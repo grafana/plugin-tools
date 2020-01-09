@@ -1,1 +1,5 @@
-# eslint-config-grafana
+# grafana-eslint-config
+
+```shell
+npm install @grafana/eslint-config
+```
