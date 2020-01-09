@@ -1,0 +1,17 @@
+{
+  "author": "Grafana Labs",
+  "license": "Apache-2.0",
+  "name": "@grafana/tsconfig",
+  "version": "1.0.0-rc1",
+  "description": "Grafana's TypeScript config",
+  "keywords": [
+    "grafana",
+    "typescript"
+  ],
+  "repository": "github:grafana/tsconfig-grafana",
+  "main": "tsconfig.json",
+  "files": [
+    "base.json",
+    "tsconfig.json"
+  ]
+}
