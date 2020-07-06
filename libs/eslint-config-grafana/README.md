@@ -1,4 +1,4 @@
-# grafana-tsconfig
+# grafana-eslint-config
 
 > Grafana's [ESLint](https://eslint.org) config.
 
