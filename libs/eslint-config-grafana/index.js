@@ -28,7 +28,7 @@ module.exports = {
     "no-bitwise": "off",
     "no-caller": "error",
     "no-cond-assign": "error",
-    "no-console": ["error", { allow: ["error", "log", "warn"] }],
+    "no-console": ["error", { allow: ["error", "log", "warn", "info"] }],
     "no-debugger": "error",
     "no-empty": "off",
     "no-eval": "error",
