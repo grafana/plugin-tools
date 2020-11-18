@@ -14,7 +14,7 @@ module.exports = {
     },
   },
   plugins: ["jsdoc", "prettier", "@typescript-eslint", "react-hooks"],
-  extends: ["plugin:react-hooks/recommended", "plugin:prettier/recommended"],
+  extends: ["plugin:react-hooks/recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
   parser: "@typescript-eslint/parser",
   rules: {
     curly: "error",
@@ -80,6 +80,6 @@ module.exports = {
           arrow: { after: true, before: true },
         },
       },
-    ],
+    ]
   },
 };
