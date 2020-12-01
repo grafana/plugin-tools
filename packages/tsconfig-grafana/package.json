@@ -8,7 +8,10 @@
     "grafana",
     "typescript"
   ],
-  "repository": "github:grafana/tsconfig-grafana",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/grafana/tsconfig-grafana.git"
+  },
   "main": "tsconfig.json",
   "files": [
     "base.json",
