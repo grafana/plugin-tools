@@ -13,7 +13,10 @@
     "react",
     "typescript"
   ],
-  "repository": "github.com:grafana/eslint-config-grafana",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/grafana/eslint-config-grafana.git"
+  },
   "files": [
     "index.js"
   ],
