@@ -44,7 +44,7 @@ module.exports = {
     "sort-keys": "off",
     "spaced-comment": ["off", "always"],
     "use-isnan": "error",
-
+    'no-duplicate-imports': 'error',
     "@typescript-eslint/no-unused-expressions": [
       "error",
       { allowShortCircuit: true, allowTernary: true },
