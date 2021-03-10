@@ -17,11 +17,13 @@
     "type": "git",
     "url": "http://github.com/grafana/eslint-config-grafana.git"
   },
-  "files": ["index.js"],
+  "files": [
+    "index.js"
+  ],
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "4.15.0",
     "@typescript-eslint/parser": "4.15.0",
-    "eslint": "7.19.0",
+    "eslint": "7.21.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-jsdoc": "31.6.1",
     "eslint-plugin-prettier": "3.3.1",
