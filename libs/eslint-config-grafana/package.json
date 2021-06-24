@@ -2,7 +2,7 @@
   "author": "Grafana Labs",
   "license": "Apache-2.0",
   "name": "@grafana/eslint-config",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Grafana's ESLint config",
   "keywords": [
     "grafana",
@@ -21,8 +21,8 @@
     "index.js"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "4.22.0",
-    "@typescript-eslint/parser": "4.22.0",
+    "@typescript-eslint/eslint-plugin": "4.28.0",
+    "@typescript-eslint/parser": "4.28.0",
     "eslint": "7.21.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-jsdoc": "31.6.1",
@@ -30,6 +30,6 @@
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "prettier": "2.2.1",
-    "typescript": "4.2.4"
+    "typescript": "4.3.4"
   }
 }
