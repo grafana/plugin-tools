@@ -19,7 +19,7 @@ jobs:
         id: version_check
         with:
           # diff the commits rather than commit message for version changes
-          diff_search: true
+          diff-search: true
 
       - name: Version update detected
         if: steps.version_check.outputs.changed == 'true'
