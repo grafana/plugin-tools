@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "git@github.com:grafana/plugins-scaffolder.git",
   "author": "Grafana",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "plop": "^2.7.4"
+  }
 }
