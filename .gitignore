@@ -1,1 +1,12 @@
+# Dependencies
 node_modules
+
+# Build output
+generated
+dist
+
+# Errors
+yarn-error.log
+
+# Cache
+.eslintcache

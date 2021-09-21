@@ -1,14 +1,51 @@
 {
-  "name": "plugins-scaffolder",
+  "name": "@grafana/create-plugin",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:grafana/plugins-scaffolder.git",
+  "repository": "git@github.com:grafana/create-plugin.git",
   "author": "Grafana",
   "license": "MIT",
+  "bin": "./dist/bin/run.js",
+  "scripts": {
+    "clean": "rm -rf ./dist ./generated",
+    "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -print0 | xargs -0  -I {} rm -rf {}",
+    "build": "yarn clean && tsc && chmod +x ./dist/bin/run.js",
+    "dev": "CREATE_PLUGIN_DEV=true nodemon --exec 'tsc && node ./dist/bin/run.js'",
+    "dev-app": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-app'",
+    "dev-panel": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-panel'",
+    "dev-datasource": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-datasource'",
+    "generate-app": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js -- create-plugin 'Sample app' 'This is a sample app.' 'app' 't' 't'",
+    "generate-panel": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js -- create-plugin 'Sample panel' 'This is a sample panel.' 'panel' 't' 't'",
+    "generate-datasource": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js -- create-plugin 'Sample datasource' 'This is a sample datasource.' 'datasource' 't' 't'",
+    "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn lint --fix"
+  },
   "dependencies": {
+    "eslint-plugin-jsdoc": "^36.1.0",
+    "glob": "^7.1.7",
     "plop": "^2.7.4"
   },
   "devDependencies": {
-    "tsc-watch": "^4.5.0"
+    "@grafana/eslint-config": "^2.5.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "nodemon": "^2.0.13",
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.4.3"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*",
+      "templates/**/*"
+    ],
+    "ext": "*",
+    "events": {
+      "start": "cls || clear"
+    }
   }
 }
