@@ -1,0 +1,8 @@
+{
+  "name": "plugins-scaffolder",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:grafana/plugins-scaffolder.git",
+  "author": "Grafana",
+  "license": "MIT"
+}
