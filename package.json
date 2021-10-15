@@ -21,7 +21,6 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "eslint-plugin-jsdoc": "^36.1.0",
     "glob": "^7.1.7",
     "plop": "^2.7.4"
   },
@@ -29,11 +28,12 @@
     "@grafana/eslint-config": "^2.5.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^36.1.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint": "^7.32.0",
     "nodemon": "^2.0.13",
     "tsc-watch": "^4.5.0",
     "typescript": "^4.4.3"
