@@ -47,6 +47,7 @@ export default function (plop) {
   });
 }
 
+// TODO<use Plop action `addMany` instead>
 function getActionsForTemplateFolder(folderPath: string) {
   const files = glob.sync(`${folderPath}/**`, { dot: true });
   const getExportFileName = (f: string) => (path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f));
