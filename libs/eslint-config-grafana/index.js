@@ -14,7 +14,11 @@ module.exports = {
     },
   },
   plugins: ["jsdoc", "prettier", "@typescript-eslint", "react-hooks"],
-  extends: ["plugin:react-hooks/recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
+  extends: [
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+  ],
   parser: "@typescript-eslint/parser",
   rules: {
     curly: "error",
@@ -44,7 +48,7 @@ module.exports = {
     "sort-keys": "off",
     "spaced-comment": ["off", "always"],
     "use-isnan": "error",
-    'no-duplicate-imports': 'error',
+    "no-duplicate-imports": "error",
     "@typescript-eslint/no-unused-expressions": [
       "error",
       { allowShortCircuit: true, allowTernary: true },
@@ -80,6 +84,7 @@ module.exports = {
           arrow: { after: true, before: true },
         },
       },
-    ]
+    ],
+    "react-hooks/exhaustive-deps": "error",
   },
 };
