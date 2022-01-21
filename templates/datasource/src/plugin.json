@@ -2,13 +2,18 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
   "name": "{{ titleCase pluginName }}",
-  "id": "{{ kebabCase pluginName }}",
+  "id": "{{ kebabCase orgName }}-{{ kebabCase pluginName }}",
   "metrics": true,
+  "backend": true,
+  "executable": "gpx_{{ snakeCase pluginName }}",
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {
       "name": "Your Name"
     },
+    "keywords": [
+      "datasource"
+    ],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
@@ -28,7 +33,7 @@
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=8.0.0",
+    "grafanaDependency": "^8.0.0",
     "plugins": []
   }
 }

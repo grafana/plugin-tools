@@ -12,6 +12,12 @@ export default function (plop) {
         message: 'What is going to be the name of your plugin?',
       },
       {
+        name: 'orgName',
+        type: 'input',
+        message: 'What is the organization name of your plugin?',
+        default: 'my-org',
+      },
+      {
         name: 'pluginDescription',
         type: 'input',
         message: 'How would you describe your plugin?',
