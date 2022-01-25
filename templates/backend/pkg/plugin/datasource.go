@@ -23,7 +23,7 @@ var (
 	_ instancemgmt.InstanceDisposer = (*Datasource)(nil)
 )
 
-// NewSampleDatasource creates a new datasource instance.
+// NewDatasource creates a new datasource instance.
 func NewDatasource(_ backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	return &Datasource{}, nil
 }
