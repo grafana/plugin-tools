@@ -28,7 +28,7 @@ func NewDatasource(_ backend.DataSourceInstanceSettings) (instancemgmt.Instance,
 	return &Datasource{}, nil
 }
 
-// SampleDatasource is an example datasource which can respond to data queries, reports
+// Datasource is an example datasource which can respond to data queries, reports
 // its health and has streaming skills.
 type Datasource struct{}
 
