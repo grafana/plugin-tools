@@ -11,7 +11,7 @@
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn lint --fix"
   },
-  "author": "Your name",
+  "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
   "devDependencies": {
     "@grafana/eslint-config": "^2.5.0",

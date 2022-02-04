@@ -1,15 +1,24 @@
+import type { NodePlopAPI } from 'plop';
+import type { ModifyActionConfig } from 'node-plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PLUGIN_TYPES } from './constants';
 
-export default function (plop) {
+export default function (plop: NodePlopAPI) {
   plop.setGenerator('create-plugin', {
+    description: 'used to scaffold a grafana plugin',
     prompts: [
       {
         name: 'pluginName',
         type: 'input',
         message: 'What is going to be the name of your plugin?',
+      },
+      {
+        name: 'orgName',
+        type: 'input',
+        message: 'What is the organization name of your plugin?',
+        default: 'my-org',
       },
       {
         name: 'pluginDescription',
@@ -41,15 +50,42 @@ export default function (plop) {
       const pluginTypeSpecificActions = getActionsForTemplateFolder(TEMPLATE_PATHS[pluginType]);
       const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
       const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
+      const modifyReadmeActions = getReadmeActions(hasBackend);
 
-      return [...commonActions, ...pluginTypeSpecificActions, ...backendActions, ...workflowActions];
+      return [
+        ...commonActions,
+        ...pluginTypeSpecificActions,
+        ...backendActions,
+        ...workflowActions,
+        ...modifyReadmeActions,
+      ];
     },
   });
 }
 
+function getReadmeActions(hasBackend: boolean): ModifyActionConfig[] {
+  return [getGettingStartedReadmeAction(hasBackend)];
+}
+
+function getGettingStartedReadmeAction(hasBackend: boolean): ModifyActionConfig {
+  const pattern = /(-- APPEND GETTING STARTED HERE --)/gi;
+  const template = '_templates/GettingStarted.md';
+  const backendTemplateFile = path.join(TEMPLATE_PATHS.backend, template);
+  const commonTemplateFile = path.join(TEMPLATE_PATHS.common, template);
+  const templateFile = hasBackend ? backendTemplateFile : commonTemplateFile;
+
+  return {
+    type: 'modify',
+    path: path.join(EXPORT_PATH_PREFIX, 'README.md'),
+    pattern,
+    template: undefined,
+    templateFile,
+  };
+}
+
 // TODO<use Plop action `addMany` instead>
 function getActionsForTemplateFolder(folderPath: string) {
-  const files = glob.sync(`${folderPath}/**`, { dot: true });
+  const files = glob.sync(`${folderPath}/**`, { dot: true, ignore: [`${folderPath}/_templates/**`] });
   const getExportFileName = (f: string) => (path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f));
   const getExportPath = (f: string) => path.relative(folderPath, path.dirname(f));
 
