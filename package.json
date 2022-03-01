@@ -8,7 +8,7 @@
   "bin": "./dist/bin/run.js",
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
-    "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -print0 | xargs -0  -I {} rm -rf {}",
+    "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/yarn.lock\" -print0 | xargs -0  -I {} rm -rf {}",
     "build": "yarn clean && tsc && chmod +x ./dist/bin/run.js",
     "dev": "CREATE_PLUGIN_DEV=true nodemon --exec 'tsc && node ./dist/bin/run.js'",
     "dev-app": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-app'",
