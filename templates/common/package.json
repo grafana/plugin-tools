@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "{{ sentenceCase pluginDescription }}",
   "scripts": {
-    "build": "webpack -c ./webpack/webpack.prod.conf.js",
-    "dev": "webpack -w -c ./webpack/webpack.dev.conf.js",
+    "build": "TS_NODE_PROJECT=\"./webpack/tsconfig.webpack.json\" webpack -c ./webpack/webpack.config.ts --env production",
+    "dev": "TS_NODE_PROJECT=\"./webpack/tsconfig.webpack.json\" webpack -w -c ./webpack/webpack.config.ts --env development",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --maxWorkers 4",
     "typecheck": "tsc --noEmit",
