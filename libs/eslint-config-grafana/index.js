@@ -13,11 +13,11 @@ module.exports = {
       version: "detect",
     },
   },
-  plugins: ["jsdoc", "prettier", "@typescript-eslint", "react-hooks"],
+  plugins: ["jsdoc", "@typescript-eslint", "react-hooks"],
   extends: [
     "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended",
     "plugin:react/recommended",
+    "prettier",
   ],
   parser: "@typescript-eslint/parser",
   rules: {
@@ -43,7 +43,6 @@ module.exports = {
     "no-shadow": "off",
     "no-unused-expressions": "off",
     "no-unused-labels": "error",
-    "prettier/prettier": "error",
     radix: "error",
     "sort-keys": "off",
     "spaced-comment": ["off", "always"],
