@@ -50,6 +50,8 @@
     "@grafana/data": "latest",
     "@grafana/runtime": "latest",
     "@grafana/ui": "latest",
-    "@types/lodash": "latest"
+    "@types/lodash": "latest"{{#if_eq pluginType "app"}},
+    "react-router-dom": "^5.2.0"
+    {{/if_eq}}
   }
 }
