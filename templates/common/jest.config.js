@@ -1,4 +1,4 @@
-const path = require('path');
+// WIP - reference https://github.com/swc-project/jest/tree/master/examples/react
 
 module.exports = {
   testEnvironment: 'jest-environment-jsdom',
@@ -8,6 +8,19 @@ module.exports = {
     '<rootDir>/src/**/*.{spec,test,jest}.{js,jsx,ts,tsx}',
   ],
   transform: {
-    '^.+\\.(t|j)sx?$': '@swc/jest',
+    '^.+\\.(t|j)sx?$': [
+      '@swc/jest',
+      {
+        sourceMaps: true,
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
+            decorators: false,
+            dynamicImport: true,
+          },
+        }
+      }
+    ],
   },
 };
