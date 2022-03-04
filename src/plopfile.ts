@@ -4,8 +4,11 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PLUGIN_TYPES } from './constants';
+import { ifEq } from './plopHelpers';
 
 export default function (plop: NodePlopAPI) {
+  plop.setHelper('if_eq', ifEq);
+
   plop.setGenerator('create-plugin', {
     description: 'used to scaffold a grafana plugin',
     prompts: [
