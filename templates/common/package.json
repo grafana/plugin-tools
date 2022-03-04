@@ -19,6 +19,7 @@
     "@grafana/tsconfig": "^1.2.0-rc1",
     "@swc/core": "^1.2.144",
     "@swc/helpers": "^0.3.6",
+    "@swc/jest": "^0.2.20",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
