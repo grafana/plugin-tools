@@ -27,4 +27,22 @@ describe('Components/AppConfig', () => {
 
     expect(screen.queryByText(/Enable \/ Disable/i)).toBeInTheDocument();
   });
+
+  test('renders an "Enable" button if the plugin is disabled', () => {
+    const plugin = { meta: { ...props.plugin.meta, enabled: false } };
+
+    render(<AppConfig plugin={plugin} query={props.query} />);
+
+    expect(screen.queryByText(/The plugin is currently not enabled./i)).toBeInTheDocument();
+    expect(screen.queryByText(/The plugin is currently enabled./i)).not.toBeInTheDocument();
+  });
+
+  test('renders a "Disable" button if the plugin is enabled', () => {
+    const plugin = { meta: { ...props.plugin.meta, enabled: true } };
+
+    render(<AppConfig plugin={plugin} query={props.query} />);
+
+    expect(screen.queryByText(/The plugin is currently enabled./i)).toBeInTheDocument();
+    expect(screen.queryByText(/The plugin is currently not enabled./i)).not.toBeInTheDocument();
+  });
 });
