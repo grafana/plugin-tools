@@ -6,9 +6,9 @@ import { css } from '@emotion/css';
 
 export type AppPluginSettings = {};
 
-interface Props extends PluginConfigPageProps<AppPluginMeta<AppPluginSettings>> {}
+export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<AppPluginSettings>> {}
 
-export const AppConfig = ({ plugin }: Props) => {
+export const AppConfig = ({ plugin }: AppConfigProps) => {
   const s = useStyles2(getStyles);
   const { enabled, jsonData } = plugin.meta;
 
