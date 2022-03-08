@@ -1,7 +1,10 @@
 {
-  "editor.formatOnSave": true,
   "files.associations": {
     "**/templates/**/*md.hbs": "markdown",
-    "**/templates/**/*json.hbs": "json"
+    "**/templates/**/*json.hbs": "json",
+  },
+  "editor.formatOnSave": true,
+  "[json]": {
+    "editor.formatOnSave": false
   }
 }
