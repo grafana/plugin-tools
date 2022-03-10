@@ -1,36 +1,31 @@
 import React from 'react';
+import { AppRootProps, PluginType } from '@grafana/data';
 import { render, screen } from '@testing-library/react';
 import { App } from './App';
 
-const meta = {
-  id: 'sample-app',
-  name: 'Sample App',
-  type: 'app',
-};
-
-const query = {};
-
 describe('Components/App', () => {
-  let basename, meta, path, query, onNavChanged;
+  let props: AppRootProps;
 
   beforeEach(() => {
     jest.resetAllMocks();
 
-    basename = 'a/sample-app';
-    meta = {
-      id: 'sample-app',
-      name: 'Sample App',
-      type: 'app',
-      enabled: true,
-      jsonData: {},
-    };
-    query = {};
-    path = '';
-    onNavChanged = jest.fn();
+    props = {
+      basename: 'a/sample-app',
+      meta: {
+        id: 'sample-app',
+        name: 'Sample App',
+        type: PluginType.app,
+        enabled: true,
+        jsonData: {},
+      },
+      query: {},
+      path: '',
+      onNavChanged: jest.fn(),
+    } as unknown as AppRootProps;
   });
 
   test('renders without an error"', () => {
-    render(<App basename={basename} meta={meta} path={path} query={query} onNavChanged={onNavChanged} />);
+    render(<App {...props} />);
 
     expect(screen.queryByText(/Hello Grafana!/i)).toBeInTheDocument();
   });

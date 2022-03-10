@@ -19,9 +19,9 @@ module.exports = {
             decorators: false,
             dynamicImport: true,
           },
-        }
-      }
+        },
+      },
     ],
   },
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.js']
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
 };

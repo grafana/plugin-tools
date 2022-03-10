@@ -20,8 +20,8 @@ declare module '*.png' {
 }
 
 declare module '*.webp' {
-    const src: string;
-    export default src;
+  const src: string;
+  export default src;
 }
 
 declare module '*.svg' {
@@ -30,8 +30,8 @@ declare module '*.svg' {
 }
 
 // Font declarations
-declare module "*.woff";
-declare module "*.woff2";
-declare module "*.eot";
-declare module "*.ttf";
-declare module "*.otf";
+declare module '*.woff';
+declare module '*.woff2';
+declare module '*.eot';
+declare module '*.ttf';
+declare module '*.otf';
