@@ -9,7 +9,10 @@
     "test:ci": "jest --maxWorkers 4",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "e2e": "TZ=UTC grafana-e2e run",
+    "e2e:open": "TZ=UTC grafana-e2e open",
+    "e2e:update": "TZ=UTC grafana-e2e run --update-screenshots",
   },
   "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
