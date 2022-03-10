@@ -3,7 +3,7 @@ import type { ModifyActionConfig } from 'node-plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, TEMPLATES_DIR, PLUGIN_TYPES } from './constants';
+import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from './constants';
 import { ifEq } from './plopHelpers';
 
 export default function (plop: NodePlopAPI) {
@@ -67,21 +67,19 @@ function getActionsForReadme(): ModifyActionConfig[] {
   ];
 }
 
-function replacePatternWithTemplateInReadme(pattern: string, templateFile: string): ModifyActionConfig {
-  const templateFilePath = path.join(TEMPLATES_DIR, '_templates', templateFile);
-
+function replacePatternWithTemplateInReadme(pattern: string, partialsFile: string): ModifyActionConfig {
   return {
     type: 'modify',
     path: path.join(EXPORT_PATH_PREFIX, 'README.md'),
     pattern,
     template: undefined,
-    templateFile: templateFilePath,
+    templateFile: path.join(PARTIALS_DIR, partialsFile),
   };
 }
 
 // TODO<use Plop action `addMany` instead>
 function getActionsForTemplateFolder(folderPath: string) {
-  const files = glob.sync(`${folderPath}/**`, { dot: true, ignore: [`${folderPath}/_templates/**`] });
+  const files = glob.sync(`${folderPath}/**`, { dot: true });
   const getExportFileName = (f: string) => (path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f));
   const getExportPath = (f: string) => path.relative(folderPath, path.dirname(f));
 

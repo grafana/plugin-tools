@@ -12,6 +12,10 @@ export const PLOP_FILE = path.join(__dirname, 'plopfile.js');
 
 export const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');
 
+// Partials are template files that can be used in other templates
+// (they won't be copied over to the generated folder as they are)
+export const PARTIALS_DIR = path.join(TEMPLATES_DIR, '_partials');
+
 export const TEMPLATE_PATHS = {
   app: path.join(TEMPLATES_DIR, 'app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
