@@ -196,7 +196,7 @@ const config = (env): Configuration => ({
       extensions: ['.ts', '.tsx'],
       lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
     }),
-    env.development && new LiveReloadPlugin(),
+    ...(env.development ? [new LiveReloadPlugin()] : []),
   ],
 
   resolve: {
