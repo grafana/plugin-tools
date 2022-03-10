@@ -3,7 +3,7 @@ import type { ModifyActionConfig } from 'node-plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PLUGIN_TYPES } from './constants';
+import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, TEMPLATES_DIR, PLUGIN_TYPES } from './constants';
 import { ifEq } from './plopHelpers';
 
 export default function (plop: NodePlopAPI) {
@@ -53,36 +53,29 @@ export default function (plop: NodePlopAPI) {
       const pluginTypeSpecificActions = getActionsForTemplateFolder(TEMPLATE_PATHS[pluginType]);
       const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
       const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
-      const modifyReadmeActions = getReadmeActions(hasBackend);
+      const readmeActions = getActionsForReadme();
 
-      return [
-        ...commonActions,
-        ...pluginTypeSpecificActions,
-        ...backendActions,
-        ...workflowActions,
-        ...modifyReadmeActions,
-      ];
+      return [...commonActions, ...pluginTypeSpecificActions, ...backendActions, ...workflowActions, ...readmeActions];
     },
   });
 }
 
-function getReadmeActions(hasBackend: boolean): ModifyActionConfig[] {
-  return [getGettingStartedReadmeAction(hasBackend)];
+function getActionsForReadme(): ModifyActionConfig[] {
+  return [
+    replacePatternWithTemplateInReadme('-- INSERT FRONTEND GETTING STARTED --', 'frontend-getting-started.md'),
+    replacePatternWithTemplateInReadme('-- INSERT BACKEND GETTING STARTED --', 'backend-getting-started.md'),
+  ];
 }
 
-function getGettingStartedReadmeAction(hasBackend: boolean): ModifyActionConfig {
-  const pattern = /(-- APPEND GETTING STARTED HERE --)/gi;
-  const template = '_templates/GettingStarted.md';
-  const backendTemplateFile = path.join(TEMPLATE_PATHS.backend, template);
-  const commonTemplateFile = path.join(TEMPLATE_PATHS.common, template);
-  const templateFile = hasBackend ? backendTemplateFile : commonTemplateFile;
+function replacePatternWithTemplateInReadme(pattern: string, templateFile: string): ModifyActionConfig {
+  const templateFilePath = path.join(TEMPLATES_DIR, '_templates', templateFile);
 
   return {
     type: 'modify',
     path: path.join(EXPORT_PATH_PREFIX, 'README.md'),
     pattern,
     template: undefined,
-    templateFile,
+    templateFile: templateFilePath,
   };
 }
 
