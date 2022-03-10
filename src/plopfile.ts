@@ -49,10 +49,19 @@ export default function (plop: NodePlopAPI) {
       },
     ],
     actions: function ({ pluginType, hasBackend, hasGithubWorkflows }) {
+      // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder(TEMPLATE_PATHS.common);
+
+      // Copy over files from the plugin type specific folder, e.g. "tempaltes/app" for "app" plugins ("app" | "panel" | "datasource").
       const pluginTypeSpecificActions = getActionsForTemplateFolder(TEMPLATE_PATHS[pluginType]);
+
+      // Copy over backend-specific files (if selected)
       const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
+
+      // Copy over Github workflow files (if selected)
       const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
+
+      // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme();
 
       return [...commonActions, ...pluginTypeSpecificActions, ...backendActions, ...workflowActions, ...readmeActions];
