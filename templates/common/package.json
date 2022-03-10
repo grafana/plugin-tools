@@ -13,6 +13,7 @@
     "e2e": "TZ=UTC grafana-e2e run",
     "e2e:open": "TZ=UTC grafana-e2e open",
     "e2e:update": "TZ=UTC grafana-e2e run --update-screenshots",
+    "server": "docker-compose up -d --build"
   },
   "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
