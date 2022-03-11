@@ -3,9 +3,12 @@ import type { ModifyActionConfig } from 'node-plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PLUGIN_TYPES } from './constants';
+import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from './constants';
+import { ifEq } from './plopHelpers';
 
 export default function (plop: NodePlopAPI) {
+  plop.setHelper('if_eq', ifEq);
+
   plop.setGenerator('create-plugin', {
     description: 'used to scaffold a grafana plugin',
     prompts: [
@@ -46,46 +49,46 @@ export default function (plop: NodePlopAPI) {
       },
     ],
     actions: function ({ pluginType, hasBackend, hasGithubWorkflows }) {
+      // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder(TEMPLATE_PATHS.common);
-      const pluginTypeSpecificActions = getActionsForTemplateFolder(TEMPLATE_PATHS[pluginType]);
-      const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
-      const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
-      const modifyReadmeActions = getReadmeActions(hasBackend);
 
-      return [
-        ...commonActions,
-        ...pluginTypeSpecificActions,
-        ...backendActions,
-        ...workflowActions,
-        ...modifyReadmeActions,
-      ];
+      // Copy over files from the plugin type specific folder, e.g. "tempaltes/app" for "app" plugins ("app" | "panel" | "datasource").
+      const pluginTypeSpecificActions = getActionsForTemplateFolder(TEMPLATE_PATHS[pluginType]);
+
+      // Copy over backend-specific files (if selected)
+      const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
+
+      // Copy over Github workflow files (if selected)
+      const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
+
+      // Replace conditional bits in the Readme files
+      const readmeActions = getActionsForReadme();
+
+      return [...commonActions, ...pluginTypeSpecificActions, ...backendActions, ...workflowActions, ...readmeActions];
     },
   });
 }
 
-function getReadmeActions(hasBackend: boolean): ModifyActionConfig[] {
-  return [getGettingStartedReadmeAction(hasBackend)];
+function getActionsForReadme(): ModifyActionConfig[] {
+  return [
+    replacePatternWithTemplateInReadme('-- INSERT FRONTEND GETTING STARTED --', 'frontend-getting-started.md'),
+    replacePatternWithTemplateInReadme('-- INSERT BACKEND GETTING STARTED --', 'backend-getting-started.md'),
+  ];
 }
 
-function getGettingStartedReadmeAction(hasBackend: boolean): ModifyActionConfig {
-  const pattern = /(-- APPEND GETTING STARTED HERE --)/gi;
-  const template = '_templates/GettingStarted.md';
-  const backendTemplateFile = path.join(TEMPLATE_PATHS.backend, template);
-  const commonTemplateFile = path.join(TEMPLATE_PATHS.common, template);
-  const templateFile = hasBackend ? backendTemplateFile : commonTemplateFile;
-
+function replacePatternWithTemplateInReadme(pattern: string, partialsFile: string): ModifyActionConfig {
   return {
     type: 'modify',
     path: path.join(EXPORT_PATH_PREFIX, 'README.md'),
     pattern,
     template: undefined,
-    templateFile,
+    templateFile: path.join(PARTIALS_DIR, partialsFile),
   };
 }
 
 // TODO<use Plop action `addMany` instead>
 function getActionsForTemplateFolder(folderPath: string) {
-  const files = glob.sync(`${folderPath}/**`, { dot: true, ignore: [`${folderPath}/_templates/**`] });
+  const files = glob.sync(`${folderPath}/**`, { dot: true });
   const getExportFileName = (f: string) => (path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f));
   const getExportPath = (f: string) => path.relative(folderPath, path.dirname(f));
 

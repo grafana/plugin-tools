@@ -10,3 +10,6 @@ yarn-error.log
 
 # Cache
 .eslintcache
+
+# IDE
+.vscode
