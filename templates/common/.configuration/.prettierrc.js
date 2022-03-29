@@ -1,4 +1,4 @@
-{
+module.exports = {
   "endOfLine": "auto",
   "printWidth": 120,
   "trailingComma": "es5",
@@ -7,4 +7,4 @@
   "singleQuote": true,
   "useTabs": false,
   "tabWidth": 2
-}
+};

@@ -5,6 +5,7 @@ services:
     container_name: '{{ kebabCase pluginName }}'
     build:
       context: .
+      dockerfile: ./.configuration/Dockerfile
       args:
         grafana_version: ${GRAFANA_VERSION:-latest}
     ports:
