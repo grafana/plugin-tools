@@ -1,12 +1,12 @@
 # Default build configuration by Grafana
 
-**This is a auto-generated directory and is not intended to be changed! ⚠️**
+**This is an auto-generated directory and is not intended to be changed! ⚠️**
 
 The `.config/` directory holds basic configuration for the different tools
 that are used to develop, test and build the project. In order to make it updates easier we ask you to
 not edit files in this folder to extend configuration.
 
-## How to extend the basic tooling configs?
+## How to extend the basic configs?
 
 Bear in mind that you are doing it at your own risk, and that extending any of the basic configuration can lead
 to issues around working with the project.
@@ -74,10 +74,16 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 Follow these steps to extend the basic Webpack configuration that lives under `.config/`:
 
-1. Create a new Webpack configuration file in the project root, e.g. `webpack.config.ts`
+#### 1. Create a new Webpack configuration file
 
-2. Use `webpack-merge` to merge the basic config provided by Grafana and your custom setup:
+Create a new config file that is going to extend the basic one provided by Grafana.
+It can live in the project root, e.g. `webpack.config.ts`.
+
+#### 2. Merge the basic config provided by Grafana and your custom setup
+We are going to use [`webpack-merge`](https://github.com/survivejs/webpack-merge) for this.
+
 ```typescript
+// webpack.config.ts
 import { merge } from 'webpack-merge';
 import grafanaConfig from './.config/webpack/webpack.config';
 
@@ -92,15 +98,17 @@ const config = (env) =>
 export default config;
 ```
 
-3. Update the `package.json` to use the new Webpack config
+#### 3. Update the `package.json` to use the new Webpack config
 
-**`$ yarn build`**
+We need to update the `scripts` in the `package.json` to use the extended Webpack configuration.
+
+**Update for `build`:**
 ```diff
 +"build": "TS_NODE_PROJECT=\"./.config/webpack/tsconfig.webpack.json\" webpack -c ./.config/webpack/webpack.config.ts --env production",
 -"build": "TS_NODE_PROJECT=\"./.config/webpack/tsconfig.webpack.json\" webpack -c ./webpack.config.ts --env production",
 ```
 
-**`$ yarn dev`**
+**Update for `dev`:**
 ```diff
 +"dev": "TS_NODE_PROJECT=\"./.config/webpack/tsconfig.webpack.json\" webpack -w -c ./.config/webpack/webpack.config.ts --env development",
 -"dev": "TS_NODE_PROJECT=\"./.config/webpack/tsconfig.webpack.json\" webpack -w -c ./webpack.config.ts --env development",
