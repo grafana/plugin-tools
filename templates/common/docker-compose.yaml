@@ -3,9 +3,7 @@ version: '3.0'
 services:
   grafana:
     container_name: '{{ kebabCase pluginName }}'
-    build:
-      context: .
-      dockerfile: ./.configuration/Dockerfile
+    build: ./.configuration
       args:
         grafana_version: ${GRAFANA_VERSION:-latest}
     ports:
