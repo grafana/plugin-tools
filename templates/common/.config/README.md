@@ -25,6 +25,8 @@ Edit the `.eslintrc` file in the project root in order to extend the ESLint conf
 }
 ```
 
+---
+
 ### Extending the Prettier config
 
 Edit the `.prettierrc.js` file in the project root in order to extend the Prettier configuration.
@@ -39,6 +41,8 @@ module.exports = {
 };
 ```
 
+---
+
 ### Extending the Jest config
 
 There are two configuration in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
@@ -47,6 +51,8 @@ There are two configuration in the project root that belong to Jest: `jest-setup
 set up the Jest DOM for the testing library and to apply some polyfills. ([link to Jest docs](https://jestjs.io/docs/configuration#setupfilesafterenv-array))
 
 **`jest.config.js`:** The main Jest configuration file that is extending our basic Grafana-tailored setup. ([link to Jest docs](https://jestjs.io/docs/configuration))
+
+---
 
 ### Extending the TypeScript config
 
@@ -61,6 +67,8 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
   }
 }
 ```
+
+---
 
 ### Extending the Webpack config
 
