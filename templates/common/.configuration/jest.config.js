@@ -1,5 +1,3 @@
-// WIP - reference https://github.com/swc-project/jest/tree/master/examples/react
-
 module.exports = {
   testEnvironment: 'jest-environment-jsdom',
   testMatch: [
