@@ -1,5 +1,4 @@
-import type { NodePlopAPI } from 'plop';
-import type { ModifyActionConfig } from 'node-plop';
+import type { NodePlopAPI, ModifyActionConfig } from 'plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
