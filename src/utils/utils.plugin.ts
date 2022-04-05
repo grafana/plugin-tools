@@ -67,6 +67,7 @@ export function updateDependencies(
     // New dependency
     if (!currentSemverRange) {
       updatedDeps[packageName] = newSemverRange;
+      logs.push(`\`${packageName}\` (new) \`${newSemverRange}\``);
       continue;
     }
 
@@ -77,6 +78,7 @@ export function updateDependencies(
 
     // Invalid semver range (e.g. when using release channels like "latest")
     if (!semver.validRange(newSemverRange) || !semver.validRange(currentSemverRange)) {
+      logs.push(`\`${packageName}\` \`${currentSemverRange}\` -> \`${newSemverRange}\``);
       updatedDeps[packageName] = newSemverRange;
       continue;
     }
@@ -91,13 +93,6 @@ export function updateDependencies(
     }
     if (!currentSemverVersion || !semver.valid(currentSemverVersion)) {
       console.log(`Skipping: invalid current semver version "${currentSemverRange}" for "${packageName}"`);
-      continue;
-    }
-
-    // New depdency, introduced now
-    if (!currentSemverRange) {
-      updatedDeps[packageName] = newSemverRange;
-      logs.push(`\`${packageName}\` (new) \`${newSemverRange}\``);
       continue;
     }
 
