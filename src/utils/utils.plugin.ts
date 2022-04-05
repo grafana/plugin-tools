@@ -104,8 +104,7 @@ export function updateDependencies(
   }
 
   if (logging) {
-    console.log('');
-    printMarkdown(`**Updated packages** \n${logs.join('\n')}`);
+    printMarkdown(logs.join('\n'));
   }
 
   return updatedDeps;
