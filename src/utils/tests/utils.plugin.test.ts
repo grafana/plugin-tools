@@ -139,5 +139,69 @@ describe('Utils / Plugins', () => {
         'node-plop': '0.26.3',
       });
     });
+
+    test('it should override `latest` and other release channels', () => {
+      expect(
+        updateDependencies(
+          // current
+          {
+            '@grafana/tsconfig': 'latest',
+            '@swc/core': '^1.2.162',
+            '@types/minimist': '^1.2.2',
+            '@types/mkdirp': '^1.0.2',
+            '@types/semver': '^8.0.0',
+            'node-plop': '0.26.3',
+          },
+          // new
+          {
+            '@grafana/tsconfig': '^2.0.0', // updated
+            '@swc/core': '^1.2.162',
+            '@types/minimist': '^1.2.2',
+            '@types/mkdirp': '^1.0.2',
+            '@types/semver': '^8.0.0',
+            'node-plop': '0.26.3',
+          }
+        )
+      ).toEqual({
+        '@grafana/tsconfig': '^2.0.0', // updated
+        '@swc/core': '^1.2.162',
+        '@types/minimist': '^1.2.2',
+        '@types/mkdirp': '^1.0.2',
+        '@types/semver': '^8.0.0',
+        'node-plop': '0.26.3',
+      });
+    });
+
+    test('it should be able to override with using release channels like "latest"', () => {
+      expect(
+        updateDependencies(
+          // current
+          {
+            '@grafana/tsconfig': '^2.0.0',
+            '@swc/core': '^1.2.162',
+            '@types/minimist': '^1.2.2',
+            '@types/mkdirp': '^1.0.2',
+            '@types/semver': '^8.0.0',
+            'node-plop': '0.26.3',
+          },
+          // new
+          {
+            '@grafana/tsconfig': 'latest', // updated
+            '@swc/core': '^1.2.162',
+            '@types/minimist': '^1.2.2',
+            '@types/mkdirp': '^1.0.2',
+            '@types/semver': '^8.0.0',
+            'node-plop': '0.26.3',
+          }
+        )
+      ).toEqual({
+        '@grafana/tsconfig': 'latest', // updated
+        '@swc/core': '^1.2.162',
+        '@types/minimist': '^1.2.2',
+        '@types/mkdirp': '^1.0.2',
+        '@types/semver': '^8.0.0',
+        'node-plop': '0.26.3',
+      });
+    });
   });
 });

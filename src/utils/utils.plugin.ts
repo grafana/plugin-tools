@@ -75,6 +75,12 @@ export function updateDependencies(
       continue;
     }
 
+    // Invalid semver range (e.g. when using release channels like "latest")
+    if (!semver.validRange(newSemverRange) || !semver.validRange(currentSemverRange)) {
+      updatedDeps[packageName] = newSemverRange;
+      continue;
+    }
+
     const newSemverVersion = semver.minVersion(newSemverRange);
     const currentSemverVersion = semver.minVersion(currentSemverRange);
 
