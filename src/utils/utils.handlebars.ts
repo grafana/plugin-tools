@@ -4,8 +4,6 @@ import titleCase from 'title-case';
 import upperCase from 'upper-case';
 import lowerCase from 'lower-case';
 
-registerHandlebarsHelpers();
-
 // Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
 export const ifEq = (a: any, b: any, options: HelperOptions) => {
   return a === b ? options.fn(this) : options.inverse(this);
@@ -37,5 +35,6 @@ export function registerHandlebarsHelpers() {
 }
 
 export function renderHandlebarsTemplate(template: string, data?: any) {
+  registerHandlebarsHelpers();
   return Handlebars.compile(template)(data);
 }
