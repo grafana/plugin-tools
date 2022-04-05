@@ -40,7 +40,7 @@ export function updatePackageJson(options: { onlyOutdated?: Boolean; logging?: B
     options
   );
 
-  fs.writeFileSync(path.join(process.cwd(), 'package.json'), JSON.stringify(packageJson, null, 2));
+  fs.writeFileSync(path.join(process.cwd(), 'package.json'), `${JSON.stringify(packageJson, null, 2)}\n`);
 }
 
 /**
