@@ -1,10 +1,9 @@
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import Handlebars from 'handlebars';
 import mkdirp from 'mkdirp';
 import { filterOutCommonFiles, isFile } from './utils.files';
-import { registerHelpers } from './utils.handlebars';
+import { renderHandlebarsTemplate } from './utils.handlebars';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX } from '../constants';
 
 /**
@@ -25,12 +24,7 @@ export function getTemplateFiles(pluginType: string, subDirectory?: string): str
 }
 
 export function renderTemplateFromFile(templateFile: string, data?: any) {
-  return renderTemplate(fs.readFileSync(templateFile).toString(), data);
-}
-
-export function renderTemplate(template: string, data?: any) {
-  registerHelpers();
-  return Handlebars.compile(template)(data);
+  return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
 export function renderAndCopyTemplateFile(pluginType: string, templateFile: string, data?: any) {

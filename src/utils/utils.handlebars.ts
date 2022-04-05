@@ -4,13 +4,15 @@ import titleCase from 'title-case';
 import upperCase from 'upper-case';
 import lowerCase from 'lower-case';
 
+registerHandlebarsHelpers();
+
 // Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
 export const ifEq = (a: any, b: any, options: HelperOptions) => {
   return a === b ? options.fn(this) : options.inverse(this);
 };
 
 // Needed when we are rendering the templates outside of the context of Plop but still would like to support the same helpers
-export function registerHelpers() {
+export function registerHandlebarsHelpers() {
   const helpers = {
     camelCase: changeCase.camelCase,
     snakeCase: changeCase.snakeCase,
@@ -32,4 +34,8 @@ export function registerHelpers() {
   Object.keys(helpers).forEach((helperName) =>
     Handlebars.registerHelper(helperName, helpers[helperName as keyof typeof helpers])
   );
+}
+
+export function renderHandlebarsTemplate(template: string, data?: any) {
+  return Handlebars.compile(template)(data);
 }
