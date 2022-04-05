@@ -6,7 +6,7 @@
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {
-      "name": "Your Name"
+      "name": "{{ sentenceCase orgName }}"
     },
     "logos": {
       "small": "img/logo.svg",
