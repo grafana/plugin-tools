@@ -8,15 +8,13 @@ export const EXPORT_PATH_PREFIX = IS_DEV ? DEV_EXPORT_DIR : process.cwd();
 
 export const DIST_DIR = path.join(__dirname, 'dist');
 
-export const PLOP_FILE = path.join(__dirname, 'plopfile.js');
-
 export const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');
 
 // Partials are template files that can be used in other templates
 // (they won't be copied over to the generated folder as they are)
 export const PARTIALS_DIR = path.join(TEMPLATES_DIR, '_partials');
 
-export const TEMPLATE_PATHS = {
+export const TEMPLATE_PATHS: Record<string, string> = {
   app: path.join(TEMPLATES_DIR, 'app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
   common: path.join(TEMPLATES_DIR, 'common'),
