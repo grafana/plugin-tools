@@ -1,11 +1,20 @@
-import type { NodePlopAPI } from 'plop';
-import type { ModifyActionConfig } from 'node-plop';
+import type { NodePlopAPI, ModifyActionConfig } from 'plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from './constants';
-import { ifEq } from './plopHelpers';
+import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from '../../constants';
+import { ifEq } from '../../utils/utils.handlebars';
 
+type CliArgs = {
+  pluginName: string;
+  pluginDescription: string;
+  orgName: string;
+  pluginType: string;
+  hasBackend: boolean;
+  hasGithubWorkflows: boolean;
+};
+
+// Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
   plop.setHelper('if_eq', ifEq);
 
@@ -48,7 +57,8 @@ export default function (plop: NodePlopAPI) {
         default: false,
       },
     ],
-    actions: function ({ pluginType, hasBackend, hasGithubWorkflows }) {
+    // @ts-ignore - We would like to specify the Answers type correctly
+    actions: function ({ pluginType, hasBackend, hasGithubWorkflows }: CliArgs) {
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder(TEMPLATE_PATHS.common);
 
@@ -81,6 +91,7 @@ function replacePatternWithTemplateInReadme(pattern: string, partialsFile: strin
     type: 'modify',
     path: path.join(EXPORT_PATH_PREFIX, 'README.md'),
     pattern,
+    // @ts-ignore
     template: undefined,
     templateFile: path.join(PARTIALS_DIR, partialsFile),
   };
@@ -104,7 +115,7 @@ function getActionsForTemplateFolder(folderPath: string) {
   }));
 }
 
-function isFile(path) {
+function isFile(path: string) {
   try {
     return fs.lstatSync(path).isFile();
   } catch (e) {

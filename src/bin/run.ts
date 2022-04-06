@@ -1,18 +1,14 @@
 #!/usr/bin/env node
 
-import { Plop, run } from 'plop';
 import minimist from 'minimist';
-import { PLOP_FILE } from '../constants';
+import { generate, update } from '../commands';
 
 const args = process.argv.slice(2);
 const argv = minimist(args);
+const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
+  update,
+  generate,
+};
+const command = commands[argv._[0]] || commands.generate;
 
-Plop.launch(
-  {
-    cwd: argv.cwd,
-    configPath: PLOP_FILE,
-    require: argv.require,
-    completion: argv.completion,
-  },
-  (env) => run(env, undefined, true)
-);
+command(argv);

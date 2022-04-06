@@ -3,8 +3,15 @@
     "esModuleInterop": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "templates"]
+  "include": ["src"],
+  "exclude": ["node_modules", "templates"],
 }

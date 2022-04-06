@@ -9,7 +9,7 @@
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {
-      "name": "Your Name"
+      "name": "{{ sentenceCase orgName }}"
     },
     "keywords": [
       "datasource"
