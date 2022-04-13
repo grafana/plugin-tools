@@ -10,7 +10,7 @@
     "clean": "rm -rf ./dist ./generated",
     "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/yarn.lock\" -print0 | xargs -0  -I {} rm -rf {}",
     "build": "yarn clean && tsc && chmod +x ./dist/bin/run.js",
-    "dev": "CREATE_PLUGIN_DEV=true nodemon --exec 'tsc && node ./dist/bin/run.js'",
+    "dev": "CREATE_PLUGIN_DEV=true nodemon --exec 'tsc'",
     "dev-app": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-app'",
     "dev-panel": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-panel'",
     "dev-datasource": "CREATE_PLUGIN_DEV=true nodemon --exec 'yarn generate-datasource'",
