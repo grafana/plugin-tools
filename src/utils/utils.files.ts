@@ -35,3 +35,31 @@ export function readJsonFile(filename: string) {
     throw error;
   }
 }
+
+export function getOnlyExistingInCwd(files: string[]) {
+  return files.filter((file) => fs.existsSync(path.join(process.cwd(), file)));
+}
+
+export function getOnlyNotExistingInCwd(files: string[]) {
+  return files.filter((file) => !fs.existsSync(path.join(process.cwd(), file)));
+}
+
+export function removeFilesInCwd(files: string[]) {
+  for (const file of files) {
+    fs.rmSync(path.join(process.cwd(), file));
+  }
+}
+
+/**
+ * Returns TRUE if the file is starting with any of the provided string filters.
+ *
+ * @param file - Path of the file
+ * @param filter - A single or array of strings to filter the files by - only returns TRUE if the file starts with any of the provided filter(s).
+ */
+export function isFileStartingWith(file: string, filter: string | string[]) {
+  if (Array.isArray(filter)) {
+    return filter.some((f) => file.startsWith(f));
+  }
+
+  return file.startsWith(filter);
+}
