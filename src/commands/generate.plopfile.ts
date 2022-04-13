@@ -2,8 +2,8 @@ import type { NodePlopAPI, ModifyActionConfig } from 'plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from '../../constants';
-import { ifEq } from '../../utils/utils.handlebars';
+import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from '../constants';
+import { ifEq } from '../utils/utils.handlebars';
 
 type CliArgs = {
   pluginName: string;
