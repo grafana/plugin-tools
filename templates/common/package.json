@@ -19,8 +19,8 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.16.7",
-    "@grafana/e2e": "8.4.5",
-    "@grafana/e2e-selectors": "8.4.5",
+    "@grafana/e2e": "{{ grafanaVersion }}",
+    "@grafana/e2e-selectors": "{{ grafanaVersion }}",
     "@grafana/eslint-config": "^2.5.0",
     "@grafana/tsconfig": "^1.2.0-rc1",
     "@swc/core": "^1.2.144",
@@ -58,9 +58,9 @@
   },
   "dependencies": {
     "@emotion/css": "^11.1.3",
-    "@grafana/data": "8.4.5",
-    "@grafana/runtime": "8.4.5",
-    "@grafana/ui": "8.4.5",
+    "@grafana/data": "{{ grafanaVersion }}",
+    "@grafana/runtime": "{{ grafanaVersion }}",
+    "@grafana/ui": "{{ grafanaVersion }}",
     "@types/lodash": "latest"{{#if_eq pluginType "app"}},
     "react-router-dom": "^5.2.0"
     {{/if_eq}}

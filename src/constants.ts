@@ -29,6 +29,13 @@ export enum PLUGIN_TYPES {
   datasource = 'datasource',
 }
 
+// This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
+// and will be available to use in the templates.
+// Example: "@grafana/ui": "{{ grafanaVersion }}"
+export const EXTRA_TEMPLATE_VARIABLES = {
+  grafanaVersion: '8.3.4',
+};
+
 export const MIGRATION_CONFIG = {
   // Files that should be overriden during a migration.
   // (paths are relative to the scaffolded projects root)

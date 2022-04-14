@@ -5,7 +5,7 @@ import mkdirp from 'mkdirp';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files';
 import { renderHandlebarsTemplate } from './utils.handlebars';
 import { getPluginJson } from './utils.plugin';
-import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX } from '../constants';
+import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
 
 /**
  *
@@ -65,6 +65,7 @@ export function getTemplateData() {
   const pluginJson = getPluginJson();
 
   return {
+    ...EXTRA_TEMPLATE_VARIABLES,
     pluginId: pluginJson.id,
     pluginName: pluginJson.name,
     pluginDescription: pluginJson.info?.description,
