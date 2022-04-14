@@ -2,8 +2,15 @@ import type { NodePlopAPI, ModifyActionConfig } from 'plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { EXPORT_PATH_PREFIX, IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES } from '../../constants';
-import { ifEq } from '../../utils/utils.handlebars';
+import { ifEq } from '../utils/utils.handlebars';
+import {
+  EXPORT_PATH_PREFIX,
+  IS_DEV,
+  TEMPLATE_PATHS,
+  PARTIALS_DIR,
+  PLUGIN_TYPES,
+  EXTRA_TEMPLATE_VARIABLES,
+} from '../constants';
 
 type CliArgs = {
   pluginName: string;
@@ -94,6 +101,7 @@ function replacePatternWithTemplateInReadme(pattern: string, partialsFile: strin
     // @ts-ignore
     template: undefined,
     templateFile: path.join(PARTIALS_DIR, partialsFile),
+    data: EXTRA_TEMPLATE_VARIABLES,
   };
 }
 
@@ -112,6 +120,7 @@ function getActionsForTemplateFolder(folderPath: string) {
     force: IS_DEV,
     // We would still like to scaffold as many files as possible even if one fails
     abortOnFail: false,
+    data: EXTRA_TEMPLATE_VARIABLES,
   }));
 }
 

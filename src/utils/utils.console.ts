@@ -6,10 +6,26 @@ marked.setOptions({
   renderer: new TerminalRenderer(),
 });
 
+export function displayAsMarkdown(msg: string) {
+  return marked(msg);
+}
+
+export function displayArrayAsList(files: string[]) {
+  return ` - ${files.map((t) => `\`${t}\``).join('\n - ')}`;
+}
+
+export function printMessage(msg: string) {
+  console.log(displayAsMarkdown(`\n${msg}`));
+}
+
+export function printSuccessMessage(msg: string) {
+  console.log(displayAsMarkdown(`\n✔ ${msg}`));
+}
+
 export function confirmPrompt(message: string) {
   const prompt = new Confirm({
     name: 'question',
-    message,
+    message: displayAsMarkdown(message),
   });
 
   return prompt.run();
@@ -17,13 +33,9 @@ export function confirmPrompt(message: string) {
 
 export function selectPrompt(message: string, choices: string[]) {
   const prompt = new Select({
-    message,
     choices,
+    message: displayAsMarkdown(message),
   });
 
   return prompt.run();
-}
-
-export function printMarkdown(content: string) {
-  console.log(marked(content));
 }

@@ -7,9 +7,10 @@ describe('Utils / Templates', () => {
       expect(getTemplateFiles(PLUGIN_TYPES.app).length).toBeGreaterThan(0);
     });
 
-    test('should be possible to filter templates for a sub-folder', () => {
+    test('should be possible to filter templates by a sub-folder', () => {
       const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, '.config/types');
 
+      // Should have found at least one file
       expect(templateFiles.length).toBeGreaterThan(0);
 
       // A file that should live in this sub-directory
@@ -19,11 +20,25 @@ describe('Utils / Templates', () => {
       expect(templateFiles.find((t) => t.includes('Dockerfile'))).toBeUndefined();
     });
 
-    test('should return an empty array when scanning a non-existing sub-folder', () => {
+    test('should return an empty array when filtering by a non-existing sub-folder', () => {
       const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, '.config/types/foo/bar/unknown');
 
       expect(Array.isArray(templateFiles)).toBe(true);
       expect(templateFiles.length).toBe(0);
+    });
+
+    test('should be possible to filter for multiple different files', () => {
+      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, ['.eslintrc', '.prettierrc.js', 'tsconfig.json']);
+
+      expect(Array.isArray(templateFiles)).toBe(true);
+      expect(templateFiles.length).toBe(3);
+    });
+
+    test('should be possible to filter for a single file', () => {
+      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, '.config/types/custom.d.ts');
+
+      expect(Array.isArray(templateFiles)).toBe(true);
+      expect(templateFiles.length).toBe(1);
     });
   });
 });

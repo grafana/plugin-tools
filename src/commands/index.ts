@@ -1,2 +1,3 @@
-export * from './generate/generate.command';
-export * from './update/update.command';
+export * from './generate.command';
+export * from './update.command';
+export * from './migrate.command';
