@@ -33,25 +33,25 @@ yarn dev
 
 Alterntives:
 
-### [`npx`](https://github.com/npm/npx)
+#### [`npx`](https://github.com/npm/npx)
 
 ```bash
 npx @grafana/create-plugin
 ```
 
-### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
+#### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
 
 ```bash
 npm init @grafana/plugin
 ```
 
-### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
+#### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
 
 ```bash
 yarn create @grafana/plugin
 ```
 
-### [`yarn`](https://yarnpkg.com/cli/dlx) (> 2.x)
+#### [`yarn`](https://yarnpkg.com/cli/dlx) (> 2.x)
 
 ```bash
 yarn dlx @grafana/create-plugin
