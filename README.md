@@ -62,7 +62,7 @@ yarn dlx @grafana/create-plugin
 
 ## Migrate your existing plugin
 
-In case you have an existing plugin previously created using the `@grafana/toolkit`, then you can use the
+In case you have an existing plugin previously created using the `@grafana/toolkit` you can use the
 following command to migrate it to the new build tooling:
 
 ```bash
@@ -75,6 +75,8 @@ npx @grafana/create-plugin migrate
 ---
 
 ## Update your plugin build config
+
+**In case your plugin was using `@grafana/toolkit` before make sure to migrate it first using `npx @grafana/create-plugin migrate`.**
 
 As new Grafana versions come out we keep updating our plugin build tooling as well to stay compatible and to make it more performant.
 In order to receive these changes and to make sure your plugin is compatible with the most recent Grafana versions you can use the `update` command,
