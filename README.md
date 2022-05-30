@@ -2,13 +2,17 @@
 
 Create Grafana plugins with ease.
 
+**ToC**
+
 - [Create a new plugin](#create-a-new-plugin)
 - [Migrate your existing plugin](#migrate-your-existing-plugin)
 - [Update your plugin build config](#update-your-plugin-build-config)
 - [Start developing your plugin](#start-developing-your-plugin)
-- **Links**
-  - [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
-  - [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
+
+**Links**
+
+- [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
+- [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
 
 **`@grafana/create-plugin`** works on macOS, Windows and Linux.<br />
 If something doesn’t work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
