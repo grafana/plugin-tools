@@ -46,7 +46,7 @@ export function getOnlyNotExistingInCwd(files: string[]) {
 
 export function removeFilesInCwd(files: string[]) {
   for (const file of files) {
-    fs.rmSync(path.join(process.cwd(), file));
+    fs.rmSync(path.join(process.cwd(), file), { recursive: true, force: true });
   }
 }
 
