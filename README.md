@@ -8,6 +8,7 @@ Create Grafana plugins with ease.
 - [Migrate your existing plugin](#migrate-your-existing-plugin)
 - [Update your plugin build config](#update-your-plugin-build-config)
 - [Start developing your plugin](#start-developing-your-plugin)
+- [Contributing](#contributing)
 
 **Links**
 
@@ -122,6 +123,8 @@ Runs ESLint against the codebase.
 #### `yarn lint:fix`
 
 Runs ESLint against the codebase and attempts to fix the simpler errors.
+
+---
 
 ## Contributing
 
