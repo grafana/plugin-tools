@@ -2,17 +2,28 @@
 
 Create Grafana plugins with ease.
 
+**ToC**
+
+- [Create a new plugin](#create-a-new-plugin)
+- [Migrate your existing plugin](#migrate-your-existing-plugin)
+- [Update your plugin build config](#update-your-plugin-build-config)
+- [Start developing your plugin](#start-developing-your-plugin)
+- [Contributing](#contributing)
+
+**Links**
+
 - [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
-- [How to run my plugin inside Grafana?]()
-- [How to publish my plugin on grafana.com?]()
+- [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
 
 **`@grafana/create-plugin`** works on macOS, Windows and Linux.<br />
 If something doesn’t work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
 If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/create-plugin/discussions).
 
-## Usage
+## Create a new plugin
 
 ### Quick overview
+
+The following commands scaffold a Grafana plugin inside the `./my-plugin` folder:
 
 ```bash
 mkdir my-plugin && cd my-plugin
@@ -21,33 +32,66 @@ yarn install
 yarn dev
 ```
 
-The commands above scaffold a Grafana plugin inside the `./my-plugin` folder.
+Alterntives:
 
-### npx
+#### [`npx`](https://github.com/npm/npx)
 
 ```bash
 npx @grafana/create-plugin
 ```
 
-([More info on how to install `npx`](https://github.com/npm/npx))
-
-### npm
+#### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
 
 ```bash
 npm init @grafana/plugin
 ```
 
-([More info about `npm init`](https://docs.npmjs.com/cli/v7/commands/npm-init))
-
-### yarn
+#### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
 
 ```bash
 yarn create @grafana/plugin
 ```
 
-([More info about `yarn create`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/))
+#### [`yarn`](https://yarnpkg.com/cli/dlx) (> 2.x)
 
-## Available scripts
+```bash
+yarn dlx @grafana/create-plugin
+```
+
+---
+
+## Migrate your existing plugin
+
+In case you have an existing plugin previously created using the `@grafana/toolkit` you can use the
+following command to migrate it to the new build tooling:
+
+```bash
+# Run this command from the root of your plugin
+cd ./my-plugin
+
+npx @grafana/create-plugin migrate
+```
+
+---
+
+## Update your plugin build config
+
+**In case your plugin was using `@grafana/toolkit` before make sure to migrate it first using `npx @grafana/create-plugin migrate`.**
+
+As new Grafana versions come out we keep updating our plugin build tooling as well to stay compatible and to make it more performant.
+In order to receive these changes and to make sure your plugin is compatible with the most recent Grafana versions you can use the `update` command,
+that automatically updates the build configuration for you:
+
+```bash
+# Run this command from the root of your plugin
+cd ./my-plugin
+
+npx @grafana/create-plugin update
+```
+
+---
+
+## Start developing your plugin
 
 We have put together the following dev scripts for you, so you can start coding right away:
 
@@ -81,6 +125,8 @@ Runs ESLint against the codebase.
 #### `yarn lint:fix`
 
 Runs ESLint against the codebase and attempts to fix the simpler errors.
+
+---
 
 ## Contributing
 
