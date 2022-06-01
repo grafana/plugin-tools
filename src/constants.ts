@@ -44,7 +44,7 @@ export const MIGRATION_CONFIG = {
     '.eslintrc',
     '.nvmrc',
     '.prettierrc.js',
-    'docker-compose.yaml',
+    'docker-compose.yaml', // Using .yaml instead of .yml (https://yaml.org/faq.html)
     'jest-setup.js',
     'jest.config.js',
     'tsconfig.json',
@@ -53,7 +53,7 @@ export const MIGRATION_CONFIG = {
   // (paths are relative to the scaffolded projects root)
   filesToExist: ['CHANGELOG.md'],
   // Files that are no longer needed for the project and possibly can be removed.
-  filesToRemove: ['Dockerfile', 'webpack/', '.webpack/', '.prettierrc'],
+  filesToRemove: ['Dockerfile', 'docker-compose.yml', 'webpack/', '.webpack/', '.prettierrc'],
   // NPM dependencies that are no longer needed for the project and possibly can be removed.
   npmDependenciesToRemove: ['ts-loader', 'babel-loader', '@grafana/toolkit'],
 };
