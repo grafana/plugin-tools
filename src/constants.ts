@@ -46,7 +46,7 @@ export const MIGRATION_CONFIG = {
     '.prettierrc.js',
     'docker-compose.yaml',
     'jest-setup.js',
-    'jest-config.js',
+    'jest.config.js',
     'tsconfig.json',
   ],
   // Files that are mandatory for the plugins, but we don't want to ever override them. We are only creating the ones that don't exist.
