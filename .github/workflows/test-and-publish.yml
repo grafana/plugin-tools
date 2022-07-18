@@ -29,7 +29,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: main
+          ref: ${{ github.ref }}
       # limit releases to version changes - https://github.com/EndBug/version-check
       - name: Check version changes
         uses: EndBug/version-check@v1
@@ -50,7 +50,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: main
+          ref: ${{ github.ref }}
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v2
         with:
