@@ -17,7 +17,7 @@
     "generate-app": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js -- create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'app' 't' 't'",
     "generate-panel": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js -- create-plugin 'Sample panel' 'sample-org' 'This is a sample panel.' 'panel' 't' 't'",
     "generate-datasource": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js -- create-plugin 'Sample datasource' 'sample-org' 'This is a sample datasource.' 'datasource' 't' 't'",
-    "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
+    "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "test": "jest --watch",
     "typecheck": "tsc --noEmit"
