@@ -62,5 +62,8 @@
     "events": {
       "start": "cls || clear"
     }
+  },
+  "engines": {
+    "node": ">=16.14.0"
   }
 }
