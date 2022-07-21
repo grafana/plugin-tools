@@ -24,11 +24,11 @@ jobs:
       - name: Unit tests
         run: yarn jest
       - name: test an app plugin generation
-        run: yarn generate-app && (cd generated && yarn && yarn build)
+        run: yarn generate-app && (cd generated && yarn && yarn build && yarn lint)
       - name: test panel plugin generation
-        run: yarn generate-panel && (cd generated && yarn && yarn build)
+        run: yarn generate-panel && (cd generated && yarn && yarn build && yarn lint)
       - name: test datasource plugin generation
-        run: yarn generate-datasource && (cd generated && yarn && yarn build)
+        run: yarn generate-datasource && (cd generated && yarn && yarn build && yarn lint)
   publish:
     name: Publish to NPM Package Registry
     runs-on: ubuntu-latest
