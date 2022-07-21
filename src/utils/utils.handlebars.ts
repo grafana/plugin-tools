@@ -3,10 +3,17 @@ import * as changeCase from 'change-case';
 import titleCase from 'title-case';
 import upperCase from 'upper-case';
 import lowerCase from 'lower-case';
+import { PLUGIN_TYPES } from '../constants';
 
 // Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
 export const ifEq = (a: any, b: any, options: HelperOptions) => {
   return a === b ? options.fn(this) : options.inverse(this);
+};
+
+export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
+  const re = new RegExp(`-?${type}$`, 'i');
+  const newPluginName = pluginName.replace(re, '');
+  return changeCase.paramCase(orgName) + '-' + changeCase.paramCase(newPluginName) + `-${type}`;
 };
 
 // Needed when we are rendering the templates outside of the context of Plop but still would like to support the same helpers
