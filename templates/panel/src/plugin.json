@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
   "name": "{{ titleCase pluginName }}",
-  "id": "{{ kebabCase pluginName }}",
+  "id": "{{ normalize_id pluginName orgName 'panel' }}",
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {

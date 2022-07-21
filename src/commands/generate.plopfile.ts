@@ -2,7 +2,7 @@ import type { NodePlopAPI, ModifyActionConfig } from 'plop';
 import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
-import { ifEq } from '../utils/utils.handlebars';
+import { ifEq, normalizeId } from '../utils/utils.handlebars';
 import {
   EXPORT_PATH_PREFIX,
   IS_DEV,
@@ -24,6 +24,7 @@ type CliArgs = {
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
   plop.setHelper('if_eq', ifEq);
+  plop.setHelper('normalize_id', normalizeId);
 
   plop.setGenerator('create-plugin', {
     description: 'used to scaffold a grafana plugin',
