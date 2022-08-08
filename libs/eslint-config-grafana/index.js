@@ -43,6 +43,7 @@ module.exports = {
     "no-shadow": "off",
     "no-unused-expressions": "off",
     "no-unused-labels": "error",
+    "no-var": "error",
     radix: "error",
     "sort-keys": "off",
     "spaced-comment": ["off", "always"],
