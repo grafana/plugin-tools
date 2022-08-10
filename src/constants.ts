@@ -20,7 +20,8 @@ export const TEMPLATE_PATHS: Record<string, string> = {
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),
-  workflows: path.join(TEMPLATES_DIR, 'github'),
+  workflows: path.join(TEMPLATES_DIR, 'github', 'ci'),
+  isCompatibleWorkflow: path.join(TEMPLATES_DIR, 'github', 'is-compatible'),
 };
 
 export enum PLUGIN_TYPES {

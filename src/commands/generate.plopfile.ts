@@ -64,9 +64,18 @@ export default function (plop: NodePlopAPI) {
         message: 'Do you want to add Github workflows?',
         default: false,
       },
+      {
+        name: 'hasGithubLevitateWorkflow',
+        type: 'confirm',
+        message: 'Do you want to add Github "is-compatible" workflow?',
+        default: true,
+        when: (answers) => {
+          return answers.hasGithubWorkflows;
+        },
+      },
     ],
     // @ts-ignore - We would like to specify the Answers type correctly
-    actions: function ({ pluginType, hasBackend, hasGithubWorkflows }: CliArgs) {
+    actions: function ({ pluginType, hasBackend, hasGithubWorkflows, hasGithubLevitateWorkflow }: CliArgs) {
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder(TEMPLATE_PATHS.common);
 
@@ -79,10 +88,21 @@ export default function (plop: NodePlopAPI) {
       // Copy over Github workflow files (if selected)
       const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
 
+      const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
+        ? getActionsForTemplateFolder(TEMPLATE_PATHS.isCompatibleWorkflow)
+        : [];
+
       // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme();
 
-      return [...commonActions, ...pluginTypeSpecificActions, ...backendActions, ...workflowActions, ...readmeActions];
+      return [
+        ...commonActions,
+        ...pluginTypeSpecificActions,
+        ...backendActions,
+        ...workflowActions,
+        ...readmeActions,
+        ...isCompatibleWorkflowActions,
+      ];
     },
   });
 }
