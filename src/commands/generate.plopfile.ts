@@ -83,7 +83,7 @@ export default function (plop: NodePlopAPI) {
       const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
 
       // Copy over Github workflow files (if selected)
-      const ciWorkflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
+      const ciWorkflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.ciWorkflows) : [];
 
       const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
         ? getActionsForTemplateFolder(TEMPLATE_PATHS.isCompatibleWorkflow)
