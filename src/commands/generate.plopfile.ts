@@ -61,17 +61,14 @@ export default function (plop: NodePlopAPI) {
       {
         name: 'hasGithubWorkflows',
         type: 'confirm',
-        message: 'Do you want to add Github workflows?',
+        message: 'Do you want to add Github CI and Release workflows?',
         default: false,
       },
       {
         name: 'hasGithubLevitateWorkflow',
         type: 'confirm',
-        message: 'Do you want to add Github "is-compatible" workflow?',
-        default: true,
-        when: (answers) => {
-          return answers.hasGithubWorkflows;
-        },
+        message: 'Do you want to add Github "API compatibility" workflow?',
+        default: false,
       },
     ],
     // @ts-ignore - We would like to specify the Answers type correctly
