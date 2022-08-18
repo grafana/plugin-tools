@@ -3,6 +3,7 @@ import { Button, Legend, useStyles2 } from '@grafana/ui';
 import { PluginConfigPageProps, AppPluginMeta, PluginMeta, GrafanaTheme2 } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import { css } from '@emotion/css';
+import { lastValueFrom } from 'rxjs';
 
 export type AppPluginSettings = {};
 
@@ -82,11 +83,10 @@ const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta>
 };
 
 export const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
-  const response = await getBackendSrv().datasourceRequest({
+  const response = getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',
     data,
   });
-
-  return response?.data;
+  return lastValueFrom(response);
 };
