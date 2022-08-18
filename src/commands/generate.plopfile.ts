@@ -67,7 +67,7 @@ export default function (plop: NodePlopAPI) {
       {
         name: 'hasGithubLevitateWorkflow',
         type: 'confirm',
-        message: 'Do you want to add Github "API compatibility" workflow?',
+        message: 'Do you want to add a Github workflow for automatically checking "Grafana API compatibility" on PRs?',
         default: false,
       },
     ],
