@@ -1,4 +1,4 @@
-name: Compatibility check
+name: Latest Grafana API compatibility check
 on: [push, pull_request]
 
 jobs:
