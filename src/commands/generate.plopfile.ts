@@ -61,12 +61,18 @@ export default function (plop: NodePlopAPI) {
       {
         name: 'hasGithubWorkflows',
         type: 'confirm',
-        message: 'Do you want to add Github workflows?',
+        message: 'Do you want to add Github CI and Release workflows?',
+        default: false,
+      },
+      {
+        name: 'hasGithubLevitateWorkflow',
+        type: 'confirm',
+        message: 'Do you want to add a Github workflow for automatically checking "Grafana API compatibility" on PRs?',
         default: false,
       },
     ],
     // @ts-ignore - We would like to specify the Answers type correctly
-    actions: function ({ pluginType, hasBackend, hasGithubWorkflows }: CliArgs) {
+    actions: function ({ pluginType, hasBackend, hasGithubWorkflows, hasGithubLevitateWorkflow }: CliArgs) {
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder(TEMPLATE_PATHS.common);
 
@@ -77,12 +83,23 @@ export default function (plop: NodePlopAPI) {
       const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
 
       // Copy over Github workflow files (if selected)
-      const workflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.workflows) : [];
+      const ciWorkflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.ciWorkflows) : [];
+
+      const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
+        ? getActionsForTemplateFolder(TEMPLATE_PATHS.isCompatibleWorkflow)
+        : [];
 
       // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme();
 
-      return [...commonActions, ...pluginTypeSpecificActions, ...backendActions, ...workflowActions, ...readmeActions];
+      return [
+        ...commonActions,
+        ...pluginTypeSpecificActions,
+        ...backendActions,
+        ...ciWorkflowActions,
+        ...readmeActions,
+        ...isCompatibleWorkflowActions,
+      ];
     },
   });
 }
