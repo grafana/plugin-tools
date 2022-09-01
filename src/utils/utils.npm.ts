@@ -163,11 +163,13 @@ export function getRemovableNpmDependencies(packageNames: string[]) {
   return packageNames.filter((packageName) => dependencies[packageName] || devDependencies[packageName]);
 }
 
-export function removeNpmDependencies(packageNames: string[]) {
+export function removeNpmDependencies(packageNames: string[], { devOnly = false } = {}) {
   const packageJson = getPackageJson();
 
   for (const packageName of packageNames) {
-    delete packageJson.dependencies[packageName];
+    if (!devOnly) {
+      delete packageJson.dependencies[packageName];
+    }
     delete packageJson.devDependencies[packageName];
   }
 

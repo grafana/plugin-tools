@@ -69,9 +69,11 @@ export const migrate = async () => {
     // (skipped automatically if there is nothing to be removed)
     // ------------------------------------------------
     const dependenciesToRemove = getRemovableNpmDependencies(MIGRATION_CONFIG.npmDependenciesToRemove);
+    const devDependenciesToRemove = getRemovableNpmDependencies(MIGRATION_CONFIG.devNpmDependenciesToRemove);
     if (dependenciesToRemove.length) {
       if (await confirmPrompt(TEXT.removeNpmDependenciesPrompt + '\n' + displayArrayAsList(dependenciesToRemove))) {
         removeNpmDependencies(dependenciesToRemove);
+        removeNpmDependencies(devDependenciesToRemove, { devOnly: true });
         printSuccessMessage(TEXT.removeNpmDependenciesSuccess);
       } else {
         printMessage(TEXT.removeNpmDependenciesAborted);

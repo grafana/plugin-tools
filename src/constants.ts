@@ -57,6 +57,7 @@ export const MIGRATION_CONFIG = {
   filesToRemove: ['Dockerfile', 'docker-compose.yml', 'webpack/', '.webpack/', '.prettierrc'],
   // NPM dependencies that are no longer needed for the project and possibly can be removed.
   npmDependenciesToRemove: ['ts-loader', 'babel-loader', '@grafana/toolkit'],
+  devNpmDependenciesToRemove: ['@grafana/toolkit', '@grafana/runtime', '@grafana/data', '@grafana/ui'],
 };
 
 export const UDPATE_CONFIG = {
