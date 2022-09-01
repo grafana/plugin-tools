@@ -72,6 +72,12 @@ cd ./my-plugin
 npx @grafana/create-plugin migrate
 ```
 
+### Things to check after migration
+
+- If you have a custom webpack configuration you might need to migrate it. You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
+- Build your plugin. Run `yarn build` to check your plugin builds as intended.
+- Test your plugin. Test your plugin inside grafana to confirm it is working as intended.
+
 ---
 
 ## Update your plugin build config
@@ -127,6 +133,10 @@ Runs ESLint against the codebase.
 Runs ESLint against the codebase and attempts to fix the simpler errors.
 
 ---
+
+## Customizing or extending the basic configs
+
+You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
 
 ## Contributing
 
