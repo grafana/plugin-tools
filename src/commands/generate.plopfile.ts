@@ -4,21 +4,22 @@ import path from 'path';
 import fs from 'fs';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
 import {
-  EXPORT_PATH_PREFIX,
   IS_DEV,
   TEMPLATE_PATHS,
   PARTIALS_DIR,
   PLUGIN_TYPES,
   EXTRA_TEMPLATE_VARIABLES,
+  DEV_EXPORT_DIR,
 } from '../constants';
 
 type CliArgs = {
   pluginName: string;
   pluginDescription: string;
   orgName: string;
-  pluginType: string;
+  pluginType: PLUGIN_TYPES;
   hasBackend: boolean;
   hasGithubWorkflows: boolean;
+  hasGithubLevitateWorkflow: boolean;
 };
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
@@ -82,26 +83,41 @@ export default function (plop: NodePlopAPI) {
         default: false,
       },
     ],
-    // @ts-ignore - We would like to specify the Answers type correctly
-    actions: function ({ pluginType, hasBackend, hasGithubWorkflows, hasGithubLevitateWorkflow }: CliArgs) {
+    actions: function ({
+      pluginName,
+      orgName,
+      pluginType,
+      hasBackend,
+      hasGithubWorkflows,
+      hasGithubLevitateWorkflow,
+    }: CliArgs) {
+      const exportPath = getExportPath(pluginName, orgName, pluginType);
+      console.log(exportPath);
       // Copy over files that are shared between plugins types
-      const commonActions = getActionsForTemplateFolder(TEMPLATE_PATHS.common);
+      const commonActions = getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.common, exportPath });
 
       // Copy over files from the plugin type specific folder, e.g. "tempaltes/app" for "app" plugins ("app" | "panel" | "datasource").
-      const pluginTypeSpecificActions = getActionsForTemplateFolder(TEMPLATE_PATHS[pluginType]);
+      const pluginTypeSpecificActions = getActionsForTemplateFolder({
+        folderPath: TEMPLATE_PATHS[pluginType],
+        exportPath,
+      });
 
       // Copy over backend-specific files (if selected)
-      const backendActions = hasBackend ? getActionsForTemplateFolder(TEMPLATE_PATHS.backend) : [];
+      const backendActions = hasBackend
+        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.backend, exportPath })
+        : [];
 
       // Copy over Github workflow files (if selected)
-      const ciWorkflowActions = hasGithubWorkflows ? getActionsForTemplateFolder(TEMPLATE_PATHS.ciWorkflows) : [];
+      const ciWorkflowActions = hasGithubWorkflows
+        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.ciWorkflows, exportPath })
+        : [];
 
       const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
-        ? getActionsForTemplateFolder(TEMPLATE_PATHS.isCompatibleWorkflow)
+        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.isCompatibleWorkflow, exportPath })
         : [];
 
       // Replace conditional bits in the Readme files
-      const readmeActions = getActionsForReadme();
+      const readmeActions = getActionsForReadme({ exportPath });
 
       return [
         ...commonActions,
@@ -115,17 +131,29 @@ export default function (plop: NodePlopAPI) {
   });
 }
 
-function getActionsForReadme(): ModifyActionConfig[] {
+function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActionConfig[] {
   return [
-    replacePatternWithTemplateInReadme('-- INSERT FRONTEND GETTING STARTED --', 'frontend-getting-started.md'),
-    replacePatternWithTemplateInReadme('-- INSERT BACKEND GETTING STARTED --', 'backend-getting-started.md'),
+    replacePatternWithTemplateInReadme(
+      '-- INSERT FRONTEND GETTING STARTED --',
+      'frontend-getting-started.md',
+      exportPath
+    ),
+    replacePatternWithTemplateInReadme(
+      '-- INSERT BACKEND GETTING STARTED --',
+      'backend-getting-started.md',
+      exportPath
+    ),
   ];
 }
 
-function replacePatternWithTemplateInReadme(pattern: string, partialsFile: string): ModifyActionConfig {
+function replacePatternWithTemplateInReadme(
+  pattern: string,
+  partialsFile: string,
+  exportPath: string
+): ModifyActionConfig {
   return {
     type: 'modify',
-    path: path.join(EXPORT_PATH_PREFIX, 'README.md'),
+    path: path.join(exportPath, 'README.md'),
     pattern,
     // @ts-ignore
     template: undefined,
@@ -135,7 +163,7 @@ function replacePatternWithTemplateInReadme(pattern: string, partialsFile: strin
 }
 
 // TODO<use Plop action `addMany` instead>
-function getActionsForTemplateFolder(folderPath: string) {
+function getActionsForTemplateFolder({ folderPath, exportPath }: { folderPath: string; exportPath: string }) {
   const files = glob.sync(`${folderPath}/**`, { dot: true });
   const getExportFileName = (f: string) => (path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f));
   const getExportPath = (f: string) => path.relative(folderPath, path.dirname(f));
@@ -144,7 +172,7 @@ function getActionsForTemplateFolder(folderPath: string) {
     type: 'add',
     templateFile: f,
     // The target path where the compiled template is saved to
-    path: path.join(EXPORT_PATH_PREFIX, getExportPath(f), getExportFileName(f)),
+    path: path.join(exportPath, getExportPath(f), getExportFileName(f)),
     // We would like to override generated files in development mode
     force: IS_DEV,
     // We would still like to scaffold as many files as possible even if one fails
@@ -158,5 +186,13 @@ function isFile(path: string) {
     return fs.lstatSync(path).isFile();
   } catch (e) {
     return false;
+  }
+}
+
+function getExportPath(pluginName: string, orgName: string, pluginType: PLUGIN_TYPES) {
+  if (IS_DEV) {
+    return DEV_EXPORT_DIR;
+  } else {
+    return path.join(process.cwd(), normalizeId(pluginName, orgName, pluginType));
   }
 }
