@@ -33,18 +33,29 @@ export default function (plop: NodePlopAPI) {
         name: 'pluginName',
         type: 'input',
         message: 'What is going to be the name of your plugin?',
+        validate: (value: string) => {
+          if (/.+/.test(value)) {
+            return true;
+          }
+          return 'Plugin name is required';
+        },
       },
       {
         name: 'orgName',
         type: 'input',
         message: 'What is the organization name of your plugin?',
-        default: 'my-org',
+        validate: (value: string) => {
+          if (/.+/.test(value)) {
+            return true;
+          }
+          return 'Organization name is required';
+        },
       },
       {
         name: 'pluginDescription',
         type: 'input',
         message: 'How would you describe your plugin?',
-        default: '<plugin description>',
+        default: '',
       },
       {
         name: 'pluginType',
