@@ -34,7 +34,7 @@ export enum PLUGIN_TYPES {
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaVersion: '9.0.7',
+  grafanaVersion: '9.1.2',
 };
 
 export const MIGRATION_CONFIG = {
@@ -57,6 +57,7 @@ export const MIGRATION_CONFIG = {
   filesToRemove: ['Dockerfile', 'docker-compose.yml', 'webpack/', '.webpack/', '.prettierrc'],
   // NPM dependencies that are no longer needed for the project and possibly can be removed.
   npmDependenciesToRemove: ['ts-loader', 'babel-loader', '@grafana/toolkit'],
+  devNpmDependenciesToRemove: ['@grafana/toolkit', '@grafana/runtime', '@grafana/data', '@grafana/ui'],
 };
 
 export const UDPATE_CONFIG = {
