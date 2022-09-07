@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_BOT_ACCESS_TOKEN }}
 
       - name: Setup environment
         uses: actions/setup-node@v3.1.1
@@ -38,6 +38,11 @@ jobs:
 
       - name: Unit tests
         run: yarn jest
+
+      - name: Setup Git
+        run: |
+          git config user.name 'grafanabot'
+          git config user.email 'bot@grafana.com'
 
       - name: bump version
         run: npm version ${{ github.event.inputs.version }}
