@@ -12,10 +12,10 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import { Configuration } from 'webpack';
 
-import { getPackageJson, getPluginId, hasReadme } from './utils';
-import { SOURCE_DIR, DIST_DIR, ENTRY_FILE } from './constants';
+import { getPackageJson, getPluginId, hasReadme, getEntries } from './utils';
+import { SOURCE_DIR, DIST_DIR } from './constants';
 
-const config = (env): Configuration => ({
+const config = async (env): Promise<Configuration> => ({
   cache: {
     type: 'filesystem',
     buildDependencies: {
@@ -27,9 +27,7 @@ const config = (env): Configuration => ({
 
   devtool: env.production ? 'source-map' : 'eval-source-map',
 
-  entry: {
-    module: path.resolve(process.cwd(), ENTRY_FILE),
-  },
+  entry: await getEntries(),
 
   externals: [
     'lodash',
