@@ -92,7 +92,6 @@ export default function (plop: NodePlopAPI) {
       hasGithubLevitateWorkflow,
     }: CliArgs) {
       const exportPath = getExportPath(pluginName, orgName, pluginType);
-      console.log(exportPath);
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.common, exportPath });
 
