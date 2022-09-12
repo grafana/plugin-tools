@@ -90,7 +90,7 @@ import grafanaConfig from './.config/webpack/webpack.config';
 const config = async (env) => {
   const baseConfig = await grafanaConfig(env);
 
-  merge(baseConfig, {
+  return merge(baseConfig, {
     // Add custom config here...
     output: {
       asyncChunks: true,
@@ -99,6 +99,7 @@ const config = async (env) => {
 };
 
 export default config;
+
 ```
 
 #### 3. Update the `package.json` to use the new Webpack config
