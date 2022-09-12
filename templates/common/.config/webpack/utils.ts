@@ -21,7 +21,7 @@ export function hasReadme() {
 }
 
 export async function getEntries(): Promise<Record<string, string>> {
-  const parent = `..${path.sep}`;
+  const parent = '..';
   const pluginsJson = await globAsync('**/src/**/plugin.json');
   
   const plugins = await Promise.all(pluginsJson.map(pluginJson => {
