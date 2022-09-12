@@ -84,18 +84,23 @@ We are going to use [`webpack-merge`](https://github.com/survivejs/webpack-merge
 
 ```typescript
 // webpack.config.ts
+import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
 import grafanaConfig from './.config/webpack/webpack.config';
 
-const config = (env) =>
-    merge(grafanaConfig(env), {
-        // Add custom config here...
-        output: {
-            asyncChunks: true,
-        },
-    });
+const config = async (env): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+
+  return merge(baseConfig, {
+    // Add custom config here...
+    output: {
+      asyncChunks: true,
+    },
+  });
+};
 
 export default config;
+
 ```
 
 #### 3. Update the `package.json` to use the new Webpack config
