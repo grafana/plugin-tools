@@ -87,13 +87,16 @@ We are going to use [`webpack-merge`](https://github.com/survivejs/webpack-merge
 import { merge } from 'webpack-merge';
 import grafanaConfig from './.config/webpack/webpack.config';
 
-const config = (env) =>
-    merge(grafanaConfig(env), {
-        // Add custom config here...
-        output: {
-            asyncChunks: true,
-        },
-    });
+const config = async (env) => {
+  const baseConfig = await grafanaConfig(env);
+
+  merge(baseConfig, {
+    // Add custom config here...
+    output: {
+      asyncChunks: true,
+    },
+  });
+};
 
 export default config;
 ```
