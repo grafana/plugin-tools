@@ -16,9 +16,10 @@ export const PARTIALS_DIR = path.join(TEMPLATES_DIR, '_partials');
 
 export const TEMPLATE_PATHS: Record<string, string> = {
   app: path.join(TEMPLATES_DIR, 'app'),
-  backend: path.join(TEMPLATES_DIR, 'backend'),
+  appBackend: path.join(TEMPLATES_DIR, 'backend', 'app'),
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
+  datasourceBackend: path.join(TEMPLATES_DIR, 'backend', 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),
   ciWorkflows: path.join(TEMPLATES_DIR, 'github', 'ci'),
   isCompatibleWorkflow: path.join(TEMPLATES_DIR, 'github', 'is-compatible'),

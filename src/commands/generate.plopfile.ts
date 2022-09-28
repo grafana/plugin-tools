@@ -102,9 +102,7 @@ export default function (plop: NodePlopAPI) {
       });
 
       // Copy over backend-specific files (if selected)
-      const backendActions = hasBackend
-        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.backend, exportPath })
-        : [];
+      const backendActions = hasBackend ? getActionsForBackend(pluginType, exportPath) : [];
 
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
@@ -143,6 +141,19 @@ function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActi
       exportPath
     ),
   ];
+}
+
+function getActionsForBackend(pluginType: string, exportPath: string) {
+  switch (pluginType) {
+    case PLUGIN_TYPES.app:
+      return getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.appBackend, exportPath });
+
+    case PLUGIN_TYPES.datasource:
+      return getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.datasourceBackend, exportPath });
+
+    default:
+      return [];
+  }
 }
 
 function replacePatternWithTemplateInReadme(
