@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "git@github.com:grafana/create-plugin.git",
   "author": "Grafana",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
