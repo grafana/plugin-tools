@@ -25,7 +25,7 @@ If you have questions or need help, please ask in [GitHub Discussions](https://g
 
 * `mkdir -p $HOME/grafana-plugins && cd $HOME/grafana-plugins`
 * Run `yarn create @grafana/plugin` and follow the questions
-* Cd to the plugin directory. e.g.: `cd my-org-my-plugin-name`
+* Cd to your new plugin directory. e.g.: `cd my-org-my-plugin-name`
 * Install the dependencies: `yarn install`
 * Start developing: `yarn dev` (will watch changes in your plugin code and rebuild)
 
@@ -42,6 +42,7 @@ If you have questions or need help, please ask in [GitHub Discussions](https://g
 * Open http://localhost:3000
 * Auth with username admin and password admin. Change the password.
 * Visit `Configuration -> Plugins` and see if your new plugin is listed there as installed.
+* Perform changes to your plugin and refresh grafana to see them. (remember to keep `yarn dev` running in your plugin)
 
 You can see more information on building grafana plugins [here](https://grafana.com/tutorials/build-a-panel-plugin/). NOTE: This guide might still contain references to toolkit. Skip to the "Anatomy of a plugin" section.
 
