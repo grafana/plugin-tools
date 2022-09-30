@@ -19,20 +19,33 @@ Create Grafana plugins with ease.
 If something doesn’t work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
 If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/create-plugin/discussions).
 
-## Create a new plugin
+## Create a new grafana plugin
 
-### Quick overview
+### Scaffolding
 
-The following commands scaffold a Grafana plugin inside the `./my-plugin` folder:
+* `mkdir -p $HOME/grafana-plugins && cd $HOME/grafana-plugins`
+* Run `yarn create @grafana/plugin` and follow the questions
+* Cd to the plugin directory. e.g.: `cd my-org-my-plugin-name`
+* Install the dependencies: `yarn install`
+* Start developing: `yarn dev` (will watch changes in your plugin code and rebuild)
 
-```bash
-mkdir my-plugin && cd my-plugin
-yarn create @grafana/plugin
-yarn install
-yarn dev
-```
+### Run your plugin inside grafana (docker example)
 
-Alterntives:
+* Run grafana inside docker:
+
+  ```bash
+  docker run -p 3000:3000 -v "$HOME"/grafana-plugins:/var/lib/grafana/plugins --name=grafana grafana/grafana:9.1.2
+  ```
+
+  NOTE: If you add or remove a plugin inside `$HOME/grafana-plugins` you need to restart grafana.
+
+* Open http://localhost:3000
+* Auth with username admin and password admin. Change the password.
+* Visit `Configuration -> Plugins` and see if your new plugin is listed there as installed.
+
+You can see more information on building grafana plugins [here](https://grafana.com/tutorials/build-a-panel-plugin/). NOTE: This guide might still contain references to toolkit. Skip to the "Anatomy of a plugin" section.
+
+## Alternatives syntaxes to run create-plugin
 
 #### [`npx`](https://github.com/npm/npx)
 
