@@ -123,7 +123,7 @@ jobs:
           pushd ./plugin-validator/cmd/plugincheck
           go install
           popd
-          plugincheck $\{{ steps.metadata.outputs.archive }}
+          plugincheck2 -config ./plugin-validator/config/publishing.yaml $\{{ steps.metadata.outputs.archive }}
 
       - name: Create release
         id: create_release
