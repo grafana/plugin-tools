@@ -3,12 +3,12 @@ version: '3.0'
 services:
   grafana:
     container_name: '{{ kebabCase pluginName }}'
-    build: 
+    build:
       context: ./.config
       args:
         grafana_version: ${GRAFANA_VERSION:-{{~grafanaVersion~}} }
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/{{ kebabCase pluginName }},
+      - ./dist:/var/lib/grafana/plugins/{{ kebabCase pluginName }}
       - ./provisioning:/etc/grafana/provisioning
