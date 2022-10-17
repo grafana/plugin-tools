@@ -9,6 +9,7 @@ import {
   getRemovableNpmDependencies,
   removeNpmDependencies,
   updateNpmScripts,
+  cleanUpPackageJson,
 } from '../utils/utils.npm';
 
 export const migrate = async () => {
@@ -90,7 +91,11 @@ export const migrate = async () => {
       printMessage(TEXT.updateNpmScriptsAborted);
     }
 
-    // 4. Summary
+    // Tidy package.json file so any changed fields are sorted as a
+    // package manager would expect.
+    cleanUpPackageJson();
+
+    // 7. Summary
     // -------------
     printSuccessMessage(TEXT.migrationCommandSuccess);
   } catch (error) {

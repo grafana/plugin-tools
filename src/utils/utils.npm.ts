@@ -187,3 +187,20 @@ export function updateNpmScripts() {
 
   writePackageJson(packageJson);
 }
+
+export function cleanUpPackageJson() {
+  const packageJson = getPackageJson();
+  packageJson.scripts = sortKeysAlphabetically(packageJson.scripts);
+  packageJson.dependencies = sortKeysAlphabetically(packageJson.dependencies);
+  packageJson.devDependencies = sortKeysAlphabetically(packageJson.devDependencies);
+  writePackageJson(packageJson);
+}
+
+function sortKeysAlphabetically(obj: Record<string, string>) {
+  return Object.keys(obj)
+    .sort()
+    .reduce<Record<string, string>>((acc, key) => {
+      acc[key] = obj[key];
+      return acc;
+    }, {});
+}
