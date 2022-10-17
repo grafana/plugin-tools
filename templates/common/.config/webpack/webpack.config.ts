@@ -45,6 +45,7 @@ const config = async (env): Promise<Configuration> => ({
     'react-redux',
     'redux',
     'rxjs',
+    'react-router',
     'react-router-dom',
     'd3',
     'angular',
