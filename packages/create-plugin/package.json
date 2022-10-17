@@ -2,7 +2,10 @@
   "name": "@grafana/create-plugin",
   "version": "0.2.0",
   "main": "index.js",
-  "repository": "git@github.com:grafana/create-plugin.git",
+  "repository": {
+    "directory": "packages/create-plugin",
+    "url": "git@github.com:grafana/create-plugin.git"
+  },
   "author": "Grafana",
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
@@ -23,14 +26,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@grafana/tsconfig": "^1.2.0-rc1",
-    "@swc/core": "^1.2.162",
     "@types/minimist": "^1.2.2",
     "@types/mkdirp": "^1.0.2",
     "@types/semver": "^7.3.9",
     "enquirer": "^2.3.6",
     "glob": "^7.1.7",
-    "jest": "^27.5.1",
     "marked-terminal": "^5.1.1",
     "marked": "^4.0.12",
     "mkdirp": "^1.0.4",
@@ -38,21 +38,9 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@grafana/eslint-config": "^2.5.0",
-    "@swc/jest": "^0.2.20",
     "@types/glob": "^7.0.0",
-    "@types/jest": "^27.4.1",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jsdoc": "^36.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "nodemon": "^2.0.13",
-    "tsc-watch": "^4.5.0",
-    "typescript": "^4.4.3"
+    "eslint-plugin-react-hooks": "^4.2.0"
   },
   "nodemonConfig": {
     "watch": [
