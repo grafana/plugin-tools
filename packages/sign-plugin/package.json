@@ -15,7 +15,7 @@
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
-    "test": "jest --watch",
+    "test": "jest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -16,5 +16,4 @@ module.exports = {
       },
     ],
   },
-  modulePathIgnorePatterns: ['<rootDir>/templates/'],
 };

@@ -25,7 +25,7 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Unit tests
-        run: yarn jest
+        run: yarn test:ci
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test panel plugin generation'
