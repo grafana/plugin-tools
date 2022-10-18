@@ -1,8 +1,10 @@
 name: test
 on:
   push:
-    tags-ignore:
-      - '**'
+    # This should disable running the workflow on tags, according to the
+    # on.<push|pull_request>.<branches|tags> GitHub Actions docs.
+    branches:
+      - '*'
 
 jobs:
   test:
