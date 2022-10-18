@@ -1,3 +1,1 @@
-export const sign = async () => {
-  console.log('signing plugin');
-};
+export * from './sign.command';

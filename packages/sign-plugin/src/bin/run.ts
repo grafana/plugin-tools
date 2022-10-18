@@ -8,6 +8,6 @@ const argv = minimist(args);
 const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
   sign,
 };
-const command = commands[argv._[0]] || commands.generate;
+const command = commands[argv._[0]] || commands.sign;
 
 command(argv);
