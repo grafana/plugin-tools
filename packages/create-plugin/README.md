@@ -1,14 +1,21 @@
-
 # Grafana / Create Plugin
 
 Create Grafana plugins with ease.
 
 **ToC**
 
-- [Create a new plugin](#create-a-new-plugin)
-- [Migrate your existing plugin](#migrate-your-existing-plugin)
-- [Update your plugin build config](#update-your-plugin-build-config)
-- [Contributing](#contributing)
+- [Grafana / Create Plugin](#grafana--create-plugin)
+  - [Create a new plugin](#create-a-new-plugin)
+    - [Quick overview](#quick-overview)
+      - [`yarn` (1.x)](#yarn-1x)
+      - [`yarn` (> 2.x)](#yarn--2x)
+      - [`npx`](#npx)
+      - [`npm`](#npm)
+  - [Migrate your existing plugin](#migrate-your-existing-plugin)
+    - [Things to check after migration](#things-to-check-after-migration)
+  - [Update your plugin build config](#update-your-plugin-build-config)
+  - [Customizing or extending the basic configs](#customizing-or-extending-the-basic-configs)
+  - [Contributing](#contributing)
 
 **Links**
 
@@ -23,7 +30,7 @@ If you have questions or need help, please ask in [GitHub Discussions](https://g
 
 ### Quick overview
 
-Run the command in the folder where you want to store your plugins. The new plugin will be scaffolded in a sub-director of the folder where you run the command.
+Run the command in the folder where you want to store your plugins. The new plugin will be scaffolded in a sub-directory of the folder where you run the command.
 
 You can run the command with the package manager of your choice:
 
@@ -96,5 +103,4 @@ You can read more about customizing or extending the basic configuration [here](
 
 ## Contributing
 
-We are always grateful for contribution! See the [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
-
+We are always grateful for contribution! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
