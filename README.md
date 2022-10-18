@@ -1,3 +1,4 @@
+
 # Grafana / Create Plugin
 
 Create Grafana plugins with ease.
@@ -7,7 +8,6 @@ Create Grafana plugins with ease.
 - [Create a new plugin](#create-a-new-plugin)
 - [Migrate your existing plugin](#migrate-your-existing-plugin)
 - [Update your plugin build config](#update-your-plugin-build-config)
-- [Start developing your plugin](#start-developing-your-plugin)
 - [Contributing](#contributing)
 
 **Links**
@@ -16,35 +16,16 @@ Create Grafana plugins with ease.
 - [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
 
 **`@grafana/create-plugin`** works on macOS, Windows and Linux.<br />
-If something doesn’t work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
+If something doesn't work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
 If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/create-plugin/discussions).
 
 ## Create a new plugin
 
 ### Quick overview
 
-The following commands scaffold a Grafana plugin inside the `./my-plugin` folder:
+Run the command in the folder where you want to store your plugins. The new plugin will be scaffolded in a sub-director of the folder where you run the command.
 
-```bash
-mkdir my-plugin && cd my-plugin
-yarn create @grafana/plugin
-yarn install
-yarn dev
-```
-
-Alterntives:
-
-#### [`npx`](https://github.com/npm/npx)
-
-```bash
-npx @grafana/create-plugin
-```
-
-#### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
-
-```bash
-npm init @grafana/plugin
-```
+You can run the command with the package manager of your choice:
 
 #### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
 
@@ -56,6 +37,18 @@ yarn create @grafana/plugin
 
 ```bash
 yarn dlx @grafana/create-plugin
+```
+
+#### [`npx`](https://github.com/npm/npx)
+
+```bash
+npx @grafana/create-plugin
+```
+
+#### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
+
+```bash
+npm init @grafana/plugin
 ```
 
 ---
@@ -97,43 +90,6 @@ npx @grafana/create-plugin update
 
 ---
 
-## Start developing your plugin
-
-We have put together the following dev scripts for you, so you can start coding right away:
-
-#### `yarn dev`
-
-Starts the build in watch mode.
-The build output (plugin bundle) is going to be exported to `./dist`.
-
-#### `yarn build`
-
-Creates a production build for your plugin.
-The build output is going to be exported to `./dist`.
-
-#### `yarn test`
-
-Runs the tests under `./src` directory in watch mode.
-Give your test files a `.test.tsx` or `.test.ts` extension.
-
-#### `yarn test:ci`
-
-Runs the tests and returns with either a zero or a non-zero exit status.
-
-#### `yarn typecheck`
-
-Runs the Typescript compiler against the codebase in a dry-run mode to highlight any type errors or warnings.
-
-#### `yarn lint`
-
-Runs ESLint against the codebase.
-
-#### `yarn lint:fix`
-
-Runs ESLint against the codebase and attempts to fix the simpler errors.
-
----
-
 ## Customizing or extending the basic configs
 
 You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
@@ -141,3 +97,4 @@ You can read more about customizing or extending the basic configuration [here](
 ## Contributing
 
 We are always grateful for contribution! See the [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
+
