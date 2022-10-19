@@ -1,4 +1,4 @@
-name: NPM bump version
+name: Create-plugin NPM bump version
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
           - major
 
 jobs:
-  bump-version:
+  create-plugin-bump-version:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,21 +32,28 @@ jobs:
 
       - name: Check types
         run: yarn typecheck
+        working-directory: './packages/create-plugin'
 
       - name: Lint
         run: yarn lint
+        working-directory: './packages/create-plugin'
+
+      - name: Build
+        run: yarn build
+        working-directory: './packages/create-plugin'
 
       - name: Unit tests
-        run: yarn jest
+        run: yarn test
+        working-directory: './packages/create-plugin'
 
       - name: Setup Git
         run: |
           git config user.name 'grafanabot'
           git config user.email 'bot@grafana.com'
-
-      - name: bump version
+      
+      - name: bump create-plugin version
         run: npm version ${{ github.event.inputs.version }}
         working-directory: './packages/create-plugin'
-
+      
       - name: Push latest version
         run: git push origin main --follow-tags
