@@ -52,7 +52,7 @@ jobs:
           git config user.email 'bot@grafana.com'
       
       - name: bump create-plugin version
-        run: npm version ${{ github.event.inputs.version }}
+        run: yarn version --new-version ${{ github.event.inputs.version }}
         working-directory: './packages/create-plugin'
       
       - name: Push latest version
