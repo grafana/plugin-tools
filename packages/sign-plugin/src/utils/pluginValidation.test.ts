@@ -8,7 +8,7 @@ describe('pluginValidation', () => {
   });
 
   describe('validatePluginJson', () => {
-    test('missing plugin.json file', () => {
+    test('missing "id" field in the plugin.json file', () => {
       expect(() => validatePluginJson({})).toThrow('Plugin id is missing in plugin.json');
     });
   });
