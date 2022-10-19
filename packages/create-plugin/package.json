@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "index.js",
   "repository": {
     "directory": "packages/create-plugin",
@@ -31,8 +31,8 @@
     "@types/semver": "^7.3.9",
     "enquirer": "^2.3.6",
     "glob": "^7.1.7",
-    "marked-terminal": "^5.1.1",
     "marked": "^4.0.12",
+    "marked-terminal": "^5.1.1",
     "mkdirp": "^1.0.4",
     "plop": "^2.7.4",
     "semver": "^7.3.5"
