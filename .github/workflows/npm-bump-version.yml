@@ -46,6 +46,7 @@ jobs:
 
       - name: bump version
         run: npm version ${{ github.event.inputs.version }}
+        working-directory: './packages/create-plugin'
 
       - name: Push latest version
         run: git push origin main --follow-tags

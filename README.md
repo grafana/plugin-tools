@@ -1,100 +1,10 @@
+# Grafana / Plugins tools
 
-# Grafana / Create Plugin
+Create and Sign Grafana plugins with ease.
 
-Create Grafana plugins with ease.
+This is a mono-repo of packages aimed at helping plugin developers extend Grafana in amazing ways!
 
-**ToC**
-
-- [Create a new plugin](#create-a-new-plugin)
-- [Migrate your existing plugin](#migrate-your-existing-plugin)
-- [Update your plugin build config](#update-your-plugin-build-config)
-- [Contributing](#contributing)
-
-**Links**
-
-- [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
-- [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
-
-**`@grafana/create-plugin`** works on macOS, Windows and Linux.<br />
-If something doesn't work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
-If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/create-plugin/discussions).
-
-## Create a new plugin
-
-### Quick overview
-
-Run the command in the folder where you want to store your plugins. The new plugin will be scaffolded in a sub-director of the folder where you run the command.
-
-You can run the command with the package manager of your choice:
-
-#### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
-
-```bash
-yarn create @grafana/plugin
-```
-
-#### [`yarn`](https://yarnpkg.com/cli/dlx) (> 2.x)
-
-```bash
-yarn dlx @grafana/create-plugin
-```
-
-#### [`npx`](https://github.com/npm/npx)
-
-```bash
-npx @grafana/create-plugin
-```
-
-#### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
-
-```bash
-npm init @grafana/plugin
-```
-
----
-
-## Migrate your existing plugin
-
-In case you have an existing plugin previously created using the `@grafana/toolkit` you can use the
-following command to migrate it to the new build tooling:
-
-```bash
-# Run this command from the root of your plugin
-cd ./my-plugin
-
-npx @grafana/create-plugin migrate
-```
-
-### Things to check after migration
-
-- If you have a custom webpack configuration you might need to migrate it. You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
-- Build your plugin. Run `yarn build` to check your plugin builds as intended.
-- Test your plugin. Test your plugin inside grafana to confirm it is working as intended.
-
----
-
-## Update your plugin build config
-
-**In case your plugin was using `@grafana/toolkit` before make sure to migrate it first using `npx @grafana/create-plugin migrate`.**
-
-As new Grafana versions come out we keep updating our plugin build tooling as well to stay compatible and to make it more performant.
-In order to receive these changes and to make sure your plugin is compatible with the most recent Grafana versions you can use the `update` command,
-that automatically updates the build configuration for you:
-
-```bash
-# Run this command from the root of your plugin
-cd ./my-plugin
-
-npx @grafana/create-plugin update
-```
-
----
-
-## Customizing or extending the basic configs
-
-You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
-
-## Contributing
-
-We are always grateful for contribution! See the [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
-
+| Package Name  | Description                            | Readme                                     |
+| ------------- | -------------------------------------- | ------------------------------------------ |
+| Create Plugin | Scaffold a Grafana Plugin effortlessly | [Link](./packages/create-plugin/README.md) |
+| Sign Plugin   | Sign a Grafana Plugin effortlessly     | [Link](./packages/sign-plugin/README.md)   |

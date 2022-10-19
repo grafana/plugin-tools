@@ -1,0 +1,40 @@
+{
+  "name": "@grafana/sign-plugin",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": {
+    "directory": "packages/sign-plugin",
+    "url": "git@github.com:grafana/create-plugin.git"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bin": "./dist/bin/run.js",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "yarn clean && tsc && chmod +x ./dist/bin/run.js",
+    "dev": "nodemon --exec 'tsc'",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "yarn lint --fix",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^1.1.3",
+    "minimist": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.2"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*"
+    ],
+    "ext": "*",
+    "events": {
+      "start": "cls || clear"
+    }
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

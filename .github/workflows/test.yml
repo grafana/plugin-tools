@@ -1,5 +1,10 @@
 name: test
-on: push
+on:
+  push:
+    # This should disable running the workflow on tags, according to the
+    # on.<push|pull_request>.<branches|tags> GitHub Actions docs.
+    branches:
+      - '**'
 
 jobs:
   test:
@@ -22,10 +27,10 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Unit tests
-        run: yarn jest
-      - name: test an app plugin generation
-        run: yarn generate-app && (cd generated && yarn && yarn build && yarn lint)
-      - name: test panel plugin generation
-        run: yarn generate-panel && (cd generated && yarn && yarn build && yarn lint)
-      - name: test datasource plugin generation
-        run: yarn generate-datasource && (cd generated && yarn && yarn build && yarn lint)
+        run: yarn test:ci
+      - name: '@grafana/create-plugin - test an app plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+      - name: '@grafana/create-plugin - test panel plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-panel && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+      - name: '@grafana/create-plugin - test datasource plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
