@@ -47,8 +47,14 @@ jobs:
       - name: Build and test frontend
         run: yarn build
 
+      - name: Start grafana docker
+        run: yarn server
+
       - name: Run e2e tests
         run: yarn e2e
+
+      - name: stop grafana docker
+        run: docker-compose down
 
       - name: Check for backend
         id: check-for-backend
