@@ -3,6 +3,7 @@ import path from 'path';
 import minimist from 'minimist';
 import { assertRootUrlIsValid } from '../utils/pluginValidation';
 import { buildManifest, signManifest, saveManifest } from '../utils/manifest';
+import { getVersion } from '../utils/getVersion';
 
 export const sign = async (argv: minimist.ParsedArgs) => {
   const pluginDistDir = path.resolve('dist');
@@ -22,7 +23,7 @@ export const sign = async (argv: minimist.ParsedArgs) => {
       manifest.rootUrls = rootUrls;
     }
 
-    manifest.toolkit = { version: '' };
+    manifest.signPlugin = { version: getVersion() };
     const signedManifest = await signManifest(manifest);
 
     console.log('Saving signed manifest...');
