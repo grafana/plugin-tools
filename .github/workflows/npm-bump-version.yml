@@ -32,12 +32,15 @@ jobs:
 
       - name: Check types
         run: yarn typecheck
+        working-directory: './packages/create-plugin'
 
       - name: Lint
         run: yarn lint
+        working-directory: './packages/create-plugin'
 
       - name: Build
         run: yarn build
+        working-directory: './packages/create-plugin'
 
       - name: Unit tests
         run: yarn test
