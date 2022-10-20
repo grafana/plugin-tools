@@ -38,10 +38,10 @@ body:
       label: How to reproduce it (as minimally and precisely as possible)
       description: Please give a concise list of steps
       value: |
-      1.
-      2.
-      3.
-      ...
+        1. In this environment...
+        2. With this config...
+        3. Run '...'
+        4. See error...
     validations:
       required: true
   - type: textarea
