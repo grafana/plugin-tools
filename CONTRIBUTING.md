@@ -32,7 +32,7 @@ If you have a question about this project, how to use it, or just need clarifica
 
 Once it's filed:
 
-- The project team will [label the issue](#label-issues).
+- The project team will label the issue.
 - Someone will try to have a response soon.
 - If you or the maintainers don't respond to an issue for 30 days, the issue will be closed. If you want to come back to it, reply (once, please), and we'll reopen the existing issue. Please avoid filing new issues as extensions of one you already made.
 
@@ -46,7 +46,7 @@ If you run into an error or bug with the project:
 
 Once it's filed:
 
-- The project team will [label the issue](#label-issues).
+- The project team will label the issue.
 - A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those steps and mark the issue as `needs-repro`. Bugs with the `needs-repro` tag will not be addressed until they are reproduced.
 - If the team is able to reproduce the issue, it will be marked `needs-fix`, as well as possibly other tags (such as `critical`), and the issue will be left to be [implemented by someone](#contribute-code).
 - If you or the maintainers don't respond to an issue for 30 days, the issue will be closed. If you want to come back to it, reply (once, please), and we'll reopen the existing issue. Please avoid filing new issues as extensions of one you already made.
@@ -62,7 +62,7 @@ If the project doesn't do something you need or want it to do:
 
 Once it's filed:
 
-- The project team will [label the issue](#label-issues).
+- The project team will label the issue.
 - The project team will evaluate the feature request, possibly asking you more questions to understand its purpose and any relevant requirements. If the issue is closed, the team will convey their reasoning and suggest an alternative path forward.
 - If the feature request is accepted, it will be marked for implementation with `feature-accepted`, which can then be done by either a core team member or by anyone in the community who wants to [contribute code](#contribute-code).
 
@@ -142,7 +142,7 @@ Once you've filed the PR:
 - One or more maintainers will use GitHub's review feature to review your PR.
 - If the maintainer asks for any changes, edit your changes, push, and ask for another review. Additional tags (such as `needs-tests`) will be added depending on the review.
 - If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's ok! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
-- If your PR gets accepted, it will be marked as such, and merged into the `latest` branch soon after. Your contribution will be distributed to the masses next time the maintainers [create a release](#create-a-release)
+- If your PR gets accepted, it will be marked as such, and merged into the `main` branch soon after. Your contribution will be distributed to the masses next time the maintainers [create a release](#create-a-release)
 
 ## Create A Release
 
