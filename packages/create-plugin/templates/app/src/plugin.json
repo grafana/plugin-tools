@@ -2,7 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "app",
   "name": "{{ titleCase pluginName }}",
-  "id": "{{ normalize_id pluginName orgName 'app' }}",
+  "id": "{{ normalize_id pluginName orgName 'app' }}",{{#if hasBackend}}
+  "backend": true,
+  "executable": "gpx_{{ snakeCase pluginName }}",{{/if}}
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {
