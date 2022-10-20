@@ -1,5 +1,4 @@
 name: Bug report
-about: Report a bug you found
 title: 'Bug: '
 labels:
   - bug
@@ -45,7 +44,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: how-reproduce
+    id: environment
     attributes:
       label: Environment
       description: 'Please run `npx envinfo --system --binaries --browsers --npmPackages="@grafana/*"` in the plugin directory and paste the results here.'
