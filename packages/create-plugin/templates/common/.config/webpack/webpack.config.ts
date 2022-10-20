@@ -117,7 +117,9 @@ const config = async (env): Promise<Configuration> => ({
   },
 
   output: {
-    clean: true,
+    clean: {
+      keep: /gpx_.*/,
+    },
     filename: '[name].js',
     libraryTarget: 'amd',
     path: path.resolve(process.cwd(), DIST_DIR),
