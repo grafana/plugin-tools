@@ -9,6 +9,7 @@
   - [Request a Feature](#request-a-feature)
 - Make Something? 🤓👩🏽‍💻📜🍳
   - [Project Setup](#project-setup)
+  - [Contributor License Agreement (CLA)](#contributor-license-agreement-cla)
   - [Contribute Documentation](#contribute-documentation)
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
@@ -96,6 +97,10 @@ Plugin-tools is a mono-repo consisting of multiple projects. Please refer to the
 | ------------- | ------------------------------------------------ |
 | Create Plugin | [Link](./packages/create-plugin/CONTRIBUTING.md) |
 | Sign Plugin   | [Link](./packages/sign-plugin/CONTRIBUTING.md)   |
+
+## Contributor License Agreement (CLA)
+
+Before we can accept your pull request, you need to [sign our CLA](https://grafana.com/docs/grafana/latest/developers/cla/). If you haven't, our CLA assistant prompts you to when you create your pull request.
 
 ## Contribute Documentation
 
