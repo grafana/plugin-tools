@@ -69,6 +69,7 @@ export default function (plop: NodePlopAPI) {
         type: 'confirm',
         message: 'Do you want a backend part of your plugin?',
         default: false,
+        when: (answers: CliArgs) => answers.pluginType !== PLUGIN_TYPES.panel,
       },
       {
         name: 'hasGithubWorkflows',
