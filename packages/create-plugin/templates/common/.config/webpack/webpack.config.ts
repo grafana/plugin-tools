@@ -60,7 +60,7 @@ const config = async (env): Promise<Configuration> => ({
       const stripPrefix = (request) => request.substr(prefix.length);
 
       if (hasPrefix(request)) {
-        return callback(null, stripPrefix(request));
+        return callback(undefined, stripPrefix(request));
       }
 
       callback();
@@ -98,7 +98,7 @@ const config = async (env): Promise<Configuration> => ({
           // Keep publicPath relative for host.com/grafana/ deployments
           publicPath: `public/plugins/${getPluginId()}/img/`,
           outputPath: 'img/',
-          name: Boolean(env.production) ? '[hash].[ext]' : '[name].[ext]',
+          filename: Boolean(env.production) ? '[hash][ext]' : '[name][ext]',
         },
       },
       {
@@ -108,7 +108,7 @@ const config = async (env): Promise<Configuration> => ({
           // Keep publicPath relative for host.com/grafana/ deployments
           publicPath: `public/plugins/${getPluginId()}/fonts`,
           outputPath: 'fonts/',
-          name: Boolean(env.production) ? '[hash].[ext]' : '[name].[ext]',
+          filename: Boolean(env.production) ? '[hash][ext]' : '[name][ext]',
         },
       },
     ],
