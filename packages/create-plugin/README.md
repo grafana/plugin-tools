@@ -23,8 +23,8 @@ Create Grafana plugins with ease.
 - [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
 
 **`@grafana/create-plugin`** works on macOS, Windows and Linux.<br />
-If something doesn't work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
-If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/create-plugin/discussions).
+If something doesn't work, please [file an issue](https://github.com/grafana/plugin-tools/issues/new).<br />
+If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/plugin-tools/discussions).
 
 ## Create a new plugin
 
@@ -103,4 +103,4 @@ You can read more about customizing or extending the basic configuration [here](
 
 ## Contributing
 
-We are always grateful for contribution! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
+We are always grateful for contributions! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.

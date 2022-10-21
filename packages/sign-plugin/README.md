@@ -12,19 +12,17 @@ Sign Grafana plugins with ease.
       - [`yarn` (> 2.x)](#yarn--2x)
   - [Contributing](#contributing)
 
-**Links**
-
-- [Signing plugins documentation](https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/)
-
 **`@grafana/sign-plugin`** works on macOS, Windows and Linux.<br />
-If something doesn’t work, please [file an issue](https://github.com/grafana/create-plugin/issues/new).<br />
-If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/create-plugin/discussions).
+If something doesn’t work, please [file an issue](https://github.com/grafana/plugin-tools/issues/new).<br />
+If you have questions or need help, please ask in [GitHub Discussions](https://github.com/grafana/plugin-tools/discussions).
 
 ## Signing a plugin
 
 Signing a plugin allows Grafana to verify the authenticity of the plugin with signature verification. This gives users a way to make sure plugins haven’t been tampered with. All Grafana Labs-authored plugins, including Enterprise plugins, are signed.
 
-All plugins require a signature since Grafana 7.4.
+All plugins require a signature since Grafana 7.0.
+
+Please refer to [Signing plugins documentation](https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/) to understand how to sign a Grafana plugin. The following commands are mentioned here for development purposes.
 
 ### Sign a public plugin
 

@@ -94,8 +94,8 @@ export const TEXT = {
   updateNpmScriptsAborted: 'No NPM scripts have been added or updated.',
 
   migrationCommandWarning:  '**⚠️  Warning!**\nThis is going to change files in your current project to make it up-to-date with the latest plugin configuration.\nPlease make sure that you have backed up your changes.',
-  migrationCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/create-plugin.',
+  migrationCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',
-  updateCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/create-plugin.',
+  updateCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
 }
