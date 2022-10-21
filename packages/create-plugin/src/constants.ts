@@ -30,6 +30,7 @@ export enum PLUGIN_TYPES {
   app = 'app',
   panel = 'panel',
   datasource = 'datasource',
+  secretsmanager = 'secretsmanager',
 }
 
 // This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
