@@ -93,23 +93,21 @@ const config = async (env): Promise<Configuration> => ({
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/,
-        use: [
-          {
-            loader: 'asset/resource',
-            options: {
-              outputPath: '/',
-              name: Boolean(env.production) ? '[path][hash].[ext]' : '[path][name].[ext]',
-            },
-          },
-        ],
+        type: 'asset/resource',
+        generator: {
+          // Keep publicPath relative for host.com/grafana/ deployments
+          publicPath: `public/plugins/${getPluginId()}/img/`,
+          outputPath: 'img/',
+          name: Boolean(env.production) ? '[hash].[ext]' : '[name].[ext]',
+        },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'asset/resource',
-        options: {
+        type: 'asset/resource',
+        generator: {
           // Keep publicPath relative for host.com/grafana/ deployments
           publicPath: `public/plugins/${getPluginId()}/fonts`,
-          outputPath: 'fonts',
+          outputPath: 'fonts/',
           name: Boolean(env.production) ? '[hash].[ext]' : '[name].[ext]',
         },
       },
@@ -121,7 +119,9 @@ const config = async (env): Promise<Configuration> => ({
       keep: /gpx_.*/,
     },
     filename: '[name].js',
-    libraryTarget: 'amd',
+    library: {
+      type: 'amd',
+    },
     path: path.resolve(process.cwd(), DIST_DIR),
     publicPath: '/',
   },
