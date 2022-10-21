@@ -16,7 +16,7 @@ export const update = async () => {
 
     // 1. Add / update configuration files
     // -----------------------------------
-    if (await confirmPrompt(TEXT.overrideFilesPrompt)) {
+    if (await confirmPrompt(TEXT.updateConfigPrompt)) {
       compileTemplateFiles(UDPATE_CONFIG.filesToOverride, getTemplateData());
       printSuccessMessage(TEXT.overrideFilesSuccess);
     } else {
