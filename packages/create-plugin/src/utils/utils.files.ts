@@ -29,7 +29,9 @@ export function readJsonFile(filename: string) {
   }
 
   try {
-    return JSON.parse(fs.readFileSync(filename).toString());
+    const content = fs.readFileSync(filename, 'utf8').toString();
+    // remove handlebars code for parsing
+    return JSON.parse(content.replace(/{{.*?}}/g, ''));
   } catch (error: any) {
     error.message = `Cannot parse the "${path.basename(filename)}" file at ${filename}.`;
     throw error;
