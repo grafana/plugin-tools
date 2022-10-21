@@ -12,8 +12,12 @@ export const ifEq = (a: any, b: any, options: HelperOptions) => {
 
 export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
   const re = new RegExp(`-?${type}$`, 'i');
-  const newPluginName = pluginName.replace(re, '');
-  return changeCase.paramCase(orgName) + '-' + changeCase.paramCase(newPluginName) + `-${type}`;
+  const pluginNameRegex = new RegExp('[^0-9a-z]', 'g');
+  const orgNameRegex = new RegExp('[^0-9a-z]', 'g');
+
+  const newPluginName = pluginName.replace(re, '').replace(pluginNameRegex, '');
+  const newOrgName = orgName.replace(orgNameRegex, '');
+  return changeCase.lowerCase(newOrgName) + '-' + changeCase.lowerCase(newPluginName) + `-${type}`;
 };
 
 // Needed when we are rendering the templates outside of the context of Plop but still would like to support the same helpers
