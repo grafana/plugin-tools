@@ -181,6 +181,8 @@ const config = async (env): Promise<Configuration> => ({
 
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    // handle resolving "rootDir" paths
+    modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
     unsafeCache: true,
   },
 });

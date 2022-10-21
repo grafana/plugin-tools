@@ -5,6 +5,7 @@
  */
 
 module.exports = {
+  modulePaths: ['<rootDir>/src'],
   testEnvironment: 'jest-environment-jsdom',
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
