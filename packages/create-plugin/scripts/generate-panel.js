@@ -11,8 +11,8 @@ async function generatePanel() {
   const plop = await nodePlop(plopFile);
   const generator = plop.getGenerator('create-plugin');
   await generator.runActions({
-    pluginName: 'myplugin',
-    orgName: 'myorg',
+    pluginName: 'my-plugin',
+    orgName: 'my-org',
     pluginDescription: 'Auto-generated panel',
     pluginType: 'panel',
     hasGithubWorkflows: true,
