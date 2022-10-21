@@ -5,6 +5,7 @@
   "id": "{{ normalize_id pluginName orgName 'panel' }}",
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
+    "keywords": ["datasource"],
     "author": {
       "name": "{{ sentenceCase orgName }}"
     },
