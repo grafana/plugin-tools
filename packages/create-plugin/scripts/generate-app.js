@@ -15,7 +15,7 @@ async function generatePanel() {
     orgName: 'my-org',
     pluginDescription: 'Auto-generated app',
     pluginType: 'app',
-    hasBackend: true,
+    hasBackend: false,
     hasGithubWorkflows: true,
     hasGithubLevitateWorkflow: true,
   });
