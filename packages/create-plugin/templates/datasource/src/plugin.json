@@ -3,9 +3,9 @@
   "type": "datasource",
   "name": "{{ titleCase pluginName }}",
   "id": "{{ normalize_id pluginName orgName 'datasource' }}",
-  "metrics": true,
+  "metrics": true,{{#if hasBackend}}
   "backend": true,
-  "executable": "gpx_{{ snakeCase pluginName }}",
+  "executable": "gpx_{{ snakeCase pluginName }}",{{/if}}
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {

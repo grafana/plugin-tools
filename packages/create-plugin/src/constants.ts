@@ -14,6 +14,8 @@ export const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');
 // (they won't be copied over to the generated folder as they are)
 export const PARTIALS_DIR = path.join(TEMPLATES_DIR, '_partials');
 
+export const FIXTURES_PATH = path.join(__dirname, '..', 'fixtures');
+
 export const TEMPLATE_PATHS: Record<string, string> = {
   app: path.join(TEMPLATES_DIR, 'app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
