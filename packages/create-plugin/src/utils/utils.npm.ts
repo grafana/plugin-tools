@@ -177,13 +177,24 @@ export function removeNpmDependencies(packageNames: string[], { devOnly = false 
 }
 
 export function updateNpmScripts() {
+  const toolkitScriptRe = /grafana-toolkit plugin:.*/;
+
   const packageJson = getPackageJson();
   const latestPackageJson = getLatestPackageJson();
 
-  packageJson.scripts = {
+  const scripts = {
     ...packageJson.scripts,
     ...latestPackageJson.scripts,
   };
+
+  // loop script keys and remove toolkit scripts
+  for (const key of Object.keys(scripts)) {
+    if (toolkitScriptRe.test(scripts[key])) {
+      delete scripts[key];
+    }
+  }
+
+  packageJson.scripts = scripts;
 
   writePackageJson(packageJson);
 }

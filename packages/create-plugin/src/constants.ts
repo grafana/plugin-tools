@@ -92,7 +92,7 @@ export const TEXT = {
 
   updateConfigPrompt: "**Would you like to update the project's configuration?**",
 
-  updateNpmScriptsPrompt: '**Would you like to update the `{ scripts }` in your `package.json`?**',
+  updateNpmScriptsPrompt: '**Would you like to update the `{ scripts }` in your `package.json`?**\nAll scripts using grafana-toolkit will be replaced.',
   updateNpmScriptsSuccess: 'NPM scripts updated successfully.',
   updateNpmScriptsAborted: 'No NPM scripts have been added or updated.',
 
