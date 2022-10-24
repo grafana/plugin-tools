@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   grafana:
-    container_name: '{{ kebabCase pluginName }}'
+    container_name: '{{ normalize_id pluginName orgName pluginType }}'
     build:
       context: ./.config
       args:
@@ -10,5 +10,5 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/{{ kebabCase pluginName }}
+      - ./dist:/var/lib/grafana/plugins/{{ normalize_id pluginName orgName pluginType }}
       - ./provisioning:/etc/grafana/provisioning
