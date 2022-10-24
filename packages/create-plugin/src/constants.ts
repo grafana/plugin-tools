@@ -89,7 +89,7 @@ export const TEXT = {
   removeNpmDependenciesSuccess: 'Unnecessary NPM dependencies removed successfully.',
   removeNpmDependenciesAborted: 'No NPM dependencies have been removed.',
 
-  updateNpmScriptsPrompt: '**Would you like to update the `{ scripts }` in your `package.json`?**',
+  updateNpmScriptsPrompt: '**Would you like to update the `{ scripts }` in your `package.json`?**\nAll scripts using grafana-toolkit will be replaced.',
   updateNpmScriptsSuccess: 'NPM scripts updated successfully.',
   updateNpmScriptsAborted: 'No NPM scripts have been added or updated.',
 
