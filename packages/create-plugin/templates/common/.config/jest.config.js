@@ -32,7 +32,5 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(ol)/)', // <- exclude the open layers library
-  ],
+  transformIgnorePatterns: [],
 };
