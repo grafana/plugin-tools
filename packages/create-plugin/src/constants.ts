@@ -97,7 +97,16 @@ export const TEXT = {
   updateNpmScriptsAborted: 'No NPM scripts have been added or updated.',
 
   migrationCommandWarning:  '**⚠️  Warning!**\nThis is going to change files in your current project to make it up-to-date with the latest plugin configuration.\nPlease make sure that you have backed up your changes.',
-  migrationCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
+  migrationCommandSuccess: `
+## What's next?
+ * Run \`yarn install\` to install the latest dependencies.
+ * Check your tsconfig.json. You might need to update if you had a custom configuration.
+ * If you have a custom webpack configuration you might need to update it too.
+ * Run \`yarn build\` and observe the output for any errors.
+ * Test your plugin in grafana and make sure everything works as expected.
+
+See instructions on how to customize your configuration here https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/common/.config/README.md
+  `,
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',
   updateCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
