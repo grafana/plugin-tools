@@ -1,0 +1,59 @@
+name: Bug report
+description: File a bug report
+title: 'Bug: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report.
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package Name
+      description: Which package does this bug affect?
+      options:
+        - create-plugin
+        - sign-plugin
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug you're experiencing
+    validations:
+      required: true
+  - type: textarea
+    id: what-expect-happen
+    attributes:
+      label: What you expected to happen
+      description: Describe the behaviour you are expecting
+    validations:
+      required: true
+  - type: textarea
+    id: how-reproduce
+    attributes:
+      label: How to reproduce it (as minimally and precisely as possible)
+      description: Please give a concise list of steps
+      value: |
+        1. In this environment...
+        2. With this config...
+        3. Run '...'
+        4. See error...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: 'Please run `npx envinfo --system --binaries --browsers --npmPackages="@grafana/*"` in the plugin directory and paste the results here.'
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.

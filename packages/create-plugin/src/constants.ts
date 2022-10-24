@@ -30,6 +30,7 @@ export enum PLUGIN_TYPES {
   app = 'app',
   panel = 'panel',
   datasource = 'datasource',
+  secretsmanager = 'secretsmanager',
 }
 
 // This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
@@ -89,13 +90,15 @@ export const TEXT = {
   removeNpmDependenciesSuccess: 'Unnecessary NPM dependencies removed successfully.',
   removeNpmDependenciesAborted: 'No NPM dependencies have been removed.',
 
+  updateConfigPrompt: "**Would you like to update the project's configuration?**",
+
   updateNpmScriptsPrompt: '**Would you like to update the `{ scripts }` in your `package.json`?**\nAll scripts using grafana-toolkit will be replaced.',
   updateNpmScriptsSuccess: 'NPM scripts updated successfully.',
   updateNpmScriptsAborted: 'No NPM scripts have been added or updated.',
 
   migrationCommandWarning:  '**⚠️  Warning!**\nThis is going to change files in your current project to make it up-to-date with the latest plugin configuration.\nPlease make sure that you have backed up your changes.',
-  migrationCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/create-plugin.',
+  migrationCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',
-  updateCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/create-plugin.',
+  updateCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
 }

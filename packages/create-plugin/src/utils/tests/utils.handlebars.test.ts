@@ -9,7 +9,7 @@ describe('Handlebars helpers', () => {
         const pluginName = 'my-plugin';
         const orgName = 'my-org';
         const actual = normalizeId(pluginName, orgName, type);
-        expect(actual).toEqual(`my-org-my-plugin-${type}`);
+        expect(actual).toEqual(`myorg-myplugin-${type}`);
       }
     );
     test.each([PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel])(
@@ -18,7 +18,7 @@ describe('Handlebars helpers', () => {
         const pluginName = `my-plugin-${type}`;
         const orgName = 'my-org';
         const actual = normalizeId(pluginName, orgName, type);
-        expect(actual).toEqual(`my-org-my-plugin-${type}`);
+        expect(actual).toEqual(`myorg-myplugin-${type}`);
       }
     );
 
@@ -28,7 +28,7 @@ describe('Handlebars helpers', () => {
         const pluginName = `my-plugin${type}`;
         const orgName = 'my-org';
         const actual = normalizeId(pluginName, orgName, type);
-        expect(actual).toEqual(`my-org-my-plugin-${type}`);
+        expect(actual).toEqual(`myorg-myplugin-${type}`);
       }
     );
   });

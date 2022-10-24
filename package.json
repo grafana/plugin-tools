@@ -1,7 +1,7 @@
 {
   "name": "@grafana/plugin-tools",
   "version": "0.0.1",
-  "repository": "git@github.com:grafana/create-plugin.git",
+  "repository": "git@github.com:grafana/plugin-tools.git",
   "author": "Grafana",
   "private": true,
   "scripts": {

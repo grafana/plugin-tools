@@ -1,10 +1,10 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "main": "index.js",
   "repository": {
     "directory": "packages/create-plugin",
-    "url": "git@github.com:grafana/create-plugin.git"
+    "url": "git@github.com:grafana/plugin-tools.git"
   },
   "author": "Grafana",
   "license": "Apache-2.0",
