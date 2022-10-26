@@ -28,9 +28,17 @@ jobs:
         run: yarn lint
       - name: Unit tests
         run: yarn test:ci
+
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test panel plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-panel && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test datasource plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+
+      - name: '@grafana/sign-plugin - generate panel plugin for signing'
+        run: node ./dist/bin/run.js -- create-plugin 'Sample panel' 'jackwestbrook' 'This is a sample panel.' 'panel' 't' 't' 't'",
+        working-directory: ./packages/create-plugin
+      - name: '@grafana/sign-plugin - sign generated plugin'
+        run: yarn && yarn build && node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        working-directory: ./packages/create-plugin/generated
