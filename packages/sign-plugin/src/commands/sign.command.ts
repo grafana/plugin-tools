@@ -1,14 +1,18 @@
 import path from 'path';
-
 import minimist from 'minimist';
+import { existsSync } from 'fs';
 import { assertRootUrlIsValid } from '../utils/pluginValidation';
 import { buildManifest, signManifest, saveManifest } from '../utils/manifest';
 import { getVersion } from '../utils/getVersion';
 
 export const sign = async (argv: minimist.ParsedArgs) => {
   const pluginDistDir = path.resolve('dist');
-  const signatureType = argv.signatureType;
-  const rootUrls = argv.rootUrls.split(',');
+  const signatureType: string = argv.signatureType;
+  const rootUrls: string[] = argv.rootUrls.split(',');
+
+  if (!existsSync(pluginDistDir)) {
+    throw new Error('Plugin `dist` directory is missing. Did you build the plugin before attempting to sign?');
+  }
 
   try {
     console.log('Building manifest...');
@@ -27,7 +31,7 @@ export const sign = async (argv: minimist.ParsedArgs) => {
     const signedManifest = await signManifest(manifest);
 
     console.log('Saving signed manifest...');
-    await saveManifest(pluginDistDir, signedManifest);
+    saveManifest(pluginDistDir, signedManifest);
 
     console.log('Signed successfully');
   } catch (err) {
