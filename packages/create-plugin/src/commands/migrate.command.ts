@@ -58,8 +58,12 @@ export const migrate = async () => {
     // (skipped automatically if there is nothing to update)
     // ------------------------------------------------
     if (hasNpmDependenciesToUpdate()) {
-      if (await confirmPrompt(TEXT.updateNpmDependenciesPrompt + getPackageJsonUpdatesAsText())) {
-        updatePackageJson();
+      if (
+        await confirmPrompt(
+          TEXT.updateNpmDependenciesPrompt + getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true })
+        )
+      ) {
+        updatePackageJson({ ignoreGrafanaDependencies: true });
         printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
       } else {
         printMessage(TEXT.updateNpmDependenciesAborted);
