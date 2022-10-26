@@ -36,6 +36,8 @@ jobs:
       - name: '@grafana/create-plugin - test datasource plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
 
+      - name: '@grafana/sign-plugin - build'
+        run: yarn workspace @grafana/sign-plugin run build
       - name: '@grafana/sign-plugin - sign generated plugin'
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
