@@ -47,7 +47,7 @@ async function* walk(dir: string, baseDir: string): RecursiveWalk {
 }
 
 export async function buildManifest(dir: string): Promise<ManifestInfo> {
-  const pluginJson = JSON.parse(fs.readFileSync(path.join(dir, 'plugin.json'), { encoding: 'utf8' }));
+  const pluginJson = JSON.parse(readFileSync(path.join(dir, 'plugin.json'), { encoding: 'utf8' }));
 
   const manifest = {
     plugin: pluginJson.id,
@@ -55,14 +55,19 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
     files: {},
   } as ManifestInfo;
 
-  for await (const p of await walk(dir, dir)) {
-    if (p === MANIFEST_FILE) {
+  for await (const filePath of await walk(dir, dir)) {
+    if (filePath === MANIFEST_FILE) {
       continue;
     }
 
-    manifest.files[p] = crypto
+    // Signing plugins on Windows can create invalid paths with `\\` in the manifest
+    // causing `Modified signature` errors in Grafana. Regardless of OS make sure
+    // we have a posix compatible path.
+    const sanitisedFilePath = filePath.split(path.sep).join(path.posix.sep);
+
+    manifest.files[sanitisedFilePath] = crypto
       .createHash('sha256')
-      .update(fs.readFileSync(path.join(dir, p)))
+      .update(readFileSync(path.join(dir, filePath)))
       .digest('hex');
   }
 
