@@ -37,7 +37,7 @@ jobs:
         run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
 
       - name: '@grafana/sign-plugin - generate panel plugin for signing'
-        run: node ./dist/bin/run.js -- create-plugin 'Sample panel' 'jackwestbrook' 'This is a sample panel.' 'panel' 't' 't' 't'",
+        run: node ./dist/bin/run.js -- create-plugin 'Sample panel' 'jackwestbrook' 'This is a sample panel.' 'panel' 't' 't' 't',
         working-directory: ./packages/create-plugin
       - name: '@grafana/sign-plugin - sign generated plugin'
         run: yarn && yarn build && node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
