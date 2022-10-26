@@ -72,7 +72,9 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
 export async function signManifest(manifest: ManifestInfo): Promise<string> {
   const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
   if (!GRAFANA_API_KEY) {
-    throw new Error('You must enter a GRAFANA_API_KEY to sign the plugin manifest');
+    throw new Error(
+      'You must create a GRAFANA_API_KEY env variable to sign plugins. Please see: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key for instructions.'
+    );
   }
 
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
@@ -83,7 +85,7 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
       headers: { Authorization: 'Bearer ' + GRAFANA_API_KEY },
     });
     if (info.status !== 200) {
-      console.warn('Error: ', info);
+      console.error('Error: ', info);
       throw new Error('Error signing manifest');
     }
 
