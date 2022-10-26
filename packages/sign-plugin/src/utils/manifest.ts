@@ -97,7 +97,12 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
   }
 }
 
-export async function saveManifest(dir: string, signedManifest: string): Promise<boolean> {
-  fs.writeFileSync(path.join(dir, MANIFEST_FILE), signedManifest);
-  return true;
+export function saveManifest(dir: string, signedManifest: string) {
+  try {
+    writeFileSync(path.join(dir, MANIFEST_FILE), signedManifest);
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error saving manifest');
+  }
 }
