@@ -36,7 +36,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: built-packages
-          path: packages/**/*.tgz
+          path: |
+            packages/create-plugin/create-plugin.tgz
+            packages/sign-plugin/sign-plugin.tgz
   commands:
     needs: test
     runs-on: ${{ matrix.os }}
@@ -61,10 +63,13 @@ jobs:
         with:
           name: built-packages
 
-      - name: Install create plugin
-        run: npm install -g ${{steps.download.outputs.download-path}}/create-plugin.tgz
-      - name: Install sign plugin
-        run: npm install -g ${{steps.download.outputs.download-path}}/sign-plugin.tgz
+      - name: debug
+        run: ls ${{steps.download.outputs.download-path}}
+
+      # - name: Install create plugin
+      #   run: npm install -g ${{steps.download.outputs.download-path}}/create-plugin.tgz
+      # - name: Install sign plugin
+      #   run: npm install -g ${{steps.download.outputs.download-path}}/sign-plugin.tgz
 
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'app' 't' 't' 't'
