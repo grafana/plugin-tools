@@ -1,0 +1,43 @@
+name: commmands
+on:
+  push:
+    # This should disable running the workflow on tags, according to the
+    # on.<push|pull_request>.<branches|tags> GitHub Actions docs.
+    branches:
+      - '**'
+
+jobs:
+  commands:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: Run commands on ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: '@grafana/create-plugin - test an app plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+      - name: '@grafana/create-plugin - test panel plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-panel && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+      - name: '@grafana/create-plugin - test datasource plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+
+      - name: '@grafana/sign-plugin - build'
+        run: yarn workspace @grafana/sign-plugin run build
+      - name: '@grafana/sign-plugin - sign generated plugin'
+        env:
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+        run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        working-directory: ./packages/create-plugin/generated
