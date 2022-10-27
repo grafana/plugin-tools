@@ -64,18 +64,16 @@ jobs:
           name: built-packages
           path: ${{runner.temp}}
 
-      - name: debug
-        run: ls ${{runner.temp}}/create-plugin
+      - name: Install create plugin
+        run: npm install -g ${{runner.temp}}/create-plugin/create-plugin.tgz
+      - name: Install sign plugin
+        run: npm install -g ${{runner.temp}}/sign-plugin/sign-plugin.tgz
 
-      # - name: Install create plugin
-      #   run: npm install -g ${{steps.download.outputs.download-path}}/create-plugin.tgz
-      # - name: Install sign plugin
-      #   run: npm install -g ${{steps.download.outputs.download-path}}/sign-plugin.tgz
+      - name: debug
+        run: npm list -g --depth 0
 
       # - name: '@grafana/create-plugin - test an app plugin generation'
       #   run: create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'app' 't' 't' 't'
-      # - name: Install packages
-      #   run: yarn install --frozen-lockfile
 
       # - name: '@grafana/create-plugin - test an app plugin generation'
       #   run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
