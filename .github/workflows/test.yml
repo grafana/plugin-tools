@@ -12,16 +12,16 @@ jobs:
     name: Run unit tests
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v2
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
-          registry-url: 'https://registry.npmjs.org'
+          cache: 'yarn'
       - name: Install dependencies
-        run: yarn
+        run: yarn install --frozen-lockfile
       - name: Check types
         run: yarn typecheck
       - name: Lint
