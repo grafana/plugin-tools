@@ -40,6 +40,15 @@ export const EXTRA_TEMPLATE_VARIABLES = {
   grafanaVersion: '9.1.2',
 };
 
+export const GRAFANA_FE_PACKAGES = [
+  '@grafana/data',
+  '@grafana/e2e-selectors',
+  '@grafana/e2e',
+  '@grafana/runtime',
+  '@grafana/schema',
+  '@grafana/ui',
+];
+
 export const MIGRATION_CONFIG = {
   // Files that should be overriden during a migration.
   // (paths are relative to the scaffolded projects root)

@@ -3,12 +3,13 @@ import fs from 'fs';
 import semver from 'semver';
 import { readJsonFile } from './utils.files';
 import { renderTemplateFromFile, getTemplateData } from './utils.templates';
-import { TEMPLATE_PATHS } from '../constants';
+import { GRAFANA_FE_PACKAGES, TEMPLATE_PATHS } from '../constants';
 
 type UpdateSummary = Record<string, { prev: string | null; next: string | null }>;
 
 type UpdateOptions = {
   onlyOutdated?: Boolean;
+  ignoreGrafanaDependencies?: boolean;
 };
 
 type PackageJson = {
@@ -35,6 +36,7 @@ export function writePackageJson(json: PackageJson) {
 
 export function getNpmDependencyUpdatesAsText(dependencyUpdates: UpdateSummary) {
   return Object.entries(dependencyUpdates)
+    .filter(([packageName, { prev, next }]) => prev !== next)
     .map(([packageName, { prev, next }]) => {
       // New package
       if (!prev) {
@@ -42,7 +44,7 @@ export function getNpmDependencyUpdatesAsText(dependencyUpdates: UpdateSummary) 
       }
 
       // Updated package
-      return `\`${packageName}\` - \`${prev}\` -> \`${next}\``;
+      return `\`${packageName}\` - \`${prev}\` -> \`${next}\` (updated)`;
     })
     .join('\n  ');
 }
@@ -100,10 +102,42 @@ export function getPackageJsonUpdates(options: UpdateOptions = {}) {
   const dependencyUpdates = getUpdatableNpmDependencies(dependencies, newDependencies, options);
   const devDependencyUpdates = getUpdatableNpmDependencies(devDependencies, newDevDependencies, options);
 
+  if (options.ignoreGrafanaDependencies) {
+    const prevGrafanaDependencies = Object.entries({ ...dependencies, ...devDependencies }).reduce<
+      Record<string, string>
+    >((acc, [key, value]) => {
+      if (GRAFANA_FE_PACKAGES.includes(key)) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+    return {
+      dependencyUpdates: ignoreGrafanaDependencies(dependencyUpdates, prevGrafanaDependencies),
+      devDependencyUpdates: ignoreGrafanaDependencies(devDependencyUpdates, prevGrafanaDependencies),
+    };
+  }
+
   return {
     dependencyUpdates,
     devDependencyUpdates,
   };
+}
+
+function ignoreGrafanaDependencies(dependencyUpdates: UpdateSummary, prevGrafanaDependencies: Record<string, string>) {
+  const whatever = Object.keys(prevGrafanaDependencies);
+  const result = Object.entries(dependencyUpdates).reduce<UpdateSummary>((acc, [packageName, value]) => {
+    if (whatever.includes(packageName)) {
+      acc[packageName] = {
+        prev: prevGrafanaDependencies[packageName],
+        next: prevGrafanaDependencies[packageName],
+      };
+    } else {
+      acc[packageName] = value;
+    }
+    return acc;
+  }, {});
+
+  return result;
 }
 
 export function getUpdatableNpmDependencies(
