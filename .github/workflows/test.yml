@@ -28,3 +28,56 @@ jobs:
         run: yarn lint
       - name: Unit tests
         run: yarn test:ci
+      - name: Build packages
+        run: yarn build
+      - name: Pack packages
+        run: yarn package:ci
+      - name: Upload packaged artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: built-packages
+          path: packages/**/*.tgz
+  commands:
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: Run commands on ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - name: Download packaged artifacts
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: built-packages
+
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
+
+      # - name: Install packages
+      #   run: yarn install --frozen-lockfile
+
+      # - name: '@grafana/create-plugin - test an app plugin generation'
+      #   run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+      # - name: '@grafana/create-plugin - test panel plugin generation'
+      #   run: yarn workspace @grafana/create-plugin run generate-panel && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+      # - name: '@grafana/create-plugin - test datasource plugin generation'
+      #   run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
+
+      # - name: '@grafana/sign-plugin - build'
+      #   run: yarn workspace @grafana/sign-plugin run build
+      # - name: '@grafana/sign-plugin - sign generated plugin'
+      #   env:
+      #     GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+      #   run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+      #   working-directory: ./packages/create-plugin/generated
