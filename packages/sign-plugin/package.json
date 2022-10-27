@@ -15,6 +15,7 @@
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
+    "package:ci": "yarn pack --filename sign-plugin.tgz",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },

@@ -10,6 +10,7 @@
     "dev": "yarn workspaces run dev",
     "lint": "yarn workspaces run lint",
     "lint:fix": "yarn workspaces run lint:fix",
+    "package:ci": "yarn workspaces run package:ci",
     "test": "yarn workspaces run test",
     "test:ci": "yarn workspaces run test --ci",
     "typecheck": "yarn workspaces run typecheck"

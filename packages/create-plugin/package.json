@@ -22,6 +22,7 @@
     "generate-datasource": "tsc && yarn clean-generated && CREATE_PLUGIN_DEV=true node ./scripts/generate-datasource.js",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
+    "package:ci": "yarn pack --filename create-plugin.tgz",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
