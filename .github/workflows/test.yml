@@ -65,7 +65,7 @@ jobs:
           path: ${{runner.temp}}
 
       - name: debug
-        run: ls ${{runner.temp}}
+        run: ls ${{runner.temp}}/create-plugin
 
       # - name: Install create plugin
       #   run: npm install -g ${{steps.download.outputs.download-path}}/create-plugin.tgz
