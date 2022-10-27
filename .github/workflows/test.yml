@@ -69,9 +69,6 @@ jobs:
       - name: Install sign plugin
         run: npm install -g ${{runner.temp}}/sign-plugin/sign-plugin.tgz
 
-      - name: resolve packages
-        run
-
       - name: '@grafana/create-plugin - test a panel plugin generation'
         run: create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'panel' 't' 't'
 
