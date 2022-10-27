@@ -46,24 +46,24 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     name: Run commands on ${{ matrix.os }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'npm'
       - name: Download packaged artifacts
         uses: actions/download-artifact@v3
         id: download
         with:
           name: built-packages
 
-      - name: 'Echo download path'
-        run: echo ${{steps.download.outputs.download-path}}
+      - name: Install create plugin
+        run: npm install -g ${{steps.download.outputs.download-path}}/create-plugin.tgz
+      - name: Install sign plugin
+        run: npm install -g ${{steps.download.outputs.download-path}}/sign-plugin.tgz
 
+      - name: '@grafana/create-plugin - test an app plugin generation'
+        run: create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'app' 't' 't' 't'
       # - name: Install packages
       #   run: yarn install --frozen-lockfile
 
