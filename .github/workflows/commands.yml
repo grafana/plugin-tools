@@ -26,6 +26,8 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Check types
+        run: yarn typecheck
 
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn && yarn build && yarn lint)
