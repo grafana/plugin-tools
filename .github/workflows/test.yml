@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
     name: Run commands on ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -62,17 +62,18 @@ jobs:
         id: download
         with:
           name: built-packages
+          path: ${{runner.temp}}
 
       - name: debug
-        run: ls ${{steps.download.outputs.download-path}}
+        run: ls ${{runner.temp}}
 
       # - name: Install create plugin
       #   run: npm install -g ${{steps.download.outputs.download-path}}/create-plugin.tgz
       # - name: Install sign plugin
       #   run: npm install -g ${{steps.download.outputs.download-path}}/sign-plugin.tgz
 
-      - name: '@grafana/create-plugin - test an app plugin generation'
-        run: create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'app' 't' 't' 't'
+      # - name: '@grafana/create-plugin - test an app plugin generation'
+      #   run: create-plugin 'Sample app' 'sample-org' 'This is a sample app.' 'app' 't' 't' 't'
       # - name: Install packages
       #   run: yarn install --frozen-lockfile
 
