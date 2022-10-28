@@ -5,14 +5,15 @@
   "author": "Grafana",
   "private": true,
   "scripts": {
-    "clean": "yarn workspaces run clean",
-    "build": "yarn workspaces run build",
-    "dev": "yarn workspaces run dev",
-    "lint": "yarn workspaces run lint",
-    "lint:fix": "yarn workspaces run lint:fix",
-    "test": "yarn workspaces run test",
-    "test:ci": "yarn workspaces run test --ci",
-    "typecheck": "yarn workspaces run typecheck"
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "dev": "lerna run dev",
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix",
+    "release": "auto shipit",
+    "test": "lerna run test",
+    "test:ci": "lerna run test --ci",
+    "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
     "@auto-it/all-contributors": "^10.37.6",
