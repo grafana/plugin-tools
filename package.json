@@ -31,6 +31,7 @@
     "eslint-plugin-jsdoc": "^36.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
+    "lerna": "^6.0.1",
     "nodemon": "^2.0.13",
     "prettier": "2.5.1",
     "tsc-watch": "^4.5.0",
