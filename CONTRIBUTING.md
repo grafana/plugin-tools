@@ -151,4 +151,27 @@ Once you've filed the PR:
 
 ## Create A Release
 
-Creating a new release requires running the [NPM bump version action](https://github.com/grafana/plugin-tools/actions/workflows/npm-bump-version.yml). Click the trigger workflow and specify the type of release (patch, minor, or major). The workflow will update package.json, commit and push which will trigger the publish to npm and create a github release.
+Releases are managed by [Auto](https://intuit.github.io/auto/index) and PR labels.
+
+_NOTE: When merging a PR with the `release` label please avoid merging another PR. For further information [see here](https://intuit.github.io/auto/docs/welcome/quick-merge#with-skip-release)._
+
+When opening a PR please attach the necessary label for the change so releases are dealt with appropriately:
+
+- **major** -> 💥 Breaking Change
+- **minor** -> 🚀 Enhancement
+- **patch** -> 🐛 Bug Fix
+
+Also bear in mind not every PR needs to make a version bump to a package. Please be mindful when labelling PRs.
+
+By default Auto creates a release for every PR that is merged to `main`. However this repo makes use of the [`onlyPublishWithReleaseLabel`](https://intuit.github.io/auto/docs/configuration/autorc#only-publish-with-release-label) flag to allow us greater control on when a release occurs. To make an actual release a PR needs to also have the `release` label attached.
+
+When a release occurs a github workflow will run `yarn release` which in turn calls `auto shipit`. This command does the following things:
+
+1. Calculate version bumps 🧮
+2. Independently bump package versions (based on labels of previously unreleased packages) 📦
+3. Update CHANGELOG.md for each package (where necessary) 📚
+4. Update contributors section of README.md (where necessary) 📚
+5. Commit changes and tag the repository 📌
+6. Create github release 📄
+7. Publish packages to NPM 🚀
+8. Push changes to repo ➡️
