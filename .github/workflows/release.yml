@@ -18,6 +18,8 @@ jobs:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
           cache: 'yarn'
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Cache node modules
         uses: actions/cache@v3
