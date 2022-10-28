@@ -4,9 +4,12 @@
  * In order to extend the configuration follow the steps in .config/README.md
  */
 
+const path = require('path');
+
 module.exports = {
   moduleNameMapper: {
     "\\.(css|scss|sass)$": "identity-obj-proxy",
+    "react-inlinesvg": path.resolve(__dirname, "mocks", "react-inlinesvg.tsx"),
   },
   modulePaths: ['<rootDir>/src'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
