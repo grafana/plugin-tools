@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": {
     "directory": "packages/sign-plugin",
-    "url": "git@github.com:grafana/plugin-tools.git"
+    "url": "https://github.com/grafana/plugin-tools"
   },
   "author": "Grafana",
   "license": "Apache-2.0",
