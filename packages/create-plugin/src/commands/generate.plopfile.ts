@@ -165,8 +165,17 @@ function replacePatternWithTemplateInReadme(
 // TODO<use Plop action `addMany` instead>
 function getActionsForTemplateFolder({ folderPath, exportPath }: { folderPath: string; exportPath: string }) {
   const files = glob.sync(`${folderPath}/**`, { dot: true });
-  const getExportFileName = (f: string) => (path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f));
-  const getExportPath = (f: string) => path.relative(folderPath, path.dirname(f));
+  function getExportFileName(f: string) {
+    // yarn and npm packing will not include `.gitignore` files
+    // so we have to manually rename them to add the dot prefix
+    if (path.basename(f) === 'gitignore') {
+      return '.gitignore';
+    }
+    return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f);
+  }
+  function getExportPath(f: string) {
+    return path.relative(folderPath, path.dirname(f));
+  }
 
   return files.filter(isFile).map((f) => ({
     type: 'add',
