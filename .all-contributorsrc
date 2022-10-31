@@ -9,6 +9,16 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "tolzhabayev",
+      "name": "Timur Olzhabayev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/580672?v=4",
+      "profile": "https://timur.digital/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
   "contributorsPerLine": 7
 }
