@@ -1,14 +1,18 @@
 {
   "name": "@grafana/sign-plugin",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "main": "index.js",
   "repository": {
     "directory": "packages/sign-plugin",
-    "url": "git@github.com:grafana/plugin-tools.git"
+    "url": "https://github.com/grafana/plugin-tools"
   },
   "author": "Grafana",
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "yarn clean && tsc && chmod +x ./dist/bin/run.js",
