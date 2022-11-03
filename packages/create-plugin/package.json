@@ -1,14 +1,18 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "index.js",
   "repository": {
     "directory": "packages/create-plugin",
-    "url": "git@github.com:grafana/plugin-tools.git"
+    "url": "https://github.com/grafana/plugin-tools"
   },
   "author": "Grafana",
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
     "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/yarn.lock\" -print0 | xargs -0  -I {} rm -rf {}",

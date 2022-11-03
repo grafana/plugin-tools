@@ -1,0 +1,24 @@
+{
+  "projectName": "plugin-tools",
+  "projectOwner": "grafana",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "tolzhabayev",
+      "name": "Timur Olzhabayev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/580672?v=4",
+      "profile": "https://timur.digital/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
