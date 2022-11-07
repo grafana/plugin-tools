@@ -1,5 +1,18 @@
 # (Mon Nov 07 2022)
 
+#### 🐛 Bug Fix
+
+- `@grafana/sign-plugin@0.0.2`
+  - Fix: Prevent error if rootUrls arg is not passed [#136](https://github.com/grafana/plugin-tools/pull/136) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Nov 07 2022)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Giuseppe Guerra ([@xnyo](https://github.com/xnyo)), for all your work!
