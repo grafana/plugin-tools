@@ -9,6 +9,11 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
+"@atomist/slack-messages@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@atomist/slack-messages/-/slack-messages-1.2.2.tgz#782d31936a0363e4458272bcc8fbe4f7651292ee"
+  integrity sha512-K1kQv1BZVtMXQqdpNZt9Pgh85KwamsWX9gYyq1xG4cpyb+EacfMiNfumrju16piFXanCUrCR0P1DowPjV2qV/A==
+
 "@auto-it/all-contributors@^10.37.6":
   version "10.37.6"
   resolved "https://registry.yarnpkg.com/@auto-it/all-contributors/-/all-contributors-10.37.6.tgz#e9a1e6a35b46ac117c624f882d324c2a72245c27"
@@ -128,6 +133,20 @@
     deepmerge "^4.0.0"
     fp-ts "^2.5.3"
     io-ts "^2.1.2"
+    tslib "2.1.0"
+
+"@auto-it/slack@^10.37.6":
+  version "10.37.6"
+  resolved "https://registry.yarnpkg.com/@auto-it/slack/-/slack-10.37.6.tgz#4e7852e16b271dbbf367ab05dd6109f78d5ed075"
+  integrity sha512-VAPg/Sh6/WRoFoWu0AtGqn3SpUfLnEfid/UxOD98ZU0aZys8PP7vWs7xmKn+3Xh04wdpfgCxRVJxISQqISVEWQ==
+  dependencies:
+    "@atomist/slack-messages" "^1.2.2"
+    "@auto-it/core" "10.37.6"
+    "@octokit/rest" "^18.12.0"
+    fp-ts "^2.5.3"
+    https-proxy-agent "^5.0.0"
+    io-ts "^2.1.2"
+    node-fetch "2.6.7"
     tslib "2.1.0"
 
 "@auto-it/version-file@10.37.6":
