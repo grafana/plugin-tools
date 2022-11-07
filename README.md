@@ -19,6 +19,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://timur.digital/"><img src="https://avatars.githubusercontent.com/u/580672?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Timur Olzhabayev</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=tolzhabayev" title="Code">💻</a></td>
+    <td align="center"><a href="https://guerra.in/"><img src="https://avatars.githubusercontent.com/u/16373015?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Giuseppe Guerra</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=xnyo" title="Code">💻</a></td>
   </tr>
 </table>
 
