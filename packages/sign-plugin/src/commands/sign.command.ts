@@ -8,7 +8,7 @@ import { getVersion } from '../utils/getVersion';
 export const sign = async (argv: minimist.ParsedArgs) => {
   const pluginDistDir = path.resolve('dist');
   const signatureType: string = argv.signatureType;
-  const rootUrls: string[] = argv.rootUrls.split(',') ?? [];
+  const rootUrls: string[] = argv.rootUrls?.split(',') ?? [];
 
   if (!existsSync(pluginDistDir)) {
     throw new Error('Plugin `dist` directory is missing. Did you build the plugin before attempting to sign?');
