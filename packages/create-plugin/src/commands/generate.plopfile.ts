@@ -93,8 +93,13 @@ export default function (plop: NodePlopAPI) {
       hasGithubLevitateWorkflow,
     }: CliArgs) {
       const exportPath = getExportPath(pluginName, orgName, pluginType);
+      const pluginId = normalizeId(pluginName, orgName, pluginType);
       // Copy over files that are shared between plugins types
-      const commonActions = getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.common, exportPath });
+      const commonActions = getActionsForTemplateFolder({
+        folderPath: TEMPLATE_PATHS.common,
+        exportPath,
+        templateData: { pluginId },
+      });
 
       // Copy over files from the plugin type specific folder, e.g. "tempaltes/app" for "app" plugins ("app" | "panel" | "datasource").
       const pluginTypeSpecificActions = getActionsForTemplateFolder({
@@ -163,7 +168,15 @@ function replacePatternWithTemplateInReadme(
 }
 
 // TODO<use Plop action `addMany` instead>
-function getActionsForTemplateFolder({ folderPath, exportPath }: { folderPath: string; exportPath: string }) {
+function getActionsForTemplateFolder({
+  folderPath,
+  exportPath,
+  templateData = {},
+}: {
+  folderPath: string;
+  exportPath: string;
+  templateData?: Record<string, string>;
+}) {
   const files = glob.sync(`${folderPath}/**`, { dot: true });
   function getExportFileName(f: string) {
     // yarn and npm packing will not include `.gitignore` files
@@ -186,7 +199,10 @@ function getActionsForTemplateFolder({ folderPath, exportPath }: { folderPath: s
     force: IS_DEV,
     // We would still like to scaffold as many files as possible even if one fails
     abortOnFail: false,
-    data: EXTRA_TEMPLATE_VARIABLES,
+    data: {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      ...templateData,
+    },
   }));
 }
 
