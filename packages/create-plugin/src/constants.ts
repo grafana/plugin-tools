@@ -19,6 +19,7 @@ export const FIXTURES_PATH = path.join(__dirname, '..', 'fixtures');
 export const TEMPLATE_PATHS: Record<string, string> = {
   app: path.join(TEMPLATES_DIR, 'app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
+  backendApp: path.join(TEMPLATES_DIR, 'backend-app'),
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),

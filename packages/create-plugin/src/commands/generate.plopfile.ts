@@ -108,8 +108,9 @@ export default function (plop: NodePlopAPI) {
       });
 
       // Copy over backend-specific files (if selected)
+      const backendFolderPath = pluginType === PLUGIN_TYPES.app ? TEMPLATE_PATHS.backendApp : TEMPLATE_PATHS.backend;
       const backendActions = hasBackend
-        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.backend, exportPath })
+        ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath })
         : [];
 
       // Copy over Github workflow files (if selected)
