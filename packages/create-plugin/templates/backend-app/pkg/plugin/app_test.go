@@ -9,26 +9,6 @@ import (
 	"testing"
 )
 
-func TestQueryData(t *testing.T) {
-	app := App{}
-
-	resp, err := app.QueryData(
-		context.Background(),
-		&backend.QueryDataRequest{
-			Queries: []backend.DataQuery{
-				{RefID: "A"},
-			},
-		},
-	)
-	if err != nil {
-		t.Error(err)
-	}
-
-	if len(resp.Responses) != 1 {
-		t.Fatal("QueryData must return a response")
-	}
-}
-
 // mockCallResourceResponseSender implements backend.CallResourceResponseSender
 // for use in tests.
 type mockCallResourceResponseSender struct {
