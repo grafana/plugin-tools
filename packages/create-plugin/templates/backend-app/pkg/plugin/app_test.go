@@ -1,10 +1,9 @@
 package plugin
 
 import (
+	"bytes"
 	"context"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"testing"
 )
@@ -24,10 +23,16 @@ func (s *mockCallResourceResponseSender) Send(response *backend.CallResourceResp
 func TestCallResource(t *testing.T) {
 	// Initialize app
 	inst, err := NewApp(backend.AppInstanceSettings{})
-	require.NoError(t, err, "NewApp must not return an error")
-	require.NotNil(t, inst, "inst must not be nil")
+	if err != nil {
+		t.Fatalf("new app: %s", err)
+	}
+	if inst == nil {
+		t.Fatal("inst must not be nil")
+	}
 	app, ok := inst.(*App)
-	require.True(t, ok, "inst should be of type *App")
+	if !ok {
+		t.Fatal("inst must be of type *App")
+	}
 
 	// request contains the fields set to the request that will be made to CallResource.
 	type request struct {
@@ -104,18 +109,26 @@ func TestCallResource(t *testing.T) {
 				Path:   tc.request.path,
 				Body:   tc.request.body,
 			}, &r)
-			require.NoError(t, err, "CallResource must not return an error")
-			require.NotNil(t, r.response, "no response received from CallResource")
-			if tc.expect.status > 0 {
-				assert.Equalf(t, tc.expect.status, r.response.Status, "response status should be %d", tc.expect.status)
+			if err != nil {
+				t.Fatalf("CallResource error: %s", err)
+			}
+			if r.response == nil {
+				t.Fatal("no response received from CallResource")
+			}
+			if tc.expect.status > 0 && tc.expect.status != r.response.Status {
+				t.Errorf("response status should be %d, got %d", tc.expect.status, tc.expect.status)
 			}
 			if len(tc.expect.contentType) > 0 {
 				ct := r.response.Headers["Content-Type"]
-				require.Len(t, ct, 1, "should have 1 Content-Type header")
-				assert.Equalf(t, tc.expect.contentType, ct[0], "should have %s content-type", tc.expect.contentType)
+				if l := len(ct); l != 1 {
+					t.Fatalf("should have 1 Content-Type header, got %d", l)
+				}
+				if tc.expect.contentType != ct[0] {
+					t.Errorf("should have %s Content-Type header, got %s", tc.expect.contentType, ct[0])
+				}
 			}
-			if tc.expect.body != nil {
-				assert.Equal(t, tc.expect.body, r.response.Body, "response body should be correct")
+			if tc.expect.body != nil && !bytes.Equal(tc.expect.body, r.response.Body) {
+				t.Errorf("response body should be %s, got %s", tc.expect.body, r.response.Body)
 			}
 		})
 	}
