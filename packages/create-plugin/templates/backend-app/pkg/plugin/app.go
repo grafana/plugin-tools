@@ -8,17 +8,14 @@ import (
 
 // Make sure App implements required interfaces. This is important to do
 // since otherwise we will only get a not implemented error response from plugin in
-// runtime. In this example app instance implements backend.QueryDataHandler,
-// backend.CheckHealthHandler and backend.CallResourceHandler interfaces.
-// Plugin should not implement all these interfaces - only those which are
+// runtime. Plugin should not implement all these interfaces - only those which are
 // required for a particular task.
 var (
 	_ backend.CallResourceHandler   = (*App)(nil)
 	_ instancemgmt.InstanceDisposer = (*App)(nil)
 )
 
-// App is an example app backend plugin which can respond to data queries, reports
-// its health and handle resource calls.
+// App is an example app backend plugin which can respond to data queries.
 type App struct {
 	backend.CallResourceHandler
 }
@@ -36,8 +33,7 @@ func NewApp(_ backend.AppInstanceSettings) (instancemgmt.Instance, error) {
 }
 
 // Dispose here tells plugin SDK that plugin wants to clean up resources when a new instance
-// created. As soon as datasource settings change detected by SDK old datasource instance will
-// be disposed and a new one will be created using the factory function.
+// created.
 func (a *App) Dispose() {
 	// cleanup
 }

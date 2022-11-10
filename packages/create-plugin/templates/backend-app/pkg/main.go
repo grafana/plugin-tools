@@ -15,8 +15,7 @@ func main() {
 	// of app instances. It accepts app instance factory as first
 	// argument. This factory will be automatically called on incoming request
 	// from Grafana to create different instances of `App` (per plugin
-	// ID). When datasource configuration changed Dispose method will be called and
-	// new datasource instance created using NewApp factory.
+	// ID).
 	if err := app.Manage("{{ kebabCase orgName }}-{{ kebabCase pluginName }}", plugin.NewApp, app.ManageOpts{}); err != nil {
 		log.DefaultLogger.Error(err.Error())
 		os.Exit(1)
