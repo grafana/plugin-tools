@@ -78,9 +78,8 @@ func TestResourceHandlers(t *testing.T) {
 				if err != nil {
 					t.Fatalf("readall: %s", err)
 				}
-				b = bytes.TrimSpace(b)
-				if !bytes.Equal(b, tc.expBody) {
-					t.Errorf("response body does not match. expected %s, got %s", string(tc.expBody), string(b))
+				if tb := bytes.TrimSpace(b); !bytes.Equal(tb, tc.expBody) {
+					t.Errorf("response body does not match. expected %s, got %s", string(tc.expBody), string(tb))
 				}
 			}
 		})
