@@ -40,3 +40,12 @@ func NewApp(_ backend.AppInstanceSettings) (instancemgmt.Instance, error) {
 func (a *App) Dispose() {
 	// cleanup
 }
+
+// CheckHealth handles health checks sent from Grafana to the plugin.
+func (a *App) CheckHealth(_ context.Context, _ *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+	return &backend.CheckHealthResult{
+		Status:  backend.HealthStatusOk,
+		Message: "ok",
+	}, nil
+}
+
