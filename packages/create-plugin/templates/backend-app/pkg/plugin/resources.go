@@ -37,11 +37,8 @@ func (a *App) handleEcho(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// newResourceHTTPServeMux returns a new *http.ServeMux with some pre-registered HTTP handlers.
-// It can be wrapped in a httpadapter and used in CallResource.
-func newResourceHTTPServeMux(app *App) *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/ping", app.handlePing)
-	mux.HandleFunc("/echo", app.handleEcho)
-	return mux
+// registerRoutes takes a *http.ServeMux and registers some HTTP handlers.
+func (a *App) registerRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("/ping", a.handlePing)
+	mux.HandleFunc("/echo", a.handleEcho)
 }

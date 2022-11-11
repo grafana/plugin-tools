@@ -4,6 +4,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
+	"net/http"
 )
 
 // Make sure App implements required interfaces. This is important to do
@@ -27,7 +28,9 @@ func NewApp(_ backend.AppInstanceSettings) (instancemgmt.Instance, error) {
 	// Use a httpadapter (provided by the SDK) for resource calls. This allows us
 	// to use a *http.ServeMux for resource calls, so we can map multiple routes
 	// to CallResource without having to implement extra logic.
-	app.CallResourceHandler = httpadapter.New(newResourceHTTPServeMux(&app))
+	mux := http.NewServeMux()
+	app.registerRoutes(mux)
+	app.CallResourceHandler = httpadapter.New(mux)
 
 	return &app, nil
 }
