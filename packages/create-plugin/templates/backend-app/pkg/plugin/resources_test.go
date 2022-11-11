@@ -4,9 +4,88 @@ import (
 	"bytes"
 	"context"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"io"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 )
+
+// TestResourceHandlers tests the resource http.HandlerFunc s for the example handlers.
+func TestResourceHandlers(t *testing.T) {
+	var app App
+
+	// Set up and run test cases
+	type tc struct {
+		name string
+
+		// request
+		method  string
+		handler http.HandlerFunc
+		body    []byte
+
+		// response (expectations)
+		// if something is not provided, it won't be checked
+		expStatus int
+		expBody   []byte
+	}
+	for _, tc := range []tc{
+		{
+			name: "get ping",
+
+			method:  http.MethodGet,
+			handler: app.handlePing,
+
+			expStatus: http.StatusOK,
+			expBody:   []byte(`{"message": "ok"}`),
+		},
+		{
+			name: "post echo 200",
+
+			method:  http.MethodPost,
+			handler: app.handleEcho,
+			body:    []byte(`{"message":"hello"}`),
+
+			expStatus: http.StatusOK,
+			expBody:   []byte(`{"message":"hello"}`),
+		},
+		{
+			name: "get echo 405",
+
+			method:  http.MethodGet,
+			handler: app.handleEcho,
+
+			expStatus: http.StatusMethodNotAllowed,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			// Direct request to the handlerFunc using httptest
+			req := httptest.NewRequest(tc.method, "/", bytes.NewBuffer(tc.body))
+			w := httptest.NewRecorder()
+			tc.handler(w, req)
+			res := w.Result()
+			defer func() {
+				if err := res.Body.Close(); err != nil {
+					t.Fatalf("close: %s", err)
+				}
+			}()
+
+			// Check expectations
+			if tc.expStatus > 0 && res.StatusCode != tc.expStatus {
+				t.Errorf("wrong status code. expected %d, got %d", tc.expStatus, res.StatusCode)
+			}
+			if len(tc.expBody) > 0 {
+				b, err := io.ReadAll(res.Body)
+				if err != nil {
+					t.Fatalf("readall: %s", err)
+				}
+				b = bytes.TrimSpace(b)
+				if !bytes.Equal(b, tc.expBody) {
+					t.Errorf("response body does not match. expected %s, got %s", string(tc.expBody), string(b))
+				}
+			}
+		})
+	}
+}
 
 // mockCallResourceResponseSender implements backend.CallResourceResponseSender
 // for use in tests.
@@ -20,6 +99,8 @@ func (s *mockCallResourceResponseSender) Send(response *backend.CallResourceResp
 	return nil
 }
 
+// TestCallResource tests CallResource calls, using backend.CallResourceRequest and backend.CallResourceResponse.
+// This ensures the httpadapter for CallResource works correctly.
 func TestCallResource(t *testing.T) {
 	// Initialize app
 	inst, err := NewApp(backend.AppInstanceSettings{})
@@ -34,80 +115,45 @@ func TestCallResource(t *testing.T) {
 		t.Fatal("inst must be of type *App")
 	}
 
-	// request contains the fields set to the request that will be made to CallResource.
-	type request struct {
+	// Set up and run test cases
+	for _, tc := range []struct {
+		name string
+
 		method string
 		path   string
 		body   []byte
-	}
 
-	// expect represents is a struct that contains expectations
-	// for the response received from CallResource.
-	// Any zero-values won't be checked.
-	type expect struct {
-		status      int
-		body        []byte
-		contentType string
-	}
-
-	// Set up and run test cases
-	for _, tc := range []struct {
-		name    string
-		request request
-		expect  expect
+		expStatus int
+		expBody   []byte
 	}{
 		{
-			name: "get ping 200",
-			request: request{
-				method: http.MethodGet,
-				path:   "ping",
-			},
-			expect: expect{
-				status:      http.StatusOK,
-				contentType: "application/json",
-				body:        []byte(`{"message": "ok"}`),
-			},
+			name:      "get ping 200",
+			method:    http.MethodGet,
+			path:      "ping",
+			expStatus: http.StatusOK,
 		},
 		{
-			name: "post echo 200",
-			request: request{
-				method: http.MethodPost,
-				path:   "echo",
-				body:   []byte(`{"message": "hello"}`),
-			},
-			expect: expect{
-				status:      http.StatusOK,
-				contentType: "application/json",
-				body:        []byte(`{"message":"hello"}` + "\n"),
-			},
+			name:      "post echo 200",
+			method:    http.MethodPost,
+			path:      "echo",
+			body:      []byte(`{"message":"ok"}`),
+			expStatus: http.StatusOK,
+			expBody:   []byte(`{"message":"ok"}`),
 		},
 		{
-			name: "get echo 405",
-			request: request{
-				method: http.MethodGet,
-				path:   "echo",
-			},
-			expect: expect{status: http.StatusMethodNotAllowed},
-		},
-		{
-			name: "get non existing handler 404",
-			request: request{
-				method: http.MethodGet,
-				path:   "not_found",
-			},
-			expect: expect{
-				status:      http.StatusNotFound,
-				contentType: "text/plain; charset=utf-8",
-				body:        []byte("404 page not found\n"),
-			},
+			name:      "get non existing handler 404",
+			method:    http.MethodGet,
+			path:      "not_found",
+			expStatus: http.StatusNotFound,
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
+			// Request by calling CallResource. This tests the httpadapter.
 			var r mockCallResourceResponseSender
 			err = app.CallResource(context.Background(), &backend.CallResourceRequest{
-				Method: tc.request.method,
-				Path:   tc.request.path,
-				Body:   tc.request.body,
+				Method: tc.method,
+				Path:   tc.path,
+				Body:   tc.body,
 			}, &r)
 			if err != nil {
 				t.Fatalf("CallResource error: %s", err)
@@ -115,20 +161,13 @@ func TestCallResource(t *testing.T) {
 			if r.response == nil {
 				t.Fatal("no response received from CallResource")
 			}
-			if tc.expect.status > 0 && tc.expect.status != r.response.Status {
-				t.Errorf("response status should be %d, got %d", tc.expect.status, tc.expect.status)
+			if tc.expStatus > 0 && tc.expStatus != r.response.Status {
+				t.Errorf("response status should be %d, got %d", tc.expStatus, r.response.Status)
 			}
-			if len(tc.expect.contentType) > 0 {
-				ct := r.response.Headers["Content-Type"]
-				if l := len(ct); l != 1 {
-					t.Fatalf("should have 1 Content-Type header, got %d", l)
+			if len(tc.expBody) > 0 {
+				if tb := bytes.TrimSpace(r.response.Body); !bytes.Equal(tb, tc.expBody) {
+					t.Errorf("response body should be %s, got %s", tc.expBody, tb)
 				}
-				if tc.expect.contentType != ct[0] {
-					t.Errorf("should have %s Content-Type header, got %s", tc.expect.contentType, ct[0])
-				}
-			}
-			if tc.expect.body != nil && !bytes.Equal(tc.expect.body, r.response.Body) {
-				t.Errorf("response body should be %s, got %s", tc.expect.body, r.response.Body)
 			}
 		})
 	}
