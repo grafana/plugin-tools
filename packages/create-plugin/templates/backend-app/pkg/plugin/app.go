@@ -15,6 +15,7 @@ import (
 var (
 	_ backend.CallResourceHandler   = (*App)(nil)
 	_ instancemgmt.InstanceDisposer = (*App)(nil)
+	_ backend.CheckHealthHandler    = (*App)(nil)
 )
 
 // App is an example app backend plugin which can respond to data queries.
