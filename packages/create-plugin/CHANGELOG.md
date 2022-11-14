@@ -1,3 +1,15 @@
+# v0.5.1 (Mon Nov 14 2022)
+
+#### 🐛 Bug Fix
+
+- Fix: include uppercase characters when normalising plugin id [#142](https://github.com/grafana/plugin-tools/pull/142) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.5.0 (Mon Nov 07 2022)
 
 :tada: This release contains work from a new contributor! :tada:

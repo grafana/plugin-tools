@@ -1,3 +1,22 @@
+# (Mon Nov 14 2022)
+
+#### 🐛 Bug Fix
+
+- Bumping workflow version to use node 16 instead of deprecated node 12 [#143](https://github.com/grafana/plugin-tools/pull/143) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@0.5.1`
+  - Fix: include uppercase characters when normalising plugin id [#142](https://github.com/grafana/plugin-tools/pull/142) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- CI: Introduce slack plugin for automating release messages [#137](https://github.com/grafana/plugin-tools/pull/137) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Mon Nov 07 2022)
 
 #### 🐛 Bug Fix
