@@ -2,7 +2,7 @@
   "author": "Grafana Labs",
   "license": "Apache-2.0",
   "name": "@grafana/eslint-config",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Grafana's ESLint config",
   "keywords": [
     "grafana",
@@ -21,13 +21,13 @@
     "index.js"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "5.16.0",
-    "@typescript-eslint/parser": "5.16.0",
-    "eslint": "8.11.0",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
+    "@typescript-eslint/parser": "5.42.0",
+    "eslint": "8.26.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-jsdoc": "38.0.6",
-    "eslint-plugin-react": "7.29.4",
-    "eslint-plugin-react-hooks": "4.3.0",
-    "typescript": "4.6.4"
+    "eslint-plugin-jsdoc": "39.6.2",
+    "eslint-plugin-react": "7.31.10",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "typescript": "4.8.4"
   }
 }
