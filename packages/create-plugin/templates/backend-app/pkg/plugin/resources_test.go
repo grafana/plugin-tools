@@ -4,87 +4,9 @@ import (
 	"bytes"
 	"context"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"io"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
-
-// TestResourceHandlers tests the resource http.HandlerFunc s for the example handlers.
-func TestResourceHandlers(t *testing.T) {
-	var app App
-
-	// Set up and run test cases
-	type tc struct {
-		name string
-
-		// request
-		method  string
-		handler http.HandlerFunc
-		body    []byte
-
-		// response (expectations)
-		// if something is not provided, it won't be checked
-		expStatus int
-		expBody   []byte
-	}
-	for _, tc := range []tc{
-		{
-			name: "get ping",
-
-			method:  http.MethodGet,
-			handler: app.handlePing,
-
-			expStatus: http.StatusOK,
-			expBody:   []byte(`{"message": "ok"}`),
-		},
-		{
-			name: "post echo 200",
-
-			method:  http.MethodPost,
-			handler: app.handleEcho,
-			body:    []byte(`{"message":"hello"}`),
-
-			expStatus: http.StatusOK,
-			expBody:   []byte(`{"message":"hello"}`),
-		},
-		{
-			name: "get echo 405",
-
-			method:  http.MethodGet,
-			handler: app.handleEcho,
-
-			expStatus: http.StatusMethodNotAllowed,
-		},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			// Direct request to the handlerFunc using httptest
-			req := httptest.NewRequest(tc.method, "/", bytes.NewBuffer(tc.body))
-			w := httptest.NewRecorder()
-			tc.handler(w, req)
-			res := w.Result()
-			defer func() {
-				if err := res.Body.Close(); err != nil {
-					t.Fatalf("close: %s", err)
-				}
-			}()
-
-			// Check expectations
-			if tc.expStatus > 0 && res.StatusCode != tc.expStatus {
-				t.Errorf("wrong status code. expected %d, got %d", tc.expStatus, res.StatusCode)
-			}
-			if len(tc.expBody) > 0 {
-				b, err := io.ReadAll(res.Body)
-				if err != nil {
-					t.Fatalf("readall: %s", err)
-				}
-				if tb := bytes.TrimSpace(b); !bytes.Equal(tb, tc.expBody) {
-					t.Errorf("response body does not match. expected %s, got %s", string(tc.expBody), string(tb))
-				}
-			}
-		})
-	}
-}
 
 // mockCallResourceResponseSender implements backend.CallResourceResponseSender
 // for use in tests.
@@ -130,6 +52,12 @@ func TestCallResource(t *testing.T) {
 			method:    http.MethodGet,
 			path:      "ping",
 			expStatus: http.StatusOK,
+		},
+		{
+			name:      "get echo 405",
+			method:    http.MethodGet,
+			path:      "echo",
+			expStatus: http.StatusMethodNotAllowed,
 		},
 		{
 			name:      "post echo 200",
