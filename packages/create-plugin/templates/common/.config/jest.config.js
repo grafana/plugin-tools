@@ -5,6 +5,8 @@
  */
 
 const path = require('path');
+// Jest will throw errors if it tries to load an es module with it being transformed first
+const esModules = ['ol', 'react-colorful'].join('|');
 
 module.exports = {
   moduleNameMapper: {
@@ -35,5 +37,5 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: [],
+  transformIgnorePatterns: [`node_modules/(?!(${esModules})/)`],
 };
