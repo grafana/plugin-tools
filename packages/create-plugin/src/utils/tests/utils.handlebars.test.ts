@@ -31,5 +31,15 @@ describe('Handlebars helpers', () => {
         expect(actual).toEqual(`myorg-myplugin-${type}`);
       }
     );
+
+    test.each([PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel])(
+      'should handle uppercase characters',
+      (type: PLUGIN_TYPES) => {
+        const pluginName = `MyPlugin`;
+        const orgName = 'MyOrg';
+        const actual = normalizeId(pluginName, orgName, type);
+        expect(actual).toEqual(`myorg-myplugin-${type}`);
+      }
+    );
   });
 });

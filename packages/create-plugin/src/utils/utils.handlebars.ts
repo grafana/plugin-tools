@@ -12,7 +12,7 @@ export const ifEq = (a: any, b: any, options: HelperOptions) => {
 
 export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
   const re = new RegExp(`-?${type}$`, 'i');
-  const nameRegex = new RegExp('[^0-9a-z]', 'g');
+  const nameRegex = new RegExp('[^0-9a-zA-Z]', 'g');
 
   const newPluginName = pluginName.replace(re, '').replace(nameRegex, '');
   const newOrgName = orgName.replace(nameRegex, '');
