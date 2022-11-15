@@ -44,7 +44,9 @@ func (d *Datasource) Dispose() {
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
 func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-	log.DefaultLogger.Info("QueryData called", "request", req)
+	// when logging at a non-Debug level, make sure you don't include sensitive information in the message
+	// (like the *backend.QueryDataRequest)
+	log.DefaultLogger.Debug("QueryData called", "request", req)
 
 	// create response struct
 	response := backend.NewQueryDataResponse()
@@ -94,7 +96,9 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
 func (d *Datasource) CheckHealth(_ context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	log.DefaultLogger.Info("CheckHealth called", "request", req)
+	// when logging at a non-Debug level, make sure you don't include sensitive information in the message
+	// (like the *backend.QueryDataRequest)
+	log.DefaultLogger.Debug("CheckHealth called", "request", req)
 
 	var status = backend.HealthStatusOk
 	var message = "Data source is working"
