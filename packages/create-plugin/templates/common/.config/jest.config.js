@@ -5,13 +5,12 @@
  */
 
 const path = require('path');
-// Jest will throw errors if it tries to load an es module with it being transformed first
-const esModules = ['ol', 'react-colorful'].join('|');
+const { grafanaESModules, nodeModulesToTransform } = require('./jest/utils');
 
 module.exports = {
   moduleNameMapper: {
-    "\\.(css|scss|sass)$": "identity-obj-proxy",
-    "react-inlinesvg": path.resolve(__dirname, "mocks", "react-inlinesvg.tsx"),
+    '\\.(css|scss|sass)$': 'identity-obj-proxy',
+    'react-inlinesvg': path.resolve(__dirname, 'jest', 'mocks', 'react-inlinesvg.tsx'),
   },
   modulePaths: ['<rootDir>/src'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
@@ -37,5 +36,7 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: [`node_modules/(?!(${esModules})/)`],
+  // Jest will throw `Cannot use import statement outside module` if it tries to load an
+  // ES module without it being transformed first. ./config/README.md#esm-errors-with-jest
+  transformIgnorePatterns: [nodeModulesToTransform(grafanaESModules)],
 };
