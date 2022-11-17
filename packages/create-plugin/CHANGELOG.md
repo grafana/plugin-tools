@@ -1,3 +1,15 @@
+# v0.5.3 (Thu Nov 17 2022)
+
+#### 🐛 Bug Fix
+
+- Create-Plugin: Transform known ES modules in jest config [#145](https://github.com/grafana/plugin-tools/pull/145) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.5.2 (Thu Nov 17 2022)
 
 #### 🐛 Bug Fix

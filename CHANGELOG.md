@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@0.5.3`
+  - Create-Plugin: Transform known ES modules in jest config [#145](https://github.com/grafana/plugin-tools/pull/145) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Nov 17 2022)
+
+#### 🐛 Bug Fix
+
 - CI: Silence slack from pinging entire channel [#148](https://github.com/grafana/plugin-tools/pull/148) ([@jackw](https://github.com/jackw))
 - `@grafana/create-plugin@0.5.2`
   - Create-Plugin: Bump dependencies to support node 18 [#144](https://github.com/grafana/plugin-tools/pull/144) ([@jackw](https://github.com/jackw))
