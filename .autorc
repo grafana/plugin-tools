@@ -9,6 +9,11 @@
     "all-contributors",
     "first-time-contributor",
     "released",
-    "slack"
+    [
+      "slack",
+      {
+        "atTarget": "unknown-user"
+      }
+    ]
   ]
 }
