@@ -1,5 +1,4 @@
-/**
- * nodeModulesToTransform
+/*
  * This utility function is useful in combination with jest `transformIgnorePatterns` config
  * to transform specific packages (e.g.ES modules) in a projects node_modules folder.
  */
