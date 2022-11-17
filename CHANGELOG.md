@@ -1,3 +1,19 @@
+# (Thu Nov 17 2022)
+
+#### 🐛 Bug Fix
+
+- CI: Silence slack from pinging entire channel [#148](https://github.com/grafana/plugin-tools/pull/148) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@0.5.2`
+  - Create-Plugin: Bump dependencies to support node 18 [#144](https://github.com/grafana/plugin-tools/pull/144) ([@jackw](https://github.com/jackw))
+  - Create-Plugin: Backend template: Switch from Info to Debug level [#146](https://github.com/grafana/plugin-tools/pull/146) ([@xnyo](https://github.com/xnyo))
+
+#### Authors: 2
+
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Mon Nov 14 2022)
 
 #### 🐛 Bug Fix

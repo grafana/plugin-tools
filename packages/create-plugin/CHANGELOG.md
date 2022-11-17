@@ -1,3 +1,17 @@
+# v0.5.2 (Thu Nov 17 2022)
+
+#### 🐛 Bug Fix
+
+- Create-Plugin: Bump dependencies to support node 18 [#144](https://github.com/grafana/plugin-tools/pull/144) ([@jackw](https://github.com/jackw))
+- Create-Plugin: Backend template: Switch from Info to Debug level [#146](https://github.com/grafana/plugin-tools/pull/146) ([@xnyo](https://github.com/xnyo))
+
+#### Authors: 2
+
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.5.1 (Mon Nov 14 2022)
 
 #### 🐛 Bug Fix
