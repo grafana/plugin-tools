@@ -2,7 +2,9 @@
 node_modules
 
 # Build output
-generated
+packages/create-plugin/generated/*
+# Keep the generated lock file to speed up CI
+!packages/create-plugin/generated/yarn.lock
 dist
 
 # Errors
