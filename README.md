@@ -1,13 +1,26 @@
-# Grafana / Plugins tools
+<div align="center">
+  <img
+    src="docs/img/grafana_icon.svg"
+    alt="Auto Logo"
+    width="100px"
+    padding="40px"/>
+  <h1>Grafana Plugin tools</h1>
+  <p>Create and Sign Grafana plugins with ease.</p>
+</div>
+<div align="center">
+<a href="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml"><img src="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml/badge.svg" alt="Node CI"></a>
+<a href="https://github.com/intuit/auto"><img src="https://img.shields.io/badge/release-auto.svg?colorA=888888&amp;colorB=9B065A&amp;label=auto" alt="Auto Release"></a>
+<br>
+<br>
 
-Create and Sign Grafana plugins with ease.
+</div>
 
-This is a mono-repo of packages aimed at helping plugin developers extend Grafana in amazing ways!
+This is a mono-repo of NPM packages to help plugin developers extend Grafana in amazing ways!
 
-| Package Name  | Description               | Readme                                     |
-| ------------- | ------------------------- | ------------------------------------------ |
-| Create Plugin | Scaffold a Grafana Plugin | [Link](./packages/create-plugin/README.md) |
-| Sign Plugin   | Sign a Grafana Plugin     | [Link](./packages/sign-plugin/README.md)   |
+| Package Name  | Description               | Readme                                     | Version                                                                   | Downloads                                                    |
+| ------------- | ------------------------- | ------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Create Plugin | Scaffold a Grafana Plugin | [Link](./packages/create-plugin/README.md) | ![npm](https://img.shields.io/npm/v/@grafana/create-plugin?label=version) | ![npm](https://img.shields.io/npm/dw/@grafana/create-plugin) |
+| Sign Plugin   | Sign a Grafana Plugin     | [Link](./packages/sign-plugin/README.md)   | ![npm](https://img.shields.io/npm/v/@grafana/sign-plugin?label=version)   | ![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)   |
 
 ## Contributors ✨
 
