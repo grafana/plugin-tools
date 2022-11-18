@@ -1,9 +1,5 @@
 <div align="center">
-  <img
-    src="docs/img/grafana_icon.svg"
-    alt="Auto Logo"
-    width="100px"
-    padding="40px"/>
+  <img src="./docs/img/grafana_icon.svg" alt="Grafana Logo" width="100px" padding="40px" />
   <h1>Grafana Plugin tools</h1>
   <p>Create and Sign Grafana plugins with ease.</p>
 </div>
