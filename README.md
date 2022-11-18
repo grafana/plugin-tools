@@ -1,14 +1,26 @@
 <div align="center">
-  <img src="./docs/img/grafana_icon.svg" alt="Grafana Logo" width="100px" padding="40px" />
+  <img
+    src="./docs/img/grafana_icon.svg"
+    alt="Grafana Logo"
+    width="100px"
+    padding="40px"
+  />
   <h1>Grafana Plugin tools</h1>
   <p>Create and Sign Grafana plugins with ease.</p>
 </div>
 <div align="center">
-<a href="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml"><img src="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml/badge.svg" alt="Node CI"></a>
-<a href="https://github.com/intuit/auto"><img src="https://img.shields.io/badge/release-auto.svg?colorA=888888&amp;colorB=9B065A&amp;label=auto" alt="Auto Release"></a>
-<br>
-<br>
-
+  <a href="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml"
+    ><img
+      src="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml/badge.svg"
+      alt="Node CI" /></a
+  >&nbsp;
+  <a href="https://github.com/intuit/auto"
+    ><img
+      src="https://img.shields.io/badge/release-auto.svg?colorA=888888&amp;colorB=9B065A&amp;label=auto"
+      alt="Auto Release"
+  /></a>
+  <br />
+  <br />
 </div>
 
 This is a mono-repo of NPM packages to help plugin developers extend Grafana in amazing ways!
