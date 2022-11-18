@@ -1,5 +1,18 @@
 # (Fri Nov 18 2022)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.6.1`
+  - Create-Plugin: Update grafanaVersion to 9.2.5 [#149](https://github.com/grafana/plugin-tools/pull/149) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Nov 18 2022)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@0.6.0`
