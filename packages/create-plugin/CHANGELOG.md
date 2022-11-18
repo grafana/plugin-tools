@@ -1,3 +1,15 @@
+# v0.6.0 (Fri Nov 18 2022)
+
+#### 🚀 Enhancement
+
+- Create-Plugin: Add backend template for app plugins [#138](https://github.com/grafana/plugin-tools/pull/138) ([@xnyo](https://github.com/xnyo))
+
+#### Authors: 1
+
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+
+---
+
 # v0.5.4 (Fri Nov 18 2022)
 
 #### 🐛 Bug Fix
