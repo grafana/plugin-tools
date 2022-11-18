@@ -1,3 +1,16 @@
+# (Fri Nov 18 2022)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.5.4`
+  - Create-plugin: Fix failing jest config [#151](https://github.com/grafana/plugin-tools/pull/151) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Nov 17 2022)
 
 #### 🐛 Bug Fix
