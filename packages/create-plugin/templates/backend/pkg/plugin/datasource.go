@@ -52,8 +52,8 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 	response := backend.NewQueryDataResponse()
 
 	// loop over queries and execute them individually.
-	for _, q := range req.Queries {
-		res := d.query(ctx, req.PluginContext, q)
+	for i, q := range req.Queries {
+		res := d.query(ctx, req.PluginContext, q, i)
 
 		// save the response in a hashmap
 		// based on with RefID as identifier
@@ -65,15 +65,20 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 
 type queryModel struct{}
 
-func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery) backend.DataResponse {
-	response := backend.DataResponse{}
+func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery, i int) backend.DataResponse {
+	if i%2 != 0 {
+		// Just to demonstrate how to return an error with a custom status code.
+		return backend.ErrDataResponse(backend.StatusInternal, "user friendly error, excluding any sensitive information")
+	}
+
+	var response backend.DataResponse
 
 	// Unmarshal the JSON into our queryModel.
 	var qm queryModel
 
-	response.Error = json.Unmarshal(query.JSON, &qm)
-	if response.Error != nil {
-		return response
+	err := json.Unmarshal(query.JSON, &qm)
+	if err != nil {
+		return backend.ErrDataResponse(backend.StatusBadRequest, "json unmarshal: " + err.Error())
 	}
 
 	// create data frame response.
