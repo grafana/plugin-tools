@@ -52,7 +52,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 	response := backend.NewQueryDataResponse()
 
 	// loop over queries and execute them individually.
-	for i, q := range req.Queries {
+	for _, q := range req.Queries {
 		res := d.query(ctx, req.PluginContext, q)
 
 		// save the response in a hashmap
