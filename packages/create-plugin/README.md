@@ -8,7 +8,7 @@ Create Grafana plugins with ease.
   - [Create a new plugin](#create-a-new-plugin)
     - [Quick overview](#quick-overview)
       - [`yarn` (1.x)](#yarn-1x)
-      - [`yarn` (> 2.x)](#yarn--2x)
+      - [`yarn` (\> 2.x)](#yarn--2x)
       - [`npx`](#npx)
       - [`npm`](#npm)
   - [Migrate your existing plugin](#migrate-your-existing-plugin)
@@ -61,6 +61,7 @@ npm init @grafana/plugin
 ---
 
 ## Migrate your existing plugin
+:warning: We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in `angular`
 
 In case you have an existing plugin previously created using the `@grafana/toolkit` you can use the
 following command to migrate it to the new build tooling:
