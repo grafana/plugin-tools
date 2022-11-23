@@ -10,6 +10,7 @@ on:
     branches:
       - master
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,34 +20,18 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
-        with:
-          path: $\{{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: $\{{ runner.os }}-yarn-$\{{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            $\{{ runner.os }}-yarn-
-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: $\{{ runner.os }}-$\{{ matrix.node-version }}-nodemodules-$\{{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            $\{{ runner.os }}-$\{{ matrix.node-version }}-nodemodules-
-
+          node-version: '16'
+          cache: 'yarn'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable --prefer-offline
 
-      - name: Build and test frontend
+      - name: Check types
+        run: yarn typecheck
+      - name: Lint
+        run: yarn lint
+      - name: Unit tests
+        run: yarn test:ci
+      - name: Build frontend
         run: yarn build
 
       - name: Start grafana docker
@@ -55,7 +40,7 @@ jobs:
       - name: Run e2e tests
         run: yarn e2e
 
-      - name: stop grafana docker
+      - name: Stop grafana docker
         run: docker-compose down
 
       - name: Check for backend
