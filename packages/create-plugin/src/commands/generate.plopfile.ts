@@ -101,7 +101,7 @@ export default function (plop: NodePlopAPI) {
         templateData: { pluginId },
       });
 
-      // Copy over files from the plugin type specific folder, e.g. "tempaltes/app" for "app" plugins ("app" | "panel" | "datasource").
+      // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
       const pluginTypeSpecificActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS[pluginType],
         exportPath,
@@ -112,6 +112,21 @@ export default function (plop: NodePlopAPI) {
       const backendActions = hasBackend
         ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath })
         : [];
+
+      // Common, pluginType and backend actions should only contain the final "override"
+      // template file in the array otherwise plop will error when trying to replace and
+      // scaffolded plugins will have the wrong files.
+      const filteredActions = [...commonActions, ...pluginTypeSpecificActions, ...backendActions]
+        .reduceRight((acc, file, idx) => {
+          const exists = acc.some((f) => f.path === file.path);
+          if (exists && file.type !== 'modify') {
+            return acc;
+          }
+
+          acc.push(file);
+          return acc;
+        }, [])
+        .reverse();
 
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
@@ -125,14 +140,7 @@ export default function (plop: NodePlopAPI) {
       // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme({ exportPath });
 
-      return [
-        ...commonActions,
-        ...pluginTypeSpecificActions,
-        ...backendActions,
-        ...ciWorkflowActions,
-        ...readmeActions,
-        ...isCompatibleWorkflowActions,
-      ];
+      return [...filteredActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
     },
   });
 }
@@ -196,7 +204,7 @@ function getActionsForTemplateFolder({
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getExportPath(f), getExportFileName(f)),
-    // We would like to override generated files in development mode
+    // Support overriding templates. E.g datasource/src/datasource.ts with backend/src/datasource.ts
     force: IS_DEV,
     // We would still like to scaffold as many files as possible even if one fails
     abortOnFail: false,
