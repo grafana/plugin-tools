@@ -127,8 +127,6 @@ export default function (plop: NodePlopAPI) {
         return acc;
       }, []);
 
-      console.log([...backendActions, ...pluginTypeSpecificActions, ...commonActions].length, pluginActions.length);
-
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
         ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.ciWorkflows, exportPath })
