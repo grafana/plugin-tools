@@ -11,7 +11,7 @@ async function generateApp() {
   const plop = await nodePlop(plopFile);
   const generator = plop.getGenerator('create-plugin');
   await generator.runActions({
-    pluginName: 'my-app',
+    pluginName: 'my-plugin',
     orgName: 'my-org',
     pluginDescription: 'Auto-generated app with backend',
     pluginType: 'app',
