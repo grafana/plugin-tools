@@ -113,21 +113,21 @@ export default function (plop: NodePlopAPI) {
         ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath })
         : [];
 
-      // Common, pluginType and backend actions can contain the same destination filenames.
-      // This filtering removes the duplicates to prevent plop erroring and makes sure the correct
-      // template is scaffolded.
-      const pluginActions = [...commonActions, ...pluginTypeSpecificActions, ...backendActions]
-        .reduceRight((acc, file) => {
-          const exists = acc.some((f) => f.path === file.path);
-          // if the file.path already exists and isn't a modification exclude it.
-          if (exists && file.type !== 'modify') {
-            return acc;
-          }
-
-          acc.push(file);
+      // Common, pluginType and backend actions can contain different templates for the same destination.
+      // This filtering removes the duplicate file additions to prevent plop erroring and makes sure the
+      // correct template is scaffolded.
+      // Note that the order is reversed so backend > pluginType > common
+      const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce((acc, file) => {
+        const actionExists = acc.find((f) => f.path === file.path);
+        // return early to prevent multiple add type actions being added to the array
+        if (actionExists && actionExists.type === 'add' && file.type === 'add') {
           return acc;
-        }, [])
-        .reverse();
+        }
+        acc.push(file);
+        return acc;
+      }, []);
+
+      console.log([...backendActions, ...pluginTypeSpecificActions, ...commonActions].length, pluginActions.length);
 
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
