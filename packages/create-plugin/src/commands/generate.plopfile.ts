@@ -113,12 +113,12 @@ export default function (plop: NodePlopAPI) {
         ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath })
         : [];
 
-      // Common, pluginType and backend actions should only contain the final "override"
-      // template file in the array otherwise plop will error when trying to replace and
-      // scaffolded plugins will have the wrong files.
-      const filteredActions = [...commonActions, ...pluginTypeSpecificActions, ...backendActions]
-        .reduceRight((acc, file, idx) => {
+      // Common, pluginType and backend actions can contain the same destination filenames.
+      // This filtering allows overriding templates by removing the duplication destinations
+      const pluginActions = [...commonActions, ...pluginTypeSpecificActions, ...backendActions]
+        .reduceRight((acc, file) => {
           const exists = acc.some((f) => f.path === file.path);
+          // if the file.path already exists and isn't a modification exclude it.
           if (exists && file.type !== 'modify') {
             return acc;
           }
@@ -140,7 +140,7 @@ export default function (plop: NodePlopAPI) {
       // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme({ exportPath });
 
-      return [...filteredActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
+      return [...pluginActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
     },
   });
 }
@@ -204,7 +204,7 @@ function getActionsForTemplateFolder({
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getExportPath(f), getExportFileName(f)),
-    // Support overriding templates. E.g datasource/src/datasource.ts with backend/src/datasource.ts
+    // Support overriding files in development for overriding "generated" plugins.
     force: IS_DEV,
     // We would still like to scaffold as many files as possible even if one fails
     abortOnFail: false,
