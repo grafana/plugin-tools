@@ -36,11 +36,3 @@ To trigger the workflow we need to push a version tag to github. This can be ach
 
 1. Run `npm version <major|minor|patch>`
 2. Run `git push origin main --follow-tags`
-
-### Manually signing a plugin
-
-If need be a plugin can be signed manually by running the following commands:
-
-1. Run `yarn build && mage -v` to create a production build of the plugin
-2.
-3.

@@ -166,6 +166,11 @@ function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActi
       'backend-getting-started.md',
       exportPath
     ),
+    replacePatternWithTemplateInReadme(
+      '-- INSERT DISTRIBUTING YOUR PLUGIN --',
+      'distributing-your-plugin.md',
+      exportPath
+    ),
   ];
 }
 

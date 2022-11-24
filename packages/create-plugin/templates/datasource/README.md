@@ -11,6 +11,8 @@ Grafana supports a wide range of data sources, including Prometheus, MySQL, and 
 -- INSERT FRONTEND GETTING STARTED --
 {{#if hasBackend}}-- INSERT BACKEND GETTING STARTED --{{/if}}
 
+-- INSERT DISTRIBUTING YOUR PLUGIN --
+
 ## Learn more
 
 Below you can find source code for existing app plugins and other related documentation.
