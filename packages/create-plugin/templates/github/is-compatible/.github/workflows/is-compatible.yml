@@ -1,5 +1,5 @@
 name: Latest Grafana API compatibility check
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   compatibilitycheck:
@@ -9,8 +9,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+          cache: 'yarn'
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable --prefer-offline
       - name: Build plugin
         run: yarn build
       - name: Compatibility check

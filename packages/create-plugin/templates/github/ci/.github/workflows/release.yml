@@ -4,52 +4,29 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*' # Run workflow on version tags, e.g. v1.0.0.
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
 
 jobs:
   release:
     runs-on: ubuntu-latest
-
+    env:
+      GRAFANA_API_KEY: $\{{ secrets.GRAFANA_API_KEY }} # Requires a Grafana API key from Grafana.com.
     steps:
       - uses: actions/checkout@v3
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '16'
+          cache: 'yarn'
 
       - name: Setup Go environment
         uses: actions/setup-go@v3
         with:
           go-version: '1.19'
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache yarn cache
-        uses: actions/cache@v3
-        id: cache-yarn-cache
-        with:
-          path: $\{{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: $\{{ runner.os }}-yarn-$\{{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            $\{{ runner.os }}-yarn-
-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: $\{{ runner.os }}-$\{{ matrix.node-version }}-nodemodules-$\{{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            $\{{ runner.os }}-$\{{ matrix.node-version }}-nodemodules-
-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile;
-        if: |
-          steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
-          steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn install --immutable --prefer-offline
 
       - name: Build and test frontend
         run: yarn build
@@ -76,10 +53,15 @@ jobs:
           version: latest
           args: buildAll
 
+      - name: Warn missing Grafana API key
+        run: |
+          echo Please generate a Grafana API key: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key
+          echo Once done please go to \"settings \> secrets \> actions\" to add it as GRAFANA_API_KEY
+        if: $\{{ env.GRAFANA_API_KEY == '' }}
+
       - name: Sign plugin
         run: yarn sign
-        env:
-          GRAFANA_API_KEY: $\{{ secrets.GRAFANA_API_KEY }} # Requires a Grafana API key from Grafana.com.
+        if: $\{{ env.GRAFANA_API_KEY != '' }}
 
       - name: Get plugin metadata
         id: metadata
@@ -117,49 +99,35 @@ jobs:
           md5sum $\{{ steps.metadata.outputs.archive }} > $\{{ steps.metadata.outputs.archive-checksum }}
           echo "checksum=$(cat ./$\{{ steps.metadata.outputs.archive-checksum }} | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
-      - name: Lint plugin
+      - name: Validate plugin
         run: |
           git clone https://github.com/grafana/plugin-validator
           pushd ./plugin-validator/pkg/cmd/plugincheck2
           go install
           popd
-          plugincheck2 -config ./plugin-validator/config/publishing.yaml $\{{ steps.metadata.outputs.archive }}
+          plugincheck2 -config ./plugin-validator/config/default.yaml $\{{ steps.metadata.outputs.archive }}
 
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: $\{{ secrets.GITHUB_TOKEN }}
+      - name: Create Github release
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: $\{{ github.ref }}
-          release_name: Release $\{{ github.ref }}
-          body_path: $\{{ steps.changelog.outputs.path }}
           draft: true
+          generate_release_notes: true
+          files: |
+            ./$\{{ steps.metadata.outputs.archive }}
+            ./$\{{ steps.metadata.outputs.archive-checksum }}
+          body: |
+            **This Github draft release has been created for your plugin.**
 
-      - name: Add plugin to release
-        id: upload-plugin-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: $\{{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: $\{{ steps.create_release.outputs.upload_url }}
-          asset_path: ./$\{{ steps.metadata.outputs.archive }}
-          asset_name: $\{{ steps.metadata.outputs.archive }}
-          asset_content_type: application/zip
+            _Note: if this is the first release for your plugin please consult the [distributing-your-plugin section](https://github.com/$\{{github.repository}}/blob/main/README.md#distributing-your-plugin) of the README_
 
-      - name: Add checksum to release
-        id: upload-checksum-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: $\{{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: $\{{ steps.create_release.outputs.upload_url }}
-          asset_path: ./$\{{ steps.metadata.outputs.archive-checksum }}
-          asset_name: $\{{ steps.metadata.outputs.archive-checksum }}
-          asset_content_type: text/plain
+            If you would like to submit this release to Grafana please consider the following steps:
 
-      - name: Publish to Grafana.com
-        run: |
-          echo A draft release has been created for your plugin. Please review and publish it. Then submit your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
-          echo
-          echo '{ "id": "$\{{ steps.metadata.outputs.plugin-id }}", "type": "$\{{ steps.metadata.outputs.plugin-type }}", "url": "https://github.com/$\{{ github.repository }}", "versions": [ { "version": "$\{{ steps.metadata.outputs.plugin-version }}", "commit": "$\{{ github.sha }}", "url": "https://github.com/$\{{ github.repository }}", "download": { "any": { "url": "https://github.com/$\{{ github.repository }}/releases/download/v$\{{ steps.metadata.outputs.plugin-version }}/$\{{ steps.metadata.outputs.archive }}", "md5": "$\{{ steps.package-plugin.outputs.checksum }}" } } } ] }' | jq .
+            - Check the Validate plugin step in the [release workflow](https://github.com/$\{{github.repository}}/commit/$\{{github.sha}}/checks/$\{{github.run_id}}) for any warnings that need attention
+            - Navigate to https://grafana.com/auth/sign-in/ to sign into your account
+            - Once logged in click **My Plugins** in the admin navigation
+            - Click the **Submit Plugin** button
+            - Fill in the Plugin Submission form:
+              - Paste this [.zip asset link](https://github.com/$\{{ github.repository }}/releases/download/v$\{{ steps.metadata.outputs.plugin-version }}/$\{{ steps.metadata.outputs.archive }}) in the Plugin URL field
+              - Paste this [.zip.md5 link](https://github.com/$\{{ github.repository }}/releases/download/v$\{{ steps.metadata.outputs.plugin-version }}/$\{{ steps.metadata.outputs.archive-checksum }}) in the MD5 field
+
+            Once done please remove these instructions and publish this release.
