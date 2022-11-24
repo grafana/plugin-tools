@@ -8,6 +8,7 @@
     "clean": "lerna run clean",
     "build": "lerna run build",
     "dev": "lerna run dev",
+    "docs": "yarn workspace website run start",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "release": "auto shipit",
@@ -44,6 +45,7 @@
   },
   "workspaces": [
     "packages/create-plugin",
-    "packages/sign-plugin"
+    "packages/sign-plugin",
+    "docusaurus/website"
   ]
 }
