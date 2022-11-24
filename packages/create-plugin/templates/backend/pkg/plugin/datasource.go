@@ -66,14 +66,14 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 type queryModel struct{}
 
 func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery) backend.DataResponse {
-	response := backend.DataResponse{}
+	var response backend.DataResponse
 
 	// Unmarshal the JSON into our queryModel.
 	var qm queryModel
 
-	response.Error = json.Unmarshal(query.JSON, &qm)
-	if response.Error != nil {
-		return response
+	err := json.Unmarshal(query.JSON, &qm)
+	if err != nil {
+		return backend.ErrDataResponse(backend.StatusBadRequest, "json unmarshal: " + err.Error())
 	}
 
 	// create data frame response.
