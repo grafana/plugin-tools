@@ -1,3 +1,25 @@
+# (Thu Nov 24 2022)
+
+#### 🐛 Bug Fix
+
+- CI: Speed up builds [#152](https://github.com/grafana/plugin-tools/pull/152) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@0.6.2`
+  - Create Plugin: Fix Plugin ID in backend to match plugin.json [#159](https://github.com/grafana/plugin-tools/pull/159) ([@jackw](https://github.com/jackw))
+  - Create-Plugin: Add errors with status code in backend template [#153](https://github.com/grafana/plugin-tools/pull/153) ([@xnyo](https://github.com/xnyo))
+
+#### 📝 Documentation
+
+- `@grafana/create-plugin@0.6.2`
+  - Docs - make sure that angular is not supported [#155](https://github.com/grafana/plugin-tools/pull/155) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Fri Nov 18 2022)
 
 #### 🐛 Bug Fix
