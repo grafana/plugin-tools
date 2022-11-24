@@ -114,7 +114,8 @@ export default function (plop: NodePlopAPI) {
         : [];
 
       // Common, pluginType and backend actions can contain the same destination filenames.
-      // This filtering allows overriding templates by removing the duplication destinations
+      // This filtering removes the duplicates to prevent plop erroring and makes sure the correct
+      // template is scaffolded.
       const pluginActions = [...commonActions, ...pluginTypeSpecificActions, ...backendActions]
         .reduceRight((acc, file) => {
           const exists = acc.some((f) => f.path === file.path);
