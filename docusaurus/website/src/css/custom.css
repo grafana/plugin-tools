@@ -29,3 +29,8 @@
   --ifm-color-primary-lightest: #f1a460;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.button--outline {
+  --ifm-button-color: white;
+  --ifm-button-border-color: white;
+}
