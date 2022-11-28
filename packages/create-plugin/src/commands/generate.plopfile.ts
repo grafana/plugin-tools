@@ -101,7 +101,7 @@ export default function (plop: NodePlopAPI) {
         templateData: { pluginId },
       });
 
-      // Copy over files from the plugin type specific folder, e.g. "tempaltes/app" for "app" plugins ("app" | "panel" | "datasource").
+      // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
       const pluginTypeSpecificActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS[pluginType],
         exportPath,
@@ -112,6 +112,20 @@ export default function (plop: NodePlopAPI) {
       const backendActions = hasBackend
         ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath })
         : [];
+
+      // Common, pluginType and backend actions can contain different templates for the same destination.
+      // This filtering removes the duplicate file additions to prevent plop erroring and makes sure the
+      // correct template is scaffolded.
+      // Note that the order is reversed so backend > pluginType > common
+      const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce((acc, file) => {
+        const actionExists = acc.find((f) => f.path === file.path);
+        // return early to prevent multiple add type actions being added to the array
+        if (actionExists && actionExists.type === 'add' && file.type === 'add') {
+          return acc;
+        }
+        acc.push(file);
+        return acc;
+      }, []);
 
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
@@ -125,14 +139,7 @@ export default function (plop: NodePlopAPI) {
       // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme({ exportPath });
 
-      return [
-        ...commonActions,
-        ...pluginTypeSpecificActions,
-        ...backendActions,
-        ...ciWorkflowActions,
-        ...readmeActions,
-        ...isCompatibleWorkflowActions,
-      ];
+      return [...pluginActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
     },
   });
 }
@@ -196,7 +203,7 @@ function getActionsForTemplateFolder({
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getExportPath(f), getExportFileName(f)),
-    // We would like to override generated files in development mode
+    // Support overriding files in development for overriding "generated" plugins.
     force: IS_DEV,
     // We would still like to scaffold as many files as possible even if one fails
     abortOnFail: false,
