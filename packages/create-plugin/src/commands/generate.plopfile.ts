@@ -253,7 +253,7 @@ function printSuccessMessage(answers: CliArgs) {
     '  * `docker-compose up` to start a grafana development server.',
     '  * `yarn dev` to build (and watch) the plugin frontend code.',
     ...(answers.hasBackend ? ['  * `mage -v build:linux` to build the plugin backend code.'] : []),
-    '  * Open http://localhost:3000/dashboard/new in your browser to create a dashboard to begin developing your plugin.',
+    '  * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
   return `
