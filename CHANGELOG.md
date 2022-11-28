@@ -1,3 +1,16 @@
+# (Mon Nov 28 2022)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.6.3`
+  - Create Plugin: Fix incorrect templates being used for scaffolding [#158](https://github.com/grafana/plugin-tools/pull/158) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Nov 24 2022)
 
 #### 🐛 Bug Fix
