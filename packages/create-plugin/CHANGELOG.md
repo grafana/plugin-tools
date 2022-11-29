@@ -1,3 +1,15 @@
+# v0.7.0 (Tue Nov 29 2022)
+
+#### 🚀 Enhancement
+
+- Create plugin: Introduce sign-plugin [#160](https://github.com/grafana/plugin-tools/pull/160) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.6.3 (Mon Nov 28 2022)
 
 #### 🐛 Bug Fix
