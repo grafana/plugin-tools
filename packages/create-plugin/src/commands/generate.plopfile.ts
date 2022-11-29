@@ -27,6 +27,8 @@ export default function (plop: NodePlopAPI) {
   plop.setHelper('if_eq', ifEq);
   plop.setHelper('normalize_id', normalizeId);
 
+  plop.setActionType('printSuccessMessage', printSuccessMessage);
+
   plop.setGenerator('create-plugin', {
     description: 'used to scaffold a grafana plugin',
     prompts: [
@@ -139,7 +141,15 @@ export default function (plop: NodePlopAPI) {
       // Replace conditional bits in the Readme files
       const readmeActions = getActionsForReadme({ exportPath });
 
-      return [...pluginActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
+      return [
+        ...pluginActions,
+        ...ciWorkflowActions,
+        ...readmeActions,
+        ...isCompatibleWorkflowActions,
+        {
+          type: 'printSuccessMessage',
+        },
+      ];
     },
   });
 }
@@ -154,6 +164,11 @@ function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActi
     replacePatternWithTemplateInReadme(
       '-- INSERT BACKEND GETTING STARTED --',
       'backend-getting-started.md',
+      exportPath
+    ),
+    replacePatternWithTemplateInReadme(
+      '-- INSERT DISTRIBUTING YOUR PLUGIN --',
+      'distributing-your-plugin.md',
       exportPath
     ),
   ];
@@ -228,4 +243,28 @@ function getExportPath(pluginName: string, orgName: string, pluginType: PLUGIN_T
   } else {
     return path.join(process.cwd(), normalizeId(pluginName, orgName, pluginType));
   }
+}
+
+function printSuccessMessage(answers: CliArgs) {
+  const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
+
+  const commands = [
+    '  * `yarn install` to install frontend dependencies.',
+    '  * `docker-compose up` to start a grafana development server.',
+    '  * `yarn dev` to build (and watch) the plugin frontend code.',
+    ...(answers.hasBackend ? ['  * `mage -v build:linux` to build the plugin backend code.'] : []),
+    '  * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
+  ];
+
+  return `
+  Congratulations on scaffolding a Grafana ${answers.pluginName} plugin! 🚀
+
+  ## What's next?
+  Navigate into ./${directory} and run the following commands to get started:
+${commands.map((command) => command).join('\n')}
+
+  View the README.md for futher information.
+  Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
+
+`;
 }

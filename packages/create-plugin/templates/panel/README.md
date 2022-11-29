@@ -13,6 +13,8 @@ Use panel plugins when you want to do things like visualize data returned by dat
 -- INSERT FRONTEND GETTING STARTED --
 {{#if hasBackend}}-- INSERT BACKEND GETTING STARTED --{{/if}}
 
+-- INSERT DISTRIBUTING YOUR PLUGIN --
+
 ## Learn more
 
 Below you can find source code for existing app plugins and other related documentation.
