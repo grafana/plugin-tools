@@ -257,7 +257,7 @@ function printSuccessMessage(answers: CliArgs) {
   ];
 
   return `
-  Congratulations on scaffolding a Grafana ${answers.pluginName} plugin! 🚀
+  Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
 
   ## What's next?
   Navigate into ./${directory} and run the following commands to get started:
