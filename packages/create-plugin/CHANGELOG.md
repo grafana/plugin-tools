@@ -1,3 +1,15 @@
+# v0.7.1 (Tue Nov 29 2022)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Remove links pointing to deprecated starter templates [#162](https://github.com/grafana/plugin-tools/pull/162) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.7.0 (Tue Nov 29 2022)
 
 #### 🚀 Enhancement
