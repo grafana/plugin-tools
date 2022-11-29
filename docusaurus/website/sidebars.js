@@ -18,6 +18,11 @@ const sidebars = {
 
   docs: {
     'Getting Started': ['getting-started', 'folder-structure', 'updating-to-new-releases'],
+    Development: ['editor-setup', 'docker', 'frontend', 'backend'],
+    'Building your Plugin': ['production-builds', 'ci'],
+    Testing: ['unit-tests', 'e2e-tests'],
+    Distribution: ['distributing-your-plugin', 'signing-your-plugin'],
+    'Advanced Usage': ['advanced-configuration'],
   },
 
   // But you can create a sidebar manually
