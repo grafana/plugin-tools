@@ -36,7 +36,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/73201?v=4",
       "profile": "https://www.heywesty.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "infra"
       ]
     }
   ],
