@@ -1,3 +1,15 @@
+# v0.8.0 (Wed Nov 30 2022)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Update Jest to v29 [#164](https://github.com/grafana/plugin-tools/pull/164) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.7.1 (Tue Nov 29 2022)
 
 #### 🐛 Bug Fix
