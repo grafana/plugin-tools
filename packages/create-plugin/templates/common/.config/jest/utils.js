@@ -11,7 +11,7 @@
 const nodeModulesToTransform = (moduleNames) => `node_modules\/(?!(${moduleNames.join('|')})\/)`;
 
 // Array of known nested grafana package dependencies that only bundle an ESM version
-const grafanaESModules = ['ol', 'react-colorful'];
+const grafanaESModules = ['ol', 'react-colorful', 'uuid'];
 
 module.exports = {
   nodeModulesToTransform,
