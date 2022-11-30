@@ -3,6 +3,7 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
+import { printMessage } from '../utils/utils.console';
 import {
   IS_DEV,
   TEMPLATE_PATHS,
@@ -249,22 +250,28 @@ function printSuccessMessage(answers: CliArgs) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
 
   const commands = [
-    '  * `yarn install` to install frontend dependencies.',
-    '  * `docker-compose up` to start a grafana development server.',
-    '  * `yarn dev` to build (and watch) the plugin frontend code.',
-    ...(answers.hasBackend ? ['  * `mage -v build:linux` to build the plugin backend code.'] : []),
-    '  * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
+    `- \`cd ./${directory}\``,
+    '- `yarn install` to install frontend dependencies.',
+    '- `docker-compose up` to start a grafana development server.',
+    '- `yarn dev` to build (and watch) the plugin frontend code.',
+    ...(answers.hasBackend ? ['- `mage -v build:linux` to build the plugin backend code.'] : []),
+    '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
-  return `
-  Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
+  const msg = `
+# Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
 
-  ## What's next?
-  Navigate into ./${directory} and run the following commands to get started:
+## What's next?
+
+Run the following commands to get started:
 ${commands.map((command) => command).join('\n')}
 
-  View the README.md for futher information.
-  Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
+_Note: We strongly recommend creating a new Git repository by running \`git init\` in ./${directory} before continuing._
 
+- View ./${directory}/README.md
+- Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
 `;
+
+  printMessage(msg);
+  return '';
 }
