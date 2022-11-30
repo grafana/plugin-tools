@@ -3,7 +3,7 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
-import { printMessage } from '../utils/utils.console';
+import { displayAsMarkdown } from '../utils/utils.console';
 import {
   IS_DEV,
   TEMPLATE_PATHS,
@@ -259,7 +259,7 @@ function printSuccessMessage(answers: CliArgs) {
   ];
 
   const msg = `
-# Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
+Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
 
 ## What's next?
 
@@ -272,6 +272,5 @@ _Note: We strongly recommend creating a new Git repository by running \`git init
 - Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
 `;
 
-  printMessage(msg);
-  return '';
+  return displayAsMarkdown(msg);
 }
