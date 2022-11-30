@@ -3,6 +3,7 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
+import { displayAsMarkdown } from '../utils/utils.console';
 import {
   IS_DEV,
   TEMPLATE_PATHS,
@@ -256,7 +257,7 @@ function printSuccessMessage(answers: CliArgs) {
     '  * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
-  return `
+  return displayAsMarkdown(`
   Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
 
   ## What's next?
@@ -266,5 +267,5 @@ ${commands.map((command) => command).join('\n')}
   View the README.md for futher information.
   Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
 
-`;
+`);
 }
