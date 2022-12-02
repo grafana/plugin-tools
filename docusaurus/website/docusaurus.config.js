@@ -39,6 +39,7 @@ const config = {
         outDir: '../docs', // the base directory to output to.
         documents: ['sign-a-plugin.md'], // the file names to download
         modifyContent(filename, content) {
+          // strip the HTML as docusaurus doesn't like non self-closing tags e.g. <br>
           remark()
             .use(stripHTML)
             .process(content, (err, file) => {
@@ -48,8 +49,11 @@ const config = {
 
               content = String(file);
             });
-
-          content = content.replace(/\*\*\*((.|\n)*)\*\*\*/, '').replace(/\\\[(.+)\]\\(\({{.+}}\))/g, '$1');
+          // clean up metadata, relref and remove heading
+          content = content
+            .replace(/\*\*\*((.|\n)*)\*\*\*/, '')
+            .replace(/\\\[(.+)\]\\(\({{.+}}\))/g, '$1')
+            .replace(/# Sign a plugin\n\n/, '');
           return {
             filename: 'signing-your-plugin.md',
             content: `---
