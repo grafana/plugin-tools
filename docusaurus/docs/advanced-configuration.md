@@ -4,12 +4,17 @@ title: Advanced Configuration
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools
-that are used to develop, test and build the project. In order to make updates easier do **not**
-edit files in this folder to extend configuration.
+that are used to develop, test and build the project.
+
+:::danger
+
+In order to make updates easier do **not** edit files in the `.config` directory to extend configuration. Instead follow the directions in this article to customise the tooling configurations.
+
+:::
 
 ## How to extend the basic configs?
 
-First not that you are doing this at your own risk and that extending any of the basic configuration can lead
+First note that you are doing this at your own risk and that extending any of the basic configuration can lead
 to issues around working with the project.
 
 ### Extending the ESLint config

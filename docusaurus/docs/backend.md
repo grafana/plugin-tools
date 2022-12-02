@@ -1,6 +1,6 @@
 ---
 id: backend
-title: Backend Development
+title: Backend
 ---
 
 1. Update [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) dependency to the latest minor version:

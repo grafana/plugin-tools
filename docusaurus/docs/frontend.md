@@ -1,62 +1,34 @@
 ---
 id: frontend
-title: Frontend Development
+title: Frontend
 ---
 
-1. Install dependencies
+The Frontend part of Grafana plugins are written in Typescript with support for React as the view library. Within the plugin directory, you can run:
 
-   ```bash
-   yarn install
-   ```
+### `yarn dev` or `yarn watch`
 
-2. Build plugin in development mode or run in watch mode
+Builds the plugin in development mode and watches for changes to source code to rebuild the plugin.
 
-   ```bash
-   yarn dev
+### `yarn build`
 
-   # or
+Builds the plugin for production. The output can be found in the `./dist` directory.
 
-   yarn watch
-   ```
+### `yarn test`
 
-3. Build plugin in production mode
+Launches the test runner in watch mode.
 
-   ```bash
-   yarn build
-   ```
+### `yarn server`
 
-4. Run the tests (using Jest)
+Launches an instance of Grafana for developing a plugin. See the section about [Docker](docker.md) for more information
 
-   ```bash
-   # Runs the tests and watches for changes
-   yarn test
+### `yarn e2e`
 
-   # Exists after running all the tests
-   yarn lint:ci
-   ```
+Launches the e2e test runner. (Make sure to have an instance of Grafana running before running e2e tests.)
 
-5. Spin up a Grafana instance and run the plugin inside it (using Docker)
+### `yarn lint`
 
-   ```bash
-   yarn server
-   ```
+Run the linter against source code to verify formatting and styling rules are adherred to.
 
-6. Run the E2E tests (using Cypress)
+### `yarn lint:fix`
 
-   ```bash
-   # Spin up a Grafana instance first that we tests against
-   yarn server
-
-   # Start the tests
-   yarn e2e
-   ```
-
-7. Run the linter
-
-   ```bash
-   yarn lint
-
-   # or
-
-   yarn lint:fix
-   ```
+Run the linter in fix mode to automatically format the frontend code.

@@ -23,4 +23,4 @@ Before signing a plugin for the first time please consult the Grafana [plugin si
 2. Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
    - _You can find the plugin ID in the plugin.json file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`._
 3. Create a Grafana Cloud API key with the `PluginPublisher` role.
-4. Keep a record of this API key as it will be required for signing a plugin.
+4. Keep a record of this API key as it will be required for [signing a plugin](signing-your-plugin.md).
