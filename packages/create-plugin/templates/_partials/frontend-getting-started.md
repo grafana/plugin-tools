@@ -6,14 +6,10 @@
    yarn install
    ```
 
-2. Build plugin in development mode or run in watch mode
+2. Build plugin in development mode and run in watch mode
 
    ```bash
    yarn dev
-
-   # or
-
-   yarn watch
    ```
 
 3. Build plugin in production mode
@@ -25,11 +21,11 @@
 4. Run the tests (using Jest)
 
    ```bash
-   # Runs the tests and watches for changes
+   # Runs the tests and watches for changes, requires git init first
    yarn test
    
    # Exists after running all the tests
-   yarn lint:ci
+   yarn test:ci
    ```
 
 5. Spin up a Grafana instance and run the plugin inside it (using Docker)
