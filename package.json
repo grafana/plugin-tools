@@ -9,6 +9,7 @@
     "build": "lerna run build",
     "dev": "lerna run dev",
     "docs": "yarn workspace website run start",
+    "docs:build": "yarn workspace website run build",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "release": "auto shipit",
