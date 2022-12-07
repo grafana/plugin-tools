@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy:
-    name: Test docs build
+    name: Build docs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
