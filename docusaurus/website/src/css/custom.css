@@ -20,13 +20,13 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #eb7b18;
-  --ifm-color-primary-dark: #d76f13;
-  --ifm-color-primary-darker: #cb6812;
-  --ifm-color-primary-darkest: #a7560e;
-  --ifm-color-primary-light: #ed8930;
-  --ifm-color-primary-lighter: #ee8f3c;
-  --ifm-color-primary-lightest: #f1a460;
+  --ifm-color-primary: #ff780a;
+  --ifm-color-primary-dark: #ef6b00;
+  --ifm-color-primary-darker: #e16500;
+  --ifm-color-primary-darkest: #ba5300;
+  --ifm-color-primary-light: #ff8725;
+  --ifm-color-primary-lighter: #ff8e32;
+  --ifm-color-primary-lightest: #ffa45a;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
@@ -34,7 +34,15 @@
   --ifm-footer-background-color: rgba(0, 0, 0, 0.3);
 }
 
+[data-theme='light'] .footer.footer--dark {
+  --ifm-footer-background-color: rgba(0, 0, 0, 0.75);
+}
+
 .button--outline {
   --ifm-button-color: white;
   --ifm-button-border-color: white;
+}
+
+[data-theme='light'] .button--outline:hover {
+  color: var(--ifm-font-color-base);
 }
