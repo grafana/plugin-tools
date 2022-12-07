@@ -1,0 +1,29 @@
+name: Test docs build
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy.yml'
+      - '.github/workflows/test-deploy.yml'
+      - 'docusaurus/**'
+
+jobs:
+  deploy:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --prefer-offline
+      - name: Build documentation website
+        run: yarn workspace website run build
