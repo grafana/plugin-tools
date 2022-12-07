@@ -1,50 +1,37 @@
 import defaults from 'lodash/defaults';
 
-import React, { ChangeEvent, PureComponent } from 'react';
-import { LegacyForms } from '@grafana/ui';
+import React, { ChangeEvent } from 'react';
+import { InlineField, Input } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
 import { defaultQuery, MyDataSourceOptions, MyQuery } from '../types';
 
-const { FormField } = LegacyForms;
-
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
-export class QueryEditor extends PureComponent<Props> {
-  onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
+export const QueryEditor = (props: Props) => {
+  const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onChange, query } = props;
     onChange({ ...query, queryText: event.target.value });
   };
 
-  onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query, onRunQuery } = this.props;
+  const onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onChange, query, onRunQuery } = props;
     onChange({ ...query, constant: parseFloat(event.target.value) });
     // executes the query
     onRunQuery();
   };
 
-  render() {
-    const query = defaults(this.props.query, defaultQuery);
-    const { queryText, constant } = query;
+  const query = defaults(props.query, defaultQuery);
+  const { queryText, constant } = query;
 
-    return (
-      <div className="gf-form">
-        <FormField
-          width={4}
-          value={constant}
-          onChange={this.onConstantChange}
-          label="Constant"
-          type="number"
-          step="0.1"
-        />
-        <FormField
-          labelWidth={8}
-          value={queryText || ''}
-          onChange={this.onQueryTextChange}
-          label="Query Text"
-          tooltip="Not used yet"
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="gf-form">
+      <InlineField label="Constant">
+        <Input onChange={onConstantChange} value={constant} width={8} type="number" step="0.1" />
+      </InlineField>
+      <InlineField label="Query Text" labelWidth={16} tooltip="Not used yet">
+        <Input onChange={onQueryTextChange} value={queryText || ''} />
+      </InlineField>
+    </div>
+  );
+};
