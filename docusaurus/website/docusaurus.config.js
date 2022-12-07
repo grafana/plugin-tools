@@ -9,7 +9,7 @@ const stripHTML = require('remark-strip-html');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Grafana Plugin Tools',
-  tagline: 'Setup a Grafana plugin by running one command',
+  tagline: 'Scaffold a Grafana plugin by running one command',
   url: 'https://grafana.github.io/',
   baseUrl: 'plugin-tools/',
   onBrokenLinks: 'throw',

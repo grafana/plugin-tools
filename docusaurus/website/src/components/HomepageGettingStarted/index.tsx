@@ -35,10 +35,10 @@ function HomepageGettingStarted() {
       <div>
         <div className="container padding-vert--xl text--left">
           <div className="row">
-            <div className="col col--4 col--offset-1">
-              <img className={styles.featureImage} alt="Easy to update" src="https://via.placeholder.com/405/300" />
+            <div className="col col--6 col--offset-1">
+              <img className={styles.featureImage} alt="Easy to update" src={useBaseUrl('img/homepage_update.gif')} />
             </div>
-            <div className="col col--5 col--offset-1">
+            <div className="col col--4 col--offset-1">
               <h2>Easy to Maintain</h2>
               <p>
                 Updating your build tooling can be a daunting and time-consuming task. When new versions of Create

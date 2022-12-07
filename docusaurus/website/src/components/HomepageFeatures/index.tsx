@@ -20,11 +20,15 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Focus on What Matters',
-    description: <>What does matter though?</>,
+    description: (
+      <>
+        Spend time where it matters - desiging and developing a Grafana plugin. Take advantage of unit and e2e testing
+        to make sure your plugin is rock solid.
+      </>
+    ),
   },
   {
     title: 'Transparency',
-
     description: (
       <>
         Under the hood we use webpack, swc, eslint, and other amazing open source projects to help you build your

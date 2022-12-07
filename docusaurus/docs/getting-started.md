@@ -15,8 +15,12 @@ Now follow the prompts to scaffold a Grafana plugin.
 
 ### What you'll need
 
+- [Go](https://go.dev/doc/install) version 1.18 or above
+- [Mage](https://magefile.org/)
 - [Node.js](https://nodejs.org/en/download/) version 16 or above:
   - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install)
+- [Docker](https://docs.docker.com/get-docker/)
 
 ## Output
 

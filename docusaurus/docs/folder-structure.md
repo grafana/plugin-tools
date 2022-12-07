@@ -43,11 +43,15 @@ myorg-myplugin-datasource/
 
 For the plugin to function, **these files must exist with exact filenames**:
 
-- `src/plugin.json` is the metadata used by Grafana to load the plugin.
-- `src/module.ts` is the JavaScript entry point.
+| Filename            | Description                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| `./go.mod`          | Go modules dependencies, [reference](https://golang.org/cmd/go/#hdr-The_go_mod_file) |
+| `./src/plugin.json` | A JSON file describing the plugin                                                    |
+| `./src/module.ts`   | The entry point of the frontend plugin                                               |
+| `./pkg/main.go`     | The entry point of the backend plugin                                                |
 
-<!-- TODO: add backend info here. -->
+The files are optional:
 
-You may create subdirectories inside `src`. For faster rebuilds, only files inside `src` are processed by webpack. You need to **put any JS and CSS files inside `src`**, otherwise webpack won’t see them.
-
-You can, however, create more top-level directories. They will not be included in the production build so you can use them for things like documentation.
+| Filename        | Description                                                                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `./Magefile.go` | Whilst not required we strongly recommend using mage build files so that you can use the build targets provided by the backend plugin SDK. |
