@@ -2,7 +2,7 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { LegacyForms } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
-import { DEFAULT_QUERY, MyDataSourceOptions, MyQuery } from '../types';
+import { MyDataSourceOptions, MyQuery } from '../types';
 
 const { FormField } = LegacyForms;
 
