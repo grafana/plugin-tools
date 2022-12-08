@@ -1,10 +1,8 @@
-import defaults from 'lodash/defaults';
-
 import React, { ChangeEvent, PureComponent } from 'react';
 import { LegacyForms } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
-import { defaultQuery, MyDataSourceOptions, MyQuery } from '../types';
+import { DEFAULT_QUERY, MyDataSourceOptions, MyQuery } from '../types';
 
 const { FormField } = LegacyForms;
 
@@ -24,8 +22,7 @@ export class QueryEditor extends PureComponent<Props> {
   };
 
   render() {
-    const query = defaults(this.props.query, defaultQuery);
-    const { queryText, constant } = query;
+    const { queryText, constant } = this.props.query;
 
     return (
       <div className="gf-form">
