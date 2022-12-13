@@ -1,3 +1,25 @@
+# (Tue Dec 13 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.8.1`
+  - Templates: Use getDefaultQuery method to set query default values [#173](https://github.com/grafana/plugin-tools/pull/173) ([@sunker](https://github.com/sunker))
+
+#### 📝 Documentation
+
+- Docs: Introduce Docusaurus website [#169](https://github.com/grafana/plugin-tools/pull/169) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Nov 30 2022)
 
 #### 🚀 Enhancement

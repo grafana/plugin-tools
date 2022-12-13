@@ -1,3 +1,19 @@
+# v0.8.1 (Tue Dec 13 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Templates: Use getDefaultQuery method to set query default values [#173](https://github.com/grafana/plugin-tools/pull/173) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.8.0 (Wed Nov 30 2022)
 
 #### 🚀 Enhancement
