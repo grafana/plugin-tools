@@ -40,6 +40,15 @@
         "doc",
         "infra"
       ]
+    },
+    {
+      "login": "sunker",
+      "name": "Erik Sundell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2388950?v=4",
+      "profile": "https://github.com/sunker",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
