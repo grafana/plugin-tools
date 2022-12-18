@@ -33,6 +33,13 @@ export GRAFANA_API_KEY=<YOUR_API_KEY>
 npx @grafana/sign-plugin
 ```
 
+If the plugin distribution directory differs from the default `dist`, specify the path to use with the `--distDir` flag.
+
+```bash
+export GRAFANA_API_KEY=<YOUR_API_KEY>
+npx @grafana/sign-plugin --distDir path/to/directory
+```
+
 ### Sign a private plugin
 
 In your plugin directory, run the following to create a MANIFEST.txt file in the dist directory of your plugin.
