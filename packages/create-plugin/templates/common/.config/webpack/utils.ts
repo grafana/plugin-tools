@@ -21,21 +21,22 @@ export function hasReadme() {
 }
 
 export async function getEntries(): Promise<Record<string, string>> {
-  const parent = '..';
-  const pluginsJson = await globAsync('**/src/**/plugin.json');
-  
-  const plugins = await Promise.all(pluginsJson.map(pluginJson => {
-    const folder = path.dirname(pluginJson);
-    return globAsync(`${folder}/module.{ts,tsx,js}`);
-  }));
+  const pluginsJson = await globAsync('**/src/**/plugin.json', { absolute: true });
+
+  const plugins = await Promise.all(pluginsJson.map((pluginJson) => {
+      const folder = path.dirname(pluginJson);
+      return globAsync(`${folder}/module.{ts,tsx,js}`, { absolute: true });
+    })
+  );
 
   return plugins.reduce((result, modules) => {
     return modules.reduce((result, module) => {
-      const pluginPath = path.resolve(path.dirname(module), parent);
+      const pluginPath = path.dirname(module);
       const pluginName = path.basename(pluginPath);
-      const entryName = plugins.length > 1 ? `${pluginName}/module` : 'module';
-  
-      result[entryName] = path.join(parent, module);
+      // support bundling nested plugins
+      const entryName = pluginName === 'src' ? 'module' : `${pluginName}/module`;
+
+      result[entryName] = module;
       return result;
     }, result);
   }, {});
