@@ -9,6 +9,8 @@ Grafana App plugins can nest datasource and panel plugins making it easy to ship
 npx @grafana/create-plugin
 ```
 
+When prompted `What type of plugin would you like?` select `app`.
+
 ## Frontend
 
 Nested frontend plugins require seperate entry (`module.ts`) and plugin meta (`plugin.json`) files. These should be added to a directory inside the `./src` directory:
