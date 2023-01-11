@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/deploy.yml'
-      - '.github/workflows/test-deploy.yml'
+      - '.github/workflows/test-build.yml'
       - 'docusaurus/**'
 
 jobs:
