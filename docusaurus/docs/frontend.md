@@ -5,7 +5,7 @@ title: Frontend
 
 The Frontend part of Grafana plugins are written in Typescript with support for React as the view library. Within the plugin directory, you can run:
 
-### `yarn dev` or `yarn watch`
+### `yarn dev`
 
 Builds the plugin in development mode and watches for changes to source code to rebuild the plugin.
 
