@@ -12,6 +12,8 @@ jobs:
   deploy:
     name: Deploy docs to GitHub Pages
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,7 +34,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GH_BOT_ACCESS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
           publish_dir: ./docusaurus/website/build
           # The following lines assign commit authorship to the official
