@@ -1,3 +1,27 @@
+# (Wed Jan 11 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for all your work!
+
+#### 🐛 Bug Fix
+
+- CI: Update workflows to use permissions rather than PAT [#183](https://github.com/grafana/plugin-tools/pull/183) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@0.8.2`
+  - Create Plugin: Update docs to build backend before running docker [#167](https://github.com/grafana/plugin-tools/pull/167) ([@sarahzinger](https://github.com/sarahzinger))
+
+#### 📝 Documentation
+
+- Adding google search console verification file [#176](https://github.com/grafana/plugin-tools/pull/176) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Dec 13 2022)
 
 :tada: This release contains work from a new contributor! :tada:

@@ -1,3 +1,19 @@
+# v0.8.2 (Wed Jan 11 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update docs to build backend before running docker [#167](https://github.com/grafana/plugin-tools/pull/167) ([@sarahzinger](https://github.com/sarahzinger))
+
+#### Authors: 1
+
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+
+---
+
 # v0.8.1 (Tue Dec 13 2022)
 
 :tada: This release contains work from a new contributor! :tada:
