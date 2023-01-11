@@ -49,6 +49,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sarahzinger",
+      "name": "Sarah Zinger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6620164?v=4",
+      "profile": "https://github.com/sarahzinger",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
