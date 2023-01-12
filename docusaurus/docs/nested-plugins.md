@@ -3,15 +3,13 @@ id: nested-plugins
 title: Nested Plugins
 ---
 
-Grafana App plugins can nest datasource and panel plugins making it easy to ship a complete user experience. To take advantage of this feature first scaffold an app plugin using `@grafana/create-plugin`:
+Grafana app plugins can nest frontend datasource and panel plugins making it easy to ship a complete user experience. To take advantage of this feature first scaffold an app plugin using `@grafana/create-plugin`:
 
 ```bash
 npx @grafana/create-plugin
 ```
 
 When prompted `What type of plugin would you like?` select `app`.
-
-## Frontend
 
 Nested frontend plugins require seperate entry (`module.ts`) and plugin meta (`plugin.json`) files. These should be added to a directory inside the `./src` directory:
 
@@ -32,20 +30,6 @@ Nested frontend plugins require seperate entry (`module.ts`) and plugin meta (`p
  │   └── logo.svg
  ├── module.ts
  └── plugin.json
-```
-
-## Backend
-
-As the backend of a plugin has a single entry point (see [folder structure](./folder-structure.md#required-files) for reference) introduce the nested plugin backend source to the `./pkg` directory:
-
-```diff bash
-./pkg
-├── main.go
-└── plugin
-    ├── app.go
-+   ├── datasource.go
-    ├── resources.go
-    └── resources_test.go
 ```
 
 :::tip
