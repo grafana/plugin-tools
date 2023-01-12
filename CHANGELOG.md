@@ -1,3 +1,22 @@
+# (Thu Jan 12 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Revert "CI: Update workflows to use permissions rather than PAT" [#184](https://github.com/grafana/plugin-tools/pull/184) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@0.8.3`
+  - Create Plugin: Update yarn scripts and instructions to work post scaffold [#168](https://github.com/grafana/plugin-tools/pull/168) ([@sarahzinger](https://github.com/sarahzinger) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+
+---
+
 # (Wed Jan 11 2023)
 
 :tada: This release contains work from a new contributor! :tada:
