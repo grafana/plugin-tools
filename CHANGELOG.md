@@ -1,3 +1,16 @@
+# (Fri Jan 13 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.8.4`
+  - Create Plugin: Make sure nested plugins dist directory structure is correct [#182](https://github.com/grafana/plugin-tools/pull/182) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Jan 12 2023)
 
 :tada: This release contains work from a new contributor! :tada:
