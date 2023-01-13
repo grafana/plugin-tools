@@ -22,7 +22,7 @@ const sidebars = {
     // 'Building your Plugin': ['production-builds', 'ci'],
     // Testing: ['unit-tests', 'e2e-tests'],
     Distribution: ['distributing-your-plugin', 'signing-your-plugin'],
-    'Advanced Usage': ['advanced-configuration'],
+    'Advanced Usage': ['advanced-configuration', 'nested-plugins'],
   },
 
   // But you can create a sidebar manually
