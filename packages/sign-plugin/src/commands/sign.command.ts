@@ -36,5 +36,6 @@ export const sign = async (argv: minimist.ParsedArgs) => {
     console.log('Signed successfully');
   } catch (err) {
     console.warn(err);
+    process.exitCode = 1;
   }
 };
