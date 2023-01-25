@@ -21,7 +21,7 @@ It's recommended that all prompts are agreed to so configs, dependencies and scr
 
 Selecting `y` will replace the files inside the `.config` directory to make sure the plugin is built and tested with the latest Grafana recommended configurations.
 
-### Would you like to update the following dependencies in the `package.json?
+### Would you like to update the following dependencies in the package.json?
 
 This step is skipped if there are no dependencies to update otherwise select from the following choices:
 
