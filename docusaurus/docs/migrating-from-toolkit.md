@@ -7,7 +7,7 @@ If you were using `@grafana/toolkit` to scaffold and develop plugins this guide 
 
 Plugin tools consists of two packages:
 
-- `create-plugin` is a command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit.
+- `create-plugin` is a command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
 - `sign-plugin` is a command-line utility to sign plugins for distribution.
 
 :::warning
