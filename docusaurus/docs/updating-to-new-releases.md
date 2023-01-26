@@ -12,10 +12,12 @@ npx @grafana/create-plugin update
 This command will rerun the original scaffolding commands against the configuration files, dependencies, and scripts, using the latest version of `create-plugin`. It will prompt to confirm any destructive operations are agreed to prior to being run.
 
 :::tip
-It's recommended that all prompts are agreed to so configs, dependencies and scripts are kept in sync. Due to their destructive nature the default for each of the following prompts is `no`.
+It's recommended that all prompts are agreed to so configs, dependencies and scripts are kept in sync.
 :::
 
 ## Prompts
+
+When running the update command the following prompts will appear asking for confirmation before making changes. Due to their destructive nature the default for each of the following prompts is `no`.
 
 ### Would you like to update the project's configuration?
 
@@ -29,7 +31,7 @@ This step is skipped if there are no dependencies to update otherwise select fro
 - Selecting `Yes, but only the outdated ones` will update all existing dependencies in `package.json`.
 - Selecting `No` will skip this step preventing any dependency updates.
 
-### Would you like to update the `scripts` in your `package.json`? All scripts using grafana-toolkit will be replaced.
+### Would you like to update the scripts in your package.json? All scripts using grafana-toolkit will be replaced.
 
 This step will update any npm scripts in the `package.json` file to match the latest configurations. Any scripts that were previously using `grafana-toolkit` will be replaced.
 

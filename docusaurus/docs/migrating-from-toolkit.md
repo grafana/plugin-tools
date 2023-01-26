@@ -24,6 +24,8 @@ npx @grafana/create-plugin migrate
 
 ## Prompts
 
+When running the migrate command the following prompts will appear asking for confirmation before making changes. Due to their destructive nature the default for each of the following prompts is `no`.
+
 ### The following files will be overriden. Would you like to continue?
 
 Selecting `y` will create/replace the following files/folders in the plugin directory:
@@ -77,7 +79,7 @@ Selecting `y` will delete the following npm dependencies found in `package.json`
 
 ### Would you like to update the scripts in your package.json? All scripts using grafana-toolkit will be replaced.
 
-This command searches the `package.json` scripts field for references to `grafana-toolkit plugin:` and replaces them with the create-plugin / sign-plugin equivalent command.
+This step will update any npm scripts in the `package.json` file to match the latest configurations. Any scripts that were previously using `grafana-toolkit` will be replaced.
 
 ## Next steps
 
