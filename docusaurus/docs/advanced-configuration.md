@@ -66,7 +66,7 @@ A common issue found with the current jest config involves importing an npm pack
 
 ```javascript
 process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./jest/utils');
+const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/utils');
 
 module.exports = {
   // Jest configuration provided by @grafana/create-plugin
