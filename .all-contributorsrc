@@ -60,6 +60,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "tomasbasham",
+      "name": "Tomas Basham",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3389856?v=4",
+      "profile": "https://tomasbasham.dev/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
