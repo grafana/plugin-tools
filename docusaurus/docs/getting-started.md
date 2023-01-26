@@ -8,10 +8,16 @@ Create Plugin is the officially supported way to develop plugins to extend Grafa
 ## Quick Start
 
 ```shell
-yarn create @grafana/plugin
+npx @grafana/create-plugin
 ```
 
 Now follow the prompts to scaffold a Grafana plugin.
+
+:::note
+
+Plugins previously scaffolded with `@grafana/toolkit` can be migrated. Please see [this migration guide](./migrating-from-toolkit).
+
+:::
 
 ### What you'll need
 
@@ -36,7 +42,7 @@ Depending on the answers given to the prompts there should be a structure like:
 
 ```
 <orgName>-<pluginName>-<pluginType>
-├── .config
+├── .config/
 ├── .eslintrc
 ├── .github
 │   └── workflows

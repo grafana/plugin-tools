@@ -7,7 +7,7 @@ After creation, your project should look similar to this:
 
 ```
 myorg-myplugin-datasource/
-├── .config
+├── .config/
 ├── .eslintrc
 ├── .github
 │   └── workflows
