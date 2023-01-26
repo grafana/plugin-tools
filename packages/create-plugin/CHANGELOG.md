@@ -1,3 +1,15 @@
+# v0.9.0 (Thu Jan 26 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Update jest config to support Grafana 9.4 packages [#188](https://github.com/grafana/plugin-tools/pull/188) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.8.4 (Fri Jan 13 2023)
 
 #### 🐛 Bug Fix

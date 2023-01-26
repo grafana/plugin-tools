@@ -1,5 +1,25 @@
 # (Thu Jan 26 2023)
 
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Tomas Basham ([@tomasbasham](https://github.com/tomasbasham)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/sign-plugin@0.1.0`
+  - Sign Plugin: Parameterise distribution directory [#175](https://github.com/grafana/plugin-tools/pull/175) ([@tomasbasham](https://github.com/tomasbasham))
+- `@grafana/create-plugin@0.9.0`
+  - Create Plugin: Update jest config to support Grafana 9.4 packages [#188](https://github.com/grafana/plugin-tools/pull/188) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Tomas Basham ([@tomasbasham](https://github.com/tomasbasham))
+
+---
+
+# (Thu Jan 26 2023)
+
 #### 🐛 Bug Fix
 
 - `@grafana/sign-plugin@0.0.3`
