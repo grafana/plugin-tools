@@ -8,14 +8,22 @@ body:
     attributes:
       value: |
         Thanks for taking the time to fill out this bug report.
-  - type: dropdown
+  - type: checkboxes
     id: package
     attributes:
-      label: Package Name
-      description: Which package does this bug affect?
+      label: Which package(s) does this bug affect?
+      description: You may select more than one.
       options:
         - create-plugin
         - sign-plugin
+    validations:
+      required: true
+    - type: textarea
+    id: version
+    attributes:
+      label: Package versions
+      description: 'Please run `npx @grafana/<name_of_affected_package> version` and paste the results here.'
+      render: shell
     validations:
       required: true
   - type: textarea
