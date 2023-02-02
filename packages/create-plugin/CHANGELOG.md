@@ -1,3 +1,15 @@
+# v0.9.1 (Thu Feb 02 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix deeply nested plugins [#195](https://github.com/grafana/plugin-tools/pull/195) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.9.0 (Thu Jan 26 2023)
 
 #### 🚀 Enhancement
