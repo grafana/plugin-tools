@@ -12,13 +12,13 @@ Create Grafana plugins with ease.
       - [`npx`](#npx)
       - [`npm`](#npm)
   - [Migrate your existing plugin](#migrate-your-existing-plugin)
-    - [Things to check after migration](#things-to-check-after-migration)
   - [Update your plugin build config](#update-your-plugin-build-config)
   - [Customizing or extending the basic configs](#customizing-or-extending-the-basic-configs)
   - [Contributing](#contributing)
 
 **Links**
 
+- [Plugin Tools docs](https://grafana.github.io/plugin-tools/)
 - [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
 - [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
 
@@ -61,6 +61,7 @@ npm init @grafana/plugin
 ---
 
 ## Migrate your existing plugin
+
 :warning: We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in `angular`
 
 In case you have an existing plugin previously created using the `@grafana/toolkit` you can use the
@@ -73,11 +74,7 @@ cd ./my-plugin
 npx @grafana/create-plugin migrate
 ```
 
-### Things to check after migration
-
-- If you have a custom webpack configuration you might need to migrate it. You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
-- Build your plugin. Run `yarn build` to check your plugin builds as intended.
-- Test your plugin. Test your plugin inside grafana to confirm it is working as intended.
+For more information see [here](https://grafana.github.io/plugin-tools/docs/migrating-from-toolkit)
 
 ---
 
@@ -96,11 +93,13 @@ cd ./my-plugin
 npx @grafana/create-plugin update
 ```
 
+For more information see [here](https://grafana.github.io/plugin-tools/docs/updating-to-new-releases)
+
 ---
 
 ## Customizing or extending the basic configs
 
-You can read more about customizing or extending the basic configuration [here](templates/common/.config/README.md)
+You can read more about customizing or extending the basic configuration [here](https://grafana.github.io/plugin-tools/docs/advanced-configuration/)
 
 ## Contributing
 
