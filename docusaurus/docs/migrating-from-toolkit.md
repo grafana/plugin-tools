@@ -5,6 +5,10 @@ title: Migrating from Grafana Toolkit
 
 If you were using `@grafana/toolkit` to scaffold and develop plugins this guide should help you make the jump to plugin tools.
 
+:::caution
+We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in angular
+:::
+
 Plugin tools consists of two packages:
 
 - `create-plugin` is a command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
@@ -84,5 +88,7 @@ This step will update any npm scripts in the `package.json` file to match the la
 ## Next steps
 
 Once the command has finished the migration we recommend looking at the changes introduced and then running each of the npm scripts inside `package.json` to confirm the plugin can be built, tested, signed etc.
+
+If the plugin had customisations to the toolkit configs (e.g. webpack) head over to the [advanced configuration guide](./advanced-configuration.md) to learn how to update the,
 
 For help with resolving issues we recommend reaching out on [slack](https://grafana.slack.com/) or the [community forum](https://community.grafana.com/c/plugin-development/30).
