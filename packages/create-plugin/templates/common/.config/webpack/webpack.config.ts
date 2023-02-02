@@ -96,7 +96,6 @@ const config = async (env): Promise<Configuration> => ({
         use: ["style-loader", "css-loader"]
       },
       {
-        exclude: /(node_modules)/,
         test: /\.s[ac]ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
