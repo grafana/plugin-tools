@@ -1,5 +1,18 @@
 # (Thu Feb 02 2023)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@0.10.0`
+  - CreatePlugin: Change default docker image to grafana-enterprise [#197](https://github.com/grafana/plugin-tools/pull/197) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Thu Feb 02 2023)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@0.9.1`
