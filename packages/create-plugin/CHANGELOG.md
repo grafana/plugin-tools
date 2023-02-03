@@ -1,3 +1,20 @@
+# v0.11.0 (Fri Feb 03 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your work!
+
+#### 🚀 Enhancement
+
+- Update datasource plugin template [#172](https://github.com/grafana/plugin-tools/pull/172) ([@iwysiu](https://github.com/iwysiu) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Isabella Siu ([@iwysiu](https://github.com/iwysiu))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.10.0 (Thu Feb 02 2023)
 
 #### 🚀 Enhancement
