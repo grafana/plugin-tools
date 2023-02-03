@@ -1,3 +1,15 @@
+# v1.0.0 (Fri Feb 03 2023)
+
+#### 💥 Breaking Change
+
+- Introduce version commands [#193](https://github.com/grafana/plugin-tools/pull/193) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.1.0 (Thu Jan 26 2023)
 
 :tada: This release contains work from a new contributor! :tada:

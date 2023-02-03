@@ -1,5 +1,18 @@
 # (Fri Feb 03 2023)
 
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@1.0.0`, `@grafana/sign-plugin@1.0.0`
+  - Introduce version commands [#193](https://github.com/grafana/plugin-tools/pull/193) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Feb 03 2023)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your work!
