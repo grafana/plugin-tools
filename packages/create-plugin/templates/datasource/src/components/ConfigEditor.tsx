@@ -1,17 +1,13 @@
-import React, { ChangeEvent, PureComponent } from 'react';
-import { LegacyForms } from '@grafana/ui';
+import React, { ChangeEvent } from 'react';
+import { InlineField, Input, SecretInput } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { MyDataSourceOptions, MySecureJsonData } from '../types';
 
-const { SecretFormField, FormField } = LegacyForms;
-
 interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions> {}
 
-interface State {}
-
-export class ConfigEditor extends PureComponent<Props, State> {
-  onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onOptionsChange, options } = this.props;
+export function ConfigEditor(props: Props) {
+  const { onOptionsChange, options } = props;
+  const onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
     const jsonData = {
       ...options.jsonData,
       path: event.target.value,
@@ -20,8 +16,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   };
 
   // Secure field (only sent to the backend)
-  onAPIKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onOptionsChange, options } = this.props;
+  const onAPIKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
     onOptionsChange({
       ...options,
       secureJsonData: {
@@ -30,8 +25,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     });
   };
 
-  onResetAPIKey = () => {
-    const { onOptionsChange, options } = this.props;
+  const onResetAPIKey = () => {
     onOptionsChange({
       ...options,
       secureJsonFields: {
@@ -45,39 +39,29 @@ export class ConfigEditor extends PureComponent<Props, State> {
     });
   };
 
-  render() {
-    const { options } = this.props;
-    const { jsonData, secureJsonFields } = options;
-    const secureJsonData = (options.secureJsonData || {}) as MySecureJsonData;
+  const { jsonData, secureJsonFields } = options;
+  const secureJsonData = (options.secureJsonData || {}) as MySecureJsonData;
 
-    return (
-      <div className="gf-form-group">
-        <div className="gf-form">
-          <FormField
-            label="Path"
-            labelWidth={6}
-            inputWidth={20}
-            onChange={this.onPathChange}
-            value={jsonData.path || ''}
-            placeholder="json field returned to frontend"
-          />
-        </div>
-
-        <div className="gf-form-inline">
-          <div className="gf-form">
-            <SecretFormField
-              isConfigured={(secureJsonFields && secureJsonFields.apiKey) as boolean}
-              value={secureJsonData.apiKey || ''}
-              label="API Key"
-              placeholder="secure json field (backend only)"
-              labelWidth={6}
-              inputWidth={20}
-              onReset={this.onResetAPIKey}
-              onChange={this.onAPIKeyChange}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <div className="gf-form-group">
+      <InlineField label="Path" labelWidth={12}>
+        <Input
+          onChange={onPathChange}
+          value={jsonData.path || ''}
+          placeholder="json field returned to frontend"
+          width={40}
+        />
+      </InlineField>
+      <InlineField label="API Key" labelWidth={12}>
+        <SecretInput
+          isConfigured={(secureJsonFields && secureJsonFields.apiKey) as boolean}
+          value={secureJsonData.apiKey || ''}
+          placeholder="secure json field (backend only)"
+          width={40}
+          onReset={onResetAPIKey}
+          onChange={onAPIKeyChange}
+        />
+      </InlineField>
+    </div>
+  );
 }

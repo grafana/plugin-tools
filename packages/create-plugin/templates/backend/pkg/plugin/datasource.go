@@ -3,6 +3,7 @@ package plugin
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -73,10 +74,12 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 
 	err := json.Unmarshal(query.JSON, &qm)
 	if err != nil {
-		return backend.ErrDataResponse(backend.StatusBadRequest, "json unmarshal: " + err.Error())
+		return backend.ErrDataResponse(backend.StatusBadRequest, fmt.Sprintf("json unmarshal: %v", err.Error()))
 	}
 
 	// create data frame response.
+	// For an overview on data frames and how grafana handles them:
+	// https://grafana.com/docs/grafana/latest/developers/plugins/data-frames/
 	frame := data.NewFrame("response")
 
 	// add fields.
