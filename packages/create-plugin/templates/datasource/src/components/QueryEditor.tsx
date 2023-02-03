@@ -1,27 +1,22 @@
-import defaults from 'lodash/defaults';
-
 import React, { ChangeEvent } from 'react';
 import { InlineField, Input } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
-import { defaultQuery, MyDataSourceOptions, MyQuery } from '../types';
+import { MyDataSourceOptions, MyQuery } from '../types';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
-export const QueryEditor = (props: Props) => {
+export const QueryEditor = ({ query, onChange, onRunQuery }: Props) => {
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = props;
     onChange({ ...query, queryText: event.target.value });
   };
 
   const onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query, onRunQuery } = props;
     onChange({ ...query, constant: parseFloat(event.target.value) });
     // executes the query
     onRunQuery();
   };
 
-  const query = defaults(props.query, defaultQuery);
   const { queryText, constant } = query;
 
   return (

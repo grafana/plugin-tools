@@ -11,7 +11,6 @@ Use panel plugins when you want to do things like visualize data returned by dat
 ## Getting started
 
 -- INSERT FRONTEND GETTING STARTED --
-{{#if hasBackend}}-- INSERT BACKEND GETTING STARTED --{{/if}}
 
 -- INSERT DISTRIBUTING YOUR PLUGIN --
 

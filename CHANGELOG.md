@@ -1,3 +1,144 @@
+# (Thu Feb 02 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@0.10.0`
+  - CreatePlugin: Change default docker image to grafana-enterprise [#197](https://github.com/grafana/plugin-tools/pull/197) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Thu Feb 02 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.9.1`
+  - Create Plugin: Fix deeply nested plugins [#195](https://github.com/grafana/plugin-tools/pull/195) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Jan 26 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Tomas Basham ([@tomasbasham](https://github.com/tomasbasham)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/sign-plugin@0.1.0`
+  - Sign Plugin: Parameterise distribution directory [#175](https://github.com/grafana/plugin-tools/pull/175) ([@tomasbasham](https://github.com/tomasbasham))
+- `@grafana/create-plugin@0.9.0`
+  - Create Plugin: Update jest config to support Grafana 9.4 packages [#188](https://github.com/grafana/plugin-tools/pull/188) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Tomas Basham ([@tomasbasham](https://github.com/tomasbasham))
+
+---
+
+# (Thu Jan 26 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/sign-plugin@0.0.3`
+  - Sign Plugin: Return non zero exit code if error occurs [#187](https://github.com/grafana/plugin-tools/pull/187) ([@jackw](https://github.com/jackw))
+
+#### 📝 Documentation
+
+- Docs: Add Toolkit migration guide [#190](https://github.com/grafana/plugin-tools/pull/190) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Jan 13 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.8.4`
+  - Create Plugin: Make sure nested plugins dist directory structure is correct [#182](https://github.com/grafana/plugin-tools/pull/182) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Jan 12 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Revert "CI: Update workflows to use permissions rather than PAT" [#184](https://github.com/grafana/plugin-tools/pull/184) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@0.8.3`
+  - Create Plugin: Update yarn scripts and instructions to work post scaffold [#168](https://github.com/grafana/plugin-tools/pull/168) ([@sarahzinger](https://github.com/sarahzinger) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+
+---
+
+# (Wed Jan 11 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for all your work!
+
+#### 🐛 Bug Fix
+
+- CI: Update workflows to use permissions rather than PAT [#183](https://github.com/grafana/plugin-tools/pull/183) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@0.8.2`
+  - Create Plugin: Update docs to build backend before running docker [#167](https://github.com/grafana/plugin-tools/pull/167) ([@sarahzinger](https://github.com/sarahzinger))
+
+#### 📝 Documentation
+
+- Adding google search console verification file [#176](https://github.com/grafana/plugin-tools/pull/176) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Tue Dec 13 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@0.8.1`
+  - Templates: Use getDefaultQuery method to set query default values [#173](https://github.com/grafana/plugin-tools/pull/173) ([@sunker](https://github.com/sunker))
+
+#### 📝 Documentation
+
+- Docs: Introduce Docusaurus website [#169](https://github.com/grafana/plugin-tools/pull/169) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Nov 30 2022)
 
 #### 🚀 Enhancement

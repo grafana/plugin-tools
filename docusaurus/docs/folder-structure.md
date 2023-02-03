@@ -3,11 +3,11 @@ id: folder-structure
 title: Folder Structure
 ---
 
-After creation, your project should look like this:
+After creation, your project should look similar to this:
 
 ```
 myorg-myplugin-datasource/
-├── .config
+├── .config/
 ├── .eslintrc
 ├── .github
 │   └── workflows
@@ -41,6 +41,8 @@ myorg-myplugin-datasource/
 └── tsconfig.json
 ```
 
+## Required files
+
 For the plugin to function, **these files must exist with exact filenames**:
 
 | Filename            | Description                                                                          |
@@ -50,7 +52,7 @@ For the plugin to function, **these files must exist with exact filenames**:
 | `./src/module.ts`   | The entry point of the frontend plugin                                               |
 | `./pkg/main.go`     | The entry point of the backend plugin                                                |
 
-The files are optional:
+These files are optional:
 
 | Filename        | Description                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |

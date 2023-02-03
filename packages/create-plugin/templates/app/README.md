@@ -8,8 +8,8 @@ App plugins can let you create a custom out-of-the-box monitoring experience by 
 
 ## Getting started
 
--- INSERT FRONTEND GETTING STARTED --
 {{#if hasBackend}}-- INSERT BACKEND GETTING STARTED --{{/if}}
+-- INSERT FRONTEND GETTING STARTED --
 
 -- INSERT DISTRIBUTING YOUR PLUGIN --
 

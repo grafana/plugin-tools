@@ -65,7 +65,7 @@ export default function (plop: NodePlopAPI) {
         name: 'pluginType',
         type: 'list',
         choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel],
-        message: 'What kind of plugin would you like? ',
+        message: 'What type of plugin would you like?',
       },
       {
         name: 'hasBackend',
@@ -252,9 +252,13 @@ function printSuccessMessage(answers: CliArgs) {
   const commands = [
     `- \`cd ./${directory}\``,
     '- `yarn install` to install frontend dependencies.',
-    '- `docker-compose up` to start a grafana development server.',
     '- `yarn dev` to build (and watch) the plugin frontend code.',
-    ...(answers.hasBackend ? ['- `mage -v build:linux` to build the plugin backend code.'] : []),
+    ...(answers.hasBackend
+      ? [
+          '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
+        ]
+      : []),
+    '- `docker-compose up` to start a grafana development server. Restart this command after each time you run mage to run your new backend code.',
     '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
@@ -268,7 +272,7 @@ ${commands.map((command) => command).join('\n')}
 
 _Note: We strongly recommend creating a new Git repository by running \`git init\` in ./${directory} before continuing._
 
-- View ./${directory}/README.md
+- View create-plugin documentation at https://grafana.github.io/plugin-tools/
 - Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
 `;
 

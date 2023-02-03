@@ -1,3 +1,96 @@
+# v0.10.0 (Thu Feb 02 2023)
+
+#### 🚀 Enhancement
+
+- CreatePlugin: Change default docker image to grafana-enterprise [#197](https://github.com/grafana/plugin-tools/pull/197) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v0.9.1 (Thu Feb 02 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix deeply nested plugins [#195](https://github.com/grafana/plugin-tools/pull/195) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v0.9.0 (Thu Jan 26 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Update jest config to support Grafana 9.4 packages [#188](https://github.com/grafana/plugin-tools/pull/188) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v0.8.4 (Fri Jan 13 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Make sure nested plugins dist directory structure is correct [#182](https://github.com/grafana/plugin-tools/pull/182) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v0.8.3 (Thu Jan 12 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update yarn scripts and instructions to work post scaffold [#168](https://github.com/grafana/plugin-tools/pull/168) ([@sarahzinger](https://github.com/sarahzinger) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+
+---
+
+# v0.8.2 (Wed Jan 11 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update docs to build backend before running docker [#167](https://github.com/grafana/plugin-tools/pull/167) ([@sarahzinger](https://github.com/sarahzinger))
+
+#### Authors: 1
+
+- Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger))
+
+---
+
+# v0.8.1 (Tue Dec 13 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Templates: Use getDefaultQuery method to set query default values [#173](https://github.com/grafana/plugin-tools/pull/173) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.8.0 (Wed Nov 30 2022)
 
 #### 🚀 Enhancement

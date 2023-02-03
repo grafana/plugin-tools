@@ -38,7 +38,46 @@
       "contributions": [
         "code",
         "doc",
-        "infra"
+        "infra",
+        "test"
+      ]
+    },
+    {
+      "login": "sunker",
+      "name": "Erik Sundell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2388950?v=4",
+      "profile": "https://github.com/sunker",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sarahzinger",
+      "name": "Sarah Zinger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6620164?v=4",
+      "profile": "https://github.com/sarahzinger",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "tomasbasham",
+      "name": "Tomas Basham",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3389856?v=4",
+      "profile": "https://tomasbasham.dev/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "mckn",
+      "name": "Marcus Andersson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/172951?v=4",
+      "profile": "https://github.com/mckn",
+      "contributions": [
+        "doc"
       ]
     }
   ],

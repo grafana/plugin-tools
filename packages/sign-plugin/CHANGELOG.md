@@ -1,3 +1,31 @@
+# v0.1.0 (Thu Jan 26 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Tomas Basham ([@tomasbasham](https://github.com/tomasbasham)), for all your work!
+
+#### 🚀 Enhancement
+
+- Sign Plugin: Parameterise distribution directory [#175](https://github.com/grafana/plugin-tools/pull/175) ([@tomasbasham](https://github.com/tomasbasham))
+
+#### Authors: 1
+
+- Tomas Basham ([@tomasbasham](https://github.com/tomasbasham))
+
+---
+
+# v0.0.3 (Thu Jan 26 2023)
+
+#### 🐛 Bug Fix
+
+- Sign Plugin: Return non zero exit code if error occurs [#187](https://github.com/grafana/plugin-tools/pull/187) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.0.2 (Mon Nov 07 2022)
 
 #### 🐛 Bug Fix
