@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
 import minimist from 'minimist';
-import { sign } from '../commands';
+import { sign, version } from '../commands';
 
 const args = process.argv.slice(2);
 const argv = minimist(args);
 
-sign(argv);
+const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
+  sign,
+  version,
+};
+const command = commands[argv._[0]] || commands.sign;
+
+command(argv);

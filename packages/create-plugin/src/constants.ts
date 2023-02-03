@@ -115,7 +115,7 @@ export const TEXT = {
  * Run \`yarn build\` and observe the output for any errors.
  * Test your plugin in grafana and make sure everything works as expected.
 
-See instructions on how to customize your configuration here https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/common/.config/README.md
+See instructions on how to customize your configuration here https://grafana.github.io/plugin-tools/docs/advanced-configuration/
   `,
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',
