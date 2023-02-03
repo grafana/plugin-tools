@@ -6,7 +6,7 @@ import { MyDataSourceOptions, MyQuery } from '../types';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
-export function QueryEditor({ query, onChange, onRunQuery }: Props): ReactElement {
+export function QueryEditor({ query, onChange, onRunQuery }: Props) {
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, queryText: event.target.value });
   };
@@ -29,4 +29,4 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props): ReactElemen
       </InlineField>
     </div>
   );
-};
+}
