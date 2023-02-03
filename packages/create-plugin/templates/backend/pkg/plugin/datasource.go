@@ -74,7 +74,7 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 
 	err := json.Unmarshal(query.JSON, &qm)
 	if err != nil {
-		return backend.ErrDataResponse(backend.StatusBadRequest, fmt.Sprintf("json unmarshal: %v", err))
+		return backend.ErrDataResponse(backend.StatusBadRequest, fmt.Sprintf("json unmarshal: %v", err.Error()))
 	}
 
 	// create data frame response.

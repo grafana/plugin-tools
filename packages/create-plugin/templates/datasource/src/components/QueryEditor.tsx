@@ -6,7 +6,7 @@ import { MyDataSourceOptions, MyQuery } from '../types';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
-export const QueryEditor = ({ query, onChange, onRunQuery }: Props) => {
+export function QueryEditor({ query, onChange, onRunQuery }: Props): ReactElement {
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, queryText: event.target.value });
   };

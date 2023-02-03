@@ -5,7 +5,7 @@ import { MyDataSourceOptions, MySecureJsonData } from '../types';
 
 interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions> {}
 
-export const ConfigEditor = (props: Props) => {
+export function ConfigEditor(props: Props): ReactElement {
   const { onOptionsChange, options } = props;
   const onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
     const jsonData = {
