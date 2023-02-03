@@ -47,6 +47,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://tomasbasham.dev/"><img src="https://avatars.githubusercontent.com/u/3389856?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tomas Basham</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=tomasbasham" title="Documentation">📖</a> <a href="https://github.com/grafana/plugin-tools/commits?author=tomasbasham" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mckn"><img src="https://avatars.githubusercontent.com/u/172951?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marcus Andersson</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=mckn" title="Documentation">📖</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/iwysiu"><img src="https://avatars.githubusercontent.com/u/5421859?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Isabella Siu</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=iwysiu" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
