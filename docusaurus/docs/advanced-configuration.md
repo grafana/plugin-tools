@@ -3,23 +3,21 @@ id: advanced-configuration
 title: Advanced Configuration
 ---
 
-The `.config/` directory holds the preferred configuration for the different tools
-that are used to develop, test and build the project.
+The `.config/` directory holds the preferred configuration for the different tools used to develop, test and build a plugin.
 
 :::danger
 
-In order to make updates easier do **not** edit files in the `.config` directory to extend configuration. Instead follow the directions in this article to customise the tooling configurations.
+To make future updates easier do **not** edit files in the `.config` directory. Instead follow the directions in this article to customise the tooling configurations.
 
 :::
 
-## How to extend the basic configs?
+## How to extend the configs?
 
-First note that you are doing this at your own risk and that extending any of the basic configuration can lead
-to issues around working with the project.
+Note that you are doing this at your own risk. Extending any of the basic configuration can lead to issues at build and runtime.
 
-### Extending the ESLint config
+### Extend the ESLint config
 
-Edit the `.eslintrc` file in the project root in order to extend the ESLint configuration.
+Edit the `.eslintrc` file in the project root to extend the ESLint configuration.
 
 **Example:**
 
@@ -35,9 +33,9 @@ Edit the `.eslintrc` file in the project root in order to extend the ESLint conf
 
 ---
 
-### Extending the Prettier config
+### Extend the Prettier config
 
-Edit the `.prettierrc.js` file in the project root in order to extend the Prettier configuration.
+Edit the `.prettierrc.js` file in the project root to extend the Prettier configuration.
 
 **Example:**
 
@@ -51,18 +49,17 @@ module.exports = {
 
 ---
 
-### Extending the Jest config
+### Extend the Jest config
 
-There are two configuration in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
+There are two files in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
 
-**`jest-setup.js`:** A file that is run before each test file in the suite is executed. We are using it to
-set up the Jest DOM for the testing library and to apply some polyfills. ([link to Jest docs](https://jestjs.io/docs/configuration#setupfilesafterenv-array))
+**`jest-setup.js`:** Is run before each test file in the suite is executed. It will set up Jest DOM for the testing library and apply some polyfills. ([link to Jest docs](https://jestjs.io/docs/configuration#setupfilesafterenv-array))
 
-**`jest.config.js`:** The main Jest configuration file that extends the Grafana recommended setup. ([link to Jest docs](https://jestjs.io/docs/configuration))
+**`jest.config.js`:** The Jest config file that extends the Grafana config. ([link to Jest docs](https://jestjs.io/docs/configuration))
 
 #### ESM errors with Jest
 
-A common issue found with the current jest config involves importing an npm package which only offers an ESM build. These packages cause jest to error with `SyntaxError: Cannot use import statement outside a module`. To work around this we provide a list of known packages to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` jest configuration property. If need be this can be extended in the following way:
+A common issue with the current jest config involves importing an npm package which only offers an ESM build. These packages cause jest to error with `SyntaxError: Cannot use import statement outside a module`. To work around this we provide a list of known packages to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` jest configuration property. This can be extended in the following way:
 
 ```javascript
 process.env.TZ = 'UTC';
@@ -78,7 +75,7 @@ module.exports = {
 
 ---
 
-### Extending the TypeScript config
+### Extend the TypeScript config
 
 Edit the `tsconfig.json` file in the project root in order to extend the TypeScript configuration.
 
@@ -96,18 +93,17 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 ---
 
-### Extending the Webpack config
+### Extend the Webpack config
 
-Follow these steps to extend the basic Webpack configuration that lives under `.config/`:
+Follow these steps to extend the Webpack configuration that lives in `.config/`:
 
 #### 1. Create a new Webpack configuration file
 
-Create a new config file that is going to extend the basic one provided by Grafana.
-It can live in the project root, e.g. `webpack.config.ts`.
+Create a `webpack.config.ts` file in the project root. This will extend the webpack config provided by @grafana/create-plugin.
 
-#### 2. Merge the basic config provided by Grafana and your custom setup
+#### 2. Merge the Grafana config with your custom config
 
-We are going to use [webpack-merge](https://github.com/survivejs/webpack-merge) for this.
+Use [webpack-merge](https://github.com/survivejs/webpack-merge) for this.
 
 ```typescript
 // webpack.config.ts
@@ -131,41 +127,18 @@ export default config;
 
 #### 3. Update the `package.json` to use the new Webpack config
 
-We need to update the `scripts` in the `package.json` to use the extended Webpack configuration.
+Update the `scripts` in the `package.json` to use the extended Webpack configuration.
 
-**Update for `build`:**
+**Update `build`:**
 
 ```diff
 -"build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
 +"build": "webpack -c ./webpack.config.ts --env production",
 ```
 
-**Update for `dev`:**
+**Update `dev`:**
 
 ```diff
 -"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
 +"dev": "webpack -w -c ./webpack.config.ts --env development",
 ```
-
-### Configure grafana image to use when running docker
-
-By default `grafana-enterprise` will be used as the docker image for all docker related commands. If you want to override this behaviour simply alter the `docker-compose.yaml` by adding the following build arg `grafana_image`. 
-
-**Example:**
-
-```yaml
-version: '3.7'
-
-services:
-  grafana:
-    container_name: 'myorg-basic-app'
-    build:
-      context: ./.config
-      args:
-        grafana_version: ${GRAFANA_VERSION:-9.1.2}
-        grafana_image: ${GRAFANA_IMAGE:-grafana}
-```
-
-In this example we are assigning the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This will give you the possibility to set the value while running the docker-compose commands which might be convinent in some scenarios.
-
----

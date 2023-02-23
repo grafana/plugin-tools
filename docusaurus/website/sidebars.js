@@ -3,9 +3,9 @@
  - create an ordered group of docs
  - render a sidebar for each doc of that group
  - provide next/previous navigation
- 
+
  The sidebars can be generated from the filesystem, or explicitly defined here.
- 
+
  Create as many sidebars as you want.
  */
 
@@ -19,6 +19,7 @@ const sidebars = {
   docs: {
     'Getting Started': [
       'getting-started',
+      'creating-a-plugin',
       'folder-structure',
       'updating-to-new-releases',
       {
@@ -27,8 +28,17 @@ const sidebars = {
         label: 'Migrating from Toolkit',
       },
     ],
-    Development: ['frontend', 'backend'], // TODO: editor-setup, docker
-    // 'Building your Plugin': ['production-builds', 'ci'],
+    Development: [
+      'frontend',
+      'backend',
+      {
+        type: 'doc',
+        id: 'docker',
+        label: 'Development Environment',
+      },
+      'ci',
+    ], // TODO: editor-setup, docker
+    // 'Building your Plugin': ['production-builds', ],
     // Testing: ['unit-tests', 'e2e-tests'],
     Distribution: ['distributing-your-plugin', 'signing-your-plugin'],
     'Advanced Usage': ['advanced-configuration', 'nested-plugins'],

@@ -11,7 +11,7 @@ Create Plugin is the officially supported way to develop plugins to extend Grafa
 npx @grafana/create-plugin
 ```
 
-Now follow the prompts to scaffold a Grafana plugin.
+Follow the prompts to scaffold a Grafana plugin. [See here](./creating-a-plugin.md) for detailed information about creating a plugin.
 
 :::note
 
