@@ -3,7 +3,7 @@ id: backend
 title: Backend
 ---
 
-The backpart part of a Grafana plugin is written in Go. To keep the [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) up to date:
+The backend part of a Grafana plugin is written in Go. To keep the [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) up to date:
 
 ```bash
 go get -u github.com/grafana/grafana-plugin-sdk-go

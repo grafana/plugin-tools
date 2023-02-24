@@ -9,10 +9,12 @@ If you are using `@grafana/toolkit` to scaffold and develop plugins this guide w
 We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in angular
 :::
 
-Plugin tools consists of two packages:
+## Why migrate?
 
-- `create-plugin` a command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
-- `sign-plugin` a command-line utility to sign plugins for distribution.
+- **More flexible:** With @grafana/create-plugin, developers have more control over their plugins, its dependencies, and can more easily customize the tooling to fit their specific needs.
+- - **Faster development time:** With its out of the box development environment @grafana/create-plugin can significantly reduce development time compared to using @grafana/toolkit.
+- **Improved testing capabilities:** Testing plugins with @grafana/create-plugin is much easier with github workflows that automate  unit and e2e test runs whenever changes are pushed to github.
+- **Better documentation:** The documentation for @grafana/create-plugin is more comprehensive and easier to discover than @grafana/toolkit.
 
 :::warning
 Before running the following command we strongly suggest backing up the code. Ideally store the plugin code in a git repository and run the command on a clean branch to easily identify changes made by the migration command.
