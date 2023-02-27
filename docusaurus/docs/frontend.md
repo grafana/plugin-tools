@@ -3,7 +3,7 @@ id: frontend
 title: Frontend
 ---
 
-The frontend of Grafana plugins are written in Typescript with React as the view library. Within the plugin directory, you can run:
+The frontend part of a Grafana plugin is written in Typescript with React as the view library. Within the plugin directory, you can run:
 
 ### `yarn dev`
 

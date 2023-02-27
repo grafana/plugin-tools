@@ -6,18 +6,18 @@ title: Migrating from Grafana Toolkit
 If you are using `@grafana/toolkit` to scaffold and develop plugins this guide will help you make the jump to plugin tools.
 
 :::caution
-We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in angular
+We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in Angular.
 :::
 
 ## Why migrate?
 
 - **More flexible:** With @grafana/create-plugin, developers have more control over their plugins, its dependencies, and can more easily customize the tooling to fit their specific needs.
-- - **Faster development time:** With its out of the box development environment @grafana/create-plugin can significantly reduce development time compared to using @grafana/toolkit.
+- **Faster development time:** With its out-of-the-box development environment @grafana/create-plugin can significantly reduce development time compared to using @grafana/toolkit.
 - **Improved testing capabilities:** Testing plugins with @grafana/create-plugin is much easier with github workflows that automate  unit and e2e test runs whenever changes are pushed to github.
 - **Better documentation:** The documentation for @grafana/create-plugin is more comprehensive and easier to discover than @grafana/toolkit.
 
 :::warning
-Before running the following command we strongly suggest backing up the code. Ideally store the plugin code in a git repository and run the command on a clean branch to easily identify changes made by the migration command.
+Before running the following command we strongly suggest backing up the code. Ideally, store the plugin code in a Git repository and run the command on a clean branch to easily identify changes made by the migration command.
 :::
 
 ## Migrate your plugin to create-plugin
@@ -89,10 +89,10 @@ This step will update any npm scripts in the `package.json` file to match the la
 
 ## Next steps
 
-Once the command has finished the migration we recommend looking at the changes introduced and then running `yarn install` followed by each of the npm scripts inside `package.json` to confirm the plugin can be built, tested, signed etc.
+When the migration command finishes running, look at the changes introduced and then running `yarn install` followed by each of the npm scripts inside `package.json` to confirm the plugin can be built, tested, signed etc.
 
-If the plugin had customisations to the toolkit configs (e.g. webpack) head over to the [advanced configuration guide](./advanced-configuration.md) to learn how to update them.
+If the plugin had customizations to the toolkit configs (e.g. webpack) head over to the [advanced configuration guide](./advanced-configuration.md) to learn how to update them.
 
 If the plugin can be built but there are problems with jest tests see the [jest advanced configuration](advanced-configuration.md#esm-errors-with-jest) issue regarding es modules.
 
-For help resolving other issues we recommend reaching out on [slack](https://grafana.slack.com/) or the [community forum](https://community.grafana.com/c/plugin-development/30).
+For help resolving other issues, reach out on [slack](https://grafana.slack.com/) or the [community forum](https://community.grafana.com/c/plugin-development/30).

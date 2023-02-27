@@ -7,8 +7,8 @@ Create Plugin is the officially supported way to develop plugins to extend Grafa
 
 Plugin tools consists of two packages:
 
-- `create-plugin` a command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
-- `sign-plugin` a command-line utility to sign plugins for distribution.
+- `create-plugin`: A command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
+- `sign-plugin`: A command-line utility to sign plugins for distribution.
 
 ## Quick Start
 

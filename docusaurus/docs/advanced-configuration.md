@@ -3,17 +3,17 @@ id: advanced-configuration
 title: Advanced Configuration
 ---
 
-The `.config/` directory holds the preferred configuration for the different tools used to develop, test and build a plugin.
+The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a plugin.
 
 :::danger
 
-To make future updates easier do **not** edit files in the `.config` directory. Instead follow the directions in this article to customise the tooling configurations.
+To make future updates easier do **not** edit files in the `.config` directory. Instead, follow the directions in this article to customise the tooling configurations.
 
 :::
 
 ## How to extend the configs?
 
-Note that you are doing this at your own risk. Extending any of the basic configuration can lead to issues at build and runtime.
+Note that you are doing this at your own risk. Extending the tooling configurations may lead to issues such as failing to compile the plugin or problems loading the plugin in Grafana.
 
 ### Extend the ESLint config
 
@@ -53,13 +53,13 @@ module.exports = {
 
 There are two files in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
 
-**`jest-setup.js`:** Is run before each test file in the suite is executed. It will set up Jest DOM for the testing library and apply some polyfills. ([link to Jest docs](https://jestjs.io/docs/configuration#setupfilesafterenv-array))
+**`jest-setup.js`:** This file is run before each test file in the suite is executed. It will set up Jest DOM for the testing library and apply some polyfills. ([link to Jest docs](https://jestjs.io/docs/configuration#setupfilesafterenv-array))
 
 **`jest.config.js`:** The Jest config file that extends the Grafana config. ([link to Jest docs](https://jestjs.io/docs/configuration))
 
 #### ESM errors with Jest
 
-A common issue with the current jest config involves importing an npm package which only offers an ESM build. These packages cause jest to error with `SyntaxError: Cannot use import statement outside a module`. To work around this we provide a list of known packages to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` jest configuration property. This can be extended in the following way:
+A common issue with the current jest config involves importing an npm package which only offers an ESM build. These packages cause jest to error with `SyntaxError: Cannot use import statement outside a module`. To work around this we provide a list of known packages to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` jest configuration property. These packages can be extended in the following way:
 
 ```javascript
 process.env.TZ = 'UTC';
@@ -99,7 +99,7 @@ Follow these steps to extend the Webpack configuration that lives in `.config/`:
 
 #### 1. Create a new Webpack configuration file
 
-Create a `webpack.config.ts` file in the project root. This will extend the webpack config provided by @grafana/create-plugin.
+Create a `webpack.config.ts` file in the project root. This file will extend the webpack config provided by @grafana/create-plugin.
 
 #### 2. Merge the Grafana config with your custom config
 

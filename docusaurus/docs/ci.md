@@ -28,10 +28,10 @@ git push origin v1.0.0
 
 ## Compatibility Check (`is-compatible.yml`)
 
-The Compatibility Check (`is-compatible.yml`) workflow is designed to check the "Grafana API compatibility" of your plugin every time you push changes to your repository. This helps catch potential frontend runtime issues by:
+The Compatibility Check (`is-compatible.yml`) workflow is designed to check the Grafana API compatibility of your plugin every time you push changes to your repository. This helps catch potential frontend runtime issues by:
 
-1. finding `@grafana` npm packages in your plugin
-1. extracting the exported types of the specified version
-1. comparing the differences between that version and the latest version
-1. looking for usages of those changed APIs inside your plugin
-1. reporting any potential incompatibilities
+1. Finding `@grafana` npm packages in your plugin.
+1. Extracting the exported types of the specified version.
+1. Comparing the differences between that version and the latest version.
+1. Looking for usages of those changed APIs inside your plugin.
+1. Reporting any potential incompatibilities.
