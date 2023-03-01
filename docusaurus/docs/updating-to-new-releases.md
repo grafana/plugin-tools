@@ -3,7 +3,7 @@ id: updating-to-new-releases
 title: Updating to New Releases
 ---
 
-To update an existing plugin to a newer version of `create-plugin` run the following migration command:
+To update an existing plugin to use a newer version of `create-plugin` run the following update command:
 
 ```shell
 npx @grafana/create-plugin update

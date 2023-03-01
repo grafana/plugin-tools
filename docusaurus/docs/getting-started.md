@@ -5,13 +5,18 @@ title: Getting Started
 
 Create Plugin is the officially supported way to develop plugins to extend Grafana in amazing ways! It offers a modern build setup with zero configuration.
 
+Plugin tools consists of two packages:
+
+- `create-plugin`: A command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
+- `sign-plugin`: A command-line utility to sign plugins for distribution.
+
 ## Quick Start
 
 ```shell
 npx @grafana/create-plugin
 ```
 
-Now follow the prompts to scaffold a Grafana plugin.
+Follow the prompts to scaffold a Grafana plugin. [See here](./creating-a-plugin.md) for detailed information about creating a plugin.
 
 :::note
 
