@@ -15,30 +15,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3{{#if_eq pluginType "app"}}
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.x.x{{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: '{{ packageManager }}'
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: {{ packageManagerInstallCmd }}
 
       - name: Check types
-        run: yarn typecheck
+        run: {{ packageManager }} run typecheck
       - name: Lint
-        run: yarn lint
+        run: {{ packageManager }} run lint
       - name: Unit tests
-        run: yarn test:ci
+        run: {{ packageManager }} run test:ci
       - name: Build frontend
-        run: yarn build
+        run: {{ packageManager }} run build
 
       - name: Start grafana docker
-        run: yarn server -d
+        run: {{ packageManager }} run server -d
 
       - name: Run e2e tests
-        run: yarn e2e
+        run: {{ packageManager }} run e2e
 
       - name: Stop grafana docker
         run: docker-compose down

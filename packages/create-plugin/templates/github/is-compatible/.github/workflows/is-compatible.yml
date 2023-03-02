@@ -9,10 +9,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: '{{ packageManager }}'
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: {{ packageManagerInstallCmd }}
       - name: Build plugin
-        run: yarn build
+        run: {{ packageManager }} run build
       - name: Compatibility check
         run: npx @grafana/levitate@latest is-compatible --path src/module.ts --target @grafana/data,@grafana/ui,@grafana/runtime
