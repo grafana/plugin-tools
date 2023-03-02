@@ -252,3 +252,48 @@ function sortKeysAlphabetically(obj: Record<string, string>) {
       return acc;
     }, {});
 }
+
+export function getPackageManager() {
+  const agent = process.env.npm_config_user_agent;
+
+  if (!agent) {
+    const parent = process.env._;
+
+    if (!parent) {
+      return 'npm';
+    }
+
+    if (parent.endsWith('pnpx') || parent.endsWith('pnpm')) {
+      return 'pnpm';
+    }
+    if (parent.endsWith('yarn')) {
+      return 'yarn';
+    }
+
+    return 'npm';
+  }
+
+  const [program] = agent.split('/');
+
+  if (program === 'yarn') {
+    return 'yarn';
+  }
+  if (program === 'pnpm') {
+    return 'pnpm';
+  }
+
+  return 'npm';
+}
+
+export function getInstallCmd(packageManager: string) {
+  switch (packageManager) {
+    case 'yarn':
+      return 'yarn install --immutable --prefer-offline';
+
+    case 'pnpm':
+      return 'pnpm install --frozen-lockfile --prefer-offline';
+
+    default:
+      return 'npm ci';
+  }
+}

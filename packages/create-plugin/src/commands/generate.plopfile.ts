@@ -1,13 +1,14 @@
-import type { NodePlopAPI, ModifyActionConfig } from 'plop';
+import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
-import fs from 'fs';
+import type { ModifyActionConfig, NodePlopAPI } from 'plop';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
-import { IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES, EXTRA_TEMPLATE_VARIABLES } from '../constants';
+import { getInstallCmd, getPackageManager } from '../utils/utils.npm';
+import { getExportPath } from '../utils/utils.path';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
 import { CliArgs } from './types';
-import { getExportPath } from '../utils/utils.path';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
@@ -84,11 +85,15 @@ export default function (plop: NodePlopAPI) {
     }: CliArgs) {
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
+      // Support the users package manager of choice.
+      const packageManager = getPackageManager();
+      const packageManagerInstallCmd = getInstallCmd(packageManager);
+
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS.common,
         exportPath,
-        templateData: { pluginId },
+        templateData: { pluginId, packageManager, packageManagerInstallCmd },
       });
 
       // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
