@@ -38,7 +38,7 @@ export enum PLUGIN_TYPES {
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaVersion: '9.2.5',
+  grafanaVersion: '9.3.8',
 };
 
 export const GRAFANA_FE_PACKAGES = [
