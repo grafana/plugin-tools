@@ -25,7 +25,7 @@ Before running the following command we strongly suggest backing up the code. Id
 To get started, in the root directory of the existing plugin (where the `package.json` file is) run the following command and answer the prompts.
 
 ```
-npx @grafana/create-plugin migrate
+npx @grafana/create-plugin@latest migrate
 ```
 
 ## Prompts

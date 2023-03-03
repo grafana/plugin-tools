@@ -9,7 +9,7 @@ Sign Grafana plugins with ease.
     - [Sign a public plugin](#sign-a-public-plugin)
     - [Sign a private plugin](#sign-a-private-plugin)
       - [`npx`](#npx)
-      - [`yarn` (> 2.x)](#yarn--2x)
+      - [`yarn` (\> 2.x)](#yarn--2x)
   - [Contributing](#contributing)
 
 **`@grafana/sign-plugin`** works on macOS, Windows and Linux.<br />
@@ -30,14 +30,14 @@ In your plugin directory, sign the plugin with your Grafana API key. Grafana sig
 
 ```bash
 export GRAFANA_API_KEY=<YOUR_API_KEY>
-npx @grafana/sign-plugin
+npx @grafana/sign-plugin@latest
 ```
 
 If the plugin distribution directory differs from the default `dist`, specify the path to use with the `--distDir` flag.
 
 ```bash
 export GRAFANA_API_KEY=<YOUR_API_KEY>
-npx @grafana/sign-plugin --distDir path/to/directory
+npx @grafana/sign-plugin@latest --distDir path/to/directory
 ```
 
 ### Sign a private plugin
@@ -45,7 +45,7 @@ npx @grafana/sign-plugin --distDir path/to/directory
 In your plugin directory, run the following to create a MANIFEST.txt file in the dist directory of your plugin.
 
 ```bash
-npx @grafana/sign-plugin --rootUrls https://example.com/grafana
+npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
 ```
 
 Alterntives:
@@ -53,13 +53,13 @@ Alterntives:
 #### [`npx`](https://github.com/npm/npx)
 
 ```bash
-npx @grafana/sign-plugin
+npx @grafana/sign-plugin@latest
 ```
 
 #### [`yarn`](https://yarnpkg.com/cli/dlx) (> 2.x)
 
 ```bash
-yarn dlx @grafana/sign-plugin
+yarn dlx @grafana/sign-plugin@latest
 ```
 
 ## Contributing

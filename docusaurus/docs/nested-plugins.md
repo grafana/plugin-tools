@@ -6,7 +6,7 @@ title: Nested Plugins
 Grafana app plugins can nest frontend datasource and panel plugins making it easy to ship a complete user experience. To take advantage of this feature first scaffold an app plugin using `@grafana/create-plugin`:
 
 ```bash
-npx @grafana/create-plugin
+npx @grafana/create-plugin@latest
 ```
 
 When prompted `What type of plugin would you like?` select `app`.

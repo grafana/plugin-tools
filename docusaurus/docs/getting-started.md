@@ -13,7 +13,7 @@ Plugin tools consists of two packages:
 ## Quick Start
 
 ```shell
-npx @grafana/create-plugin
+npx @grafana/create-plugin@latest
 ```
 
 Follow the prompts to scaffold a Grafana plugin. [See here](./creating-a-plugin.md) for detailed information about creating a plugin.
