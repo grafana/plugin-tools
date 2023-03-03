@@ -270,7 +270,15 @@ describe('Utils / NPM', () => {
         };
       });
       const result = getPackageJsonUpdates({ dontUpdateGrafanaDependencies: true });
-      console.log(result);
+
+      // should be in dependencies
+      expect(result.dependencyUpdates['@grafana/data'].next).toEqual(result.dependencyUpdates['@grafana/data'].prev);
+      expect(result.dependencyUpdates['@grafana/runtime'].next).toEqual(
+        result.dependencyUpdates['@grafana/runtime'].prev
+      );
+      // should not be in devDependencies
+      expect(result.devDependencyUpdates['@grafana/data']).not.toBeDefined();
+      expect(result.devDependencyUpdates['@grafana/runtime']).not.toBeDefined();
     });
   });
 });
