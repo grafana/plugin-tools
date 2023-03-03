@@ -49,7 +49,7 @@ yarn dlx @grafana/create-plugin
 #### [`npx`](https://github.com/npm/npx)
 
 ```bash
-npx @grafana/create-plugin
+npx @grafana/create-plugin@latest
 ```
 
 #### [`npm`](https://docs.npmjs.com/cli/v7/commands/npm-init)
@@ -71,7 +71,7 @@ following command to migrate it to the new build tooling:
 # Run this command from the root of your plugin
 cd ./my-plugin
 
-npx @grafana/create-plugin migrate
+npx @grafana/create-plugin@latest migrate
 ```
 
 For more information see [here](https://grafana.github.io/plugin-tools/docs/migrating-from-toolkit)
@@ -90,7 +90,7 @@ that automatically updates the build configuration for you:
 # Run this command from the root of your plugin
 cd ./my-plugin
 
-npx @grafana/create-plugin update
+npx @grafana/create-plugin@latest update
 ```
 
 For more information see [here](https://grafana.github.io/plugin-tools/docs/updating-to-new-releases)
