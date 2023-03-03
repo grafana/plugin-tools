@@ -9,7 +9,7 @@ type UpdateSummary = Record<string, { prev: string | null; next: string | null }
 
 type UpdateOptions = {
   onlyOutdated?: Boolean;
-  ignoreGrafanaDependencies?: boolean;
+  dontUpdateGrafanaDependencies?: boolean;
 };
 
 type PackageJson = {
@@ -36,7 +36,7 @@ export function writePackageJson(json: PackageJson) {
 
 export function getNpmDependencyUpdatesAsText(dependencyUpdates: UpdateSummary) {
   return Object.entries(dependencyUpdates)
-    .filter(([packageName, { prev, next }]) => prev !== next)
+    .filter(([_, { prev, next }]) => prev !== next)
     .map(([packageName, { prev, next }]) => {
       // New package
       if (!prev) {
@@ -99,45 +99,22 @@ export function getPackageJsonUpdates(options: UpdateOptions = {}) {
   const devDependencies = packageJson.devDependencies || {};
   const newDependencies = newPackageJson.dependencies || {};
   const newDevDependencies = newPackageJson.devDependencies || {};
+
+  // Move grafana dependencies from devDependencies to dependencies
+  for (const grafanaPackage of GRAFANA_FE_PACKAGES) {
+    if (devDependencies[grafanaPackage]) {
+      dependencies[grafanaPackage] = devDependencies[grafanaPackage];
+      delete devDependencies[grafanaPackage];
+    }
+  }
+
   const dependencyUpdates = getUpdatableNpmDependencies(dependencies, newDependencies, options);
   const devDependencyUpdates = getUpdatableNpmDependencies(devDependencies, newDevDependencies, options);
-
-  if (options.ignoreGrafanaDependencies) {
-    const prevGrafanaDependencies = Object.entries({ ...dependencies, ...devDependencies }).reduce<
-      Record<string, string>
-    >((acc, [key, value]) => {
-      if (GRAFANA_FE_PACKAGES.includes(key)) {
-        acc[key] = value;
-      }
-      return acc;
-    }, {});
-    return {
-      dependencyUpdates: ignoreGrafanaDependencies(dependencyUpdates, prevGrafanaDependencies),
-      devDependencyUpdates: ignoreGrafanaDependencies(devDependencyUpdates, prevGrafanaDependencies),
-    };
-  }
 
   return {
     dependencyUpdates,
     devDependencyUpdates,
   };
-}
-
-function ignoreGrafanaDependencies(dependencyUpdates: UpdateSummary, prevGrafanaDependencies: Record<string, string>) {
-  const whatever = Object.keys(prevGrafanaDependencies);
-  const result = Object.entries(dependencyUpdates).reduce<UpdateSummary>((acc, [packageName, value]) => {
-    if (whatever.includes(packageName)) {
-      acc[packageName] = {
-        prev: prevGrafanaDependencies[packageName],
-        next: prevGrafanaDependencies[packageName],
-      };
-    } else {
-      acc[packageName] = value;
-    }
-    return acc;
-  }, {});
-
-  return result;
 }
 
 export function getUpdatableNpmDependencies(
@@ -150,6 +127,14 @@ export function getUpdatableNpmDependencies(
   // Dependencies
   for (const [packageName, newSemverRange] of Object.entries(nextDeps)) {
     const currentSemverRange = prevDeps[packageName];
+
+    // keep grafana dependencies at the same version when instructed
+    if (options.dontUpdateGrafanaDependencies && GRAFANA_FE_PACKAGES.includes(packageName)) {
+      if (currentSemverRange) {
+        updateSummary[packageName] = { prev: currentSemverRange, next: currentSemverRange };
+      }
+      continue;
+    }
 
     // New dependency
     if (!currentSemverRange) {

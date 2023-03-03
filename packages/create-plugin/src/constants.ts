@@ -95,6 +95,7 @@ export const TEXT = {
   updateNpmDependenciesPrompt: '**Would you like to update the following dependencies in the `package.json?`**',
   updateNpmDependenciesSuccess: 'Successfully updated the NPM dependencies.',
   updateNpmDependenciesAborted: 'No NPM dependencies have been updated.',
+  updateNpmGrafanaPackagesPrompt: 'Would you like to update the `@grafana/*` packages dependencies?',
 
   removeNpmDependenciesPrompt: '**Would you like to remove the following possibly unnecessary NPM dependencies?**',
   removeNpmDependenciesSuccess: 'Unnecessary NPM dependencies removed successfully.',

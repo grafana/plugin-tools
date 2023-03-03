@@ -57,13 +57,13 @@ export const migrate = async () => {
     // 4. Add / update dependencies inside the `package.json`
     // (skipped automatically if there is nothing to update)
     // ------------------------------------------------
-    if (hasNpmDependenciesToUpdate()) {
+    if (hasNpmDependenciesToUpdate({ dontUpdateGrafanaDependencies: true })) {
       if (
         await confirmPrompt(
-          TEXT.updateNpmDependenciesPrompt + getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true })
+          TEXT.updateNpmDependenciesPrompt + getPackageJsonUpdatesAsText({ dontUpdateGrafanaDependencies: true })
         )
       ) {
-        updatePackageJson({ ignoreGrafanaDependencies: true });
+        updatePackageJson({ dontUpdateGrafanaDependencies: true });
         printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
       } else {
         printMessage(TEXT.updateNpmDependenciesAborted);
