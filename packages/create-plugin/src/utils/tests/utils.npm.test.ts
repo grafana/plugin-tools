@@ -193,7 +193,7 @@ describe('Utils / NPM', () => {
     });
   });
 
-  describe.only('getPackageJsonUpdates()', () => {
+  describe('getPackageJsonUpdates()', () => {
     let spies: jest.SpyInstance[];
     beforeEach(() => {
       spies = [
