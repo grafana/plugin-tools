@@ -1,3 +1,21 @@
+# v1.0.1 (Fri Mar 03 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Will Browne ([@wbrowne](https://github.com/wbrowne)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Add `@latest` to docs and scripts using npx commands [#208](https://github.com/grafana/plugin-tools/pull/208) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Remove default logging examples as their usage is prone to user error [#205](https://github.com/grafana/plugin-tools/pull/205) ([@wbrowne](https://github.com/wbrowne))
+
+#### Authors: 2
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
 # v1.0.0 (Fri Feb 03 2023)
 
 #### 💥 Breaking Change

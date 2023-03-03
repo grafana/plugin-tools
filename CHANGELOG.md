@@ -1,3 +1,28 @@
+# (Fri Mar 03 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Will Browne ([@wbrowne](https://github.com/wbrowne)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.0.1`, `@grafana/sign-plugin@1.0.1`
+  - Add `@latest` to docs and scripts using npx commands [#208](https://github.com/grafana/plugin-tools/pull/208) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@1.0.1`
+  - Remove default logging examples as their usage is prone to user error [#205](https://github.com/grafana/plugin-tools/pull/205) ([@wbrowne](https://github.com/wbrowne))
+
+#### 📝 Documentation
+
+- Website: Improve documentation [#203](https://github.com/grafana/plugin-tools/pull/203) ([@jackw](https://github.com/jackw))
+
+#### Authors: 3
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
 # (Fri Feb 03 2023)
 
 #### 💥 Breaking Change

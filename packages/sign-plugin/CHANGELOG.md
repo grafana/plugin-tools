@@ -1,3 +1,15 @@
+# v1.0.1 (Fri Mar 03 2023)
+
+#### 🐛 Bug Fix
+
+- Add `@latest` to docs and scripts using npx commands [#208](https://github.com/grafana/plugin-tools/pull/208) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v1.0.0 (Fri Feb 03 2023)
 
 #### 💥 Breaking Change
