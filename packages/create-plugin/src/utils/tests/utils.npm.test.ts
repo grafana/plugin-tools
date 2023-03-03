@@ -257,7 +257,7 @@ describe('Utils / NPM', () => {
 
     it('moves @grafana/* dependencies from devDependencies to dependencies when instructed keeping their version', () => {
       // the plugin package.json
-      jest.spyOn(files, 'readJsonFile').mockImplementation(() => {
+      const spy = jest.spyOn(files, 'readJsonFile').mockImplementation(() => {
         return {
           dependencies: {
             underscore: '2.0.0',
@@ -279,6 +279,8 @@ describe('Utils / NPM', () => {
       // should not be in devDependencies
       expect(result.devDependencyUpdates['@grafana/data']).not.toBeDefined();
       expect(result.devDependencyUpdates['@grafana/runtime']).not.toBeDefined();
+
+      spy.mockRestore();
     });
   });
 });
