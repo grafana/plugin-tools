@@ -24,7 +24,7 @@
    # Runs the tests and watches for changes, requires git init first
    yarn test
    
-   # Exists after running all the tests
+   # Exits after running all the tests
    yarn test:ci
    ```
 
@@ -37,10 +37,10 @@
 6. Run the E2E tests (using Cypress)
 
    ```bash
-   # Spin up a Grafana instance first that we tests against 
+   # Spins up a Grafana instance first that we tests against 
    yarn server
    
-   # Start the tests
+   # Starts the tests
    yarn e2e
    ```
 
