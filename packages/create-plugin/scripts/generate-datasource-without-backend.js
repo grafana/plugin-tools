@@ -13,8 +13,9 @@ async function generate() {
   await generator.runActions({
     pluginName: 'my-plugin',
     orgName: 'my-org',
-    pluginDescription: 'Auto-generated panel',
-    pluginType: 'panel',
+    pluginDescription: 'Auto-generated datasource',
+    pluginType: 'datasource',
+    hasBackend: false,
     hasGithubWorkflows: true,
     hasGithubLevitateWorkflow: true,
   });
