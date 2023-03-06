@@ -2,7 +2,7 @@ const nodePlop = require('node-plop');
 const path = require('path');
 const fs = require('fs');
 
-async function generatePanel() {
+async function generate() {
   const plopFile = path.join(__dirname, '../dist/commands/generate.plopfile.js');
   if (!fs.existsSync(plopFile)) {
     console.error('Run build first');
@@ -21,4 +21,4 @@ async function generatePanel() {
   });
 }
 
-generatePanel();
+generate();
