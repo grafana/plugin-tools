@@ -35,13 +35,15 @@
     "@types/minimist": "^1.2.2",
     "@types/mkdirp": "^1.0.2",
     "@types/semver": "^7.3.9",
+    "@types/which": "^2.0.2",
     "enquirer": "^2.3.6",
     "glob": "^7.1.7",
     "marked": "^4.0.12",
     "marked-terminal": "^5.1.1",
     "mkdirp": "^1.0.4",
     "plop": "^2.7.4",
-    "semver": "^7.3.5"
+    "semver": "^7.3.5",
+    "which": "^3.0.0"
   },
   "devDependencies": {
     "@types/glob": "^7.0.0",
