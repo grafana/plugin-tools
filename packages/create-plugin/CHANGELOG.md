@@ -1,3 +1,26 @@
+# v1.1.0 (Mon Mar 06 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Romain Gaillard ([@romain-gaillard](https://github.com/romain-gaillard)), for all your work!
+
+#### 🚀 Enhancement
+
+- Auto update grafana go sdk after generation [#214](https://github.com/grafana/plugin-tools/pull/214) ([@academo](https://github.com/academo))
+
+#### 🐛 Bug Fix
+
+- Bumped mage action to v2 to avoid the warning "Node.js 12 actions are… [#213](https://github.com/grafana/plugin-tools/pull/213) ([@romain-gaillard](https://github.com/romain-gaillard))
+- Fix datasource without backend template and update test CI [#206](https://github.com/grafana/plugin-tools/pull/206) ([@academo](https://github.com/academo))
+- Minor typo fixed and improved comment consistency in frontend-getting-started.md [#211](https://github.com/grafana/plugin-tools/pull/211) ([@romain-gaillard](https://github.com/romain-gaillard))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Romain Gaillard ([@romain-gaillard](https://github.com/romain-gaillard))
+
+---
+
 # v1.0.1 (Fri Mar 03 2023)
 
 :tada: This release contains work from a new contributor! :tada:
