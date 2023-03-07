@@ -6,7 +6,7 @@ title: Creating a Plugin
 To create a new Grafana plugin run the following command in your shell:
 
 ```shell
-npx @grafana/create-plugin
+npx @grafana/create-plugin@latest
 ```
 
 :::info

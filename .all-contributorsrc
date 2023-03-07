@@ -88,6 +88,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "romain-gaillard",
+      "name": "Romain Gaillard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15131586?v=4",
+      "profile": "https://github.com/romain-gaillard",
+      "contributions": [
+        "infra",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7

@@ -6,7 +6,7 @@ title: Updating to New Releases
 To update an existing plugin to use a newer version of `create-plugin` run the following update command:
 
 ```shell
-npx @grafana/create-plugin update
+npx @grafana/create-plugin@latest update
 ```
 
 This command will rerun the original scaffolding commands against the configuration files, dependencies, and scripts, using the latest version of `create-plugin`. It will prompt to confirm any destructive operations are agreed to prior to being run.

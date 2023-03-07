@@ -3,32 +3,19 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
-import { displayAsMarkdown } from '../utils/utils.console';
-import {
-  IS_DEV,
-  TEMPLATE_PATHS,
-  PARTIALS_DIR,
-  PLUGIN_TYPES,
-  EXTRA_TEMPLATE_VARIABLES,
-  DEV_EXPORT_DIR,
-} from '../constants';
-
-type CliArgs = {
-  pluginName: string;
-  pluginDescription: string;
-  orgName: string;
-  pluginType: PLUGIN_TYPES;
-  hasBackend: boolean;
-  hasGithubWorkflows: boolean;
-  hasGithubLevitateWorkflow: boolean;
-};
+import { IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES, EXTRA_TEMPLATE_VARIABLES } from '../constants';
+import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
+import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
+import { CliArgs } from './types';
+import { getExportPath } from '../utils/utils.path';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
   plop.setHelper('if_eq', ifEq);
   plop.setHelper('normalize_id', normalizeId);
 
-  plop.setActionType('printSuccessMessage', printSuccessMessage);
+  plop.setActionType('printSuccessMessage', printGenerateSuccessMessage);
+  plop.setActionType('updateGoSdkAndModules', updateGoSdkAndModules);
 
   plop.setGenerator('create-plugin', {
     description: 'used to scaffold a grafana plugin',
@@ -148,6 +135,9 @@ export default function (plop: NodePlopAPI) {
         ...readmeActions,
         ...isCompatibleWorkflowActions,
         {
+          type: 'updateGoSdkAndModules',
+        },
+        {
           type: 'printSuccessMessage',
         },
       ];
@@ -236,45 +226,4 @@ function isFile(path: string) {
   } catch (e) {
     return false;
   }
-}
-
-function getExportPath(pluginName: string, orgName: string, pluginType: PLUGIN_TYPES) {
-  if (IS_DEV) {
-    return DEV_EXPORT_DIR;
-  } else {
-    return path.join(process.cwd(), normalizeId(pluginName, orgName, pluginType));
-  }
-}
-
-function printSuccessMessage(answers: CliArgs) {
-  const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-
-  const commands = [
-    `- \`cd ./${directory}\``,
-    '- `yarn install` to install frontend dependencies.',
-    '- `yarn dev` to build (and watch) the plugin frontend code.',
-    ...(answers.hasBackend
-      ? [
-          '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
-        ]
-      : []),
-    '- `docker-compose up` to start a grafana development server. Restart this command after each time you run mage to run your new backend code.',
-    '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
-  ];
-
-  const msg = `
-Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
-
-## What's next?
-
-Run the following commands to get started:
-${commands.map((command) => command).join('\n')}
-
-_Note: We strongly recommend creating a new Git repository by running \`git init\` in ./${directory} before continuing._
-
-- View create-plugin documentation at https://grafana.github.io/plugin-tools/
-- Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
-`;
-
-  return displayAsMarkdown(msg);
 }
