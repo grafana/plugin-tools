@@ -51,7 +51,7 @@ function updateSdk(exportPath: string): Promise<void> {
 function updateGoMod(exportPath: string): Promise<void> {
   return new Promise(async (resolve, reject) => {
     // run go get SDK_GO_MODULE to update the go.mod file
-    const command = `go get ${SDK_GO_MODULE}`;
+    const command = `go mod tidy`;
     exec(command, { cwd: exportPath }, (error) => {
       if (error) {
         reject();
