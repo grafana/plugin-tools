@@ -1,3 +1,16 @@
+# (Tue Mar 07 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.1.1`
+  - Keep custom executable name if defined [#207](https://github.com/grafana/plugin-tools/pull/207) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Mon Mar 06 2023)
 
 :tada: This release contains work from new contributors! :tada:
