@@ -127,7 +127,7 @@ const config = async (env): Promise<Configuration> => ({
 
   output: {
     clean: {
-      keep: new RegExp(`gpx_.*|${pluginJson.executable || 'gpx_'}.*`),
+      keep: new RegExp(`.*?_(amd64|arm(64)?)(.exe)?`),
     },
     filename: '[name].js',
     library: {
