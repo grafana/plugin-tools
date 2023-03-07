@@ -53,11 +53,14 @@ export function getPackageJsonUpdatesAsText(options: UpdateOptions = {}) {
   let asText = '';
   const { dependencyUpdates, devDependencyUpdates } = getPackageJsonUpdates(options);
 
-  if (Object.keys(dependencyUpdates).length > 0) {
+  const npmDependencyUpdatesText = getNpmDependencyUpdatesAsText(dependencyUpdates);
+  const npmDevDependencyUpdatesText = getNpmDependencyUpdatesAsText(devDependencyUpdates);
+
+  if (npmDependencyUpdatesText.length > 0) {
     asText += `\n\n  **Dependencies**\n  ${getNpmDependencyUpdatesAsText(dependencyUpdates)}`;
   }
 
-  if (Object.keys(devDependencyUpdates).length > 0) {
+  if (npmDevDependencyUpdatesText.length > 0) {
     asText += `\n\n  **Dev Dependencies**\n  ${getNpmDependencyUpdatesAsText(devDependencyUpdates)}`;
   }
 

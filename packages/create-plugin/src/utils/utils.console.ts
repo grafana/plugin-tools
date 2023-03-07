@@ -22,7 +22,7 @@ export function printSuccessMessage(msg: string) {
   console.log(displayAsMarkdown(`\n✔ ${msg}`));
 }
 
-export function confirmPrompt(message: string) {
+export function confirmPrompt(message: string): Promise<boolean> {
   const prompt = new Confirm({
     name: 'question',
     message: displayAsMarkdown(message),
@@ -31,7 +31,7 @@ export function confirmPrompt(message: string) {
   return prompt.run();
 }
 
-export function selectPrompt(message: string, choices: string[]) {
+export function selectPrompt(message: string, choices: string[]): Promise<string> {
   const prompt = new Select({
     choices,
     message: displayAsMarkdown(message),

@@ -28,22 +28,32 @@ export const update = async () => {
     // (skipped automatically if there is nothing to update)
     // ------------------------------------------------
     if (hasNpmDependenciesToUpdate()) {
-      const PROMPT_CHOICES = {
-        ALL: 'Yes, all of them',
-        ONLY_OUTDATED: 'Yes, but only the outdated ones',
-        NONE: 'No',
-      };
-      const shouldUpdateDeps = await selectPrompt(TEXT.updateNpmDependenciesPrompt + getPackageJsonUpdatesAsText(), [
-        PROMPT_CHOICES.ALL,
-        PROMPT_CHOICES.ONLY_OUTDATED,
-        PROMPT_CHOICES.NONE,
-      ]);
+      const shouldUpdateGrafanaDeps = await confirmPrompt(TEXT.updateGrafanaNpmDependenciesPrompt);
 
-      if (shouldUpdateDeps && shouldUpdateDeps !== PROMPT_CHOICES.NONE) {
-        updatePackageJson({ onlyOutdated: shouldUpdateDeps === PROMPT_CHOICES.ONLY_OUTDATED });
-        printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
-      } else {
-        printMessage(TEXT.updateNpmDependenciesAborted);
+      const updatableText = getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: !shouldUpdateGrafanaDeps });
+
+      if (updatableText.length > 0) {
+        const PROMPT_CHOICES = {
+          ALL: 'Yes, all of them',
+          ONLY_OUTDATED: 'Yes, but only the outdated ones',
+          NONE: 'No',
+        };
+
+        const shouldUpdateDeps = await selectPrompt(TEXT.updateNpmDependenciesPrompt + updatableText, [
+          PROMPT_CHOICES.ALL,
+          PROMPT_CHOICES.ONLY_OUTDATED,
+          PROMPT_CHOICES.NONE,
+        ]);
+
+        if (shouldUpdateDeps && shouldUpdateDeps !== PROMPT_CHOICES.NONE) {
+          updatePackageJson({
+            onlyOutdated: shouldUpdateDeps === PROMPT_CHOICES.ONLY_OUTDATED,
+            ignoreGrafanaDependencies: !shouldUpdateGrafanaDeps,
+          });
+          printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
+        } else {
+          printMessage(TEXT.updateNpmDependenciesAborted);
+        }
       }
     }
 
