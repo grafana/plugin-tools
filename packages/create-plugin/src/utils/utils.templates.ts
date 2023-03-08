@@ -6,6 +6,7 @@ import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files'
 import { renderHandlebarsTemplate } from './utils.handlebars';
 import { getPluginJson } from './utils.plugin';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
+import { getInstallCmd, getPackageManager } from './utils.npm';
 
 /**
  *
@@ -63,6 +64,8 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 
 export function getTemplateData() {
   const pluginJson = getPluginJson();
+  const packageManager = getPackageManager();
+  const packageManagerInstallCmd = getInstallCmd(packageManager);
 
   return {
     ...EXTRA_TEMPLATE_VARIABLES,
@@ -72,5 +75,7 @@ export function getTemplateData() {
     hasBackend: Boolean(pluginJson.backend),
     orgName: pluginJson.info?.author?.name,
     pluginType: pluginJson.type,
+    packageManager,
+    packageManagerInstallCmd,
   };
 }
