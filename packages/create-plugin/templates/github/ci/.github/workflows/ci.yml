@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3{{#if_eq pluginType "app"}}
+      - uses: actions/checkout@v3{{#if_eq packageManager "pnpm"}}
       - uses: pnpm/action-setup@v2
         with:
           version: 7.x.x{{/if_eq}}
