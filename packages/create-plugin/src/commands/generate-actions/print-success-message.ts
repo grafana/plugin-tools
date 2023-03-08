@@ -1,14 +1,15 @@
 import { displayAsMarkdown } from '../../utils/utils.console';
 import { normalizeId } from '../../utils/utils.handlebars';
+import { getPackageManager } from '../../utils/utils.npm';
 import { CliArgs } from '../types';
 
 export function printGenerateSuccessMessage(answers: CliArgs) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-
+  const packageManager = getPackageManager();
   const commands = [
     `- \`cd ./${directory}\``,
-    '- `yarn install` to install frontend dependencies.',
-    '- `yarn dev` to build (and watch) the plugin frontend code.',
+    `- \`${packageManager} install\` to install frontend dependencies.`,
+    `- \`${packageManager} run dev\` to build (and watch) the plugin frontend code.`,
     ...(answers.hasBackend
       ? [
           '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
