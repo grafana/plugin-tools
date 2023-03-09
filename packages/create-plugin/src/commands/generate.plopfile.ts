@@ -4,7 +4,6 @@ import path from 'path';
 import type { ModifyActionConfig, NodePlopAPI } from 'plop';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
-import { getInstallCmd, getPackageManager } from '../utils/utils.npm';
 import { getExportPath } from '../utils/utils.path';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
@@ -85,15 +84,12 @@ export default function (plop: NodePlopAPI) {
     }: CliArgs) {
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
-      // Support the users package manager of choice.
-      const packageManager = getPackageManager();
-      const packageManagerInstallCmd = getInstallCmd(packageManager);
 
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS.common,
         exportPath,
-        templateData: { pluginId, packageManager, packageManagerInstallCmd },
+        templateData: { pluginId },
       });
 
       // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
