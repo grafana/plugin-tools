@@ -14,8 +14,8 @@ body:
       label: Which package(s) does this bug affect?
       description: You may select more than one.
       options:
-        - 'create-plugin'
-        - 'sign-plugin'
+        - label: 'Create Plugin'
+        - label: 'Sign Plugin'
     validations:
       required: true
   - type: textarea
