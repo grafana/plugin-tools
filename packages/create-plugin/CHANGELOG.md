@@ -1,3 +1,15 @@
+# v1.1.2 (Fri Mar 10 2023)
+
+#### 🐛 Bug Fix
+
+- Chore: Remove unused deps from scaffolded plugins [#221](https://github.com/grafana/plugin-tools/pull/221) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v1.1.1 (Tue Mar 07 2023)
 
 #### 🐛 Bug Fix
