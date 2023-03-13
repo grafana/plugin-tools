@@ -1,3 +1,16 @@
+# (Mon Mar 13 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.1.3`
+  - Run go mod tidy after generating with backend [#216](https://github.com/grafana/plugin-tools/pull/216) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Fri Mar 10 2023)
 
 #### 🐛 Bug Fix

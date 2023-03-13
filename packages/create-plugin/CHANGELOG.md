@@ -1,3 +1,15 @@
+# v1.1.3 (Mon Mar 13 2023)
+
+#### 🐛 Bug Fix
+
+- Run go mod tidy after generating with backend [#216](https://github.com/grafana/plugin-tools/pull/216) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.1.2 (Fri Mar 10 2023)
 
 #### 🐛 Bug Fix
