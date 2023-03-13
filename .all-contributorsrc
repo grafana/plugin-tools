@@ -107,6 +107,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "academo",
+      "name": "Esteban Beltran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/227916?v=4",
+      "profile": "https://github.com/academo",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
