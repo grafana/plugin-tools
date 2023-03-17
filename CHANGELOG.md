@@ -1,3 +1,16 @@
+# (Fri Mar 17 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.2.0`
+  - Template: Removed the module.test.ts file from being scafollded by create-plugin [#225](https://github.com/grafana/plugin-tools/pull/225) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Mon Mar 13 2023)
 
 #### 🐛 Bug Fix
