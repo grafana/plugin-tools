@@ -2,7 +2,7 @@ module github.com/{{ kebabCase orgName }}/{{ kebabCase pluginName }}
 
 go 1.19
 
-require github.com/grafana/grafana-plugin-sdk-go v0.155.0
+require github.com/grafana/grafana-plugin-sdk-go v0.156.0
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
