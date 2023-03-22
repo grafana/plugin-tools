@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "{{ packageManager }} run lint --fix",
-    "e2e": "{{ packageManager }} cypress install && {{ packageManager }} run grafana-e2e run",
-    "e2e:update": "{{ packageManager }} cypress install && {{ packageManager }} run grafana-e2e run --update-screenshots",
+    "e2e": "{{ packageManager }} exec cypress install && {{ packageManager }} exec grafana-e2e run",
+    "e2e:update": "{{ packageManager }} exec cypress install && {{ packageManager }} exec grafana-e2e run --update-screenshots",
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest"
   },
