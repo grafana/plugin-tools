@@ -205,6 +205,11 @@ function getActionsForTemplateFolder({
     return path.relative(folderPath, path.dirname(f));
   }
 
+  // Remove the npmrc file if not running `pnpm`.
+  if (EXTRA_TEMPLATE_VARIABLES.packageManager !== 'pnpm') {
+    files.filter((file) => path.basename(file) === 'npmrc');
+  }
+
   return files.filter(isFile).map((f) => ({
     type: 'add',
     templateFile: f,
