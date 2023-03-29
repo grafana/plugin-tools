@@ -28,9 +28,7 @@ export const update = async () => {
     // (skipped automatically if there is nothing to update)
     // ------------------------------------------------
     if (hasNpmDependenciesToUpdate()) {
-      const shouldUpdateGrafanaDeps = await confirmPrompt(TEXT.updateGrafanaNpmDependenciesPrompt);
-
-      const updatableText = getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: !shouldUpdateGrafanaDeps });
+      const updatableText = getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true });
 
       if (updatableText.length > 0) {
         const PROMPT_CHOICES = {
@@ -48,7 +46,7 @@ export const update = async () => {
         if (shouldUpdateDeps && shouldUpdateDeps !== PROMPT_CHOICES.NONE) {
           updatePackageJson({
             onlyOutdated: shouldUpdateDeps === PROMPT_CHOICES.ONLY_OUTDATED,
-            ignoreGrafanaDependencies: !shouldUpdateGrafanaDeps,
+            ignoreGrafanaDependencies: true,
           });
           printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
         } else {
