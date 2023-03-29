@@ -1,3 +1,51 @@
+# v1.2.0 (Fri Mar 17 2023)
+
+#### 🚀 Enhancement
+
+- Template: Removed the module.test.ts file from being scafollded by create-plugin [#225](https://github.com/grafana/plugin-tools/pull/225) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.1.3 (Mon Mar 13 2023)
+
+#### 🐛 Bug Fix
+
+- Run go mod tidy after generating with backend [#216](https://github.com/grafana/plugin-tools/pull/216) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v1.1.2 (Fri Mar 10 2023)
+
+#### 🐛 Bug Fix
+
+- Chore: Remove unused deps from scaffolded plugins [#221](https://github.com/grafana/plugin-tools/pull/221) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v1.1.1 (Tue Mar 07 2023)
+
+#### 🐛 Bug Fix
+
+- Keep custom executable name if defined [#207](https://github.com/grafana/plugin-tools/pull/207) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.1.0 (Mon Mar 06 2023)
 
 :tada: This release contains work from a new contributor! :tada:

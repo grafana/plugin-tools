@@ -77,7 +77,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/172951?v=4",
       "profile": "https://github.com/mckn",
       "contributions": [
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -97,6 +98,24 @@
       "contributions": [
         "infra",
         "doc"
+      ]
+    },
+    {
+      "login": "leventebalogh",
+      "name": "Levente Balogh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9974811?v=4",
+      "profile": "https://leventebalogh.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "academo",
+      "name": "Esteban Beltran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/227916?v=4",
+      "profile": "https://github.com/academo",
+      "contributions": [
+        "code"
       ]
     }
   ],

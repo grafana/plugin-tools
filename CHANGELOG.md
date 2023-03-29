@@ -1,3 +1,60 @@
+# (Fri Mar 17 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.2.0`
+  - Template: Removed the module.test.ts file from being scafollded by create-plugin [#225](https://github.com/grafana/plugin-tools/pull/225) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Mon Mar 13 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.1.3`
+  - Run go mod tidy after generating with backend [#216](https://github.com/grafana/plugin-tools/pull/216) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Fri Mar 10 2023)
+
+#### 🐛 Bug Fix
+
+- Chore: Apply version bumps [#220](https://github.com/grafana/plugin-tools/pull/220) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@jackw](https://github.com/jackw))
+- Fix: GH bug report template [#219](https://github.com/grafana/plugin-tools/pull/219) ([@jackw](https://github.com/jackw))
+- Chore: Update `@grafana/eslint-config` [#215](https://github.com/grafana/plugin-tools/pull/215) ([@leventebalogh](https://github.com/leventebalogh))
+- `@grafana/create-plugin@1.1.2`
+  - Chore: Remove unused deps from scaffolded plugins [#221](https://github.com/grafana/plugin-tools/pull/221) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Tue Mar 07 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.1.1`
+  - Keep custom executable name if defined [#207](https://github.com/grafana/plugin-tools/pull/207) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Mon Mar 06 2023)
 
 :tada: This release contains work from new contributors! :tada:
