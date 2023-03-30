@@ -1,3 +1,23 @@
+# (Thu Mar 30 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.2.1`
+  - Create Plugin: Don't upgrade grafana dependencies when running update command [#217](https://github.com/grafana/plugin-tools/pull/217) ([@academo](https://github.com/academo))
+  - CreatePlugin: Add vscode launch.json files for backend debug mode [#224](https://github.com/grafana/plugin-tools/pull/224) ([@xnyo](https://github.com/xnyo))
+
+#### 🏠 Internal
+
+- Website: Bump Docusaurus dependencies to 2.4.0 [#227](https://github.com/grafana/plugin-tools/pull/227) ([@jackw](https://github.com/jackw))
+
+#### Authors: 3
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Mar 17 2023)
 
 #### 🚀 Enhancement

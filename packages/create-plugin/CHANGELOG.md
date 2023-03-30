@@ -1,3 +1,17 @@
+# v1.2.1 (Thu Mar 30 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Don't upgrade grafana dependencies when running update command [#217](https://github.com/grafana/plugin-tools/pull/217) ([@academo](https://github.com/academo))
+- CreatePlugin: Add vscode launch.json files for backend debug mode [#224](https://github.com/grafana/plugin-tools/pull/224) ([@xnyo](https://github.com/xnyo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+
+---
+
 # v1.2.0 (Fri Mar 17 2023)
 
 #### 🚀 Enhancement
