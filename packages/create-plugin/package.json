@@ -37,6 +37,7 @@
     "@types/semver": "^7.3.9",
     "@types/which": "^2.0.2",
     "enquirer": "^2.3.6",
+    "find-up": "^5.0.0",
     "glob": "^7.1.7",
     "marked": "^4.0.12",
     "marked-terminal": "^5.1.1",

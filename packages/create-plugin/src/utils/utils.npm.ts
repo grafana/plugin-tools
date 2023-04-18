@@ -4,6 +4,7 @@ import semver from 'semver';
 import { readJsonFile } from './utils.files';
 import { renderTemplateFromFile, getTemplateData } from './utils.templates';
 import { GRAFANA_FE_PACKAGES, TEMPLATE_PATHS } from '../constants';
+import { getPackageManagerFromLockFile } from './utils.packageManager';
 
 type UpdateSummary = Record<string, { prev: string | null; next: string | null }>;
 
@@ -236,6 +237,15 @@ export function updateNpmScripts() {
   writePackageJson(packageJson);
 }
 
+export function writePackageManager() {
+  const packageJson = getPackageJson();
+  if (!packageJson.packageManager) {
+    const { packageManager, version } = getPackageManagerFromLockFile();
+
+    packageJson.packageManager = `${packageManager}@${version}`;
+  }
+}
+
 export function cleanUpPackageJson() {
   const packageJson = getPackageJson();
   packageJson.scripts = sortKeysAlphabetically(packageJson.scripts);
@@ -251,49 +261,4 @@ function sortKeysAlphabetically(obj: Record<string, string>) {
       acc[key] = obj[key];
       return acc;
     }, {});
-}
-
-export function getPackageManager() {
-  const agent = process.env.npm_config_user_agent;
-
-  if (!agent) {
-    const parent = process.env._;
-
-    if (!parent) {
-      return 'npm';
-    }
-
-    if (parent.endsWith('pnpx') || parent.endsWith('pnpm')) {
-      return 'pnpm';
-    }
-    if (parent.endsWith('yarn')) {
-      return 'yarn';
-    }
-
-    return 'npm';
-  }
-
-  const [program] = agent.split('/');
-
-  if (program === 'yarn') {
-    return 'yarn';
-  }
-  if (program === 'pnpm') {
-    return 'pnpm';
-  }
-
-  return 'npm';
-}
-
-export function getInstallCmd(packageManager: string) {
-  switch (packageManager) {
-    case 'yarn':
-      return 'yarn install --immutable --prefer-offline';
-
-    case 'pnpm':
-      return 'pnpm install --frozen-lockfile --prefer-offline';
-
-    default:
-      return 'npm ci';
-  }
 }
