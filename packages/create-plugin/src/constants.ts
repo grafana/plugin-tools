@@ -1,5 +1,4 @@
 import path from 'path';
-import { getInstallCmd, getPackageManager } from './utils/utils.npm';
 
 export const IS_DEV = process.env.CREATE_PLUGIN_DEV !== undefined;
 
@@ -35,17 +34,11 @@ export enum PLUGIN_TYPES {
   secretsmanager = 'secretsmanager',
 }
 
-// Support the users package manager of choice.
-const PACKAGE_MANAGER = getPackageManager();
-const PACKAGE_MANAGER_INSTALL_CMD = getInstallCmd(PACKAGE_MANAGER);
-
 // This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
   grafanaVersion: '9.3.8',
-  packageManager: PACKAGE_MANAGER,
-  packageManagerInstallCmd: PACKAGE_MANAGER_INSTALL_CMD,
 };
 
 export const GRAFANA_FE_PACKAGES = [
