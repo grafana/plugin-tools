@@ -1,11 +1,11 @@
 import { displayAsMarkdown } from '../../utils/utils.console';
 import { normalizeId } from '../../utils/utils.handlebars';
-import { getPackageManager } from '../../utils/utils.npm';
+import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager';
 import { CliArgs } from '../types';
 
 export function printGenerateSuccessMessage(answers: CliArgs) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-  const packageManager = getPackageManager();
+  const { packageManager } = getPackageManagerFromUserAgent();
   const commands = [
     `- \`cd ./${directory}\``,
     `- \`${packageManager} install\` to install frontend dependencies.`,
