@@ -30,7 +30,9 @@
     "@testing-library/react": "^12.1.4",
     "@types/glob": "^8.0.0",
     "@types/jest": "^29.2.2",
-    "@types/lodash": "^4.14.188",{{#if_eq pluginType "app"}}
+    "@types/lodash": "^4.14.188",
+    "@types/react": "17.0.42",
+    "@types/react-dom": "17.0.14",{{#if_eq pluginType "app"}}
     "@types/react-router-dom": "^5.3.3",{{/if_eq}}
     "@types/node": "^18.11.9",
     "copy-webpack-plugin": "^11.0.0",
@@ -63,7 +65,9 @@
     "@grafana/runtime": "{{ grafanaVersion }}",
     "@grafana/ui": "{{ grafanaVersion }}",
     "react": "17.0.2",
-    "react-dom": "17.0.2"{{#if_eq pluginType "app"}},
-    "react-router-dom": "^5.2.0"{{/if_eq}}
-  }
+    "react-dom": "17.0.2",{{#if_eq pluginType "app"}}
+    "react-router-dom": "^5.2.0",{{/if_eq}}
+    "tslib": "2.5.0"
+  },
+  "packageManager": "{{ packageManager }}@{{ packageManagerVersion }}"
 }
