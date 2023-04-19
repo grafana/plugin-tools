@@ -129,7 +129,15 @@ export default function (plop: NodePlopAPI) {
 
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
-        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.ciWorkflows, exportPath })
+        ? getActionsForTemplateFolder({
+            folderPath: TEMPLATE_PATHS.ciWorkflows,
+            exportPath,
+            templateData: {
+              packageManager,
+              packageManagerInstallCmd,
+              packageManagerVersion,
+            },
+          })
         : [];
 
       const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
@@ -201,7 +209,7 @@ function getActionsForTemplateFolder({
   exportPath: string;
   templateData?: Record<string, string>;
 }) {
-  const files = glob.sync(`${folderPath}/**`, { dot: true });
+  let files = glob.sync(`${folderPath}/**`, { dot: true });
   function getExportFileName(f: string) {
     // yarn and npm packing will not include `.gitignore` files
     // so we have to manually rename them to add the dot prefix
@@ -220,7 +228,9 @@ function getActionsForTemplateFolder({
 
   // Remove the npmrc file if not running `pnpm`.
   if (templateData.packageManager !== 'pnpm') {
-    files.filter((file) => path.basename(file) === 'npmrc');
+    files = files.filter((file) => {
+      return path.basename(file) !== 'npmrc';
+    });
   }
 
   return files.filter(isFile).map((f) => ({
