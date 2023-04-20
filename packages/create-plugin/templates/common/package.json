@@ -66,7 +66,8 @@
     "@grafana/ui": "{{ grafanaVersion }}",
     "react": "17.0.2",
     "react-dom": "17.0.2",{{#if_eq pluginType "app"}}
-    "react-router-dom": "^5.2.0",{{/if_eq}}
+    "react-router-dom": "^5.2.0",
+    "rxjs": "7.5.7",{{/if_eq}}
     "tslib": "2.5.0"
   },
   "packageManager": "{{ packageManager }}@{{ packageManagerVersion }}"
