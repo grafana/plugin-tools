@@ -31,10 +31,10 @@
     "@types/glob": "^8.0.0",
     "@types/jest": "^29.2.2",
     "@types/lodash": "^4.14.188",
+    "@types/node": "^18.11.9",
     "@types/react": "17.0.42",
     "@types/react-dom": "17.0.14",{{#if_eq pluginType "app"}}
     "@types/react-router-dom": "^5.3.3",{{/if_eq}}
-    "@types/node": "^18.11.9",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "eslint-webpack-plugin": "^3.1.1",
@@ -49,8 +49,8 @@
     "sass-loader": "13.2.0",
     "style-loader": "3.3.1",
     "swc-loader": "^0.2.3",
-    "tsconfig-paths": "^4.1.0",
     "ts-node": "^10.5.0",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "^4.4.0",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
