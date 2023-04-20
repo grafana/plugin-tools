@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+{{#if_eq packageManager "pnpm"}}
+      - uses: pnpm/action-setup@v2
+{{/if_eq}}
       - uses: actions/setup-node@v3
         with:
           node-version: '16'

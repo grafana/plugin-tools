@@ -141,7 +141,15 @@ export default function (plop: NodePlopAPI) {
         : [];
 
       const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
-        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.isCompatibleWorkflow, exportPath })
+        ? getActionsForTemplateFolder({
+            folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
+            exportPath,
+            templateData: {
+              packageManager,
+              packageManagerInstallCmd,
+              packageManagerVersion,
+            },
+          })
         : [];
 
       // Replace conditional bits in the Readme files
