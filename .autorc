@@ -4,11 +4,6 @@
     "email": "bot@grafana.com"
   },
   "onlyPublishWithReleaseLabel": true,
-  "canary": {
-    "target": "pr-body",
-    "message": "Install PR version: `yarn add -D my-project@%v`",
-    "force": true
-  },
   "plugins": [
     "npm",
     "all-contributors",
