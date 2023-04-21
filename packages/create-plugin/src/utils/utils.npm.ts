@@ -4,6 +4,7 @@ import semver from 'semver';
 import { readJsonFile } from './utils.files';
 import { renderTemplateFromFile, getTemplateData } from './utils.templates';
 import { GRAFANA_FE_PACKAGES, TEMPLATE_PATHS } from '../constants';
+import { PackageManager } from './utils.packageManager';
 
 type UpdateSummary = Record<string, { prev: string | null; next: string | null }>;
 
@@ -237,10 +238,10 @@ export function updateNpmScripts() {
   writePackageJson(packageJson);
 }
 
-export function writePackageManager({ packageManager, version }: { packageManager: string; version: string }) {
+export function writePackageManager({ packageManagerName, packageManagerVersion }: PackageManager) {
   const packageJson = getPackageJson();
   if (!packageJson.packageManager) {
-    packageJson.packageManager = `${packageManager}@${version}`;
+    packageJson.packageManager = `${packageManagerName}@${packageManagerVersion}`;
     writePackageJson(packageJson);
   }
 }

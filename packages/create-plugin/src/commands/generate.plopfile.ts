@@ -86,8 +86,8 @@ export default function (plop: NodePlopAPI) {
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
       // Support the users package manager of choice.
-      const { packageManager, version: packageManagerVersion } = getPackageManagerFromUserAgent();
-      const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManager);
+      const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+      const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
 
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
@@ -95,7 +95,7 @@ export default function (plop: NodePlopAPI) {
         exportPath,
         templateData: {
           pluginId,
-          packageManager,
+          packageManagerName,
           packageManagerInstallCmd,
           packageManagerVersion,
         },
@@ -133,7 +133,7 @@ export default function (plop: NodePlopAPI) {
             folderPath: TEMPLATE_PATHS.ciWorkflows,
             exportPath,
             templateData: {
-              packageManager,
+              packageManagerName,
               packageManagerInstallCmd,
               packageManagerVersion,
             },
@@ -145,7 +145,7 @@ export default function (plop: NodePlopAPI) {
             folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
             exportPath,
             templateData: {
-              packageManager,
+              packageManagerName,
               packageManagerInstallCmd,
               packageManagerVersion,
             },
@@ -235,7 +235,7 @@ function getActionsForTemplateFolder({
   }
 
   // Remove the npmrc file if not running `pnpm`.
-  if (templateData.packageManager !== 'pnpm') {
+  if (templateData.packageManagerName !== 'pnpm') {
     files = files.filter((file) => {
       return path.basename(file) !== 'npmrc';
     });

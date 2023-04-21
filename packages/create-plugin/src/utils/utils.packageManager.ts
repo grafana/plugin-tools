@@ -7,16 +7,21 @@ const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
 const YARN_LOCKFILE = 'yarn.lock';
 const SUPPORTED_PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'];
-const LEGACY_PACKAGE_MANAGER = { packageManager: 'yarn', version: '1.22.19' };
+const LEGACY_PACKAGE_MANAGER = { packageManagerName: 'yarn', packageManagerVersion: '1.22.19' };
 
-export function getPackageManagerFromUserAgent() {
+export type PackageManager = {
+  packageManagerName: string;
+  packageManagerVersion: string;
+};
+
+export function getPackageManagerFromUserAgent(): PackageManager {
   const agent = process.env.npm_config_user_agent;
 
-  const [packageManager, versionWithText] = agent.split('/');
+  const [name, versionWithText] = agent.split('/');
   const [version] = versionWithText.split(' ');
 
-  if (SUPPORTED_PACKAGE_MANAGERS.includes(packageManager)) {
-    return { packageManager, version: version.trimEnd() };
+  if (SUPPORTED_PACKAGE_MANAGERS.includes(name)) {
+    return { packageManagerName: name, packageManagerVersion: version.trimEnd() };
   }
 
   return LEGACY_PACKAGE_MANAGER;
@@ -36,8 +41,8 @@ export function getPackageManagerWithFallback() {
   return LEGACY_PACKAGE_MANAGER;
 }
 
-export function getPackageManagerInstallCmd(packageManager: string) {
-  switch (packageManager) {
+export function getPackageManagerInstallCmd(packageManagerName: string) {
+  switch (packageManagerName) {
     case 'yarn':
       return 'yarn install --immutable --prefer-offline';
 
@@ -49,7 +54,7 @@ export function getPackageManagerInstallCmd(packageManager: string) {
   }
 }
 
-function getPackageManagerFromLockFile() {
+function getPackageManagerFromLockFile(): PackageManager | undefined {
   const closestLockfilePath = findUpSync([YARN_LOCKFILE, PNPM_LOCKFILE, NPM_LOCKFILE]);
   if (!Boolean(closestLockfilePath)) {
     return undefined;
@@ -62,38 +67,38 @@ function getPackageManagerFromLockFile() {
       const npmVersionCommand = spawnSync('npm', ['--version'], {
         shell: true,
       });
-      const version = npmVersionCommand.stdout.toString().trimEnd();
-      return { packageManager: 'npm', version };
+      const packageManagerVersion = npmVersionCommand.stdout.toString().trimEnd();
+      return { packageManagerName: 'npm', packageManagerVersion };
     }
 
     if (closestLockfile === PNPM_LOCKFILE) {
       const pnpmVersionCommand = spawnSync('pnpm', ['--version'], {
         shell: true,
       });
-      const version = pnpmVersionCommand.stdout.toString().trimEnd();
-      return { packageManager: 'pnpm', version };
+      const packageManagerVersion = pnpmVersionCommand.stdout.toString().trimEnd();
+      return { packageManagerName: 'pnpm', packageManagerVersion };
     }
 
     if (closestLockfile === YARN_LOCKFILE) {
       const yarnVersionCommand = spawnSync('yarn', ['--version'], {
         shell: true,
       });
-      const version = yarnVersionCommand.stdout.toString().trimEnd();
-      return { packageManager: 'yarn', version };
+      const packageManagerVersion = yarnVersionCommand.stdout.toString().trimEnd();
+      return { packageManagerName: 'yarn', packageManagerVersion };
     }
 
     return undefined;
   } catch (error) {
-    console.error('Failed to find package manager from lock file');
+    console.error('Failed to find package manager from lock file. Have you installed dependencies?');
     throw Error(error);
   }
 }
 
-function getPackageManagerFromPackageJson() {
+function getPackageManagerFromPackageJson(): PackageManager | undefined {
   const packageJson = getPackageJson();
   if (packageJson.hasOwnProperty('packageManager')) {
-    const [packageManager, version] = packageJson.packageManager.split('@');
-    return { packageManager, version };
+    const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
+    return { packageManagerName, packageManagerVersion };
   }
 
   return undefined;

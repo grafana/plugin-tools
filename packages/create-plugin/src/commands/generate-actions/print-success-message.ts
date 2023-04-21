@@ -5,11 +5,11 @@ import { CliArgs } from '../types';
 
 export function printGenerateSuccessMessage(answers: CliArgs) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-  const { packageManager } = getPackageManagerFromUserAgent();
+  const { packageManagerName } = getPackageManagerFromUserAgent();
   const commands = [
     `- \`cd ./${directory}\``,
-    `- \`${packageManager} install\` to install frontend dependencies.`,
-    `- \`${packageManager} run dev\` to build (and watch) the plugin frontend code.`,
+    `- \`${packageManagerName} install\` to install frontend dependencies.`,
+    `- \`${packageManagerName} run dev\` to build (and watch) the plugin frontend code.`,
     ...(answers.hasBackend
       ? [
           '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',

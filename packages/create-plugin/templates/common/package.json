@@ -9,9 +9,9 @@
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "{{ packageManager }} run lint --fix",
-    "e2e": "{{ packageManager }} exec cypress install && {{ packageManager }} exec grafana-e2e run",
-    "e2e:update": "{{ packageManager }} exec cypress install && {{ packageManager }} exec grafana-e2e run --update-screenshots",
+    "lint:fix": "{{ packageManagerName }} run lint --fix",
+    "e2e": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run",
+    "e2e:update": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run --update-screenshots",
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest"
   },
@@ -70,5 +70,5 @@
     "rxjs": "7.5.7",{{/if_eq}}
     "tslib": "2.5.0"
   },
-  "packageManager": "{{ packageManager }}@{{ packageManagerVersion }}"
+  "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}"
 }

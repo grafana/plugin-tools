@@ -64,7 +64,7 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 
 export function getTemplateData() {
   const pluginJson = getPluginJson();
-  const { packageManager, version: packageManagerVersion } = getPackageManagerWithFallback();
+  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
 
   return {
     ...EXTRA_TEMPLATE_VARIABLES,
@@ -74,7 +74,7 @@ export function getTemplateData() {
     hasBackend: Boolean(pluginJson.backend),
     orgName: pluginJson.info?.author?.name,
     pluginType: pluginJson.type,
-    packageManager,
+    packageManagerName,
     packageManagerVersion,
   };
 }
