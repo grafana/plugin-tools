@@ -97,7 +97,7 @@ export const migrate = async () => {
       printMessage(TEXT.updateNpmScriptsAborted);
     }
 
-    // Guarantee that the package manager property is set in the package.json file
+    // Guarantee that the package manager property is set in the package.json file if it is missing
     const packageManager = getPackageManagerWithFallback();
     writePackageManager(packageManager);
 
