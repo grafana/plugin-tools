@@ -218,6 +218,12 @@ function getActionsForTemplateFolder({
   templateData?: Record<string, string>;
 }) {
   let files = glob.sync(`${folderPath}/**`, { dot: true });
+
+  // Remove the npmrc file if not running `pnpm`.
+  if (templateData.packageManagerName !== 'pnpm') {
+    files = files.filter((file) => path.basename(file) !== 'npmrc');
+  }
+
   function getExportFileName(f: string) {
     // yarn and npm packing will not include `.gitignore` files
     // so we have to manually rename them to add the dot prefix
@@ -230,15 +236,9 @@ function getActionsForTemplateFolder({
 
     return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f);
   }
+
   function getExportPath(f: string) {
     return path.relative(folderPath, path.dirname(f));
-  }
-
-  // Remove the npmrc file if not running `pnpm`.
-  if (templateData.packageManagerName !== 'pnpm') {
-    files = files.filter((file) => {
-      return path.basename(file) !== 'npmrc';
-    });
   }
 
   return files.filter(isFile).map((f) => ({
