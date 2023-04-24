@@ -7,7 +7,7 @@ const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
 const YARN_LOCKFILE = 'yarn.lock';
 const SUPPORTED_PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'];
-const LEGACY_PACKAGE_MANAGER = { packageManagerName: 'yarn', packageManagerVersion: '1.22.19' };
+const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'yarn', packageManagerVersion: '1.22.19' };
 
 export type PackageManager = {
   packageManagerName: string;
@@ -24,7 +24,7 @@ export function getPackageManagerFromUserAgent(): PackageManager {
     return { packageManagerName: name, packageManagerVersion: version.trimEnd() };
   }
 
-  return LEGACY_PACKAGE_MANAGER;
+  return DEFAULT_PACKAGE_MANAGER;
 }
 
 export function getPackageManagerWithFallback() {
@@ -38,7 +38,7 @@ export function getPackageManagerWithFallback() {
     return packageManagerFromLockFile;
   }
 
-  return LEGACY_PACKAGE_MANAGER;
+  return DEFAULT_PACKAGE_MANAGER;
 }
 
 export function getPackageManagerInstallCmd(packageManagerName: string) {
