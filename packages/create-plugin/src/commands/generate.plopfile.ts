@@ -145,7 +145,7 @@ export default function (plop: NodePlopAPI) {
         : [];
 
       // Replace conditional bits in the Readme files
-      const readmeActions = getActionsForReadme({ exportPath });
+      const readmeActions = getActionsForReadme({ exportPath, templateData });
 
       return [
         ...pluginActions,
@@ -163,22 +163,31 @@ export default function (plop: NodePlopAPI) {
   });
 }
 
-function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActionConfig[] {
+function getActionsForReadme({
+  exportPath,
+  templateData,
+}: {
+  exportPath: string;
+  templateData: Record<string, string>;
+}): ModifyActionConfig[] {
   return [
     replacePatternWithTemplateInReadme(
       '-- INSERT FRONTEND GETTING STARTED --',
       'frontend-getting-started.md',
-      exportPath
+      exportPath,
+      templateData
     ),
     replacePatternWithTemplateInReadme(
       '-- INSERT BACKEND GETTING STARTED --',
       'backend-getting-started.md',
-      exportPath
+      exportPath,
+      templateData
     ),
     replacePatternWithTemplateInReadme(
       '-- INSERT DISTRIBUTING YOUR PLUGIN --',
       'distributing-your-plugin.md',
-      exportPath
+      exportPath,
+      templateData
     ),
   ];
 }
@@ -186,7 +195,8 @@ function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActi
 function replacePatternWithTemplateInReadme(
   pattern: string,
   partialsFile: string,
-  exportPath: string
+  exportPath: string,
+  templateData: Record<string, string> = {}
 ): ModifyActionConfig {
   return {
     type: 'modify',
@@ -195,7 +205,10 @@ function replacePatternWithTemplateInReadme(
     // @ts-ignore
     template: undefined,
     templateFile: path.join(PARTIALS_DIR, partialsFile),
-    data: EXTRA_TEMPLATE_VARIABLES,
+    data: {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      ...templateData,
+    },
   };
 }
 

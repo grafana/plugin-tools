@@ -3,53 +3,53 @@
 1. Install dependencies
 
    ```bash
-   yarn install
+   {{ packageManagerName }} run install
    ```
 
 2. Build plugin in development mode and run in watch mode
 
    ```bash
-   yarn dev
+   {{ packageManagerName }} run dev
    ```
 
 3. Build plugin in production mode
 
    ```bash
-   yarn build
+   {{ packageManagerName }} run build
    ```
 
 4. Run the tests (using Jest)
 
    ```bash
    # Runs the tests and watches for changes, requires git init first
-   yarn test
-   
+   {{ packageManagerName }} run test
+
    # Exits after running all the tests
-   yarn test:ci
+   {{ packageManagerName }} run test:ci
    ```
 
 5. Spin up a Grafana instance and run the plugin inside it (using Docker)
 
    ```bash
-   yarn server
+   {{ packageManagerName }} run server
    ```
 
 6. Run the E2E tests (using Cypress)
 
    ```bash
-   # Spins up a Grafana instance first that we tests against 
-   yarn server
-   
+   # Spins up a Grafana instance first that we tests against
+   {{ packageManagerName }} run server
+
    # Starts the tests
-   yarn e2e
+   {{ packageManagerName }} run e2e
    ```
 
 7. Run the linter
 
    ```bash
-   yarn lint
-   
+   {{ packageManagerName }} run lint
+
    # or
 
-   yarn lint:fix
+   {{ packageManagerName }} run lint:fix
    ```
