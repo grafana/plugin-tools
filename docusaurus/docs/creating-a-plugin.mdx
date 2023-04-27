@@ -5,9 +5,14 @@ title: Creating a Plugin
 
 To create a new Grafana plugin run the following command in your shell:
 
-```shell
-npx @grafana/create-plugin@latest
-```
+<CodeSnippets
+  paths="
+  createplugin-scaffold.npm.shell.md,
+  createplugin-scaffold.pnpm.shell.md,
+  createplugin-scaffold.yarn.shell.md"
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
 :::info
 The answers to the name, organization and type of plugin prompts are combined to create the plugin directory name and the plugin id.
@@ -24,7 +29,6 @@ In the above example, this will cause the directory and plugin ID to be named `g
 ## Prompts
 
 When running the create command, the following prompts appear asking for confirmation before making changes:
-
 
 ### What is the name of your plugin?
 
