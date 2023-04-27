@@ -6,7 +6,7 @@ import {
   hasNpmDependenciesToUpdate,
   getPackageJsonUpdatesAsText,
   updateNpmScripts,
-  writePackageManager,
+  writePackageManagerInPackageJson,
 } from '../utils/utils.npm';
 import { getPackageManagerWithFallback } from '../utils/utils.packageManager';
 
@@ -69,7 +69,7 @@ export const update = async () => {
 
     // Guarantee that the package manager property is set in the package.json file if it is missing
     const packageManager = getPackageManagerWithFallback();
-    writePackageManager(packageManager);
+    writePackageManagerInPackageJson(packageManager);
 
     // 4. Summary
     // -------------

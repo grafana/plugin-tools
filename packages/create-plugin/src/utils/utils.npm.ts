@@ -238,7 +238,7 @@ export function updateNpmScripts() {
   writePackageJson(packageJson);
 }
 
-export function writePackageManager({ packageManagerName, packageManagerVersion }: PackageManager) {
+export function writePackageManagerInPackageJson({ packageManagerName, packageManagerVersion }: PackageManager) {
   const packageJson = getPackageJson();
   if (!packageJson.packageManager) {
     packageJson.packageManager = `${packageManagerName}@${packageManagerVersion}`;

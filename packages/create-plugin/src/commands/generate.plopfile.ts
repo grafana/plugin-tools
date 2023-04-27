@@ -88,17 +88,17 @@ export default function (plop: NodePlopAPI) {
       // Support the users package manager of choice.
       const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
       const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-
+      const templateData = {
+        pluginId,
+        packageManagerName,
+        packageManagerInstallCmd,
+        packageManagerVersion,
+      };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS.common,
         exportPath,
-        templateData: {
-          pluginId,
-          packageManagerName,
-          packageManagerInstallCmd,
-          packageManagerVersion,
-        },
+        templateData,
       });
 
       // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
@@ -132,11 +132,7 @@ export default function (plop: NodePlopAPI) {
         ? getActionsForTemplateFolder({
             folderPath: TEMPLATE_PATHS.ciWorkflows,
             exportPath,
-            templateData: {
-              packageManagerName,
-              packageManagerInstallCmd,
-              packageManagerVersion,
-            },
+            templateData,
           })
         : [];
 
@@ -144,11 +140,7 @@ export default function (plop: NodePlopAPI) {
         ? getActionsForTemplateFolder({
             folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
             exportPath,
-            templateData: {
-              packageManagerName,
-              packageManagerInstallCmd,
-              packageManagerVersion,
-            },
+            templateData,
           })
         : [];
 
@@ -219,7 +211,7 @@ function getActionsForTemplateFolder({
 }) {
   let files = glob.sync(`${folderPath}/**`, { dot: true });
 
-  // Remove the npmrc file if not running `pnpm`.
+  // The npmrc file is only useful for `pnpm` settings. We can remove it for other package managers.
   if (templateData.packageManagerName !== 'pnpm') {
     files = files.filter((file) => path.basename(file) !== 'npmrc');
   }
