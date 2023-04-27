@@ -1,0 +1,1 @@
+yarn create @grafana/plugin
