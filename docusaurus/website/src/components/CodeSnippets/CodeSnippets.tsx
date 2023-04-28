@@ -39,8 +39,10 @@ function CodeSnippets({ paths, groupId, queryString }) {
   }
 
   return (
+    // @ts-ignore - Tabs types appear to be broken.
     <Tabs groupId={groupId} queryString={queryString}>
       {snippets.map((snippet) => (
+        // @ts-ignore - TabItem types appear to be broken.
         <TabItem key={snippet.value} value={snippet.value} label={snippet.label}>
           <CodeBlock language={snippet.language}>{snippet.code}</CodeBlock>
         </TabItem>
