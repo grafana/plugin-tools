@@ -1,3 +1,25 @@
+# v1.3.0 (Fri Apr 28 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support different Node package managers [#226](https://github.com/grafana/plugin-tools/pull/226) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Documentation: Fix path in for template README.md for jest customizations [#218](https://github.com/grafana/plugin-tools/pull/218) ([@briangann](https://github.com/briangann))
+
+#### 🔩 Dependency Updates
+
+- Chore: Update `glob` to v10 [#230](https://github.com/grafana/plugin-tools/pull/230) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 3
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v1.2.1 (Thu Mar 30 2023)
 
 #### 🐛 Bug Fix
