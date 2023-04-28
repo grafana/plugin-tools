@@ -16,29 +16,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+{{#if_eq packageManagerName "pnpm"}}
+      # pnpm action uses the packageManager field in package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v2
+{{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: '{{ packageManagerName }}'
+
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: {{ packageManagerInstallCmd }}
 
       - name: Check types
-        run: yarn typecheck
+        run: {{ packageManagerName }} run typecheck
       - name: Lint
-        run: yarn lint
+        run: {{ packageManagerName }} run lint
       - name: Unit tests
-        run: yarn test:ci
+        run: {{ packageManagerName }} run test:ci
       - name: Build frontend
-        run: yarn build
+        run: {{ packageManagerName }} run build
 
       - name: Start grafana docker
-        run: yarn server -d
+        run: docker-compose up -d
 
       - name: Run e2e tests
-        run: yarn e2e
+        run: {{ packageManagerName }} run e2e
 
       - name: Stop grafana docker
         run: docker-compose down

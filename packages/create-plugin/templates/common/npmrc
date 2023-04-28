@@ -1,0 +1,14 @@
+# This file is required for PNPM
+
+# PNPM 8 changed the default resolution mode to "lowest-direct" which is not how we expect resolutions to work
+resolution-mode="highest"
+
+# Make sure the default patterns are still included (https://pnpm.io/npmrc#public-hoist-pattern)
+public-hoist-pattern[]="*eslint*"
+public-hoist-pattern[]="*prettier*"
+
+# Hoist all types packages to the root for better TS support
+public-hoist-pattern[]="@types/*"
+
+# @grafana/e2e expects cypress to exist in the root of the node_modules directory
+public-hoist-pattern[]="*cypress*"

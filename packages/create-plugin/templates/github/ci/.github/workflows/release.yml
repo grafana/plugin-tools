@@ -13,12 +13,16 @@ jobs:
       GRAFANA_API_KEY: $\{{ secrets.GRAFANA_API_KEY }} # Requires a Grafana API key from Grafana.com.
     steps:
       - uses: actions/checkout@v3
-
+{{#if_eq packageManagerName "pnpm"}}
+      # pnpm action uses the packageManager field in package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v2
+{{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: '{{ packageManagerName }}'
 
       - name: Setup Go environment
         uses: actions/setup-go@v3
@@ -26,10 +30,10 @@ jobs:
           go-version: '1.19'
 
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: {{ packageManagerInstallCmd }}
 
       - name: Build and test frontend
-        run: yarn build
+        run: {{ packageManagerName }} run build
 
       - name: Check for backend
         id: check-for-backend
@@ -60,7 +64,7 @@ jobs:
         if: $\{{ env.GRAFANA_API_KEY == '' }}
 
       - name: Sign plugin
-        run: yarn sign
+        run: {{ packageManagerName }} run sign
         if: $\{{ env.GRAFANA_API_KEY != '' }}
 
       - name: Get plugin metadata

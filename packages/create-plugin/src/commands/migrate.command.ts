@@ -10,7 +10,9 @@ import {
   removeNpmDependencies,
   updateNpmScripts,
   cleanUpPackageJson,
+  writePackageManagerInPackageJson,
 } from '../utils/utils.npm';
+import { getPackageManagerWithFallback } from '../utils/utils.packageManager';
 
 export const migrate = async () => {
   try {
@@ -94,6 +96,10 @@ export const migrate = async () => {
     } else {
       printMessage(TEXT.updateNpmScriptsAborted);
     }
+
+    // Guarantee that the package manager property is set in the package.json file if it is missing
+    const packageManager = getPackageManagerWithFallback();
+    writePackageManagerInPackageJson(packageManager);
 
     // Tidy package.json file so any changed fields are sorted as a
     // package manager would expect.

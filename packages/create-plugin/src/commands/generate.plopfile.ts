@@ -1,13 +1,14 @@
-import type { NodePlopAPI, ModifyActionConfig } from 'plop';
+import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
-import fs from 'fs';
+import type { ModifyActionConfig, NodePlopAPI } from 'plop';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
-import { IS_DEV, TEMPLATE_PATHS, PARTIALS_DIR, PLUGIN_TYPES, EXTRA_TEMPLATE_VARIABLES } from '../constants';
+import { getExportPath } from '../utils/utils.path';
+import { getPackageManagerInstallCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
 import { CliArgs } from './types';
-import { getExportPath } from '../utils/utils.path';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
@@ -84,11 +85,20 @@ export default function (plop: NodePlopAPI) {
     }: CliArgs) {
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
+      // Support the users package manager of choice.
+      const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+      const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+      const templateData = {
+        pluginId,
+        packageManagerName,
+        packageManagerInstallCmd,
+        packageManagerVersion,
+      };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS.common,
         exportPath,
-        templateData: { pluginId },
+        templateData,
       });
 
       // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
@@ -119,15 +129,23 @@ export default function (plop: NodePlopAPI) {
 
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
-        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.ciWorkflows, exportPath })
+        ? getActionsForTemplateFolder({
+            folderPath: TEMPLATE_PATHS.ciWorkflows,
+            exportPath,
+            templateData,
+          })
         : [];
 
       const isCompatibleWorkflowActions = hasGithubLevitateWorkflow
-        ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.isCompatibleWorkflow, exportPath })
+        ? getActionsForTemplateFolder({
+            folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
+            exportPath,
+            templateData,
+          })
         : [];
 
       // Replace conditional bits in the Readme files
-      const readmeActions = getActionsForReadme({ exportPath });
+      const readmeActions = getActionsForReadme({ exportPath, templateData });
 
       return [
         ...pluginActions,
@@ -145,22 +163,31 @@ export default function (plop: NodePlopAPI) {
   });
 }
 
-function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActionConfig[] {
+function getActionsForReadme({
+  exportPath,
+  templateData,
+}: {
+  exportPath: string;
+  templateData: Record<string, string>;
+}): ModifyActionConfig[] {
   return [
     replacePatternWithTemplateInReadme(
       '-- INSERT FRONTEND GETTING STARTED --',
       'frontend-getting-started.md',
-      exportPath
+      exportPath,
+      templateData
     ),
     replacePatternWithTemplateInReadme(
       '-- INSERT BACKEND GETTING STARTED --',
       'backend-getting-started.md',
-      exportPath
+      exportPath,
+      templateData
     ),
     replacePatternWithTemplateInReadme(
       '-- INSERT DISTRIBUTING YOUR PLUGIN --',
       'distributing-your-plugin.md',
-      exportPath
+      exportPath,
+      templateData
     ),
   ];
 }
@@ -168,7 +195,8 @@ function getActionsForReadme({ exportPath }: { exportPath: string }): ModifyActi
 function replacePatternWithTemplateInReadme(
   pattern: string,
   partialsFile: string,
-  exportPath: string
+  exportPath: string,
+  templateData: Record<string, string> = {}
 ): ModifyActionConfig {
   return {
     type: 'modify',
@@ -177,7 +205,10 @@ function replacePatternWithTemplateInReadme(
     // @ts-ignore
     template: undefined,
     templateFile: path.join(PARTIALS_DIR, partialsFile),
-    data: EXTRA_TEMPLATE_VARIABLES,
+    data: {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      ...templateData,
+    },
   };
 }
 
@@ -191,15 +222,26 @@ function getActionsForTemplateFolder({
   exportPath: string;
   templateData?: Record<string, string>;
 }) {
-  const files = glob.sync(`${folderPath}/**`, { dot: true });
+  let files = glob.sync(`${folderPath}/**`, { dot: true });
+
+  // The npmrc file is only useful for `pnpm` settings. We can remove it for other package managers.
+  if (templateData.packageManagerName !== 'pnpm') {
+    files = files.filter((file) => path.basename(file) !== 'npmrc');
+  }
+
   function getExportFileName(f: string) {
     // yarn and npm packing will not include `.gitignore` files
     // so we have to manually rename them to add the dot prefix
     if (path.basename(f) === 'gitignore') {
       return '.gitignore';
     }
+    if (path.basename(f) === 'npmrc') {
+      return '.npmrc';
+    }
+
     return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f);
   }
+
   function getExportPath(f: string) {
     return path.relative(folderPath, path.dirname(f));
   }
