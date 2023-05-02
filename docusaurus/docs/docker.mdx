@@ -13,19 +13,26 @@ The Docker container is configured with the necessary variables to allow easy ac
 
 To get started run the following commands in the order listed:
 
-- `yarn install`: Install frontend dependencies.
-- `yarn dev`: Build and watch the plugin frontend code.
+- <SyncCommand cmd="install" />: Install frontend dependencies.
+- <SyncCommand cmd="run dev" />: Build and watch the plugin frontend code.
 - `mage -v build:linux`: Build the plugin backend code. This command must be rerun every time you edit your backend files.
-- `yarn server`: Start a grafana development server running on [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend code.
-
+- <SyncCommand cmd="run server" />: Start a grafana development server running on
+  [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend
+  code.
 
 ### Configure the Grafana version
 
 You can use the environment variable `GRAFANA_VERSION` to set the Grafana version whilst developing the plugin. This is useful for testing a plugin across different versions of Grafana.
 
-```shell
-GRAFANA_VERSION=8.5.5 yarn server
-```
+<CodeSnippets
+  paths={[
+    'docker-grafana-version.npm.shell.md',
+    'docker-grafana-version.pnpm.shell.md',
+    'docker-grafana-version.yarn.shell.md',
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
 ### Configure the Grafana image
 

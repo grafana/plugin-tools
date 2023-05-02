@@ -13,10 +13,11 @@ Plugin tools consists of two packages:
 ## Quick Start
 
 <CodeSnippets
-  paths="
-  createplugin-scaffold.npm.shell.md,
-  createplugin-scaffold.pnpm.shell.md,
-  createplugin-scaffold.yarn.shell.md"
+  paths={[
+    'createplugin-scaffold.npm.shell.md',
+    'createplugin-scaffold.pnpm.shell.md',
+    'createplugin-scaffold.yarn.shell.md',
+  ]}
   groupId="package-manager"
   queryString="current-package-manager"
 />
@@ -35,8 +36,11 @@ Plugins previously scaffolded with `@grafana/toolkit` can be migrated. Please se
 - [Mage](https://magefile.org/)
 - [Node.js](https://nodejs.org/en/download/) version 16 or above:
   - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-- [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install)
+- Optionally [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
 - [Docker](https://docs.docker.com/get-docker/)
+
+### Choosing a package manager
+Starting from v1.3 of Create Plugin when you create a new plugin, the CLI will use `npm`, `pnpm` or `yarn` depending on which tool you use to run `@grafana/create-plugin`.
 
 ## Output
 
@@ -88,27 +92,32 @@ Depending on the answers given to the prompts there should be a structure like:
 
 Once the installation is done you can open the plugin folder:
 
-```shell
-cd <orgName>-<pluginName>-<pluginType>
-yarn install
-```
+<CodeSnippets
+  paths={[
+    'createplugin-install.npm.shell.md',
+    'createplugin-install.pnpm.shell.md',
+    'createplugin-install.yarn.shell.md',
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
 ## Scripts
 
 Inside the newly create plugin, you can run some built-in commands:
 
-### `yarn dev`
+### <SyncCommand cmd="run dev" />
 
 Builds plugin in development mode and runs in watch mode. The plugin will be rebuilt whenever you make changes to the code. You will see build errors and lint warnings in the console.
 
-### `yarn test`
+### <SyncCommand cmd="run test" />
 
 Runs the tests and watches for changes
 
-### `yarn build`
+### <SyncCommand cmd="run build" />
 
 Creates a production build of the plugin optimizing for the best performance. The build is minified and the filenames include hashes.
 
-### `mage -v`
+<h3><code>mage -v</code></h3>
 
 Build backend plugin binaries for Linux, Windows and Darwin.
