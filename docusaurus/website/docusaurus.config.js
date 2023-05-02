@@ -51,7 +51,7 @@ const config = {
             });
           // clean up metadata, relref and remove heading
           const cleanedContent = content
-            .replace(/\\\[(.+)\]\\(\({{.+}}\))/g, '$1')
+            .replace(/\\\[(.+?)\]\\(\({{.+?}}\))/g, '$1')
             .replace(/## title: Sign a plugin\n\n# Sign a plugin/m, '')
             .replace(/\*\*\*/, '');
           return {
