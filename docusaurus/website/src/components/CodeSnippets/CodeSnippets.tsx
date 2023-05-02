@@ -3,8 +3,18 @@ import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-function CodeSnippets({ paths, groupId, queryString }) {
-  const snippetPaths = paths.split(',').map((path) => path.trim());
+/*
+  CodeSnippets is a component that allows you to display code snippets from the docs/snippets folder.
+  It takes in an array of paths to the snippets you want to display, and will display them in a tabbed
+  interface. The paths should be relative to the docs/snippets folder, and should include the file extension.
+
+  Snippets should be named in the following format: <name>.<value>.<language>.<extension>
+  `value` is used for the tabs unique value and label.
+  language is used for syntax highlighting.
+ */
+
+function CodeSnippets({ paths, groupId, queryString }: { paths: string[]; groupId?: string; queryString?: string }) {
+  const snippetPaths = paths.map((path) => path.trim());
   const [snippets, setSnippets] = useState([]);
 
   useEffect(() => {
@@ -36,6 +46,10 @@ function CodeSnippets({ paths, groupId, queryString }) {
 
   if (snippets.length === 0) {
     return null;
+  }
+
+  if (snippets.length === 1) {
+    return <CodeBlock language={snippets[0].language}>{snippets[0].code}</CodeBlock>;
   }
 
   return (
