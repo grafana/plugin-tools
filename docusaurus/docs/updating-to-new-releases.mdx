@@ -5,9 +5,11 @@ title: Updating to New Releases
 
 To update an existing plugin to use a newer version of `create-plugin` run the following update command:
 
-```shell
-npx @grafana/create-plugin@latest update
-```
+<CodeSnippets
+  paths={['createplugin-update.npm.shell.md', 'createplugin-update.pnpm.shell.md', 'createplugin-update.yarn.shell.md']}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
 This command will rerun the original scaffolding commands against the configuration files, dependencies, and scripts, using the latest version of `create-plugin`. It will prompt to confirm any destructive operations are agreed to prior to being run.
 

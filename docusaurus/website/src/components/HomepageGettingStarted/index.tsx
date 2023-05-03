@@ -1,6 +1,6 @@
 import React from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import CodeBlock from '@theme/CodeBlock';
+import CodeSnippets from '../CodeSnippets/CodeSnippets';
 
 import styles from './styles.module.css';
 
@@ -19,7 +19,7 @@ function HomepageGettingStarted() {
                 <br />
                 To create a plugin run this command:
               </p>
-              <CodeBlock className="language-sh">npx @grafana/create-plugin</CodeBlock>
+              <CodeSnippets paths={['createplugin-scaffold.npm.shell.md']} />
               <br />
             </div>
             <div className="col col--6 col--offset-1">
@@ -44,7 +44,7 @@ function HomepageGettingStarted() {
                 Updating your build tooling can be a daunting and time-consuming task. When new versions of Create
                 Plugin are released, you can upgrade using a single command:
               </p>
-              <CodeBlock className="language-sh">npx @grafana/create-plugin update</CodeBlock>
+              <CodeSnippets paths={['createplugin-update.npm.shell.md']} />
             </div>
           </div>
         </div>
