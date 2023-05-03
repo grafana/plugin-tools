@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[556],{3556:(e,s,n)=>{n.r(s),n.d(s,{default:()=>p});const p="cd <orgName>-<pluginName>-<pluginType>\npnpm install"}}]);

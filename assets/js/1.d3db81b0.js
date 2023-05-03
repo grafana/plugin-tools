@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[1],{2001:(e,s,r)=>{r.r(s),r.d(s,{default:()=>t});const t="GRAFANA_VERSION=8.5.5 yarn run server"}}]);
