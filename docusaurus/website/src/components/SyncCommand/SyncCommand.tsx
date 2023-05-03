@@ -1,7 +1,12 @@
 import React from 'react';
 import { useLocation } from '@docusaurus/router';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
-function SyncCommand({ cmd }) {
+interface SyncCommandProps {
+  cmd: string;
+}
+
+function SyncCommand({ cmd }: SyncCommandProps) {
   let currentPackageManager = window.localStorage['docusaurus.tab.package-manager'];
   const location = useLocation();
 
@@ -18,4 +23,8 @@ function SyncCommand({ cmd }) {
   return <code>{cmdString}</code>;
 }
 
-export default SyncCommand;
+function BrowserOnlySyncCommand({ cmd }: SyncCommandProps) {
+  return <BrowserOnly>{() => <SyncCommand cmd={cmd} />}</BrowserOnly>;
+}
+
+export default BrowserOnlySyncCommand;
