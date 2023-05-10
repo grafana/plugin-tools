@@ -30,9 +30,7 @@
     "@testing-library/react": "^12.1.4",
     "@types/jest": "^29.2.2",
     "@types/lodash": "^4.14.188",
-    "@types/node": "^18.11.9",
-    "@types/react": "17.0.42",
-    "@types/react-dom": "17.0.14",{{#if_eq pluginType "app"}}
+    "@types/node": "^18.11.9",{{#if_eq pluginType "app"}}
     "@types/react-router-dom": "^5.3.3",{{/if_eq}}
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
