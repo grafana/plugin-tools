@@ -125,6 +125,45 @@ const config = async (env): Promise<Configuration> => {
 export default config;
 ```
 
+This is a more complete customization that excludes "libs" via rules in addition to "node_modules", and also provides fallbacks that are no longer present in webpack v5.
+
+```typescript
+import type { Configuration } from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
+
+const config = async (env: any): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+  const customConfig = {
+    module: {
+      rules: [
+        {
+          exclude: /(node_modules|libs)/,
+        },
+      ],
+    },
+    resolve: {
+      fallback: {
+        crypto: require.resolve('crypto-browserify'),
+        fs: false,
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'),
+        util: require.resolve("util"),
+      },
+    },
+  };
+  return mergeWithRules({
+    module: {
+      rules: {
+        exclude: 'replace',
+      },
+    },
+  })(baseConfig, customConfig);
+};
+
+export default config;
+```
+
 #### 3. Update the `package.json` to use the new Webpack config
 
 Update the `scripts` in the `package.json` to use the extended Webpack configuration.
