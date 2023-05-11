@@ -32,7 +32,7 @@ If you have questions or need help, please ask in [GitHub Discussions](https://g
 
 Run the command in the folder where you want to store your plugins. The new plugin will be scaffolded in a sub-directory of the folder where you run the command.
 
-You can run the command with the package manager of your choice:
+Create Plugin can be used with NPM, PNPM or Yarn 1. The plugin will be scaffolded to use your preferred package manager. Run the command with the package manager of your choice:
 
 #### [`npx`](https://github.com/npm/npx)
 
