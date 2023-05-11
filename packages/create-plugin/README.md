@@ -7,10 +7,10 @@ Create Grafana plugins with ease.
 - [Grafana / Create Plugin](#grafana--create-plugin)
   - [Create a new plugin](#create-a-new-plugin)
     - [Quick overview](#quick-overview)
-      - [`yarn` (1.x)](#yarn-1x)
-      - [`yarn` (\> 2.x)](#yarn--2x)
       - [`npx`](#npx)
       - [`npm`](#npm)
+      - [`pnpm`](#pnpm)
+      - [`yarn` (1.x)](#yarn-1x)
   - [Migrate your existing plugin](#migrate-your-existing-plugin)
   - [Update your plugin build config](#update-your-plugin-build-config)
   - [Customizing or extending the basic configs](#customizing-or-extending-the-basic-configs)
@@ -34,18 +34,6 @@ Run the command in the folder where you want to store your plugins. The new plug
 
 You can run the command with the package manager of your choice:
 
-#### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
-
-```bash
-yarn create @grafana/plugin
-```
-
-#### [`yarn`](https://yarnpkg.com/cli/dlx) (> 2.x)
-
-```bash
-yarn dlx @grafana/create-plugin
-```
-
 #### [`npx`](https://github.com/npm/npx)
 
 ```bash
@@ -56,6 +44,18 @@ npx @grafana/create-plugin@latest
 
 ```bash
 npm init @grafana/plugin
+```
+
+#### [`pnpm`](https://pnpm.io/cli/dlx)
+
+```bash
+pnpm dlx @grafana/create-plugin@latest
+```
+
+#### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
+
+```bash
+yarn create @grafana/plugin
 ```
 
 ---
