@@ -52,6 +52,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/romain-gaillard"><img src="https://avatars.githubusercontent.com/u/15131586?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Romain Gaillard</b></sub></a><br /><a href="#infra-romain-gaillard" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=romain-gaillard" title="Documentation">📖</a></td>
     <td align="center"><a href="https://leventebalogh.com/"><img src="https://avatars.githubusercontent.com/u/9974811?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Levente Balogh</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=leventebalogh" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/academo"><img src="https://avatars.githubusercontent.com/u/227916?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Esteban Beltran</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=academo" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/sympatheticmoose"><img src="https://avatars.githubusercontent.com/u/19860021?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Harris</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=sympatheticmoose" title="Code">💻</a> <a href="https://github.com/grafana/plugin-tools/commits?author=sympatheticmoose" title="Documentation">📖</a></td>
   </tr>
 </table>
 

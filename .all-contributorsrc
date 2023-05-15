@@ -117,6 +117,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sympatheticmoose",
+      "name": "David Harris",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19860021?v=4",
+      "profile": "https://github.com/sympatheticmoose",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
