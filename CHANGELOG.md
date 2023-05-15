@@ -1,3 +1,30 @@
+# (Mon May 15 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.3.1`
+  - Create Plugin: Fix react types errors [#238](https://github.com/grafana/plugin-tools/pull/238) ([@jackw](https://github.com/jackw))
+  - chore: update grafanaDependency for datasources [#247](https://github.com/grafana/plugin-tools/pull/247) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 📝 Documentation
+
+- create-plugin: documentation - add another webpack config example [#243](https://github.com/grafana/plugin-tools/pull/243) ([@briangann](https://github.com/briangann))
+- Website: Introduce Snippets for FE Package Managers [#233](https://github.com/grafana/plugin-tools/pull/233) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@1.3.1`
+  - docs: readme update for windows [#240](https://github.com/grafana/plugin-tools/pull/240) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 3
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Apr 28 2023)
 
 #### 🚀 Enhancement

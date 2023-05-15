@@ -1,3 +1,21 @@
+# v1.3.1 (Mon May 15 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix react types errors [#238](https://github.com/grafana/plugin-tools/pull/238) ([@jackw](https://github.com/jackw))
+- chore: update grafanaDependency for datasources [#247](https://github.com/grafana/plugin-tools/pull/247) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 📝 Documentation
+
+- docs: readme update for windows [#240](https://github.com/grafana/plugin-tools/pull/240) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 2
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v1.3.0 (Fri Apr 28 2023)
 
 #### 🚀 Enhancement
