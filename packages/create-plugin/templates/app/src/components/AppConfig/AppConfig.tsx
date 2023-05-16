@@ -1,35 +1,33 @@
 import React, { ChangeEvent, useState } from 'react';
+import { lastValueFrom } from 'rxjs';
 import { css } from '@emotion/css';
 import { AppPluginMeta, GrafanaTheme2, PluginConfigPageProps, PluginMeta } from '@grafana/data';
-import { getBackendSrv, locationService } from '@grafana/runtime';
+import { getBackendSrv } from '@grafana/runtime';
 import { Button, Field, FieldSet, Input, SecretInput, useStyles2 } from '@grafana/ui';
 import { testIds } from '../testIds';
 
-export type JsonData = {
+export type AppPluginSettings = {
   apiUrl?: string;
-  isApiKeySet?: boolean;
 };
 
 type State = {
   // The URL to reach our custom API.
   apiUrl: string;
   // Tells us if the API key secret is set.
-  // Set to `true` ONLY if it has already been set and haven't been changed.
-  // (We unfortunately need an auxiliray variable for this, as `secureJsonData` is never exposed to the browser after it is set)
   isApiKeySet: boolean;
   // An secret key for our custom API.
   apiKey: string;
 };
 
-interface Props extends PluginConfigPageProps<AppPluginMeta<JsonData>> {}
+export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<AppPluginSettings>> {}
 
-export const AppConfig = ({ plugin }: Props) => {
+export const AppConfig = ({ plugin }: AppConfigProps) => {
   const s = useStyles2(getStyles);
-  const { enabled, pinned, jsonData } = plugin.meta;
+  const { enabled, pinned, jsonData, secureJsonFields } = plugin.meta;
   const [state, setState] = useState<State>({
     apiUrl: jsonData?.apiUrl || '',
     apiKey: '',
-    isApiKeySet: Boolean(jsonData?.isApiKeySet),
+    isApiKeySet: Boolean(secureJsonFields?.apiKey),
   });
 
   const onResetApiKey = () =>
@@ -39,90 +37,37 @@ export const AppConfig = ({ plugin }: Props) => {
       isApiKeySet: false,
     });
 
-  const onChangeApiKey = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
-      apiKey: event.target.value.trim(),
-    });
-  };
-
-  const onChangeApiUrl = (event: ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      apiUrl: event.target.value.trim(),
+      [event.target.name]: event.target.value.trim(),
     });
   };
 
   return (
     <div data-testid={testIds.appConfig.container}>
-      {/* ENABLE / DISABLE PLUGIN */}
-      <FieldSet label="Enable / Disable">
-        {!enabled && (
-          <>
-            <div className={s.colorWeak}>The plugin is currently not enabled.</div>
-            <Button
-              className={s.marginTop}
-              variant="primary"
-              onClick={() =>
-                updatePluginAndReload(plugin.meta.id, {
-                  enabled: true,
-                  pinned: true,
-                  jsonData,
-                })
-              }
-            >
-              Enable plugin
-            </Button>
-          </>
-        )}
-
-        {/* Disable the plugin */}
-        {enabled && (
-          <>
-            <div className={s.colorWeak}>The plugin is currently enabled.</div>
-            <Button
-              className={s.marginTop}
-              variant="destructive"
-              onClick={() =>
-                updatePluginAndReload(plugin.meta.id, {
-                  enabled: false,
-                  pinned: false,
-                  jsonData,
-                })
-              }
-            >
-              Disable plugin
-            </Button>
-          </>
-        )}
-      </FieldSet>
-
-      {/* CUSTOM SETTINGS */}
-      <FieldSet label="API Settings" className={s.marginTopXl}>
-        {/* API Key */}
+      <FieldSet label="API Settings">
         <Field label="API Key" description="A secret key for authenticating to our custom API">
           <SecretInput
             width={60}
             data-testid={testIds.appConfig.apiKey}
-            id="api-key"
-            value={state?.apiKey}
+            name="apiKey"
+            value={state.apiKey}
             isConfigured={state.isApiKeySet}
             placeholder={'Your secret API key'}
-            onChange={onChangeApiKey}
+            onChange={onChange}
             onReset={onResetApiKey}
           />
         </Field>
 
-        {/* API Url */}
         <Field label="API Url" description="" className={s.marginTop}>
           <Input
             width={60}
-            id="api-url"
+            name="apiUrl"
             data-testid={testIds.appConfig.apiUrl}
-            label={`API Url`}
-            value={state?.apiUrl}
+            value={state.apiUrl}
             placeholder={`E.g.: http://mywebsite.com/api/v1`}
-            onChange={onChangeApiUrl}
+            onChange={onChange}
           />
         </Field>
 
@@ -136,7 +81,6 @@ export const AppConfig = ({ plugin }: Props) => {
                 pinned,
                 jsonData: {
                   apiUrl: state.apiUrl,
-                  isApiKeySet: true,
                 },
                 // This cannot be queried later by the frontend.
                 // We don't want to override it in case it was set previously and left untouched now.
@@ -169,24 +113,24 @@ const getStyles = (theme: GrafanaTheme2) => ({
   `,
 });
 
-const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<JsonData>>) => {
+const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<AppPluginSettings>>) => {
   try {
     await updatePlugin(pluginId, data);
 
     // Reloading the page as the changes made here wouldn't be propagated to the actual plugin otherwise.
     // This is not ideal, however unfortunately currently there is no supported way for updating the plugin state.
-    locationService.reload();
+    window.location.reload();
   } catch (e) {
     console.error('Error while updating the plugin', e);
   }
 };
 
 export const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
-  const response = await getBackendSrv().datasourceRequest({
+  const response = await getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',
     data,
   });
 
-  return response?.data;
+  return lastValueFrom(response);
 };
