@@ -27,7 +27,7 @@
     "@swc/helpers": "^0.5.0",
     "@swc/jest": "^0.2.26",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^12.1.4",
     "@types/jest": "^29.5.0",
     "@types/lodash": "^4.14.194",
     "@types/node": "^18.15.11",{{#if_eq pluginType "app"}}
@@ -42,7 +42,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "prettier": "^2.8.7",
     "replace-in-file-webpack-plugin": "^1.0.6",
-    "sass": "1.62.0",
+    "sass": "1.62.1",
     "sass-loader": "13.2.2",
     "style-loader": "3.3.2",
     "swc-loader": "^0.2.3",
