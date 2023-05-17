@@ -37,6 +37,8 @@ jobs:
         run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test datasource with backend plugin generation'
         run: yarn workspace @grafana/create-plugin run generate-datasource-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+      - name: '@grafana/create-plugin - test scenes app plugin generation'
+        run: yarn workspace @grafana/create-plugin run generate-scenes-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
 
       - name: '@grafana/sign-plugin - build'
         run: yarn workspace @grafana/sign-plugin run build

@@ -18,6 +18,7 @@ export const FIXTURES_PATH = path.join(__dirname, '..', 'fixtures');
 
 export const TEMPLATE_PATHS: Record<string, string> = {
   app: path.join(TEMPLATES_DIR, 'app'),
+  scenesapp: path.join(TEMPLATES_DIR, 'scenes-app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
   backendApp: path.join(TEMPLATES_DIR, 'backend-app'),
   common: path.join(TEMPLATES_DIR, 'common'),
@@ -32,13 +33,14 @@ export enum PLUGIN_TYPES {
   panel = 'panel',
   datasource = 'datasource',
   secretsmanager = 'secretsmanager',
+  scenes = 'scenesapp',
 }
 
 // This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaVersion: '9.3.8',
+  grafanaVersion: '9.5.0',
 };
 
 export const GRAFANA_FE_PACKAGES = [

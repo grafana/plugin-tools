@@ -52,7 +52,7 @@ export default function (plop: NodePlopAPI) {
       {
         name: 'pluginType',
         type: 'list',
-        choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel],
+        choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel, PLUGIN_TYPES.scenes],
         message: 'What type of plugin would you like?',
       },
       {
