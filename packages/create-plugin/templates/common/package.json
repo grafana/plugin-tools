@@ -30,7 +30,7 @@
     "@testing-library/react": "^12.1.4",
     "@types/jest": "^29.2.2",
     "@types/lodash": "^4.14.188",
-    "@types/node": "^18.11.9",{{#if_eq pluginType "app"}}
+    "@types/node": "^18.11.9",{{#if_eq pluginType "app" || pluginType "scenesapp"}}
     "@types/react-router-dom": "^5.3.3",{{/if_eq}}
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
@@ -60,9 +60,10 @@
     "@emotion/css": "^11.1.3",
     "@grafana/data": "{{ grafanaVersion }}",
     "@grafana/runtime": "{{ grafanaVersion }}",
-    "@grafana/ui": "{{ grafanaVersion }}",
+    "@grafana/ui": "{{ grafanaVersion }}",{{#if_eq pluginType "scenesapp"}}
+    "@grafana/scenes": "^0.7.0",{{/if_eq}}
     "react": "17.0.2",
-    "react-dom": "17.0.2",{{#if_eq pluginType "app"}}
+    "react-dom": "17.0.2",{{#if_eq pluginType "app" || pluginType "scenesapp"}}
     "react-router-dom": "^5.2.0",
     "rxjs": "7.5.7",{{/if_eq}}
     "tslib": "2.5.0"
