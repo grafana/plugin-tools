@@ -1,3 +1,22 @@
+# v1.3.2 (Thu May 18 2023)
+
+#### 🐛 Bug Fix
+
+- Chore: Update dev-dependencies [#232](https://github.com/grafana/plugin-tools/pull/232) ([@leventebalogh](https://github.com/leventebalogh) [@jackw](https://github.com/jackw))
+- Fix fonts not loaded correctly on generated bundles [#251](https://github.com/grafana/plugin-tools/pull/251) ([@academo](https://github.com/academo))
+
+#### 📝 Documentation
+
+- Create Plugin: Update readme for supported package managers [#244](https://github.com/grafana/plugin-tools/pull/244) ([@jackw](https://github.com/jackw))
+
+#### Authors: 3
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v1.3.1 (Mon May 15 2023)
 
 #### 🐛 Bug Fix
