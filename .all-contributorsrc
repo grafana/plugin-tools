@@ -127,6 +127,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "briangann",
+      "name": "Brian Gann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7364245?v=4",
+      "profile": "https://bkgann.wordpress.com/",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7
