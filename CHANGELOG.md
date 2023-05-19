@@ -1,3 +1,16 @@
+# (Fri May 19 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.3.3`
+  - create-plugin: updates for ci workflow [#242](https://github.com/grafana/plugin-tools/pull/242) ([@briangann](https://github.com/briangann))
+
+#### Authors: 1
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+
+---
+
 # (Thu May 18 2023)
 
 #### 🐛 Bug Fix
