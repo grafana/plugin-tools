@@ -15,7 +15,7 @@ type State = {
   apiUrl: string;
   // Tells us if the API key secret is set.
   isApiKeySet: boolean;
-  // An secret key for our custom API.
+  // A secret key for our custom API.
   apiKey: string;
 };
 
