@@ -108,9 +108,6 @@ const getStyles = (theme: GrafanaTheme2) => ({
   marginTop: css`
     margin-top: ${theme.spacing(3)};
   `,
-  marginTopXl: css`
-    margin-top: ${theme.spacing(6)};
-  `,
 });
 
 const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<AppPluginSettings>>) => {
