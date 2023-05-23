@@ -1,3 +1,16 @@
+# (Tue May 23 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.4.0`
+  - Create Plugin: App plugins with Top Nav support [#246](https://github.com/grafana/plugin-tools/pull/246) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri May 19 2023)
 
 #### 🐛 Bug Fix
