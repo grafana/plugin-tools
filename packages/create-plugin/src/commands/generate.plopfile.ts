@@ -88,12 +88,13 @@ export default function (plop: NodePlopAPI) {
       // Support the users package manager of choice.
       const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
       const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+      const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
       const templateData: TemplateData = {
         pluginId,
         packageManagerName,
         packageManagerInstallCmd,
         packageManagerVersion,
-        isAppType: pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes,
+        isAppType,
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
@@ -110,7 +111,7 @@ export default function (plop: NodePlopAPI) {
       });
 
       // Copy over backend-specific files (if selected)
-      const backendFolderPath = pluginType === PLUGIN_TYPES.app ? TEMPLATE_PATHS.backendApp : TEMPLATE_PATHS.backend;
+      const backendFolderPath = isAppType ? TEMPLATE_PATHS.backendApp : TEMPLATE_PATHS.backend;
       const backendActions = hasBackend
         ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath, templateData })
         : [];
