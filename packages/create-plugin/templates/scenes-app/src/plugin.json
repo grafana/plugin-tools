@@ -7,7 +7,7 @@
   "executable": "gpx_{{ snakeCase pluginName }}",{{/if}}
   "info": {
     "keywords": [
-      "app",
+      "app"
     ],
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {
