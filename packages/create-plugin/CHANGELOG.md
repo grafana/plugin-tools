@@ -1,3 +1,46 @@
+# v1.4.0 (Tue May 23 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: App plugins with Top Nav support [#246](https://github.com/grafana/plugin-tools/pull/246) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v1.3.3 (Fri May 19 2023)
+
+#### 🐛 Bug Fix
+
+- create-plugin: updates for ci workflow [#242](https://github.com/grafana/plugin-tools/pull/242) ([@briangann](https://github.com/briangann))
+
+#### Authors: 1
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+
+---
+
+# v1.3.2 (Thu May 18 2023)
+
+#### 🐛 Bug Fix
+
+- Chore: Update dev-dependencies [#232](https://github.com/grafana/plugin-tools/pull/232) ([@leventebalogh](https://github.com/leventebalogh) [@jackw](https://github.com/jackw))
+- Fix fonts not loaded correctly on generated bundles [#251](https://github.com/grafana/plugin-tools/pull/251) ([@academo](https://github.com/academo))
+
+#### 📝 Documentation
+
+- Create Plugin: Update readme for supported package managers [#244](https://github.com/grafana/plugin-tools/pull/244) ([@jackw](https://github.com/jackw))
+
+#### Authors: 3
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v1.3.1 (Mon May 15 2023)
 
 #### 🐛 Bug Fix

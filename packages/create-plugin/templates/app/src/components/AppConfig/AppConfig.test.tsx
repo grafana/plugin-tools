@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { PluginType } from '@grafana/data';
 import { AppConfig, AppConfigProps } from './AppConfig';
+import { testIds } from 'components/testIds';
 
 describe('Components/AppConfig', () => {
   let props: AppConfigProps;
@@ -23,29 +24,15 @@ describe('Components/AppConfig', () => {
     } as unknown as AppConfigProps;
   });
 
-  test('renders without an error"', () => {
-    render(<AppConfig plugin={props.plugin} query={props.query} />);
-
-    expect(screen.queryByText(/Enable \/ Disable/i)).toBeInTheDocument();
-  });
-
-  test('renders an "Enable" button if the plugin is disabled', () => {
+  test('renders the "API Settings" fieldset with API key, API url inputs and button', () => {
     const plugin = { meta: { ...props.plugin.meta, enabled: false } };
 
     // @ts-ignore - We don't need to provide `addConfigPage()` and `setChannelSupport()` for these tests
     render(<AppConfig plugin={plugin} query={props.query} />);
 
-    expect(screen.queryByText(/The plugin is currently not enabled./i)).toBeInTheDocument();
-    expect(screen.queryByText(/The plugin is currently enabled./i)).not.toBeInTheDocument();
-  });
-
-  test('renders a "Disable" button if the plugin is enabled', () => {
-    const plugin = { meta: { ...props.plugin.meta, enabled: true } };
-
-    // @ts-ignore - We don't need to provide `addConfigPage()` and `setChannelSupport()` for these tests
-    render(<AppConfig plugin={plugin} query={props.query} />);
-
-    expect(screen.queryByText(/The plugin is currently enabled./i)).toBeInTheDocument();
-    expect(screen.queryByText(/The plugin is currently not enabled./i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: /api settings/i })).toBeInTheDocument();
+    expect(screen.queryByTestId(testIds.appConfig.apiKey)).toBeInTheDocument();
+    expect(screen.queryByTestId(testIds.appConfig.apiUrl)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /save api settings/i })).toBeInTheDocument();
   });
 });
