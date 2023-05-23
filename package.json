@@ -5,17 +5,17 @@
   "author": "Grafana",
   "private": true,
   "scripts": {
-    "clean": "lerna run clean",
-    "build": "lerna run build --scope=\"@grafana/*\"",
-    "dev": "lerna run dev",
-    "docs": "yarn workspace website run start",
-    "docs:build": "yarn workspace website run build",
-    "lint": "lerna run lint",
-    "lint:fix": "lerna run lint:fix",
+    "clean": "nx run-many --target=clean",
+    "build": "nx run-many --target=build --parallel --exclude website",
+    "dev": "nx run-many --target=dev --parallel",
+    "docs": "nx run website:start",
+    "docs:build": "nx run website:build",
+    "lint": "nx run-many --target=lint --parallel",
+    "lint:fix": "nx run-many --target=lint:fix --parallel",
     "release": "auto shipit",
-    "test": "lerna run test",
+    "test": "nx run-many --target=test --parallel",
     "test:ci": "lerna run test --ci",
-    "typecheck": "lerna run typecheck"
+    "typecheck": "nx run-many --target=typecheck --parallel"
   },
   "devDependencies": {
     "@auto-it/all-contributors": "^10.37.6",
@@ -29,8 +29,9 @@
     "@types/node": "18.11.7",
     "auto": "^10.37.6",
     "jest": "^27.5.1",
-    "lerna": "^6.0.1",
+    "lerna": "6.6.1",
     "nodemon": "^2.0.13",
+    "nx": "16.2.1",
     "prettier": "2.5.1",
     "tsc-watch": "^4.5.0",
     "typescript": "^4.4.3"

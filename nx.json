@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test"]
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc"]
+    },
+    "test": {
+      "inputs": ["default", "{projectRoot}/jest.config.js", "{workspaceRoot}/jest.config.base.js"]
+    }
+  },
+  "namedInputs": {
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+  },
+  "affected": {
+    "defaultBase": "main"
+  },
+}
