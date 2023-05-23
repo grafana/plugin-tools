@@ -9,3 +9,11 @@ export type CliArgs = {
   hasGithubWorkflows: boolean;
   hasGithubLevitateWorkflow: boolean;
 };
+
+export type TemplateData = {
+  pluginId: string;
+  packageManagerName: string;
+  packageManagerInstallCmd: string;
+  packageManagerVersion: string;
+  isAppType: boolean;
+};

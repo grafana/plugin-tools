@@ -8,7 +8,7 @@ import { getExportPath } from '../utils/utils.path';
 import { getPackageManagerInstallCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
-import { CliArgs } from './types';
+import { CliArgs, TemplateData } from './types';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
@@ -88,11 +88,12 @@ export default function (plop: NodePlopAPI) {
       // Support the users package manager of choice.
       const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
       const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-      const templateData = {
+      const templateData: TemplateData = {
         pluginId,
         packageManagerName,
         packageManagerInstallCmd,
         packageManagerVersion,
+        isAppType: pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes,
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
@@ -105,12 +106,13 @@ export default function (plop: NodePlopAPI) {
       const pluginTypeSpecificActions = getActionsForTemplateFolder({
         folderPath: TEMPLATE_PATHS[pluginType],
         exportPath,
+        templateData,
       });
 
       // Copy over backend-specific files (if selected)
       const backendFolderPath = pluginType === PLUGIN_TYPES.app ? TEMPLATE_PATHS.backendApp : TEMPLATE_PATHS.backend;
       const backendActions = hasBackend
-        ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath })
+        ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath, templateData })
         : [];
 
       // Common, pluginType and backend actions can contain different templates for the same destination.
@@ -168,7 +170,7 @@ function getActionsForReadme({
   templateData,
 }: {
   exportPath: string;
-  templateData: Record<string, string>;
+  templateData: TemplateData;
 }): ModifyActionConfig[] {
   return [
     replacePatternWithTemplateInReadme(
@@ -196,7 +198,7 @@ function replacePatternWithTemplateInReadme(
   pattern: string,
   partialsFile: string,
   exportPath: string,
-  templateData: Record<string, string> = {}
+  templateData: TemplateData
 ): ModifyActionConfig {
   return {
     type: 'modify',
@@ -216,11 +218,11 @@ function replacePatternWithTemplateInReadme(
 function getActionsForTemplateFolder({
   folderPath,
   exportPath,
-  templateData = {},
+  templateData,
 }: {
   folderPath: string;
   exportPath: string;
-  templateData?: Record<string, string>;
+  templateData: TemplateData;
 }) {
   let files = glob.sync(`${folderPath}/**`, { dot: true });
 
