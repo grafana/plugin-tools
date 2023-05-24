@@ -18,6 +18,7 @@ export const FIXTURES_PATH = path.join(__dirname, '..', 'fixtures');
 
 export const TEMPLATE_PATHS: Record<string, string> = {
   app: path.join(TEMPLATES_DIR, 'app'),
+  scenesapp: path.join(TEMPLATES_DIR, 'scenes-app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
   backendApp: path.join(TEMPLATES_DIR, 'backend-app'),
   common: path.join(TEMPLATES_DIR, 'common'),
@@ -32,6 +33,7 @@ export enum PLUGIN_TYPES {
   panel = 'panel',
   datasource = 'datasource',
   secretsmanager = 'secretsmanager',
+  scenes = 'scenesapp',
 }
 
 // This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
