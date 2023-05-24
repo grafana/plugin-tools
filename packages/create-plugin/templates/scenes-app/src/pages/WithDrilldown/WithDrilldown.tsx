@@ -8,6 +8,8 @@ import {
   SceneFlexItem,
   SceneFlexLayout,
   SceneQueryRunner,
+  SceneTimePicker,
+  SceneTimeRange,
 } from '@grafana/scenes';
 import { getHumidityOverviewScene, getTemperatureOverviewScene } from './scenes';
 import { getRoomsTemperatureStats, getRoomsTemperatureTable } from './panels';
@@ -49,9 +51,10 @@ const getDrilldownsAppScene = () => {
   return new SceneApp({
     pages: [
       new SceneAppPage({
+        $timeRange: new SceneTimeRange({ from: 'now-6h', to: 'now' }),
         title: 'Page with drilldown',
         subTitle: 'This scene showcases a basic drilldown functionality. Interact with room to see room details scene.',
-
+        controls: [new SceneTimePicker({ isOnCanvas: true })],
         url: prefixRoute(`${ROUTES.WithDrilldown}`),
         hideFromBreadcrumbs: true,
         getScene,
