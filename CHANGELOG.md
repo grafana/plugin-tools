@@ -1,3 +1,25 @@
+# (Wed May 24 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.5.0`
+  - Create Plugin: Add scenes app scaffolding [#250](https://github.com/grafana/plugin-tools/pull/250) ([@dprokop](https://github.com/dprokop) [@jackw](https://github.com/jackw))
+
+#### 📝 Documentation
+
+- Docs: Add supported operating system section [#255](https://github.com/grafana/plugin-tools/pull/255) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Dominik Prokop ([@dprokop](https://github.com/dprokop))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue May 23 2023)
 
 #### 🚀 Enhancement
