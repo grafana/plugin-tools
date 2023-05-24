@@ -14,7 +14,7 @@
     "lint:fix": "nx run-many --target=lint:fix --parallel",
     "release": "auto shipit",
     "test": "nx run-many --target=test --parallel",
-    "test:ci": "lerna run test --ci",
+    "test:ci": "nx run-many --target=test --ci",
     "typecheck": "nx run-many --target=typecheck --parallel"
   },
   "devDependencies": {
