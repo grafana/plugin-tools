@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --prefer-offline
       - name: Build documentation website
-        run: yarn workspace website run build
+        run: yarn docs:build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
