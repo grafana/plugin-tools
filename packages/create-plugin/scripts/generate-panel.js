@@ -10,14 +10,19 @@ async function generate() {
   }
   const plop = await nodePlop(plopFile);
   const generator = plop.getGenerator('create-plugin');
-  await generator.runActions({
-    pluginName: 'my-plugin',
-    orgName: 'my-org',
-    pluginDescription: 'Auto-generated panel',
-    pluginType: 'panel',
-    hasGithubWorkflows: true,
-    hasGithubLevitateWorkflow: true,
-  });
+  await generator.runActions(
+    {
+      pluginName: 'my-plugin',
+      orgName: 'my-org',
+      pluginDescription: 'Auto-generated panel',
+      pluginType: 'panel',
+      hasGithubWorkflows: true,
+      hasGithubLevitateWorkflow: true,
+    },
+    {
+      onFailure: console.error,
+    }
+  );
 }
 
 generate();
