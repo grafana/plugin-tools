@@ -3,7 +3,7 @@ id: folder-structure
 title: Folder Structure
 ---
 
-After creation, your project should look similar to this:
+After you install the `create-plugin` tool and have answered the prompts, your project should look similar to this:
 
 ```
 myorg-myplugin-datasource/
@@ -43,17 +43,19 @@ myorg-myplugin-datasource/
 
 ## Required files
 
-For the plugin to function, **these files must exist with exact filenames**:
+You must have files with these exact filenames:
 
 | Filename            | Description                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------ |
-| `./go.mod`          | Go modules dependencies, [reference](https://golang.org/cmd/go/#hdr-The_go_mod_file) |
-| `./src/plugin.json` | A JSON file describing the plugin                                                    |
-| `./src/module.ts`   | The entry point of the frontend plugin                                               |
-| `./pkg/main.go`     | The entry point of the backend plugin                                                |
+| `./go.mod`          | Go modules dependencies. Refer to [Golang documentation](https://golang.org/cmd/go/#hdr-The_go_mod_file) |
+| `./src/plugin.json` | A JSON file describing the plugin.                                                    |
+| `./src/module.ts`   | The entry point of the frontend plugin.                                             |
+| `./pkg/main.go`     | The entry point of the backend plugin.                                                |
 
-These files are optional:
+## Optional files
+
+These files in your project are optional:
 
 | Filename        | Description                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `./Magefile.go` | Whilst not required we strongly recommend using mage build files so that you can use the build targets provided by the backend plugin SDK. |
+| `./Magefile.go` | Optional: We strongly recommend using mage build files so that you can use the build targets provided by the backend plugin SDK. |
