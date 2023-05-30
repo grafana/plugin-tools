@@ -12,7 +12,7 @@
     "docs:build": "yarn workspace website run build",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
-    "release": "auto shipit -vv",
+    "release": "auto shipit",
     "test": "lerna run test",
     "test:ci": "lerna run test --ci",
     "typecheck": "lerna run typecheck"
