@@ -1,3 +1,17 @@
+# v1.5.1 (Wed May 31 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix lint:fix not passing args with NPM [#265](https://github.com/grafana/plugin-tools/pull/265) ([@jackw](https://github.com/jackw))
+- Scripts: Add error-handling to generator scripts [#257](https://github.com/grafana/plugin-tools/pull/257) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v1.5.0 (Wed May 24 2023)
 
 :tada: This release contains work from a new contributor! :tada:

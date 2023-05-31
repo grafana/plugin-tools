@@ -1,3 +1,23 @@
+# (Wed May 31 2023)
+
+#### 🐛 Bug Fix
+
+- CI: Use a GH app token [#259](https://github.com/grafana/plugin-tools/pull/259) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@1.5.1`
+  - Create Plugin: Fix lint:fix not passing args with NPM [#265](https://github.com/grafana/plugin-tools/pull/265) ([@jackw](https://github.com/jackw))
+  - Scripts: Add error-handling to generator scripts [#257](https://github.com/grafana/plugin-tools/pull/257) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### 📝 Documentation
+
+- Website: Add explanation for scenes app and link [#256](https://github.com/grafana/plugin-tools/pull/256) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Wed May 24 2023)
 
 :tada: This release contains work from a new contributor! :tada:
