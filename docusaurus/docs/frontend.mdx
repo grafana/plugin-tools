@@ -3,8 +3,11 @@ id: frontend
 title: Frontend
 ---
 
-The frontend part of a Grafana plugin is written in Typescript with React as the view library. Within the plugin directory, you can run:
+Develop the frontend part of a Grafana plugin in Typescript with ReactJS as the View library. Several commands are available within the `plugin` directory for interacting with the frontend.
 
+## Frontend CLI reference
+
+You can run the following commands when developing your plugin:
 
 ### <SyncCommand cmd="run dev" />
 
@@ -12,21 +15,20 @@ Builds the plugin in development mode and watches for changes to source code to 
 
 ### <SyncCommand cmd="run build" />
 
-
 Builds the plugin for production. The output can be found in the `./dist` directory.
+
 ### <SyncCommand cmd="run test" />
 
-
 Launches the test runner in watch mode.
+
 ### <SyncCommand cmd="run e2e" />
 
+Launches the e2e test runner. Make sure to have an instance of Grafana running before you run e2e tests.
 
-Launches the e2e test runner. (Make sure to have an instance of Grafana running before running e2e tests.)
 ### <SyncCommand cmd="run lint" />
 
+Runs the linter against source code to verify that you have adhered to the formatting and styling rules.
 
-Run the linter against source code to verify formatting and styling rules are adherred to.
 ### <SyncCommand cmd="run lint:fix" />
 
-
-Run the linter in fix mode to automatically format the frontend code.
+Runs the linter in fix mode to automatically format the frontend code.
