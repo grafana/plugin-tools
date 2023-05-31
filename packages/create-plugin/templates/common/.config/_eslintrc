@@ -6,8 +6,10 @@
  */
 {
   "extends": ["@grafana/eslint-config"],
+  "plugins": ["deprecation"],
   "root": true,
   "rules": {
+    "deprecation/deprecation": "warn",
     "react/prop-types": "off"
   }
 }

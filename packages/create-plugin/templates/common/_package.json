@@ -34,6 +34,7 @@
     "@types/react-router-dom": "^5.3.3",{{/if}}
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
+    "eslint-plugin-deprecation": "^1.4.1",
     "eslint-webpack-plugin": "^4.0.1",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
     "glob": "^10.2.7",
