@@ -3,17 +3,18 @@ id: migrating-from-toolkit
 title: Migrating from Grafana Toolkit
 ---
 
-If you are using `@grafana/toolkit` to scaffold and develop plugins, follow this guide to make the jump to our newest plugin tools.
+The `@grafana/toolkit` tool is now [deprecated](https://grafana.com/docs/grafana/next/breaking-changes/breaking-changes-v10-0/#grafanatoolkit-cli-commands-have-been-removed-and-migrated-to-the-create-plugin-package). If you are still using `@grafana/toolkit` to scaffold and develop plugins, follow this guide to make the jump to our newest plugin tools.
 
 :::caution
 Our plugin tools use ReactJS. We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in Angular.
 :::
 
-## Why migrate to the `create-plugin` tool?
+## Benefits of migrating to the `create-plugin` tool
 
 - **More flexible:** With `create-plugin`, you have more control over your plugins and its dependencies. The additional control translates into greater ease of customizing the tooling to fit your specific needs.
 - **Faster development:** With its out-of-the-box development environment, `create-plugin` can significantly reduce development time compared to using `grafana-toolkit`.
 - **Improved testing capabilities:** Easily test plugins with `create-plugin` GitHub workflows that automate unit and e2e test runs whenever you push changes to GitHub. 
+- **Technical support:** The `grafana-toolkit` tool is deprecated and no longer supported by Grafana.
 - **Better documentation:** The documentation for `create-plugin` is more comprehensive and easier to discover than `grafana-toolkit`.
 
 ## Migrate your plugin to create-plugin

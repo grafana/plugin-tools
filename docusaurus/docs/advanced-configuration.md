@@ -3,12 +3,10 @@ id: advanced-configuration
 title: Advanced Configuration
 ---
 
-The plugin `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
+The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
 
 :::danger
-
-Customize the plugin tooling at your own risk. If you choose to extend the tooling configurations, then you may experience issues such as failure to compile or load in Grafana.
-
+Do not edit the `.config/` directory or extend the tooling configurations. If you attempt to do so, then you may experience issues such as failure to compile or load in Grafana. Instead of changing the files directly, follow the instructions in this topic to make advanced configurations.
 :::
 
 ## Extend the ESLint config
