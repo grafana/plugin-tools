@@ -3,7 +3,7 @@ id: ci
 title: Continuous Integration
 ---
 
-Automate your development process to minimize errors and make it faster and more cost-efficient. Use the Continuous Integration (CI) features of the Grafana `create-plugin` tool to help automate your development process.
+Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
 
 ## The CI workflow
 

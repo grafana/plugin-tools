@@ -3,9 +3,7 @@ id: backend
 title: Backend
 ---
 
-The preferred language for developing backend components of a Grafana plugin is [Go](https://go.dev/). 
-
-The following commands are frequently used to manage Go during plugin development:
+Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used to manage Go during plugin development:
 
 ## Update the Go SDK
 
