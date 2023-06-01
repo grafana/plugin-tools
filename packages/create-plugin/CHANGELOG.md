@@ -1,3 +1,19 @@
+# v1.5.2 (Thu Jun 01 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Alex Simonok ([@asimonok](https://github.com/asimonok)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix Code Coverage for JSX files [#271](https://github.com/grafana/plugin-tools/pull/271) ([@asimonok](https://github.com/asimonok))
+
+#### Authors: 1
+
+- Alex Simonok ([@asimonok](https://github.com/asimonok))
+
+---
+
 # v1.5.1 (Wed May 31 2023)
 
 #### 🐛 Bug Fix

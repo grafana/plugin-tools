@@ -1,3 +1,22 @@
+# (Thu Jun 01 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Alex Simonok ([@asimonok](https://github.com/asimonok)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Tooling: Use NX instead of Lerna for running tasks [#260](https://github.com/grafana/plugin-tools/pull/260) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@1.5.2`
+  - Create Plugin: Fix Code Coverage for JSX files [#271](https://github.com/grafana/plugin-tools/pull/271) ([@asimonok](https://github.com/asimonok))
+
+#### Authors: 2
+
+- Alex Simonok ([@asimonok](https://github.com/asimonok))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed May 31 2023)
 
 #### 🐛 Bug Fix
