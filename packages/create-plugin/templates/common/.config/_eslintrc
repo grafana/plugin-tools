@@ -6,6 +6,9 @@
  */
 {
   "extends": ["@grafana/eslint-config"],
+  "parserOptions": {
+    "project": "../tsconfig.json"
+  },
   "plugins": ["deprecation"],
   "root": true,
   "rules": {
