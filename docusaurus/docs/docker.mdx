@@ -3,26 +3,26 @@ id: docker
 title: Docker Development Environment
 ---
 
-`@grafana/create-plugin` includes a development environment that uses Docker to start an instance of the Grafana application for plugin developers to code against.
+The `create-plugin` tool includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
 
-:::info
-[Docker](https://docs.docker.com/get-docker/) simplifies the process of creating, deploying, and running applications. It is useful for development as it allows the creation of consistent and isolated environments for applications. This makes it easy to manage dependencies and ensure that the application runs the same way across different machines.
-:::
+## Why use the Docker environment
 
-The Docker container is configured with the necessary variables to allow easy access to grafana and to load plugins without the need for them to be signed. It also adds a live reload feature allowing frontend changes to trigger browser refreshes whenever the frontend code changes.
+We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
 
-To get started run the following commands in the order listed:
+With the `create-plugin` tool, the Docker container is configured with the necessary variables to allow easy access to Grafana and to load plugins without the need for them to be signed. The plugin tool also adds a live reload feature that allows you to make your frontend code changes to trigger refreshes in the browser.
 
-- <SyncCommand cmd="install" />: Install frontend dependencies.
-- <SyncCommand cmd="run dev" />: Build and watch the plugin frontend code.
-- `mage -v build:linux`: Build the plugin backend code. This command must be rerun every time you edit your backend files.
-- <SyncCommand cmd="run server" />: Start a grafana development server running on
-  [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend
-  code.
+## Get started with Docker
+
+To start your plugin development project, run the following commands in the order listed:
+
+1. <SyncCommand cmd="install" />: Installs frontend dependencies.
+1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
+1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
+1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend code.
 
 ### Configure the Grafana version
 
-You can use the environment variable `GRAFANA_VERSION` to set the Grafana version whilst developing the plugin. This is useful for testing a plugin across different versions of Grafana.
+To test a plugin across different versions of Grafana, set an environment variable. Use `GRAFANA_VERSION` to set the Grafana version:
 
 <CodeSnippets
   paths={[
@@ -36,9 +36,7 @@ You can use the environment variable `GRAFANA_VERSION` to set the Grafana versio
 
 ### Configure the Grafana image
 
-`grafana-enterprise` is the default Docker image. To override this image alter the `docker-compose.yaml` adding the following build arg `grafana_image`.
-
-**Example:**
+The default Docker image in the plugin tool is `grafana-enterprise`. If you want to override this image, alter the `docker-compose.yaml` by adding the `grafana_image` build argument like so:
 
 ```yaml
 version: '3.7'
@@ -53,4 +51,4 @@ services:
         grafana_image: ${GRAFANA_IMAGE:-grafana}
 ```
 
-This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the possibility to set the value when running `docker-compose` commands.
+This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker-compose` commands.

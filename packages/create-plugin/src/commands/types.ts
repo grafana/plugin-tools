@@ -16,4 +16,5 @@ export type TemplateData = {
   packageManagerInstallCmd: string;
   packageManagerVersion: string;
   isAppType: boolean;
+  isNPM: boolean;
 };
