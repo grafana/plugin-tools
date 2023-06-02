@@ -58,4 +58,4 @@ These files in your project are optional:
 
 | Filename        | Description                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `./Magefile.go` | Optional: We strongly recommend using mage build files so that you can use the build targets provided by the backend plugin SDK. |
+| `./Magefile.go` | We strongly recommend using mage build files so that you can use the build targets provided by the backend plugin SDK. |
