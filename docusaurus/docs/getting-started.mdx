@@ -3,14 +3,16 @@ id: getting-started
 title: Getting Started
 ---
 
-Create Plugin is the officially supported way to develop plugins to extend Grafana in amazing ways! It offers a modern build setup with zero configuration.
+Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration. 
 
-Plugin tools consists of two packages:
+The plugin tools consist of two packages:
 
-- `create-plugin`: A command-line utility to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
-- `sign-plugin`: A command-line utility to sign plugins for distribution.
+- `create-plugin`: A CLI to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
+- `sign-plugin`: A CLI to sign plugins for distribution.
 
 ## Quick Start
+
+To scaffold your plugin, run the following command and follow the prompts: 
 
 <CodeSnippets
   paths={[
@@ -22,15 +24,19 @@ Plugin tools consists of two packages:
   queryString="current-package-manager"
 />
 
-Follow the prompts to scaffold a Grafana plugin. [See here](./creating-a-plugin.mdx) for detailed information about creating a plugin.
+For next steps, see [Creating a plugin](./creating-a-plugin.mdx) 
 
 :::note
 
-Plugins previously scaffolded with `@grafana/toolkit` can be migrated. Please see [this migration guide](./migrating-from-toolkit).
+If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to simplify migration. For more information, refer to the [Migration guide](./migrating-from-toolkit).
 
 :::
 
-### What you'll need
+### Before you begin 
+
+Make sure you are using supported a supported OS, Grafana version, and tooling.
+
+#### Supported operating systems
 
 - [Go](https://go.dev/doc/install) version 1.18 or above
 - [Mage](https://magefile.org/)
@@ -38,27 +44,42 @@ Plugins previously scaffolded with `@grafana/toolkit` can be migrated. Please se
 - Optionally [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
 - [Docker](https://docs.docker.com/get-docker/)
 
-### Supported Operating Systems
-Create Plugin currently supports the following operating systems:
+Grafana plugin tools work with the following operating systems:
 
 - Linux
 - macOS
 - Windows 10+ with WSL (Windows Subsystem for Linux)
 
-### Choosing a package manager
-Starting from v1.3 of Create Plugin when you create a new plugin, the CLI will use `npm`, `pnpm` or `yarn` depending on which tool you use to run `@grafana/create-plugin`.
+#### Supported Grafana version
+
+We generally recommend that you build for a version of Grafana later than v9.0. For more information about requirements and dependencies when developing with Grafana, see the [Grafana developer's guide](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md).
+
+#### Recommended tooling
+
+You'll need to have the following tools set up:
+
+- [Go](https://go.dev/doc/install) version 1.18 or later.
+- [Mage](https://magefile.org/).
+- [Node.js](https://nodejs.org/en/download/) version 16 or later.
+  - We recommend that you should install Node.js with all checkboxes related to dependencies checked.
+- [Docker](https://docs.docker.com/get-docker/).
+- Optional: [Yarn 1 (Classic)](https://classic.yarnpkg.com/lang/en/docs/install) or [pnpm](https://pnpm.io/installation).
+
+#### Choose a package manager
+
+When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
 
 ## Output
 
-Running the above command will create a directory called `<orgName>-<pluginName>-<pluginType>` inside the current directory. Within this new directory is the initial project structure to kickstart development.
+Run the above command to create a directory called `<orgName>-<pluginName>-<pluginType>` inside the current directory. This directory contains  the initial project structure to kickstart your plugin development.
 
 :::info
 
-The directory name `<orgName>-<pluginName>-<pluginType>` is based on the answers given by the prompts. Please replace any commands with the name of the generated folder.
+The directory name `<orgName>-<pluginName>-<pluginType>` is based on the answers you gave to the prompts. Use the name of the generated folder when prompted.
 
 :::
 
-Depending on the answers given to the prompts there should be a structure like:
+Depending on the answers you gave to the prompts, there should now be a structure like:
 
 ```
 <orgName>-<pluginName>-<pluginType>
@@ -96,7 +117,7 @@ Depending on the answers given to the prompts there should be a structure like:
 └── tsconfig.json
 ```
 
-Once the installation is done you can open the plugin folder:
+When you've finished installing the tools, open the plugin folder:
 
 <CodeSnippets
   paths={[
@@ -108,22 +129,22 @@ Once the installation is done you can open the plugin folder:
   queryString="current-package-manager"
 />
 
-## Scripts
+## Key CLI commands
 
-Inside the newly create plugin, you can run some built-in commands:
+After `create-plugin` has finished, you can run built-in commands in the shell:
 
 ### <SyncCommand cmd="run dev" />
 
-Builds plugin in development mode and runs in watch mode. The plugin will be rebuilt whenever you make changes to the code. You will see build errors and lint warnings in the console.
+Builds the plugin in _development mode_ and runs in _watch mode_. Rebuilds the plugin whenever you make changes to the code. You'll see build errors and lint warnings in the console.
 
 ### <SyncCommand cmd="run test" />
 
-Runs the tests and watches for changes
+Runs the tests and watches for changes.
 
 ### <SyncCommand cmd="run build" />
 
-Creates a production build of the plugin optimizing for the best performance. The build is minified and the filenames include hashes.
+Creates a production build of the plugin that optimizes for the best performance. Minifies the build and includes hashes in the filenames.
 
 <h3><code>mage -v</code></h3>
 
-Build backend plugin binaries for Linux, Windows and Darwin.
+Builds backend plugin binaries for Linux, Windows and Darwin.
