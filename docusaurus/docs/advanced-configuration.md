@@ -3,21 +3,15 @@ id: advanced-configuration
 title: Advanced Configuration
 ---
 
-The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a plugin.
+The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
 
 :::danger
-
-To make future updates easier do **not** edit files in the `.config` directory. Instead, follow the directions in this article to customise the tooling configurations.
-
+Do not edit the `.config/` directory or extend the tooling configurations. If you attempt to do so, then you may experience issues such as failure to compile or load in Grafana. Instead of changing the files directly, follow the instructions in this topic to make advanced configurations.
 :::
 
-## How to extend the configs?
+## Extend the ESLint config
 
-Note that you are doing this at your own risk. Extending the tooling configurations may lead to issues such as failing to compile the plugin or problems loading the plugin in Grafana.
-
-### Extend the ESLint config
-
-Edit the `.eslintrc` file in the project root to extend the ESLint configuration.
+Edit the `.eslintrc` file in the project root to extend the ESLint configuration:
 
 **Example:**
 
@@ -33,9 +27,9 @@ Edit the `.eslintrc` file in the project root to extend the ESLint configuration
 
 ---
 
-### Extend the Prettier config
+## Extend the Prettier config
 
-Edit the `.prettierrc.js` file in the project root to extend the Prettier configuration.
+Edit the `.prettierrc.js` file in the project root to extend the Prettier configuration:
 
 **Example:**
 
@@ -49,17 +43,21 @@ module.exports = {
 
 ---
 
-### Extend the Jest config
+## Extend the Jest config
 
 There are two files in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
 
-**`jest-setup.js`:** This file is run before each test file in the suite is executed. It will set up Jest DOM for the testing library and apply some polyfills. ([link to Jest docs](https://jestjs.io/docs/configuration#setupfilesafterenv-array))
+**`jest-setup.js`:** This file is run before each test file in the suite is executed. It sets up Jest DOM for the testing library and applies some polyfills. For more information, refer to the ([Jest documentation](https://jestjs.io/docs/configuration#setupfilesafterenv-array)).
 
-**`jest.config.js`:** The Jest config file that extends the Grafana config. ([link to Jest docs](https://jestjs.io/docs/configuration))
+**`jest.config.js`:** This is the Jest config file that extends the Grafana config. For more information, refer to the ([est documentation](https://jestjs.io/docs/configuration)).
 
-#### ESM errors with Jest
+### ESM errors with Jest
 
-A common issue with the current jest config involves importing an npm package which only offers an ESM build. These packages cause jest to error with `SyntaxError: Cannot use import statement outside a module`. To work around this we provide a list of known packages to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` jest configuration property. These packages can be extended in the following way:
+A common issue with the current Jest config involves importing an npm package which only offers an ESM build. These packages cause Jest to generate the error: `SyntaxError: Cannot use import statement outside a module`. 
+
+To work around this issue, use one of the packages known to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` Jest configuration property. 
+
+To use these packages, extend them in the following way:
 
 ```javascript
 process.env.TZ = 'UTC';
@@ -68,22 +66,22 @@ const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/uti
 module.exports = {
   // Jest configuration provided by @grafana/create-plugin
   ...require('./.config/jest.config'),
-  // Inform jest to only transform specific node_module packages.
+  // Inform Jest to only transform specific node_module packages.
   transformIgnorePatterns: [nodeModulesToTransform([...grafanaESModules, 'packageName'])],
 };
 ```
 
 ---
 
-### Extend the TypeScript config
+## Extend the TypeScript config
 
-Edit the `tsconfig.json` file in the project root in order to extend the TypeScript configuration.
+To extend the TS configuration, edit the `tsconfig.json` file in the project root:
 
 **Example:**
 
 ```json
 {
-  // Typescript configuration provided by @grafana/create-plugin
+  // TypeScript configuration provided by @grafana/create-plugin
   "extends": "./.config/tsconfig.json",
   "compilerOptions": {
     "preserveConstEnums": true
@@ -93,17 +91,17 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 ---
 
-### Extend the Webpack config
+## Extend the Webpack config
 
 Follow these steps to extend the Webpack configuration that lives in `.config/`:
 
-#### 1. Create a new Webpack configuration file
+### 1. Create a new Webpack configuration file
 
-Create a `webpack.config.ts` file in the project root. This file will extend the webpack config provided by @grafana/create-plugin.
+Create a `webpack.config.ts` file in the project root. This file extends the Webpack config provided by `create-plugin`.
 
-#### 2. Merge the Grafana config with your custom config
+### 2. Merge the Grafana config with your custom config
 
-Use [webpack-merge](https://github.com/survivejs/webpack-merge) for this.
+Use the following [webpack-merge](https://github.com/survivejs/webpack-merge) command:
 
 ```typescript
 // webpack.config.ts
@@ -125,7 +123,7 @@ const config = async (env): Promise<Configuration> => {
 export default config;
 ```
 
-This is a more complete customization that excludes "libs" via rules in addition to "node_modules", and also provides fallbacks that are no longer present in webpack v5.
+The following alternative customization excludes "libs" via rules in addition to "node_modules". It also provides fallbacks that are no longer present in Webpack v5.
 
 ```typescript
 import type { Configuration } from 'webpack';
@@ -164,9 +162,9 @@ const config = async (env: any): Promise<Configuration> => {
 export default config;
 ```
 
-#### 3. Update the `package.json` to use the new Webpack config
+### 3. Update the `package.json` to use the new Webpack config
 
-Update the `scripts` in the `package.json` to use the extended Webpack configuration.
+Update the `scripts` in the `package.json` to use the extended Webpack configuration:
 
 **Update `build`:**
 

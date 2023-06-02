@@ -10,7 +10,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref }}
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v3
         with:
@@ -21,27 +23,27 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --prefer-offline
       - name: Check types
-        run: yarn typecheck
+        run: yarn nx affected -t typecheck --parallel
       - name: Lint
-        run: yarn lint
+        run: yarn nx affected -t lint --parallel
       - name: Unit tests
-        run: yarn test:ci
+        run: yarn nx affected -t test --ci
+      - name: Build all packages
+        run: yarn build
 
       - name: '@grafana/create-plugin - test an app plugin generation'
-        run: yarn workspace @grafana/create-plugin run generate-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: yarn nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test an app with backend plugin generation'
-        run: yarn workspace @grafana/create-plugin run generate-app-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: yarn nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test panel plugin generation'
-        run: yarn workspace @grafana/create-plugin run generate-panel && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: yarn nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test datasource plugin generation'
-        run: yarn workspace @grafana/create-plugin run generate-datasource && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: yarn nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test datasource with backend plugin generation'
-        run: yarn workspace @grafana/create-plugin run generate-datasource-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: yarn nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
       - name: '@grafana/create-plugin - test scenes app plugin generation'
-        run: yarn workspace @grafana/create-plugin run generate-scenes-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: yarn nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
 
-      - name: '@grafana/sign-plugin - build'
-        run: yarn workspace @grafana/sign-plugin run build
       - name: '@grafana/sign-plugin - sign generated plugin'
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
@@ -56,9 +58,16 @@ jobs:
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PEM }}
+
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_BOT_ACCESS_TOKEN }}
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Prepare repository
         run: git fetch --unshallow --tags
@@ -78,7 +87,7 @@ jobs:
 
       - name: Create Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_BOT_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: yarn release

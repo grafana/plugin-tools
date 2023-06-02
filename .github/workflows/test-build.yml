@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/deploy.yml'
-      - '.github/workflows/test-deploy.yml'
+      - '.github/workflows/test-build.yml'
       - 'docusaurus/**'
 
 jobs:
@@ -26,4 +26,4 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --prefer-offline
       - name: Build documentation website
-        run: yarn workspace website run build
+        run: yarn docs:build

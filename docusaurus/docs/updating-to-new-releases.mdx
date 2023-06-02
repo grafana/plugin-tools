@@ -3,7 +3,7 @@ id: updating-to-new-releases
 title: Updating to New Releases
 ---
 
-To update an existing plugin to use a newer version of `create-plugin` run the following update command:
+To update an existing plugin to use a newer version of the `create-plugin` tool, run the following command:
 
 <CodeSnippets
   paths={['createplugin-update.npm.shell.md', 'createplugin-update.pnpm.shell.md', 'createplugin-update.yarn.shell.md']}
@@ -11,32 +11,34 @@ To update an existing plugin to use a newer version of `create-plugin` run the f
   queryString="current-package-manager"
 />
 
-This command will rerun the original scaffolding commands against the configuration files, dependencies, and scripts, using the latest version of `create-plugin`. It will prompt to confirm any destructive operations are agreed to prior to being run.
+This command reruns the original scaffolding commands against the configuration files, dependencies, and scripts. It automatically uses the latest version of the `create-plugin` tool. It prompts you to confirm any destructive operations before it runs.
 
 :::tip
-It's recommended that all prompts are agreed to so configs, dependencies and scripts are kept in sync.
+We recommended that you normally agree to all prompts so that configs, dependencies, and scripts are kept in sync.
 :::
 
 ## Prompts
 
-When running the update command the following prompts will appear asking for confirmation before making changes. Due to their destructive nature the default for each of the following prompts is `no`.
+When you run the `update` command, you are prompted with the following questions. The default for each prompt is `No`.
 
 ### Would you like to update the project's configuration?
 
-Selecting `y` will replace the files inside the `.config` directory to make sure the plugin is built and tested with the latest Grafana recommended configurations.
+Select `y` to replace the files inside the `.config` directory. By doing so, you can make sure that the plugin is built and tested with the latest Grafana recommended configurations.
 
-### Would you like to update the following dependencies in the package.json?
+### Would you like to update the following dependencies in the `package.json`?
 
-This step is skipped if there are no dependencies to update otherwise select from the following choices:
+Select from the following choices:
 
-- Selecting `Yes, all of them` will update all existing dependencies and add any missing dependencies to `package.json`.
-- Selecting `Yes, but only the outdated ones` will update all existing dependencies in `package.json`.
-- Selecting `No` will skip this step preventing any dependency updates.
+- **`Yes, all of them`:** This updates all existing dependencies and adds any missing dependencies to `package.json`.
+- **`Yes, but only the outdated ones`:** This updates all existing dependencies in `package.json`.
+- **`No`:** This choice skips this step, thus preventing any dependency updates.
 
-### Would you like to update the scripts in your package.json? All scripts using grafana-toolkit will be replaced.
+Note that if there are no dependencies then you will not see this prompt.
 
-This step will update any npm scripts in the `package.json` file to match the latest configurations. Any scripts that were previously using `grafana-toolkit` will be replaced.
+### Would you like to update the scripts in your `package.json`? All scripts using grafana-toolkit will be replaced.
+
+Select 'y' to update any npm scripts in the `package.json` file to match the latest configurations. Any scripts that previously used `grafana-toolkit` are replaced.
 
 :::caution
-Whilst as much care as possible is taken to ensure this doesn't break things it’s always good to consult the [changelog](https://github.com/grafana/plugin-tools/blob/main/CHANGELOG.md) for potential breaking changes.
+We strongly recommend that you consult the [changelog](https://github.com/grafana/plugin-tools/blob/main/CHANGELOG.md) for potential breaking changes before making changes to your configuration.
 :::

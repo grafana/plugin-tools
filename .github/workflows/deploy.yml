@@ -13,6 +13,13 @@ jobs:
     name: Deploy docs to GitHub Pages
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PEM }}
+
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup node
@@ -25,14 +32,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --prefer-offline
       - name: Build documentation website
-        run: yarn workspace website run build
+        run: yarn docs:build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GH_BOT_ACCESS_TOKEN }}
+          github_token: ${{ steps.generate_token.outputs.token }}
           # Build output to publish to the `gh-pages` branch:
           publish_dir: ./docusaurus/website/build
           # The following lines assign commit authorship to the official
