@@ -26,7 +26,7 @@ const config = async (env): Promise<Configuration> => ({
     },
   },
 
-  context: path.join(process.cwd(), SOURCE_DIR),
+  context: process.cwd(),
 
   devtool: env.production ? 'source-map' : 'eval-source-map',
 
@@ -143,16 +143,16 @@ const config = async (env): Promise<Configuration> => ({
         // If src/README.md exists use it; otherwise the root README
         // To `compiler.options.output`
         { from: hasReadme() ? 'README.md' : '../README.md', to: '.', force: true },
-        { from: 'plugin.json', to: '.' },
+        { from: 'plugin.json', to: '.', context: SOURCE_DIR + '/' },
         { from: '../LICENSE', to: '.' },
         { from: '../CHANGELOG.md', to: '.', force: true },
         { from: '**/*.json', to: '.' }, // TODO<Add an error for checking the basic structure of the repo>
-        { from: '**/*.svg', to: '.', noErrorOnMissing: true }, // Optional
-        { from: '**/*.png', to: '.', noErrorOnMissing: true }, // Optional
-        { from: '**/*.html', to: '.', noErrorOnMissing: true }, // Optional
-        { from: 'img/**/*', to: '.', noErrorOnMissing: true }, // Optional
-        { from: 'libs/**/*', to: '.', noErrorOnMissing: true }, // Optional
-        { from: 'static/**/*', to: '.', noErrorOnMissing: true }, // Optional
+        { from: '**/*.svg', to: '.', context: SOURCE_DIR + '/', noErrorOnMissing: true }, // Optional
+        { from: '**/*.png', to: '.', context: SOURCE_DIR + '/', noErrorOnMissing: true }, // Optional
+        { from: '**/*.html', to: '.', context: SOURCE_DIR + '/', noErrorOnMissing: true }, // Optional
+        { from: 'img/**/*', to: '.', context: SOURCE_DIR + '/', noErrorOnMissing: true }, // Optional
+        { from: 'libs/**/*', to: '.', context: SOURCE_DIR + '/', noErrorOnMissing: true }, // Optional
+        { from: 'static/**/*', to: '.', context: SOURCE_DIR + '/', noErrorOnMissing: true }, // Optional
       ],
     }),
     // Replace certain template-variables in the README and plugin.json
@@ -181,7 +181,7 @@ const config = async (env): Promise<Configuration> => ({
       issue: {
         include: [{ file: '**/*.{ts,tsx}' }],
       },
-      typescript: { configFile: path.join(process.cwd(), 'tsconfig.json') },
+      typescript: { configFile: path.join(process.cwd(), 'tsconfig.json'), context: process.cwd() },
     }),
     new ESLintPlugin({
       extensions: ['.ts', '.tsx'],
