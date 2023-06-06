@@ -56,6 +56,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://bkgann.wordpress.com/"><img src="https://avatars.githubusercontent.com/u/7364245?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brian Gann</b></sub></a><br /><a href="#infra-briangann" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     <td align="center"><a href="https://github.com/dprokop"><img src="https://avatars.githubusercontent.com/u/2376619?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dominik Prokop</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=dprokop" title="Documentation">📖</a> <a href="#infra-dprokop" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=dprokop" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/josmperez"><img src="https://avatars.githubusercontent.com/u/45749060?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joseph Perez</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=josmperez" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
