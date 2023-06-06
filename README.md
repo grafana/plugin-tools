@@ -58,6 +58,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/josmperez"><img src="https://avatars.githubusercontent.com/u/45749060?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joseph Perez</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=josmperez" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/sd2k"><img src="https://avatars.githubusercontent.com/u/5464991?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ben Sully</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=sd2k" title="Documentation">📖</a></td>
   </tr>
 </table>
 
