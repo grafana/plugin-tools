@@ -1,2 +1,4 @@
+```shell
 cd <orgName>-<pluginName>-<pluginType>
-yarn install
+npm install
+```
