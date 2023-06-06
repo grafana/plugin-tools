@@ -3,7 +3,7 @@
 1. Install dependencies
 
    ```bash
-   {{ packageManagerName }} run install
+   {{ packageManagerName }} install
    ```
 
 2. Build plugin in development mode and run in watch mode
