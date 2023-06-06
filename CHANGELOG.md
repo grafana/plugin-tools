@@ -2,6 +2,23 @@
 
 :tada: This release contains work from a new contributor! :tada:
 
+Thank you, Ben Sully ([@sd2k](https://github.com/sd2k)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.6.1`
+  - Create Plugin: fix 'Install dependencies' command in generated frontend README [#276](https://github.com/grafana/plugin-tools/pull/276) ([@sd2k](https://github.com/sd2k))
+
+#### Authors: 1
+
+- Ben Sully ([@sd2k](https://github.com/sd2k))
+
+---
+
+# (Tue Jun 06 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
 Thank you, Joseph Perez ([@josmperez](https://github.com/josmperez)), for all your work!
 
 #### 🚀 Enhancement
