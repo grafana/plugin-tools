@@ -1,3 +1,15 @@
+# v1.6.0 (Tue Jun 06 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Enable apps by default [#274](https://github.com/grafana/plugin-tools/pull/274) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v1.5.2 (Thu Jun 01 2023)
 
 :tada: This release contains work from a new contributor! :tada:

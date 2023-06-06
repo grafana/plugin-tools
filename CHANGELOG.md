@@ -1,3 +1,27 @@
+# (Tue Jun 06 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joseph Perez ([@josmperez](https://github.com/josmperez)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.6.0`
+  - Create Plugin: Enable apps by default [#274](https://github.com/grafana/plugin-tools/pull/274) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### 📝 Documentation
+
+- Docs: Plugin-tools intro material - Doc review chunk 6 [#258](https://github.com/grafana/plugin-tools/pull/258) ([@josmperez](https://github.com/josmperez))
+- Docs: Plugin-tools development material - chunk 8 [#269](https://github.com/grafana/plugin-tools/pull/269) ([@josmperez](https://github.com/josmperez))
+- Docs: Plugin-tools - Config and migration - chunk 7 [#266](https://github.com/grafana/plugin-tools/pull/266) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 2
+
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Thu Jun 01 2023)
 
 :tada: This release contains work from a new contributor! :tada:
