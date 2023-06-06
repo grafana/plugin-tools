@@ -27,5 +27,5 @@ Build backend plugin binaries for Linux, Windows and Darwin:
 List all available Mage targets for additional commands:
 
 ```bash
-`mage -l`
+mage -l
 ```
