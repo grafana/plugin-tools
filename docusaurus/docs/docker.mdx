@@ -3,6 +3,10 @@ id: docker
 title: Docker Development Environment
 ---
 
+import DockerNPM from '@snippets/docker-grafana-version.npm.md';
+import DockerPNPM from '@snippets/docker-grafana-version.pnpm.md';
+import DockerYarn from '@snippets/docker-grafana-version.yarn.md';
+
 The `create-plugin` tool includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
 
 ## Why use the Docker environment
@@ -18,17 +22,19 @@ To start your plugin development project, run the following commands in the orde
 1. <SyncCommand cmd="install" />: Installs frontend dependencies.
 1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
 1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
-1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend code.
+1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
+   [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend
+   code.
 
 ### Configure the Grafana version
 
 To test a plugin across different versions of Grafana, set an environment variable. Use `GRAFANA_VERSION` to set the Grafana version:
 
 <CodeSnippets
-  paths={[
-    'docker-grafana-version.npm.shell.md',
-    'docker-grafana-version.pnpm.shell.md',
-    'docker-grafana-version.yarn.shell.md',
+  snippets={[
+    { component: DockerNPM, label: 'npm' },
+    { component: DockerPNPM, label: 'pnpm' },
+    { component: DockerYarn, label: 'yarn' },
   ]}
   groupId="package-manager"
   queryString="current-package-manager"

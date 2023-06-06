@@ -3,20 +3,24 @@ id: creating-a-plugin
 title: Creating a Plugin
 ---
 
+import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
+import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
+import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
+
 To create a new Grafana plugin, run the following command in your shell:
 
 <CodeSnippets
-  paths={[
-    'createplugin-scaffold.npm.shell.md',
-    'createplugin-scaffold.pnpm.shell.md',
-    'createplugin-scaffold.yarn.shell.md',
+  snippets={[
+    { component: ScaffoldNPM, label: 'npm' },
+    { component: ScaffoldPNPM, label: 'pnpm' },
+    { component: ScaffoldYarn, label: 'yarn' },
   ]}
   groupId="package-manager"
   queryString="current-package-manager"
 />
 
 :::info
-When prompted, enter answers to the given questions. For example: 
+When prompted, enter answers to the given questions. For example:
 
 ```
 ? What is going to be the name of your plugin?: _mongodb_
