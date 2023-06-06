@@ -4,8 +4,8 @@ export function isUnsupportedPlatform() {
   const os = platform();
 
   if (os === 'win32') {
-    return false;
+    return true;
   }
 
-  return true;
+  return false;
 }
