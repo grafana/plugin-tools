@@ -2,10 +2,13 @@
 
 import minimist from 'minimist';
 import { generate, update, migrate, version } from '../commands';
-import { operatingSystemCheck } from '../utils/utils.os';
+import { isUnsupportedPlatform } from '../utils/utils.os';
 
 // Exit early if operating system isn't supported.
-operatingSystemCheck();
+if (isUnsupportedPlatform()) {
+  console.error("Unsupported operating system 'Windows' detected. Please use WSL with create-plugin.");
+  process.exit(1);
+}
 
 const args = process.argv.slice(2);
 const argv = minimist(args);
