@@ -1,3 +1,23 @@
+# v1.6.2 (Wed Jun 07 2023)
+
+### Release Notes
+
+#### Create Plugin: Introduce OS check ([#263](https://github.com/grafana/plugin-tools/pull/263))
+
+`create-plugin` will now exit when run natively on Windows, which is an unsupported platform with known issues. By exiting early we hope to prevent users from hitting issues whilst developing plugins. We recommend the use of Windows Subsystem for Linux (WSL) which is supported.
+
+---
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Introduce OS check [#263](https://github.com/grafana/plugin-tools/pull/263) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v1.6.1 (Tue Jun 06 2023)
 
 :tada: This release contains work from a new contributor! :tada:
