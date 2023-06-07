@@ -3,6 +3,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import CodeSnippets from '../CodeSnippets/CodeSnippets';
 
 import styles from './styles.module.css';
+import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
+import UpdateNPM from '@snippets/createplugin-update.npm.md';
 
 function HomepageGettingStarted() {
   return (
@@ -19,7 +21,7 @@ function HomepageGettingStarted() {
                 <br />
                 To create a plugin run this command:
               </p>
-              <CodeSnippets paths={['createplugin-scaffold.npm.shell.md']} />
+              <CodeSnippets snippets={[{ component: ScaffoldNPM }]} />
               <br />
             </div>
             <div className="col col--6 col--offset-1">
@@ -44,7 +46,7 @@ function HomepageGettingStarted() {
                 Updating your build tooling can be a daunting and time-consuming task. When new versions of Create
                 Plugin are released, you can upgrade using a single command:
               </p>
-              <CodeSnippets paths={['createplugin-update.npm.shell.md']} />
+              <CodeSnippets snippets={[{ component: UpdateNPM }]} />
             </div>
           </div>
         </div>
