@@ -23,13 +23,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Check types
-        run: npm exec nx affected -- --base=origin/main --target typecheck --parallel
+        run: npm exec nx affected -- --target typecheck --parallel
       - name: Lint
-        run: npm exec nx affected -- --base=origin/main --target lint --parallel
+        run: npm exec nx affected -- --target lint --parallel
       - name: Unit tests
-        run: npm exec nx affected -- --base=origin/main --target test --ci
+        run: npm exec nx affected -- --target test --ci
       - name: Build all packages
         run: npm run build
+
+      - name: Restore cached generated plugin dependencies
+        id: cache-generated-deps-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ./packages/create-plugin/generated/package-lock.json
+            ./packages/create-plugin/generated/node_modules
+          key: ${{ runner.os }}-generated-plugin-deps
 
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
@@ -43,6 +52,15 @@ jobs:
         run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test scenes app plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+
+      - name: Save generated plugin dependencies
+        id: cache-generated-deps-save
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            ./packages/create-plugin/generated/package-lock.json
+            ./packages/create-plugin/generated/node_modules
+          key: ${{ steps.cache-generated-deps-restore.outputs.cache-primary-key }}
 
       - name: '@grafana/sign-plugin - sign generated plugin'
         env:
