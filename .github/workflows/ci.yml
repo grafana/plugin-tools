@@ -23,26 +23,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Check types
-        run: npm run nx affected -t typecheck --parallel
+        run: npm exec nx affected -t typecheck --parallel
       - name: Lint
-        run: npm run nx affected -t lint --parallel
+        run: npm exec nx affected -t lint --parallel
       - name: Unit tests
-        run: npm run nx affected -t test --ci
+        run: npm exec nx affected -t test --ci
       - name: Build all packages
         run: npm run build
 
       - name: '@grafana/create-plugin - test an app plugin generation'
-        run: npm run nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test an app with backend plugin generation'
-        run: npm run nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test panel plugin generation'
-        run: npm run nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource plugin generation'
-        run: npm run nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource with backend plugin generation'
-        run: npm run nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test scenes app plugin generation'
-        run: npm run nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
 
       - name: '@grafana/sign-plugin - sign generated plugin'
         env:
