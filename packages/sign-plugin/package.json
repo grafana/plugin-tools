@@ -15,10 +15,10 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "yarn clean && tsc && chmod +x ./dist/bin/run.js",
+    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "npm run lint -- --fix",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },

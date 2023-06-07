@@ -23,11 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Check types
-        run: npm exec nx affected -t typecheck --parallel
+        run: npm exec nx affected -- --base=origin/main --target typecheck --parallel
       - name: Lint
-        run: npm exec nx affected -t lint --parallel
+        run: npm exec nx affected -- --base=origin/main --target lint --parallel
       - name: Unit tests
-        run: npm exec nx affected -t test --ci
+        run: npm exec nx affected -- --base=origin/main --target test --ci
       - name: Build all packages
         run: npm run build
 
