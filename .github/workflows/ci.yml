@@ -18,31 +18,50 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: npm ci
       - name: Check types
-        run: yarn nx affected -t typecheck --parallel
+        run: npm exec nx affected -- --target typecheck --parallel
       - name: Lint
-        run: yarn nx affected -t lint --parallel
+        run: npm exec nx affected -- --target lint --parallel
       - name: Unit tests
-        run: yarn nx affected -t test --ci
+        run: npm exec nx affected -- --target test --ci
       - name: Build all packages
-        run: yarn build
+        run: npm run build
+
+      - name: Restore cached generated plugin dependencies
+        id: cache-generated-deps-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ./packages/create-plugin/generated/package-lock.json
+            ./packages/create-plugin/generated/node_modules
+          key: ${{ runner.os }}-generated-plugin-deps
 
       - name: '@grafana/create-plugin - test an app plugin generation'
-        run: yarn nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test an app with backend plugin generation'
-        run: yarn nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test panel plugin generation'
-        run: yarn nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: npm exec nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource plugin generation'
-        run: yarn nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: npm exec nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource with backend plugin generation'
-        run: yarn nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test scenes app plugin generation'
-        run: yarn nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && yarn install --prefer-offline && yarn build && yarn lint)
+        run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+
+      - name: Save generated plugin dependencies
+        id: cache-generated-deps-save
+        if: steps.cache-generated-deps-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            ./packages/create-plugin/generated/package-lock.json
+            ./packages/create-plugin/generated/node_modules
+          key: ${{ steps.cache-generated-deps-restore.outputs.cache-primary-key }}
 
       - name: '@grafana/sign-plugin - sign generated plugin'
         env:
@@ -77,17 +96,17 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: yarn release
+        run: npm run release
