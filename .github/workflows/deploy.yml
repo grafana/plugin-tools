@@ -27,12 +27,12 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: npm ci
       - name: Build documentation website
-        run: yarn docs:build
+        run: npm run docs:build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
