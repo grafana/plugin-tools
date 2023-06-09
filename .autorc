@@ -10,9 +10,15 @@
     "first-time-contributor",
     "released",
     [
+      "omit-commits",
+      {
+        "labels": "no-changelog"
+      }
+    ],
+    [
       "slack",
       {
-        "atTarget": "unknown-user"
+        "atTarget": false
       }
     ]
   ]
