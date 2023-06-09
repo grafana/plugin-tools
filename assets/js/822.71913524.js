@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[822],{1789:(e,t,a)=>{a.r(t),a.d(t,{default:()=>s});const s="npx @grafana/create-plugin@latest migrate"}}]);

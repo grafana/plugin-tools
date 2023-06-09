@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[993],{5993:(e,a,s)=>{s.r(a),s.d(a,{default:()=>t});const t="yarn create @grafana/plugin update"}}]);
