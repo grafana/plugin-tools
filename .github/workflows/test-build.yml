@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --immutable --prefer-offline
+        run: npm ci
       - name: Build documentation website
-        run: yarn docs:build
+        run: npm run docs:build
