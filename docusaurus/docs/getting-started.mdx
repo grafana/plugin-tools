@@ -3,7 +3,11 @@ id: getting-started
 title: Getting Started
 ---
 
-Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration. 
+import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
+import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
+import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
+
+Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration.
 
 The plugin tools consist of two packages:
 
@@ -12,19 +16,19 @@ The plugin tools consist of two packages:
 
 ## Quick Start
 
-To scaffold your plugin, run the following command and follow the prompts: 
+To scaffold your plugin, run the following command and follow the prompts:
 
 <CodeSnippets
-  paths={[
-    'createplugin-scaffold.npm.shell.md',
-    'createplugin-scaffold.pnpm.shell.md',
-    'createplugin-scaffold.yarn.shell.md',
+  snippets={[
+    { component: ScaffoldNPM, label: 'npm' },
+    { component: ScaffoldPNPM, label: 'pnpm' },
+    { component: ScaffoldYarn, label: 'yarn' },
   ]}
   groupId="package-manager"
   queryString="current-package-manager"
 />
 
-For next steps, see [Creating a plugin](./creating-a-plugin.mdx) 
+For next steps, see [Creating a plugin](./creating-a-plugin.mdx)
 
 :::note
 
@@ -32,7 +36,7 @@ If you have previously built a plugin with `@grafana/toolkit`, you can use our p
 
 :::
 
-### Before you begin 
+### Before you begin
 
 Make sure you are using supported a supported OS, Grafana version, and tooling.
 
@@ -71,7 +75,7 @@ When you first run `@grafana/create-plugin`, choose your package manager: `npm`,
 
 ## Output
 
-Run the above command to create a directory called `<orgName>-<pluginName>-<pluginType>` inside the current directory. This directory contains  the initial project structure to kickstart your plugin development.
+Run the above command to create a directory called `<orgName>-<pluginName>-<pluginType>` inside the current directory. This directory contains the initial project structure to kickstart your plugin development.
 
 :::info
 
@@ -145,6 +149,8 @@ Runs the tests and watches for changes.
 
 Creates a production build of the plugin that optimizes for the best performance. Minifies the build and includes hashes in the filenames.
 
-<h3><code>mage -v</code></h3>
+<h3>
+  <code>mage -v</code>
+</h3>
 
 Builds backend plugin binaries for Linux, Windows and Darwin.

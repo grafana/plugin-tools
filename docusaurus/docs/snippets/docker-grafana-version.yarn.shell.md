@@ -1,1 +1,0 @@
-GRAFANA_VERSION=8.5.5 yarn run server

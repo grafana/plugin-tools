@@ -1,1 +1,0 @@
-yarn create @grafana/plugin update

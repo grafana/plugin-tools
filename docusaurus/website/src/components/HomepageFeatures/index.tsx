@@ -4,7 +4,6 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-
   description: JSX.Element;
 };
 
