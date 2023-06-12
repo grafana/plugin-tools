@@ -1,3 +1,16 @@
+# (Mon Jun 12 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.6.3`
+  - Create Plugin: Bump dependencies [#279](https://github.com/grafana/plugin-tools/pull/279) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jun 07 2023)
 
 ### Release Notes
