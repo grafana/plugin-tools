@@ -13,7 +13,7 @@
   "overrides": [
     {
       "plugins": ["deprecation"],
-      "files": ["**/*.ts", "**/*.tsx"],
+      "files": ["src/**/*.{ts,tsx}"],
       "rules": {
         "deprecation/deprecation": "warn"
       },
