@@ -21,6 +21,6 @@
     },
     "transpileOnly": true
   },
-  "include": ["../src", "../cypress", "./types"],
+  "include": ["../src", "./types"],
   "extends": "@grafana/tsconfig"
 }
