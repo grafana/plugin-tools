@@ -20,6 +20,7 @@ const grafanaESModules = [
   'd3-scale-chromatic',
   'ol',
   'react-colorful',
+  'rxjs',
   'uuid',
 ];
 
