@@ -1,3 +1,28 @@
+# (Wed Jul 05 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Steve Lorello ([@slorello89](https://github.com/slorello89)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.7.0`
+  - Making grafana-image parameter flexible [#286](https://github.com/grafana/plugin-tools/pull/286) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### 🐛 Bug Fix
+
+- Docs: Remove duplicate OS section of getting started page [#284](https://github.com/grafana/plugin-tools/pull/284) ([@slorello89](https://github.com/slorello89))
+- `@grafana/create-plugin@1.7.0`
+  - Create Plugin: Add rxjs and schema to known Jest ES modules [#289](https://github.com/grafana/plugin-tools/pull/289) ([@jackw](https://github.com/jackw))
+
+#### Authors: 3
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Steve Lorello ([@slorello89](https://github.com/slorello89))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Mon Jun 12 2023)
 
 #### 🐛 Bug Fix

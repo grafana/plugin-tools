@@ -1,3 +1,20 @@
+# v1.7.0 (Wed Jul 05 2023)
+
+#### 🚀 Enhancement
+
+- Making grafana-image parameter flexible [#286](https://github.com/grafana/plugin-tools/pull/286) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add rxjs and schema to known Jest ES modules [#289](https://github.com/grafana/plugin-tools/pull/289) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v1.6.3 (Mon Jun 12 2023)
 
 #### 🐛 Bug Fix
