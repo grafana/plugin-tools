@@ -165,6 +165,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "slorello89",
+      "name": "Steve Lorello",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42971704?v=4",
+      "profile": "https://slorello.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
