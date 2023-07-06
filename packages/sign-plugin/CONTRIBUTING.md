@@ -7,14 +7,14 @@ The following guidelines help you on how to start with the codebase and how to s
 
 ### Prerequisites
 
-You need to have `npm` or `yarn` installed.
+You need to have `npm` installed.
 
 ### Installing
 
 ```bash
 git clone git@github.com:grafana/plugin-tools.git
 cd plugin-tools
-yarn install
+npm install
 ```
 
 ## Overview
@@ -36,11 +36,11 @@ There are a collection of [commands](#commmands) to assist with developing `sign
 Below are the main commands used for developing `sign-plugin`. They can be run by either `yarn workspace @grafana/sign-plugin run <name_of_command>` or navigating to `packages/sign-plugin` and running the command directly as detailed below.
 
 ```shell
-yarn build # used to build @grafana/sign-plugin
+npm build # used to build @grafana/sign-plugin
 ```
 
 ```shell
-yarn dev # watches for changes to files and rebuilds @grafana/sign-plugin automatically
+npm dev # watches for changes to files and rebuilds @grafana/sign-plugin automatically
 ```
 
 ### Conventions
