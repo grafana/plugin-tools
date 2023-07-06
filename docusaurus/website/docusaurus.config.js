@@ -36,7 +36,8 @@ const config = {
       {
         // options here
         name: 'grafana-content', // used by CLI, must be path safe
-        sourceBaseUrl: 'https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/', // the base url for the markdown (gets prepended to all of the documents when fetching)
+        sourceBaseUrl:
+          'https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/publish-a-plugin',
         outDir: '../docs', // the base directory to output to.
         documents: ['sign-a-plugin.md'], // the file names to download
         modifyContent(filename, content) {
@@ -52,9 +53,10 @@ const config = {
             });
           // clean up metadata, relref and remove heading
           const cleanedContent = content
+            .replace(/\*\*\*[.\s\S]+\*\*\*/g, '')
             .replace(/\\\[(.+?)\]\\(\({{.+?}}\))/g, '$1')
-            .replace(/## title: Sign a plugin\n\n# Sign a plugin/m, '')
-            .replace(/\*\*\*/, '');
+            .replace(/\[(.+?)\](\((.+?)\))/g, '$1')
+            .replace(/# Sign a plugin/m, '');
           return {
             filename: 'signing-your-plugin.md',
             content: `---
