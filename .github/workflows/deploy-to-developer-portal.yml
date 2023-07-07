@@ -8,7 +8,6 @@ on:
     paths:
       - '.github/workflows/deploy-to-developer-portal.yml'
       - 'docusaurus/**'
-
 jobs:
   deploy:
     name: Deploy docs to Developer Portal Bucket
