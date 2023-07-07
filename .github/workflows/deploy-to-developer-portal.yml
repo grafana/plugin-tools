@@ -45,3 +45,4 @@ jobs:
         with:
           path: './docusaurus/website/build/'
           destination: 'grafana_developer_portal/plugin-tools'
+          parent: false
