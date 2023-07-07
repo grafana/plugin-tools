@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/deploy-to-dev-portal
     paths:
       - '.github/workflows/deploy-to-developer-portal.yml'
       - 'docusaurus/**'
