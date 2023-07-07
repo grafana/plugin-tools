@@ -43,5 +43,5 @@ jobs:
       - name: Deploy to Developer Portal Bucket
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: './docusaurus/website/build/*'
+          path: './docusaurus/website/build/'
           destination: 'grafana_developer_portal/plugin-tools'
