@@ -7,14 +7,14 @@ The following guidelines help you on how to start with the codebase and how to s
 
 ### Prerequisites
 
-You need to have `npm` or `yarn` installed.
+You need to have `npm` installed.
 
 ### Installing
 
 ```bash
 git clone git@github.com:grafana/plugin-tools.git
 cd plugin-tools
-yarn install
+npm install
 ```
 
 ## Overview
@@ -51,23 +51,23 @@ There are a collection of [commands](#commmands) to assist with developing `crea
 Below are the main commands used for developing `create-plugin`. They can be run by either `yarn workspace @grafana/create-plugin run <name_of_command>` or navigating to `packages/create-plugin` and running the command directly as detailed below.
 
 ```shell
-yarn build # used to build @grafana/create-plugin
+npm run build # used to build @grafana/create-plugin
 ```
 
 ```shell
-yarn dev # watches for changes to files and rebuilds @grafana/create-plugin automatically
+npm run dev # watches for changes to files and rebuilds @grafana/create-plugin automatically
 ```
 
 ```shell
-yarn dev-app # watches for changes and scaffolds an app plugin (in ./generated) for developing app configs
+npm run dev-app # watches for changes and scaffolds an app plugin (in ./generated) for developing app configs
 ```
 
 ```shell
-yarn dev-panel # watches for changes and scaffolds an app plugin (in ./generated) for developing panel configs
+npm run dev-panel # watches for changes and scaffolds an app plugin (in ./generated) for developing panel configs
 ```
 
 ```shell
-yarn dev-datasource # watches for changes and scaffolds an app plugin (in ./generated) for developing datasource configs
+npm run dev-datasource # watches for changes and scaffolds an app plugin (in ./generated) for developing datasource configs
 ```
 
 ### Conventions
