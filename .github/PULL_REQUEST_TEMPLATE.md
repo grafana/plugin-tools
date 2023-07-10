@@ -18,6 +18,20 @@ Thank you for sending a pull request! Here are some tips:
 
 **What this PR does / why we need it**:
 
+<!--
+PRs with code changes to any of the packages should include labels for the change so releases are dealt with appropriately.
+
+- If this PR should publish a new version of packages please add the **release** label.
+- If this PR should NOT be included in changelogs / versioning please add the **no-changelog** label.
+
+Add one of the following if this PR should version a new release of a package:
+- **major** -> 💥 Breaking Change
+- **minor** -> 🚀 Enhancement
+- **patch** -> 🐛 Bug Fix
+
+Also bear in mind not every PR needs to make a version bump to a package. Please be mindful when labelling PRs.
+-->
+
 **Which issue(s) this PR fixes**:
 
 <!--
