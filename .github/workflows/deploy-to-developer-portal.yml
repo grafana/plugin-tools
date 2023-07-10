@@ -13,12 +13,12 @@ jobs:
     name: Deploy docs to Developer Portal Bucket
     runs-on: ubuntu-latest
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PEM }}
+      # - name: Generate token
+      #   id: generate_token
+      #   uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+      #   with:
+      #     app_id: ${{ secrets.APP_ID }}
+      #     private_key: ${{ secrets.APP_PEM }}
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,8 +32,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+        #mac: sed -i '' 's/title: Getting Started/title: Getting Started\nslug:\ \//g' ./docusaurus/docs/getting-started.mdx
+        #linux: sed -i 's/title: Getting Started/title: Getting Started\nslug:\ \//g' ./docusaurus/docs/getting-started.mdx
+      - name: Make docs the homepage of this subsite
+        run: |
+          rm -f ./docusaurus/website/src/pages/index.tsx
+          sed -i 's/title: Getting Started/title: Getting Started\nslug:\ \//g' ./docusaurus/docs/getting-started.mdx
+          
       - name: Build documentation website
-        run: npm run docs:build
+        run: npm run docs:build -- --config docusaurus.config.devportal.js
         
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
