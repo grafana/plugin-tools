@@ -21,7 +21,8 @@ const sidebars = {
       'introduction/backend-plugins',
       'introduction/grafana-plugin-sdk-for-go',
       'introduction/plugin-protocol',
-      'introduction/data-frames',],
+      'introduction/data-frames',
+    ],
     'Getting Started': [
       'getting-started',
       'creating-a-plugin',
