@@ -1,3 +1,15 @@
+# v1.0.3 (Mon Jul 10 2023)
+
+#### 🐛 Bug Fix
+
+- Chore: Remove axios as a dependency for sign-plugin [#292](https://github.com/grafana/plugin-tools/pull/292) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.0.1 (Fri Mar 03 2023)
 
 #### 🐛 Bug Fix
