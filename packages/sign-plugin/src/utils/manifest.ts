@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fs from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import axios from 'axios';
+import { postData } from './request';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
 
@@ -86,8 +86,8 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
   const url = GRAFANA_COM_URL + '/plugins/ci/sign';
 
   try {
-    const info = await axios.post(url, manifest, {
-      headers: { Authorization: 'Bearer ' + GRAFANA_API_KEY },
+    const info = await postData(url, manifest, {
+      Authorization: 'Bearer ' + GRAFANA_API_KEY,
     });
     if (info.status !== 200) {
       console.error('Error: ', info);
