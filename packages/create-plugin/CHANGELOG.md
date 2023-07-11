@@ -1,3 +1,15 @@
+# v1.9.0 (Tue Jul 11 2023)
+
+#### 🚀 Enhancement
+
+- Do not generate videos for cypress e2e tests [#302](https://github.com/grafana/plugin-tools/pull/302) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.8.0 (Tue Jul 11 2023)
 
 :tada: This release contains work from a new contributor! :tada:

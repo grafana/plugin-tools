@@ -1,5 +1,18 @@
 # (Tue Jul 11 2023)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.9.0`
+  - Do not generate videos for cypress e2e tests [#302](https://github.com/grafana/plugin-tools/pull/302) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Tue Jul 11 2023)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your work!
