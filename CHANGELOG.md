@@ -1,3 +1,26 @@
+# (Tue Jul 11 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.8.0`
+  - Create Plugin: add readme best practice example [#298](https://github.com/grafana/plugin-tools/pull/298) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.8.0`
+  - Create Plugin: Update scenes to latest version [#287](https://github.com/grafana/plugin-tools/pull/287) ([@dprokop](https://github.com/dprokop))
+
+#### Authors: 2
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Dominik Prokop ([@dprokop](https://github.com/dprokop))
+
+---
+
 # (Mon Jul 10 2023)
 
 #### 🐛 Bug Fix
