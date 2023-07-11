@@ -61,7 +61,8 @@
     "@grafana/data": "{{ grafanaVersion }}",
     "@grafana/runtime": "{{ grafanaVersion }}",
     "@grafana/ui": "{{ grafanaVersion }}",{{#if_eq pluginType "scenesapp"}}
-    "@grafana/scenes": "^0.11.0",{{/if_eq}}
+    "@grafana/schema": "10.0.1",
+    "@grafana/scenes": "^0.19.0",{{/if_eq}}
     "react": "17.0.2",
     "react-dom": "17.0.2",{{#if isAppType}}
     "react-router-dom": "^5.2.0",
