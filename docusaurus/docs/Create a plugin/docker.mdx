@@ -1,0 +1,61 @@
+---
+id: docker
+sidebar_position: 130
+title: Docker development environment
+---
+
+import DockerNPM from '@snippets/docker-grafana-version.npm.md';
+import DockerPNPM from '@snippets/docker-grafana-version.pnpm.md';
+import DockerYarn from '@snippets/docker-grafana-version.yarn.md';
+
+The `create-plugin` tool includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
+
+## Why use the Docker environment
+
+We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
+
+With the `create-plugin` tool, the Docker container is configured with the necessary variables to allow easy access to Grafana and to load plugins without the need for them to be signed. The plugin tool also adds a live reload feature that allows you to make your frontend code changes to trigger refreshes in the browser.
+
+## Get started with Docker
+
+To start your plugin development project, run the following commands in the order listed:
+
+1. <SyncCommand cmd="install" />: Installs frontend dependencies.
+1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
+1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
+1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
+   [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend
+   code.
+
+### Configure the Grafana version
+
+To test a plugin across different versions of Grafana, set an environment variable. Use `GRAFANA_VERSION` to set the Grafana version:
+
+<CodeSnippets
+  snippets={[
+    { component: DockerNPM, label: 'npm' },
+    { component: DockerPNPM, label: 'pnpm' },
+    { component: DockerYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
+
+### Configure the Grafana image
+
+The default Docker image in the plugin tool is `grafana-enterprise`. If you want to override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument like so:
+
+```yaml
+version: '3.7'
+
+services:
+  grafana:
+    container_name: 'myorg-basic-app'
+    build:
+      context: ./.config
+      args:
+        grafana_version: ${GRAFANA_VERSION:-9.1.2}
+        grafana_image: ${GRAFANA_IMAGE:-grafana}
+```
+
+This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker-compose` commands.
