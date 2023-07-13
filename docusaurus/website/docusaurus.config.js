@@ -60,8 +60,8 @@ const config = {
           return {
             filename: 'signing-your-plugin.md',
             content: `---
-id: signing-your-plugin
-title: Signing Your Plugin
+id: sign-your-plugin
+title: Sign your plugin
 ---
 
 <head>
@@ -119,7 +119,7 @@ ${cleanedContent}
         items: [
           {
             type: 'doc',
-            docId: 'getting-started',
+            docId: 'Get started/get-started',
             position: 'right',
             label: 'Docs',
           },
@@ -138,8 +138,8 @@ ${cleanedContent}
             title: 'Docs',
             items: [
               {
-                label: 'Getting Started',
-                to: '/docs/getting-started',
+                label: 'Get Started',
+                to: '/docs/get-started',
               },
             ],
           },
