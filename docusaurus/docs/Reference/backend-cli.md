@@ -1,7 +1,10 @@
 ---
-id: backend
-title: Backend
+id: backend-cli
+title: Backend CLI
+sidebar_position: 720
 ---
+
+# Backend CLI reference
 
 Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used to manage Go during plugin development:
 

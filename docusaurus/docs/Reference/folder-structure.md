@@ -1,6 +1,7 @@
 ---
 id: folder-structure
-title: Folder Structure
+title: Folder structure
+sidebar_position: 730
 ---
 
 After you install the `create-plugin` tool and have answered the prompts, your project should look similar to this:
