@@ -27,7 +27,6 @@ yarn-error.log*
 # Generated files
 .docusaurus
 .cache-loader
-docusaurus/docs/signing-your-plugin.md
 
 # Allow vscode config inside templates
 !packages/create-plugin/templates/*/.vscode
