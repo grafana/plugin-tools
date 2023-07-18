@@ -1,6 +1,7 @@
 ---
 id: migrate-8.3.x-to-8.4.x
 title: 8.3.x to 8.4.x
+sidebar_position: 640
 ---
 
 # Migrate plugins from Grafana version 8.3.x to 8.4.x

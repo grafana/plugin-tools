@@ -1,6 +1,7 @@
 ---
 id: migrate-6.x-to-7.0
 title: 6.x to 7.0
+sidebar_position: 620
 ---
 
 # Migrate plugins from Grafana version 6.x to 7.0

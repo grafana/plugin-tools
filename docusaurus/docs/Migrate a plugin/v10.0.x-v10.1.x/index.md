@@ -1,20 +1,7 @@
 ---
 id: migrate-10.0.x-to-10.1.x
-label: "10.0.x to 10.1.x"
 title: 10.0.x to 10.1.x
----
-
----
-description: Guide for migrating plugins from Grafana v10.0.x to v10.1.x
-keywords:
-  - grafana
-  - plugins
-  - migration
-  - plugin
-  - documentation
-title: Migrate plugins from Grafana 10.0.x to 10.1.x
-menutitle: v10.0.x to v10.1.x
-weight: 1900
+sidebar_position: 690
 ---
 
 # Migrate plugins from Grafana version 10.0.x to 10.1.x

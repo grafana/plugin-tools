@@ -1,6 +1,7 @@
 ---
 id: migrate 7.x.x-to-8.x.x
 title: 7.x.x to 8.x.x
+sidebar_position: 630
 ---
 
 # Migrate plugins from Grafana version 7.x.x to 8.x.x
@@ -146,7 +147,7 @@ func (d *SampleDatasource) CheckHealth(_ context.Context, req *backend.CheckHeal
 
 We strongly recommend that you not allow unsigned plugins in your Grafana installation. By allowing unsigned plugins, we can't guarantee the authenticity of the plugin, which could compromise the security of your Grafana installation.
 
-To sign your plugin, see [Sign a plugin](https://grafana.com/docs/grafana/latest/developers/plugins/publish-a-plugin/sign-a-plugin.md).
+To sign your plugin, see [Sign a plugin](../../Publish%20a%20plugin/sign-a-plugin).
 
 You can still run and develop an unsigned plugin by running your Grafana instance in [development mode](https://grafana.com/docs/grafana/latest/administration/configuration/#app_mode). Alternatively, you can use the [allow_loading_unsigned_plugins](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#allow_loading_unsigned_plugins) configuration setting.
 
