@@ -1,6 +1,6 @@
 ---
 id: ci
-title: Continuous Integration
+title: Automate development with CI
 sidebar_position: 360
 ---
 

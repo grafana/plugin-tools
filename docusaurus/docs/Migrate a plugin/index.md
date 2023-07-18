@@ -9,4 +9,4 @@ sidebar_position: 500
 This section contains topics related to migrating or updating a Grafana plugin.
 
 - [Migrate from Grafana Toolkit](./migrate-from-toolkit)
-- [Update to new releases](./update-to-new-releases)
+- [Update to new releases](./update-create-plugin-tool)

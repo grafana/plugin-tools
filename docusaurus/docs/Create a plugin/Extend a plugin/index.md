@@ -7,3 +7,6 @@ sidebar_position: 350
 # Extend a plugin
 
 This section contains topics related to extending the functionality of a Grafana plugin.
+
+- [Automate development with CI](./ci)
+- [Extend configurations](./extend-configurations)
