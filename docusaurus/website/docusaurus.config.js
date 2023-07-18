@@ -119,7 +119,7 @@ ${cleanedContent}
         items: [
           {
             type: 'doc',
-            docId: 'getting-started',
+            docId: 'Get started/get-started',
             position: 'right',
             label: 'Docs',
           },
@@ -138,8 +138,8 @@ ${cleanedContent}
             title: 'Docs',
             items: [
               {
-                label: 'Getting Started',
-                to: '/docs/getting-started',
+                label: 'Get Started',
+                to: '/docs/Get started/get-started',
               },
             ],
           },
