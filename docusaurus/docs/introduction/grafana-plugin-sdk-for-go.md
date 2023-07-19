@@ -1,6 +1,7 @@
 ---
 id: grafana-plugin-sdk-for-go
 title: Grafana plugin SDK for Go
+sidebar_position: 120
 ---
 
 # Grafana plugin SDK for Go
