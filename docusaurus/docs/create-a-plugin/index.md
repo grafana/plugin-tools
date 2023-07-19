@@ -8,5 +8,5 @@ sidebar_position: 300
 
 This section contains topics related to developing or extending a Grafana plugin.
 
-- [Develop a plugin](./Develop%20a%20plugin/)
-- [Extend a plugin](./Extend%20a%20plugin/)
+- [Develop a plugin](./develop-a-plugin/index.md)
+- [Extend a plugin](./extend-a-plugin/index.md)
