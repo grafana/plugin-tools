@@ -75,7 +75,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'get-started/get-started',
+            docId: 'get-started/get-started-with-plugins',
             position: 'right',
             label: 'Docs',
           },
@@ -95,7 +95,7 @@ const config = {
             items: [
               {
                 label: 'Get Started',
-                to: '/docs/get-started/get-started',
+                to: '/docs/get-started/get-started-with-plugins',
               },
             ],
           },
