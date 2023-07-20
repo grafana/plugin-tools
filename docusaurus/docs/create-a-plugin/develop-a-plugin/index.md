@@ -8,6 +8,6 @@ sidebar_position: 320
 
 This section contains topics related to developing a Grafana plugin.
 
-- [Create a plugin](./create-a-plugin)
+- [Create a plugin](./use-create-plugin)
 - [Work with data frames](./work-with-data-frames)
 - [Create nested plugins](./create-nested-plugins)

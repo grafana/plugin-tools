@@ -95,7 +95,7 @@ const config = {
             items: [
               {
                 label: 'Get Started',
-                to: '/docs/get-started/get-started-with-plugins',
+                to: '/docs/get-started',
               },
             ],
           },
