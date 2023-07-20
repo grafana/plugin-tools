@@ -46,3 +46,17 @@
 [data-theme='light'] .button--outline:hover {
   color: var(--ifm-font-color-base);
 }
+
+.md-figure-block {
+  margin: 0.5rem 0;
+}
+
+.md-figure-block img {
+  display: block;
+}
+
+.md-figure-caption {
+  color: var(--ifm-blockquote-color);
+  font-size: 0.9rem;
+  margin-bottom: var(--ifm-global-spacing);
+}
