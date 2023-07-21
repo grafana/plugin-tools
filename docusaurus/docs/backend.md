@@ -1,6 +1,6 @@
 ---
-id: backend
-title: Backend
+id: id
+title: Title
 ---
 
 Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used to manage Go during plugin development:
