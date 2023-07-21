@@ -10,26 +10,29 @@ Panels are the building blocks of Grafana. They allow you to visualize data in d
 
 For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
 
-{{% class "prerequisite-section" %}}
-
 ### Prerequisites
 
 - Grafana >=7.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 - yarn
-  {{% /class %}}
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+import SharedContent from '@shared/set-up-environment.md';
+
+<SharedContent />
 
 ## Create a new plugin
 
-{{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
+<!-- import SharedContent from '@shared/create-plugin.md';
+
+<SharedContent /> -->
 
 ## Anatomy of a plugin
 
-{{< docs/shared lookup="tutorials/plugin-anatomy.md" source="grafana" version="latest" >}}
+<!-- import SharedContent from '@shared/plugin-anatomy.md';
+
+<SharedContent /> -->
 
 ## Panel plugins
 

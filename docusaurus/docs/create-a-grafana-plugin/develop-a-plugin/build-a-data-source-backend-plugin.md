@@ -16,8 +16,6 @@ In this tutorial, you'll:
 - Implement a health check for your data source
 - Enable Grafana Alerting for your data source
 
-{{% class "prerequisite-section" %}}
-
 #### Prerequisites
 
 - Knowledge about how data sources are implemented in the frontend.
@@ -25,12 +23,13 @@ In this tutorial, you'll:
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- yarn
-  {{% /class %}}
+- yarn  
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+import SharedContent from '@shared/set-up-environment.md';
+
+<SharedContent />
 
 ## Create a new plugin
 

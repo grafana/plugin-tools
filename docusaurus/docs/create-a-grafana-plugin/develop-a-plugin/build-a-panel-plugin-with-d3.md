@@ -15,22 +15,23 @@ In this tutorial, you'll:
 - Build a simple panel plugin to visualize a bar chart.
 - Learn how to use D3.js to build a panel using data-driven transformations.
 
-{{% class "prerequisite-section" %}}
-
 ### Prerequisites
 
 - Grafana 7.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 - yarn
-  {{% /class %}}
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+import SharedContent from '@shared/set-up-environment.md';
+
+<SharedContent />
 
 ## Create a new plugin
 
-{{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
+<!-- import SharedContent from '@shared/create-plugin.md';
+
+<SharedContent /> -->
 
 ## Data-driven documents
 

@@ -37,6 +37,7 @@ const config = {
         resolve: {
           alias: {
             '@snippets': path.resolve(__dirname, '..', 'docs', 'snippets'),
+            '@shared': path.resolve(__dirname, '..', 'docs', 'shared'),
           },
         },
       },
@@ -50,7 +51,7 @@ const config = {
       ({
         docs: {
           path: '../docs',
-          exclude: ['**/snippets/**'],
+          exclude: ['**/snippets/**', '**/shared/**'],
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.

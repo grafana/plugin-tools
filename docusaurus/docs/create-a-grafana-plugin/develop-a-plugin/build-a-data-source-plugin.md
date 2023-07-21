@@ -14,28 +14,31 @@ In this tutorial, you'll:
 - Construct queries using the query editor
 - Configure your data source using the config editor
 
-{{% class "prerequisite-section" %}}
-
 ### Prerequisites
 
 - Grafana >=7.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 - yarn
-  {{% /class %}}
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+import SharedContent from '@shared/set-up-environment.md';
+
+<SharedContent />
 
 ## Create a new plugin
 
-{{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
+<!-- import SharedContent from '@shared/create-plugin.md';
+
+<SharedContent /> -->
 
 To learn how to create a backend data source plugin, see [Build a data source backend plugin](./build-a-data-source-backend-plugin.md)
 
 ## Anatomy of a plugin
 
-{{< docs/shared lookup="tutorials/plugin-anatomy.md" source="grafana" version="latest" >}}
+<!-- import SharedContent from '@shared/plugin-anatomy.md';
+
+<SharedContent /> -->
 
 ## Data source plugins
 
