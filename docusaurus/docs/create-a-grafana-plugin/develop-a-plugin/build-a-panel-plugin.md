@@ -24,15 +24,15 @@ import SharedContent from '@shared/set-up-environment.md';
 
 ## Create a new plugin
 
-<!-- import SharedContent from '@shared/create-plugin.md';
+import SharedContentForCreate from '@shared/create-plugin.md';
 
-<SharedContent /> -->
+<SharedContent /> 
 
 ## Anatomy of a plugin
 
-<!-- import SharedContent from '@shared/plugin-anatomy.md';
+import SharedContentForAnatomy from '@shared/plugin-anatomy.md';
 
-<SharedContent /> -->
+<SharedContent />
 
 ## Panel plugins
 
