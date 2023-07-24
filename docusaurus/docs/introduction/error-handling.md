@@ -48,7 +48,7 @@ try {
 
 :::note
 
-Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [Documentation style guide](/docs/writers-toolkit/).
+Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [Documentation style guide](https://grafana.com/docs/writers-toolkit/).
 
 :::
 
