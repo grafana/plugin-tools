@@ -4,9 +4,6 @@ title: Create a plugin
 sidebar_position: 300
 ---
 
-# Create a plugin
+import DocCardList from '@theme/DocCardList';
 
-This section contains topics related to developing or extending a Grafana plugin.
-
-- [Develop a plugin](./develop-a-plugin/index.md)
-- [Extend a plugin](./extend-a-plugin/index.md)
+<DocCardList />
