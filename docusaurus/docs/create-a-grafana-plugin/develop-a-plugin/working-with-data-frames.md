@@ -12,9 +12,7 @@ The `DataFrame` interface contains a `name` and an array of `fields` where each 
 
 :::note
 
-If you want to migrate an existing plugin to use the data frame format, refer to [Migrate to data frames](../../migration-guide/v6.x-v7.x#migrate-to-data-frames).
-
-<!-- this link will resolve when PR 308 is merged -->
+If you want to migrate an existing plugin to use the data frame format, refer to [Migrate to data frames](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/v6.x-v7.x/#migrate-to-data-frames).
 
 :::
 
