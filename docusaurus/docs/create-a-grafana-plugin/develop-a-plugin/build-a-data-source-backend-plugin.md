@@ -27,9 +27,9 @@ In this tutorial, you'll:
 
 ## Set up your environment
 
-import SharedContent from '@shared/set-up-environment.md';
+<!-- import SharedContent from '@shared/set-up-environment.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Create a new plugin
 
