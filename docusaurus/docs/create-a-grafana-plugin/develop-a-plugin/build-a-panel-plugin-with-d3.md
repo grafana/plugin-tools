@@ -23,15 +23,15 @@ In this tutorial, you'll:
 
 ## Set up your environment
 
-import SharedContent from '@shared/set-up-environment.md';
+<!-- import SharedContent from '@shared/set-up-environment.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Create a new plugin
 
-import SharedContentForCreate from '@shared/create-plugin.md';
+<!-- import SharedContentForCreate from '@shared/create-plugin.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Data-driven documents
 

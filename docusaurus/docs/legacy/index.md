@@ -63,7 +63,7 @@ The Grafana SDK is quite small so far and can be found here:
 
 - [SDK file in Grafana](https://github.com/grafana/grafana/blob/main/public/app/plugins/sdk.ts)
 
-The SDK contains three different plugin classes: PanelCtrl, MetricsPanelCtrl and QueryCtrl. For plugins of the panel type, the module.js file should export one of these. There are some extra classes for [data sources]({{< relref "./data-sources.md" >}}).
+The SDK contains three different plugin classes: PanelCtrl, MetricsPanelCtrl and QueryCtrl. For plugins of the panel type, the module.js file should export one of these. There are some extra classes for [data sources](./data-sources.md).
 
 Example:
 
@@ -111,7 +111,7 @@ There are a number of Grafana events that a plugin can hook into:
 - `data-snapshot-load` is an event triggered to load data when in snapshot mode.
 - `data-error` is used to handle errors on dashboard refresh.
 
-If a panel receives data and hooks into the `data-received` event then it should handle snapshot mode too. Otherwise the panel will not work if saved as a snapshot. [Getting Plugins to work in Snapshot Mode]({{< relref "./snapshot-mode" >}}) describes how to add support for this.
+If a panel receives data and hooks into the `data-received` event then it should handle snapshot mode too. Otherwise the panel will not work if saved as a snapshot. [Getting Plugins to work in Snapshot Mode](./snapshot-mode.md) describes how to add support for this.
 
 ## Examples
 

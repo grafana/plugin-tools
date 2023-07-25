@@ -18,21 +18,21 @@ For more information about panels, refer to the documentation on [Panels](https:
 
 ## Set up your environment
 
-import SharedContent from '@shared/set-up-environment.md';
+<!-- import SharedContent from '@shared/set-up-environment.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Create a new plugin
 
-import SharedContentForCreate from '@shared/create-plugin.md';
+<!-- import SharedContentForCreate from '@shared/create-plugin.md';
 
-<SharedContent /> 
+<SharedContent />  -->
 
 ## Anatomy of a plugin
 
-import SharedContentForAnatomy from '@shared/plugin-anatomy.md';
+<!-- import SharedContentForAnatomy from '@shared/plugin-anatomy.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Panel plugins
 

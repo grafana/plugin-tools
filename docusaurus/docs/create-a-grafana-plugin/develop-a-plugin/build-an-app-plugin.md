@@ -18,21 +18,21 @@ Data source and panel plugins will show up like normal plugins. The app pages wi
 
 ## Set up your environment
 
-import SharedContent from '@shared/set-up-environment.md';
+<!-- import SharedContent from '@shared/set-up-environment.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Create a new plugin
 
-import SharedContentForCreate from '@shared/create-plugin.md';
+<!-- import SharedContentForCreate from '@shared/create-plugin.md';
 
-<SharedContent />
+<SharedContent /> -->
 
 ## Anatomy of a plugin
 
-import SharedContentForAnatomy from '@shared/plugin-anatomy.md';
+<!-- import SharedContentForAnatomy from '@shared/plugin-anatomy.md';
 
-<SharedContent /> 
+<SharedContent />  -->
 
 ## App plugins
 

@@ -8,13 +8,13 @@ sidebar_position: 304
 
 Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There's a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a support for your data source.
 
-For more information about backend plugins, refer to the documentation on [Backend plugins](https://grafana.com/docs/grafana/latest/developers/plugins/backend/).
+For more information about backend plugins, refer to the documentation on [Backend plugins](../../introduction/backend.md).
 
 In this tutorial, you'll:
 
-- Build a backend for your data source
-- Implement a health check for your data source
-- Enable Grafana Alerting for your data source
+- Build a backend for your data source.
+- Implement a health check for your data source.
+- Enable Grafana Alerting for your data source.
 
 #### Prerequisites
 

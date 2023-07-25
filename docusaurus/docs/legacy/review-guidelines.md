@@ -95,7 +95,7 @@ johnnyb-awesome-datasource
 |-- README.md
 ```
 
-Most JavaScript projects have a build step. The generated JavaScript should be placed in the `dist` directory and the source code in the `src` directory. We recommend that the plugin.json file be placed in the src directory and then copied over to the dist directory when building. The `README.md` can be placed in the root or in the dist directory.
+Most JavaScript projects have a build step. The generated JavaScript should be placed in the `dist` directory and the source code in the `src` directory. We recommend that the `plugin.json` file be placed in the src directory and then copied over to the dist directory when building. The `README.md` can be placed in the root or in the dist directory.
 
 Directories:
 
@@ -144,7 +144,7 @@ Use the `width-x` and `max-width-x` classes to control the width of your labels 
 
 ## Data Sources
 
-For more information about data sources, refer to the [basic guide for data sources](http://docs.grafana.org/plugins/developing/datasources/).
+For more information about data sources, refer to the [basic guide for data sources](https://grafana.com/docs/grafana/latest/developers/plugins/legacy/data-sources/).
 
 ### Configuration Page Guidelines
 
@@ -160,7 +160,7 @@ For more information about data sources, refer to the [basic guide for data sour
 
 If possible, any passwords or secrets should be saved in the `secureJsonData` blob. To encrypt sensitive data, the Grafana server's proxy feature must be used. The Grafana server has support for token authentication (OAuth) and HTTP Header authentication. If the calls have to be sent directly from the browser to a third-party API, this will not be possible and sensitive data will not be encrypted.
 
-Read more here about how [authentication for data sources]({{< relref "../create-a-grafana-plugin/extend-a-plugin/add-authentication-for-data-source-plugins" >}}) works.
+Read more here about how [authentication for data sources](../create-a-grafana-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md) works.
 
 If using the proxy feature, the Configuration page should use the `secureJsonData` blob like this:
 
