@@ -1,6 +1,7 @@
 ---
 id: plugin-protocol
 title: Plugin protocol
+sidebar_position: 3
 ---
 
 # Plugin protocol

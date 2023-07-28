@@ -1,6 +1,7 @@
 ---
 id: distributing-your-plugin
 title: Distributing Your Plugin
+sidebar_position: 1
 ---
 
 To distribute a Grafana plugin either to the community or privately, the plugin must be signed so the Grafana application can verify its authenticity. You can do this with the `@grafana/sign-plugin` package.

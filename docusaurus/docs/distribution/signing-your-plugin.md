@@ -1,6 +1,7 @@
 ---
 id: signing-your-plugin
 title: Signing Your Plugin
+sidebar_position: 2
 ---
 
 <head>
