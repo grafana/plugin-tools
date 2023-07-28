@@ -9,8 +9,6 @@
  Create as many sidebars as you want.
  */
 
-const { env } = require('process');
-
 // @ts-check
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
