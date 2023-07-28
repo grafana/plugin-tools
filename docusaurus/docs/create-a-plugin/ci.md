@@ -1,7 +1,7 @@
 ---
 id: ci
 title: Automate development with CI
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
