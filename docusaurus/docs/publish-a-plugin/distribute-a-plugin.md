@@ -8,7 +8,7 @@ To distribute a Grafana plugin either to the community or privately, the plugin 
 
 :::info
 
-It's not necessary to sign a plugin during development. The [Docker development environment](/plugin-tools/docs/get-started/set-up-development-environment) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
 
 :::
 
@@ -24,4 +24,4 @@ Before signing a plugin for the first time please consult the Grafana [plugin si
 2. Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
    - _You can find the plugin ID in the plugin.json file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`._
 3. Create a Grafana Cloud API key with the `PluginPublisher` role.
-4. Keep a record of this API key as it will be required for [signing a plugin](/plugin-tools/docs/publish-a-plugin/sign-a-plugin).
+4. Keep a record of this API key as it will be required for [signing a plugin](../../docs/publish-a-plugin/sign-a-plugin.md).
