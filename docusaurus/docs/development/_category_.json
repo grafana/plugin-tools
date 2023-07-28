@@ -1,0 +1,9 @@
+{
+    "position": 3,
+    "label": "Development",
+    "collapsible": true,
+    "collapsed": true,
+    "customProps": {
+      "description": "This description can be used in the swizzled DocCard"
+    }
+  }

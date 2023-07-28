@@ -7,7 +7,7 @@ To distribute a Grafana plugin either to the community or privately, the plugin 
 
 :::info
 
-It's not necessary to sign a plugin during development. The [docker development environment](./docker.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+It's not necessary to sign a plugin during development. The [docker development environment](../development/docker.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
 
 :::
 

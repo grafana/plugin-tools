@@ -1,6 +1,8 @@
 ---
 id: advanced-configuration
 title: Advanced Configuration
+sidebar_label: Advanced Configuration
+sidebar_position: 5
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
