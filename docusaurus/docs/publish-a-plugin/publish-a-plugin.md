@@ -1,6 +1,6 @@
 ---
-id: distributing-your-plugin
-title: Distributing Your Plugin
+id: publish-a-plugin
+title: Publish a plugin
 sidebar_position: 1
 ---
 
