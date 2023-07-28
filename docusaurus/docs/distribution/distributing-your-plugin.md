@@ -1,13 +1,14 @@
 ---
 id: distributing-your-plugin
 title: Distributing Your Plugin
+sidebar_position: 1
 ---
 
 To distribute a Grafana plugin either to the community or privately, the plugin must be signed so the Grafana application can verify its authenticity. You can do this with the `@grafana/sign-plugin` package.
 
 :::info
 
-It's not necessary to sign a plugin during development. The [docker development environment](./docker.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+It's not necessary to sign a plugin during development. The [docker development environment](../development/docker.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
 
 :::
 

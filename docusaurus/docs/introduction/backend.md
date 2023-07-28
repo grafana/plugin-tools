@@ -1,6 +1,7 @@
 ---
 id: backend-plugins
 title: Backend plugins
+sidebar_position: 1
 ---
 
 # Backend plugins

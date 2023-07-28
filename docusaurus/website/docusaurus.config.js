@@ -50,7 +50,7 @@ const config = {
       ({
         docs: {
           path: '../docs',
-          exclude: ['**/snippets/**', '**/shared/**'],
+          exclude: ['**/snippets/**', '**/shared/**', '**/drafts/**'],
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -85,7 +85,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'getting-started',
+            docId: 'getting-started/getting-started',
             position: 'right',
             label: 'Docs',
           },
