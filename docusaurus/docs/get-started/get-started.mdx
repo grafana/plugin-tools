@@ -18,35 +18,33 @@ The plugin tools consist of two packages:
 
 To scaffold your plugin, follow these steps:
 
-1. Run the following command and follow the prompts:
+1. Run the following command:
 
-<CodeSnippets
-  snippets={[
-    { component: ScaffoldNPM, label: 'npm' },
-    { component: ScaffoldPNPM, label: 'pnpm' },
-    { component: ScaffoldYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+  <CodeSnippets
+    snippets={[
+      { component: ScaffoldNPM, label: 'npm' },
+      { component: ScaffoldPNPM, label: 'pnpm' },
+      { component: ScaffoldYarn, label: 'yarn' },
+    ]}
+    groupId="package-manager"
+    queryString="current-package-manager"
+  />
 
 1. When prompted, enter answers to the given questions. For example:
 
-```
-? What is going to be the name of your plugin?: _mongodb_
-? What is the organization name of your plugin?: _grafana_
-? What type of plugin would you like?: _datasource_
-```
+  ```
+  ? What is going to be the name of your plugin?: _mongodb_
+  ? What is the organization name of your plugin?: _grafana_
+  ? What type of plugin would you like?: _datasource_
+  ```
 
-If you enter those values for name, organization, and plugin type, then the directory and plugin ID will be named `grafana-mongodb-datasource`.
+  If you enter those values for name, organization, and plugin type, then the directory and plugin ID will be named `grafana-mongodb-datasource`.
 
-:::
+  :::note
 
-:::note
+  If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to simplify migration. For more information, refer to the [Migration guide](./migrate-from-toolkit).
 
-If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to simplify migration. For more information, refer to the [Migration guide](./migrate-from-toolkit).
-
-:::
+  :::
 
 ### Before you begin
 
