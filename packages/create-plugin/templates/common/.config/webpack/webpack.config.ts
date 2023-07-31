@@ -127,7 +127,7 @@ const config = async (env): Promise<Configuration> => ({
 
   output: {
     clean: {
-      keep: new RegExp(`.*?_(amd64|arm(64)?)(.exe)?`),
+      keep: new RegExp(`(.*?_(amd64|arm(64)?)(.exe)?|go_plugin_build_manifest)`),
     },
     filename: '[name].js',
     library: {
