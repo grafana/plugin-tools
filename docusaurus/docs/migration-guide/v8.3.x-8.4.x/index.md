@@ -5,7 +5,7 @@ title: 8.3.x to 8.4.x
 
 # Migrate plugins from Grafana version 8.3.x to 8.4.x
 
-This section explains how to migrate Grafana v8.3.x plugins to the updated plugin system available in Grafana v8.4.x. Depending on your plugin, you need to perform one or more of the following steps.
+Follow these instructions to migrate Grafana v8.3.x plugins to the updated plugin system available in Grafana v8.4.x. Depending on your plugin, you need to perform one or more of the following steps.
 
 ## Value Mapping Editor has been removed from @grafana-ui library
 

@@ -5,7 +5,7 @@ title: 9.1.x to 9.2.x
 
 # Migrate plugins from Grafana version 9.1.x to 9.2.x
 
-Follow the instructions in this section to migrate plugins from Grafana version 9.1.x to 9.2.x.
+Follow these instructions to migrate plugins from Grafana version 9.1.x to 9.2.x.
 
 ## React and React-dom as peer dependencies
 

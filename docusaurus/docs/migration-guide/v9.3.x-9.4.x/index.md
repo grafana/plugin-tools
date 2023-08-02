@@ -5,7 +5,7 @@ title: 9.3.x to 9.4.x
 
 # Migrate plugins from Grafana 9.3.x to 9.4.x
 
-Follow the instructions in this section to migrate from Grafana 9.3.x to 9.4.x.
+Follow these instructions to migrate from Grafana 9.3.x to 9.4.x.
 
 ## New navigation layout is supported
 

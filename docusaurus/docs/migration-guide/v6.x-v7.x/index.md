@@ -5,7 +5,7 @@ title: 6.x to 7.0
 
 # Migrate plugins from Grafana version 6.x to 7.0
 
-Follow the instructions in this section to upgrade Grafana from version 6.x to 7.0.
+Follow these instructions to upgrade Grafana from version 6.x to 7.0.
 
 ## What's new in Grafana 7.0?
 

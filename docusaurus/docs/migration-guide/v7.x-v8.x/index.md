@@ -5,9 +5,9 @@ title: 7.x.x to 8.x.x
 
 # Migrate plugins from Grafana version 7.x.x to 8.x.x
 
-This section explains how to migrate Grafana v7.x.x plugins to the updated plugin system available in Grafana v8.x.x. Depending on your plugin, you need to perform one or more of the following steps.
+Follow these instructions to migrate Grafana v7.x.x plugins to the updated plugin system available in Grafana v8.x.x. Depending on your plugin, you need to perform one or more of the following steps.
 
-In this section, we've documented the breaking changes in Grafana v8.x.x and the steps you need to take to upgrade your plugin.
+Be aware of breaking changes in Grafana v8.x.x, documented below, and the steps you need to take to upgrade your plugin.
 
 ## Backend plugin v1 support has been dropped
 

@@ -5,7 +5,7 @@ title: 8.x to 9.x
 
 # Migrate plugins from Grafana version 8.x to 9.x
 
-Follow the instructions in this section to migrate plugins from version 8.x to 9.x.
+Follow these instructions to migrate plugins from version 8.x to 9.x.
 
 ## 9.0 breaking changes
 

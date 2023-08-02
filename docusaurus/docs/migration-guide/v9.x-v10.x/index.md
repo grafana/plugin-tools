@@ -5,6 +5,8 @@ title: 9.x to 10.x
 
 # Migrate plugins from Grafana version 9.x to 10.x
 
+Follow these instructions to migrate plugins from Grafana version 9.x to 10.x.
+
 ## Verify plugin behavior with React 18
 
 Grafana 10 includes our upgrade to React 18 and use of the new React client-side rendering API. These changes were delivered to the core `grafana` repo with [PR 64428](https://github.com/grafana/grafana/pull/64428).
