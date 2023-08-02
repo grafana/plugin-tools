@@ -1,7 +1,7 @@
 ---
-id: ci
-title: Continuous Integration
-sidebar_position: 4
+id: set-up-github-workflows
+title: Set up GitHub workflows
+sidebar_position: 3
 ---
 
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
@@ -14,7 +14,7 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 :::caution
 
-This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [distributing your plugin](../distribution/distributing-your-plugin.md#initial-steps).
+This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [distributing your plugin](../../docs/publish-a-plugin/distribute-a-plugin.md).
 
 :::
 
