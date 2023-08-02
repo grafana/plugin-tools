@@ -1,3 +1,15 @@
+# v1.9.1 (Wed Aug 02 2023)
+
+#### 🐛 Bug Fix
+
+- Do not remove go_plugin_build_manifest on frontendbuild [#322](https://github.com/grafana/plugin-tools/pull/322) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.9.0 (Tue Jul 11 2023)
 
 #### 🚀 Enhancement
