@@ -1,4 +1,4 @@
 contact_links:
-  - name: Feature Request
-    url: https://github.com/grafana/plugin-tools/discussions/new
-    about: Discuss ideas for new features of changes
+  - name: Usage question or support
+    url: https://community.grafana.com/c/plugin-development/30
+    about: Join our community
