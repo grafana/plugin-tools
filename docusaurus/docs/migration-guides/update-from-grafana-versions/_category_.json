@@ -1,6 +1,6 @@
 {
     "position": 4,
-    "label": "Updates from Grafana versions",
+    "label": "Update from Grafana versions",
     "collapsible": true,
     "collapsed": true
   }

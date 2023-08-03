@@ -1,6 +1,6 @@
 ---
 id: migrate-angularjs-to-react
-title: AngularJS to React
+title: Migrate from AngularJS to React
 sidebar_position: 3
 ---
 
