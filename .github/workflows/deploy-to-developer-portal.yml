@@ -32,11 +32,14 @@ jobs:
         run: npm ci
       
         #mac: sed -i '' 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx        
+        #mac: grep -rl "](/docs/" docusaurus/docs | xargs sed -i '' 's/](\/docs\//](\//g'
         #linux: sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx        
+        #linux: grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
       - name: Make docs the homepage of this subsite
         run: |
           rm -f ./docusaurus/website/src/pages/index.tsx
-          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx          
+          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
+          grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
       - name: Build documentation website
         run: npm run docs:build -- --config docusaurus.config.devportal.js
         
