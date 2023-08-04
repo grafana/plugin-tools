@@ -3,8 +3,7 @@ name: Deploy to Developer Portal Bucket
 on:
   push:
     branches:
-      - main
-      - feat/deploy-to-dev-portal
+      - main      
     paths:
       - '.github/workflows/deploy-to-developer-portal.yml'
       - 'docusaurus/**'
