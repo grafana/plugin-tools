@@ -1,3 +1,18 @@
+# (Wed Aug 02 2023)
+
+#### 🐛 Bug Fix
+
+- Adding noindex for now until we reshuffle the content [#305](https://github.com/grafana/plugin-tools/pull/305) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@1.9.1`
+  - Do not remove go_plugin_build_manifest on frontendbuild [#322](https://github.com/grafana/plugin-tools/pull/322) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Jul 11 2023)
 
 #### 🚀 Enhancement

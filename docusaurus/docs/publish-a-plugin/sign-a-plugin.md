@@ -1,6 +1,6 @@
 ---
-id: signing-your-plugin
-title: Signing Your Plugin
+id: sign-a-plugin
+title: Sign a plugin
 sidebar_position: 2
 ---
 

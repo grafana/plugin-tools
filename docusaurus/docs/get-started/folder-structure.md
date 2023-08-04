@@ -1,6 +1,6 @@
 ---
 id: folder-structure
-title: Folder Structure
+title: Folder structure
 sidebar_position: 2
 ---
 
