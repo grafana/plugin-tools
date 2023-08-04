@@ -31,13 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-        #mac: sed -i '' 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
-        #linux: sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
+        #mac: sed -i '' 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx        
+        #linux: sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx        
       - name: Make docs the homepage of this subsite
         run: |
           rm -f ./docusaurus/website/src/pages/index.tsx
-          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
-          
+          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx          
       - name: Build documentation website
         run: npm run docs:build -- --config docusaurus.config.devportal.js
         
