@@ -10,7 +10,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      GRAFANA_API_KEY: $\{{ secrets.GRAFANA_API_KEY }} # Requires a Grafana API key from Grafana.com.
+      # usage of GRAFANA_API_KEY is deprecated
+      # GRAFANA_API_KEY: $\{{ secrets.GRAFANA_API_KEY }}
       GRAFANA_ACCESS_POLICY_TOKEN: $\{{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
