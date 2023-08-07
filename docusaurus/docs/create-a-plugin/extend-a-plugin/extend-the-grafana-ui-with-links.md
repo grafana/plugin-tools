@@ -52,8 +52,11 @@ new AppPlugin().configureExtensionLink({
 
 Your link will now appear in dashboard panel menus. When the user clicks the link, they will be sent to the path you defined earlier.
 
-{{% admonition type="note" %}} Each plugin is limited to a maximum of two links per extension point.{{%
-/admonition %}}
+:::note
+
+Each plugin is limited to a maximum of two links per extension point.
+
+:::
 
 ## Add a link extension using context within Grafana
 
@@ -94,8 +97,11 @@ new AppPlugin().configureExtensionLink({
 
 The above example demonstrates how to return a different `path` based on which plugin the dashboard panel is using. If the clicked-upon panel is neither a time series nor a pie chart panel, then the `configure()` function returns _undefined_. When this happens, Grafana doesn't render the link.
 
-{{% admonition type="note" %}} The context passed to the `configure()` function is bound by the `extensionPointId` into which you insert the link. Different extension points contain different contexts.{{%
-/admonition %}}
+:::note 
+
+The context passed to the `configure()` function is bound by the `extensionPointId` into which you insert the link. Different extension points contain different contexts.
+
+:::
 
 ## Add an event handler to a link
 
