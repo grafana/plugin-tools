@@ -80,7 +80,7 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
 
   if(!GRAFANA_ACCESS_POLICY_TOKEN && !GRAFANA_API_KEY) {
     throw new Error(
-      'You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins. Please see: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key for instructions.'
+      'You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins. Please see: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-a-token for instructions.'
     );
   }
   if (GRAFANA_API_KEY) {

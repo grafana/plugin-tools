@@ -59,11 +59,11 @@ jobs:
           version: latest
           args: buildAll
 
-      - name: Warn missing Grafana API key
+      - name: Warn missing Grafana access policy token
         run: |
-          echo Please generate a Grafana API key: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key
+          echo Please generate a Grafana access policy token: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-a-token
           echo Once done please follow the instructions found here: https://github.com/$\{{github.repository}}/blob/main/README.md#using-github-actions-release-workflow
-        if: $\{{ env.GRAFANA_API_KEY == '' }}
+        if: $\{{ env.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
 
       - name: Sign plugin
         run: {{ packageManagerName }} run sign
