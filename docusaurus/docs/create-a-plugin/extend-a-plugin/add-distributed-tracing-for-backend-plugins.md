@@ -1,6 +1,7 @@
 ---
-aliases:
-  - ../../../plugins/add-distributed-tracing-for-backend-plugins/
+id: add-distributed-tracing-for-backend-plugins
+title: Add distributed tracing for backend plugins
+sidebar_position: 3
 description: How to add distributed tracing for backend plugins.
 keywords:
   - grafana
@@ -10,12 +11,6 @@ keywords:
   - tracing
   - backend
   - back-end
-labels:
-  products:
-    - enterprise
-    - oss
-title: Add distributed tracing for backend plugins
-weight: 350
 ---
 
 # Add distributed tracing for backend plugins

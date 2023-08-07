@@ -1,19 +1,13 @@
 ---
-aliases:
-  - ../../../plugins/add-support-for-annotations/
+id: add-support-for-annotations
+title: Enable annotations
 description: Add support for annotations in your plugin.
+sidebar_position: 5
 keywords:
   - grafana
   - plugins
   - plugin
   - annotations
-labels:
-  products:
-    - enterprise
-    - oss
-menuTitle: Enable annotations
-title: Enable annotations
-weight: 100
 ---
 
 # Enable annotations

@@ -1,7 +1,8 @@
 ---
-aliases:
-  - ../../../plugins/add-query-editor-help/
+id: add-query-editor-help
+title: Add query editor help
 description: How to add a help component to query editors in Grafana.
+sidebar_position: 4
 keywords:
   - grafana
   - plugins
@@ -9,12 +10,6 @@ keywords:
   - queries
   - query editor
   - query editor help
-labels:
-  products:
-    - enterprise
-    - oss
-title: Add query editor help
-weight: 500
 ---
 
 # Add query editor help

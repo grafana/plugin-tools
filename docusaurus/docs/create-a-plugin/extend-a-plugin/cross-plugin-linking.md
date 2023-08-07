@@ -1,7 +1,8 @@
 ---
-aliases:
-  - ../../../plugins/cross-plugin-linking/
+id: add-support-for-variables
+title: Work with cross-plugin links
 description: Learn how to add plugin links to a Grafana app plugin.
+sidebar_position: 8
 keywords:
   - grafana
   - plugins
@@ -10,12 +11,6 @@ keywords:
   - cross-plugin links
   - extensions
   - extensions api
-labels:
-  products:
-    - enterprise
-    - oss
-title: Work with cross-plugin links
-weight: 800
 ---
 
 # Work with cross-plugin links

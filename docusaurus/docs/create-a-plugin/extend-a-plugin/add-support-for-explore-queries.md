@@ -1,7 +1,8 @@
 ---
-aliases:
-  - ../../../plugins/add-support-for-explore-queries/
+id: add-support-for-explore-queries
+title: Add features to Explore queries
 description: Add features to Explore queries.
+sidebar_position: 6
 keywords:
   - grafana
   - plugins
@@ -9,12 +10,6 @@ keywords:
   - queries
   - explore queries
   - explore
-labels:
-  products:
-    - enterprise
-    - oss
-title: Add features to Explore queries
-weight: 400
 ---
 
 # Add features to Explore queries

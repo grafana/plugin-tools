@@ -1,19 +1,14 @@
 ---
-aliases:
-  - ../../../plugins/add-support-for-variables/
+id: add-support-for-variables
+title: Add support for variables
 description: Add support for variables.
+sidebar_position: 7
 keywords:
   - grafana
   - plugins
   - plugin
   - queries
   - variables
-labels:
-  products:
-    - enterprise
-    - oss
-title: Add support for variables
-weight: 600
 ---
 
 # Add support for variables
