@@ -60,6 +60,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/josmperez"><img src="https://avatars.githubusercontent.com/u/45749060?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joseph Perez</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=josmperez" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/sd2k"><img src="https://avatars.githubusercontent.com/u/5464991?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ben Sully</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=sd2k" title="Documentation">📖</a></td>
     <td align="center"><a href="https://slorello.com/"><img src="https://avatars.githubusercontent.com/u/42971704?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Steve Lorello</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=slorello89" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/Ukochka"><img src="https://avatars.githubusercontent.com/u/20494436?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yulia Shanyrova</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=Ukochka" title="Documentation">📖</a> <a href="#infra-Ukochka" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=Ukochka" title="Code">💻</a></td>
   </tr>
 </table>
 
