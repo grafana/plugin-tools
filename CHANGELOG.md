@@ -1,3 +1,26 @@
+# (Mon Aug 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.10.0`, `@grafana/sign-plugin@1.1.0`
+  - sign-plugin: GRAFANA_ACESS_POLICY_TOKEN has been added instead of GRAFANA_API_KEY [#331](https://github.com/grafana/plugin-tools/pull/331) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- Chore/fix dev portal deployment [#332](https://github.com/grafana/plugin-tools/pull/332) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Adding gcs pipeline [#295](https://github.com/grafana/plugin-tools/pull/295) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # (Wed Aug 02 2023)
 
 #### 🐛 Bug Fix
