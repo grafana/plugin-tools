@@ -102,7 +102,11 @@ import { locationService } from '@grafana/runtime';
 locationService.partial({ 'var-service': 'billing' }, true);
 ```
 
-> **Note:** Grafana queries your data source whenever you update a variable. Excessive updates to variables can slow down Grafana and lead to a poor user experience.
+:::note
+
+Grafana queries your data source whenever you update a variable. Excessive updates to variables can slow down Grafana and lead to a poor user experience.
+
+:::
 
 ## Add support for query variables to your data source
 
@@ -131,7 +135,11 @@ async metricFindQuery(query: MyVariableQuery, options?: any) {
 }
 ```
 
-> **Note:** By default, Grafana provides a basic query model and editor for simple text queries. If that's all you need, then leave the query type as `string`:
+:::note
+
+By default, Grafana provides a basic query model and editor for simple text queries. If that's all you need, then leave the query type as `string`:
+
+:::
 
 ```ts
 async metricFindQuery(query: string, options?: any)
