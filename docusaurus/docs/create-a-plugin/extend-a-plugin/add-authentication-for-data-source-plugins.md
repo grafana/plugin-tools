@@ -1,7 +1,7 @@
 ---
-aliases:
-  - ../../plugins/developing/auth-for-datasources/
-  - /docs/grafana/next/developers/plugins/authentication/
+id: add-authentication-for-data-source-plugins
+title: Add authentication for data source plugins
+sidebar_position: 2
 description: How to add authentication for data source plugins.
 keywords:
   - grafana
@@ -10,12 +10,6 @@ keywords:
   - authentication
   - data source
   - datasource
-labels:
-  products:
-    - enterprise
-    - oss
-title: Add authentication for data source plugins
-weight: 300
 ---
 
 # Add authentication for data source plugins
