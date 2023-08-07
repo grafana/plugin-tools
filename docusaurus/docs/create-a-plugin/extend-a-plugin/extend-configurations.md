@@ -14,7 +14,9 @@ keywords:
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
 
 :::danger
+
 Do not edit the `.config/` directory or extend the tooling configurations. If you attempt to do so, then you may experience issues such as failure to compile or load in Grafana. Instead of changing the files directly, follow the instructions in this topic to make advanced configurations.
+
 :::
 
 ## Extend the ESLint config
@@ -55,9 +57,9 @@ module.exports = {
 
 There are two files in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
 
-**`jest-setup.js`:** This file is run before each test file in the suite is executed. It sets up Jest DOM for the testing library and applies some polyfills. For more information, refer to the ([Jest documentation](https://jestjs.io/docs/configuration#setupfilesafterenv-array)).
+**`jest-setup.js`:** This file is run before each test file in the suite is executed. It sets up Jest DOM for the testing library and applies some polyfills. For more information, refer to the [Jest documentation](https://jestjs.io/docs/configuration#setupfilesafterenv-array).
 
-**`jest.config.js`:** This is the Jest config file that extends the Grafana config. For more information, refer to the ([est documentation](https://jestjs.io/docs/configuration)).
+**`jest.config.js`:** This is the Jest config file that extends the Grafana config. For more information, refer to the [Jest configuration documentation](https://jestjs.io/docs/configuration).
 
 ### ESM errors with Jest
 
