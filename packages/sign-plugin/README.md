@@ -26,17 +26,17 @@ Please refer to [Signing plugins documentation](https://grafana.com/docs/grafana
 
 ### Sign a public plugin
 
-In your plugin directory, sign the plugin with your Grafana API key. Grafana sign-plugin creates a MANIFEST.txt file in the dist directory of your plugin.
+In your plugin directory, sign the plugin with your Grafana access policy token. Grafana sign-plugin creates a MANIFEST.txt file in the dist directory of your plugin.
 
 ```bash
-export GRAFANA_API_KEY=<YOUR_API_KEY>
+export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_GRAFANA_ACCESS_POLICY_TOKEN>
 npx @grafana/sign-plugin@latest
 ```
 
 If the plugin distribution directory differs from the default `dist`, specify the path to use with the `--distDir` flag.
 
 ```bash
-export GRAFANA_API_KEY=<YOUR_API_KEY>
+export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_GRAFANA_ACCESS_POLICY_TOKEN>
 npx @grafana/sign-plugin@latest --distDir path/to/directory
 ```
 
