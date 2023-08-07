@@ -1,6 +1,6 @@
 ---
-id: backend
-title: Backend
+id: manage-go
+title: Manage Go for backend
 sidebar_position: 2
 ---
 
