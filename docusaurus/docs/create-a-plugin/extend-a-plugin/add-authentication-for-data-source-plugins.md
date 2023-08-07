@@ -43,7 +43,7 @@ Data source plugins have two ways of storing custom configuration: `jsonData` an
 
 Users with the Viewer role can access data source configuration such as the contents of `jsonData` in cleartext. If you've enabled anonymous access, anyone who can access Grafana in their browser can see the contents of `jsonData`.
 
-Users of [Grafana Enterprise](/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](/docs/grafana/latest/enterprise/datasource_permissions).
+Users of [Grafana Enterprise]](https://grafana.com/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](https://grafana.com/docs/grafana/latest/enterprise/datasource_permissions).
 
 > **Important:** Do not use `jsonData` with sensitive data such as password, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
 
@@ -128,11 +128,11 @@ Once the user has saved the configuration for a data source, the secret data sou
 
 The Grafana server comes with a proxy that lets you define templates for your requests: _proxy routes_. Grafana sends the proxy route to the server, decrypts the secrets along with other configuration, and adds them to the request before sending it.
 
-> **Note:** Be sure not to confuse the data source proxy with the [auth proxy]({{< relref "../../../../setup-grafana/configure-security/configure-authentication/auth-proxy/index.md" >}}). The data source proxy is used to authenticate a data source, while the auth proxy is used to log into Grafana itself.
+> **Note:** Be sure not to confuse the data source proxy with the [auth proxy](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/auth-proxy/index.md). The data source proxy is used to authenticate a data source, while the auth proxy is used to log into Grafana itself.
 
 ### Add a proxy route to your plugin
 
-To forward requests through the Grafana proxy, you need to configure one or more _proxy routes_. A proxy route is a template for any outgoing request that is handled by the proxy. You can configure proxy routes in the [plugin.json]({{< relref "../../metadata.md" >}}) file.
+To forward requests through the Grafana proxy, you need to configure one or more _proxy routes_. A proxy route is a template for any outgoing request that is handled by the proxy. You can configure proxy routes in the [plugin.json](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/) file.
 
 1. Add the route to `plugin.json`:
 
@@ -297,7 +297,7 @@ While the data source proxy supports the most common authentication methods for 
 - Proxy routes only support HTTP or HTTPS.
 - Proxy routes don't support custom token authentication.
 
-If any of these limitations apply to your plugin, you need to add a [backend plugin]({{< relref "../../introduction-to-plugin-development/backend" >}}). Because backend plugins run on the server, they can access decrypted secrets, which makes it easier to implement custom authentication methods.
+If any of these limitations apply to your plugin, you need to add a [backend plugin](../../introduction/backend-plugins). Because backend plugins run on the server, they can access decrypted secrets, which makes it easier to implement custom authentication methods.
 
 The decrypted secrets are available from the `DecryptedSecureJSONData` field in the instance settings.
 
@@ -315,7 +315,7 @@ func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 ## Forward OAuth identity for the logged-in user
 
-If your data source uses the same OAuth provider as Grafana itself, for example using [Generic OAuth Authentication]({{< relref "../../../../setup-grafana/configure-security/configure-authentication/generic-oauth" >}}), then your data source plugin can reuse the access token for the logged-in Grafana user.
+If your data source uses the same OAuth provider as Grafana itself, for example using [Generic OAuth Authentication](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/generic-oauth), then your data source plugin can reuse the access token for the logged-in Grafana user.
 
 To allow Grafana to pass the access token to the plugin, update the data source configuration and set the `jsonData.oauthPassThru` property to `true`. The [DataSourceHttpSettings](https://developers.grafana.com/ui/latest/index.html?path=/story/data-source-datasourcehttpsettings--basic) settings provide a toggle, the **Forward OAuth Identity** option, for this. You can also build an appropriate toggle to set `jsonData.oauthPassThru` in your data source configuration page UI.
 

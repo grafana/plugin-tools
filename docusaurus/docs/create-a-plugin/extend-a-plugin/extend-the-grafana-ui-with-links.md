@@ -26,7 +26,7 @@ You can use the Plugin extensions API with your Grafana app plugins to add links
 Be sure your plugin meets the following requirements before proceeding:
 
 - It must be an app plugin.
-- It must be preloaded (by setting the [preload property]({{< relref "../../metadata.md" >}}) to `true` in the `plugin.json`
+- It must be preloaded (by setting the [preload property](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/) to `true` in the `plugin.json`
 - It must be installed and enabled.
 
 ## Available extension points within Grafana
@@ -143,4 +143,4 @@ const SampleModal = ({ onDismiss, pluginId }: Props) => {
 };
 ```
 
-As you can see, the plugin extensions API enables you to insert links into the UI of Grafana applications that send users to plugin features or trigger actions based on where the user clicked. The plugins extension API can also be used for [cross-plugin linking]({{< relref "./cross-plugin-linking" >}}).
+As you can see, the plugin extensions API enables you to insert links into the UI of Grafana applications that send users to plugin features or trigger actions based on where the user clicked. The plugins extension API can also be used for [cross-plugin linking](./cross-plugin-linking).
