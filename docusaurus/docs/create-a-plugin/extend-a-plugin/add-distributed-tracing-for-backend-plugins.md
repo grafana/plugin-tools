@@ -15,7 +15,11 @@ keywords:
 
 # Add distributed tracing for backend plugins
 
-> **Note:** This feature requires at least Grafana 9.5.0, and your plugin needs to be built at least with grafana-plugins-sdk-go v0.157.0. If you run a plugin with tracing features on an older version of Grafana, tracing is disabled.
+:::note
+
+This feature requires at least Grafana 9.5.0, and your plugin needs to be built at least with grafana-plugins-sdk-go v0.157.0. If you run a plugin with tracing features on an older version of Grafana, tracing is disabled.
+
+:::
 
 Distributed tracing allows backend plugin developers to create custom spans in their plugins, and send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
 
@@ -37,11 +41,19 @@ OpenTelemetry must be enabled and configured for the Grafana instance. Please re
 
 Refer to the [OpenTelemetry Go SDK](https://pkg.go.dev/go.opentelemetry.io/otel) for in-depth documentation about all the features provided by OpenTelemetry.
 
-> **Note:** If tracing is disabled in Grafana, `backend.DefaultTracer()` returns a no-op tracer.
+:::note
+
+If tracing is disabled in Grafana, `backend.DefaultTracer()` returns a no-op tracer.
+
+:::
 
 ## Implement tracing in your plugin
 
-> **Note:** Make sure you are using at least grafana-plugin-sdk-go v0.157.0. You can update with `go get -u github.com/grafana/grafana-plugin-sdk-go`.
+:::note
+
+Make sure you are using at least grafana-plugin-sdk-go v0.157.0. You can update with `go get -u github.com/grafana/grafana-plugin-sdk-go`.
+
+:::
 
 ### Configure a global tracer
 

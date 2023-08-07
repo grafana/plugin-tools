@@ -39,9 +39,17 @@ Users with the Viewer role can access data source configuration such as the cont
 
 Users of [Grafana Enterprise]](https://grafana.com/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](https://grafana.com/docs/grafana/latest/enterprise/datasource_permissions).
 
-> **Important:** Do not use `jsonData` with sensitive data such as password, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
+:::important
 
-> **Note:** You can see the settings that the current user has access to by entering `window.grafanaBootData` in the developer console of your browser.
+Do not use `jsonData` with sensitive data such as password, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
+
+:::
+
+:::note
+
+You can see the settings that the current user has access to by entering `window.grafanaBootData` in the developer console of your browser.
+
+:::
 
 ### Store configuration in `secureJsonData`
 
@@ -70,7 +78,11 @@ To demonstrate how you can add secrets to a data source plugin, let's add suppor
    const { apiKey } = secureJsonData;
    ```
 
-   > **Note:** You can do this until the user saves the configuration; when the user saves the configuration, Grafana clears the value. After that, you can use `secureJsonFields` to determine whether the property has been configured.
+:::note
+
+You can do this until the user saves the configuration; when the user saves the configuration, Grafana clears the value. After that, you can use `secureJsonFields` to determine whether the property has been configured.
+
+:::
 
 1. To securely update the secret in your plugin's configuration editor, update the `secureJsonData` object using the `onOptionsChange` prop:
 
@@ -122,7 +134,11 @@ Once the user has saved the configuration for a data source, the secret data sou
 
 The Grafana server comes with a proxy that lets you define templates for your requests: _proxy routes_. Grafana sends the proxy route to the server, decrypts the secrets along with other configuration, and adds them to the request before sending it.
 
-> **Note:** Be sure not to confuse the data source proxy with the [auth proxy](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/auth-proxy/index.md). The data source proxy is used to authenticate a data source, while the auth proxy is used to log into Grafana itself.
+:::note
+
+Be sure not to confuse the data source proxy with the [auth proxy](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/auth-proxy/index.md). The data source proxy is used to authenticate a data source, while the auth proxy is used to log into Grafana itself.
+
+:::
 
 ### Add a proxy route to your plugin
 
@@ -139,7 +155,11 @@ To forward requests through the Grafana proxy, you need to configure one or more
    ]
    ```
 
-   > **Note:** You need to restart the Grafana server every time you make a change to your `plugin.json` file.
+    :::note
+
+    You need to restart the Grafana server every time you make a change to your `plugin.json` file.
+
+    :::
 
 1. In the `DataSource`, extract the proxy URL from `instanceSettings` to a class property called `url`:
 
