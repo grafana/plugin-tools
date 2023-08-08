@@ -13,7 +13,7 @@ jobs:
         with:
           # Number of days of inactivity before a stale Issue or Pull Request is closed.
           # Set to -1 to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
-          days-before-close: 60
+          days-before-close: 14
           # Number of days of inactivity before an Issue or Pull Request becomes stale
           days-before-stale: 90
           exempt-issue-labels: no stalebot
@@ -23,7 +23,7 @@ jobs:
           stale-pr-label: stale
           stale-pr-message: >
             This pull request has been automatically marked as stale because it has not had
-            activity in the last 30 days. It will be closed in 2 weeks if no further activity occurs. Please
+            activity in the last 90 days. It will be closed in 2 weeks if no further activity occurs. Please
             feel free to give a status update now, ping for review, or re-open when it's ready.
             Thank you for your contributions!
           close-pr-message: >
