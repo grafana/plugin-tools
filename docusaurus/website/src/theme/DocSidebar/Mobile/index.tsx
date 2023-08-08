@@ -5,6 +5,7 @@ import {
   type NavbarSecondaryMenuComponent,
   ThemeClassNames,
 } from '@docusaurus/theme-common';
+// @ts-ignore
 import {useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';
 import DocSidebarItems from '@theme/DocSidebarItems';
 import type {Props} from '@theme/DocSidebar/Mobile';
