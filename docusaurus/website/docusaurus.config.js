@@ -1,15 +1,13 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const path = require('path');
 const remarkFigureCaption = require('gridsome-remark-figure-caption');
+const { grafanaPrismTheme } = require('./src/theme/prism');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Grafana Plugin Tools',
-  tagline: 'Scaffold a Grafana plugin by running one command',
+  tagline: 'Scaffold a Grafana plugin with one command',
   url: 'https://grafana.github.io/',
   baseUrl: 'plugin-tools/',
   onBrokenLinks: 'throw',
@@ -139,8 +137,13 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Grafana Labs. Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: grafanaPrismTheme,
+        // darkTheme: darkCodeTheme,
+      },
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
       },
     }),
 };
