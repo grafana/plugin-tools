@@ -2,7 +2,7 @@
 id: add-support-for-variables
 title: Add support for variables
 description: Add support for variables.
-sidebar_position: 7
+sidebar_position: 6
 keywords:
   - grafana
   - plugins

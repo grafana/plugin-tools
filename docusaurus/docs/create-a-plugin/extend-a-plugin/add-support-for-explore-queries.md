@@ -2,7 +2,7 @@
 id: add-support-for-explore-queries
 title: Add features to Explore queries
 description: Add features to Explore queries.
-sidebar_position: 6
+sidebar_position: 5
 keywords:
   - grafana
   - plugins
