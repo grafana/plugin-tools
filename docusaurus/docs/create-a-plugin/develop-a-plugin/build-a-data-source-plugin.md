@@ -41,7 +41,7 @@ In this tutorial, you'll:
 
 {{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
 
-To learn how to create a backend data source plugin, see [Build a data source backend plugin]({{< relref "./build-a-data-source-backend-plugin.md" >}})
+To learn how to create a backend data source plugin, see [Build a data source backend plugin](./build-a-data-source-backend-plugin.md)
 
 ## Anatomy of a plugin
 
@@ -316,7 +316,7 @@ So far, you've generated the data returned by the data source. A more realistic 
 
 While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 
-The main advantage of `getBackendSrv` is that it proxies requests through the Grafana server rather making the request from the browser. This is strongly recommended when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins]({{< relref "../extend-a-plugin/add-authentication-for-data-source-plugins.md" >}}).
+The main advantage of `getBackendSrv` is that it proxies requests through the Grafana server rather making the request from the browser. This is strongly recommended when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../extend-a-plugin/add-authentication-for-data-source-plugins.md).
 
 1. Import `getBackendSrv`.
 
@@ -374,7 +374,7 @@ In this tutorial you built a complete data source plugin for Grafana that uses a
 
 Learn how you can improve your plugin even further, by reading our advanced guides:
 
-- [Add support for variables](/docs/grafana/latest/developers/plugins/add-support-for-variables/)
-- [Add support for annotations](/docs/grafana/latest/developers/plugins/add-support-for-annotations/)
-- [Add support for Explore queries](/docs/grafana/latest/developers/plugins/add-support-for-explore-queries/)
-- [Build a logs data source](/docs/grafana/latest/developers/plugins/build-a-logs-data-source-plugin/)
+- [Add support for variables](../extend-a-plugin/add-support-for-variables.md)
+- [Add support for annotations](../extend-a-plugin/enable-annotations.md)
+- [Add support for Explore queries](../extend-a-plugin/add-support-for-explore-queries.md)
+- [Build a logs data source](../develop-a-plugin/build-a-logs-data-source-plugin.md)
