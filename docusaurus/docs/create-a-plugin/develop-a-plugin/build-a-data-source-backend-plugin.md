@@ -118,7 +118,7 @@ The folders and files used to build the backend for the data source are:
 | file/folder        | description                                                                                                                                          |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Magefile.go`      | It’s not a requirement to use mage build files, but we strongly recommend using it so that you can use the build targets provided by the plugin SDK. |
-| `/go.mod `         | Go modules dependencies, [reference](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                 |
+| `/go.mod `         | Go [modules dependencies](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                 |
 | `/src/plugin.json` | A JSON file describing the backend plugin                                                                                                            |
 | `/pkg/main.go`     | Starting point of the plugin binary.                                                                                                                 |
 
@@ -144,7 +144,7 @@ In the tutorial we have extracted a method named `query` to take care of each qu
 
 As you can see the sample only returns static numbers. Try to extend the plugin to return other types of data.
 
-You can read more about how to [build data frames in our docs](/docs/grafana/latest/developers/plugins/data-frames/).
+You can read more about how to [build data frames in our docs](/docs/introduction/data-frames).
 
 ## Add support for health checks
 
@@ -158,7 +158,7 @@ Open `/pkg/plugin/datasource.go`. In this file you'll see that the `SampleDataso
 
 ## Add authentication
 
-Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../extend-a-plugin/add-authentication-for-data-source-plugins/#authenticate-using-a-backend-plugin).
+Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](/docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins/#authenticate-using-a-backend-plugin).
 
 ## Enable Grafana Alerting
 

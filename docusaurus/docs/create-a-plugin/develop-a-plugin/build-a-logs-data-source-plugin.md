@@ -31,7 +31,7 @@ When these steps are done, then you can improve the user experience with one or 
 
 ### Step 1: Enable logs support
 
-Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../../metadata.md) file.
+Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/) file.
 
 ```json
 {
@@ -41,7 +41,7 @@ Tell Grafana that your data source plugin can return log data, by adding `"logs"
 
 ### Step 2: Construct the log data
 
-As it does with metrics data, Grafana expects your plugin to return log data as a [data frame](../../introduction-to-plugin-development/data-frames.md).
+As it does with metrics data, Grafana expects your plugin to return log data as a [data frame](../../introduction/data-frames.md).
 
 To return log data, return a data frame with at least one time field and one text field from the data source's `query` method.
 
