@@ -1,6 +1,7 @@
 ---
-aliases:
-  - ../../../plugins/build-a-streaming-data-source-plugin/
+id: build-a-streaming-data-source-plugin
+title: Build a streaming data source plugin
+sidebar_position: 9
 description: How to build a streaming data source plugin.
 keywords:
   - grafana
@@ -9,12 +10,6 @@ keywords:
   - streaming
   - streaming data source
   - datasource
-labels:
-  products:
-    - enterprise
-    - oss
-title: Build a streaming data source plugin
-weight: 600
 ---
 
 # Build a streaming data source plugin

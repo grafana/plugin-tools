@@ -1,5 +1,8 @@
 ---
+id: build-a-panel-plugin
 description: Learn how to create a custom visualization for your dashboards.
+title: Build a panel plugin
+sidebar_position: 8
 keywords:
   - grafana
   - plugins
@@ -8,12 +11,6 @@ keywords:
   - custom visualization
   - dashboard
   - dashboards
-labels:
-  products:
-    - enterprise
-    - oss
-title: Build a panel plugin
-weight: 100
 ---
 
 ## Introduction

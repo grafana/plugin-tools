@@ -1,4 +1,7 @@
 ---
+id: build-a-data-source-backend-plugin
+title: Build a data source backend plugin
+sidebar_position: 4
 description: Create a backend for your data source plugin.
 keywords:
   - grafana
@@ -7,12 +10,6 @@ keywords:
   - backend
   - backend data source
   - datasource
-labels:
-  products:
-    - enterprise
-    - oss
-title: Build a data source backend plugin
-weight: 400
 ---
 
 ## Introduction
