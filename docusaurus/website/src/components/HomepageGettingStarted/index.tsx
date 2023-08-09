@@ -9,10 +9,10 @@ import UpdateNPM from '@snippets/createplugin-update.npm.md';
 function HomepageGettingStarted() {
   return (
     <>
-      <div className={styles.gettingStartedSection}>
-        <div className="container padding-vert--xl text--left">
+      <div className="container text--left margin-bottom--lg">
+        <div className="card padding--lg">
           <div className="row">
-            <div className="col col--4 col--offset-1">
+            <div className="col col--5">
               <h2>Get started in seconds</h2>
               <p>
                 Whether you’re building an app, datasource or panel plugin, Create Plugin lets you{' '}
@@ -34,13 +34,13 @@ function HomepageGettingStarted() {
           </div>
         </div>
       </div>
-      <div>
-        <div className="container padding-vert--xl text--left">
+      <div className="container text--left margin-bottom--xl">
+        <div className="card padding--lg">
           <div className="row">
-            <div className="col col--6 col--offset-1">
+            <div className="col col--6">
               <img className={styles.featureImage} alt="Easy to update" src={useBaseUrl('img/homepage_update.gif')} />
             </div>
-            <div className="col col--4 col--offset-1">
+            <div className="col col--5">
               <h2>Easy to Maintain</h2>
               <p>
                 Updating your build tooling can be a daunting and time-consuming task. When new versions of Create

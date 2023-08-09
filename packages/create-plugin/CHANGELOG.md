@@ -1,3 +1,19 @@
+# v1.10.0 (Mon Aug 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all your work!
+
+#### 🚀 Enhancement
+
+- sign-plugin: GRAFANA_ACESS_POLICY_TOKEN has been added instead of GRAFANA_API_KEY [#331](https://github.com/grafana/plugin-tools/pull/331) ([@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 1
+
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # v1.9.1 (Wed Aug 02 2023)
 
 #### 🐛 Bug Fix

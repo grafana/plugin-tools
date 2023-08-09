@@ -1,0 +1,55 @@
+name: Deploy to Developer Portal Bucket
+
+on:
+  push:
+    branches:
+      - main      
+    paths:
+      - '.github/workflows/deploy-to-developer-portal.yml'
+      - 'docusaurus/**'
+jobs:
+  deploy:
+    name: Deploy docs to Developer Portal Bucket
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Generate token
+      #   id: generate_token
+      #   uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+      #   with:
+      #     app_id: ${{ secrets.APP_ID }}
+      #     private_key: ${{ secrets.APP_PEM }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+      
+        #mac: sed -i '' 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx        
+        #mac: grep -rl "](/docs/" docusaurus/docs | xargs sed -i '' 's/](\/docs\//](\//g'
+        #linux: sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx        
+        #linux: grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
+      - name: Make docs the homepage of this subsite
+        run: |
+          rm -f ./docusaurus/website/src/pages/index.tsx
+          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
+          grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
+      - name: Build documentation website
+        run: npm run docs:build -- --config docusaurus.config.devportal.js
+        
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Deploy to Developer Portal Bucket
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: './docusaurus/website/build/'
+          destination: 'grafana_developer_portal/plugin-tools'
+          parent: false

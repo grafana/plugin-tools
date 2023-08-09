@@ -9,6 +9,7 @@
     "build": "nx run-many --target=build --parallel --exclude website",
     "dev": "nx run-many --target=dev --parallel",
     "docs": "nx run website:start",
+    "docs:clear": "nx run website:clear",
     "docs:build": "nx run website:build",
     "lint": "nx run-many --target=lint --parallel",
     "lint:fix": "nx run-many --target=lint:fix --parallel",

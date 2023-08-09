@@ -12,11 +12,29 @@ const {
   themeConfigColorMode,
 } = require('./docusaurus.config.base');
 
+
+// Replace docs link in footer so builds don't have broken links.
+const [docs, ...rest] = themeConfigFooter.links;
+const footerConfig = {
+  ...themeConfigFooter,
+  links: [
+    {
+      title: 'Docs',
+      items: [
+        {
+          label: 'Get Started',
+          to: '/',
+        },
+      ],
+    },
+    ...rest,
+  ],
+};
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...generalConfig,
-  url: 'https://grafana.github.io/',
-  noIndex: true,
+  url: 'https://devportal.grafana-dev.net/',
 
   plugins: plugins,
 
@@ -25,8 +43,12 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: presetsDocs,
+        docs: {
+          ...presetsDocs,
+          routeBasePath: '/',
+        },
         theme: presetsTheme,
+        blog: false,
       }),
     ],
   ],
@@ -35,7 +57,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: themeConfigNavbar,
-      footer: themeConfigFooter,
+      footer: footerConfig,
       prism: themeConfigPrism,
       colorMode: themeConfigColorMode,
     }),

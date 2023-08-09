@@ -63,7 +63,12 @@ jobs:
             ./packages/create-plugin/generated/node_modules
           key: ${{ steps.cache-generated-deps-restore.outputs.cache-primary-key }}
 
-      - name: '@grafana/sign-plugin - sign generated plugin'
+      - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generated plugin'
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+        run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        working-directory: ./packages/create-plugin/generated
+      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generated plugin'
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
