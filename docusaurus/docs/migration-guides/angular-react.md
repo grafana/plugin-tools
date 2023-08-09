@@ -2,6 +2,8 @@
 id: migrate-angularjs-to-react
 title: Migrate from AngularJS to React
 sidebar_position: 3
+tags: grafana, plugins, angular, react, migration, migrate
+description: "How to migrate a Grafana plugin from AngularJS to React."
 ---
 
 # Migrate a plugin from AngularJS to React
