@@ -23,7 +23,7 @@ const footerConfig = {
       items: [
         {
           label: 'Get Started',
-          to: '/plugin-tools/',
+          to: '/',
         },
       ],
     },

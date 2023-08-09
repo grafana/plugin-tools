@@ -13,6 +13,8 @@ jobs:
   deploy:
     name: Build docs
     runs-on: ubuntu-latest
+    env:
+      NX_SKIP_NX_CACHE: 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -25,5 +27,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      - name: Build documentation website
+      - name: Build documentation website (GH Pages)
         run: npm run docs:build
+      - name: Clear documentation build
+        run: npm run docs:clear
+      - name: Make docs the homepage of this subsite (Dev Portal)
+        run: |
+          rm -f ./docusaurus/website/src/pages/index.tsx
+          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
+          grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
+      - name: Build documentation website (Dev Portal)
+        run: npm run docs:build -- --config docusaurus.config.devportal.js
