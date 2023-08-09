@@ -13,6 +13,8 @@ jobs:
   deploy:
     name: Build docs
     runs-on: ubuntu-latest
+    env:
+      NX_SKIP_NX_CACHE: 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
