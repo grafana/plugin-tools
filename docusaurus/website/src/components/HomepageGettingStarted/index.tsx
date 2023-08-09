@@ -28,7 +28,7 @@ function HomepageGettingStarted() {
               <img
                 className={styles.featureImage}
                 alt="Easy to get started in seconds"
-                src={useBaseUrl('img/render1691508271332-1.gif')}
+                src={useBaseUrl('img/homepage_gettingstarted.gif')}
               />
             </div>
           </div>
