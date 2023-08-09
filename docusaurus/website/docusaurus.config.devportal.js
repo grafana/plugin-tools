@@ -12,6 +12,25 @@ const {
   themeConfigColorMode,
 } = require('./docusaurus.config.base');
 
+
+// Replace docs link in footer so builds don't have broken links.
+const [docs, ...rest] = themeConfigFooter.links;
+const footerConfig = {
+  ...themeConfigFooter,
+  links: [
+    {
+      title: 'Docs',
+      items: [
+        {
+          label: 'Get Started',
+          to: '/plugin-tools/',
+        },
+      ],
+    },
+    ...rest,
+  ],
+};
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...generalConfig,
@@ -38,7 +57,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: themeConfigNavbar,
-      footer: themeConfigFooter,
+      footer: footerConfig,
       prism: themeConfigPrism,
       colorMode: themeConfigColorMode,
     }),
