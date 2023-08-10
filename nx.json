@@ -4,7 +4,7 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test"],
+        "cacheableOperations": ["build", "lint", "typecheck", "test"],
         "accessToken": "ZWM1ZTNhMzItNmI1Zi00YTc5LThkMTQtNTE5ZjA3NTc3MmEwfHJlYWQtd3JpdGU="
       }
     }
@@ -13,6 +13,9 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist"]
+    },
+    "typecheck": {
+      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"]
     },
     "lint": {
       "inputs": ["default", "{workspaceRoot}/.eslintrc"]
