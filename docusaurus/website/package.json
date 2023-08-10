@@ -47,5 +47,19 @@
   },
   "engines": {
     "node": ">=16"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "inputs": [
+          "{projectRoot}/**/*",
+          "{workspaceRoot}/docusaurus/docs/*.@(md|mdx|json)",
+          "{workspaceRoot}/docusaurus/docs/**/*.@(md|mdx|json)"
+        ],
+        "outputs": [
+          "{projectRoot}/build"
+        ]
+      }
+    }
   }
 }
