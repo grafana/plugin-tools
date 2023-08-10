@@ -12,6 +12,8 @@ jobs:
   deploy:
     name: Deploy docs to GitHub Pages
     runs-on: ubuntu-latest
+    env:
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Generate token
         id: generate_token
