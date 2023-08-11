@@ -34,7 +34,8 @@ const footerConfig = {
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...generalConfig,
-  url: 'https://devportal.grafana-dev.net/',
+  url: 'https://grafana-dev.com/',
+  baseUrl: 'developers/plugin-tools/',
 
   plugins: plugins,
 
