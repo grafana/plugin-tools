@@ -34,7 +34,7 @@ jobs:
           sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
           grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
       - name: Build documentation website
-        run: npm run docs:build -- --config docusaurus.config.devportal.js
+        run: npm run docs:build -- --config docusaurus.config.devportal.prod.js
         
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
