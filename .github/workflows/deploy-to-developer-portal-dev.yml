@@ -1,4 +1,4 @@
-name: Deploy to Developer Portal Bucket
+name: Deploy to Developer Portal DEV Bucket
 
 on:
   workflow_dispatch:
