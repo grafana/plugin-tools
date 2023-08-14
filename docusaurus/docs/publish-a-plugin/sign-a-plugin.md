@@ -34,13 +34,13 @@ To verify ownership of your plugin, generate an access token that you'll use eve
    Realm: has to be your-org-name (all-stacks)
    Scope: plugins:write
 
-   {{< figure src="/media/docs/plugins/create-access-policy-v2.png" class="docs-image--no-shadow" max-width="650px" >}}
+   ![Create access policy.](/img/create-access-policy-v2.png)
 
 1. Click **Create token** to create a new token.
 
    The expiration date field is optional, though you should change tokens periodically for increased security.
 
-   {{< figure src="/media/docs/plugins/create-access-policy-token.png" class="docs-image--no-shadow" max-width="650px" >}}
+   ![Create access policy token.](/img/create-access-policy-token.png)
 
 1. Click **Create** and save a copy of the token somewhere secure for future reference.
 
