@@ -1,3 +1,15 @@
+# v1.10.1 (Mon Aug 14 2023)
+
+#### 🐛 Bug Fix
+
+- Fix swc-core version to 1.3.75 to prevent existing bug with baseUrls [#346](https://github.com/grafana/plugin-tools/pull/346) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.10.0 (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:

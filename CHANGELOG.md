@@ -1,3 +1,19 @@
+# (Mon Aug 14 2023)
+
+#### 🐛 Bug Fix
+
+- prod deployment [#345](https://github.com/grafana/plugin-tools/pull/345) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Adding stalebot config [#291](https://github.com/grafana/plugin-tools/pull/291) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@1.10.1`
+  - Fix swc-core version to 1.3.75 to prevent existing bug with baseUrls [#346](https://github.com/grafana/plugin-tools/pull/346) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:
