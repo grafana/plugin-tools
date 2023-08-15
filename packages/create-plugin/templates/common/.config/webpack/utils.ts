@@ -8,6 +8,7 @@ import { SOURCE_DIR } from './constants';
 
 
 export function isWSL() {
+  console.log('isWSL works');
   if (process.platform !== 'linux') {
 		return false;
 	}

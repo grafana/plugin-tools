@@ -19,8 +19,7 @@ import { SOURCE_DIR, DIST_DIR } from './constants';
 const pluginJson = getPluginJson();
 
 const config = async (env): Promise<Configuration> => {
-
-  const baseConfig: Configuration = {
+    const baseConfig: Configuration = {
     cache: {
       type: 'filesystem',
       buildDependencies: {
@@ -201,6 +200,7 @@ const config = async (env): Promise<Configuration> => {
   }
 
   if(isWSL()) {
+    console.log('WSL detected, enabling polling for file changes');
     baseConfig.watchOptions = {
       poll: 3000,
       ignored: /node_modules/,
