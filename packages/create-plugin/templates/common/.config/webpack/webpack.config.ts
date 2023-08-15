@@ -200,7 +200,6 @@ const config = async (env): Promise<Configuration> => {
   }
 
   if(isWSL()) {
-    console.log('WSL detected, enabling polling for file changes');
     baseConfig.watchOptions = {
       poll: 3000,
       ignored: /node_modules/,

@@ -8,20 +8,19 @@ import { SOURCE_DIR } from './constants';
 
 
 export function isWSL() {
-  console.log('isWSL works');
   if (process.platform !== 'linux') {
-		return false;
-	}
+    return false;
+  }
 
-	if (os.release().toLowerCase().includes('microsoft')) {
-		return true;
-	}
+  if (os.release().toLowerCase().includes('microsoft')) {
+    return true;
+  }
 
-	try {
-		return fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
-	} catch {
-		return false;
-	}
+  try {
+    return fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
+  } catch {
+    return false;
+  }
 } 
 
 export function getPackageJson() {
