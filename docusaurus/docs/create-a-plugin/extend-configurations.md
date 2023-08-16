@@ -54,7 +54,7 @@ There are two files in the project root that belong to Jest: `jest-setup.js` and
 
 ### ESM errors with Jest
 
-If you see `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test` see [here](../faq-troubleshoot.md)
+If you see `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test` see [Troubleshooting](../troubleshooting.md).
 
 ---
 
