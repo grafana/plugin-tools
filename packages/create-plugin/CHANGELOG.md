@@ -1,3 +1,15 @@
+# v1.11.0 (Wed Aug 16 2023)
+
+#### 🚀 Enhancement
+
+- create-plugin: Enable webpack watchOption -> poll if WSL is detected [#356](https://github.com/grafana/plugin-tools/pull/356) ([@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 1
+
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # v1.10.1 (Mon Aug 14 2023)
 
 #### 🐛 Bug Fix
