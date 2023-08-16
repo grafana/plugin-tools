@@ -63,7 +63,7 @@ To extend Explore functionality for your data source, define an Explore-specific
 
 By default, Explore should select an appropriate and useful visualization for your data. It can figure out whether the returned data is time series data or logs or something else, and creates the right type of visualization.
 
-However, if you want a custom visualization, you can add a hint to your returned data frame by setting the `meta' attribute to `preferredVisualisationType`.
+However, if you want a custom visualization, you can add a hint to your returned data frame by setting the `meta` attribute to `preferredVisualisationType`.
 
 Construct a data frame with specific metadata like this:
 
