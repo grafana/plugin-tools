@@ -1,7 +1,7 @@
 ---
 id: publishing-and-signing-criteria
 title: Publishing and signing criteria
-sidebar_position: 2
+sidebar_position: 1
 keywords:
   - grafana
   - plugins
