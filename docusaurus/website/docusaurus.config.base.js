@@ -90,7 +90,7 @@ const themeConfigFooter = {
       items: [
         {
           label: 'Get Started',
-          to: '/docs/get-started',
+          to: '/',
         },
       ],
     },

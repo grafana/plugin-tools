@@ -15,18 +15,20 @@ const {
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...generalConfig,
-  url: 'https://grafana.github.io/',
-  noIndex: true,
-
-  plugins: plugins,
-
+  url: 'https://grafana.com/',
+  baseUrl: 'developers/plugin-tools/',
+  plugins,
   presets: [
     [
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: presetsDocs,
+        docs: {
+          ...presetsDocs,
+          routeBasePath: '/',
+        },
         theme: presetsTheme,
+        blog: false,
       }),
     ],
   ],
@@ -39,6 +41,7 @@ const config = {
       prism: themeConfigPrism,
       colorMode: themeConfigColorMode,
     }),
+
 };
 
 module.exports = config;
