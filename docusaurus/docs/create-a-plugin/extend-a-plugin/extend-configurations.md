@@ -1,7 +1,6 @@
 ---
 id: extend-configurations
 title: Extend configurations
-sidebar_position: 10
 description: Advanced configurations of Grafana plugins.
 keywords:
   - grafana

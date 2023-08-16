@@ -2,7 +2,6 @@
 id: custom-panel-option-editors
 title: Build a custom panel option editor
 description: How to build a custom panel option editor.
-sidebar_position: 9
 keywords:
   - grafana
   - plugins

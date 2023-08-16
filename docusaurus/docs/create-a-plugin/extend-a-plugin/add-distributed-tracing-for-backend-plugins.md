@@ -1,7 +1,6 @@
 ---
 id: add-distributed-tracing-for-backend-plugins
 title: Add distributed tracing for backend plugins
-sidebar_position: 3
 description: How to add distributed tracing for backend plugins.
 keywords:
   - grafana
