@@ -6,7 +6,7 @@ sidebar_position: 6
 
 ## Troubleshooting
 
-Here are some things to try and check if you experience problems while working with the `create-plugin` or `sign-plugin` tools in Windows.
+Here are some things to try and check if you experience problems while working with the `create-plugin` or `sign-plugin` tools.
 
 ### I am getting: `Unsupported operating system 'Windows' detected. Please use WSL with create-plugin`
 
