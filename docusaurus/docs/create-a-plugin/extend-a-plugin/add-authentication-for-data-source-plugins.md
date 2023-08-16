@@ -148,11 +148,11 @@ To forward requests through the Grafana proxy, you need to configure one or more
    ]
    ```
 
-    :::note
+  :::note
 
-    You need to restart the Grafana server every time you make a change to your `plugin.json` file.
+  You need to restart the Grafana server every time you make a change to your `plugin.json` file.
 
-    :::
+  :::
 
 1. In the `DataSource`, extract the proxy URL from `instanceSettings` to a class property called `url`:
 
