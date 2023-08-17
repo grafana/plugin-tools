@@ -3,6 +3,7 @@ id: build-a-panel-plugin-with-d3
 title: Build a panel plugin with D3.js
 sidebar_position: 7
 description: how to use D3.js in your panel plugins.
+draft: true
 keywords:
   - grafana
   - plugins

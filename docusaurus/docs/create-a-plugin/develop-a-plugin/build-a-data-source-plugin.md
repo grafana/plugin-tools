@@ -3,6 +3,7 @@ id: build-a-data-source-plugin
 title: Build a data source plugin
 sidebar_position: 5
 description: Create a plugin to add support for your own data sources.
+draft: true
 keywords:
   - grafana
   - plugins

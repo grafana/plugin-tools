@@ -3,6 +3,7 @@ id: build-a-panel-plugin
 description: Learn how to create a custom visualization for your dashboards.
 title: Build a panel plugin
 sidebar_position: 8
+draft: true
 keywords:
   - grafana
   - plugins

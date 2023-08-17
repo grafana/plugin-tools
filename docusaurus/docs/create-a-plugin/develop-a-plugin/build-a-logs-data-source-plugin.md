@@ -3,6 +3,7 @@ id: build-a-logs-data-source-plugin
 title: Build a logs data source plugin
 sidebar_position: 6
 description: How to build a logs data source plugin.
+draft: true
 keywords:
   - grafana
   - plugins
