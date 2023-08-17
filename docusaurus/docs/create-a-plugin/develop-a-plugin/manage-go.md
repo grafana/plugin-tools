@@ -8,7 +8,7 @@ Develop backend components for a Grafana plugin in [Go](https://go.dev/). The fo
 
 ## Update the Go SDK
 
-To keep the [Grafana plugin SDK for Go](../introduction/grafana-plugin-sdk-for-go.md) up to date:
+To keep the [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) up to date:
 
 ```bash
 go get -u github.com/grafana/grafana-plugin-sdk-go
