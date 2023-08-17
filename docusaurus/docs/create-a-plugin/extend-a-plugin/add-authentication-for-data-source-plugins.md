@@ -135,7 +135,7 @@ Be sure not to confuse the data source proxy with the [auth proxy](https://grafa
 
 ### Add a proxy route to your plugin
 
-To forward requests through the Grafana proxy, you need to configure one or more _proxy routes_. A proxy route is a template for any outgoing request that is handled by the proxy. You can configure proxy routes in the [plugin.json](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/) file.
+To forward requests through the Grafana proxy, you need to configure one or more _proxy routes_. A proxy route is a template for any outgoing request that is handled by the proxy. You can configure proxy routes in the [plugin.json](../../metadata.md) file.
 
 1. Add the route to `plugin.json`:
 

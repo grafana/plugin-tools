@@ -125,12 +125,12 @@ The folders and files used to build the backend for the data source are:
 
 #### plugin.json
 
-The [plugin.json](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/) file is required for all plugins. When building a backend plugin these properties are important:
+The [plugin.json](../../metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
 
 | property   | description                                                                                                                                                   |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | backend    | Should be set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                                        |
-| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/) for details. |
+| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](h../../metadata.md) for details. |
 | alerting   | Should be set to `true` if your backend datasource supports alerting.                                                                                         |
 
 In the next step we will look at the query endpoint!
