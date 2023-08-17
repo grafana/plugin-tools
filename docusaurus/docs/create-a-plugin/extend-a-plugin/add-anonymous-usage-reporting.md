@@ -1,7 +1,6 @@
 ---
 id: add-anonymous-usage-reporting
 title: Add anonymous usage reporting
-sidebar_position: 1
 description: How to add anonymous usage tracking to your Grafana plugin.
 keywords:
   - grafana

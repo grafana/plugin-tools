@@ -20,7 +20,7 @@ Create Grafana plugins with ease.
 
 - [Plugin Tools docs](https://grafana.github.io/plugin-tools/)
 - [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
-- [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide/)
+- [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide)
 
 **`@grafana/create-plugin`** works on macOS, Linux and Windows Subsystem for Linux (WSL).<br />
 If something doesn't work, please [file an issue](https://github.com/grafana/plugin-tools/issues/new).<br />

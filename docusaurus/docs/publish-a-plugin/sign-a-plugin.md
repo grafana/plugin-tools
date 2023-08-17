@@ -1,58 +1,76 @@
 ---
 id: sign-a-plugin
 title: Sign a plugin
-sidebar_position: 2
+sidebar_position: 3
+description: "How to sign a Grafana plugin."
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - sign plugin
+  - signing plugin
 ---
 
-<head>
-  <meta name="robots" content="noindex" />
-</head>
+# Sign a plugin
 
-Grafana requires all plugins to be signed so that we can verify their authenticity with signature verification.
-
-All Grafana Labs-authored backend plugins, including Enterprise plugins, are signed. By default, Grafana **requires** all plugins to be signed in order for them to be loaded.
+All Grafana Labs-authored backend plugins, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
 
 Before you can sign your plugin, you need to decide whether you want to sign it as a _public_ or a _private_ plugin.
 
-To make your plugin publicly available outside of your organization, sign your plugin under a _community_ or _commercial_ signature level. Public plugins are available from the Grafana plugin catalog and can be installed by anyone.
+To make your plugin publicly available outside of your organization, sign your plugin under a _community_ or _commercial_ [signature level](#plugin-signature-levels). Public plugins are available from the [Grafana plugin catalog](https://grafana.com/plugins) and can be installed by anyone.
 
-If you intend to only use the plugin within your organization, sign it under a _private_ signature level.
+If you intend to only use the plugin within your organization, sign it under a _private_ [signature level](#plugin-signature-levels).
 
-## Generate an API key
+:::info
 
-To verify ownership of your plugin, generate an API key that you'll use every time you need to sign a new version of your plugin.
+It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
 
-1.  Create a Grafana Cloud account.
+:::
 
-2.  Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
+## Generate an Access Policy token
 
-    You can find the plugin ID in the `plugin.json` file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`.
+To verify ownership of your plugin, generate an Access Policy token that you'll use every time you need to sign a new version of your plugin.
 
-3.  Create a Grafana Cloud API key with the **PluginPublisher** role.
+1. [Create a Grafana Cloud account](https://grafana.com/signup).
+
+1. Login into your account and navigate to **My Account > Security > Access Policies**. Click **Create access policy**.
+
+   Realm: has to be your-org-name (all-stacks)
+   Scope: plugins:write
+
+   ![Create access policy.](/img/create-access-policy-v2.png)
+
+1. Click **Create token** to create a new token.
+
+   The expiration date field is optional, though you should change tokens periodically for increased security.
+
+   ![Create access policy token.](/img/create-access-policy-token.png)
+
+1. Click **Create** and save a copy of the token somewhere secure for future reference.
 
 ## Sign a public plugin
 
 Public plugins need to be reviewed by the Grafana team before you can sign them.
 
-1.  Submit your plugin for review.
-2.  If we approve your plugin, you're granted a plugin signature level. You need this signature level to proceed.
-3.  In your plugin directory, sign the plugin with the API key you just created. Grafana Sign Plugin creates a MANIFEST.txt file in the `dist` directory of your plugin:
+1. Submit your plugin for [review](./publish-or-update-a-plugin.md#publish-your-plugin).
+1. If we approve your plugin, you're granted a plugin signature level. You need this signature level to proceed.
+1. In your plugin directory, sign the plugin with the API key you just created. Grafana Sign Plugin creates a [MANIFEST.txt](#plugin-manifest) file in the `dist` directory of your plugin:
 
-    ```bash
-    export GRAFANA_API_KEY=<YOUR_API_KEY>
-    npx @grafana/sign-plugin@latest
-    ```
+   ```bash
+   export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
+   npx @grafana/sign-plugin@latest
+   ```
 
 ## Sign a private plugin
 
-1.  In your plugin directory, sign the plugin with the API key you just created. Grafana Sign Plugin creates a MANIFEST.txt file in the `dist` directory of your plugin.
+1. In your plugin directory, sign the plugin with the API key you just created. Grafana Sign Plugin creates a [MANIFEST.txt](#plugin-manifest) file in the `dist` directory of your plugin.
 
-    ```bash
-    export GRAFANA_API_KEY=<YOUR_API_KEY>
-    npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
-    ```
+   ```bash
+   export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
+   npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
+   ```
 
-2.  After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin.
+1. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin.
 
 ## Plugin signature levels
 
@@ -60,15 +78,15 @@ To sign a plugin, you need to select the _signature level_ that you want to sign
 
 You can sign your plugin under three different _signature levels_: _private_, _community_, and _commercial_.
 
-| **Plugin Level** | **Paid Subscription Required?**             | **Description**                                                                                                                                                                                                                                                                                                    |
-| ---------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Private          | No;Free of charge                           | You can create and sign a Private plugin for any technology at no charge.Private plugins are intended for use on your own installation of Grafana. They may not be distributed to the Grafana community, and they are not published in the Grafana plugin catalog.                                                 |
-| Community        | No;Free of charge                           | You can create, sign, and distribute plugins at no charge, provided that all dependent technologies are open source and not for profit.Community plugins are published in the official Grafana catalog, and are available to the entire Grafana community.                                                         |
-| Commercial       | Yes;Commercial plugin subscription required | You can create, sign, and distribute plugins with dependent technologies that are closed source or commercially backed. To do so, enter into a Commercial plugin subscription with Grafana Labs.Commercial plugins are published on the Grafana plugin catalog, and are available to the entire Grafana community. |
+| **Plugin Level** | **Paid Subscription Required?**                 | **Description**                                                                                                                                                                                                                                                                                                                  |
+| ---------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Private          | No;<br></br>Free of charge                           | Private plugins are for use on your own Grafana instance. They may not be shared to the Grafana community or to your customers, and are not published in the Grafana catalog. Private plugins are not Supported in Grafana Cloud.  |
+| Community        | No;<br></br>Free of charge                           | Community plugins contain dependent technologies that are open source and/or not for profit. Community plugins are published to the official Grafana catalog, and are available to the Grafana community for direct installation. Support is provided by the individual developer and/or community. Supported in Grafana Cloud. Not commercial in nature and not affiliated with any commercial endeavor.
+| Commercial       | Yes;<br></br>Commercial plugin subscription required | Commercial plugins contain dependent technologies that are closed source or commercially backed (even if open source at their core). These plugins meet the commercial plugin criteria and are partner-developed. Commercial plugins are published to the official Grafana catalog, and are available to the Grafana community for direct installation. Support is provided by the Partner. Supported in Grafana Cloud. |
 
-For instructions on how to sign a plugin under the Community and Commercial signature level, refer to Sign a public plugin.
+For instructions on how to sign a plugin under the Community and Commercial signature level, refer to [Sign a public plugin](#sign-a-public-plugin).
 
-For instructions on how to sign a plugin under the Private signature level, refer to Sign a private plugin.
+For instructions on how to sign a plugin under the Private signature level, refer to [Sign a private plugin](#sign-a-private-plugin).
 
 ## Plugin manifest
 
@@ -121,10 +139,10 @@ In some cases an invalid `MANIFEST.txt` is generated because of an issue when si
 
 ### Why do I get a "Field is required: `rootUrls`" error for my public plugin?
 
-With a **public** plugin, your plugin doesn't have a plugin signature level assigned to it yet. A Grafana team member will assign a signature level to your plugin once it has been reviewed and approved. For more information, refer to Sign a public plugin.
+With a **public** plugin, your plugin doesn't have a plugin signature level assigned to it yet. A Grafana team member will assign a signature level to your plugin once it has been reviewed and approved. For more information, refer to [Sign a public plugin](#sign-a-public-plugin).
 
 ### Why do I get a "Field is required: `rootUrls`" error for my private plugin?
 
-With a **private** plugin, you need to add a `rootUrls` flag to the `plugin:sign` command. The `rootUrls` must match the root_url configuration. For more information, refer to Sign a private plugin.
+With a **private** plugin, you need to add a `rootUrls` flag to the `plugin:sign` command. The `rootUrls` must match the [root_url](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#root_url) configuration. For more information, refer to [Sign a private plugin](#sign-a-private-plugin).
 
 If you still get this error, make sure that the API key was generated by a Grafana Cloud account that matches the first part of the plugin ID.

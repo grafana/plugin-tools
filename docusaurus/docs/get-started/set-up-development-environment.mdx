@@ -11,6 +11,12 @@ import DockerYarn from '@snippets/docker-grafana-version.yarn.md';
 
 The `create-plugin` tool includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
 
+:::info
+
+It's not necessary to [sign a plugin](../publish-a-plugin/sign-a-plugin.md) during development. The that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+
+:::
+
 ## Why use the Docker environment
 
 We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.

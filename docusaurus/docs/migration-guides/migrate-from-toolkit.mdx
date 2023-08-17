@@ -1,7 +1,8 @@
 ---
 id: migrate-from-toolkit
-title: Migrate from Grafana Toolkit
-sidebar_position: 5
+title: Migrate from toolkit
+sidebar_position: 2
+description: "How to migrate your Grafana plugin from Grafana toolkit to create-plugin tool."
 ---
 
 import MigrateNPM from '@snippets/createplugin-migrate.npm.md';
@@ -107,8 +108,8 @@ When the migration command finishes running, follow these following steps:
 
 1. Run each npm script inside `package.json` to confirm that the plugin can be built, tested, and signed.
 
-If the plugin had customizations to the toolkit configs (for example, webpack), then refer to [Extend configurations](/docs/create-a-plugin/extend-configurations) to learn how to update them.
+If the plugin had customizations to the toolkit configs (for example, webpack), then refer to [Extend configurations](/create-a-plugin/extend-a-plugin/extend-configurations) to learn how to update them.
 
-If the plugin can be built, but there are problems with Jest tests, then see the [Jest advanced configuration](/docs/create-a-plugin/extend-configurations#esm-errors-with-jest) issue regarding es modules.
+If the plugin can be built, but there are problems with Jest tests, then see the [Jest advanced configuration](/create-a-plugin/extend-a-plugin/extend-configurations#esm-errors-with-jest) issue regarding es modules.
 
 For help with other issues, reach out on [Slack](https://grafana.slack.com/) or the [Community forum](https://community.grafana.com/c/plugin-development/30).

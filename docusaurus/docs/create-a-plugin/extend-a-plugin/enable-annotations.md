@@ -2,7 +2,6 @@
 id: enable-for-annotations
 title: Enable annotations
 description: Add support for annotations in your plugin.
-sidebar_position: 9
 keywords:
   - grafana
   - plugins
