@@ -4,7 +4,7 @@ title: Troubleshooting
 sidebar_position: 6
 ---
 
-## Troubleshooting
+# Troubleshooting
 
 Here are some things to try and check if you experience problems while working with the `create-plugin` or `sign-plugin` tools.
 
