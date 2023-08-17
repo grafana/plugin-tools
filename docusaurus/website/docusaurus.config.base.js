@@ -22,6 +22,7 @@ const generalConfig = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  noIndex: true,
 };
 
 const plugins = [
