@@ -1,14 +1,14 @@
 ---
-id: backend
-title: Backend
+id: work-with-backend
+title: Work with the backend
 sidebar_position: 2
 ---
 
-Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used to manage Go during plugin development:
+Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used during backend plugin development:
 
 ## Update the Go SDK
 
-To keep the [Grafana plugin SDK for Go](../introduction/grafana-plugin-sdk-for-go.md) up to date:
+To keep the [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go) up to date:
 
 ```bash
 go get -u github.com/grafana/grafana-plugin-sdk-go

@@ -10,7 +10,6 @@ Grafana supports a variety of different data sources, each with its own data mod
 
 The data frame structure is a concept that's borrowed from data analysis tools like the [R programming language](https://www.r-project.org) and [Pandas](https://pandas.pydata.org/).
 
-
 :::note
 
 Data frames are available in Grafana 7.0+, and replaced the Time series and Table structures with a more generic data structure that can support a wider range of data types.
