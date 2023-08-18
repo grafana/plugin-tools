@@ -1,7 +1,7 @@
 ---
 id: folder-structure
 title: Folder structure
-description: How your folder structure should look after installing create-plugin.
+description: How your folder structure should look after running create-plugin.
 keywords:
   - grafana
   - plugins
