@@ -1,6 +1,16 @@
 ---
 id: plugin-protocol
 title: Plugin protocol
+description: Learn about the Grafana plugin protocol for plugin development.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - backend
+  - plugin protocol
+  - protocol
+  - protobufs
+  - protocal buffers
 sidebar_position: 3
 ---
 

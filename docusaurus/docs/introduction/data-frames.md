@@ -1,6 +1,13 @@
 ---
 id: data-frames
 title: Data frames
+description: Learn about data frames for use in Grafana plugin development.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - data frames
+  - dataframes
 sidebar_position: 4
 ---
 

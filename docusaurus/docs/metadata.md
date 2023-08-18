@@ -1,11 +1,14 @@
 ---
 id: reference-plugin-json
 title: Reference (plugin.json)
-description: Reference for the plugin.json metadata file.
+description: Reference for the Grafana plugin.json metadata file.
 keywords:
   - grafana
   - plugins
   - documentation
+  - plugin.json
+  - API reference
+  - API
 ---
 
 # plugin.json

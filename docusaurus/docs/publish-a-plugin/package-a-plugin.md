@@ -2,7 +2,7 @@
 id: package-a-plugin
 title: Package a plugin
 sidebar_position: 2
-description: "How to package a plugin."
+description: How to package a Grafana plugin.
 keywords:
   - grafana
   - plugins

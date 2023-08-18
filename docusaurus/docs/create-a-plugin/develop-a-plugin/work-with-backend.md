@@ -1,6 +1,13 @@
 ---
 id: work-with-backend
 title: Work with the backend
+description: A guide to the Go commands frequently used in plugin development.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - go
+  - CLI commands
 sidebar_position: 2
 ---
 

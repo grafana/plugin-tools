@@ -2,7 +2,7 @@
 id: sign-a-plugin
 title: Sign a plugin
 sidebar_position: 3
-description: "How to sign a Grafana plugin."
+description: How to sign a Grafana plugin.
 keywords:
   - grafana
   - plugins

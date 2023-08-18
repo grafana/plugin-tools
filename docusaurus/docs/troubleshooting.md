@@ -1,6 +1,14 @@
 ---
 id: troubleshooting
 title: Troubleshooting
+description: Troubleshoot issues in your Grafana plugin development.
+keywords:
+  - grafana
+  - plugins
+  - documentation
+  - troubleshooting
+  - Windows
+  - WSL
 sidebar_position: 6
 ---
 

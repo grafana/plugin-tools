@@ -1,6 +1,14 @@
 ---
 id: grafana-plugin-sdk-for-go
 title: Grafana plugin SDK for Go
+description: Learn about the Grafana plugin SDK for development in Go.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - backend
+  - SDK
+  - Go
 sidebar_position: 2
 ---
 
