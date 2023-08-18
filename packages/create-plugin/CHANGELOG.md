@@ -1,3 +1,15 @@
+# v1.12.0 (Fri Aug 18 2023)
+
+#### 🚀 Enhancement
+
+- create-plugin: Add link to documentation about troubleshooting create-plugin on windows [#365](https://github.com/grafana/plugin-tools/pull/365) ([@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 1
+
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # v1.11.0 (Wed Aug 16 2023)
 
 #### 🚀 Enhancement

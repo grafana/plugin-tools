@@ -1,3 +1,27 @@
+# (Fri Aug 18 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.12.0`
+  - create-plugin: Add link to documentation about troubleshooting create-plugin on windows [#365](https://github.com/grafana/plugin-tools/pull/365) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- quick fix for drafts [#366](https://github.com/grafana/plugin-tools/pull/366) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 📝 Documentation
+
+- Add troubleshooting.md page for windows and other create-plugin issues [#354](https://github.com/grafana/plugin-tools/pull/354) ([@academo](https://github.com/academo) [@josmperez](https://github.com/josmperez))
+
+#### Authors: 4
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # (Wed Aug 16 2023)
 
 :tada: This release contains work from a new contributor! :tada:
