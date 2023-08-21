@@ -2,7 +2,7 @@
 id: error-handling
 title: Error handling
 sidebar_position: 5
-description: "How to handle errors in plugins."
+description: How to handle errors in plugins.
 keywords:
   - grafana
   - plugins

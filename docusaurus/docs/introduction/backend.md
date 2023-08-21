@@ -1,6 +1,13 @@
 ---
 id: backend-plugins
 title: Backend plugins
+description: Learn about the Grafana backend plugin system for extending the features of Grafana.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - backend
+  - plugin system
 sidebar_position: 1
 ---
 

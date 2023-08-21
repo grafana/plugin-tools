@@ -1,6 +1,16 @@
 ---
 id: set-up-github-workflows
 title: Set up GitHub workflows
+description: How to automate your plugin development process by using GitHub workflows.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - github
+  - workflows
+  - CI
+  - continuous integration
+  - automation
 sidebar_position: 3
 ---
 

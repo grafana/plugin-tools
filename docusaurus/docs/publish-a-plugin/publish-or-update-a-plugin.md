@@ -2,7 +2,7 @@
 id: publish-a-plugin
 title: Publish or update a plugin
 sidebar_position: 4
-description: "Learn how to package and share your plugin."
+description: How to package and share your Grafana plugin.
 keywords:
   - grafana
   - plugins

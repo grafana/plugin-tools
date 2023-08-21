@@ -2,7 +2,6 @@
 id: cross-plugin-linking
 title: Work with cross-plugin links
 description: Learn how to add plugin links to a Grafana app plugin.
-
 keywords:
   - grafana
   - plugins

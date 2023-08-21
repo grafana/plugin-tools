@@ -1,7 +1,7 @@
 ---
 id: add-support-for-variables
 title: Add support for variables
-description: Add support for variables.
+description: Add support for variables in Grafana plugin development.
 keywords:
   - grafana
   - plugins

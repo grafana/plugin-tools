@@ -1,7 +1,7 @@
 ---
 id: add-support-for-explore-queries
 title: Add features to Explore queries
-description: Add features to Explore queries.
+description: Add features to Explore queries in Grafana plugin development.
 keywords:
   - grafana
   - plugins
