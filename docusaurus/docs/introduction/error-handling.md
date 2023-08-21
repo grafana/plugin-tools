@@ -11,7 +11,7 @@ keywords:
   - error handling
 ---
 
-# Work with error handling
+# Error handling
 
 This guide explains how to handle errors in plugins and provides suggestions for common scenarios.
 

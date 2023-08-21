@@ -8,7 +8,7 @@ keywords:
   - documentation
 ---
 
-# plugin.json
+# Reference (plugin.json)
 
 The `plugin.json` file is required for all plugins. When Grafana starts, it scans the plugin folders and mounts every folder that contains a plugin.json file unless the folder contains a subfolder named dist. In that case, Grafana mounts the dist folder instead.
 

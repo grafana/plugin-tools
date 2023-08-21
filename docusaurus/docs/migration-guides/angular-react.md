@@ -6,7 +6,7 @@ keywords: [grafana, plugins, angular, react, migration, migrate]
 description: "How to migrate a Grafana plugin from AngularJS to React."
 ---
 
-# Migrate a plugin from AngularJS to React
+# Migrate from AngularJS to React
 
 If you want to migrate a plugin to Grafana's React-based plugin platform, then we recommend that you release it under a new major version. Consider keeping a release branch for the previous version to be able to roll out patch releases for versions prior to Grafana 7.
 

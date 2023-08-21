@@ -12,7 +12,7 @@ keywords:
   - signing
 ---
 
-# Plugin publishing and signing criteria
+# Publishing and signing criteria
 
 Grafana plugins must adhere to the Grafana Labs [Plugin Policy](https://grafana.com/legal/plugins/). Our review process for publishing and signing will examine your compliance with this policy.
 
