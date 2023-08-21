@@ -17,13 +17,13 @@ The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-p
 1. Install the dependencies:
 
    ```
-   yarn install
+   npm install
    ```
 
 1. Build the plugin:
 
    ```
-   yarn dev
+   npm dev
    ```
 
 1. Restart the Grafana server for Grafana to discover your plugin.
