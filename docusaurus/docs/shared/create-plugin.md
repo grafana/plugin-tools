@@ -2,7 +2,7 @@ Tooling for modern web development can be tricky to wrap your head around. While
 
 The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-plugin) is a CLI application that simplifies Grafana plugin development, so that you can focus on code. The tool scaffolds a starter plugin and all the required configuration for you.
 
-1. In the plugin directory, create a plugin from template using create-plugin. When prompted for the kind of plugin, select `datasource`:
+1. <span>In the plugin directory, create a plugin from template using create-plugin. When prompted for the kind of plugin, select {props.pluginType}</span>:
 
    ```
    npx @grafana/create-plugin@latest

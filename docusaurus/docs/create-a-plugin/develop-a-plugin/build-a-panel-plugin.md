@@ -35,7 +35,7 @@ For more information about panels, refer to the documentation on [Panels](https:
 
 ## Create a new plugin
 
-<CreatePlugin />
+<CreatePlugin pluginType="panel" />
 
 ## Anatomy of a plugin
 

@@ -37,7 +37,7 @@ In this tutorial, you'll:
 
 ## Create a new plugin
 
-<CreatePlugin />
+<CreatePlugin pluginType="datasource" />
 
 To learn how to create a backend data source plugin, see [Build a data source backend plugin](./build-a-data-source-backend-plugin.md)
 

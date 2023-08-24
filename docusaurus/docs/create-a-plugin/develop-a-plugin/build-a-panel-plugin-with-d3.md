@@ -39,7 +39,7 @@ In this tutorial, you'll:
 
 ## Create a new plugin
 
-<CreatePlugin />
+<CreatePlugin pluginType="panel" />
 
 ## Data-driven documents
 
