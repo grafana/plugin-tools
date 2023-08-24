@@ -14,32 +14,32 @@ keywords:
   - dashboards
 ---
 
+import SetupEnvironment from '@shared/set-up-environment.md';
+import CreatePlugin from '@shared/create-plugin.md';
+import PluginAnatomy from '@shared/plugin-anatomy.md';
+
 ## Introduction
 
 Panels are the building blocks of Grafana. They allow you to visualize data in different ways. While Grafana has several types of panels already built-in, you can also build your own panel, to add support for other visualizations.
 
 For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
 
-{{% class "prerequisite-section" %}}
-
 ### Prerequisites
 
 - Grafana >=7.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- yarn
-  {{% /class %}}
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+<SetupEnvironment />
 
 ## Create a new plugin
 
-{{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
+<CreatePlugin />
 
 ## Anatomy of a plugin
 
-{{< docs/shared lookup="tutorials/plugin-anatomy.md" source="grafana" version="latest" >}}
+<PluginAnatomy />
 
 ## Panel plugins
 
@@ -162,7 +162,7 @@ You're almost done. You've added a new option and a corresponding control to cha
    **src/components/SimplePanel.tsx**
 
    ```ts
-  let color = theme.visualization.getColorByName(options.color);
+   let color = theme.visualization.getColorByName(options.color);
    ```
 
 1. Configure the circle to use the color.

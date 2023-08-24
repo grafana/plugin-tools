@@ -12,6 +12,10 @@ keywords:
   - datasource
 ---
 
+import SetupEnvironment from '@shared/set-up-environment.md';
+import CreatePlugin from '@shared/create-plugin.md';
+import PluginAnatomy from '@shared/plugin-anatomy.md';
+
 ## Introduction
 
 Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There's a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a support for your data source.
@@ -22,28 +26,24 @@ In this tutorial, you'll:
 - Construct queries using the query editor
 - Configure your data source using the config editor
 
-{{% class "prerequisite-section" %}}
-
 ### Prerequisites
 
 - Grafana >=7.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- yarn
-  {{% /class %}}
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+<SetupEnvironment />
 
 ## Create a new plugin
 
-{{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
+<CreatePlugin />
 
 To learn how to create a backend data source plugin, see [Build a data source backend plugin](./build-a-data-source-backend-plugin.md)
 
 ## Anatomy of a plugin
 
-{{< docs/shared lookup="tutorials/plugin-anatomy.md" source="grafana" version="latest" >}}
+<PluginAnatomy />
 
 ## Data source plugins
 

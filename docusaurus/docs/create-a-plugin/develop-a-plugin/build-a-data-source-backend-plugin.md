@@ -13,6 +13,8 @@ keywords:
   - datasource
 ---
 
+import SetupEnvironment from '@shared/set-up-environment.md';
+
 ## Introduction
 
 Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There's a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a support for your data source.
@@ -25,8 +27,6 @@ In this tutorial, you'll:
 - Implement a health check for your data source
 - Enable Grafana Alerting for your data source
 
-{{% class "prerequisite-section" %}}
-
 #### Prerequisites
 
 - Knowledge about how data sources are implemented in the frontend.
@@ -34,12 +34,10 @@ In this tutorial, you'll:
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- yarn
-  {{% /class %}}
 
 ## Set up your environment
 
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
+<SetupEnvironment />
 
 ## Create a new plugin
 
