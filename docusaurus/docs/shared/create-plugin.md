@@ -23,7 +23,7 @@ The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-p
 1. Build the plugin:
 
    ```
-   npm dev
+   npm run dev
    ```
 
 1. Restart the Grafana server for Grafana to discover your plugin.
