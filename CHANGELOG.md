@@ -1,3 +1,20 @@
+# (Fri Aug 25 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.12.1`
+  - Update transform regex to detect nested modules [#375](https://github.com/grafana/plugin-tools/pull/375) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 1
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+
+---
+
 # (Fri Aug 18 2023)
 
 #### 🚀 Enhancement
