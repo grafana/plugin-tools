@@ -27,7 +27,7 @@ The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-p
    ```
 
 1. Restart the Grafana server for Grafana to discover your plugin.
-1. Open Grafana and go to **Connections** -> **Connect Data**. Make sure that your data source is there.
+1. <span>Open Grafana and go to <b>Administration</b> -> <b>Plugins</b>. Make sure that your {props.pluginType} plugin is there.</span>
 
 By default, Grafana logs whenever it discovers a plugin:
 

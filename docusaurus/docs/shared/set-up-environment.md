@@ -20,12 +20,6 @@ If you don't want to install Grafana on your local machine, you can use [Docker 
 The template create by `@grafana/create-plugin` contains a `docker-compose.yaml` file with everything necessary and you just have to run:
 
 ```
-docker compose up -d
-```
-
-or you can you use the provided `package.json` scripts:
-
-```
 npm run server
 ```
 

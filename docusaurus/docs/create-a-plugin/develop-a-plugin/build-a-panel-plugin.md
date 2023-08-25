@@ -49,14 +49,14 @@ Prior to Grafana 6.0, plugins were written in [AngularJS](https://angular.io/). 
 
 ### Panel properties
 
-The [PanelProps](https://github.com/grafana/grafana/blob/747b546c260f9a448e2cb56319f796d0301f4bb9/packages/grafana-data/src/types/panel.ts#L27-L40) interface exposes runtime information about the panel, such as panel dimensions, and the current time range.
+The [PanelProps](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbfa3cb9b2d474ad56dc/packages/grafana-data/src/types/panel.ts#L74-L122) interface exposes runtime information about the panel, such as panel dimensions, and the current time range.
 
-You can access the panel properties through `props`, as seen in your plugin.
+You can access the panel properties through the `props` argument, as seen in your plugin.
 
 **src/components/SimplePanel.tsx**
 
 ```js
-const { options, data, width, height } = props;
+export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 ```
 
 ### Development workflow
@@ -73,7 +73,7 @@ First, you need to add your panel to a dashboard:
 Now that you can view your panel, try making a change to the panel plugin:
 
 1. In `SimplePanel.tsx`, change the fill color of the circle.
-1. Run `yarn dev` to build the plugin.
+1. Run `npm run dev` to build the plugin.
 1. In the browser, reload Grafana with the new changes.
 
 ## Add panel options
