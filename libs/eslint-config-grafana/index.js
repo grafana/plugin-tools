@@ -66,10 +66,6 @@ module.exports = {
       },
     ],
     "@typescript-eslint/consistent-type-assertions": "error",
-    "@typescript-eslint/explicit-member-accessibility": [
-      "error",
-      { accessibility: "no-public" },
-    ],
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-namespace": ["error", { allowDeclarations: false }],
     "@typescript-eslint/no-unused-vars": "off",
