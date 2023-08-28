@@ -1,6 +1,5 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-
 const {
   generalConfig,
   plugins,
@@ -12,6 +11,16 @@ const {
   themeConfigColorMode,
 } = require('./docusaurus.config.base');
 
+const devPortalHome = 'https://grafana.com/developers';
+
+// @ts-ignore
+themeConfigFooter.links[0].items.push({
+  label: 'Portal Home',
+  to: devPortalHome,
+});
+
+themeConfigNavbar.items.unshift({ href: devPortalHome, label: 'Portal Home', position: 'right' });
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...generalConfig,
@@ -21,35 +30,32 @@ const config = {
   presets: [
     [
       'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
           ...presetsDocs,
           routeBasePath: '/',
         },
         theme: presetsTheme,
         blog: false,
-      }),
+      },
     ],
   ],
 
-  themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
-      navbar: themeConfigNavbar,
-      footer: themeConfigFooter,
-      prism: themeConfigPrism,
-      colorMode: themeConfigColorMode,
-    }),
-  
+  themeConfig: {
+    navbar: themeConfigNavbar,
+    footer: themeConfigFooter,
+    prism: themeConfigPrism,
+    colorMode: themeConfigColorMode,
+  },
+
   customFields: {
     rudderStackTracking: {
-      url: "https://rs.grafana.com",
-      writeKey: "1sBAgwTlZ2K0zTzkM8YTWorZI00",
-      configUrl: "https://rsc.grafana.com",
-      sdkUrl: "https://rsdk.grafana.com",
+      url: 'https://rs.grafana.com',
+      writeKey: '1sBAgwTlZ2K0zTzkM8YTWorZI00',
+      configUrl: 'https://rsc.grafana.com',
+      sdkUrl: 'https://rsdk.grafana.com',
     },
-    canSpamUrl: "https://grafana.com/canspam",
+    canSpamUrl: 'https://grafana.com/canspam',
   },
 };
 

@@ -57,6 +57,7 @@ const presetsDocs = {
     ],
   ],
 };
+
 const presetsTheme = {
   customCss: require.resolve('./src/css/custom.css'),
 };
@@ -68,7 +69,6 @@ const themeConfigNavbar = {
     src: 'img/logo.svg',
   },
   items: [
-    { href: 'https://grafana.com/developers', label: 'Portal Home', position: 'right' },
     { href: 'https://community.grafana.com/c/plugin-development/30', label: 'Help', position: 'right' },
     {
       href: 'https://www.github.com/grafana/plugin-tools',
@@ -87,10 +87,6 @@ const themeConfigFooter = {
         {
           label: 'Get Started',
           to: '/',
-        },
-        {
-          label: 'Portal Home',
-          to: 'https://grafana.com/developers',
         },
       ],
     },
@@ -127,6 +123,7 @@ const themeConfigFooter = {
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
 };
+
 const themeConfigColorMode = {
   defaultMode: 'dark',
   disableSwitch: true,
