@@ -68,7 +68,7 @@ const themeConfigNavbar = {
     src: 'img/logo.svg',
   },
   items: [
-    { href: '/../', label: 'Portal Home', position: 'right' },
+    { href: 'https://grafana.com/developers', label: 'Portal Home', position: 'right' },
     { href: 'https://community.grafana.com/c/plugin-development/30', label: 'Help', position: 'right' },
     {
       href: 'https://www.github.com/grafana/plugin-tools',
@@ -90,7 +90,7 @@ const themeConfigFooter = {
         },
         {
           label: 'Portal Home',
-          to: '/..',
+          to: 'https://grafana.com/developers',
         },
       ],
     },
