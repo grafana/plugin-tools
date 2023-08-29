@@ -38,7 +38,10 @@ const config = {
   themeConfig: {
     navbar: {
       ...themeConfigNavbar,
-      items: [{ href: devPortalHome, label: 'Portal Home', position: 'right' }, ...themeConfigNavbar.items],
+      items: [
+        { href: devPortalHome, label: 'Portal Home', position: 'right', target: '_self' },
+        ...themeConfigNavbar.items,
+      ],
     },
     footer: {
       ...themeConfigFooter,
@@ -49,7 +52,8 @@ const config = {
             ...docsFooterLinks.items,
             {
               label: 'Portal Home',
-              to: devPortalHome,
+              href: devPortalHome,
+              target: '_self',
             },
           ],
         },
