@@ -37,6 +37,12 @@ const plugins = [
       },
     },
   ],
+  [
+    'docusaurus-lunr-search',
+    {
+      disableVersioning: true,
+    },
+  ],
 ];
 
 const presetsDocs = {
