@@ -13,13 +13,7 @@ const {
 
 const devPortalHome = 'https://grafana-dev.com/developers';
 
-// @ts-ignore
-themeConfigFooter.links[0].items.push({
-  label: 'Portal Home',
-  to: devPortalHome,
-});
-
-themeConfigNavbar.items.unshift({ href: devPortalHome, label: 'Portal Home', position: 'right' });
+const [docsFooterLinks, ...otherFooterLinks] = themeConfigFooter.links;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -42,8 +36,26 @@ const config = {
   ],
 
   themeConfig: {
-    navbar: themeConfigNavbar,
-    footer: themeConfigFooter,
+    navbar: {
+      ...themeConfigNavbar,
+      items: [{ href: devPortalHome, label: 'Portal Home', position: 'right' }, ...themeConfigNavbar.items],
+    },
+    footer: {
+      ...themeConfigFooter,
+      links: [
+        {
+          ...docsFooterLinks,
+          items: [
+            ...docsFooterLinks.items,
+            {
+              label: 'Portal Home',
+              to: devPortalHome,
+            },
+          ],
+        },
+        ...otherFooterLinks,
+      ],
+    },
     prism: themeConfigPrism,
     colorMode: themeConfigColorMode,
   },
