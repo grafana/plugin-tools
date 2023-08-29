@@ -9,6 +9,7 @@ keywords:
   - plugin.json
   - API reference
   - API
+sidebar_position: 7
 ---
 
 # Reference (plugin.json)
