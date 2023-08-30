@@ -12,7 +12,7 @@ export function printGenerateSuccessMessage(answers: CliArgs) {
     `- \`${packageManagerName} run dev\` to build (and watch) the plugin frontend code.`,
     ...(answers.hasBackend
       ? [
-          '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
+          '- `mage` to build the plugin backend code. Rerun this command every time you edit your backend files.',
         ]
       : []),
     '- `docker-compose up` to start a grafana development server. Restart this command after each time you run mage to run your new backend code.',
