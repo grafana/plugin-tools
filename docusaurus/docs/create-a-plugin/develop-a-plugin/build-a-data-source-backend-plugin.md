@@ -13,7 +13,8 @@ keywords:
   - datasource
 ---
 
-import SetupEnvironment from '@shared/set-up-environment.md';
+import CreatePlugin from '@shared/create-plugin-backend.md';
+
 
 ## Introduction
 
@@ -35,52 +36,14 @@ In this tutorial, you'll:
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
-## Set up your environment
-
-<SetupEnvironment />
-
 ## Create a new plugin
 
-To build a backend for your data source plugin, Grafana requires a binary that it can execute when it loads the plugin during start-up. In this guide, we will build a binary using the [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go).
-
-The easiest way to get started is to use the Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-plugin). Navigate to the plugin folder that you configured in step 1 and type:
-
-```
-npx @grafana/create-plugin@latest
-```
-
-Follow the steps and select **datasource** as your plugin type and answer **yes** when prompted to create a backend for your plugin.
-
-```bash
-cd my-plugin
-```
-
-Install frontend dependencies and build frontend parts of the plugin to _dist_ directory:
-
-```bash
-yarn install
-yarn build
-```
-
-Run the following to update [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go) dependency to the latest minor version:
-
-```bash
-go get -u github.com/grafana/grafana-plugin-sdk-go
-go mod tidy
-```
-
-Build backend plugin binaries for Linux, Windows and Darwin to _dist_ directory:
-
-```bash
-mage -v
-```
+<CreatePlugin />
 
 Now, let's verify that the plugin you've built so far can be used in Grafana when creating a new data source:
-
-1. Restart your Grafana instance.
-1. Open Grafana in your web browser.
-1. Navigate via the side-menu to **Configuration** -> **Data Sources**.
-1. Click **Add data source**.
+<!-- TODO validate these steps -->
+1. Navigate via the side-menu to **Connections** -> **Data Sources**.
+1. Click **Add new data source**.
 1. Find your newly created plugin and select it.
 1. Enter a name and then click **Save & Test** (ignore any errors reported for now).
 

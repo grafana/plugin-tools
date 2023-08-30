@@ -12,8 +12,7 @@ keywords:
   - datasource
 ---
 
-import SetupEnvironment from '@shared/set-up-environment.md';
-import CreatePlugin from '@shared/create-plugin.md';
+import CreatePlugin from '@shared/create-plugin-frontend.md';
 import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
@@ -30,10 +29,6 @@ In this tutorial, you'll:
 
 - Grafana >=7.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-
-## Set up your environment
-
-<SetupEnvironment />
 
 ## Create a new plugin
 

@@ -1,3 +1,3 @@
 ```shell
-GRAFANA_VERSION=8.5.5 npm run server
+GRAFANA_VERSION=10.0.0 npm run server
 ```

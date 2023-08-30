@@ -14,24 +14,21 @@ keywords:
   - dashboards
 ---
 
-import SetupEnvironment from '@shared/set-up-environment.md';
-import CreatePlugin from '@shared/create-plugin.md';
+import CreatePlugin from '@shared/create-plugin-frontend.md';
 import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
 
-Panels are the building blocks of Grafana. They allow you to visualize data in different ways. While Grafana has several types of panels already built-in, you can also build your own panel, to add support for other visualizations.
+Panels are one of the fundamental building blocks of Grafana, which allow you to visualize data in different ways. Grafana has several types of panels already built-in, and many more available in the [Plugin Catalog](https://grafana.com/grafana/plugins/). 
+
+To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html and can be scaffolded with the `create-plugin` tool.
 
 For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
 
 ### Prerequisites
 
-- Grafana >=7.0
+- Grafana >=9.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-
-## Set up your environment
-
-<SetupEnvironment />
 
 ## Create a new plugin
 
@@ -42,10 +39,6 @@ For more information about panels, refer to the documentation on [Panels](https:
 <PluginAnatomy />
 
 ## Panel plugins
-
-Since Grafana 6.x, panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html).
-
-Prior to Grafana 6.0, plugins were written in [AngularJS](https://angular.io/). Even though we still support plugins written in AngularJS, we highly recommend that you write new plugins using ReactJS.
 
 ### Panel properties
 
@@ -59,7 +52,7 @@ You can access the panel properties through the `props` argument, as seen in you
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 ```
 
-### Development workflow
+## Development workflow
 
 Next, you'll learn the basic workflow of making a change to your panel, building it, and reloading Grafana to reflect the changes you made.
 
@@ -72,9 +65,9 @@ First, you need to add your panel to a dashboard:
 
 Now that you can view your panel, try making a change to the panel plugin:
 
-1. In `SimplePanel.tsx`, change the fill color of the circle.
-1. Run `npm run dev` to build the plugin.
-1. In the browser, reload Grafana with the new changes.
+1. In `SimplePanel.tsx`, change the fill color of the circle. For example to change to 
+1. Save the file. 
+1. In the browser, reload Grafana to see the new changes.
 
 ## Add panel options
 
