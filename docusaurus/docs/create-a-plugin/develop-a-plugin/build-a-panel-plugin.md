@@ -19,7 +19,7 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
 
-Panels are one of the fundamental building blocks of Grafana, which allow you to visualize data in different ways. Grafana has several types of panels already built-in, and many more available in the [Plugin Catalog](https://grafana.com/grafana/plugins/). 
+Panels are one of the fundamental building blocks of Grafana, which allow you to visualize data in different ways. Grafana has several types of panels already built-in, and many more available in the [Plugin Catalog](https://grafana.com/grafana/plugins/).
 
 To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html and can be scaffolded with the `create-plugin` tool.
 
@@ -65,8 +65,13 @@ First, you need to add your panel to a dashboard:
 
 Now that you can view your panel, try making a change to the panel plugin:
 
-1. In `SimplePanel.tsx`, change the fill color of the circle. For example to change to 
-1. Save the file. 
+1. In `SimplePanel.tsx`, change the fill color of the circle. For example to change to green:
+
+   ```ts
+   <circle style={{ fill: theme.visualization.getColorByName('green') }} r={100} />
+   ```
+
+1. Save the file.
 1. In the browser, reload Grafana to see the new changes.
 
 ## Add panel options
