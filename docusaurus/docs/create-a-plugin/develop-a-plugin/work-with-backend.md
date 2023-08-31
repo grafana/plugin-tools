@@ -24,7 +24,14 @@ go mod tidy
 
 ## Build plugin binaries
 
-Build backend plugin binaries for Linux, Windows and Darwin:
+To build backend plugin binaries for Linux, Windows and Darwin:
+
+```bash
+mage
+```
+
+If your plugin is only intended to run on a particular platform(s), or you want to optimize build time whilst developing the plugin, you can specify the target architecture:
+
 
 | Option         | Description                                  | Example               |
 | -------------- | -------------------------------------------- | --------------------- |
