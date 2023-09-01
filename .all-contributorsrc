@@ -115,7 +115,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/227916?v=4",
       "profile": "https://github.com/academo",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -173,6 +174,17 @@
       "profile": "https://slorello.com/",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "Ukochka",
+      "name": "Yulia Shanyrova",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20494436?v=4",
+      "profile": "https://github.com/Ukochka",
+      "contributions": [
+        "doc",
+        "infra",
+        "code"
       ]
     }
   ],

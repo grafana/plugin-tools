@@ -76,18 +76,24 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
 
 export async function signManifest(manifest: ManifestInfo): Promise<string> {
   const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
-  if (!GRAFANA_API_KEY) {
+  const GRAFANA_ACCESS_POLICY_TOKEN = process.env.GRAFANA_ACCESS_POLICY_TOKEN;
+
+  if(!GRAFANA_ACCESS_POLICY_TOKEN && !GRAFANA_API_KEY) {
     throw new Error(
-      'You must create a GRAFANA_API_KEY env variable to sign plugins. Please see: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key for instructions.'
+      'You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins. Please see: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-a-token for instructions.'
     );
+  }
+  if (GRAFANA_API_KEY) {
+    console.warn(`\x1b[33m%s\x1b[0m`,'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead. For more info visit https://grafana.com/docs/grafana/latest/developers/plugins/publish-a-plugin/sign-a-plugin')
   }
 
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
   const url = GRAFANA_COM_URL + '/plugins/ci/sign';
 
+  const token = GRAFANA_ACCESS_POLICY_TOKEN ? GRAFANA_ACCESS_POLICY_TOKEN : GRAFANA_API_KEY;
   try {
     const info = await postData(url, manifest, {
-      Authorization: 'Bearer ' + GRAFANA_API_KEY,
+      Authorization: 'Bearer ' + token,
     });
     if (info.status !== 200) {
       console.error('Error: ', info);

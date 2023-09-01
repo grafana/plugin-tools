@@ -1,3 +1,120 @@
+# (Fri Aug 25 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.12.1`
+  - Update transform regex to detect nested modules [#375](https://github.com/grafana/plugin-tools/pull/375) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 1
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+
+---
+
+# (Fri Aug 18 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.12.0`
+  - create-plugin: Add link to documentation about troubleshooting create-plugin on windows [#365](https://github.com/grafana/plugin-tools/pull/365) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- quick fix for drafts [#366](https://github.com/grafana/plugin-tools/pull/366) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 📝 Documentation
+
+- Add troubleshooting.md page for windows and other create-plugin issues [#354](https://github.com/grafana/plugin-tools/pull/354) ([@academo](https://github.com/academo) [@josmperez](https://github.com/josmperez))
+
+#### Authors: 4
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Wed Aug 16 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.11.0`
+  - create-plugin: Enable webpack watchOption -> poll if WSL is detected [#356](https://github.com/grafana/plugin-tools/pull/356) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- Add CSS to make links visible inside page content [#355](https://github.com/grafana/plugin-tools/pull/355) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Mon Aug 14 2023)
+
+#### 🐛 Bug Fix
+
+- prod deployment [#345](https://github.com/grafana/plugin-tools/pull/345) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Adding stalebot config [#291](https://github.com/grafana/plugin-tools/pull/291) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@1.10.1`
+  - Fix swc-core version to 1.3.75 to prevent existing bug with baseUrls [#346](https://github.com/grafana/plugin-tools/pull/346) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Mon Aug 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.10.0`, `@grafana/sign-plugin@1.1.0`
+  - sign-plugin: GRAFANA_ACESS_POLICY_TOKEN has been added instead of GRAFANA_API_KEY [#331](https://github.com/grafana/plugin-tools/pull/331) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- Chore/fix dev portal deployment [#332](https://github.com/grafana/plugin-tools/pull/332) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Adding gcs pipeline [#295](https://github.com/grafana/plugin-tools/pull/295) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Wed Aug 02 2023)
+
+#### 🐛 Bug Fix
+
+- Adding noindex for now until we reshuffle the content [#305](https://github.com/grafana/plugin-tools/pull/305) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@1.9.1`
+  - Do not remove go_plugin_build_manifest on frontendbuild [#322](https://github.com/grafana/plugin-tools/pull/322) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Jul 11 2023)
 
 #### 🚀 Enhancement
