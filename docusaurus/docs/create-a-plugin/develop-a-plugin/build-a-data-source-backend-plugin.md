@@ -15,7 +15,6 @@ keywords:
 
 import CreatePlugin from '@shared/create-plugin-backend.md';
 
-
 ## Introduction
 
 Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
@@ -40,6 +39,7 @@ In this tutorial, you'll:
 <CreatePlugin />
 
 Now, let's verify that the plugin you've built so far can be used in Grafana when creating a new data source:
+
 1. Navigate via the side-menu to **Connections** -> **Data Sources**.
 1. Click **Add data source**.
 1. Search for the name of your newly created plugin and select it.
@@ -77,7 +77,7 @@ The folders and files used to build the backend for the data source are:
 | file/folder        | description                                                                                                                                          |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Magefile.go`      | It’s not a requirement to use mage build files, but we strongly recommend using it so that you can use the build targets provided by the plugin SDK. |
-| `/go.mod `         | Go [modules dependencies](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                 |
+| `/go.mod `         | Go [modules dependencies](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                            |
 | `/src/plugin.json` | A JSON file describing the backend plugin                                                                                                            |
 | `/pkg/main.go`     | Starting point of the plugin binary.                                                                                                                 |
 
@@ -85,15 +85,16 @@ The folders and files used to build the backend for the data source are:
 
 The [plugin.json](../../metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
 
-| property   | description                                                                                                                                                   |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| backend    | Should be set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                                        |
+| property   | description                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| backend    | Should be set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.         |
 | executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](h../../metadata.md) for details. |
-| alerting   | Should be set to `true` if your backend datasource supports alerting.                                                                                         |
+| alerting   | Should be set to `true` if your backend datasource supports alerting.                                                          |
 
 In the next step we will look at the query endpoint!
 
 ## Implement data queries
+
 <!-- this section needs updating -->
 
 We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `Datasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
@@ -128,6 +129,7 @@ Implementing authentication allows your plugin to access protected resources lik
 
 1. Open _src/plugin.json_.
 1. Add the top level `alerting` property with a value of `true` to specify that your plugin supports Grafana Alerting, e.g.
+
    ```json
    {
      ...
@@ -146,8 +148,8 @@ Implementing authentication allows your plugin to access protected resources lik
 1. Edit the existing panel.
 1. Click on the _Alert_ tab underneath the panel.
 1. Click on _Create alert rule from this panel_ button.
-1. In _Expressions_ section, add a _Reduce_ expressions `B`, if there is none created yet, and set _Input_ to `A`, _Function_ to `Last` and _Mode_ to `strict`.
-1. Then add a _Threshold_ expressions `C`, if there is none created yet, and set _Input_ to `B`, and  _IS ABOVE_ to `15`.
+1. In _Expressions_ section, add a _Reduce_ expressions `B` (if there is none created yet) and set _Input_ to `A`, _Function_ to `Last` and _Mode_ to `strict`.
+1. Then add a _Threshold_ expressions `C` (if there is none created yet) and set _Input_ to `B`, and _IS ABOVE_ to `15`.
 1. Your _Expressions_ section should have two expressions now: a reduce `B` and a threshold `C`.
 1. Click on _Set as alert condition_ on _Threshold_ expression.
 1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
