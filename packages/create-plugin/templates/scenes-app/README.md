@@ -1,6 +1,6 @@
 # Grafana Scenes App Plugin Template
 
-This template is a starting point for building an app plugin with [scenes](https://grafana.github.io/scenes) for Grafana.
+This template is a starting point for building an app plugin with [scenes](https://grafana.com/developers/scenes) for Grafana.
 
 ## What are Grafana app plugins?
 
@@ -10,7 +10,7 @@ App plugins can let you create a custom out-of-the-box monitoring experience by 
 
 [@grafana/scenes](https://github.com/grafana/scenes) is a framework to enable versatile app plugins implementation. It provides an easy way to build apps that resemble Grafana's dashboarding experience, including template variables support, versatile layouts, panels rendering and more.
 
-To learn more about @grafana/scenes usage please refer to the [documentation](https://grafana.github.io/scenes)
+To learn more about @grafana/scenes usage please refer to the [documentation](https://grafana.com/developers/scenes)
 
 ## What does this template contain?
 
