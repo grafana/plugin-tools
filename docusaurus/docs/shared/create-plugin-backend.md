@@ -1,6 +1,6 @@
 The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-plugin) is a CLI application that simplifies Grafana plugin development, so that you can focus on code. The tool scaffolds a starter plugin, all the required configuration, and a development environment using [Docker Compose](https://docs.docker.com/compose/) for you.
 
-1. <span>In a new directory, create a plugin from a template using create-plugin. When prompted for the kind of plugin, select {props.pluginType}</span>:
+1. <span>In a new directory, create a plugin from a template using create-plugin. When prompted for the kind of plugin, select {props.pluginType}</span> and answer yes to "Do you want a backend part of your plugin?":
 
    ```
    npx @grafana/create-plugin@latest
@@ -24,7 +24,7 @@ The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-p
    npm run dev
    ```
 
-1. Build the plugin backend:
+1. In a new terminal window, build the plugin backend:
 
    ```
    mage -v build:linux

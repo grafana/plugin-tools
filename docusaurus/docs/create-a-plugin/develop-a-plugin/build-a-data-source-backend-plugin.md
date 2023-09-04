@@ -18,20 +18,19 @@ import CreatePlugin from '@shared/create-plugin-backend.md';
 
 ## Introduction
 
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There's a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a support for your data source.
+Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
 For more information about backend plugins, refer to the documentation on [Backend plugins](../../introduction/backend.md).
 
 In this tutorial, you'll:
 
-- Build a backend for your data source
+- Build a [backend](../../introduction/backend.md) for your data source
 - Implement a health check for your data source
-- Enable Grafana Alerting for your data source
+- Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for your data source
 
 #### Prerequisites
 
-- Knowledge about how data sources are implemented in the frontend.
-- Grafana 7.0
+- Grafana 9.0
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
@@ -41,16 +40,14 @@ In this tutorial, you'll:
 <CreatePlugin />
 
 Now, let's verify that the plugin you've built so far can be used in Grafana when creating a new data source:
-<!-- TODO validate these steps -->
 1. Navigate via the side-menu to **Connections** -> **Data Sources**.
-1. Click **Add new data source**.
-1. Find your newly created plugin and select it.
-1. Enter a name and then click **Save & Test** (ignore any errors reported for now).
+1. Click **Add data source**.
+1. Search for the name of your newly created plugin and select it.
+1. Enter a name and then click **Save & Test** (a "randomized error" may occur and can be ignored).
 
 You now have a new data source instance of your plugin that is ready to use in a dashboard:
 
-1. Navigate via the side-menu to **Create** -> **Dashboard**.
-1. Click **Add new panel**.
+1. Create a new dashboard and add a new panel
 1. In the query tab, select the data source you just created.
 1. A line graph is rendered with one series consisting of two data points.
 1. Save the dashboard.
@@ -97,6 +94,7 @@ The [plugin.json](../../metadata.md) file is required for all plugins. When buil
 In the next step we will look at the query endpoint!
 
 ## Implement data queries
+<!-- this section needs updating -->
 
 We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `SampleDatasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
 
@@ -105,6 +103,8 @@ Each request contains multiple queries to reduce traffic between Grafana and plu
 In the tutorial we have extracted a method named `query` to take care of each query model. Since each plugin has their own unique query model, Grafana sends it to the backend plugin as JSON. Therefore the plugin needs to `Unmarshal` the query model into something easier to work with.
 
 As you can see the sample only returns static numbers. Try to extend the plugin to return other types of data.
+
+<!-- An example would likely be better -->
 
 You can read more about how to [build data frames in our docs](../../introduction/data-frames).
 
@@ -118,6 +118,8 @@ In this sample data source, there is a 50% chance that the health check will be 
 
 Open `/pkg/plugin/datasource.go`. In this file you'll see that the `SampleDatasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Navigate to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
 
+Learn more: view other Health Check implementations in our [examples repository](https://github.com/grafana/grafana-plugin-examples/)
+
 ## Add authentication
 
 Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../extend-a-plugin/add-authentication-for-data-source-plugins.md#authenticate-using-a-backend-plugin).
@@ -125,7 +127,7 @@ Implementing authentication allows your plugin to access protected resources lik
 ## Enable Grafana Alerting
 
 1. Open _src/plugin.json_.
-1. Add the top level `backend` property with a value of `true` to specify that your plugin supports Grafana Alerting, e.g.
+1. Add the top level `alerting` property with a value of `true` to specify that your plugin supports Grafana Alerting, e.g.
    ```json
    {
      ...
@@ -136,18 +138,15 @@ Implementing authentication allows your plugin to access protected resources lik
      ...
    }
    ```
-1. Rebuild frontend parts of the plugin to _dist_ directory:
-
-```bash
-yarn build
-```
 
 1. Restart your Grafana instance.
 1. Open Grafana in your web browser.
+1. Verify that alerting is now supported by navigating to your created data source. You should an "Alerting supported" message in the Settings view.
 1. Open the dashboard you created earlier in the _Create a new plugin_ step.
 1. Edit the existing panel.
-1. Click on the _Alert_ tab.
-1. Click on _Create Alert_ button.
+<!-- this needs to be updated from legacy alerting -->
+1. Click on the _Alert_ tab underneath the panel.
+1. Click on _Create alert rule from this panel_ button.
 1. Edit condition and specify _IS ABOVE 10_. Change _Evaluate every_ to _10s_ and clear the _For_ field to make the alert rule evaluate quickly.
 1. Save the dashboard.
 1. After some time the alert rule evaluates and transitions into _Alerting_ state.
