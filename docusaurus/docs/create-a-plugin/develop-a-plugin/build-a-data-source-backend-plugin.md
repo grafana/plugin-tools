@@ -96,7 +96,7 @@ In the next step we will look at the query endpoint!
 ## Implement data queries
 <!-- this section needs updating -->
 
-We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `SampleDatasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
+We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `Datasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
 
 Each request contains multiple queries to reduce traffic between Grafana and plugins. So you need to loop over the slice of queries, process each query, and then return the results of all queries.
 
@@ -116,7 +116,7 @@ When editing a data source in Grafana's UI, you can **Save & Test** to verify th
 
 In this sample data source, there is a 50% chance that the health check will be successful. Make sure to return appropriate error messages to the users, informing them about what is misconfigured in the data source.
 
-Open `/pkg/plugin/datasource.go`. In this file you'll see that the `SampleDatasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Navigate to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
+Open `/pkg/plugin/datasource.go`. In this file you'll see that the `Datasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Navigate to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
 
 Learn more: view other Health Check implementations in our [examples repository](https://github.com/grafana/grafana-plugin-examples/)
 
@@ -144,10 +144,15 @@ Implementing authentication allows your plugin to access protected resources lik
 1. Verify that alerting is now supported by navigating to your created data source. You should an "Alerting supported" message in the Settings view.
 1. Open the dashboard you created earlier in the _Create a new plugin_ step.
 1. Edit the existing panel.
-<!-- this needs to be updated from legacy alerting -->
 1. Click on the _Alert_ tab underneath the panel.
 1. Click on _Create alert rule from this panel_ button.
-1. Edit condition and specify _IS ABOVE 10_. Change _Evaluate every_ to _10s_ and clear the _For_ field to make the alert rule evaluate quickly.
+1. In _Expressions_ section, add a _Reduce_ expressions `B`, if there is none created yet, and set _Input_ to `A`, _Function_ to `Last` and _Mode_ to `strict`.
+1. Then add a _Threshold_ expressions `C`, if there is none created yet, and set _Input_ to `B`, and  _IS ABOVE_ to `15`.
+1. Your _Expressions_ section should have two expressions now: a reduce `B` and a threshold `C`.
+1. Click on _Set as alert condition_ on _Threshold_ expression.
+1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
+1. Then, click on _New evaluation group_ button and create a new evaluation group; choose a name and set the _Evaluation interval_ to `10s`.
+1. Click _Save rule and exit_ button.
 1. Save the dashboard.
 1. After some time the alert rule evaluates and transitions into _Alerting_ state.
 
