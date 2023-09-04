@@ -5,6 +5,8 @@ services:
     container_name: '{{ pluginId }}'
     build:
       context: ./.config
+      platforms:
+      - "linux/amd64"
       args:
         grafana_image: ${GRAFANA_IMAGE:-{{~grafanaImage~}} }
         grafana_version: ${GRAFANA_VERSION:-{{~grafanaVersion~}} }
