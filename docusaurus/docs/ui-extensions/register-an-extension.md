@@ -21,36 +21,30 @@ Be sure your plugin meets the following requirements before proceeding:
 - It must be preloaded by setting the [preload property](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/#pluginjson) to `true` in the `plugin.json`.
 - It must be installed and **enabled**.
 
-## Example: add a link extension within a Grafana dashboard panel menu
+## How to add an extension to Grafana core/plugins from your app plugin
 
+1. Open the `module.ts(x)` file in your plugin where your `AppPlugin` should be exposed.
 
+1. Use the `configureExtensionLink` on your `AppPlugin` instance to register extensions. This method requires an object containing the following properties:
 
+   - `extensionPointId` *required* - the unique identifier of the extension point you would like to extend.
+   - `title` *required* - used to display your extension at the extension point.
+   - `description` *required* - short description of what your extension does.
+   - `path` - a path within your app plugin where you would like to navigate the user when he/she click the extension.
+   - `onClick` - a callback that should be triggered when the user click the extension.
+   - `category` - a category that we should use to group your extension with other extensions.
+   - `icon` - an icon that should be used while displaying your extension.
+   - `configure` - a function that will be called prior to displaying the extension which enables you to dynamically change/hide your extension depending on the context.
 
+::: note
 
-## Available extension points within Grafana
+One of `path` or `onClick` is required. Otherwise the extension will be hidden due to incorrect configuration.
 
-An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
+:::
 
-- `grafana/dashboard/panel/menu`: extension point for all panel dropdown menus in dashboards
-- `grafana/explore/toolbar/action`: extension point for toolbar actions in explore
+### Example: Adding a regular link
 
-
-
-
-
-
-
-
-## Add a link extension within a Grafana dashboard panel menu
-
-To add an extension within a Grafana dashboard panel menu, complete the following steps:
-
-1. Define the link extension in your plugin's `module.ts` file.
-
-1. Define a new instance of the `AppPlugin` class by using the `configureExtensionLink` method. This method requires:
-   - an object that describes your link extension, including a `title` property for the link text
-   - an `extensionPointId` method that tells Grafana where the link should appear
-   - a `path` or `onClick` for the user to go to your plugin or
+In the example below we are adding an extension link to the Grafana dashboard panel menu. When the user clicks the menu item "Go to basic app" he/she will be navigated to `/a/myorg-basic-app/one`.
 
 ```typescript
 new AppPlugin().configureExtensionLink({
@@ -61,90 +55,74 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
-Your link will now appear in dashboard panel menus. When the user clicks the link, they will be sent to the path you defined earlier.
+### Example: Adding a regular link with query string parameters from the context
 
-TODO NOTE Each plugin is limited to a maximum of five links per extension point.
-
-## Add a link extension using context within Grafana
-
-The above example works for simple cases. However, you may want to act on information from the app's panel from which the user is navigating.
-
-To do this, use the `configure` property on the object that is passed to `configureExtensionLink()`. This property takes a function and returns an object that consists of a `title` property for the link text and a `path` to send the user to your plugin.
-
-Alternatively, if you need to hide the link for certain scenarios, define the function to return _undefined_:
+In the example below we are adding an extension link to the Grafana dashboard panel menu. When the user click the menu item "Go to basic app" he/she will be navigated to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
 ```typescript
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
   extensionPointId: 'grafana/dashboard/panel/menu',
-  path: '/a/myorg-basic-app/one',
+  path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
   configure: (context: PanelContext) => {
-    switch (context?.pluginId) {
-      case 'timeseries':
-        return {
-          title: 'Go to page one',
-          description: 'hello',
-          path: '/a/myorg-basic-app/one',
-        };
+    const {timeZone, panelId } = context;
 
-      case 'piechart':
-        return {
-          title: 'Go to page two',
-          path: '/a/myorg-basic-app/two',
-        };
-
-      // Returning undefined tells Grafana to hide the link
-      default:
-        return undefined;
-    }
-  },
+    // You only need to return the properties that you would like to override.
+    return {
+      path: `/a/myorg-basic-app/one?panelId=${panelId}&timeZone=${timeZone}`
+    };
+  }
 });
 ```
 
-The above example demonstrates how to return a different `path` based on which plugin the dashboard panel is using. If the clicked-upon panel is neither a time series nor a pie chart panel, then the `configure()` function returns _undefined_. When this happens, Grafana doesn't render the link.
+### Example: Adding a regular link that should be visible depending on the context
 
-TODO NOTE The context passed to the `configure()` function is bound by the `extensionPointId` into which you insert the link. Different extension points contain different contexts.
-
-## Add an event handler to a link
-
-Link extensions give you the means to direct users to a plugin page via href links within the Grafana UI. You can also use them to trigger `onClick` events to perform dynamic actions when clicked.
-
-To add an event handler to a link in a panel menu, complete the following steps:
-
-1. Define the link extension in the plugin's `module.ts` file.
-1. Create a new instance of the `AppPlugin` class, again using the `configureExtensionLink` method. This time, add an `onClick` property which takes a function. This function receives the click event and an object consisting of the `context` and an `openModal` function.
-
-In the following example, we open a dialog.
+In the example below we are adding an extension link to the Grafana dashboard panel menu. It will only be visible for panels with time zone set to UTC.
 
 ```typescript
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
   extensionPointId: 'grafana/dashboard/panel/menu',
-  path: '/a/myorg-basic-app/one',
-  onClick: (event, { context, openModal }) => {
-    event.preventDefault();
-    openModal({
-      title: 'My plugin dialog',
-      body: ({ onDismiss }) => <SampleModal onDismiss={onDismiss} pluginId={context?.pluginId} />,
-    });
-  },
+  path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
+  configure: (context: PanelContext) => {
+    const {timeZone } = context;
+
+    switch (toLowerCase(timeZone)) {
+      case 'utc':
+        return {}; // no overrides applied but we want to display the extension.
+      default:
+        return undefined; // returning undefined from the configure function will hide the extension.
+    }
+  }
 });
-
-type Props = {
-  onDismiss: () => void;
-  pluginId?: string;
-};
-
-const SampleModal = ({ onDismiss, pluginId }: Props) => {
-  return (
-    <VerticalGroup spacing="sm">
-      <p>This dialog was opened via the plugin extensions API.</p>
-      <p>The panel is using a {pluginId} plugin to display data.</p>
-    </VerticalGroup>
-  );
-};
 ```
 
-As you can see, the plugin extensions API enables you to insert links into the UI of Grafana applications that send users to plugin features or trigger actions based on where the user clicked. The plugins extension API can also be used for TODO cross-plugin linking
+### Example: Adding a link that should display a modal
+
+In the example below we are adding an extension link to the Grafana dashboard panel menu. It will open a flow (defined in our app) in a modal on top of the current view.
+
+```typescript
+new AppPlugin().configureExtensionLink({
+  title: 'Create incident',
+  description: 'Will open a prefilled form to create an incident.',
+  extensionPointId: 'grafana/dashboard/panel/menu',
+  onClick: (event, params) => {
+    const { context, openModal } = params;
+    const { targets = [], title } = context;
+    
+    openModal({
+      title: 'Create incident',
+      body: (props) => <CreateIncidentForm {...props} title={title} targets={targets}>
+    });
+  }
+});
+```
+
+## Available extension points within Grafana
+
+An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
+
+- `grafana/dashboard/panel/menu`: extension point for all panel dropdown menus in dashboards
+- `grafana/explore/toolbar/action`: extension point for toolbar actions in explore
