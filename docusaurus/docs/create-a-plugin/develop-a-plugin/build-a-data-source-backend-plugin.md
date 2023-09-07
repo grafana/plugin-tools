@@ -158,14 +158,21 @@ Implementing authentication allows your plugin to access protected resources lik
 1. Restart your Grafana instance.
 1. Open Grafana in your web browser.
 1. Verify that alerting is now supported by navigating to your created data source. You should an "Alerting supported" message in the Settings view.
+
+
+### Create an alert
+
+:::note
+The following instructions are based on Grafana v10.1.1, consult the [documentation](https://grafana.com/docs/grafana/latest/alerting/) for alerting for version appropriate guidance.
+:::
+
 1. Open the dashboard you created earlier in the _Create a new plugin_ step.
 1. Edit the existing panel.
 1. Click on the _Alert_ tab underneath the panel.
 1. Click on _Create alert rule from this panel_ button.
-1. In _Expressions_ section, add a _Reduce_ expressions `B` (if there is none created yet) and set _Input_ to `A`, _Function_ to `Last` and _Mode_ to `strict`.
-1. Then add a _Threshold_ expressions `C` (if there is none created yet) and set _Input_ to `B`, and _IS ABOVE_ to `15`.
-1. Your _Expressions_ section should have two expressions now: a reduce `B` and a threshold `C`.
-1. Click on _Set as alert condition_ on _Threshold_ expression.
+1. In _Expressions_ section, in the _Threshold_ expression `C`, set the _IS ABOVE_ to `15`.
+1. Click on _Set as alert condition_ on _Threshold_ expression `C`. Your alert should now look as follows.
+![Expression section showing B "reduce" with Input: A, Function: Last, Mode: Strict, C Threshold with Input: B, Is Above: 15 and Alert Condition enabled indicator](/img/create-alert.png "Alert Expression")
 1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
 1. Then, click on _New evaluation group_ button and create a new evaluation group; choose a name and set the _Evaluation interval_ to `10s`.
 1. Click _Save rule and exit_ button.
