@@ -3,6 +3,7 @@ version: '3.0'
 services:
   grafana:
     container_name: '{{ pluginId }}'
+    platform: "linux/amd64"
     build:
       context: ./.config
       platforms:
