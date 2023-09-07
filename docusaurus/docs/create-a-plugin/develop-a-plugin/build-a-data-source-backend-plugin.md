@@ -105,7 +105,7 @@ In the tutorial we have extracted a method named `query` to take care of each qu
 
 As you can see the sample only returns static numbers. Try to extend the plugin to return other types of data.
 
-For example to generate three random floats equally spaced in time, you can replace the two static numbers generated, using the following code:
+For example to generate three floats equally spaced in time, you can replace the two static numbers generated, using the following code:
 
 ```go
 	duration := query.TimeRange.To.Sub(query.TimeRange.From)
@@ -114,10 +114,14 @@ For example to generate three random floats equally spaced in time, you can repl
 	s := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(s)
 
+	lowVal := 10.0
+	highVal := 20.0
+	midVal := lowVal + (r.Float64() * (highVal - lowVal))
+
 	// add fields.
 	frame.Fields = append(frame.Fields,
 		data.NewField("time", nil, []time.Time{query.TimeRange.From, mid, query.TimeRange.To}),
-		data.NewField("values", nil, []float64{r.Float64(), r.Float64(), r.Float64()}),
+		data.NewField("values", nil, []float64{lowVal, midVal, highVal}),
 	)
 ```
 
