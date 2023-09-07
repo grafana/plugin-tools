@@ -17,7 +17,7 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
 
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There's a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a support for your data source.
+Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
 In this tutorial, you'll:
 
@@ -27,7 +27,7 @@ In this tutorial, you'll:
 
 ### Prerequisites
 
-- Grafana >=7.0
+- Grafana >=9.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin
@@ -54,8 +54,6 @@ async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse>
 
 The `options` object contains the queries, or _targets_, that the user made, along with context information, like the current time interval. Use this information to query an external database.
 
-> The term _target_ originates from Graphite, and the earlier days of Grafana when Graphite was the only supported data source. As Grafana gained support for more data sources, the term "target" became synonymous with any type of query.
-
 ### Test your data source
 
 `testDatasource` implements a health check for your data source. For example, Grafana calls this method whenever the user clicks the **Save & Test** button, after changing the connection settings.
@@ -64,9 +62,11 @@ The `options` object contains the queries, or _targets_, that the user made, alo
 async testDatasource()
 ```
 
+For an example of a health check in a frontend data source, see our [datasource-http](https://github.com/grafana/grafana-plugin-examples/blob/edf9f0259d28bc14aaaac4204058f7caab99d6ab/examples/datasource-http/src/DataSource.ts#L84) plugin.
+
 ## Data frames
 
-Nowadays there are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called _data frames_.
+There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called _data frames_.
 
 Let's see how to create and return a data frame from the `query` method. In this step, you'll change the code in the starter plugin to return a [sine wave](https://en.wikipedia.org/wiki/Sine_wave).
 
@@ -91,6 +91,8 @@ Let's see how to create and return a data frame from the `query` method. In this
 1. In the `map` function, use the `lodash/defaults` package to set default values for query properties that haven't been set:
 
    ```ts
+   import defaults from 'lodash/defaults';
+   
    const query = defaults(target, defaultQuery);
    ```
 
