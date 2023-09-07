@@ -1,3 +1,19 @@
+# v1.12.2 (Thu Sep 07 2023)
+
+#### 🐛 Bug Fix
+
+- fix: update dockerfile with platform [#383](https://github.com/grafana/plugin-tools/pull/383) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- chore: update links to developer portal [#382](https://github.com/grafana/plugin-tools/pull/382) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Create plugin: Use latest Grafana version [#309](https://github.com/grafana/plugin-tools/pull/309) ([@dprokop](https://github.com/dprokop) [@academo](https://github.com/academo))
+
+#### Authors: 3
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Dominik Prokop ([@dprokop](https://github.com/dprokop))
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.12.1 (Fri Aug 25 2023)
 
 :tada: This release contains work from a new contributor! :tada:
