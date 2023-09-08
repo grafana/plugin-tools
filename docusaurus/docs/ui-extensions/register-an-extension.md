@@ -36,7 +36,7 @@ Be sure your plugin meets the following requirements before proceeding:
    - `icon` - an icon that should be used while displaying your extension.
    - `configure` - a function that is called prior to displaying the extension which enables you to dynamically change or hide your extension depending on its context.
 
-::: note
+:::note
 
 Use either `path` or `onClick` (one is required). Otherwise, the extension will be hidden.
 
