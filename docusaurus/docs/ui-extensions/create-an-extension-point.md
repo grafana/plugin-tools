@@ -81,7 +81,7 @@ Each extension link has either a `path` or an `onClick` property defined. There'
 
 The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin, adding the extension, wants to navigate the user away from the current view into their app, then they can choose to define a path.
 
-If the instead would like to e.g. open a modal or trigger a background task (without navigating the user away from the current page) they can provide a callback.
+If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
 
 ## Additional options
 
