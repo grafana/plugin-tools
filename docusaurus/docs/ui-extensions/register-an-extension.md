@@ -55,7 +55,7 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
-### Example: Adding a regular link with query string parameters from the context
+### Example: Add a regular link with query string parameters from the context
 
 In the example below we are adding an extension link to the Grafana dashboard panel menu. When the user click the menu item "Go to basic app" he/she will be navigated to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
