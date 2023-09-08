@@ -21,7 +21,7 @@ Firstly, you will need to define an extension point ID. This is basically just a
 
 :::note
 
-Extension points living in core Grafana should start with `grafana/` and extension points living in plugins should start with `/plugins` followed by the plugin id e.g. `plugins/<PLUGIN_ID>/`.
+Extension points living in core Grafana should start with `grafana/` and extension points living in plugins should have IDs starting with `/plugins` followed by the plugin ID, for example, `plugins/<PLUGIN_ID>/`.
 
 :::
 
