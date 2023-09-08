@@ -36,7 +36,7 @@ Use the `getPluginLinkExtensions` method in `@grafana/runtime` to create an exte
 
 :::note
 
-Creating an extension point in a plugin creates a public interface for other plugins to interact with. Changes to the extension point ID or its context could break any plugin that attempts to register a link inside your plugin.
+When you create an extension point in a plugin, you create a public interface for other plugins to interact with. Changes to the extension point ID or its context could break any plugin that attempts to register a link inside your plugin.
 
 :::
 
