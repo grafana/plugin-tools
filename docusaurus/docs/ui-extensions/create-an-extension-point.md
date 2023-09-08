@@ -27,7 +27,7 @@ Extension points living in core Grafana should start with `grafana/` and extensi
 
 The second thing you need to consider is how to design the UI of the extension point so it supports a scenario where multiple extensions are being added without breaking the UI.
 
-Lastly you need to consider if there are any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values etc in the functionality being added via the extension.
+Finally, consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the functionality being added via the extension.
 
 
 ## How to create an extension point
