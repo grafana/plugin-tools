@@ -64,15 +64,17 @@ async testDatasource()
 
 For an example of a health check in a frontend data source, see our [datasource-http](https://github.com/grafana/grafana-plugin-examples/blob/edf9f0259d28bc14aaaac4204058f7caab99d6ab/examples/datasource-http/src/DataSource.ts#L84) plugin.
 
-## Data frames
+## Returning Data frames
 
-There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called _data frames_.
+There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called [data frames](../../introduction/data-frames.md).
 
 Let's see how to create and return a data frame from the `query` method. In this step, you'll change the code in the starter plugin to return a [sine wave](https://en.wikipedia.org/wiki/Sine_wave).
 
 1. In the current `query` method, remove the code inside the `map` function.
 
    The `query` method now look like this:
+
+   **src/datasource.ts**
 
    ```ts
    async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
@@ -146,7 +148,7 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
    return frame;
    ```
 
-1. Rebuild the plugin and try it out.
+1. Try it out by creating a new data source instance and building a dashboard.
 
 Your data source is now sending data frames that Grafana can visualize. Next, we'll look at how you can control the frequency of the sine wave by defining a _query_.
 
@@ -193,7 +195,7 @@ Now that you've defined the query model you wish to support, the next step is to
 
 1. Define the `frequency` from the `query` object and add a new form field to the query editor to control the new frequency property in the `render` method.
 
-   **QueryEditor.tsx**
+   **src/components/QueryEditor.tsx**
 
    ```ts
    const { queryText, constant, frequency } = query;
@@ -201,7 +203,7 @@ Now that you've defined the query model you wish to support, the next step is to
 
    ```ts
    <InlineField label="Frequency" labelWidth={16}>
-     <Input onChange={onFrequencyChange} value={frequency} />
+     <Input onChange={onFrequencyChange} value={frequency || ''} />
    </InlineField>
    ```
 
@@ -225,11 +227,16 @@ The new query model is now ready to use in our `query` method.
 
 1. In the `query` method, use the `frequency` property to adjust our equation.
 
+   **src/datasource.ts**
+
    ```ts
    frame.add({ time: from + t, value: Math.sin((2 * Math.PI * query.frequency * t) / duration) });
    ```
 
-## Configure your data source
+1. Try it out by changing the frequency in the query for your panel.
+
+
+## Enable configuration for your datasource
 
 To access a specific data source, you often need to configure things like hostname, credentials, or authentication method. A _config editor_ lets your users configure your data source plugin to fit their needs.
 
@@ -243,7 +250,7 @@ The resolution controls how close in time the data points are to each other. A h
 
 1. Add a new number property called `resolution` to the options model.
 
-   **types.ts**
+   **src/types.ts**
 
    ```ts
    export interface MyDataSourceOptions extends DataSourceJsonData {
@@ -258,7 +265,7 @@ Just like query editor, the form field in the config editor calls the registered
 
 1. Add a new form field to the query editor to control the new resolution option.
 
-   **ConfigEditor.tsx**
+   **src/components/ConfigEditor.tsx**
 
    ```ts
    <InlineField label="Resolution" labelWidth={12}>
@@ -283,6 +290,8 @@ Just like query editor, the form field in the config editor calls the registered
 ### Use the option
 
 1. Create a property called `resolution` to the `DataSource` class.
+   
+   **src/datasource.ts**
 
    ```ts
    export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
@@ -297,77 +306,30 @@ Just like query editor, the form field in the config editor calls the registered
      // ...
    ```
 
-1. In the `query` method, use the `resolution` property to calculate the step size.
-
-   **src/datasource.ts**
+1. In the `query` method, use the `resolution` property to change how we calculate the step size.
 
    ```ts
    const step = duration / this.resolution;
    ```
 
-## Get data from an external API
-
-So far, you've generated the data returned by the data source. A more realistic use case would be to fetch data from an external API.
-
-While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
-
-The main advantage of `getBackendSrv` is that it proxies requests through the Grafana server rather making the request from the browser. This is strongly recommended when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../extend-a-plugin/add-authentication-for-data-source-plugins.md).
-
-1. Import `getBackendSrv`.
-
-   **src/datasource.ts**
-
-   ```ts
-   import { getBackendSrv } from '@grafana/runtime';
-   ```
-
-1. Create a helper method `doRequest` and use the `datasourceRequest` method to make a request to your API. Replace `https://api.example.com/metrics` to point to your own API endpoint.
-
-   ```ts
-   async doRequest(query: MyQuery) {
-     const result = await getBackendSrv().datasourceRequest({
-       method: "GET",
-       url: "https://api.example.com/metrics",
-       params: query,
-     })
-
-     return result;
-   }
-   ```
-
-1. Make a request for each query. `Promises.all` waits for all requests to finish before returning the data.
-
-   ```ts
-   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-     const promises = options.targets.map((query) =>
-       this.doRequest(query).then((response) => {
-         const frame = new MutableDataFrame({
-           refId: query.refId,
-           fields: [
-             { name: "Time", type: FieldType.time },
-             { name: "Value", type: FieldType.number },
-           ],
-         });
-
-         response.data.forEach((point: any) => {
-           frame.appendRow([point.time, point.value]);
-         });
-
-         return frame;
-       })
-     );
-
-     return Promise.all(promises).then((data) => ({ data }));
-   }
-   ```
+1. Try it out by configuring a new datasource and changing the value for the resolution.
 
 ## Summary
 
 In this tutorial you built a complete data source plugin for Grafana that uses a query editor to control what data to visualize. You've added a data source option, commonly used to set connection options and more.
 
-### Learn more
+## Learn more
 
-Learn how you can improve your plugin even further, by reading our advanced guides:
+### Get data from an external API
+The majority of data sources in Grafana will return data from an external API, this tutorial tries to keep things simple and not require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample. 
+
+This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
+
+While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. This is strongly recommended when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../extend-a-plugin/add-authentication-for-data-source-plugins.md).
+
+### Improving your plugin's quality
+
+You can also learn how you can improve your plugin even further, by reading our advanced guides:
 
 - [Add support for variables](../extend-a-plugin/add-support-for-variables.md)
 - [Add support for annotations](../extend-a-plugin/enable-annotations.md)
