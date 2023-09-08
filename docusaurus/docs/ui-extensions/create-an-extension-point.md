@@ -79,7 +79,7 @@ The preceding example shows a component that renders <LinkButton /> components f
 #### Why does the extension have `onClick` and `path`?
 Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
 
-The reason for this is to be able to support both native browser links and callbacks. If the plugin, adding the extension, want to navigate the user away from the current view into their app they can choose to define a path.
+The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin, adding the extension, wants to navigate the user away from the current view into their app, then they can choose to define a path.
 
 If the instead would like to e.g. open a modal or trigger a background task (without navigating the user away from the current page) they can provide a callback.
 
