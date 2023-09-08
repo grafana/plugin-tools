@@ -42,7 +42,7 @@ One of `path` or `onClick` is required. Otherwise the extension will be hidden d
 
 :::
 
-### Example: Adding a regular link
+### Example: Add a regular link
 
 In the example below we are adding an extension link to the Grafana dashboard panel menu. When the user clicks the menu item "Go to basic app" he/she will be navigated to `/a/myorg-basic-app/one`.
 
