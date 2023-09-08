@@ -18,9 +18,13 @@ import CreatePlugin from '@shared/create-plugin-frontend.md';
 
 ## Introduction
 
-Panels are the building blocks of Grafana, and allow you to visualize data in different ways. This tutorial gives you a hands-on walkthrough of creating your own panel using [D3.js](https://d3js.org/).
+Panels are one of the fundamental building blocks of Grafana, which allow you to visualize data in different ways. Grafana has several types of panels already built-in, and many more available in the [Plugin Catalog](https://grafana.com/grafana/plugins/).
 
-For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/features/panels/panels/).
+To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html and can be scaffolded with the `create-plugin` tool.
+
+For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
+
+This tutorial gives you a hands-on walkthrough of creating your own panel using [D3.js](https://d3js.org/).
 
 In this tutorial, you'll:
 
@@ -29,7 +33,7 @@ In this tutorial, you'll:
 
 ### Prerequisites
 
-- Grafana 7.0
+- Grafana >=9.0
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin
@@ -42,18 +46,27 @@ In this tutorial, you'll:
 
 Wait a minute. Manipulating documents based on data? That's sounds an awful lot like React. In fact, much of what you can accomplish with D3 you can already do with React. So before we start looking at D3, let's see how you can create an SVG from data, using only React.
 
-In **SimplePanel.tsx**, change `SimplePanel` to return an `svg` with a `rect` element.
+1. For the purposes of this tutorial, remove the following from **src/components/SimplePanel.tsx**:
+
+  ```ts
+    viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
+  ```
+
+  and 
+
+  ```ts
+  <div className={styles.textBox}>
+   {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
+   <div>Text option value: {options.text}</div>
+  </div>
+  ```
+
+1. Now, change the SVG group `g` in `SimplePanel` to return a `rect` element rather than a circle.
 
 ```ts
-export const SimplePanel = ({ options, data, width, height }: Props) => {
-  const theme = useTheme();
-
-  return (
-    <svg width={width} height={height}>
-      <rect x={0} y={0} width={10} height={10} fill={theme.palette.greenBase} />
-    </svg>
-  );
-};
+<g>
+  <rect x={0} y={0} width={30} height={10} fill={theme.visualization.getColorByName('green')} />
+</g>
 ```
 
 One single rectangle might not be very exciting, so let's see how you can create rectangles from data.
@@ -70,22 +83,15 @@ One single rectangle might not be very exciting, so let's see how you can create
    const barHeight = height / values.length;
    ```
 
-1. Inside a SVG group, `g`, create a `rect` element for every value in the dataset. Each rectangle uses the value as its width.
+1. Inside the SVG group `g`, create a `rect` element for every value in the dataset. Each rectangle uses the value as its width.
 
    ```ts
-   return (
-     <svg width={width} height={height}>
-       <g>
+        <g>
          {values.map((value, i) => (
-           <rect x={0} y={i * barHeight} width={value} height={barHeight - 1} fill={theme.palette.greenBase} />
+           <rect x={0} y={i * barHeight} width={value} height={barHeight - 1} fill={theme.visualization.getColorByName('green')} />
          ))}
        </g>
-     </svg>
-   );
    ```
-
-1. Rebuild the plugin and reload your browser to see the changes you've made.
-
 As you can see, React is perfectly capable of dynamically creating HTML elements. In fact, creating elements using React is often faster than creating them using D3.
 
 So why would you use even use D3? In the next step, we'll see how you can take advantage of D3's data transformations.
@@ -99,7 +105,7 @@ D3 is already bundled with Grafana, and you can access it by importing the `d3` 
 1. Install the D3 type definitions:
 
    ```bash
-   yarn add --dev @types/d3
+   npm install --include=dev @types/d3
    ```
 
 1. Import `d3` in **SimplePanel.tsx**.
@@ -128,7 +134,8 @@ Scales are functions that map a range of values to another range of values. In t
      <svg width={width} height={height}>
        <g>
          {values.map((value, i) => (
-           <rect x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1} fill={theme.palette.greenBase} />
+           <rect key={value} x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1}
+            fill={theme.visualization.getColorByName('green')} />
          ))}
        </g>
      </svg>
@@ -188,41 +195,78 @@ Congrats! You've created a simple and responsive bar chart.
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
-import { useTheme } from '@grafana/ui';
+import { css, cx } from '@emotion/css';
+import { useStyles2, useTheme2 } from '@grafana/ui';
 import * as d3 from 'd3';
+
 
 interface Props extends PanelProps<SimpleOptions> {}
 
-export const SimplePanel = ({ options, data, width, height }: Props) => {
-  const theme = useTheme();
+const getStyles = () => {
+  return {
+    wrapper: css`
+      font-family: Open Sans;
+      position: relative;
+    `,
+    svg: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+    `,
+    textBox: css`
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+    `,
+  };
+};
 
+export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
+  const theme = useTheme2();
+  const styles = useStyles2(getStyles);
   const values = [4, 8, 15, 16, 23, 42];
-
-  const scale = d3
-    .scaleLinear()
-    .domain([0, d3.max(values) || 0.0])
-    .range([0, width]);
-
-  const axis = d3.axisBottom(scale);
-
   const padding = 20;
   const chartHeight = height - padding;
   const barHeight = chartHeight / values.length;
+  const scale = d3
+  .scaleLinear()
+  .domain([0, d3.max(values) || 0.0])
+  .range([0, width]);
+  const axis = d3.axisBottom(scale);
 
   return (
-    <svg width={width} height={height}>
-      <g>
-        {values.map((value, i) => (
-          <rect x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1} fill={theme.palette.greenBase} />
-        ))}
-      </g>
-      <g
-        transform={`translate(0, ${chartHeight})`}
-        ref={(node) => {
-          d3.select(node).call(axis as any);
-        }}
-      />
-    </svg>
+    
+    <div
+      className={cx(
+        styles.wrapper,
+        css`
+          width: ${width}px;
+          height: ${height}px;
+        `
+      )}
+    >
+      <svg
+        className={styles.svg}
+        width={width}
+        height={height}
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      >
+        <g>
+          {values.map((value, i) => (
+            <rect key={value} x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1}
+            fill={theme.visualization.getColorByName('green')} />
+          ))}
+        </g>
+        <g
+          transform={`translate(0, ${chartHeight})`}
+          ref={(node) => {
+            d3.select(node).call(axis as any);
+          }}
+        />
+      </svg>      
+    </div>
   );
 };
 ```
