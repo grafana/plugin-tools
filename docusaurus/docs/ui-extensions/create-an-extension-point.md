@@ -85,4 +85,4 @@ If instead you want to open a modal or trigger a background task without sending
 
 ## Additional options
 
-If you would like to limit how many extensions a plugin can register for your extension point you can pass the `limitPerPlugin` option as part of the `getPluginLinkExtensions` call. The default limit is set to **5** extensions per plugin to prevent plugins from flooding your extension point.
+If you want to limit how many extensions a plugin can register for your extension point, you can pass the `limitPerPlugin` option as part of the `getPluginLinkExtensions` call. The default limit is set to five extensions per plugin to prevent plugins from flooding your extension point.
