@@ -77,7 +77,7 @@ function AppMenuExtensionPoint() {
 The preceding example shows a component that renders <LinkButton /> components for all link extensions that other plugins registered for the `plugin/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
 
 #### Why does the extension has onClick and path?
-Each extension link has either an `path` or `onClick` property defined. There will never be a scenario where both properties are defined at the same time.
+Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
 
 The reason for this is to be able to support both native browser links and callbacks. If the plugin, adding the extension, want to navigate the user away from the current view into their app they can choose to define a path.
 
