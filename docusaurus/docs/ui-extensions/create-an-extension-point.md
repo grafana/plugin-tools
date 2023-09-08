@@ -17,7 +17,7 @@ keywords:
 
 When you want your plugin to insert links to a specific location in another plugin's UI, use an extension point. Here's what you need to know about extension points.
 
-The first one is to define an extension point ID. It is basically just a string describing the part of the UI where the extension point lives. Extension developers should be able to figure out where in the UI the extension will be added by reading the extension point ID.
+Firstly, you will need to define an extension point ID. This is basically just a string describing the part of the UI where the extension point lives. Extension developers should be able to figure out where in the UI the extension will be added by reading the extension point ID.
 
 :::note
 
