@@ -1,6 +1,6 @@
 ---
 id: create-an-extension-point
-title: Create an extension point in your App plugin
+title: Create an extension point in your app plugin
 sidebar_label: Create an extension point
 sidebar_position: 2
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
