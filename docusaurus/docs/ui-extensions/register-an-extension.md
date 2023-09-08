@@ -99,7 +99,7 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
-### Example: Adding a link that should display a modal
+### Example: Add a link that should display a modal
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will open a flow (defined in our app) in a modal on top of the current view.
 
