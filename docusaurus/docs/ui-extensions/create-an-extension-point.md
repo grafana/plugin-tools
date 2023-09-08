@@ -12,7 +12,7 @@ keywords:
   - extensions
   - extension point
   - app plugins
- - apps
+  - apps
 ---
 
 When you want your plugin to insert links to a specific location in another plugin's UI, use an extension point. Here's what you need to know about extension points.
