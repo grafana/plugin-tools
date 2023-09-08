@@ -14,7 +14,7 @@ keywords:
   - app plugins
 ---
 
-There are a couple of things you need to consider when adding an extension point to your UI.
+When you want your plugin to insert links to a specific location in another plugin's UI, use an extension point. Here's what you need to know about extension points.
 
 The first one is to define an extension point ID. It is basically just a string describing the part of the UI where the extension point lives. Extension developers should be able to figure out where in the UI the extension will be added by reading the extension point ID.
 
