@@ -1,6 +1,6 @@
 ---
 id: register-an-extension
-title: Register an Extension from your App plugin
+title: Register an extension from your app plugin
 sidebar_label: Register an extension
 sidebar_position: 1
 description: Learn how to register an extension from your app plugin.
@@ -19,7 +19,7 @@ Be sure your plugin meets the following requirements before proceeding:
 
 - It must be an app plugin.
 - It must be preloaded by setting the [preload property](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/#pluginjson) to `true` in the `plugin.json`.
-- It must be installed and **enabled**.
+- It must be installed and *enabled*.
 
 ## How to add an extension to Grafana core/plugins from your app plugin
 
@@ -30,21 +30,21 @@ Be sure your plugin meets the following requirements before proceeding:
    - `extensionPointId` *required* - the unique identifier of the extension point you would like to extend.
    - `title` *required* - used to display your extension at the extension point.
    - `description` *required* - short description of what your extension does.
-   - `path` - a path within your app plugin where you would like to navigate the user when he/she click the extension.
-   - `onClick` - a callback that should be triggered when the user click the extension.
+   - `path` - a path within your app plugin where you would like to send users when they click the extension.
+   - `onClick` - a callback that should be triggered when the user clicks the extension.
    - `category` - a category that we should use to group your extension with other extensions.
    - `icon` - an icon that should be used while displaying your extension.
-   - `configure` - a function that will be called prior to displaying the extension which enables you to dynamically change/hide your extension depending on the context.
+   - `configure` - a function that is called prior to displaying the extension which enables you to dynamically change or hide your extension depending on its context.
 
 ::: note
 
-One of `path` or `onClick` is required. Otherwise the extension will be hidden due to incorrect configuration.
+Use either `path` or `onClick` (one is required). Otherwise, the extension will be hidden.
 
 :::
 
 ### Example: Add a regular link
 
-In the example below we are adding an extension link to the Grafana dashboard panel menu. When the user clicks the menu item "Go to basic app" he/she will be navigated to `/a/myorg-basic-app/one`.
+In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one`.
 
 ```typescript
 new AppPlugin().configureExtensionLink({
@@ -57,7 +57,7 @@ new AppPlugin().configureExtensionLink({
 
 ### Example: Add a regular link with query string parameters from the context
 
-In the example below we are adding an extension link to the Grafana dashboard panel menu. When the user click the menu item "Go to basic app" he/she will be navigated to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
+In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
 ```typescript
 new AppPlugin().configureExtensionLink({
@@ -76,7 +76,7 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
-### Example: Adding a regular link that should be visible depending on the context
+### Example: Add a regular link that should be visible depending on the context
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will only be visible for panels with the time zone set to UTC.
 
