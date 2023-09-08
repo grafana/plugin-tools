@@ -78,7 +78,7 @@ new AppPlugin().configureExtensionLink({
 
 ### Example: Adding a regular link that should be visible depending on the context
 
-In the example below we are adding an extension link to the Grafana dashboard panel menu. It will only be visible for panels with time zone set to UTC.
+In the following example, we add an extension link to the Grafana dashboard panel menu. It will only be visible for panels with the time zone set to UTC.
 
 ```typescript
 new AppPlugin().configureExtensionLink({
