@@ -40,7 +40,7 @@ Creating an extension point in a plugin creates a public interface for other plu
 
 :::
 
-The `getPluginLinkExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugin/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can loop over
+The `getPluginLinkExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugin/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can then loop over.
 
 
 ```typescript
