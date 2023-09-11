@@ -19,17 +19,15 @@ Be sure your plugin meets the following requirements before proceeding:
 
 - It must be an app plugin.
 - It must be preloaded by setting the [preload property](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/#pluginjson) to `true` in the `plugin.json`.
-- It must be installed and *enabled* for the extension to be available.
+- It must be installed and _enabled_ for the extension to be available.
 
 ## How to extend the Grafana UI or an app plugin from your app plugin
 
-1. Open the `module.ts(x)` file in your plugin where your `AppPlugin` should be exposed.
-
 1. Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
 
-   - `extensionPointId` *required* - the unique identifier of the extension point you would like to extend.
-   - `title` *required* - used to display your extension at the extension point.
-   - `description` *required* - short description of what your extension does.
+   - `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend.
+   - `title` _required_ - used to display your extension at the extension point.
+   - `description` _required_ - short description of what your extension does.
    - `path` - a path within your app plugin where you would like to send users when they click the extension.
    - `onClick` - a callback that should be triggered when the user clicks the extension.
    - `category` - a category that we should use to group your extension with other extensions.
@@ -66,13 +64,13 @@ new AppPlugin().configureExtensionLink({
   extensionPointId: 'grafana/dashboard/panel/menu',
   path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
   configure: (context: PanelContext) => {
-    const {timeZone, panelId } = context;
+    const { timeZone, panelId } = context;
 
     // You only need to return the properties that you would like to override.
     return {
-      path: `/a/myorg-basic-app/one?panelId=${panelId}&timeZone=${timeZone}`
+      path: `/a/myorg-basic-app/one?panelId=${panelId}&timeZone=${timeZone}`,
     };
-  }
+  },
 });
 ```
 
@@ -87,7 +85,7 @@ new AppPlugin().configureExtensionLink({
   extensionPointId: 'grafana/dashboard/panel/menu',
   path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
   configure: (context: PanelContext) => {
-    const {timeZone } = context;
+    const { timeZone } = context;
 
     switch (toLowerCase(timeZone)) {
       case 'utc':
@@ -95,7 +93,7 @@ new AppPlugin().configureExtensionLink({
       default:
         return undefined; // returning undefined from the configure function will hide the extension.
     }
-  }
+  },
 });
 ```
 
@@ -111,7 +109,7 @@ new AppPlugin().configureExtensionLink({
   onClick: (event, params) => {
     const { context, openModal } = params;
     const { targets = [], title } = context;
-    
+
     openModal({
       title: 'Create incident',
       body: (props) => <CreateIncidentForm {...props} title={title} targets={targets}>
