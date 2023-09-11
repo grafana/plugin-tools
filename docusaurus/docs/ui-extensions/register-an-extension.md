@@ -25,7 +25,7 @@ Be sure your plugin meets the following requirements before proceeding:
 
 1. Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
 
-   - `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend.
+   - `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend. See [available extension points](#available-extension-points-within-grafana) within Grafana.
    - `title` _required_ - used to display your extension at the extension point.
    - `description` _required_ - short description of what your extension does.
    - `path` - a path within your app plugin where you would like to send users when they click the extension.
