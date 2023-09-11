@@ -15,13 +15,13 @@ keywords:
   - apps
 ---
 
-When you want your plugin to insert links to a specific location in another plugin's UI, use an extension point. Here's what you need to know about extension points.
+Providing an extension point within your UI enables other plugins to contribute supplementary capabilities, and leverage the context within the current view to guide users to a potential next step. Here's what you need to know about extension points.
 
 Firstly, you will need to define an extension point ID. This is basically just a string describing the part of the UI where the extension point lives. Extension developers should be able to figure out where in the UI the extension will be added by reading the extension point ID.
 
 :::note
 
-Extension points living in core Grafana should start with `grafana/` and extension points living in plugins should have IDs starting with `/plugins` followed by the plugin ID, for example, `plugins/<PLUGIN_ID>/`.
+Extension points living in core Grafana must start with `grafana/` and extension points living in plugins must have IDs starting with `/plugins` followed by the plugin ID, for example, `plugins/<PLUGIN_ID>/`.
 
 :::
 
@@ -30,11 +30,11 @@ The second thing you need to consider is how to design the UI of the extension p
 Finally, consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the functionality being added via the extension.
 
 
-## How to create an extension point
+## Create an extension point
 
 Use the `getPluginLinkExtensions` method in `@grafana/runtime` to create an extension point within your plugin.
 
-:::note
+:::warning
 
 When you create an extension point in a plugin, you create a public interface for other plugins to interact with. Changes to the extension point ID or its context could break any plugin that attempts to register a link inside your plugin.
 
@@ -79,7 +79,7 @@ The preceding example shows a component that renders <LinkButton /> components f
 #### Why does the extension have `onClick` and `path`?
 Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
 
-The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin, adding the extension, wants to navigate the user away from the current view into their app, then they can choose to define a path.
+The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin adding the extension wants to navigate the user away from the current view into their app, then they can choose to define a path.
 
 If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
 

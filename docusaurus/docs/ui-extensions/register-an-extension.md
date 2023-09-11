@@ -19,13 +19,13 @@ Be sure your plugin meets the following requirements before proceeding:
 
 - It must be an app plugin.
 - It must be preloaded by setting the [preload property](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/#pluginjson) to `true` in the `plugin.json`.
-- It must be installed and *enabled*.
+- It must be installed and *enabled* for the extension to be available.
 
-## How to add an extension to Grafana core/plugins from your app plugin
+## How to extend the Grafana UI or an app plugin from your app plugin
 
 1. Open the `module.ts(x)` file in your plugin where your `AppPlugin` should be exposed.
 
-1. Use the `configureExtensionLink` on your `AppPlugin` instance to register extensions. This method requires an object containing the following properties:
+1. Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
 
    - `extensionPointId` *required* - the unique identifier of the extension point you would like to extend.
    - `title` *required* - used to display your extension at the extension point.
@@ -42,7 +42,7 @@ Use either `path` or `onClick` (one is required). Otherwise, the extension will 
 
 :::
 
-### Example: Add a regular link
+### Example: Link to a new location
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one`.
 
@@ -99,7 +99,7 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
-### Example: Add a link that should display a modal
+### Example: Display a modal view
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will open a flow (defined in our app) in a modal on top of the current view.
 
