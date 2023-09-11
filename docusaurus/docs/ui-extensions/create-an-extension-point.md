@@ -29,7 +29,6 @@ The second thing you need to consider is how to design the UI of the extension p
 
 Finally, consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the functionality being added via the extension.
 
-
 ## Create an extension point
 
 Use the `getPluginLinkExtensions` method in `@grafana/runtime` to create an extension point within your plugin.
@@ -42,6 +41,7 @@ When you create an extension point in a plugin, you create a public interface fo
 
 The `getPluginLinkExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugin/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can then loop over.
 
+In the following example, a component render <LinkButton /> components for all link extensions that other plugins registered for the `plugin/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
 
 ```typescript
 import { getPluginLinkExtensions } from '@grafana/runtime';
@@ -64,7 +64,12 @@ function AppMenuExtensionPoint() {
     <div>
       {extensions.map((extension) => {
         return (
-          <LinkButton href={extension.path} onClick={extension.onClick} title={extension.description} key={extension.key}>
+          <LinkButton
+            href={extension.path}
+            onClick={extension.onClick}
+            title={extension.description}
+            key={extension.key}
+          >
             {extension.title}
           </LinkButton>
         );
@@ -74,9 +79,8 @@ function AppMenuExtensionPoint() {
 }
 ```
 
-The preceding example shows a component that renders <LinkButton /> components for all link extensions that other plugins registered for the `plugin/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
-
 #### Why does the extension have `onClick` and `path`?
+
 Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
 
 The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin adding the extension wants to navigate the user away from the current view into their app, then they can choose to define a path.
