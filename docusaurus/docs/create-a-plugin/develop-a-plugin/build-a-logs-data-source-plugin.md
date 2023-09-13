@@ -99,15 +99,13 @@ const result = createDataFrame({
 
 ## Enhance your logs data source plugin with optional features
 
-You can use the following optional features to enhance your logs data source plugin.
-
-### Implement features that enhance log querying experience in Explore
+You can use the following optional features to enhance your logs data source plugin. With optional features, you are going to enhance log querying experience in Explore.
 
 [Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If the data source produces log results, we highly recommend implementing the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
 
 The following steps show the process for adding support for Explore features in a data source plugin through a seamless integration. Implement these APIs to enhance the user experience and take advantage of Explore's powerful log investigation capabilities.
 
-#### Show log results in Explore's Logs view
+### Show log results in Explore's Logs view
 
 To ensure that your log results are displayed in an interactive Logs view, you must add a `meta` attribute to `preferredVisualisationType` in your log result data frame.
 
@@ -132,7 +130,7 @@ const result = createDataFrame({
 });
 ```
 
-#### Highlight searched words
+### Highlight searched words
 
 :::note
 
@@ -167,7 +165,7 @@ const result = createDataFrame({
 });
 ```
 
-#### Log result `meta` information
+### Log result `meta` information
 
 :::note
 
@@ -238,7 +236,7 @@ const result = createDataFrame({
 });
 ```
 
-#### Color-coded log levels
+### Color-coded log levels
 
 :::note
 
@@ -250,7 +248,7 @@ Color-coded [log levels](https://grafana.com/docs/grafana/latest/explore/logs-in
 
 Refer to [Logs data frame format](#logs-data-frame-format) for more information.
 
-#### Copy link to log line
+### Copy link to log line
 
 :::note
 
@@ -302,7 +300,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 }
 ```
 
-#### Live tailing
+### Live tailing
 
 :::note
 
@@ -338,7 +336,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 }
 ```
 
-#### Log context
+### Log context
 
 :::note
 
