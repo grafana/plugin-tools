@@ -31,7 +31,7 @@ To learn more about RxJs, refer to the [RxJS documentation](https://rxjs.dev/gui
 
 Enable streaming for your data source plugin to update your dashboard when new data becomes available.
 
-For example, a streaming data source plugin can connect to a websocket, or subscribe to a message bus, and update the visualization whenever a new message is available.
+For example, a streaming data source plugin can connect to a websocket, or subscribe to a message bus, and then update the visualization whenever a new message is available.
 
 1. Enable streaming for your data source in the `plugin.json` file.
 

@@ -19,15 +19,15 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
 
-Panels are one of the fundamental building blocks of Grafana, which allow you to visualize data in different ways. Grafana has several types of panels already built-in, and many more available in the [Plugin Catalog](https://grafana.com/grafana/plugins/).
+Panels allow you to visualize data in different ways; they are one of the fundamental building blocks of Grafana. Grafana has several types of panels already built-in, and many more available in the [Grafana plugin Catalog](https://grafana.com/grafana/plugins/).
 
-To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html and can be scaffolded with the `create-plugin` tool.
+To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html) and can be scaffolded with the `create-plugin` tool.
 
 For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
 
 ### Prerequisites
 
-- Grafana >=9.0
+- Grafana v9.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin
@@ -46,7 +46,7 @@ The [PanelProps](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbf
 
 You can access the panel properties through the `props` argument, as seen in your plugin.
 
-**src/components/SimplePanel.tsx**
+**`src/components/SimplePanel.tsx`**
 
 ```js
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
@@ -65,7 +65,7 @@ First, you need to add your panel to a dashboard:
 
 Now that you can view your panel, try making a change to the panel plugin:
 
-1. In `SimplePanel.tsx`, change the fill color of the circle. For example to change to green:
+1. In `SimplePanel.tsx`, change the fill color of the circle. For example, to change it to green:
 
    ```ts
    <circle style={{ fill: theme.visualization.getColorByName('green') }} r={100} />
@@ -98,7 +98,7 @@ Panel options are defined in a _panel options object_. `SimpleOptions` is an int
 
 Here's the updated options definition:
 
-**src/types.ts**
+**`src/types.ts`**
 
 ```ts
 type SeriesSize = 'sm' | 'md' | 'lg';
@@ -157,7 +157,7 @@ You're almost done. You've added a new option and a corresponding control to cha
 
 1. To convert option value to the colors used by the current theme, add the following statement right before the `return` statement in `SimplePanel.tsx`.
 
-   **src/components/SimplePanel.tsx**
+   **`src/components/SimplePanel.tsx`**
 
    ```ts
    let color = theme.visualization.getColorByName(options.color);

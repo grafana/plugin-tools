@@ -29,7 +29,7 @@ In this tutorial, you'll:
 
 #### Prerequisites
 
-- Grafana 9.0
+- Grafana v9.0 or later
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
@@ -40,16 +40,15 @@ In this tutorial, you'll:
 
 Now, let's verify that the plugin you've built so far can be used in Grafana when creating a new data source:
 
-1. Navigate via the side-menu to **Connections** -> **Data Sources**.
+1. On the side menu, go to **Connections** -> **Data Sources**.
 1. Click **Add data source**.
 1. Search for the name of your newly created plugin and select it.
-1. Enter a name and then click **Save & Test** (a "randomized error" may occur and can be ignored).
+1. Enter a name and then click **Save & Test**. If a "randomized error" occurs, you may ignore it - this is a result of the [health check](#add-support-for-health-checks) explained further below.
 
 You now have a new data source instance of your plugin that is ready to use in a dashboard:
 
-1. Create a new dashboard and add a new panel
-1. In the query tab, select the data source you just created.
-1. A line graph is rendered with one series consisting of two data points.
+1. Create a new dashboard and add a new panel.
+1. On the query tab, select the data source you just created. A line graph is rendered with one series consisting of two data points.
 1. Save the dashboard.
 
 ### Troubleshooting
@@ -87,15 +86,13 @@ The [plugin.json](../../metadata.md) file is required for all plugins. When buil
 
 | property   | description                                                                                                                    |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| backend    | Should be set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.         |
-| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](h../../metadata.md) for details. |
-| alerting   | Should be set to `true` if your backend datasource supports alerting.                                                          |
+| backend    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                   |
+| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](../../metadata.md) for details. |
+| alerting   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                          |
 
 In the next step we will look at the query endpoint!
 
 ## Implement data queries
-
-<!-- this section needs updating -->
 
 We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `Datasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
 

@@ -18,9 +18,9 @@ import CreatePlugin from '@shared/create-plugin-frontend.md';
 
 ## Introduction
 
-Panels are one of the fundamental building blocks of Grafana, which allow you to visualize data in different ways. Grafana has several types of panels already built-in, and many more available in the [Plugin Catalog](https://grafana.com/grafana/plugins/).
+Panels allow you to visualize data in different ways; they are one of the fundamental building blocks of Grafana. Grafana has several types of panels already built-in, and many more available in the [Grafana plugin Catalog](https://grafana.com/grafana/plugins/).
 
-To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html and can be scaffolded with the `create-plugin` tool.
+To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html) and can be scaffolded with the `create-plugin` tool.
 
 For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
 
@@ -33,7 +33,7 @@ In this tutorial, you'll:
 
 ### Prerequisites
 
-- Grafana >=9.0
+- Grafana v9.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin
@@ -46,7 +46,7 @@ In this tutorial, you'll:
 
 Wait a minute. Manipulating documents based on data? That's sounds an awful lot like React. In fact, much of what you can accomplish with D3 you can already do with React. So before we start looking at D3, let's see how you can create an SVG from data, using only React.
 
-1. For the purposes of this tutorial, remove the following from **src/components/SimplePanel.tsx**:
+1. For the purposes of this tutorial, remove the following from `src/components/SimplePanel.tsx`:
 
   ```ts
     viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
@@ -108,7 +108,7 @@ D3 is already bundled with Grafana, and you can access it by importing the `d3` 
    npm install --include=dev @types/d3
    ```
 
-1. Import `d3` in **SimplePanel.tsx**.
+1. Import `d3` in `SimplePanel.tsx`.
 
    ```ts
    import * as d3 from 'd3';

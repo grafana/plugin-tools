@@ -27,7 +27,7 @@ In this tutorial, you'll:
 
 ### Prerequisites
 
-- Grafana >=9.0
+- Grafana v9.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin
@@ -74,7 +74,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 
    The `query` method now look like this:
 
-   **src/datasource.ts**
+   **`src/datasource.ts`**
 
    ```ts
    async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
@@ -170,7 +170,7 @@ We want to be able to control the frequency of the sine wave, so let's add anoth
 
 1. Add a new number property called `frequency` to the query model:
 
-   **src/types.ts**
+   **`src/types.ts`**
 
    ```ts
    export interface MyQuery extends DataQuery {
@@ -195,7 +195,7 @@ Now that you've defined the query model you wish to support, the next step is to
 
 1. Define the `frequency` from the `query` object and add a new form field to the query editor to control the new frequency property in the `render` method.
 
-   **src/components/QueryEditor.tsx**
+   **`src/components/QueryEditor.tsx`**
 
    ```ts
    const { queryText, constant, frequency } = query;
@@ -227,7 +227,7 @@ The new query model is now ready to use in our `query` method.
 
 1. In the `query` method, use the `frequency` property to adjust our equation.
 
-   **src/datasource.ts**
+   **`src/datasource.ts`**
 
    ```ts
    frame.add({ time: from + t, value: Math.sin((2 * Math.PI * query.frequency * t) / duration) });
@@ -250,7 +250,7 @@ The resolution controls how close in time the data points are to each other. A h
 
 1. Add a new number property called `resolution` to the options model.
 
-   **src/types.ts**
+   **`src/types.ts`**
 
    ```ts
    export interface MyDataSourceOptions extends DataSourceJsonData {
@@ -265,7 +265,7 @@ Just like query editor, the form field in the config editor calls the registered
 
 1. Add a new form field to the query editor to control the new resolution option.
 
-   **src/components/ConfigEditor.tsx**
+   **`src/components/ConfigEditor.tsx`**
 
    ```ts
    <InlineField label="Resolution" labelWidth={12}>
@@ -291,7 +291,7 @@ Just like query editor, the form field in the config editor calls the registered
 
 1. Create a property called `resolution` to the `DataSource` class.
    
-   **src/datasource.ts**
+   **`src/datasource.ts`**
 
    ```ts
    export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
@@ -321,15 +321,15 @@ In this tutorial you built a complete data source plugin for Grafana that uses a
 ## Learn more
 
 ### Get data from an external API
-The majority of data sources in Grafana will return data from an external API, this tutorial tries to keep things simple and not require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample. 
+The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample. 
 
 This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 
-While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. This is strongly recommended when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../extend-a-plugin/add-authentication-for-data-source-plugins.md).
+While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. We strongly recommend this when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../extend-a-plugin/add-authentication-for-data-source-plugins.md).
 
 ### Improving your plugin's quality
 
-You can also learn how you can improve your plugin even further, by reading our advanced guides:
+To learn more about advanced plugin development topics, refer to the following:
 
 - [Add support for variables](../extend-a-plugin/add-support-for-variables.md)
 - [Add support for annotations](../extend-a-plugin/enable-annotations.md)
