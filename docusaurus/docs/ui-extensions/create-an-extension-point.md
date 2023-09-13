@@ -21,7 +21,7 @@ Firstly, you will need to define an extension point ID. This is basically just a
 
 :::note
 
-Extension points living in core Grafana must start with `grafana/` and extension points living in plugins must have IDs starting with `/plugins` followed by the plugin ID, for example, `plugins/<PLUGIN_ID>/`.
+Extension points living in core Grafana must start with `grafana/` and extension points living in plugins must have IDs starting with `plugins/` followed by the plugin ID, for example, `plugins/<PLUGIN_ID>/`.
 
 :::
 
@@ -49,7 +49,7 @@ import { LinkButton } from '@grafana/ui';
 
 function AppMenuExtensionPoint() {
   const { extensions } = getPluginExtensions({
-    extensionPointId: 'plugin/another-app-plugin/menu',
+    extensionPointId: 'plugins/another-app-plugin/menu',
     context: {
       referenceId: '12345',
       timeZone: 'UTC',
