@@ -33,7 +33,7 @@ The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-p
 1. Start Grafana:
 
    ```
-   npm run server
+   docker-compose up
    ```
 
 1. <span>Open Grafana, by default <a href="http://localhost:3000/">http://localhost:3000/</a>, and then go to <b>Administration</b> > <b>Plugins</b>. Make sure that your {props.pluginType} plugin is there.</span>
