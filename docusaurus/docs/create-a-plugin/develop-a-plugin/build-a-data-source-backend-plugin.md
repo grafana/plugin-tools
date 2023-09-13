@@ -40,7 +40,7 @@ In this tutorial, you'll:
 
 Now, let's verify that the plugin you've built so far can be used in Grafana when creating a new data source:
 
-1. Navigate via the side-menu to **Connections** -> **Data Sources**.
+1. On the side menu, go to **Connections** -> **Data Sources**.
 1. Click **Add data source**.
 1. Search for the name of your newly created plugin and select it.
 1. Enter a name and then click **Save & Test** (a "randomized error" may occur and can be ignored).
