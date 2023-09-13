@@ -47,7 +47,7 @@ Now, let's verify that the plugin you've built so far can be used in Grafana whe
 
 You now have a new data source instance of your plugin that is ready to use in a dashboard:
 
-1. Create a new dashboard and add a new panel
+1. Create a new dashboard and add a new panel.
 1. In the query tab, select the data source you just created.
 1. A line graph is rendered with one series consisting of two data points.
 1. Save the dashboard.
