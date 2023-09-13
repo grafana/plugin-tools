@@ -90,8 +90,8 @@ jobs:
         with:
           app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
           private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
-          # repositories: >-
-          #   ["grafana/plugin-tools"]
+          repositories: |
+            ["grafana/plugin-tools"]
   
 
       - uses: actions/checkout@v3
