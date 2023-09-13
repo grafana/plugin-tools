@@ -41,7 +41,7 @@ When you create an extension point in a plugin, you create a public interface fo
 
 The `getPluginLinkExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugins/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can then loop over.
 
-In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugin/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
+In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
 
 ```typescript
 import { getPluginLinkExtensions } from '@grafana/runtime';
