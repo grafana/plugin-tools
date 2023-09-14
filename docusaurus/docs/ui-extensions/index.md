@@ -22,7 +22,7 @@ Before we go into details we need to cover the two major concepts in the UI exte
 
 ![Panel menu showing available extensions](/img/ui-extensions-menu.png)
 
-In the example above, there is one extension point with three registered extensions. This highlights one of the benefits of using UI extensions. Once you have added an extension point to your U,I you can extend it multiple times by multiple plugins.
+In the example above, there is one extension point with three registered extensions. This highlights one of the benefits of using UI extensions. Once you have added an extension point to your UI you can extend it multiple times by multiple plugins.
 
 ## Why should I add an extension point?
 
