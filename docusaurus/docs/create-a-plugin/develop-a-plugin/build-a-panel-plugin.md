@@ -14,52 +14,45 @@ keywords:
   - dashboards
 ---
 
+import CreatePlugin from '@shared/create-plugin-frontend.md';
+import PluginAnatomy from '@shared/plugin-anatomy.md';
+
 ## Introduction
 
-Panels are the building blocks of Grafana. They allow you to visualize data in different ways. While Grafana has several types of panels already built-in, you can also build your own panel, to add support for other visualizations.
+Panels, which allow you to visualize data in different ways, are one of the fundamental building blocks of Grafana. Grafana has several types of panels already included, and many more available in the [Grafana plugin Catalog](https://grafana.com/grafana/plugins/).
+
+To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html) and can be scaffolded with the `create-plugin` tool.
 
 For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/panels/).
 
-{{% class "prerequisite-section" %}}
-
 ### Prerequisites
 
-- Grafana >=7.0
+- Grafana v9.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- yarn
-  {{% /class %}}
-
-## Set up your environment
-
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
 
 ## Create a new plugin
 
-{{< docs/shared lookup="tutorials/create-plugin.md" source="grafana" version="latest" >}}
+<CreatePlugin pluginType="panel" />
 
 ## Anatomy of a plugin
 
-{{< docs/shared lookup="tutorials/plugin-anatomy.md" source="grafana" version="latest" >}}
+<PluginAnatomy />
 
 ## Panel plugins
 
-Since Grafana 6.x, panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html).
-
-Prior to Grafana 6.0, plugins were written in [AngularJS](https://angular.io/). Even though we still support plugins written in AngularJS, we highly recommend that you write new plugins using ReactJS.
-
 ### Panel properties
 
-The [PanelProps](https://github.com/grafana/grafana/blob/747b546c260f9a448e2cb56319f796d0301f4bb9/packages/grafana-data/src/types/panel.ts#L27-L40) interface exposes runtime information about the panel, such as panel dimensions, and the current time range.
+The [PanelProps](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbfa3cb9b2d474ad56dc/packages/grafana-data/src/types/panel.ts#L74-L122) interface exposes runtime information about the panel, such as panel dimensions, and the current time range.
 
-You can access the panel properties through `props`, as seen in your plugin.
+You can access the panel properties through the `props` argument, as seen in your plugin.
 
-**src/SimplePanel.tsx**
+**`src/components/SimplePanel.tsx`**
 
 ```js
-const { options, data, width, height } = props;
+export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 ```
 
-### Development workflow
+## Development workflow
 
 Next, you'll learn the basic workflow of making a change to your panel, building it, and reloading Grafana to reflect the changes you made.
 
@@ -72,9 +65,14 @@ First, you need to add your panel to a dashboard:
 
 Now that you can view your panel, try making a change to the panel plugin:
 
-1. In `SimplePanel.tsx`, change the fill color of the circle.
-1. Run `yarn dev` to build the plugin.
-1. In the browser, reload Grafana with the new changes.
+1. In `SimplePanel.tsx`, change the fill color of the circle. For example, to change it to green:
+
+   ```ts
+   <circle style={{ fill: theme.visualization.getColorByName('green') }} r={100} />
+   ```
+
+1. Save the file.
+1. In the browser, reload Grafana to see the new changes.
 
 ## Add panel options
 
@@ -100,7 +98,7 @@ Panel options are defined in a _panel options object_. `SimpleOptions` is an int
 
 Here's the updated options definition:
 
-**src/types.ts**
+**`src/types.ts`**
 
 ```ts
 type SeriesSize = 'sm' | 'md' | 'lg';
@@ -157,23 +155,12 @@ Grafana builds an options editor for you and displays it in the panel editor sid
 
 You're almost done. You've added a new option and a corresponding control to change the value. But the plugin isn't using the option yet. Let's change that.
 
-1. To convert option value to the colors used by the current theme, add a `switch` statement right before the `return` statement in `SimplePanel.tsx`.
+1. To convert option value to the colors used by the current theme, add the following statement right before the `return` statement in `SimplePanel.tsx`.
 
-   **src/SimplePanel.tsx**
+   **`src/components/SimplePanel.tsx`**
 
    ```ts
-   let color: string;
-   switch (options.color) {
-     case 'red':
-       color = theme.palette.redBase;
-       break;
-     case 'green':
-       color = theme.palette.greenBase;
-       break;
-     case 'blue':
-       color = theme.palette.blue95;
-       break;
-   }
+   let color = theme.visualization.getColorByName(options.color);
    ```
 
 1. Configure the circle to use the color.

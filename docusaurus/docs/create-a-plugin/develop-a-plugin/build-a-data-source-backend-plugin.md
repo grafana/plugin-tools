@@ -13,85 +13,44 @@ keywords:
   - datasource
 ---
 
+import CreatePlugin from '@shared/create-plugin-backend.md';
+
 ## Introduction
 
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There's a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a support for your data source.
+Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
 For more information about backend plugins, refer to the documentation on [Backend plugins](../../introduction/backend.md).
 
 In this tutorial, you'll:
 
-- Build a backend for your data source
+- Build a [backend](../../introduction/backend.md) for your data source
 - Implement a health check for your data source
-- Enable Grafana Alerting for your data source
-
-{{% class "prerequisite-section" %}}
+- Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for your data source
 
 #### Prerequisites
 
-- Knowledge about how data sources are implemented in the frontend.
-- Grafana 7.0
+- Grafana v9.0 or later
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- yarn
-  {{% /class %}}
-
-## Set up your environment
-
-{{< docs/shared lookup="tutorials/set-up-environment.md" source="grafana" version="latest" >}}
 
 ## Create a new plugin
 
-To build a backend for your data source plugin, Grafana requires a binary that it can execute when it loads the plugin during start-up. In this guide, we will build a binary using the [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go).
-
-The easiest way to get started is to use the Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-plugin). Navigate to the plugin folder that you configured in step 1 and type:
-
-```
-npx @grafana/create-plugin@latest
-```
-
-Follow the steps and select **datasource** as your plugin type and answer **yes** when prompted to create a backend for your plugin.
-
-```bash
-cd my-plugin
-```
-
-Install frontend dependencies and build frontend parts of the plugin to _dist_ directory:
-
-```bash
-yarn install
-yarn build
-```
-
-Run the following to update [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go) dependency to the latest minor version:
-
-```bash
-go get -u github.com/grafana/grafana-plugin-sdk-go
-go mod tidy
-```
-
-Build backend plugin binaries for Linux, Windows and Darwin to _dist_ directory:
-
-```bash
-mage -v
-```
+<CreatePlugin />
 
 Now, let's verify that the plugin you've built so far can be used in Grafana when creating a new data source:
 
-1. Restart your Grafana instance.
-1. Open Grafana in your web browser.
-1. Navigate via the side-menu to **Configuration** -> **Data Sources**.
+1. On the side menu, go to **Connections** > **Data Sources**.
 1. Click **Add data source**.
-1. Find your newly created plugin and select it.
-1. Enter a name and then click **Save & Test** (ignore any errors reported for now).
+1. Search for the name of your newly created plugin and select it.
+1. Enter a name and then click **Save & Test**. If a "randomized error" occurs, you may ignore it - this is a result of the [health check](#add-support-for-health-checks) explained further below.
 
-You now have a new data source instance of your plugin that is ready to use in a dashboard:
+You now have a new data source instance of your plugin that is ready to use in a dashboard. 
 
-1. Navigate via the side-menu to **Create** -> **Dashboard**.
-1. Click **Add new panel**.
-1. In the query tab, select the data source you just created.
-1. A line graph is rendered with one series consisting of two data points.
+To add the data source to the dashboard:
+
+1. Create a new dashboard and add a new panel.
+1. On the query tab, select the data source you just created. A line graph is rendered with one series consisting of two data points.
 1. Save the dashboard.
 
 ### Troubleshooting
@@ -119,7 +78,7 @@ The folders and files used to build the backend for the data source are:
 | file/folder        | description                                                                                                                                          |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Magefile.go`      | It’s not a requirement to use mage build files, but we strongly recommend using it so that you can use the build targets provided by the plugin SDK. |
-| `/go.mod `         | Go [modules dependencies](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                 |
+| `/go.mod `         | Go [modules dependencies](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                            |
 | `/src/plugin.json` | A JSON file describing the backend plugin                                                                                                            |
 | `/pkg/main.go`     | Starting point of the plugin binary.                                                                                                                 |
 
@@ -127,23 +86,43 @@ The folders and files used to build the backend for the data source are:
 
 The [plugin.json](../../metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
 
-| property   | description                                                                                                                                                   |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| backend    | Should be set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                                        |
-| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](h../../metadata.md) for details. |
-| alerting   | Should be set to `true` if your backend datasource supports alerting.                                                                                         |
+| property   | description                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| backend    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                   |
+| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](../../metadata.md) for details. |
+| alerting   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                          |
 
 In the next step we will look at the query endpoint!
 
 ## Implement data queries
 
-We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `SampleDatasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
+We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will see the `Datasource` struct which implements the [backend.QueryDataHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#QueryDataHandler) interface. The `QueryData` method on this struct is where the data fetching happens for a data source plugin.
 
 Each request contains multiple queries to reduce traffic between Grafana and plugins. So you need to loop over the slice of queries, process each query, and then return the results of all queries.
 
 In the tutorial we have extracted a method named `query` to take care of each query model. Since each plugin has their own unique query model, Grafana sends it to the backend plugin as JSON. Therefore the plugin needs to `Unmarshal` the query model into something easier to work with.
 
 As you can see the sample only returns static numbers. Try to extend the plugin to return other types of data.
+
+For example to generate three floats equally spaced in time, you can replace the two static numbers generated, using the following code:
+
+```go
+	duration := query.TimeRange.To.Sub(query.TimeRange.From)
+	mid := query.TimeRange.From.Add(duration / 2)
+
+	s := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(s)
+
+	lowVal := 10.0
+	highVal := 20.0
+	midVal := lowVal + (r.Float64() * (highVal - lowVal))
+
+	// add fields.
+	frame.Fields = append(frame.Fields,
+		data.NewField("time", nil, []time.Time{query.TimeRange.From, mid, query.TimeRange.To}),
+		data.NewField("values", nil, []float64{lowVal, midVal, highVal}),
+	)
+```
 
 You can read more about how to [build data frames in our docs](../../introduction/data-frames).
 
@@ -155,7 +134,9 @@ When editing a data source in Grafana's UI, you can **Save & Test** to verify th
 
 In this sample data source, there is a 50% chance that the health check will be successful. Make sure to return appropriate error messages to the users, informing them about what is misconfigured in the data source.
 
-Open `/pkg/plugin/datasource.go`. In this file you'll see that the `SampleDatasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Navigate to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
+Open `/pkg/plugin/datasource.go`. In this file, you'll see that the `Datasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Go to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
+
+To learn more, refer to other Health Check implementations in our [examples repository](https://github.com/grafana/grafana-plugin-examples/).
 
 ## Add authentication
 
@@ -164,7 +145,8 @@ Implementing authentication allows your plugin to access protected resources lik
 ## Enable Grafana Alerting
 
 1. Open _src/plugin.json_.
-1. Add the top level `backend` property with a value of `true` to specify that your plugin supports Grafana Alerting, e.g.
+1. Add the top level `alerting` property with a value of `true` to specify that your plugin supports Grafana Alerting, e.g.
+
    ```json
    {
      ...
@@ -175,19 +157,28 @@ Implementing authentication allows your plugin to access protected resources lik
      ...
    }
    ```
-1. Rebuild frontend parts of the plugin to _dist_ directory:
-
-```bash
-yarn build
-```
 
 1. Restart your Grafana instance.
 1. Open Grafana in your web browser.
+1. Verify that alerting is now supported by navigating to your created data source. You should an "Alerting supported" message in the Settings view.
+
+
+### Create an alert
+
+:::note
+The following instructions are based on Grafana v10.1.1, consult the [documentation](https://grafana.com/docs/grafana/latest/alerting/) for alerting for version appropriate guidance.
+:::
+
 1. Open the dashboard you created earlier in the _Create a new plugin_ step.
 1. Edit the existing panel.
-1. Click on the _Alert_ tab.
-1. Click on _Create Alert_ button.
-1. Edit condition and specify _IS ABOVE 10_. Change _Evaluate every_ to _10s_ and clear the _For_ field to make the alert rule evaluate quickly.
+1. Click on the _Alert_ tab underneath the panel.
+1. Click on _Create alert rule from this panel_ button.
+1. In _Expressions_ section, in the _Threshold_ expression `C`, set the _IS ABOVE_ to `15`.
+1. Click on _Set as alert condition_ on _Threshold_ expression `C`. Your alert should now look as follows.
+![Expression section showing B "reduce" with Input: A, Function: Last, Mode: Strict, C Threshold with Input: B, Is Above: 15 and Alert Condition enabled indicator](/img/create-alert.png "Alert Expression")
+1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
+1. Then, click on _New evaluation group_ button and create a new evaluation group; choose a name and set the _Evaluation interval_ to `10s`.
+1. Click _Save rule and exit_ button.
 1. Save the dashboard.
 1. After some time the alert rule evaluates and transitions into _Alerting_ state.
 
