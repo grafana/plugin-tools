@@ -134,7 +134,7 @@ When editing a data source in Grafana's UI, you can **Save & Test** to verify th
 
 In this sample data source, there is a 50% chance that the health check will be successful. Make sure to return appropriate error messages to the users, informing them about what is misconfigured in the data source.
 
-Open `/pkg/plugin/datasource.go`. In this file you'll see that the `Datasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Navigate to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
+Open `/pkg/plugin/datasource.go`. In this file, you'll see that the `Datasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Go to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
 
 Learn more: view other Health Check implementations in our [examples repository](https://github.com/grafana/grafana-plugin-examples/)
 
