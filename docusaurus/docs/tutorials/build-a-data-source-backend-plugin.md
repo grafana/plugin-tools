@@ -1,9 +1,8 @@
 ---
 id: build-a-data-source-backend-plugin
 title: Build a data source backend plugin
-sidebar_position: 4
+sidebar_position: 10
 description: Create a backend for your data source plugin.
-draft: true
 keywords:
   - grafana
   - plugins
@@ -19,11 +18,11 @@ import CreatePlugin from '@shared/create-plugin-backend.md';
 
 Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
-For more information about backend plugins, refer to the documentation on [Backend plugins](../../introduction/backend.md).
+A backend component provides a number of additional capabilities to your plugin, such as custom authentication methods. To learn more, refer to the documentation on [Backend plugins](../introduction/backend.md).
 
 In this tutorial, you'll:
 
-- Build a [backend](../../introduction/backend.md) for your data source
+- Build a [backend](../introduction/backend.md) for your data source
 - Implement a health check for your data source
 - Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for your data source
 
@@ -84,12 +83,12 @@ The folders and files used to build the backend for the data source are:
 
 #### plugin.json
 
-The [plugin.json](../../metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
+The [plugin.json](../metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
 
 | property   | description                                                                                                                    |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | backend    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                   |
-| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](../../metadata.md) for details. |
+| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](../metadata.md) for details. |
 | alerting   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                          |
 
 In the next step we will look at the query endpoint!
@@ -124,7 +123,7 @@ For example to generate three floats equally spaced in time, you can replace the
 	)
 ```
 
-You can read more about how to [build data frames in our docs](../../introduction/data-frames).
+You can read more about how to [build data frames in our docs](../introduction/data-frames).
 
 ## Add support for health checks
 
@@ -140,7 +139,7 @@ To learn more, refer to other Health Check implementations in our [examples repo
 
 ## Add authentication
 
-Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../extend-a-plugin/add-authentication-for-data-source-plugins.md#authenticate-using-a-backend-plugin).
+Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md#authenticate-using-a-backend-plugin).
 
 ## Enable Grafana Alerting
 

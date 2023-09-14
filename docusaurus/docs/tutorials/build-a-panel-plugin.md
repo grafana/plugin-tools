@@ -2,8 +2,7 @@
 id: build-a-panel-plugin
 description: Learn how to create a custom visualization for your dashboards.
 title: Build a panel plugin
-sidebar_position: 8
-draft: true
+sidebar_position: 30
 keywords:
   - grafana
   - plugins
@@ -242,7 +241,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
 
 1. Rebuild your plugin and try it out by adding multiple queries to the panel. Refresh the dashboard.
 
-If you want to know more about data frames, check out our introduction to [Data frames](../../introduction/data-frames.md).
+If you want to know more about data frames, check out our introduction to [Data frames](../introduction/data-frames.md).
 
 ## Summary
 
