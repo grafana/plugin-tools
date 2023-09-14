@@ -1,9 +1,8 @@
 ---
 id: build-a-logs-data-source-plugin
 title: Build a logs data source plugin
-sidebar_position: 6
+sidebar_position: 20
 description: How to build a logs data source plugin.
-draft: true
 keywords:
   - grafana
   - plugins
@@ -33,7 +32,7 @@ When these steps are done, then you can improve the user experience with one or 
 
 ### Step 1: Enable logs support
 
-Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../../metadata.md) file.
+Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../metadata.md) file.
 
 ```json
 {
