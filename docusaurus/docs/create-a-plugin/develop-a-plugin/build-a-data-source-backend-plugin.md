@@ -136,7 +136,7 @@ In this sample data source, there is a 50% chance that the health check will be 
 
 Open `/pkg/plugin/datasource.go`. In this file, you'll see that the `Datasource` struct also implements the [backend.CheckHealthHandler](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend?tab=doc#CheckHealthHandler) interface. Go to the `CheckHealth` method to see how the health check for this sample plugin is implemented.
 
-Learn more: view other Health Check implementations in our [examples repository](https://github.com/grafana/grafana-plugin-examples/)
+To learn more, refer to other Health Check implementations in our [examples repository](https://github.com/grafana/grafana-plugin-examples/).
 
 ## Add authentication
 
