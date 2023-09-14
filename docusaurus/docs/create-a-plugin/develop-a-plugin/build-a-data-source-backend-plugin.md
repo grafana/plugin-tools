@@ -45,7 +45,9 @@ Now, let's verify that the plugin you've built so far can be used in Grafana whe
 1. Search for the name of your newly created plugin and select it.
 1. Enter a name and then click **Save & Test**. If a "randomized error" occurs, you may ignore it - this is a result of the [health check](#add-support-for-health-checks) explained further below.
 
-You now have a new data source instance of your plugin that is ready to use in a dashboard:
+You now have a new data source instance of your plugin that is ready to use in a dashboard. 
+
+To add the data source to the dashboard:
 
 1. Create a new dashboard and add a new panel.
 1. On the query tab, select the data source you just created. A line graph is rendered with one series consisting of two data points.
