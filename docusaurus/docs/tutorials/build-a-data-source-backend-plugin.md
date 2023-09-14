@@ -18,7 +18,7 @@ import CreatePlugin from '@shared/create-plugin-backend.md';
 
 Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
-For more information about backend plugins, refer to the documentation on [Backend plugins](../introduction/backend.md).
+A backend component provides a number of additional capabilities to your plugin, such as custom authentication methods. To learn more refer to the documentation on [Backend plugins](../introduction/backend.md).
 
 In this tutorial, you'll:
 
