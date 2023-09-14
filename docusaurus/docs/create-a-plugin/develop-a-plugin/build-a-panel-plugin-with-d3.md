@@ -18,7 +18,7 @@ import CreatePlugin from '@shared/create-plugin-frontend.md';
 
 ## Introduction
 
-Panels allow you to visualize data in different ways; they are one of the fundamental building blocks of Grafana. Grafana has several types of panels already built-in, and many more available in the [Grafana plugin Catalog](https://grafana.com/grafana/plugins/).
+Panels allow you to visualize data in different ways; they are one of the fundamental building blocks of Grafana. Grafana has several types of panels already included, and many more available in the [Grafana plugin Catalog](https://grafana.com/grafana/plugins/).
 
 To add support for other visualizations, you can create your own panel plugin. Panels are [ReactJS components](https://reactjs.org/docs/components-and-props.html) and can be scaffolded with the `create-plugin` tool.
 
