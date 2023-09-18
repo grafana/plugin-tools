@@ -15,6 +15,28 @@ import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
 import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
 import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
 
+# Grafana plugin developer's guide
+
+Extend Grafana's built-in capabilities with plugins. Plugins enable Grafana 
+to accomplish specialized tasks, custom-tailored to your requirements. 
+By making a plugin for your organization, you can connect Grafana to other 
+data sources, ticketing tools, and CI/CD tooling.
+
+You can create plugins for private use or contribute them to the open 
+source community by publishing to the Grafana 
+[plugin catalog](https://grafana.com/plugins). 
+This catalog has hundreds of other community and commercial plugins.
+
+## Types of plugins
+
+You can create several types of plugins, including:
+
+* **Panel plugins** - Visualize data and navigate between dashboards.
+* **Data source plugins** - Link to new databases or other sources of data.
+* **App plugins** - Create rich applications for custom out-of-the-box experiences.
+
+## Plugin tools
+
 Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration.
 
 The plugin tools consist of two packages:
