@@ -84,7 +84,7 @@ module.exports = {
 };
 ```
 
-### I get `"image with reference <plugin-name> was found but does not match the specified platform: wanted linux/amd64, actual: linux/arm64/v8"` after running docker-compose up or npm run server.
+### I get `"image with reference <plugin-name> was found but does not match the specified platform: wanted linux/amd64, actual: linux/arm64/v8"` after running `docker-compose up` or `npm run server`.
 
 This is most likely to impact users of Apple silicon Macs. If you have previously built an image for a plugin scaffolded with `create-plugin` prior to v1.12.2, running `docker-compose up` may fail with the above message if the old image hasn't been removed.
 
