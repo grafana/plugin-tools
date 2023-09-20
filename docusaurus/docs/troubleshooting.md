@@ -64,7 +64,7 @@ If you're using mounts to access your files, it's likely that webpack isn't dete
 - If you're editing your code from a native Windows app (such as VS Code), you need to manually rerun `yarn build` every time you want to see a change in your plugin.
 - Use [webpack `watchOption` with `poll`](https://webpack.js.org/configuration/watch/#watchoptionspoll) in your project. Find instructions on how to extend webpack configuration in our [documentation](https://grafana.com/developers/plugin-tools/create-a-plugin/extend-configurations).
 
-### I get `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test`
+### I get `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test`.
 
 A common issue with the current Jest config involves importing an npm package that only offers an ESM build. These packages cause Jest to error with `SyntaxError: Cannot use import statement outside a module`.
 
@@ -83,3 +83,11 @@ module.exports = {
   transformIgnorePatterns: [nodeModulesToTransform([...grafanaESModules, 'packageName'])],
 };
 ```
+
+### I get `"image with reference <plugin-name> was found but does not match the specified platform: wanted linux/amd64, actual: linux/arm64/v8"` after running docker-compose up or npm run server.
+
+This is most likely to impact users of Apple silicon Macs. If you have previously built an image for a plugin scaffolded with `create-plugin` prior to v1.12.2, running `docker-compose up` may fail with the above message if the old image hasn't been removed.
+
+#### What you can do:
+- Remove the image using `docker rmi <plugin-name> --force`
+- Run `docker-compose up --build` or `npm run server`
