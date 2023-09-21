@@ -11,7 +11,7 @@ keywords:
   - CI
   - continuous integration
   - automation
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
