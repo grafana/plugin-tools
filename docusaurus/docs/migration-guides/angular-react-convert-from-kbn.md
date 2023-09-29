@@ -35,7 +35,7 @@ This method returns an object with categorized unit formats instead of a flat li
 Generally, a configuration editor can just use the default unit format provider. However, if you need to have a unit picker, you can use the `UnitPicker` component from `@grafana/ui`.
 An example of this component is the [Grafana design system unit picker](https://developers.grafana.com/ui/latest/index.html?path=/story/pickers-and-editors-unitpicker--basic).
 
-### Formatted Value
+### Convert from `valueFormats`
 
 In Angular plugins, a common pattern is to use kbn to get a format function for a specific unit, then call the function with a few parameters, as shown below:
 
@@ -46,7 +46,7 @@ data.valueFormatted = formatFunc(data.value, decimalInfo.decimals, decimalInfo.s
 
 There are several methods for formatting a value to include the unit for text output, each addressing different scenarios.
 
-Iterate the fields of the frame to get all value fields, then process each of them. This is a basic example, typically more code is required to include valueMappings and other overrides.
+Iterate the fields of the frame to get all value fields, then process each of them, as shown in the following example. This is a basic example; typically, more code is required to include `valueMappings` and other overrides.
 
 ```ts
 import {
@@ -70,32 +70,34 @@ for (const valueField of valueFields) {
 }
 ```
 
-There are many examples of processing frames into formatted text output throughout the panels that come with Grafana, searching for these functions in the git repo will provide many more examples:
+There are many examples of processing frames into formatted text output throughout the panels that come with Grafana. Search for these functions in the [GitHub repo](https://github.com/grafana/grafana) to find examples such as these:
 
-formattedValueToString
-getValueFormat
-reduceField
+- `formattedValueToString`
+- `getValueFormat`
+- `reduceField`
 
-### Rounded Value
+### Convert from `roundValue` 
+
+Your plugin may include code like this:
 
 ```ts
 data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
 ```
 
-Converting the above line would be done like this:
+To convert this code, write code like this:
 
 ```ts
 import { roundDecimals } from '@grafana/data';
 const valueRounded = roundDecimals(data.value, decimalInfo.decimals);
 ```
 
-## Additional Resources
+## Additional resources
 
 Formatting values to the displayed string including units may include a “prefix”, “suffix”, and other custom settings like the color of the text itself.
 
-Here are some examples that can be referenced that implement displaying values using the new methods along with additional customizations:
+Many customizations are possible when implementing the new methods. Here are some examples that you can reference:
 
-[BarChart](https://github.com/grafana/grafana/blob/dc6cd4bb296dda4312395aaee0ee491d348f84bc/public/app/plugins/panel/barchart/distribute.ts#L7)
-[GeoMap](https://github.com/grafana/grafana/blob/dc6cd4bb296dda4312395aaee0ee491d348f84bc/public/app/plugins/panel/geomap/utils/measure.ts#L36)
-[PieChart](https://github.com/grafana/grafana/blob/dc6cd4bb296dda4312395aaee0ee491d348f84bc/public/app/plugins/panel/piechart/PieChartPanel.tsx#L118)
-[Polystat](https://github.com/grafana/grafana-polystat-panel/blob/ecc71d54c3e8819e66604f26aa31d72fb0432873/src/data/processor.ts#L278)
+- [BarChart](https://github.com/grafana/grafana/blob/dc6cd4bb296dda4312395aaee0ee491d348f84bc/public/app/plugins/panel/barchart/distribute.ts#L7)
+- [GeoMap](https://github.com/grafana/grafana/blob/dc6cd4bb296dda4312395aaee0ee491d348f84bc/public/app/plugins/panel/geomap/utils/measure.ts#L36)
+- [PieChart](https://github.com/grafana/grafana/blob/dc6cd4bb296dda4312395aaee0ee491d348f84bc/public/app/plugins/panel/piechart/PieChartPanel.tsx#L118)
+- [Polystat](https://github.com/grafana/grafana-polystat-panel/blob/ecc71d54c3e8819e66604f26aa31d72fb0432873/src/data/processor.ts#L278)
