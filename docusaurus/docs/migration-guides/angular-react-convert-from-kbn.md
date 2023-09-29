@@ -13,35 +13,27 @@ keywords:
   - migration
   - kbn
 ---
-# Angular to React: Converting from kbn
+# Angular to React: Convert from kbn
 
-To provide formatted output from datasources, angular plugins often leverage the kbn package, which is no longer available from Grafana core.
+The kbn package is often used to provide formatted output from data sources in Angular-based Grafana plugins. However, you may need to migrate from kbn package because it is no longer available from the Grafana core. 
 
-Specifically these API calls are used:
+Specifically your plugin may use these kbn API calls:
 
 ```ts
 getUnitFormats()
 valueFormats()
 roundValue()
 ```
-
 ## Conversion to new methods
 
-### Getting Unit Formats
+### Convert from `getUnitFormats`
 
-For plugins that make use of this call:
+For plugins that make use of kbn.getUnitFormats(), the new method to use comes from `@grafana/data`, called `getValueFormats()`.
 
-```ts
-kbn.getUnitFormats()
-```
+This method returns an object with categorized unit formats instead of a flat list of units, and should be handled accordingly. 
 
-The new method to use comes from `@grafana/data`, called `getValueFormats()`.
-
-This returns an object with categorized unit formats, instead of a flat list of units, and should be handled accordingly.
-Generally a configuration editor can just use the default unit format provider.
-
-If there is a need to have a unit picker, the `UnitPicker` component from `@grafana/ui` can be used.
-An example of this component can be seen here: [Grafana design system](https://developers.grafana.com/ui/latest/index.html?path=/story/pickers-and-editors-unitpicker--basic)
+Generally, a configuration editor can just use the default unit format provider. However, if you need to have a unit picker, you can use the `UnitPicker` component from `@grafana/ui`.
+An example of this component is the [Grafana design system unit picker](https://developers.grafana.com/ui/latest/index.html?path=/story/pickers-and-editors-unitpicker--basic).
 
 ### Formatted Value
 
