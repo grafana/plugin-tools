@@ -28,7 +28,7 @@ roundValue()
 
 ### Convert from `getUnitFormats`
 
-For plugins that make use of kbn.getUnitFormats(), the new method to use comes from `@grafana/data`, called `getValueFormats()`.
+For plugins that make use of `kbn.getUnitFormats()`, the new method to use comes from `@grafana/data`, called `getValueFormats()`.
 
 This method returns an object with categorized unit formats instead of a flat list of units, and should be handled accordingly. 
 
@@ -84,7 +84,7 @@ Your plugin may include code like this:
 data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
 ```
 
-To convert this code, write code like this:
+Convert this code like so:
 
 ```ts
 import { roundDecimals } from '@grafana/data';
@@ -93,7 +93,7 @@ const valueRounded = roundDecimals(data.value, decimalInfo.decimals);
 
 ## Additional resources
 
-Formatting values to the displayed string including units may include a “prefix”, “suffix”, and other custom settings like the color of the text itself.
+Formatting values for the displayed string including units may include a prefix, suffix, and other custom settings like the color of the text itself.
 
 Many customizations are possible when implementing the new methods. Here are some examples that you can reference:
 
