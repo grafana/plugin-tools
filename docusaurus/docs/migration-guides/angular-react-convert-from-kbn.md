@@ -1,6 +1,6 @@
 ﻿---
 id: angular-react-convert-from-kbn
-title: Migrate from package kbn
+title: Migrate from kbn package
 sidebar_position: 5
 description: How to migrate a plugin that uses the kbn package to current methods.
 keywords:
