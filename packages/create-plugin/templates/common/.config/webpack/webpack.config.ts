@@ -135,7 +135,7 @@ const config = async (env): Promise<Configuration> => {
         type: 'amd',
       },
       path: path.resolve(process.cwd(), DIST_DIR),
-      publicPath: '/',
+      publicPath: `public/plugins/${pluginJson.id}/`,
     },
 
     plugins: [
