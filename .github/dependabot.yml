@@ -9,7 +9,7 @@ updates:
       # Check for updates to GitHub Actions every month
       interval: "monthly"
     labels:
-        - "github-actions"
+        - "github_actions"
         - "dependencies"
         - "no stalebot"
   - package-ecosystem: "npm"
