@@ -186,6 +186,15 @@
         "infra",
         "code"
       ]
+    },
+    {
+      "login": "aangelisc",
+      "name": "Andreas Christou",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15019026?v=4",
+      "profile": "https://github.com/aangelisc",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
