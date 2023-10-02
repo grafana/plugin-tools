@@ -1,3 +1,21 @@
+# v2.0.0 (Mon Oct 02 2023)
+
+#### 🐛 Bug Fix
+
+- Bugfix: Enable plugins to lazy load modules [#427](https://github.com/grafana/plugin-tools/pull/427) ([@mckn](https://github.com/mckn))
+- webpack template: minor lint fixes [#414](https://github.com/grafana/plugin-tools/pull/414) ([@briangann](https://github.com/briangann))
+- Increase required node engine to v18 [#405](https://github.com/grafana/plugin-tools/pull/405) ([@academo](https://github.com/academo))
+- README typo fixes [#387](https://github.com/grafana/plugin-tools/pull/387) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 4
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v1.12.2 (Thu Sep 07 2023)
 
 #### 🐛 Bug Fix

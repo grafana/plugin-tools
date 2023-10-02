@@ -1,3 +1,50 @@
+# (Mon Oct 02 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo)), for all your work!
+
+#### 💥 Breaking Change
+
+- Chore(deps): Bump tibdex/github-app-token from 1.8.0 to 2.1.0 [#421](https://github.com/grafana/plugin-tools/pull/421) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+- Bump actions/checkout from 3 to 4 [#395](https://github.com/grafana/plugin-tools/pull/395) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🚀 Enhancement
+
+- Bump semver from 7.3.8 to 7.5.2 [#400](https://github.com/grafana/plugin-tools/pull/400) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🐛 Bug Fix
+
+- Cleanup commented out workflow code and remove the noindex [#419](https://github.com/grafana/plugin-tools/pull/419) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Update troubleshooting.md [#391](https://github.com/grafana/plugin-tools/pull/391) ([@aangelisc](https://github.com/aangelisc))
+- Excluding dependabot from steps that require secrets [#397](https://github.com/grafana/plugin-tools/pull/397) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@2.0.0`
+  - Bugfix: Enable plugins to lazy load modules [#427](https://github.com/grafana/plugin-tools/pull/427) ([@mckn](https://github.com/mckn))
+  - webpack template: minor lint fixes [#414](https://github.com/grafana/plugin-tools/pull/414) ([@briangann](https://github.com/briangann))
+  - README typo fixes [#387](https://github.com/grafana/plugin-tools/pull/387) ([@aangelisc](https://github.com/aangelisc))
+- `@grafana/create-plugin@2.0.0`, `@grafana/sign-plugin@2.0.0`
+  - Increase required node engine to v18 [#405](https://github.com/grafana/plugin-tools/pull/405) ([@academo](https://github.com/academo))
+
+#### 📝 Documentation
+
+- docs: publish tutorials [#403](https://github.com/grafana/plugin-tools/pull/403) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Update index.md [#404](https://github.com/grafana/plugin-tools/pull/404) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Docs: update plugins tutorials [#373](https://github.com/grafana/plugin-tools/pull/373) ([@oshirohugo](https://github.com/oshirohugo) [@sympatheticmoose](https://github.com/sympatheticmoose))
+- Changed so UI extensions section is collapsed by default [#402](https://github.com/grafana/plugin-tools/pull/402) ([@mckn](https://github.com/mckn))
+
+#### Authors: 8
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Brian Gann ([@briangann](https://github.com/briangann))
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Thu Sep 07 2023)
 
 #### 🐛 Bug Fix
