@@ -12,7 +12,7 @@
     [
       "omit-commits",
       {
-        "labels": "no-changelog"
+        "labels": ["no-changelog", "github_actions"]
       }
     ],
     [

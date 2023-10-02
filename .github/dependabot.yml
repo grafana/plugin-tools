@@ -2,9 +2,22 @@
 
 version: 2
 updates:
-
+  # Check for updates to GitHub Actions every month
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      # Check for updates to GitHub Actions every month
+    schedule:      
       interval: "monthly"
+    labels:
+        - "github_actions"
+        - "dependencies"
+        - "no stalebot"
+  # Check for updates to npm dependencies every month
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    # Specify labels for npm pull requests
+    labels:
+      - "javascript"
+      - "dependencies"
+      - "no stalebot"
