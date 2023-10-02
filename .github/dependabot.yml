@@ -13,11 +13,11 @@ updates:
         - "dependencies"
         - "no stalebot"
   - package-ecosystem: "npm"
-      directory: "/"
-      schedule:
-        interval: "monthly"
-      # Specify labels for npm pull requests
-      labels:
-        - "javascript"
-        - "dependencies"
-        - "no stalebot"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    # Specify labels for npm pull requests
+    labels:
+      - "javascript"
+      - "dependencies"
+      - "no stalebot"
