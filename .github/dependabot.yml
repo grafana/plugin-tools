@@ -8,3 +8,16 @@ updates:
     schedule:
       # Check for updates to GitHub Actions every month
       interval: "monthly"
+    labels:
+        - "github-actions"
+        - "dependencies"
+        - "no stalebot"
+  - package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+        interval: "monthly"
+      # Specify labels for npm pull requests
+      labels:
+        - "javascript"
+        - "dependencies"
+        - "no stalebot"
