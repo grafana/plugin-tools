@@ -23,7 +23,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "minimist": "^1.2.2"
+    "minimist": "^1.2.2",
+    "proxy-agent": "6.3.1"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2"
