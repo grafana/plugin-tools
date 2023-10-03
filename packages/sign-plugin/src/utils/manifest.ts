@@ -84,7 +84,7 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
     );
   }
   if (GRAFANA_API_KEY) {
-    console.warn(`\x1b[33m%s\x1b[0m`,'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead. For more info visit https://grafana.com/docs/grafana/latest/developers/plugins/publish-a-plugin/sign-a-plugin')
+    console.warn(`\x1b[33m%s\x1b[0m`,'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead. For more info visit https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin')
   }
 
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
