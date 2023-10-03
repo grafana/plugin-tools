@@ -16,7 +16,7 @@ import (
 // since otherwise we will only get a not implemented error response from plugin in
 // runtime. In this example datasource instance implements backend.QueryDataHandler,
 // backend.CheckHealthHandler interfaces. Plugin should not implement all these
-// interfaces- only those which are required for a particular task.
+// interfaces - only those which are required for a particular task.
 var (
 	_ backend.QueryDataHandler      = (*Datasource)(nil)
 	_ backend.CheckHealthHandler    = (*Datasource)(nil)
@@ -24,7 +24,7 @@ var (
 )
 
 // NewDatasource creates a new datasource instance.
-func NewDatasource(_ backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+func NewDatasource(_ context.Context, _ backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	return &Datasource{}, nil
 }
 
