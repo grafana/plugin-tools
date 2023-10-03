@@ -1,3 +1,15 @@
+# v2.0.1 (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- Add fixes for backend sdk v0.177.0 [#437](https://github.com/grafana/plugin-tools/pull/437) ([@wbrowne](https://github.com/wbrowne))
+
+#### Authors: 1
+
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
 # v2.0.0 (Mon Oct 02 2023)
 
 #### 🐛 Bug Fix

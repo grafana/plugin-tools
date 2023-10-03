@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@2.0.1`
+  - Add fixes for backend sdk v0.177.0 [#437](https://github.com/grafana/plugin-tools/pull/437) ([@wbrowne](https://github.com/wbrowne))
+
+#### Authors: 1
+
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
+# (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
 - `@grafana/sign-plugin@2.0.1`
   - Allows to sign behind an https proxy [#436](https://github.com/grafana/plugin-tools/pull/436) ([@academo](https://github.com/academo))
 
