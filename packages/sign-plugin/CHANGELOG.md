@@ -1,3 +1,15 @@
+# v2.0.1 (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- Allows to sign behind an https proxy [#436](https://github.com/grafana/plugin-tools/pull/436) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v2.0.0 (Mon Oct 02 2023)
 
 #### 🐛 Bug Fix

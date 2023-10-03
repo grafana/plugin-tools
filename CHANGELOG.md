@@ -1,3 +1,21 @@
+# (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/sign-plugin@2.0.1`
+  - Allows to sign behind an https proxy [#436](https://github.com/grafana/plugin-tools/pull/436) ([@academo](https://github.com/academo))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump prism-react-renderer from 1.3.5 to 2.1.0 [#434](https://github.com/grafana/plugin-tools/pull/434) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Mon Oct 02 2023)
 
 :tada: This release contains work from a new contributor! :tada:
