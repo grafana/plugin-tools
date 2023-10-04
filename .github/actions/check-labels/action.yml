@@ -3,5 +3,5 @@ description: 'Check PRs for labels related to Auto and publishing npm packages.'
 author: 'frontend@grafana'
 
 runs:
-  using: node18
+  using: node20
   main: ./index.js
