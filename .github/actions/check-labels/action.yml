@@ -1,0 +1,7 @@
+name: 'Check PR labels'
+description: 'Check PRs for labels related to Auto and publishing npm packages.'
+author: 'frontend@grafana'
+
+runs:
+  using: node18
+  main: ./index.js
