@@ -5,6 +5,7 @@ import type { ModifyActionConfig, NodePlopAPI } from 'plop';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
 import { getExportPath } from '../utils/utils.path';
+import { getVersion } from '../utils/utils.version';
 import { getPackageManagerInstallCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
@@ -99,7 +100,7 @@ export default function (plop: NodePlopAPI) {
         packageManagerVersion,
         isAppType,
         isNPM: packageManagerName === 'npm',
-        packageVersion: process.env.npm_package_version
+        packageVersion: getVersion(),
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
