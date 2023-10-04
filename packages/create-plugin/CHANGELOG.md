@@ -1,3 +1,19 @@
+# v2.0.2 (Wed Oct 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create-plugin: Make baseURL absolute and bump swc/core [#424](https://github.com/grafana/plugin-tools/pull/424) ([@mikkancso](https://github.com/mikkancso))
+
+#### Authors: 1
+
+- [@mikkancso](https://github.com/mikkancso)
+
+---
+
 # v2.0.1 (Tue Oct 03 2023)
 
 #### 🐛 Bug Fix
