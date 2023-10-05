@@ -10,7 +10,7 @@ async function run() {
     } = context;
     const labels = pull_request?.labels || [];
     const labelNames = labels.map((label) => label.name);
-    const githubToken = core.getInput('repo-token', { required: true });
+    const githubToken = core.getInput('repo-token');
     const prNumber = pull_request?.number;
 
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'skip-changelog'];
