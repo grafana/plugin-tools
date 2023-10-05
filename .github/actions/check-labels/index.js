@@ -17,13 +17,16 @@ async function run() {
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
     const hasReleaseLabel = labelNames.includes('release');
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
-    const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
+    const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels. Please address the following issues:`;
     const prMessageLabelExplanation = `
+If there are changes to any of the npm packages src files please choose from one of the following labels:
 - 🐛 if this PR fixes a bug add the \`patch\` label
 - 🚀 if this PR includes an enhancement add the \`minor\` label
 - 💥 if this PR includes a breaking change add the \`major\` label
-- 🙈 if this PR changes the repository CI scripts, build tooling, or the docs website and documentation add the \`skip-changelog\` label
-`;
+
+If you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
+If the changes only affect the docs website, documentation, or this repository's tooling please consider using the \`skip-changelog\` label instead.
+    `;
 
     const octokit = getOctokit(githubToken);
 
@@ -41,11 +44,9 @@ async function run() {
     }
 
     if (attachedSemverLabels.length === 0) {
-      let error =
-        'This PR is **missing** one of the following required labels: `patch`, `minor`, `major`, `skip-changelog`.';
+      let error = '- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
       if (!hasReleaseLabel) {
-        error +=
-          '\n\nAdditionally it is missing the optional `release` label. If you would like this PR to publish new versions please add it.';
+        error += '- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelExplanation}`;
 
@@ -55,12 +56,10 @@ async function run() {
 
     if (attachedSemverLabels.length > 1) {
       let error =
-        'This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
+        '- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       if (!hasReleaseLabel) {
-        error +=
-          '\n\nAdditionally it is missing the optional `release` label. If you would like this PR to publish new versions please add it.';
+        error += '- (Optional) This PR is missing the `release` label.';
       }
-
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelExplanation}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
