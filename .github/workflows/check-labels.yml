@@ -9,8 +9,8 @@ on:
       - unlabeled
       - edited
 
-# permissions:
-#   pull-requests: write
+permissions:
+  pull-requests: write
 
 jobs:
   check-labels:

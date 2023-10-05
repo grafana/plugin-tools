@@ -13,10 +13,6 @@ async function run() {
     const githubToken = core.getInput('repo-token', { required: true });
     const prNumber = pull_request?.number;
 
-    if (!Boolean(githubToken)) {
-      core.setFailed('No github token provided');
-    }
-
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'skip-changelog'];
     const hasSemverLabel = labelNames.filter((label) => requiredOneOfLabels.includes(label));
     const hasReleaseLabel = labelNames.includes('release');
