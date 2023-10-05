@@ -93,7 +93,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 
    ```ts
    import defaults from 'lodash/defaults';
-   
+
    const query = defaults(target, defaultQuery);
    ```
 
@@ -234,7 +234,6 @@ The new query model is now ready to use in our `query` method.
 
 1. Try it out by changing the frequency in the query for your panel.
 
-
 ## Enable configuration for your datasource
 
 To access a specific data source, you often need to configure things like hostname, credentials, or authentication method. A _config editor_ lets your users configure your data source plugin to fit their needs.
@@ -289,7 +288,7 @@ Just like query editor, the form field in the config editor calls the registered
 ### Use the option
 
 1. Create a property called `resolution` to the `DataSource` class.
-   
+
    **`src/datasource.ts`**
 
    ```ts
@@ -320,7 +319,8 @@ In this tutorial you built a complete data source plugin for Grafana that uses a
 ## Learn more
 
 ### Get data from an external API
-The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample. 
+
+The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample.
 
 This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 
