@@ -19,12 +19,12 @@ async function run() {
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
     const prIntroMessage = `👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
     const prMessageLabelExplanation = `
-    If there are changes to any of the npm packages src files please choose from one of the following labels:
-    - **patch** -> 🐛 if this PR includes a bug fix
-    - **minor** -> 🚀 if this PR includes an enhancement
-    - **major** -> 💥 if this PR includes a breaking change
+If there are changes to any of the npm packages src files please choose from one of the following labels:
+- **patch** -> 🐛 if this PR includes a bug fix
+- **minor** -> 🚀 if this PR includes an enhancement
+- **major** -> 💥 if this PR includes a breaking change
 
-    If the changes only affect the repo CI, tooling or the docs website and/or documentation files please consider using the **skip-changelog** label.
+If the changes only affect the repo CI, tooling or the docs website and/or documentation files please consider using the **skip-changelog** label.
     `;
     const octokit = getOctokit(githubToken);
 
