@@ -18,7 +18,7 @@ keywords:
 Be sure your plugin meets the following requirements before proceeding:
 
 - It must be an app plugin.
-- It must be preloaded by setting the [preload property](https://grafana.com/developers/plugin-tools/reference-plugin-json#properties) to `true` in the `plugin.json`.
+- It must be preloaded by setting the [preload property](../reference-plugin-json#properties) to `true` in the `plugin.json`.
 - It must be installed and _enabled_ for the extension to be available.
 
 ## How to extend the Grafana UI or an app plugin from your app plugin
