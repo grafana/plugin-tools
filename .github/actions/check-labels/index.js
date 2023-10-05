@@ -17,7 +17,7 @@ async function run() {
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
     const hasReleaseLabel = labelNames.includes('release');
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
-    const prIntroMessage = `👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
+    const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
     const prMessageLabelExplanation = `
 If there are changes to any of the npm packages src files please choose from one of the following labels:
 - 🐛 if this PR fixes a bug add the \`patch\` label
@@ -42,7 +42,7 @@ If instead the changes affect this repositories CI scripts, its build tooling or
     }
 
     if (attachedSemverLabels.length === 0) {
-      const error = 'This PR is missing one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
+      const error = 'This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelExplanation}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
@@ -51,7 +51,7 @@ If instead the changes affect this repositories CI scripts, its build tooling or
 
     if (attachedSemverLabels.length > 1) {
       const error =
-        'This PR contains multiple semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
+        'This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelExplanation}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
