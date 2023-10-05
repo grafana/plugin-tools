@@ -1,4 +1,4 @@
-import { chmodSync, mkdirSync, readdirSync, copyFileSync, rmSync, readFileSync } from "fs";
+import { mkdirSync, readdirSync, copyFileSync, rmSync, readFileSync } from "fs";
 import { platform } from 'os';
 import { getPluginJson } from "../utils/pluginValidation";
 import { resolve, join } from 'path';
@@ -42,14 +42,10 @@ export const bundle = (pluginDistDir: string) => {
 
         console.log('verifying file permissions...')
         if (platform() === 'win32') { 
-            console.warn("Warning: Windows-based systems cannot update unix permissions. Please use WSL or a Unix based system to automatically handle permissions.");
+          console.warn("Warning: Windows-based systems cannot update unix permissions. You will need to manually update these in a unix environment.");
+        } else {
+          execSync(`find ${pluginId} -name '${pluginJson.executable}*' -exec chmod 0755 {} \\;`)
         }
-        const newFiles = readdirSync(pluginId);
-        newFiles.forEach(fileName => {
-            if (fileName.startsWith(pluginJson.executable)) {
-                chmodSync(`${pluginId}/${fileName}`, '0755')
-            }
-        })
 
         console.log('Zipping Bundle...')
         // plugin must be zipped inside folder named after pluginId + version
