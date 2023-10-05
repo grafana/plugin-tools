@@ -13,10 +13,9 @@ async function run() {
     const githubToken = core.getInput('github_token') || process.env.GITHUB_TOKEN;
     const prNumber = pull_request?.number;
 
-    // if (!Boolean(githubToken)) {
-    //   core.setFailed('');
-    //   return;
-    // }
+    if (!Boolean(githubToken)) {
+      core.setFailed('No github token provided');
+    }
 
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'skip-changelog'];
     const hasSemverLabel = labelNames.filter((label) => requiredOneOfLabels.includes(label));
