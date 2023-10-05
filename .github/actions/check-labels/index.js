@@ -19,7 +19,8 @@ async function run() {
     const hasReleaseLabel = labelNames.includes('release');
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
     const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels. Please address the following issues:`;
-    const prMessageLabelDetails = `<details><summary>🏷️ More info about how labels work</summary>
+    const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
+<br />
 
 - If the changes only affect the docs website, documentation, or this repository's tooling add the \`skip-changelog\` label.
 - If there are changes to any of the npm packages src files please choose from one of the following labels:
@@ -47,7 +48,7 @@ async function run() {
     if (attachedSemverLabels.length === 0) {
       let error = '- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
       if (!hasReleaseLabel) {
-        error += '\n\n- (Optional) This PR is missing the `release` label.';
+        error += '\n- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
 
@@ -59,7 +60,7 @@ async function run() {
       let error =
         '- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       if (!hasReleaseLabel) {
-        error += '\n\n- (Optional) This PR is missing the `release` label.';
+        error += '\n- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
 
