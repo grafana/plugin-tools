@@ -36,7 +36,7 @@ async function run() {
     if (attachedSemverLabels.length === 0) {
       const error = 'This PR is missing one of the following labels: `patch`, `minor`, `major`, `skip-changelog`';
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}`;
-      console.log({ previousCommentId, message, ...repo, prNumber });
+
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
       core.setFailed(error);
     }
@@ -45,7 +45,7 @@ async function run() {
       const error =
         'This PR contains multiple semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}`;
-      console.log({ previousCommentId, message, ...repo, prNumber });
+
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
       core.setFailed(error);
     }
@@ -54,7 +54,7 @@ async function run() {
       const warning =
         'This PR has required semver label `${attachedSemverLabels}[0]` but missing `release` label. This PR can be merged but will not trigger new releases.';
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
-      console.log({ previousCommentId, message, ...repo, prNumber });
+
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
       core.setOutput('canMergeWithoutPublish', warning);
     }
