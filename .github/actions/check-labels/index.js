@@ -19,13 +19,14 @@ async function run() {
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
     const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels. Please address the following issues:`;
     const prMessageLabelExplanation = `
+If the changes only affect the docs website, documentation, or this repository's tooling add the \`skip-changelog\` label.
+
 If there are changes to any of the npm packages src files please choose from one of the following labels:
 - 🐛 if this PR fixes a bug add the \`patch\` label
 - 🚀 if this PR includes an enhancement add the \`minor\` label
 - 💥 if this PR includes a breaking change add the \`major\` label
 
-If you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
-If the changes only affect the docs website, documentation, or this repository's tooling please consider using the \`skip-changelog\` label instead.
+Optionally, if you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
     `;
 
     const octokit = getOctokit(githubToken);
@@ -46,7 +47,7 @@ If the changes only affect the docs website, documentation, or this repository's
     if (attachedSemverLabels.length === 0) {
       let error = '- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
       if (!hasReleaseLabel) {
-        error += '- (Optional) This PR is missing the `release` label.';
+        error += '\n- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelExplanation}`;
 
@@ -58,7 +59,7 @@ If the changes only affect the docs website, documentation, or this repository's
       let error =
         '- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       if (!hasReleaseLabel) {
-        error += '- (Optional) This PR is missing the `release` label.';
+        error += '\n- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelExplanation}`;
 
