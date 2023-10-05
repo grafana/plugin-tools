@@ -10,7 +10,7 @@ async function run() {
     } = context;
     const labels = pull_request?.labels || [];
     const labelNames = labels.map((label) => label.name);
-    const githubToken = core.getInput('github_token') || process.env.GITHUB_TOKEN;
+    const githubToken = core.getInput('repo-token', { required: true });
     const prNumber = pull_request?.number;
 
     if (!Boolean(githubToken)) {
