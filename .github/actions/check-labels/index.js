@@ -11,7 +11,8 @@ async function run() {
     const labels = pull_request?.labels || [];
     const labelNames = labels.map((label) => label.name);
     const githubToken = core.getInput('github-token');
-    const prNumber = pull_request?.number;
+    // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
+    const prNumber = pull_request.number;
 
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'skip-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
@@ -34,7 +35,6 @@ Optionally, if you would like this PR to publish new versions of packages when i
 
     const { data } = await octokit.rest.issues.listComments({
       ...repo,
-      // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
       issue_number: prNumber,
     });
 
@@ -48,7 +48,7 @@ Optionally, if you would like this PR to publish new versions of packages when i
     if (attachedSemverLabels.length === 0) {
       let error = '- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
       if (!hasReleaseLabel) {
-        error += '\n\n- (Optional) This PR is missing the `release` label.';
+        error += '\n- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
 
@@ -60,7 +60,7 @@ Optionally, if you would like this PR to publish new versions of packages when i
       let error =
         '- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       if (!hasReleaseLabel) {
-        error += '\n\n- (Optional) This PR is missing the `release` label.';
+        error += '\n- (Optional) This PR is missing the `release` label.';
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
 
