@@ -29,6 +29,11 @@ The following table shows the plugin types currently supported by Grafana on the
 | renderer       |        No       |       Yes      |             No             |
 | secretsmanager |        No       |       Yes      |             No             |
 
+:::note
+
+This documentation discusses plugin usage for plugin developers. General information for plugin users is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
+
+:::
 ## Data source plugins
 
 In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/).
