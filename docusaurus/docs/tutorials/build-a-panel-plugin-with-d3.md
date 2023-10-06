@@ -48,18 +48,18 @@ Wait a minute. Manipulating documents based on data? That's sounds an awful lot 
 
 1. For the purposes of this tutorial, remove the following from `src/components/SimplePanel.tsx`:
 
-```ts
-  viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-```
+  ```ts
+    viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
+  ```
 
-and
+  and 
 
-```ts
-<div className={styles.textBox}>
-  {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
-  <div>Text option value: {options.text}</div>
-</div>
-```
+  ```ts
+  <div className={styles.textBox}>
+   {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
+   <div>Text option value: {options.text}</div>
+  </div>
+  ```
 
 1. Now, change the SVG group `g` in `SimplePanel` to return a `rect` element rather than a circle.
 
@@ -86,20 +86,13 @@ One single rectangle might not be very exciting, so let's see how you can create
 1. Inside the SVG group `g`, create a `rect` element for every value in the dataset. Each rectangle uses the value as its width.
 
    ```ts
-   <g>
-     {values.map((value, i) => (
-       <rect
-         x={0}
-         y={i * barHeight}
-         width={value}
-         height={barHeight - 1}
-         fill={theme.visualization.getColorByName('green')}
-       />
-     ))}
-   </g>
+        <g>
+         {values.map((value, i) => (
+           <rect x={0} y={i * barHeight} width={value} height={barHeight - 1} fill={theme.visualization.getColorByName('green')} />
+         ))}
+       </g>
    ```
-
-   As you can see, React is perfectly capable of dynamically creating HTML elements. In fact, creating elements using React is often faster than creating them using D3.
+As you can see, React is perfectly capable of dynamically creating HTML elements. In fact, creating elements using React is often faster than creating them using D3.
 
 So why would you use even use D3? In the next step, we'll see how you can take advantage of D3's data transformations.
 
@@ -141,14 +134,8 @@ Scales are functions that map a range of values to another range of values. In t
      <svg width={width} height={height}>
        <g>
          {values.map((value, i) => (
-           <rect
-             key={value}
-             x={0}
-             y={i * barHeight}
-             width={scale(value)}
-             height={barHeight - 1}
-             fill={theme.visualization.getColorByName('green')}
-           />
+           <rect key={value} x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1}
+            fill={theme.visualization.getColorByName('green')} />
          ))}
        </g>
      </svg>
@@ -212,6 +199,7 @@ import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import * as d3 from 'd3';
 
+
 interface Props extends PanelProps<SimpleOptions> {}
 
 const getStyles = () => {
@@ -242,12 +230,13 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   const chartHeight = height - padding;
   const barHeight = chartHeight / values.length;
   const scale = d3
-    .scaleLinear()
-    .domain([0, d3.max(values) || 0.0])
-    .range([0, width]);
+  .scaleLinear()
+  .domain([0, d3.max(values) || 0.0])
+  .range([0, width]);
   const axis = d3.axisBottom(scale);
 
   return (
+    
     <div
       className={cx(
         styles.wrapper,
@@ -266,14 +255,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
       >
         <g>
           {values.map((value, i) => (
-            <rect
-              key={value}
-              x={0}
-              y={i * barHeight}
-              width={scale(value)}
-              height={barHeight - 1}
-              fill={theme.visualization.getColorByName('green')}
-            />
+            <rect key={value} x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1}
+            fill={theme.visualization.getColorByName('green')} />
           ))}
         </g>
         <g
@@ -282,7 +265,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
             d3.select(node).call(axis as any);
           }}
         />
-      </svg>
+      </svg>      
     </div>
   );
 };

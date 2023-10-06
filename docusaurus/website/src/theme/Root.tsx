@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from '@docusaurus/router';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "@docusaurus/router";
 
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { CookieConsent } from '../components/CookieConsent/CookieConsent';
-import { RudderStackTrackingConfig, startTracking, trackPage } from './tracking';
-import { analyticsVersion, cookieName, getCookie, setCookie } from './tracking/cookie';
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { CookieConsent } from "../components/CookieConsent/CookieConsent";
+import {
+  RudderStackTrackingConfig,
+  startTracking,
+  trackPage,
+} from "./tracking";
+import {
+  analyticsVersion,
+  cookieName,
+  getCookie,
+  setCookie,
+} from "./tracking/cookie";
 
 export default function Root({ children }) {
   const location = useLocation();
@@ -12,7 +21,8 @@ export default function Root({ children }) {
     siteConfig: { customFields },
   } = useDocusaurusContext();
 
-  const rudderStackConfig = customFields.rudderStackTracking as RudderStackTrackingConfig;
+  const rudderStackConfig =
+    customFields.rudderStackTracking as RudderStackTrackingConfig;
 
   const setCookieAndStartTracking = () => {
     setCookie(cookieName, {
@@ -21,13 +31,13 @@ export default function Root({ children }) {
 
     setShouldShow(false);
     startTracking(rudderStackConfig);
-  };
+  }
 
   const [shouldShow, setShouldShow] = useState(false);
 
   const canSpam = async () => {
     try {
-      const response = await fetch(customFields.canSpamUrl as string, { mode: 'no-cors' });
+      const response = await fetch(customFields.canSpamUrl as string, { mode: "no-cors" });
       if (response.status === 204) {
         return true;
       }
@@ -35,7 +45,7 @@ export default function Root({ children }) {
       // do nothing
     }
     return false;
-  };
+  }
 
   const onClick = () => {
     return setCookieAndStartTracking();
@@ -43,18 +53,16 @@ export default function Root({ children }) {
 
   useEffect(() => {
     // If the user has already given consent, start tracking.
-    if (getCookie(cookieName, 'analytics') === analyticsVersion) {
+    if (getCookie(cookieName, "analytics") === analyticsVersion) {
       return setCookieAndStartTracking();
     }
 
     // If the user is from an IP address that does not require consent, start tracking.
-    canSpam()
-      .then((result) => {
-        if (result) {
-          return setCookieAndStartTracking();
-        }
-      })
-      .catch(console.error);
+    canSpam().then((result) => {
+      if (result) {
+        return setCookieAndStartTracking();
+      }
+    }).catch(console.error);
 
     // If the user has not given consent and is from IP address that requires consent, show the consent banner.
     setShouldShow(true);

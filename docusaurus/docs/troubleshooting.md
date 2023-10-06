@@ -89,7 +89,6 @@ module.exports = {
 This error is most likely to impact users of Mac computers with Apple silicon. If you have previously built an image for a plugin scaffolded with `create-plugin` prior to v1.12.2, then running `docker-compose up` may fail with the above message if the old image hasn't been removed.
 
 #### What you can do:
-
 - Run `docker-compose down` to stop and remove the container.
 - Remove the image using `docker rmi <plugin-name>`.
 - Run `docker-compose up` or `npm run server`.

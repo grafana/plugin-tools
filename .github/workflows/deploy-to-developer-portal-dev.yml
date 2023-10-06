@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Which branch to use?'
-        default: 'main'
+        description: "Which branch to use?"
+        default: "main"
 jobs:
   deploy:
     name: Deploy docs to Developer Portal Bucket
@@ -25,10 +25,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
+            
       - name: Build documentation website
         run: npm run docs:build -- --config docusaurus.config.dev.js
-
+        
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:

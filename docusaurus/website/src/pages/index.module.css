@@ -3,9 +3,9 @@
  * and scoped locally.
  */
 
-.heroBanner {
+ .heroBanner {
   aspect-ratio: 3.01/1;
-  background-image: url('/img/hero_banner.png');
+  background-image: url("/img/hero_banner.png");
   background-size: contain;
   display: flex;
   align-items: center;

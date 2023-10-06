@@ -2,8 +2,10 @@ import fs from 'fs';
 import process from 'process';
 import os from 'os';
 import path from 'path';
+import util from 'util';
 import { glob } from 'glob';
 import { SOURCE_DIR } from './constants';
+
 
 export function isWSL() {
   if (process.platform !== 'linux') {
@@ -19,7 +21,7 @@ export function isWSL() {
   } catch {
     return false;
   }
-}
+} 
 
 export function getPackageJson() {
   return require(path.resolve(process.cwd(), 'package.json'));
@@ -38,8 +40,7 @@ export function hasReadme() {
 export async function getEntries(): Promise<Record<string, string>> {
   const pluginsJson = await glob('**/src/**/plugin.json', { absolute: true });
 
-  const plugins = await Promise.all(
-    pluginsJson.map((pluginJson) => {
+  const plugins = await Promise.all(pluginsJson.map((pluginJson) => {
       const folder = path.dirname(pluginJson);
       return glob(`${folder}/module.{ts,tsx,js,jsx}`, { absolute: true });
     })
