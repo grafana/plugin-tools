@@ -77,7 +77,7 @@ To submit an **update** for an already published plugin:
 1. Click **Submit Update** for the plugin you want to update. The Create Plugin Submission dialog appears.
 
    ![Submit plugin.](/img/plugins-submission-create2.png)
-   
+
 1. Enter the information requested by the form.
    - **OS & Architecture:**
      - Select **Single** if your plugin archive contains binaries for multiple architectures.

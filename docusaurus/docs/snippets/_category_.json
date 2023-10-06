@@ -1,7 +1,7 @@
 {
-    "position": 10,
-    "label": "snippets",
-    "collapsible": true,
-    "collapsed": false,
-    "className": "hidden"
-  }
+  "position": 10,
+  "label": "snippets",
+  "collapsible": true,
+  "collapsed": false,
+  "className": "hidden"
+}

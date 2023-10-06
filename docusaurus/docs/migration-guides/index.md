@@ -1,5 +1,5 @@
 ---
-id: migration-guides 
+id: migration-guides
 title: Grafana plugin migration guides
 description: How to upgrade or migrate a Grafana plugin.
 keywords:

@@ -2,7 +2,7 @@
 id: publishing-and-signing-criteria
 title: Publishing and signing criteria
 sidebar_position: 1
-description: Ensure your plugin complies with Grafana's publishing criteria. 
+description: Ensure your plugin complies with Grafana's publishing criteria.
 keywords:
   - grafana
   - plugins

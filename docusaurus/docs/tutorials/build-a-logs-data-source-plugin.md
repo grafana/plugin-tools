@@ -12,7 +12,6 @@ keywords:
   - datasource
 ---
 
-
 # Build a logs data source plugin
 
 Grafana data source plugins support metrics, logs, and other data types. The steps to build a logs data source plugin are largely the same as for a metrics data source, but there are a few differences which we will explain in this guide.
@@ -135,7 +134,7 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute. 
+This feature must be implemented in the data frame as a meta attribute.
 
 :::
 
