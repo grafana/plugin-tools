@@ -1,12 +1,16 @@
 ---
-id: plugin-usage
+id: plugin-types-usage
 title: Plugin types and usage
-description: Learn to use Grafana plugins.
+description: Learn about the different types of Grafana plugins, their usage and configuration.
 keywords:
   - grafana
   - plugins
   - plugin
   - usage
+  - provisioning
+  - provision
+  - configuration
+  - configure
 sidebar_position: 1
 ---
 
