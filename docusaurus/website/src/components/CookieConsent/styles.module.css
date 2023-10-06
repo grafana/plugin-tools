@@ -3,8 +3,9 @@
   left: 0;
   position: fixed;
   right: 0;
-  z-index: 1;
+  z-index: 1;  
   border-top: 1px solid color-mix(in srgb, var(--ifm-color-warning) 20%, transparent);
+
 }
 
 .cookieConsentContainer {

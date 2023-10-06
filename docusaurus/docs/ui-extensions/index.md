@@ -26,7 +26,7 @@ In the example above, there is one extension point with three registered extensi
 
 ## Why should I add an extension point?
 
-App plugins can provide custom pages in the Grafana UI, often highly contextualized to a particular service or task to enable users to be productive. Grafana is a feature-rich observability platform and has an extensive ecosystem of plugins, allowing users to monitor and act upon a wide set of data.
+App plugins can provide custom pages in the Grafana UI, often highly contextualized to a particular service or task to enable users to be productive. Grafana is a feature-rich observability platform and has an extensive ecosystem of plugins, allowing users to monitor and act upon a wide set of data. 
 
 Extension points facilitate the breaking down of silos between individual views, allowing users to quickly leverage data from their current context to take relevant actions. By providing extension points within your app, relevant extensions can easily offer new capabilities to your shared users.
 

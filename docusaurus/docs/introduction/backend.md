@@ -97,6 +97,6 @@ The Grafana HTTP API offers an endpoint (`/api/plugins/<plugin id>/metrics`) tha
 
 #### Streaming
 
-The streaming capability allows a backend plugin to handle data source queries that are streaming.
+The streaming capability allows a backend plugin to handle data source queries that are streaming. 
 
-For more information, refer to the [Datasource Steaming Backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-backend-websocket) example.
+For more information, refer to the [Datasource Steaming Backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-backend-websocket) example. 

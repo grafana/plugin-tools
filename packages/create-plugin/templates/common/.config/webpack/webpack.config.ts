@@ -97,7 +97,7 @@ const config = async (env): Promise<Configuration> => {
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          use: ["style-loader", "css-loader"]
         },
         {
           test: /\.s[ac]ss$/,
@@ -207,6 +207,7 @@ const config = async (env): Promise<Configuration> => {
   }
 
   return baseConfig;
+
 };
 
 export default config;
