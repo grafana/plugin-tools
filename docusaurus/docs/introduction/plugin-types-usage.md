@@ -36,7 +36,7 @@ The following table shows the plugin types currently supported by Grafana on the
 
 ## Data source plugins
 
-In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). Data source plugins may be added on frontend and [the backend](./backend.md).
+In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). Data source plugins may be added on the frontend and [the backend](./backend.md).
 
 ### Usage of data-source plugins
 
@@ -63,7 +63,7 @@ Data-source plugins can include dashboards by referencing dashboard JSON files (
 
 ## App plugins
 
-Development of app plugins, also known as apps or applications, allows you to bundle data sources and panels to provide a seamless monitoring experience, similar to existing plugins such as [Zabbix](https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/). App plugins may be added on frontend and [the backend](./backend.md).
+Development of app plugins, also known as apps or applications, allows you to bundle data sources and panels to provide a seamless monitoring experience, similar to existing plugins such as [Zabbix](https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/). App plugins may be added on the frontend and [the backend](./backend.md).
 
 ### Usage of apps
 
