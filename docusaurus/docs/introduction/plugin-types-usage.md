@@ -21,10 +21,9 @@ sidebar_position: 1
 This documentation discusses plugin configuration and usage for plugin developers. General information for plugin users is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
 
 ::: 
-
 ## Overview
 
-Grafana plugin development allows for many options depending on the type of user experience you want to create. Make a plugin in one of several different types depending on whether you want to offer users a new way of visualizing data, a connection to a new database, or an integrated out-of-the-box experience. 
+Grafana plugin development allows for many options depending on the type of user experience you want to create. You can find a plugin type whether you want to offer users a new way of visualizing data, a connection to a new database, or an integrated out-of-the-box experience. 
 
 The following table shows the plugin types currently supported by Grafana on the frontend and backend. 
 
@@ -68,7 +67,7 @@ Development of app plugins, also known as apps or applications, allows you to bu
 
 ### Usage of apps
 
-You can configure a Grafana app when you want to integrate with a third-party service and optionally provide custom pages and such within Grafana. Given any installed plugin of type `app`, you can enable them once per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) and they are persisted in Grafana’s database. 
+Configure a Grafana app when you want to leverage or create a tailored monitoring view for a third-party service and optionally use custom pages or UI extensions. Given any installed plugin of type `app`, you can enable them once per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) and they are persisted in Grafana’s database. 
 
 ### Provisioning of apps
 
