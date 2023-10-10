@@ -55,7 +55,7 @@ Grafana's backend plugin system exposes several key capabilities, or building bl
 
 ### Query data
 
-The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](https://grafana.com/docs/grafana/latest/developers/plugins/introduction-to-plugin-development/data-frames/), which are used to visualize metrics, logs, and traces.
+The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](./data-frames.md), which are used to visualize metrics, logs, and traces.
 
 :::note
 
@@ -104,3 +104,4 @@ Grafana uses a simplified model where all necessary information (configuration) 
 Grafana uses instance management in the backend plugin SDK to optimize plugin resources. It works by caching parts of the plugin (including `jsonData` and `secureJSONData`) in memory so that subsequent requests can benefit from not having to reinitialize the plugin instance, where the instance is intended to hold things such as HTTP clients, connection pools, decrypted secrets, and so on.
 
 Connection pooling allows a plugin instance to reuse connections to a downstream server so that it doesn't use all of the machine's available TCP connections. For an example of a plugin supporting connection pooling, refer to the [HTTP Backend plugin example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-http-backend/pkg/plugin/datasource.go#L40-L66), which shows each plugin instance creating an HTTP client that will be reused throughout the lifetime of the instance and thereby reuse HTTP connections.
+
