@@ -93,16 +93,14 @@ The Grafana HTTP API offers an endpoint (`/api/plugins/<plugin id>/metrics`) tha
 
 ### Streaming
 
-The streaming capability allows a backend plugin to handle data source queries that are streaming. For more information, refer to [Build a streaming data source plugin](https://grafana.com/docs/grafana/latest/developers/plugins/create-a-grafana-plugin/develop-a-plugin/build-a-streaming-data-source-plugin/).
+The streaming capability allows a backend plugin to handle data source queries that are streaming. For more information, refer to an example for a [streaming data source plugin](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-backend-websocket).
 
 ## Data communication model
 
-When communicating with backend plugins, Grafana should provide all the necessary information (configuration) in each request to allow the plugin to fulfill the request and return a response. This is a simple model for ensuring data communication between Grafana and plugin. 
-
-However, there are cases when a Grafana plugin or data source has been configured with sensitive information that is stored encrypted in Grafana’s database. In such cases, Grafana will decrypt the sensitive data and attach it in clear text in messages to the plugin upon each request to their respective backends.
+Grafana uses a simplified model where all necessary information (configuration) is provided in each request to a backend plugin, allowing the plugin to fulfill the request and return a response. 
 
 ## Caching and connection pooling
 
-Grafana uses instance management (that is, caching) in the backend plugin SDK to optimize plugin resources. It works by caching parts of the plugin (including `jsonData` and `secureJSONData`) in memory so that subsequent requests can benefit from not having to reinitialize the plugin instance, where the instance is intended to hold things such as HTTP clients, connection pools, decrypted secrets, and so on. 
+Grafana uses instance management in the backend plugin SDK to optimize plugin resources. It works by caching parts of the plugin (including `jsonData` and `secureJSONData`) in memory so that subsequent requests can benefit from not having to reinitialize the plugin instance, where the instance is intended to hold things such as HTTP clients, connection pools, decrypted secrets, and so on.
 
-Connection pooling allows a plugin instance to reuse connections to a downstream server so that it doesn't use all of the machine's available TCP connections. Plugin developers must implement connection pooling properly to avoid having a detrimental effect on performance in multitenant environments such as Grafana Cloud.
+Connection pooling allows a plugin instance to reuse connections to a downstream server so that it doesn't use all of the machine's available TCP connections. For an example of a plugin supporting connection pooling, refer to the [HTTP Backend plugin example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-http-backend/pkg/plugin/datasource.go#L40-L66), which shows each plugin instance creating an HTTP client that will be reused throughout the lifetime of the instance and thereby reuse HTTP connections.
