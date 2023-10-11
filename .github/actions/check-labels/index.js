@@ -14,7 +14,7 @@ async function run() {
     // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
     const prNumber = pull_request.number;
 
-    const requiredOneOfLabels = ['patch', 'minor', 'major', 'skip-changelog'];
+    const requiredOneOfLabels = ['patch', 'minor', 'major', 'no-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
     const hasReleaseLabel = labelNames.includes('release');
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
@@ -22,7 +22,7 @@ async function run() {
     const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
 <br />
 
-- If the changes only affect the docs website, documentation, or this repository's tooling add the \`skip-changelog\` label.
+- If the changes only affect the docs website, documentation, or this repository's tooling add the \`no-changelog\` label.
 - If there are changes to any of the npm packages src files please choose from one of the following labels:
   - 🐛 if this PR fixes a bug add the \`patch\` label
   - 🚀 if this PR includes an enhancement add the \`minor\` label
@@ -47,7 +47,7 @@ async function run() {
 
     if (attachedSemverLabels.length === 0) {
       let error = 'Please address the following issues:\n';
-      error += '\n- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
+      error += '\n- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `no-changelog`.';
       if (!hasReleaseLabel) {
         error += '\n- (Optional) This PR is missing the `release` label.';
       }
@@ -60,7 +60,7 @@ async function run() {
     if (attachedSemverLabels.length > 1) {
       let error = 'Please address the following issues:\n';
       error +=
-        '\n- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
+        '\n- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.';
       if (!hasReleaseLabel) {
         error += '\n- (Optional) This PR is missing the `release` label.';
       }
@@ -70,7 +70,7 @@ async function run() {
       core.setFailed(error);
     }
 
-    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] !== 'skip-changelog' && !hasReleaseLabel) {
+    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] !== 'no-changelog' && !hasReleaseLabel) {
       const warning = `This PR has a required semver label (\`${attachedSemverLabels[0]}\`) but is missing the \`release\` label. This PR can be merged but will not trigger new releases.`;
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
