@@ -1,33 +1,18 @@
 // @ts-check
 const core = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
-
-const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
-const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
-const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
-<br />
-
-- If the changes only affect the docs website, documentation, or this repository's tooling add the \`no-changelog\` label.
-- If there are changes to any of the npm packages src files please choose from one of the following labels:
-- 🐛 if this PR fixes a bug add the \`patch\` label
-- 🚀 if this PR includes an enhancement add the \`minor\` label
-- 💥 if this PR includes a breaking change add the \`major\` label
-- Optionally, if you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
-</details>
-`;
+const { prMessageSymbol, prIntroMessage, prMessageLabelDetails } = require('./messages');
 
 async function run() {
   try {
     const {
       payload: { pull_request },
-      repo,
     } = context;
     const labels = pull_request?.labels || [];
     const labelNames = labels.map((label) => label.name);
     const githubToken = core.getInput('github-token');
     const octokit = getOctokit(githubToken);
-    // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
-    const prNumber = pull_request.number;
+
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'no-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
     const isMissingSemverLabel = attachedSemverLabels.length === 0;
@@ -45,7 +30,7 @@ async function run() {
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
-      await doComment({ octokit, message, repo, prNumber });
+      await doComment({ octokit, message });
       core.error('This PR is missing one of the following labels: `patch`, `minor`, `major`, `no-changelog`.');
       core.setFailed('Missing semver label');
     }
@@ -61,7 +46,7 @@ async function run() {
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
-      await doComment({ octokit, message, repo, prNumber });
+      await doComment({ octokit, message });
       core.error(
         'This PR contains multiple semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.'
       );
@@ -77,7 +62,7 @@ async function run() {
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
-      await doComment({ octokit, message, repo, prNumber });
+      await doComment({ octokit, message });
       core.notice(warning);
       core.setOutput('canMerge', warning);
     }
@@ -87,7 +72,7 @@ async function run() {
         const error =
           'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
-        await doComment({ octokit, message, repo, prNumber });
+        await doComment({ octokit, message });
         core.error(
           'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.'
         );
@@ -97,7 +82,7 @@ async function run() {
           'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
-        await doComment({ octokit, message, repo, prNumber });
+        await doComment({ octokit, message });
         core.notice(
           'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.'
         );
@@ -109,8 +94,14 @@ async function run() {
   }
 }
 
-async function doComment({ octokit, message, repo, prNumber }) {
+async function doComment({ octokit, message }) {
   try {
+    const {
+      payload: { pull_request },
+      repo,
+    } = context;
+    // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
+    const prNumber = pull_request.number;
     const { data } = await octokit.rest.issues.listComments({
       ...repo,
       issue_number: prNumber,
