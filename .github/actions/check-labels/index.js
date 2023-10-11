@@ -2,6 +2,8 @@
 const core = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
 
+const { prMessageSymbol, prIntroMessage, prMessageLabelDetails } = require('./constants');
+
 async function run() {
   try {
     const {
@@ -13,64 +15,49 @@ async function run() {
     const githubToken = core.getInput('github-token');
     // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
     const prNumber = pull_request.number;
-
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'no-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
-    const hasReleaseLabel = labelNames.includes('release');
-    const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
-    const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
-    const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
-<br />
-
-- If the changes only affect the docs website, documentation, or this repository's tooling add the \`no-changelog\` label.
-- If there are changes to any of the npm packages src files please choose from one of the following labels:
-  - 🐛 if this PR fixes a bug add the \`patch\` label
-  - 🚀 if this PR includes an enhancement add the \`minor\` label
-  - 💥 if this PR includes a breaking change add the \`major\` label
-- Optionally, if you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
-</details>
-`;
-
     const octokit = getOctokit(githubToken);
+    const previousCommentId = getPreviousComments({ octokit, repo, prNumber });
+    const isMissingSemverLabel = attachedSemverLabels.length === 0;
+    const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
+    const hasOneSemverLabel = attachedSemverLabels.length === 1;
+    const hasReleaseLabel = labelNames.includes('release');
 
-    const { data } = await octokit.rest.issues.listComments({
-      ...repo,
-      issue_number: prNumber,
-    });
-
-    let previousCommentId;
-    for (const { body, id } of data) {
-      if (body?.includes(prMessageSymbol)) {
-        previousCommentId = id;
-      }
-    }
-
-    if (attachedSemverLabels.length === 0) {
-      let error = 'Please address the following issues:\n';
-      error += '\n- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `no-changelog`.';
+    if (isMissingSemverLabel) {
+      let errorMsg = [
+        'Please address the following issues:',
+        '\n- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `no-changelog`.',
+      ];
       if (!hasReleaseLabel) {
-        error += '\n- (Optional) This PR is missing the `release` label.';
+        errorMsg.push('- (Optional) This PR is missing the `release` label.');
       }
-      const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
+      const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
-      core.setFailed(error);
+      core.error('This PR is missing one of the following labels: `patch`, `minor`, `major`, `no-changelog`.');
+      core.setFailed('Missing semver label');
     }
 
-    if (attachedSemverLabels.length > 1) {
-      let error = 'Please address the following issues:\n';
-      error +=
-        '\n- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.';
+    if (hasMultipleSemverLabels) {
+      let errorMsg = [
+        'Please address the following issues:',
+        '\n- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.',
+      ];
+
       if (!hasReleaseLabel) {
-        error += '\n- (Optional) This PR is missing the `release` label.';
+        errorMsg.push('- (Optional) This PR is missing the `release` label.');
       }
-      const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
+      const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
-      core.setFailed(error);
+      core.error(
+        'This PR contains multiple semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.'
+      );
+      core.setFailed('Multiple semver labels');
     }
 
-    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] !== 'no-changelog') {
+    if (hasOneSemverLabel && attachedSemverLabels[0] !== 'no-changelog') {
       let warning = '';
       if (hasReleaseLabel) {
         warning = `This PR will trigger a new \`${attachedSemverLabels[0]}\` release when merged.`;
@@ -80,15 +67,19 @@ async function run() {
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
+      core.notice(warning);
       core.setOutput('canMerge', warning);
     }
 
-    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] == 'no-changelog') {
+    if (hasOneSemverLabel && attachedSemverLabels[0] == 'no-changelog') {
       if (hasReleaseLabel) {
         const error =
           'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
         await doComment({ octokit, previousCommentId, message, repo, prNumber });
+        core.error(
+          'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.'
+        );
         core.setFailed(error);
       } else {
         const warning =
@@ -96,12 +87,29 @@ async function run() {
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
         await doComment({ octokit, previousCommentId, message, repo, prNumber });
+        core.notice(
+          'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.'
+        );
         core.setOutput('canMerge', warning);
       }
     }
   } catch (error) {
     core.setFailed(error.message);
   }
+}
+
+async function getPreviousComments({ octokit, repo, prNumber }) {
+  const { data } = await octokit.rest.issues.listComments({
+    ...repo,
+    issue_number: prNumber,
+  });
+  let previousCommentId;
+  for (const { body, id } of data) {
+    if (body?.includes(prMessageSymbol)) {
+      previousCommentId = id;
+    }
+  }
+  return previousCommentId;
 }
 
 async function doComment({ octokit, previousCommentId, message, repo, prNumber }) {
