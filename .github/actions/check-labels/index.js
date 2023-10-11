@@ -70,7 +70,7 @@ async function run() {
       core.setFailed(error);
     }
 
-    if (attachedSemverLabels.length === 1 && !hasReleaseLabel) {
+    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] !== 'skip-changelog' && !hasReleaseLabel) {
       const warning = `This PR has a required semver label (\`${attachedSemverLabels[0]}\`) but is missing the \`release\` label. This PR can be merged but will not trigger new releases.`;
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
