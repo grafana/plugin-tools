@@ -1,0 +1,94 @@
+---
+id: plugin-lifecycle
+title: Life cycle of a plugin
+description: Learn about the life cycle of a Grafana plugin.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - lifecycle
+  - life cycle
+  - loading
+  - unloading
+  - installation
+sidebar_position: 2.5
+---
+
+# Life cycle of a plugin
+
+The life cycle of plugins varies depending on plugin type, classification, and whether or not it has a backend. 
+
+The life cycle of plugins is only tracked in-memory today and is not persisted in Grafana’s database. 
+
+## Installing and uninstalling a plugin
+
+For instructions to install or uninstall plugins, see our documentation at [Plugin administration](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-grafana-plugins).
+
+Upon installation, a plugin is extracted to the _plugin directory_ on the filesystem. Similarly, uninstalling a plugin deletes the files from the same directory.  
+
+:::note
+
+Use of the Grafana CLI to install or uninstall a plugin requires you to restart Grafana for the change to take effect. To avoid restarting Grafana, you can install a plugin from within the Grafana [plugin catalog](https://grafana.com/plugins/) during runtime.
+
+:::
+
+## Loading plugins
+
+Understanding the different phases involved when Grafana is starting a plugin may help you better understand plugin usage and to debug any unexpected behavior during loading.
+
+### Phase 1. Plugin initialization
+
+All plugins are initialized either when Grafana starts up or when a plugin has been installed/uninstalled during runtime.
+
+For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 4](#phase-4-backend-plugin-initialization)).
+
+### Phase 2. Plugin discovery 
+
+Grafana starts to discover which plugins are installed by scanning directories on the file system for every `plugin.json`.
+
+### Phase 3. Plugin loading 
+
+All plugins that were discovered in the discovery phase are checked to make sure they’re valid and that they have a valid signature. Valid plugins are referred to as _verified plugins_. 
+
+### Phase 4. Backend plugin initialization
+
+For any verified plugin that has a backend, Grafana configures a backend client. Depending on the plugin's classification, one of these things will happen: 
+- **Core plugins** - the backend client is already configured and nothing more needs to be done.
+- **External plugins** - Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
+
+:::note
+
+If a remote plugin has been configured to connect to a remote service, then the backend client will be configured to connect to a remote gRPC service instead.
+
+:::
+
+### Phase 5. Registration
+
+All verified plugins are registered in an in-memory registry. From now on, the plugin is available within Grafana and so are referred to as _registered plugins_.
+
+### Phase 6. Start backend plugin (backend plugins only)
+
+For registered external plugins that have a backend, Grafana starts to run the backend binary as a separate process using HashiCorp’s Go Plugin System over RPC. The supported plugin protocol and version is negotiated between Grafana (client) and the plugin (server) to give Grafana an understanding of the plugin's capabilities.  
+
+A Grafana backend plugin has its own separate life cycle. So long as the backend plugin is running, Grafana will make sure to restart the backend plugin in case it crashes or is killed. When Grafana is shut down, the backend processes is then terminated.  
+
+### Phase 7. Client-side loading 
+
+After Grafana has started and the HTTP API is running, Grafana users receive the server-side rendered index page containing so-called bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin. 
+
+When the user interacts with a UI that requires a plugin (for example, they open a dashboard with panels), Grafana _lazy-loads_ the plugin’s fetch request. 
+
+- **Data-source plugins** - A data-source plugin could be loaded in more than one way. For instance, it could be loaded in the Explore page if the user selects the data source in the dropdown, or if they load a dashboard containing a plugin data source.
+
+- **App plugins** - Apps have two different loading modes: _lazy_ and _pre-load_. Lazy app plugins load only when the user accesses the App menu item directly. Pre-load app plugins load with the Grafana app and can execute code as soon as the page loads.
+
+:::note
+
+Each plugin is loaded only once but its objects are initialized multiple times. For example, a dashboard with 10 different panel plugins will load 10 plugins with an instance of each. A dashboard with 10 panels of the same plugin will load the plugin once and have 10 instances.
+
+:::
+
+<!---
+Add new H2 section with link to plugin deprecation doc 
+https://github.com/grafana/website/pull/15810
+-->
