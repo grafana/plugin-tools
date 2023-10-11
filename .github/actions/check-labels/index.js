@@ -72,10 +72,9 @@ async function run() {
         const error =
           'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
+
         await doComment({ octokit, message });
-        core.error(
-          'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.'
-        );
+        core.error(error);
         core.setFailed(error);
       } else {
         const warning =
@@ -83,9 +82,7 @@ async function run() {
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
         await doComment({ octokit, message });
-        core.notice(
-          'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.'
-        );
+        core.notice(warning);
         core.setOutput('canMerge', warning);
       }
     }
