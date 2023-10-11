@@ -30,7 +30,7 @@ async function run() {
     const prNumber = pull_request.number;
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'no-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
-    const previousCommentId = getPreviousComment({ octokit, repo, prNumber });
+    const previousCommentId = await getPreviousComment({ octokit, repo, prNumber });
     const isMissingSemverLabel = attachedSemverLabels.length === 0;
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
