@@ -18,22 +18,21 @@ sidebar_position: 1
 
 :::note
 
-This documentation discusses plugin configuration and usage for plugin developers. General information for plugin users is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
+This documentation discusses plugin configuration and usage for plugin developers. General information about plugin adninistration is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
 
 ::: 
 ## Overview
 
-Grafana plugin development allows for many options depending on the type of user experience you want to create. You can find a plugin type whether you want to offer users a new way of visualizing data, a connection to a new database, or an integrated out-of-the-box experience. 
+Grafana plugin development allows for many options depending on the type of user experience you want to create. Whatever your need, there's a SDK-supported plugin type for your intended use:
+- **Data-source plugin** - a connection to a new database or other source of data,
+- **App plugin** - an integrated out-of-the-box experience, or
+- **Panel plugin** - a new way of visualizing data.
 
-The following table shows the plugin types currently supported by Grafana on the frontend and backend. 
+:::note
 
-|                |                 |                |                            |
-| -------------- | :-------------: | :------------: | :------------------------: |
-| **Type**       | **Frontend** |   **Backend**  | **SDK-supported** |
-| datasource     |       Yes       | Yes (optional) |             Yes            |
-| app            |       Yes       | Yes (optional) |             Yes            |
-| panel          |       Yes       |       No       |             Yes            |
+Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](../get-started/get-started.mdx#what-type-of-plugin-would-you-like) of plugin.
 
+:::
 ## Data source plugins
 
 In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). Data source plugins may be added on the frontend and [the backend](./backend.md).
@@ -50,12 +49,15 @@ To distinguish a Grafana data source from a data-source plugin, we sometimes ref
 
 :::
 
+### Configuration of data sources
+
+Use the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#configuration-file-location) to configure your data source [`plugin_id`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
 
 ### Provisioning of data sources
 
-Use the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) to configure your data source plugins.
+Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
 
-Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/) so that you can use YAML files when Grafana starts up or on demand. Note that a plugin of type `datasource` must be installed before it can be provisioned.
+Note that a plugin of type `datasource` must be installed before it can be provisioned.
 
 ### Bundling of dashboards
 
@@ -63,17 +65,21 @@ Data-source plugins can include dashboards by referencing dashboard JSON files (
 
 ## App plugins
 
-Development of app plugins, also known as apps or applications, allows you to bundle data sources and panels to provide a seamless monitoring experience, similar to existing plugins such as [Zabbix](https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/). App plugins may be added on the frontend and [the backend](./backend.md).
+Development of app plugins, also known as apps or applications, allows you to create out-of-the-box solutions such as in the [Redis](https://grafana.com/grafana/plugins/redis-app/) app. You can optionally bundle data sources and panels, as well as provide custom pages, [Scenes](https://grafana.com/developers/scenes), and [UI extensions](../ui-extensions/).
 
 ### Usage of apps
 
 Configure a Grafana app when you want to leverage or create a tailored monitoring view for a third-party service and optionally use custom pages or UI extensions. Given any installed plugin of type `app`, you can enable them once per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) and they are persisted in Grafana’s database. 
 
+### Configuration of apps
+
+Use the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#configuration-file-location) to configure your app `[`plugin_id`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
+
 ### Provisioning of apps
 
-Use the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) to configure your app plugins.
+Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
 
-Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/) so that you can use YAML files to start them when Grafana starts or on demand. Note that the plugin must be installed before provisioning can succeed with a `plugin id` of `app` type.
+Note that the plugin must be installed before provisioning can succeed with a `plugin id` of `app` type.
 
 ### Bundling of apps
 
