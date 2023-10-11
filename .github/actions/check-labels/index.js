@@ -70,15 +70,35 @@ async function run() {
       core.setFailed(error);
     }
 
-    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] !== 'no-changelog' && !hasReleaseLabel) {
-      const warning = `This PR has a required semver label (\`${attachedSemverLabels[0]}\`) but is missing the \`release\` label. This PR can be merged but will not trigger new releases.`;
+    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] !== 'no-changelog') {
+      let warning = '';
+      if (hasReleaseLabel) {
+        warning = `This PR will trigger a new \`${attachedSemverLabels[0]}\` release when merged.`;
+      } else {
+        warning = `This PR has required semver label \`${attachedSemverLabels[0]}\` but is missing the \`release\` label. This PR can be merged but will not trigger a new release.`;
+      }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
-      core.setOutput('canMergeWithoutPublish', warning);
+      core.setOutput('canMerge', warning);
     }
 
-    core.setOutput('willPublish', 'This PR will trigger a new `${hasSemverLabel}` release when merged.');
+    if (attachedSemverLabels.length === 1 && attachedSemverLabels[0] == 'no-changelog') {
+      if (hasReleaseLabel) {
+        const error =
+          'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
+        const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
+        await doComment({ octokit, previousCommentId, message, repo, prNumber });
+        core.setFailed(error);
+      } else {
+        const warning =
+          'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.';
+        const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
+
+        await doComment({ octokit, previousCommentId, message, repo, prNumber });
+        core.setOutput('canMerge', warning);
+      }
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
