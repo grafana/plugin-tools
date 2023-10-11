@@ -18,7 +18,7 @@ async function run() {
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
     const hasReleaseLabel = labelNames.includes('release');
     const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
-    const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels. Please address the following issues:`;
+    const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
     const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
 <br />
 
@@ -69,8 +69,7 @@ async function run() {
     }
 
     if (attachedSemverLabels.length === 1 && !hasReleaseLabel) {
-      const warning =
-        'This PR has a required semver label (`${attachedSemverLabels}[0]`) but is missing the `release` label. This PR can be merged but will not trigger new releases.';
+      const warning = `This PR has a required semver label (${attachedSemverLabels[0]}) but is missing the \`release\` label. This PR can be merged but will not trigger new releases.`;
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
