@@ -25,16 +25,27 @@ async function run() {
     const labels = pull_request?.labels || [];
     const labelNames = labels.map((label) => label.name);
     const githubToken = core.getInput('github-token');
+    const octokit = getOctokit(githubToken);
     // @ts-ignore - prNumber always exists because the workflow uses the pull_request event.
     const prNumber = pull_request.number;
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'no-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
-    const octokit = getOctokit(githubToken);
-    const previousCommentId = getPreviousComments({ octokit, repo, prNumber });
+    const previousCommentId = getPreviousComment({ octokit, repo, prNumber });
     const isMissingSemverLabel = attachedSemverLabels.length === 0;
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
+
+    console.log({
+      prNumber,
+      requiredOneOfLabels,
+      attachedSemverLabels,
+      previousCommentId,
+      isMissingSemverLabel,
+      hasMultipleSemverLabels,
+      hasOneSemverLabel,
+      hasReleaseLabel,
+    });
 
     if (isMissingSemverLabel) {
       let errorMsg = [
@@ -110,11 +121,12 @@ async function run() {
   }
 }
 
-async function getPreviousComments({ octokit, repo, prNumber }) {
+async function getPreviousComment({ octokit, repo, prNumber }) {
   const { data } = await octokit.rest.issues.listComments({
     ...repo,
     issue_number: prNumber,
   });
+
   let previousCommentId;
   for (const { body, id } of data) {
     if (body?.includes(prMessageSymbol)) {
