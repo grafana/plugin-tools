@@ -16,7 +16,7 @@ sidebar_position: 2.5
 
 # Life cycle of a plugin
 
-The life cycle of a plugin varies depending on its type and whether or not it has a backend. This document describes the various phases of a plugin including installation and loading. 
+This document describes the various phases of a plugin including installation and loading. We will describe the differences in a plugin's life cycle depending on its type and whether or not it has a backend.  
 
 :::note
 
