@@ -16,9 +16,13 @@ sidebar_position: 2.5
 
 # Life cycle of a plugin
 
-The life cycle of plugins varies depending on plugin type, classification, and whether or not it has a backend. 
+The life cycle of plugins varies depending on plugin type and whether or not it has a backend. This document describes the phases of a plugin including installation and loading. 
 
-The life cycle of plugins is only tracked in-memory today and is not persisted in Grafana’s database. 
+:::note
+
+The life cycle of plugins is only tracked in-memory and is not persisted in Grafana’s database. 
+
+:::
 
 ## Installing and uninstalling a plugin
 
