@@ -29,7 +29,7 @@ async function run() {
   - 💥 if this PR includes a breaking change add the \`major\` label
 - Optionally, if you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
 </details>
-    `;
+`;
 
     const octokit = getOctokit(githubToken);
 
@@ -69,7 +69,7 @@ async function run() {
     }
 
     if (attachedSemverLabels.length === 1 && !hasReleaseLabel) {
-      const warning = `This PR has a required semver label (${attachedSemverLabels[0]}) but is missing the \`release\` label. This PR can be merged but will not trigger new releases.`;
+      const warning = `This PR has a required semver label (\`${attachedSemverLabels[0]}\`) but is missing the \`release\` label. This PR can be merged but will not trigger new releases.`;
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
       await doComment({ octokit, previousCommentId, message, repo, prNumber });
