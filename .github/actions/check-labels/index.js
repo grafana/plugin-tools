@@ -46,7 +46,8 @@ async function run() {
     }
 
     if (attachedSemverLabels.length === 0) {
-      let error = '- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
+      let error = 'Please address the following issues:\n';
+      error += '\n- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `skip-changelog`.';
       if (!hasReleaseLabel) {
         error += '\n- (Optional) This PR is missing the `release` label.';
       }
@@ -57,8 +58,9 @@ async function run() {
     }
 
     if (attachedSemverLabels.length > 1) {
-      let error =
-        '- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
+      let error = 'Please address the following issues:\n';
+      error +=
+        '\n- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `skip-changelog` labels.';
       if (!hasReleaseLabel) {
         error += '\n- (Optional) This PR is missing the `release` label.';
       }
