@@ -30,22 +30,10 @@ async function run() {
     const prNumber = pull_request.number;
     const requiredOneOfLabels = ['patch', 'minor', 'major', 'no-changelog'];
     const attachedSemverLabels = labelNames.filter((label) => requiredOneOfLabels.includes(label));
-    const previousCommentId = await getPreviousComment({ octokit, repo, prNumber });
     const isMissingSemverLabel = attachedSemverLabels.length === 0;
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
-
-    console.log({
-      prNumber,
-      requiredOneOfLabels,
-      attachedSemverLabels,
-      previousCommentId,
-      isMissingSemverLabel,
-      hasMultipleSemverLabels,
-      hasOneSemverLabel,
-      hasReleaseLabel,
-    });
 
     if (isMissingSemverLabel) {
       let errorMsg = [
@@ -57,7 +45,7 @@ async function run() {
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
-      await doComment({ octokit, previousCommentId, message, repo, prNumber });
+      await doComment({ octokit, message, repo, prNumber });
       core.error('This PR is missing one of the following labels: `patch`, `minor`, `major`, `no-changelog`.');
       core.setFailed('Missing semver label');
     }
@@ -73,7 +61,7 @@ async function run() {
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
-      await doComment({ octokit, previousCommentId, message, repo, prNumber });
+      await doComment({ octokit, message, repo, prNumber });
       core.error(
         'This PR contains multiple semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.'
       );
@@ -89,7 +77,7 @@ async function run() {
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
-      await doComment({ octokit, previousCommentId, message, repo, prNumber });
+      await doComment({ octokit, message, repo, prNumber });
       core.notice(warning);
       core.setOutput('canMerge', warning);
     }
@@ -99,7 +87,7 @@ async function run() {
         const error =
           'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
-        await doComment({ octokit, previousCommentId, message, repo, prNumber });
+        await doComment({ octokit, message, repo, prNumber });
         core.error(
           'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.'
         );
@@ -109,7 +97,7 @@ async function run() {
           'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
-        await doComment({ octokit, previousCommentId, message, repo, prNumber });
+        await doComment({ octokit, message, repo, prNumber });
         core.notice(
           'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.'
         );
@@ -121,23 +109,20 @@ async function run() {
   }
 }
 
-async function getPreviousComment({ octokit, repo, prNumber }) {
-  const { data } = await octokit.rest.issues.listComments({
-    ...repo,
-    issue_number: prNumber,
-  });
-
-  let previousCommentId;
-  for (const { body, id } of data) {
-    if (body?.includes(prMessageSymbol)) {
-      previousCommentId = id;
-    }
-  }
-  return previousCommentId;
-}
-
-async function doComment({ octokit, previousCommentId, message, repo, prNumber }) {
+async function doComment({ octokit, message, repo, prNumber }) {
   try {
+    const { data } = await octokit.rest.issues.listComments({
+      ...repo,
+      issue_number: prNumber,
+    });
+
+    let previousCommentId;
+    for (const { body, id } of data) {
+      if (body?.includes(prMessageSymbol)) {
+        previousCommentId = id;
+      }
+    }
+
     if (previousCommentId) {
       await octokit.rest.issues.updateComment({
         ...repo,
