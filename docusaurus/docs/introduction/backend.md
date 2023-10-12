@@ -97,7 +97,7 @@ The streaming capability allows a backend plugin to handle data source queries t
 
 ## Data communication model
 
-Grafana uses a simplified model where all necessary information (configuration) is provided in each request to a backend plugin, allowing the plugin to fulfill the request and return a response. 
+Grafana uses a communication model where all necessary information (configuration) is provided in each request to a backend plugin, allowing the plugin to fulfill the request and return a response. This model simplifies for plugin authors not having to keep track of or request additional state to fulfill a request.
 
 ## Caching and connection pooling
 
