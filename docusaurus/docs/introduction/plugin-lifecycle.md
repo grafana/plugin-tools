@@ -60,10 +60,6 @@ For any verified plugin that has a backend, Grafana configures a backend client.
 - **Core plugins** - the backend client is already configured and nothing more needs to be done.
 - **External plugins** - Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
 
-:::note
-
-If a remote plugin has been configured to connect to a remote service, then the backend client will be configured to connect to a remote gRPC service instead.
-
 :::
 
 ### Phase 5. Registration
