@@ -1,3 +1,4 @@
+// @ts-check
 const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
 const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
 const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
