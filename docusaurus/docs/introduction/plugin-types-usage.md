@@ -106,9 +106,3 @@ Compared with data sources and apps, there’s currently no support for configur
 With the recent introduction of [Grafana Scenes](https://grafana.com/developers/scenes), you can use any installed plugin of type `panel` as a visualization within a Scenes implementation.
 
 :::
-
-## Plugin deprecation
-
-When a plugin developer is no longer able to maintain the plugin, the plugin may be deprecated and removed from the Grafana [plugin catalog](https://grafana.com/plugins). 
-
-For more information, refer to our [plugin deprecation policy](https://grafana.com/legal/plugin-deprecation/).

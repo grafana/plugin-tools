@@ -88,7 +88,8 @@ Each plugin is loaded only once but its objects are initialized multiple times. 
 
 :::
 
-<!---
-Add new H2 section with link to plugin deprecation doc 
-https://github.com/grafana/website/pull/15810
--->
+## Plugin deprecation
+
+When a plugin developer is no longer able to maintain the plugin, the plugin may be deprecated and removed from the Grafana [plugin catalog](https://grafana.com/plugins). 
+
+For more information, refer to our [plugin deprecation policy](https://grafana.com/legal/plugin-deprecation/).
