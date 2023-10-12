@@ -6,9 +6,9 @@ const prMessageLabelDetails = `<details><summary>🏷️ More info about which l
 
 - If the changes only affect the docs website, documentation, or this repository's tooling add the \`no-changelog\` label.
 - If there are changes to any of the npm packages src files please choose from one of the following labels:
-- 🐛 if this PR fixes a bug add the \`patch\` label
-- 🚀 if this PR includes an enhancement add the \`minor\` label
-- 💥 if this PR includes a breaking change add the \`major\` label
+  - 🐛 if this PR fixes a bug add the \`patch\` label
+  - 🚀 if this PR includes an enhancement add the \`minor\` label
+  - 💥 if this PR includes a breaking change add the \`major\` label
 - Optionally, if you would like this PR to publish new versions of packages when it is merged add the \`release\` label.
 </details>
 `;
