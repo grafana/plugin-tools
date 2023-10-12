@@ -22,8 +22,8 @@ async function run() {
 
     if (isMissingSemverLabel) {
       let errorMsg = [
-        'Please address the following issues:',
-        '\n- This PR is **missing** one of the following labels: `patch`, `minor`, `major`, `no-changelog`.',
+        '❌ This PR cannot be merged until the following issues are addressed:',
+        '\n- **This PR is missing one of the following labels**: `patch`, `minor`, `major`, `no-changelog`.',
       ];
       if (!hasReleaseLabel) {
         errorMsg.push('- (Optional) This PR is missing the `release` label.');
@@ -37,8 +37,8 @@ async function run() {
 
     if (hasMultipleSemverLabels) {
       let errorMsg = [
-        'Please address the following issues:',
-        '\n- This PR contains **multiple** semver labels. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.',
+        '❌ This PR cannot be merged until the following issues are addressed:',
+        '\n- **This PR contains multiple semver labels**. A PR can only include one of: `patch`, `minor`, `major`, `no-changelog` labels.',
       ];
 
       if (!hasReleaseLabel) {
@@ -56,9 +56,9 @@ async function run() {
     if (hasOneSemverLabel && attachedSemverLabels[0] !== 'no-changelog') {
       let warning = '';
       if (hasReleaseLabel) {
-        warning = `This PR will trigger a new \`${attachedSemverLabels[0]}\` release when merged.`;
+        warning = `✨ This PR can be merged and will trigger a new \`${attachedSemverLabels[0]}\` release.`;
       } else {
-        warning = `This PR has required semver label \`${attachedSemverLabels[0]}\` but is missing the \`release\` label. This PR can be merged but will not trigger a new release.`;
+        warning = `✨ This PR can be merged but will not trigger a new release. To trigger a new release add the \`release\` label.`;
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
@@ -70,7 +70,7 @@ async function run() {
     if (hasOneSemverLabel && attachedSemverLabels[0] == 'no-changelog') {
       if (hasReleaseLabel) {
         const error =
-          'This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
+          '❌ This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${error}\n\n${prMessageLabelDetails}`;
 
         await doComment({ octokit, message });
@@ -78,7 +78,7 @@ async function run() {
         core.setFailed(error);
       } else {
         const warning =
-          'This PR can be merged. It will not be considered when calculating future releases and will not appear in the changelogs.';
+          '✨ This PR can be merged. It will not be considered when calculating future versions and will not appear in the changelogs.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
         await doComment({ octokit, message });
