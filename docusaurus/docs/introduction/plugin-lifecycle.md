@@ -60,8 +60,6 @@ For any verified plugin that has a backend, Grafana configures a backend client.
 - **Core plugins** - the backend client is already configured and nothing more needs to be done.
 - **External plugins** - Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
 
-:::
-
 ### Phase 5. Registration
 
 All verified plugins are registered in an in-memory registry. From now on, the plugin is available within Grafana and so are referred to as _registered plugins_.
