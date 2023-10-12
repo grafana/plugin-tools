@@ -54,13 +54,13 @@ jobs:
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test an app with backend plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -l && mage -v buildAll)
+        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v build:linux)
       - name: '@grafana/create-plugin - test panel plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource with backend plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v buildAll)
+        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v build:linux)
       - name: '@grafana/create-plugin - test scenes app plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
 
