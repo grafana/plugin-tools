@@ -76,7 +76,7 @@ A Grafana backend plugin has its own separate life cycle. So long as the backend
 
 After Grafana has started and the HTTP API is running, Grafana users receive the server-side rendered index page containing so-called bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin. 
 
-When the user interacts with a UI that requires a plugin, Grafana _lazy-loads_ the plugin’s fetch request: 
+When the user interacts with a UI that requires a plugin, Grafana will _lazy load_ the plugin's `module.js` file: 
 
 - **Data-source plugins** - A data-source plugin could be loaded in more than one way. For instance, it could be loaded in the Explore page if the user selects the data source in the dropdown, or if they load a dashboard containing a plugin data source.
 
