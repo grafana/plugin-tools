@@ -18,7 +18,7 @@ sidebar_position: 1
 
 :::note
 
-This documentation discusses plugin configuration and usage for plugin developers. General information about plugin administration is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
+This documentation discusses plugin configuration, provisioning, and usage for plugin developers. General information about plugin administration is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
 
 ::: 
 ## Overview
