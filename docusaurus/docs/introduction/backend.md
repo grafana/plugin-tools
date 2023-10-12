@@ -57,7 +57,7 @@ Grafana's backend plugin system exposes several key capabilities, or building bl
 
 #### Query data
 
-The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](https://grafana.com/docs/grafana/latest/developers/plugins/introduction-to-plugin-development/data-frames/), which are used to visualize metrics, logs, and traces.
+The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](./data-frames.md), which are used to visualize metrics, logs, and traces.
 
 :::note
 
@@ -97,4 +97,6 @@ The Grafana HTTP API offers an endpoint (`/api/plugins/<plugin id>/metrics`) tha
 
 #### Streaming
 
-The streaming capability allows a backend plugin to handle data source queries that are streaming. For more information, refer to [Build a streaming data source plugin](https://grafana.com/docs/grafana/latest/developers/plugins/create-a-grafana-plugin/develop-a-plugin/build-a-streaming-data-source-plugin/).
+The streaming capability allows a backend plugin to handle data source queries that are streaming. 
+
+For more information, refer to the [Datasource Steaming Backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-backend-websocket) example. 
