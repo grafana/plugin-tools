@@ -1,5 +1,18 @@
 # (Fri Oct 13 2023)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.1.1`
+  - Create Plugin: Format code under templates/common [#451](https://github.com/grafana/plugin-tools/pull/451) ([@zoltanbedi](https://github.com/zoltanbedi))
+
+#### Authors: 1
+
+- Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi))
+
+---
+
+# (Fri Oct 13 2023)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi)), for all your work!
