@@ -30,3 +30,6 @@ yarn-error.log*
 
 # Allow vscode config inside templates
 !packages/create-plugin/templates/*/.vscode
+
+# Ignore nx cloud env file. Can be used locally for setting a different NX_CLOUD_ACCESS_TOKEN
+nx-cloud.env
