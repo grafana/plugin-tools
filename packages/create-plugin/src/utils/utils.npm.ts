@@ -1,9 +1,6 @@
-import path from 'path';
-import fs from 'fs';
 import semver from 'semver';
-import { readJsonFile } from './utils.files';
-import { renderTemplateFromFile, getTemplateData } from './utils.templates';
-import { GRAFANA_FE_PACKAGES, TEMPLATE_PATHS } from '../constants';
+import { GRAFANA_FE_PACKAGES } from '../constants';
+import { getPackageJson, writePackageJson, getLatestPackageJson } from './utils.packagejson';
 import { PackageManager } from './utils.packageManager';
 
 type UpdateSummary = Record<string, { prev: string | null; next: string | null }>;
@@ -11,30 +8,8 @@ type UpdateSummary = Record<string, { prev: string | null; next: string | null }
 type UpdateOptions = {
   onlyOutdated?: Boolean;
   ignoreGrafanaDependencies?: boolean;
+  devOnly?: boolean;
 };
-
-type PackageJson = {
-  scripts: Record<string, string>;
-  dependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-  packageManager?: string;
-} & Record<string, any>;
-
-export function getPackageJson(): PackageJson {
-  return readJsonFile(path.join(process.cwd(), 'package.json'));
-}
-
-// Returns with a package.json that is generated based on the latest templates
-export function getLatestPackageJson(): PackageJson {
-  const packageJsonPath = path.join(TEMPLATE_PATHS.common, 'package.json');
-  const data = getTemplateData();
-
-  return JSON.parse(renderTemplateFromFile(packageJsonPath, data));
-}
-
-export function writePackageJson(json: PackageJson) {
-  return fs.writeFileSync(path.join(process.cwd(), 'package.json'), `${JSON.stringify(json, null, 2)}\n`);
-}
 
 export function getNpmDependencyUpdatesAsText(dependencyUpdates: UpdateSummary) {
   return Object.entries(dependencyUpdates)
@@ -104,8 +79,8 @@ export function getPackageJsonUpdates(options: UpdateOptions = {}) {
   const devDependencies = packageJson.devDependencies || {};
   const newDependencies = newPackageJson.dependencies || {};
   const newDevDependencies = newPackageJson.devDependencies || {};
-  const dependencyUpdates = getUpdatableNpmDependencies(dependencies, newDependencies, options);
-  const devDependencyUpdates = getUpdatableNpmDependencies(devDependencies, newDevDependencies, options);
+  let dependencyUpdates = getUpdatableNpmDependencies(dependencies, newDependencies, options);
+  let devDependencyUpdates = getUpdatableNpmDependencies(devDependencies, newDevDependencies, options);
 
   if (options.ignoreGrafanaDependencies) {
     const prevGrafanaDependencies = Object.entries({ ...dependencies, ...devDependencies }).reduce<
@@ -116,14 +91,13 @@ export function getPackageJsonUpdates(options: UpdateOptions = {}) {
       }
       return acc;
     }, {});
-    return {
-      dependencyUpdates: ignoreGrafanaDependencies(dependencyUpdates, prevGrafanaDependencies),
-      devDependencyUpdates: ignoreGrafanaDependencies(devDependencyUpdates, prevGrafanaDependencies),
-    };
+
+    dependencyUpdates = ignoreGrafanaDependencies(dependencyUpdates, prevGrafanaDependencies);
+    devDependencyUpdates = ignoreGrafanaDependencies(devDependencyUpdates, prevGrafanaDependencies);
   }
 
   return {
-    dependencyUpdates,
+    dependencyUpdates: options.devOnly ? {} : dependencyUpdates,
     devDependencyUpdates,
   };
 }

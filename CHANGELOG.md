@@ -1,3 +1,27 @@
+# (Fri Oct 13 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.1.0`
+  - Update only dev dependencies when the update command runs [#458](https://github.com/grafana/plugin-tools/pull/458) ([@academo](https://github.com/academo))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.1.0`
+  - Revert prettier formatting [#450](https://github.com/grafana/plugin-tools/pull/450) ([@zoltanbedi](https://github.com/zoltanbedi))
+  - Chore: Run prettier [#449](https://github.com/grafana/plugin-tools/pull/449) ([@zoltanbedi](https://github.com/zoltanbedi))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi))
+
+---
+
 # (Wed Oct 04 2023)
 
 :tada: This release contains work from a new contributor! :tada:
