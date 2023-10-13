@@ -26,7 +26,7 @@ async function run() {
         '\n- **This PR is missing one of the following labels**: `patch`, `minor`, `major`, `no-changelog`.',
       ];
       if (!hasReleaseLabel) {
-        errorMsg.push('- (Optional) This PR is missing the `release` label.');
+        errorMsg.push('- _Optionally_ add the `release` label if you would like this PR to trigger npm package publishing.');
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
@@ -42,7 +42,7 @@ async function run() {
       ];
 
       if (!hasReleaseLabel) {
-        errorMsg.push('- (Optional) This PR is missing the `release` label.');
+        errorMsg.push('- _Optionally_ add the `release` label if you would like this PR to trigger npm package publishing.');
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
