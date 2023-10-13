@@ -31,7 +31,7 @@ If you intend to only use the plugin within your organization, sign it under a P
 
 ## Signature levels
 
-A plugin's signature level classifies it according to author, related technology, or intended use. 
+A plugin's signature level classifies it according to author, related technology, and intended use. 
 
 - To sign a plugin under the [Community](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) and [Commercial](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) signature levels, refer to [Sign a public plugin](#sign-a-public-plugin).
 - To sign a plugin under the [Private](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) signature level, refer to [Sign a private plugin](#sign-a-private-plugin).

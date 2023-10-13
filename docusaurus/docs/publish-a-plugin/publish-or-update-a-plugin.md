@@ -13,24 +13,15 @@ keywords:
 
 # Publish or update a plugin
 
-You've just built your plugin; now you want to share it with the world.
+You've just built your plugin; now you want to share it with the world. In this guide, you'll learn how to publish a new plugin or update an existing one, and you'll learn about plugin deprecation.
 
-In this guide, you'll learn how to package and share your plugin with others.
-
-The best way to share your plugin with the world is to publish it in the [Grafana plugin catalog](https://grafana.com/plugins).
-By having your plugin published on Grafana.com, more users will be able to discover your plugin.
+The best way to share your plugin with the world is to publish it in the [Grafana plugin catalog](https://grafana.com/plugins). By having your plugin published on Grafana.com, more users will be able to discover your plugin.
 
 ## Before you begin
 
-When you build a plugin from source, a `dist` folder is created. This folder contains the production build or _plugin assets_ for your plugin.
-
-To package a plugin, refer to [Package a plugin](./package-a-plugin.md).
-
-### Follow our guidelines
-
-Get familiar with our plugin [publishing and signing criteria](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria)
-
-### Do this for best results
+1. [Create a plugin](../get-started/get-started.mdx) - When you build a plugin from source, a `dist` folder is created. This folder contains the production build or _plugin assets_ for your plugin.
+1. [Fllow our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
+1. [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 
 To speed up the time it takes to review your plugin:
 
@@ -42,8 +33,8 @@ To speed up the time it takes to review your plugin:
 Follow these steps to publish your plugin for the first time.
 
 1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account.
-1. In the left menu, under **Org settings**, click **My Plugins**.
-1. Click **Submit Plugin**. The Create Plugin Submission dialog appears.
+1. In the left menu, under Org Settings, click **My Plugins**.
+1. Click **Submit New Plugin**. The Create Plugin Submission dialog box appears.
 
    ![Submit plugin.](/img/plugins-submission-create2.png)
 
@@ -53,7 +44,7 @@ Follow these steps to publish your plugin for the first time.
      - Select **Multiple** if you'd like to submit separate plugin archives for each architecture.
        This can lead to faster downloads since users can select the specific architecture on which they want to install the plugin.
    - **URL:** A URL that points to a ZIP archive of your packaged plugin.
-   - **Source Code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
+   - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
    - **MD5:** The MD5 hash of the plugin specified by the **URL**.
    - The remaining questions help us determine the [signature level](./sign-a-plugin#plugin-signature-levels) for your plugin.
 1. Click **Submit**.
@@ -62,19 +53,19 @@ Follow these steps to publish your plugin for the first time.
    All submissions are manually inspected by a plugin reviewer.
    For every new plugin, we perform a manual review that includes the following checks:
 
-- **Code review:** For quality and security purposes, we review the source code for the plugin.
-  If you're unable to make the source code publicly available, let us know in a comment on your plugin submission.
-- **Tests:** We install your plugin on one of our Grafana instances to test it for basic use.
-  For more advanced plugins, we may ask you to assist us in configuring a test environment for the plugin.
-  We use the test environment whenever you submit a plugin update.
+    - **Code review:** For quality and security purposes, we review the source code for the plugin.
+      If you're unable to make the source code publicly available, let us know in a comment on your plugin submission.
+    - **Tests:** We install your plugin on one of our Grafana instances to test it for basic use.
+      For more advanced plugins, we may ask you to assist us in configuring a test environment for the plugin.
+      We use the test environment whenever you submit a plugin update.
 
 ## Update your plugin
 
-To submit an **update** for an already published plugin:
+To submit an update for an already published plugin:
 
 1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account.
-1. In the left menu, under **Org settings**, click **My Plugins**.
-1. Click **Submit Update** for the plugin you want to update. The Create Plugin Submission dialog appears.
+1. In the left menu, under Org Settings, click **My Plugins**.
+1. Click **Submit Update** for the plugin you want to update. The Create Plugin Submission dialog box appears.
 
    ![Submit plugin.](/img/plugins-submission-create2.png)
    
@@ -84,9 +75,24 @@ To submit an **update** for an already published plugin:
      - Select **Multiple** if you'd like to submit separate plugin archives for each architecture.
        This can lead to faster downloads since users can select the specific architecture they want to install the plugin on.
    - **URL:** A URL that points to a ZIP archive of your packaged plugin.
-   - **Source Code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code. See [examples](#what-source-code-url-formats-are-supported).
+   - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code. See [examples](#what-source-code-url-formats-are-supported).
    - **MD5:** The MD5 hash of the plugin specified by the **URL**.
 1. Click **Submit**.
+    After you submit your updated plugin, we run an automated validation to make sure it adheres to our guidelines. We may also perform a manual review depending on the circumstances.
+
+## Deprecate a plugin
+
+Grafana is maintained by a large community of engineers, SREs, and other professionals. The [Grafana plugin catalog](https://grafana.com/plugins/) contains a wide range of data source, panel, and app plugins - many of which are developed in open source by community members.
+
+It’s not always possible for those developers to maintain plugins over time. Accordingly, Grafana Labs may de-list a plugin through deprecation if it does not meet our standards for security, quality and compatibility. Plugins may be deprecated for reasons including, but not limited to:
+
+- A critical or high vulnerability is uncovered.
+- The plugin is found to contain malicious code.
+- The plugin is no longer compatible with any currently supported Grafana version.
+- The plugin is showing no signs of maintenance - updates, responses to issues.
+- For commercial plugins, where the agreement with said partner has lapsed or is no longer valid.
+
+For more information, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/).
 
 ## Frequently asked questions
 
@@ -111,9 +117,9 @@ To submit an **update** for an already published plugin:
 - The plugin's catalog page content is extracted from the plugin README file.
   To update the plugin's catalog page, submit an updated plugin with the new content included in the README file.
 
-### Can I unlist my plugin from the Grafana plugin catalog in case of a bug?
+### Can I unlist a plugin? How are plugins deprecated?
 
-- In the event of a bug, unlisting the plugin from our catalog may be possible in exceptional cases, such as security concerns. However, we don't have control over the instances where the plugin is installed.
+- Refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/) to learn more about plugin deprecation.
 
 ### Can I distribute my plugin somewhere else other than the Grafana plugin catalog?
 
