@@ -26,11 +26,11 @@ export const update = async () => {
       process.exit(0);
     }
 
-    // 2. Add / update dependencies inside the `package.json`
+    // 2. Add / update dev dependencies inside the `package.json`
     // (skipped automatically if there is nothing to update)
     // ------------------------------------------------
-    if (hasNpmDependenciesToUpdate()) {
-      const updatableText = getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true });
+    if (hasNpmDependenciesToUpdate({ devOnly: true })) {
+      const updatableText = getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true, devOnly: true });
 
       if (updatableText.length > 0) {
         const PROMPT_CHOICES = {
@@ -49,6 +49,7 @@ export const update = async () => {
           updatePackageJson({
             onlyOutdated: shouldUpdateDeps === PROMPT_CHOICES.ONLY_OUTDATED,
             ignoreGrafanaDependencies: true,
+            devOnly: true,
           });
           printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
         } else {
