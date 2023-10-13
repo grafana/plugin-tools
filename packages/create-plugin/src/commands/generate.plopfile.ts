@@ -8,6 +8,7 @@ import { getExportPath } from '../utils/utils.path';
 import { getPackageManagerInstallCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
+import { prettifyFiles } from './generate-actions/prettify-files';
 import { CliArgs, TemplateData } from './types';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
@@ -16,6 +17,7 @@ export default function (plop: NodePlopAPI) {
   plop.setHelper('normalize_id', normalizeId);
 
   plop.setActionType('printSuccessMessage', printGenerateSuccessMessage);
+  plop.setActionType('prettifyFiles', prettifyFiles);
   plop.setActionType('updateGoSdkAndModules', updateGoSdkAndModules);
 
   plop.setGenerator('create-plugin', {
@@ -95,7 +97,7 @@ export default function (plop: NodePlopAPI) {
         packageManagerInstallCmd,
         packageManagerVersion,
         isAppType,
-        isNPM: packageManagerName === 'npm'
+        isNPM: packageManagerName === 'npm',
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
@@ -159,6 +161,7 @@ export default function (plop: NodePlopAPI) {
         {
           type: 'updateGoSdkAndModules',
         },
+        { type: 'prettifyFiles' },
         {
           type: 'printSuccessMessage',
         },
