@@ -1,0 +1,33 @@
+name: 'Check PR labels'
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
+      - edited
+
+permissions:
+  pull-requests: write
+
+jobs:
+  check-labels:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ./.github/actions/check-labels/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./.github/actions/check-labels
+
+      - name: Check labels
+        uses: ./.github/actions/check-labels
