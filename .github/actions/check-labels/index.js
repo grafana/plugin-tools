@@ -1,7 +1,7 @@
 // @ts-check
 const core = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
-const { prMessageSymbol, prIntroMessage, prMessageLabelDetails } = require('./messages');
+const { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } = require('./messages');
 
 async function run() {
   try {
@@ -26,7 +26,7 @@ async function run() {
         '\n- **This PR is missing one of the following labels**: `patch`, `minor`, `major`, `no-changelog`.',
       ];
       if (!hasReleaseLabel) {
-        errorMsg.push('- _Optionally_ add the `release` label if you would like this PR to trigger npm package publishing.');
+        errorMsg.push(prReleaseLabelMessage);
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
@@ -42,7 +42,7 @@ async function run() {
       ];
 
       if (!hasReleaseLabel) {
-        errorMsg.push('- _Optionally_ add the `release` label if you would like this PR to trigger npm package publishing.');
+        errorMsg.push(prReleaseLabelMessage);
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${errorMsg.join('\n')}\n\n${prMessageLabelDetails}`;
 
@@ -56,9 +56,9 @@ async function run() {
     if (hasOneSemverLabel && attachedSemverLabels[0] !== 'no-changelog') {
       let warning = '';
       if (hasReleaseLabel) {
-        warning = `✨ This PR can be merged and will trigger a new \`${attachedSemverLabels[0]}\` release.`;
+        warning = `✨ This PR can be merged and will trigger a new \`${attachedSemverLabels[0]}\` release.\n**NOTE**: When merging a PR with the \`release\` label please avoid merging another PR. For further information [see here](https://intuit.github.io/auto/docs/welcome/quick-merge#with-skip-release).`;
       } else {
-        warning = `✨ This PR can be merged but will not trigger a new release. To trigger a new release add the \`release\` label.`;
+        warning = `✨ This PR can be merged but will not trigger a new release. To trigger a new release add the \`release\` label before merging.\n**NOTE**: When merging a PR with the \`release\` label please avoid merging another PR. For further information [see here](https://intuit.github.io/auto/docs/welcome/quick-merge#with-skip-release).`;
       }
       const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
@@ -67,7 +67,7 @@ async function run() {
       core.setOutput('canMerge', warning);
     }
 
-    if (hasOneSemverLabel && attachedSemverLabels[0] == 'no-changelog') {
+    if (hasOneSemverLabel && attachedSemverLabels[0] === 'no-changelog') {
       if (hasReleaseLabel) {
         const error =
           '❌ This PR includes conflicting labels `no-changelog` and `release`. Please either replace `no-changelog` with a semver related label or remove the `release` label.';
@@ -78,7 +78,7 @@ async function run() {
         core.setFailed(error);
       } else {
         const warning =
-          '✨ This PR can be merged. It will not be considered when calculating future versions and will not appear in the changelogs.';
+          '✨ This PR can be merged. It will not be considered when calculating future versions of the npm packages and will not appear in the changelogs.';
         const message = `${prMessageSymbol}\n${prIntroMessage}\n\n${warning}`;
 
         await doComment({ octokit, message });

@@ -13,8 +13,11 @@ const prMessageLabelDetails = `<details><summary>🏷️ More info about which l
 </details>
 `;
 
+const prReleaseLabelMessage = '- _Optionally_ if using a `patch`, `minor` or `major` label also add the `release` label if you would like this PR to trigger npm package publishing.';
+
 module.exports = {
   prMessageSymbol,
   prIntroMessage,
   prMessageLabelDetails,
+  prReleaseLabelMessage
 };
