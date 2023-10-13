@@ -7,6 +7,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests
     env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
@@ -95,6 +96,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && github.actor != 'dependabot[bot]'"
     name: Release packages
     env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
@@ -103,7 +105,7 @@ jobs:
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
         with:
           app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
-          private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}          
+          private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
 
       - uses: actions/checkout@v4
         with:
