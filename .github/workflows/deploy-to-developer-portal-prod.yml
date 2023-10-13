@@ -1,11 +1,11 @@
-name: Deploy to Developer Portal Bucket
+name: Deploy to Developer Portal PROD Bucket
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/deploy-to-developer-portal.yml'
+      - '.github/workflows/deploy-to-developer-portal-prod.yml'
       - 'docusaurus/**'
 jobs:
   deploy:
@@ -14,15 +14,8 @@ jobs:
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
-      # - name: Generate token
-      #   id: generate_token
-      #   uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
-      #   with:
-      #     app_id: ${{ secrets.APP_ID }}
-      #     private_key: ${{ secrets.APP_PEM }}
-
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -37,13 +30,13 @@ jobs:
         #mac: grep -rl "](/docs/" docusaurus/docs | xargs sed -i '' 's/](\/docs\//](\//g'
         #linux: sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
         #linux: grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
-      - name: Make docs the homepage of this subsite
-        run: |
-          rm -f ./docusaurus/website/src/pages/index.tsx
-          sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
-          grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
+      # - name: Make docs the homepage of this subsite
+      #   run: |
+      #     rm -f ./docusaurus/website/src/pages/index.tsx
+      #     sed -i 's/title: Get started/title: Get started\nslug:\ \//g' ./docusaurus/docs/get-started/get-started.mdx
+      #     grep -rl "](/docs/" docusaurus/docs | xargs sed -i 's/](\/docs\//](\//g'
       - name: Build documentation website
-        run: npm run docs:build -- --config docusaurus.config.devportal.js
+        run: npm run docs:build
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -53,5 +46,5 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v1
         with:
           path: './docusaurus/website/build/'
-          destination: 'grafana_developer_portal/plugin-tools'
+          destination: 'grafana-developer-portal/plugin-tools'
           parent: false

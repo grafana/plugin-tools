@@ -21,7 +21,7 @@ const generalConfig = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
-  },
+  },  
 };
 
 const plugins = [
@@ -34,6 +34,12 @@ const plugins = [
           '@shared': path.resolve(__dirname, '..', 'docs', 'shared'),
         },
       },
+    },
+  ],
+  [
+    'docusaurus-lunr-search',
+    {
+      disableVersioning: true,
     },
   ],
 ];
@@ -56,6 +62,7 @@ const presetsDocs = {
     ],
   ],
 };
+
 const presetsTheme = {
   customCss: require.resolve('./src/css/custom.css'),
 };
@@ -67,12 +74,6 @@ const themeConfigNavbar = {
     src: 'img/logo.svg',
   },
   items: [
-    {
-      type: 'doc',
-      docId: 'get-started/get-started',
-      position: 'right',
-      label: 'Docs',
-    },
     { href: 'https://community.grafana.com/c/plugin-development/30', label: 'Help', position: 'right' },
     {
       href: 'https://www.github.com/grafana/plugin-tools',
@@ -90,7 +91,7 @@ const themeConfigFooter = {
       items: [
         {
           label: 'Get Started',
-          to: '/docs/get-started',
+          to: '/',
         },
       ],
     },
@@ -127,6 +128,7 @@ const themeConfigFooter = {
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
 };
+
 const themeConfigColorMode = {
   defaultMode: 'dark',
   disableSwitch: true,

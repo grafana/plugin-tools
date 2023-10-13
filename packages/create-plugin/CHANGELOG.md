@@ -1,3 +1,139 @@
+# v2.1.0 (Fri Oct 13 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi)), for all your work!
+
+#### 🚀 Enhancement
+
+- Update only dev dependencies when the update command runs [#458](https://github.com/grafana/plugin-tools/pull/458) ([@academo](https://github.com/academo))
+
+#### 🐛 Bug Fix
+
+- Revert prettier formatting [#450](https://github.com/grafana/plugin-tools/pull/450) ([@zoltanbedi](https://github.com/zoltanbedi))
+- Chore: Run prettier [#449](https://github.com/grafana/plugin-tools/pull/449) ([@zoltanbedi](https://github.com/zoltanbedi))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi))
+
+---
+
+# v2.0.2 (Wed Oct 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create-plugin: Make baseURL absolute and bump swc/core [#424](https://github.com/grafana/plugin-tools/pull/424) ([@mikkancso](https://github.com/mikkancso))
+
+#### Authors: 1
+
+- [@mikkancso](https://github.com/mikkancso)
+
+---
+
+# v2.0.1 (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- Add fixes for backend sdk v0.177.0 [#437](https://github.com/grafana/plugin-tools/pull/437) ([@wbrowne](https://github.com/wbrowne))
+
+#### Authors: 1
+
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
+# v2.0.0 (Mon Oct 02 2023)
+
+#### 🐛 Bug Fix
+
+- Bugfix: Enable plugins to lazy load modules [#427](https://github.com/grafana/plugin-tools/pull/427) ([@mckn](https://github.com/mckn))
+- webpack template: minor lint fixes [#414](https://github.com/grafana/plugin-tools/pull/414) ([@briangann](https://github.com/briangann))
+- Increase required node engine to v18 [#405](https://github.com/grafana/plugin-tools/pull/405) ([@academo](https://github.com/academo))
+- README typo fixes [#387](https://github.com/grafana/plugin-tools/pull/387) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 4
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.12.2 (Thu Sep 07 2023)
+
+#### 🐛 Bug Fix
+
+- fix: update dockerfile with platform [#383](https://github.com/grafana/plugin-tools/pull/383) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- chore: update links to developer portal [#382](https://github.com/grafana/plugin-tools/pull/382) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Create plugin: Use latest Grafana version [#309](https://github.com/grafana/plugin-tools/pull/309) ([@dprokop](https://github.com/dprokop) [@academo](https://github.com/academo))
+
+#### Authors: 3
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Dominik Prokop ([@dprokop](https://github.com/dprokop))
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v1.12.1 (Fri Aug 25 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update transform regex to detect nested modules [#375](https://github.com/grafana/plugin-tools/pull/375) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 1
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+
+---
+
+# v1.12.0 (Fri Aug 18 2023)
+
+#### 🚀 Enhancement
+
+- create-plugin: Add link to documentation about troubleshooting create-plugin on windows [#365](https://github.com/grafana/plugin-tools/pull/365) ([@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 1
+
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# v1.11.0 (Wed Aug 16 2023)
+
+#### 🚀 Enhancement
+
+- create-plugin: Enable webpack watchOption -> poll if WSL is detected [#356](https://github.com/grafana/plugin-tools/pull/356) ([@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 1
+
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# v1.10.1 (Mon Aug 14 2023)
+
+#### 🐛 Bug Fix
+
+- Fix swc-core version to 1.3.75 to prevent existing bug with baseUrls [#346](https://github.com/grafana/plugin-tools/pull/346) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.10.0 (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:

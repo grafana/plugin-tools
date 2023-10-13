@@ -115,7 +115,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/227916?v=4",
       "profile": "https://github.com/academo",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -180,6 +181,35 @@
       "name": "Yulia Shanyrova",
       "avatar_url": "https://avatars.githubusercontent.com/u/20494436?v=4",
       "profile": "https://github.com/Ukochka",
+      "contributions": [
+        "doc",
+        "infra",
+        "code"
+      ]
+    },
+    {
+      "login": "aangelisc",
+      "name": "Andreas Christou",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15019026?v=4",
+      "profile": "https://github.com/aangelisc",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mikkancso",
+      "name": "mikkancso",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13637610?v=4",
+      "profile": "https://github.com/mikkancso",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "zoltanbedi",
+      "name": "Zoltán Bedi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13729989?v=4",
+      "profile": "https://github.com/zoltanbedi",
       "contributions": [
         "doc",
         "infra",

@@ -1,3 +1,223 @@
+# (Fri Oct 13 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.1.0`
+  - Update only dev dependencies when the update command runs [#458](https://github.com/grafana/plugin-tools/pull/458) ([@academo](https://github.com/academo))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.1.0`
+  - Revert prettier formatting [#450](https://github.com/grafana/plugin-tools/pull/450) ([@zoltanbedi](https://github.com/zoltanbedi))
+  - Chore: Run prettier [#449](https://github.com/grafana/plugin-tools/pull/449) ([@zoltanbedi](https://github.com/zoltanbedi))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi))
+
+---
+
+# (Wed Oct 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.0.2`
+  - Create-plugin: Make baseURL absolute and bump swc/core [#424](https://github.com/grafana/plugin-tools/pull/424) ([@mikkancso](https://github.com/mikkancso))
+
+#### Authors: 1
+
+- [@mikkancso](https://github.com/mikkancso)
+
+---
+
+# (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.0.1`
+  - Add fixes for backend sdk v0.177.0 [#437](https://github.com/grafana/plugin-tools/pull/437) ([@wbrowne](https://github.com/wbrowne))
+
+#### Authors: 1
+
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
+# (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/sign-plugin@2.0.1`
+  - Allows to sign behind an https proxy [#436](https://github.com/grafana/plugin-tools/pull/436) ([@academo](https://github.com/academo))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump prism-react-renderer from 1.3.5 to 2.1.0 [#434](https://github.com/grafana/plugin-tools/pull/434) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Mon Oct 02 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo)), for all your work!
+
+#### 💥 Breaking Change
+
+- Chore(deps): Bump tibdex/github-app-token from 1.8.0 to 2.1.0 [#421](https://github.com/grafana/plugin-tools/pull/421) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+- Bump actions/checkout from 3 to 4 [#395](https://github.com/grafana/plugin-tools/pull/395) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🚀 Enhancement
+
+- Bump semver from 7.3.8 to 7.5.2 [#400](https://github.com/grafana/plugin-tools/pull/400) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🐛 Bug Fix
+
+- Cleanup commented out workflow code and remove the noindex [#419](https://github.com/grafana/plugin-tools/pull/419) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Update troubleshooting.md [#391](https://github.com/grafana/plugin-tools/pull/391) ([@aangelisc](https://github.com/aangelisc))
+- Excluding dependabot from steps that require secrets [#397](https://github.com/grafana/plugin-tools/pull/397) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@2.0.0`
+  - Bugfix: Enable plugins to lazy load modules [#427](https://github.com/grafana/plugin-tools/pull/427) ([@mckn](https://github.com/mckn))
+  - webpack template: minor lint fixes [#414](https://github.com/grafana/plugin-tools/pull/414) ([@briangann](https://github.com/briangann))
+  - README typo fixes [#387](https://github.com/grafana/plugin-tools/pull/387) ([@aangelisc](https://github.com/aangelisc))
+- `@grafana/create-plugin@2.0.0`, `@grafana/sign-plugin@2.0.0`
+  - Increase required node engine to v18 [#405](https://github.com/grafana/plugin-tools/pull/405) ([@academo](https://github.com/academo))
+
+#### 📝 Documentation
+
+- docs: publish tutorials [#403](https://github.com/grafana/plugin-tools/pull/403) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Update index.md [#404](https://github.com/grafana/plugin-tools/pull/404) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Docs: update plugins tutorials [#373](https://github.com/grafana/plugin-tools/pull/373) ([@oshirohugo](https://github.com/oshirohugo) [@sympatheticmoose](https://github.com/sympatheticmoose))
+- Changed so UI extensions section is collapsed by default [#402](https://github.com/grafana/plugin-tools/pull/402) ([@mckn](https://github.com/mckn))
+
+#### Authors: 8
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Brian Gann ([@briangann](https://github.com/briangann))
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Thu Sep 07 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.12.2`
+  - fix: update dockerfile with platform [#383](https://github.com/grafana/plugin-tools/pull/383) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+  - chore: update links to developer portal [#382](https://github.com/grafana/plugin-tools/pull/382) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+  - Create plugin: Use latest Grafana version [#309](https://github.com/grafana/plugin-tools/pull/309) ([@dprokop](https://github.com/dprokop) [@academo](https://github.com/academo))
+
+#### 📝 Documentation
+
+- Move to underscore from dots in urls [#381](https://github.com/grafana/plugin-tools/pull/381) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 4
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Dominik Prokop ([@dprokop](https://github.com/dprokop))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Fri Aug 25 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@1.12.1`
+  - Update transform regex to detect nested modules [#375](https://github.com/grafana/plugin-tools/pull/375) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 1
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+
+---
+
+# (Fri Aug 18 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.12.0`
+  - create-plugin: Add link to documentation about troubleshooting create-plugin on windows [#365](https://github.com/grafana/plugin-tools/pull/365) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- quick fix for drafts [#366](https://github.com/grafana/plugin-tools/pull/366) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 📝 Documentation
+
+- Add troubleshooting.md page for windows and other create-plugin issues [#354](https://github.com/grafana/plugin-tools/pull/354) ([@academo](https://github.com/academo) [@josmperez](https://github.com/josmperez))
+
+#### Authors: 4
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Wed Aug 16 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@1.11.0`
+  - create-plugin: Enable webpack watchOption -> poll if WSL is detected [#356](https://github.com/grafana/plugin-tools/pull/356) ([@Ukochka](https://github.com/Ukochka))
+
+#### 🐛 Bug Fix
+
+- Add CSS to make links visible inside page content [#355](https://github.com/grafana/plugin-tools/pull/355) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Mon Aug 14 2023)
+
+#### 🐛 Bug Fix
+
+- prod deployment [#345](https://github.com/grafana/plugin-tools/pull/345) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Adding stalebot config [#291](https://github.com/grafana/plugin-tools/pull/291) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@1.10.1`
+  - Fix swc-core version to 1.3.75 to prevent existing bug with baseUrls [#346](https://github.com/grafana/plugin-tools/pull/346) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:

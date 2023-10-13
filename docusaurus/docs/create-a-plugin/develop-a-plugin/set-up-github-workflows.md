@@ -1,7 +1,17 @@
 ---
 id: set-up-github-workflows
 title: Set up GitHub workflows
-sidebar_position: 3
+description: How to automate your plugin development process by using GitHub workflows.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - github
+  - workflows
+  - CI
+  - continuous integration
+  - automation
+sidebar_position: 4
 ---
 
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
@@ -14,7 +24,7 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 :::caution
 
-This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [distributing your plugin](../../docs/publish-a-plugin/distribute-a-plugin.md).
+This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [distributing your plugin](../../publish-a-plugin/publish-or-update-a-plugin.md).
 
 :::
 

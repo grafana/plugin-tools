@@ -1,13 +1,21 @@
 ---
 id: extend-configurations
 title: Extend configurations
-sidebar_position: 4
+description: Advanced configurations of Grafana plugins.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - advanced
+  - configuration
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
 
 :::danger
+
 Do not edit the `.config/` directory or extend the tooling configurations. If you attempt to do so, then you may experience issues such as failure to compile or load in Grafana. Instead of changing the files directly, follow the instructions in this topic to make advanced configurations.
+
 :::
 
 ## Extend the ESLint config
@@ -48,29 +56,13 @@ module.exports = {
 
 There are two files in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
 
-**`jest-setup.js`:** This file is run before each test file in the suite is executed. It sets up Jest DOM for the testing library and applies some polyfills. For more information, refer to the ([Jest documentation](https://jestjs.io/docs/configuration#setupfilesafterenv-array)).
+**`jest-setup.js`:** This file is run before each test file in the suite is executed. It sets up Jest DOM for the testing library and applies some polyfills. For more information, refer to the [Jest documentation](https://jestjs.io/docs/configuration#setupfilesafterenv-array).
 
-**`jest.config.js`:** This is the Jest config file that extends the Grafana config. For more information, refer to the ([est documentation](https://jestjs.io/docs/configuration)).
+**`jest.config.js`:** This is the Jest config file that extends the Grafana config. For more information, refer to the [Jest configuration documentation](https://jestjs.io/docs/configuration).
 
 ### ESM errors with Jest
 
-A common issue with the current Jest config involves importing an npm package which only offers an ESM build. These packages cause Jest to generate the error: `SyntaxError: Cannot use import statement outside a module`. 
-
-To work around this issue, use one of the packages known to pass to the `[transformIgnorePatterns](https://jestjs.io/docs/configuration#transformignorepatterns-arraystring)` Jest configuration property. 
-
-To use these packages, extend them in the following way:
-
-```javascript
-process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/utils');
-
-module.exports = {
-  // Jest configuration provided by @grafana/create-plugin
-  ...require('./.config/jest.config'),
-  // Inform Jest to only transform specific node_module packages.
-  transformIgnorePatterns: [nodeModulesToTransform([...grafanaESModules, 'packageName'])],
-};
-```
+If you see `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test` see [Troubleshooting](../../troubleshooting.md#i-get-syntaxerror-cannot-use-import-statement-outside-a-module-when-running-jest-or-npm-run-test).
 
 ---
 
@@ -147,7 +139,7 @@ const config = async (env: any): Promise<Configuration> => {
         fs: false,
         path: require.resolve('path-browserify'),
         stream: require.resolve('stream-browserify'),
-        util: require.resolve("util"),
+        util: require.resolve('util'),
       },
     },
   };

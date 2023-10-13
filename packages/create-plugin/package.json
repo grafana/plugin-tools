@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "1.10.0",
+  "version": "2.1.0",
   "main": "index.js",
   "repository": {
     "directory": "packages/create-plugin",
@@ -64,6 +64,6 @@
     }
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   }
 }

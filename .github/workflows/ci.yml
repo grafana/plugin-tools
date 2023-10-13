@@ -10,7 +10,7 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
@@ -18,9 +18,20 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
+
+      - name: Setup Mage
+        run: |
+          git clone https://github.com/magefile/mage
+          cd mage
+          go run bootstrap.go
 
       - name: Install dependencies
         run: npm ci
@@ -45,13 +56,13 @@ jobs:
       - name: '@grafana/create-plugin - test an app plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test an app with backend plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v build:linux)
       - name: '@grafana/create-plugin - test panel plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
       - name: '@grafana/create-plugin - test datasource with backend plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v build:linux)
       - name: '@grafana/create-plugin - test scenes app plugin generation'
         run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
 
@@ -66,11 +77,13 @@ jobs:
           key: ${{ steps.cache-generated-deps-restore.outputs.cache-primary-key }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generated plugin'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
         working-directory: ./packages/create-plugin/generated
       - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generated plugin'
+        if: ${{ github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
@@ -79,7 +92,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: test
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && github.actor != 'dependabot[bot]'"
     name: Release packages
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
@@ -87,12 +100,12 @@ jobs:
     steps:
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PEM }}
+          app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
+          private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}          
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
 
@@ -102,7 +115,7 @@ jobs:
       - name: Setup environment
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 

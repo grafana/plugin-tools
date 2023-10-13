@@ -1,6 +1,6 @@
 {
-    "position": 2,
-    "label": "Get started",
-    "collapsible": true,
-    "collapsed": false
-  }
+  "position": 10,
+  "label": "Get started",
+  "collapsible": true,
+  "collapsed": false
+}

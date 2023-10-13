@@ -40,7 +40,7 @@ export enum PLUGIN_TYPES {
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaVersion: '9.5.3',
+  grafanaVersion: '10.0.3',
   grafanaImage: 'grafana-enterprise',
 };
 
@@ -118,7 +118,7 @@ export const TEXT = {
  * Run \`yarn build\` and observe the output for any errors.
  * Test your plugin in grafana and make sure everything works as expected.
 
-See instructions on how to customize your configuration here https://grafana.github.io/plugin-tools/docs/advanced-configuration/
+See instructions on how to customize your configuration here https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations
   `,
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',

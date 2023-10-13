@@ -1,6 +1,14 @@
 ---
 id: get-started
 title: Get started
+description: Get started with Grafana plugin developing with the create-plugin tool.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - create-plugin
+  - getting started
+slug: /
 ---
 
 import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
@@ -33,16 +41,16 @@ To scaffold your plugin, follow these steps:
 1. When prompted, enter answers to the given questions. For example:
 
   ```
-  ? What is going to be the name of your plugin?: _mongodb_
-  ? What is the organization name of your plugin?: _grafana_
-  ? What type of plugin would you like?: _datasource_
+  ? What is going to be the name of your plugin?: mongodb
+  ? What is the organization name of your plugin?: grafana
+  ? What type of plugin would you like?: datasource
   ```
 
   If you enter those values for name, organization, and plugin type, then the directory and plugin ID will be named `grafana-mongodb-datasource`.
 
   :::note
 
-  If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to simplify migration. For more information, refer to the [Migration guide](./migrate-from-toolkit.mdx).
+  If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to simplify migration. For more information, refer to [Migrate from toolkit](/migration-guides/migrate-from-toolkit.mdx).
 
   :::
 
@@ -66,11 +74,11 @@ We generally recommend that you build for a version of Grafana later than v9.0. 
 
 You'll need to have the following tools set up:
 
-- [Go](https://go.dev/doc/install) version 1.18 or above
+- Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
-- [Node.js](https://nodejs.org/en/download/) version 16 or above
+- [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 - Optionally [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
-- [Docker](https://docs.docker.com/get-docker/).
+- [Docker](https://docs.docker.com/get-docker/)
 
 #### Choose a package manager
 
@@ -159,10 +167,10 @@ Select from the following choices:
 - **app**: Create a custom out-of-the-box monitoring experience.
 - **datasource**: Add support for new databases or external APIs.
 - **panel**: Add new visualizations to dashboards.
-- **scenesapp**: Create scenes applications or scenes plugins (that is, dashboard-like experiences in app plugins). Currently in public preview.
+- **scenesapp**: Create scenes applications or scenes plugins (that is, dashboard-like experiences in app plugins).
 
 To learn more about the types of plugins, refer to the [plugin management guidelines](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
-To learn more about scenes, refer to the [Scenes documentation](https://grafana.github.io/scenes/).
+To learn more about scenes, refer to the [Scenes documentation](https://grafana.com/developers/scenes).
 
 ### Do you want a backend part of your plugin?
 
@@ -172,15 +180,15 @@ App and data source plugins can have a backend component written in Go. Backend 
 - Connect to non-HTTP services to which a browser normally can’t connect. For example, SQL database servers.
 - Keep state between users. For example, query caching for data sources.
 - Use custom authentication methods and/or authorization checks that aren’t supported in Grafana.
-- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](https://grafana.com/docs/grafana/latest/developers/plugins/backend/#resources).
+- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](./introduction/backend-plugins#resources).
 
 ### Do you want to add Github CI and Release workflows?
 
-Add [Github workflows](/docs/create-a-plugin/set-up-github-workflows) to your development cycle to help catch issues early or release your plugin to the community.
+Add [Github workflows](/create-a-plugin/develop-a-plugin/set-up-github-workflows) to your development cycle to help catch issues early or release your plugin to the community.
 
 ### Do you want to add a Github workflow to automatically check Grafana API compatibility on PRs?
 
-Add a [Github workflow](/docs/create-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
+Add a [Github workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
 
 ## Key CLI commands
 
