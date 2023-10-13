@@ -206,7 +206,7 @@ describe('Utils / NPM', () => {
   });
 
   describe('hasNpmDependenciesToUpdate()', () => {
-    test('It should return false when there are not npm dependencies to update', () => {
+    test('It should return false when there are no npm dependencies to update', () => {
       const packageJson = {
         dependencies: {
           '@grafana/ui': '10.0.0',
