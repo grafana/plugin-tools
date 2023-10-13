@@ -28,7 +28,7 @@ To package a plugin, refer to [Package a plugin](./package-a-plugin.md).
 
 ### Follow our guidelines
 
-Get familiar with our plugin [publishing and signing criteria](./publishing-and-signing-criteria.md)
+Get familiar with our plugin [publishing and signing criteria](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria)
 
 ### Do this for best results
 
