@@ -1,0 +1,66 @@
+name: 'Test plugin scaffolding'
+on: [pull_request]
+
+jobs:
+  getScripts:
+    name: Get scripts matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: echo "::set-output name=matrix::[{\"cmd\":\"generate-app\",\"hasBackend\":false}, {\"cmd\":\"generate-app-backend\",\"hasBackend\":true}]"
+  generatePlugins:
+    name: Test plugin scaffolding
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
+    steps:
+      - run: echo ${{ matrix.cmd }}
+      - run: echo ${{ matrix.hasBackend }}
+
+        # - name: Restore cached generated plugin dependencies
+        #   id: cache-generated-deps-restore
+        #   uses: actions/cache/restore@v3
+        #   with:
+        #     path: |
+        #       ./packages/create-plugin/generated/package-lock.json
+        #       ./packages/create-plugin/generated/node_modules
+        #     key: ${{ runner.os }}-generated-plugin-deps
+
+        # - name: '@grafana/create-plugin - test an app plugin generation'
+        #   run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        # - name: '@grafana/create-plugin - test an app with backend plugin generation'
+        #   run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v build:linux)
+        # - name: '@grafana/create-plugin - test panel plugin generation'
+        #   run: npm exec nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        # - name: '@grafana/create-plugin - test datasource plugin generation'
+        #   run: npm exec nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+        # - name: '@grafana/create-plugin - test datasource with backend plugin generation'
+        #   run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint && mage -v build:linux)
+        # - name: '@grafana/create-plugin - test scenes app plugin generation'
+        #   run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
+
+        # - name: Save generated plugin dependencies
+        #   id: cache-generated-deps-save
+        #   if: steps.cache-generated-deps-restore.outputs.cache-hit != 'true'
+        #   uses: actions/cache/save@v3
+        #   with:
+        #     path: |
+        #       ./packages/create-plugin/generated/package-lock.json
+        #       ./packages/create-plugin/generated/node_modules
+        #     key: ${{ steps.cache-generated-deps-restore.outputs.cache-primary-key }}
+
+        # - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generated plugin'
+        #   if: ${{ github.actor != 'dependabot[bot]' }}
+        #   env:
+        #     GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+        #   run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        #   working-directory: ./packages/create-plugin/generated
+        # - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generated plugin'
+        #   if: ${{ github.actor != 'dependabot[bot]' }}
+        #   env:
+        #     GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+        #   run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        #   working-directory: ./packages/create-plugin/generated
