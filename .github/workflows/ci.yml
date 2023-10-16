@@ -101,7 +101,7 @@ jobs:
 
       - name: Save generated plugin dependencies
         id: cache-generated-deps-save
-        if: steps.cache-generated-deps-restore.outputs.cache-hit != 'true'
+        if: ${{ steps.cache-generated-deps-restore.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v3
         with:
           path: |
