@@ -78,7 +78,7 @@ To submit an update for an already published plugin:
    - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code. See [examples](#what-source-code-url-formats-are-supported).
    - **MD5:** The MD5 hash of the plugin specified by the **URL**.
 1. Click **Submit**.
-    After you submit your updated plugin, we run an automated validation to make sure it adheres to our guidelines. We may also perform a manual review depending on the circumstances.
+    All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already setup for an existing plugin, plugin update reviews may go faster.
 
 ## Deprecate a plugin
 
