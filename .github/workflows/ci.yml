@@ -24,7 +24,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
       - name: Check types
         run: npm exec nx affected -- --target typecheck --parallel
       - name: Lint
@@ -73,7 +73,7 @@ jobs:
           cache: 'npm'
 
       - name: Install package dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
 
       - name: Generate plugin
         run: npm exec nx run @grafana/create-plugin:${{ matrix.scaffoldCommand.cmd }}
@@ -86,7 +86,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
 
       - name: Install generated plugin dependencies
-        run: npm install
+        run: npm install --prefer-offline --no-audit
         working-directory: ./packages/create-plugin/generated
 
       - name: Lint plugin frontend
@@ -152,7 +152,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
 
       - name: Build
         run: npm run build
