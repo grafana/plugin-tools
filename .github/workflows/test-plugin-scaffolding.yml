@@ -39,19 +39,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
-      - name: Setup Go environment
-        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
-        uses: actions/setup-go@v3
-        with:
-          go-version: '1.20'
-
-      - name: Setup Mage
-        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
-        run: |
-          git clone https://github.com/magefile/mage
-          cd mage
-          go run bootstrap.go
-
       - name: Install package dependencies
         run: npm ci
 
@@ -71,11 +58,11 @@ jobs:
 
       - name: Lint plugin frontend
         run: npm run lint
-        working-directory: ${{ matrix.pluginDir }}
+        working-directory: ./packages/create-plugin/generated
 
       - name: Build plugin frontend
         run: npm run build
-        working-directory: ${{ matrix.pluginDir }}
+        working-directory: ./packages/create-plugin/generated
 
       - name: Save generated plugin dependencies
         id: cache-generated-deps-save
@@ -84,6 +71,21 @@ jobs:
         with:
           path: ./packages/create-plugin/generated/package-lock.json
           key: ${{ runner.os }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '~1.20'
+          check-latest: true
+          cache-dependency-path: ./packages/create-plugin/generated/go.sum
+        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
+
+      - name: Build plugin backend
+        uses: magefile/mage-action@v2
+        with:
+          version: latest
+          args: -v build:linux
+          workdir: ./packages/create-plugin/generated
+        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
 
         # - name: Restore cached generated plugin dependencies
         #   id: cache-generated-deps-restore
