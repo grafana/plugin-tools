@@ -2,22 +2,23 @@ name: 'Test plugin scaffolding'
 on: [pull_request]
 
 jobs:
-  getScripts:
-    name: Get scripts matrix
+  get-commands:
+    name: Get scaffold commands
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      scaffoldCommands: ${{ steps.set-matrix.outputs.scaffoldCommands }}
     steps:
       - id: set-matrix
-        run: echo "::set-output name=matrix::[{\"cmd\":\"generate-app\",\"hasBackend\":false}, {\"cmd\":\"generate-app-backend\",\"hasBackend\":true}]"
-  generatePlugins:
+        run: echo "scaffoldCommands=[{\"cmd\":\"generate-app\",\"hasBackend\":false}, {\"cmd\":\"generate-app-backend\",\"hasBackend\":true}]" >> $GITHUB_OUTPUT
+  generate-plugins:
     name: Test plugin scaffolding
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    needs: getScripts
+    needs: get-commands
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJson(needs.getScripts.outputs.matrix)}}
+      matrix:
+        scaffoldCommand: ${{ fromJson(needs.get-commands.outputs.scaffoldCommands) }}
     steps:
       - run: echo ${{ matrix.cmd }}
       - run: echo ${{ matrix.hasBackend }}
