@@ -4,6 +4,7 @@ on: [pull_request]
 jobs:
   getScripts:
     name: Get scripts matrix
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -12,10 +13,11 @@ jobs:
         run: echo "::set-output name=matrix::[{\"cmd\":\"generate-app\",\"hasBackend\":false}, {\"cmd\":\"generate-app-backend\",\"hasBackend\":true}]"
   generatePlugins:
     name: Test plugin scaffolding
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
+      matrix: ${{fromJson(needs.getScripts.outputs.matrix)}}
     steps:
       - run: echo ${{ matrix.cmd }}
       - run: echo ${{ matrix.hasBackend }}
