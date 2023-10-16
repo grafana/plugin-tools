@@ -20,7 +20,7 @@ The best way to share your plugin with the world is to publish it in the [Grafan
 ## Before you begin
 
 1. [Create a plugin](../get-started/get-started.mdx) - When you build a plugin from source, a `dist` folder is created. This folder contains the production build or _plugin assets_ for your plugin.
-1. [Fllow our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
+1. [Follow our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
 1. [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 
 To speed up the time it takes to review your plugin:
