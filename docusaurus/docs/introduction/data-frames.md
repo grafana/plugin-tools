@@ -217,3 +217,7 @@ The Javascript implementation of data frames is in the [`/src/dataframe` folder]
 ### Go
 
 For documentation on the Go implementation of data frames, refer to the [github.com/grafana/grafana-plugin-sdk-go/data package](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/data?tab=doc).
+
+## Learn more
+
+For a guide to plugin development with data frames, refer to [Work with data frames](../create-a-plugin/develop-a-plugin/work-with-data-frames.md).
