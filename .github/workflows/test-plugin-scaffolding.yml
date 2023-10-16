@@ -20,8 +20,8 @@ jobs:
       matrix:
         scaffoldCommand: ${{ fromJson(needs.get-commands.outputs.scaffoldCommands) }}
     steps:
-      - run: echo ${{ matrix.cmd }}
-      - run: echo ${{ matrix.hasBackend }}
+      - run: echo ${{ scaffoldCommand.cmd }}
+      - run: echo ${{ scaffoldCommand.hasBackend }}
 
         # - name: Restore cached generated plugin dependencies
         #   id: cache-generated-deps-restore
