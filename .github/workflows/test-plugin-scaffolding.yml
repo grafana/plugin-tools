@@ -19,9 +19,71 @@ jobs:
     strategy:
       matrix:
         scaffoldCommand: ${{ fromJson(needs.get-commands.outputs.scaffoldCommands) }}
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - run: echo ${{ matrix.scaffoldCommand.cmd }}
       - run: echo ${{ matrix.scaffoldCommand.hasBackend }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
+      - name: Setup .npmrc file for NPM registry
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Setup Go environment
+        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
+
+      - name: Setup Mage
+        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
+        run: |
+          git clone https://github.com/magefile/mage
+          cd mage
+          go run bootstrap.go
+
+      - name: Install package dependencies
+        run: npm ci
+
+      - name: Generate plugin
+        run: npm exec nx run @grafana/create-plugin:${{ matrix.scaffoldCommand.cmd }}
+
+      - name: Restore cached generated plugin dependencies
+        id: cache-generated-deps-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: ./packages/create-plugin/generated/package-lock.json
+          key: ${{ runner.os }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+
+      - name: Install generated plugin dependencies
+        run: npm ci
+        working-directory: ./packages/create-plugin/generated
+
+      - name: Lint plugin frontend
+        run: npm run lint
+        working-directory: ${{ matrix.pluginDir }}
+
+      - name: Build plugin frontend
+        run: npm run build
+        working-directory: ${{ matrix.pluginDir }}
+
+      - name: Save generated plugin dependencies
+        id: cache-generated-deps-save
+        if: steps.cache-generated-deps-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v3
+        with:
+          path: ./packages/create-plugin/generated/package-lock.json
+          key: ${{ runner.os }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
 
         # - name: Restore cached generated plugin dependencies
         #   id: cache-generated-deps-restore
