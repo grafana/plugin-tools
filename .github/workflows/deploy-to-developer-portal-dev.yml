@@ -10,6 +10,9 @@ jobs:
   deploy:
     name: Deploy docs to Developer Portal Bucket
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,10 +28,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-            
+
       - name: Build documentation website
         run: npm run docs:build -- --config docusaurus.config.dev.js
-        
+
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
