@@ -87,6 +87,8 @@ Let's look at an example. The following table demonstrates a data frame with two
 
 Each field has three values, and each value in a field must share the same type. In this case, all values in the `time` field are timestamps, and all values in the `temperature` field are numbers.
 
+Time fields in the frontend and [backend](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L231-L243) should be given in numeric values.
+
 One restriction on data frames is that all fields in the frame must be of the same length to be a valid data frame.
 
 ## Field configurations
