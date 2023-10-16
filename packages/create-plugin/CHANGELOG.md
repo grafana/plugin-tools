@@ -1,3 +1,15 @@
+# v2.1.2 (Mon Oct 16 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Prevent conflicting webpack runtimes [#464](https://github.com/grafana/plugin-tools/pull/464) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.1.1 (Fri Oct 13 2023)
 
 #### 🐛 Bug Fix
