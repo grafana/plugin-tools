@@ -10,8 +10,9 @@ keywords:
   - folders
 sidebar_position: 2
 ---
+# Folder structure
 
-After you install the `create-plugin` tool and have answered the prompts, your project should look similar to this:
+After you install the [`create-plugin` tool](../get-started/get-started.mdx) and have answered the prompts, there should now be a folder structure like so:
 
 ```
 myorg-myplugin-datasource/

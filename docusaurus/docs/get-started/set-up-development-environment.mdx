@@ -8,26 +8,58 @@ description: Set up your development environment with Docker for Grafana plugin 
   - create-plugin
   - Docker
   - setup 
-sidebar_position: 3
+sidebar_position: 1
 ---
+
+# Set up development environment
+
+We have chosen to use Docker for plugin development because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
+
+With the `create-plugin` tool, the Docker container is configured with the necessary variables to allow easy access to Grafana and to load plugins without the need for them to be signed. The plugin tool also adds a live reload feature that allows you to make your frontend code changes to trigger refreshes in the browser.
 
 import DockerNPM from '@snippets/docker-grafana-version.npm.md';
 import DockerPNPM from '@snippets/docker-grafana-version.pnpm.md';
 import DockerYarn from '@snippets/docker-grafana-version.yarn.md';
 
-The `create-plugin` tool includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
+## Before you begin
+
+Make sure you are using supported a supported OS, Grafana version, and tooling.
+
+### Supported operating systems
+
+Grafana plugin tools work with the following operating systems:
+
+- Linux
+- macOS
+- Windows 10+ with WSL (Windows Subsystem for Linux)
+
+### Supported Grafana version
+
+We generally recommend that you build for a version of Grafana later than v9.0. For more information about requirements and dependencies when developing with Grafana, see the [Grafana developer's guide](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md).
+
+### Recommended tooling
+
+You'll need to have the following tools set up:
+
+- Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
+- [Mage](https://magefile.org/)
+- [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
+- Optionally [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
+- [Docker](https://docs.docker.com/get-docker/)
+
+### Choose a package manager
+
+When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
+
+## Set up Docker environment
+
+The [`create-plugin` tool](../get-started/get-started.mdx) includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
 
 :::info
 
-It's not necessary to [sign a plugin](../publish-a-plugin/sign-a-plugin.md) during development. The that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+It's not necessary to [sign a plugin](../publish-a-plugin/sign-a-plugin.md) during development. The development environment that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
 
 :::
-
-## Why use the Docker environment
-
-We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
-
-With the `create-plugin` tool, the Docker container is configured with the necessary variables to allow easy access to Grafana and to load plugins without the need for them to be signed. The plugin tool also adds a live reload feature that allows you to make your frontend code changes to trigger refreshes in the browser.
 
 ## Get started with Docker
 
