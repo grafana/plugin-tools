@@ -136,6 +136,7 @@ const config = async (env): Promise<Configuration> => {
       },
       path: path.resolve(process.cwd(), DIST_DIR),
       publicPath: `public/plugins/${pluginJson.id}/`,
+      uniqueName: pluginJson.id,
     },
 
     plugins: [
