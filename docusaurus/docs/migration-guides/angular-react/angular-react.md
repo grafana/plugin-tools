@@ -17,7 +17,7 @@ import DocCardList from '@theme/DocCardList';
 
 # Migrate from AngularJS to React
 
-If you want to migrate a plugin to Grafana's React-based plugin platform, then we recommend that you release it under a new major version. Consider keeping a release branch for the previous version to be able to roll out patch releases for versions prior to Grafana 7.
+If you want to migrate a plugin to Grafana's React-based plugin platform, then we recommend that you release it under a new major version. 
 
 While there's no standard migration path from an Angular plugin to the new React platform, we’ve learned that one of the easiest ways to migrate is to:
 
