@@ -331,8 +331,8 @@ When configured, Grafana can forward authorization HTTP headers such as `Authori
 To get Grafana to forward the headers, create a HTTP client using the [Grafana plugin SDK for Go](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient) and set the `ForwardHTTPHeaders` option to `true` (by default, it's set to `false`). This package exposes request information which can be subsequently forwarded downstream and/or used directly within the plugin.
 
 ```go
-func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-  opts, err := settings.HTTPClientOptions()
+func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+  opts, err := settings.HTTPClientOptions(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
 	}
