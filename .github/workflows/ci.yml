@@ -100,7 +100,7 @@ jobs:
         working-directory: ./packages/create-plugin/generated
 
       - name: debug caching
-        run: echo ${{ steps.cache-generated-deps-restore.outputs.cache-hit }}
+        run: echo ${{ steps.cache-generated-deps-restore.outputs }}
 
       - name: Save generated plugin dependencies
         id: cache-generated-deps-save
