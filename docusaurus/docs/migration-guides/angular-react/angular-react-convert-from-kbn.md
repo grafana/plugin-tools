@@ -1,7 +1,7 @@
 ﻿---
 id: angular-react-convert-from-kbn
 title: Migrate from kbn package
-sidebar_position: 5
+sidebar_position: 1
 description: How to migrate a plugin that uses the kbn package to current methods.
 keywords:
   - grafana
