@@ -1,3 +1,15 @@
+# v2.2.0 (Tue Oct 17 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Make sure scaffolded code is prettified [#461](https://github.com/grafana/plugin-tools/pull/461) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.1.2 (Mon Oct 16 2023)
 
 #### 🐛 Bug Fix
