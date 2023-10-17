@@ -14,6 +14,9 @@ slug: /
 import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
 import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
 import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
+import InstallNPM from '@snippets/createplugin-install.npm.md';
+import InstallPNPM from '@snippets/createplugin-install.pnpm.md';
+import InstallYarn from '@snippets/createplugin-install.yarn.md';
 
 Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration.
 
@@ -135,10 +138,10 @@ Depending on the answers you gave to the prompts, there should now be a structur
 When you've finished installing the tools, open the plugin folder:
 
 <CodeSnippets
-  paths={[
-    'createplugin-install.npm.shell.md',
-    'createplugin-install.pnpm.shell.md',
-    'createplugin-install.yarn.shell.md',
+  snippets={[
+    { component: InstallNPM, label: 'npm' },
+    { component: InstallPNPM, label: 'pnpm' },
+    { component: InstallYarn, label: 'yarn' },
   ]}
   groupId="package-manager"
   queryString="current-package-manager"
