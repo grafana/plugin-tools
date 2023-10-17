@@ -76,7 +76,7 @@ jobs:
         run: npm ci --no-audit
 
       - name: Generate plugin
-        run: npm exec nx run @grafana/create-plugin:${{ matrix.scaffoldCommand.cmd }}-ci
+        run: npm exec nx run @grafana/create-plugin:${{ matrix.scaffoldCommand.cmd }}
 
       - name: Restore cached generated plugin dependencies
         id: cache-generated-deps-restore
