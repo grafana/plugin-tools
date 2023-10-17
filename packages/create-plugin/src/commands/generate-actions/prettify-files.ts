@@ -17,7 +17,9 @@ export async function prettifyFiles({ pluginName, orgName, pluginType }: CliArgs
     let command = 'npx -y prettier@2 . --write';
     await exec(command, { cwd: exportPath });
   } catch (error) {
-    throw new Error('There was a problem running prettier on the plugin files. Please run prettier manually.');
+    throw new Error(
+      'There was a problem running prettier on the plugin files. Please run `npx -y prettier@2 . --write` manually in your plugin directory.'
+    );
   }
   return 'Successfully ran prettier against new plugin.';
 }
