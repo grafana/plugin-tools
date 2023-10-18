@@ -1,8 +1,7 @@
 ---
 id: prompt-cli-reference
 title: Prompts and CLI
-sidebar_position: 2
-description: Reference for plugin tools' prompts and CLI commands.
+description: Reference for prompts and CLI commands.
 keywords:
   - grafana
   - plugins
@@ -10,11 +9,12 @@ keywords:
   - create-plugin
   - prompts
   - CLI
+sidebar_position: 20
 ---
 
-# Plugin tools' prompts and CLI commands
+# Plugin tools' prompts and CLI commands reference
 
-Refer to this document for a list of prompts and CLI commands available through the [create-plugin](../get-started/get-started.mdx) tool.
+Refer to this document for a list of prompts and CLI commands available through the [create-plugin](../get-started/get-started.mdx#quick-start) tool.
 
 ## Prompts
 
@@ -52,7 +52,7 @@ App and data source plugins can have a backend component written in Go. Backend 
 - Connect to non-HTTP services to which a browser normally can’t connect. For example, SQL database servers.
 - Keep state between users. For example, query caching for data sources.
 - Use custom authentication methods and/or authorization checks that aren’t supported in Grafana.
-- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](./introduction/backend-plugins#resources).
+- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](../introduction/backend.md#resources).
 
 ### Do you want to add Github CI and Release workflows?
 
@@ -64,46 +64,46 @@ Add a [Github workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflow
 
 ## CLI commands
 
-### <SyncCommand cmd="run build" />
+### `run build`
 
 Compiles and bundles the project using Webpack in production mode.
 
-### <SyncCommand cmd="run dev" />
+### `run dev`
 
 Runs Webpack in watch mode for development, continually monitoring for changes.
 
-### <SyncCommand cmd="run e2e" />
+### `run e2e`
 
 Runs Grafana end-to-end tests using Cypress.
 
-### <SyncCommand cmd="run e2e:update" />
+### `run e2e:update`
 
 Runs Grafana end-to-end tests and tests any test screenshots, using Cypress.
 
-### <SyncCommand cmd="run lint" />
+### `run lint`
 
 Lints the frontend codebase using ESLint with the `.gitignore` file to ignore certain files. Results are cached locally to speed up future linting tasks.
 
-### <SyncCommand cmd="run lint:fix" />
+### `run lint:fix`
 
 Lints the frontend codebase using ESLint and automatically fixes detected issues.
 
-### <SyncCommand cmd="run typecheck" />
+### `run typecheck`
 
 Performs a type-checking process on the frontend code using TypeScript.
 
-## <SyncCommand cmd="run server" />
+### `run server`
 
 Launches the https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment using Docker.
 
-## <SyncCommand cmd="run sign" />
+### `run sign`
 
 Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
 
-### <SyncCommand cmd="run test" />
+### `run test`
 
 Executes frontend tests, running only the tests that have changed, and enables a watch mode for ongoing testing.
 
-### <SyncCommand cmd="run test:ci" />
+### `run test:ci`
 
 Runs frontend tests for CI, ensuring it passes even with no tests, and utilizes a maximum of four workers for parallel execution.

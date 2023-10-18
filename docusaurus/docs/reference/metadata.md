@@ -1,6 +1,6 @@
 ---
 id: reference-plugin-json
-title: Reference (plugin.json)
+title: Plugin.json
 description: Reference for the Grafana plugin.json metadata file.
 keywords:
   - grafana
@@ -9,10 +9,10 @@ keywords:
   - plugin.json
   - API reference
   - API
-sidebar_position: 70
+sidebar_position: 10
 ---
 
-# Reference (plugin.json)
+# Plugin.json metadata reference
 
 The `plugin.json` file is required for all plugins. When Grafana starts, it scans the plugin folders and mounts every folder that contains a plugin.json file unless the folder contains a subfolder named dist. In that case, Grafana mounts the dist folder instead.
 
@@ -38,7 +38,7 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | `metrics`            | boolean                       | No       | For data source plugins, if the plugin supports metric queries. Used to enable the plugin in the panel editor.                                                                                                                                                                                                                                                                                          |
 | `preload`            | boolean                       | No       | Initialize plugin on startup. By default, the plugin initializes on first use. Useful for app plugins that should load without user interaction.                                                                                                                                                                                                                                                        |
 | `queryOptions`       | [object](#queryoptions)       | No       | For data source plugins. There is a query options section in the plugin's query editor and these options can be turned on if needed.                                                                                                                                                                                                                                                                    |
-| `routes`             | [object](#routes)[]           | No       | For data source plugins. Proxy routes used for plugin authentication and adding headers to HTTP requests made by the plugin. For more information, refer to [Authentication for data source plugins](../docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).                                                   |
+| `routes`             | [object](#routes)[]           | No       | For data source plugins. Proxy routes used for plugin authentication and adding headers to HTTP requests made by the plugin. For more information, refer to [Authentication for data source plugins](../docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).                                                                                                            |
 | `skipDataQuery`      | boolean                       | No       | For panel plugins. Hides the query editor.                                                                                                                                                                                                                                                                                                                                                              |
 | `state`              | string                        | No       | Marks a plugin as a pre-release. Possible values are: `alpha`, `beta`.                                                                                                                                                                                                                                                                                                                                  |
 | `streaming`          | boolean                       | No       | For data source plugins, if the plugin supports streaming. Used in Explore to start live streaming.                                                                                                                                                                                                                                                                                                     |
