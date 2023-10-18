@@ -40,6 +40,12 @@ To successfully share dependencies, you must define two key components:
 - **SystemJS import map in Grafana:** The dependency must be listed in a SystemJS import map in the Grafana application.
 - **Plugin build tool configuration:** The dependency must be externalized in the plugin's build tool configuration, which is primarily done using Webpack.
 
+:::caution
+
+Customising the build tool configuration to change the external dependencies is not supported and will likely lead to plugin loading failure or bugs.
+
+:::
+
 # Compilation and runtime
 
 As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
