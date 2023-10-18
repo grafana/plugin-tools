@@ -18,5 +18,5 @@ Grafana supports a wide range of data sources, including Prometheus, MySQL, and 
 Below you can find source code for existing app plugins and other related documentation.
 
 - [Basic data source plugin example](https://github.com/grafana/grafana-plugin-examples/tree/master/examples/datasource-basic#readme)
-- [`plugin.json` documentation](https://grafana.com/developers/plugin-tools/reference-plugin-json)
+- [`plugin.json` documentation](https://grafana.com/developers/plugin-tools/reference/reference-plugin-json)
 - [How to sign a plugin?](https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin)

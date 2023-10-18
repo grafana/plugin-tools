@@ -19,5 +19,5 @@ Use panel plugins when you want to do things like visualize data returned by dat
 Below you can find source code for existing app plugins and other related documentation.
 
 - [Basic panel plugin example](https://github.com/grafana/grafana-plugin-examples/tree/master/examples/panel-basic#readme)
-- [`plugin.json` documentation](https://grafana.com/developers/plugin-tools/reference-plugin-json)
+- [`plugin.json` documentation](https://grafana.com/developers/plugin-tools/reference/reference-plugin-json)
 - [How to sign a plugin?](https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin)
