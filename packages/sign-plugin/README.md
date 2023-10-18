@@ -22,7 +22,7 @@ Signing a plugin allows Grafana to verify the authenticity of the plugin with si
 
 All plugins require a signature since Grafana 7.0.
 
-Please refer to [Signing plugins documentation](https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/) to understand how to sign a Grafana plugin. The following commands are mentioned here for development purposes.
+Please refer to [Signing plugins documentation](https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin) to understand how to sign a Grafana plugin. The following commands are mentioned here for development purposes.
 
 ### Sign a public plugin
 
