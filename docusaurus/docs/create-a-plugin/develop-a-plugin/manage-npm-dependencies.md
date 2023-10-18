@@ -22,7 +22,7 @@ It's important to understand that while a plugin specifies the expected versions
 
 When you develop your plugin, its `package.json` may reference a specific version of a `@grafana` npm package, such as `@grafana/ui: 9.5.1`.
 
-However, when the plugin is installed and executed within a Grafana instance, it inherits the version of the `@grafana` packages that the Grafana application is using. For example, if the Grafana version is 10.0.0, then the plugin uses version 10.0.0 of the shared dependencies from the Grafana application.
+However, when the plugin is installed and executed within a Grafana instance, it inherits the version of the `@grafana` packages that the Grafana application is using. For example, if the Grafana version is 10.0.0, then the plugin uses version 10.0.0 of the shared `@grafana` dependencies from the Grafana application.
 
 # Dependency sharing mechanism
 
