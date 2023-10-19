@@ -16,7 +16,7 @@ sidebar_position: 2.5
 
 # Life cycle of a plugin
 
-This document describes the various phases of a plugin including installation and loading. We will describe the differences in a plugin's life cycle depending on its type and whether or not it has a backend.  
+This document describes the various phases of a plugin such as installation and loading. We will describe the differences in a plugin's life cycle depending on its type and whether or not it has a [backend](backend.md).  
 
 :::note
 
@@ -40,41 +40,43 @@ Use of the Grafana CLI to install or uninstall a plugin requires you to restart 
 
 Understanding the different phases involved when Grafana is starting a plugin may help you better understand plugin usage and to debug any unexpected behavior during loading.
 
-### Phase 1. Plugin initialization
-
 All plugins are initialized either when Grafana starts up or when a plugin has been installed/uninstalled during runtime.
 
 For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 4](#phase-4-backend-plugin-initialization)).
 
-### Phase 2. Plugin discovery 
+### Phase 1. Plugin discovery 
 
 Grafana starts to discover which plugins are installed by scanning directories on the file system for every `plugin.json`.
 
-### Phase 3. Plugin loading 
+### Phase 2. Plugin loading 
 
-All plugins that were discovered in the discovery phase are checked to make sure they’re valid and that they have a valid signature. Valid plugins are referred to as _verified plugins_. 
+All plugins that were discovered in the discovery phase are checked to make sure they’re valid. Some of the automated checks include:
+- Plugins must have a valid [signature](https://grafana.com/docs/grafana/latest/administration/plugin-management/#plugin-signatures). Valid plugins are referred to as _verified plugins_. 
+- Angular detection: Given that [Angular is deprecated](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/), if Angular support is disabled and Angular is detected in the plugin, then we record an error and don't allow the plugin to be loaded.
 
-### Phase 4. Backend plugin initialization
+### Phase 3. Backend plugin initialization (backend plugins only)
 
-For any verified plugin that has a backend, Grafana configures a backend client. Depending on the plugin's classification, one of these things will happen: 
-- **Core plugins** - the backend client is already configured and nothing more needs to be done.
-- **External plugins** - Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
+For any verified plugin that has a backend, Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
 
-### Phase 5. Registration
+### Phase 4. Registration
 
 All verified plugins are registered in an in-memory registry. From now on, the plugin is available within Grafana and so are referred to as _registered plugins_.
 
-### Phase 6. Start backend plugin (backend plugins only)
+Registered plugins show as installed in the catalog and appear in views for selecting a panel or data source in a dashboard.
 
-For registered external plugins that have a backend, Grafana starts to run the backend binary as a separate process using HashiCorp’s Go Plugin System over RPC. The supported plugin protocol and version is negotiated between Grafana (client) and the plugin (server) to give Grafana an understanding of the plugin's capabilities.  
+### Phase 5. Start backend plugin (backend plugins only)
 
-A Grafana backend plugin has its own separate life cycle. So long as the backend plugin is running, Grafana will make sure to restart the backend plugin in case it crashes or is killed. When Grafana is shut down, the backend processes is then terminated.  
+For registered plugins that have a backend, Grafana starts to run the backend binary as a separate process using HashiCorp’s Go Plugin System over RPC. The supported plugin protocol and version is negotiated between Grafana (client) and the plugin (server) to give Grafana an understanding of the plugin's capabilities. 
 
-### Phase 7. Client-side loading 
+A Grafana backend plugin has its own separate life cycle. So long as the backend plugin is running, Grafana will make sure to restart the backend plugin in case it crashes or is terminated. When Grafana is shut down, the backend processes is then terminated.  
+
+### Phase 6. Client-side loading 
 
 After Grafana has started and the HTTP API is running, Grafana users receive the server-side rendered index page containing so-called bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin. 
 
 When the user interacts with a UI that requires a plugin, Grafana will _lazy load_ the plugin's `module.js` file: 
+
+- **Panel plugins** - When the user opens a dashboard with panels (or interacts with any UI that requires a plugin), Grafana lazy-loads the necessary plugin’s code through a fetch request. Each plugin is loaded only once but its objects are initialized multiple times. 
 
 - **Data-source plugins** - A data-source plugin could be loaded in more than one way. For instance, it could be loaded in the Explore page if the user selects the data source in the dropdown, or if they load a dashboard containing a plugin data source.
 
@@ -85,9 +87,3 @@ When the user interacts with a UI that requires a plugin, Grafana will _lazy loa
 Each plugin is loaded only once but its objects are initialized multiple times. For example, a dashboard with 10 different panel plugins will load 10 plugins with an instance of each. A dashboard with 10 panels of the same plugin will load the plugin once and have 10 instances.
 
 :::
-
-## Plugin deprecation
-
-When a plugin developer is no longer able to maintain the plugin, the plugin may be deprecated and removed from the Grafana [plugin catalog](https://grafana.com/plugins). 
-
-For more information, refer to our [plugin deprecation policy](https://grafana.com/legal/plugin-deprecation/).
