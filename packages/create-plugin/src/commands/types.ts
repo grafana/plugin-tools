@@ -18,4 +18,5 @@ export type TemplateData = {
   isAppType: boolean;
   isNPM: boolean;
   createPluginVersion: string;
+  shouldBundleGrafanaUI: boolean;
 };

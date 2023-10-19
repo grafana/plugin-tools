@@ -1,6 +1,7 @@
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
+import minimist from 'minimist';
 import type { ModifyActionConfig, NodePlopAPI } from 'plop';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { ifEq, normalizeId } from '../utils/utils.handlebars';
@@ -87,6 +88,8 @@ export default function (plop: NodePlopAPI) {
       hasGithubWorkflows,
       hasGithubLevitateWorkflow,
     }: CliArgs) {
+      const args = process.argv.slice(2);
+      const argv = minimist(args);
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
       // Support the users package manager of choice.
@@ -101,6 +104,7 @@ export default function (plop: NodePlopAPI) {
         isAppType,
         isNPM: packageManagerName === 'npm',
         createPluginVersion: getVersion(),
+        shouldBundleGrafanaUI: Boolean(argv['experimental-bundle-grafana-ui']),
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
