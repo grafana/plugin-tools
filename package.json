@@ -55,6 +55,6 @@
       "eslint --ext .js,.tsx,.ts --cache --fix",
       "prettier --write"
     ],
-    "*.{css,md,mdx,json}": "prettier --write"
+    "*.{css,md,json}": "prettier --write"
   }
 }
