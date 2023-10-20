@@ -18,7 +18,7 @@ Frontend plugins in Grafana have their own unique dependencies, as well as depen
 
 It's important to understand that while a plugin specifies the expected versions of these dependencies in its `package.json` file, they are dynamically linked to the Grafana version at runtime.
 
-# Dynamic dependency linking
+## Dynamic dependency linking
 
 The plugin `package.json` may reference a specific version of a `@grafana` npm package, such as `@grafana/ui: 9.5.1`. Within development environments (such as the developer's IDE or when running unit tests) this version of `@grafana/ui` will be used.
 
@@ -30,16 +30,16 @@ This dynamic dependency linking also applies to the [Docker development environm
 
 :::
 
-# Dependency sharing mechanism
+## Dependency sharing mechanism
 
-To facilitate this dynamic dependency linking, Grafana employs [SystemJS](https://github.com/systemjs/systemjs) for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
+To facilitate this dynamic dependency linking, Grafana employs SystemJS for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
 
 Grafana makes the decision to share dependencies for one of two reasons:
 
 - **Singleton dependency requirement:** In some cases, only a single instance of a dependency can exist during runtime.
 - **Performance optimization:** Sharing dependencies can enhance performance, especially when dealing with large dependency codebases.
 
-# Requirements for sharing dependencies
+## Requirements for sharing dependencies
 
 To successfully share dependencies, two key components must be defined:
 
@@ -52,9 +52,9 @@ Customizing the build tool configuration to change the external dependencies is 
 
 :::
 
-# Compilation and runtime
+## Compilation and runtime
 
-As the Grafana application loads in the frontend, [SystemJS](https://github.com/systemjs/systemjs) registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
+As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
 
 When a user navigates to a Grafana page that requires a particular plugin, the following steps occur:
 
