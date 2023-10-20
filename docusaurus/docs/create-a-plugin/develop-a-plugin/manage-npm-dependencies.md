@@ -53,6 +53,12 @@ Customising the build tool configuration to change the external dependencies is 
 
 :::
 
+:::caution
+
+Customising the build tool configuration to change the external dependencies is not supported and will likely lead to plugin loading failure or bugs.
+
+:::
+
 # Compilation and runtime
 
 As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
