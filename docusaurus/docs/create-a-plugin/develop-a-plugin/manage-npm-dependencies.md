@@ -24,6 +24,13 @@ When you develop your plugin, its `package.json` may reference a specific versio
 
 However, when the plugin is installed and executed within a Grafana instance, it inherits the version of the `@grafana` packages that the Grafana application is using. For example, if the Grafana version is 10.0.0, then the plugin uses version 10.0.0 of the shared `@grafana` dependencies from the Grafana application.
 
+:::info
+
+This dynamic dependency linking also applies to the [docker development environment](/get-started/set-up-development-environment) provided by create-plugin. When the plugin is running inside Grafana it will inherit the version of the `@grafana` dependencies from the Grafana application.
+
+:::
+
+
 # Dependency sharing mechanism
 
 To facilitate this dynamic dependency linking, Grafana employs SystemJS for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
