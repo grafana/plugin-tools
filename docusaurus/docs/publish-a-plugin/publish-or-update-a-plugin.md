@@ -19,14 +19,14 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 
 ## Before you begin
 
-1. [Create a plugin](../get-started/get-started.mdx) - When you build a plugin from source, a `dist` folder is created. This folder contains the production build or _plugin assets_ for your plugin.
-1. [Follow our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
-1. [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
+- 1. [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
+- [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
+- Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
 
 To speed up the time it takes to review your plugin:
 
 - Check that your plugin is ready for review using the [plugin validator](https://github.com/grafana/plugin-validator).
-- Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
+- Provide sample dashboards and test data with your repository so that the plugin's functionality can be verified.
 
 ## Publish your plugin
 
@@ -80,13 +80,19 @@ To submit an update for an already published plugin:
 1. Click **Submit**.
     All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already set up for an existing plugin, plugin update reviews may go faster.
 
+## Deprecate a plugin
+
+Grafana is maintained by a large community of engineers, SREs, and other professionals. It’s not always possible for those developers to maintain plugins over time. Accordingly, Grafana Labs may de-list a plugin through deprecation if it does not meet our standards for security, quality and compatibility.
+
+For more information, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/).
+
 ## Frequently asked questions
 
 ### Do I need to submit a private plugin?
 
 - No. Please only submit plugins that you wish to make publicly available for the Grafana community.
 
-### How long does it take to review my submission?
+### How long does it take to review a submission?
 
 - We're not able to give an estimate at this time, though we're constantly working on improving the time it takes to review a plugin.
 
@@ -106,24 +112,20 @@ To submit an update for an already published plugin:
 ### Can I unlist a plugin?
 
 - In the event of a bug, unlisting the plugin from our catalog may be possible in exceptional cases, such as security concerns. However, we don't have control over the instances where the plugin is installed.
-- 
+
 - Also, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/) to learn more about plugin deprecation.
 
 ### Can I distribute my plugin somewhere else other than the Grafana plugin catalog?
 
 - The official method for distributing Grafana plugins is through our catalog. Alternative methods, such as installing private or development plugins on local Grafana instances, are available as per the guidelines provided in [this guide](https://grafana.com/docs/grafana/latest/administration/plugin-management#install-plugin-on-local-grafana).
 
-### Can I still use Angular for my plugin?
+### Can I still use Angular for a plugin?
 
 - No. We will not accept any new plugin submissions written in Angular. For more information, refer to our [Angular support deprecation documentation](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/).
 
 ### Do plugin signatures expire?
 
 - Plugin signatures do not currently expire.
-
-### How are plugins deprecated?
-
-- Refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/) to learn more about the plugin deprecation process.
 
 ### What source code URL formats are supported?
 

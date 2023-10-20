@@ -17,17 +17,15 @@ All Grafana Labs-authored backend plugins, including Enterprise plugins, are sig
 
 :::info
 
-It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
 
 :::
 
 ## Public or private plugins
 
-Before you can sign your plugin, you need to decide whether you want to make it a _public_ or a _private_ plugin. 
+Before signing your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
 
-To make your plugin publicly available outside of your organization, sign your plugin under a Community or Commercial [signature level](#signature-levels). Public plugins are available from the [Grafana plugin catalog](https://grafana.com/plugins) and can be installed by anyone.
-
-If you intend to only use the plugin within your organization, sign it under a Private [signature level](#signature-levels).
+The plugin can be _public_, signed as Community or Commercial, and distributed within the [Grafana plugin catalog](https://grafana.com/plugins), so that it is available for others to install. Or you can make it _private_ and only available for use within your organization.
 
 ## Signature levels
 
