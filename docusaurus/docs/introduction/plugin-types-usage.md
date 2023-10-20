@@ -23,10 +23,10 @@ This documentation discusses plugin configuration, provisioning, and usage for p
 ::: 
 ## Overview
 
-Grafana plugin development allows for many options depending on the type of user experience you want to create. Whatever your need, there's a SDK-supported plugin type for your intended use:
+Grafana plugin development allows for many options depending on the type of user experience you want to create. Whatever your need, there's a supported plugin type for your intended use:
+- **Panel plugin** - a new way of visualizing data.
 - **Data-source plugin** - a connection to a new database or other source of data,
 - **App plugin** - an integrated out-of-the-box experience, or
-- **Panel plugin** - a new way of visualizing data.
 
 :::note
 
@@ -41,8 +41,6 @@ Development of panel plugins, also known as visualizations, allows Grafana to us
 ### Usage of panel plugins
 
 Any installed plugin of type `panel` can be used, selected, and configured as a visualization within a dashboard.
-
-Use the plugins API ([`/api/plugins`](https://grafana.com/api/plugins), `/api/plugins/\<plugin id\>/`) for endpoints to retrieve installed plugins, including panel plugins. 
 
 Compared with data sources and apps, there’s currently no support for configuring visualizations on a [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) level. 
 
@@ -79,7 +77,7 @@ Not all plugins support this type of configuration. Refer to the readme of speci
 
 ### Provisioning of data sources
 
-Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
+Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can [define Grafana as-code](https://grafana.com/developers/plugin-tools/reference-plugin-json#includes) as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
 
 Note that a plugin of type `datasource` must be installed before it can be provisioned.
 
@@ -103,7 +101,7 @@ To distinguish a Grafana app from an app plugin, we sometimes refer to the latte
 
 ### Global configuration of app plugins
 
-Use the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#configuration-file-location) to configure your app `[`plugin_id`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
+Use the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#configuration-file-location) to configure your app [`plugin_id`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
 
 :::info
 
@@ -113,7 +111,7 @@ Not all plugins support this type of configuration. Refer to the readme of speci
 
 ### Provisioning of app plugins
 
-Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
+Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can [define Grafana as-code](https://grafana.com/developers/plugin-tools/reference-plugin-json#includes) as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
 
 Note that the plugin must be installed before provisioning can succeed with a `plugin id` of `app` type.
 
