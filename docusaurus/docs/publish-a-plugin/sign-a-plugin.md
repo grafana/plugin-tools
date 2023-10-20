@@ -23,9 +23,11 @@ It's not necessary to sign a plugin during development. The [Docker development 
 
 ## Public or private plugins
 
-Before signing your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
+Plugins can have different [signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) according to their author, related technology, and intended use.
 
 The plugin can be _public_, signed as Community or Commercial, and distributed within the [Grafana plugin catalog](https://grafana.com/plugins), so that it is available for others to install. Or you can make it _private_ and only available for use within your organization.
+
+Before signing your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
 
 ## Signature levels
 
@@ -50,7 +52,7 @@ To verify ownership of your plugin, generate an Access Policy token that you'll 
 
 1. Click **Create access policy**.
 
-   Realm: has to be **your-org-name** (all-stacks)
+   Realm: has to be **your-org-name** (all-stacks)  
    Scope: **plugins:write**
 
    ![Create access policy.](/img/create-access-policy-v2.png)
@@ -61,7 +63,9 @@ To verify ownership of your plugin, generate an Access Policy token that you'll 
 
    ![Create access policy token.](/img/create-access-policy-token.png)
 
-1. Click **Create**, and then save a copy of the token somewhere secure for future reference.
+1. Click **Create** and then save a copy of the token somewhere secure for future reference.
+
+1. Proceed to signing your [public plugin](#sign-a-public-plugin) or [private plugin](#sign-a-private-plugin).
 
 ## Sign a public plugin
 

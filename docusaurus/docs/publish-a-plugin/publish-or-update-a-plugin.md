@@ -19,7 +19,7 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 
 ## Before you begin
 
-- 1. [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
+- [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
 - [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 - Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
 
@@ -61,24 +61,9 @@ Follow these steps to publish your plugin for the first time.
 
 ## Update your plugin
 
-To submit an update for an already published plugin:
+To update a plugin, follow the same guidance as for [publishing a plugin](#publishing-a-plugin), except in Step 3 where you can now click **Submit Update** for the plugin you want to update.
 
-1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account.
-1. In the left menu, under Org Settings, click **My Plugins**.
-1. Click **Submit Update** for the plugin you want to update. The Create Plugin Submission dialog box appears.
-
-   ![Submit plugin.](/img/plugins-submission-create2.png)
-   
-1. Enter the information requested by the form.
-   - **OS & Architecture:**
-     - Select **Single** if your plugin archive contains binaries for multiple architectures.
-     - Select **Multiple** if you'd like to submit separate plugin archives for each architecture.
-       This can lead to faster downloads since users can select the specific architecture they want to install the plugin on.
-   - **URL:** A URL that points to a ZIP archive of your packaged plugin.
-   - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code. See [examples](#what-source-code-url-formats-are-supported).
-   - **MD5:** The MD5 hash of the plugin specified by the **URL**.
-1. Click **Submit**.
-    All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already set up for an existing plugin, plugin update reviews may go faster.
+All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already setup for an existing plugin, plugin update reviews may go faster.
 
 ## Deprecate a plugin
 
