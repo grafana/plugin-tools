@@ -77,13 +77,13 @@ Not all plugins support this type of configuration. Refer to the readme of speci
 
 ### Provisioning of data sources
 
-Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can [define Grafana as-code](https://grafana.com/developers/plugin-tools/reference-plugin-json#includes) as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
+Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can [efine Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
 
 Note that a plugin of type `datasource` must be installed before it can be provisioned.
 
 ### Bundling of dashboards
 
-Data-source plugins can include dashboards by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
+Data-source plugins can [include dashboards]((https://grafana.com/developers/plugin-tools/reference-plugin-json#includes)) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
 
 ## App plugins
 
@@ -111,13 +111,13 @@ Not all plugins support this type of configuration. Refer to the readme of speci
 
 ### Provisioning of app plugins
 
-Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can [define Grafana as-code](https://grafana.com/developers/plugin-tools/reference-plugin-json#includes) as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
+Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
 
 Note that the plugin must be installed before provisioning can succeed with a `plugin id` of `app` type.
 
 ### Bundling of apps
 
-The app plugin type allows you to [nest other plugins inside it](../create-a-plugin/extend-a-plugin/nested-plugins); in other words, to bundle or distribute multiple plugins in the same package. 
+The app plugin type allows you to [nest other plugins inside it](../create-a-plugin/extend-a-plugin/nested-plugins); in other words, to bundle or [include]((https://grafana.com/developers/plugin-tools/reference-plugin-json#includes)) multiple plugins in the same package. 
 
 ### Bundling of dashboards
 
