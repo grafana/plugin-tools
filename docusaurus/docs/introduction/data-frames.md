@@ -89,7 +89,7 @@ Each field has three values, and each value in a field must share the same type.
 
 While time fields represent timestamps, the type of the values should be `Number` (TypeScript) or `time.Time` (Golang).
 
-Another restriction on time fields in date frames concerns converting numbers. In the plugin frontend code, it's possible to convert other formats to `Number` using the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/v10.1.5/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L231-L243) from the `@grafana/data` package. This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), Javascript `DateTime`s and strings with relative times (for example, `now-10s`) to `Numbers`.
+Another restriction on time fields in date frames concerns converting numbers. In the plugin frontend code, it's possible to convert other formats to `Number` using the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/3e24a500bf43b30360faf9f32465281cc0ff996d/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L245-L257) from the `@grafana/data` package. This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), Javascript `DateTime`s and strings with relative times (for example, `now-10s`) to `Numbers`.
 
 One restriction on data frames is that all fields in the frame must be of the same length to be a valid data frame.
 
