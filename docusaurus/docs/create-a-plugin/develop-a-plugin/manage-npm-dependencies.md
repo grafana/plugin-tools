@@ -1,7 +1,7 @@
 ---
-id: manage-npm-dependencies
-title: Manage NPM dependencies
-description: How to manage frontend NPM dependencies in Grafana plugins.
+id: npm-dependencies
+title: NPM dependencies
+description: Frontend NPM dependencies in Grafana plugins.
 keywords:
   - grafana
   - plugins
@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 5
 ---
 
-# Manage frontend NPM dependencies in a Grafana plugin
+# Frontend NPM dependencies in a Grafana plugin
 
 Frontend plugins in Grafana have their own unique dependencies, as well as dependencies that are shared with the Grafana application during runtime. This document focuses on how these shared dependencies, particularly the `@grafana` npm packages, are handled.
 
