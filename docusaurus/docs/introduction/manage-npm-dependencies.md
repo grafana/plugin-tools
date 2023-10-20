@@ -1,7 +1,7 @@
 ---
-id: manage-npm-dependencies
-title: Manage NPM dependencies
-description: How to manage frontend NPM dependencies in Grafana plugins.
+id: npm-dependencies
+title: NPM dependencies
+description: Learn about frontend NPM dependencies in Grafana plugins.
 keywords:
   - grafana
   - plugins
@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 5
 ---
 
-# Manage frontend NPM dependencies in a Grafana plugin
+# Frontend NPM dependencies in a Grafana plugin
 
 Frontend plugins in Grafana have their own unique dependencies, as well as dependencies that are shared with the Grafana application during runtime. This document focuses on how these shared dependencies, particularly the `@grafana` npm packages, are handled.
 
@@ -20,19 +20,13 @@ It's important to understand that while a plugin specifies the expected versions
 
 # Dynamic dependency linking
 
-The plugin `package.json` may reference a specific version of a `@grafana` npm package, such as `@grafana/ui: 9.5.1`. Within development environments (such as the developer's IDE or when running unit tests) this version of `@grafana/ui` will be used.
+The plugin `package.json` may reference a specific version of a `@grafana` npm package, such as `@grafana/ui: 9.5.1`. Within development environments (such as the developers IDE or when running unit tests) this version of `@grafana/ui` will be used.
 
 However, when the plugin is installed and executed within a Grafana instance, it inherits the version of the `@grafana` packages that the Grafana application is using. For example, if the Grafana version is 10.0.0, then the plugin uses version 10.0.0 of the shared `@grafana` dependencies from the Grafana application.
 
-:::info
-
-This dynamic dependency linking also applies to the [Docker development environment](/get-started/set-up-development-environment) provided by the create-plugin tool. When the plugin is running inside Grafana it will inherit the version of the `@grafana` dependencies from the Grafana application.
-
-:::
-
 # Dependency sharing mechanism
 
-To facilitate this dynamic dependency linking, Grafana employs [SystemJS](https://github.com/systemjs/systemjs) for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
+To facilitate this dynamic dependency linking, Grafana employs SystemJS for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
 
 Grafana makes the decision to share dependencies for one of two reasons:
 
@@ -41,9 +35,9 @@ Grafana makes the decision to share dependencies for one of two reasons:
 
 # Requirements for sharing dependencies
 
-To successfully share dependencies, two key components must be defined:
+To share dependencies, Grafana defines two key components:
 
-- **[SystemJS](https://github.com/systemjs/systemjs) import map in Grafana:** The dependency must be listed in a SystemJS import map in the Grafana application.
+- **SystemJS import map in Grafana:** The dependency must be listed in a SystemJS import map in the Grafana application.
 - **Plugin build tool configuration:** The dependency must be externalized in the plugin's build tool configuration, which is primarily done using Webpack.
 
 :::caution
@@ -54,7 +48,7 @@ Customizing the build tool configuration to change the external dependencies is 
 
 # Compilation and runtime
 
-As the Grafana application loads in the frontend, [SystemJS](https://github.com/systemjs/systemjs) registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
+As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
 
 When a user navigates to a Grafana page that requires a particular plugin, the following steps occur:
 
