@@ -13,7 +13,7 @@ keywords:
 
 # Publish or update a plugin
 
-You've just built your plugin; now you want to share it with the world. In this guide, you'll learn how to publish a new plugin or update an existing one, and you'll learn about plugin deprecation.
+You've just built your plugin; now you want to share it with the world. In this guide, you'll learn how to publish a new plugin or update an existing one.
 
 The best way to share your plugin with the world is to publish it in the [Grafana plugin catalog](https://grafana.com/plugins). By having your plugin published on Grafana.com, more users will be able to discover your plugin.
 
@@ -78,21 +78,7 @@ To submit an update for an already published plugin:
    - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code. See [examples](#what-source-code-url-formats-are-supported).
    - **MD5:** The MD5 hash of the plugin specified by the **URL**.
 1. Click **Submit**.
-    All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already setup for an existing plugin, plugin update reviews may go faster.
-
-## Deprecate a plugin
-
-Grafana is maintained by a large community of engineers, SREs, and other professionals. The [Grafana plugin catalog](https://grafana.com/plugins/) contains a wide range of data source, panel, and app plugins - many of which are developed in open source by community members.
-
-It’s not always possible for those developers to maintain plugins over time. Accordingly, Grafana Labs may de-list a plugin through deprecation if it does not meet our standards for security, quality and compatibility. Plugins may be deprecated for reasons including, but not limited to:
-
-- A critical or high vulnerability is uncovered.
-- The plugin is found to contain malicious code.
-- The plugin is no longer compatible with any currently supported Grafana version.
-- The plugin is showing no signs of maintenance - updates, responses to issues.
-- For commercial plugins, where the agreement with said partner has lapsed or is no longer valid.
-
-For more information, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/).
+    All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already set up for an existing plugin, plugin update reviews may go faster.
 
 ## Frequently asked questions
 
@@ -117,9 +103,11 @@ For more information, refer to the Grafana Labs [Plugin Deprecation Policy](http
 - The plugin's catalog page content is extracted from the plugin README file.
   To update the plugin's catalog page, submit an updated plugin with the new content included in the README file.
 
-### Can I unlist a plugin? How are plugins deprecated?
+### Can I unlist a plugin?
 
-- Refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/) to learn more about plugin deprecation.
+- In the event of a bug, unlisting the plugin from our catalog may be possible in exceptional cases, such as security concerns. However, we don't have control over the instances where the plugin is installed.
+- 
+- Also, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/) to learn more about plugin deprecation.
 
 ### Can I distribute my plugin somewhere else other than the Grafana plugin catalog?
 
@@ -132,6 +120,10 @@ For more information, refer to the Grafana Labs [Plugin Deprecation Policy](http
 ### Do plugin signatures expire?
 
 - Plugin signatures do not currently expire.
+
+### How are plugins deprecated?
+
+- Refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/) to learn more about the plugin deprecation process.
 
 ### What source code URL formats are supported?
 
