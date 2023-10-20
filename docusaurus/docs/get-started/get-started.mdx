@@ -18,6 +18,40 @@ import InstallNPM from '@snippets/createplugin-install.npm.md';
 import InstallPNPM from '@snippets/createplugin-install.pnpm.md';
 import InstallYarn from '@snippets/createplugin-install.yarn.md';
 
+# Get started
+
+Welcome to the world of Grafana plugin creation, where you can enhance Grafana's foundational features. In this guide, you'll learn how to get started by scaffolding a plugin, running it in an efficient development environment, and using its basic features.
+
+## Quick Start
+
+Scaffold a new plugin with a single command! Run the following and answer the prompts:
+
+<CodeSnippets
+  snippets={[
+    { component: ScaffoldNPM, label: 'npm' },
+    { component: ScaffoldPNPM, label: 'pnpm' },
+    { component: ScaffoldYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
+
+## Why create a Grafana plugin?
+
+Grafana plugin development allows you to create many different types of user experiences using [supported](/introduction/grafana-plugin-sdk-for-go) features. For example, you can make:
+
+- **Panel plugins** - new ways of visualizing data
+- **Data-source plugins** - connections to a new database or other source of data
+- **App plugins** - integrated out-of-the-box experiences
+
+:::tip
+
+If this is your first time creating a plugin, we recommand that you familiarize yourself with the fundamentals of plugin types, backend plugins, data frames, and other key concepts. For more, refer to the [Introduction to Grafana plugin development](/introduction/).
+
+:::
+
+## Use plugin tools to develop your plugins faster
+
 Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration.
 
 The plugin tools consist of two packages:
@@ -25,43 +59,17 @@ The plugin tools consist of two packages:
 - `create-plugin`: A CLI to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
 - `sign-plugin`: A CLI to sign plugins for distribution.
 
-## Quick Start
+  :::info
 
-To scaffold your plugin, follow these steps:
-
-1. Run the following command:
-
-  <CodeSnippets
-    snippets={[
-      { component: ScaffoldNPM, label: 'npm' },
-      { component: ScaffoldPNPM, label: 'pnpm' },
-      { component: ScaffoldYarn, label: 'yarn' },
-    ]}
-    groupId="package-manager"
-    queryString="current-package-manager"
-  />
-
-1. When prompted, enter answers to the given questions. For example:
-
-  ```
-  ? What is going to be the name of your plugin?: mongodb
-  ? What is the organization name of your plugin?: grafana
-  ? What type of plugin would you like?: datasource
-  ```
-
-  If you enter those values for name, organization, and plugin type, then the directory and plugin ID will be named `grafana-mongodb-datasource`.
-
-  :::note
-
-  If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to simplify migration. For more information, refer to [Migrate from toolkit](/migration-guides/migrate-from-toolkit.mdx).
+  If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to make the jump to our newest tools. For more information, refer to [Migrate from toolkit](/migration-guides/migrate-from-toolkit.mdx).
 
   :::
 
-### Before you begin
+## Before you begin
 
-Make sure you are using supported a supported OS, Grafana version, and tooling.
+Make sure you are using a supported OS, Grafana version, and tooling.
 
-#### Supported operating systems
+### Supported operating systems
 
 Grafana plugin tools work with the following operating systems:
 
@@ -69,35 +77,59 @@ Grafana plugin tools work with the following operating systems:
 - macOS
 - Windows 10+ with WSL (Windows Subsystem for Linux)
 
-#### Supported Grafana version
+### Supported Grafana version
 
 We generally recommend that you build for a version of Grafana later than v9.0. For more information about requirements and dependencies when developing with Grafana, see the [Grafana developer's guide](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md).
 
-#### Recommended tooling
+### Recommended tooling
 
 You'll need to have the following tools set up:
 
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
-- Optionally [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
 - [Docker](https://docs.docker.com/get-docker/)
+- Optionally, [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
 
-#### Choose a package manager
+#### Supported package managers
 
 When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
 
-## Output
+## Scaffolding a plugin
 
-Run the above command to create a directory called `<orgName>-<pluginName>-<pluginType>` inside the current directory. This directory contains the initial project structure to kickstart your plugin development.
+### Step 1: Install the `create-plugin` tool
 
-:::info
+Run the following command and answer the prompts:
 
-The directory name `<orgName>-<pluginName>-<pluginType>` is based on the answers you gave to the prompts. Use the name of the generated folder when prompted.
+<CodeSnippets
+  snippets={[
+    { component: ScaffoldNPM, label: 'npm' },
+    { component: ScaffoldPNPM, label: 'pnpm' },
+    { component: ScaffoldYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
-:::
+For help with the prompts, refer to the [Prompts reference](/get-started/prompts-cli.md#prompts).
 
-Depending on the answers you gave to the prompts, there should now be a structure like:
+### Step 2: Open the generated folder structure
+
+When you've finished installing the tools, open the plugin folder:
+
+<CodeSnippets
+  snippets={[
+    { component: InstallNPM, label: 'npm' },
+    { component: InstallPNPM, label: 'pnpm' },
+    { component: InstallYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
+
+The directory name `<orgName>-<pluginName>-<pluginType>` is based on the answers you gave to the prompts. Use the name of the generated folder when prompted. This directory contains the initial project structure to kickstart your plugin development.
+
+The file structure should look like this:
 
 ```
 <orgName>-<pluginName>-<pluginType>
@@ -135,77 +167,25 @@ Depending on the answers you gave to the prompts, there should now be a structur
 └── tsconfig.json
 ```
 
-When you've finished installing the tools, open the plugin folder:
+For more information about these files, refer to [Folder structure](get-started/folder-structure/).
 
-<CodeSnippets
-  snippets={[
-    { component: InstallNPM, label: 'npm' },
-    { component: InstallPNPM, label: 'pnpm' },
-    { component: InstallYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+### Step 3: Run your plugin in Docker
 
-## Create-plugin prompts reference
+With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](get-started/set-up-development-environment/).
 
-When running the `create-plugin` command, the following prompts appear:
+### Step 4: Use CLI commands
 
-### What is the name of your plugin?
+After you have installed `create-plugin`, you can run built-in commands in the shell. For example:
 
-Enter the name of your plugin. This helps to identify its purpose.
-
-### What is the organization name of your plugin?
-
-Enter the name of your organization. Grafana plugins require an organization name (normally your [Grafana account](https://grafana.com/signup/) username) to help uniquely identify your plugin.
-
-### How would you describe your plugin?
-
-Give your plugin a description. This will help users more easily understand what it does when the plugin is distributed.
-
-### What type of plugin would you like?
-
-Select from the following choices:
-
-- **app**: Create a custom out-of-the-box monitoring experience.
-- **datasource**: Add support for new databases or external APIs.
-- **panel**: Add new visualizations to dashboards.
-- **scenesapp**: Create scenes applications or scenes plugins (that is, dashboard-like experiences in app plugins).
-
-To learn more about the types of plugins, refer to the [plugin management guidelines](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
-To learn more about scenes, refer to the [Scenes documentation](https://grafana.com/developers/scenes).
-
-### Do you want a backend part of your plugin?
-
-App and data source plugins can have a backend component written in Go. Backend plugins offer powerful features such as:
-
-- Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for data sources.
-- Connect to non-HTTP services to which a browser normally can’t connect. For example, SQL database servers.
-- Keep state between users. For example, query caching for data sources.
-- Use custom authentication methods and/or authorization checks that aren’t supported in Grafana.
-- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](/introduction/backend-plugins#resources).
-
-### Do you want to add Github CI and Release workflows?
-
-Add [Github workflows](/create-a-plugin/develop-a-plugin/set-up-github-workflows) to your development cycle to help catch issues early or release your plugin to the community.
-
-### Do you want to add a Github workflow to automatically check Grafana API compatibility on PRs?
-
-Add a [Github workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
-
-## Key CLI commands
-
-After `create-plugin` has finished, you can run built-in commands in the shell:
-
-### <SyncCommand cmd="run dev" />
+#### <SyncCommand cmd="run dev" />
 
 Builds the plugin in _development mode_ and runs in _watch mode_. Rebuilds the plugin whenever you make changes to the code. You'll see build errors and lint warnings in the console.
 
-### <SyncCommand cmd="run test" />
+#### <SyncCommand cmd="run test" />
 
 Runs the tests and watches for changes.
 
-### <SyncCommand cmd="run build" />
+#### <SyncCommand cmd="run build" />
 
 Creates a production build of the plugin that optimizes for the best performance. Minifies the build and includes hashes in the filenames.
 
@@ -214,3 +194,63 @@ Creates a production build of the plugin that optimizes for the best performance
 </h3>
 
 Builds backend plugin binaries for Linux, Windows and Darwin.
+
+For a complete list of available CLI commands, refer to [CLI commands](/prompts-cli#cli-commands).
+
+## Frequently used CLI commands
+
+### `run build`
+
+Compiles and bundles the project using Webpack in production mode.
+
+### `run dev`
+
+Runs Webpack in watch mode for development, continually monitoring for changes.
+
+### `run e2e`
+
+Runs Grafana end-to-end tests using Cypress.
+
+### `run e2e:update`
+
+Runs Grafana end-to-end tests and tests any test screenshots, using Cypress.
+
+### `run lint`
+
+Lints the frontend codebase using ESLint with the `.gitignore` file to ignore certain files. Results are cached locally to speed up future linting tasks.
+
+### `run lint:fix`
+
+Lints the frontend codebase using ESLint and automatically fixes detected issues.
+
+### `run typecheck`
+
+Performs a type-checking process on the frontend code using TypeScript.
+
+### `run server`
+
+Launches the https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment using Docker.
+
+### `run sign`
+
+Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
+
+### `run test`
+
+Executes frontend tests, running only the tests that have changed, and enables a watch mode for ongoing testing.
+
+### `run test:ci`
+
+Runs frontend tests for CI, ensuring it passes even with no tests, and utilizes a maximum of four workers for parallel execution.
+
+:::info
+
+For a complete list of available CLI commands, refer to the [CLI reference](/prompts-cli.md#prompts).
+
+:::
+
+## Next steps
+
+- Start your plugin journey with one of our [plugin development tutorials](/tutorials/).
+- Learn how to [develop and extend](/create-a-plugin/) its functionality.
+- Review the [Examples](https://github.com/grafana/grafana-plugin-examples), [sign](/publish-a-plugin/sign-a-plugin) to learn about good practices.
