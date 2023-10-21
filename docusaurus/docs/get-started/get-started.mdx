@@ -95,7 +95,7 @@ You'll need to have the following tools set up:
 
 When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
 
-## Scaffolding a plugin
+## Scaffold a plugin
 
 ### Step 1: Install the `create-plugin` tool
 
@@ -175,29 +175,11 @@ With the `create-plugin` tool, you can use a Docker container to simplify the co
 
 ### Step 4: Use CLI commands
 
-After you have installed `create-plugin`, you can run built-in commands in the shell. For example:
-
-#### <SyncCommand cmd="run dev" />
-
-Builds the plugin in _development mode_ and runs in _watch mode_. Rebuilds the plugin whenever you make changes to the code. You'll see build errors and lint warnings in the console.
-
-#### <SyncCommand cmd="run test" />
-
-Runs the tests and watches for changes.
-
-#### <SyncCommand cmd="run build" />
-
-Creates a production build of the plugin that optimizes for the best performance. Minifies the build and includes hashes in the filenames.
-
-<h3>
-  <code>mage -v</code>
-</h3>
-
-Builds backend plugin binaries for Linux, Windows and Darwin.
-
-For a complete list of available CLI commands, refer to [CLI commands](/prompts-cli#cli-commands).
+After you have installed `create-plugin`, you can run built-in commands in the shell. Refer to the section below.
 
 ## Frequently used CLI commands
+
+Use the CLI for essential tasks of plugin development.
 
 ### `run build`
 
@@ -206,22 +188,6 @@ Compiles and bundles the project using Webpack in production mode.
 ### `run dev`
 
 Runs Webpack in watch mode for development, continually monitoring for changes.
-
-### `run e2e`
-
-Runs Grafana end-to-end tests using Cypress.
-
-### `run e2e:update`
-
-Runs Grafana end-to-end tests and tests any test screenshots, using Cypress.
-
-### `run lint`
-
-Lints the frontend codebase using ESLint with the `.gitignore` file to ignore certain files. Results are cached locally to speed up future linting tasks.
-
-### `run lint:fix`
-
-Lints the frontend codebase using ESLint and automatically fixes detected issues.
 
 ### `run typecheck`
 
@@ -235,17 +201,9 @@ Launches the https://grafana.com/developers/plugin-tools/get-started/set-up-deve
 
 Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
 
-### `run test`
-
-Executes frontend tests, running only the tests that have changed, and enables a watch mode for ongoing testing.
-
-### `run test:ci`
-
-Runs frontend tests for CI, ensuring it passes even with no tests, and utilizes a maximum of four workers for parallel execution.
-
 :::info
 
-For a complete list of available CLI commands, refer to the [CLI reference](/prompts-cli.md#prompts).
+For a complete list of available CLI commands, refer to the [CLI reference](/get-started/prompt-cli-reference#cli-commands).
 
 :::
 

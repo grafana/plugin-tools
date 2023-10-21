@@ -1,6 +1,6 @@
 ---
 id: create-plugin
-title: How to create and enhance a plugin
+title: Create a Grafana plugin
 description: How to develop and extend a Grafana plugin.
 keywords:
   - grafana
