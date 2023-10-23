@@ -26,7 +26,7 @@ Enter the name of your plugin. This helps to identify its purpose.
 
 ### What is the organization name of your plugin?
 
-Enter the name of your organization. This which is normally your [Grafana account](https://grafana.com/signup/) username to help uniquely identify your plugin.
+Enter the name of your organization. This is normally your [Grafana account](https://grafana.com/signup/) username Grafana uses to help uniquely identify your plugin.
 
 ### How would you describe your plugin?
 
