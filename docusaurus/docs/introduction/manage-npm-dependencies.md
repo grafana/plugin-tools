@@ -18,13 +18,13 @@ Frontend plugins in Grafana have their own unique dependencies, as well as depen
 
 It's important to understand that while a plugin specifies the expected versions of these dependencies in its `package.json` file, they are dynamically linked to the Grafana version at runtime.
 
-# Dynamic dependency linking
+## Dynamic dependency linking
 
 The plugin `package.json` may reference a specific version of a `@grafana` npm package, such as `@grafana/ui: 9.5.1`. Within development environments (such as the developers IDE or when running unit tests) this version of `@grafana/ui` will be used.
 
 However, when the plugin is installed and executed within a Grafana instance, it inherits the version of the `@grafana` packages that the Grafana application is using. For example, if the Grafana version is 10.0.0, then the plugin uses version 10.0.0 of the shared `@grafana` dependencies from the Grafana application.
 
-# Dependency sharing mechanism
+## Dependency sharing mechanism
 
 To facilitate this dynamic dependency linking, Grafana employs SystemJS for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
 
@@ -33,7 +33,7 @@ Grafana makes the decision to share dependencies for one of two reasons:
 - **Singleton dependency requirement:** In some cases, only a single instance of a dependency can exist during runtime.
 - **Performance optimization:** Sharing dependencies can enhance performance, especially when dealing with large dependency codebases.
 
-# Requirements for sharing dependencies
+## Requirements for sharing dependencies
 
 To share dependencies, Grafana defines two key components:
 
@@ -46,7 +46,7 @@ Customizing the build tool configuration to change the external dependencies is 
 
 :::
 
-# Compilation and runtime
+## Compilation and runtime
 
 As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
 
