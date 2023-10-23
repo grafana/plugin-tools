@@ -1,3 +1,16 @@
+# (Mon Oct 23 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.2.2`
+  - Create Plugin: Fix migrate and update commands [#487](https://github.com/grafana/plugin-tools/pull/487) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Oct 20 2023)
 
 :tada: This release contains work from a new contributor! :tada:
