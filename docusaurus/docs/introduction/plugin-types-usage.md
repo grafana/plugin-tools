@@ -83,7 +83,7 @@ Note that a plugin of type `datasource` must be installed before it can be provi
 
 ### Bundling of dashboards
 
-Data-source plugins can [include dashboards](https://grafana.com/developers/plugin-tools/reference-plugin-json#includes) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
+Data-source plugins can [include dashboards](/reference-plugin-json#includes) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
 
 ## App plugins
 
