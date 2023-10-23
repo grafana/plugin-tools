@@ -117,7 +117,7 @@ Note that the plugin must be installed before provisioning can succeed with a `p
 
 ### Bundling of apps
 
-The app plugin type allows you to [nest other plugins inside it](../create-a-plugin/extend-a-plugin/nested-plugins); in other words, to bundle or [include](https://grafana.com/developers/plugin-tools/reference-plugin-json#includes) multiple plugins in the same package. 
+The app plugin type allows you to [nest other plugins inside it](../create-a-plugin/extend-a-plugin/nested-plugins); in other words, to bundle or [include](/reference-plugin-json#includes) multiple plugins in the same package.
 
 ### Bundling of dashboards
 
