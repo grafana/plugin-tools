@@ -42,8 +42,6 @@ Plugins are loaded either when Grafana starts up or when a plugin has been insta
 
 Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and troubleshoot any unexpected behavior, such as why a certain plugin is not marked as installed in the plugins catalog and/or for use within Grafana even though you've installed it. You can check the [Grafana server log](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) for any unexpected errors or details related to loading a plugin. In addition, you can enable even more details by changing the [log level to debug](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#log).
 
-All plugins are initialized either when Grafana starts up or when a plugin has been installed/uninstalled during runtime.
-
 For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 4](#phase-4-backend-plugin-initialization)).
 
 ### Phase 1. Plugin discovery 
