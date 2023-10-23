@@ -56,7 +56,7 @@ All plugins that were discovered in the discovery phase are checked to make sure
 - Plugins must have a valid [signature](https://grafana.com/docs/grafana/latest/administration/plugin-management/#plugin-signatures). Valid plugins are referred to as _verified plugins_. 
 - Angular detection: Given that [Angular is deprecated](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/), if Angular support is disabled and Angular is detected in the plugin, then we record an error and don't allow the plugin to be loaded.
 
-### Phase 3. Backend plugin initialization (backend plugins only)
+### Phase 3. Backend plugin initialization
 
 For any verified plugin that has a backend, Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
 
