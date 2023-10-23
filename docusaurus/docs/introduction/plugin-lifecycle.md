@@ -66,7 +66,7 @@ All verified plugins are registered in an in-memory registry. From now on, the p
 
 Registered plugins show as installed in the catalog and appear in views for selecting a panel or data source in a dashboard.
 
-### Phase 5. Start backend plugin (backend plugins only)
+### Phase 5. Start backend plugin
 
 For registered plugins that have a backend, Grafana starts to run the backend binary as a separate process using HashiCorp’s Go Plugin System over RPC. The supported plugin protocol and version is negotiated between Grafana (client) and the plugin (server) to give Grafana an understanding of the plugin's capabilities. 
 
