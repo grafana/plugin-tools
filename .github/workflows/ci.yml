@@ -99,6 +99,20 @@ jobs:
         run: npm run build
         working-directory: ./packages/create-plugin/generated
 
+      - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
+        if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+        run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        working-directory: ./packages/create-plugin/generated
+
+      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
+        if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        env:
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+        run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
+        working-directory: ./packages/create-plugin/generated
+
       - name: Save generated plugin dependencies
         id: cache-generated-deps-save
         if: ${{ steps.cache-generated-deps-restore.outputs.cache-hit != 'true' }}
