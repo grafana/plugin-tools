@@ -1,3 +1,33 @@
+# v2.2.2 (Mon Oct 23 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix migrate and update commands [#487](https://github.com/grafana/plugin-tools/pull/487) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.2.1 (Fri Oct 20 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Domas ([@domasx2](https://github.com/domasx2)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Templates/Webpack: Include full path in dev mode image output filename [#388](https://github.com/grafana/plugin-tools/pull/388) ([@domasx2](https://github.com/domasx2))
+- Docs: Fix broken links in package files [#476](https://github.com/grafana/plugin-tools/pull/476) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 2
+
+- Domas ([@domasx2](https://github.com/domasx2))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+
+---
+
 # v2.2.0 (Tue Oct 17 2023)
 
 #### 🚀 Enhancement

@@ -10,6 +10,7 @@ import { printGenerateSuccessMessage } from './generate-actions/print-success-me
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
 import { prettifyFiles } from './generate-actions/prettify-files';
 import { CliArgs, TemplateData } from './types';
+import { getExportFileName } from '../utils/utils.files';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
@@ -234,19 +235,6 @@ function getActionsForTemplateFolder({
   // The npmrc file is only useful for `pnpm` settings. We can remove it for other package managers.
   if (templateData.packageManagerName !== 'pnpm') {
     files = files.filter((file) => path.basename(file) !== 'npmrc');
-  }
-
-  function getExportFileName(f: string) {
-    // yarn and npm packing will not include `.gitignore` files
-    // so we have to manually rename them to add the dot prefix
-    if (path.basename(f) === 'gitignore') {
-      return '.gitignore';
-    }
-    if (path.basename(f) === 'npmrc') {
-      return '.npmrc';
-    }
-
-    return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f);
   }
 
   function getExportPath(f: string) {

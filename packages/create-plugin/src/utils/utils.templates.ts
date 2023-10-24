@@ -7,6 +7,7 @@ import { renderHandlebarsTemplate } from './utils.handlebars';
 import { getPluginJson } from './utils.plugin';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
 import { getPackageManagerWithFallback } from './utils.packageManager';
+import { getExportFileName } from '../utils/utils.files';
 
 /**
  *
@@ -52,7 +53,7 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
 
   const rendered = renderTemplateFromFile(templateFile, data);
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '');
-  const exportPath = path.join(EXPORT_PATH_PREFIX, relativeExportPath);
+  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
   mkdirp.sync(path.dirname(exportPath));
   fs.writeFileSync(exportPath, rendered);

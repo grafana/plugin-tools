@@ -16,7 +16,7 @@ export function getPackageJson(): PackageJson {
 
 // Returns with a package.json that is generated based on the latest templates
 export function getLatestPackageJson(): PackageJson {
-  const packageJsonPath = path.join(TEMPLATE_PATHS.common, 'package.json');
+  const packageJsonPath = path.join(TEMPLATE_PATHS.common, '_package.json');
   const data = getTemplateData();
 
   return JSON.parse(renderTemplateFromFile(packageJsonPath, data));

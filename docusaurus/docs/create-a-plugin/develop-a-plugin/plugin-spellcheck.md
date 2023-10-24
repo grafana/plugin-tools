@@ -1,13 +1,12 @@
 ---
 id: plugin-spellcheck
-title: Set up GitHub workflows
+title: Plugin spellcheck (internal)
 draft: true
 description: Internal docs on how to setup the plugin spellcheck.
 keywords:
   - grafana
   - plugins
   - spellcheck
-
 ---
 
 # Configuring plugin spellcheck
