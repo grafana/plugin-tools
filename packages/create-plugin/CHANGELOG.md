@@ -1,3 +1,20 @@
+# v2.3.0 (Tue Oct 24 2023)
+
+#### 🚀 Enhancement
+
+- Bump to node 20 [#478](https://github.com/grafana/plugin-tools/pull/478) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix wrongly named files when upgrading/migrating [#490](https://github.com/grafana/plugin-tools/pull/490) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v2.2.2 (Mon Oct 23 2023)
 
 #### 🐛 Bug Fix
