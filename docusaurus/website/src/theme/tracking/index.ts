@@ -65,7 +65,7 @@ export function trackPage() {
       ? document.querySelector("link[rel='canonical']").getAttribute('href')
       : href;
     const properties = {
-      url: url,
+      url,
       path: pathname,
       referrer: document.referrer || '$direct',
       title: document.title,
