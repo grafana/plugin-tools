@@ -67,9 +67,9 @@ All plugin submissions, new or updates, go through the same automated and rigoro
 
 ## Deprecate a plugin
 
-Grafana is maintained by a large community of engineers, SREs, and other professionals. It’s not always possible for those developers to maintain plugins over time. Accordingly, Grafana Labs may de-list a plugin through deprecation if it does not meet our standards for security, quality and compatibility.
+If a plugin is no longer relevant or is unable to be maintained, plugin developers can request that the plugin be deprecated and removed from the catalog. Similarly, Grafana Labs may deprecate and delist a plugin as part of curating the catalog and ensuring plugins meet our standards for security, quality and compatibility.
 
-For more information, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/).
+For more information on plugin deprecation and how to request your plugin to be deprecated, refer to the Grafana Labs [Plugin Deprecation Policy](https://grafana.com/legal/plugin-deprecation/).
 
 ## Frequently asked questions
 
