@@ -1,3 +1,15 @@
+# v2.2.3 (Tue Oct 24 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix wrongly named files when upgrading/migrating [#490](https://github.com/grafana/plugin-tools/pull/490) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.2.2 (Mon Oct 23 2023)
 
 #### 🐛 Bug Fix
