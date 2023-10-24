@@ -10,6 +10,7 @@ import { printGenerateSuccessMessage } from './generate-actions/print-success-me
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
 import { prettifyFiles } from './generate-actions/prettify-files';
 import { CliArgs, TemplateData } from './types';
+import { getExportFileName } from '../utils/utils.files';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
@@ -236,16 +237,6 @@ function getActionsForTemplateFolder({
     files = files.filter((file) => path.basename(file) !== 'npmrc');
   }
 
-  function getExportFileName(f: string) {
-    const baseName = path.basename(f);
-
-    if (Object.keys(configFileNamesMap).includes(baseName)) {
-      return configFileNamesMap[baseName];
-    }
-
-    return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : baseName;
-  }
-
   function getExportPath(f: string) {
     return path.relative(folderPath, path.dirname(f));
   }
@@ -265,16 +256,6 @@ function getActionsForTemplateFolder({
     },
   }));
 }
-
-// yarn and npm packing will not include `.gitignore` files
-// so we have to manually rename them to add the dot prefix
-// other config files trip up the tooling in the plugin-tools monorepo
-const configFileNamesMap: Record<string, string> = {
-  gitignore: '.gitignore',
-  npmrc: '.npmrc',
-  _eslintrc: '.eslintrc',
-  '_package.json': 'package.json',
-};
 
 function isFile(path: string) {
   try {
