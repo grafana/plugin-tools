@@ -37,7 +37,7 @@ Grafana makes the decision to share dependencies for one of two reasons:
 
 To share dependencies, Grafana defines two key components:
 
-- **SystemJS import map in Grafana:** The dependency must be listed in a SystemJS import map in the Grafana application.
+- **[SystemJS](https://github.com/systemjs/systemjs) import map in Grafana:** The dependency must be listed in a SystemJS import map in the Grafana application.
 - **Plugin build tool configuration:** The dependency must be externalized in the plugin's build tool configuration, which is primarily done using Webpack.
 
 :::caution
@@ -52,7 +52,7 @@ As the Grafana application loads in the frontend, SystemJS registers all shared 
 
 When a user navigates to a Grafana page that requires a particular plugin, the following steps occur:
 
-1. SystemJS _lazily loads_ the plugin's `module.js` file.
+1. [SystemJS](https://github.com/systemjs/systemjs) _lazily loads_ the plugin's `module.js` file.
 1. SystemJS instantiates the code within the `module.js` file, ensuring that it links up any shared dependencies with the external dependency references in the plugin, before executing the code.
 
 This process enables Grafana to efficiently manage and share dependencies across various plugins while ensuring that the correct and compatible versions of shared dependencies are used during runtime.
