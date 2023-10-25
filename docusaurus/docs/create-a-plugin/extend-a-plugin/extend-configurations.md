@@ -34,6 +34,23 @@ Edit the `.eslintrc` file in the project root to extend the ESLint configuration
 }
 ```
 
+The following example can be used to disable deprecation notices.
+
+```json
+{
+  // Eslint configuration provided by @grafana/create-plugin
+  "extends": "./.config/.eslintrc",
+  "overrides": [
+    {
+      "files": ["src/**/*.{ts,tsx}"],
+      "rules": {
+        "deprecation/deprecation": "off"
+      }
+    }
+  ]
+}
+```
+
 ---
 
 ## Extend the Prettier config
