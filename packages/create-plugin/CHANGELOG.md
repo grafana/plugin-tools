@@ -1,3 +1,16 @@
+# v2.4.0 (Wed Oct 25 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Lint Deprecation Warnings [#268](https://github.com/grafana/plugin-tools/pull/268) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v2.3.0 (Tue Oct 24 2023)
 
 #### 🚀 Enhancement
