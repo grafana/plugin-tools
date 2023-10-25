@@ -99,6 +99,12 @@ jobs:
         run: npm run build
         working-directory: ./packages/create-plugin/generated
 
+      - name: '@grafana/sign-plugin - build'
+        if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+        run: npm exec nx run @grafana/sign-plugin:build
+
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
