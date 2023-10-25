@@ -50,6 +50,26 @@ export function removeFilesInCwd(files: string[]) {
   }
 }
 
+export function getExportFileName(f: string) {
+  const baseName = path.basename(f);
+
+  if (Object.keys(configFileNamesMap).includes(baseName)) {
+    return configFileNamesMap[baseName];
+  }
+
+  return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : baseName;
+}
+
+// yarn and npm packing will not include `.gitignore` files
+// so we have to manually rename them to add the dot prefix
+// other config files trip up the tooling in the plugin-tools monorepo
+const configFileNamesMap: Record<string, string> = {
+  gitignore: '.gitignore',
+  npmrc: '.npmrc',
+  _eslintrc: '.eslintrc',
+  '_package.json': 'package.json',
+};
+
 /**
  * Returns TRUE if the file is starting with any of the provided string filters.
  *
