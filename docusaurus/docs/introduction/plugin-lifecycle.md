@@ -18,12 +18,6 @@ sidebar_position: 2.5
 
 This document describes the various phases of a plugin such as installation and loading. We will describe the differences in a plugin's life cycle depending on its type and whether or not it has a [backend](backend.md).  
 
-:::note
-
-The life cycle of plugins is tracked in-memory and is not persisted in Grafana’s database. 
-
-:::
-
 ## Installing and uninstalling a plugin
 
 For instructions to install or uninstall plugins, see our documentation at [Plugin administration](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-grafana-plugins).
@@ -42,7 +36,13 @@ Plugins are loaded either when Grafana starts up or when a plugin has been insta
 
 Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and troubleshoot any unexpected behavior, such as why a certain plugin is not marked as installed in the plugins catalog and/or for use within Grafana even though you've installed it. You can check the [Grafana server log](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) for any unexpected errors or details related to loading a plugin. In addition, you can enable even more details by changing the [log level to debug](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#log).
 
-For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 4](#phase-4-backend-plugin-initialization)).
+For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 3](#phase-3-backend-plugin-initialization)).
+
+:::note
+
+The life cycle of plugins is tracked in-memory and is not persisted in Grafana’s database. This means that the phases described below occur every time the server is restarted.
+
+:::
 
 ### Phase 1. Plugin discovery 
 
@@ -72,7 +72,7 @@ A Grafana backend plugin has its own separate life cycle. So long as the backend
 
 ### Phase 6. Client-side loading 
 
-After Grafana has started and the HTTP API is running, Grafana users receive the server-side rendered index page containing so-called bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin. 
+After Grafana has started and the [HTTP API](https://grafana.com/docs/grafana/latest/developers/http_api/) is running, Grafana users receive the server-side rendered index page containing so-called bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin. 
 
 When the user interacts with a UI that requires a plugin, Grafana will _lazy load_ the plugin's `module.js` file: 
 
