@@ -54,9 +54,8 @@ Follow these steps to publish your plugin for the first time.
    For every new plugin, we perform a manual review that includes the following checks:
 
     - **Code review:** For quality and security purposes, we review the source code for the plugin.
-      If you're unable to make the source code publicly available, let us know in a comment on your plugin submission.
     - **Tests:** We install your plugin on one of our Grafana instances to test it for basic use.
-      For more advanced plugins, we may ask you to assist us in configuring a test environment for the plugin.
+      We may ask you to assist us in configuring a test environment for the plugin.
       We use the test environment whenever you submit a plugin update.
 
 ## Update your plugin

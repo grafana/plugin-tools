@@ -29,19 +29,6 @@ The plugin can be _public_, signed as Community or Commercial, and distributed w
 
 Before signing your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
 
-## Signature levels
-
-A plugin's signature level classifies it according to author, related technology, and intended use. 
-
-- To sign a plugin under the [Community](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) and [Commercial](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) signature levels, refer to [Sign a public plugin](#sign-a-public-plugin).
-- To sign a plugin under the [Private](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) signature level, refer to [Sign a private plugin](#sign-a-private-plugin).
-
-:::info
-
-For detailed descriptions of the Community, Commercial, and Private signature levels, refer to the Grafana [Plugins policy](https://grafana.com/legal/plugins/). 
-
-:::
-
 ## Generate an Access Policy token
 
 To verify ownership of your plugin, generate an Access Policy token that you'll use every time you need to sign a new version of your plugin.
