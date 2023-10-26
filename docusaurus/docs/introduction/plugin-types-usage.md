@@ -20,35 +20,38 @@ sidebar_position: 1
 
 This documentation discusses plugin configuration, provisioning, and usage for plugin developers. General information about plugin administration is available at [Plugin management](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
 
-::: 
+:::
+
 ## Overview
 
 Grafana plugin development allows for many options depending on the type of user experience you want to create. Whatever your need, there's a supported plugin type for your intended use:
+
 - **Panel plugin** - a new way of visualizing data.
 - **Data-source plugin** - a connection to a new database or other source of data,
 - **App plugin** - an integrated out-of-the-box experience, or
 
 :::note
 
-Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](../get-started/get-started.mdx#what-type-of-plugin-would-you-like) of plugin.
+Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](../get-started/prompts-cli.md#what-type-of-plugin-would-you-like) of plugin.
 
 :::
 
 ## Panel (visualization) plugins
 
-Development of panel plugins, also known as visualizations, allows Grafana to use custom visualizations, similar to existing plugins such the [Polystat](https://grafana.com/grafana/plugins/grafana-polystat-panel/) panel. 
+Development of panel plugins, also known as visualizations, allows Grafana to use custom visualizations, similar to existing plugins such the [Polystat](https://grafana.com/grafana/plugins/grafana-polystat-panel/) panel.
 
 ### Usage of panel plugins
 
 Any installed plugin of type `panel` can be used, selected, and configured as a visualization within a dashboard.
 
-Compared with data sources and apps, there’s currently no support for configuring visualizations on a [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) level. 
+Compared with data sources and apps, there’s currently no support for configuring visualizations on a [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) level.
 
 :::note
 
 With the recent introduction of [Grafana Scenes](https://grafana.com/developers/scenes), you can use any installed plugin of type `panel` as a visualization within a Scenes implementation.
 
 :::
+
 ## Data source plugins
 
 In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). Data source plugins may be added on the frontend and [the backend](./backend.md).
@@ -57,7 +60,7 @@ In plugin development, you can create new data source plugins to use Grafana wit
 
 Create and configure a Grafana data source when you want to work with data provided by a third-party service for use in Grafana Dashboards, Explore, Alerting, and so on.
 
-Given any installed plugin of type `datasource`, you can create and configure any number of data sources per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations). After you create zero to infinity data sources, they are persisted in Grafana's database. 
+Given any installed plugin of type `datasource`, you can create and configure any number of data sources per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations). After you create zero to infinity data sources, they are persisted in Grafana's database.
 
 :::note
 
@@ -77,7 +80,7 @@ Not all plugins support this type of configuration. Refer to the readme of speci
 
 ### Provisioning of data sources
 
-Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
+Data sources can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations).
 
 Note that a plugin of type `datasource` must be installed before it can be provisioned.
 
@@ -91,7 +94,7 @@ Development of app plugins, also known as apps or applications, allows you to cr
 
 ### Usage of app plugins
 
-Configure a Grafana app when you want to leverage or create a tailored monitoring view for a third-party service and optionally use custom pages or UI extensions. Given any installed plugin of type `app`, you can enable them once per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) and they are persisted in Grafana’s database. 
+Configure a Grafana app when you want to leverage or create a tailored monitoring view for a third-party service and optionally use custom pages or UI extensions. Given any installed plugin of type `app`, you can enable them once per [Grafana organization](https://grafana.com/docs/grafana/latest/administration/organization-management/#about-organizations) and they are persisted in Grafana’s database.
 
 :::note
 
@@ -111,7 +114,7 @@ Not all plugins support this type of configuration. Refer to the readme of speci
 
 ### Provisioning of app plugins
 
-Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations). 
+Apps can also be provisioned using Grafana’s [provisioning features](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins) so that you can define Grafana as-code as part of a GitOps approach when Grafana starts up or [on demand](https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-provisioning-configurations).
 
 Note that the plugin must be installed before provisioning can succeed with a `plugin id` of `app` type.
 
