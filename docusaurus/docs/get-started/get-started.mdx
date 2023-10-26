@@ -46,13 +46,13 @@ Grafana plugin development allows you to create many different types of user exp
 
 :::tip
 
-If this is your first time creating a plugin, we recommand that you familiarize yourself with the fundamentals of plugin types, backend plugins, data frames, and other key concepts. For more, refer to the [Introduction to Grafana plugin development](/introduction/).
+If this is your first time creating a plugin, we recommend that you familiarize yourself with the fundamentals of plugin types, backend plugins, data frames, and other key concepts. For more, refer to the [Introduction to Grafana plugin development](/introduction/).
 
 :::
 
 ## Use plugin tools to develop your plugins faster
 
-Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero configuration.
+Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero additional configuration required.
 
 The plugin tools consist of two packages:
 
@@ -173,9 +173,11 @@ For more information about these files, refer to [Folder structure](get-started/
 
 With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](get-started/set-up-development-environment/).
 
-### Step 4: Use CLI commands
-
-After you have installed `create-plugin`, you can run built-in commands in the shell. Refer to the [section below](#frequently-used-cli-commands).
+Key CLI commands include:
+- Install (`npm i`)
+- Build the frontend in development mode (`npm run dev`)
+- Build the backend (optional) (`mage -v build:linux`)
+- Run the Grafana server (`npm run server`)
 
 ## Frequently used CLI commands
 
@@ -199,7 +201,7 @@ Performs a type-checking process on the frontend code using TypeScript.
 
 ### `run server`
 
-Launches the https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment using Docker.
+Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
 
 ### `run sign`
 
@@ -215,4 +217,5 @@ For a complete list of available CLI commands, refer to the [CLI reference](/get
 
 - Start your plugin journey with one of our [plugin development tutorials](/tutorials/).
 - Learn how to [develop and extend](/create-a-plugin/) its functionality.
-- Review the [Examples](https://github.com/grafana/grafana-plugin-examples), [sign](/publish-a-plugin/sign-a-plugin) to learn about good practices.
+- Review the [plugin examples](https://github.com/grafana/grafana-plugin-examples) to learn about good practices.
+- Learn how to [package](/publish-a-plugin/package-a-plugin), [sign](/publish-a-plugin/sign-a-plugin), and [publish](/publish-a-plugin/publish-or-update-a-plugin.md) your plugin to the Grafana plugin catalog(link). 
