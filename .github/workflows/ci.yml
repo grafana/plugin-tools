@@ -19,7 +19,7 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -34,31 +34,30 @@ jobs:
       - name: Build all packages
         run: npm run build
 
-  get-commands:
-    name: Get scaffold commands
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    runs-on: ubuntu-latest
-    outputs:
-      scaffoldCommands: ${{ steps.set-matrix.outputs.scaffoldCommands }}
-    steps:
-      - id: set-matrix
-        run: echo "scaffoldCommands=[{\"cmd\":\"generate-app\",\"hasBackend\":false},{\"cmd\":\"generate-app-backend\",\"hasBackend\":true},{\"cmd\":\"generate-panel\",\"hasBackend\":false},{\"cmd\":\"generate-datasource\",\"hasBackend\":false},{\"cmd\":\"generate-datasource-backend\",\"hasBackend\":true},{\"cmd\":\"generate-scenes-app\",\"hasBackend\":false}]" >> $GITHUB_OUTPUT
-
   generate-plugins:
     name: Test plugin scaffolding
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    needs: [test, get-commands]
+    needs: [test]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        scaffoldCommand: ${{ fromJson(needs.get-commands.outputs.scaffoldCommands) }}
+        include:
+          - cmd: generate-app
+            hasBackend: false
+          - cmd: generate-app-backend
+            hasBackend: true
+          - cmd: generate-panel
+            hasBackend: false
+          - cmd: generate-datasource
+            hasBackend: false
+          - cmd: generate-datasource-backend
+            hasBackend: true
+          - cmd: generate-scenes-app
+            hasBackend: false
     env:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
-      - run: echo ${{ matrix.scaffoldCommand.cmd }}
-      - run: echo ${{ matrix.scaffoldCommand.hasBackend }}
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -68,7 +67,7 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -76,7 +75,7 @@ jobs:
         run: npm ci --no-audit
 
       - name: Generate plugin
-        run: npm exec nx run @grafana/create-plugin:${{ matrix.scaffoldCommand.cmd }}
+        run: npm exec nx run @grafana/create-plugin:${{ matrix.cmd }}
 
       - name: Restore cached generated plugin dependencies
         id: cache-generated-deps-restore
@@ -85,7 +84,7 @@ jobs:
           path: |
             ./packages/create-plugin/generated/package-lock.json
             ./packages/create-plugin/generated/node_modules
-          key: ${{ matrix.scaffoldCommand.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
 
       - name: Install generated plugin dependencies
         run: npm install --prefer-offline --no-audit
@@ -100,20 +99,20 @@ jobs:
         working-directory: ./packages/create-plugin/generated
 
       - name: '@grafana/sign-plugin - build'
-        if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: npm exec nx run @grafana/sign-plugin:build
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
         working-directory: ./packages/create-plugin/generated
 
       - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        if: ${{ matrix.scaffoldCommand.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
@@ -127,14 +126,14 @@ jobs:
           path: |
             ./packages/create-plugin/generated/package-lock.json
             ./packages/create-plugin/generated/node_modules
-          key: ${{ matrix.scaffoldCommand.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
 
       - uses: actions/setup-go@v4
         with:
           go-version: '~1.20'
           check-latest: true
           cache-dependency-path: ./packages/create-plugin/generated/go.sum
-        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
+        if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
         uses: magefile/mage-action@v2
@@ -142,7 +141,7 @@ jobs:
           version: latest
           args: -v build:linux
           workdir: ./packages/create-plugin/generated
-        if: ${{ matrix.scaffoldCommand.hasBackend == true }}
+        if: ${{ matrix.hasBackend == true }}
 
   release:
     runs-on: ubuntu-latest
@@ -171,7 +170,7 @@ jobs:
       - name: Setup environment
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
