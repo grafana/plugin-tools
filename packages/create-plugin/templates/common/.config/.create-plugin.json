@@ -1,3 +1,6 @@
 {
-  "version": "{{ createPluginVersion }}"
+  "version": "{{ createPluginVersion }}",
+  "config": {
+    "bundleGrafanaUi": "{{ shouldBundleGrafanaUI }}"
+  }
 }
