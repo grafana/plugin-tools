@@ -30,6 +30,13 @@ This is a mono-repo of NPM packages to help plugin developers extend Grafana in 
 | Create Plugin | Scaffold a Grafana Plugin | [Link](./packages/create-plugin/README.md) | [![npm](https://img.shields.io/npm/v/@grafana/create-plugin)](https://www.npmjs.com/package/@grafana/create-plugin) | [![npm](https://img.shields.io/npm/dw/@grafana/create-plugin)](https://npmcharts.com/compare/@grafana/create-plugin?interval=7) |
 | Sign Plugin   | Sign a Grafana Plugin     | [Link](./packages/sign-plugin/README.md)   | [![npm](https://img.shields.io/npm/v/@grafana/sign-plugin)](https://www.npmjs.com/package/@grafana/sign-plugin)     | [![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)](https://npmcharts.com/compare/@grafana/sign-plugin?interval=7)     |
 
+### Additional resources
+
+📖 Learn from tutorials and documenation in the [Grafana developer portal](https://grafana.com/developers).  
+✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.  
+🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.  
+✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.  
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
