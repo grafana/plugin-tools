@@ -99,8 +99,6 @@ Grafana uses a communication model where you can opt in to instance management t
 
 ## Caching and connection pooling
 
-Grafana uses instance management in the backend plugin SDK to optimize plugin resources. It works by caching parts of the plugin (including `jsonData` and `secureJSONData`) in memory so that subsequent requests can benefit from not having to reinitialize the plugin instance, where the instance is intended to hold things such as HTTP clients, connection pools, decrypted secrets, and so on.
-
 Grafana provides instance management in the backend plugin SDK to ease working with multiple configured Grafana data sources or apps, referred to as instances. This allows a plugin to simply keep state cleanly separated between instances. The SDK makes sure to optimize plugin resources by caching said instances in memory until their configuration changes in Grafana. Refer to the [HTTP Backend plugin example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/main.go) or the [App with backend example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/pkg/main.go), which shows how to use the instance management for data source and app plugins.
 
 Mentioned instance state is especially useful for holding client connections to downstream servers, such as HTTP, gRPC, TCP and UDP etc, to enable usage of connection pooling that optimizes usage and connection reuse to a downstream server. By using connection pooling, the plugin will not use all of the machine's available TCP connections. 
