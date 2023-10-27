@@ -74,4 +74,6 @@ drwxr-xr-x          0 bx stor 22-Mar-24 23:23 grafana-clickhouse-datasource/img/
 22 files, 92516655 bytes uncompressed, 34319591 bytes compressed:  62.9%
 ```
 
-When you've packaged your plugin, you can proceed to [publishing a plugin](./publish-or-update-a-plugin.md) or [installing a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
+When you've packaged your plugin, you can proceed to:
+- [publish a plugin](./publish-or-update-a-plugin.md) to share it with the world, or 
+- [install a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin) by extracting it into your plugin directory.

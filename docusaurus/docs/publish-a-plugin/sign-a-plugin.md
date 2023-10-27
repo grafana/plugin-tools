@@ -15,17 +15,19 @@ keywords:
 
 All Grafana Labs-authored backend plugins, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
 
-Before you can sign your plugin, you need to decide whether you want to sign it as a _public_ or a _private_ plugin.
-
-To make your plugin publicly available outside of your organization, sign your plugin under a _community_ or _commercial_ [signature level](#plugin-signature-levels). Public plugins are available from the [Grafana plugin catalog](https://grafana.com/plugins) and can be installed by anyone.
-
-If you intend to only use the plugin within your organization, sign it under a _private_ [signature level](#plugin-signature-levels).
-
 :::info
 
-It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature.
+It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
 
 :::
+
+## Public or private plugins
+
+Plugins can have different [signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) according to their author, related technology, and intended use.
+
+The plugin can be _public_, signed as Community or Commercial, and distributed within the [Grafana plugin catalog](https://grafana.com/plugins), so that it is available for others to install. Or you can make it _private_ and only available for use within your organization.
+
+Before signing your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
 
 ## Generate an Access Policy token
 
@@ -33,28 +35,32 @@ To verify ownership of your plugin, generate an Access Policy token that you'll 
 
 1. [Create a Grafana Cloud account](https://grafana.com/signup).
 
-1. Login into your account and navigate to **My Account > Security > Access Policies**. Click **Create access policy**.
+1. Login into your account, and then go to **My Account > Security > Access Policies**. 
 
-   Realm: has to be your-org-name (all-stacks)
-   Scope: plugins:write
+1. Click **Create access policy**.
+
+   Realm: has to be **your-org-name** (all-stacks)  
+   Scope: **plugins:write**
 
    ![Create access policy.](/img/create-access-policy-v2.png)
 
 1. Click **Create token** to create a new token.
 
-   The expiration date field is optional, though you should change tokens periodically for increased security.
+   **Expiration date** is optional, though you should change tokens periodically for increased security.
 
    ![Create access policy token.](/img/create-access-policy-token.png)
 
-1. Click **Create** and save a copy of the token somewhere secure for future reference.
+1. Click **Create** and then save a copy of the token somewhere secure for future reference.
+
+1. Proceed to signing your [public plugin](#sign-a-public-plugin) or [private plugin](#sign-a-private-plugin).
 
 ## Sign a public plugin
 
 Public plugins need to be reviewed by the Grafana team before you can sign them.
 
-1. Submit your plugin for [review](./publish-or-update-a-plugin.md#publish-your-plugin).
+1. Submit your plugin for [review](./publish-or-update-a-plugin.md).
 1. If we approve your plugin, you're granted a plugin signature level. You need this signature level to proceed.
-1. In your plugin directory, sign the plugin with the Access policy token you just created. Grafana Sign Plugin creates a [MANIFEST.txt](#plugin-manifest) file in the `dist` directory of your plugin:
+1. In your plugin directory, sign the plugin with the Access Policy token you just created. The Grafana sign-plugin tool creates a [MANIFEST.txt](#plugin-manifest) file in the `dist` directory of your plugin:
 
    ```bash
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
@@ -63,7 +69,7 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
 ## Sign a private plugin
 
-1. In your plugin directory, sign the plugin with the Access policy token you just created. Grafana Sign Plugin creates a [MANIFEST.txt](#plugin-manifest) file in the `dist` directory of your plugin.
+1. In your plugin directory, sign the plugin with the Access Policy token you just created. The Grafana sign-plugin tool creates a [MANIFEST.txt](#plugin-manifest) file in the `dist` directory of your plugin.
 
    ```bash
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
@@ -71,22 +77,6 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
    ```
 
 1. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin.
-
-## Plugin signature levels
-
-To sign a plugin, you need to select the _signature level_ that you want to sign it under. The signature level of your plugin determines how you can distribute it.
-
-You can sign your plugin under three different _signature levels_: _private_, _community_, and _commercial_.
-
-| **Signature Level** | **Paid Subscription Required to Sign?**             | **Description** |
-| ------------------- | --------------------------------------------------- | --------------- |
-| Private             | No; <br /> Free of charge                           | Private plugins are for use on your own Grafana instance. <br /><br /> They may not be shared to the Grafana community or to your customers, and are not published in the Grafana catalog. <br /><br /> Private plugins are not supported in Grafana Cloud. |
-| Community           | No; <br /> Free of charge                           | Community plugins contain dependent technologies that are open source and/or not for profit. <br /><br /> Community plugins are published to the official Grafana catalog, and are available to the Grafana community for direct installation. <br /><br /> Support is provided by the individual developer and/or community. <br /><br /> Supported in Grafana Cloud. <br /><br /> Not commercial in nature and not affiliated with any commercial endeavor. |
-| Commercial          | Yes; <br /> Commercial plugin subscription required | Commercial plugins contain dependent technologies that are closed source or commercially backed (even if open source at their core). These plugins meet the commercial plugin criteria and are partner-developed. <br /><br />Commercial plugins are published to the official Grafana catalog, and are available to the Grafana community for direct installation. <br /><br /> Support is provided by the Partner. <br /><br /> Supported in Grafana Cloud. |
-
-For instructions on how to sign a plugin under the Community and Commercial signature level, refer to [Sign a public plugin](#sign-a-public-plugin).
-
-For instructions on how to sign a plugin under the Private signature level, refer to [Sign a private plugin](#sign-a-private-plugin).
 
 ## Plugin manifest
 
@@ -139,10 +129,10 @@ In some cases an invalid `MANIFEST.txt` is generated because of an issue when si
 
 ### Why do I get a "Field is required: `rootUrls`" error for my public plugin?
 
-With a **public** plugin, your plugin doesn't have a plugin signature level assigned to it yet. A Grafana team member will assign a signature level to your plugin once it has been reviewed and approved. For more information, refer to [Sign a public plugin](#sign-a-public-plugin).
+With a _public_ plugin, your plugin doesn't have a plugin signature level assigned to it yet. A Grafana team member will assign a signature level to your plugin once it has been reviewed and approved. For more information, refer to [Sign a public plugin](#sign-a-public-plugin).
 
 ### Why do I get a "Field is required: `rootUrls`" error for my private plugin?
 
-With a **private** plugin, you need to add a `rootUrls` flag to the `plugin:sign` command. The `rootUrls` must match the [root_url](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#root_url) configuration. For more information, refer to [Sign a private plugin](#sign-a-private-plugin).
+With a _private_ plugin, you need to add a `rootUrls` flag to the `plugin:sign` command. The `rootUrls` must match the [`root_url`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#root_url) configuration. For more information, refer to [Sign a private plugin](#sign-a-private-plugin).
 
-If you still get this error, make sure that the Access policy token was generated by a Grafana Cloud account that matches the first part of the plugin ID.
+If you still get this error, make sure that the Access Policy token was generated by a Grafana Cloud account that matches the first part of the plugin ID.
