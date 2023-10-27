@@ -17,5 +17,5 @@ export type TemplateData = {
   packageManagerVersion: string;
   isAppType: boolean;
   isNPM: boolean;
-  packageVersion: string;
+  createPluginVersion: string;
 };

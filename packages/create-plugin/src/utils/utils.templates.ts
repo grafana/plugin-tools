@@ -77,6 +77,6 @@ export function getTemplateData() {
     pluginType: pluginJson.type,
     packageManagerName,
     packageManagerVersion,
-    packageVersion: getVersion(),
+    createPluginVersion: getVersion(),
   };
 }

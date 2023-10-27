@@ -100,7 +100,7 @@ export default function (plop: NodePlopAPI) {
         packageManagerVersion,
         isAppType,
         isNPM: packageManagerName === 'npm',
-        packageVersion: getVersion(),
+        createPluginVersion: getVersion(),
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
