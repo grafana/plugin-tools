@@ -360,7 +360,6 @@ import { catchError, lastValueFrom, of, switchMap, Observable } from 'rxjs';
 
 export class ExampleDatasource
   extends DataSourceApi<ExampleQuery, ExampleOptions>
-  // Implement DataSourceWithLogsContextSupport and its methods
   implements DataSourceWithLogsContextSupport<ExampleQuery>
 {
   // Retrieve context for a given log row
