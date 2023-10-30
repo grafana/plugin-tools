@@ -11,7 +11,7 @@ import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-pack
 import { prettifyFiles } from './generate-actions/prettify-files';
 import { CliArgs, TemplateData } from './types';
 import { getExportFileName } from '../utils/utils.files';
-import { getFeatureFlags } from '../utils/utils.featureFlags';
+import { getFeatureFlags } from '../utils/utils.rcFile';
 import { getVersion } from '../utils/utils.version';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api

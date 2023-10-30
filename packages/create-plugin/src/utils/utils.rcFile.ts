@@ -6,26 +6,33 @@ type FeatureFlags = {
 };
 
 type CPRCFile = {
+  version: string;
   features: FeatureFlags;
 };
 
-export function getFeatureFlags(): FeatureFlags {
+export function getRCFile(): CPRCFile | undefined {
   try {
-    const rootPath = path.resolve(__dirname, '..', '..', '.cprc.json');
+    const rootPath = path.resolve(process.cwd(), '.config/.cprc.json');
     const rootConfig = readRCFileSync(rootPath);
 
-    const userPath = path.resolve(__dirname, '.cprc.json');
+    const userPath = path.resolve(process.cwd(), '.cprc.json');
     const userConfig = readRCFileSync(userPath);
 
-    return createFeatureFlags({
-      ...rootConfig?.features,
-      ...userConfig?.features,
-    });
+    return {
+      ...rootConfig,
+      ...userConfig,
+      features: createFeatureFlags({
+        ...rootConfig.features,
+        ...userConfig.features,
+      }),
+    };
   } catch (error) {
-    // log something about the error
-    // and use default flags
-    return createFeatureFlags();
+    return undefined;
   }
+}
+
+export function getFeatureFlags(): FeatureFlags {
+  return createFeatureFlags(getRCFile()?.features);
 }
 
 function readRCFileSync(path: string): CPRCFile | undefined {
