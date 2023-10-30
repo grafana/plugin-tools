@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: '20'
           cache: '{{ packageManagerName }}'
+{{#if_eq packageManagerName "pnpm"}}
+          cache-dependency-path: pnpm-lock.yaml
+{{/if_eq}}
 
       - name: Install dependencies
         run: {{ packageManagerInstallCmd }}
@@ -51,7 +54,7 @@ jobs:
         if: steps.check-for-backend.outputs.has-backend == 'true'
         uses: actions/setup-go@v3
         with:
-          go-version: '1.20'
+          go-version: '1.21'
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
