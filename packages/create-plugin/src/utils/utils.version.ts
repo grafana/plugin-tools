@@ -6,7 +6,7 @@ export function getVersion() {
   const pkg = readFileSync(packageJsonPath, 'utf8');
   const { version } = JSON.parse(pkg);
   if (!version) {
-    throw `Could not find the version of sign-plugin`;
+    throw `Could not find the version of create-plugin`;
   }
   return version;
 }

@@ -5,37 +5,56 @@ type FeatureFlags = {
   bundleGrafanaUI: boolean;
 };
 
-type CPRCFile = {
+type CreatePluginConfig = UserConfig & {
   version: string;
+};
+
+type UserConfig = {
   features: FeatureFlags;
 };
 
-export function getRCFile(): CPRCFile | undefined {
+export function getConfig(): CreatePluginConfig {
   try {
     const rootPath = path.resolve(process.cwd(), '.config/.cprc.json');
     const rootConfig = readRCFileSync(rootPath);
-
-    const userPath = path.resolve(process.cwd(), '.cprc.json');
-    const userConfig = readRCFileSync(userPath);
+    const userConfig = getUserConfig();
 
     return {
       ...rootConfig,
       ...userConfig,
+      version: rootConfig.version,
       features: createFeatureFlags({
         ...rootConfig.features,
         ...userConfig.features,
       }),
     };
   } catch (error) {
-    return undefined;
+    return {
+      version: 'n/a',
+      features: createFeatureFlags(),
+    };
   }
 }
 
-export function getFeatureFlags(): FeatureFlags {
-  return createFeatureFlags(getRCFile()?.features);
+function getUserConfig(): UserConfig | undefined {
+  try {
+    const userPath = path.resolve(process.cwd(), '.cprc.json');
+    const userConfig = readRCFileSync(userPath);
+
+    return {
+      ...userConfig,
+      features: createFeatureFlags({
+        ...userConfig.features,
+      }),
+    };
+  } catch (error) {
+    return {
+      features: createFeatureFlags(),
+    };
+  }
 }
 
-function readRCFileSync(path: string): CPRCFile | undefined {
+function readRCFileSync(path: string): CreatePluginConfig | undefined {
   try {
     const data = fs.readFileSync(path);
     return JSON.parse(data.toString());

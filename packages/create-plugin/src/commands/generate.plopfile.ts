@@ -11,7 +11,7 @@ import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-pack
 import { prettifyFiles } from './generate-actions/prettify-files';
 import { CliArgs, TemplateData } from './types';
 import { getExportFileName } from '../utils/utils.files';
-import { getFeatureFlags } from '../utils/utils.rcFile';
+import { getConfig } from '../utils/utils.config';
 import { getVersion } from '../utils/utils.version';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
@@ -88,7 +88,7 @@ export default function (plop: NodePlopAPI) {
       hasGithubWorkflows,
       hasGithubLevitateWorkflow,
     }: CliArgs) {
-      const featureFlags = getFeatureFlags();
+      const { features } = getConfig();
       const currentVersion = getVersion();
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
@@ -104,7 +104,7 @@ export default function (plop: NodePlopAPI) {
         isAppType,
         isNPM: packageManagerName === 'npm',
         version: currentVersion,
-        bundleGrafanaUI: featureFlags.bundleGrafanaUI,
+        bundleGrafanaUI: features.bundleGrafanaUI,
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
