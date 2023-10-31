@@ -34,7 +34,7 @@ Use of the Grafana CLI to install or uninstall a plugin requires you to restart 
 
 Plugins are loaded either when Grafana starts up or when a plugin has been installed/uninstalled during runtime. 
 
-Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and troubleshoot any unexpected behavior, such as why a certain plugin is not marked as installed in the plugins catalog and/or for use within Grafana even though you've installed it. You can check the [Grafana server log](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) for any unexpected errors or details related to loading a plugin. In addition, you can enable even more details by changing the [log level to debug](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#log).
+Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and [troubleshoot](#troubleshooting) any unexpected behavior, such as why a certain plugin is not marked as installed in the plugins catalog and/or for use within Grafana even though you've installed it. 
 
 For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 3](#phase-3-backend-plugin-initialization)).
 
@@ -87,3 +87,7 @@ When the user interacts with a UI that requires a plugin, Grafana will _lazy loa
 Each plugin is loaded only once but its objects are initialized multiple times. For example, a dashboard with 10 different panel plugins will load 10 plugins with an instance of each. A dashboard with 10 panels of the same plugin will load the plugin once and have 10 instances.
 
 :::
+
+## Troubleshooting
+
+You can check the [Grafana server log](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) for any unexpected errors or details related to loading a plugin. In addition, you can enable even more details by changing the [log level to debug](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#log).
