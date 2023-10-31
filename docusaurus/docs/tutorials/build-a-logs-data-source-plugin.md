@@ -395,14 +395,6 @@ export class ExampleDatasource
   ): Promise<ExampleQuery | null> {
     // Data source internal implementation that creates context query based on row, options and original query
   }
-
-  // This method can be used to show "context" button based on runtime conditions (for example, row model data or plugin settings)
-  showContextToggle(row?: LogRowModel): boolean {
-    // If you want to always show toggle, you can just return true
-    if (row && row.searchWords && row.searchWords.length > 0) {
-      return true;
-    }
-  }
 }
 ```
 
