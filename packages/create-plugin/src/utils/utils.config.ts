@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { getVersion } from './utils.version';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;
@@ -30,7 +31,7 @@ export function getConfig(): CreatePluginConfig {
     };
   } catch (error) {
     return {
-      version: 'n/a',
+      version: getVersion(),
       features: createFeatureFlags(),
     };
   }
