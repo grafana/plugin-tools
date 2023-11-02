@@ -131,6 +131,7 @@ const themeConfigFooter = {
 
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
+  additionalLanguages: ['bash', 'diff', 'json'],
 };
 
 const themeConfigColorMode = {
