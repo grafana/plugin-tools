@@ -1,3 +1,24 @@
+# v2.5.0 (Thu Nov 02 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all your work!
+
+#### 🚀 Enhancement
+
+- Adding support for controling the create-plugin tool via a rc file [#506](https://github.com/grafana/plugin-tools/pull/506) ([@mckn](https://github.com/mckn))
+
+#### 🐛 Bug Fix
+
+- Bump nvmrc to 20 to align with package.json [#498](https://github.com/grafana/plugin-tools/pull/498) ([@ckbedwell](https://github.com/ckbedwell))
+
+#### Authors: 2
+
+- Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v2.4.0 (Wed Oct 25 2023)
 
 #### 🚀 Enhancement
