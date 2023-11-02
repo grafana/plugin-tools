@@ -1,5 +1,18 @@
 # (Thu Nov 02 2023)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.5.1`
+  - Create Plugin: Fix app backend test [#518](https://github.com/grafana/plugin-tools/pull/518) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Nov 02 2023)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all your work!

@@ -1,3 +1,15 @@
+# v2.5.1 (Thu Nov 02 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix app backend test [#518](https://github.com/grafana/plugin-tools/pull/518) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.5.0 (Thu Nov 02 2023)
 
 :tada: This release contains work from a new contributor! :tada:
