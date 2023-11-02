@@ -8,6 +8,8 @@ import { getPluginJson } from './utils.plugin';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
 import { getPackageManagerWithFallback } from './utils.packageManager';
 import { getExportFileName } from '../utils/utils.files';
+import { getVersion } from './utils.version';
+import { getConfig } from './utils.config';
 
 /**
  *
@@ -65,6 +67,9 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 
 export function getTemplateData() {
   const pluginJson = getPluginJson();
+  const { features } = getConfig();
+  const currentVersion = getVersion();
+
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
 
   return {
@@ -77,5 +82,7 @@ export function getTemplateData() {
     pluginType: pluginJson.type,
     packageManagerName,
     packageManagerVersion,
+    version: currentVersion,
+    bundleGrafanaUI: features.bundleGrafanaUI,
   };
 }

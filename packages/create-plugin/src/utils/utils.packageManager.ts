@@ -17,6 +17,10 @@ export type PackageManager = {
 export function getPackageManagerFromUserAgent(): PackageManager {
   const agent = process.env.npm_config_user_agent;
 
+  if (!agent) {
+    return DEFAULT_PACKAGE_MANAGER;
+  }
+
   const [name, versionWithText] = agent.split('/');
   const [version] = versionWithText.split(' ');
 
