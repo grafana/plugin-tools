@@ -12,7 +12,6 @@ keywords:
   - datasource
 ---
 
-
 # Build a logs data source plugin
 
 Grafana data source plugins support metrics, logs, and other data types. The steps to build a logs data source plugin are largely the same as for a metrics data source, but there are a few differences which we will explain in this guide.
@@ -52,7 +51,7 @@ The log data frame should include following fields:
 | **body**       | `string`                                        | required       | Content of the log line, non-nullable.                                                                                                                                                                                                        |
 | **severity**   | `string`                                        | optional       | Severity/level of the log line. If no severity field is found, consumers/client will decide the log level. More information about log levels, refer to [Logs integration](https://grafana.com/docs/grafana/latest/explore/logs-integration/). |
 | **id**         | `string`                                        | optional       | Unique identifier of the log line.                                                                                                                                                                                                            |
-| **attributes** | `json raw message` (Go) or `other` (TypeScript) | optional       | Additional attributes of the log line. Other systems may refer to this with different names, such as "Labels" in Loki. Represent its value as Record<string,any> type in JavaScript.                                                          |
+| **attributes** | `json raw message` (Go) or `other` (TypeScript) | optional       | Additional attributes of the log line. Other systems may refer to this with different names, such as "Labels" in Loki. Represent its value as `Record<string,any>` type in JavaScript.                                                        |
 
 Logs data frame's `type` needs to be set to `type: DataFrameType.LogLines` in data frame's meta.
 
@@ -135,7 +134,7 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute. 
+This feature must be implemented in the data frame as a meta attribute.
 
 :::
 
