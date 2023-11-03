@@ -136,7 +136,7 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
-        uses: magefile/mage-action@v2
+        uses: magefile/mage-action@v3
         with:
           version: latest
           args: -v build:linux
