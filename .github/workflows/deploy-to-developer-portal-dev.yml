@@ -20,7 +20,7 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
