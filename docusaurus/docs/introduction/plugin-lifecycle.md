@@ -34,7 +34,7 @@ Use of the Grafana CLI to install or uninstall a plugin requires you to restart 
 
 Plugins are loaded either when Grafana starts up or when a plugin has been installed/uninstalled during runtime. 
 
-Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and [troubleshoot](#troubleshooting) any unexpected behavior, such as why a certain plugin is not marked as installed in the plugins catalog and/or for use within Grafana even though you've installed it. 
+Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and [troubleshoot](#troubleshooting) any unexpected behavior. For example, why a certain plugin is not marked as installed in the plugins catalog or for use within Grafana even though you've installed it. 
 
 For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 3](#phase-3-backend-plugin-initialization)).
 
