@@ -8,7 +8,11 @@ import { getExportPath } from '../utils/utils.path';
 import { getPackageManagerInstallCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
+import { prettifyFiles } from './generate-actions/prettify-files';
 import { CliArgs, TemplateData } from './types';
+import { getExportFileName } from '../utils/utils.files';
+import { getConfig } from '../utils/utils.config';
+import { getVersion } from '../utils/utils.version';
 
 // Plopfile API documentation: https://plopjs.com/documentation/#plopfile-api
 export default function (plop: NodePlopAPI) {
@@ -16,6 +20,7 @@ export default function (plop: NodePlopAPI) {
   plop.setHelper('normalize_id', normalizeId);
 
   plop.setActionType('printSuccessMessage', printGenerateSuccessMessage);
+  plop.setActionType('prettifyFiles', prettifyFiles);
   plop.setActionType('updateGoSdkAndModules', updateGoSdkAndModules);
 
   plop.setGenerator('create-plugin', {
@@ -83,6 +88,8 @@ export default function (plop: NodePlopAPI) {
       hasGithubWorkflows,
       hasGithubLevitateWorkflow,
     }: CliArgs) {
+      const { features } = getConfig();
+      const currentVersion = getVersion();
       const exportPath = getExportPath(pluginName, orgName, pluginType);
       const pluginId = normalizeId(pluginName, orgName, pluginType);
       // Support the users package manager of choice.
@@ -95,7 +102,9 @@ export default function (plop: NodePlopAPI) {
         packageManagerInstallCmd,
         packageManagerVersion,
         isAppType,
-        isNPM: packageManagerName === 'npm'
+        isNPM: packageManagerName === 'npm',
+        version: currentVersion,
+        bundleGrafanaUI: features.bundleGrafanaUI,
       };
       // Copy over files that are shared between plugins types
       const commonActions = getActionsForTemplateFolder({
@@ -159,6 +168,7 @@ export default function (plop: NodePlopAPI) {
         {
           type: 'updateGoSdkAndModules',
         },
+        { type: 'prettifyFiles' },
         {
           type: 'printSuccessMessage',
         },
@@ -231,19 +241,6 @@ function getActionsForTemplateFolder({
   // The npmrc file is only useful for `pnpm` settings. We can remove it for other package managers.
   if (templateData.packageManagerName !== 'pnpm') {
     files = files.filter((file) => path.basename(file) !== 'npmrc');
-  }
-
-  function getExportFileName(f: string) {
-    // yarn and npm packing will not include `.gitignore` files
-    // so we have to manually rename them to add the dot prefix
-    if (path.basename(f) === 'gitignore') {
-      return '.gitignore';
-    }
-    if (path.basename(f) === 'npmrc') {
-      return '.npmrc';
-    }
-
-    return path.extname(f) === '.hbs' ? path.basename(f, '.hbs') : path.basename(f);
   }
 
   function getExportPath(f: string) {

@@ -2,9 +2,10 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test"]
+        "cacheableOperations": ["build", "lint", "typecheck", "test"],
+        "accessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ="
       }
     }
   },
@@ -12,6 +13,9 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist"]
+    },
+    "typecheck": {
+      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"]
     },
     "lint": {
       "inputs": ["default", "{workspaceRoot}/.eslintrc"]

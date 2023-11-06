@@ -1,0 +1,13 @@
+name: 'Check PR labels'
+description: 'Check PRs for labels related to Auto and publishing npm packages.'
+author: 'frontend@grafana'
+
+inputs:
+  github-token:
+    description: 'Token for the repository. Can be passed in using `{{ secrets.GITHUB_TOKEN }}`.'
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: node20
+  main: ./index.js

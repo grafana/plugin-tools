@@ -52,10 +52,12 @@ const config = async (env): Promise<Configuration> => {
       'react-router',
       'react-router-dom',
       'd3',
-      'angular',
-      '@grafana/ui',
+      'angular',{{#unless bundleGrafanaUI}}
+      '@grafana/ui',{{/unless}}
       '@grafana/runtime',
-      '@grafana/data',
+      '@grafana/data',{{#if bundleGrafanaUI}}
+      'react-inlinesvg',
+      'i18next',{{/if}}
 
       // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
       ({ request }, callback) => {
@@ -97,7 +99,7 @@ const config = async (env): Promise<Configuration> => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"]
+          use: ['style-loader', 'css-loader'],
         },
         {
           test: /\.s[ac]ss$/,
@@ -110,7 +112,7 @@ const config = async (env): Promise<Configuration> => {
             // Keep publicPath relative for host.com/grafana/ deployments
             publicPath: `public/plugins/${pluginJson.id}/img/`,
             outputPath: 'img/',
-            filename: Boolean(env.production) ? '[hash][ext]' : '[name][ext]',
+            filename: Boolean(env.production) ? '[hash][ext]' : '[file]',
           },
         },
         {
@@ -136,6 +138,7 @@ const config = async (env): Promise<Configuration> => {
       },
       path: path.resolve(process.cwd(), DIST_DIR),
       publicPath: `public/plugins/${pluginJson.id}/`,
+      uniqueName: pluginJson.id,
     },
 
     plugins: [
@@ -207,7 +210,6 @@ const config = async (env): Promise<Configuration> => {
   }
 
   return baseConfig;
-
 };
 
 export default config;

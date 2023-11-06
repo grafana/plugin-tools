@@ -8,15 +8,16 @@
     "clean": "nx run-many --target=clean",
     "build": "nx run-many --target=build --parallel --exclude website",
     "dev": "nx run-many --target=dev --parallel",
-    "docs": "nx run website:start",
-    "docs:clear": "nx run website:clear",
-    "docs:build": "nx run website:build",
+    "docs": "nx start website",
+    "docs:clear": "nx clear website",
+    "docs:build": "nx build website",
     "lint": "nx run-many --target=lint --parallel",
     "lint:fix": "nx run-many --target=lint:fix --parallel",
     "release": "auto shipit",
     "test": "nx run-many --target=test --parallel",
     "test:ci": "nx run-many --target=test --ci",
-    "typecheck": "nx run-many --target=typecheck --parallel"
+    "typecheck": "nx run-many --target=typecheck --parallel",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@auto-it/all-contributors": "^10.46.0",
@@ -28,22 +29,32 @@
     "@swc/core": "^1.2.162",
     "@swc/jest": "^0.2.20",
     "@types/jest": "^27.4.1",
-    "@types/node": "18.11.7",
+    "@types/node": "20.8.7",
     "auto": "^10.46.0",
+    "husky": "^8.0.3",
     "jest": "^27.5.1",
     "lerna": "^6.6.2",
+    "lint-staged": "^14.0.1",
     "nodemon": "^2.0.13",
     "nx": "16.2.1",
+    "nx-cloud": "^16.3.0",
     "prettier": "2.5.1",
     "tsc-watch": "^4.5.0",
     "typescript": "^5.2.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "workspaces": [
     "packages/create-plugin",
     "packages/sign-plugin",
     "docusaurus/website"
-  ]
+  ],
+  "lint-staged": {
+    "*.{ts,tsx,js}": [
+      "eslint --ext .js,.tsx,.ts --cache --fix",
+      "prettier --write"
+    ],
+    "*.{css,md,json}": "prettier --write"
+  }
 }

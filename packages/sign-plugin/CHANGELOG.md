@@ -1,3 +1,27 @@
+# v2.1.0 (Tue Oct 24 2023)
+
+#### 🚀 Enhancement
+
+- Bump to node 20 [#478](https://github.com/grafana/plugin-tools/pull/478) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v2.0.2 (Fri Oct 20 2023)
+
+#### 🐛 Bug Fix
+
+- Docs: Fix broken links in package files [#476](https://github.com/grafana/plugin-tools/pull/476) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 1
+
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+
+---
+
 # v2.0.1 (Tue Oct 03 2023)
 
 #### 🐛 Bug Fix

@@ -30,10 +30,11 @@
     "@testing-library/react": "14.0.0",
     "@types/jest": "^29.5.0",
     "@types/lodash": "^4.14.194",
-    "@types/node": "^18.15.11",{{#if isAppType}}
+    "@types/node": "^20.8.7",{{#if isAppType}}
     "@types/react-router-dom": "^5.3.3",{{/if}}
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
+    "eslint-plugin-deprecation": "^2.0.0",
     "eslint-webpack-plugin": "^4.0.1",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
     "glob": "^10.2.7",
@@ -54,7 +55,7 @@
     "webpack-livereload-plugin": "^3.0.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@emotion/css": "11.10.6",

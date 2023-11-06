@@ -1,0 +1,2 @@
+# These files should be considered handlebars templates and can cause eslint to error.
+/packages/create-plugin/templates

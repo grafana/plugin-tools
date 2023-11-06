@@ -16,7 +16,7 @@ const isRudderstackSetup = (config: RudderStackTrackingConfig) =>
 // Enqueue all rudderstack requests until it is loaded and consent is granted
 let rudderstack = {};
 let rudderQueue = [];
-const rudderMethods = ["page", "track", "identify", "reset"];
+const rudderMethods = ['page', 'track', 'identify', 'reset'];
 for (const method of rudderMethods) {
   rudderstack[method] = (...args) => {
     rudderQueue.push([method].concat(args));
@@ -48,11 +48,11 @@ export function startTracking(config: RudderStackTrackingConfig) {
       rudderQueue = undefined;
     };
 
-    const el = document.createElement("script");
+    const el = document.createElement('script');
     el.async = true;
     el.src = config.sdkUrl;
     el.onload = initRudderstack;
-    document.getElementsByTagName("head")[0].appendChild(el);
+    document.getElementsByTagName('head')[0].appendChild(el);
   }
 }
 
@@ -61,12 +61,13 @@ export function trackPage() {
   // define it manually.
   if (rudderQueue) {
     const { href, pathname } = location;
+    const url = Boolean(document.querySelector("link[rel='canonical']"))
+      ? document.querySelector("link[rel='canonical']").getAttribute('href')
+      : href;
     const properties = {
-      url:
-        document.querySelector("link[rel='canonical']").getAttribute("href") ||
-        href,
+      url,
       path: pathname,
-      referrer: document.referrer || "$direct",
+      referrer: document.referrer || '$direct',
       title: document.title,
       tab_url: href,
     };
