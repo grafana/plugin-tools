@@ -8,12 +8,12 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
   const nonInteractive = argv['non-interactive'];
 
   const CWD = process.cwd();
-  const DIS_PATH = path.join(CWD, 'dist');
-  const PLUGIN_JSON = path.join(DIS_PATH, 'plugin.json');
-  const MANIFEST_TXT = path.join(DIS_PATH, 'MANIFEST.txt');
+  const DIST_PATH = path.join(CWD, 'dist');
+  const PLUGIN_JSON = path.join(DIST_PATH, 'plugin.json');
+  const MANIFEST_TXT = path.join(DIST_PATH, 'MANIFEST.txt');
 
   // validate DIS_PATH exists
-  if (!fs.existsSync(DIS_PATH) || !fs.statSync(DIS_PATH).isDirectory()) {
+  if (!fs.existsSync(DIST_PATH) || !fs.statSync(DIST_PATH).isDirectory()) {
     printErrorMessage(
       "Could not find 'dist' directory. Please build your plugin before running this command. e.g.: `yarn build` or `npm run build`"
     );
@@ -70,7 +70,7 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
   }
 
   try {
-    await zipDistPath(DIS_PATH, zipFilePath, pluginId);
+    await zipDistPath(DIST_PATH, zipFilePath, pluginId);
     printSuccessMessage(`Successfully created zip archive at ${zipFileName}`);
   } catch (error) {
     printErrorMessage(`Could not create zip file: ${error}`);
