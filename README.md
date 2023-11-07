@@ -72,6 +72,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/mikkancso"><img src="https://avatars.githubusercontent.com/u/13637610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mikkancso</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=mikkancso" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/zoltanbedi"><img src="https://avatars.githubusercontent.com/u/13729989?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zoltán Bedi</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=zoltanbedi" title="Documentation">📖</a> <a href="#infra-zoltanbedi" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=zoltanbedi" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/joanlopez"><img src="https://avatars.githubusercontent.com/u/5459617?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joan López de la Franca Beltran</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=joanlopez" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

@@ -219,6 +219,15 @@
         "infra",
         "code"
       ]
+    },
+    {
+      "login": "joanlopez",
+      "name": "Joan López de la Franca Beltran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5459617?v=4",
+      "profile": "https://github.com/joanlopez",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
