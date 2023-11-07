@@ -40,13 +40,19 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
 
   const pluginJsonContent = require(PLUGIN_JSON_PATH);
   const pluginId = pluginJsonContent.id;
+  const pluginVersion = pluginJsonContent.info?.version;
 
   if (typeof pluginId !== 'string' || pluginId.length === 0) {
     printErrorMessage(`Could not find 'id' in 'plugin.json'`);
     process.exit(1);
   }
 
-  const zipFileName = `${pluginId}.zip`;
+  if (typeof pluginVersion !== 'string' || pluginVersion.length === 0) {
+    printErrorMessage(`Could not find 'version' in 'plugin.json'`);
+    process.exit(1);
+  }
+
+  const zipFileName = `${pluginId}-${pluginVersion}.zip`;
   const zipFilePath = path.join(CWD, zipFileName);
 
   // if zip file already exists, warn user and confirm if wish to continue
