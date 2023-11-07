@@ -97,7 +97,7 @@ For more information see [here](https://grafana.com/developers/plugin-tools/migr
 
 ## Package your plugin
 
-You can use the `package` command to [package](https://grafana.com/developers/plugin-tools/publish-a-plugin/package-a-plugin) automatically.
+You can use the `package` command to [package](https://grafana.com/developers/plugin-tools/publish-a-plugin/package-a-plugin) your plugin automatically.
 
 1. Build your plugin: e.g. `npm run build` or `yarn build` and `mage` if your plugin has a backend.
 2. [Sign your plugin](https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin).
