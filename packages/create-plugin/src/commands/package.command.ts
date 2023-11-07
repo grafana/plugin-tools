@@ -9,8 +9,8 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
 
   const CWD = process.cwd();
   const DIST_PATH = path.join(CWD, 'dist');
-  const PLUGIN_JSON = path.join(DIST_PATH, 'plugin.json');
-  const MANIFEST_TXT = path.join(DIST_PATH, 'MANIFEST.txt');
+  const PLUGIN_JSON_PATH = path.join(DIST_PATH, 'plugin.json');
+  const MANIFEST_TXT_PATH = path.join(DIST_PATH, 'MANIFEST.txt');
 
   // validate DIS_PATH exists
   if (!fs.existsSync(DIST_PATH) || !fs.statSync(DIST_PATH).isDirectory()) {
@@ -21,7 +21,7 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
   }
 
   // validate PLUGIN_JSON exists
-  if (!fs.existsSync(PLUGIN_JSON)) {
+  if (!fs.existsSync(PLUGIN_JSON_PATH)) {
     printErrorMessage(
       "Could not find 'plugin.json' inside 'dist' directory. Please build your plugin before running this command. e.g.: `yarn build` or `npm run build`"
     );
@@ -29,7 +29,7 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
   }
 
   // if no manifest file, warn user and confirm if wish to continue
-  if (!fs.existsSync(MANIFEST_TXT) && !nonInteractive) {
+  if (!fs.existsSync(MANIFEST_TXT_PATH) && !nonInteractive) {
     const confirm = await confirmPrompt(
       `Could not find a 'MANIFEST.txt' file inside 'dist' directory. This means that the plugin is not signed. Would you like to continue generating an unsigned archive file?`
     );
@@ -38,7 +38,7 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
     }
   }
 
-  const pluginJsonContent = require(PLUGIN_JSON);
+  const pluginJsonContent = require(PLUGIN_JSON_PATH);
   const pluginId = pluginJsonContent.id;
 
   if (typeof pluginId !== 'string' || pluginId.length === 0) {
