@@ -5,10 +5,9 @@ import archiver from 'archiver';
 import path from 'path';
 
 export const packagePlugin = async (argv: minimist.ParsedArgs) => {
-  const CWD = process.cwd();
-
   const nonInteractive = argv['non-interactive'];
 
+  const CWD = process.cwd();
   const DIS_PATH = path.join(CWD, 'dist');
   const PLUGIN_JSON = path.join(DIS_PATH, 'plugin.json');
   const MANIFEST_TXT = path.join(DIS_PATH, 'MANIFEST.txt');
