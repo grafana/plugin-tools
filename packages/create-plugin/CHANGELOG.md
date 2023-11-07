@@ -1,3 +1,24 @@
+# v2.6.0 (Tue Nov 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez)), for all your work!
+
+#### 🚀 Enhancement
+
+- update to use sha1sum and minor workflow updates [#503](https://github.com/grafana/plugin-tools/pull/503) ([@briangann](https://github.com/briangann))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Replace 'master' with 'main' on  ref [#507](https://github.com/grafana/plugin-tools/pull/507) ([@joanlopez](https://github.com/joanlopez))
+
+#### Authors: 2
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez))
+
+---
+
 # v2.5.1 (Thu Nov 02 2023)
 
 #### 🐛 Bug Fix
