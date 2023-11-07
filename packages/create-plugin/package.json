@@ -38,6 +38,7 @@
     "@types/mkdirp": "^1.0.2",
     "@types/semver": "^7.3.9",
     "@types/which": "^2.0.2",
+    "archiver": "^6.0.1",
     "enquirer": "^2.3.6",
     "find-up": "^5.0.0",
     "glob": "^7.1.7",
@@ -49,6 +50,7 @@
     "which": "^3.0.0"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.1",
     "@types/glob": "^7.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0"

@@ -22,6 +22,14 @@ export function printSuccessMessage(msg: string) {
   console.log(displayAsMarkdown(`\n✔ ${msg}`));
 }
 
+export function printWarningMessage(msg: string) {
+  console.log(displayAsMarkdown(`\n⚠ ${msg}`));
+}
+
+export function printErrorMessage(msg: string) {
+  console.log(displayAsMarkdown(`\n❌ ${msg}`));
+}
+
 export function confirmPrompt(message: string): Promise<boolean> {
   const prompt = new Confirm({
     name: 'question',

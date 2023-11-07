@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import minimist from 'minimist';
-import { generate, update, migrate, version } from '../commands';
+import { generate, update, migrate, version, packagePlugin } from '../commands';
 import { isUnsupportedPlatform } from '../utils/utils.os';
 
 // Exit early if operating system isn't supported.
@@ -18,6 +18,7 @@ const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
   migrate,
   generate,
   update,
+  package: packagePlugin,
   version,
 };
 const command = commands[argv._[0]] || commands.generate;
