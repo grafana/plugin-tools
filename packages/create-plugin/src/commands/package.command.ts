@@ -41,6 +41,11 @@ export const packagePlugin = async (argv: minimist.ParsedArgs) => {
   const pluginJsonContent = require(PLUGIN_JSON);
   const pluginId = pluginJsonContent.id;
 
+  if (typeof pluginId !== 'string' || pluginId.length === 0) {
+    printErrorMessage(`Could not find 'id' in 'plugin.json'`);
+    process.exit(1);
+  }
+
   const zipFileName = `${pluginId}.zip`;
   const zipFilePath = path.join(CWD, zipFileName);
 
