@@ -95,7 +95,8 @@ import type { EditorProps } from './types';
 
 export function QueryEditor(props: EditorProps): ReactElement {
   const { datasource, query, onChange, onRunQuery } = props;
-  const report = usePluginInteractionReporter();
+
+  const report = usePluginInteractionReporter(); //  add this to fetch a report function
 
   const queryType = { value: query.value ?? 'timeseries' };
   const queryTypes = [
@@ -123,6 +124,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
       rawQuery: type,
     });
 
+    //  fetch this report with two arguments
     report('grafana_plugin_executed_query', {
       query_type: queryType.value,
     });
