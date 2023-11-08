@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 2
 ---
 
-After you [install](./get-started.mdx#step-1-scaffold-a-new-plugin) the `create-plugin` tool] and have answered the prompts, your project should look similar to this:
+After you [install](./get-started.mdx#step-1-scaffold-a-new-plugin) the `create-plugin` tool and have answered the prompts, your project should look similar to this:
 
 ```
 myorg-myplugin-datasource/

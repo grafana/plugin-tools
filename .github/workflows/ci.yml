@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v3
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
@@ -65,7 +65,7 @@ jobs:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v3
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
@@ -136,7 +136,7 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
-        uses: magefile/mage-action@v2
+        uses: magefile/mage-action@v3
         with:
           version: latest
           args: -v build:linux
@@ -168,7 +168,7 @@ jobs:
         run: git fetch --unshallow --tags
 
       - name: Setup environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'

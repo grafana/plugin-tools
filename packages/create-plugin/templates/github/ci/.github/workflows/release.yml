@@ -29,7 +29,7 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3
         with:
-          go-version: '1.19'
+          go-version: '1.21'
 
       - name: Install dependencies
         run: {{ packageManagerInstallCmd }}
@@ -78,13 +78,13 @@ jobs:
           export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
           export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
           export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
-          export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
+          export GRAFANA_PLUGIN_ARTIFACT_SHA1SUM=${GRAFANA_PLUGIN_ARTIFACT}.sha1
 
           echo "plugin-id=${GRAFANA_PLUGIN_ID}" >> $GITHUB_OUTPUT
           echo "plugin-version=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_OUTPUT
           echo "plugin-type=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_OUTPUT
           echo "archive=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_OUTPUT
-          echo "archive-checksum=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_OUTPUT
+          echo "archive-sha1sum=${GRAFANA_PLUGIN_ARTIFACT_SHA1SUM}" >> $GITHUB_OUTPUT
 
           echo "github-tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
@@ -102,8 +102,7 @@ jobs:
         run: |
           mv dist $\{{ steps.metadata.outputs.plugin-id }}
           zip $\{{ steps.metadata.outputs.archive }} $\{{ steps.metadata.outputs.plugin-id }} -r
-          md5sum $\{{ steps.metadata.outputs.archive }} > $\{{ steps.metadata.outputs.archive-checksum }}
-          echo "checksum=$(cat ./$\{{ steps.metadata.outputs.archive-checksum }} | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          sha1sum $\{{ steps.metadata.outputs.archive }} | cut -f1 -d' ' > $\{{ steps.metadata.outputs.archive-sha1sum }}
 
       - name: Validate plugin
         run: |
@@ -120,7 +119,7 @@ jobs:
           generate_release_notes: true
           files: |
             ./$\{{ steps.metadata.outputs.archive }}
-            ./$\{{ steps.metadata.outputs.archive-checksum }}
+            ./$\{{ steps.metadata.outputs.archive-sha1sum }}
           body: |
             **This Github draft release has been created for your plugin.**
 
@@ -134,6 +133,6 @@ jobs:
             - Click the **Submit Plugin** button
             - Fill in the Plugin Submission form:
               - Paste this [.zip asset link](https://github.com/$\{{ github.repository }}/releases/download/v$\{{ steps.metadata.outputs.plugin-version }}/$\{{ steps.metadata.outputs.archive }}) in the Plugin URL field
-              - Paste this [.zip.md5 link](https://github.com/$\{{ github.repository }}/releases/download/v$\{{ steps.metadata.outputs.plugin-version }}/$\{{ steps.metadata.outputs.archive-checksum }}) in the MD5 field
+              - Paste this [.zip.sha1 link](https://github.com/${{ github.repository }}/releases/download/v${{ steps.metadata.outputs.plugin-version }}/${{ steps.metadata.outputs.archive-sha1sum }}) in the SHA1 field
 
             Once done please remove these instructions and publish this release.

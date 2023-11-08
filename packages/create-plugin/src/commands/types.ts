@@ -18,4 +18,6 @@ export type TemplateData = {
   packageManagerVersion: string;
   isAppType: boolean;
   isNPM: boolean;
+  version: string;
+  bundleGrafanaUI: boolean;
 };

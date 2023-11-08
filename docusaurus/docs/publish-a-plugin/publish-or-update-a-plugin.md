@@ -45,7 +45,7 @@ Follow these steps to publish your plugin for the first time.
        This can lead to faster downloads since users can select the specific architecture on which they want to install the plugin.
    - **URL:** A URL that points to a ZIP archive of your packaged plugin.
    - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
-   - **MD5:** The MD5 hash of the plugin specified by the **URL**.
+   - **SHA1:** The SHA1 hash of the plugin specified by the **URL**.
    - The remaining questions help us determine the [signature level](./sign-a-plugin#plugin-signature-levels) for your plugin.
 1. Click **Submit**.
    After you submit your plugin, we run an automated validation to make sure it adheres to our guidelines.
