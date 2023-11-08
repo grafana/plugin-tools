@@ -99,6 +99,18 @@ For more information see [here](https://grafana.com/developers/plugin-tools/migr
 
 You can read more about customizing or extending the basic configuration [here](https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations)
 
+
+```bash
+# Run this command from the root of your plugin
+cd ./my-plugin
+
+npx @grafana/create-plugin@latest provisioning
+```
+
+For more information see [here](https://grafana.com/developers/plugin-tools/create-a-plugin/)
+
+---
+
 ## Contributing
 
 We are always grateful for contributions! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.

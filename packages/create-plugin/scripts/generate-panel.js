@@ -16,6 +16,7 @@ async function generate() {
       orgName: 'my-org',
       pluginDescription: 'Auto-generated panel',
       pluginType: 'panel',
+      hasProvisioning: true,
       hasGithubWorkflows: true,
       hasGithubLevitateWorkflow: true,
     },

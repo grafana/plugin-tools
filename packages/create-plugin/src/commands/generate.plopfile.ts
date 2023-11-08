@@ -66,6 +66,12 @@ export default function (plop: NodePlopAPI) {
         when: (answers: CliArgs) => answers.pluginType !== PLUGIN_TYPES.panel,
       },
       {
+        name: 'hasProvisioning',
+        type: 'confirm',
+        message: 'Do you want to add provisioning to your plugin?',
+        default: false,
+      },
+      {
         name: 'hasGithubWorkflows',
         type: 'confirm',
         message: 'Do you want to add Github CI and Release workflows?',
@@ -83,6 +89,7 @@ export default function (plop: NodePlopAPI) {
       orgName,
       pluginType,
       hasBackend,
+      hasProvisioning,
       hasGithubWorkflows,
       hasGithubLevitateWorkflow,
     }: CliArgs) {
@@ -134,6 +141,14 @@ export default function (plop: NodePlopAPI) {
         return acc;
       }, []);
 
+      const provisioningActions = hasProvisioning
+        ? getActionsForTemplateFolder({
+            folderPath: TEMPLATE_PATHS.provisioning,
+            exportPath,
+            templateData,
+          })
+        : [];
+
       // Copy over Github workflow files (if selected)
       const ciWorkflowActions = hasGithubWorkflows
         ? getActionsForTemplateFolder({
@@ -159,6 +174,7 @@ export default function (plop: NodePlopAPI) {
         ...ciWorkflowActions,
         ...readmeActions,
         ...isCompatibleWorkflowActions,
+        ...provisioningActions,
         {
           type: 'updateGoSdkAndModules',
         },

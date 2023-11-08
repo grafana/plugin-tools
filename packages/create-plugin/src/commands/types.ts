@@ -6,6 +6,7 @@ export type CliArgs = {
   orgName: string;
   pluginType: PLUGIN_TYPES;
   hasBackend: boolean;
+  hasProvisioning: boolean;
   hasGithubWorkflows: boolean;
   hasGithubLevitateWorkflow: boolean;
 };

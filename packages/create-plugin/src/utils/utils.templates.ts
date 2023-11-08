@@ -59,6 +59,19 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
   fs.writeFileSync(exportPath, rendered);
 }
 
+export function compileProvisioningTemplateFile(templateFile: string, data?: any) {
+  if (!isFile(templateFile)) {
+    return;
+  }
+
+  const rendered = renderTemplateFromFile(templateFile, data);
+  const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.provisioning, '.');
+  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
+
+  mkdirp.sync(path.dirname(exportPath));
+  fs.writeFileSync(exportPath, rendered);
+}
+
 export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
@@ -73,6 +86,7 @@ export function getTemplateData() {
     pluginName: pluginJson.name,
     pluginDescription: pluginJson.info?.description,
     hasBackend: Boolean(pluginJson.backend),
+    hasProvisioning: Boolean(pluginJson.provisioning),
     orgName: pluginJson.info?.author?.name,
     pluginType: pluginJson.type,
     packageManagerName,
