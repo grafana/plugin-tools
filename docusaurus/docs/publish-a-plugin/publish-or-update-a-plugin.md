@@ -107,6 +107,10 @@ For more information on plugin deprecation and how to request your plugin to be 
 
 - No. We will not accept any new plugin submissions written in Angular. For more information, refer to our [Angular support deprecation documentation](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/).
 
+### Can I submit plugins built with Toolkit?
+
+- The Toolkit is deprecated. Please [migrate to `create-plugin`](../migration-guides/migrate-from-toolkit.mdx). In the future, we will reject submissions based on Toolkit as it becomes increasingly out-of-date.
+
 ### Do plugin signatures expire?
 
 - Plugin signatures do not currently expire.
