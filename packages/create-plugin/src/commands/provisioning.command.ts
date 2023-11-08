@@ -8,7 +8,7 @@ export const provisioning = async () => {
     if (await confirmPrompt(TEXT.updateProvisioning)) {
       const provisioningSpecificFiles = glob.sync(`${TEMPLATE_PATHS.provisioning}/**`, { dot: true });
 
-      provisioningSpecificFiles.map((file) => {
+      provisioningSpecificFiles.forEach((file) => {
         compileProvisioningTemplateFile(file, getTemplateData());
       });
       printSuccessMessage(TEXT.updateProvisioningSuccess);
