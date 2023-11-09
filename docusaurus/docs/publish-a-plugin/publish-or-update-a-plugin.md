@@ -109,7 +109,7 @@ For more information on plugin deprecation and how to request your plugin to be 
 
 ### Can I submit plugins built with Toolkit?
 
-- The Toolkit is deprecated. Please [migrate to `create-plugin`](../migration-guides/migrate-from-toolkit.mdx). In the future, we will reject submissions based on Toolkit as it becomes increasingly out-of-date.
+- The @grafana/toolkit tool is deprecated. Please [migrate to `create-plugin`](../migration-guides/migrate-from-toolkit.mdx). In the future, we will reject submissions based on @grafana/toolkit as it becomes increasingly out-of-date.
 
 ### Do plugin signatures expire?
 
