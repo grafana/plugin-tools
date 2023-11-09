@@ -29,15 +29,14 @@ npm install
 
 ```js
 docusaurus/
-├── docs/ // the home of all the website documentation
-│   ├── create-a-plugin/
+├── docs/ // the website documentation files
 │   ├── get-started/
 │   │   ├── _category_.json // category item metadata
 │   │   ├── folder-structure.md // documentation file
 │   │   └── get-started.mdx // documentation file using react components
 │   ├── shared/ // special directory for sharing text
 │   └── snippets/ // special directory for command snippets
-└── website/
+└── website/ // website source code
     ├── plugins/ // location of docusaurus custom plugins
     ├── src/ // react / js source code for website
     │   ├── components
@@ -51,20 +50,22 @@ docusaurus/
     └── package.json
 ```
 
+For futher information on working with docusaurus please consult the [official docs](https://docusaurus.io/docs/category/guides).
+
 ## Development
 
-There are a collection of [commands](#commmands) to assist with developing the webiste. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code or documentation changes to the project.
+There are a collection of [commands](#commmands) to assist with developing the website. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code or documentation changes to the project.
 
 ### Commmands
 
-Below are the main commands used for developing `create-plugin`. They can be run by either `npx nx run @grafana/create-plugin:<name_of_command>`, `npm run <name_of_command> -w @grafana/create-plugin` or navigating to `packages/create-plugin` and running the command directly as detailed below.
-
-```shell
-npm run build # creates a production build of the website.
-```
+Below are the main commands used for developing the website. They can be run by either `npx nx run website:<name_of_command>`, `npm run <name_of_command> -w website` or navigating to `docusaurus/website` and running the command directly as detailed below.
 
 ```shell
 npm run start # starts a local development server to preview changes as files are edited.
+```
+
+```shell
+npm run build # creates a production build of the website.
 ```
 
 ```shell
