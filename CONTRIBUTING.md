@@ -84,7 +84,7 @@ Then in your terminal:
 
 - `cd path/to/your/clone`
 - `npm install`
-- `npm test && npm build`
+- `npm run test && npm run build`
 
 And you should be ready to go!
 
