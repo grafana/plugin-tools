@@ -4,6 +4,7 @@ node_modules
 # Build output
 packages/create-plugin/generated
 dist
+compiled
 build
 
 # Errors

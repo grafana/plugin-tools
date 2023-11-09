@@ -20,7 +20,7 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rm -rf ./dist ./com",
+    "clean": "rm -rf ./dist ./compiled",
     "build": "npm run clean && tsc -p ./tsconfig.json && rollup -c rollup.config.ts",
     "dev": "yarn bundle -w",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
@@ -32,9 +32,15 @@
     "playwright:test": "npx playwright test",
     "playwright:test:ui": "npx playwright test --ui"
   },
-  "dependencies": {},
-  "devDependencies": {},
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.3.0",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-esbuild": "^6.1.0",
+    "rollup-plugin-node-externals": "^6.1.2",
+    "ts-node": "^10.9.1"
   }
 }
