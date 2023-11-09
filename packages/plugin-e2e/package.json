@@ -1,12 +1,40 @@
 {
   "name": "@grafana/plugin-e2e",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "files": [
+    "./dist",
+    "./compiled",
+    "./package.json"
+  ],
+  "repository": {
+    "directory": "packages/sign-plugin",
+    "url": "https://github.com/grafana/plugin-tools"
   },
-  "author": "",
-  "license": "Apache-2.0"
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist ./com",
+    "build": "npm run clean && tsc -p ./tsconfig.json && rollup -c rollup.config.ts",
+    "dev": "yarn bundle -w",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "jest",
+    "server": "docker-compose up --build",
+    "bundle": "npm run clean && rollup -c rollup.config.ts",
+    "typecheck": "tsc --emitDeclarationOnly false --noEmit",
+    "playwright:test": "npx playwright test",
+    "playwright:test:ui": "npx playwright test --ui"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=20"
+  }
 }
