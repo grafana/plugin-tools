@@ -48,7 +48,7 @@ There are a collection of [commands](#commmands) to assist with developing `crea
 
 ### Commmands
 
-Below are the main commands used for developing `create-plugin`. They can be run by either `yarn workspace @grafana/create-plugin run <name_of_command>` or navigating to `packages/create-plugin` and running the command directly as detailed below.
+Below are the main commands used for developing `create-plugin`. They can be run by either `npx nx run @grafana/create-plugin:<name_of_command>`, `npm run <name_of_command> -w @grafana/create-plugin` or navigating to `packages/create-plugin` and running the command directly as detailed below.
 
 ```shell
 npm run build # used to build @grafana/create-plugin
@@ -77,3 +77,5 @@ _Work in progress._
 ### Developing the templates
 
 The templates are used by Plop to scaffold Grafana plugins. Whilst they appear to be the intended filetype they are infact treated as markdown by Plop when it runs. As such we need to be mindful of syntax and to [escape particular characters](https://handlebarsjs.com/guide/expressions.html#whitespace-control) where necessary. The [github/ci.yml](./templates/github/ci/.github/workflows/ci.yml) file is a good example of this.
+
+Note that certain files are intentionally named differently (e.g. npmrc, package.json). This is done due to other tooling preventing the files from being packaged for NPM or breaking other tools during local development.
