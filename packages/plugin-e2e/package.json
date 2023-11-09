@@ -10,7 +10,7 @@
     "./package.json"
   ],
   "repository": {
-    "directory": "packages/sign-plugin",
+    "directory": "packages/plugin-e2e",
     "url": "https://github.com/grafana/plugin-tools"
   },
   "author": "Grafana",
@@ -22,6 +22,7 @@
   "scripts": {
     "clean": "rm -rf ./dist ./compiled",
     "build": "npm run clean && tsc -p ./tsconfig.json && rollup -c rollup.config.ts",
+    "build2": "tsc -p ./tsconfig.json && rollup -c rollup.config.ts",
     "dev": "yarn bundle -w",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
