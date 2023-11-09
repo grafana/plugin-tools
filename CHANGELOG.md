@@ -1,3 +1,62 @@
+# (Tue Nov 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.6.0`
+  - update to use sha1sum and minor workflow updates [#503](https://github.com/grafana/plugin-tools/pull/503) ([@briangann](https://github.com/briangann))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.6.0`
+  - Create Plugin: Replace 'master' with 'main' on ref [#507](https://github.com/grafana/plugin-tools/pull/507) ([@joanlopez](https://github.com/joanlopez))
+
+#### Authors: 2
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez))
+
+---
+
+# (Thu Nov 02 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.5.1`
+  - Create Plugin: Fix app backend test [#518](https://github.com/grafana/plugin-tools/pull/518) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Nov 02 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.5.0`
+  - Adding support for controling the create-plugin tool via a rc file [#506](https://github.com/grafana/plugin-tools/pull/506) ([@mckn](https://github.com/mckn))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.5.0`
+  - Bump nvmrc to 20 to align with package.json [#498](https://github.com/grafana/plugin-tools/pull/498) ([@ckbedwell](https://github.com/ckbedwell))
+
+#### Authors: 2
+
+- Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Wed Oct 25 2023)
 
 #### 🚀 Enhancement

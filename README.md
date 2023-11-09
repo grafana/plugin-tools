@@ -35,7 +35,7 @@ This is a mono-repo of NPM packages to help plugin developers extend Grafana in 
 📖 Learn from tutorials and documenation in the [Grafana developer portal](https://grafana.com/developers).  
 ✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.  
 🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.  
-✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.  
+✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.
 
 ## Contributors ✨
 
@@ -52,7 +52,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/sunker"><img src="https://avatars.githubusercontent.com/u/2388950?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Erik Sundell</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=sunker" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/sarahzinger"><img src="https://avatars.githubusercontent.com/u/6620164?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sarah Zinger</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=sarahzinger" title="Documentation">📖</a> <a href="https://github.com/grafana/plugin-tools/commits?author=sarahzinger" title="Code">💻</a></td>
     <td align="center"><a href="https://tomasbasham.dev/"><img src="https://avatars.githubusercontent.com/u/3389856?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tomas Basham</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=tomasbasham" title="Documentation">📖</a> <a href="https://github.com/grafana/plugin-tools/commits?author=tomasbasham" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/mckn"><img src="https://avatars.githubusercontent.com/u/172951?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marcus Andersson</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=mckn" title="Documentation">📖</a> <a href="https://github.com/grafana/plugin-tools/commits?author=mckn" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/mckn"><img src="https://avatars.githubusercontent.com/u/172951?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marcus Andersson</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=mckn" title="Documentation">📖</a> <a href="https://github.com/grafana/plugin-tools/commits?author=mckn" title="Tests">⚠️</a> <a href="https://github.com/grafana/plugin-tools/commits?author=mckn" title="Code">💻</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/iwysiu"><img src="https://avatars.githubusercontent.com/u/5421859?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Isabella Siu</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=iwysiu" title="Code">💻</a></td>
@@ -71,6 +71,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/aangelisc"><img src="https://avatars.githubusercontent.com/u/15019026?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andreas Christou</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=aangelisc" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/mikkancso"><img src="https://avatars.githubusercontent.com/u/13637610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mikkancso</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=mikkancso" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/zoltanbedi"><img src="https://avatars.githubusercontent.com/u/13729989?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zoltán Bedi</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=zoltanbedi" title="Documentation">📖</a> <a href="#infra-zoltanbedi" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=zoltanbedi" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/joanlopez"><img src="https://avatars.githubusercontent.com/u/5459617?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joan López de la Franca Beltran</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=joanlopez" title="Code">💻</a></td>
   </tr>
 </table>
 

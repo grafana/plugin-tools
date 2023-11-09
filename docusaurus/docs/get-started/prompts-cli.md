@@ -96,7 +96,7 @@ Performs a type-checking process on the frontend code using TypeScript.
 
 ### `run server`
 
-Launches the https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment using Docker.
+Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
 
 ### `run sign`
 
