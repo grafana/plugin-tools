@@ -1,6 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 const {
+  customFields,
   generalConfig,
   plugins,
   presetsDocs,
@@ -65,6 +66,7 @@ const config = {
   },
 
   customFields: {
+    ...customFields,
     rudderStackTracking: {
       url: 'https://rs.grafana.com',
       writeKey: '1sBAgwTlZ2K0zTzkM8YTWorZI00',
