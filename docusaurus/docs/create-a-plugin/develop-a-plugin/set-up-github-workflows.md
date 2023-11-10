@@ -22,7 +22,7 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 ## The release workflow
 
-:::caution
+:::warning
 
 This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [distributing your plugin](../../publish-a-plugin/publish-or-update-a-plugin.md).
 

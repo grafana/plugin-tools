@@ -2,6 +2,10 @@ const path = require('path');
 const remarkFigureCaption = require('gridsome-remark-figure-caption');
 const { grafanaPrismTheme } = require('./src/theme/prism');
 
+const customFields = {
+  nodeEnv: process.env.NODE_ENV,
+};
+
 /** @type {import('@docusaurus/types').Config} */
 const generalConfig = {
   title: 'Grafana Plugin Tools',
@@ -21,7 +25,7 @@ const generalConfig = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
-  },  
+  },
 };
 
 const plugins = [
@@ -127,6 +131,7 @@ const themeConfigFooter = {
 
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
+  additionalLanguages: ['bash', 'diff', 'json'],
 };
 
 const themeConfigColorMode = {
@@ -136,6 +141,7 @@ const themeConfigColorMode = {
 };
 
 module.exports = {
+  customFields,
   generalConfig,
   plugins,
   presetsDocs,
