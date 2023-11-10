@@ -91,7 +91,6 @@ export function getTemplateData() {
     pluginName: pluginJson.name,
     pluginDescription: pluginJson.info?.description,
     hasBackend: Boolean(pluginJson.backend),
-    hasProvisioning: Boolean(pluginJson.provisioning),
     orgName: pluginJson.info?.author?.name,
     pluginType: pluginJson.type,
     packageManagerName,

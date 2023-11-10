@@ -17,7 +17,6 @@ async function generate() {
       pluginDescription: 'Auto-generated datasource',
       pluginType: 'datasource',
       hasBackend: true,
-      hasProvisioning: false,
       hasGithubWorkflows: true,
       hasGithubLevitateWorkflow: true,
     },

@@ -17,7 +17,6 @@ async function generate() {
       pluginDescription: 'Auto-generated scenes app',
       pluginType: 'scenesapp',
       hasBackend: false,
-      hasProvisioning: true,
       hasGithubWorkflows: true,
       hasGithubLevitateWorkflow: true,
     },

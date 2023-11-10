@@ -17,7 +17,6 @@ async function generate() {
       pluginDescription: 'Auto-generated app',
       pluginType: 'app',
       hasBackend: false,
-      hasProvisioning: true,
       hasGithubWorkflows: true,
       hasGithubLevitateWorkflow: true,
     },

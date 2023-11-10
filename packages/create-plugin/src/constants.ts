@@ -100,9 +100,9 @@ export const TEXT = {
   updateNpmDependenciesSuccess: 'Successfully updated the NPM dependencies.',
   updateNpmDependenciesAborted: 'No NPM dependencies have been updated.',
 
-  updateProvisioning: '**Would you like to add provisioning files?**',
-  updateProvisioningSuccess: 'Successfully updated provisioning.',
-  updateProvisioningAborted: 'No provisioning have been updated.',
+  addProvisioning: '**Would you like to add provisioning files?**',
+  addProvisioningSuccess: 'Successfully added provisioning.',
+  addProvisioningAborted: 'No provisioning have been added.',
 
   removeNpmDependenciesPrompt: '**Would you like to remove the following possibly unnecessary NPM dependencies?**',
   removeNpmDependenciesSuccess: 'Unnecessary NPM dependencies removed successfully.',
