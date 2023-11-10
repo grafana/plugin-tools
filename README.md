@@ -38,9 +38,9 @@ This Mono-repo uses [NPM](https://nodejs.org) for package management, [NX](https
 
 ### Additional resources
 
-📖 Learn from tutorials and documentation in the [Grafana developer portal](https://grafana.com/developers).
-✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.
-🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.
+📖 Learn from tutorials and documentation in the [Grafana developer portal](https://grafana.com/developers).<br/>
+✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.<br/>
+🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.<br/>
 ✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.
 
 ## Contributors ✨

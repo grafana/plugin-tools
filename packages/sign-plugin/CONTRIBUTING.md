@@ -33,7 +33,7 @@ There are a collection of [commands](#commmands) to assist with developing `sign
 
 ### Commmands
 
-Below are the main commands used for developing `sign-plugin`. Below are the main commands used for developing `sign-plugin`. They can be run by either `npx nx run @grafana/sign-plugin:<name_of_command>`, `npm run <name_of_command> -w @grafana/sign-plugin` or navigating to `packages/sign-plugin` and running the command directly as detailed below.
+Below are the main commands used for developing `sign-plugin`. They can be run by either `npx nx run @grafana/sign-plugin:<name_of_command>`, `npm run <name_of_command> -w @grafana/sign-plugin` or navigating to `packages/sign-plugin` and running the command directly as detailed below.
 
 ```shell
 npm build # used to build @grafana/sign-plugin
