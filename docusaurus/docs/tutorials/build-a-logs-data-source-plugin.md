@@ -33,7 +33,7 @@ When these steps are done, then you can improve the user experience with one or 
 
 Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../metadata.md) file.
 
-```json
+```json title="src/plugin.json"
 {
   "logs": true
 }

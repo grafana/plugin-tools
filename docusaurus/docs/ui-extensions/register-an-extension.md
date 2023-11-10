@@ -44,7 +44,7 @@ Use either `path` or `onClick` (one is required). Otherwise, the extension will 
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one`.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
@@ -57,7 +57,7 @@ new AppPlugin().configureExtensionLink({
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
@@ -78,7 +78,7 @@ new AppPlugin().configureExtensionLink({
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will only be visible for panels with the time zone set to UTC.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
@@ -101,7 +101,7 @@ new AppPlugin().configureExtensionLink({
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will open a flow (defined in our app) in a modal on top of the current view.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Create incident',
   description: 'Will open a prefilled form to create an incident.',

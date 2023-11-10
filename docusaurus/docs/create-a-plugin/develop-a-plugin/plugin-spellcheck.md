@@ -31,18 +31,18 @@ If you ended up here following the link from the failing CI then most probably y
 1. Install cspell package to your plugin's repo:
 
 ```bash
-yarn add -D cspell@6.13.3
+npm install --save-dev cspell@6.13.3
 ```
 
 3. Add `spellcheck` command to the `scripts` section in `package.json` of your plugin:
 
-```
+```json title="package.json"
 "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\""
 ```
 
 3. Create a `cspell.config.json` file in the repo root folder and add a basic config there:
 
-```json
+```json title="cspell.config.json"
 {
   "ignorePaths": [
     "coverage/**",
@@ -72,7 +72,7 @@ yarn add -D cspell@6.13.3
 }
 ```
 
-4. Run `yarn spellcheck` to see if there are any misspellings
+4. Run `npm run spellcheck` to see if there are any misspellings
 5. If errors found, either fix them or add to `ignorePaths` or `words` section of the `cspell.config.json` created earlier
 
 Sample PR to add spellcheck to your repo: https://github.com/grafana/athena-datasource/pull/185/files
