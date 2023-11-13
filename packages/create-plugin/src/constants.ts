@@ -21,7 +21,7 @@ export const TEMPLATE_PATHS: Record<string, string> = {
   scenesapp: path.join(TEMPLATES_DIR, 'scenes-app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
   backendApp: path.join(TEMPLATES_DIR, 'backend-app'),
-  provisioning: path.join(TEMPLATES_DIR, 'provisioning-template'),
+  provisioning: path.join(TEMPLATES_DIR, 'provisioning'),
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),
