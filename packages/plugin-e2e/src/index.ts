@@ -1,2 +1,1 @@
-const dummie: { d?: string } = {};
-export default dummie;
+export * from './e2e-selectors';
