@@ -1,12 +1,12 @@
 {
   "name": "@grafana/plugin-e2e",
   "version": "0.0.1",
+  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "module": "./dist/esm/index.js",
   "files": [
     "./dist",
-    "./compiled",
     "./package.json"
   ],
   "repository": {
@@ -21,14 +21,12 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist ./compiled",
-    "build": "npm run clean && tsc -p ./tsconfig.json && rollup -c rollup.config.ts",
-    "build2": "tsc -p ./tsconfig.json && rollup -c rollup.config.ts",
-    "dev": "yarn bundle -w",
+    "build": "tsc --project tsconfig.json & tsc --project tsconfig.cjs.json",
+    "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "jest",
     "server": "docker-compose up --build",
-    "bundle": "npm run clean && rollup -c rollup.config.ts",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "playwright:test": "npx playwright test",
     "playwright:test:ui": "npx playwright test --ui"
