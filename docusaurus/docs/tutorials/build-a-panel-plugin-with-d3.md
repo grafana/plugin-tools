@@ -46,52 +46,60 @@ In this tutorial, you'll:
 
 Wait a minute. Manipulating documents based on data? That's sounds an awful lot like React. In fact, much of what you can accomplish with D3 you can already do with React. So before we start looking at D3, let's see how you can create an SVG from data, using only React.
 
-1. For the purposes of this tutorial, remove the following from `src/components/SimplePanel.tsx`:
+1. For the purposes of this tutorial, remove the following code:
 
-  ```ts
-    viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-  ```
+   ```tsx title="src/components/SimplePanel.tsx"
+   viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
+   ```
 
-  and 
+   and
 
-  ```ts
-  <div className={styles.textBox}>
-   {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
-   <div>Text option value: {options.text}</div>
-  </div>
-  ```
+   ```tsx title="src/components/SimplePanel.tsx"
+   <div className={styles.textBox}>
+     {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
+     <div>Text option value: {options.text}</div>
+   </div>
+   ```
 
-1. Now, change the SVG group `g` in `SimplePanel` to return a `rect` element rather than a circle.
+1. Now, change the SVG group `g` to return a `rect` element rather than a circle.
 
-```ts
-<g>
-  <rect x={0} y={0} width={30} height={10} fill={theme.visualization.getColorByName('green')} />
-</g>
-```
+   ```tsx title="src/components/SimplePanel.tsx"
+   <g>
+     <rect x={0} y={0} width={30} height={10} fill={theme.visualization.getColorByName('green')} />
+   </g>
+   ```
 
 One single rectangle might not be very exciting, so let's see how you can create rectangles from data.
 
-1. Create some data that we can visualize.
+1.  Create some data that we can visualize.
 
-   ```ts
-   const values = [4, 8, 15, 16, 23, 42];
-   ```
+    ```ts title="src/components/SimplePanel.tsx"
+    const values = [4, 8, 15, 16, 23, 42];
+    ```
 
-1. Calculate the height of each bar based on the height of the panel.
+1.  Calculate the height of each bar based on the height of the panel.
 
-   ```ts
-   const barHeight = height / values.length;
-   ```
+    ```ts title="src/components/SimplePanel.tsx"
+    const barHeight = height / values.length;
+    ```
 
-1. Inside the SVG group `g`, create a `rect` element for every value in the dataset. Each rectangle uses the value as its width.
+1.  Inside the SVG group `g`, create a `rect` element for every value in the dataset. Each rectangle uses the value as its width.
 
-   ```ts
-        <g>
-         {values.map((value, i) => (
-           <rect x={0} y={i * barHeight} width={value} height={barHeight - 1} fill={theme.visualization.getColorByName('green')} />
-         ))}
-       </g>
-   ```
+    ```tsx title="src/components/SimplePanel.tsx"
+    <g>
+      {values.map((value, i) => (
+        <rect
+          key={value}
+          x={0}
+          y={i * barHeight}
+          width={value}
+          height={barHeight - 1}
+          fill={theme.visualization.getColorByName('green')}
+        />
+      ))}
+    </g>
+    ```
+
 As you can see, React is perfectly capable of dynamically creating HTML elements. In fact, creating elements using React is often faster than creating them using D3.
 
 So why would you use even use D3? In the next step, we'll see how you can take advantage of D3's data transformations.
@@ -105,12 +113,12 @@ D3 is already bundled with Grafana, and you can access it by importing the `d3` 
 1. Install the D3 type definitions:
 
    ```bash
-   npm install --include=dev @types/d3
+   npm install --save-dev @types/d3
    ```
 
-1. Import `d3` in `SimplePanel.tsx`.
+1. Import `d3`:
 
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    import * as d3 from 'd3';
    ```
 
@@ -120,7 +128,7 @@ Scales are functions that map a range of values to another range of values. In t
 
 1. Create a scale to map a value between 0 and the maximum value in the dataset, to a value between 0 and the width of the panel. We'll be using this to calculate the width of the bar.
 
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    const scale = d3
      .scaleLinear()
      .domain([0, d3.max(values) || 0.0])
@@ -129,13 +137,19 @@ Scales are functions that map a range of values to another range of values. In t
 
 1. Pass the value to the scale function to calculate the width of the bar in pixels.
 
-   ```ts
+   ```tsx title="src/components/SimplePanel.tsx"
    return (
      <svg width={width} height={height}>
        <g>
          {values.map((value, i) => (
-           <rect key={value} x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1}
-            fill={theme.visualization.getColorByName('green')} />
+           <rect
+             key={value}
+             x={0}
+             y={i * barHeight}
+             width={scale(value)}
+             height={barHeight - 1}
+             fill={theme.visualization.getColorByName('green')}
+           />
          ))}
        </g>
      </svg>
@@ -152,13 +166,13 @@ Let's see how you can use D3 to add a horizontal axis to your bar chart.
 
 1. Create a D3 axis. Notice that by using the same scale as before, we make sure that the bar width aligns with the ticks on the axis.
 
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    const axis = d3.axisBottom(scale);
    ```
 
 1. Generate the axis. While D3 needs to generate the elements for the axis, we can encapsulate it by generating them within an anonymous function which we pass as a `ref` to a group element `g`.
 
-   ```ts
+   ```tsx title="src/components/SimplePanel.tsx"
    <g
      ref={(node) => {
        d3.select(node).call(axis as any);
@@ -170,7 +184,7 @@ By default, the axis renders at the top of the SVG element. We'd like to move it
 
 1. Calculate the new bar height based on the padded height.
 
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    const padding = 20;
    const chartHeight = height - padding;
    const barHeight = chartHeight / values.length;
@@ -178,7 +192,7 @@ By default, the axis renders at the top of the SVG element. We'd like to move it
 
 1. Translate the axis by adding a transform to the `g` element.
 
-   ```ts
+   ```tsx title="src/components/SimplePanel.tsx"
    <g
      transform={`translate(0, ${chartHeight})`}
      ref={(node) => {
@@ -191,14 +205,13 @@ Congrats! You've created a simple and responsive bar chart.
 
 ## Complete example
 
-```ts
+```tsx title="src/components/SimplePanel.tsx"
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import * as d3 from 'd3';
-
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -230,13 +243,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   const chartHeight = height - padding;
   const barHeight = chartHeight / values.length;
   const scale = d3
-  .scaleLinear()
-  .domain([0, d3.max(values) || 0.0])
-  .range([0, width]);
+    .scaleLinear()
+    .domain([0, d3.max(values) || 0.0])
+    .range([0, width]);
   const axis = d3.axisBottom(scale);
 
   return (
-    
     <div
       className={cx(
         styles.wrapper,
@@ -255,8 +267,14 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
       >
         <g>
           {values.map((value, i) => (
-            <rect key={value} x={0} y={i * barHeight} width={scale(value)} height={barHeight - 1}
-            fill={theme.visualization.getColorByName('green')} />
+            <rect
+              key={value}
+              x={0}
+              y={i * barHeight}
+              width={scale(value)}
+              height={barHeight - 1}
+              fill={theme.visualization.getColorByName('green')}
+            />
           ))}
         </g>
         <g
@@ -265,7 +283,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
             d3.select(node).call(axis as any);
           }}
         />
-      </svg>      
+      </svg>
     </div>
   );
 };

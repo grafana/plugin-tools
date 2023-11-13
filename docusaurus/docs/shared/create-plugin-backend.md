@@ -2,37 +2,37 @@ The Grafana [create-plugin tool](https://www.npmjs.com/package/@grafana/create-p
 
 1. <span>In a new directory, create a plugin from a template using the create-plugin tool. When prompted for the kind of plugin, select {props.pluginType}</span> and answer yes to "Do you want a backend part of your plugin?":
 
-   ```
+   ```shell
    npx @grafana/create-plugin@latest
    ```
 
 1. Go to the directory of your newly created plugin:
 
-   ```
+   ```shell
    cd <your-plugin>
    ```
 
 1. Install the dependencies:
 
-   ```
+   ```shell
    npm install
    ```
 
 1. Build the plugin frontend:
 
-   ```
+   ```shell
    npm run dev
    ```
 
 1. In a new terminal window, build the plugin backend:
 
-   ```
+   ```shell
    mage -v build:linux
    ```
 
 1. Start Grafana:
 
-   ```
+   ```shell
    docker-compose up
    ```
 

@@ -111,7 +111,7 @@ Field options let the user control how Grafana displays the data in a data frame
 
 To apply the field options to a value, use the `display` method on the corresponding field. The result contains information such as the color and suffix to use when display the value.
 
-```ts
+```tsx
 const valueField = frame.fields.find((field) => field.type === FieldType.number);
 
 return (
