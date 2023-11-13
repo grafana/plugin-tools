@@ -48,10 +48,9 @@ If you run into an error or bug with the project:
 Once it's filed:
 
 - The project team will label the issue.
-- A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those steps and mark the issue as `needs-repro`. Bugs with the `needs-repro` tag will not be addressed until they are reproduced.
-- If the team is able to reproduce the issue, it will be marked `needs-fix`, as well as possibly other tags (such as `critical`), and the issue will be left to be [implemented by someone](#contribute-code).
+- A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those steps. Bugs will not be addressed until they are reproduced.
+- If the team is able to reproduce the issue it will be left to be [implemented by someone](#contribute-code).
 - If you or the maintainers don't respond to an issue for 30 days, the issue will be closed. If you want to come back to it, reply (once, please), and we'll reopen the existing issue. Please avoid filing new issues as extensions of one you already made.
-- `critical` issues may be left open, depending on perceived immediacy and severity, even past the 30 day deadline.
 
 ## Request a Feature
 
@@ -96,6 +95,7 @@ Plugin-tools is a mono-repo consisting of multiple projects. Please refer to the
 | ------------- | ------------------------------------------------ |
 | Create Plugin | [Link](./packages/create-plugin/CONTRIBUTING.md) |
 | Sign Plugin   | [Link](./packages/sign-plugin/CONTRIBUTING.md)   |
+| Website       | [Link](./docusaurus/website/CONTRIBUTING.md)     |
 
 ## Contributor License Agreement (CLA)
 
@@ -127,7 +127,7 @@ Once you've filed the PR:
 
 ## Contribute Code
 
-We like code commits a lot! They're super handy, and they keep the project going and doing the work it needs to do to be useful to others.
+We like code commits a lot! They're super handy, and they keep the project going and doing the work it needs to do to be useful to others. Before considering contributing code please review [report an error or bug](#report-an-error-or-bug) and [request a feature](#request-a-feature) to make sure an issue has been filed and discussed with the project maintainers. PRs submitted without associated issues risk being closed or rejected.
 
 Code contributions of just about any size are acceptable!
 
