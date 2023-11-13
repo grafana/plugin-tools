@@ -32,13 +32,13 @@ Configure your data source plugin to authenticate against a third-party API in o
 
 ## Encrypt data source configuration
 
-Data source plugins have two ways of storing custom configuration: `jsonData` and `secureJsonData`. 
+Data source plugins have two ways of storing custom configuration: `jsonData` and `secureJsonData`.
 
 Users with the Viewer role can access data source configuration such as the contents of `jsonData` in cleartext. If you've enabled anonymous access, anyone who can access Grafana in their browser can see the contents of `jsonData`.
 
-Users of [Grafana Enterprise](https://grafana.com/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](https://grafana.com/docs/grafana/latest/enterprise/datasource_permissions). You can see the settings that the current user has access to by entering `window.grafanaBootData` in the developer console of your browser. 
+Users of [Grafana Enterprise](https://grafana.com/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](https://grafana.com/docs/grafana/latest/enterprise/datasource_permissions). You can see the settings that the current user has access to by entering `window.grafanaBootData` in the developer console of your browser.
 
-:::caution
+:::danger
 
 Do not use `jsonData` with sensitive data such as password, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
 
@@ -148,11 +148,11 @@ To forward requests through the Grafana proxy, you need to configure one or more
    ]
    ```
 
-  :::note
+:::note
 
-  You need to restart the Grafana server every time you make a change to your `plugin.json` file.
+You need to restart the Grafana server every time you make a change to your `plugin.json` file.
 
-  :::
+:::
 
 1. In the `DataSource`, extract the proxy URL from `instanceSettings` to a class property called `url`:
 

@@ -10,7 +10,7 @@ Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joa
 
 #### 🐛 Bug Fix
 
-- Create Plugin: Replace 'master' with 'main' on  ref [#507](https://github.com/grafana/plugin-tools/pull/507) ([@joanlopez](https://github.com/joanlopez))
+- Create Plugin: Replace 'master' with 'main' on ref [#507](https://github.com/grafana/plugin-tools/pull/507) ([@joanlopez](https://github.com/joanlopez))
 
 #### Authors: 2
 

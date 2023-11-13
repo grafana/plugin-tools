@@ -46,7 +46,7 @@ To share dependencies, Grafana defines two key components:
 - **[SystemJS](https://github.com/systemjs/systemjs) import map in Grafana:** The dependency must be listed in a SystemJS import map in the Grafana application.
 - **Plugin build tool configuration:** The dependency must be externalized in the plugin's build tool configuration, which is primarily done using Webpack.
 
-:::caution
+:::danger
 
 Customizing the build tool configuration to change the external dependencies is not supported and will likely lead to plugin loading failure or bugs.
 
