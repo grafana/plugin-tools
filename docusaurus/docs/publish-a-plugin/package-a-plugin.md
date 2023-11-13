@@ -50,7 +50,7 @@ Package a plugin to organize the plugin code and make it ready for use in your o
    zip myorg-simple-panel-1.0.0.zip myorg-simple-panel -r
    ```
 
-1. Optional: Verify that your plugin is packaged correctly using [zipinfo](https://linux.die.net/man/1/zipinfo).
+1. Optional: verify that your plugin is packaged correctly using [zipinfo](https://linux.die.net/man/1/zipinfo).
    It should look like this:
 
    ```shell
