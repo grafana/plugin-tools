@@ -64,7 +64,7 @@ Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflow
 
 ## CLI commands
 
-Use the CLI for essential tasks of plugin development, employing `npm`, `pnpm`, or `yarn`.
+Use the CLI for essential tasks of plugin development, substituting `npm` for `pnpm`, or `yarn` based on your choice of package manager.
 
 ### `npm run build`
 

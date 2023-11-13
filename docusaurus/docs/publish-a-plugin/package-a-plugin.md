@@ -13,16 +13,25 @@ keywords:
   - packages
 ---
 
+import BuildNPM from '@snippets/createplugin-build-ci.npm.md';
+import BuildPNPM from '@snippets/createplugin-build-ci.pnpm.md';
+import BuildYarn from '@snippets/createplugin-build-ci.yarn.md';
+
 # Package a plugin
 
 Package a plugin to organize the plugin code and make it ready for use in your organization. Follow these steps to package the plugin in a ZIP file.
 
 1. Build the plugin
 
-   ```
-   yarn install --pure-lockfile
-   yarn build
-   ```
+   <CodeSnippets
+   snippets={[
+   { component: BuildNPM, label: 'npm' },
+   { component: BuildPNPM, label: 'pnpm' },
+   { component: BuildYarn, label: 'yarn' },
+   ]}
+   groupId="package-manager"
+   queryString="current-package-manager"
+   />
 
 1. Optional: If your data source plugin has a backend plugin, build it as well.
 
@@ -44,8 +53,8 @@ Package a plugin to organize the plugin code and make it ready for use in your o
 1. Optional: Verify that your plugin is packaged correctly using [zipinfo](https://linux.die.net/man/1/zipinfo).
    It should look like this:
 
-   ```
-   zipinfo grafana-clickhouse-datasource-1.1.2.zip
+   ```shell
+   $ zipinfo grafana-clickhouse-datasource-1.1.2.zip
 
    Archive:  grafana-clickhouse-datasource-1.1.2.zip
    Zip file size: 34324077 bytes, number of entries: 22

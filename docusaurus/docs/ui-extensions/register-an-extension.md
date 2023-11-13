@@ -23,20 +23,20 @@ Be sure your plugin meets the following requirements before proceeding:
 
 ## How to extend the Grafana UI or an app plugin from your app plugin
 
-1. Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
+Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
 
-   - `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend. See [available extension points](#available-extension-points-within-grafana) within Grafana.
-   - `title` _required_ - used to display your extension at the extension point.
-   - `description` _required_ - short description of what your extension does.
-   - `path` - a path within your app plugin where you would like to send users when they click the extension.
-   - `onClick` - a callback that should be triggered when the user clicks the extension.
-   - `category` - a category that we should use to group your extension with other extensions.
-   - `icon` - an icon that should be used while displaying your extension.
-   - `configure` - a function that is called prior to displaying the extension which enables you to dynamically change or hide your extension depending on its context.
+- `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend. See [available extension points](#available-extension-points-within-grafana) within Grafana.
+- `title` _required_ - used to display your extension at the extension point.
+- `description` _required_ - short description of what your extension does.
+- `path` - a path within your app plugin where you would like to send users when they click the extension.
+- `onClick` - a callback that should be triggered when the user clicks the extension.
+- `category` - a category that we should use to group your extension with other extensions.
+- `icon` - an icon that should be used while displaying your extension.
+- `configure` - a function that is called prior to displaying the extension which enables you to dynamically change or hide your extension depending on its context.
 
-:::note
+:::warning
 
-Use either `path` or `onClick` (one is required). Otherwise, the extension will be hidden.
+Use either `path` or `onClick` (only one is required) otherwise the extension will be hidden.
 
 :::
 

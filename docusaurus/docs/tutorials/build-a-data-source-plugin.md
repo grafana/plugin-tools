@@ -149,7 +149,9 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
 
 Your data source is now sending data frames that Grafana can visualize. Next, we'll look at how you can control the frequency of the sine wave by defining a _query_.
 
-> In this example, we're generating timestamps from the current time range. This means that you'll get the same graph no matter what time range you're using. In practice, you'd instead use the timestamps returned by your database.
+:::info
+In this example, we're generating timestamps from the current time range. This means that you'll get the same graph no matter what time range you're using. In practice, you'd instead use the timestamps returned by your database.
+:::
 
 ## Define a query
 

@@ -87,7 +87,7 @@ For example, a streaming data source plugin can connect to a websocket, or subsc
    frame.addField({ name: 'value', type: FieldType.number });
    ```
 
-Circular data frames have a limited capacity. When a circular data frame reaches its capacity, the oldest data point is removed.
+   Circular data frames have a limited capacity. When a circular data frame reaches its capacity, the oldest data point is removed.
 
 1. Use `subscriber.next()` to send the updated data frame whenever you receive new updates.
 
@@ -111,9 +111,9 @@ Circular data frames have a limited capacity. When a circular data frame reaches
    };
    ```
 
-:::note
-In practice, you'd call `subscriber.next` as soon as you receive new data from a websocket or a message bus. In the example above, data is being received every 500 milliseconds.
-:::
+   :::note
+   In practice, you'd call `subscriber.next` as soon as you receive new data from a websocket or a message bus. In the example above, data is being received every 500 milliseconds.
+   :::
 
 ### Example code for final `query` method
 

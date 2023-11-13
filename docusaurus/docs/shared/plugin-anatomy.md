@@ -12,7 +12,7 @@ While certain plugin types can have specific configuration options, let's look a
 
 To see all the available configuration settings for the `plugin.json`, refer to the [plugin.json Schema](../metadata.md).
 
-### `module.js`
+### `module.ts`
 
 After discovering your plugin, Grafana loads the `module.js` file, the entrypoint for your plugin. `module.js` exposes the implementation of your plugin, which depends on the type of plugin you're building.
 
