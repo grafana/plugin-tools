@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "main": "./dist/cjs/index.js",
-  "types": "./dist/types/index.d.ts",
-  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "files": [
     "./dist",
     "./package.json"
@@ -20,8 +19,8 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rm -rf ./dist ./compiled",
-    "build": "tsc --project tsconfig.json & tsc --project tsconfig.cjs.json",
+    "clean": "rm -rf ./dist",
+    "build": "tsc --project tsconfig.cjs.json",
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
