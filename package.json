@@ -48,7 +48,8 @@
   "workspaces": [
     "packages/create-plugin",
     "packages/sign-plugin",
-    "docusaurus/website"
+    "docusaurus/website",
+    "packages/plugin-e2e"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
