@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc --project tsconfig.cjs.json",
+    "build": "tsc --project tsconfig.json",
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
