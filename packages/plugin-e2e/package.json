@@ -25,7 +25,6 @@
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest",
     "server": "docker-compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "playwright:test": "npx playwright test",
