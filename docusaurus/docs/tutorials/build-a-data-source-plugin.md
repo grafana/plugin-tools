@@ -47,7 +47,7 @@ A data source in Grafana must extend the `DataSourceApi` interface, which requir
 
 The `query` method is the heart of any data source plugin. It accepts a query from the user, retrieves the data from an external database, and returns the data in a format that Grafana recognizes.
 
-```
+```ts
 async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse>
 ```
 
@@ -57,7 +57,7 @@ The `options` object contains the queries, or _targets_, that the user made, alo
 
 `testDatasource` implements a health check for your data source. For example, Grafana calls this method whenever the user clicks the **Save & Test** button, after changing the connection settings.
 
-```
+```ts
 async testDatasource()
 ```
 
@@ -73,9 +73,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 
    The `query` method now look like this:
 
-   **`src/datasource.ts`**
-
-   ```ts
+   ```ts title="src/datasource.ts"
    async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
      const { range } = options;
      const from = range!.from.valueOf();
@@ -91,15 +89,15 @@ Let's see how to create and return a data frame from the `query` method. In this
 
 1. In the `map` function, use the `lodash/defaults` package to set default values for query properties that haven't been set:
 
-   ```ts
+   ```ts title="src/datasource.ts"
    import defaults from 'lodash/defaults';
-   
+
    const query = defaults(target, defaultQuery);
    ```
 
 1. Create a default query at the top of datasource.ts:
 
-   ```ts
+   ```ts title="src/datasource.ts"
    export const defaultQuery: Partial<MyQuery> = {
      constant: 6.5,
    };
@@ -107,7 +105,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 
 1. Create a data frame with a time field and a number field:
 
-   ```ts
+   ```ts title="src/datasource.ts"
    const frame = new MutableDataFrame({
      refId: query.refId,
      fields: [
@@ -123,7 +121,7 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
 
 1. Create a couple of helper variables:
 
-   ```ts
+   ```ts title="src/datasource.ts"
    // duration of the time range, in milliseconds.
    const duration = to - from;
 
@@ -133,7 +131,7 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
 
 1. Add the values to the data frame:
 
-   ```ts
+   ```ts title="src/datasource.ts"
    for (let t = 0; t < duration; t += step) {
      frame.add({ time: from + t, value: Math.sin((2 * Math.PI * t) / duration) });
    }
@@ -143,7 +141,7 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
 
 1. Return the data frame:
 
-   ```ts
+   ```ts title="src/datasource.ts"
    return frame;
    ```
 
@@ -151,7 +149,9 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
 
 Your data source is now sending data frames that Grafana can visualize. Next, we'll look at how you can control the frequency of the sine wave by defining a _query_.
 
-> In this example, we're generating timestamps from the current time range. This means that you'll get the same graph no matter what time range you're using. In practice, you'd instead use the timestamps returned by your database.
+:::info
+In this example, we're generating timestamps from the current time range. This means that you'll get the same graph no matter what time range you're using. In practice, you'd instead use the timestamps returned by your database.
+:::
 
 ## Define a query
 
@@ -169,9 +169,7 @@ We want to be able to control the frequency of the sine wave, so let's add anoth
 
 1. Add a new number property called `frequency` to the query model:
 
-   **`src/types.ts`**
-
-   ```ts
+   ```ts title="src/types.ts"
    export interface MyQuery extends DataQuery {
      queryText?: string;
      constant: number;
@@ -181,7 +179,7 @@ We want to be able to control the frequency of the sine wave, so let's add anoth
 
 1. Set a default value to the new `frequency` property:
 
-   ```ts
+   ```ts title="src/types.ts"
    export const defaultQuery: Partial<MyQuery> = {
      constant: 6.5,
      frequency: 1.0,
@@ -194,21 +192,17 @@ Now that you've defined the query model you wish to support, the next step is to
 
 1. Define the `frequency` from the `query` object and add a new form field to the query editor to control the new frequency property in the `render` method.
 
-   **`src/components/QueryEditor.tsx`**
-
-   ```ts
+   ```tsx title="src/components/QueryEditor.tsx"
    const { queryText, constant, frequency } = query;
-   ```
 
-   ```ts
    <InlineField label="Frequency" labelWidth={16}>
      <Input onChange={onFrequencyChange} value={frequency || ''} />
-   </InlineField>
+   </InlineField>;
    ```
 
 1. Add a event listener for the new property.
 
-   ```ts
+   ```tsx title="src/components/QueryEditor.tsx"
    const onFrequencyChange = (event: ChangeEvent<HTMLInputElement>) => {
      onChange({ ...query, frequency: parseFloat(event.target.value) });
      // executes the query
@@ -226,14 +220,11 @@ The new query model is now ready to use in our `query` method.
 
 1. In the `query` method, use the `frequency` property to adjust our equation.
 
-   **`src/datasource.ts`**
-
-   ```ts
+   ```ts title="src/datasource.ts"
    frame.add({ time: from + t, value: Math.sin((2 * Math.PI * query.frequency * t) / duration) });
    ```
 
 1. Try it out by changing the frequency in the query for your panel.
-
 
 ## Enable configuration for your datasource
 
@@ -249,9 +240,7 @@ The resolution controls how close in time the data points are to each other. A h
 
 1. Add a new number property called `resolution` to the options model.
 
-   **`src/types.ts`**
-
-   ```ts
+   ```ts title="src/types.ts"
    export interface MyDataSourceOptions extends DataSourceJsonData {
      path?: string;
      resolution?: number;
@@ -264,9 +253,7 @@ Just like query editor, the form field in the config editor calls the registered
 
 1. Add a new form field to the query editor to control the new resolution option.
 
-   **`src/components/ConfigEditor.tsx`**
-
-   ```ts
+   ```tsx title="src/components/ConfigEditor.tsx"
    <InlineField label="Resolution" labelWidth={12}>
      <Input onChange={onResolutionChange} value={jsonData.resolution || ''} placeholder="Enter a number" width={40} />
    </InlineField>
@@ -274,7 +261,7 @@ Just like query editor, the form field in the config editor calls the registered
 
 1. Add a event listener for the new option.
 
-   ```ts
+   ```ts title="src/components/ConfigEditor.tsx"
    const onResolutionChange = (event: ChangeEvent<HTMLInputElement>) => {
      const jsonData = {
        ...options.jsonData,
@@ -289,10 +276,8 @@ Just like query editor, the form field in the config editor calls the registered
 ### Use the option
 
 1. Create a property called `resolution` to the `DataSource` class.
-   
-   **`src/datasource.ts`**
 
-   ```ts
+   ```ts title="src/datasource.ts"
    export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
      resolution: number;
 
@@ -307,7 +292,7 @@ Just like query editor, the form field in the config editor calls the registered
 
 1. In the `query` method, use the `resolution` property to change how we calculate the step size.
 
-   ```ts
+   ```ts title="src/datasource.ts"
    const step = duration / this.resolution;
    ```
 
@@ -320,7 +305,8 @@ In this tutorial you built a complete data source plugin for Grafana that uses a
 ## Learn more
 
 ### Get data from an external API
-The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample. 
+
+The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample.
 
 This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 

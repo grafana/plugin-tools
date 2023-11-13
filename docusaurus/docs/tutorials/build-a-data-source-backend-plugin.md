@@ -44,7 +44,7 @@ Now, let's verify that the plugin you've built so far can be used in Grafana whe
 1. Search for the name of your newly created plugin and select it.
 1. Enter a name and then click **Save & Test**. If a "randomized error" occurs, you may ignore it - this is a result of the [health check](#add-support-for-health-checks) explained further below.
 
-You now have a new data source instance of your plugin that is ready to use in a dashboard. 
+You now have a new data source instance of your plugin that is ready to use in a dashboard.
 
 To add the data source to the dashboard:
 
@@ -85,11 +85,11 @@ The folders and files used to build the backend for the data source are:
 
 The [plugin.json](../metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
 
-| property   | description                                                                                                                    |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| backend    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                   |
+| property   | description                                                                                                                |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------- |
+| backend    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.               |
 | executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](../metadata.md) for details. |
-| alerting   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                          |
+| alerting   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                      |
 
 In the next step we will look at the query endpoint!
 
@@ -106,21 +106,21 @@ As you can see the sample only returns static numbers. Try to extend the plugin 
 For example to generate three floats equally spaced in time, you can replace the two static numbers generated, using the following code:
 
 ```go
-	duration := query.TimeRange.To.Sub(query.TimeRange.From)
-	mid := query.TimeRange.From.Add(duration / 2)
+duration := query.TimeRange.To.Sub(query.TimeRange.From)
+mid := query.TimeRange.From.Add(duration / 2)
 
-	s := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(s)
+s := rand.NewSource(time.Now().UnixNano())
+r := rand.New(s)
 
-	lowVal := 10.0
-	highVal := 20.0
-	midVal := lowVal + (r.Float64() * (highVal - lowVal))
+lowVal := 10.0
+highVal := 20.0
+midVal := lowVal + (r.Float64() * (highVal - lowVal))
 
-	// add fields.
-	frame.Fields = append(frame.Fields,
-		data.NewField("time", nil, []time.Time{query.TimeRange.From, mid, query.TimeRange.To}),
-		data.NewField("values", nil, []float64{lowVal, midVal, highVal}),
-	)
+// add fields.
+frame.Fields = append(frame.Fields,
+  data.NewField("time", nil, []time.Time{query.TimeRange.From, mid, query.TimeRange.To}),
+  data.NewField("values", nil, []float64{lowVal, midVal, highVal}),
+)
 ```
 
 You can read more about how to [build data frames in our docs](../introduction/data-frames).
@@ -143,10 +143,9 @@ Implementing authentication allows your plugin to access protected resources lik
 
 ## Enable Grafana Alerting
 
-1. Open _src/plugin.json_.
 1. Add the top level `alerting` property with a value of `true` to specify that your plugin supports Grafana Alerting, e.g.
 
-   ```json
+   ```json title="src/plugin.json"
    {
      ...
      "backend": true,
@@ -159,8 +158,7 @@ Implementing authentication allows your plugin to access protected resources lik
 
 1. Restart your Grafana instance.
 1. Open Grafana in your web browser.
-1. Verify that alerting is now supported by navigating to your created data source. You should an "Alerting supported" message in the Settings view.
-
+1. Verify that alerting is now supported by navigating to your created data source. You should see an "Alerting supported" message in the Settings view.
 
 ### Create an alert
 
@@ -174,7 +172,7 @@ The following instructions are based on Grafana v10.1.1, consult the [documentat
 1. Click on _Create alert rule from this panel_ button.
 1. In _Expressions_ section, in the _Threshold_ expression `C`, set the _IS ABOVE_ to `15`.
 1. Click on _Set as alert condition_ on _Threshold_ expression `C`. Your alert should now look as follows.
-![Expression section showing B "reduce" with Input: A, Function: Last, Mode: Strict, C Threshold with Input: B, Is Above: 15 and Alert Condition enabled indicator](/img/create-alert.png "Alert Expression")
+   ![Expression section showing B "reduce" with Input: A, Function: Last, Mode: Strict, C Threshold with Input: B, Is Above: 15 and Alert Condition enabled indicator](/img/create-alert.png 'Alert Expression')
 1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
 1. Then, click on _New evaluation group_ button and create a new evaluation group; choose a name and set the _Evaluation interval_ to `10s`.
 1. Click _Save rule and exit_ button.

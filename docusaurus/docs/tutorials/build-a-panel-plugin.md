@@ -45,9 +45,7 @@ The [PanelProps](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbf
 
 You can access the panel properties through the `props` argument, as seen in your plugin.
 
-**`src/components/SimplePanel.tsx`**
-
-```js
+```js title="src/components/SimplePanel.tsx"
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 ```
 
@@ -66,7 +64,7 @@ Now that you can view your panel, try making a change to the panel plugin:
 
 1. In `SimplePanel.tsx`, change the fill color of the circle. For example, to change it to green:
 
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    <circle style={{ fill: theme.visualization.getColorByName('green') }} r={100} />
    ```
 
@@ -97,9 +95,7 @@ Panel options are defined in a _panel options object_. `SimpleOptions` is an int
 
 Here's the updated options definition:
 
-**`src/types.ts`**
-
-```ts
+```ts title="src/types.ts"
 type SeriesSize = 'sm' | 'md' | 'lg';
 type CircleColor = 'red' | 'green' | 'blue';
 
@@ -120,9 +116,9 @@ Grafana supports a range of option controls, such as text inputs, switches, and 
 
 Let's create a radio control and bind it to the `color` option.
 
-1. In `src/module.ts`, add the control at the end of the builder:
+1. Add the control at the end of the builder:
 
-   ```ts
+   ```ts title="src/module.ts"
    .addRadio({
      path: 'color',
      name: 'Circle color',
@@ -156,15 +152,13 @@ You're almost done. You've added a new option and a corresponding control to cha
 
 1. To convert option value to the colors used by the current theme, add the following statement right before the `return` statement in `SimplePanel.tsx`.
 
-   **`src/components/SimplePanel.tsx`**
-
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    let color = theme.visualization.getColorByName(options.color);
    ```
 
 1. Configure the circle to use the color.
 
-   ```ts
+   ```tsx title="src/components/SimplePanel.tsx"
    <g>
      <circle style={{ fill: color }} r={100} />
    </g>
@@ -176,7 +170,9 @@ Now, when you change the color in the panel editor, the fill color of the circle
 
 Most panels visualize dynamic data from a Grafana data source. In this step, you'll create one circle per series, each with a radius equal to the last value in the series.
 
-> To use data from queries in your panel, you need to set up a data source. If you don't have one available, you can use the [TestData](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source while developing.
+:::info
+To use data from queries in your panel, you need to set up a data source. If you don't have one available, you can use the [TestData](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source while developing.
+:::
 
 The results from a data source query within your panel are available in the `data` property inside your panel component.
 
@@ -198,7 +194,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
 
 1. Get the last value of each field of type `number`, by adding the following to `SimplePanel.tsx`, before the `return` statement:
 
-   ```ts
+   ```ts title="src/components/SimplePanel.tsx"
    const radii = data.series
      .map((series) => series.fields.find((field) => field.type === 'number'))
      .map((field) => field?.values.get(field.values.length - 1));
@@ -208,7 +204,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
 
 1. Change the `svg` element to the following:
 
-   ```ts
+   ```tsx title="src/components/SimplePanel.tsx"
    <svg
      className={styles.svg}
      width={width}
@@ -228,7 +224,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
 
    Note how we're creating a `<circle>` element for each value in `radii`:
 
-   ```ts
+   ```tsx title="src/components/SimplePanel.tsx"
    {
      radii.map((radius, index) => {
        const step = width / radii.length;
