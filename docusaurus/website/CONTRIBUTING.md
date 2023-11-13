@@ -76,6 +76,17 @@ npm run serve # use this command to run the production build locally (requires t
 npm run clear # clears the docusaurus cache
 ```
 
+## Deployment
+
+During development branches can be manually deployed to the [development website](https://grafana-dev.com/developers/plugin-tools) by doing the following:
+
+1. Navigate to [this actions page](https://github.com/grafana/plugin-tools/actions/workflows/deploy-to-developer-portal-dev.yml).
+1. Click `Run workflow` dropdown found above the recent workflow runs table.
+1. In the dropdown replace `Which branch to use?` with the name of the branch you'd like to deploy.
+1. Click `Run workflow` button.
+
+To deploy changes to production simply merge a PR to main and wait for the developer portal production workflow to run.
+
 ### Conventions
 
 Please refer to the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/).
