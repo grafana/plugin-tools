@@ -1,5 +1,6 @@
 const semver = require('semver');
-import { E2ESelectors, VersionedSelectors } from './types';
+import { E2ESelectors } from './types';
+import { VersionedSelectors } from './versioned/types';
 
 const processSelectors = (
   selectors: E2ESelectors,
