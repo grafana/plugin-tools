@@ -23,20 +23,20 @@ Be sure your plugin meets the following requirements before proceeding:
 
 ## How to extend the Grafana UI or an app plugin from your app plugin
 
-1. Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
+Add the `configureExtensionLink` method in your `module.ts(x)` file to register extensions. This requires an object containing the following properties:
 
-   - `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend. See [available extension points](#available-extension-points-within-grafana) within Grafana.
-   - `title` _required_ - used to display your extension at the extension point.
-   - `description` _required_ - short description of what your extension does.
-   - `path` - a path within your app plugin where you would like to send users when they click the extension.
-   - `onClick` - a callback that should be triggered when the user clicks the extension.
-   - `category` - a category that we should use to group your extension with other extensions.
-   - `icon` - an icon that should be used while displaying your extension.
-   - `configure` - a function that is called prior to displaying the extension which enables you to dynamically change or hide your extension depending on its context.
+- `extensionPointId` _required_ - the unique identifier of the extension point you would like to extend. See [available extension points](#available-extension-points-within-grafana) within Grafana.
+- `title` _required_ - used to display your extension at the extension point.
+- `description` _required_ - short description of what your extension does.
+- `path` - a path within your app plugin where you would like to send users when they click the extension.
+- `onClick` - a callback that should be triggered when the user clicks the extension.
+- `category` - a category that we should use to group your extension with other extensions.
+- `icon` - an icon that should be used while displaying your extension.
+- `configure` - a function that is called prior to displaying the extension which enables you to dynamically change or hide your extension depending on its context.
 
-:::note
+:::warning
 
-Use either `path` or `onClick` (one is required). Otherwise, the extension will be hidden.
+Use either `path` or `onClick` (only one is required) otherwise the extension will be hidden.
 
 :::
 
@@ -44,7 +44,7 @@ Use either `path` or `onClick` (one is required). Otherwise, the extension will 
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one`.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
@@ -57,7 +57,7 @@ new AppPlugin().configureExtensionLink({
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
@@ -78,7 +78,7 @@ new AppPlugin().configureExtensionLink({
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will only be visible for panels with the time zone set to UTC.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
@@ -101,7 +101,7 @@ new AppPlugin().configureExtensionLink({
 
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will open a flow (defined in our app) in a modal on top of the current view.
 
-```typescript
+```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
   title: 'Create incident',
   description: 'Will open a prefilled form to create an incident.',

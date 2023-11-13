@@ -17,7 +17,7 @@ import DocCardList from '@theme/DocCardList';
 
 # Migrate from AngularJS to React
 
-If you want to migrate a plugin to Grafana's React-based plugin platform, then we recommend that you release it under a new major version. 
+If you want to migrate a plugin to Grafana's React-based plugin platform, then we recommend that you release it under a new major version.
 
 While there's no standard migration path from an Angular plugin to the new React platform, we’ve learned that one of the easiest ways to migrate is to:
 
@@ -29,17 +29,13 @@ While there's no standard migration path from an Angular plugin to the new React
 
 Starting with Grafana 7.0, plugins export a `PanelPlugin` from `module.ts` where `MyPanel`is a React component containing the props from `PanelProps`.
 
-**src/module.ts**
-
-```ts
+```ts title="src/module.ts"
 import { PanelPlugin } from '@grafana/data';
 
 export const plugin = new PanelPlugin<MyOptions>(MyPanel);
 ```
 
-**src/MyPanel.tsx**
-
-```ts
+```ts title="src/MyPanel.tsx"
 import { PanelProps } from '@grafana/data';
 
 interface Props extends PanelProps<SimpleOptions> {}

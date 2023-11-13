@@ -24,7 +24,7 @@ Edit the `.eslintrc` file in the project root to extend the ESLint configuration
 
 **Example:**
 
-```json
+```json title=".eslintrc"
 {
   // Eslint configuration provided by @grafana/create-plugin
   "extends": "./.config/.eslintrc",
@@ -36,7 +36,7 @@ Edit the `.eslintrc` file in the project root to extend the ESLint configuration
 
 The following example can be used to disable deprecation notices.
 
-```json
+```json title=".eslintrc"
 {
   // Eslint configuration provided by @grafana/create-plugin
   "extends": "./.config/.eslintrc",
@@ -59,7 +59,7 @@ Edit the `.prettierrc.js` file in the project root to extend the Prettier config
 
 **Example:**
 
-```javascript
+```js title=".prettierrc.js"
 module.exports = {
   // Prettier configuration provided by @grafana/create-plugin
   ...require('./.config/.prettierrc.js'),
@@ -89,7 +89,7 @@ To extend the TS configuration, edit the `tsconfig.json` file in the project roo
 
 **Example:**
 
-```json
+```json title="tsconfig.json"
 {
   // TypeScript configuration provided by @grafana/create-plugin
   "extends": "./.config/tsconfig.json",
@@ -113,8 +113,7 @@ Create a `webpack.config.ts` file in the project root. This file extends the Web
 
 Use the following [webpack-merge](https://github.com/survivejs/webpack-merge) command:
 
-```typescript
-// webpack.config.ts
+```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
 import grafanaConfig from './.config/webpack/webpack.config';
@@ -135,7 +134,7 @@ export default config;
 
 The following alternative customization excludes "libs" via rules in addition to "node_modules". It also provides fallbacks that are no longer present in Webpack v5.
 
-```typescript
+```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { mergeWithRules } from 'webpack-merge';
 import grafanaConfig from './.config/webpack/webpack.config';
@@ -176,16 +175,9 @@ export default config;
 
 Update the `scripts` in the `package.json` to use the extended Webpack configuration:
 
-**Update `build`:**
-
-```diff
+```diff title="package.json"
 -"build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
 +"build": "webpack -c ./webpack.config.ts --env production",
-```
-
-**Update `dev`:**
-
-```diff
 -"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
 +"dev": "webpack -w -c ./webpack.config.ts --env development",
 ```

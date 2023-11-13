@@ -27,6 +27,7 @@ Grafana uses [RxJS](https://rxjs.dev/) to continuously send data from a data sou
 To learn more about RxJs, refer to the [RxJS documentation](https://rxjs.dev/guide/overview).
 
 :::
+
 ## Add streaming to your data source
 
 Enable streaming for your data source plugin to update your dashboard when new data becomes available.
@@ -35,84 +36,84 @@ For example, a streaming data source plugin can connect to a websocket, or subsc
 
 1. Enable streaming for your data source in the `plugin.json` file.
 
-  ```json
-  {
-    "streaming": true
-  }
-  ```
+   ```json title="src/plugin.json"
+   {
+     "streaming": true
+   }
+   ```
 
 1. Modify the signature of the `query` method to return an `Observable` from the `rxjs` package. Make sure you remove the `async` keyword.
 
-  ```ts
-  import { Observable } from 'rxjs';
-  ```
+   ```ts
+   import { Observable } from 'rxjs';
+   ```
 
-  ```ts
-  query(options: DataQueryRequest<MyQuery>): Observable<DataQueryResponse> {
-    // ...
-  }
-  ```
+   ```ts
+   query(options: DataQueryRequest<MyQuery>): Observable<DataQueryResponse> {
+     // ...
+   }
+   ```
 
 1. Create an `Observable` instance for each query, and then combine them all using the `merge` function from the `rxjs` package.
 
-  ```ts
-  import { Observable, merge } from 'rxjs';
-  ```
+   ```ts
+   import { Observable, merge } from 'rxjs';
+   ```
 
-  ```ts
-  const observables = options.targets.map((target) => {
-    return new Observable<DataQueryResponse>((subscriber) => {
-      // ...
-    });
-  });
+   ```ts
+   const observables = options.targets.map((target) => {
+     return new Observable<DataQueryResponse>((subscriber) => {
+       // ...
+     });
+   });
 
-  return merge(...observables);
-  ```
+   return merge(...observables);
+   ```
 
 1. In the `subscribe` function, create a `CircularDataFrame` instance.
 
-  ```ts
-  import { CircularDataFrame } from '@grafana/data';
-  ```
+   ```ts
+   import { CircularDataFrame } from '@grafana/data';
+   ```
 
-  ```ts
-  const frame = new CircularDataFrame({
-    append: 'tail',
-    capacity: 1000,
-  });
+   ```ts
+   const frame = new CircularDataFrame({
+     append: 'tail',
+     capacity: 1000,
+   });
 
-  frame.refId = query.refId;
-  frame.addField({ name: 'time', type: FieldType.time });
-  frame.addField({ name: 'value', type: FieldType.number });
-  ```
+   frame.refId = query.refId;
+   frame.addField({ name: 'time', type: FieldType.time });
+   frame.addField({ name: 'value', type: FieldType.number });
+   ```
 
-  Circular data frames have a limited capacity. When a circular data frame reaches its capacity, the oldest data point is removed.
+   Circular data frames have a limited capacity. When a circular data frame reaches its capacity, the oldest data point is removed.
 
 1. Use `subscriber.next()` to send the updated data frame whenever you receive new updates.
 
-  ```ts
-  import { LoadingState } from '@grafana/data';
-  ```
+   ```ts
+   import { LoadingState } from '@grafana/data';
+   ```
 
-  ```ts
-  const intervalId = setInterval(() => {
-    frame.add({ time: Date.now(), value: Math.random() });
+   ```ts
+   const intervalId = setInterval(() => {
+     frame.add({ time: Date.now(), value: Math.random() });
 
-    subscriber.next({
-      data: [frame],
-      key: query.refId,
-      state: LoadingState.Streaming,
-    });
-  }, 500);
+     subscriber.next({
+       data: [frame],
+       key: query.refId,
+       state: LoadingState.Streaming,
+     });
+   }, 500);
 
-  return () => {
-    clearInterval(intervalId);
-  };
-  ```
+   return () => {
+     clearInterval(intervalId);
+   };
+   ```
 
-  :::note
-  In practice, you'd call `subscriber.next` as soon as you receive new data from a websocket or a message bus. In the example above, data is being received every 500 milliseconds.
-  :::
+   :::note
+   In practice, you'd call `subscriber.next` as soon as you receive new data from a websocket or a message bus. In the example above, data is being received every 500 milliseconds.
+   :::
 
 ### Example code for final `query` method
 

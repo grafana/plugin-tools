@@ -33,7 +33,7 @@ Finally, consider if there is any information from the current view that should 
 
 Use the `getPluginLinkExtensions` method in `@grafana/runtime` to create an extension point within your plugin.
 
-:::warning
+:::danger
 
 When you create an extension point in a plugin, you create a public interface for other plugins to interact with. Changes to the extension point ID or its context could break any plugin that attempts to register a link inside your plugin.
 
@@ -43,7 +43,7 @@ The `getPluginLinkExtensions` method takes an object consisting of the `extensio
 
 In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
 
-```typescript
+```tsx
 import { getPluginLinkExtensions } from '@grafana/runtime';
 import { LinkButton } from '@grafana/ui';
 
