@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  grafana:
+    image: grafana/${GRAFANA_IMAGE:-grafana-enterprise}:${GRAFANA_VERSION:-main}
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_AUTH_ANONYMOUS_ORG_ID=1
+    ports:
+      - 3001:3000/tcp
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
