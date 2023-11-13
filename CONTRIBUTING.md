@@ -48,7 +48,7 @@ If you run into an error or bug with the project:
 Once it's filed:
 
 - The project team will label the issue.
-- A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those step. Bugs will not be addressed until they are reproduced.
+- A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those steps. Bugs will not be addressed until they are reproduced.
 - If the team is able to reproduce the issue it will be left to be [implemented by someone](#contribute-code).
 - If you or the maintainers don't respond to an issue for 30 days, the issue will be closed. If you want to come back to it, reply (once, please), and we'll reopen the existing issue. Please avoid filing new issues as extensions of one you already made.
 

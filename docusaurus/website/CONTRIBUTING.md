@@ -78,7 +78,7 @@ npm run clear # clears the docusaurus cache
 
 ## Deployment
 
-During development branches can be manually deployed to the development website by doing the following:
+During development branches can be manually deployed to the [development website](https://grafana-dev.com/developers/plugin-tools) by doing the following:
 
 1. Navigate to [this actions page](https://github.com/grafana/plugin-tools/actions/workflows/deploy-to-developer-portal-dev.yml).
 1. Click `Run workflow` dropdown found above the recent workflow runs table.
