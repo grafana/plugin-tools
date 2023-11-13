@@ -1,1 +1,0 @@
-For more information see [here](https://grafana.com/tutorials/provision-dashboards-and-data-sources/)

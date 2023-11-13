@@ -54,10 +54,7 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
   }
 
   const rendered = renderTemplateFromFile(templateFile, data);
-  const relativeExportPath = templateFile
-    .replace(TEMPLATE_PATHS.common, '')
-    .replace(TEMPLATE_PATHS[pluginType], '')
-    .replace(TEMPLATE_PATHS.provisioning, '');
+  const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '');
   const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
   mkdirp.sync(path.dirname(exportPath));
@@ -68,18 +65,10 @@ export function compileProvisioningTemplateFile(pluginType: string, templateFile
   if (!isFile(templateFile)) {
     return;
   }
-  mkdirp.sync('provisioning');
-  const rendered = renderTemplateFromFile(templateFile, data);
-  const relativeExportPath = path.join(
-    'provisioning',
-    templateFile.replace(`${TEMPLATE_PATHS.provisioning}/${pluginType}`, '.')
-  );
-  const exportPath = path.join(
-    EXPORT_PATH_PREFIX,
 
-    path.dirname(relativeExportPath),
-    getExportFileName(templateFile)
-  );
+  const rendered = renderTemplateFromFile(templateFile, data);
+  const relativeExportPath = templateFile.replace(TEMPLATE_PATHS[pluginType], '.');
+  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
   mkdirp.sync(path.dirname(exportPath));
   fs.writeFileSync(exportPath, rendered);

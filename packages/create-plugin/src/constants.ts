@@ -21,7 +21,6 @@ export const TEMPLATE_PATHS: Record<string, string> = {
   scenesapp: path.join(TEMPLATES_DIR, 'scenes-app'),
   backend: path.join(TEMPLATES_DIR, 'backend'),
   backendApp: path.join(TEMPLATES_DIR, 'backend-app'),
-  provisioning: path.join(TEMPLATES_DIR, 'provisioning'),
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),
@@ -102,7 +101,7 @@ export const TEXT = {
 
   addProvisioning: '**Would you like to add provisioning files?**',
   addProvisioningSuccess: 'Successfully added provisioning.',
-  addProvisioningAborted: 'No provisioning have been added.',
+  addProvisioningAborted: 'No provisioning has been added.',
 
   removeNpmDependenciesPrompt: '**Would you like to remove the following possibly unnecessary NPM dependencies?**',
   removeNpmDependenciesSuccess: 'Unnecessary NPM dependencies removed successfully.',

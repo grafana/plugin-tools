@@ -8,20 +8,18 @@ import { confirmPrompt, printMessage, printSuccessMessage } from '../utils/utils
 
 export const provisioning = async () => {
   const { type } = getPluginJson();
-  printMessage(type);
-  const provisioningFolder = path.resolve('provisioning');
+  const provisioningFolder = path.join(process.cwd(), 'provisioning');
   try {
     if (await confirmPrompt(TEXT.addProvisioning)) {
       if (!fs.existsSync(provisioningFolder)) {
-        const provisioningSpecificFiles = glob.sync(`${TEMPLATE_PATHS.provisioning}/${type}/**`, { dot: true });
+        const provisioningSpecificFiles = glob.sync(`${TEMPLATE_PATHS[type]}/provisioning/**`, { dot: true });
 
         provisioningSpecificFiles.forEach((file) => {
-          printMessage(file);
           compileProvisioningTemplateFile(type, file, getTemplateData());
         });
         printSuccessMessage(TEXT.addProvisioningSuccess);
       } else {
-        printMessage(`You plugin already has provisioning files located in ${provisioningFolder}`);
+        printMessage(`You plugin already has provisioning files located under ${provisioningFolder}, aborting.`);
         process.exit(0);
       }
     } else {

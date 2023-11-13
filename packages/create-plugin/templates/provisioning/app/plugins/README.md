@@ -1,1 +1,0 @@
-For more information see [here](https://grafana.com/docs/grafana/latest/administration/provisioning/)
