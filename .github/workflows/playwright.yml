@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
 
       - name: Install dependencies
-        run: npm i --w @grafana/plugin-e2e
+        run: npm i
         env:
           NODE_OPTIONS: '--max_old_space_size=4096'
 
