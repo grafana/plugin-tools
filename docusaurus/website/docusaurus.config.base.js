@@ -1,6 +1,19 @@
 const path = require('path');
 const remarkFigureCaption = require('gridsome-remark-figure-caption');
-const { grafanaPrismTheme } = require('./src/theme/prism');
+const prism = require('prism-react-renderer');
+
+const {
+  themes: { oneDark },
+} = prism;
+
+// Replace background and color to better match Grafana theme.
+const grafanaPrismTheme = {
+  ...oneDark,
+  plain: {
+    color: 'rgb(204, 204, 220)',
+    backgroundColor: '#181b1f',
+  },
+};
 
 const customFields = {
   nodeEnv: process.env.NODE_ENV,
