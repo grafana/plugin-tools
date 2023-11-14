@@ -33,5 +33,11 @@
   "engines": {
     "node": ">=20"
   },
-  "devDependencies": {}
+  "peerDependencies": {
+    "@playwright/test": "^1.39.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.39.0",
+    "semver": "^7.5.4"
+  }
 }

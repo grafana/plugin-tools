@@ -33,3 +33,8 @@ yarn-error.log*
 
 # Ignore nx cloud env file. Can be used locally for setting a different NX_CLOUD_ACCESS_TOKEN
 nx-cloud.env
+
+# End to End tests
+playwright-report/
+packages/plugin-e2e/playwright/.cache/
+packages/plugin-e2e/playwright/.auth
