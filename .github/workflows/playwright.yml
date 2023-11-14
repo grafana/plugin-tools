@@ -19,20 +19,16 @@ jobs:
         uses: actions/setup-node@v3
 
       - name: Install dependencies
-        run: npm i
-        env:
-          NODE_OPTIONS: '--max_old_space_size=4096'
+        run: npm ci
 
       - name: Build frontend
         run: npm run build --w @grafana/plugin-e2e
-        env:
-          NODE_OPTIONS: '--max_old_space_size=4096'
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
       - name: Start Grafana
-        run: docker run --rm -d -p 3001:3000 --name=grafana grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+        run: docker run --rm -d -p 3000:3000 --name=grafana grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
 
       - name: Run Playwright tests
         run: npm run playwright:test --w @grafana/plugin-e2e
