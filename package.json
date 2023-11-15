@@ -39,7 +39,7 @@
     "nx": "16.2.1",
     "nx-cloud": "^16.3.0",
     "prettier": "2.5.1",
-    "tsc-watch": "^4.5.0",
+    "tsc-watch": "^6.0.4",
     "typescript": "^5.2.2"
   },
   "engines": {
