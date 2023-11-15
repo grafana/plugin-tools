@@ -1,3 +1,5 @@
+// This file is not part of the @grafana/plugin-e2e package. It's only used for testing the plugin-e2e package itself.
+
 import { defineConfig, devices } from '@playwright/test';
 import { PluginOptions } from './src';
 
