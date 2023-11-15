@@ -41,7 +41,7 @@
     "enquirer": "^2.3.6",
     "find-up": "^5.0.0",
     "glob": "^7.1.7",
-    "marked": "^4.0.12",
+    "marked": "^10.0.0",
     "marked-terminal": "^5.1.1",
     "mkdirp": "^1.0.4",
     "plop": "^2.7.4",
