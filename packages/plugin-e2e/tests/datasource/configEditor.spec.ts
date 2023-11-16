@@ -1,5 +1,4 @@
 import { expect, test } from '../../src';
-import { CLUSTERS_RESPONSE } from './mocks/resourceResponse';
 
 test('invalid credentials should return an error', async ({ createDataSourceConfigPage, page }) => {
   const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
