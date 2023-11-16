@@ -1,32 +1,18 @@
 import { Expect } from '@playwright/test';
-import { createDataSourceViaAPI } from '../fixtures/commands/createDataSource';
-import { DataSource, PluginTestCtx } from '../types';
+import { PluginTestCtx } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
-  datasourceJson: DataSource | undefined;
-
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
+  constructor(ctx: PluginTestCtx, expect: Expect<any>, private uid: string) {
     super(ctx, expect);
   }
 
-  async createDataSource(datasource: DataSource) {
-    this.datasourceJson = await createDataSourceViaAPI(this.ctx.request, datasource);
-    await this.goto();
-  }
-
   async deleteDataSource() {
-    if (this.datasourceJson) {
-      await this.ctx.request.delete(`/api/datasources/uid/${this.datasourceJson.uid}`);
-    }
+    await this.ctx.request.delete(`/api/datasources/uid/${this.uid}`);
   }
 
   async goto() {
-    if (!this.datasourceJson) {
-      throw new Error('Datasource not created');
-    }
-
-    await this.ctx.page.goto(this.ctx.selectors.pages.EditDataSource.url(this.datasourceJson.uid), {
+    await this.ctx.page.goto(this.ctx.selectors.pages.EditDataSource.url(this.uid), {
       waitUntil: 'load',
     });
   }
