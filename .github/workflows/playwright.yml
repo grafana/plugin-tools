@@ -10,10 +10,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        GRAFANA_VERSION: ['latest', '9.5.5']
+        GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Copy auth file
+        run: mkdir -p packages/plugin-e2e/playwright/.auth/ && cp .github/workflows/user.json packages/plugin-e2e/playwright/.auth/user.json
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
