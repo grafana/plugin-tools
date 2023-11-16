@@ -39,5 +39,8 @@
   "devDependencies": {
     "@playwright/test": "^1.39.0",
     "semver": "^7.5.4"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
   }
 }
