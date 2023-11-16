@@ -31,7 +31,10 @@ export const versionedPages = {
     dataSources: (dataSourceName: string) => `Data source list item ${dataSourceName}`,
   },
   EditDataSource: {
-    url: (dataSourceUid: string) => `/datasources/edit/${dataSourceUid}`,
+    url: {
+      '10.2.0': (dataSourceUid: string) => `/connections/datasources/edit/${dataSourceUid}`,
+      [MIN_GRAFANA_VERSION]: (dataSourceUid: string) => `/datasources/edit/${dataSourceUid}`,
+    },
     settings: 'Datasource settings page basic settings',
   },
   AddDataSource: {
