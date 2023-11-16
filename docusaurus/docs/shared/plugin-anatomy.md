@@ -14,9 +14,9 @@ To see all the available configuration settings for the `plugin.json`, refer to 
 
 ### `module.ts`
 
-After discovering your plugin, Grafana loads the `module.ts` file, the entrypoint for your plugin. `module.ts` exposes the implementation of your plugin, which depends on the type of plugin you're building.
+After discovering your plugin, Grafana loads the `module.js` file, the entrypoint for your plugin. `module.js` exposes the implementation of your plugin, which depends on the type of plugin you're building.
 
-Specifically, `module.ts` needs to expose an object that extends [GrafanaPlugin](https://github.com/grafana/grafana/blob/f900098cc9f5771c02b6189ba5138547b4f5e6c2/packages/grafana-data/src/types/plugin.ts#L175), and can be any of the following:
+Specifically, `src/module.ts` needs to export a class that extends [GrafanaPlugin](https://github.com/grafana/grafana/blob/f900098cc9f5771c02b6189ba5138547b4f5e6c2/packages/grafana-data/src/types/plugin.ts#L175), and can be any of the following:
 
 - [PanelPlugin](https://github.com/grafana/grafana/blob/f900098cc9f5771c02b6189ba5138547b4f5e6c2/packages/grafana-data/src/panel/PanelPlugin.ts#L95)
 - [DataSourcePlugin](https://github.com/grafana/grafana/blob/f900098cc9f5771c02b6189ba5138547b4f5e6c2/packages/grafana-data/src/types/datasource.ts#L33)

@@ -24,9 +24,7 @@ The simplest editor is a React component that accepts two props:
 
 The editor in the example below lets the user toggle a boolean value by clicking a button:
 
-**SimpleEditor.tsx**
-
-```ts
+```tsx title="src/SimpleEditor.tsx"
 import React from 'react';
 import { Button } from '@grafana/ui';
 import { StandardEditorProps } from '@grafana/data';
@@ -38,9 +36,7 @@ export const SimpleEditor = ({ value, onChange }: StandardEditorProps<boolean>) 
 
 To use a custom panel option editor, use the `addCustomEditor` on the `OptionsUIBuilder` object in your `module.ts` file and set the `editor` property to the name of your custom editor component.
 
-**module.ts**
-
-```ts
+```ts title="src/module.ts"
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder.addCustomEditor({
     id: 'label',
@@ -57,9 +53,7 @@ You can use your custom editor to customize multiple possible settings. To add s
 
 Here's an example of an editor that populates a drop-down with a range of numbers. The `Settings` interface defines the range of the `from` and `to` properties.
 
-**SimpleEditor.tsx**
-
-```ts
+```tsx title="src/SimpleEditor.tsx"
 interface Settings {
   from: number;
   to: number;
@@ -87,7 +81,7 @@ export const SimpleEditor = ({ item, value, onChange }: Props) => {
 
 You can now configure the editor for each option by configuring the `settings` property to call `addCustomEditor`:
 
-```ts
+```ts title="src/module.ts"
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder.addCustomEditor({
     id: 'index',
@@ -108,9 +102,7 @@ Option editors can access the results from the last query. This lets you update 
 
 The editor context is available through the `context` prop. The data frames returned by the data source are available under `context.data`.
 
-**SimpleEditor.tsx**
-
-```ts
+```tsx title="src/SimpleEditor.tsx"
 export const SimpleEditor = ({ item, value, onChange, context }: StandardEditorProps<string>) => {
   const options: SelectableValue<string>[] = [];
 

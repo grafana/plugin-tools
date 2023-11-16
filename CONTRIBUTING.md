@@ -48,10 +48,9 @@ If you run into an error or bug with the project:
 Once it's filed:
 
 - The project team will label the issue.
-- A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those steps and mark the issue as `needs-repro`. Bugs with the `needs-repro` tag will not be addressed until they are reproduced.
-- If the team is able to reproduce the issue, it will be marked `needs-fix`, as well as possibly other tags (such as `critical`), and the issue will be left to be [implemented by someone](#contribute-code).
+- A team member will try to reproduce the issue with your provided steps. If there are no repro steps or no obvious way to reproduce the issue, the team will ask you for those steps. Bugs will not be addressed until they are reproduced.
+- If the team is able to reproduce the issue it will be left to be [implemented by someone](#contribute-code).
 - If you or the maintainers don't respond to an issue for 30 days, the issue will be closed. If you want to come back to it, reply (once, please), and we'll reopen the existing issue. Please avoid filing new issues as extensions of one you already made.
-- `critical` issues may be left open, depending on perceived immediacy and severity, even past the 30 day deadline.
 
 ## Request a Feature
 
@@ -65,7 +64,7 @@ Once it's filed:
 
 - The project team will label the issue.
 - The project team will evaluate the feature request, possibly asking you more questions to understand its purpose and any relevant requirements. If the issue is closed, the team will convey their reasoning and suggest an alternative path forward.
-- If the feature request is accepted, it will be marked for implementation with `feature-accepted`, which can then be done by either a core team member or by anyone in the community who wants to [contribute code](#contribute-code).
+- If the feature request is accepted it can then be worked on by either a core team member or by anyone in the community who wants to [contribute code](#contribute-code).
 
 Note: The team is unlikely to be able to accept every single feature request that is filed. Please understand if they need to say no.
 
@@ -78,14 +77,13 @@ If this seems like a lot or you aren't able to do all this setup, you might also
 If you want to go the usual route and run the project locally, though:
 
 - [Install Node.js](https://nodejs.org/en/download/)
-- [Install yarn](https://classic.yarnpkg.com/lang/en/docs/install)
 - [Fork the project](https://guides.github.com/activities/forking/#fork)
 
 Then in your terminal:
 
 - `cd path/to/your/clone`
-- `yarn install`
-- `yarn test && yarn build`
+- `npm install`
+- `npm run test && npm run build`
 
 And you should be ready to go!
 
@@ -97,6 +95,7 @@ Plugin-tools is a mono-repo consisting of multiple projects. Please refer to the
 | ------------- | ------------------------------------------------ |
 | Create Plugin | [Link](./packages/create-plugin/CONTRIBUTING.md) |
 | Sign Plugin   | [Link](./packages/sign-plugin/CONTRIBUTING.md)   |
+| Website       | [Link](./docusaurus/website/CONTRIBUTING.md)     |
 
 ## Contributor License Agreement (CLA)
 
@@ -111,22 +110,24 @@ Documentation contributions of any size are welcome! Feel free to file a PR even
 To contribute documentation:
 
 - [Set up the project](#project-setup).
-- Edit or add any relevant documentation.
+- Run `npm run docs` to start a development server for the [documentation website](./docusaurus/website/).
+- Edit or add any relevant [documentation](./docusaurus/docs/).
 - Make sure your changes are formatted correctly and consistently with the rest of the documentation.
 - Re-read what you wrote, and run a spellchecker on it to make sure you didn't miss anything.
 - Go to https://github.com/grafana/plugin-tools/pulls and open a new pull request with your changes.
 - Please make use of the Pull Request Template. If your PR is connected to an open issue, add a line in your PR's description that says `Fixes: #123`, where `#123` is the number of the issue you're fixing.
+- If you are a maintainer add the `type/docs` and `no-changelog` labels to the PR.
 
 Once you've filed the PR:
 
 - One or more maintainers will use GitHub's review feature to review your PR.
 - If the maintainer asks for any changes, edit your changes, push, and ask for another review.
 - If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's ok! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
-- If your PR gets accepted, it will be marked as such, and merged into the `latest` branch soon after. Your contribution will be distributed to the masses next time the maintainers [create a release](#create-a-release)
+- If your PR gets accepted, it will be marked as such, and merged into the `latest` branch soon after. Your contribution will be distributed to the masses once the PR is merged.
 
 ## Contribute Code
 
-We like code commits a lot! They're super handy, and they keep the project going and doing the work it needs to do to be useful to others.
+We like code commits a lot! They're super handy, and they keep the project going and doing the work it needs to do to be useful to others. Before considering contributing code please review [report an error or bug](#report-an-error-or-bug) and [request a feature](#request-a-feature) to make sure an issue has been filed and discussed with the project maintainers. PRs submitted without associated issues risk being closed or rejected.
 
 Code contributions of just about any size are acceptable!
 
@@ -135,6 +136,7 @@ The main difference between code contributions and documentation contributions i
 To contribute code:
 
 - [Set up the project](#project-setup).
+- Review the CONTRIBUTING.md file for the package/s you are working on.
 - Make any necessary changes to the source code.
 - Include any [additional documentation](#contribute-documentation) the changes might need.
 - Write tests that verify that your contribution works as expected.

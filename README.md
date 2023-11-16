@@ -9,16 +9,18 @@
   <p>Create and Sign Grafana plugins with ease.</p>
 </div>
 <div align="center">
-  <a href="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml"
-    ><img
-      src="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml/badge.svg"
-      alt="Node CI" /></a
-  >&nbsp;
-  <a href="https://github.com/intuit/auto"
-    ><img
-      src="https://img.shields.io/badge/release-auto.svg?colorA=888888&amp;colorB=9B065A&amp;label=auto"
-      alt="Auto Release"
-  /></a>
+  <a href="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml">
+    <img src="https://github.com/grafana/plugin-tools/actions/workflows/ci.yml/badge.svg" alt="Node CI" />
+  </a>&nbsp;
+  <a href="https://nodejs.org">
+    <img src="https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&amp;logo=npm&amp;logoColor=white" alt="NPM" />
+  </a>&nbsp;
+  <a href="https://nx.dev/">
+    <img src="https://img.shields.io/badge/nx-143055?style=for-the-badge&amp;logo=nx&amp;logoColor=white" alt="Nx" />
+  </a>&nbsp;
+  <a href="https://github.com/intuit/auto">
+    <img src="https://img.shields.io/badge/release-auto.svg?colorA=888888&amp;colorB=9B065A&amp;label=auto" alt="Auto Release" />
+  </a>
   <br />
   <br />
 </div>
@@ -30,12 +32,16 @@ This is a mono-repo of NPM packages to help plugin developers extend Grafana in 
 | Create Plugin | Scaffold a Grafana Plugin | [Link](./packages/create-plugin/README.md) | [![npm](https://img.shields.io/npm/v/@grafana/create-plugin)](https://www.npmjs.com/package/@grafana/create-plugin) | [![npm](https://img.shields.io/npm/dw/@grafana/create-plugin)](https://npmcharts.com/compare/@grafana/create-plugin?interval=7) |
 | Sign Plugin   | Sign a Grafana Plugin     | [Link](./packages/sign-plugin/README.md)   | [![npm](https://img.shields.io/npm/v/@grafana/sign-plugin)](https://www.npmjs.com/package/@grafana/sign-plugin)     | [![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)](https://npmcharts.com/compare/@grafana/sign-plugin?interval=7)     |
 
+### Overview
+
+This Mono-repo uses [NPM](https://nodejs.org) for package management, [NX](https://nx.dev/) to efficiently orchestrate tasks across the codebase, and [Auto](https://intuit.github.io/auto/) for streamlined and automated package publishing. We've carefully chosen and integrated these technologies to enhance development workflows. Before diving into the codebase, make sure to consult the [contributing guide](./CONTRIBUTING.md) for a smooth collaboration experience.
+
 ### Additional resources
 
-📖 Learn from tutorials and documenation in the [Grafana developer portal](https://grafana.com/developers).  
-✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.  
-🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.  
-✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.  
+📖 Learn from tutorials and documentation in the [Grafana developer portal](https://grafana.com/developers).<br/>
+✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.<br/>
+🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.<br/>
+✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.
 
 ## Contributors ✨
 
@@ -71,6 +77,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/aangelisc"><img src="https://avatars.githubusercontent.com/u/15019026?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andreas Christou</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=aangelisc" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/mikkancso"><img src="https://avatars.githubusercontent.com/u/13637610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mikkancso</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=mikkancso" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/zoltanbedi"><img src="https://avatars.githubusercontent.com/u/13729989?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zoltán Bedi</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=zoltanbedi" title="Documentation">📖</a> <a href="#infra-zoltanbedi" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=zoltanbedi" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/joanlopez"><img src="https://avatars.githubusercontent.com/u/5459617?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joan López de la Franca Beltran</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=joanlopez" title="Code">💻</a></td>
   </tr>
 </table>
 

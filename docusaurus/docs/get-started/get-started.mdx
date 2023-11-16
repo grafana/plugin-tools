@@ -59,11 +59,11 @@ The plugin tools consist of two packages:
 - `create-plugin`: A CLI to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
 - `sign-plugin`: A CLI to sign plugins for distribution.
 
-  :::info
+:::info
 
-  If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to make the jump to our newest tools. For more information, refer to [Migrate from toolkit](/migration-guides/migrate-from-toolkit.mdx).
+If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to make the jump to our newest tools. For more information, refer to [Migrate from toolkit](/migration-guides/migrate-from-toolkit.mdx).
 
-  :::
+:::
 
 ## Before you begin
 
@@ -181,29 +181,29 @@ Key CLI commands include:
 
 ## Frequently used CLI commands
 
-Use the CLI for essential tasks of plugin development, employing `npm`, `pnpm`, or `yarn` (for example, `npm run build`).
+Use the CLI for essential tasks of plugin development, substituting `npm` for `pnpm`, or `yarn` based on your choice of package manager.
 
 ### `mage -v`
 
 Builds backend plugin binaries for Linux, Windows and Darwin.
 
-### `run build`
+### `npm run build`
 
 Compiles and bundles the project using Webpack in production mode.
 
-### `run dev`
+### `npm run dev`
 
 Runs Webpack in watch mode for development, continually monitoring for changes.
 
-### `run typecheck`
+### `npm run typecheck`
 
 Performs a type-checking process on the frontend code using TypeScript.
 
-### `run server`
+### `npm run server`
 
 Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
 
-### `run sign`
+### `npm run sign`
 
 Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
 
@@ -218,4 +218,4 @@ For a complete list of available CLI commands, refer to the [CLI reference](/get
 - Start your plugin journey with one of our [plugin development tutorials](/tutorials/).
 - Learn how to [develop and extend](/create-a-plugin/) its functionality.
 - Review the [plugin examples](https://github.com/grafana/grafana-plugin-examples) to learn about good practices.
-- Learn how to [package](/publish-a-plugin/package-a-plugin), [sign](/publish-a-plugin/sign-a-plugin), and [publish](/publish-a-plugin/publish-or-update-a-plugin.md) your plugin to the Grafana [plugin catalog](https://grafana.com/plugins). 
+- Learn how to [package](/publish-a-plugin/package-a-plugin), [sign](/publish-a-plugin/sign-a-plugin), and [publish](/publish-a-plugin/publish-or-update-a-plugin.md) your plugin to the Grafana [plugin catalog](https://grafana.com/plugins).

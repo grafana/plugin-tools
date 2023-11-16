@@ -1,0 +1,37 @@
+{
+  "name": "@grafana/plugin-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist",
+    "./package.json"
+  ],
+  "repository": {
+    "directory": "packages/plugin-e2e",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc --project tsconfig.json",
+    "dev": "nodemon --exec 'tsc'",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "server": "docker-compose up --build",
+    "typecheck": "tsc --emitDeclarationOnly false --noEmit",
+    "test": "jest",
+    "playwright:test": "npx playwright test",
+    "playwright:test:ui": "npx playwright test --ui"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {}
+}

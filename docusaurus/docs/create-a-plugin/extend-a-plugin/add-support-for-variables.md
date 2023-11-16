@@ -34,7 +34,7 @@ For panels, the `replaceVariables` function is available in the `PanelProps`.
 
 Add `replaceVariables` to the argument list, and pass a user-defined template string to it:
 
-```ts
+```tsx
 export function SimplePanel({ options, data, width, height, replaceVariables }: Props) {
   const query = replaceVariables('Now displaying $service');
 
@@ -148,7 +148,7 @@ Let's create a custom query editor to allow the user to edit the query model.
 
 1. Create a `VariableQueryEditor` component:
 
-   ```ts
+   ```tsx title="src/VariableQueryEditor.tsx"
    import React, { useState } from 'react';
    import { MyVariableQuery } from './types';
 

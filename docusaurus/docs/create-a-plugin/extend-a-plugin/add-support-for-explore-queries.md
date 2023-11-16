@@ -23,7 +23,7 @@ To extend Explore functionality for your data source, define an Explore-specific
 
 1. Create a file `ExploreQueryEditor.tsx` in the `src` directory of your plugin, with content similar to this:
 
-   ```ts
+   ```tsx title="src/ExploreQueryEditor.tsx"
    import React from 'react';
 
    import { QueryEditorProps } from '@grafana/data';
@@ -40,7 +40,7 @@ To extend Explore functionality for your data source, define an Explore-specific
 
 1. Modify your base query editor in `QueryEditor.tsx` to render the Explore-specific query editor. For example:
 
-   ```ts
+   ```tsx title="src/QueryEditor.tsx"
    // [...]
    import { CoreApp } from '@grafana/data';
    import ExploreQueryEditor from './ExploreQueryEditor';
@@ -67,7 +67,7 @@ However, if you want a custom visualization, you can add a hint to your returned
 
 Construct a data frame with specific metadata like this:
 
-```
+```ts
 const firstResult = new MutableDataFrame({
     fields: [...],
     meta: {
