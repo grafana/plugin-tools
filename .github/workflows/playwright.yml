@@ -35,6 +35,8 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run playwright:test --w @grafana/plugin-e2e
+        env:
+          GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
       - uses: actions/upload-artifact@v3
         if: always()
