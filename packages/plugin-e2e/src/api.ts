@@ -1,6 +1,7 @@
 import { test as base } from '@playwright/test';
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
+import { DataSourceConfigPage } from './models';
 
 export type PluginOptions = {
   selectorRegistration: void;
@@ -19,6 +20,16 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana
    */
   selectors: E2ESelectors;
+
+  /**
+   * Isolated {@link DataSourceConfigPage} instance for each test.
+   *
+   * Does not nativate to the config page by default. To visit the
+   * config page, use {@link DataSourceConfigPage.createDataSource}
+   * to create a data source edit for a given data source type
+   * or {@link DataSourceConfigPage.goto} to edit an existing data source.
+   */
+  datasourceConfigPage: DataSourceConfigPage;
 
   /**
    * Fixture command that will logs in to Grafana using the Grafana API. 
