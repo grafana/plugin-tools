@@ -1,11 +1,11 @@
 import grafanaVersion from './grafanaVersion';
 import selectors from './selectors';
-import datasourceConfigPage from './datasourceConfigPage';
 import login from './commands/login';
+import createDataSourceConfigPage from './commands/createDataSourceConfigPage';
 
 export default {
   selectors,
   grafanaVersion,
-  datasourceConfigPage,
   login,
+  createDataSourceConfigPage,
 };

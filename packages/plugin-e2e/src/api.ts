@@ -1,7 +1,9 @@
-import { test as base } from '@playwright/test';
+import { test as base, expect as baseExpect } from '@playwright/test';
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import { DataSourceConfigPage } from './models';
+import matchers from './matchers';
+import { CreateDataSourcePageArgs } from './types';
 
 export type PluginOptions = {
   selectorRegistration: void;
@@ -22,17 +24,15 @@ export type PluginFixture = {
   selectors: E2ESelectors;
 
   /**
-   * Isolated {@link DataSourceConfigPage} instance for each test.
+   * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.
    *
-   * Does not nativate to the config page by default. To visit the
-   * config page, use {@link DataSourceConfigPage.createDataSource}
-   * to create a data source edit for a given data source type
-   * or {@link DataSourceConfigPage.goto} to edit an existing data source.
+   * The data source config page cannot be navigated to without a data source uid, so this fixture will create a new
+   * data source using the Grafana API, create a new DataSourceConfigPage instance and navigate to the page.
    */
-  datasourceConfigPage: DataSourceConfigPage;
+  createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
 
   /**
-   * Fixture command that will logs in to Grafana using the Grafana API. 
+   * Fixture command that login to Grafana using the Grafana API. 
    * If the same credentials should be used in every test, 
    * invoke this fixture in a setup project.
    * See https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
@@ -61,4 +61,6 @@ export type PluginFixture = {
 // extend Playwright with Grafana plugin specific fixtures
 export const test = base.extend<PluginFixture & PluginOptions>(fixtures);
 
-export { selectors, expect } from '@playwright/test';
+export const expect = baseExpect.extend(matchers);
+
+export { selectors } from '@playwright/test';

@@ -34,3 +34,14 @@ export type CreateDataSourceArgs = {
    */
   datasource: DataSource;
 };
+
+export type CreateDataSourcePageArgs = {
+  /**
+   * The data source type to create
+   */
+  type: string;
+  /**
+   * The data source name to create
+   */
+  name?: string;
+};
