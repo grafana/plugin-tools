@@ -30,11 +30,19 @@ export default defineConfig<PluginOptions>({
 
   /* List of projects to run. See https://playwright.dev/docs/test-configuration#projects */
   projects: [
+    // 1. Login to Grafana and store the cookie on disk for use in other tests.
+    {
+      name: 'authenticate',
+      testMatch: [/.*auth\.setup\.ts/],
+    },
+    // 2. Run all tests in parallel with Chrome.
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
       },
+      dependencies: ['authenticate'],
     },
   ],
 });

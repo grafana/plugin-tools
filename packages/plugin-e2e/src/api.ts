@@ -19,6 +19,32 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana
    */
   selectors: E2ESelectors;
+
+  /**
+   * Fixture command that will logs in to Grafana using the Grafana API. 
+   * If the same credentials should be used in every test, 
+   * invoke this fixture in a setup project.
+   * See https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
+   * 
+   * If no credentials are provided, the default admin/admin credentials will be used.
+   * 
+   * The default credentials can be overridden in the playwright.config.ts file:
+   * eg.
+   * export default defineConfig({
+      use: {
+        httpCredentials: {
+          username: 'user',
+          password: 'pass',
+        },
+      },
+    });
+   * 
+   * To override credentials in a single test:
+   * test.use({ httpCredentials: { username: 'admin', password: 'admin' } });
+   * To avoid authentication in a single test:
+   * test.use({ storageState: { cookies: [], origins: [] } });
+   */
+  login: () => Promise<void>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures
