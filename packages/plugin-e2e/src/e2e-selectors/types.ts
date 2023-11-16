@@ -8,7 +8,6 @@ export type APIs = {
   DataSource: {
     getResource: string;
     healthCheck: string;
-    query: string;
   };
 };
 

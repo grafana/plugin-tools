@@ -15,11 +15,7 @@ const toBeOK = async (request: Promise<Response>) => {
     };
   } catch (err: unknown) {
     return {
-      message: () =>
-        getMessage(
-          'Response status code is within 200..299 range.',
-          err instanceof Error ? err.toString() : 'Unknown error'
-        ),
+      message: () => getMessage(message, err instanceof Error ? err.toString() : 'Unknown error'),
       pass,
       actual,
     };
