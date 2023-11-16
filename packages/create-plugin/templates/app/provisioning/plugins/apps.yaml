@@ -1,9 +1,9 @@
 apiVersion: 1
 
 apps:
-  - type: '{{ normalize_id pluginName orgName 'app' }}')
+  - type: '{{ normalize_id pluginName orgName 'app' }}'
     org_id: 1
-    org_name: Main Org.
+    org_name: '{{ orgName }}'
     disabled: false
     jsonData:
       apiUrl: http://default-url.com

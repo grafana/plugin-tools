@@ -97,7 +97,7 @@ For more information see [here](https://grafana.com/developers/plugin-tools/migr
 
 ## Customizing or extending the basic configs
 
-You can read more about customizing or extending the basic configuration [here](https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations)
+You can read more about customizing or extending the basic configuration in our [documentation](https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations).
 
 ## Add provisioning to your existing plugin
 
@@ -110,10 +110,10 @@ cd ./my-plugin
 npx @grafana/create-plugin@latest provisioning
 ```
 
-For more information see [here](https://grafana.com/developers/plugin-tools/publish-a-plugin/develop-a-plugin/provide-provisioning)
+For more information see our [documentation](https://grafana.com/developers/plugin-tools/publish-a-plugin/develop-a-plugin/provide-provisioning).
 
 ---
 
 ## Contributing
 
-We are always grateful for contributions! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
+We are always grateful for contributions! See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
