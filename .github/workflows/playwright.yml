@@ -1,0 +1,41 @@
+name: E2E tests - Playwright
+on:
+  pull_request:
+    paths:
+      - 'packages/plugin-e2e/**'
+
+jobs:
+  playwright-tests:
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        GRAFANA_VERSION: ['latest', '9.5.5']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build --w @grafana/plugin-e2e
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start Grafana
+        run: docker run --rm -d -p 3000:3000 --name=grafana grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+
+      - name: Run Playwright tests
+        run: npm run playwright:test --w @grafana/plugin-e2e
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.GRAFANA_VERSION }}
+          path: playwright-report/
+          retention-days: 30
