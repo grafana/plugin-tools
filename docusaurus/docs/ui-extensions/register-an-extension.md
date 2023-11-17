@@ -123,7 +123,7 @@ new AppPlugin().configureExtensionLink({
 Using React components as extensions is a powerful way to extend the functionality of an existing UI either in core Grafana or in an other plugin.
 
 ```ts title="src/module.ts"
-new AppPlugin().configureExtensionLink({
+new AppPlugin().configureExtensionComponent({
   title: 'My component extension',
   description: 'Renders a button at a pre-defined extension point.',
   extensionPointId: 'grafana/<extension-point-id>',
@@ -135,6 +135,35 @@ new AppPlugin().configureExtensionLink({
 export const MyExtension = () => (
   <Button onClick={() => {}} variant="secondary" type="button">
     Extend UI
+  </Button>
+);
+```
+
+### Example: Use the context of the extension point in a component
+
+Extension points can pass contextual information to the extensions they render, we refer to this data as `context`.
+In case it is a core extension point (defined in core Grafana), there is also always a type definition available for these context objects. In the following example we will cover how to use this `context` in our component extension and also get the static types right.
+
+```ts title="src/module.ts"
+// This could also come from another plugin or defined manually if a plugin doesn't expose it.
+import { PluginExtensionSampleContext } from '@grafana/data';
+
+new AppPlugin().configureExtensionComponent<PluginExtensionSampleContext>({
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
+  component: MyExtension,
+});
+```
+
+```tsx title="src/components/MyExtension.tsx"
+type Props = {
+  context: PluginExtensionSampleContext;
+};
+
+export const MyExtension = ({ context }: Props) => (
+  <Button onClick={() => {}} variant="secondary" type="button">
+    Create incident from {context.name}
   </Button>
 );
 ```
