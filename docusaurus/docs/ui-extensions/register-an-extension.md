@@ -168,6 +168,36 @@ export const MyExtension = ({ context }: Props) => (
 );
 ```
 
+### Example: Access plugin information in a component extension
+
+It can happen that we would like to access some meta information of our plugin inside the component extension dynamically. `@grafana/data` exposes some helper hooks to make it possible:
+
+```ts title="src/module.ts"
+new AppPlugin().configureExtensionComponent({
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
+  component: MyExtension,
+});
+```
+
+```tsx title="src/components/MyExtension.tsx"
+import { usePluginMeta, usePluginJsonData } from '@grafana/data';
+
+export const MyExtension = () => (
+  const meta = usePluginMeta();
+  const jsonData = usePluginJsonData();
+
+  if (meta.info.version !== '1.0.0') {
+    return null;
+  }
+
+  <Button onClick={() => {}} variant="secondary" type="button">
+    Create incident ({jsonData.postFix})
+  </Button>
+);
+```
+
 ## Available extension points within Grafana
 
 An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
