@@ -28,7 +28,7 @@ The following lists describe some of our popular plugins. For a complete list, s
 
 ## App plugins
 
-- [**app-basic:**](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-basic/) This app plugin shows how to add fundamental features such as navigation, routine, styling, and configuration.
+- [**app-basic:**](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-basic/) This app plugin shows how to add fundamental features such as navigation, routing, styling, and configuration.
 - [**app-with-backend:**](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) This app plugin adds support for a backend including handling incoming HTTP requests.
 - [**app-with-dashboards:**](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-dashboards) This example shows how to include pre-built dashboards with your app plugin.
 - [**app-with-extension-point:**](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-extension-point) This example shows how to add a plugin extension point that can be extended by other plugins.
