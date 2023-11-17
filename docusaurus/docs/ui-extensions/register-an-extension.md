@@ -118,6 +118,27 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
+### Example: Display a React component
+
+Using React components as extensions is a powerful way to extend the functionality of an existing UI either in core Grafana or in an other plugin.
+
+```ts title="src/module.ts"
+new AppPlugin().configureExtensionLink({
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
+  component: MyExtension,
+});
+```
+
+```tsx title="src/components/MyExtension.tsx"
+export const MyExtension = () => (
+  <Button onClick={() => {}} variant="secondary" type="button">
+    Extend UI
+  </Button>
+);
+```
+
 ## Available extension points within Grafana
 
 An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
