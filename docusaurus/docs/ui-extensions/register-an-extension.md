@@ -184,7 +184,7 @@ new AppPlugin().configureExtensionComponent({
 ```tsx title="src/components/MyExtension.tsx"
 import { usePluginMeta, usePluginJsonData } from '@grafana/data';
 
-export const MyExtension = () => (
+export const MyExtension = () => {
   const meta = usePluginMeta();
   const jsonData = usePluginJsonData();
 
@@ -192,10 +192,12 @@ export const MyExtension = () => (
     return null;
   }
 
-  <Button onClick={() => {}} variant="secondary" type="button">
-    Create incident ({jsonData.postFix})
-  </Button>
-);
+  return (
+    <Button onClick={() => {}} variant="secondary" type="button">
+      Create incident ({jsonData.postFix})
+    </Button>
+  );
+};
 ```
 
 ## Available extension points within Grafana

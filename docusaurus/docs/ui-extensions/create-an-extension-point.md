@@ -79,13 +79,47 @@ function AppMenuExtensionPoint() {
 }
 ```
 
-#### Why does the extension have `onClick` and `path`?
+### Why does the extension have `onClick` and `path`?
 
 Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
 
 The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin adding the extension wants to navigate the user away from the current view into their app, then they can choose to define a path.
 
 If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
+
+### Example: create an extension point for displaying components?
+
+Component type extensions are simply React components, which you can render anywere in your plugin.
+
+```tsx title="src/components/Toolbar.tsx"
+import { getPluginComponentExtensions } from '@grafana/runtime';
+
+export const Toolbar = () => {
+  const { extensions } = getPluginComponentExtensions({ extensionPointId: '<extension-point-id>' });
+  const version = '1.0.0'; // Let's share this with the extensions
+
+  return (
+    <div>
+      <div className="title">Title</div>
+      <div className="extensions">
+        {/* Loop through the available extensions */}
+        {extensions.map((extension) => {
+          const Component = extension.component as React.ComponentType<{
+            context: { version: string };
+          }>;
+
+          // Render extension component and pass contextual information (version)
+          return (
+            <div key={extension.id}>
+              <Component context={{ version }} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+```
 
 ## Additional options
 
