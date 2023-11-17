@@ -87,7 +87,7 @@ The reason for this behavior is that we want to be able to support both native b
 
 If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
 
-### Example: create an extension point for displaying components?
+### Example: create an extension point for displaying components
 
 Component type extensions are simply React components, which you can render anywere in your plugin.
 
