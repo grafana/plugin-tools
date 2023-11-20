@@ -38,14 +38,23 @@ export default defineConfig<PluginOptions>({
       name: 'authenticate',
       testMatch: [/.*auth\.setup\.ts/],
     },
-    // 2. Run all tests in parallel with Chrome.
+    // 2. Create a datasource that can be used across tests (should use provsiioning DS instead, but currently not working in CI)
+    {
+      name: 'setupDatasource',
+      use: {
+        storageState: 'playwright/.auth/user.json',
+      },
+      testMatch: [/.*datasource\.setup\.ts/],
+      dependencies: ['authenticate'],
+    },
+    // 3. Run all tests in parallel using Chrome.
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
-      dependencies: ['authenticate'],
+      dependencies: ['authenticate', 'setupDatasource'],
     },
   ],
 });
