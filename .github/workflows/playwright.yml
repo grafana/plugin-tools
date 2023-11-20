@@ -10,10 +10,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        GRAFANA_VERSION: ['latest', '9.5.5']
+        GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Copy auth file
+        run: mkdir -p packages/plugin-e2e/playwright/.auth/ && cp .github/user.json packages/plugin-e2e/playwright/.auth/user.json
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -28,14 +31,16 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start Grafana
-        run: docker run --rm -d -p 3000:3000 --name=grafana grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+        run: docker run --rm -d -p 3000:3000 --name=grafana --env GF_INSTALL_PLUGINS=grafana-googlesheets-datasource grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
 
       - name: Run Playwright tests
         run: npm run playwright:test --w @grafana/plugin-e2e
+        env:
+          GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report-${{ matrix.GRAFANA_VERSION }}
-          path: playwright-report/
+          path: packages/plugin-e2e/playwright-report/
           retention-days: 30

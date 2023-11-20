@@ -38,6 +38,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.39.0",
-    "semver": "^7.5.4"
+    "@types/uuid": "^9.0.7",
+    "dotenv": "^16.3.1"
+  },
+  "dependencies": {
+    "semver": "^7.5.4",
+    "uuid": "^9.0.1"
   }
 }
