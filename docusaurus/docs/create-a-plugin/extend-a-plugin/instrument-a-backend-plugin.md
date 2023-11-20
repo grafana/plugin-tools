@@ -55,7 +55,7 @@ The `backend.Logger` is a convenient wrapper over `log.DefaultLogger` from the [
 
 #### Reuse logger with certain key/value pairs
 
-If you want to log multiple messages and include certain key/value pairs without repeating your code everywhere you can create a new logger with arguments using the `With` method on your instantiated logger.
+You can log multiple messages and include certain key-value pairs without repeating your code everywhere. To do so, create a new logger with arguments using the `With` method on your instantiated logger.
 
 **Example:**
 
@@ -72,7 +72,7 @@ import (
 
 func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
     // instantiates a logger that will include the datasource UID
-    // key/value pair over the life-time of this instance.
+    // key-value pair over the lifetime of this instance.
     logger := backend.Logger.With("dsUID", settings.UID)
 
     return &Datasource{
@@ -96,7 +96,7 @@ You can also use `backend.NewLoggerWith` from the [backend package](https://pkg.
 
 #### Use a contextual logger
 
-Use a contextual logger to automatically include additional key/value pairs attached to `context.Context`, e.g. `traceID`, to allow correlating logs with traces and/or correlate logs with a common identifier. You can create a new contextual logger by using the `FromContext` method on your instantiated logger and can also be combined when [reusing logger with certain key/value pairs](#reuse-logger-with-certain-keyvalue-pairs). Using a contextual logger is recommended whenever you have access to a `context.Context`.
+Use a contextual logger to automatically include additional key-value pairs attached to `context.Context`. For example, you can use `traceID` to allow correlating logs with traces and to correlate logs with a common identifier. You can create a new contextual logger by using the `FromContext` method on your instantiated logger; you can also combine this method when [reusing logger with certain key-value pairs](#reuse-logger-with-certain-keyvalue-pairs). We recommend using a contextual logger whenever you have access to a `context.Context`.
 
 :::note
 
@@ -104,14 +104,14 @@ Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github
 
 :::
 
-By default, the following key/value pairs are included in logs when using a contextual logger:
+By default, the following key-value pairs are included in logs when using a contextual logger:
 
-- **pluginID:** The plugin identifier, e.g. grafana-github-datasource.
-- **endpoint:** The request being handled, i.e. callResource, checkHealth, collectMetrics, queryData, runStream, subscribeStream or publishStream.
+- **pluginID:** The plugin identifier. For example, `grafana-github-datasource`.
+- **endpoint:** The request being handled; that is, `callResource`, `checkHealth`, `collectMetrics`, `queryData`, `runStream`, `subscribeStream`, or `publishStream`.
 - **traceID:** If available, includes the distributed trace identifier.
 - **dsName:** If available, the name of the configured datasource instance.
 - **dsUID:** If available, the unique identifier (UID) of the configured datasource instance.
-- **uname:** If available, the username of the user that made the request.
+- **uname:** If available, the username of the user who made the request.
 
 **Example:**
 
@@ -128,7 +128,7 @@ import (
 
 func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
     // instantiates a logger that will include the datasource UID
-    // key/value pair over the life-time of this instance.
+    // key-value pair over the lifetime of this instance.
     logger := backend.Logger.With("dsUID", settings.UID)
 
     return &Datasource{
@@ -147,7 +147,7 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 #### Include additional contextual information in logs
 
-If you want to propagate additional contextual key/value pairs to subsequent code/logic you can use the [log.WithContextualAttributes](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/log#WithContextualAttributes) function.
+If you want to propagate additional contextual key-value pairs to subsequent code/logic you can use the [log.WithContextualAttributes](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/log#WithContextualAttributes) function.
 
 **Example:**
 
@@ -166,37 +166,37 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 ```
 
-### Best practices/recommendations
+### Best practices
 
-- Start the log message with a capital letter, e.g. `logger.Info("Hello world")` instead of `logger.Info("hello world")`.
-- The log message should be an identifier for the log entry, try to avoid parameterization, e.g. `logger.Debug(fmt.Sprintf(“Something happened, got argument %d”, “arg”)), in favor of key-value pairs for additional data, e.g. `logger.Info(“Something happened”, “argument”, “arg”).
-- Prefer using camelCase style when naming log keys, e.g. remoteAddr or userID, to be consistent with Go identifiers.
-- Use the key `error` when logging Go errors, e.g. `logger.Error("Something failed", "error", errors.New("An error occurred")`.
+- Start the log message with a capital letter; for example, `logger.Info("Hello world")` instead of `logger.Info("hello world")`.
+- The log message should be an identifier for the log entry, try to avoid parameterization; for example,  `logger.Debug(fmt.Sprintf(“Something happened, got argument %d”, “arg”))`, in favor of key-value pairs for additional data; for example, `logger.Info(“Something happened”, “argument”, “arg”)`.
+- Prefer using camelCase style when naming log keys; for example, `remoteAddr` or `userID`, to be consistent with Go identifiers.
+- Use the key `error` when logging Go errors; for example, `logger.Error("Something failed", "error", errors.New("An error occurred")`.
 - Use a contextual logger whenever you have access to a `context.Context`.
 - Do not log sensitive information, such as data source credentials or IP addresses, or other personally identifiable information.
 
 #### Validate and sanitize input coming from user input
 
-If log messages or key/value pairs originate from user input they should be validated and sanitized. Be careful to not expose any sensitive information in log messages e.g. secrets, credentials etc. It's especially easy to do by mistake when including a Go struct as value.
+If log messages or key-value pairs originate from user input they should be validated and sanitized. Be careful to not expose any sensitive information in log messages (secrets, credentials, and so on). It's especially easy to do by mistake when including a Go struct as a value.
 
 #### When to use which log level?
 
 - **Debug:** Informational messages of high frequency and/or less-important messages during normal operations.
 - **Info:** Informational messages of low frequency and/or important messages.
-- **Warning:** Should in normal cases not be used/needed. If used should be actionable.
+- **Warning:** Should in normal cases not be needed. If used, it should be actionable.
 - **Error:** Error messages indicating some operation failed (with an error) and the program didn't have a way to handle the error.
 
 :::note
 
-Incoming requests of high frequency are normally more common for the QueryData endpoint since for example the nature of a dashboard generates a request per panel and/or query.
+Incoming requests of high frequency are normally more common for the `QueryData` endpoint, since--for example--the nature of a dashboard generates a request per panel or query.
 
 :::
 
 ### Inspect logs locally
 
-Logs from a backend plugin will be consumed by the connected Grafana instance and included in the Grafana server log.
+Logs from a backend plugin are consumed by the connected Grafana instance and included in the Grafana server log.
 
-Each log message for a backend plugin will include a name, `logger=plugin.<plugin id>`, e.g.
+Each log message for a backend plugin will include a name, `logger=plugin.<plugin id>`. Example:
 
 ```shell
 DEBUG[11-14|15:26:26] Debug msg     logger=plugin.grafana-helloworld-app someID=1
@@ -212,7 +212,7 @@ You can enable [debug logging in your Grafana instance](https://grafana.com/docs
 filters = plugin.<plugin id>:debug
 ```
 
-Please refer to [Configure Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#log) for more details setting up logging.
+Please refer to [Configure Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#log) for more details about setting up logging.
 
 Further, see [How to collect and visualize logs, metrics and traces](#collect-and-visualize-logs-metrics-and-traces).
 
@@ -232,7 +232,7 @@ There are many possible types of metrics that can be tracked. One popular method
 
 [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) uses the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang). Any custom metric registered with the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) will be picked up by the SDK and exposed through the [Collect metrics capability](../../introduction/backend.md#collect-metrics).
 
-For convenience, It's recommended to use the [promauto package](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus/promauto) when creating custom metrics since it will automatically register the metric in the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables).
+For convenience, it's recommended to use the [promauto package](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus/promauto) when creating custom metrics since it automatically registers the metric in the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) and expose them to Grafana.
 
 **Example:**
 
@@ -264,26 +264,26 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 ```
 
-### Best practices/recommendations
+### Best practices
 
-- Consider using the namespace _grafana_plugin_ as that would prefix any defined metric names with plugin*. This will make it clear for operators that any metric named \*grafana_plugin*\* originates from a Grafana plugin.
-- Use snake case style when naming metrics, e.g. _http_request_duration_seconds_ instead of _httpRequestDurationSeconds_.
-- Use snake case style when naming metric labels, e.g. _status_code_ instead of _statusCode_.
-- If the metric type is a counter, name it with a _\_total suffix_, e.g. _http_requests_total_.
-- If the metric type is a histogram and you're measuring duration, name it with a _`_<unit>`_ suffix, e.g. _http_request_duration_seconds_.
-- If the metric type is a gauge, name it to denote it's a value that can increase and decrease , e.g. _http_request_in_flight_.
+- Consider using the namespace `grafana_plugin` as that would prefix any defined metric names with `plugin`. This will make it clear for operators that any metric named `grafana_plugin` originates from a Grafana plugin.
+- Use snake case style when naming metrics, e.g. `http_request_duration_seconds` instead of `httpRequestDurationSeconds`.
+- Use snake case style when naming metric labels, e.g. `status_code` instead of `statusCode`.
+- If the metric type is a counter, name it with a `_total` suffix, e.g. `http_requests_total`.
+- If the metric type is a histogram and you're measuring duration, name it with a `_<unit>`  suffix, e.g. `http_request_duration_seconds`.
+- If the metric type is a gauge, name it to denote it's a value that can increase and decrease , e.g. `http_request_in_flight`.
 
 #### Label values and high cardinality
 
-Be careful with what label values you add/accept. Using/allowing too many label values could result in high cardinality problems.
+Be careful with what label values you add. Using/allowing too many label values could result in high cardinality problems.
 
 If label values originate from user input they should be validated/cleaned. Use `metricutil.SanitizeLabelName("<label value>")` from pkg/infra/metrics/metricutil package to sanitize label names. Very important to only allow a predefined set of labels to minimize the risk of high cardinality problems.
 
-Be careful to not expose any sensitive information in label values, e.g. secrets, credentials etc.
+Be careful to not expose any sensitive information in label values (secrets, credentials, and so on).
 
 ### Automatic instrumentation by the SDK
 
-The SDK provides automatic collection/exposure of Go runtime metrics and process metrics to ease developer and operator experience.
+The SDK provides automatic collection and exposure of Go runtime metrics and process metrics to ease developer and operator experience.
 
 ### Collect and visualize metrics locally
 
@@ -293,17 +293,17 @@ Further, see [How to collect and visualize logs, metrics and traces](#collect-an
 
 ## Traces
 
-Distributed tracing allows backend plugin developers to create custom spans in their plugins, and send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
+Distributed tracing allows backend plugin developers to create custom spans in their plugins, and then send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
 
 :::note
 
-This feature requires at least Grafana 9.5.0, and your plugin needs to be built at least with grafana-plugins-sdk-go v0.157.0. If you run a plugin with tracing features on an older version of Grafana, tracing is disabled.
+This feature requires at least Grafana 9.5.0, and your plugin needs to be built at least with `grafana-plugins-sdk-go v0.157.0`. If you run a plugin with tracing features on an older version of Grafana, tracing will be disabled.
 
 :::
 
 ### Plugin configuration
 
-Plugin tracing must be enabled manually on a per-plugin basis, by specifying `tracing = true` in the plugin's config section:
+Plugin tracing must be enabled manually on a per-plugin basis. To do so, specify`tracing = true` in the plugin's config section:
 
 ```
 [plugin.myorg-myplugin-datasource]
@@ -314,7 +314,7 @@ tracing = true
 
 Grafana supports [OpenTelemetry](https://opentelemetry.io/) for distributed tracing. If Grafana is configured to use a deprecated tracing system (Jaeger or OpenTracing), then tracing is disabled in the plugin provided by the SDK and configured when calling `datasource.Manage | app.Manage`.
 
-OpenTelemetry must be enabled and configured for the Grafana instance. Please refer to [Configure Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#tracingopentelemetry) for more information.
+OpenTelemetry must be enabled and configured for the Grafana instance. Refer to [Configure Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#tracingopentelemetry) for more information.
 
 Refer to the [OpenTelemetry Go SDK](https://pkg.go.dev/go.opentelemetry.io/otel) for in-depth documentation about all the features provided by OpenTelemetry.
 
@@ -328,7 +328,7 @@ If tracing is disabled in Grafana, `backend.DefaultTracer()` returns a no-op tra
 
 :::note
 
-Make sure you are using at least [grafana-plugin-sdk-go v0.157.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.157.0). See [Update the Go SDK](../develop-a-plugin/work-with-backend#update-the-go-sdk) for update instructions.
+Make sure you are using at least [`grafana-plugin-sdk-go v0.157.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.157.0). Refer to [Update the Go SDK](../develop-a-plugin/work-with-backend#update-the-go-sdk) for update instructions.
 
 :::
 
@@ -387,11 +387,11 @@ When OpenTelemetry tracing is enabled on the main Grafana instance and tracing i
 
 ### Automatic instrumentation by the SDK
 
-The SDK provides some automatic instrumentation to ease developer experience.
+The SDK automates some instrumentation to ease developer experience.
 
 #### Tracing gRPC calls
 
-When tracing is enabled, a new span is created automatically for each gRPC call (`QueryData`, `CallResource`, `CheckHealth`, etc.), both on Grafana's side and on the plugin's side. The plugin SDK also injects the trace context into the `context.Context` that is passed to those methods.
+When tracing is enabled, a new span is created automatically for each gRPC call (`QueryData`, `CallResource`, `CheckHealth`, and so on), both on Grafana's side and on the plugin's side. The plugin SDK also injects the trace context into the `context.Context` that is passed to those methods.
 
 You can retrieve the [trace.SpanContext](https://pkg.go.dev/go.opentelemetry.io/otel/trace#SpanContext) with `tracing.SpanContextFromContext` by passing the original `context.Context` to it:
 
@@ -406,11 +406,11 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 
 #### Tracing outgoing HTTP requests
 
-When tracing is enabled, a `TracingMiddleware` is also added to the default middleware stack to all HTTP clients created using the [httpclient.New](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient#New) or [httpclient.NewProvider](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient#NewProvider), unless you specify custom middleware. This middleware creates spans for each outgoing HTTP request and provides some useful attributes and events related to the request's lifecycle.
+When tracing is enabled, a `TracingMiddleware` is also added to the default middleware stack to all HTTP clients created using the [`httpclient.New`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient#New) or [`httpclient.NewProvider`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient#NewProvider), unless you specify custom middleware. This middleware creates spans for each outgoing HTTP request and provides some useful attributes and events related to the request's lifecycle.
 
 ### Collect and visualize traces locally
 
-Please refer to [How to collect and visualize logs, metrics and traces](#collect-and-visualize-logs-metrics-and-traces).
+Refer to [How to collect and visualize logs, metrics and traces](#collect-and-visualize-logs-metrics-and-traces).
 
 ### Plugin example
 
@@ -418,4 +418,4 @@ Refer to the [datasource-http-backend plugin example](https://github.com/grafana
 
 ## Collect and visualize logs, metrics and traces
 
-If you want to collect and visualize logs, metrics and traces using Loki, Prometheus and Tempo when developing your plugin, please refer to https://github.com/grafana/grafana/tree/main/devenv/docker/blocks/self-instrumentation which are being used by the Grafana maintainers.
+If you want to collect and visualize logs, metrics and traces using Loki, Prometheus, and Tempo when developing your plugin, refer to https://github.com/grafana/grafana/tree/main/devenv/docker/blocks/self-instrumentation which are being used by the Grafana maintainers.
