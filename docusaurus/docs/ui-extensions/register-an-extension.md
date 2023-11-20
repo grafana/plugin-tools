@@ -142,7 +142,7 @@ export const MyExtension = () => (
 ### Example: Use the context of the extension point in a component
 
 Extension points can pass contextual information to the extensions they render, we refer to this data as `context`.
-In case it is a core extension point (defined in core Grafana), there is also always a type definition available for these context objects. In the following example we will cover how to use this `context` in our component extension and also get the static types right.
+Extension points defined in core Grafana additionally have a type definition available for these context objects. In the following example we will cover how to use this `context` in our component extension and also get the static types right.
 
 ```ts title="src/module.ts"
 // This could also come from another plugin or defined manually if a plugin doesn't expose it.
