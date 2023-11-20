@@ -277,7 +277,7 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 Be careful with what label values you add. Using/allowing too many label values could result in high cardinality problems.
 
-If label values originate from user input they should be validated/cleaned. Use `metricutil.SanitizeLabelName("<label value>")` from pkg/infra/metrics/metricutil package to sanitize label names. Very important to only allow a predefined set of labels to minimize the risk of high cardinality problems.
+If label values originate from user input they should be validated and cleaned. Use `metricutil.SanitizeLabelName("<label value>")` from pkg/infra/metrics/metricutil package to sanitize label names. Very important to only allow a predefined set of labels to minimize the risk of high cardinality problems.
 
 Be careful to not expose any sensitive information in label values (secrets, credentials, and so on).
 
