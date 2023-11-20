@@ -1,9 +1,10 @@
-import { test as base, expect as baseExpect } from '@playwright/test';
+import { test as base, expect as baseExpect, selectors } from '@playwright/test';
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
-import { DataSourceConfigPage } from './models';
 import matchers from './matchers';
-import { CreateDataSourcePageArgs } from './types';
+import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource } from './types';
+import { PanelEditPage, GrafanaPage, DataSourceConfigPage, EmptyDashboardPage } from './models';
+import { grafanaE2ESelectorEngine } from './selectorEngine';
 
 export type PluginOptions = {
   selectorRegistration: void;
@@ -24,12 +25,40 @@ export type PluginFixture = {
   selectors: E2ESelectors;
 
   /**
+   * Isolated {@link EmptyDashboardPage} instance for each test.
+   *
+   * Navigates to a new dashboard page.
+   */
+  emptyDashboardPage: EmptyDashboardPage;
+
+  /**
+   * Isolated {@link PanelEditPage} instance for each test.
+   *
+   * Navigates to a new dashboard page and adds a new panel.
+   *
+   * Use {@link PanelEditPage.setVisualization} to change the visualization
+   * Use {@link PanelEditPage.datasource.set} to change the
+   * Use {@link ExplorePage.getQueryEditorEditorRow} to retrieve the query
+   * editor row locator for a given query refId
+   */
+  panelEditPage: PanelEditPage;
+
+  /**
    * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.
    *
    * The data source config page cannot be navigated to without a data source uid, so this fixture will create a new
    * data source using the Grafana API, create a new DataSourceConfigPage instance and navigate to the page.
    */
   createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
+
+  /**
+   * Fixture command that create a data source via the Grafana API.
+   *
+   * If you have tests that depend on the the existance of a data source,
+   * you may use this command in a setup project. Read more about setup projects
+   * here: https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
+   */
+  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSource>;
 
   /**
    * Fixture command that login to Grafana using the Grafana API. 
