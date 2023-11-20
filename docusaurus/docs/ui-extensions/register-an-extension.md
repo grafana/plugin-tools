@@ -120,7 +120,7 @@ new AppPlugin().configureExtensionLink({
 
 ### Example: Display a React component
 
-Using React components as extensions is a powerful way to extend the functionality of an existing UI either in core Grafana or in an other plugin.
+Using React components as extensions is a powerful way to extend the functionality of an existing UI either in core Grafana or in another plugin.
 
 ```ts title="src/module.ts"
 new AppPlugin().configureExtensionComponent({
