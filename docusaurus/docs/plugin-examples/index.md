@@ -33,5 +33,3 @@ The following lists describe some of our popular plugins. For a complete list, s
 - [**app-with-dashboards:**](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-dashboards) This example shows how to include pre-built dashboards with your app plugin.
 - [**app-with-extension-point:**](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-extension-point) This example shows how to add a plugin extension point that can be extended by other plugins.
 - [**app-with-scenes:**](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-scenes) Build a basic app plugin using the @grafana/scenes framework. This example shows examples of custom pages, nested data sources, and panel plugins.
-
-Refer to the Grafana plugin examples [README](https://github.com/grafana/grafana-plugin-examples/tree/main#readme) for more information on usage, testing, and API compatibility.
