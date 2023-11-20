@@ -1,7 +1,7 @@
 ---
-id: instrument-a-backend-plugin
-title: Instrument a backend plugin
-description: How to instrument backend plugins using logs, metrics and traces.
+id: add-logs-metrics-traces-for-backend-plugins
+title: Add logs, metrics and traces for backend plugins
+description: How to add logs, metrics and traces for backend plugins.
 keywords:
   - grafana
   - plugins
@@ -16,9 +16,9 @@ keywords:
   - back-end
 ---
 
-# Instrument a backend plugin
+# Add logs, metrics and traces for backend plugins
 
-Guidance, conventions and best practices for instrumenting backend plugins using logs, metrics and traces to make it easier to diagnose and resolve issues for both plugin developers and Grafana operators.
+Guidance, conventions and best practices for adding logs, metrics and traces for backend plugins to make it easier to diagnose and resolve issues for both plugin developers and Grafana operators.
 
 ## Logs
 
@@ -169,7 +169,7 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 ### Best practices
 
 - Start the log message with a capital letter; for example, `logger.Info("Hello world")` instead of `logger.Info("hello world")`.
-- The log message should be an identifier for the log entry, try to avoid parameterization; for example,  `logger.Debug(fmt.Sprintf(“Something happened, got argument %d”, “arg”))`, in favor of key-value pairs for additional data; for example, `logger.Info(“Something happened”, “argument”, “arg”)`.
+- The log message should be an identifier for the log entry, try to avoid parameterization; for example, `logger.Debug(fmt.Sprintf(“Something happened, got argument %d”, “arg”))`, in favor of key-value pairs for additional data; for example, `logger.Info(“Something happened”, “argument”, “arg”)`.
 - Prefer using camelCase style when naming log keys; for example, `remoteAddr` or `userID`, to be consistent with Go identifiers.
 - Use the key `error` when logging Go errors; for example, `logger.Error("Something failed", "error", errors.New("An error occurred")`.
 - Use a contextual logger whenever you have access to a `context.Context`.
@@ -270,7 +270,7 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 - Use snake case style when naming metrics, e.g. `http_request_duration_seconds` instead of `httpRequestDurationSeconds`.
 - Use snake case style when naming metric labels, e.g. `status_code` instead of `statusCode`.
 - If the metric type is a counter, name it with a `_total` suffix, e.g. `http_requests_total`.
-- If the metric type is a histogram and you're measuring duration, name it with a `_<unit>`  suffix, e.g. `http_request_duration_seconds`.
+- If the metric type is a histogram and you're measuring duration, name it with a `_<unit>` suffix, e.g. `http_request_duration_seconds`.
 - If the metric type is a gauge, name it to denote it's a value that can increase and decrease , e.g. `http_request_in_flight`.
 
 #### Label values and high cardinality
