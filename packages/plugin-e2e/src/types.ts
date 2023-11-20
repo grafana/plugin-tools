@@ -44,4 +44,9 @@ export type CreateDataSourcePageArgs = {
    * The data source name to create
    */
   name?: string;
+
+  /**
+   * Set this to false to delete the data source via Grafana API after the test. Defaults to true.
+   */
+  deleteDataSourceAfterTest?: boolean;
 };
