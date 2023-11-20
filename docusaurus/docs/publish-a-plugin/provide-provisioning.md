@@ -1,7 +1,7 @@
 ---
 id: provide-provisioning
 title: Provision your plugin
-description: How to add provisioning to your plugin to potentially speed up your plugin review process.
+description: How to add provisioning to your plugin to speed up your plugin review process.
 keywords:
   - github
   - provisioning
