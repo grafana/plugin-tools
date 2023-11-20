@@ -9,5 +9,8 @@ export const versionedAPIs = {
     query: {
       [MIN_GRAFANA_VERSION]: '*/**/api/ds/query*',
     },
+    healthCheck: {
+      [MIN_GRAFANA_VERSION]: 'api/datasources/uid/*/health',
+    },
   },
 };
