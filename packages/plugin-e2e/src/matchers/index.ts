@@ -1,5 +1,5 @@
 import toBeOK from './toBeOK';
-import { toHavePanelError } from './toHavePanelError';
+import toHavePanelError from './toHavePanelError';
 
 export default {
   toBeOK,

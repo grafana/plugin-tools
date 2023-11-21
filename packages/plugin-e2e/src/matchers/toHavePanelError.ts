@@ -2,10 +2,7 @@ import { expect } from '@playwright/test';
 import { PanelError } from '../types';
 import { getMessage } from './utils';
 
-/**
- * Hello
- */
-export const toHavePanelError = async (panelError: PanelError, options?: { timeout?: number }) => {
+const toHavePanelError = async (panelError: PanelError, options?: { timeout?: number }) => {
   let pass = true;
   let actual;
   let message: any = 'A panel error to be displayed';
@@ -26,4 +23,4 @@ export const toHavePanelError = async (panelError: PanelError, options?: { timeo
   };
 };
 
-// export default toHavePanelError;
+export default toHavePanelError;

@@ -52,7 +52,7 @@ export type PluginFixture = {
   createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
 
   /**
-   * Fixture command that create a data source via the Grafana API.
+   * Fixture command that creates a data source via the Grafana API.
    *
    * If you have tests that depend on the the existance of a data source,
    * you may use this command in a setup project. Read more about setup projects

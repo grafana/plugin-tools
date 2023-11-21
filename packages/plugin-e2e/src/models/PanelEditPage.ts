@@ -1,6 +1,5 @@
-import * as semver from 'semver';
 import { Expect, Locator } from '@playwright/test';
-
+import * as semver from 'semver';
 import { PanelError, PluginTestCtx, RequestOptions, Visualization } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
