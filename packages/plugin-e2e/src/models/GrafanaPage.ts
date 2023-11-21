@@ -1,4 +1,4 @@
-import { Expect, Locator } from '@playwright/test';
+import { Expect, Locator, Request } from '@playwright/test';
 import { PluginTestCtx } from '../types';
 
 /**
@@ -40,8 +40,21 @@ export abstract class GrafanaPage {
    * @param status the HTTP status code to return. Defaults to 200
    */
   async mockResourceResponse<T = any>(path: string, json: T, status = 200) {
-    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.getResource}/${path}`, async (route) => {
+    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resource}/${path}`, async (route) => {
       await route.fulfill({ json, status });
+    });
+  }
+
+  /**
+   * Waits for a data source query data request to be made.
+   *
+   * @param cb optional callback to filter the request. Use this to filter by request body or other request properties
+   */
+  async waitForQueryDataRequest(cb?: (request: Request) => boolean | Promise<boolean>) {
+    return this.ctx.page.waitForRequest((request) => {
+      if (request.url().includes('api/ds/query') && request.method() === 'POST') {
+        return cb ? cb(request) : true;
+      }
     });
   }
 }
