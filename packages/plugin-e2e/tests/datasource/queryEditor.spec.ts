@@ -1,8 +1,15 @@
 import { expect, test } from '../../src';
-import { sheetsDataSource } from './datasource';
+import { ProvisionFile } from '../../src/types';
 import { GOOGLE_SHEETS_SPREADSHEETS } from './mocks/resource';
 
-test('should list spreadsheets when clicking on spreadsheet segment', async ({ panelEditPage, page }) => {
+test('should list spreadsheets when clicking on spreadsheet segment', async ({
+  panelEditPage,
+  page,
+  readProvision,
+}) => {
+  const sheetsDataSource = await readProvision<ProvisionFile>({
+    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
+  }).then((provision) => provision.datasources[0]);
   await panelEditPage.datasource.set(sheetsDataSource.name!);
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await panelEditPage.mockResourceResponse('spreadsheets', GOOGLE_SHEETS_SPREADSHEETS);
@@ -11,7 +18,10 @@ test('should list spreadsheets when clicking on spreadsheet segment', async ({ p
   await expect(page.getByText(GOOGLE_SHEETS_SPREADSHEETS.spreadsheets.sheet2, { exact: true })).toHaveCount(1);
 });
 
-test('should set correct cache time on query passed to the backend', async ({ panelEditPage, page }) => {
+test('should set correct cache time on query passed to the backend', async ({ panelEditPage, page, readProvision }) => {
+  const sheetsDataSource = await readProvision<ProvisionFile>({
+    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
+  }).then((provision) => provision.datasources[0]);
   await panelEditPage.datasource.set(sheetsDataSource.name!);
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await panelEditPage.mockResourceResponse('spreadsheets', GOOGLE_SHEETS_SPREADSHEETS);

@@ -1,10 +1,18 @@
 import { expect, test } from '../../src';
-import { sheetsDataSource } from './datasource';
+import { ProvisionFile } from '../../src/types';
+
+export type RedshiftDatasourceConfig = {
+  name: string;
+};
 
 test('should return data and not display panel error when a valid query is provided', async ({
   panelEditPage,
   page,
+  readProvision,
 }) => {
+  const sheetsDataSource = await readProvision<ProvisionFile>({
+    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
+  }).then((provision) => provision.datasources[0]);
   await panelEditPage.datasource.set(sheetsDataSource.name!);
   await panelEditPage.timeRange.set({ from: '2019-01-11', to: '2019-12-15' });
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
@@ -18,7 +26,11 @@ test('should return data and not display panel error when a valid query is provi
 test('should return an error and display panel error when an invalid query is provided', async ({
   panelEditPage,
   page,
+  readProvision,
 }) => {
+  const sheetsDataSource = await readProvision<ProvisionFile>({
+    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
+  }).then((provision) => provision.datasources[0]);
   await panelEditPage.datasource.set(sheetsDataSource.name!);
   await panelEditPage.timeRange.set({ from: '2019-01-11', to: '2019-12-15' });
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');

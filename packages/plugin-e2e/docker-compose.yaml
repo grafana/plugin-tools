@@ -9,6 +9,7 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ID=1
+      - GOOGLE_JWT_FILE=${GOOGLE_JWT_FILE}
     ports:
       - 3000:3000/tcp
     volumes:

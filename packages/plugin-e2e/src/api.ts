@@ -2,7 +2,7 @@ import { test as base, expect as baseExpect, selectors } from '@playwright/test'
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
-import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource } from './types';
+import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
 import { PanelEditPage, GrafanaPage, DataSourceConfigPage, EmptyDashboardPage } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 
@@ -85,6 +85,12 @@ export type PluginFixture = {
    * test.use({ storageState: { cookies: [], origins: [] } });
    */
   login: () => Promise<void>;
+
+  /**
+   * Fixture command that reads a the yaml file for a provisioned dashboard
+   * or data source and returns it as json.
+   */
+  readProvision<T = any>(args: ReadProvisionArgs): Promise<T>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures
