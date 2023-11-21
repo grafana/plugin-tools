@@ -33,7 +33,7 @@ export const createDataSourceViaAPI = async (
   const text = await createDsReq.text();
   const status = await createDsReq.status();
   if (status === 200) {
-    console.log('Data source created: ', dsName);
+    console.log('Data source created: ', name);
     return createDsReq.json().then((r) => r.datasource);
   }
 

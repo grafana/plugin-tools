@@ -11,6 +11,6 @@ test('valid credentials should return a 200 status code', async ({ createDataSou
   const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
   await page.getByText('Google JWT File', { exact: true }).click();
   await page.getByTestId('Paste JWT button').click();
-  await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!);
+  await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!.replace(/'/g, ''));
   await expect(configPage.saveAndTest()).toBeOK();
 });
