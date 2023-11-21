@@ -33,7 +33,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start Grafana
-        run: docker run --rm -d -p 3000:3000 --name=grafana --env JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} --env "GF_INSTALL_PLUGINS=grafana-googlesheets-datasource ${{matrix.GOOGLE_SHEETS_VERSION}}" grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+        run: docker run --rm -d -p 3000:3000 --name=grafana --env GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} --env "GF_INSTALL_PLUGINS=grafana-googlesheets-datasource ${{matrix.GOOGLE_SHEETS_VERSION}}" grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
 
       - name: Run Playwright tests
         run: npm run playwright:test --w @grafana/plugin-e2e
