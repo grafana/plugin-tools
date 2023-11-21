@@ -15,7 +15,7 @@ test('should set correct cache time on query passed to the backend', async ({ pa
   await panelEditPage.datasource.set(sheetsDataSource.name!);
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await panelEditPage.mockResourceResponse('spreadsheets', GOOGLE_SHEETS_SPREADSHEETS);
-  await queryEditorRow.getByRole('button', { name: '5m' }).click();
+  await queryEditorRow.getByText('5m', { exact: true }).click();
   await page.keyboard.insertText('1h');
   await page.keyboard.press('Enter');
 
