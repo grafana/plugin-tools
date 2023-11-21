@@ -45,7 +45,7 @@ export default defineConfig<PluginOptions>({
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
-      dependencies: ['authenticate', 'setupDatasource'],
+      dependencies: ['authenticate'],
     },
   ],
 });
