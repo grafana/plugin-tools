@@ -55,6 +55,7 @@ export abstract class GrafanaPage {
       if (request.url().includes('api/ds/query') && request.method() === 'POST') {
         return cb ? cb(request) : true;
       }
+      return false;
     });
   }
 }
