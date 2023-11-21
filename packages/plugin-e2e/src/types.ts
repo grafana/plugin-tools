@@ -118,3 +118,14 @@ export type Visualization =
   | 'Text'
   | 'Time series'
   | 'Worldmap Panel';
+
+/**
+ * Implement this interface in a POM in case you want to enable the `toHavePanelError` matcher for the page.
+ * Only applicable to pages that have one panel only, such as the explore page or panel edit page.
+ *
+ * @internal
+ */
+export interface PanelError {
+  ctx: PluginTestCtx;
+  getPanelError: () => Locator;
+}
