@@ -12,7 +12,7 @@ jobs:
       matrix:
         GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
         GOOGLE_SHEETS_VERSION: ['1.2.4', '1.2.0']
-    name: E2E Tests - Grafana${{ matrix.GRAFANA_VERSION }} GoogleSheets${{ matrix.GOOGLE_SHEETS_VERSION }}
+    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
