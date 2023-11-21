@@ -1,6 +1,9 @@
 {
-    "position": 1,
-    "label": "Update from Grafana versions",
-    "collapsible": true,
-    "collapsed": true
-  }
+  "position": 1,
+  "label": "Update from Grafana versions",
+  "customProps": {
+    "description": "How to update your plugin from one version of Grafana to another."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

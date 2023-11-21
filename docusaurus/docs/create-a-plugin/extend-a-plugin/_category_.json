@@ -1,6 +1,9 @@
 {
-    "position": 2,
-    "label": "Extend a plugin",
-    "collapsible": true,
-    "collapsed": true
-  }
+  "position": 2,
+  "label": "Extend a plugin",
+  "customProps": {
+    "description": "Guides for extending a Grafana plugin with features such as authentication, query editor help, and annotations."
+  },
+  "collapsible": true,
+  "collapsed": true
+}
