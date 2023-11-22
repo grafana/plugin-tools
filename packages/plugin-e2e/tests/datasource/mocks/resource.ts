@@ -5,5 +5,5 @@ export const GOOGLE_SHEETS_SPREADSHEETS = {
   },
 };
 
-export const CLOUDWATCH_REGIONS = ['custom-region1', 'custom-region2'];
-export const CLOUDWATCH_NAMESPACES = ['custom-namespace1', 'custom-namespace2'];
+export const REDSHIFT_SCHEMAS = ['public', 'test'];
+export const REDSHIFT_TABLES = ['custom-namespace1', 'custom-namespace2'];
