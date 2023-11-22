@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { promises } from 'fs';
-import { resolve as resolvePath } from 'path';
+import { extname, resolve as resolvePath } from 'path';
 import { parse as parseYml } from 'yaml';
 import { PluginFixture, PluginOptions } from '../../api';
 import { ReadProvisionArgs } from '../../types';
@@ -15,7 +15,7 @@ const readProvision: ReadProvisionFixture = async ({}, use) => {
   await use(async ({ filePath }) => {
     const resolvedPath = resolvePath(process.cwd(), 'provisioning', filePath);
     const contents = await promises.readFile(resolvedPath, 'utf8');
-    return parseYml(contents);
+    return extname(filePath) === '.yaml' ? parseYml(contents) : JSON.parse(contents);
   });
 };
 
