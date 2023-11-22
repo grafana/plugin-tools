@@ -4,8 +4,7 @@ datasources:
   - name: '{{ pluginName }}'
   - type: '{{ normalize_id pluginName orgName 'datasource' }}'
     access: proxy
-    isDefault: true
+    isDefault: false
     orgId: 1
     version: 1
     editable: true
-    uid: U9sW5bank

@@ -1,6 +1,6 @@
 ---
 id: provide-provisioning
-title: Provision your plugin
+title: Provide a test environment
 description: How to add provisioning to your plugin to speed up your plugin review process.
 keywords:
   - github
@@ -44,7 +44,6 @@ Provisioning is not required; it's an optional part of the plugin submission pro
 1. When you run the create-plugin tool, it will generate a folder called `provisioning` with additional files based on the plugin type selected.
 1. When you run the Docker development environment, these files are used to automatically install (and if applicable, _enable_) your plugin and a sample dashboard.
 1. We recommended that you use and update the sample dashboard to continuously verify behavior as part of your development process. And, as appropriate, configure your plugin so that it can return data.
-1. We recommend that you submit the provisioning files along with your plugin for review.
 
 :::note
 

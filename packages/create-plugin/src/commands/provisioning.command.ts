@@ -4,7 +4,7 @@ import fs from 'fs';
 import { TEMPLATE_PATHS, TEXT } from '../constants';
 import { getPluginJson } from '../utils/utils.plugin';
 import { compileProvisioningTemplateFile, getTemplateData } from '../utils/utils.templates';
-import { confirmPrompt, printMessage, printSuccessMessage } from '../utils/utils.console';
+import { confirmPrompt, printMessage, printSuccessMessage, printError } from '../utils/utils.console';
 
 export const provisioning = async () => {
   const { type } = getPluginJson();
@@ -24,9 +24,9 @@ export const provisioning = async () => {
       }
     } else {
       printMessage(TEXT.addProvisioningAborted);
-      process.exit(0);
+      process.exit(1);
     }
   } catch (error) {
-    console.error(error);
+    printError(error);
   }
 };
