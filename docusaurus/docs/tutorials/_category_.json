@@ -1,6 +1,9 @@
 {
   "position": 15,
   "label": "Tutorials",
+  "customProps": {
+    "description": "Start your building journey with one of our tutorials for learning the essentials of plugin development."
+  },
   "collapsible": true,
   "collapsed": true
 }
