@@ -79,7 +79,7 @@ function AppMenuExtensionPoint() {
 }
 ```
 
-### Why does the extension have `onClick` and `path`?
+#### Why does the extension have `onClick` and `path`?
 
 Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
 
@@ -89,7 +89,13 @@ If instead you want to open a modal or trigger a background task without sending
 
 ### Example: create an extension point for displaying components
 
-Component type extensions are simply React components, which you can render anywhere in your plugin.
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
+
+Component type extensions are simple React components, which gives much more freedom on what they are able to do. In case you would like to make some part of your plugin extendable by other plugins, you can create a component-type extension point using `getPluginComponentExtensions()`. Any contextual information can be shared with the extension components using the `context={}` prop (see the example below).
 
 ```tsx title="src/components/Toolbar.tsx"
 import { getPluginComponentExtensions } from '@grafana/runtime';
