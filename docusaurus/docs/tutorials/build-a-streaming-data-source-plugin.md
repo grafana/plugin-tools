@@ -2,7 +2,7 @@
 id: build-a-streaming-data-source-plugin
 title: Build a streaming data source plugin
 sidebar_position: 9
-description: How to build a streaming data source plugin.
+description: Learn how to build a streaming data source plugin.
 draft: true
 keywords:
   - grafana
