@@ -120,6 +120,12 @@ new AppPlugin().configureExtensionLink({
 
 ### Example: Display a React component
 
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
+
 Using React components as extensions is a powerful way to extend the functionality of an existing UI either in core Grafana or in another plugin.
 
 ```ts title="src/module.ts"
@@ -140,6 +146,12 @@ export const MyExtension = () => (
 ```
 
 ### Example: Use the context of the extension point in a component
+
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
 
 Extension points can pass contextual information to the extensions they render, we refer to this data as `context`.
 Extension points defined in core Grafana additionally have a type definition available for these context objects. In the following example we will cover how to use this `context` in our component extension and also get the static types right.
@@ -169,6 +181,12 @@ export const MyExtension = ({ context }: Props) => (
 ```
 
 ### Example: Access plugin information in a component extension
+
+:::note
+
+**Available in Grafana >=10.3.0** <br /> (_The `usePluginMeta()` and `usePluginJsonDataAvailable()` hooks are only available in Grafana 10.3.0 and above._)
+
+:::
 
 If you would like to access meta information about your plugin from within the component extension, `@grafana/data` exposes some React hooks to make it possible:
 
