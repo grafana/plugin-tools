@@ -89,7 +89,7 @@ If instead you want to open a modal or trigger a background task without sending
 
 ### Example: create an extension point for displaying components
 
-Component type extensions are simply React components, which you can render anywere in your plugin.
+Component type extensions are simply React components, which you can render anywhere in your plugin.
 
 ```tsx title="src/components/Toolbar.tsx"
 import { getPluginComponentExtensions } from '@grafana/runtime';
