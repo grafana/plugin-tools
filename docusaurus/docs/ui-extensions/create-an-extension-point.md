@@ -87,6 +87,46 @@ The reason for this behavior is that we want to be able to support both native b
 
 If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
 
+### Example: create an extension point for displaying components
+
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
+
+Component type extensions are simple React components, which gives much more freedom on what they are able to do. In case you would like to make some part of your plugin extendable by other plugins, you can create a component-type extension point using `getPluginComponentExtensions()`. Any contextual information can be shared with the extension components using the `context={}` prop (see the example below).
+
+```tsx title="src/components/Toolbar.tsx"
+import { getPluginComponentExtensions } from '@grafana/runtime';
+
+export const Toolbar = () => {
+  const { extensions } = getPluginComponentExtensions({ extensionPointId: '<extension-point-id>' });
+  const version = '1.0.0'; // Let's share this with the extensions
+
+  return (
+    <div>
+      <div className="title">Title</div>
+      <div className="extensions">
+        {/* Loop through the available extensions */}
+        {extensions.map((extension) => {
+          const Component = extension.component as React.ComponentType<{
+            context: { version: string };
+          }>;
+
+          // Render extension component and pass contextual information (version)
+          return (
+            <div key={extension.id}>
+              <Component context={{ version }} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+```
+
 ## Additional options
 
 If you want to limit how many extensions a plugin can register for your extension point, you can pass the `limitPerPlugin` option as part of the `getPluginLinkExtensions` call. The default limit is set to five extensions per plugin to prevent plugins from flooding your extension point.
