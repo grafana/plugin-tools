@@ -3,7 +3,7 @@ import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
 import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
-import { PanelEditPage, GrafanaPage, DataSourceConfigPage, DashboardPage } from './models';
+import { PanelEditPage, GrafanaPage, DataSourceConfigPage, DashboardPage, VariableEditPage } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 
 export type PluginOptions = {
@@ -47,6 +47,15 @@ export type PluginFixture = {
    * editor row locator for a given query refId
    */
   panelEditPage: PanelEditPage;
+
+  /**
+   * Isolated {@link VariableEditPage} instance for each test.
+   *
+   * Navigates to a new dashboard page and adds a new variable.
+   *
+   * Use {@link VariableEditPage.setVariableType} to change the variable type
+   */
+  variableEditPage: VariableEditPage;
 
   /**
    * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.

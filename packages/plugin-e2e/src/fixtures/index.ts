@@ -6,6 +6,7 @@ import panelEditPage from './panelEditPage';
 import createDataSource from './commands/createDataSource';
 import readProvision from './commands/readProvision';
 import newDashboardPage from './newDashboardPage';
+import variableEditPage from './variableEditPage';
 
 export default {
   selectors,
@@ -14,6 +15,7 @@ export default {
   createDataSourceConfigPage,
   newDashboardPage,
   panelEditPage,
+  variableEditPage,
   createDataSource,
   readProvision,
 };
