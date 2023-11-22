@@ -153,7 +153,7 @@ export const MyExtension = () => (
 
 :::
 
-Extension points can pass contextual information to the extensions they render, we refer to this data as `context`.
+Extension points can pass contextual information to the extensions they render; we refer to this data as `context`.
 Extension points defined in core Grafana additionally have a type definition available for these context objects. In the following example, we use this `context` in our component extension and also show how to use the static types.
 
 ```ts title="src/module.ts"
