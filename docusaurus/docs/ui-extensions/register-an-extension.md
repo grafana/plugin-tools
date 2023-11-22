@@ -170,7 +170,7 @@ export const MyExtension = ({ context }: Props) => (
 
 ### Example: Access plugin information in a component extension
 
-It can happen that we would like to access some meta information of our plugin inside the component extension dynamically. `@grafana/data` exposes some helper hooks to make it possible:
+If you would like to access meta information about your plugin from within the component extension, `@grafana/data` exposes some React hooks to make it possible:
 
 ```ts title="src/module.ts"
 new AppPlugin().configureExtensionComponent({
