@@ -121,6 +121,11 @@ export type PluginFixture = {
    * or data source and returns it as json.
    */
   readProvision<T = any>(args: ReadProvisionArgs): Promise<T>;
+
+  /**
+   * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
+   */
+  isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures

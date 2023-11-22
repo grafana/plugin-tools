@@ -8,6 +8,7 @@ import createDataSource from './commands/createDataSource';
 import readProvision from './commands/readProvision';
 import newDashboardPage from './newDashboardPage';
 import variableEditPage from './variableEditPage';
+import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 
 export default {
   selectors,
@@ -20,4 +21,5 @@ export default {
   annotationEditPage,
   createDataSource,
   readProvision,
+  isFeatureToggleEnabled,
 };
