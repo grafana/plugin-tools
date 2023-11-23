@@ -23,7 +23,7 @@ export function printSuccessMessage(msg: string) {
 }
 
 export function printError(error: string) {
-  console.error(displayAsMarkdown(`\n✔ ${error}`));
+  console.error(displayAsMarkdown(`\nx ${error}`));
 }
 
 export function confirmPrompt(message: string): Promise<boolean> {
