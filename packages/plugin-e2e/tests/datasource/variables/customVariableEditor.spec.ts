@@ -1,6 +1,6 @@
-import { expect, test } from '../../src';
-import { ProvisionFile } from '../../src/types';
-import { REDSHIFT_SCHEMAS, REDSHIFT_TABLES } from './mocks/resource';
+import { expect, test } from '../../../src';
+import { ProvisionFile } from '../../../src/types';
+import { REDSHIFT_SCHEMAS, REDSHIFT_TABLES } from '../mocks/resource';
 
 const toMetricFindOption = (text: string) => ({
   text,
@@ -15,11 +15,9 @@ test('query type `Metrics` should load regions and namespaces and display them i
 }) => {
   await variableEditPage.mockResourceResponse('schemas', REDSHIFT_SCHEMAS);
   await variableEditPage.mockResourceResponse('tables', REDSHIFT_TABLES);
-  const ds = await readProvision<ProvisionFile>({ filePath: 'datasources/redshift.yaml' }).then(
-    (provision) => provision.datasources?.[0]!
-  );
+  const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/redshift.yaml' });
   await variableEditPage.setVariableType('Query');
-  await variableEditPage.datasource.set(ds.name!);
+  await variableEditPage.datasource.set(provision.datasources?.[0]!.name!);
   await page.getByLabel('Schema').click();
   await expect(variableEditPage.getByTestIdOrAriaLabel('Select option')).toContainText(REDSHIFT_SCHEMAS);
   await page.keyboard.press('Escape');
