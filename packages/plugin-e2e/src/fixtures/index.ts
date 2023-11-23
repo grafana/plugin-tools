@@ -11,6 +11,7 @@ import variableEditPage from './variableEditPage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 
 export default {
+  featureToggles: {},
   selectors,
   grafanaVersion,
   login,

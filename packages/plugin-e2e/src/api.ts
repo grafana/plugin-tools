@@ -15,9 +15,11 @@ import { grafanaE2ESelectorEngine } from './selectorEngine';
 
 export type PluginOptions = {
   selectorRegistration: void;
+  featureToggles: Record<string, boolean>;
 };
 
 export type PluginFixture = {
+  featureToggles: Record<string, boolean>;
   /**
    * The current Grafana version.
    *
