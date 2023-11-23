@@ -1,4 +1,4 @@
-import { Expect, Locator, Request } from '@playwright/test';
+import { Expect, Locator, Request, Response } from '@playwright/test';
 import { PluginTestCtx } from '../types';
 
 /**
@@ -58,6 +58,20 @@ export abstract class GrafanaPage {
     return this.ctx.page.waitForRequest((request) => {
       if (request.url().includes('api/ds/query') && request.method() === 'POST') {
         return cb ? cb(request) : true;
+      }
+      return false;
+    });
+  }
+
+  /**
+   * Waits for a data source query data request to be made.
+   *
+   * @param cb optional callback to filter the request. Use this to filter by request body or other request properties
+   */
+  async waitForQueryDataResponse(cb?: (request: Response) => boolean | Promise<boolean>) {
+    return this.ctx.page.waitForResponse((response) => {
+      if (response.url().includes('api/ds/query') && response.request().method() === 'POST') {
+        return cb ? cb(response) : true;
       }
       return false;
     });

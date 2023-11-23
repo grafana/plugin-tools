@@ -12,7 +12,10 @@ test('should load resources and display them as options when clicking on an inpu
   variableEditPage,
   page,
   readProvision,
+  isFeatureToggleEnabled,
 }) => {
+  const myTestVar = await isFeatureToggleEnabled('myTestVar');
+  console.log({ myTestVar, dataConnectionsConsole: await isFeatureToggleEnabled('dataConnectionsConsole') });
   await variableEditPage.mockResourceResponse('schemas', REDSHIFT_SCHEMAS);
   await variableEditPage.mockResourceResponse('tables', REDSHIFT_TABLES);
   const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/redshift.yaml' });
