@@ -14,7 +14,7 @@ This document summarizes good practices for Grafana plugins. This live document 
 
 ## General
 
-- Choose the right plugin type for your use case: panel, data-source or app. See [Plugin types](../introduction/plugin-types-usage.md) for more information.
+- Choose the right plugin type for your use case: panel, data-source or app. See [Plugin types](https://grafana.com/developers/plugin-tools/introduction/plugin-types-usage) for more information.
 - Verify that your data-source or app plugin can be provisioned. See [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more information.
 - Include default dashboards in your data-source or app plugin. See [Bundling of dashboards](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more information.
 - Ensure that the minimum version of Grafana is correct. This should point to the earliest version of Grafana that your plugin fully supports. This is specified as `grafanaDependency` in your plugin.json.
