@@ -1,6 +1,6 @@
 apiVersion: 1
 
 datasources:
-  - name: '{{ pluginName }}'
+  - name: gdev-testdata
     isDefault: false
     type: testdata
