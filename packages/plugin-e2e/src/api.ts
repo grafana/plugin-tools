@@ -30,7 +30,7 @@ export type PluginFixture = {
    * Navigates to a new dashboard page and adds a new panel.
    *
    * Use {@link PanelEditPage.setVisualization} to change the visualization
-   * Use {@link PanelEditPage.datasource.set} to change the
+   * Use {@link PanelEditPage.datasource.set} to change the datasource
    * Use {@link PanelEditPage.getQueryEditorEditorRow} to retrieve the query
    * editor row locator for a given query refId
    */
