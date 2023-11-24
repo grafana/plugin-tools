@@ -39,7 +39,7 @@ export type PluginFixture = {
   /**
    * Isolated {@link PanelEditPage} instance for each test.
    *
-   * Navigates to a new dashboard page and adds a new panel.
+   * Navigates to a new dashboard page, adds a new panel and moves to the panel edit page. 
    *
    * Use {@link PanelEditPage.setVisualization} to change the visualization
    * Use {@link PanelEditPage.datasource.set} to change the datasource
