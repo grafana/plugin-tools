@@ -3,7 +3,7 @@ import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
 import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
-import { PanelEditPage, GrafanaPage, DataSourceConfigPage } from './models';
+import { PanelEditPage, GrafanaPage, DataSourceConfigPage, DashboardPage } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 
 export type PluginOptions = {
@@ -34,7 +34,7 @@ export type PluginFixture = {
    * Use {@link PanelEditPage.getQueryEditorEditorRow} to retrieve the query
    * editor row locator for a given query refId
    */
-  newDashboardPage: GrafanaPage;
+  newDashboardPage: DashboardPage;
 
   /**
    * Isolated {@link PanelEditPage} instance for each test.
