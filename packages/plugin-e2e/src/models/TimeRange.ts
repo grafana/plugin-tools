@@ -9,12 +9,8 @@ export class TimeRange extends GrafanaPage {
 
   async set({ from, to, zone }: TimeRangeArgs) {
     try {
-      await this.ctx.page
-        .getByLabel(this.ctx.selectors.components.PanelEditor.General.content)
-        .locator(`selector=${this.ctx.selectors.components.TimePicker.openButton}`)
-        .click({ force: true });
+      await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.TimePicker.openButton).click();
     } catch (e) {
-      //TODO: investigate this properly and find a better solution
       // seems like in older versions of Grafana the time picker markup is rendered twice
       await this.ctx.page.locator('[aria-controls="TimePickerContent"]').last().click();
     }
