@@ -8,7 +8,7 @@ const toMetricFindOption = (text: string) => ({
   label: text,
 });
 
-test('query type `Metrics` should load regions and namespaces and display them in dropdown', async ({
+test('should load resources and display them as options when clicking on an input', async ({
   variableEditPage,
   page,
   readProvision,
