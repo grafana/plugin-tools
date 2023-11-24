@@ -1,0 +1,19 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: AWS CloudWatch
+    orgId: 1
+
+datasources:
+  - name: AWS CloudWatch
+    type: cloudwatch
+    uid: xpyRJd9Mz
+    editable: true
+    jsonData:
+      authType: keys
+      defaultRegion: us-east-2
+      tracingDatasourceUid: P7DC3E4760CFAC4AK
+    secureJsonData:
+      accessKey: $AWS_ACCESS_KEY_ID
+      secretKey: $AWS_SECRET_ACCESS_KEY
+    version: 1
