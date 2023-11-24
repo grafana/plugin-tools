@@ -16,15 +16,15 @@ Is something missing from the list? [Let us know](https://github.com/grafana/plu
 
 ## General
 
-- Choose the right plugin type for your use case: panel, data-source or app. See [Plugin types](/introduction/plugin-types-usage) for more information.
 - Verify that your data-source or app plugin can be provisioned. See [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more information.
 - Include default dashboards in your data-source or app plugin. See [Bundling of dashboards](https://grafana.com/developers/plugin-tools/introduction/plugin-types-usage#bundling-of-dashboards) for more information.
 - Ensure that the minimum version of Grafana is correct. This should point to the earliest version of Grafana that your plugin fully supports. This is specified as `grafanaDependency` in your plugin.json.
+- [App plugins](/introduction/plugin-types-usage#app-plugins) offer incredible flexibility and additional capabilities than panel or data-source plugins, allowing you to build more tailored monitoring experiences for a given service. Consider creating these instead of simply including default dashboards with a data-source.
 
 ## Panel plugins
 
 - Do not store or use credentials. Panel plugins do not have a way to securely store credentials. If your plugin needs to use credentials, consider using a data-source plugin instead and a panel plugin to display the information returned by the data-source.
-- See how you can add more advanced options to your panel plugin [here](/create-a-plugin/extend-a-plugin/custom-panel-option-editors).
+- If the default panel options are not a good fit for what you're trying to offer users, consider creating custom options. See how [here](/create-a-plugin/extend-a-plugin/custom-panel-option-editors).
 
 ## Data-source plugins
 
@@ -38,6 +38,7 @@ Is something missing from the list? [Let us know](https://github.com/grafana/plu
 - Skip hidden or empty queries. This avoids executing unnecessary or wrong queries. See this [example](https://github.com/grafana/grafana/blob/fd5f66083c91b9759ae7772f99b80c9342b93290/public/app/plugins/datasource/loki/datasource.ts#L1085).
 - Specify a default query. This can be useful for users to discover how queries are written for the plugin. See an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-streaming-backend-websocket/streaming-backend-websocket-plugin/src/datasource.ts#L39-L41).
 - Avoid using `console.log` in your plugin. Such messages are usually for debugging purposes and therefore not suitable to ship to the client.
+-
 
 ### Frontend (only) plugins
 
@@ -64,3 +65,4 @@ Is something missing from the list? [Let us know](https://github.com/grafana/plu
 - Ensure that your app can be enabled and disabled.
 - Specify a default page for your app.
 - To generate dynamic apps, check out [Grafana Scenes](https://grafana.com/developers/scenes/).
+- Consider whether contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/) would help a user appropriately discover your app and continue a given workflow. Additionally, if your app provides context that be used in other apps - creating an extension point would allow these apps to do so, with no further changes required in your app.
