@@ -4,11 +4,12 @@ services:
   grafana:
     image: grafana/${GRAFANA_IMAGE:-grafana-enterprise}:${GRAFANA_VERSION:-main}
     environment:
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-googlesheets-datasource
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-googlesheets-datasource 1.2.4
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ID=1
+      - GOOGLE_JWT_FILE=${GOOGLE_JWT_FILE}
     ports:
       - 3000:3000/tcp
     volumes:

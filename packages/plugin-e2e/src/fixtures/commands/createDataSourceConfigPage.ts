@@ -27,7 +27,7 @@ const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
     await datasourceConfigPage.goto();
     return datasourceConfigPage;
   });
-  deleteDataSource && datasourceConfigPage?.deleteDataSource();
+  deleteDataSource && (await datasourceConfigPage?.deleteDataSource());
 };
 
 export default createDataSourceConfigPage;

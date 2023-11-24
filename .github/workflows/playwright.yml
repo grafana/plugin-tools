@@ -11,6 +11,8 @@ jobs:
       fail-fast: false
       matrix:
         GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
+        GOOGLE_SHEETS_VERSION: ['1.2.4', '1.2.0']
+    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -31,7 +33,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start Grafana
-        run: docker run --rm -d -p 3000:3000 --name=grafana --env GF_INSTALL_PLUGINS=grafana-googlesheets-datasource grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+        run: docker run --rm -d -p 3000:3000 --name=grafana --volume ./packages/plugin-e2e/provisioning:/etc/grafana/provisioning --env GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} --env "GF_INSTALL_PLUGINS=grafana-googlesheets-datasource ${{matrix.GOOGLE_SHEETS_VERSION}}" grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
 
       - name: Run Playwright tests
         run: npm run playwright:test --w @grafana/plugin-e2e
@@ -41,6 +43,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report-${{ matrix.GRAFANA_VERSION }}
+          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}-GoogleSheets${{ matrix.GOOGLE_SHEETS_VERSION }}
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
