@@ -1,10 +1,6 @@
 import { expect, test } from '../../src';
 import { ProvisionFile } from '../../src/types';
 
-export type RedshiftDatasourceConfig = {
-  name: string;
-};
-
 test('should return data and not display panel error when a valid query is provided', async ({
   panelEditPage,
   page,
