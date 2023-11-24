@@ -4,16 +4,16 @@ import login from './commands/login';
 import createDataSourceConfigPage from './commands/createDataSourceConfigPage';
 import panelEditPage from './panelEditPage';
 import createDataSource from './commands/createDataSource';
-import emptyDashboardPage from './emptyDashboardPage';
 import readProvision from './commands/readProvision';
+import newDashboardPage from './newDashboardPage';
 
 export default {
   selectors,
   grafanaVersion,
   login,
   createDataSourceConfigPage,
+  newDashboardPage,
   panelEditPage,
   createDataSource,
-  emptyDashboardPage,
   readProvision,
 };

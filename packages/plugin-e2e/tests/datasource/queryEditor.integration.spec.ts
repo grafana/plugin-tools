@@ -37,7 +37,7 @@ test('should return an error and display panel error when an invalid query is pr
   await queryEditorRow.getByText('Enter SpreadsheetID').click();
   await page.keyboard.insertText('1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8');
   await page.keyboard.press('Enter');
-  await page.getByPlaceholder('ie: Class Data!A2:E').fill('invalid range');
+  await page.getByPlaceholder('Class Data!A2:E').fill('invalid range');
   await expect(panelEditPage.refreshPanel()).not.toBeOK();
   await expect(panelEditPage).toHavePanelError();
 });

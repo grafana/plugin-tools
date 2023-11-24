@@ -19,7 +19,8 @@ export class DashboardPage extends GrafanaPage {
   }
 
   async goto(opts?: GotoDashboardArgs) {
-    let url = this.ctx.selectors.pages.Dashboard.url(opts?.uid ?? this.dashboardUid ?? '');
+    const uid = opts?.uid || this.dashboardUid;
+    let url = uid ? this.ctx.selectors.pages.Dashboard.url(uid) : this.ctx.selectors.pages.AddDashboard.url;
     if (opts?.queryParams) {
       url += `?${opts.queryParams.toString()}`;
     }

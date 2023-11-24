@@ -3,7 +3,7 @@ import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
 import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
-import { PanelEditPage, GrafanaPage, DataSourceConfigPage, EmptyDashboardPage } from './models';
+import { PanelEditPage, GrafanaPage, DataSourceConfigPage } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 
 export type PluginOptions = {
@@ -25,11 +25,16 @@ export type PluginFixture = {
   selectors: E2ESelectors;
 
   /**
-   * Isolated {@link EmptyDashboardPage} instance for each test.
+   * Isolated {@link DashboardPage} instance for each test.
    *
-   * Navigates to a new dashboard page.
+   * Navigates to a new dashboard page and adds a new panel.
+   *
+   * Use {@link PanelEditPage.setVisualization} to change the visualization
+   * Use {@link PanelEditPage.datasource.set} to change the
+   * Use {@link PanelEditPage.getQueryEditorEditorRow} to retrieve the query
+   * editor row locator for a given query refId
    */
-  emptyDashboardPage: EmptyDashboardPage;
+  newDashboardPage: GrafanaPage;
 
   /**
    * Isolated {@link PanelEditPage} instance for each test.

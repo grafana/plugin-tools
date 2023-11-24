@@ -5,8 +5,8 @@ import { PlaywrightCombinedArgs } from './types';
 
 type PanelEditPageFixture = TestFixture<PanelEditPage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
-const panelEditPage: PanelEditPageFixture = async ({ emptyDashboardPage }, use) => {
-  const panelEditPage = await emptyDashboardPage.addPanel();
+const panelEditPage: PanelEditPageFixture = async ({ newDashboardPage }, use) => {
+  const panelEditPage = await newDashboardPage.addPanel();
   await use(panelEditPage);
 };
 
