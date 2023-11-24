@@ -2,7 +2,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "declaration": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "module": "nodenext"
   },
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.base.json",

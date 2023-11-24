@@ -19,6 +19,7 @@
     "access": "public"
   },
   "scripts": {
+    "pack": "npm run build && npm pack",
     "clean": "rm -rf ./dist",
     "build": "tsc --project tsconfig.json",
     "dev": "nodemon --exec 'tsc'",
