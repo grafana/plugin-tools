@@ -18,7 +18,7 @@ keywords:
 
 # Add logs, metrics and traces for backend plugins
 
-Guidance, conventions and best practices for adding logs, metrics and traces for backend plugins to make it easier to diagnose and resolve issues for both plugin developers and Grafana operators.
+Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) for backend plugins makes it easier to diagnose and resolve issues for both plugin developers and Grafana operators. This document provides guidance, conventions and best practices to help you effectively instrument your plugins, as well as how to access this data when the plugin is installed.
 
 ## Logs
 
@@ -188,7 +188,7 @@ If log messages or key-value pairs originate from user input they should be vali
 
 :::note
 
-Incoming requests of high frequency are normally more common for the `QueryData` endpoint, since--for example--the nature of a dashboard generates a request per panel or query.
+Incoming requests of high frequency are normally more common for the `QueryData` endpoint, since - for example - the nature of a dashboard generates a request per panel or query.
 
 :::
 
@@ -226,13 +226,13 @@ Consider using metrics to provide real-time insight into the state of resources.
 
 See [Prometheus metric types](https://prometheus.io/docs/concepts/metric_types/) for a list and description of the different metric types you can use and when to use them.
 
-There are many possible types of metrics that can be tracked. One popular method for defining metrics is the [RED method](https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/).
+There are many possible metrics that can be tracked. One popular method for defining which metrics to monitor is the [RED method](https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/).
 
 ### Implement metrics in your plugin
 
-[Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) uses the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang). Any custom metric registered with the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) will be picked up by the SDK and exposed through the [Collect metrics capability](../../introduction/backend.md#collect-metrics).
+The [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) uses the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang). Any custom metric registered with the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) will be picked up by the SDK and exposed through the [Collect metrics capability](../../introduction/backend.md#collect-metrics).
 
-For convenience, it's recommended to use the [promauto package](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus/promauto) when creating custom metrics since it automatically registers the metric in the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) and expose them to Grafana.
+For convenience, it's recommended to use the [promauto package](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus/promauto) when creating custom metrics since it automatically registers the metric in the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) and exposes them to Grafana.
 
 **Example:**
 
@@ -275,9 +275,9 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 #### Label values and high cardinality
 
-Be careful with what label values you add. Using/allowing too many label values could result in high cardinality problems.
+Be careful with what label values you add. Using or allowing too many label values could result in high cardinality problems.
 
-If label values originate from user input they should be validated and cleaned. Use `metricutil.SanitizeLabelName("<label value>")` from pkg/infra/metrics/metricutil package to sanitize label names. Very important to only allow a predefined set of labels to minimize the risk of high cardinality problems.
+If label values originate from user input they should be validated and cleaned. Use `metricutil.SanitizeLabelName("<label value>")` from pkg/infra/metrics/metricutil package to sanitize label names. It is very important to only allow a predefined set of labels to minimize the risk of high cardinality problems.
 
 Be careful to not expose any sensitive information in label values (secrets, credentials, and so on).
 
@@ -387,7 +387,7 @@ When OpenTelemetry tracing is enabled on the main Grafana instance and tracing i
 
 ### Automatic instrumentation by the SDK
 
-The SDK automates some instrumentation to ease developer experience.
+The SDK automates some instrumentation to ease developer experience. This section explores the default tracing added to gRPC calls and outgoing HTTP requests. 
 
 #### Tracing gRPC calls
 
