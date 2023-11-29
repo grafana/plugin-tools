@@ -2,12 +2,6 @@ import { expect, test } from '../../../src';
 import { ProvisionFile } from '../../../src/types';
 import { REDSHIFT_SCHEMAS, REDSHIFT_TABLES } from '../mocks/resource';
 
-const toMetricFindOption = (text: string) => ({
-  text,
-  value: text,
-  label: text,
-});
-
 test('should load resources and display them as options when clicking on an input', async ({
   variableEditPage,
   page,
