@@ -38,7 +38,7 @@ export default defineConfig<PluginOptions>({
       name: 'authenticate',
       testMatch: [/.*auth\.setup\.ts/],
     },
-    // 2. Run all tests in parallel with Chrome.
+    // 2. Run all tests in parallel using Chrome.
     {
       name: 'chromium',
       use: {
