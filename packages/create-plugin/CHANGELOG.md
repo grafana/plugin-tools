@@ -1,3 +1,15 @@
+# v2.7.0 (Mon Dec 04 2023)
+
+#### 🚀 Enhancement
+
+- Update github release workflow to use our action instead of custom code [#544](https://github.com/grafana/plugin-tools/pull/544) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v2.6.0 (Tue Nov 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:

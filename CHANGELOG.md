@@ -1,3 +1,27 @@
+# (Mon Dec 04 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.7.0`
+  - Update github release workflow to use our action instead of custom code [#544](https://github.com/grafana/plugin-tools/pull/544) ([@academo](https://github.com/academo))
+
+#### ⚠️ Pushed to `main`
+
+- add provisioning files ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump @auto-it/first-time-contributor from 10.46.0 to 11.0.4 [#513](https://github.com/grafana/plugin-tools/pull/513) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps): Bump @types/semver from 7.5.2 to 7.5.4 [#511](https://github.com/grafana/plugin-tools/pull/511) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Tue Nov 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:
