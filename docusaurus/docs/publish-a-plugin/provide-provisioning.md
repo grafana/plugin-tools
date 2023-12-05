@@ -10,7 +10,7 @@ keywords:
 sidebar_position: 5
 ---
 
-# Plugin provisioning
+# Provide a test environment
 
 Developers often ask us how long it takes for a plugin to be reviewed for publishing to the Grafana [plugin catalog](https://grafana.com/plugins). Although we [can't provide estimates](https://grafana.com/developers/plugin-tools/publish-a-plugin/publish-a-plugin#how-long-does-it-take-to-review-a-submission), we are always looking for ways to reduce cycle times.
 
