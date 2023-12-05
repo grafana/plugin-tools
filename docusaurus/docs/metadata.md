@@ -82,7 +82,8 @@ Grafana Enterprise specific features.
 
 ## iam
 
-Identity and Access Management section. Grafana will read this section and initialize a service account for the plugin, with a tailored set of RBAC permissions.
+Identity and Access Management section. Grafana will read this section and initialize a service account for the plugin, with a tailored set of
+[Grafana RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes).
 Then its bearer token will be share to the plugin backend using the `GF_PLUGIN_APP_CLIENT_SECRET` environment variable.
 
 Requires Grafana >= 10.3.0. Currently behind a feature toggle `externalServiceAccounts`.
@@ -93,9 +94,7 @@ Requires Grafana >= 10.3.0. Currently behind a feature toggle `externalServiceAc
 | ------------- | ----------------------- | -------- | ------------------------------------------------------ |
 | `permissions` | [object](#permission)[] | No       | RBAC permissions the plugin requires to query Grafana. |
 
-### Permission
-
-[Grafana RBAC permission](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes) required by the plugin to query the Grafana API.
+### permissions
 
 #### Properties
 
