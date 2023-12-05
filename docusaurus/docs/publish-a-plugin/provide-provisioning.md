@@ -16,7 +16,7 @@ Developers often ask us how long it takes for a plugin to be reviewed for publis
 
 By far the most time consuming aspect of a plugin's review is the creation of a suitable test environment so we can verify its behavior. This step often involves a number of back-and-forth conversations between the plugin developer and the review team.
 
-To drastically improve the review time, developers can provide this themselves by [_provisioning_](https://grafana.com/docs/grafana/latest/administration/provisioning/#provision-grafana) their plugin. Provisioning refers to the process of preparing and configuring a test environment within the plugin's [Docker development environment]((https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment).
+To drastically improve the review time, developers can provide this themselves by [_provisioning_](https://grafana.com/docs/grafana/latest/administration/provisioning/#provision-grafana) their plugin. Provisioning refers to the process of preparing and configuring a test environment within the plugin's [Docker development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment).
 
 ## Why should plugin developers care about this?
 
