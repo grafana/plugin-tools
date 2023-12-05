@@ -1,5 +1,5 @@
 ---
-id: provide-provisioning
+id: provide-test-environment
 title: Provide a test environment
 description: How to add provisioning to your plugin to speed up your plugin review process.
 keywords:
@@ -31,7 +31,7 @@ There are several benefits to provisioning:
 
 Grafana can be configured to have resources installed and enabled through a mechanism known as [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#provision-grafana), where resources are configured in a YAML file under a `/provisioning` directory.
 
-Since create-plugin v2.7.0, we generate provisioning capabilities for all plugin types (apps, scenes-apps, datasources, panels), and to include a sample dashboard as part of create-plugin.
+Since create-plugin v2.8.0, we generate provisioning capabilities for all plugin types (apps, scenes-apps, datasources, panels), and to include a sample dashboard as part of create-plugin.
 
 ## What do plugin developers need to do?
 
