@@ -110,7 +110,7 @@ cd ./my-plugin
 npx @grafana/create-plugin@latest provisioning
 ```
 
-For more information see our [documentation](https://grafana.com/developers/plugin-tools/publish-a-plugin/develop-a-plugin/provide-test-environment).
+For more information see our [documentation](https://grafana.com/developers/plugin-tools/publish-a-plugin/provide-test-environment).
 
 ---
 
