@@ -29,7 +29,7 @@ There are several benefits to provisioning:
 
 ## Mechanism to provide a test environment
 
-Grafana can be configured to have resources installed and enabled through a mechanism known as provisioning, where resources are configured in a YAML file under a `/provisioning` directory.
+Grafana can be configured to have resources installed and enabled through a mechanism known as [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#provision-grafana), where resources are configured in a YAML file under a `/provisioning` directory.
 
 Since create-plugin v2.7.0, we generate provisioning capabilities for all plugin types (apps, scenes-apps, datasources, panels), and to include a sample dashboard as part of create-plugin.
 
