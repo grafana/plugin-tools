@@ -230,6 +230,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ludovicm67",
+      "name": "Ludovic Muller",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9420561?v=4",
+      "profile": "https://ludovic-muller.fr/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
