@@ -1,3 +1,15 @@
+# v2.9.0 (Fri Dec 08 2023)
+
+#### 🚀 Enhancement
+
+- Update the scenes-app template to use the latest scenes library and fix some template code style errors [#573](https://github.com/grafana/plugin-tools/pull/573) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v2.8.1 (Fri Dec 08 2023)
 
 :tada: This release contains work from a new contributor! :tada:

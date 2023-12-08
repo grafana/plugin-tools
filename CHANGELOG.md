@@ -1,5 +1,18 @@
 # (Fri Dec 08 2023)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.9.0`
+  - Update the scenes-app template to use the latest scenes library and fix some template code style errors [#573](https://github.com/grafana/plugin-tools/pull/573) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Fri Dec 08 2023)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for all your work!
