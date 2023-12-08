@@ -1,3 +1,20 @@
+# (Fri Dec 08 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.8.1`
+  - Templates: import DataQuery from `@grafana/schema` instead of `@grafana/data` [#549](https://github.com/grafana/plugin-tools/pull/549) ([@ludovicm67](https://github.com/ludovicm67))
+
+#### Authors: 1
+
+- Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67))
+
+---
+
 # (Thu Dec 07 2023)
 
 #### 🚀 Enhancement
