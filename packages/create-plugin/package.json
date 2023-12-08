@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "2.8.1",
+  "version": "2.9.0",
   "main": "index.js",
   "repository": {
     "directory": "packages/create-plugin",
