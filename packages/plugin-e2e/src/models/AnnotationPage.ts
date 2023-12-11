@@ -21,7 +21,7 @@ export class AnnotationPage extends GrafanaPage {
       const ctaSelector = this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTAV2);
       await ctaSelector.waitFor();
       await ctaSelector.click();
-    } catch (error) {
+    } catch (err: unknown) {
       this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTA);
     }
 
