@@ -16,7 +16,7 @@ const toDisplayPreviews = async (variableEditPage: VariableEditPage, previewText
     return {
       pass: true,
       actual: false,
-      message,
+      message: () => message,
     };
   } catch (err: unknown) {
     return {
