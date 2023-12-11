@@ -16,15 +16,7 @@ export class AnnotationPage extends GrafanaPage {
 
   async clickAddNew() {
     const { Dashboard } = this.ctx.selectors.pages;
-    //TODO: At some point this UI changed. Rather than catching the error, we should find out in which version that happened and handle versions differently
-    try {
-      const ctaSelector = this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTAV2);
-      await ctaSelector.waitFor();
-      await ctaSelector.click();
-    } catch (err: unknown) {
-      this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTA);
-    }
-
+    this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTAV2).click();
     return new AnnotationEditPage(this.ctx, this.expect);
   }
 }

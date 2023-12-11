@@ -1,6 +1,6 @@
 import { test, expect } from '../../../src';
 import { ProvisionFile } from '../../../src/types';
-import { REDSHIFT_SCHEMAS, REDSHIFT_TABLES } from '../mocks/resource';
+import { REDSHIFT_SCHEMAS } from '../mocks/resource';
 
 test('should load resources and display them as options when clicking on an input', async ({
   annotationEditPage,
