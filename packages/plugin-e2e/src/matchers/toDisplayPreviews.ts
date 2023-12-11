@@ -5,7 +5,7 @@ import { VariableEditPage } from '../models';
 const toDisplayPreviews = async (variableEditPage: VariableEditPage, previewTexts: Array<string | RegExp>) => {
   let pass = false;
   let actual;
-  let message: any = `To find preview of values: ${previewTexts.join(', ')}}`;
+  let message = `To find preview of values: ${previewTexts.join(', ')}}`;
 
   try {
     await expect(
