@@ -77,14 +77,14 @@ jobs:
       - name: Generate plugin
         run: npm exec nx run @grafana/create-plugin:${{ matrix.cmd }}
 
-      # - name: Restore cached generated plugin dependencies
-      #   id: cache-generated-deps-restore
-      #   uses: actions/cache/restore@v3
-      #   with:
-      #     path: |
-      #       ./packages/create-plugin/generated/package-lock.json
-      #       ./packages/create-plugin/generated/node_modules
-      #     key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+      - name: Restore cached generated plugin dependencies
+        id: cache-generated-deps-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ./packages/create-plugin/generated/package-lock.json
+            ./packages/create-plugin/generated/node_modules
+          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
 
       - name: Install generated plugin dependencies
         run: npm install --prefer-offline --no-audit
