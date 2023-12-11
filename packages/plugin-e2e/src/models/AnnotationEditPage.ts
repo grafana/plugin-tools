@@ -17,8 +17,4 @@ export class AnnotationEditPage extends GrafanaPage {
     await this.ctx.page.getByRole('button', { name: 'TEST' }).click();
     return responsePromise;
   }
-
-  async expectRunQueryResultToContainText(text: string) {
-    await this.expect(this.ctx.page.getByText(text)).toBeVisible();
-  }
 }
