@@ -48,7 +48,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2388950?v=4",
       "profile": "https://github.com/sunker",
       "contributions": [
-        "code"
+        "code",
+        "infra"
       ]
     },
     {
@@ -168,7 +169,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/5464991?v=4",
       "profile": "https://github.com/sd2k",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -225,6 +227,15 @@
       "name": "Joan López de la Franca Beltran",
       "avatar_url": "https://avatars.githubusercontent.com/u/5459617?v=4",
       "profile": "https://github.com/joanlopez",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ludovicm67",
+      "name": "Ludovic Muller",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9420561?v=4",
+      "profile": "https://ludovic-muller.fr/",
       "contributions": [
         "code"
       ]

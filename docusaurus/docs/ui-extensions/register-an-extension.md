@@ -225,3 +225,4 @@ An _extension point_ is a location within the Grafana UI where a plugin can inse
 - `grafana/alerting/instance/action`: extension point for actions in alert instance table in alerting
 - `grafana/dashboard/panel/menu`: extension point for all panel dropdown menus in dashboards
 - `grafana/explore/toolbar/action`: extension point for toolbar actions in explore
+- `grafana/user/profile/tab`: extension point for a tab of content on the `/profile` page
