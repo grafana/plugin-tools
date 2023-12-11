@@ -1,3 +1,4 @@
+import annotationEditPage from './annotationEditPage';
 import grafanaVersion from './grafanaVersion';
 import selectors from './selectors';
 import login from './commands/login';
@@ -16,6 +17,7 @@ export default {
   newDashboardPage,
   panelEditPage,
   variableEditPage,
+  annotationEditPage,
   createDataSource,
   readProvision,
 };
