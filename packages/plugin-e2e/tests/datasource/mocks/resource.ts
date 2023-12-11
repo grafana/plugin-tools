@@ -4,3 +4,6 @@ export const GOOGLE_SHEETS_SPREADSHEETS = {
     sheet2: 'Google Sheets Datasource - Average Temperature',
   },
 };
+
+export const REDSHIFT_SCHEMAS = ['public', 'test'];
+export const REDSHIFT_TABLES = ['custom-namespace1', 'custom-namespace2'];

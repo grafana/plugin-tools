@@ -9,7 +9,7 @@ test('should list spreadsheets when clicking on spreadsheet segment', async ({
 }) => {
   const sheetsDataSource = await readProvision<ProvisionFile>({
     filePath: 'datasources/google-sheets-datasource-jwt.yaml',
-  }).then((provision) => provision.datasources[0]);
+  }).then((provision) => provision.datasources?.[0]!);
   await panelEditPage.datasource.set(sheetsDataSource.name!);
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await panelEditPage.mockResourceResponse('spreadsheets', GOOGLE_SHEETS_SPREADSHEETS);
@@ -19,10 +19,8 @@ test('should list spreadsheets when clicking on spreadsheet segment', async ({
 });
 
 test('should set correct cache time on query passed to the backend', async ({ panelEditPage, page, readProvision }) => {
-  const sheetsDataSource = await readProvision<ProvisionFile>({
-    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
-  }).then((provision) => provision.datasources[0]);
-  await panelEditPage.datasource.set(sheetsDataSource.name!);
+  const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/google-sheets-datasource-jwt.yaml' });
+  await panelEditPage.datasource.set(provision.datasources?.[0]!.name!);
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await panelEditPage.mockResourceResponse('spreadsheets', GOOGLE_SHEETS_SPREADSHEETS);
   await queryEditorRow.getByText('5m', { exact: true }).click();

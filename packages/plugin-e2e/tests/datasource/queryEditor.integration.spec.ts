@@ -6,10 +6,8 @@ test('should return data and not display panel error when a valid query is provi
   page,
   readProvision,
 }) => {
-  const sheetsDataSource = await readProvision<ProvisionFile>({
-    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
-  }).then((provision) => provision.datasources[0]);
-  await panelEditPage.datasource.set(sheetsDataSource.name!);
+  const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/google-sheets-datasource-jwt.yaml' });
+  await panelEditPage.datasource.set(provision.datasources?.[0]!.name!);
   await panelEditPage.timeRange.set({ from: '2019-01-11', to: '2019-12-15' });
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await queryEditorRow.getByText('Enter SpreadsheetID').click();
@@ -24,10 +22,8 @@ test('should return an error and display panel error when an invalid query is pr
   page,
   readProvision,
 }) => {
-  const sheetsDataSource = await readProvision<ProvisionFile>({
-    filePath: 'datasources/google-sheets-datasource-jwt.yaml',
-  }).then((provision) => provision.datasources[0]);
-  await panelEditPage.datasource.set(sheetsDataSource.name!);
+  const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/google-sheets-datasource-jwt.yaml' });
+  await panelEditPage.datasource.set(provision.datasources?.[0]!.name!);
   await panelEditPage.timeRange.set({ from: '2019-01-11', to: '2019-12-15' });
   const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
   await queryEditorRow.getByText('Enter SpreadsheetID').click();

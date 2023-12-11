@@ -43,6 +43,10 @@ export abstract class GrafanaPage {
     await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resource}/${path}`, async (route) => {
       await route.fulfill({ json, status });
     });
+    // some data sources use the backendSrv directly, and then the path may be different
+    await this.ctx.page.route(`/api/datasources/*/resources/${path}`, async (route) => {
+      await route.fulfill({ json, status });
+    });
   }
 
   /**
