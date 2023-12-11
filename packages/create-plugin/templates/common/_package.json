@@ -27,12 +27,12 @@
     "@swc/helpers": "^0.5.0",
     "@swc/jest": "^0.2.26",
     "@testing-library/jest-dom": "6.1.4",
-    "@types/testing-library__jest-dom": "5.14.8",
     "@testing-library/react": "14.0.0",
     "@types/jest": "^29.5.0",
     "@types/lodash": "^4.14.194",
     "@types/node": "^20.8.7",{{#if isAppType}}
     "@types/react-router-dom": "^5.3.3",{{/if}}
+    "@types/testing-library__jest-dom": "5.14.8",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "eslint-plugin-deprecation": "^2.0.0",
