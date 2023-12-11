@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@auto-it/all-contributors": "^10.46.0",
-    "@auto-it/first-time-contributor": "^10.46.0",
+    "@auto-it/first-time-contributor": "^11.0.4",
     "@auto-it/omit-commits": "^10.46.0",
     "@auto-it/slack": "^10.46.0",
     "@grafana/eslint-config": "^6.0.1",
@@ -39,7 +39,6 @@
     "nx": "16.2.1",
     "nx-cloud": "^16.3.0",
     "prettier": "2.5.1",
-    "tsc-watch": "^4.5.0",
     "typescript": "^5.2.2"
   },
   "engines": {
@@ -48,7 +47,8 @@
   "workspaces": [
     "packages/create-plugin",
     "packages/sign-plugin",
-    "docusaurus/website"
+    "docusaurus/website",
+    "packages/plugin-e2e"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [

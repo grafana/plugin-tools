@@ -27,8 +27,8 @@ This documentation discusses plugin configuration, provisioning, and usage for p
 Grafana plugin development allows for many options depending on the type of user experience you want to create. Whatever your need, there's a supported plugin type for your intended use:
 
 - **Panel plugin** - a new way of visualizing data.
-- **Data-source plugin** - a connection to a new database or other source of data,
-- **App plugin** - an integrated out-of-the-box experience, or
+- **Data-source plugin** - a connection to a new database or other source of data.
+- **App plugin** - an integrated out-of-the-box experience.
 
 :::note
 

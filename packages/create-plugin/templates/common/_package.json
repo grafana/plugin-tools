@@ -61,9 +61,9 @@
     "@emotion/css": "11.10.6",
     "@grafana/data": "{{ grafanaVersion }}",
     "@grafana/runtime": "{{ grafanaVersion }}",
-    "@grafana/ui": "{{ grafanaVersion }}",{{#if_eq pluginType "scenesapp"}}
-    "@grafana/schema": "{{ grafanaVersion }}",
-    "@grafana/scenes": "0.27.0",{{/if_eq}}
+    "@grafana/ui": "{{ grafanaVersion }}",
+    "@grafana/schema": "{{ grafanaVersion }}",{{#if_eq pluginType "scenesapp"}}
+    "@grafana/scenes": "^1.28.0",{{/if_eq}}
     "react": "18.2.0",
     "react-dom": "18.2.0",{{#if isAppType}}
     "react-router-dom": "5.3.3",

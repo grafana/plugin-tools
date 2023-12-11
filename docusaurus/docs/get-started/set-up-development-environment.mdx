@@ -58,7 +58,7 @@ To test a plugin across different versions of Grafana, set an environment variab
 
 The default Docker image in the plugin tool is `grafana-enterprise`. If you want to override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument like so:
 
-```yaml
+```yaml title="docker-compose.yaml"
 version: '3.7'
 
 services:

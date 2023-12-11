@@ -33,7 +33,7 @@ Finally, consider if there is any information from the current view that should 
 
 Use the `getPluginLinkExtensions` method in `@grafana/runtime` to create an extension point within your plugin.
 
-:::warning
+:::danger
 
 When you create an extension point in a plugin, you create a public interface for other plugins to interact with. Changes to the extension point ID or its context could break any plugin that attempts to register a link inside your plugin.
 
@@ -43,7 +43,7 @@ The `getPluginLinkExtensions` method takes an object consisting of the `extensio
 
 In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
 
-```typescript
+```tsx
 import { getPluginLinkExtensions } from '@grafana/runtime';
 import { LinkButton } from '@grafana/ui';
 
@@ -86,6 +86,46 @@ Each extension link has either a `path` or an `onClick` property defined. There'
 The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin adding the extension wants to navigate the user away from the current view into their app, then they can choose to define a path.
 
 If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
+
+### Example: create an extension point for displaying components
+
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
+
+Component type extensions are simple React components, which gives much more freedom on what they are able to do. In case you would like to make some part of your plugin extendable by other plugins, you can create a component-type extension point using `getPluginComponentExtensions()`. Any contextual information can be shared with the extension components using the `context={}` prop (see the example below).
+
+```tsx title="src/components/Toolbar.tsx"
+import { getPluginComponentExtensions } from '@grafana/runtime';
+
+export const Toolbar = () => {
+  const { extensions } = getPluginComponentExtensions({ extensionPointId: '<extension-point-id>' });
+  const version = '1.0.0'; // Let's share this with the extensions
+
+  return (
+    <div>
+      <div className="title">Title</div>
+      <div className="extensions">
+        {/* Loop through the available extensions */}
+        {extensions.map((extension) => {
+          const Component = extension.component as React.ComponentType<{
+            context: { version: string };
+          }>;
+
+          // Render extension component and pass contextual information (version)
+          return (
+            <div key={extension.id}>
+              <Component context={{ version }} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+```
 
 ## Additional options
 

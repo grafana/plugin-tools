@@ -2,7 +2,7 @@
 id: build-a-logs-data-source-plugin
 title: Build a logs data source plugin
 sidebar_position: 20
-description: How to build a logs data source plugin.
+description: Learn how to build a logs data source plugin.
 keywords:
   - grafana
   - plugins
@@ -11,7 +11,6 @@ keywords:
   - logs data source
   - datasource
 ---
-
 
 # Build a logs data source plugin
 
@@ -34,7 +33,7 @@ When these steps are done, then you can improve the user experience with one or 
 
 Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../metadata.md) file.
 
-```json
+```json title="src/plugin.json"
 {
   "logs": true
 }
@@ -46,13 +45,13 @@ Tell Grafana that your data source plugin can return log data, by adding `"logs"
 
 The log data frame should include following fields:
 
-| Field name     | Field type                                      | Required field | Description                                                                                                                                                                                                                                   |
-| -------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **timestamp**  | `time`                                          | required       | Timestamp, non-nullable.                                                                                                                                                                                                                      |
-| **body**       | `string`                                        | required       | Content of the log line, non-nullable.                                                                                                                                                                                                        |
-| **severity**   | `string`                                        | optional       | Severity/level of the log line. If no severity field is found, consumers/client will decide the log level. More information about log levels, refer to [Logs integration](https://grafana.com/docs/grafana/latest/explore/logs-integration/). |
-| **id**         | `string`                                        | optional       | Unique identifier of the log line.                                                                                                                                                                                                            |
-| **attributes** | `json raw message` (Go) or `other` (TypeScript) | optional       | Additional attributes of the log line. Other systems may refer to this with different names, such as "Labels" in Loki. Represent its value as Record<string,any> type in JavaScript.                                                          |
+| Field name    | Field type                                      | Required field | Description                                                                                                                                                                                                                                   |
+| ------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **timestamp** | `time`                                          | required       | Timestamp, non-nullable.                                                                                                                                                                                                                      |
+| **body**      | `string`                                        | required       | Content of the log line, non-nullable.                                                                                                                                                                                                        |
+| **severity**  | `string`                                        | optional       | Severity/level of the log line. If no severity field is found, consumers/client will decide the log level. More information about log levels, refer to [Logs integration](https://grafana.com/docs/grafana/latest/explore/logs-integration/). |
+| **id**        | `string`                                        | optional       | Unique identifier of the log line.                                                                                                                                                                                                            |
+| **labels**    | `json raw message` (Go) or `other` (TypeScript) | optional       | Additional labels of the log line. Other systems may refer to this with different names, such as "attributes". Represent its value as `Record<string,any>` type in JavaScript.                                                                |
 
 Logs data frame's `type` needs to be set to `type: DataFrameType.LogLines` in data frame's meta.
 
@@ -65,7 +64,7 @@ frame := data.NewFrame(
   data.NewField("body", nil, []string{"message one", "message two", "message three"}),
   data.NewField("severity", nil, []string{"critical", "error", "warning"}),
   data.NewField("id", nil, []string{"xxx-001", "xyz-002", "111-003"}),
-  data.NewField("attributes", nil, []json.RawMessage{[]byte(`{}`), []byte(`{"hello":"world"}`), []byte(`{"hello":"world", "foo": 123.45, "bar" :["yellow","red"], "baz" : { "name": "alice" }}`)}),
+  data.NewField("labels", nil, []json.RawMessage{[]byte(`{}`), []byte(`{"hello":"world"}`), []byte(`{"hello":"world", "foo": 123.45, "bar" :["yellow","red"], "baz" : { "name": "alice" }}`)}),
 )
 
 frame.SetMeta(&data.FrameMeta{
@@ -85,7 +84,7 @@ const result = createDataFrame({
     { name: 'severity', type: FieldType.string, values: ['critical', 'error', 'warning'] },
     { name: 'id', type: FieldType.string, values: ['xxx-001', 'xyz-002', '111-003'] },
     {
-      name: 'attributes',
+      name: 'labels',
       type: FieldType.other,
       values: [{}, { hello: 'world' }, { hello: 'world', foo: 123.45, bar: ['yellow', 'red'], baz: { name: 'alice' } }],
     },
@@ -135,7 +134,7 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute. 
+This feature must be implemented in the data frame as a meta attribute.
 
 :::
 
@@ -178,7 +177,7 @@ This feature must be implemented in the data frame as a meta attribute, or in th
 
 - **Count of received logs vs limit** - Displays the count of received logs compared to the specified limit. Data frames should set a limit with a meta attribute for the number of requested log lines.
 - **Error**: Displays possible errors in your log results. Data frames should to have an `error` in the `meta` attribute.
-- **Common labels**: Displays attributes present in the `attributes` data frame field that are the same for all displayed log lines. This feature is supported for data sources that produce log data frames with an attributes field. Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+- **Common labels**: Displays labels present in the `labels` data frame field that are the same for all displayed log lines. This feature is supported for data sources that produce log data frames with an labels field. Refer to [Logs data frame format](#logs-data-frame-format) for more information.
 
 **Example in Go:**
 

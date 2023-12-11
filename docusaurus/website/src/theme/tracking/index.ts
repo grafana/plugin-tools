@@ -30,8 +30,8 @@ export type RudderStackTrackingConfig = {
   sdkUrl: string;
 };
 
-export function startTracking(config: RudderStackTrackingConfig) {
-  if (isRudderstackSetup(config)) {
+export function startTracking(config: RudderStackTrackingConfig, shouldTrack: boolean) {
+  if (isRudderstackSetup(config) && shouldTrack) {
     const { writeKey, url, configUrl } = config;
 
     const initRudderstack = async () => {

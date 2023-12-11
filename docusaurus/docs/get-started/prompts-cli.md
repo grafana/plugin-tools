@@ -64,48 +64,48 @@ Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflow
 
 ## CLI commands
 
-Use the CLI for essential tasks of plugin development, employing `npm`, `pnpm`, or `yarn` (for example, `npm run build`).
+Use the CLI for essential tasks of plugin development, substituting `npm` for `pnpm`, or `yarn` based on your choice of package manager.
 
-### `run build`
+### `npm run build`
 
 Compiles and bundles the project using Webpack in production mode.
 
-### `run dev`
+### `npm run dev`
 
 Runs Webpack in watch mode for development, continually monitoring for changes.
 
-### `run e2e`
+### `npm run e2e`
 
 Runs Grafana end-to-end tests using Cypress.
 
-### `run e2e:update`
+### `npm run e2e:update`
 
 Runs Grafana end-to-end tests and tests any test screenshots, using Cypress.
 
-### `run lint`
+### `npm run lint`
 
 Lints the frontend codebase using ESLint with the `.gitignore` file to ignore certain files. Results are cached locally to speed up future linting tasks.
 
-### `run lint:fix`
+### `npm run lint:fix`
 
 Lints the frontend codebase using ESLint and automatically fixes detected issues.
 
-### `run typecheck`
+### `npm run typecheck`
 
 Performs a type-checking process on the frontend code using TypeScript.
 
-### `run server`
+### `npm run server`
 
 Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
 
-### `run sign`
+### `npm run sign`
 
 Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
 
-### `run test`
+### `npm run test`
 
 Executes frontend tests, running only the tests that have changed, and enables a watch mode for ongoing testing.
 
-### `run test:ci`
+### `npm run test:ci`
 
 Runs frontend tests for CI, ensuring it passes even with no tests, and utilizes a maximum of four workers for parallel execution.

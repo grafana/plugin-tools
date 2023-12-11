@@ -1,6 +1,9 @@
 {
-    "position": 2,
-    "label": "Extend a plugin",
-    "collapsible": true,
-    "collapsed": true
-  }
+  "position": 2,
+  "label": "Extend a plugin",
+  "customProps": {
+    "description": "Guides for extending your Grafana plugin with additional features to improve its quality."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

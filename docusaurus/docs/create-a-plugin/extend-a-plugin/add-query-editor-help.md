@@ -41,7 +41,7 @@ Query editors support the addition of a help component to display examples of po
 
 1. Create a few examples of potential queries:
 
-   ```ts
+   ```tsx
    import React from 'react';
    import { QueryEditorHelpProps, DataQuery } from '@grafana/data';
 

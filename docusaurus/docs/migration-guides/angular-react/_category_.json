@@ -1,6 +1,9 @@
 {
-    "position": 10,
-    "label": "Migrate from AngularJS to React",
-    "collapsible": true,
-    "collapsed": true
-  }
+  "position": 10,
+  "label": "Migrate from AngularJS to React",
+  "customProps": {
+    "description": "How to migrate your plugin from the legacy AngularJS framework to our React based platform."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

@@ -1,3 +1,101 @@
+# (Fri Dec 08 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.9.0`
+  - Update the scenes-app template to use the latest scenes library and fix some template code style errors [#573](https://github.com/grafana/plugin-tools/pull/573) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Fri Dec 08 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.8.1`
+  - Templates: import DataQuery from `@grafana/schema` instead of `@grafana/data` [#549](https://github.com/grafana/plugin-tools/pull/549) ([@ludovicm67](https://github.com/ludovicm67))
+
+#### Authors: 1
+
+- Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67))
+
+---
+
+# (Thu Dec 07 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.8.0`
+  - create-plugin: Add provisioning scaffold [#529](https://github.com/grafana/plugin-tools/pull/529) ([@Ukochka](https://github.com/Ukochka) [@josmperez](https://github.com/josmperez) [@sympatheticmoose](https://github.com/sympatheticmoose) [@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker) [@dependabot[bot]](https://github.com/dependabot[bot]) [@tolzhabayev](https://github.com/tolzhabayev) [@leventebalogh](https://github.com/leventebalogh) [@sd2k](https://github.com/sd2k))
+
+#### Authors: 9
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Ben Sully ([@sd2k](https://github.com/sd2k))
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Mon Dec 04 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.7.0`
+  - Update github release workflow to use our action instead of custom code [#544](https://github.com/grafana/plugin-tools/pull/544) ([@academo](https://github.com/academo))
+
+#### ⚠️ Pushed to `main`
+
+- add provisioning files ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump @auto-it/first-time-contributor from 10.46.0 to 11.0.4 [#513](https://github.com/grafana/plugin-tools/pull/513) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps): Bump @types/semver from 7.5.2 to 7.5.4 [#511](https://github.com/grafana/plugin-tools/pull/511) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Tue Nov 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.6.0`
+  - update to use sha1sum and minor workflow updates [#503](https://github.com/grafana/plugin-tools/pull/503) ([@briangann](https://github.com/briangann))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.6.0`
+  - Create Plugin: Replace 'master' with 'main' on ref [#507](https://github.com/grafana/plugin-tools/pull/507) ([@joanlopez](https://github.com/joanlopez))
+
+#### Authors: 2
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez))
+
+---
+
 # (Thu Nov 02 2023)
 
 #### 🐛 Bug Fix

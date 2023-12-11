@@ -9,6 +9,7 @@ keywords:
   - plugin
   - publish plugin
   - update plugin
+  - provision
 ---
 
 # Publish or update a plugin
@@ -19,14 +20,14 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 
 ## Before you begin
 
-- [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins. 
+- [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins.
 - [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 - Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
 
-To speed up the time it takes to review your plugin:
+**To speed up the time it takes to review your plugin:**
 
 - Check that your plugin is ready for review using the [plugin validator](https://github.com/grafana/plugin-validator).
-- Provide sample dashboards and test data with your repository so that the plugin's functionality can be verified.
+- Provide sample dashboards and test data with your repository so that the plugin's functionality can be verified. Use the [provisioning](./provide-test-environment.md) process provided to simplify this step.
 
 ## Publish your plugin
 
@@ -45,7 +46,7 @@ Follow these steps to publish your plugin for the first time.
        This can lead to faster downloads since users can select the specific architecture on which they want to install the plugin.
    - **URL:** A URL that points to a ZIP archive of your packaged plugin.
    - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
-   - **MD5:** The MD5 hash of the plugin specified by the **URL**.
+   - **SHA1:** The SHA1 hash of the plugin specified by the **URL**.
    - The remaining questions help us determine the [signature level](./sign-a-plugin#plugin-signature-levels) for your plugin.
 1. Click **Submit**.
    After you submit your plugin, we run an automated validation to make sure it adheres to our guidelines.
@@ -53,10 +54,10 @@ Follow these steps to publish your plugin for the first time.
    All submissions are manually inspected by a plugin reviewer.
    For every new plugin, we perform a manual review that includes the following checks:
 
-    - **Code review:** For quality and security purposes, we review the source code for the plugin.
-    - **Tests:** We install your plugin on one of our Grafana instances to test it for basic use.
-      We may ask you to assist us in configuring a test environment for the plugin.
-      We use the test environment whenever you submit a plugin update.
+   - **Code review:** For quality and security purposes, we review the source code for the plugin.
+   - **Tests:** We install your plugin on one of our Grafana instances to test it for basic use.
+     We may ask you to assist us in configuring a test environment for the plugin.
+     We use the test environment whenever you submit a plugin update.
 
 ## Update your plugin
 
@@ -78,7 +79,7 @@ For more information on plugin deprecation and how to request your plugin to be 
 
 ### How long does it take to review a submission?
 
-- We're not able to give an estimate at this time, though we're constantly working on improving the time it takes to review a plugin.
+- We're not able to give an estimate at this time, though we're constantly working to improve the time it takes to review a plugin. Providing a [provisioned](./provide-test-environment.md) test environment can drastically speed up your review.
 
 ### Can I decide a date when my plugin will be published?
 
@@ -106,6 +107,10 @@ For more information on plugin deprecation and how to request your plugin to be 
 ### Can I still use Angular for a plugin?
 
 - No. We will not accept any new plugin submissions written in Angular. For more information, refer to our [Angular support deprecation documentation](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/).
+
+### Can I submit plugins built with Toolkit?
+
+- The @grafana/toolkit tool is deprecated. Please [migrate to `create-plugin`](../migration-guides/migrate-from-toolkit.mdx). In the future, we will reject submissions based on @grafana/toolkit as it becomes increasingly out-of-date.
 
 ### Do plugin signatures expire?
 
