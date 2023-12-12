@@ -15,7 +15,7 @@ jobs:
     name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Copy auth file
         run: mkdir -p packages/plugin-e2e/playwright/.auth/ && cp .github/user.json packages/plugin-e2e/playwright/.auth/user.json
