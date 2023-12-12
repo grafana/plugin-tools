@@ -218,6 +218,28 @@ export const MyExtension = () => {
 };
 ```
 
+### Example: Add an item to Grafana's command palette
+
+:::note
+
+**Available in Grafana >=10.3.0** <br /> (_The `grafana/commandpalette/action` extension point is only available in Grafana 10.3.0 and above._)
+
+:::
+
+```ts title="src/module.ts"
+new AppPlugin().configureExtensionComponent({
+  title: 'Frobnicate dashboards',
+  description: 'Opens a modal where the user can frobnicate dashboards',
+  extensionPointId: 'grafana/commandpalette/action',
+  onClick: (event, { openModal }) => {
+    openModal({
+      title: 'Frobnicate dashboards',
+      body: (props) => <MyModalComponent {...props} />
+    });
+  }
+});
+```
+
 ## Available extension points within Grafana
 
 An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
