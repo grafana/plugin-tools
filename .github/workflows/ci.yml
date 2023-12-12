@@ -78,7 +78,7 @@ jobs:
         run: npm exec nx run @grafana/create-plugin:${{ matrix.cmd }}
 
       - name: Install generated plugin dependencies
-        run: npm install --prefer-offline --no-audit
+        run: npm ci
         working-directory: ./packages/create-plugin/generated
 
       - name: Lint plugin frontend
