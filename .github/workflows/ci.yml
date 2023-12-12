@@ -77,17 +77,8 @@ jobs:
       - name: Generate plugin
         run: npm exec nx run @grafana/create-plugin:${{ matrix.cmd }}
 
-      - name: Restore cached generated plugin dependencies
-        id: cache-generated-deps-restore
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            ./packages/create-plugin/generated/package-lock.json
-            ./packages/create-plugin/generated/node_modules
-          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
-
       - name: Install generated plugin dependencies
-        run: npm install --prefer-offline --no-audit
+        run: npm install --no-audit
         working-directory: ./packages/create-plugin/generated
 
       - name: Lint plugin frontend
@@ -117,16 +108,6 @@ jobs:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
         working-directory: ./packages/create-plugin/generated
-
-      - name: Save generated plugin dependencies
-        id: cache-generated-deps-save
-        if: ${{ steps.cache-generated-deps-restore.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            ./packages/create-plugin/generated/package-lock.json
-            ./packages/create-plugin/generated/node_modules
-          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
 
       - uses: actions/setup-go@v4
         with:
