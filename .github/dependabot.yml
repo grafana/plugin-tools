@@ -5,7 +5,7 @@ updates:
   # Check for updates to GitHub Actions every month
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:      
+    schedule:
       interval: "monthly"
     labels:
         - "github_actions"
@@ -21,3 +21,6 @@ updates:
       - "javascript"
       - "dependencies"
       - "no stalebot"
+    groups:
+    # All official @docusaurus/* packages should have the exact same version as @docusaurus/core (number=3.0.1).
+      - "@docusaurus/*"
