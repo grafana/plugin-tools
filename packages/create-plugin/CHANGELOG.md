@@ -1,3 +1,15 @@
+# v2.10.0 (Tue Dec 12 2023)
+
+#### 🚀 Enhancement
+
+- Update react to 18 in package.json template [#455](https://github.com/grafana/plugin-tools/pull/455) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v2.9.0 (Fri Dec 08 2023)
 
 #### 🚀 Enhancement
