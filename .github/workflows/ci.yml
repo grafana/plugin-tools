@@ -84,7 +84,7 @@ jobs:
           path: |
             ./packages/create-plugin/generated/package-lock.json
             ./packages/create-plugin/generated/node_modules
-          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package.json') }}
 
       - name: Install generated plugin dependencies
         run: npm install --prefer-offline --no-audit
@@ -126,7 +126,7 @@ jobs:
           path: |
             ./packages/create-plugin/generated/package-lock.json
             ./packages/create-plugin/generated/node_modules
-          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package-lock.json') }}
+          key: ${{ matrix.cmd }}-${{ hashFiles('./packages/create-plugin/generated/package.json') }}
 
       - uses: actions/setup-go@v4
         with:
