@@ -5,7 +5,7 @@ test('editor populates query from url', async ({ explorePage, readProvision }) =
   const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/google-sheets-datasource-jwt.yaml' });
   await explorePage.goto({
     queryParams: new URLSearchParams(
-      `panes=%7B"xlX":%7B"datasource":"${provision.datasources[0].uid}","queries":%5B%7B"refId":"A","datasource":%7B"type":"grafana-redshift-datasource","uid":"P7DC3E4760CFAC4AH"%7D,"rawSQL":"SELECT%20%2A%20FROM%20public.average_temperature","format":0%7D%5D,"range":%7B"from":"1579046400000","to":"1607990400000"%7D%7D%7D&schemaVersion=1&orgId=1`
+      `panes=%7B%22xlX%22:%7B%22datasource%22:%22undefined%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22grafana-redshift-datasource%22,%22uid%22:%22P7DC3E4760CFAC4AH%22%7D,%22rawSQL%22:%22SELECT%20%2A%20FROM%20public.average_temperature%22,%22format%22:0%7D%5D,%22range%22:%7B%22from%22:%221579046400000%22,%22to%22:%221607990400000%22%7D%7D%7D&schemaVersion=1&orgId=1&left=%7B%22datasource%22:%22P7DC3E4760CFAC4AH%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22grafana-redshift-datasource%22,%22uid%22:%22P7DC3E4760CFAC4AH%22%7D,%22rawSQL%22:%22SELECT%20%2A%20FROM%20public.average_temperature%22,%22format%22:0%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D`
     ),
   });
   const queryEditorRowLocator = await explorePage.getQueryEditorRow('A');
