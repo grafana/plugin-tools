@@ -223,6 +223,7 @@ export const MyExtension = () => {
 An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
 
 - `grafana/alerting/instance/action`: extension point for actions in alert instance table in alerting
+- `grafana/commandpalette/action`: extension point for commands in command palette
 - `grafana/dashboard/panel/menu`: extension point for all panel dropdown menus in dashboards
 - `grafana/explore/toolbar/action`: extension point for toolbar actions in explore
 - `grafana/user/profile/tab`: extension point for a tab of content on the `/profile` page
