@@ -22,5 +22,7 @@ updates:
       - "dependencies"
       - "no stalebot"
     groups:
-    # All official @docusaurus/* packages should have the exact same version as @docusaurus/core (number=3.0.1).
-      - "@docusaurus/*"
+      # All official @docusaurus/* packages should have the exact same version as @docusaurus/core (number=3.0.1).
+      docusaurus:
+        patterns:
+        - "@docusaurus/*"
