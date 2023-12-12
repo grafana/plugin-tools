@@ -5,6 +5,7 @@ import matchers from './matchers';
 import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
 import { PanelEditPage, GrafanaPage, DataSourceConfigPage, DashboardPage, VariableEditPage } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
+import { ExplorePage } from './models/ExplorePage';
 
 export type PluginOptions = {
   selectorRegistration: void;
@@ -56,6 +57,17 @@ export type PluginFixture = {
    * Use {@link VariableEditPage.setVariableType} to change the variable type
    */
   variableEditPage: VariableEditPage;
+
+  /**
+   * Isolated {@link ExplorePage} instance for each test.
+   *
+   * Navigates to a the explore page.
+   *
+   * Use {@link ExplorePage.datasource.set} to change the datasource
+   * Use {@link ExplorePage.getQueryEditorEditorRow} to retrieve the query editor
+   * row locator for a given query refId
+   */
+  explorePage: ExplorePage;
 
   /**
    * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.
