@@ -21,7 +21,6 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Verify that your data source or app plugin can be provisioned.** Refer to [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more information.
 - **Include default dashboards in your data source or app plugin.** Refer to [Bundling of dashboards](https://grafana.com/developers/plugin-tools/introduction/plugin-types-usage#bundling-of-dashboards) for more information.
 - **Ensure that the minimum version of Grafana is correct.** Make sure that the `grafanaDependency` in your `plugin.json` points to the earliest version of Grafana that your plugin fully supports.
-- **Consider building an [app plugin](/introduction/plugin-types-usage#app-plugins).** App plugins offer more flexibility and additional capabilities than panel or data source plugins, allowing you to build more tailored monitoring experiences for a given service. Apps provide a better user experience than simply including default dashboards with a data source.
 
 ## Panel plugins
 
