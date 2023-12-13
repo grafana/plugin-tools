@@ -7,7 +7,7 @@ const MatrixOutput = 'matrix';
 
 const VersionResolverTypes = {
   PluginGrafanaDependency: 'plugin-grafana-dependency',
-  MiniumSupportObligation: 'minimum-support-obligation',
+  VersionSupportPolicy: 'version-support-policy',
 };
 
 async function run() {
@@ -20,13 +20,13 @@ async function run() {
     }
 
     const pluginDependency = await getPluginGrafanaDependency().catch(() => {
-      core.info('Could not find plugin grafanaDependency, using `minimum-support-obligation` version resolver');
-      versionResolverType = VersionResolverTypes.MiniumSupportObligation;
+      core.info('Could not find plugin grafanaDependency, using `version-support-policy` version resolver');
+      versionResolverType = VersionResolverTypes.VersionSupportPolicy;
     });
 
     let output = [];
     switch (versionResolverType) {
-      case VersionResolverTypes.MiniumSupportObligation:
+      case VersionResolverTypes.VersionSupportPolicy:
         const currentMajorVersion = availableGrafanaVersions[0].major;
         const previousMajorVersion = currentMajorVersion - 1;
 
