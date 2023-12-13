@@ -23,7 +23,7 @@
     "@auto-it/all-contributors": "^10.46.0",
     "@auto-it/first-time-contributor": "^11.0.4",
     "@auto-it/omit-commits": "^10.46.0",
-    "@auto-it/slack": "^10.46.0",
+    "@auto-it/slack": "^11.0.4",
     "@grafana/eslint-config": "^6.0.1",
     "@grafana/tsconfig": "^1.2.0-rc1",
     "@swc/core": "^1.2.162",
