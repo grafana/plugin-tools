@@ -30082,11 +30082,6 @@ ${pendingInterceptorsFormatter.format(pending)}
           return;
         }
 
-        const pluginDependency = await getPluginGrafanaDependency().catch(() => {
-          core.info('Could not find plugin grafanaDependency, using `version-support-policy` version resolver');
-          versionResolverType = VersionResolverTypes.VersionSupportPolicy;
-        });
-
         let output = [];
         switch (versionResolverType) {
           case VersionResolverTypes.VersionSupportPolicy:
@@ -30109,6 +30104,7 @@ ${pendingInterceptorsFormatter.format(pending)}
             }
             break;
           default:
+            const pluginDependency = await getPluginGrafanaDependency();
             for (const grafanaVersion of availableGrafanaVersions) {
               if (semver.gt(pluginDependency, grafanaVersion.version)) {
                 break;
