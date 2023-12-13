@@ -27,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         GRAFANA_VERSION:: ${{fromJson(needs.setup-matrix.outputs.matrix)}}
-    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
+    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
