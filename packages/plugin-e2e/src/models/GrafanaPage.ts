@@ -1,5 +1,5 @@
 import { Expect, Locator, Request } from '@playwright/test';
-import { PluginTestCtx } from '../types';
+import { NavigateOptions, PluginTestCtx } from '../types';
 
 /**
  * Base class for all Grafana pages.
@@ -8,6 +8,16 @@ import { PluginTestCtx } from '../types';
  */
 export abstract class GrafanaPage {
   constructor(public readonly ctx: PluginTestCtx, protected readonly expect: Expect<any>) {}
+
+  protected async navigate(url: string, options?: NavigateOptions) {
+    if (options?.queryParams) {
+      url += `?${options.queryParams.toString()}`;
+    }
+    await this.ctx.page.goto(url, {
+      waitUntil: 'networkidle',
+      ...options,
+    });
+  }
 
   /**
    * Get a locator for a Grafana element by data-testid or aria-label
