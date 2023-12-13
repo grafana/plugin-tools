@@ -2,64 +2,67 @@ const fs = require('fs/promises');
 const core = require('@actions/core');
 const semver = require('semver');
 
-const DEFAULT_MIN_GRAFANA_VERSION = '8.4.0';
-
 const VersionResolverTypeInput = 'version-resolver-type';
-const LastNMinorsInput = 'last-n-minors';
-const AllMinorsFromInput = 'all-minors-from';
 const MatrixOutput = 'matrix';
 
 const VersionResolverTypes = {
   PluginGrafanaDependency: 'plugin-grafana-dependency',
-  AllMinorsFrom: 'all-minors-from',
-  LastNMinors: 'last-n-minors',
+  MiniumSupportObligation: 'minimum-support-obligation',
 };
 
 async function run() {
   try {
-    let minVersion = DEFAULT_MIN_GRAFANA_VERSION;
-    let lastNMinors = 0;
+    let versionResolverType = core.getInput(VersionResolverTypeInput) || VersionResolverTypes.PluginGrafanaDependency;
+    const availableGrafanaVersions = await getGrafanaStableMinorVersions();
+    if (availableGrafanaVersions.length === 0) {
+      core.setFailed('Could not find any stable Grafana versions');
+      return;
+    }
 
-    const versionResolverType = core.getInput(VersionResolverTypeInput) || VersionResolverTypes.PluginGrafanaDependency;
+    const pluginDependency = await getPluginGrafanaDependency().catch(() => {
+      core.info('Could not find plugin grafanaDependency, using `minimum-support-obligation` version resolver');
+      versionResolverType = VersionResolverTypes.MiniumSupportObligation;
+    });
+
+    let output = [];
     switch (versionResolverType) {
-      case VersionResolverTypes.AllMinorsFrom:
-        const providedMinVersion = core.getInput(AllMinorsFromInput);
-        if (semver.valid(providedMinVersion)) {
-          minVersion = semver.parse(providedMinVersion).version;
-        } else {
-          core.info(`The provided min-version is not a valid semver version. Using default min version: ${minVersion}`);
-        }
-        break;
-      case VersionResolverTypes.LastNMinors:
-        const lastNMinorsString = core.getInput(LastNMinorsInput);
-        try {
-          lastNMinors = parseInt(lastNMinorsString);
-        } catch (error) {
-          core.info(`The provided last-n-minors is not a valid number. Using default min version: ${minVersion}`);
+      case VersionResolverTypes.MiniumSupportObligation:
+        const currentMajorVersion = availableGrafanaVersions[0].major;
+        const previousMajorVersion = currentMajorVersion - 1;
+
+        for (const grafanaVersion of availableGrafanaVersions) {
+          if (previousMajorVersion > grafanaVersion.major) {
+            break;
+          }
+
+          if (currentMajorVersion === grafanaVersion.major) {
+            output.push(grafanaVersion.version);
+          }
+
+          if (previousMajorVersion === grafanaVersion.major) {
+            output.push(grafanaVersion.version);
+            break;
+          }
         }
         break;
       default:
-        try {
-          minVersion = await getPluginGrafanaDependency();
-        } catch (_) {
-          core.info(`Could not find plugin grafanaDependency. Using default min version: ${minVersion}`);
+        for (const grafanaVersion of availableGrafanaVersions) {
+          if (semver.gt(pluginDependency, grafanaVersion.version)) {
+            break;
+          }
+
+          output.push(grafanaVersion.version);
         }
-        break;
     }
 
-    const targetGrafanaVersions = await getGrafanaMinorVersions(minVersion);
-
-    if (versionResolverType === VersionResolverTypes.LastNMinors && lastNMinors !== NaN && lastNMinors > 0) {
-      targetGrafanaVersions.splice(0, targetGrafanaVersions.length - lastNMinors);
-    }
-    core.info('output', targetGrafanaVersions);
-    core.setOutput(MatrixOutput, JSON.stringify(targetGrafanaVersions));
+    core.info('output', output);
+    core.setOutput(MatrixOutput, JSON.stringify(output));
   } catch (error) {
     core.setFailed(error.message);
   }
 }
 
-function getGrafanaMinorVersions(minVersion) {
+function getGrafanaStableMinorVersions() {
   return new Promise(async (resolve) => {
     const latestMinorVersions = new Map();
 
@@ -74,11 +77,6 @@ function getGrafanaMinorVersions(minVersion) {
       }
       const v = semver.parse(grafanaVersion.version);
 
-      // ignore versions below the specified minimum Grafana version
-      if (semver.lt(v, minVersion)) {
-        continue;
-      }
-
       const baseVersion = new semver.SemVer(`${v.major}.${v.minor}.0`).toString();
       if (!latestMinorVersions.has(baseVersion)) {
         latestMinorVersions.set(baseVersion, v);
@@ -90,7 +88,8 @@ function getGrafanaMinorVersions(minVersion) {
         latestMinorVersions.set(baseVersion, v);
       }
     }
-    return resolve(Array.from(latestMinorVersions).map(([_, value]) => value.version));
+
+    return resolve(Array.from(latestMinorVersions).map(([_, semver]) => semver));
   });
 }
 

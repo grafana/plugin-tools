@@ -10,20 +10,10 @@ inputs:
     description: >
      Choose between different version resolver types.
       plugin-grafana-dependency: Resolve versions based on the Grafana version specified in the plugin.json file.
-      all-minors-from: Use all minor versions since the specified version.
-      last-n-minors: Use the last n minor versions.
+      minimum-support-obligation: Resolve versions according to Grafana's plugin compatibility policy. I.e. the latest major version and the last minor of the previous major version.
     options: 
       - plugin-grafana-dependency
-      - all-minors-from
-      - last-n-minors
-  all-minors-from:
-    required: false
-    type: string
-    description: 'Minimum Grafana minor version to test against'
-  last-n-minors:
-    required: false
-    type: string
-    description: 'Number of Grafana minor versions to test against'
+      - minimum-support-obligation
 
 output:
   matrix:
