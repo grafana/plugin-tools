@@ -1,0 +1,34 @@
+name: 'Grafana E2E versions'
+description: 'Resolve Grafana versions for use in E2E tests'
+author: 'plugins-platform@grafana'
+
+inputs:
+  version-resolver-type:
+    required: true 
+    type: choice
+    default: plugin-grafana-dependency
+    description: >
+     Choose between different version resolver types.
+      plugin-grafana-dependency: Resolve versions based on the Grafana version specified in the plugin.json file.
+      all-minors-from: Use all minor versions since the specified version.
+      last-n-minors: Use the last n minor versions.
+    options: 
+      - plugin-grafana-dependency
+      - all-minors-from
+      - last-n-minors
+  all-minors-from:
+    required: false
+    type: string
+    description: 'Minimum Grafana minor version to test against'
+  last-n-minors:
+    required: false
+    type: string
+    description: 'Number of Grafana minor versions to test against'
+
+output:
+  matrix:
+    description: 'Versions to test against'
+
+runs:
+  using: node20
+  main: ./output/index.js
