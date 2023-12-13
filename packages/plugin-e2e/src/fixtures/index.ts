@@ -8,6 +8,7 @@ import createDataSource from './commands/createDataSource';
 import readProvision from './commands/readProvision';
 import newDashboardPage from './newDashboardPage';
 import variableEditPage from './variableEditPage';
+import explorePage from './explorePage';
 
 export default {
   selectors,
@@ -18,6 +19,7 @@ export default {
   panelEditPage,
   variableEditPage,
   annotationEditPage,
+  explorePage,
   createDataSource,
   readProvision,
 };

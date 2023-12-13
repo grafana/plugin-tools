@@ -111,6 +111,34 @@ export type ReadProvisionArgs = {
   filePath: string;
 };
 
+export type NavigateOptions = {
+  /**
+   * Referer header value.
+   */
+  referer?: string;
+
+  /**
+   * Maximum operation time in milliseconds. Defaults to `0` - no timeout.
+   */
+  timeout?: number;
+
+  /**
+   * When to consider operation succeeded, defaults to `load`. Events can be either:
+   * - `'domcontentloaded'` - consider operation to be finished when the `DOMContentLoaded` event is fired.
+   * - `'load'` - consider operation to be finished when the `load` event is fired.
+   * - `'networkidle'` - **DISCOURAGED** consider operation to be finished when there are no network connections for
+   *   at least `500` ms. Don't use this method for testing, rely on web assertions to assess readiness instead.
+   * - `'commit'` - consider operation to be finished when network response is received and the document started
+   *   loading.
+   */
+  waitUntil?: 'load' | 'domcontentloaded' | 'networkidle' | 'commit';
+
+  /**
+   * Query parameters to add to the url. Optional
+   */
+  queryParams?: URLSearchParams;
+};
+
 /**
  * Panel visualization types
  */

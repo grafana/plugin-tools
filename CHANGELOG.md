@@ -1,3 +1,21 @@
+# (Tue Dec 12 2023)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.10.0`
+  - Update react to 18 in package.json template [#455](https://github.com/grafana/plugin-tools/pull/455) ([@academo](https://github.com/academo))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump @types/node from 20.8.7 to 20.10.1 [#567](https://github.com/grafana/plugin-tools/pull/567) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Fri Dec 08 2023)
 
 #### 🚀 Enhancement
