@@ -234,9 +234,9 @@ new AppPlugin().configureExtensionComponent({
   onClick: (event, { openModal }) => {
     openModal({
       title: 'Frobnicate dashboards',
-      body: (props) => <MyModalComponent {...props} />
+      body: (props) => <MyModalComponent {...props} />,
     });
-  }
+  },
 });
 ```
 
