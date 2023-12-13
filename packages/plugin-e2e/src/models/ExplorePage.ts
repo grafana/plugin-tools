@@ -1,4 +1,4 @@
-import { Expect, Locator } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
 import { NavigateOptions, PluginTestCtx, RequestOptions } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
@@ -9,10 +9,10 @@ const SHOW_MORE_ITEMS = 'Show more items';
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: any;
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
-    this.datasource = new DataSourcePicker(ctx, expect);
-    this.timeRange = new TimeRange(ctx, this.expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
+    this.datasource = new DataSourcePicker(ctx);
+    this.timeRange = new TimeRange(ctx);
   }
 
   async goto(options?: NavigateOptions) {
@@ -24,7 +24,7 @@ export class ExplorePage extends GrafanaPage {
     const locator = this.ctx.page.locator('[aria-label="Query editor row"]').filter({
       has: this.ctx.page.locator(`[aria-label="Query editor row title ${refId}"]`),
     });
-    await this.expect(locator).toBeVisible();
+    await expect(locator).toBeVisible();
     return locator;
   }
 

@@ -1,10 +1,9 @@
-import { Expect } from '@playwright/test';
 import { PluginTestCtx } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourcePicker extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
   }
 
   async set(name: string) {

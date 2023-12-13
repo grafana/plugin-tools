@@ -1,10 +1,9 @@
-import { Expect } from '@playwright/test';
 import { PluginTestCtx } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, expect: Expect<any>, private uid: string) {
-    super(ctx, expect);
+  constructor(ctx: PluginTestCtx, private uid: string) {
+    super(ctx);
   }
 
   async deleteDataSource() {

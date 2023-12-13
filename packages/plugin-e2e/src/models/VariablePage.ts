@@ -1,11 +1,10 @@
-import { Expect } from '@playwright/test';
 import { PluginTestCtx } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 import { VariableEditPage } from './VariableEditPage';
 
 export class VariablePage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
   }
 
   async goto() {
@@ -27,6 +26,6 @@ export class VariablePage extends GrafanaPage {
       await this.getByTestIdOrAriaLabel(Dashboard.Settings.Variables.List.newButton).click();
     }
 
-    return new VariableEditPage(this.ctx, this.expect);
+    return new VariableEditPage(this.ctx);
   }
 }

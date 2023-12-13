@@ -1,4 +1,4 @@
-import { Expect, Locator, Request } from '@playwright/test';
+import { Locator, Request } from '@playwright/test';
 import { NavigateOptions, PluginTestCtx } from '../types';
 
 /**
@@ -7,7 +7,7 @@ import { NavigateOptions, PluginTestCtx } from '../types';
  * Exposes methods for locating Grafana specific elements on the page
  */
 export abstract class GrafanaPage {
-  constructor(public readonly ctx: PluginTestCtx, protected readonly expect: Expect<any>) {}
+  constructor(public readonly ctx: PluginTestCtx) {}
 
   protected async navigate(url: string, options?: NavigateOptions) {
     if (options?.queryParams) {

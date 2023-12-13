@@ -1,8 +1,5 @@
 const gte = require('semver/functions/gte');
-
 import { GotoDashboardArgs, PluginTestCtx } from '../types';
-
-import { Expect } from '@playwright/test';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
@@ -12,10 +9,10 @@ export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
 
-  constructor(ctx: PluginTestCtx, expect: Expect<any>, protected readonly dashboardUid?: string) {
-    super(ctx, expect);
-    this.dataSourcePicker = new DataSourcePicker(ctx, expect);
-    this.timeRange = new TimeRange(ctx, this.expect);
+  constructor(ctx: PluginTestCtx, protected readonly dashboardUid?: string) {
+    super(ctx);
+    this.dataSourcePicker = new DataSourcePicker(ctx);
+    this.timeRange = new TimeRange(ctx);
   }
 
   async goto(opts?: GotoDashboardArgs) {
@@ -37,7 +34,7 @@ export class DashboardPage extends GrafanaPage {
     await this.ctx.page.goto(`${url}?editPanel=${panelId}`, {
       waitUntil: 'networkidle',
     });
-    return new PanelEditPage(this.ctx, this.expect);
+    return new PanelEditPage(this.ctx);
   }
 
   async addPanel(): Promise<PanelEditPage> {
@@ -52,7 +49,7 @@ export class DashboardPage extends GrafanaPage {
       await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.AddDashboard.addNewPanel).click();
     }
 
-    return new PanelEditPage(this.ctx, this.expect);
+    return new PanelEditPage(this.ctx);
   }
 
   async deleteDashboard() {

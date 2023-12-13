@@ -1,4 +1,4 @@
-import { Expect, Locator } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 import * as semver from 'semver';
 import { PanelError, PluginTestCtx, RequestOptions, Visualization } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
@@ -9,16 +9,16 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
 
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
-    this.datasource = new DataSourcePicker(ctx, expect);
-    this.timeRange = new TimeRange(ctx, this.expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
+    this.datasource = new DataSourcePicker(ctx);
+    this.timeRange = new TimeRange(ctx);
   }
 
   async setVisualization(visualization: Visualization) {
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
-    await this.expect(
+    await expect(
       this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
@@ -33,7 +33,7 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     const locator = this.ctx.page.locator('[aria-label="Query editor row"]').filter({
       has: this.ctx.page.locator(`[aria-label="Query editor row title ${refId}"]`),
     });
-    this.expect(locator).toBeVisible();
+    expect(locator).toBeVisible();
     return locator;
   }
 

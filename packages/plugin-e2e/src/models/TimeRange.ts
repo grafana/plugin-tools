@@ -1,10 +1,9 @@
-import { Expect } from '@playwright/test';
 import { PluginTestCtx, TimeRangeArgs } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class TimeRange extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
   }
 
   async set({ from, to, zone }: TimeRangeArgs) {
