@@ -1,8 +1,8 @@
 name: E2E tests - Playwright
 on:
   pull_request:
-    paths:
-      - 'packages/plugin-e2e/**'
+    # paths:
+    #   - 'packages/plugin-e2e/**'
 
 jobs:
   setup-matrix:
