@@ -16,9 +16,6 @@ jobs:
       - name: Resolve Grafana E2E versions
         id: resolve-versions
         uses: ./.github/actions/grafana-e2e-versions
-        with:
-          version-resolver-type: last-n-minors
-          last-n-minors: 6
 
   playwright-tests:
     needs: setup-matrix
