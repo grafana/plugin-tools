@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        GRAFANA_VERSION:: ${{fromJson(needs.setup-matrix.outputs.matrix)}}
+        GRAFANA_VERSION: ${{fromJson(needs.setup-matrix.outputs.matrix)}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
