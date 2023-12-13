@@ -28,12 +28,6 @@ export class ExplorePage extends GrafanaPage {
 
   async runQuery(options?: RequestOptions) {
     const components = this.ctx.selectors.components;
-    const runButtonTextContent = await this.getByTestIdOrAriaLabel(components.RefreshPicker.runButtonV2).textContent();
-    // if there is a query running, wait for it to finish before starting a new one
-    if (runButtonTextContent === 'Cancel') {
-      await this.ctx.page.waitForResponse((resp) => resp.url().includes('/api/ds/query'), options);
-    }
-
     const responsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes('/api/ds/query'), options);
     try {
       await this.getByTestIdOrAriaLabel(components.RefreshPicker.runButtonV2).click({
