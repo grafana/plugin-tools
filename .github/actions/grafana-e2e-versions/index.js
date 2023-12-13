@@ -48,12 +48,11 @@ async function run() {
     }
 
     const targetGrafanaVersions = await getGrafanaMinorVersions(minVersion);
-    core.info('output', targetGrafanaVersions);
 
     if (versionResolverType === VersionResolverTypes.LastNMinors && lastNMinors !== NaN && lastNMinors > 0) {
       targetGrafanaVersions.splice(0, targetGrafanaVersions.length - lastNMinors);
     }
-
+    core.info('output', targetGrafanaVersions);
     core.setOutput(MatrixOutput, JSON.stringify(targetGrafanaVersions));
   } catch (error) {
     core.setFailed(error.message);
