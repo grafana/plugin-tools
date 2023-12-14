@@ -66,7 +66,7 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataRequest(cb?: (request: Request) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForRequest((request) => {
-      if (request.url().includes('api/ds/query') && request.method() === 'POST') {
+      if (request.url().includes(this.ctx.selectors.apis.DataSource.query) && request.method() === 'POST') {
         return cb ? cb(request) : true;
       }
       return false;
