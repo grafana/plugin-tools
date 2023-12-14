@@ -4,8 +4,6 @@ import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
 
-const SHOW_MORE_ITEMS = 'Show more items';
-
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: any;
@@ -39,7 +37,7 @@ export class ExplorePage extends GrafanaPage {
       });
     } catch (_) {
       // handle the case when the run button is hidden behind the "Show more items" button
-      await this.getByTestIdOrAriaLabel(components.PageToolbar.item(SHOW_MORE_ITEMS)).click();
+      await this.getByTestIdOrAriaLabel(components.PageToolbar.item(components.PageToolbar.shotMoreItems)).click();
       await this.getByTestIdOrAriaLabel(components.RefreshPicker.runButtonV2).last().click();
     }
     return responsePromise;

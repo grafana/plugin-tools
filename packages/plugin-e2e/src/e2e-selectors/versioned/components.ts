@@ -278,6 +278,9 @@ export const versionedComponents = {
   PageToolbar: {
     container: () => '.page-toolbar',
     item: (tooltip: string) => `${tooltip}`,
+    shotMoreItems: {
+      [MIN_GRAFANA_VERSION]: 'Show more items',
+    },
     itemButton: (title: string) => `data-testid ${title}`,
     itemButtonTitle: {
       '10.1.0': 'Add button',

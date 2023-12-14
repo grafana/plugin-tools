@@ -245,6 +245,7 @@ export type Components = {
   };
   PageToolbar: {
     item: (tooltip: string) => string;
+    shotMoreItems: string;
     container: string;
     itemButton: (title: string) => string;
     itemButtonTitle: string;
