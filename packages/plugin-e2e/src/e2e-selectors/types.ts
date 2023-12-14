@@ -8,8 +8,10 @@ export type APIs = {
   DataSource: {
     resourcePattern: string;
     resourceUIDPattern: string;
-    healthCheck: string;
+    healthPattern: string;
     queryPattern: string;
+    health: (uid: string) => string;
+    delete: (uid: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;
