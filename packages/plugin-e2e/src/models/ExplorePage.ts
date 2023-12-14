@@ -20,9 +20,8 @@ export class ExplorePage extends GrafanaPage {
   }
 
   async getQueryEditorRow(refId: string): Promise<Locator> {
-    //TODO: add new selector and use it in grafana/ui
-    const locator = this.ctx.page.locator('[aria-label="Query editor row"]').filter({
-      has: this.ctx.page.locator(`[aria-label="Query editor row title ${refId}"]`),
+    const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+      has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
     });
     await expect(locator).toBeVisible();
     return locator;
@@ -30,7 +29,10 @@ export class ExplorePage extends GrafanaPage {
 
   async runQuery(options?: RequestOptions) {
     const components = this.ctx.selectors.components;
-    const responsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes('/api/ds/query'), options);
+    const responsePromise = this.ctx.page.waitForResponse(
+      (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
+      options
+    );
     try {
       await this.getByTestIdOrAriaLabel(components.RefreshPicker.runButtonV2).click({
         timeout: 1000,

@@ -28,12 +28,11 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     await this.ctx.page.getByTestId(this.ctx.selectors.components.PanelEditor.applyButton).click();
   }
 
-  getQueryEditorRow(refId: string): Locator {
-    //TODO: add new selector and use it in grafana/ui
-    const locator = this.ctx.page.locator('[aria-label="Query editor row"]').filter({
-      has: this.ctx.page.locator(`[aria-label="Query editor row title ${refId}"]`),
+  async getQueryEditorRow(refId: string): Promise<Locator> {
+    const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+      has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
     });
-    expect(locator).toBeVisible();
+    await expect(locator).toBeVisible();
     return locator;
   }
 

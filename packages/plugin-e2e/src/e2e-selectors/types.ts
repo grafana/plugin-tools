@@ -10,6 +10,7 @@ export type APIs = {
     resourceUIDPattern: string;
     healthPattern: string;
     queryPattern: string;
+    query: string;
     health: (uid: string) => string;
     delete: (uid: string) => string;
   };
