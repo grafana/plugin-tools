@@ -4,14 +4,15 @@ export type E2ESelectors = {
   apis: APIs;
 };
 
+export type DataSource = { uid: string; id: string };
+
 export type APIs = {
   DataSource: {
     resourcePattern: string;
     resourceUIDPattern: string;
-    healthPattern: string;
     queryPattern: string;
     query: string;
-    health: (uid: string) => string;
+    health: (ds: DataSource) => string;
     delete: (uid: string) => string;
   };
   Dashboard: {

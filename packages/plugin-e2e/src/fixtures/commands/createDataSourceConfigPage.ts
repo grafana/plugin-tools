@@ -19,7 +19,7 @@ const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   await use(async (args) => {
     deleteDataSource = args.deleteDataSourceAfterTest ?? true;
     const datasource = await createDataSourceViaAPI(request, args);
-    datasourceConfigPage = new DataSourceConfigPage({ page, selectors, grafanaVersion, request }, datasource.uid);
+    datasourceConfigPage = new DataSourceConfigPage({ page, selectors, grafanaVersion, request }, datasource);
     await datasourceConfigPage.goto();
     return datasourceConfigPage;
   });
