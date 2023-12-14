@@ -19,9 +19,7 @@ To enable annotations, simply add two lines of code to your plugin. Grafana uses
 
 1. Add `"annotations": true` to the [plugin.json](../../metadata.md) file to let Grafana know that your plugin supports annotations.
 
-   **In `plugin.json`:**
-
-   ```json
+   ```json title="src/plugin.json"
    {
      "annotations": true
    }
@@ -29,9 +27,7 @@ To enable annotations, simply add two lines of code to your plugin. Grafana uses
 
 2. In `datasource.ts`, override the `annotations` property from `DataSourceApi` (or `DataSourceWithBackend` for backend data sources). For the default behavior, set `annotations` to an empty object.
 
-   **In `datasource.ts`:**
-
-   ```ts
+   ```ts title="src/datasource.ts"
    annotations: {
    }
    ```

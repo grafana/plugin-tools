@@ -18,9 +18,7 @@ Create Grafana plugins with ease.
 
 **Links**
 
-- [Plugin Tools docs](https://grafana.github.io/plugin-tools/)
-- [Plugin developer docs](https://grafana.com/docs/grafana/latest/developers/plugins/)
-- [Plugin migration guide](https://grafana.com/docs/grafana/latest/developers/plugins/migration-guide)
+- [Plugin developer docs](https://grafana.com/developers/plugin-tools)
 
 **`@grafana/create-plugin`** works on macOS, Linux and Windows Subsystem for Linux (WSL).<br />
 If something doesn't work, please [file an issue](https://github.com/grafana/plugin-tools/issues/new).<br />
@@ -74,7 +72,7 @@ cd ./my-plugin
 npx @grafana/create-plugin@latest migrate
 ```
 
-For more information see [here](https://grafana.github.io/plugin-tools/docs/migrating-from-toolkit)
+For more information see [here](https://grafana.com/developers/plugin-tools/migration-guides/migrate-from-toolkit)
 
 ---
 
@@ -93,14 +91,29 @@ cd ./my-plugin
 npx @grafana/create-plugin@latest update
 ```
 
-For more information see [here](https://grafana.github.io/plugin-tools/docs/updating-to-new-releases)
+For more information see [here](https://grafana.com/developers/plugin-tools/migration-guides/update-create-plugin-versions)
 
 ---
 
 ## Customizing or extending the basic configs
 
-You can read more about customizing or extending the basic configuration [here](https://grafana.github.io/plugin-tools/docs/advanced-configuration/)
+You can read more about customizing or extending the basic configuration in our [documentation](https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations).
+
+## Add provisioning to your existing plugin
+
+You can streamline the plugin review process by incorporating provisioning into your existing plugin, enabling reviewers to test your plugin more efficiently.
+
+```bash
+# Run this command from the root of your plugin
+cd ./my-plugin
+
+npx @grafana/create-plugin@latest provisioning
+```
+
+For more information see our [documentation](https://grafana.com/developers/plugin-tools/publish-a-plugin/provide-test-environment).
+
+---
 
 ## Contributing
 
-We are always grateful for contributions! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
+We are always grateful for contributions! See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.

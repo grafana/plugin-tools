@@ -6,22 +6,25 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v3
+      - uses: nrwl/nx-set-shas@v4
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --no-audit
       - name: Check types
         run: npm exec nx affected -- --target typecheck --parallel
       - name: Lint
@@ -31,65 +34,114 @@ jobs:
       - name: Build all packages
         run: npm run build
 
-      - name: Restore cached generated plugin dependencies
-        id: cache-generated-deps-restore
-        uses: actions/cache/restore@v3
+  generate-plugins:
+    name: Test plugin scaffolding
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    needs: [test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - cmd: generate-app
+            hasBackend: false
+          - cmd: generate-app-backend
+            hasBackend: true
+          - cmd: generate-panel
+            hasBackend: false
+          - cmd: generate-datasource
+            hasBackend: false
+          - cmd: generate-datasource-backend
+            hasBackend: true
+          - cmd: generate-scenes-app
+            hasBackend: false
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          path: |
-            ./packages/create-plugin/generated/package-lock.json
-            ./packages/create-plugin/generated/node_modules
-          key: ${{ runner.os }}-generated-plugin-deps
-
-      - name: '@grafana/create-plugin - test an app plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
-      - name: '@grafana/create-plugin - test an app with backend plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-app-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
-      - name: '@grafana/create-plugin - test panel plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-panel && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
-      - name: '@grafana/create-plugin - test datasource plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-datasource && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
-      - name: '@grafana/create-plugin - test datasource with backend plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-datasource-backend && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
-      - name: '@grafana/create-plugin - test scenes app plugin generation'
-        run: npm exec nx run @grafana/create-plugin:generate-scenes-app && (cd ./packages/create-plugin/generated && npm install && npm run build && npm run lint)
-
-      - name: Save generated plugin dependencies
-        id: cache-generated-deps-save
-        if: steps.cache-generated-deps-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - name: Setup .npmrc file for NPM registry
+        uses: actions/setup-node@v4
         with:
-          path: |
-            ./packages/create-plugin/generated/package-lock.json
-            ./packages/create-plugin/generated/node_modules
-          key: ${{ steps.cache-generated-deps-restore.outputs.cache-primary-key }}
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
-      - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generated plugin'
+      - name: Install package dependencies
+        run: npm ci --no-audit
+
+      - name: Generate plugin
+        run: npm exec nx run @grafana/create-plugin:${{ matrix.cmd }}
+
+      - name: Install generated plugin dependencies
+        run: npm install --no-audit
+        working-directory: ./packages/create-plugin/generated
+
+      - name: Lint plugin frontend
+        run: npm run lint
+        working-directory: ./packages/create-plugin/generated
+
+      - name: Build plugin frontend
+        run: npm run build
+        working-directory: ./packages/create-plugin/generated
+
+      - name: '@grafana/sign-plugin - build'
+        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+        run: npm exec nx run @grafana/sign-plugin:build
+
+      - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
+        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
         working-directory: ./packages/create-plugin/generated
-      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generated plugin'
+
+      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
+        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
         working-directory: ./packages/create-plugin/generated
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '~1.20'
+          check-latest: true
+          cache-dependency-path: ./packages/create-plugin/generated/go.sum
+        if: ${{ matrix.hasBackend == true }}
+
+      - name: Build plugin backend
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: -v build:linux
+          workdir: ./packages/create-plugin/generated
+        if: ${{ matrix.hasBackend == true }}
+
   release:
     runs-on: ubuntu-latest
-    needs: test
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    needs: [test, generate-plugins]
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && github.actor != 'dependabot[bot]'"
     name: Release packages
     env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PEM }}
+          app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
+          private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
 
@@ -97,14 +149,14 @@ jobs:
         run: git fetch --unshallow --tags
 
       - name: Setup environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --no-audit
 
       - name: Build
         run: npm run build

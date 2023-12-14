@@ -1,0 +1,48 @@
+name: E2E tests - Playwright
+on:
+  pull_request:
+    paths:
+      - 'packages/plugin-e2e/**'
+
+jobs:
+  playwright-tests:
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
+        GOOGLE_SHEETS_VERSION: ['1.2.4', '1.2.0']
+    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy auth file
+        run: mkdir -p packages/plugin-e2e/playwright/.auth/ && cp .github/user.json packages/plugin-e2e/playwright/.auth/user.json
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build --w @grafana/plugin-e2e
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start Grafana
+        run: docker run --rm -d -p 3000:3000 --name=grafana --volume ./packages/plugin-e2e/provisioning:/etc/grafana/provisioning --env AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} --env AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} --env GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} --env "GF_INSTALL_PLUGINS=grafana-googlesheets-datasource ${{matrix.GOOGLE_SHEETS_VERSION}},grafana-redshift-datasource 1.13.0" grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+
+      - name: Run Playwright tests
+        run: npm run playwright:test --w @grafana/plugin-e2e
+        env:
+          GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}-GoogleSheets${{ matrix.GOOGLE_SHEETS_VERSION }}
+          path: packages/plugin-e2e/playwright-report/
+          retention-days: 30

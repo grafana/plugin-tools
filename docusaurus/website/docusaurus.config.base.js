@@ -1,6 +1,23 @@
 const path = require('path');
 const remarkFigureCaption = require('gridsome-remark-figure-caption');
-const { grafanaPrismTheme } = require('./src/theme/prism');
+const prism = require('prism-react-renderer');
+
+const {
+  themes: { oneDark },
+} = prism;
+
+// Replace background and color to better match Grafana theme.
+const grafanaPrismTheme = {
+  ...oneDark,
+  plain: {
+    color: 'rgb(204, 204, 220)',
+    backgroundColor: '#181b1f',
+  },
+};
+
+const customFields = {
+  nodeEnv: process.env.NODE_ENV,
+};
 
 /** @type {import('@docusaurus/types').Config} */
 const generalConfig = {
@@ -22,7 +39,6 @@ const generalConfig = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-  noIndex: true,
 };
 
 const plugins = [
@@ -35,6 +51,12 @@ const plugins = [
           '@shared': path.resolve(__dirname, '..', 'docs', 'shared'),
         },
       },
+    },
+  ],
+  [
+    'docusaurus-lunr-search',
+    {
+      disableVersioning: true,
     },
   ],
 ];
@@ -57,6 +79,7 @@ const presetsDocs = {
     ],
   ],
 };
+
 const presetsTheme = {
   customCss: require.resolve('./src/css/custom.css'),
 };
@@ -68,12 +91,6 @@ const themeConfigNavbar = {
     src: 'img/logo.svg',
   },
   items: [
-    {
-      type: 'doc',
-      docId: 'get-started/get-started',
-      position: 'right',
-      label: 'Docs',
-    },
     { href: 'https://community.grafana.com/c/plugin-development/30', label: 'Help', position: 'right' },
     {
       href: 'https://www.github.com/grafana/plugin-tools',
@@ -127,7 +144,9 @@ const themeConfigFooter = {
 
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
+  additionalLanguages: ['bash', 'diff', 'json'],
 };
+
 const themeConfigColorMode = {
   defaultMode: 'dark',
   disableSwitch: true,
@@ -135,6 +154,7 @@ const themeConfigColorMode = {
 };
 
 module.exports = {
+  customFields,
   generalConfig,
   plugins,
   presetsDocs,

@@ -1,7 +1,7 @@
 import { basename } from 'path';
 import { spawnSync } from 'child_process';
 import { sync as findUpSync } from 'find-up';
-import { getPackageJson } from './utils.npm';
+import { getPackageJson } from './utils.packagejson';
 
 const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
@@ -16,6 +16,10 @@ export type PackageManager = {
 
 export function getPackageManagerFromUserAgent(): PackageManager {
   const agent = process.env.npm_config_user_agent;
+
+  if (!agent) {
+    return DEFAULT_PACKAGE_MANAGER;
+  }
 
   const [name, versionWithText] = agent.split('/');
   const [version] = versionWithText.split(' ');

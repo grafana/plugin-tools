@@ -7,6 +7,9 @@ import { renderHandlebarsTemplate } from './utils.handlebars';
 import { getPluginJson } from './utils.plugin';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
 import { getPackageManagerWithFallback } from './utils.packageManager';
+import { getExportFileName } from '../utils/utils.files';
+import { getVersion } from './utils.version';
+import { getConfig } from './utils.config';
 
 /**
  *
@@ -52,7 +55,20 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
 
   const rendered = renderTemplateFromFile(templateFile, data);
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '');
-  const exportPath = path.join(EXPORT_PATH_PREFIX, relativeExportPath);
+  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
+
+  mkdirp.sync(path.dirname(exportPath));
+  fs.writeFileSync(exportPath, rendered);
+}
+
+export function compileProvisioningTemplateFile(pluginType: string, templateFile: string, data?: any) {
+  if (!isFile(templateFile)) {
+    return;
+  }
+
+  const rendered = renderTemplateFromFile(templateFile, data);
+  const relativeExportPath = templateFile.replace(TEMPLATE_PATHS[pluginType], '.');
+  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
   mkdirp.sync(path.dirname(exportPath));
   fs.writeFileSync(exportPath, rendered);
@@ -64,6 +80,9 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 
 export function getTemplateData() {
   const pluginJson = getPluginJson();
+  const { features } = getConfig();
+  const currentVersion = getVersion();
+
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
 
   return {
@@ -76,5 +95,7 @@ export function getTemplateData() {
     pluginType: pluginJson.type,
     packageManagerName,
     packageManagerVersion,
+    version: currentVersion,
+    bundleGrafanaUI: features.bundleGrafanaUI,
   };
 }

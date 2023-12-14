@@ -1,0 +1,5 @@
+# These files should be considered handlebars templates and can cause prettier to error.
+# Instead we run a command post scaffold to make sure to prettify the code.
+/packages/create-plugin/templates/**/*.*
+
+/.nx/cache

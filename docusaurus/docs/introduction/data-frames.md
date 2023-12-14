@@ -87,6 +87,10 @@ Let's look at an example. The following table demonstrates a data frame with two
 
 Each field has three values, and each value in a field must share the same type. In this case, all values in the `time` field are timestamps, and all values in the `temperature` field are numbers.
 
+While time fields represent timestamps, the type of the values should be `Number` (TypeScript) or `time.Time` (Golang).
+
+Another restriction on time fields in date frames concerns converting numbers. In the plugin frontend code, it's possible to convert other formats to `Number` using the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/3e24a500bf43b30360faf9f32465281cc0ff996d/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L245-L257) from the `@grafana/data` package. This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), Javascript `DateTime`s and strings with relative times (for example, `now-10s`) to `Numbers`.
+
 One restriction on data frames is that all fields in the frame must be of the same length to be a valid data frame.
 
 ## Field configurations
@@ -97,7 +101,7 @@ By adding field configurations to a data frame, Grafana can configure visualizat
 
 ## Data transformations
 
-We have seen how field configs contain type information, and they also have another role. Data frame fields enable _data transformations_ within Grafana.
+We have seen how field configs contain type information; additionally, data frame fields enable _data transformations_ within Grafana.
 
 A data transformation is any function that accepts a data frame as input, and returns another data frame as output. By using data frames in your plugin, you get a range of transformations for free.
 
@@ -217,3 +221,7 @@ The Javascript implementation of data frames is in the [`/src/dataframe` folder]
 ### Go
 
 For documentation on the Go implementation of data frames, refer to the [github.com/grafana/grafana-plugin-sdk-go/data package](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/data?tab=doc).
+
+## Learn more
+
+For a guide to plugin development with data frames, refer to [Work with data frames](../create-a-plugin/develop-a-plugin/work-with-data-frames.md).

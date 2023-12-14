@@ -1,0 +1,21 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: AWS Redshift
+    orgId: 1
+
+datasources:
+  - name: AWS Redshift
+    type: grafana-redshift-datasource
+    uid: P7DC3E4760CFAC4AH
+    jsonData:
+      authType: keys
+      defaultRegion: us-east-2
+      useManagedSecret: false
+      database: dev
+      dbUser: cloud-datasources
+      clusterIdentifier: redshift-cluster-grafana
+    secureJsonData:
+      accessKey: $AWS_ACCESS_KEY_ID
+      secretKey: $AWS_SECRET_ACCESS_KEY
+    version: 1

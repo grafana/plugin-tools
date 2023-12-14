@@ -1,3 +1,51 @@
+# v2.1.0 (Tue Oct 24 2023)
+
+#### 🚀 Enhancement
+
+- Bump to node 20 [#478](https://github.com/grafana/plugin-tools/pull/478) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v2.0.2 (Fri Oct 20 2023)
+
+#### 🐛 Bug Fix
+
+- Docs: Fix broken links in package files [#476](https://github.com/grafana/plugin-tools/pull/476) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 1
+
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+
+---
+
+# v2.0.1 (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- Allows to sign behind an https proxy [#436](https://github.com/grafana/plugin-tools/pull/436) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.0.0 (Mon Oct 02 2023)
+
+#### 🐛 Bug Fix
+
+- Increase required node engine to v18 [#405](https://github.com/grafana/plugin-tools/pull/405) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v1.1.0 (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:

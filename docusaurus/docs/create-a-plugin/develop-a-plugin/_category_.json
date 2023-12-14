@@ -1,6 +1,9 @@
 {
-    "position": 1,
-    "label": "Develop a plugin",
-    "collapsible": true,
-    "collapsed": true
-  }
+  "position": 1,
+  "label": "Develop a plugin",
+  "customProps": {
+    "description": "Guides for learning the fundamentals of Grafana plugin development."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

@@ -1,3 +1,325 @@
+# v2.10.0 (Tue Dec 12 2023)
+
+#### 🚀 Enhancement
+
+- Update react to 18 in package.json template [#455](https://github.com/grafana/plugin-tools/pull/455) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.9.0 (Fri Dec 08 2023)
+
+#### 🚀 Enhancement
+
+- Update the scenes-app template to use the latest scenes library and fix some template code style errors [#573](https://github.com/grafana/plugin-tools/pull/573) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.8.1 (Fri Dec 08 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Templates: import DataQuery from `@grafana/schema` instead of `@grafana/data` [#549](https://github.com/grafana/plugin-tools/pull/549) ([@ludovicm67](https://github.com/ludovicm67))
+
+#### Authors: 1
+
+- Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67))
+
+---
+
+# v2.8.0 (Thu Dec 07 2023)
+
+#### 🚀 Enhancement
+
+- create-plugin: Add provisioning scaffold [#529](https://github.com/grafana/plugin-tools/pull/529) ([@Ukochka](https://github.com/Ukochka) [@josmperez](https://github.com/josmperez) [@sympatheticmoose](https://github.com/sympatheticmoose) [@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker) [@dependabot[bot]](https://github.com/dependabot[bot]) [@tolzhabayev](https://github.com/tolzhabayev) [@leventebalogh](https://github.com/leventebalogh) [@sd2k](https://github.com/sd2k))
+
+#### Authors: 9
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Ben Sully ([@sd2k](https://github.com/sd2k))
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# v2.7.0 (Mon Dec 04 2023)
+
+#### 🚀 Enhancement
+
+- Update github release workflow to use our action instead of custom code [#544](https://github.com/grafana/plugin-tools/pull/544) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.6.0 (Tue Nov 07 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez)), for all your work!
+
+#### 🚀 Enhancement
+
+- update to use sha1sum and minor workflow updates [#503](https://github.com/grafana/plugin-tools/pull/503) ([@briangann](https://github.com/briangann))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Replace 'master' with 'main' on ref [#507](https://github.com/grafana/plugin-tools/pull/507) ([@joanlopez](https://github.com/joanlopez))
+
+#### Authors: 2
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Joan López de la Franca Beltran ([@joanlopez](https://github.com/joanlopez))
+
+---
+
+# v2.5.1 (Thu Nov 02 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix app backend test [#518](https://github.com/grafana/plugin-tools/pull/518) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.5.0 (Thu Nov 02 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all your work!
+
+#### 🚀 Enhancement
+
+- Adding support for controling the create-plugin tool via a rc file [#506](https://github.com/grafana/plugin-tools/pull/506) ([@mckn](https://github.com/mckn))
+
+#### 🐛 Bug Fix
+
+- Bump nvmrc to 20 to align with package.json [#498](https://github.com/grafana/plugin-tools/pull/498) ([@ckbedwell](https://github.com/ckbedwell))
+
+#### Authors: 2
+
+- Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v2.4.0 (Wed Oct 25 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Lint Deprecation Warnings [#268](https://github.com/grafana/plugin-tools/pull/268) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v2.3.0 (Tue Oct 24 2023)
+
+#### 🚀 Enhancement
+
+- Bump to node 20 [#478](https://github.com/grafana/plugin-tools/pull/478) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix wrongly named files when upgrading/migrating [#490](https://github.com/grafana/plugin-tools/pull/490) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v2.2.2 (Mon Oct 23 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix migrate and update commands [#487](https://github.com/grafana/plugin-tools/pull/487) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.2.1 (Fri Oct 20 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Domas ([@domasx2](https://github.com/domasx2)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Templates/Webpack: Include full path in dev mode image output filename [#388](https://github.com/grafana/plugin-tools/pull/388) ([@domasx2](https://github.com/domasx2))
+- Docs: Fix broken links in package files [#476](https://github.com/grafana/plugin-tools/pull/476) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 2
+
+- Domas ([@domasx2](https://github.com/domasx2))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+
+---
+
+# v2.2.0 (Tue Oct 17 2023)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Make sure scaffolded code is prettified [#461](https://github.com/grafana/plugin-tools/pull/461) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.1.2 (Mon Oct 16 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Prevent conflicting webpack runtimes [#464](https://github.com/grafana/plugin-tools/pull/464) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.1.1 (Fri Oct 13 2023)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Format code under templates/common [#451](https://github.com/grafana/plugin-tools/pull/451) ([@zoltanbedi](https://github.com/zoltanbedi))
+
+#### Authors: 1
+
+- Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi))
+
+---
+
+# v2.1.0 (Fri Oct 13 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi)), for all your work!
+
+#### 🚀 Enhancement
+
+- Update only dev dependencies when the update command runs [#458](https://github.com/grafana/plugin-tools/pull/458) ([@academo](https://github.com/academo))
+
+#### 🐛 Bug Fix
+
+- Revert prettier formatting [#450](https://github.com/grafana/plugin-tools/pull/450) ([@zoltanbedi](https://github.com/zoltanbedi))
+- Chore: Run prettier [#449](https://github.com/grafana/plugin-tools/pull/449) ([@zoltanbedi](https://github.com/zoltanbedi))
+
+#### Authors: 2
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi))
+
+---
+
+# v2.0.2 (Wed Oct 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create-plugin: Make baseURL absolute and bump swc/core [#424](https://github.com/grafana/plugin-tools/pull/424) ([@mikkancso](https://github.com/mikkancso))
+
+#### Authors: 1
+
+- [@mikkancso](https://github.com/mikkancso)
+
+---
+
+# v2.0.1 (Tue Oct 03 2023)
+
+#### 🐛 Bug Fix
+
+- Add fixes for backend sdk v0.177.0 [#437](https://github.com/grafana/plugin-tools/pull/437) ([@wbrowne](https://github.com/wbrowne))
+
+#### Authors: 1
+
+- Will Browne ([@wbrowne](https://github.com/wbrowne))
+
+---
+
+# v2.0.0 (Mon Oct 02 2023)
+
+#### 🐛 Bug Fix
+
+- Bugfix: Enable plugins to lazy load modules [#427](https://github.com/grafana/plugin-tools/pull/427) ([@mckn](https://github.com/mckn))
+- webpack template: minor lint fixes [#414](https://github.com/grafana/plugin-tools/pull/414) ([@briangann](https://github.com/briangann))
+- Increase required node engine to v18 [#405](https://github.com/grafana/plugin-tools/pull/405) ([@academo](https://github.com/academo))
+- README typo fixes [#387](https://github.com/grafana/plugin-tools/pull/387) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 4
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Esteban Beltran ([@academo](https://github.com/academo))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.12.2 (Thu Sep 07 2023)
+
+#### 🐛 Bug Fix
+
+- fix: update dockerfile with platform [#383](https://github.com/grafana/plugin-tools/pull/383) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- chore: update links to developer portal [#382](https://github.com/grafana/plugin-tools/pull/382) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Create plugin: Use latest Grafana version [#309](https://github.com/grafana/plugin-tools/pull/309) ([@dprokop](https://github.com/dprokop) [@academo](https://github.com/academo))
+
+#### Authors: 3
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Dominik Prokop ([@dprokop](https://github.com/dprokop))
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v1.12.1 (Fri Aug 25 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update transform regex to detect nested modules [#375](https://github.com/grafana/plugin-tools/pull/375) ([@aangelisc](https://github.com/aangelisc))
+
+#### Authors: 1
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+
+---
+
 # v1.12.0 (Fri Aug 18 2023)
 
 #### 🚀 Enhancement

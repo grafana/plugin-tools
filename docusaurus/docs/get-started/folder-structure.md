@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 2
 ---
 
-After you install the `create-plugin` tool and have answered the prompts, your project should look similar to this:
+After you [install](./get-started.mdx#step-1-scaffold-a-new-plugin) the `create-plugin` tool and have answered the prompts, your project should look similar to this:
 
 ```
 myorg-myplugin-datasource/
@@ -53,17 +53,17 @@ myorg-myplugin-datasource/
 
 You must have files with these exact filenames:
 
-| Filename            | Description                                                                          |
-| ------------------- | ------------------------------------------------------------------------------------ |
+| Filename            | Description                                                                                              |
+| ------------------- | -------------------------------------------------------------------------------------------------------- |
 | `./go.mod`          | Go modules dependencies. Refer to [Golang documentation](https://golang.org/cmd/go/#hdr-The_go_mod_file) |
-| `./src/plugin.json` | A JSON file describing the plugin.                                                    |
-| `./src/module.ts`   | The entry point of the frontend plugin.                                             |
-| `./pkg/main.go`     | The entry point of the backend plugin.                                                |
+| `./src/plugin.json` | A JSON file describing the plugin.                                                                       |
+| `./src/module.ts`   | The entry point of the frontend plugin.                                                                  |
+| `./pkg/main.go`     | The entry point of the backend plugin.                                                                   |
 
 ## Optional files
 
 These files in your project are optional:
 
-| Filename        | Description                                                                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Filename        | Description                                                                                                            |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `./Magefile.go` | We strongly recommend using mage build files so that you can use the build targets provided by the backend plugin SDK. |

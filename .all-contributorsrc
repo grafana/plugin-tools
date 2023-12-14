@@ -48,7 +48,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2388950?v=4",
       "profile": "https://github.com/sunker",
       "contributions": [
-        "code"
+        "code",
+        "infra"
       ]
     },
     {
@@ -78,7 +79,8 @@
       "profile": "https://github.com/mckn",
       "contributions": [
         "doc",
-        "test"
+        "test",
+        "code"
       ]
     },
     {
@@ -106,7 +108,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/9974811?v=4",
       "profile": "https://leventebalogh.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -155,7 +158,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/45749060?v=4",
       "profile": "https://github.com/josmperez",
       "contributions": [
-        "doc"
+        "doc",
+        "infra",
+        "code"
       ]
     },
     {
@@ -164,7 +169,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/5464991?v=4",
       "profile": "https://github.com/sd2k",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -184,6 +190,53 @@
       "contributions": [
         "doc",
         "infra",
+        "code"
+      ]
+    },
+    {
+      "login": "aangelisc",
+      "name": "Andreas Christou",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15019026?v=4",
+      "profile": "https://github.com/aangelisc",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mikkancso",
+      "name": "mikkancso",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13637610?v=4",
+      "profile": "https://github.com/mikkancso",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "zoltanbedi",
+      "name": "Zoltán Bedi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13729989?v=4",
+      "profile": "https://github.com/zoltanbedi",
+      "contributions": [
+        "doc",
+        "infra",
+        "code"
+      ]
+    },
+    {
+      "login": "joanlopez",
+      "name": "Joan López de la Franca Beltran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5459617?v=4",
+      "profile": "https://github.com/joanlopez",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ludovicm67",
+      "name": "Ludovic Muller",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9420561?v=4",
+      "profile": "https://ludovic-muller.fr/",
+      "contributions": [
         "code"
       ]
     }

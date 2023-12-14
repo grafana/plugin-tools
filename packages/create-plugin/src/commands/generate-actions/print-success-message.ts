@@ -29,8 +29,7 @@ ${commands.map((command) => command).join('\n')}
 
 _Note: We strongly recommend creating a new Git repository by running \`git init\` in ./${directory} before continuing._
 
-- View create-plugin documentation at https://grafana.github.io/plugin-tools/
-- Learn more about Grafana Plugins at https://grafana.com/docs/grafana/latest/plugins/developing/development/
+- Learn more about Grafana Plugin Development at https://grafana.com/developers/plugin-tools
 `;
 
   return displayAsMarkdown(msg);

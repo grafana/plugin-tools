@@ -1,4 +1,6 @@
 import https, { RequestOptions } from 'https';
+import { ProxyAgent } from 'proxy-agent';
+
 import { URL } from 'url';
 
 interface Headers {
@@ -10,6 +12,8 @@ interface Response<R> {
   data: R;
   status: number;
 }
+
+const agent = new ProxyAgent();
 
 export async function postData(urlString: string, data: unknown, headers: Headers): Promise<Response<string>> {
   return new Promise<Response<string>>((resolve, reject) => {
@@ -25,6 +29,7 @@ export async function postData(urlString: string, data: unknown, headers: Header
         ...headers,
         'Content-Type': 'application/json',
       },
+      agent,
     };
 
     const req = https.request(options, (res) => {
