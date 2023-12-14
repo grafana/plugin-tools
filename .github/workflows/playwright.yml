@@ -28,7 +28,6 @@ jobs:
             '8.1.8',
             '8.0.7',
           ]
-        GOOGLE_SHEETS_VERSION: ['1.2.4', '1.2.0']
     name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
     runs-on: ubuntu-latest
     steps:
