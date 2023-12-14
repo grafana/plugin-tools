@@ -10,24 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        GRAFANA_VERSION:
-          [
-            '10.2.2',
-            '10.1.5',
-            '10.0.9',
-            '9.5.14',
-            '9.4.17',
-            '9.3.16',
-            '9.2.20',
-            '9.1.8',
-            '9.0.8',
-            '8.5.27',
-            '8.4.11',
-            '8.3.11',
-            '8.2.7',
-            '8.1.8',
-            '8.0.7',
-          ]
+        GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
+        GOOGLE_SHEETS_VERSION: ['1.2.4', '1.2.0']
     name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
     runs-on: ubuntu-latest
     steps:
