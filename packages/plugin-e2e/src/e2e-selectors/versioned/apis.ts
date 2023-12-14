@@ -16,7 +16,8 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: '/api/ds/query',
     },
     healthPattern: {
-      [MIN_GRAFANA_VERSION]: 'api/datasources/uid/*/health',
+      ['9.5.0']: 'api/datasources/uid/*/health',
+      [MIN_GRAFANA_VERSION]: '/api/datasources/*/health',
     },
     health: {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}/health`,
