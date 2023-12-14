@@ -15,7 +15,7 @@ export class AnnotationPage extends GrafanaPage {
 
   async clickAddNew() {
     const { Dashboard } = this.ctx.selectors.pages;
-    this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTAV2).click();
+    await this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTAV2).click();
     return new AnnotationEditPage(this.ctx);
   }
 }
