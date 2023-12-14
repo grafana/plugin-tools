@@ -5,6 +5,8 @@ import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
 
+const ERROR_STATUS = 'error';
+
 export class PanelEditPage extends GrafanaPage implements PanelError {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
@@ -37,19 +39,19 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   }
 
   getPanelError() {
-    // the selector (not the selector value) used to identify a panel error changed in 9.4.3 and in 10.1.5
-    let selector = this.ctx.selectors.components.Panels.Panel.status('error');
+    // the selector (not the selector value) used to identify a panel error changed in 9.4.3
     if (semver.lte(this.ctx.grafanaVersion, '9.4.3')) {
-      selector = this.ctx.selectors.components.Panels.Panel.headerCornerInfo('error');
-    } else if (semver.lte(this.ctx.grafanaVersion, '10.1.5')) {
-      selector = 'Panel status';
+      return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.headerCornerInfo(ERROR_STATUS));
     }
 
-    return this.getByTestIdOrAriaLabel(selector);
+    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.status(ERROR_STATUS));
   }
 
   async refreshPanel(options?: RequestOptions) {
-    const responsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes('/query'), options);
+    const responsePromise = this.ctx.page.waitForResponse(
+      (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
+      options
+    );
     // in older versions of grafana, the refresh button is rendered twice. this is a workaround to click the correct one
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.General.content)
       .locator(`selector=${this.ctx.selectors.components.RefreshPicker.runButtonV2}`)
