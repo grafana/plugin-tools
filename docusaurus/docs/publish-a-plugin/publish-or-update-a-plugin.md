@@ -37,7 +37,7 @@ Follow these steps to publish your plugin for the first time.
 1. In the left menu, under Org Settings, click **My Plugins**.
 1. Click **Submit New Plugin**. The Create Plugin Submission dialog box appears.
 
-   ![Submit plugin.](/img/plugins-submission-create2.png)
+   ![Submit plugin.](/img/plugins-submission-create.png)
 
 1. Enter the information requested by the form.
    - **OS & Architecture:**
@@ -47,6 +47,8 @@ Follow these steps to publish your plugin for the first time.
    - **URL:** A URL that points to a ZIP archive of your packaged plugin.
    - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
    - **SHA1:** The SHA1 hash of the plugin specified by the **URL**.
+   - **Testing guidance:** An overview covering the installation, configuration, and usage of your plugin.
+   - **Provisioning provided for test environment:** Check this box if you have [configured provisioning](./provide-test-environment.md). If you've done this, rest assured it will be identified during the review, and no additional action is needed on your part.
    - The remaining questions help us determine the [signature level](./sign-a-plugin#plugin-signature-levels) for your plugin.
 1. Click **Submit**.
    After you submit your plugin, we run an automated validation to make sure it adheres to our guidelines.
