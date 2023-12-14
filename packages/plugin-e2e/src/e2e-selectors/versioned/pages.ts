@@ -58,6 +58,9 @@ export const versionedPages = {
     addNewPanel: 'Add new panel',
     addNewRow: 'Add new row',
     addNewPanelLibrary: 'Add new panel from panel library',
+    itemButtonAddViz: {
+      [MIN_GRAFANA_VERSION]: 'Add new visualization menu item',
+    },
     Annotations: {
       url: '/dashboard/new?orgId=1&editview=annotations',
     },

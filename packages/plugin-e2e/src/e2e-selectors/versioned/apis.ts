@@ -16,4 +16,9 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: 'api/datasources/uid/*/health',
     },
   },
+  Dashboard: {
+    delete: {
+      [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
+    },
+  },
 };

@@ -276,6 +276,10 @@ export const versionedComponents = {
     container: () => '.page-toolbar',
     item: (tooltip: string) => `${tooltip}`,
     itemButton: (title: string) => `data-testid ${title}`,
+    itemButtonTitle: {
+      '10.1.0': 'Add button',
+      [MIN_GRAFANA_VERSION]: 'Add panel button',
+    },
   },
   QueryEditorToolbarItem: {
     button: (title: string) => `QueryEditor toolbar item button ${title}`,

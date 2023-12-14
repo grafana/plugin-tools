@@ -11,6 +11,9 @@ export type APIs = {
     healthCheck: string;
     queryPattern: string;
   };
+  Dashboard: {
+    delete: (uid: string) => string;
+  };
 };
 
 export type Components = {
@@ -241,6 +244,7 @@ export type Components = {
     item: (tooltip: string) => string;
     container: string;
     itemButton: (title: string) => string;
+    itemButtonTitle: string;
   };
   QueryEditorToolbarItem: {};
   BackButton: {
@@ -408,6 +412,7 @@ export type Pages = {
     addNewPanel: string;
     addNewRow: string;
     addNewPanelLibrary: string;
+    itemButtonAddViz: string;
     Annotations: {
       url: string;
     };

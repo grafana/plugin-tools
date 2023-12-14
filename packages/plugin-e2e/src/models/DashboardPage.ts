@@ -38,22 +38,21 @@ export class DashboardPage extends GrafanaPage {
   }
 
   async addPanel(): Promise<PanelEditPage> {
+    const { components, pages } = this.ctx.selectors;
     if (gte(this.ctx.grafanaVersion, '10.0.0')) {
-      //TODO: add new selector and use it in grafana/ui
-      const title = gte(this.ctx.grafanaVersion, '10.1.0') ? 'Add button' : 'Add panel button';
-      await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PageToolbar.itemButton(title)).click();
       await this.getByTestIdOrAriaLabel(
-        this.ctx.selectors.pages.AddDashboard.itemButton('Add new visualization menu item')
+        components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)
       ).click();
+      await this.getByTestIdOrAriaLabel(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
-      await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.AddDashboard.addNewPanel).click();
+      await this.getByTestIdOrAriaLabel(pages.AddDashboard.addNewPanel).click();
     }
 
     return new PanelEditPage(this.ctx);
   }
 
   async deleteDashboard() {
-    await this.ctx.request.delete(`/api/datasources/uid/${this.dashboardUid}`);
+    await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboardUid));
   }
 
   async refreshDashboard() {
