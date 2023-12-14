@@ -3,9 +3,9 @@ import minimist from 'minimist';
 // @ts-ignore
 import { Confirm, Input, Select } from 'enquirer';
 import glob from 'glob';
-import { lstatSync } from 'node:fs';
+import { existsSync, lstatSync } from 'node:fs';
 import path from 'path';
-import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { getConfig } from '../utils/utils.config';
 import { getExportFileName } from '../utils/utils.files';
 import { normalizeId } from '../utils/utils.handlebars';
@@ -13,14 +13,35 @@ import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../
 import { getExportPath } from '../utils/utils.path';
 import { getVersion } from '../utils/utils.version';
 import { TemplateData } from './types';
+import { renderTemplateFromFile } from '../utils/utils.templates';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
+import { prettifyFiles } from './generate-actions/prettify-files';
+import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
+import { printSuccessMessage } from '../utils/utils.console';
+
+const messages = {
+  generateFilesSuccess: `Successfully generated plugin files`,
+  updateGoSdkSuccess: `Successfully updated backend files`,
+  prettifySuccess: `Successfully prettified frontend files`,
+};
 
 export const generate = async (argv: minimist.ParsedArgs) => {
-  console.log(argv);
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
   const exportPath = getExportPath(answers.pluginName, answers.orgName, answers.pluginType);
   const templateActions = getTemplateActions({ templateData, exportPath });
-  console.log({ exportPath, templateAction: templateActions[0] });
+  const { pluginName, orgName, pluginType } = answers;
+  await generateFiles({ actions: templateActions, templateData });
+  printSuccessMessage(messages.generateFilesSuccess);
+  // @ts-ignore
+  await updateGoSdkAndModules({ pluginName, orgName, pluginType });
+  printSuccessMessage(messages.updateGoSdkSuccess);
+  // @ts-ignore
+  await prettifyFiles({ pluginName, orgName, pluginType });
+  printSuccessMessage(messages.prettifySuccess);
+  // @ts-ignore
+  console.log(printGenerateSuccessMessage(answers));
 };
 
 async function promptUser(argv: minimist.ParsedArgs) {
@@ -70,6 +91,7 @@ async function promptUser(argv: minimist.ParsedArgs) {
       answers[hasBackendPrompt.name] = promptResult;
     }
   }
+  // TODO: Should we continue to prompt for workflows?
 
   return answers;
 }
@@ -84,6 +106,7 @@ function getTemplateData(answers: Record<string, any>) {
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const templateData: TemplateData = {
+    ...answers,
     pluginId,
     packageManagerName,
     packageManagerInstallCmd,
@@ -97,13 +120,100 @@ function getTemplateData(answers: Record<string, any>) {
   return templateData;
 }
 
-function getTemplateActions({ exportPath, templateData }: any) {
+function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: any }) {
   const commonActions = getActionsForTemplateFolder({
     folderPath: TEMPLATE_PATHS.common,
     exportPath,
     templateData,
   });
-  return commonActions;
+
+  // Copy over files from the plugin type specific folder, e.g. "templates/app" for "app" plugins ("app" | "panel" | "datasource").
+  const pluginTypeSpecificActions = getActionsForTemplateFolder({
+    folderPath: TEMPLATE_PATHS[templateData.pluginType],
+    exportPath,
+    templateData,
+  });
+
+  // Copy over backend-specific files (if selected)
+  const backendFolderPath = templateData.isAppType ? TEMPLATE_PATHS.backendApp : TEMPLATE_PATHS.backend;
+  const backendActions = templateData.hasBackend
+    ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath, templateData })
+    : [];
+
+  // Common, pluginType and backend actions can contain different templates for the same destination.
+  // This filtering removes the duplicate file additions to prevent plop erroring and makes sure the
+  // correct template is scaffolded.
+  // Note that the order is reversed so backend > pluginType > common
+  const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce((acc, file) => {
+    const actionExists = acc.find((f) => f.path === file.path);
+    // return early to prevent multiple add type actions being added to the array
+    if (actionExists && actionExists.type === 'add' && file.type === 'add') {
+      return acc;
+    }
+    acc.push(file);
+    return acc;
+  }, []);
+
+  // Copy over Github workflow files (if selected)
+  const ciWorkflowActions = getActionsForTemplateFolder({
+    folderPath: TEMPLATE_PATHS.ciWorkflows,
+    exportPath,
+    templateData,
+  });
+
+  const isCompatibleWorkflowActions = getActionsForTemplateFolder({
+    folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
+    exportPath,
+    templateData,
+  });
+
+  // Replace conditional bits in the Readme files
+  const readmeActions = getActionsForReadme({ exportPath, templateData });
+
+  return [...pluginActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
+}
+
+function getActionsForReadme({ exportPath, templateData }: { exportPath: string; templateData: TemplateData }): any {
+  return [
+    replacePatternWithTemplateInReadme(
+      '-- INSERT FRONTEND GETTING STARTED --',
+      'frontend-getting-started.md',
+      exportPath,
+      templateData
+    ),
+    replacePatternWithTemplateInReadme(
+      '-- INSERT BACKEND GETTING STARTED --',
+      'backend-getting-started.md',
+      exportPath,
+      templateData
+    ),
+    replacePatternWithTemplateInReadme(
+      '-- INSERT DISTRIBUTING YOUR PLUGIN --',
+      'distributing-your-plugin.md',
+      exportPath,
+      templateData
+    ),
+  ];
+}
+
+function replacePatternWithTemplateInReadme(
+  pattern: string,
+  partialsFile: string,
+  exportPath: string,
+  templateData: TemplateData
+): any {
+  return {
+    type: 'modify',
+    path: path.join(exportPath, 'README.md'),
+    pattern,
+    // @ts-ignore
+    template: undefined,
+    templateFile: path.join(PARTIALS_DIR, partialsFile),
+    data: {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      ...templateData,
+    },
+  };
 }
 
 function getActionsForTemplateFolder({
@@ -147,6 +257,26 @@ function isFile(path: string) {
     return lstatSync(path).isFile();
   } catch (e) {
     return false;
+  }
+}
+
+// TODO:
+// - Handle modify commands (e.g readme generation)
+// - Handle bruteforce action.force to overwrite files / not overwrite files
+// - Handle abort on fail???
+async function generateFiles({ actions, templateData }: { actions: any[]; templateData: TemplateData }) {
+  for (const action of actions) {
+    const rootDir = path.dirname(action.path);
+    if (!existsSync(rootDir)) {
+      await mkdir(rootDir, { recursive: true });
+    }
+
+    if (action.type === 'add') {
+      const rendered = renderTemplateFromFile(action.templateFile, templateData);
+      await writeFile(action.path, rendered);
+    }
+    if (action.type === 'modify') {
+    }
   }
 }
 
