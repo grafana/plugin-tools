@@ -12,7 +12,7 @@ sidebar_position: 0.5
 
 # Best practices for plugin development
 
-We have compiled a list of good practices for building high-quality plugins for Grafana. We recommend referring to them when building your own plugin for best results.
+We have compiled a list of practices for building high-quality plugins for Grafana that we have found beneficial. Refer to them when building your own plugin for best results.
 
 Is something missing from this list? [Let us know](https://github.com/grafana/plugin-tools/issues/new).
 
@@ -42,19 +42,19 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 ### Frontend (only) plugins
 
-- **Frontend-only data sources typically use the [Grafana proxy](/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service.** While this is a simple way of adding support for queries in your plugin (and doesn't require Golang knowledge), there are use cases for which writing a backend plugin is necessary. Refer to [Backend plugins](/introduction/backend-plugins#use-cases-for-implementing-a-backend-plugin) for more information about those.
+- **Data sources running only on the frontend typically use the [Grafana proxy](/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service.** This s a simple way of adding support for queries in your plugin, and it doesn't require Golang knowledge. However, there are use cases for which writing a backend plugin is necessary. Refer to [Backend plugins](/introduction/backend-plugins#use-cases-for-implementing-a-backend-plugin) for more information about those.
 
 ### Backend plugins
 
 - **Add support for alerting.** Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"enabled": true` to your `plugin.json` file.
 - **Use the `CallResourceHandler` interface to serve custom HTTP requests.** For more information, refer to [Resource handlers](/introduction/backend-plugins#resource-handlers). This is useful, for example, when providing query builders, as shown in this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/app-with-backend/pkg/plugin/app.go#L35).
-- **Add metrics to your data source.** More information in [Backend plugins](/introduction/backend-plugins#collect-metrics).
+- **Add metrics to your data source.** Find more information in [Backend plugins](/introduction/backend-plugins#collect-metrics).
 - **Add tracing to your data source.** In addition to metrics, tracing allows you to deep dive into your plugin performance. More information is available in our [documentation](/create-a-plugin/extend-a-plugin/add-distributed-tracing-for-backend-plugins) and an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-http-backend/pkg/plugin/datasource.go#L141-L156).
 - **Keep cached connections.** This is an important optimization. To learn more, refer to our [documentation](/introduction/backend-plugins#caching-and-connection-pooling) and an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-http-backend/pkg/plugin/datasource.go#L40-L66).
 - **Add macro support.** Macros are similar to variables, but they are typically evaluated in the backend and can return values based on environment data like the current time selection. It can be useful, for example, to evaluate alerts during a dynamic period. These are usually defined using the syntax `$__macroName` (for example, `$__timeFilter`). Refer to this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-basic/pkg/query/macro.go) to discover how you can implement support. Some pre-defined macros are available in the [plugin SDK `macros` package](https://github.com/grafana/grafana-plugin-sdk-go/tree/main/experimental/macros).
 - **For SQL data sources, refer to the [`sqlutil` package in the SDK](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/data/sqlutil).** It includes multiple helpers to work with SQL data sources for things like data frame conversion, default macros, and so on. Also, consider using the [`sqlds` package](https://pkg.go.dev/github.com/grafana/sqlds) which highly simplifies the implementation of SQL data sources.
-- **Don't use the local file system.** Different plugins share the same environment. For security reasons, plugins should not rely on local files.
-- **Don't use environment variables.** Environment variables are also a security risk and should be avoided. For configuration to a particular data source, use the `jsonData` or `secureJsonData` fields in the `plugin.json` file. In case some generic configuration is needed for the plugin (shared among data sources), use the [`plugin` configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
+- **Don't use the local file system.** Different plugins share the same environment. For security reasons, plugins shouldn't rely on local files.
+- **Don't use environment variables.** Environment variables are also a security risk and should be avoided. For configuration to a particular data source, use the `jsonData` or `secureJsonData` fields in the `plugin.json` file. If configuration is needed for the plugin which is shared among data sources, then use the [`plugin` configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
 - **Plugins should not execute arbitrary code in the backend.** Again, this is a security risk and should be avoided. If your plugin needs to execute code, provide a list of allowed commands and validate the input before executing it.
 - **Don't expose sensitive information.** For security reasons, avoid exposing sensitive information such as secrets.
 - **In general, any error happening should be logged with level `error`.**
@@ -64,4 +64,4 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 - **Specify a root page for your app.** If your app defines multiple pages, make sure to select a default one that will be used as a landing page for your plugin.
 - **To generate dynamic apps, consider using [Grafana Scenes](https://grafana.com/developers/scenes/).**
-- **Consider whether contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/) would help a user appropriately discover your app and continue a given workflow.** Additionally, if your app provides context that be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
+- **Consider  contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/)**. UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
