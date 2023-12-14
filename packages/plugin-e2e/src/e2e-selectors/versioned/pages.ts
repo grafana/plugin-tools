@@ -64,6 +64,9 @@ export const versionedPages = {
     Annotations: {
       url: '/dashboard/new?orgId=1&editview=annotations',
     },
+    Variables: {
+      url: '/dashboard/new?orgId=1&editview=templating',
+    },
   },
   Dashboard: {
     url: (uid: string) => `/d/${uid}`,
@@ -130,6 +133,9 @@ export const versionedPages = {
           tableRowDuplicateButtons: (variableName: string) => `Variable editor Table Duplicate button ${variableName}`,
           tableRowRemoveButtons: (variableName: string) => `Variable editor Table Remove button ${variableName}`,
           addVariableCTAV2: (name: string) => `data-testid Call to action button ${name}`,
+          addVariableCTAV2Item: {
+            [MIN_GRAFANA_VERSION]: 'Add variable',
+          },
         },
         Edit: {
           General: {

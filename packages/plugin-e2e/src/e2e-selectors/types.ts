@@ -419,6 +419,9 @@ export type Pages = {
     Annotations: {
       url: string;
     };
+    Variables: {
+      url: string;
+    };
   };
   Dashboard: {
     url: (uid: string) => string;
@@ -480,6 +483,7 @@ export type Pages = {
           tableRowDuplicateButtons: (variableName: string) => string;
           tableRowRemoveButtons: (variableName: string) => string;
           addVariableCTAV2: (variableName: string) => string;
+          addVariableCTAV2Item: string;
         };
         Edit: {
           General: {
