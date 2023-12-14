@@ -1,3 +1,22 @@
+# v2.10.1 (Thu Dec 14 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Carson ([@mure](https://github.com/mure)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Copy over `query_help.md` when building plugins [#374](https://github.com/grafana/plugin-tools/pull/374) ([@mure](https://github.com/mure) [@jackw](https://github.com/jackw))
+- Minor edits to style of README.md [#583](https://github.com/grafana/plugin-tools/pull/583) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 3
+
+- Carson ([@mure](https://github.com/mure))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+
+---
+
 # v2.10.0 (Tue Dec 12 2023)
 
 #### 🚀 Enhancement
