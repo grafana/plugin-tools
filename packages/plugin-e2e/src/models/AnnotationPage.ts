@@ -8,7 +8,7 @@ export class AnnotationPage extends GrafanaPage {
   }
 
   async goto() {
-    await this.ctx.page.goto('/dashboard/new?orgId=1&editview=annotations', {
+    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Annotations.url, {
       waitUntil: 'networkidle',
     });
   }

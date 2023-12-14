@@ -58,6 +58,9 @@ export const versionedPages = {
     addNewPanel: 'Add new panel',
     addNewRow: 'Add new row',
     addNewPanelLibrary: 'Add new panel from panel library',
+    Annotations: {
+      url: '/dashboard/new?orgId=1&editview=annotations',
+    },
   },
   Dashboard: {
     url: (uid: string) => `/d/${uid}`,

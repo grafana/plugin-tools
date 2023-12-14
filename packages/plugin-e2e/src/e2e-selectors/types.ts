@@ -406,6 +406,9 @@ export type Pages = {
     addNewPanel: string;
     addNewRow: string;
     addNewPanelLibrary: string;
+    Annotations: {
+      url: string;
+    };
   };
   Dashboard: {
     url: (uid: string) => string;
