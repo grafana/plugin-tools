@@ -1,5 +1,5 @@
 const gte = require('semver/functions/gte');
-import { Expect } from '@playwright/test';
+
 import { PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
@@ -9,9 +9,9 @@ export type VariableType = 'Query' | 'Constant' | 'Custom';
 
 export class VariableEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
-    this.datasource = new DataSourcePicker(ctx, expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
+    this.datasource = new DataSourcePicker(ctx);
   }
 
   async setVariableType(type: VariableType) {
