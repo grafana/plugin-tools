@@ -38,7 +38,7 @@ export abstract class GrafanaPage {
    * @param status the HTTP status code to return. Defaults to 200
    */
   async mockQueryDataResponse<T = any>(json: T, status = 200) {
-    await this.ctx.page.route('*/**/api/ds/query*', async (route) => {
+    await this.ctx.page.route(this.ctx.selectors.apis.DataSource.queryPattern, async (route) => {
       await route.fulfill({ json, status });
     });
   }
@@ -50,11 +50,11 @@ export abstract class GrafanaPage {
    * @param status the HTTP status code to return. Defaults to 200
    */
   async mockResourceResponse<T = any>(path: string, json: T, status = 200) {
-    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resource}/${path}`, async (route) => {
+    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resourceUIDPattern}/${path}`, async (route) => {
       await route.fulfill({ json, status });
     });
     // some data sources use the backendSrv directly, and then the path may be different
-    await this.ctx.page.route(`/api/datasources/*/resources/${path}`, async (route) => {
+    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resourcePattern}/${path}`, async (route) => {
       await route.fulfill({ json, status });
     });
   }
@@ -66,7 +66,7 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataRequest(cb?: (request: Request) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForRequest((request) => {
-      if (request.url().includes('api/ds/query') && request.method() === 'POST') {
+      if (request.url().includes(this.ctx.selectors.apis.DataSource.query) && request.method() === 'POST') {
         return cb ? cb(request) : true;
       }
       return false;

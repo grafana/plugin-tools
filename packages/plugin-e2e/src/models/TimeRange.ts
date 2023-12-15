@@ -15,6 +15,7 @@ export class TimeRange extends GrafanaPage {
     }
 
     if (zone) {
+      //todo: add an e2e selector for the time zone picker and use it in grafana ui
       await this.ctx.page.getByRole('button', { name: 'Change time settings' }).click();
       await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.TimeZonePicker.containerV2).fill(zone);
     }

@@ -14,7 +14,10 @@ export class AnnotationEditPage extends GrafanaPage {
    * @param options - Optional. RequestOptions to pass to waitForResponse
    */
   async runQuery(options?: RequestOptions) {
-    const responsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes('/query'), options);
+    const responsePromise = this.ctx.page.waitForResponse(
+      (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
+      options
+    );
     //TODO: add new selector and use it in grafana/ui
     await this.ctx.page.getByRole('button', { name: 'TEST' }).click();
     return responsePromise;

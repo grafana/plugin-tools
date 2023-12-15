@@ -8,22 +8,20 @@ export class VariablePage extends GrafanaPage {
   }
 
   async goto() {
-    //TODO: use selector instead
-    await this.ctx.page.goto('dashboard/new?orgId=1&editview=templating', {
+    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Settings.Variables.url, {
       waitUntil: 'networkidle',
     });
   }
 
   async clickAddNew() {
-    const { Dashboard } = this.ctx.selectors.pages;
+    const { addVariableCTAV2, addVariableCTAV2Item, newButton } =
+      this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
     try {
-      const ctaSelector = this.getByTestIdOrAriaLabel(
-        Dashboard.Settings.Variables.List.addVariableCTAV2('Add variable')
-      );
+      const ctaSelector = this.getByTestIdOrAriaLabel(addVariableCTAV2(addVariableCTAV2Item));
       await ctaSelector.waitFor();
       await ctaSelector.click();
     } catch (error) {
-      await this.getByTestIdOrAriaLabel(Dashboard.Settings.Variables.List.newButton).click();
+      await this.getByTestIdOrAriaLabel(newButton).click();
     }
 
     return new VariableEditPage(this.ctx);
