@@ -48,7 +48,7 @@ async function promptUser(argv: minimist.ParsedArgs) {
   const answers: Record<string, any> = {};
 
   for (const promptDefinition of prompts) {
-    const { name, type, message, validate, default: defaultValue, choices } = promptDefinition;
+    const { name, type, message, validate, initial, choices } = promptDefinition;
     if (argv[name]) {
       answers[name] = argv[name];
     } else {
@@ -59,7 +59,7 @@ async function promptUser(argv: minimist.ParsedArgs) {
           name,
           message,
           validate,
-          initial: defaultValue,
+          initial,
         });
       }
 
@@ -91,7 +91,18 @@ async function promptUser(argv: minimist.ParsedArgs) {
       answers[hasBackendPrompt.name] = promptResult;
     }
   }
-  // TODO: Should we continue to prompt for workflows?
+
+  for (const promptDefinition of workflowPrompts) {
+    const { name } = promptDefinition;
+    if (argv[name]) {
+      answers[name] = argv[name];
+    } else {
+      const prompt = new Confirm(promptDefinition);
+
+      const promptResult = await prompt.run();
+      answers[name] = promptResult;
+    }
+  }
 
   return answers;
 }
@@ -155,17 +166,21 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
   }, []);
 
   // Copy over Github workflow files (if selected)
-  const ciWorkflowActions = getActionsForTemplateFolder({
-    folderPath: TEMPLATE_PATHS.ciWorkflows,
-    exportPath,
-    templateData,
-  });
+  const ciWorkflowActions = templateData.hasGithubWorkflows
+    ? getActionsForTemplateFolder({
+        folderPath: TEMPLATE_PATHS.ciWorkflows,
+        exportPath,
+        templateData,
+      })
+    : [];
 
-  const isCompatibleWorkflowActions = getActionsForTemplateFolder({
-    folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
-    exportPath,
-    templateData,
-  });
+  const isCompatibleWorkflowActions = templateData.hasGithubLevitateWorkflow
+    ? getActionsForTemplateFolder({
+        folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
+        exportPath,
+        templateData,
+      })
+    : [];
 
   // Replace conditional bits in the Readme files
   const readmeActions = getActionsForReadme({ exportPath, templateData });
@@ -307,12 +322,27 @@ const prompts = [
     name: 'pluginDescription',
     type: 'input',
     message: 'How would you describe your plugin?',
-    default: '',
+    initial: '',
   },
   {
     name: 'pluginType',
     type: 'select',
     choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel, PLUGIN_TYPES.scenes],
     message: 'What type of plugin would you like?',
+  },
+];
+
+const workflowPrompts = [
+  {
+    name: 'hasGithubWorkflows',
+    type: 'confirm',
+    message: 'Do you want to add Github CI and Release workflows?',
+    initial: false,
+  },
+  {
+    name: 'hasGithubLevitateWorkflow',
+    type: 'confirm',
+    message: 'Do you want to add a Github workflow for automatically checking "Grafana API compatibility" on PRs?',
+    initial: false,
   },
 ];

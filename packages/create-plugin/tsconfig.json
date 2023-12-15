@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "exclude": ["node_modules", "templates"],
+  "exclude": ["node_modules", "templates", "src/commands/generate.plopfile.ts"],
   "extends": "../../tsconfig.base.json",
   "include": ["src"]
 }
