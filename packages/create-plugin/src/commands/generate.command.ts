@@ -14,22 +14,31 @@ import { getExportPath } from '../utils/utils.path';
 import { getVersion } from '../utils/utils.version';
 import { TemplateData } from './types';
 import { renderTemplateFromFile } from '../utils/utils.templates';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
 import { prettifyFiles } from './generate-actions/prettify-files';
 import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
-import { printSuccessMessage } from '../utils/utils.console';
+import { printSuccessMessage, printError } from '../utils/utils.console';
 
 const messages = {
-  generateFilesSuccess: `Successfully generated plugin files`,
-  updateGoSdkSuccess: `Successfully updated backend files`,
-  prettifySuccess: `Successfully formatted frontend files`,
+  generateFilesSuccess: 'Successfully generated plugin files',
+  updateGoSdkSuccess: 'Successfully updated backend files',
+  prettifySuccess: 'Successfully formatted frontend files',
 };
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
   const exportPath = getExportPath(answers.pluginName, answers.orgName, answers.pluginType);
+  const exportPathExists = existsSync(exportPath);
+  const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
+
+  // Prevent generation from writing to an existing, populated directory unless in DEV mode.
+  if (exportPathIsPopulated && !IS_DEV) {
+    printError(`Aborting scaffold. '${exportPath}' exists and contains files.`);
+    process.exit(1);
+  }
+
   const templateActions = getTemplateActions({ templateData, exportPath });
   const { pluginName, orgName, pluginType } = answers;
   await generateFiles({ actions: templateActions, templateData });
@@ -200,16 +209,14 @@ function getActionsForTemplateFolder({
     files = files.filter((file) => path.basename(file) !== 'npmrc');
   }
 
-  function getExportPath(f: string) {
+  function getFileExportPath(f: string) {
     return path.relative(folderPath, path.dirname(f));
   }
 
   return files.filter(isFile).map((f) => ({
     templateFile: f,
     // The target path where the compiled template is saved to
-    path: path.join(exportPath, getExportPath(f), getExportFileName(f)),
-    // Support overriding files in development for overriding "generated" plugins.
-    force: IS_DEV,
+    path: path.join(exportPath, getFileExportPath(f), getExportFileName(f)),
     // We would still like to scaffold as many files as possible even if one fails
     abortOnFail: false,
     data: {
@@ -228,7 +235,6 @@ function isFile(path: string) {
 }
 
 // TODO:
-// - Handle modify commands (e.g readme generation)
 // - Handle bruteforce action.force to overwrite files / not overwrite files
 // - Handle abort on fail???
 async function generateFiles({ actions, templateData }: { actions: any[]; templateData: TemplateData }) {
