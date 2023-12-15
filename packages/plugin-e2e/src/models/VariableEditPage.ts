@@ -1,6 +1,6 @@
 const gte = require('semver/functions/gte');
 
-import { PluginTestCtx } from '../types';
+import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
@@ -9,9 +9,18 @@ export type VariableType = 'Query' | 'Constant' | 'Custom';
 
 export class VariableEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(ctx: PluginTestCtx) {
+  constructor(ctx: PluginTestCtx, private args: DashboardEditViewArgs<string>) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
+  }
+
+  async goto(options?: NavigateOptions) {
+    const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
+    const url = this.args.dashboard?.uid
+      ? Dashboard.Settings.Variables.Edit.url(this.args.dashboard.uid, this.args.id)
+      : AddDashboard.Settings.Variables.Edit.url(this.args.id);
+
+    await super.navigate(url, options);
   }
 
   async setVariableType(type: VariableType) {

@@ -1,29 +1,36 @@
-import { PluginTestCtx } from '../types';
+import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 import { VariableEditPage } from './VariableEditPage';
 
 export class VariablePage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx) {
+  constructor(ctx: PluginTestCtx, private dashboard?: DashboardPageArgs) {
     super(ctx);
   }
 
-  async goto() {
-    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Settings.Variables.url, {
-      waitUntil: 'networkidle',
-    });
+  async goto(options?: NavigateOptions) {
+    const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
+    let url = this.dashboard?.uid
+      ? Dashboard.Settings.Variables.List.url(this.dashboard.uid)
+      : AddDashboard.Settings.Variables.List.url;
+
+    return super.navigate(url, options);
   }
 
   async clickAddNew() {
     const { addVariableCTAV2, addVariableCTAV2Item, newButton } =
       this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
-    try {
-      const ctaSelector = this.getByTestIdOrAriaLabel(addVariableCTAV2(addVariableCTAV2Item));
-      await ctaSelector.waitFor();
-      await ctaSelector.click();
-    } catch (error) {
+
+    if (!this.dashboard?.uid) {
+      await this.getByTestIdOrAriaLabel(addVariableCTAV2(addVariableCTAV2Item)).click();
+    } else {
       await this.getByTestIdOrAriaLabel(newButton).click();
     }
 
-    return new VariableEditPage(this.ctx);
+    const editIndex = await this.ctx.page.evaluate(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('editIndex');
+    });
+
+    return new VariableEditPage(this.ctx, { dashboard: this.dashboard, id: editIndex || '1' });
   }
 }
