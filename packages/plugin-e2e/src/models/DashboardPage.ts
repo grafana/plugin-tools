@@ -9,7 +9,7 @@ export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
 
-  constructor(ctx: PluginTestCtx, private dashboard?: DashboardPageArgs) {
+  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
     super(ctx);
     this.dataSourcePicker = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);

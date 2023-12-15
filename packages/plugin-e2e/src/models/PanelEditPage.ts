@@ -18,7 +18,7 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
 
-  constructor(ctx: PluginTestCtx, private args: DashboardEditViewArgs<string>) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);

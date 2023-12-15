@@ -4,7 +4,7 @@ import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(ctx: PluginTestCtx, private args: DashboardEditViewArgs<string>) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
   }

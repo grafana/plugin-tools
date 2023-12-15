@@ -3,7 +3,7 @@ import { GrafanaPage } from './GrafanaPage';
 import { VariableEditPage } from './VariableEditPage';
 
 export class VariablePage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, private dashboard?: DashboardPageArgs) {
+  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
     super(ctx);
   }
 

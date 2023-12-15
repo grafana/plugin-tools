@@ -4,7 +4,7 @@ import { AnnotationEditPage } from './AnnotationEditPage';
 import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationPage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, private dashboard?: DashboardPageArgs) {
+  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
     super(ctx);
   }
 
