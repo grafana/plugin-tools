@@ -21,6 +21,8 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Verify that your data source or app plugin can be provisioned.** Refer to [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more information.
 - **Include default dashboards in your data source or app plugin.** Refer to [Bundling of dashboards](https://grafana.com/developers/plugin-tools/introduction/plugin-types-usage#bundling-of-dashboards) for more information.
 - **Ensure that the minimum version of Grafana is correct.** Make sure that the `grafanaDependency` in your `plugin.json` points to the earliest version of Grafana that your plugin fully supports.
+- **Avoid using `console.log` in your plugin.** Console messages are usually for debugging purposes and therefore not suitable to ship to the client.
+- **Utilize log levels and never log sensitive information.** Make sure to utilize log levels properly, avoid excessive logging and never log credentials or other sensitive information.
 
 ## Panel plugins
 
@@ -38,7 +40,6 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Add query editor help.** Query editors can be complex and it's useful to provide help to users. For more information, refer to [Add query editor help](/create-a-plugin/extend-a-plugin/add-query-editor-help).
 - **Skip hidden or empty queries.** This avoids executing unnecessary or wrong queries. Data sources implementing [`DataSourceWithBackend`](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-basic/src/datasource.ts#L5) only need to implement the method `filterQuery`. Refer to this [example](https://github.com/grafana/grafana/blob/fd5f66083c91b9759ae7772f99b80c9342b93290/public/app/plugins/datasource/loki/datasource.ts#L1085).
 - **Specify a default query.** Default queries can help users to discover how queries are written for the plugin. Refer to this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-streaming-backend-websocket/streaming-backend-websocket-plugin/src/datasource.ts#L39-L41).
-- **Avoid using `console.log` in your plugin.** Console messages are usually for debugging purposes and therefore not suitable to ship to the client.
 
 ### Frontend (only) plugins
 
@@ -46,7 +47,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 ### Backend plugins
 
-- **Add support for alerting.** Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"enabled": true` to your `plugin.json` file.
+- **Add support for alerting.** Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"alterting": true` to your `plugin.json` file.
 - **Use the `CallResourceHandler` interface to serve custom HTTP requests.** For more information, refer to [Resource handlers](/introduction/backend-plugins#resource-handlers). This is useful, for example, when providing query builders, as shown in this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/app-with-backend/pkg/plugin/app.go#L35).
 - **Add metrics to your data source.** Find more information in [Backend plugins](/introduction/backend-plugins#collect-metrics).
 - **Add tracing to your data source.** In addition to metrics, tracing allows you to deep dive into your plugin performance. More information is available in our [documentation](/create-a-plugin/extend-a-plugin/add-distributed-tracing-for-backend-plugins) and an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-http-backend/pkg/plugin/datasource.go#L141-L156).
