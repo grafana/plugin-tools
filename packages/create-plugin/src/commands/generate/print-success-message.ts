@@ -32,5 +32,5 @@ _Note: We strongly recommend creating a new Git repository by running \`git init
 - Learn more about Grafana Plugin Development at https://grafana.com/developers/plugin-tools
 `;
 
-  return displayAsMarkdown(msg);
+  console.log(displayAsMarkdown(msg));
 }
