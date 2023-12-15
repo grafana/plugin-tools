@@ -29,12 +29,11 @@ export class DataSourceConfigPage extends GrafanaPage {
 
   async saveAndTest() {
     const responsePromise = this.ctx.page.waitForResponse((resp) =>
-      resp.url().includes(
-        this.ctx.selectors.apis.DataSource.health({
-          id: this.datasource.id.toString() ?? '',
-          uid: this.datasource.uid ?? '',
-        })
-      )
+      resp
+        .url()
+        .includes(
+          this.ctx.selectors.apis.DataSource.health(this.datasource.uid ?? '', this.datasource.id.toString() ?? '')
+        )
     );
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
     return responsePromise;
