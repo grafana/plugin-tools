@@ -116,7 +116,12 @@ export const versionedPages = {
         title: 'Tab General',
       },
       Annotations: {
+        Edit: {
+          url: (dashboardUid: string, annotationIndex: string) =>
+            `${versionedPages.Dashboard.url(dashboardUid)}?editview=annotations&editIndex=${annotationIndex}`,
+        },
         List: {
+          url: (dashboardUid: string) => `${versionedPages.Dashboard.url(dashboardUid)}?editview=annotations`,
           addAnnotationCTA: 'Call to action button Add annotation query',
           addAnnotationCTAV2: 'data-testid Call to action button Add annotation query',
         },

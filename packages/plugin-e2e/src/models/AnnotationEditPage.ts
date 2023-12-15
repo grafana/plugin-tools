@@ -1,12 +1,21 @@
 import { DataSourcePicker } from './DataSourcePicker';
-import { PluginTestCtx, RequestOptions } from '../types';
+import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(ctx: PluginTestCtx) {
+  constructor(ctx: PluginTestCtx, private args: DashboardEditViewArgs<string>) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
+  }
+
+  async goto(options?: NavigateOptions) {
+    const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
+    const url = this.args.dashboard?.uid
+      ? Dashboard.Settings.Annotations.Edit.url(this.args.dashboard.uid, this.args.id)
+      : AddDashboard.Settings.Annotations.Edit.url(this.args.id);
+
+    return super.navigate(url, options);
   }
 
   /**

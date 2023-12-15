@@ -463,7 +463,11 @@ export type Pages = {
         title: string;
       };
       Annotations: {
+        Edit: {
+          url: (dashboardUid: string, annotationIndex: string) => string;
+        };
         List: {
+          url: (uid: string) => string;
           /**
            * @deprecated use addAnnotationCTAV2 from Grafana 8.3 instead
            */
