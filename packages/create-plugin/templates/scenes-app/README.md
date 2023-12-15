@@ -18,6 +18,6 @@ To learn more about @grafana/scenes usage please refer to the [documentation](ht
 1. An example of a scene with tabs. See [Scene with tabs](./src/pages/WithTabs/WithTabs.tsx)
 1. An example of a scene with drill down. See [Scene with drill down](./src/pages/WithDrilldown/WithDrilldown.tsx)
 
--- INSERT FRONTEND GETTING STARTED --
+{{> frontend-getting-started packageManagerName=packageManagerName }}
 
--- INSERT DISTRIBUTING YOUR PLUGIN --
+{{> distributing-your-plugin }}

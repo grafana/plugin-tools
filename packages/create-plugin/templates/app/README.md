@@ -8,10 +8,10 @@ App plugins can let you create a custom out-of-the-box monitoring experience by 
 
 ## Get started
 
-{{#if hasBackend}}-- INSERT BACKEND GETTING STARTED --{{/if}}
--- INSERT FRONTEND GETTING STARTED --
+{{#if hasBackend}}{{> backend-getting-started }}{{/if}}
+{{> frontend-getting-started packageManagerName=packageManagerName }}
 
--- INSERT DISTRIBUTING YOUR PLUGIN --
+{{> distributing-your-plugin }}
 
 ## Learn more
 

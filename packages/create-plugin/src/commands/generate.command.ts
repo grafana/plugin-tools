@@ -5,7 +5,7 @@ import { Confirm, Input, Select } from 'enquirer';
 import glob from 'glob';
 import { existsSync, lstatSync } from 'node:fs';
 import path from 'path';
-import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PARTIALS_DIR, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { getConfig } from '../utils/utils.config';
 import { getExportFileName } from '../utils/utils.files';
 import { normalizeId } from '../utils/utils.handlebars';
@@ -23,7 +23,7 @@ import { printSuccessMessage } from '../utils/utils.console';
 const messages = {
   generateFilesSuccess: `Successfully generated plugin files`,
   updateGoSdkSuccess: `Successfully updated backend files`,
-  prettifySuccess: `Successfully prettified frontend files`,
+  prettifySuccess: `Successfully formatted frontend files`,
 };
 
 export const generate = async (argv: minimist.ParsedArgs) => {
@@ -152,13 +152,12 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
     : [];
 
   // Common, pluginType and backend actions can contain different templates for the same destination.
-  // This filtering removes the duplicate file additions to prevent plop erroring and makes sure the
-  // correct template is scaffolded.
+  // This filtering removes the duplicate file additions to make sure the correct template is scaffolded.
   // Note that the order is reversed so backend > pluginType > common
   const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce((acc, file) => {
     const actionExists = acc.find((f) => f.path === file.path);
-    // return early to prevent multiple add type actions being added to the array
-    if (actionExists && actionExists.type === 'add' && file.type === 'add') {
+    // return early to prevent duplicate file additions
+    if (actionExists) {
       return acc;
     }
     acc.push(file);
@@ -182,53 +181,7 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
       })
     : [];
 
-  // Replace conditional bits in the Readme files
-  const readmeActions = getActionsForReadme({ exportPath, templateData });
-
-  return [...pluginActions, ...ciWorkflowActions, ...readmeActions, ...isCompatibleWorkflowActions];
-}
-
-function getActionsForReadme({ exportPath, templateData }: { exportPath: string; templateData: TemplateData }): any {
-  return [
-    replacePatternWithTemplateInReadme(
-      '-- INSERT FRONTEND GETTING STARTED --',
-      'frontend-getting-started.md',
-      exportPath,
-      templateData
-    ),
-    replacePatternWithTemplateInReadme(
-      '-- INSERT BACKEND GETTING STARTED --',
-      'backend-getting-started.md',
-      exportPath,
-      templateData
-    ),
-    replacePatternWithTemplateInReadme(
-      '-- INSERT DISTRIBUTING YOUR PLUGIN --',
-      'distributing-your-plugin.md',
-      exportPath,
-      templateData
-    ),
-  ];
-}
-
-function replacePatternWithTemplateInReadme(
-  pattern: string,
-  partialsFile: string,
-  exportPath: string,
-  templateData: TemplateData
-): any {
-  return {
-    type: 'modify',
-    path: path.join(exportPath, 'README.md'),
-    pattern,
-    // @ts-ignore
-    template: undefined,
-    templateFile: path.join(PARTIALS_DIR, partialsFile),
-    data: {
-      ...EXTRA_TEMPLATE_VARIABLES,
-      ...templateData,
-    },
-  };
+  return [...pluginActions, ...ciWorkflowActions, ...isCompatibleWorkflowActions];
 }
 
 function getActionsForTemplateFolder({
@@ -252,7 +205,6 @@ function getActionsForTemplateFolder({
   }
 
   return files.filter(isFile).map((f) => ({
-    type: 'add',
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getExportPath(f), getExportFileName(f)),
@@ -286,12 +238,8 @@ async function generateFiles({ actions, templateData }: { actions: any[]; templa
       await mkdir(rootDir, { recursive: true });
     }
 
-    if (action.type === 'add') {
-      const rendered = renderTemplateFromFile(action.templateFile, templateData);
-      await writeFile(action.path, rendered);
-    }
-    if (action.type === 'modify') {
-    }
+    const rendered = renderTemplateFromFile(action.templateFile, templateData);
+    await writeFile(action.path, rendered);
   }
 }
 
