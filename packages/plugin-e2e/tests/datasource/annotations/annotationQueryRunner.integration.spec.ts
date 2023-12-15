@@ -1,6 +1,6 @@
 import semverLt from 'semver/functions/lt';
-import { test, expect } from '../../../src';
-import { ProvisionFile } from '../../../src/types';
+import { test, expect, AnnotationEditPage } from '../../../src';
+import { Dashboard, ProvisionFile } from '../../../src/types';
 
 test('should run successfully if valid Redshift query was provided', async ({
   annotationEditPage,
@@ -29,5 +29,21 @@ test('should run successfully if valid Google Sheets query was provided', async 
   await page.getByText('Enter SpreadsheetID').click();
   await page.keyboard.insertText('1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8');
   await page.keyboard.press('Enter');
+  await expect(annotationEditPage.runQuery()).toBeOK();
+});
+
+test('should run successfully if valid Redshift query was provided in provisioned dashboard', async ({
+  request,
+  page,
+  selectors,
+  grafanaVersion,
+  readProvision,
+}) => {
+  const provision = await readProvision<Dashboard>({ filePath: 'dashboards/redshift.json' });
+  const annotationEditPage = new AnnotationEditPage(
+    { request, page, selectors, grafanaVersion },
+    { dashboard: { uid: provision.uid }, id: '1' }
+  );
+  await annotationEditPage.goto();
   await expect(annotationEditPage.runQuery()).toBeOK();
 });
