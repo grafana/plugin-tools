@@ -62,7 +62,12 @@ export const versionedPages = {
       [MIN_GRAFANA_VERSION]: 'Add new visualization menu item',
     },
     Annotations: {
-      url: '/dashboard/new?orgId=1&editview=annotations',
+      List: {
+        url: '/dashboard/new?orgId=1&editview=annotations',
+      },
+      Edit: {
+        url: (annotationIndex: string) => `/dashboard/new?editview=annotations&editIndex=${annotationIndex}`,
+      },
     },
     Variables: {
       url: '/dashboard/new?orgId=1&editview=templating',

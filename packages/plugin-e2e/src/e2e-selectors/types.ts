@@ -419,7 +419,12 @@ export type Pages = {
     addNewPanelLibrary: string;
     itemButtonAddViz: string;
     Annotations: {
-      url: string;
+      List: {
+        url: string;
+      };
+      Edit: {
+        url: (annotationIndex: string) => string;
+      };
     };
     Variables: {
       url: string;

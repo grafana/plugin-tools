@@ -9,7 +9,7 @@ export class AnnotationPage extends GrafanaPage {
   }
 
   async goto() {
-    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Annotations.url, {
+    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Annotations.List.url, {
       waitUntil: 'networkidle',
     });
   }
