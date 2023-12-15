@@ -1,3 +1,16 @@
+# (Fri Dec 15 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.0.1`
+  - Plugin E2E: Publish to NPM [#605](https://github.com/grafana/plugin-tools/pull/605) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Dec 14 2023)
 
 :tada: This release contains work from a new contributor! :tada:
