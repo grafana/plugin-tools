@@ -8,7 +8,7 @@ export class VariablePage extends GrafanaPage {
   }
 
   async goto() {
-    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Variables.url, {
+    await this.ctx.page.goto(this.ctx.selectors.pages.AddDashboard.Settings.Variables.url, {
       waitUntil: 'networkidle',
     });
   }

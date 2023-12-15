@@ -4,15 +4,13 @@ export type E2ESelectors = {
   apis: APIs;
 };
 
-export type DataSource = { uid: string; id: string };
-
 export type APIs = {
   DataSource: {
     resourcePattern: string;
     resourceUIDPattern: string;
     queryPattern: string;
     query: string;
-    health: (ds: DataSource) => string;
+    health: (uid: string, id: string) => string;
     delete: (uid: string) => string;
   };
   Dashboard: {
@@ -418,16 +416,18 @@ export type Pages = {
     addNewRow: string;
     addNewPanelLibrary: string;
     itemButtonAddViz: string;
-    Annotations: {
-      List: {
+    Settings: {
+      Annotations: {
+        List: {
+          url: string;
+        };
+        Edit: {
+          url: (annotationIndex: string) => string;
+        };
+      };
+      Variables: {
         url: string;
       };
-      Edit: {
-        url: (annotationIndex: string) => string;
-      };
-    };
-    Variables: {
-      url: string;
     };
   };
   Dashboard: {

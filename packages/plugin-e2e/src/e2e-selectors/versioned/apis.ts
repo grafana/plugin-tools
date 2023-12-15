@@ -1,4 +1,3 @@
-import { DataSource } from '../types';
 import { MIN_GRAFANA_VERSION } from './constants';
 
 export const versionedAPIs = {
@@ -17,8 +16,8 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: '/api/ds/query',
     },
     health: {
-      ['9.5.0']: ({ uid }: DataSource) => `/api/datasources/uid/${uid}/health`,
-      [MIN_GRAFANA_VERSION]: ({ id }: DataSource) => `/api/datasources/${id}/health`,
+      ['9.5.0']: (uid: string, _: string) => `/api/datasources/uid/${uid}/health`,
+      [MIN_GRAFANA_VERSION]: (_: string, id: string) => `/api/datasources/${id}/health`,
     },
     delete: {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
