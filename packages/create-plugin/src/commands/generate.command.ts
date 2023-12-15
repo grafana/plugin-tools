@@ -1,36 +1,27 @@
-// import path from 'path';
-import minimist from 'minimist';
-// @ts-ignore
-import { Confirm, Input, Select } from 'enquirer';
 import glob from 'glob';
-import { existsSync, lstatSync } from 'node:fs';
+import minimist from 'minimist';
+import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'path';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { getConfig } from '../utils/utils.config';
-import { getExportFileName } from '../utils/utils.files';
+import { printError } from '../utils/utils.console';
+import { directoryExists, getExportFileName, isFile } from '../utils/utils.files';
 import { normalizeId } from '../utils/utils.handlebars';
 import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager';
 import { getExportPath } from '../utils/utils.path';
-import { getVersion } from '../utils/utils.version';
-import { TemplateData } from './types';
 import { renderTemplateFromFile } from '../utils/utils.templates';
-import { mkdir, readdir, writeFile } from 'node:fs/promises';
-import { updateGoSdkAndModules } from './generate-actions/update-go-sdk-and-packages';
-import { prettifyFiles } from './generate-actions/prettify-files';
-import { printGenerateSuccessMessage } from './generate-actions/print-success-message';
-import { printSuccessMessage, printError } from '../utils/utils.console';
-
-const messages = {
-  generateFilesSuccess: 'Successfully generated plugin files',
-  updateGoSdkSuccess: 'Successfully updated backend files',
-  prettifySuccess: 'Successfully formatted frontend files',
-};
+import { getVersion } from '../utils/utils.version';
+import { prettifyFiles } from './generate/prettify-files';
+import { printGenerateSuccessMessage } from './generate/print-success-message';
+import { promptUser } from './generate/prompt-user';
+import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages';
+import { CliArgs, TemplateData } from './types';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
   const exportPath = getExportPath(answers.pluginName, answers.orgName, answers.pluginType);
-  const exportPathExists = existsSync(exportPath);
+  const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
 
   // Prevent generation from writing to an existing, populated directory unless in DEV mode.
@@ -39,84 +30,27 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 
-  const templateActions = getTemplateActions({ templateData, exportPath });
-  const { pluginName, orgName, pluginType } = answers;
-  await generateFiles({ actions: templateActions, templateData });
-  printSuccessMessage(messages.generateFilesSuccess);
-  // @ts-ignore
-  await updateGoSdkAndModules({ pluginName, orgName, pluginType });
-  printSuccessMessage(messages.updateGoSdkSuccess);
-  // @ts-ignore
-  await prettifyFiles({ pluginName, orgName, pluginType });
-  printSuccessMessage(messages.prettifySuccess);
-  // @ts-ignore
-  console.log(printGenerateSuccessMessage(answers));
+  const actions = getTemplateActions({ templateData, exportPath });
+  const { failures, changes } = await generateFiles({ actions });
+
+  if (failures.length > 0) {
+    failures.forEach((failure) => {
+      printError(`${failure.error}`);
+    });
+  }
+  console.log(`✔ Successfully generated ${changes.length} plugin files.`);
+
+  if (answers.hasBackend) {
+    const updateGoStatusMsg = await updateGoSdkAndModules(exportPath);
+    console.log(updateGoStatusMsg);
+  }
+
+  const formatFECodeMsg = await prettifyFiles(exportPath);
+  console.log(formatFECodeMsg);
+  printGenerateSuccessMessage(answers);
 };
 
-async function promptUser(argv: minimist.ParsedArgs) {
-  const answers: Record<string, any> = {};
-
-  for (const promptDefinition of prompts) {
-    const { name, type, message, validate, initial, choices } = promptDefinition;
-    if (argv[name]) {
-      answers[name] = argv[name];
-    } else {
-      let prompt;
-
-      if (type === 'input') {
-        prompt = new Input({
-          name,
-          message,
-          validate,
-          initial,
-        });
-      }
-
-      if (type === 'select') {
-        prompt = new Select({
-          name,
-          message,
-          choices,
-        });
-      }
-
-      const promptResult = await prompt.run();
-      answers[name] = promptResult;
-    }
-  }
-
-  if (answers.pluginType !== PLUGIN_TYPES.panel) {
-    const hasBackendPrompt = {
-      name: 'hasBackend',
-      message: 'Do you want a backend part of your plugin?',
-      initial: false,
-    };
-    if (argv[hasBackendPrompt.name]) {
-      answers[hasBackendPrompt.name] = argv[hasBackendPrompt.name];
-    } else {
-      const prompt = new Confirm(hasBackendPrompt);
-      const promptResult = await prompt.run();
-
-      answers[hasBackendPrompt.name] = promptResult;
-    }
-  }
-
-  for (const promptDefinition of workflowPrompts) {
-    const { name } = promptDefinition;
-    if (argv[name]) {
-      answers[name] = argv[name];
-    } else {
-      const prompt = new Confirm(promptDefinition);
-
-      const promptResult = await prompt.run();
-      answers[name] = promptResult;
-    }
-  }
-
-  return answers;
-}
-
-function getTemplateData(answers: Record<string, any>) {
+function getTemplateData(answers: CliArgs) {
   const { pluginName, orgName, pluginType } = answers;
   const { features } = getConfig();
   const currentVersion = getVersion();
@@ -217,8 +151,6 @@ function getActionsForTemplateFolder({
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getFileExportPath(f), getExportFileName(f)),
-    // We would still like to scaffold as many files as possible even if one fails
-    abortOnFail: false,
     data: {
       ...EXTRA_TEMPLATE_VARIABLES,
       ...templateData,
@@ -226,77 +158,28 @@ function getActionsForTemplateFolder({
   }));
 }
 
-function isFile(path: string) {
-  try {
-    return lstatSync(path).isFile();
-  } catch (e) {
-    return false;
-  }
-}
-
-// TODO:
-// - Handle bruteforce action.force to overwrite files / not overwrite files
-// - Handle abort on fail???
-async function generateFiles({ actions, templateData }: { actions: any[]; templateData: TemplateData }) {
+async function generateFiles({ actions }: { actions: any[] }) {
+  const failures = [];
+  const changes = [];
   for (const action of actions) {
-    const rootDir = path.dirname(action.path);
-    if (!existsSync(rootDir)) {
-      await mkdir(rootDir, { recursive: true });
+    try {
+      const rootDir = path.dirname(action.path);
+      const pathExists = await directoryExists(rootDir);
+      if (!pathExists) {
+        await mkdir(rootDir, { recursive: true });
+      }
+
+      const rendered = renderTemplateFromFile(action.templateFile, action.data);
+      await writeFile(action.path, rendered);
+      changes.push({
+        path: action.path,
+      });
+    } catch (error) {
+      failures.push({
+        path: action.path,
+        error: error.message || error.toString(),
+      });
     }
-
-    const rendered = renderTemplateFromFile(action.templateFile, templateData);
-    await writeFile(action.path, rendered);
   }
+  return { failures, changes };
 }
-
-const prompts = [
-  {
-    name: 'pluginName',
-    type: 'input',
-    message: 'What is going to be the name of your plugin?',
-    validate: (value: string) => {
-      if (/.+/.test(value)) {
-        return true;
-      }
-      return 'Plugin name is required';
-    },
-  },
-  {
-    name: 'orgName',
-    type: 'input',
-    message: 'What is the organization name of your plugin?',
-    validate: (value: string) => {
-      if (/.+/.test(value)) {
-        return true;
-      }
-      return 'Organization name is required';
-    },
-  },
-  {
-    name: 'pluginDescription',
-    type: 'input',
-    message: 'How would you describe your plugin?',
-    initial: '',
-  },
-  {
-    name: 'pluginType',
-    type: 'select',
-    choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel, PLUGIN_TYPES.scenes],
-    message: 'What type of plugin would you like?',
-  },
-];
-
-const workflowPrompts = [
-  {
-    name: 'hasGithubWorkflows',
-    type: 'confirm',
-    message: 'Do you want to add Github CI and Release workflows?',
-    initial: false,
-  },
-  {
-    name: 'hasGithubLevitateWorkflow',
-    type: 'confirm',
-    message: 'Do you want to add a Github workflow for automatically checking "Grafana API compatibility" on PRs?',
-    initial: false,
-  },
-];

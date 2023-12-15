@@ -1,80 +1,37 @@
 import minimist from 'minimist';
-// @ts-ignore
-import { Confirm, Input, Select } from 'enquirer';
+import Enquirer from 'enquirer';
 import { PLUGIN_TYPES } from '../../constants';
 import { CliArgs } from '../types';
 
-export async function promptUser(argv: minimist.ParsedArgs): Promise<CliArgs> {
-  const answers = {} as CliArgs;
+export async function promptUser(argv: minimist.ParsedArgs) {
+  let answers;
+  const enquirer = new Enquirer();
 
-  for (const promptDefinition of prompts) {
-    const { name, type, message, validate, initial, choices } = promptDefinition;
+  for (const prompt of prompts) {
+    const { name, when } = prompt;
+
     if (argv[name]) {
       answers[name] = argv[name];
     } else {
-      let prompt;
-
-      if (type === 'input') {
-        prompt = new Input({
-          name,
-          message,
-          validate,
-          initial,
-        });
+      if (typeof when === 'function' && !when(answers)) {
+        continue;
+      } else {
+        answers = await enquirer.prompt(prompt);
       }
-
-      if (type === 'select') {
-        prompt = new Select({
-          name,
-          message,
-          choices,
-        });
-      }
-
-      const promptResult = await prompt.run();
-      answers[name] = promptResult;
     }
   }
 
-  if (answers.pluginType !== PLUGIN_TYPES.panel) {
-    const hasBackendPrompt: Prompt = {
-      name: 'hasBackend',
-      type: 'confirm',
-      message: 'Do you want a backend part of your plugin?',
-      initial: false,
-    };
-    if (argv[hasBackendPrompt.name]) {
-      answers[hasBackendPrompt.name] = argv[hasBackendPrompt.name];
-    } else {
-      const prompt = new Confirm(hasBackendPrompt);
-      const promptResult = await prompt.run();
-
-      answers[hasBackendPrompt.name] = promptResult;
-    }
-  }
-
-  for (const promptDefinition of workflowPrompts) {
-    const { name } = promptDefinition;
-    if (argv[name]) {
-      answers[name] = argv[name];
-    } else {
-      const prompt = new Confirm(promptDefinition);
-
-      const promptResult = await prompt.run();
-      answers[name] = promptResult;
-    }
-  }
-
-  return answers;
+  return answers as CliArgs;
 }
 
 type Prompt = {
   name: keyof CliArgs;
   type: string;
   message: string;
-  validate?: (value: string) => void;
+  validate?: (value: string) => string | boolean | Promise<string | boolean>;
   initial?: string | Boolean;
   choices?: string[] | Array<Record<string, string>>;
+  when?: (answers: Partial<CliArgs>) => Boolean;
 };
 
 const prompts: Prompt[] = [
@@ -112,9 +69,13 @@ const prompts: Prompt[] = [
     choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel, PLUGIN_TYPES.scenes],
     message: 'What type of plugin would you like?',
   },
-];
-
-const workflowPrompts: Prompt[] = [
+  {
+    name: 'hasBackend',
+    type: 'confirm',
+    message: 'Do you want a backend part of your plugin?',
+    initial: false,
+    when: (answers) => answers.pluginType !== PLUGIN_TYPES.panel,
+  },
   {
     name: 'hasGithubWorkflows',
     type: 'confirm',

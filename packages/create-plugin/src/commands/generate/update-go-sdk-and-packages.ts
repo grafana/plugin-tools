@@ -27,7 +27,7 @@ export async function updateGoSdkAndModules(exportPath: string): Promise<string>
       'There was an error trying to update the grafana go sdk. Please run `go get github.com/grafana/grafana-plugin-sdk-go` manually in your plugin directory.'
     );
   }
-  return 'Grafana go sdk updated successfully.';
+  return '✔ Grafana go sdk updated successfully.';
 }
 
 function updateSdk(exportPath: string): Promise<void> {
