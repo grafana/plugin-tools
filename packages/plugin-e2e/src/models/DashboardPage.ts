@@ -1,9 +1,11 @@
 import * as semver from 'semver';
+import { expect } from '@playwright/test';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from './TimeRange';
+import { formatExpectError } from '../errors';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -50,6 +52,10 @@ export class DashboardPage extends GrafanaPage {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('editPanel');
     });
+
+    await expect(this.ctx.page.url(), formatExpectError('Could not add panel', 'Dashboard page')).toContain(
+      `editPanel=${panelId}`
+    );
 
     return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
   }

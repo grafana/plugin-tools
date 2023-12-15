@@ -1,6 +1,8 @@
+import { expect } from '@playwright/test';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 import { VariableEditPage } from './VariableEditPage';
+import { formatExpectError } from '../errors';
 
 export class VariablePage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
@@ -30,6 +32,11 @@ export class VariablePage extends GrafanaPage {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('editIndex');
     });
+
+    await expect(
+      this.ctx.page.url(),
+      formatExpectError('Could not add new template variable', 'Variable list page')
+    ).toContain(`editview=templating`);
 
     return new VariableEditPage(this.ctx, { dashboard: this.dashboard, id: editIndex || '1' });
   }

@@ -2,6 +2,8 @@ import * as semver from 'semver';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { AnnotationEditPage } from './AnnotationEditPage';
 import { GrafanaPage } from './GrafanaPage';
+import { expect } from '@playwright/test';
+import { formatExpectError } from '../errors';
 
 export class AnnotationPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
@@ -37,6 +39,10 @@ export class AnnotationPage extends GrafanaPage {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('editIndex');
     });
+
+    await expect(this.ctx.page.url(), formatExpectError('Could not add Annotation', 'Annotation list page')).toContain(
+      `editview=annotations`
+    );
 
     return new AnnotationEditPage(this.ctx, { id: editIndex || '1' });
   }
