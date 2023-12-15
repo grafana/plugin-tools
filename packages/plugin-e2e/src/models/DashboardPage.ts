@@ -1,4 +1,4 @@
-const gte = require('semver/functions/gte');
+import * as semver from 'semver';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
@@ -37,7 +37,7 @@ export class DashboardPage extends GrafanaPage {
 
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages } = this.ctx.selectors;
-    if (gte(this.ctx.grafanaVersion, '10.0.0')) {
+    if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
       await this.getByTestIdOrAriaLabel(
         components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)
       ).click();
