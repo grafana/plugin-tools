@@ -4,16 +4,21 @@ import { PLUGIN_TYPES } from '../../constants';
 import { CliArgs } from '../types';
 
 export async function promptUser(argv: minimist.ParsedArgs) {
-  let answers;
+  let answers: Partial<CliArgs> = {};
   const enquirer = new Enquirer();
 
   for (const prompt of prompts) {
-    const { name } = prompt;
+    const { name, shouldPrompt } = prompt;
 
-    if (argv[name]) {
-      answers[name] = argv[name];
+    if (argv.hasOwnProperty(name)) {
+      answers = { ...answers, [name]: argv[name] };
     } else {
-      answers = await enquirer.prompt(prompt);
+      if (typeof shouldPrompt === 'function' && !shouldPrompt(answers)) {
+        continue;
+      } else {
+        const result = await enquirer.prompt(prompt);
+        answers = { ...answers, ...result };
+      }
     }
   }
 
@@ -27,7 +32,7 @@ type Prompt = {
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   initial?: any;
   choices?: Array<string | Choice>;
-  skip?: ((state: object) => boolean | Promise<boolean>) | boolean;
+  shouldPrompt?: ((state: object) => boolean | Promise<boolean>) | boolean;
 };
 
 type Choice = {
@@ -80,7 +85,7 @@ const prompts: Prompt[] = [
     type: 'confirm',
     message: 'Do you want a backend part of your plugin?',
     initial: false,
-    skip: (answers: CliArgs) => answers.pluginType !== PLUGIN_TYPES.panel,
+    shouldPrompt: (answers: CliArgs) => answers.pluginType !== PLUGIN_TYPES.panel,
   },
   {
     name: 'hasGithubWorkflows',
