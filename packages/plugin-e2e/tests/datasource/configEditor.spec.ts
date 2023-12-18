@@ -14,3 +14,12 @@ test('valid credentials should return a 200 status code', async ({ createDataSou
   await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!.replace(/'/g, ''));
   await expect(configPage.saveAndTest()).toBeOK();
 });
+
+test('frontend data source - valid credentials should return a 200 status code', async ({
+  createDataSourceConfigPage,
+  page,
+}) => {
+  const configPage = await createDataSourceConfigPage({ type: 'testdata' });
+  await configPage.saveAndTest({ skipWaitForResponse: true });
+  await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
+});

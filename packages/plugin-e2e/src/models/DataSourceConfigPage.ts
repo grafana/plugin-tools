@@ -1,11 +1,10 @@
-import { DataSource, PluginTestCtx } from '../types';
+import { DataSource, PluginTestCtx, TriggerQueryOptions } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
   constructor(ctx: PluginTestCtx, private datasource: DataSource) {
     super(ctx);
   }
-
   async deleteDataSource() {
     await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.delete(this.datasource.uid));
   }
@@ -27,7 +26,11 @@ export class DataSourceConfigPage extends GrafanaPage {
     });
   }
 
-  async saveAndTest() {
+  async saveAndTest(options?: TriggerQueryOptions) {
+    if (options?.skipWaitForResponse) {
+      return this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
+    }
+
     const responsePromise = this.ctx.page.waitForResponse((resp) =>
       resp
         .url()
