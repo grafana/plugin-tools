@@ -81,6 +81,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/joanlopez"><img src="https://avatars.githubusercontent.com/u/5459617?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joan López de la Franca Beltran</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=joanlopez" title="Code">💻</a></td>
     <td align="center"><a href="https://ludovic-muller.fr/"><img src="https://avatars.githubusercontent.com/u/9420561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ludovic Muller</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=ludovicm67" title="Code">💻</a></td>
+    <td align="center"><a href="https://grafana.com/"><img src="https://avatars.githubusercontent.com/u/43478413?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Grot (@grafanabot)</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=grafanabot" title="Code">💻</a> <a href="https://github.com/grafana/plugin-tools/commits?author=grafanabot" title="Documentation">📖</a></td>
   </tr>
 </table>
 
