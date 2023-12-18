@@ -8,16 +8,12 @@ export async function promptUser(argv: minimist.ParsedArgs) {
   const enquirer = new Enquirer();
 
   for (const prompt of prompts) {
-    const { name, when } = prompt;
+    const { name } = prompt;
 
     if (argv[name]) {
       answers[name] = argv[name];
     } else {
-      if (typeof when === 'function' && !when(answers)) {
-        continue;
-      } else {
-        answers = await enquirer.prompt(prompt);
-      }
+      answers = await enquirer.prompt(prompt);
     }
   }
 
@@ -26,12 +22,22 @@ export async function promptUser(argv: minimist.ParsedArgs) {
 
 type Prompt = {
   name: keyof CliArgs;
-  type: string;
-  message: string;
-  validate?: (value: string) => string | boolean | Promise<string | boolean>;
-  initial?: string | Boolean;
-  choices?: string[] | Array<Record<string, string>>;
-  when?: (answers: Partial<CliArgs>) => Boolean;
+  type: string | (() => string);
+  message: string | (() => string) | (() => Promise<string>);
+  validate?: (value: string) => boolean | string | Promise<boolean | string>;
+  initial?: any;
+  choices?: Array<string | Choice>;
+  skip?: ((state: object) => boolean | Promise<boolean>) | boolean;
+};
+
+type Choice = {
+  name: string;
+  message?: string;
+  value?: unknown;
+  hint?: string;
+  role?: string;
+  enabled?: boolean;
+  disabled?: boolean | string;
 };
 
 const prompts: Prompt[] = [
@@ -74,7 +80,7 @@ const prompts: Prompt[] = [
     type: 'confirm',
     message: 'Do you want a backend part of your plugin?',
     initial: false,
-    when: (answers) => answers.pluginType !== PLUGIN_TYPES.panel,
+    skip: (answers: CliArgs) => answers.pluginType !== PLUGIN_TYPES.panel,
   },
   {
     name: 'hasGithubWorkflows',
