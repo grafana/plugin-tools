@@ -11,7 +11,12 @@ const toHaveAlert = async (grafanaPage: GrafanaPage, severity: AlertVariant, opt
   try {
     const filteredAlerts = grafanaPage
       .getByTestIdOrAriaLabel(grafanaPage.ctx.selectors.components.Alert.alertV2(severity))
-      .filter({ hasText: options?.hasText });
+      .filter({
+        hasText: options?.hasText,
+        hasNotText: options?.hasNotText,
+        has: options?.has,
+        hasNot: options?.hasNot,
+      });
     await expect(filteredAlerts.first()).toBeVisible({ timeout: options?.timeout });
   } catch (err: unknown) {
     message = getMessage(message, `No alert was found on the page: ${err instanceof Error ? err.toString() : ''}`);
