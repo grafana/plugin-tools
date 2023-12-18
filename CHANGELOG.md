@@ -1,3 +1,17 @@
+# (Mon Dec 18 2023)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.0.2`
+  - Plugin E2E: Use module nodenext [#608](https://github.com/grafana/plugin-tools/pull/608) ([@sunker](https://github.com/sunker))
+  - Plugin E2E: Publish to NPM [#605](https://github.com/grafana/plugin-tools/pull/605) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Dec 15 2023)
 
 #### 🐛 Bug Fix
