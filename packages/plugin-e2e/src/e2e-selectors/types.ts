@@ -11,7 +11,7 @@ export type APIs = {
     queryPattern: string;
     query: string;
     health: (uid: string, id: string) => string;
-    delete: (uid: string) => string;
+    datasourceByUID: (uid: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;

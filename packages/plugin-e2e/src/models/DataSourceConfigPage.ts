@@ -6,7 +6,7 @@ export class DataSourceConfigPage extends GrafanaPage {
     super(ctx);
   }
   async deleteDataSource() {
-    await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.delete(this.datasource.uid));
+    await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid));
   }
 
   async goto() {
@@ -26,12 +26,20 @@ export class DataSourceConfigPage extends GrafanaPage {
     });
   }
 
+  /**
+   * Clicks the save and test button and waits for the response
+   *
+   * Optionally, you can skip waiting for the response by passing in { skipWaitForResponse: true } as the options parameter
+   */
   async saveAndTest(options?: TriggerQueryOptions) {
     if (options?.skipWaitForResponse) {
       return this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
     }
 
-    const responsePromise = this.ctx.page.waitForResponse((resp) =>
+    const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
+      resp.url().includes(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid))
+    );
+    const healthResponsePromise = this.ctx.page.waitForResponse((resp) =>
       resp
         .url()
         .includes(
@@ -39,6 +47,6 @@ export class DataSourceConfigPage extends GrafanaPage {
         )
     );
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
-    return responsePromise;
+    return saveResponsePromise.then(() => healthResponsePromise);
   }
 }
