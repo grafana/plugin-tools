@@ -4,7 +4,7 @@ import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'path';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { getConfig } from '../utils/utils.config';
-import { printError } from '../utils/utils.console';
+import { printError, printSuccessMessage } from '../utils/utils.console';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files';
 import { normalizeId } from '../utils/utils.handlebars';
 import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager';
@@ -26,27 +26,28 @@ export const generate = async (argv: minimist.ParsedArgs) => {
 
   // Prevent generation from writing to an existing, populated directory unless in DEV mode.
   if (exportPathIsPopulated && !IS_DEV) {
-    printError(`Aborting scaffold. '${exportPath}' exists and contains files.`);
+    printError(`**Aborting scaffold. '${exportPath}' exists and contains files.**`);
     process.exit(1);
   }
 
   const actions = getTemplateActions({ templateData, exportPath });
   const { failures, changes } = await generateFiles({ actions });
 
+  printSuccessMessage(`Successfully generated ${changes.length} plugin files.`);
+
   if (failures.length > 0) {
     failures.forEach((failure) => {
       printError(`${failure.error}`);
     });
   }
-  console.log(`✔ Successfully generated ${changes.length} plugin files.`);
 
   if (answers.hasBackend) {
     const updateGoStatusMsg = await updateGoSdkAndModules(exportPath);
-    console.log(updateGoStatusMsg);
+    printSuccessMessage(updateGoStatusMsg);
   }
 
   const formatFECodeMsg = await prettifyFiles(exportPath);
-  console.log(formatFECodeMsg);
+  printSuccessMessage(formatFECodeMsg);
   printGenerateSuccessMessage(answers);
 };
 

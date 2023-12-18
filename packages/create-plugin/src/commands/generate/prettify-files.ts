@@ -17,5 +17,5 @@ export async function prettifyFiles(exportPath: string) {
       'There was a problem running prettier on the plugin files. Please run `npx -y prettier@2 . --write` manually in your plugin directory.'
     );
   }
-  return '✔ Successfully ran prettier against new plugin.';
+  return 'Successfully ran prettier against new plugin.';
 }
