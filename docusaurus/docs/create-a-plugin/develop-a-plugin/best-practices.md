@@ -21,6 +21,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Verify that your data source or app plugin can be provisioned** - Refer to [Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more information.
 - **Include default dashboards in your data source or app plugin** - Refer to [Bundling of dashboards](https://grafana.com/developers/plugin-tools/introduction/plugin-types-usage#bundling-of-dashboards) for more information.
 - **Ensure that the minimum version of Grafana is correct** - Make sure that the `grafanaDependency` in your `plugin.json` points to the earliest version of Grafana that your plugin fully supports.
+- **Don't expose sensitive information** - For security reasons, avoid exposing sensitive information such as secrets. Make sure to utilize log levels properly, avoid excessive logging, and never log credentials or other sensitive information.
 - **Add linting and auto-completion** - Reduce bugs in your plugin by adding a code snippet like [this one](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-3-add-linting-and-auto-completion-to-your-pluginjson) in VS Code to get linting for your plugin.
 - **Include a well-written README** - Give users a deeper understanding of how to configure and use your plugin, but don’t make it essential reading. You want users to be able to understand your plugin intuitively without referring to the documentation if possible.
 - **Allow incremental learning** - Hide advanced options using switches or categories, and let users learn about advanced features when they’re ready.
@@ -29,8 +30,6 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 ## Panel plugins
 
 - **Don't store or use credentials** - Panel plugins don't have a way to securely store credentials. If your plugin needs to use credentials, consider using a data source or app plugin instead and a panel plugin to display the information returned by the data source.
-
-* **Detect query fields automatically** - Consider automatically detecting fields from a user’s query based on field type rather than relying on hard-coded field names. This increases the chance that users will have something useful right away when they switch between visualizations.
 
 - **Consider creating custom options** - If the default panel options aren't a good fit for what you're trying to offer users, use [custom options](/create-a-plugin/extend-a-plugin/custom-panel-option-editors).
 - **Document the dataframe schema** - Consider [documenting the plugin's schema](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-2-document-the-data-frame-schema-for-panel-plugins) (expected fields, field types, naming conventions for field names, etc.) in the README.
@@ -64,7 +63,6 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Don't use the local file system** - Different plugins share the same environment. For security reasons, plugins shouldn't rely on local files.
 - **Don't use environment variables** - Environment variables are also a security risk and should be avoided. For configuration to a particular data source, use the `jsonData` or `secureJsonData` fields in the `plugin.json` file. If configuration is needed for the plugin which is shared among data sources, then use the [`plugin` configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
 - **Plugins should not execute arbitrary code in the backend** - Again, this is a security risk and should be avoided. If your plugin needs to execute code, provide a list of allowed commands and validate the input before executing it.
-- **Don't expose sensitive information** - For security reasons, avoid exposing sensitive information such as secrets.
 - **In general, any error happening should be logged with level `error`.**
 - **Don't use the `info` level: use the `debug` level instead.**
 
