@@ -1,6 +1,13 @@
 import { expect, Locator } from '@playwright/test';
 import * as semver from 'semver';
-import { PanelError, PluginTestCtx, RequestOptions, Visualization } from '../types';
+import {
+  DashboardEditViewArgs,
+  NavigateOptions,
+  PanelError,
+  PluginTestCtx,
+  RequestOptions,
+  Visualization,
+} from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
@@ -11,10 +18,22 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
 
-  constructor(ctx: PluginTestCtx) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
+  }
+
+  async goto(options?: NavigateOptions) {
+    const url = this.args.dashboard?.uid
+      ? this.ctx.selectors.pages.Dashboard.url(this.args.dashboard.uid)
+      : this.ctx.selectors.pages.AddDashboard.url;
+
+    options ??= {};
+    options.queryParams ??= new URLSearchParams();
+    options.queryParams.append('editPanel', this.args.id);
+
+    await super.navigate(url, options);
   }
 
   async setVisualization(visualization: Visualization) {

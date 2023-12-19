@@ -432,7 +432,12 @@ export type Pages = {
         };
       };
       Variables: {
-        url: string;
+        List: {
+          url: string;
+        };
+        Edit: {
+          url: (variableIndex: string) => string;
+        };
       };
     };
   };
@@ -469,7 +474,11 @@ export type Pages = {
         title: string;
       };
       Annotations: {
+        Edit: {
+          url: (dashboardUid: string, annotationIndex: string) => string;
+        };
         List: {
+          url: (uid: string) => string;
           /**
            * @deprecated use addAnnotationCTAV2 from Grafana 8.3 instead
            */
@@ -487,6 +496,7 @@ export type Pages = {
       };
       Variables: {
         List: {
+          url: (dashboardUid: string) => string;
           newButton: string;
           table: string;
           tableRowNameFields: (variableName: string) => string;
@@ -499,6 +509,7 @@ export type Pages = {
           addVariableCTAV2Item: string;
         };
         Edit: {
+          url: (dashboardUid: string, editIndex: string) => string;
           General: {
             headerLink: string;
             modeLabelNew: string;

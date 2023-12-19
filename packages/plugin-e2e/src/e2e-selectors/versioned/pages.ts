@@ -71,7 +71,12 @@ export const versionedPages = {
         },
       },
       Variables: {
-        url: '/dashboard/new?orgId=1&editview=templating',
+        List: {
+          url: '/dashboard/new?orgId=1&editview=templating',
+        },
+        Edit: {
+          url: (annotationIndex: string) => `/dashboard/new?orgId=1&editview=templating&editIndex=${annotationIndex}`,
+        },
       },
     },
   },
@@ -116,7 +121,12 @@ export const versionedPages = {
         title: 'Tab General',
       },
       Annotations: {
+        Edit: {
+          url: (dashboardUid: string, annotationIndex: string) =>
+            `${versionedPages.Dashboard.url(dashboardUid)}?editview=annotations&editIndex=${annotationIndex}`,
+        },
         List: {
+          url: (dashboardUid: string) => `${versionedPages.Dashboard.url(dashboardUid)}?editview=annotations`,
           addAnnotationCTA: 'Call to action button Add annotation query',
           addAnnotationCTAV2: 'data-testid Call to action button Add annotation query',
         },
@@ -131,6 +141,7 @@ export const versionedPages = {
       },
       Variables: {
         List: {
+          url: (dashboardUid: string) => `${versionedPages.Dashboard.url(dashboardUid)}?editview=templating`,
           newButton: 'Variable editor New variable button',
           table: 'Variable editor Table',
           tableRowNameFields: (variableName: string) => `Variable editor Table Name field ${variableName}`,
@@ -145,6 +156,10 @@ export const versionedPages = {
           },
         },
         Edit: {
+          url: {
+            [MIN_GRAFANA_VERSION]: (dashboardUid: string, editIndex: string) =>
+              `${versionedPages.Dashboard.url(dashboardUid)}?editview=templating&editIndex=${editIndex}`,
+          },
           General: {
             headerLink: 'Variable editor Header link',
             modeLabelNew: 'Variable editor Header mode New',

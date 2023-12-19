@@ -29,6 +29,14 @@ export interface DataSource<T = any> {
 }
 
 /**
+ * The dashboard object
+ */
+export interface Dashboard {
+  uid: string;
+  title?: string;
+}
+
+/**
  * The YAML provision file parsed to a javascript object
  */
 export type ProvisionFile<T = DataSource> = {
@@ -89,7 +97,7 @@ export interface TimeRangeArgs {
   zone?: string;
 }
 
-export type GotoDashboardArgs = {
+export type DashboardPageArgs = {
   /**
    * The uid of the dashboard to go to
    */
@@ -102,6 +110,18 @@ export type GotoDashboardArgs = {
    * Query parameters to add to the url
    */
   queryParams?: URLSearchParams;
+};
+
+/**
+ * DashboardEditViewArgs is used to pass arguments to the page object models that represent a dashboard edit view,
+ * such as {@link PanelEditPage}, {@link VariableEditPage} and {@link AnnotationEditPage}.
+ *
+ * If dashboard is not specified, it's assumed that it's a new dashboard. Otherwise, the dashboard uid is used to
+ * navigate to an already existing dashboard.
+ */
+export type DashboardEditViewArgs<T> = {
+  dashboard?: DashboardPageArgs;
+  id: T;
 };
 
 export type ReadProvisionArgs = {

@@ -1,4 +1,4 @@
-import { DataSource, PluginTestCtx, TriggerQueryOptions } from '../types';
+import { DataSource, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
@@ -9,10 +9,8 @@ export class DataSourceConfigPage extends GrafanaPage {
     await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid));
   }
 
-  async goto() {
-    await this.ctx.page.goto(this.ctx.selectors.pages.EditDataSource.url(this.datasource.uid), {
-      waitUntil: 'load',
-    });
+  async goto(options?: NavigateOptions) {
+    return super.navigate(this.ctx.selectors.pages.EditDataSource.url(this.datasource.uid), options);
   }
 
   /**

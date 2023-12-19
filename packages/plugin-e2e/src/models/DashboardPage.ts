@@ -1,5 +1,5 @@
 const gte = require('semver/functions/gte');
-import { GotoDashboardArgs, PluginTestCtx } from '../types';
+import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
@@ -9,32 +9,30 @@ export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
 
-  constructor(ctx: PluginTestCtx, protected readonly dashboardUid?: string) {
+  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
     super(ctx);
     this.dataSourcePicker = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
   }
 
-  async goto(opts?: GotoDashboardArgs) {
-    const uid = opts?.uid || this.dashboardUid;
-    let url = uid ? this.ctx.selectors.pages.Dashboard.url(uid) : this.ctx.selectors.pages.AddDashboard.url;
-    if (opts?.queryParams) {
-      url += `?${opts.queryParams.toString()}`;
+  async goto(options?: NavigateOptions) {
+    let url = this.dashboard?.uid
+      ? this.ctx.selectors.pages.Dashboard.url(this.dashboard.uid)
+      : this.ctx.selectors.pages.AddDashboard.url;
+
+    if (this.dashboard?.timeRange) {
+      options.queryParams = options.queryParams ?? new URLSearchParams();
+      options.queryParams.append('from', this.dashboard.timeRange.from);
+      options.queryParams.append('to', this.dashboard.timeRange.to);
     }
-    await this.ctx.page.goto(url, {
-      waitUntil: 'networkidle',
-    });
-    if (opts?.timeRange) {
-      await this.timeRange.set(opts.timeRange);
-    }
+
+    return super.navigate(url, options);
   }
 
   async gotoPanelEditPage(panelId: string) {
-    const url = this.ctx.selectors.pages.Dashboard.url(this.dashboardUid ?? '');
-    await this.ctx.page.goto(`${url}?editPanel=${panelId}`, {
-      waitUntil: 'networkidle',
-    });
-    return new PanelEditPage(this.ctx);
+    const panelEditPage = new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
+    await panelEditPage.goto();
+    return panelEditPage;
   }
 
   async addPanel(): Promise<PanelEditPage> {
@@ -48,11 +46,16 @@ export class DashboardPage extends GrafanaPage {
       await this.getByTestIdOrAriaLabel(pages.AddDashboard.addNewPanel).click();
     }
 
-    return new PanelEditPage(this.ctx);
+    const panelId = await this.ctx.page.evaluate(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('editPanel');
+    });
+
+    return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
   }
 
   async deleteDashboard() {
-    await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboardUid));
+    await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboard.uid));
   }
 
   async refreshDashboard() {
