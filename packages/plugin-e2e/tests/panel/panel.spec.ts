@@ -10,7 +10,7 @@ test('add a clock panel in new dashboard and set time format to "12 hour"', asyn
 }) => {
   await panelEditPage.setVisualization('Clock');
   await panelEditPage.setPanelTitle('Clock panel test');
-  await panelEditPage.getByTestIdOrAriaLabel(selectors.components.OptionsGroup.group('Clock')).click();
+  await panelEditPage.collapseSection('Clock');
   await page.getByText('12 Hour').click();
   //TODO: add data-testid selector to clock panel
   await expect(page.getByRole('heading', { name: /.*[APap][mM]$/ })).toBeVisible();
@@ -28,7 +28,7 @@ test('open a clock panel in a provisioned dashboard and set time format to "12 h
   const panelEditPage = await new PanelEditPage({ page, selectors, grafanaVersion, request }, args);
   await panelEditPage.goto();
   await expect(panelEditPage.getVisualizationName()).toHaveText('Clock');
-  await panelEditPage.getByTestIdOrAriaLabel(selectors.components.OptionsGroup.group('Clock')).click();
+  await panelEditPage.collapseSection('Clock');
   await page.getByText('12 Hour').click();
   await expect(page.getByRole('heading', { name: /.*[APap][mM]$/ })).toBeVisible();
 });

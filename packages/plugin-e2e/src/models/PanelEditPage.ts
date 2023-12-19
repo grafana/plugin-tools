@@ -50,15 +50,37 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     }
 
     await vizInput.fill(title);
+    await this.ctx.page.keyboard.press('Tab');
   }
-
+  /**
+   * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
+   */
   async setVisualization(visualization: Visualization) {
+    // toggle options pane if panel edit is not visible
+    const showPanelEditElement = this.getByTestIdOrAriaLabel('Show options pane');
+    const showPanelEditElementCount = await showPanelEditElement.count();
+    if (showPanelEditElementCount > 0) {
+      await showPanelEditElement.click();
+    }
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
     await expect(
       this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
+  }
+
+  /**
+   * Expands the section for the given category name. If the section is already expanded, this method does nothing.
+   */
+  async collapseSection(categoryName: string) {
+    const section = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.OptionsGroup.group(categoryName));
+    await expect(section, `Could not find any section for category: ${categoryName}`).toBeVisible();
+    const sectionToggle = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.OptionsGroup.toggle(categoryName));
+    const expandedAttr = await sectionToggle.getAttribute('aria-expanded');
+    if (/false/.test(expandedAttr)) {
+      await section.click();
+    }
   }
 
   getVisualizationName() {
