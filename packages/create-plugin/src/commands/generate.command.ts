@@ -1,10 +1,11 @@
 import glob from 'glob';
 import minimist from 'minimist';
+import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'path';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants';
 import { getConfig } from '../utils/utils.config';
-import { printError, printSuccessMessage } from '../utils/utils.console';
+import { printError } from '../utils/utils.console';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files';
 import { normalizeId } from '../utils/utils.handlebars';
 import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager';
@@ -26,28 +27,26 @@ export const generate = async (argv: minimist.ParsedArgs) => {
 
   // Prevent generation from writing to an existing, populated directory unless in DEV mode.
   if (exportPathIsPopulated && !IS_DEV) {
-    printError(`**Aborting scaffold. '${exportPath}' exists and contains files.**`);
+    printError(`**Aborting plugin scaffold. '${exportPath}' exists and contains files.**`);
     process.exit(1);
   }
 
   const actions = getTemplateActions({ templateData, exportPath });
-  const { failures, changes } = await generateFiles({ actions });
+  const { changes, failures } = await generateFiles({ actions });
 
-  printSuccessMessage(`Successfully generated ${changes.length} plugin files.`);
+  changes.forEach((change) => {
+    console.log(`${chalk.green('✔︎ ++')} ${change.path}`);
+  });
 
-  if (failures.length > 0) {
-    failures.forEach((failure) => {
-      printError(`${failure.error}`);
-    });
-  }
+  failures.forEach((failure) => {
+    printError(`${failure.error}`);
+  });
 
   if (answers.hasBackend) {
-    const updateGoStatusMsg = await updateGoSdkAndModules(exportPath);
-    printSuccessMessage(updateGoStatusMsg);
+    await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
+  await execPostScaffoldFunction(prettifyFiles, exportPath);
 
-  const formatFECodeMsg = await prettifyFiles(exportPath);
-  printSuccessMessage(formatFECodeMsg);
   printGenerateSuccessMessage(answers);
 };
 
@@ -183,4 +182,17 @@ async function generateFiles({ actions }: { actions: any[] }) {
     }
   }
   return { failures, changes };
+}
+
+type AsyncFunction<T> = (...args: any[]) => Promise<T>;
+
+async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parameters<AsyncFunction<T>>) {
+  try {
+    const resultMsg = await fn.apply(undefined, args);
+    if (resultMsg) {
+      console.log(`${chalk.green('✔︎')} ${resultMsg}`);
+    }
+  } catch (error) {
+    printError(`${error}`);
+  }
 }

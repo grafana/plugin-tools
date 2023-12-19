@@ -19,7 +19,7 @@ export function printGenerateSuccessMessage(answers: CliArgs) {
     '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
-  const msg = `# Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
+  const msg = `\n# Congratulations on scaffolding a Grafana ${answers.pluginType} plugin! 🚀
 
 ## What's next?
 
