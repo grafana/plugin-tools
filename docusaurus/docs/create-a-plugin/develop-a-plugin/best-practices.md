@@ -70,7 +70,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 - **Specify a root page for your app** - If your app defines multiple pages, make sure to select a default one that will be used as a landing page for your plugin.
 - **To generate dynamic apps, consider using [Grafana Scenes](https://grafana.com/developers/scenes/).**
-- **Consider contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/)** - UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
+- **Consider contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/)** - UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that can be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
 
 ## Publishing a plugin
 
