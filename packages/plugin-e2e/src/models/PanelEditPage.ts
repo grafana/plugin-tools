@@ -36,19 +36,16 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     await super.navigate(url, options);
   }
 
+  /**
+   * Sets the title of the panel. This method will open the panel options, set the title and close the panel options.
+   */
   async setPanelTitle(title: string) {
     const { OptionsGroup } = this.ctx.selectors.components;
+    await this.collapseSection(OptionsGroup.groupTitle);
     //TODO: add new selector and use it in grafana/ui
     const vizInput = await this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle))
       .locator('input')
       .first();
-    const isVisible = await vizInput.isVisible();
-    if (!isVisible) {
-      // expand panel options if not visible
-      //TODO: add new selector and use it in grafana/ui
-      await this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle)).locator('button').click();
-    }
-
     await vizInput.fill(title);
     await this.ctx.page.keyboard.press('Tab');
   }
