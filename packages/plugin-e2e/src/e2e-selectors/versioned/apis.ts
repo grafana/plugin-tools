@@ -19,7 +19,7 @@ export const versionedAPIs = {
       ['9.5.0']: (uid: string, _: string) => `/api/datasources/uid/${uid}/health`,
       [MIN_GRAFANA_VERSION]: (_: string, id: string) => `/api/datasources/${id}/health`,
     },
-    delete: {
+    datasourceByUID: {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
     },
   },

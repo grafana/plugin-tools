@@ -139,6 +139,13 @@ export type NavigateOptions = {
   queryParams?: URLSearchParams;
 };
 
+export type TriggerQueryOptions = {
+  /**
+   * Set this to true to skip waiting for the response. Defaults to false.
+   */
+  skipWaitForResponse: boolean;
+};
+
 /**
  * Panel visualization types
  */
@@ -161,6 +168,8 @@ export type Visualization =
   | 'Time series'
   | 'Worldmap Panel';
 
+export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
+
 /**
  * Implement this interface in a POM in case you want to enable the `toHavePanelError` matcher for the page.
  * Only applicable to pages that have one panel only, such as the explore page or panel edit page.
@@ -170,4 +179,52 @@ export type Visualization =
 export interface PanelError {
   ctx: PluginTestCtx;
   getPanelError: () => Locator;
+}
+
+export interface AlertPageOptions {
+  /**
+   * Maximum wait time in milliseconds, defaults to 30 seconds, pass `0` to disable the timeout. The default value can
+   * be changed by using the
+   * [browserContext.setDefaultTimeout(timeout)](https://playwright.dev/docs/api/class-browsercontext#browser-context-set-default-timeout)
+   * or [page.setDefaultTimeout(timeout)](https://playwright.dev/docs/api/class-page#page-set-default-timeout) methods.
+   */
+  timeout?: number;
+  /**
+   * Matches elements containing an element that matches an inner locator. Inner locator is queried against the outer
+   * one. For example, `article` that has `text=Playwright` matches `<article><div>Playwright</div></article>`.
+   *
+   * Note that outer and inner locators must belong to the same frame. Inner locator must not contain {@link
+   * FrameLocator}s.
+   */
+  has?: Locator;
+
+  /**
+   * Matches elements that do not contain an element that matches an inner locator. Inner locator is queried against the
+   * outer one. For example, `article` that does not have `div` matches `<article><span>Playwright</span></article>`.
+   *
+   * Note that outer and inner locators must belong to the same frame. Inner locator must not contain {@link
+   * FrameLocator}s.
+   */
+  hasNot?: Locator;
+
+  /**
+   * Matches elements that do not contain specified text somewhere inside, possibly in a child or a descendant element.
+   * When passed a [string], matching is case-insensitive and searches for a substring.
+   */
+  hasNotText?: string | RegExp;
+
+  /**
+   * Matches elements containing specified text somewhere inside, possibly in a child or a descendant element. When
+   * passed a [string], matching is case-insensitive and searches for a substring. For example, `"Playwright"` matches
+   * `<article><div>Playwright</div></article>`.
+   */
+  hasText?: string | RegExp;
+}
+
+/**
+ * @internal
+ */
+export interface AlertPage {
+  ctx: PluginTestCtx;
+  hasAlert: (severity: AlertVariant, options?: AlertPageOptions) => Promise<Locator>;
 }
