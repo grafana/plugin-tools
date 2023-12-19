@@ -239,6 +239,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "grafanabot",
+      "name": "Grot (@grafanabot)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43478413?v=4",
+      "profile": "https://grafana.com/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7

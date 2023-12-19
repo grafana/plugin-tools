@@ -11,7 +11,7 @@ export type APIs = {
     queryPattern: string;
     query: string;
     health: (uid: string, id: string) => string;
-    delete: (uid: string) => string;
+    datasourceByUID: (uid: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;
@@ -192,7 +192,13 @@ export type Components = {
   AlertTab: {
     content: string;
   };
-  Alert: {};
+  Alert: {
+    /**
+     * @deprecated use alertV2 from Grafana 8.3 instead
+     */
+    alert: (severity: string) => string;
+    alertV2: (severity: string) => string;
+  };
   TransformTab: {
     content: string;
   };

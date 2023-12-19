@@ -9,6 +9,7 @@ import readProvision from './commands/readProvision';
 import newDashboardPage from './newDashboardPage';
 import variableEditPage from './variableEditPage';
 import explorePage from './explorePage';
+import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 
 export default {
   selectors,
@@ -22,4 +23,5 @@ export default {
   explorePage,
   createDataSource,
   readProvision,
+  isFeatureToggleEnabled,
 };
