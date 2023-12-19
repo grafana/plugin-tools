@@ -5,14 +5,27 @@ on:
       - 'packages/plugin-e2e/**'
 
 jobs:
+  setup-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      matrix: ${{ steps.resolve-versions.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Resolve Grafana E2E versions
+        id: resolve-versions
+        uses: grafana/plugin-actions/e2e-version@main
+        with:
+          version-resolver-type: version-support-policy
+
   playwright-tests:
+    needs: setup-matrix
     timeout-minutes: 60
     strategy:
-      fail-fast: false
       matrix:
-        GRAFANA_VERSION: ['latest', '10.0.5', '9.5.5', '9.2.5']
-        GOOGLE_SHEETS_VERSION: ['1.2.4', '1.2.0']
-    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }} GoogleSheets@${{ matrix.GOOGLE_SHEETS_VERSION }}
+        GRAFANA_VERSION: ${{fromJson(needs.setup-matrix.outputs.matrix)}}
+    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +56,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}-GoogleSheets${{ matrix.GOOGLE_SHEETS_VERSION }}
+          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
