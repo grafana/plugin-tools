@@ -2,6 +2,28 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/plugin-e2e@0.2.0`
+  - Plugin-E2E: Keep comments in tsd files [#614](https://github.com/grafana/plugin-tools/pull/614) ([@sunker](https://github.com/sunker))
+  - Plugin E2E: Harmonise model instantiation and navigation [#603](https://github.com/grafana/plugin-tools/pull/603) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.2.0`
+  - Plugin E2E: Add isFeatureToggleEnabled fixture [#612](https://github.com/grafana/plugin-tools/pull/612) ([@sunker](https://github.com/sunker))
+  - Plugin E2E: Add expect matcher for alert box [#610](https://github.com/grafana/plugin-tools/pull/610) ([@sunker](https://github.com/sunker))
+  - Plugin E2E: Use module nodenext [#608](https://github.com/grafana/plugin-tools/pull/608) ([@sunker](https://github.com/sunker))
+  - Plugin E2E: Publish to NPM [#605](https://github.com/grafana/plugin-tools/pull/605) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Dec 19 2023)
+
+#### 🚀 Enhancement
+
 - `@grafana/plugin-e2e@0.1.0`
   - Plugin E2E: Harmonise model instantiation and navigation [#603](https://github.com/grafana/plugin-tools/pull/603) ([@sunker](https://github.com/sunker))
 
