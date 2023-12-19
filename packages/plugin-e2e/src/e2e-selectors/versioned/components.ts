@@ -296,6 +296,9 @@ export const versionedComponents = {
   OptionsGroup: {
     group: (title?: string) => (title ? `Options group ${title}` : 'Options group'),
     toggle: (title?: string) => (title ? `Options group ${title} toggle` : 'Options group toggle'),
+    groupTitle: {
+      [MIN_GRAFANA_VERSION]: 'Panel options',
+    },
   },
   PluginVisualization: {
     item: (title: string) => `Plugin visualization item ${title}`,

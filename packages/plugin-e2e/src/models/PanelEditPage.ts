@@ -36,6 +36,22 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     await super.navigate(url, options);
   }
 
+  async setPanelTitle(title: string) {
+    const { OptionsGroup } = this.ctx.selectors.components;
+    //TODO: add new selector and use it in grafana/ui
+    const vizInput = await this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle))
+      .locator('input')
+      .first();
+    const isVisible = await vizInput.isVisible();
+    if (!isVisible) {
+      // expand panel options if not visible
+      //TODO: add new selector and use it in grafana/ui
+      await this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle)).locator('button').click();
+    }
+
+    await vizInput.fill(title);
+  }
+
   async setVisualization(visualization: Visualization) {
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
@@ -43,6 +59,10 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
       this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
+  }
+
+  getVisualizationName() {
+    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
   }
 
   async apply() {
