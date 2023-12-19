@@ -53,7 +53,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 ### Backend plugins
 
-- **Add support for alerting** - Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"enabled": true` to your `plugin.json` file.
+- **Add support for alerting** - Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"alerting": true` to your `plugin.json` file.
 - **Use the `CallResourceHandler` interface to serve custom HTTP requests** - For more information, refer to [Resource handlers](/introduction/backend-plugins#resource-handlers). This is useful, for example, when providing query builders, as shown in this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/app-with-backend/pkg/plugin/app.go#L35).
 - **Add metrics to your data source** - Find more information in [Backend plugins](/introduction/backend-plugins#collect-metrics).
 - **Add tracing to your data source** - In addition to metrics, tracing allows you to deep dive into your plugin performance. More information is available in our [documentation](/create-a-plugin/extend-a-plugin/add-distributed-tracing-for-backend-plugins) and an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-http-backend/pkg/plugin/datasource.go#L141-L156).
