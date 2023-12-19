@@ -23,7 +23,7 @@ test('open a clock panel in a provisioned dashboard and set time format to "12 h
   grafanaVersion,
   readProvision,
 }) => {
-  const dashboard = await readProvision<Dashboard>({ filePath: 'dashboards/clockpanel/clock-panel.json' });
+  const dashboard = await readProvision<Dashboard>({ filePath: 'dashboards/clock-panel.json' });
   const args = { dashboard: { uid: dashboard.uid }, id: '5' };
   const panelEditPage = await new PanelEditPage({ page, selectors, grafanaVersion, request }, args);
   await panelEditPage.goto();
