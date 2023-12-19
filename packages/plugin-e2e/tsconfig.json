@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "declaration": true
+    "declaration": true,
+    "stripInternal": true,
+    "module": "NodeNext",
+    "removeComments": false
   },
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.base.json",

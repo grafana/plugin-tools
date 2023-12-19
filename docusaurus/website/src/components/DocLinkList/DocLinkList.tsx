@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCurrentSidebarCategory, filterDocCardListItems } from '@docusaurus/theme-common';
-import { useDocById } from '@docusaurus/theme-common/internal';
+import { useDocById, findFirstSidebarItemLink } from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
 import type { Props } from '@theme/DocCardList';
 import styles from './styles.module.css';
@@ -19,7 +19,14 @@ export default function DocLinkList(props: Props): JSX.Element {
 
   return (
     <ul className={className}>
-      {filteredItems.map((item) => item.type === 'link' && <DocLink key={item.docId} item={item} />)}
+      {filteredItems.map((item) => {
+        if (item.type === 'link') {
+          return <DocLink key={item.docId} item={item} />;
+        }
+        if (item.type === 'category') {
+          return <DocCategoryLink key={item.href} category={item} />;
+        }
+      })}
     </ul>
   );
 }
@@ -30,6 +37,19 @@ function DocLink({ item }) {
   return (
     <li key={item.docId} className="margin-bottom--md">
       <Link to={item.href}>{item.label}</Link>
+      {description && <small className={styles.description}>{description}</small>}
+    </li>
+  );
+}
+
+function DocCategoryLink({ category }) {
+  const categoryHref = findFirstSidebarItemLink(category);
+  const doc = useDocById(category.docId ?? undefined);
+  const description = category.description || category.customProps?.description || doc?.description;
+
+  return (
+    <li key={category.docId} className="margin-bottom--md">
+      <Link to={categoryHref}>{category.label}</Link>
       {description && <small className={styles.description}>{description}</small>}
     </li>
   );

@@ -4,12 +4,15 @@ services:
   grafana:
     image: grafana/${GRAFANA_IMAGE:-grafana-enterprise}:${GRAFANA_VERSION:-main}
     environment:
-      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-googlesheets-datasource 1.2.4,grafana-redshift-datasource 1.13.0
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ID=1
+      - GOOGLE_JWT_FILE=${GOOGLE_JWT_FILE}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     ports:
-      - 3001:3000/tcp
+      - 3000:3000/tcp
     volumes:
       - ./provisioning:/etc/grafana/provisioning

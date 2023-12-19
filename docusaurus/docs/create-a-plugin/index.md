@@ -12,6 +12,4 @@ keywords:
   - enhance
 ---
 
-import DocCardList from '@theme/DocCardList';
-
-<DocCardList />
+<DocLinkList />

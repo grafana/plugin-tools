@@ -118,9 +118,134 @@ new AppPlugin().configureExtensionLink({
 });
 ```
 
+### Example: Display a React component
+
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
+
+Using React components as extensions is a powerful way to extend the functionality of an existing UI either in core Grafana or in another plugin.
+
+```ts title="src/module.ts"
+new AppPlugin().configureExtensionComponent({
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
+  component: MyExtension,
+});
+```
+
+```tsx title="src/components/MyExtension.tsx"
+export const MyExtension = () => (
+  <Button onClick={() => {}} variant="secondary" type="button">
+    Extend UI
+  </Button>
+);
+```
+
+### Example: Use the context of the extension point in a component
+
+:::note
+
+**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+
+:::
+
+Extension points can pass contextual information to the extensions they render; we refer to this data as `context`.
+Extension points defined in core Grafana additionally have a type definition available for these context objects. In the following example, we use this `context` in our component extension and also show how to use the static types.
+
+```ts title="src/module.ts"
+// This could also come from another plugin or defined manually if a plugin doesn't expose it.
+import { PluginExtensionSampleContext } from '@grafana/data';
+
+new AppPlugin().configureExtensionComponent<PluginExtensionSampleContext>({
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
+  component: MyExtension,
+});
+```
+
+```tsx title="src/components/MyExtension.tsx"
+type Props = {
+  context: PluginExtensionSampleContext;
+};
+
+export const MyExtension = ({ context }: Props) => (
+  <Button onClick={() => {}} variant="secondary" type="button">
+    Create incident from {context.name}
+  </Button>
+);
+```
+
+### Example: Access plugin information in a component extension
+
+:::note
+
+**Available in Grafana >=10.3.0** <br /> (_The `usePluginMeta()` and `usePluginJsonDataAvailable()` hooks are only available in Grafana 10.3.0 and above._)
+
+:::
+
+If you would like to access meta information about your plugin from within the component extension, `@grafana/data` exposes some React hooks to make it possible:
+
+```ts title="src/module.ts"
+new AppPlugin().configureExtensionComponent({
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
+  component: MyExtension,
+});
+```
+
+```tsx title="src/components/MyExtension.tsx"
+import { usePluginMeta, usePluginJsonData } from '@grafana/data';
+
+export const MyExtension = () => {
+  const meta = usePluginMeta();
+  const jsonData = usePluginJsonData();
+
+  if (meta.info.version !== '1.0.0') {
+    return null;
+  }
+
+  return (
+    <Button onClick={() => {}} variant="secondary" type="button">
+      Create incident ({jsonData.postFix})
+    </Button>
+  );
+};
+```
+
+### Example: Add an item to Grafana's command palette
+
+:::note
+
+**Available in Grafana >=10.3.0** <br /> (_The `grafana/commandpalette/action` extension point is only available in Grafana 10.3.0 and above._)
+
+:::
+
+```ts title="src/module.ts"
+new AppPlugin().configureExtensionComponent({
+  title: 'Frobnicate dashboards',
+  description: 'Opens a modal where the user can frobnicate dashboards',
+  extensionPointId: 'grafana/commandpalette/action',
+  onClick: (event, { openModal }) => {
+    openModal({
+      title: 'Frobnicate dashboards',
+      body: (props) => <MyModalComponent {...props} />,
+    });
+  },
+});
+```
+
 ## Available extension points within Grafana
 
 An _extension point_ is a location within the Grafana UI where a plugin can insert links. The IDs of all extension points within Grafana start with `grafana/`. For example, you can use the following extension point ID:
 
+- `grafana/alerting/instance/action`: extension point for actions in alert instance table in alerting
+- `grafana/commandpalette/action`: extension point for commands in command palette
 - `grafana/dashboard/panel/menu`: extension point for all panel dropdown menus in dashboards
 - `grafana/explore/toolbar/action`: extension point for toolbar actions in explore
+- `grafana/user/profile/tab`: extension point for a tab of content on the `/profile` page

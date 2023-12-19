@@ -48,7 +48,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2388950?v=4",
       "profile": "https://github.com/sunker",
       "contributions": [
-        "code"
+        "code",
+        "infra",
+        "doc"
       ]
     },
     {
@@ -168,7 +170,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/5464991?v=4",
       "profile": "https://github.com/sd2k",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -227,6 +230,25 @@
       "profile": "https://github.com/joanlopez",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "ludovicm67",
+      "name": "Ludovic Muller",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9420561?v=4",
+      "profile": "https://ludovic-muller.fr/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "grafanabot",
+      "name": "Grot (@grafanabot)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43478413?v=4",
+      "profile": "https://grafana.com/",
+      "contributions": [
+        "code",
+        "doc"
       ]
     }
   ],
