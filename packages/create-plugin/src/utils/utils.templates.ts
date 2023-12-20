@@ -2,7 +2,7 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
-import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files';
+import { filterOutCommonFiles, getExportFilePath, isFile, isFileStartingWith } from './utils.files';
 import { renderHandlebarsTemplate } from './utils.handlebars';
 import { getPluginJson } from './utils.plugin';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
@@ -24,12 +24,7 @@ export function getTemplateFiles(pluginType: string, filter?: string | string[])
   if (filter) {
     return templateFiles.filter((file) => {
       const fileProjectRelativePath = getProjectRelativeTemplatePath(file, pluginType);
-      const exportedName = path.join(path.dirname(fileProjectRelativePath), getExportFileName(fileProjectRelativePath));
-
-      // note: some files to filter might use their exported name instead of
-      // their template version e.g. _eslint instead of .eslint.
-      // We need to check the filter with both of them to prevent skipping them in an update or migration
-      return isFileStartingWith(fileProjectRelativePath, filter) || isFileStartingWith(exportedName, filter);
+      return isFileStartingWith(fileProjectRelativePath, filter);
     });
   }
 
