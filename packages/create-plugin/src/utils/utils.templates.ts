@@ -23,9 +23,13 @@ export function getTemplateFiles(pluginType: string, filter?: string | string[])
 
   if (filter) {
     return templateFiles.filter((file) => {
-      const projectRelativePath = getProjectRelativeTemplatePath(file, pluginType);
+      const fileProjectRelativePath = getProjectRelativeTemplatePath(file, pluginType);
+      const exportedName = path.join(path.dirname(fileProjectRelativePath), getExportFileName(fileProjectRelativePath));
 
-      return isFileStartingWith(projectRelativePath, filter);
+      // note: some files to filter might use their exported name instead of
+      // their template version e.g. _eslint instead of .eslint.
+      // We need to check the filter with both of them to prevent skipping them in an update or migration
+      return isFileStartingWith(fileProjectRelativePath, filter) || isFileStartingWith(exportedName, filter);
     });
   }
 
