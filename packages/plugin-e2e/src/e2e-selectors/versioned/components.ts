@@ -12,8 +12,14 @@ export const versionedComponents = {
       '8.1.0': 'data-testid TimePicker Open Button',
       [MIN_GRAFANA_VERSION]: 'TimePicker open button',
     },
-    fromField: 'Time Range from field',
-    toField: 'Time Range to field',
+    fromField: {
+      '8.3.0': 'data-testid Time Range from field',
+      [MIN_GRAFANA_VERSION]: 'Time Range from field',
+    },
+    toField: {
+      '8.3.0': 'data-testid Time Range to field',
+      [MIN_GRAFANA_VERSION]: 'Time Range to field',
+    },
     applyTimeRange: 'data-testid TimePicker submit button',
     calendar: {
       label: 'Time Range calendar',
