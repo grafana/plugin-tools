@@ -29,6 +29,14 @@ export interface DataSource<T = any> {
 }
 
 /**
+ * The dashboard object
+ */
+export interface Dashboard {
+  uid: string;
+  title?: string;
+}
+
+/**
  * The YAML provision file parsed to a javascript object
  */
 export type ProvisionFile<T = DataSource> = {
@@ -89,7 +97,7 @@ export interface TimeRangeArgs {
   zone?: string;
 }
 
-export type GotoDashboardArgs = {
+export type DashboardPageArgs = {
   /**
    * The uid of the dashboard to go to
    */
@@ -104,11 +112,58 @@ export type GotoDashboardArgs = {
   queryParams?: URLSearchParams;
 };
 
+/**
+ * DashboardEditViewArgs is used to pass arguments to the page object models that represent a dashboard edit view,
+ * such as {@link PanelEditPage}, {@link VariableEditPage} and {@link AnnotationEditPage}.
+ *
+ * If dashboard is not specified, it's assumed that it's a new dashboard. Otherwise, the dashboard uid is used to
+ * navigate to an already existing dashboard.
+ */
+export type DashboardEditViewArgs<T> = {
+  dashboard?: DashboardPageArgs;
+  id: T;
+};
+
 export type ReadProvisionArgs = {
   /**
    * The path, relative to the provisioning folder, to the dashboard json file
    */
   filePath: string;
+};
+
+export type NavigateOptions = {
+  /**
+   * Referer header value.
+   */
+  referer?: string;
+
+  /**
+   * Maximum operation time in milliseconds. Defaults to `0` - no timeout.
+   */
+  timeout?: number;
+
+  /**
+   * When to consider operation succeeded, defaults to `load`. Events can be either:
+   * - `'domcontentloaded'` - consider operation to be finished when the `DOMContentLoaded` event is fired.
+   * - `'load'` - consider operation to be finished when the `load` event is fired.
+   * - `'networkidle'` - **DISCOURAGED** consider operation to be finished when there are no network connections for
+   *   at least `500` ms. Don't use this method for testing, rely on web assertions to assess readiness instead.
+   * - `'commit'` - consider operation to be finished when network response is received and the document started
+   *   loading.
+   */
+  waitUntil?: 'load' | 'domcontentloaded' | 'networkidle' | 'commit';
+
+  /**
+   * Query parameters to add to the url. Optional
+   */
+  queryParams?: URLSearchParams;
+};
+
+export type TriggerQueryOptions = {
+  /**
+   * Set this to true to skip waiting for the response. Defaults to false.
+   */
+  skipWaitForResponse: boolean;
 };
 
 /**
@@ -133,6 +188,8 @@ export type Visualization =
   | 'Time series'
   | 'Worldmap Panel';
 
+export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
+
 /**
  * Implement this interface in a POM in case you want to enable the `toHavePanelError` matcher for the page.
  * Only applicable to pages that have one panel only, such as the explore page or panel edit page.
@@ -142,4 +199,52 @@ export type Visualization =
 export interface PanelError {
   ctx: PluginTestCtx;
   getPanelError: () => Locator;
+}
+
+export interface AlertPageOptions {
+  /**
+   * Maximum wait time in milliseconds, defaults to 30 seconds, pass `0` to disable the timeout. The default value can
+   * be changed by using the
+   * [browserContext.setDefaultTimeout(timeout)](https://playwright.dev/docs/api/class-browsercontext#browser-context-set-default-timeout)
+   * or [page.setDefaultTimeout(timeout)](https://playwright.dev/docs/api/class-page#page-set-default-timeout) methods.
+   */
+  timeout?: number;
+  /**
+   * Matches elements containing an element that matches an inner locator. Inner locator is queried against the outer
+   * one. For example, `article` that has `text=Playwright` matches `<article><div>Playwright</div></article>`.
+   *
+   * Note that outer and inner locators must belong to the same frame. Inner locator must not contain {@link
+   * FrameLocator}s.
+   */
+  has?: Locator;
+
+  /**
+   * Matches elements that do not contain an element that matches an inner locator. Inner locator is queried against the
+   * outer one. For example, `article` that does not have `div` matches `<article><span>Playwright</span></article>`.
+   *
+   * Note that outer and inner locators must belong to the same frame. Inner locator must not contain {@link
+   * FrameLocator}s.
+   */
+  hasNot?: Locator;
+
+  /**
+   * Matches elements that do not contain specified text somewhere inside, possibly in a child or a descendant element.
+   * When passed a [string], matching is case-insensitive and searches for a substring.
+   */
+  hasNotText?: string | RegExp;
+
+  /**
+   * Matches elements containing specified text somewhere inside, possibly in a child or a descendant element. When
+   * passed a [string], matching is case-insensitive and searches for a substring. For example, `"Playwright"` matches
+   * `<article><div>Playwright</div></article>`.
+   */
+  hasText?: string | RegExp;
+}
+
+/**
+ * @internal
+ */
+export interface AlertPage {
+  ctx: PluginTestCtx;
+  hasAlert: (severity: AlertVariant, options?: AlertPageOptions) => Promise<Locator>;
 }

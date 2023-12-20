@@ -4,6 +4,7 @@ import { PluginConfigPageProps, AppPluginMeta, PluginMeta, GrafanaTheme2 } from 
 import { getBackendSrv, locationService } from '@grafana/runtime';
 import { css } from '@emotion/css';
 import { testIds } from '../testIds';
+import { lastValueFrom } from 'rxjs';
 
 export type JsonData = {
   apiUrl?: string;
@@ -182,11 +183,13 @@ const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<
 };
 
 export const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
-  const response = await getBackendSrv().datasourceRequest({
+  const response = getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',
     data,
   });
 
-  return response?.data;
+  const dataResponse = await lastValueFrom(response);
+
+  return dataResponse.data;
 };

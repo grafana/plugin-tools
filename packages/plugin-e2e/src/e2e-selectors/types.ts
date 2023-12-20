@@ -6,8 +6,15 @@ export type E2ESelectors = {
 
 export type APIs = {
   DataSource: {
-    resource: string;
-    healthCheck: string;
+    resourcePattern: string;
+    resourceUIDPattern: string;
+    queryPattern: string;
+    query: string;
+    health: (uid: string, id: string) => string;
+    datasourceByUID: (uid: string) => string;
+  };
+  Dashboard: {
+    delete: (uid: string) => string;
   };
 };
 
@@ -185,7 +192,13 @@ export type Components = {
   AlertTab: {
     content: string;
   };
-  Alert: {};
+  Alert: {
+    /**
+     * @deprecated use alertV2 from Grafana 8.3 instead
+     */
+    alert: (severity: string) => string;
+    alertV2: (severity: string) => string;
+  };
   TransformTab: {
     content: string;
   };
@@ -237,8 +250,10 @@ export type Components = {
   };
   PageToolbar: {
     item: (tooltip: string) => string;
+    shotMoreItems: string;
     container: string;
     itemButton: (title: string) => string;
+    itemButtonTitle: string;
   };
   QueryEditorToolbarItem: {};
   BackButton: {
@@ -406,6 +421,25 @@ export type Pages = {
     addNewPanel: string;
     addNewRow: string;
     addNewPanelLibrary: string;
+    itemButtonAddViz: string;
+    Settings: {
+      Annotations: {
+        List: {
+          url: string;
+        };
+        Edit: {
+          url: (annotationIndex: string) => string;
+        };
+      };
+      Variables: {
+        List: {
+          url: string;
+        };
+        Edit: {
+          url: (variableIndex: string) => string;
+        };
+      };
+    };
   };
   Dashboard: {
     url: (uid: string) => string;
@@ -440,7 +474,11 @@ export type Pages = {
         title: string;
       };
       Annotations: {
+        Edit: {
+          url: (dashboardUid: string, annotationIndex: string) => string;
+        };
         List: {
+          url: (uid: string) => string;
           /**
            * @deprecated use addAnnotationCTAV2 from Grafana 8.3 instead
            */
@@ -458,6 +496,7 @@ export type Pages = {
       };
       Variables: {
         List: {
+          url: (dashboardUid: string) => string;
           newButton: string;
           table: string;
           tableRowNameFields: (variableName: string) => string;
@@ -467,8 +506,10 @@ export type Pages = {
           tableRowDuplicateButtons: (variableName: string) => string;
           tableRowRemoveButtons: (variableName: string) => string;
           addVariableCTAV2: (variableName: string) => string;
+          addVariableCTAV2Item: string;
         };
         Edit: {
+          url: (dashboardUid: string, editIndex: string) => string;
           General: {
             headerLink: string;
             modeLabelNew: string;

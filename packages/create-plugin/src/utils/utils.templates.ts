@@ -61,6 +61,19 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
   fs.writeFileSync(exportPath, rendered);
 }
 
+export function compileProvisioningTemplateFile(pluginType: string, templateFile: string, data?: any) {
+  if (!isFile(templateFile)) {
+    return;
+  }
+
+  const rendered = renderTemplateFromFile(templateFile, data);
+  const relativeExportPath = templateFile.replace(TEMPLATE_PATHS[pluginType], '.');
+  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
+
+  mkdirp.sync(path.dirname(exportPath));
+  fs.writeFileSync(exportPath, rendered);
+}
+
 export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }

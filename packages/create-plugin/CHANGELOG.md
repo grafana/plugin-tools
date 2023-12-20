@@ -1,3 +1,82 @@
+# v2.10.1 (Thu Dec 14 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Carson ([@mure](https://github.com/mure)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Copy over `query_help.md` when building plugins [#374](https://github.com/grafana/plugin-tools/pull/374) ([@mure](https://github.com/mure) [@jackw](https://github.com/jackw))
+- Minor edits to style of README.md [#583](https://github.com/grafana/plugin-tools/pull/583) ([@josmperez](https://github.com/josmperez))
+
+#### Authors: 3
+
+- Carson ([@mure](https://github.com/mure))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+
+---
+
+# v2.10.0 (Tue Dec 12 2023)
+
+#### 🚀 Enhancement
+
+- Update react to 18 in package.json template [#455](https://github.com/grafana/plugin-tools/pull/455) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.9.0 (Fri Dec 08 2023)
+
+#### 🚀 Enhancement
+
+- Update the scenes-app template to use the latest scenes library and fix some template code style errors [#573](https://github.com/grafana/plugin-tools/pull/573) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.8.1 (Fri Dec 08 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Templates: import DataQuery from `@grafana/schema` instead of `@grafana/data` [#549](https://github.com/grafana/plugin-tools/pull/549) ([@ludovicm67](https://github.com/ludovicm67))
+
+#### Authors: 1
+
+- Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67))
+
+---
+
+# v2.8.0 (Thu Dec 07 2023)
+
+#### 🚀 Enhancement
+
+- create-plugin: Add provisioning scaffold [#529](https://github.com/grafana/plugin-tools/pull/529) ([@Ukochka](https://github.com/Ukochka) [@josmperez](https://github.com/josmperez) [@sympatheticmoose](https://github.com/sympatheticmoose) [@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker) [@dependabot[bot]](https://github.com/dependabot[bot]) [@tolzhabayev](https://github.com/tolzhabayev) [@leventebalogh](https://github.com/leventebalogh) [@sd2k](https://github.com/sd2k))
+
+#### Authors: 9
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Ben Sully ([@sd2k](https://github.com/sd2k))
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # v2.7.0 (Mon Dec 04 2023)
 
 #### 🚀 Enhancement

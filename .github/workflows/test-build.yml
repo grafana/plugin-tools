@@ -9,6 +9,7 @@ on:
       - '.github/workflows/deploy-to-developer-portal-prod.yml'
       - '.github/workflows/test-build.yml'
       - 'docusaurus/**'
+      - 'package-lock.json'
 
 jobs:
   deploy:

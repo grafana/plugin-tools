@@ -39,3 +39,4 @@ nx-cloud.env
 playwright-report/
 packages/plugin-e2e/playwright/.cache/
 packages/plugin-e2e/playwright/.auth
+.nx/cache

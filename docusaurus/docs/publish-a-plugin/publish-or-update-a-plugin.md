@@ -9,6 +9,7 @@ keywords:
   - plugin
   - publish plugin
   - update plugin
+  - provision
 ---
 
 # Publish or update a plugin
@@ -23,10 +24,10 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 - [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 - Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
 
-To speed up the time it takes to review your plugin:
+**To speed up the time it takes to review your plugin:**
 
 - Check that your plugin is ready for review using the [plugin validator](https://github.com/grafana/plugin-validator).
-- Provide sample dashboards and test data with your repository so that the plugin's functionality can be verified.
+- Provide sample dashboards and test data with your repository so that the plugin's functionality can be verified. Use the [provisioning](./provide-test-environment.md) process provided to simplify this step.
 
 ## Publish your plugin
 
@@ -36,7 +37,7 @@ Follow these steps to publish your plugin for the first time.
 1. In the left menu, under Org Settings, click **My Plugins**.
 1. Click **Submit New Plugin**. The Create Plugin Submission dialog box appears.
 
-   ![Submit plugin.](/img/plugins-submission-create2.png)
+   ![Submit plugin.](/img/plugins-submission-create.png)
 
 1. Enter the information requested by the form.
    - **OS & Architecture:**
@@ -46,6 +47,8 @@ Follow these steps to publish your plugin for the first time.
    - **URL:** A URL that points to a ZIP archive of your packaged plugin.
    - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
    - **SHA1:** The SHA1 hash of the plugin specified by the **URL**.
+   - **Testing guidance:** An overview covering the installation, configuration, and usage of your plugin.
+   - **Provisioning provided for test environment:** Check this box if you have [configured provisioning](./provide-test-environment.md). If you've done this, rest assured it will be identified during the review, and no additional action is needed on your part.
    - The remaining questions help us determine the [signature level](./sign-a-plugin#plugin-signature-levels) for your plugin.
 1. Click **Submit**.
    After you submit your plugin, we run an automated validation to make sure it adheres to our guidelines.
@@ -78,7 +81,7 @@ For more information on plugin deprecation and how to request your plugin to be 
 
 ### How long does it take to review a submission?
 
-- We're not able to give an estimate at this time, though we're constantly working on improving the time it takes to review a plugin.
+- We're not able to give an estimate at this time, though we're constantly working to improve the time it takes to review a plugin. Providing a [provisioned](./provide-test-environment.md) test environment can drastically speed up your review.
 
 ### Can I decide a date when my plugin will be published?
 

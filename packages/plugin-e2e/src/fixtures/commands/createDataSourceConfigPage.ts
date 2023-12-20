@@ -1,4 +1,4 @@
-import { expect, TestFixture } from '@playwright/test';
+import { TestFixture } from '@playwright/test';
 import { PluginFixture, PluginOptions } from '../../api';
 import { CreateDataSourcePageArgs } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
@@ -19,11 +19,7 @@ const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   await use(async (args) => {
     deleteDataSource = args.deleteDataSourceAfterTest ?? true;
     const datasource = await createDataSourceViaAPI(request, args);
-    datasourceConfigPage = new DataSourceConfigPage(
-      { page, selectors, grafanaVersion, request },
-      expect,
-      datasource.uid
-    );
+    datasourceConfigPage = new DataSourceConfigPage({ page, selectors, grafanaVersion, request }, datasource);
     await datasourceConfigPage.goto();
     return datasourceConfigPage;
   });

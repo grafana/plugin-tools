@@ -1,5 +1,5 @@
-import { Expect, Locator, Request } from '@playwright/test';
-import { PluginTestCtx } from '../types';
+import { Locator, Request, Response } from '@playwright/test';
+import { NavigateOptions, PluginTestCtx } from '../types';
 
 /**
  * Base class for all Grafana pages.
@@ -7,7 +7,17 @@ import { PluginTestCtx } from '../types';
  * Exposes methods for locating Grafana specific elements on the page
  */
 export abstract class GrafanaPage {
-  constructor(public readonly ctx: PluginTestCtx, protected readonly expect: Expect<any>) {}
+  constructor(public readonly ctx: PluginTestCtx) {}
+
+  protected async navigate(url: string, options?: NavigateOptions) {
+    if (options?.queryParams) {
+      url += `?${options.queryParams.toString()}`;
+    }
+    await this.ctx.page.goto(url, {
+      waitUntil: 'networkidle',
+      ...options,
+    });
+  }
 
   /**
    * Get a locator for a Grafana element by data-testid or aria-label
@@ -28,7 +38,7 @@ export abstract class GrafanaPage {
    * @param status the HTTP status code to return. Defaults to 200
    */
   async mockQueryDataResponse<T = any>(json: T, status = 200) {
-    await this.ctx.page.route('*/**/api/ds/query*', async (route) => {
+    await this.ctx.page.route(this.ctx.selectors.apis.DataSource.queryPattern, async (route) => {
       await route.fulfill({ json, status });
     });
   }
@@ -40,7 +50,11 @@ export abstract class GrafanaPage {
    * @param status the HTTP status code to return. Defaults to 200
    */
   async mockResourceResponse<T = any>(path: string, json: T, status = 200) {
-    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resource}/${path}`, async (route) => {
+    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resourceUIDPattern}/${path}`, async (route) => {
+      await route.fulfill({ json, status });
+    });
+    // some data sources use the backendSrv directly, and then the path may be different
+    await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resourcePattern}/${path}`, async (route) => {
       await route.fulfill({ json, status });
     });
   }
@@ -52,8 +66,22 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataRequest(cb?: (request: Request) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForRequest((request) => {
-      if (request.url().includes('api/ds/query') && request.method() === 'POST') {
+      if (request.url().includes(this.ctx.selectors.apis.DataSource.query) && request.method() === 'POST') {
         return cb ? cb(request) : true;
+      }
+      return false;
+    });
+  }
+
+  /**
+   * Waits for a data source query data response
+   *
+   * @param cb optional callback to filter the response. Use this to filter by response body or other response properties
+   */
+  async waitForQueryDataResponse(cb?: (request: Response) => boolean | Promise<boolean>) {
+    return this.ctx.page.waitForResponse((response) => {
+      if (response.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+        return cb ? cb(response) : true;
       }
       return false;
     });

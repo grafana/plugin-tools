@@ -3,8 +3,16 @@ import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
 import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
-import { PanelEditPage, GrafanaPage, DataSourceConfigPage, DashboardPage } from './models';
+import {
+  PanelEditPage,
+  GrafanaPage,
+  DataSourceConfigPage,
+  DashboardPage,
+  VariableEditPage,
+  AnnotationEditPage,
+} from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
+import { ExplorePage } from './models/ExplorePage';
 
 export type PluginOptions = {
   selectorRegistration: void;
@@ -39,7 +47,7 @@ export type PluginFixture = {
   /**
    * Isolated {@link PanelEditPage} instance for each test.
    *
-   * Navigates to a new dashboard page, adds a new panel and moves to the panel edit page. 
+   * Navigates to a new dashboard page and adds a new panel.
    *
    * Use {@link PanelEditPage.setVisualization} to change the visualization
    * Use {@link PanelEditPage.datasource.set} to change the datasource
@@ -47,6 +55,35 @@ export type PluginFixture = {
    * editor row locator for a given query refId
    */
   panelEditPage: PanelEditPage;
+
+  /**
+   * Isolated {@link VariableEditPage} instance for each test.
+   *
+   * Navigates to a new dashboard page and adds a new variable.
+   *
+   * Use {@link VariableEditPage.setVariableType} to change the variable type
+   */
+  variableEditPage: VariableEditPage;
+
+  /**
+   * Isolated {@link AnnotationEditPage} instance for each test.
+   *
+   * Navigates to a new dashboard page and adds a new annotation.
+   *
+   * Use {@link AnnotationEditPage.datasource.set} to change the datasource
+   */
+  annotationEditPage: AnnotationEditPage;
+
+  /**
+   * Isolated {@link ExplorePage} instance for each test.
+   *
+   * Navigates to a the explore page.
+   *
+   * Use {@link ExplorePage.datasource.set} to change the datasource
+   * Use {@link ExplorePage.getQueryEditorEditorRow} to retrieve the query editor
+   * row locator for a given query refId
+   */
+  explorePage: ExplorePage;
 
   /**
    * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.
@@ -96,6 +133,11 @@ export type PluginFixture = {
    * or data source and returns it as json.
    */
   readProvision<T = any>(args: ReadProvisionArgs): Promise<T>;
+
+  /**
+   * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
+   */
+  isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures

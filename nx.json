@@ -1,27 +1,22 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "typecheck", "test"],
-        "accessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ="
-      }
-    }
-  },
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/dist"]
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
     },
     "typecheck": {
-      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"]
+      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"],
+      "cache": true
     },
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc"]
+      "inputs": ["default", "{workspaceRoot}/.eslintrc"],
+      "cache": true
     },
     "test": {
-      "inputs": ["default", "{projectRoot}/jest.config.js", "{workspaceRoot}/jest.config.base.js"]
+      "inputs": ["default", "{projectRoot}/jest.config.js", "{workspaceRoot}/jest.config.base.js"],
+      "cache": true
     }
   },
   "namedInputs": {
@@ -29,5 +24,6 @@
   },
   "affected": {
     "defaultBase": "main"
-  }
+  },
+  "nxCloudAccessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ="
 }

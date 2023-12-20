@@ -1,10 +1,9 @@
-import { Expect } from '@playwright/test';
 import { PluginTestCtx, TimeRangeArgs } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class TimeRange extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, expect: Expect<any>) {
-    super(ctx, expect);
+  constructor(ctx: PluginTestCtx) {
+    super(ctx);
   }
 
   async set({ from, to, zone }: TimeRangeArgs) {
@@ -16,6 +15,7 @@ export class TimeRange extends GrafanaPage {
     }
 
     if (zone) {
+      //todo: add an e2e selector for the time zone picker and use it in grafana ui
       await this.ctx.page.getByRole('button', { name: 'Change time settings' }).click();
       await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.TimeZonePicker.containerV2).fill(zone);
     }
@@ -27,18 +27,5 @@ export class TimeRange extends GrafanaPage {
     await toField.clear();
     await toField.fill(to);
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.TimePicker.applyTimeRange).click();
-
-    await this.expect
-      .soft(
-        this.ctx.page.getByLabel(this.ctx.selectors.components.PanelEditor.General.content).getByText(from),
-        'Could not set "from" in dashboard time range picker'
-      )
-      .toBeVisible();
-    await this.expect
-      .soft(
-        this.ctx.page.getByLabel(this.ctx.selectors.components.PanelEditor.General.content).getByText(to),
-        'Could not set "to" in dashboard time range picker'
-      )
-      .toBeVisible();
   }
 }

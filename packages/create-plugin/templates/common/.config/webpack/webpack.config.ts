@@ -157,6 +157,7 @@ const config = async (env): Promise<Configuration> => {
           { from: 'img/**/*', to: '.', noErrorOnMissing: true }, // Optional
           { from: 'libs/**/*', to: '.', noErrorOnMissing: true }, // Optional
           { from: 'static/**/*', to: '.', noErrorOnMissing: true }, // Optional
+          { from: '**/query_help.md', to: '.', noErrorOnMissing: true}, // Optional
         ],
       }),
       // Replace certain template-variables in the README and plugin.json

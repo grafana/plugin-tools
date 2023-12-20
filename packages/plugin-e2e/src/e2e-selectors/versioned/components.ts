@@ -74,7 +74,10 @@ export const versionedComponents = {
       menu: (title: string) => `data-testid Panel menu ${title}`,
       containerByTitle: (title: string) => `${title} panel`,
       headerCornerInfo: (mode: string) => `Panel header ${mode}`,
-      status: (status: string) => `data-testid Panel status ${status}`,
+      status: {
+        ['10.2.0']: (status: string) => `data-testid Panel status ${status}`,
+        [MIN_GRAFANA_VERSION]: (_: string) => 'Panel status',
+      },
       loadingBar: () => `Panel loading bar`,
       HoverWidget: {
         container: 'data-testid hover-header-container',
@@ -275,7 +278,14 @@ export const versionedComponents = {
   PageToolbar: {
     container: () => '.page-toolbar',
     item: (tooltip: string) => `${tooltip}`,
+    shotMoreItems: {
+      [MIN_GRAFANA_VERSION]: 'Show more items',
+    },
     itemButton: (title: string) => `data-testid ${title}`,
+    itemButtonTitle: {
+      '10.1.0': 'Add button',
+      [MIN_GRAFANA_VERSION]: 'Add panel button',
+    },
   },
   QueryEditorToolbarItem: {
     button: (title: string) => `QueryEditor toolbar item button ${title}`,
