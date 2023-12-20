@@ -2,7 +2,7 @@ import glob from 'glob';
 import path from 'path';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
-import { filterOutCommonFiles, getExportFilePath, isFile, isFileStartingWith } from './utils.files';
+import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files';
 import { renderHandlebarsTemplate } from './utils.handlebars';
 import { getPluginJson } from './utils.plugin';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';

@@ -50,6 +50,19 @@ export function removeFilesInCwd(files: string[]) {
   }
 }
 
+/** Given a exported file name it'll return its equivalent
+ * in the template folder.
+ */
+export function getExportTemplateName(f: string) {
+  const baseName = path.basename(f);
+  for (const [key, value] of Object.entries(configFileNamesMap)) {
+    if (value === baseName) {
+      return key;
+    }
+  }
+  return baseName;
+}
+
 export function getExportFileName(f: string) {
   const baseName = path.basename(f);
 
