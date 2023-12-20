@@ -23,8 +23,9 @@ export function getTemplateFiles(pluginType: string, filter?: string | string[])
 
   if (filter) {
     return templateFiles.filter((file) => {
-      const fileProjectRelativePath = getProjectRelativeTemplatePath(file, pluginType);
-      return isFileStartingWith(fileProjectRelativePath, filter);
+      const projectRelativePath = getProjectRelativeTemplatePath(file, pluginType);
+
+      return isFileStartingWith(projectRelativePath, filter);
     });
   }
 
