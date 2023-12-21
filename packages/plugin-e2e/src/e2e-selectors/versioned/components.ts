@@ -13,11 +13,11 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'TimePicker open button',
     },
     fromField: {
-      '8.3.0': 'data-testid Time Range from field',
+      '10.2.3': 'data-testid Time Range from field',
       [MIN_GRAFANA_VERSION]: 'Time Range from field',
     },
     toField: {
-      '8.3.0': 'data-testid Time Range to field',
+      '10.2.3': 'data-testid Time Range to field',
       [MIN_GRAFANA_VERSION]: 'Time Range to field',
     },
     applyTimeRange: 'data-testid TimePicker submit button',
@@ -412,7 +412,7 @@ export const versionedComponents = {
   },
   CodeEditor: {
     container: {
-      '10.3.0': 'data-testid Code editor container',
+      '10.2.3': 'data-testid Code editor container',
       [MIN_GRAFANA_VERSION]: 'Code editor container',
     },
   },
