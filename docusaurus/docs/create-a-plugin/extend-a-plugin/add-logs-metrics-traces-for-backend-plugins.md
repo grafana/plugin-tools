@@ -227,7 +227,7 @@ DEBUG[11-14|15:26:26] handleQuery   logger=plugin.grafana-basic-datasource plugi
 
 If log messages or key-value pairs originate from user input they should be validated and sanitized. Be careful to not expose any sensitive information in log messages (secrets, credentials, and so on). It's especially easy to do by mistake when including a Go struct as a value.
 
-If values originating from user input are bounded, that is when there are a fixed set of expected values, it's recommended to validate it is one of these values or else return an error.
+If values originating from user input are bounded, that is when there are a fixed set of expected values, it's recommended to validate it's one of these values or else return an error.
 
 If values originating from user input are unbounded, that is when the value could be anything, it's recommended to validate the max length/size of value and return an error or sanitize by just allowing a certain amount/fixed set of characters.
 
@@ -276,9 +276,27 @@ Consider using metrics to provide real-time insight into the state of resources.
 
 ### Metric types
 
-See [Prometheus metric types](https://prometheus.io/docs/concepts/metric_types/) for a list and description of the different metric types you can use and when to use them.
+There are four different metric types supported in Prometheus and that you can use:
+
+- **Counter:** Can only increase or be reset to zero on restart. For example, you can use a counter to represent the number of requests served, tasks completed, or errors.
+- **Gauge:** Numerical value that can arbitrarily go up and down. For example, you can use a gauge to represent the temperatures or current memory usage.
+- **Histogram:** Samples observations (usually things like request durations or response sizes) and counts them in configurable buckets. It also provides a sum of all observed values.
+- **Summary:** Similar to a histogram, a summary samples observations (usually things like request durations and response sizes). While it also provides a total count of observations and a sum of all observed values, it calculates configurable quantiles over a sliding time window.
+
+See [Prometheus metric types](https://prometheus.io/docs/concepts/metric_types/) for a list and detailed description of the different metric types you can use and when to use them.
 
 There are many possible metrics that can be tracked. One popular method for defining which metrics to monitor is the [RED method](https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/).
+
+### Automatic instrumentation by the SDK
+
+The SDK provides automatic collection and exposure of Go runtime, CPU, memory and process metrics to ease developer and operator experience. These metrics are exposed under the `go_` and `process_` namespaces and includes to name a few:
+
+- `go_info`: Information about the Go environment.
+- `go_memstats_alloc_bytes`: Number of bytes allocated and still in use.
+- `go_goroutines`: Number of goroutines that currently exist.
+- `process_cpu_seconds_total`: Total user and system CPU time spent in seconds.
+
+For further details and an up-to-date list of what metrics are automatically gathered and exposed for your plugin it's suggested to call Grafana's HTTP API, `/api/plugins/:pluginID/metrics`. See also [Collect and visualize metrics locally](#collect-and-visualize-metrics-locally) for further instructions how to pull metrics into Promethus.
 
 ### Implement metrics in your plugin
 
@@ -287,6 +305,8 @@ The [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md)
 For convenience, it's recommended to use the [promauto package](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus/promauto) when creating custom metrics since it automatically registers the metric in the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) and exposes them to Grafana.
 
 **Example:**
+
+The following example shows how to define and use a custom counter metric named `grafana_plugin_queries_total` that tracks the total number of queries per query type.
 
 ```go
 package plugin
@@ -303,7 +323,7 @@ import (
 var queriesTotal = promauto.NewCounterVec(
     prometheus.CounterOpts{
         Namespace: "grafana_plugin",
-        Name:      "query",
+        Name:      "queries_total",
         Help:      "Total number of queries.",
     },
     []string{"query_type"},
@@ -331,13 +351,9 @@ If label values originate from user input they should be validated and cleaned. 
 
 Be careful to not expose any sensitive information in label values (secrets, credentials, and so on).
 
-If a value originating from user input are bounded, that is when there are a fixed set of expected values, it's recommended to validate it is one of these values or else return an error.
+If a value originating from user input are bounded, that is when there are a fixed set of expected values, it's recommended to validate it's one of these values or else return an error.
 
 If a value originating from user input are unbounded, that is when the value could be anything, it's in general not recommended to use as a label because of high cardinality problems mentioned earlier. If still needed, the recommendation is to validate the max length/size of value and return an error or sanitize by just allowing a certain amount/fixed set of characters.
-
-### Automatic instrumentation by the SDK
-
-The SDK provides automatic collection and exposure of Go runtime metrics and process metrics to ease developer and operator experience.
 
 ### Collect and visualize metrics locally
 
