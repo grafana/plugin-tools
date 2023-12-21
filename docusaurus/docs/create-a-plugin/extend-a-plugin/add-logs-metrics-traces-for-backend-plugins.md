@@ -44,9 +44,18 @@ import (
 func main() {
     backend.Logger.Debug("Debug msg", "someID", 1)
     backend.Logger.Info("Info msg", "queryType", "default")
-    backend.Logger.Warning("Warning msg", "key", "value")
+    backend.Logger.Warning("Warning msg", "someKey", "someValue")
     backend.Logger.Error("Error msg", "error", errors.New("An error occurred"))
 }
+```
+
+The above example would output something like the following.
+
+```shell
+DEBUG[11-14|15:26:26] Debug msg     logger=plugin.grafana-basic-datasource someID=1
+INFO [11-14|15:26:26] Info msg      logger=plugin.grafana-basic-datasource queryType=default
+WARN [11-14|15:26:26] Warning msg   logger=plugin.grafana-basic-datasource someKey=someValue
+ERROR[11-14|15:26:26] Error msg     logger=plugin.grafana-basic-datasource error=An error occurred
 ```
 
 :::note
@@ -87,7 +96,7 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 ```
 
-Above example would output something like this each time `QueryData` is called.
+The above example would output something like the following each time `QueryData` is called.
 
 ```shell
 DEBUG[11-14|15:26:26] QueryData     logger=plugin.grafana-basic-datasource key=value queries=2
@@ -147,7 +156,7 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 ```
 
-Above example would output something like this each time `QueryData` is called with 2 queries.
+The above example would output something like this each time `QueryData` is called with 2 queries.
 
 ```shell
 DEBUG[11-14|15:26:26] QueryData     logger=plugin.grafana-basic-datasource pluginID=grafana-basic-datasource endpoint=queryData traceID=399c275ebb516a53ec158b4d0ddaf914 dsName=Basic datasource dsUID=kXhzRl7Mk uname=admin key=value queries=2
@@ -197,7 +206,7 @@ func (ds *Datasource) handleQuery(ctx context.Context, q backend.DataQuery) {
 }
 ```
 
-Above example would output something like this each time `QueryData` is called with 2 queries.
+The above example would output something like this each time `QueryData` is called with 2 queries.
 
 ```shell
 DEBUG[11-14|15:26:26] QueryData     logger=plugin.grafana-basic-datasource pluginID=grafana-basic-datasource endpoint=queryData traceID=399c275ebb516a53ec158b4d0ddaf914 dsName=Basic datasource dsUID=kXhzRl7Mk uname=admin queries=2
@@ -239,7 +248,7 @@ Incoming requests of high frequency are normally more common for the `QueryData`
 
 Logs from a backend plugin are consumed by the connected Grafana instance and included in the Grafana server log.
 
-Each log message for a backend plugin will include a name, `logger=plugin.<plugin id>`. Example:
+Each log message for a backend plugin will include a logger name, `logger=plugin.<plugin id>`. Example:
 
 ```shell
 DEBUG[11-14|15:26:26] Debug msg     logger=plugin.grafana-basic-datasource someID=1
