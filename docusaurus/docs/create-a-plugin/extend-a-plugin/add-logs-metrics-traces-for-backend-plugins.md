@@ -63,7 +63,7 @@ You can log multiple messages and include certain key-value pairs without repeat
 
 The following example illustrates how you can instantiate a logger per [datasource instance](../../introduction/plugin-types-usage.md#usage-of-data-source-plugins), and use the `With` method to include certain key-value pairs over the life-time of this datasource instance.
 
-```go title="datasource.go"
+```go
 package plugin
 
 import (
@@ -122,7 +122,7 @@ By default, the following key-value pairs are included in logs when using a cont
 
 The following example extends the [Reuse logger with certain key/value pairs](#reuse-logger-with-certain-keyvalue-pairs) example to include usage of a contextual logger.
 
-```go title="datasource.go"
+```go
 package plugin
 
 import (
@@ -161,7 +161,7 @@ If you want to propagate additional contextual key-value pairs to subsequent cod
 
 The following example extends the [Use a contextual logger](#use-a-contextual-logger) example with usage of the `log.WithContextualAttributes` function by adding additional contextual key-value pairs and allow propagation of these to other methods (`handleQuery`).
 
-```go title="datasource.go"
+```go
 package plugin
 
 import (
