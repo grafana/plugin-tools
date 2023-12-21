@@ -57,11 +57,10 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Don't use environment variables.** Environment variables are also a security risk and should be avoided. For configuration to a particular data source, use the `jsonData` or `secureJsonData` fields in the `plugin.json` file. If configuration is needed for the plugin which is shared among data sources, then use the [`plugin` configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
 - **Plugins should not execute arbitrary code in the backend.** Again, this is a security risk and should be avoided. If your plugin needs to execute code, provide a list of allowed commands and validate the input before executing it.
 - **Don't expose sensitive information.** For security reasons, avoid exposing sensitive information such as secrets.
-- **In general, any error happening should be logged with level `error`.**
-- **Don't use the `info` level: use the `debug` level instead.**
+- **Logs, metrics and traces:** Find more information in [Add logs, metrics and traces for backend plugins](../extend-a-plugin/add-logs-metrics-traces-for-backend-plugins.md).
 
 ## App plugins
 
 - **Specify a root page for your app.** If your app defines multiple pages, make sure to select a default one that will be used as a landing page for your plugin.
 - **To generate dynamic apps, consider using [Grafana Scenes](https://grafana.com/developers/scenes/).**
-- **Consider  contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/)**. UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
+- **Consider contributing a [UI extension](https://grafana.com/developers/plugin-tools/ui-extensions/)**. UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
