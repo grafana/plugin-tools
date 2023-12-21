@@ -222,7 +222,7 @@ If log messages or key-value pairs originate from user input they should be vali
 
 - **Debug:** Informational messages of high frequency and less-important messages during normal operations.
 - **Info:** Informational messages of low frequency and important messages.
-- **Warning:** Should in normal cases not be needed. If used, it should be actionable so that the operator/user can do something to resolve it. If not, use debug or info level instead.
+- **Warning:** An error/state that can be be recovered from without interrupting the operation. If used, it should be actionable so that the operator can do something to resolve it.
 - **Error:** Error messages indicating some operation failed (with an error) and the program didn't have a way to handle the error.
 
 :::note
