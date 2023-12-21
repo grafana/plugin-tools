@@ -57,7 +57,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Don't use environment variables.** Environment variables are also a security risk and should be avoided. For configuration to a particular data source, use the `jsonData` or `secureJsonData` fields in the `plugin.json` file. If configuration is needed for the plugin which is shared among data sources, then use the [`plugin` configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#pluginplugin_id).
 - **Plugins should not execute arbitrary code in the backend.** Again, this is a security risk and should be avoided. If your plugin needs to execute code, provide a list of allowed commands and validate the input before executing it.
 - **Don't expose sensitive information.** For security reasons, avoid exposing sensitive information such as secrets.
-- **Logs, metrics and traces:** Find more information in [Add logs, metrics and traces for backend plugins](../extend-a-plugin/add-logs-metrics-traces-for-backend-plugins.md).
+- **Logs, metrics and traces:** Find more information in [Add logs, metrics and traces for backend plugins](/create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins).
 
 ## App plugins
 
