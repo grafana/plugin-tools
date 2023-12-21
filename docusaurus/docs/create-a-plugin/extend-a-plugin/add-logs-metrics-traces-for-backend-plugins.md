@@ -101,7 +101,7 @@ You can also use `backend.NewLoggerWith` from the [backend package](https://pkg.
 
 #### Use a contextual logger
 
-Use a contextual logger to automatically include additional key-value pairs attached to `context.Context`. For example, you can use `traceID` to allow correlating logs with traces and to correlate logs with a common identifier. You can create a new contextual logger by using the `FromContext` method on your instantiated logger; you can also combine this method when [reusing logger with certain key-value pairs](#reuse-logger-with-certain-keyvalue-pairs). We recommend using a contextual logger whenever you have access to a `context.Context`.
+Use a contextual logger to automatically include additional key-value pairs attached to `context.Context`. For example, you can use `traceID` to allow correlating logs with traces and correlate logs with a common identifier. You can create a new contextual logger by using the `FromContext` method on your instantiated logger; you can also combine this method when [reusing logger with certain key-value pairs](#reuse-logger-with-certain-keyvalue-pairs). We recommend using a contextual logger whenever you have access to a `context.Context`.
 
 :::note
 
@@ -220,9 +220,9 @@ If log messages or key-value pairs originate from user input they should be vali
 
 #### When to use which log level?
 
-- **Debug:** Informational messages of high frequency and/or less-important messages during normal operations.
-- **Info:** Informational messages of low frequency and/or important messages.
-- **Warning:** Should in normal cases not be needed. If used, it should be actionable.
+- **Debug:** Informational messages of high frequency and less-important messages during normal operations.
+- **Info:** Informational messages of low frequency and important messages.
+- **Warning:** Should in normal cases not be needed. If used, it should be actionable so that the operator/user can do something to resolve it. If not, use debug or info level instead.
 - **Error:** Error messages indicating some operation failed (with an error) and the program didn't have a way to handle the error.
 
 :::note
@@ -244,7 +244,7 @@ WARN [11-14|15:26:26] Warning msg   logger=plugin.grafana-basic-datasource someK
 ERROR[11-14|15:26:26] Error msg     logger=plugin.grafana-basic-datasource error=An error occurred
 ```
 
-You can enable [debug logging in your Grafana instance](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) and that will normally output a huge amount of information and make it hard to find the logs related to a certain plugin. However, using a named logger makes it convenient to enable debug logging only for a certain named logger and/or plugin:
+You can enable [debug logging in your Grafana instance](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) and that will normally output a huge amount of information and make it hard to find the logs related to a certain plugin. However, using a named logger makes it convenient to enable debug logging only for a certain named logger and plugin:
 
 ```
 [log]
