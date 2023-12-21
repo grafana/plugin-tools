@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: grafana/plugin-actions/build-plugin@release
+{{#if_eq packageManagerName "pnpm"}}
+      - uses: pnpm/action-setup@v2
+{{/if_eq}}
         # uncomment to enable plugin sign in
         #with:
           # see https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token to generate it
