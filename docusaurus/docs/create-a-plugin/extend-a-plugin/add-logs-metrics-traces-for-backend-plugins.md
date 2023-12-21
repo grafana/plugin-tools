@@ -285,8 +285,6 @@ There are four different metric types supported in Prometheus and that you can u
 
 See [Prometheus metric types](https://prometheus.io/docs/concepts/metric_types/) for a list and detailed description of the different metric types you can use and when to use them.
 
-There are many possible metrics that can be tracked. One popular method for defining which metrics to monitor is the [RED method](https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/).
-
 ### Automatic instrumentation by the SDK
 
 The SDK provides automatic collection and exposure of Go runtime, CPU, memory and process metrics to ease developer and operator experience. These metrics are exposed under the `go_` and `process_` namespaces and includes to name a few:
