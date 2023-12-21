@@ -218,6 +218,10 @@ DEBUG[11-14|15:26:26] handleQuery   logger=plugin.grafana-basic-datasource plugi
 
 If log messages or key-value pairs originate from user input they should be validated and sanitized. Be careful to not expose any sensitive information in log messages (secrets, credentials, and so on). It's especially easy to do by mistake when including a Go struct as a value.
 
+If values originating from user input are bounded, that is when there are a fixed set of expected values, it's recommended to validate it is one of these values or else return an error.
+
+If values originating from user input are unbounded, that is when the value could be anything, it's recommended to validate the max length/size of value and return an error or sanitize by just allowing a certain amount/fixed set of characters.
+
 #### When to use which log level?
 
 - **Debug:** Informational messages of high frequency and less-important messages during normal operations.
@@ -312,13 +316,15 @@ func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReque
 - If the metric type is a histogram and you're measuring duration, name it with a `_<unit>` suffix, e.g. `http_request_duration_seconds`.
 - If the metric type is a gauge, name it to denote it's a value that can increase and decrease , e.g. `http_request_in_flight`.
 
-#### Label values and high cardinality
+#### Validate and sanitize input coming from user input
 
-Be careful with what label values you add. Using or allowing too many label values could result in high cardinality problems.
-
-If label values originate from user input they should be validated and cleaned. Use `metricutil.SanitizeLabelName("<label value>")` from pkg/infra/metrics/metricutil package to sanitize label names. It is very important to only allow a predefined set of labels to minimize the risk of high cardinality problems.
+If label values originate from user input they should be validated and cleaned. It is very important to only allow a predefined set of labels to minimize the risk of high cardinality problems. Using or allowing too many label values could result in high cardinality problems. For example, using user IDs, email addresses, or other unbounded sets of values as a label could pretty easily create high cardinality problems and leading to a huge amount of time series in Prometheus. For more information about labels and high cardinality, see [Prometheus label naming](https://prometheus.io/docs/practices/naming/#labels).
 
 Be careful to not expose any sensitive information in label values (secrets, credentials, and so on).
+
+If a value originating from user input are bounded, that is when there are a fixed set of expected values, it's recommended to validate it is one of these values or else return an error.
+
+If a value originating from user input are unbounded, that is when the value could be anything, it's in general not recommended to use as a label because of high cardinality problems mentioned earlier. If still needed, the recommendation is to validate the max length/size of value and return an error or sanitize by just allowing a certain amount/fixed set of characters.
 
 ### Automatic instrumentation by the SDK
 
