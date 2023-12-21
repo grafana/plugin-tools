@@ -30,6 +30,8 @@ Using the global logger, `backend.Logger`, from the [backend package](https://pk
 
 **Example:**
 
+The following example shows basic use of the global logger with different severity levels and key-value pairs.
+
 ```go
 package plugin
 
@@ -55,11 +57,13 @@ The `backend.Logger` is a convenient wrapper over `log.DefaultLogger` from the [
 
 #### Reuse logger with certain key/value pairs
 
-You can log multiple messages and include certain key-value pairs without repeating your code everywhere. To do so, create a new logger with arguments using the `With` method on your instantiated logger.
+You can log multiple messages and include certain key-value pairs without repeating your code everywhere, for example when you want to include some specific key-value pairs based on how a datasource has been configured in each log message. To do so, create a new logger with arguments using the `With` method on your instantiated logger.
 
 **Example:**
 
-```go
+The following example illustrates how you can instantiate a logger per [datasource instance](../../introduction/plugin-types-usage.md#usage-of-data-source-plugins), and use the `With` method to include certain key-value pairs over the life-time of this datasource instance.
+
+```go title="datasource.go"
 package plugin
 
 import (
@@ -71,9 +75,7 @@ import (
 )
 
 func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-    // instantiates a logger that will include the datasource UID
-    // key-value pair over the lifetime of this instance.
-    logger := backend.Logger.With("dsUID", settings.UID)
+    logger := backend.Logger.With("key", "value")
 
     return &Datasource{
         logger: logger,
@@ -81,11 +83,14 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 }
 
 func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-    ds.logger.Debug("Debug msg", "someID", 1)
-    ds.logger.Info("Info msg", "queryType", "default")
-    ds.logger.Warning("Warning msg", "key", "value")
-    ds.logger.Error("Error msg", "error", errors.New("An error occurred"))
+    ds.logger.Debug("QueryData", "queries", len(req.Queries))
 }
+```
+
+Above example would output something like this each time `QueryData` is called.
+
+```shell
+DEBUG[11-14|15:26:26] QueryData     logger=plugin.grafana-basic-datasource key=value queries=2
 ```
 
 :::note
@@ -115,7 +120,9 @@ By default, the following key-value pairs are included in logs when using a cont
 
 **Example:**
 
-```go
+The following example extends the [Reuse logger with certain key/value pairs](#reuse-logger-with-certain-keyvalue-pairs) example to include usage of a contextual logger.
+
+```go title="datasource.go"
 package plugin
 
 import (
@@ -127,9 +134,7 @@ import (
 )
 
 func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-    // instantiates a logger that will include the datasource UID
-    // key-value pair over the lifetime of this instance.
-    logger := backend.Logger.With("dsUID", settings.UID)
+    logger := backend.Logger.With("key", "value")
 
     return &Datasource{
         logger:   logger,
@@ -138,11 +143,14 @@ func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSetti
 
 func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
     ctxLogger := ds.logger.FromContext(ctx)
-    ctxLogger.Debug("Debug msg", "someID", 1)
-    ctxLogger.Info("Info msg", "queryType", "default")
-    ctxLogger.Warning("Warning msg", "key", "value")
-    ctxLogger.Error("Error msg", "error", errors.New("An error occurred"))
+    ctxLogger.Debug("QueryData", "queries", len(req.Queries))
 }
+```
+
+Above example would output something like this each time `QueryData` is called with 2 queries.
+
+```shell
+DEBUG[11-14|15:26:26] QueryData     logger=plugin.grafana-basic-datasource pluginID=grafana-basic-datasource endpoint=queryData traceID=399c275ebb516a53ec158b4d0ddaf914 dsName=Basic datasource dsUID=kXhzRl7Mk uname=admin key=value queries=2
 ```
 
 #### Include additional contextual information in logs
@@ -151,19 +159,50 @@ If you want to propagate additional contextual key-value pairs to subsequent cod
 
 **Example:**
 
-```go
+The following example extends the [Use a contextual logger](#use-a-contextual-logger) example with usage of the `log.WithContextualAttributes` function by adding additional contextual key-value pairs and allow propagation of these to other methods (`handleQuery`).
+
+```go title="datasource.go"
+package plugin
+
+import (
+    "context"
+    "errors"
+
+    "github.com/grafana/grafana-plugin-sdk-go/backend"
+    "github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
+    "github.com/grafana/grafana-plugin-sdk-go/backend/log"
+)
+
+func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+    logger := backend.Logger.With("key", "value")
+
+    return &Datasource{
+        logger: logger,
+    }, nil
+}
+
 func (ds *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
     ctxLogger := ds.logger.FromContext(ctx)
-    ctxLogger.Debug("Debug msg", "someID", 1)
-    ctxLogger.Info("Info msg", "queryType", "default")
-    ctxLogger.Warning("Warning msg", "key", "value")
-    ctxLogger.Error("Error msg", "error", errors.New("An error occurred"))
+    ctxLogger.Debug("QueryData", "queries", len(req.Queries))
 
     for _, q := range req.Queries {
         childCtx = log.WithContextualAttributes(ctx, []any{"refID", q.RefID, "queryType", q.QueryType})
         ds.handleQuery(childCtx, q)
     }
 }
+
+func (ds *Datasource) handleQuery(ctx context.Context, q backend.DataQuery) {
+    ctxLogger := ds.logger.FromContext(ctx)
+    ctxLogger.Debug("handleQuery")
+}
+```
+
+Above example would output something like this each time `QueryData` is called with 2 queries.
+
+```shell
+DEBUG[11-14|15:26:26] QueryData     logger=plugin.grafana-basic-datasource pluginID=grafana-basic-datasource endpoint=queryData traceID=399c275ebb516a53ec158b4d0ddaf914 dsName=Basic datasource dsUID=kXhzRl7Mk uname=admin queries=2
+DEBUG[11-14|15:26:26] handleQuery   logger=plugin.grafana-basic-datasource pluginID=grafana-basic-datasource endpoint=queryData traceID=399c275ebb516a53ec158b4d0ddaf914 dsName=Basic datasource dsUID=kXhzRl7Mk uname=admin refID=A queryType=simpleQuery
+DEBUG[11-14|15:26:26] handleQuery   logger=plugin.grafana-basic-datasource pluginID=grafana-basic-datasource endpoint=queryData traceID=399c275ebb516a53ec158b4d0ddaf914 dsName=Basic datasource dsUID=kXhzRl7Mk uname=admin refID=B queryType=advancedQuery
 ```
 
 ### Best practices
@@ -199,10 +238,10 @@ Logs from a backend plugin are consumed by the connected Grafana instance and in
 Each log message for a backend plugin will include a name, `logger=plugin.<plugin id>`. Example:
 
 ```shell
-DEBUG[11-14|15:26:26] Debug msg     logger=plugin.grafana-helloworld-app someID=1
-INFO [11-14|15:26:26] Info msg      logger=plugin.grafana-helloworld-app queryType=default
-WARN [11-14|15:26:26] Warning msg   logger=plugin.grafana-helloworld-app key=value
-ERROR[11-14|15:26:26] Error msg     logger=plugin.grafana-helloworld-app error=An error occurred
+DEBUG[11-14|15:26:26] Debug msg     logger=plugin.grafana-basic-datasource someID=1
+INFO [11-14|15:26:26] Info msg      logger=plugin.grafana-basic-datasource queryType=default
+WARN [11-14|15:26:26] Warning msg   logger=plugin.grafana-basic-datasource someKey=someValue
+ERROR[11-14|15:26:26] Error msg     logger=plugin.grafana-basic-datasource error=An error occurred
 ```
 
 You can enable [debug logging in your Grafana instance](https://grafana.com/docs/grafana/latest/troubleshooting/#troubleshoot-with-logs) and that will normally output a huge amount of information and make it hard to find the logs related to a certain plugin. However, using a named logger makes it convenient to enable debug logging only for a certain named logger and/or plugin:
@@ -387,7 +426,7 @@ When OpenTelemetry tracing is enabled on the main Grafana instance and tracing i
 
 ### Automatic instrumentation by the SDK
 
-The SDK automates some instrumentation to ease developer experience. This section explores the default tracing added to gRPC calls and outgoing HTTP requests. 
+The SDK automates some instrumentation to ease developer experience. This section explores the default tracing added to gRPC calls and outgoing HTTP requests.
 
 #### Tracing gRPC calls
 
