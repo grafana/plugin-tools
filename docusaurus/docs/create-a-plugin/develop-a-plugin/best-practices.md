@@ -22,6 +22,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Include default dashboards in your data source or app plugin** - Refer to [Bundling of dashboards](https://grafana.com/developers/plugin-tools/introduction/plugin-types-usage#bundling-of-dashboards) for more information.
 - **Ensure that the minimum version of Grafana is correct** - Make sure that the `grafanaDependency` in your `plugin.json` points to the earliest version of Grafana that your plugin fully supports.
 - **Don't expose sensitive information** - For security reasons, avoid exposing sensitive information such as secrets. Make sure to utilize log levels properly, avoid excessive logging, and never log credentials or other sensitive information.
+- **Avoid using `console.log` in your plugin** - Console messages are usually for debugging purposes and therefore not suitable to ship to the client.
 - **Add linting and auto-completion** - Reduce bugs in your plugin by adding a code snippet like [this one](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-3-add-linting-and-auto-completion-to-your-pluginjson) in VS Code to get linting for your plugin.
 - **Include a well-written README** - Give users a deeper understanding of how to configure and use your plugin, but don’t make it essential reading. You want users to be able to understand your plugin intuitively without referring to the documentation if possible.
 - **Allow incremental learning** - Hide advanced options using switches or categories, and let users learn about advanced features when they’re ready.
@@ -45,7 +46,6 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Add query editor help** - Query editors can be complex and it's useful to provide help to users. For more information, refer to [Add query editor help](/create-a-plugin/extend-a-plugin/add-query-editor-help).
 - **Skip hidden or empty queries** - This avoids executing unnecessary or wrong queries. Data sources implementing [`DataSourceWithBackend`](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-basic/src/datasource.ts#L5) only need to implement the method `filterQuery`. Refer to this [example](https://github.com/grafana/grafana/blob/fd5f66083c91b9759ae7772f99b80c9342b93290/public/app/plugins/datasource/loki/datasource.ts#L1085).
 - **Specify a default query** - Default queries can help users to discover how queries are written for the plugin. Refer to this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-streaming-backend-websocket/streaming-backend-websocket-plugin/src/datasource.ts#L39-L41).
-- **Avoid using `console.log` in your plugin** - Console messages are usually for debugging purposes and therefore not suitable to ship to the client.
 
 ### Frontend (only) plugins
 
