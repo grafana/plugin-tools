@@ -24,7 +24,7 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 :::warning
 
-This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token(../..//publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
+This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
 
 :::
 
