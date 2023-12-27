@@ -28,7 +28,9 @@ SELECT * FROM services WHERE id = "auth-api"
 
 Grafana provides a couple of helper functions to interpolate variables in a string template. Let's see how you can use them in your plugin.
 
-## Interpolate variables in panel plugins
+## Add variables to plugins
+
+### Interpolate variables in panel plugins
 
 For panels, the `replaceVariables` function is available in the `PanelProps`.
 
@@ -42,7 +44,7 @@ export function SimplePanel({ options, data, width, height, replaceVariables }: 
 }
 ```
 
-## Interpolate variables in data source plugins
+### Interpolate variables in data source plugins
 
 For data sources, you need to use the `getTemplateSrv`, which returns an instance of `TemplateSrv`.
 
@@ -64,27 +66,7 @@ For data sources, you need to use the `getTemplateSrv`, which returns an instanc
    }
    ```
 
-## Format multi-value variables
-
-When a user selects multiple values for a variable, the value of the interpolated variable depends on the [variable format](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax#advanced-variable-format-options).
-
-A data source plugin can define the default format option when no format is specified by adding a third argument to the interpolation function.
-
-Let's change the SQL query to use CSV format by default:
-
-```ts
-getTemplateSrv().replace('SELECT * FROM services WHERE id IN ($service)', options.scopedVars, 'csv');
-```
-
-Now, when users write `$service`, the query looks like this:
-
-```sql
-SELECT * FROM services WHERE id IN (admin,auth,billing)
-```
-
-For more information on the available variable formats, refer to [Advanced variable format options](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/index.md#advanced-variable-format-options).
-
-## Set a variable from your plugin
+### Set a variable from your plugin
 
 Not only can you read the value of a variable, you can also update the variable from your plugin. Use `locationService.partial(query, replace)`.
 
@@ -101,13 +83,13 @@ import { locationService } from '@grafana/runtime';
 locationService.partial({ 'var-service': 'billing' }, true);
 ```
 
-:::note
+:::caution
 
 Grafana queries your data source whenever you update a variable. Excessive updates to variables can slow down Grafana and lead to a poor user experience.
 
 :::
 
-## Add support for query variables to your data source
+### Add support for query variables to your data source
 
 A [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) is a type of variable that allows you to query a data source for the values. By adding support for query variables to your data source plugin, users can create dynamic dashboards based on data from your data source.
 
@@ -197,11 +179,11 @@ Let's create a custom query editor to allow the user to edit the query model.
    };
    ```
 
-   Grafana saves the query model whenever one of the text fields loses focus (`onBlur`) and then previews the values returned by `metricFindQuery`.
+   Grafana saves the query model whenever one of the text fields loses focus (`onBlur`), and then it previews the values returned by `metricFindQuery`.
 
    The second argument to `onChange` allows you to set a text representation of the query that will appear next to the name of the variable in the variables list.
 
-1. Configure your plugin to use the query editor:
+2. Configure your plugin to use the query editor:
 
    ```ts
    import { VariableQueryEditor } from './VariableQueryEditor';
@@ -212,3 +194,91 @@ Let's create a custom query editor to allow the user to edit the query model.
    ```
 
 That's it! You can now try out the plugin by adding a [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) to your dashboard.
+
+## Using template variables
+
+[Template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/#templates) enable users to create dashboards that change dynamically based on their input. Since variables have been around in Grafana for a long time, many users expect them to be supported for any data sources they install.
+
+### Interpolate template variables
+
+To interpolate template variables, you need to import the `getTemplateSrv()` function from the `@grafana/runtime` package:
+
+```
+import { getTemplateSrv } from '@grafana/runtime';
+```
+
+The `getTemplateSrv()` function returns an instance of `TemplateSrv` which provides methods for working with template variables. The most important one, `replace()`, accepts a string containing variables as input and returns an interpolated string, where the variables have been replaced with the values that the users have selected.
+
+For example, if you have a variable called `instance`, the following code replaces the variable with its corresponding value:
+
+```
+getTemplateSrv().replace("I'd like $instance, please!");
+
+// I'd like server-1, please!
+```
+
+The `replace()` even handles built-in variables such as `$__from` and `$__to`.
+
+And that’s it! For most use cases, that’s all you need to do to add support for template variables in your data source. Note that it’s up to you to decide which fields will support template variables. For example, to interpolate a single property, `rawQuery`, in your query, add the following:
+
+```
+const interpolatedQuery: MyQuery = {
+  ...query,
+  rawQuery: getTemplateSrv().replace(query.rawQuery),
+};
+```
+
+### Format multi-value variables
+
+In the previous example, the variables only had one value, `server-1`. However, if the user instead creates a multi-value variable, it can hold multiple values at the same time. Multi-value variables pose a new challenge: How do you decide how to format a collection of values?
+
+For example, which of these different formats would suit your use case?
+
+```
+{server-1, server-2, server-3} (Graphite)
+["server-1", "server-2", "server-3"] (JSON)
+("server-1" OR "server-2" OR "server-3") (Lucene)
+```
+
+Fortunately, the `replace()` method lets you pass a third argument to allow you to choose from a set of predefined formats, such as the CSV format:
+
+```
+getTemplateSrv().replace("I'd like $instance, please!", {}, "csv");
+
+// I'd like server-1, server-2, server-3, please!
+```
+
+:::note
+
+The second argument to the `replace()` method lets you configure sets of custom variables, or scoped variables, to include when interpolating the string. Unless this interests you, feel free to pass an empty object, `{}`.
+
+:::
+
+Grafana supports a range of format options. To browse the available formats, check out [Advanced variable format options](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/#advanced-variable-format-options).
+
+### Format variables using interpolation functions
+
+After reviewing the advanced variable format options, you may find that you want to support a format option that isn't available. Fortunately, Grafana gives you full control over how `replace()` formats variables through the use of interpolation functions.
+
+You can pass an interpolation function to `replace()` instead of a string as the third argument. The following example uses a custom formatter function to add an `and` before the last element:
+
+```
+const formatter = (value: string | string[]): string => {
+  if (typeof value == 'string') {
+    return value;
+  }
+
+  // Add 'and' before the last element.
+  if (value.length > 1) {
+    return value.slice(0, -1).join(', ') + ' and ' + value[value.length - 1];
+  }
+
+  return value[0];
+};
+
+getTemplateSrv().replace("I'd like $instance, please!", {}, formatter);
+
+// I'd like server-1, server-2, and server-3, please!
+```
+
+The argument to the function can be a string or an array of strings such as `(string | string[])` depending on whether the variable supports multiple values, so make sure to check the type of the value before you use it.
