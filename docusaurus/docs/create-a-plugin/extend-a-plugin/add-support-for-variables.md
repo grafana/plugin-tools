@@ -282,3 +282,63 @@ getTemplateSrv().replace("I'd like $instance, please!", {}, formatter);
 ```
 
 The argument to the function can be a string or an array of strings such as `(string | string[])` depending on whether the variable supports multiple values, so make sure to check the type of the value before you use it.
+
+## Using variables outside of templates
+
+There may be a case where you want to use a variable outside of a template. For example, if you want to validate the number of selected values or add them to a drop-down menu.
+
+This helper function uses the `replace()` method to return the values as an array:
+
+```
+function getValuesForVariable(name: string): string[] {
+  const values: string[] = [];
+
+  // Collects the values in an array.
+  getTemplateSrv().replace(`$${name}`, {}, (value: string | string[]) => {
+    if (Array.isArray(value)) {
+      values.push(...value);
+    } else {
+      values.push(value);
+    }
+
+    // We don't really care about the string here.
+    return '';
+  });
+
+  return values;
+}
+const instances = getValuesForVariable("instance");
+
+for (var instance of instances) {
+  console.log(instance);
+}
+
+// server-1
+// server-2
+// server-3
+```
+
+You can even go a step further and create an object that neatly contains all variables and their values:
+
+```
+function getAllVariables(): Record<string, string[]> {
+  const entries = getTemplateSrv()
+    .getVariables()
+    .map((v) => [v.name, getValuesForVariable(v.name)]);
+
+  return Object.fromEntries(entries);
+}
+const vars = getAllVariables();
+
+console.log(vars.instance);
+
+// ["server-1", "server-2", "server-3"]
+```
+
+In this example, use `getTemplateSrv().getVariables()` to list all configured variables for the current dashboard.
+
+:::note
+
+You can also split the interpolated string based on a predictable delimiter. Feel free to adapt these snippets based on what makes sense to you.
+
+:::
