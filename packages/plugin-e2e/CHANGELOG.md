@@ -1,3 +1,15 @@
+# v0.4.0 (Tue Jan 02 2024)
+
+#### 🚀 Enhancement
+
+- Plugin-E2E: Allow provisioningRootDir to be overridden [#623](https://github.com/grafana/plugin-tools/pull/623) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.3.0 (Tue Jan 02 2024)
 
 #### 🚀 Enhancement

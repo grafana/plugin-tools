@@ -2,6 +2,19 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/plugin-e2e@0.4.0`
+  - Plugin-E2E: Allow provisioningRootDir to be overridden [#623](https://github.com/grafana/plugin-tools/pull/623) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 02 2024)
+
+#### 🚀 Enhancement
+
 - `@grafana/plugin-e2e@0.3.0`
   - Plugin E2E: Enable testing panel plugins [#616](https://github.com/grafana/plugin-tools/pull/616) ([@sunker](https://github.com/sunker))
 
