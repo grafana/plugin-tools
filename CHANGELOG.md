@@ -1,3 +1,22 @@
+# (Tue Jan 02 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.3.0`
+  - Plugin E2E: Enable testing panel plugins [#616](https://github.com/grafana/plugin-tools/pull/616) ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump cookiejs from 2.1.2 to 2.1.3 [#601](https://github.com/grafana/plugin-tools/pull/601) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps-dev): Bump jest and @types/jest [#598](https://github.com/grafana/plugin-tools/pull/598) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Dec 19 2023)
 
 #### 🚀 Enhancement

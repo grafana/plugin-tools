@@ -1,3 +1,15 @@
+# v0.3.0 (Tue Jan 02 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Enable testing panel plugins [#616](https://github.com/grafana/plugin-tools/pull/616) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.2.0 (Tue Dec 19 2023)
 
 #### 🚀 Enhancement
