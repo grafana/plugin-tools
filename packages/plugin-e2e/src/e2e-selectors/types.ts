@@ -262,6 +262,7 @@ export type Components = {
   OptionsGroup: {
     group: (title?: string) => string;
     toggle: (title?: string) => string;
+    groupTitle: string;
   };
   PluginVisualization: {
     current: string;
