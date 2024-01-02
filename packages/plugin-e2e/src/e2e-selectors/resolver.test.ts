@@ -24,7 +24,7 @@ describe('resolveSelectors', () => {
 
   test('returns the right selector value when it has multiple versions', () => {
     versionedSelectors.components.CodeEditor.container = {
-      '10.3.0': 'data-testid Code editor container',
+      '10.2.3': 'data-testid Code editor container',
       [MIN_GRAFANA_VERSION]: 'Code editor container',
     };
 
