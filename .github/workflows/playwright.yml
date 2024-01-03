@@ -56,6 +56,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}
+          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}.zip
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
