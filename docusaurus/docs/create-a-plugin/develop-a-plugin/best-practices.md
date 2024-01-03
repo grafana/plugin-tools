@@ -10,7 +10,7 @@ keywords:
 sidebar_position: 0.5
 ---
 
-# Best practices for plugin development
+# Best practices for plugin development and such
 
 We have compiled a list of practices for building and publishing high-quality plugins for Grafana that we have found beneficial. Refer to them when building your own plugin for best results.
 
