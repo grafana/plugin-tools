@@ -13,14 +13,6 @@ jobs:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
       - name: Check for docs file changes
         uses: dorny/paths-filter@v2.11.1
         id: filter
@@ -32,6 +24,16 @@ jobs:
               - '.github/workflows/test-build.yml'
               - 'docusaurus/**'
               - 'package-lock.json'
+      - name: Checkout repository
+        if: ${{ steps.filter.outputs.docs == 'true' }}
+        uses: actions/checkout@v4
+      - name: Setup node
+        if: ${{ steps.filter.outputs.docs == 'true' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
       - name: Install dependencies
         if: ${{ steps.filter.outputs.docs == 'true' }}
         run: npm ci
