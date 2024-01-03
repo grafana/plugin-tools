@@ -27,7 +27,8 @@
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "jest",
     "playwright:test": "npx playwright test",
-    "playwright:test:ui": "npx playwright test --ui"
+    "playwright:test:ui": "npx playwright test --ui",
+    "playwright:showreport": "npx playwright show-report"
   },
   "engines": {
     "node": ">=20"
