@@ -22,7 +22,7 @@ The plugin-e2e workspace consists of the following folder structure:
 ```js
 ./packages/plugin-e2e
 ├── provisioning // Dashboards and data sources used to provision Grafana when running E2E tests in CI and locally
-├── dist // Generated code and typescript definition files which constitutues the npm package
+├── dist // Generated code and typescript definition files which constitutes the npm package
 ├── src //
 │   ├── e2e-selectors // Types and utility functions for resolving e2e selectors for a given Grafana version
 │   │   └── versioned // Selector values defined for a range of Grafana versions
@@ -37,9 +37,9 @@ The plugin-e2e workspace consists of the following folder structure:
 
 ## Development
 
-There are a collection of [commands](#commmands) to assist with developing `plugin-e2e`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
+There are a collection of [commands](#commands) to assist with developing `plugin-e2e`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
 
-### Commmands
+### Commands
 
 Below are the main commands used for developing `plugin-e2e`. They can be run by either `npx nx run @grafana/plugin-e2e:<name_of_command>`, `npm run <name_of_command> -w @grafana/plugin-e2e` or navigating to `packages/plugin-e2e` and running the command directly as detailed below.
 
@@ -123,7 +123,7 @@ Beware that scenarios provided by @grafana/plugin-e2e needs to be work in older 
 
 2. Run Playwright tests locally - `npm run playwright:test`
 
-3. Push the changes in your local PR, create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/) and add the labels `release` and `minor|patch`. A github action will exectute all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is not compatible with older versions of Grafana.
+3. Push the changes in your local PR, create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/) and add the labels `release` and `minor|patch`. A github action will execute all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is not compatible with older versions of Grafana.
 
 4. Once CI passes, `auto` will publish a canary release to npm. You can find the version number at the bottom of the PR description.
 
