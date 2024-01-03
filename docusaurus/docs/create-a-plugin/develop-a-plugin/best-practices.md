@@ -52,10 +52,10 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Data sources running only on the frontend typically use the [Grafana proxy](/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service** - This is a simple way of adding support for queries in your plugin, and it doesn't require Golang knowledge. However, there are use cases for which writing a backend plugin is necessary. Refer to [Backend plugins](/introduction/backend-plugins#use-cases-for-implementing-a-backend-plugin) for more information about those.
 
 ### Backend plugins
+
 - **Add support for alerting** - Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"alerting": true` to your `plugin.json` file.
 - **Use the `CallResourceHandler` interface to serve custom HTTP requests** - For more information, refer to [Resource handlers](/introduction/backend-plugins#resource-handlers). This is useful, for example, when providing query builders, as shown in this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/app-with-backend/pkg/plugin/app.go#L35).
-- **Add metrics to your data source** - Find more information in [Backend plugins](/introduction/backend-plugins#collect-metrics).
-- **Add tracing to your data source** - In addition to metrics, tracing allows you to deep dive into your plugin performance. More information is available in our [documentation](/create-a-plugin/extend-a-plugin/add-distributed-tracing-for-backend-plugins) and an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-http-backend/pkg/plugin/datasource.go#L141-L156).
+- **Add logs, metrics and traces to your data source.** Make it easier to diagnose and resolve issues for both plugin developers and Grafana operators. Find more information in our [documentation](/create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins).
 - **Keep cached connections** - This is an important optimization. To learn more, refer to our [documentation](/introduction/backend-plugins#caching-and-connection-pooling) and an [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-http-backend/pkg/plugin/datasource.go#L40-L66).
 - **Add macro support** - Macros are similar to variables, but they are typically evaluated in the backend and can return values based on environment data like the current time selection. It can be useful, for example, to evaluate alerts during a dynamic period. These are usually defined using the syntax `$__macroName` (for example, `$__timeFilter`). Refer to this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-basic/pkg/query/macro.go) to discover how you can implement support. Some pre-defined macros are available in the [plugin SDK `macros` package](https://github.com/grafana/grafana-plugin-sdk-go/tree/main/experimental/macros).
 - **For SQL data sources, refer to the [`sqlutil` package in the SDK](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/data/sqlutil)** - It includes multiple helpers to work with SQL data sources for things like data frame conversion, default macros, and so on. Also, consider using the [`sqlds` package](https://pkg.go.dev/github.com/grafana/sqlds) which highly simplifies the implementation of SQL data sources.
@@ -64,6 +64,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Plugins should not execute arbitrary code in the backend** - Again, this is a security risk and should be avoided. If your plugin needs to execute code, provide a list of allowed commands and validate the input before executing it.
 - **In general, any error happening should be logged with level `error`.**
 - **Don't use the `info` level: use the `debug` level instead.**
+
 ## App plugins
 
 - **Specify a root page for your app** - If your app defines multiple pages, make sure to select a default one that will be used as a landing page for your plugin.
@@ -74,4 +75,4 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 - **Add a GitHub badge** - Follow [these steps](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-4-add-dynamic-badges-to-your-readme) to help users find your plugin using GitHub badges.
 - **Add workflow automation** - If your plugin is available on GitHub, consider [adding the GitHub workflows](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-5-automate-your-releases-using-github-actions) for plugin development to your repository.
->>>>>>> main
+  > > > > > > > main
