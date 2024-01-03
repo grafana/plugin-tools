@@ -125,7 +125,7 @@ Beware that scenarios provided by @grafana/plugin-e2e needs to be work in older 
 
 3. Push the changes in your local PR, create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/) and add the labels `release` and `minor|patch`. CI will run all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is no longer compatible with older versions of Grafana.
 
-4. Once CI passes, `auto` will publish a canary release to npm. You can find the version number at the bottom of the PR description.
+4. Once CI passes, `auto` will publish a canary release to NPM. You can find the version number at the bottom of the PR description.
 
 5. Install the pre-release of @grafana/plugin-e2e in [grafana/grafana](https://github.com/grafana/grafana) and run Playwright tests.
 
