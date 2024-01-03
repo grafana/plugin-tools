@@ -76,9 +76,9 @@ If you find that fixtures, models or expect matchers provided by @grafana/plugin
 
 ### Fix broken E2E selectors
 
-The selectors used by @grafana/plugin-e2e are defined in `/src/e2e-selectors`. These selectors make up a subset of the selectors in [@grafana/e2e-selectors](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors). If you have changed the value of a selector in @grafana/e2e-selectors and the same selector is being used in @grafana/plugin-e2e, you need to change the value of the corresponding selector in `/src/e2e-selectors/versioned`.
+The selectors used by @grafana/plugin-e2e are defined in [`/src/e2e-selectors`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/e2e-selectors). These selectors make up a subset of the selectors in [`@grafana/e2e-selectors`](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors). If you have changed the value of a selector in ` @grafana/e2e-selectors`` and the same selector is being used in @grafana/plugin-e2e, you need to change the value of the corresponding selector in [ `/src/e2e-selectors/versioned`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/e2e-selectors/versioned).
 
-> **_NOTE:_** The long term goal is to externalize the @grafana/e2e-selectors package so that it's detached from the Grafana release cycle. Then there would be no need to duplicate the selectors in @grafana/e2e-selectors and @grafana/plugin-e2e.
+> Note: The long term goal is to externalize the @grafana/e2e-selectors package so that it's detached from the Grafana release cycle. Then there would be no need to duplicate the selectors in @grafana/e2e-selectors and @grafana/plugin-e2e.
 
 All selectors defined in @grafana/plugin-e2e is associated with a minimum Grafana version. If you for example have change the value of the `DataSourcePicker.container` selector in Grafana 10.0.0, you need to add a new key-value pair for the combination of Grafana version and selector value. Beware that the minimum version resolver follow strict semver, so if you've introduced the change in 10.0.0 but it's been backported to 9.5.6, you should specify 9.5.6 as the minimum Grafana version.
 
@@ -86,7 +86,7 @@ All selectors defined in @grafana/plugin-e2e is associated with a minimum Grafan
 ...
 DataSourcePicker: {
     container: {
-      '10.0.0': 'data-testid Data source picker select container',
+      '9.5.6': 'data-testid Data source picker select container',
       '8.3.0': 'Data source picker select container',
     },
 }
@@ -105,8 +105,8 @@ If for example the UI for adding a panel to a dashboard is being changed complet
 
 ```typescript
 // DashboardPage.addPanel method
-if (gte(this.ctx.grafanaVersion, '10.3.0')) {
-  // logic that ensures adding new panels work in Grafana versions greater than or equals to 10.3.0
+if (gte(this.ctx.grafanaVersion, '10.4.0')) {
+  // logic that ensures adding new panels work in Grafana versions greater than or equals to 10.4.0
 } else if (gte(this.ctx.grafanaVersion, '10.0.0')) {
   await this.getByTestIdOrAriaLabel(components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)).click();
   await this.getByTestIdOrAriaLabel(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
@@ -119,11 +119,11 @@ Beware that scenarios provided by @grafana/plugin-e2e needs to be work in older 
 
 ### Testing your changes
 
-1. If you need to, add a new Playwright test in `tests`.
+1. If you need to, add a new Playwright test in [`tests`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/tests).
 
 2. Run Playwright tests locally - `npm run playwright:test`
 
-3. Push the changes in your local PR, create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/) and add the labels `release` and `minor|patch`. A github action will execute all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is not compatible with older versions of Grafana.
+3. Push the changes in your local PR, create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/) and add the labels `release` and `minor|patch`. CI will run all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is no longer compatible with older versions of Grafana.
 
 4. Once CI passes, `auto` will publish a canary release to npm. You can find the version number at the bottom of the PR description.
 
@@ -134,6 +134,6 @@ yarn add @grafana/plugin-e2e@0.3.0-canary.623.aedff75.0
 yarn e2e:plugin
 ```
 
-6. If all tests pass in the grafana/grafana and the PR in grafana/plugin-tools is approved, you can go ahead and merge the PR.
+6. If all tests pass in `grafana/grafana` and the PR in `grafana/plugin-tools` is approved, you can go ahead and merge the PR.
 
 7. Once the PR is merged, `auto` will publish a patch/minor release to npm. Then you can go ahead and install the new release of @grafana/plugin-e2e in grafana/grafana.
