@@ -4,12 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - '.github/workflows/deploy-to-developer-portal-dev.yml'
-      - '.github/workflows/deploy-to-developer-portal-prod.yml'
-      - '.github/workflows/test-build.yml'
-      - 'docusaurus/**'
-      - 'package-lock.json'
 
 jobs:
   deploy:
@@ -27,8 +21,20 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-
+      - name: Check for docs file changes
+        uses: dorny/paths-filter@v2.11.1
+        id: filter
+        with:
+          filters: |
+            docs:
+              - '.github/workflows/deploy-to-developer-portal-dev.yml'
+              - '.github/workflows/deploy-to-developer-portal-prod.yml'
+              - '.github/workflows/test-build.yml'
+              - 'docusaurus/**'
+              - 'package-lock.json'
       - name: Install dependencies
+        if: ${{ steps.filter.outputs.docs == 'true' }}
         run: npm ci
       - name: Build documentation website (Dev Portal)
+        if: ${{ steps.filter.outputs.docs == 'true' }}
         run: npm run docs:build
