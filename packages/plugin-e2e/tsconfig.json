@@ -8,5 +8,6 @@
   },
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.base.json",
-  "include": ["src"]
+  "include": ["src"],
+  "files": ["./global.d.ts"]
 }
