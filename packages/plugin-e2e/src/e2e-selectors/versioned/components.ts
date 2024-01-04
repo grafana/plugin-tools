@@ -1,12 +1,6 @@
 import { MIN_GRAFANA_VERSION } from './constants';
 
 export const versionedComponents = {
-  Breadcrumbs: {
-    breadcrumb: {
-      // did not exist prior to 9.4.0
-      '9.4.0': (title: string) => `data-testid ${title} breadcrumb`,
-    },
-  },
   TimePicker: {
     openButton: {
       '8.1.0': 'data-testid TimePicker Open Button',
@@ -20,317 +14,98 @@ export const versionedComponents = {
       '10.2.3': 'data-testid Time Range to field',
       [MIN_GRAFANA_VERSION]: 'Time Range to field',
     },
-    applyTimeRange: 'data-testid TimePicker submit button',
-    calendar: {
-      label: 'Time Range calendar',
-      openButton: 'Open time range calendar',
-      closeButton: 'Close time range Calendar',
+    applyTimeRange: {
+      '8.1.0': 'data-testid TimePicker submit button',
+      [MIN_GRAFANA_VERSION]: 'TimePicker submit button',
     },
-    absoluteTimeRangeTitle: 'data-testid-absolute-time-range-narrow',
-  },
-  DataSourcePermissions: {
-    form: () => 'form[name="addPermission"]',
-    roleType: 'Role to add new permission to',
-    rolePicker: 'Built-in role picker',
-    permissionLevel: 'Permission Level',
-  },
-  DataSource: {
-    TestData: {
-      QueryTab: {
-        scenarioSelectContainer: 'Test Data Query scenario select container',
-        scenarioSelect: 'Test Data Query scenario select',
-        max: 'TestData max',
-        min: 'TestData min',
-        noise: 'TestData noise',
-        seriesCount: 'TestData series count',
-        spread: 'TestData spread',
-        startValue: 'TestData start value',
-        drop: 'TestData drop values',
-      },
-    },
-    DataSourceHttpSettings: {
-      urlInput: 'Datasource HTTP settings url',
-    },
-    Jaeger: {
-      traceIDInput: 'Trace ID',
-    },
-    Prometheus: {
-      configPage: {
-        connectionSettings: 'Data source connection URL',
-        exemplarsAddButton: 'Add exemplar config button',
-        internalLinkSwitch: 'Internal link switch',
-      },
-      exemplarMarker: 'Exemplar marker',
-    },
-  },
-  Menu: {
-    MenuComponent: (title: string) => `${title} menu`,
-    MenuGroup: (title: string) => `${title} menu group`,
-    MenuItem: (title: string) => `${title} menu item`,
-    SubMenu: {
-      container: 'SubMenu container',
-      icon: 'SubMenu icon',
+    absoluteTimeRangeTitle: {
+      [MIN_GRAFANA_VERSION]: 'data-testid-absolute-time-range-narrow',
     },
   },
   Panels: {
     Panel: {
-      title: (title: string) => `data-testid Panel header ${title}`,
-      headerItems: (item: string) => `data-testid Panel header item ${item}`,
-      menuItems: (item: string) => `data-testid Panel menu item ${item}`,
-      menu: (title: string) => `data-testid Panel menu ${title}`,
-      containerByTitle: (title: string) => `${title} panel`,
-      headerCornerInfo: (mode: string) => `Panel header ${mode}`,
+      headerCornerInfo: {
+        [MIN_GRAFANA_VERSION]: (mode: string) => `Panel header ${mode}`,
+      },
       status: {
         ['10.2.0']: (status: string) => `data-testid Panel status ${status}`,
         [MIN_GRAFANA_VERSION]: (_: string) => 'Panel status',
       },
-      loadingBar: () => `Panel loading bar`,
-      HoverWidget: {
-        container: 'data-testid hover-header-container',
-        dragIcon: 'data-testid drag-icon',
-      },
-    },
-    Visualization: {
-      Graph: {
-        container: 'Graph container',
-        VisualizationTab: {
-          legendSection: 'Legend section',
-        },
-        Legend: {
-          legendItemAlias: (name: string) => `gpl alias ${name}`,
-          showLegendSwitch: 'gpl show legend',
-        },
-        xAxis: {
-          labels: () => 'div.flot-x-axis > div.flot-tick-label',
-        },
-      },
-      BarGauge: {
-        /**
-         * @deprecated use valueV2 from Grafana 8.3 instead
-         */
-        value: 'Bar gauge value',
-        valueV2: 'data-testid Bar gauge value',
-      },
-      PieChart: {
-        svgSlice: 'Pie Chart Slice',
-      },
-      Text: {
-        container: () => '.markdown-html',
-      },
-      Table: {
-        header: 'table header',
-        footer: 'table-footer',
-        body: {
-          // did not exist prior to 10.2.0
-          '10.2.0': 'data-testid table body',
-        },
-      },
-    },
-  },
-  VizLegend: {
-    seriesName: (name: string) => `VizLegend series ${name}`,
-  },
-  Drawer: {
-    General: {
-      title: (title: string) => `Drawer title ${title}`,
-      expand: 'Drawer expand',
-      contract: 'Drawer contract',
-      close: 'Drawer close',
-      rcContentWrapper: () => '.rc-drawer-content-wrapper',
     },
   },
   PanelEditor: {
     General: {
-      content: 'Panel editor content',
+      content: {
+        [MIN_GRAFANA_VERSION]: 'Panel editor content',
+      },
     },
-    OptionsPane: {
-      content: 'Panel editor option pane content',
-      select: 'Panel editor option pane select',
-      fieldLabel: (type: string) => `${type} field property editor`,
+    applyButton: {
+      '9.2.0': 'data-testid Apply changes and go back to dashboard',
+      [MIN_GRAFANA_VERSION]: 'Apply changes and go back to dashboard',
     },
-    // not sure about the naming *DataPane*
-    DataPane: {
-      content: 'Panel editor data pane content',
-    },
-    applyButton: 'data-testid Apply changes and go back to dashboard',
     toggleVizPicker: {
       '10.0.0': 'data-testid toggle-viz-picker',
       [MIN_GRAFANA_VERSION]: 'toggle-viz-picker',
     },
-    toggleVizOptions: 'data-testid toggle-viz-options',
-    toggleTableView: 'toggle-table-view',
-
-    // [Geomap] Map controls
-    showZoomField: 'Map controls Show zoom control field property editor',
-    showAttributionField: 'Map controls Show attribution field property editor',
-    showScaleField: 'Map controls Show scale field property editor',
-    showMeasureField: 'Map controls Show measure tools field property editor',
-    showDebugField: 'Map controls Show debug field property editor',
-
-    measureButton: 'show measure tools',
-  },
-  PanelInspector: {
-    Data: {
-      content: 'Panel inspector Data content',
-    },
-    Stats: {
-      content: 'Panel inspector Stats content',
-    },
-    Json: {
-      content: 'Panel inspector Json content',
-    },
-    Query: {
-      content: 'Panel inspector Query content',
-      refreshButton: 'Panel inspector Query refresh button',
-      jsonObjectKeys: () => '.json-formatter-key',
-    },
-  },
-  Tab: {
-    title: (title: string) => `Tab ${title}`,
-    active: () => '[class*="-activeTabStyle"]',
   },
   RefreshPicker: {
-    /**
-     * @deprecated use runButtonV2 from Grafana 8.3 instead
-     */
-    runButton: 'RefreshPicker run button',
-    /**
-     * @deprecated use intervalButtonV2 from Grafana 8.3 instead
-     */
-    intervalButton: 'RefreshPicker interval button',
-    runButtonV2: 'data-testid RefreshPicker run button',
-    intervalButtonV2: 'data-testid RefreshPicker interval button',
-  },
-  QueryTab: {
-    content: 'Query editor tab content',
-    queryInspectorButton: 'Query inspector button',
-    queryHistoryButton: 'data-testid query-history-button',
-    addQuery: 'data-testid query-tab-add-query',
-  },
-  QueryHistory: {
-    queryText: 'Query text',
+    runButtonV2: {
+      ['8.3.0']: 'data-testid RefreshPicker run button',
+      [MIN_GRAFANA_VERSION]: 'RefreshPicker run button',
+    },
   },
   QueryEditorRows: {
-    rows: 'Query editor row',
+    rows: {
+      [MIN_GRAFANA_VERSION]: 'Query editor row',
+    },
   },
   QueryEditorRow: {
-    actionButton: (title: string) => `${title}`,
-    title: (refId: string) => `Query editor row title ${refId}`,
-    container: (refId: string) => `Query editor row ${refId}`,
-  },
-  AlertTab: {
-    content: 'Alert editor tab content',
+    title: {
+      [MIN_GRAFANA_VERSION]: (refId: string) => `Query editor row title ${refId}`,
+    },
   },
   Alert: {
-    /**
-     * @deprecated use alertV2 from Grafana 8.3 instead
-     */
-    alert: (severity: string) => `Alert ${severity}`,
-    alertV2: (severity: string) => `data-testid Alert ${severity}`,
-  },
-  TransformTab: {
-    content: 'data-testid Transform editor tab content',
-    newTransform: (name: string) => `data-testid New transform ${name}`,
-    transformationEditor: (name: string) => `data-testid Transformation editor ${name}`,
-    transformationEditorDebugger: (name: string) => `data-testid Transformation editor debugger ${name}`,
-  },
-  Transforms: {
-    card: (name: string) => `data-testid New transform ${name}`,
-    Reduce: {
-      modeLabel: 'Transform mode label',
-      calculationsLabel: 'Transform calculations label',
+    alertV2: {
+      '8.3.0': (severity: string) => `data-testid Alert ${severity}`,
+      [MIN_GRAFANA_VERSION]: (severity: string) => `Alert ${severity}`,
     },
-    SpatialOperations: {
-      actionLabel: 'root Action field property editor',
-      locationLabel: 'root Location Mode field property editor',
-      location: {
-        autoOption: 'Auto location option',
-        coords: {
-          option: 'Coords location option',
-          latitudeFieldLabel: 'root Latitude field field property editor',
-          longitudeFieldLabel: 'root Longitude field field property editor',
-        },
-        geohash: {
-          option: 'Geohash location option',
-          geohashFieldLabel: 'root Geohash field field property editor',
-        },
-        lookup: {
-          option: 'Lookup location option',
-          lookupFieldLabel: 'root Lookup field field property editor',
-          gazetteerFieldLabel: 'root Gazetteer field property editor',
-        },
-      },
-    },
-    searchInput: 'search transformations',
-    addTransformationButton: 'data-testid add transformation button',
-  },
-  NavBar: {
-    Configuration: {
-      button: 'Configuration',
-    },
-    Toggle: {
-      button: 'Toggle menu',
-    },
-    Reporting: {
-      button: 'Reporting',
-    },
-  },
-  NavMenu: {
-    item: 'data-testid Nav menu item',
-  },
-  NavToolbar: {
-    container: 'data-testid Nav toolbar',
   },
   PageToolbar: {
-    container: () => '.page-toolbar',
-    item: (tooltip: string) => `${tooltip}`,
+    item: {
+      [MIN_GRAFANA_VERSION]: (tooltip: string) => `${tooltip}`,
+    },
     shotMoreItems: {
       [MIN_GRAFANA_VERSION]: 'Show more items',
     },
-    itemButton: (title: string) => `data-testid ${title}`,
+    itemButton: {
+      //did not exist prior to 9.5.0
+      ['9.5.0']: (title: string) => `data-testid ${title}`,
+    },
     itemButtonTitle: {
       '10.1.0': 'Add button',
       [MIN_GRAFANA_VERSION]: 'Add panel button',
     },
   },
   QueryEditorToolbarItem: {
-    button: (title: string) => `QueryEditor toolbar item button ${title}`,
-  },
-  BackButton: {
-    backArrow: 'Go Back',
+    button: {
+      [MIN_GRAFANA_VERSION]: (title: string) => `QueryEditor toolbar item button ${title}`,
+    },
   },
   OptionsGroup: {
-    group: (title?: string) => (title ? `Options group ${title}` : 'Options group'),
-    toggle: (title?: string) => (title ? `Options group ${title} toggle` : 'Options group toggle'),
+    group: {
+      [MIN_GRAFANA_VERSION]: (title?: string) => (title ? `Options group ${title}` : 'Options group'),
+    },
+    toggle: {
+      [MIN_GRAFANA_VERSION]: (title?: string) => (title ? `Options group ${title} toggle` : 'Options group toggle'),
+    },
     groupTitle: {
       [MIN_GRAFANA_VERSION]: 'Panel options',
     },
   },
   PluginVisualization: {
-    item: (title: string) => `Plugin visualization item ${title}`,
-    current: () => '[class*="-currentVisualizationItem"]',
-  },
-  Select: {
-    option: 'Select option',
-    input: () => 'input[id*="time-options-input"]',
-    singleValue: () => 'div[class*="-singleValue"]',
-  },
-  FieldConfigEditor: {
-    content: 'Field config editor content',
-  },
-  OverridesConfigEditor: {
-    content: 'Field overrides editor content',
-  },
-  FolderPicker: {
-    /**
-     * @deprecated use containerV2 from Grafana 8.3 instead
-     */
-    container: 'Folder picker select container',
-    containerV2: 'data-testid Folder picker select container',
-    input: 'Select a folder',
-  },
-  ReadonlyFolderPicker: {
-    container: 'data-testid Readonly folder picker select container',
+    item: {
+      [MIN_GRAFANA_VERSION]: (title: string) => `Plugin visualization item ${title}`,
+    },
   },
   DataSourcePicker: {
     container: {
@@ -338,131 +113,17 @@ export const versionedComponents = {
       // did not exist prior to 8.3.0
       '8.3.0': 'Data source picker select container',
     },
-    /**
-     * @deprecated use inputV2 instead
-     */
-    input: () => 'input[id="data-source-picker"]',
-    inputV2: 'data-testid Select a data source',
   },
   TimeZonePicker: {
-    /**
-     * @deprecated use TimeZonePicker.containerV2 from Grafana 8.3 instead
-     */
-    container: 'Time zone picker select container',
-    containerV2: 'data-testid Time zone picker select container',
-  },
-  WeekStartPicker: {
-    /**
-     * @deprecated use WeekStartPicker.containerV2 from Grafana 8.3 instead
-     */
-    container: 'Choose starting day of the week',
-    containerV2: 'data-testid Choose starting day of the week',
-    placeholder: 'Choose starting day of the week',
-  },
-  TraceViewer: {
-    spanBar: 'data-testid SpanBar--wrapper',
-  },
-  QueryField: { container: 'Query field' },
-  QueryBuilder: {
-    queryPatterns: 'Query patterns',
-    labelSelect: 'Select label',
-    valueSelect: 'Select value',
-    matchOperatorSelect: 'Select match operator',
-  },
-  ValuePicker: {
-    button: (name: string) => `Value picker button ${name}`,
-    select: (name: string) => `Value picker select ${name}`,
-  },
-  Search: {
-    /**
-     * @deprecated use sectionV2 from Grafana 8.3 instead
-     */
-    section: 'Search section',
-    sectionV2: 'data-testid Search section',
-    /**
-     * @deprecated use itemsV2 from Grafana 8.3 instead
-     */
-    items: 'Search items',
-    itemsV2: 'data-testid Search items',
-    cards: 'data-testid Search cards',
-    collapseFolder: (sectionId: string) => `data-testid Collapse folder ${sectionId}`,
-    expandFolder: (sectionId: string) => `data-testid Expand folder ${sectionId}`,
-    dashboardCard: (item: string) => `data-testid Search card ${item}`,
-    folderHeader: (folderName: string) => `data-testid Folder header ${folderName}`,
-    folderContent: (folderName: string) => `data-testid Folder content ${folderName}`,
-    dashboardItems: 'data-testid Dashboard search item',
-  },
-  DashboardLinks: {
-    container: 'data-testid Dashboard link container',
-    dropDown: 'data-testid Dashboard link dropdown',
-    link: 'data-testid Dashboard link',
-  },
-  LoadingIndicator: {
-    icon: 'Loading indicator',
-  },
-  CallToActionCard: {
-    /**
-     * @deprecated use buttonV2 from Grafana 8.3 instead
-     */
-    button: (name: string) => `Call to action button ${name}`,
-    buttonV2: (name: string) => `data-testid Call to action button ${name}`,
-  },
-  DataLinksContextMenu: {
-    singleLink: 'Data link',
+    containerV2: {
+      '8.3.0': 'data-testid Time zone picker select container',
+      [MIN_GRAFANA_VERSION]: 'Folder picker select container',
+    },
   },
   CodeEditor: {
     container: {
       '10.2.3': 'data-testid Code editor container',
       [MIN_GRAFANA_VERSION]: 'Code editor container',
     },
-  },
-  DashboardImportPage: {
-    textarea: 'data-testid-import-dashboard-textarea',
-    submit: 'data-testid-load-dashboard',
-  },
-  ImportDashboardForm: {
-    name: 'data-testid-import-dashboard-title',
-    submit: 'data-testid-import-dashboard-submit',
-  },
-  PanelAlertTabContent: {
-    content: 'Unified alert editor tab content',
-  },
-  VisualizationPreview: {
-    card: (name: string) => `data-testid suggestion-${name}`,
-  },
-  ColorSwatch: {
-    name: `data-testid-colorswatch`,
-  },
-  DashboardRow: {
-    title: (title: string) => `data-testid dashboard-row-title-${title}`,
-  },
-  UserProfile: {
-    profileSaveButton: 'data-testid-user-profile-save',
-    preferencesSaveButton: 'data-testid-shared-prefs-save',
-    orgsTable: 'data-testid-user-orgs-table',
-    sessionsTable: 'data-testid-user-sessions-table',
-  },
-  FileUpload: {
-    inputField: 'data-testid-file-upload-input-field',
-    fileNameSpan: 'data-testid-file-upload-file-name',
-  },
-  DebugOverlay: {
-    wrapper: 'debug-overlay',
-  },
-  OrgRolePicker: {
-    input: 'Role',
-  },
-  AnalyticsToolbarButton: {
-    button: 'Dashboard insights',
-  },
-  Variables: {
-    variableOption: 'data-testid variable-option',
-  },
-  Annotations: {
-    annotationsTypeInput: 'annotations-type-input',
-    annotationsChoosePanelInput: 'choose-panels-input',
-  },
-  Tooltip: {
-    container: 'data-testid tooltip',
   },
 };

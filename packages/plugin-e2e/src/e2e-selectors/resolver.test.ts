@@ -16,12 +16,6 @@ describe('resolveSelectors', () => {
     versionedSelectors = originalVersionedSelectors;
   });
 
-  test('handles selector without version', () => {
-    versionedSelectors.components.PanelEditor.General.content = 'Panel editor content';
-    const selectors = resolveSelectors(versionedSelectors, GRAFANA_VERSION);
-    expect(selectors.components.PanelEditor.General.content).toBe('Panel editor content');
-  });
-
   test('returns the right selector value when it has multiple versions', () => {
     versionedSelectors.components.CodeEditor.container = {
       '10.2.3': 'data-testid Code editor container',
