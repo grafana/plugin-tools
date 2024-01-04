@@ -4,7 +4,6 @@ import { versionedAPIs } from './versioned/apis';
 import { MIN_GRAFANA_VERSION } from './versioned/constants';
 import { VersionedSelectors } from './versioned/types';
 
-const GRAFANA_VERSION = '10.2.0';
 let versionedSelectors: VersionedSelectors = {
   components: versionedComponents,
   pages: versionedPages,
