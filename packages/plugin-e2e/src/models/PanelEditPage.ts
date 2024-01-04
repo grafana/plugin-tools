@@ -24,6 +24,9 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     this.timeRange = new TimeRange(ctx);
   }
 
+  /**
+   * Navigates to the panel edit page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
+   */
   async goto(options?: NavigateOptions) {
     const url = this.args.dashboard?.uid
       ? this.ctx.selectors.pages.Dashboard.url(this.args.dashboard.uid)
@@ -80,14 +83,23 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     }
   }
 
+  /**
+   * Returns the name of the visualization currently selected in the panel editor
+   */
   getVisualizationName() {
     return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
   }
 
+  /**
+   * Clicks the "Apply" button in the panel editor
+   */
   async apply() {
     await this.ctx.page.getByTestId(this.ctx.selectors.components.PanelEditor.applyButton).click();
   }
 
+  /**
+   * Returns the locator for the query editor row with the given refId
+   */
   async getQueryEditorRow(refId: string): Promise<Locator> {
     const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
       has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
@@ -96,6 +108,9 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     return locator;
   }
 
+  /**
+   * Returns the locator for the panel error (if any)
+   */
   getPanelError() {
     // the selector (not the selector value) used to identify a panel error changed in 9.4.3
     if (semver.lte(this.ctx.grafanaVersion, '9.4.3')) {
@@ -105,6 +120,9 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.status(ERROR_STATUS));
   }
 
+  /**
+   * CLicks the "Refresh" button in the panel editor. Returns the response promise for the data query
+   */
   async refreshPanel(options?: RequestOptions) {
     const responsePromise = this.ctx.page.waitForResponse(
       (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
