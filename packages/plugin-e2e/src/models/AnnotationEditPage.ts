@@ -9,6 +9,9 @@ export class AnnotationEditPage extends GrafanaPage {
     this.datasource = new DataSourcePicker(ctx);
   }
 
+  /**
+   * Navigates to the annotation edit page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
+   */
   async goto(options?: NavigateOptions) {
     const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
     const url = this.args.dashboard?.uid
