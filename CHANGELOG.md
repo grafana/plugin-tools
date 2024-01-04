@@ -1,3 +1,16 @@
+# (Thu Jan 04 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.5.0`
+  - Plugin E2E: Comment public apis [#640](https://github.com/grafana/plugin-tools/pull/640) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Jan 02 2024)
 
 #### 🚀 Enhancement
