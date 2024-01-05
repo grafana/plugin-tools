@@ -32,12 +32,12 @@ export type Components = {
       headerCornerInfo: (mode: string) => string;
       status: (status: string) => string;
     };
-  };
-  Visualization: {
-    Table: {
-      header: string;
-      footer: string;
-      body: string;
+    Visualization: {
+      Table: {
+        header: string;
+        footer: string;
+        body: string;
+      };
     };
   };
   PanelEditor: {
