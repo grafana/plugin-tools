@@ -24,12 +24,30 @@ export const versionedComponents = {
   },
   Panels: {
     Panel: {
+      title: {
+        '8.1.2': (title: string) => `data-testid Panel header ${title}`,
+        [MIN_GRAFANA_VERSION]: (title: string) => `Panel header ${title}`,
+      },
       headerCornerInfo: {
         [MIN_GRAFANA_VERSION]: (mode: string) => `Panel header ${mode}`,
       },
       status: {
         ['10.2.0']: (status: string) => `data-testid Panel status ${status}`,
         [MIN_GRAFANA_VERSION]: (_: string) => 'Panel status',
+      },
+    },
+    Visualization: {
+      Table: {
+        header: {
+          [MIN_GRAFANA_VERSION]: 'table header',
+        },
+        footer: {
+          [MIN_GRAFANA_VERSION]: 'table-footer',
+        },
+        body: {
+          // did not exist prior to 10.2.0
+          '10.2.0': 'data-testid table body',
+        },
       },
     },
   },
@@ -105,6 +123,18 @@ export const versionedComponents = {
   PluginVisualization: {
     item: {
       [MIN_GRAFANA_VERSION]: (title: string) => `Plugin visualization item ${title}`,
+    },
+  },
+  Select: {
+    option: {
+      [MIN_GRAFANA_VERSION]: 'Select option',
+    },
+    input: {
+      '8.3.0': () => 'input[id*="time-options-input"]',
+      [MIN_GRAFANA_VERSION]: () => 'input[id*="react-select-"]',
+    },
+    singleValue: {
+      [MIN_GRAFANA_VERSION]: () => 'div[class*="-singleValue"]',
     },
   },
   DataSourcePicker: {

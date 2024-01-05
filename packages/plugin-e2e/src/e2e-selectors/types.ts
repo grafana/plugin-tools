@@ -28,8 +28,16 @@ export type Components = {
   };
   Panels: {
     Panel: {
+      title: (title: string) => string;
       headerCornerInfo: (mode: string) => string;
       status: (status: string) => string;
+    };
+  };
+  Visualization: {
+    Table: {
+      header: string;
+      footer: string;
+      body: string;
     };
   };
   PanelEditor: {
@@ -64,6 +72,11 @@ export type Components = {
   };
   PluginVisualization: {
     item: (title: string) => string;
+  };
+  Select: {
+    option: string;
+    input: () => string;
+    singleValue: () => string;
   };
   DataSourcePicker: {
     container: string;
