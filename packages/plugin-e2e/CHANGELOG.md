@@ -1,3 +1,15 @@
+# v0.6.0 (Fri Jan 05 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Tidy up selectors [#641](https://github.com/grafana/plugin-tools/pull/641) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.5.0 (Thu Jan 04 2024)
 
 #### 🚀 Enhancement
