@@ -1,5 +1,18 @@
 # (Fri Jan 05 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.10.2`
+  - Github workflows: Add correct permissions to the release workflow [#642](https://github.com/grafana/plugin-tools/pull/642) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Fri Jan 05 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@0.6.0`

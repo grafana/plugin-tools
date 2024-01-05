@@ -1,3 +1,15 @@
+# v2.10.2 (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
+- Github workflows: Add correct permissions to the release workflow [#642](https://github.com/grafana/plugin-tools/pull/642) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v2.10.1 (Thu Dec 14 2023)
 
 :tada: This release contains work from a new contributor! :tada:
