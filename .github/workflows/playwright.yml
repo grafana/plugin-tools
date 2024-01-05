@@ -31,6 +31,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          repo_secrets: |
+            GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY=infra/data/ci/grafana/releng/artifacts-uploader-service-account:GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ env.GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
       - name: Copy auth file
         run: mkdir -p packages/plugin-e2e/playwright/.auth/ && cp .github/user.json packages/plugin-e2e/playwright/.auth/user.json
 
@@ -61,23 +74,7 @@ jobs:
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
 
-      - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@main
-        with:
-          repo_secrets: |
-            GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY=infra/data/ci/grafana/releng/artifacts-uploader-service-account:GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY
-      - name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ env.GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY }}'
-
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-
       - name: Publish report to Cloud Storage
-        working-directory: ${{ steps.get_dir.outputs.dir }}
-        env:
-          VERSION: ${{ steps.build_frontend.outputs.version }}
         run: |
           echo "Publish release to Google Cloud Storage:"
           gsutil cp -r packages/plugin-e2e/playwright-report/. gs://releng-pipeline-artifacts-dev/plugin-name/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}
