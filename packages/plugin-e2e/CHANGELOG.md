@@ -1,3 +1,15 @@
+# v0.6.1 (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Re-adding a few selectors [#644](https://github.com/grafana/plugin-tools/pull/644) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.6.0 (Fri Jan 05 2024)
 
 #### 🚀 Enhancement

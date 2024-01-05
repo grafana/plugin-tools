@@ -2,6 +2,24 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@0.6.1`
+  - Plugin E2E: Re-adding a few selectors [#644](https://github.com/grafana/plugin-tools/pull/644) ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump @swc/jest from 0.2.20 to 0.2.29 [#631](https://github.com/grafana/plugin-tools/pull/631) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@2.10.2`
   - Github workflows: Add correct permissions to the release workflow [#642](https://github.com/grafana/plugin-tools/pull/642) ([@leventebalogh](https://github.com/leventebalogh))
 
