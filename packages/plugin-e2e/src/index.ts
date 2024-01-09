@@ -18,7 +18,7 @@ declare global {
       /**
        * Await the response of a Playwright request and asserts the response was successful (status in the range 200-299).
        */
-      toBeOK(this: Matchers<unknown, Promise<Response>>): R;
+      toBeOK(this: Matchers<unknown, Response>): R;
 
       /**
        * Asserts that preview text elements are displayed on the Variable Edit Page. You should make sure any variable queries are completed before calling this matcher.

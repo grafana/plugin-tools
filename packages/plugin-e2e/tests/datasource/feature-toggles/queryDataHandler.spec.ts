@@ -23,6 +23,6 @@ test('query data handler', async ({ selectors, panelEditPage, page, readProvisio
     await expect(await queryStatedResponse).toBeTruthy();
     await expect(await queryFinishedResponse).toBeTruthy();
   } else {
-    await expect(panelEditPage.refreshPanel()).toBeOK();
+    await expect(await panelEditPage.refreshPanel()).toBeOK();
   }
 });

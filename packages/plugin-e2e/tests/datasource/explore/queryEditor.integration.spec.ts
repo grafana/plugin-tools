@@ -15,7 +15,7 @@ test('should return data and not display panel error when a valid query is provi
   const responsePromise = page.waitForResponse((resp) => resp.url().includes('/api/ds/query'));
   await page.keyboard.press('Tab');
   await responsePromise;
-  await expect(explorePage.runQuery()).toBeOK();
+  await expect(await explorePage.runQuery()).toBeOK();
 });
 
 test('should return an error and display panel error when an invalid query is provided', async ({
@@ -34,5 +34,5 @@ test('should return an error and display panel error when an invalid query is pr
   const responsePromise = page.waitForResponse((resp) => resp.url().includes('/api/ds/query'));
   await page.keyboard.press('Tab');
   await responsePromise;
-  await expect(explorePage.runQuery()).not.toBeOK();
+  await expect(await explorePage.runQuery()).not.toBeOK();
 });
