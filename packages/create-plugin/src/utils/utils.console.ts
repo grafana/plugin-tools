@@ -1,9 +1,12 @@
 const { marked } = require('marked');
+const chalk = require('chalk');
 const TerminalRenderer = require('marked-terminal');
 const { Confirm, Select } = require('enquirer');
 
 marked.setOptions({
-  renderer: new TerminalRenderer(),
+  renderer: new TerminalRenderer({
+    firstHeading: chalk.hex('#ff9900').underline.bold,
+  }),
 });
 
 export function displayAsMarkdown(msg: string) {
@@ -19,7 +22,7 @@ export function printMessage(msg: string) {
 }
 
 export function printSuccessMessage(msg: string) {
-  console.log(displayAsMarkdown(`\n✔ ${msg}`));
+  console.log(displayAsMarkdown(`\n✔ ${msg}`).trim());
 }
 
 export function printError(error: string) {

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { TEMPLATE_PATHS } from '../constants';
+import { access, constants } from 'fs/promises';
 
 // Removes common template files from the list in case they have a plugin-specific override
 export function filterOutCommonFiles(files: string[], pluginType: string) {
@@ -33,6 +34,15 @@ export function readJsonFile(filename: string) {
   } catch (error: any) {
     error.message = `Cannot parse the "${path.basename(filename)}" file at ${filename}.`;
     throw error;
+  }
+}
+
+export async function directoryExists(path: string) {
+  try {
+    await access(path, constants.F_OK);
+    return true;
+  } catch (e) {
+    return false;
   }
 }
 
