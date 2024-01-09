@@ -1,4 +1,4 @@
-import { test as base, expect as baseExpect, selectors } from '@playwright/test';
+import { Page, test as base, expect as baseExpect, selectors } from '@playwright/test';
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
@@ -28,6 +28,11 @@ export type PluginOptions = {
    * 
    */
   provisioningRootDir: string;
+  /**
+   * Optionally, you can add or override feature toggles.
+   * The feature toggles you specify here will only work in the frontend.
+   */
+  featureToggles: Record<string, boolean>;
 };
 
 export type PluginFixture = {
@@ -43,6 +48,11 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana
    */
   selectors: E2ESelectors;
+
+  /**
+   * Isolated Playwright {@link Page} instance for each test.
+   */
+  page: Page;
 
   /**
    * Isolated {@link DashboardPage} instance for each test.

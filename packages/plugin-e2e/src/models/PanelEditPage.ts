@@ -1,4 +1,4 @@
-import { expect, Locator } from '@playwright/test';
+import { expect, Locator, Response } from '@playwright/test';
 import * as semver from 'semver';
 import {
   DashboardEditViewArgs,
@@ -121,17 +121,21 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   }
 
   /**
-   * CLicks the "Refresh" button in the panel editor. Returns the response promise for the data query
+   * Clicks the "Refresh" button in the panel editor. Returns the response promise for the data query
    */
   async refreshPanel(options?: RequestOptions) {
+    const defaultPredicate = (resp: Response) => resp.url().includes(this.ctx.selectors.apis.DataSource.query);
     const responsePromise = this.ctx.page.waitForResponse(
-      (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
+      options?.waitForResponsePredicateCallback ?? defaultPredicate,
       options
     );
+
     // in older versions of grafana, the refresh button is rendered twice. this is a workaround to click the correct one
-    await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.General.content)
-      .locator(`selector=${this.ctx.selectors.components.RefreshPicker.runButtonV2}`)
-      .click();
+    const refreshPanelButton = this.getByTestIdOrAriaLabel(
+      this.ctx.selectors.components.PanelEditor.General.content
+    ).locator(`selector=${this.ctx.selectors.components.RefreshPicker.runButtonV2}`);
+
+    await refreshPanelButton.click();
 
     return responsePromise;
   }

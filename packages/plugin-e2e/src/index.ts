@@ -7,6 +7,13 @@ export * from './fixtures';
 export * from './models';
 
 declare global {
+  interface Window {
+    grafanaBootData: {
+      settings: {
+        featureToggles: Record<string, boolean>;
+      };
+    };
+  }
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace PlaywrightTest {
     const r: unique symbol;
