@@ -1,3 +1,21 @@
+# (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.11.0`
+  - Create Plugin: Remove Plop [#602](https://github.com/grafana/plugin-tools/pull/602) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump lerna from 8.0.0 to 8.0.2 [#646](https://github.com/grafana/plugin-tools/pull/646) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Jan 05 2024)
 
 #### 🐛 Bug Fix

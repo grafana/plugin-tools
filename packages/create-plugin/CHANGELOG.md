@@ -1,3 +1,15 @@
+# v2.11.0 (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Remove Plop [#602](https://github.com/grafana/plugin-tools/pull/602) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.10.2 (Fri Jan 05 2024)
 
 #### 🐛 Bug Fix
