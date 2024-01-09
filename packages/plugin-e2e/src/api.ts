@@ -1,4 +1,4 @@
-import { Page, test as base, expect as baseExpect, selectors } from '@playwright/test';
+import { test as base, expect as baseExpect, selectors } from '@playwright/test';
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
@@ -48,11 +48,6 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana
    */
   selectors: E2ESelectors;
-
-  /**
-   * Isolated Playwright {@link Page} instance for each test.
-   */
-  page: Page;
 
   /**
    * Isolated {@link DashboardPage} instance for each test.

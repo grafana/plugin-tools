@@ -1,4 +1,4 @@
-import { Fixtures } from '@playwright/test';
+import { Fixtures, PlaywrightTestArgs } from '@playwright/test';
 import path from 'path';
 import annotationEditPage from './annotationEditPage';
 import grafanaVersion from './grafanaVersion';
@@ -15,7 +15,7 @@ import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
 import { PluginFixture, PluginOptions } from '../api';
 
-const fixtures: Fixtures<PluginFixture, PluginOptions> = {
+const fixtures: Fixtures<PluginFixture, PluginOptions, PlaywrightTestArgs> = {
   provisioningRootDir: [path.join(process.cwd(), 'provisioning'), { option: true, scope: 'worker' }],
   featureToggles: [{}, { option: true, scope: 'worker' }],
   selectors,
