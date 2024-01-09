@@ -1,8 +1,15 @@
 import Handlebars, { HelperOptions } from 'handlebars';
-import * as changeCase from 'change-case';
-import titleCase from 'title-case';
-import upperCase from 'upper-case';
-import lowerCase from 'lower-case';
+import {
+  camelCase,
+  snakeCase,
+  dotCase,
+  pathCase,
+  sentenceCase,
+  constantCase,
+  kebabCase,
+  pascalCase,
+} from 'change-case';
+import { titleCase } from 'title-case';
 import { PARTIALS_DIR, PLUGIN_TYPES } from '../constants.js';
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join } from 'node:path';
@@ -18,7 +25,7 @@ export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TY
 
   const newPluginName = pluginName.replace(re, '').replace(nameRegex, '');
   const newOrgName = orgName.replace(nameRegex, '');
-  return changeCase.lowerCase(newOrgName) + '-' + changeCase.lowerCase(newPluginName) + `-${type}`;
+  return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${type}`;
 };
 
 // Register our helpers and partials with handlebars.
@@ -27,20 +34,20 @@ registerHandlebarsPartials();
 
 function registerHandlebarsHelpers() {
   const helpers = {
-    camelCase: changeCase.camelCase,
-    snakeCase: changeCase.snakeCase,
-    dotCase: changeCase.dotCase,
-    pathCase: changeCase.pathCase,
-    lowerCase: lowerCase,
-    upperCase: upperCase,
-    sentenceCase: changeCase.sentenceCase,
-    constantCase: changeCase.constantCase,
+    camelCase: camelCase,
+    snakeCase: snakeCase,
+    dotCase: dotCase,
+    pathCase: pathCase,
+    lowerCase: (str: string) => str.toUpperCase(),
+    upperCase: (str: string) => str.toLowerCase(),
+    sentenceCase: sentenceCase,
+    constantCase: constantCase,
     titleCase: titleCase,
-    dashCase: changeCase.paramCase,
-    kabobCase: changeCase.paramCase,
-    kebabCase: changeCase.paramCase,
-    properCase: changeCase.pascalCase,
-    pascalCase: changeCase.pascalCase,
+    dashCase: kebabCase,
+    kabobCase: kebabCase,
+    kebabCase: kebabCase,
+    properCase: pascalCase,
+    pascalCase: pascalCase,
     if_eq: ifEq,
     normalize_id: normalizeId,
   };
