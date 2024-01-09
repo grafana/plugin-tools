@@ -13,6 +13,9 @@ You need to have `npm` installed.
 git clone git@github.com:grafana/plugin-tools.git
 cd plugin-tools
 npm install
+
+#Each version of Playwright needs specific versions of browser binaries to operate. You will need to use the Playwright CLI to install these browsers.
+yarn playwright install
 ```
 
 ### Folder structure
