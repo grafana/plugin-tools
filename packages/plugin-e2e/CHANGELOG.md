@@ -1,3 +1,15 @@
+# v0.7.0 (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Bump playwright to latest version [#649](https://github.com/grafana/plugin-tools/pull/649) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.6.1 (Fri Jan 05 2024)
 
 #### 🐛 Bug Fix

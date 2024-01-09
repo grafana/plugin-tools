@@ -2,6 +2,19 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/plugin-e2e@0.7.0`
+  - Plugin E2E: Bump playwright to latest version [#649](https://github.com/grafana/plugin-tools/pull/649) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
 - `@grafana/create-plugin@2.11.0`
   - Create Plugin: Remove Plop [#602](https://github.com/grafana/plugin-tools/pull/602) ([@jackw](https://github.com/jackw))
 
