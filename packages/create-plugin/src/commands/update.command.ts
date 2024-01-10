@@ -1,14 +1,14 @@
-import { TEXT, UDPATE_CONFIG } from '../constants';
-import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates';
-import { confirmPrompt, selectPrompt, printMessage, printSuccessMessage } from '../utils/utils.console';
+import { TEXT, UDPATE_CONFIG } from '../constants.js';
+import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
+import { confirmPrompt, selectPrompt, printMessage, printSuccessMessage } from '../utils/utils.console.js';
 import {
   updatePackageJson,
   hasNpmDependenciesToUpdate,
   getPackageJsonUpdatesAsText,
   updateNpmScripts,
   writePackageManagerInPackageJson,
-} from '../utils/utils.npm';
-import { getPackageManagerWithFallback } from '../utils/utils.packageManager';
+} from '../utils/utils.npm.js';
+import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 
 export const update = async () => {
   try {

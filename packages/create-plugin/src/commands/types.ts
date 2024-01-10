@@ -1,4 +1,4 @@
-import { PLUGIN_TYPES } from '../constants';
+import { PLUGIN_TYPES } from '../constants.js';
 
 export type CliArgs = {
   pluginName: string;

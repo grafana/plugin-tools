@@ -1,4 +1,7 @@
-import path from 'path';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export const IS_DEV = process.env.CREATE_PLUGIN_DEV !== undefined;
 

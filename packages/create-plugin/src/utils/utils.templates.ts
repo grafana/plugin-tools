@@ -1,15 +1,15 @@
 import glob from 'glob';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 import mkdirp from 'mkdirp';
-import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files';
-import { renderHandlebarsTemplate } from './utils.handlebars';
-import { getPluginJson } from './utils.plugin';
-import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants';
-import { getPackageManagerWithFallback } from './utils.packageManager';
-import { getExportFileName } from '../utils/utils.files';
-import { getVersion } from './utils.version';
-import { getConfig } from './utils.config';
+import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
+import { renderHandlebarsTemplate } from './utils.handlebars.js';
+import { getPluginJson } from './utils.plugin.js';
+import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
+import { getPackageManagerWithFallback } from './utils.packageManager.js';
+import { getExportFileName } from '../utils/utils.files.js';
+import { getVersion } from './utils.version.js';
+import { getConfig } from './utils.config.js';
 
 /**
  *
