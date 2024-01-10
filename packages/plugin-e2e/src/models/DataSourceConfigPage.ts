@@ -9,6 +9,9 @@ export class DataSourceConfigPage extends GrafanaPage {
     await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid));
   }
 
+  /**
+   * Navigates to the datasource edit page for an existing datasource
+   */
   async goto(options?: NavigateOptions) {
     return super.navigate(this.ctx.selectors.pages.EditDataSource.url(this.datasource.uid), options);
   }

@@ -248,3 +248,21 @@ export interface AlertPage {
   ctx: PluginTestCtx;
   hasAlert: (severity: AlertVariant, options?: AlertPageOptions) => Promise<Locator>;
 }
+
+export interface ContainTextOptions {
+  /**
+   * Whether to perform case-insensitive match. `ignoreCase` option takes precedence over the corresponding regular
+   * expression flag if specified.
+   */
+  ignoreCase?: boolean;
+
+  /**
+   * Time to retry the assertion for in milliseconds. Defaults to `timeout` in `TestConfig.expect`.
+   */
+  timeout?: number;
+
+  /**
+   * Whether to use `element.innerText` instead of `element.textContent` when retrieving DOM node text.
+   */
+  useInnerText?: boolean;
+}

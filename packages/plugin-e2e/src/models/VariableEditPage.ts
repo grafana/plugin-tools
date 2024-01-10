@@ -14,6 +14,9 @@ export class VariableEditPage extends GrafanaPage {
     this.datasource = new DataSourcePicker(ctx);
   }
 
+  /**
+   * Navigates to the variable edit page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
+   */
   async goto(options?: NavigateOptions) {
     const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
     const url = this.args.dashboard?.uid
@@ -23,6 +26,9 @@ export class VariableEditPage extends GrafanaPage {
     await super.navigate(url, options);
   }
 
+  /**
+   * Sets the type of variable in the 'Variable type' dropdown to the given type
+   */
   async setVariableType(type: VariableType) {
     await this.getByTestIdOrAriaLabel(
       this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.generalTypeSelectV2

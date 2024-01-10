@@ -3,7 +3,9 @@ import * as changeCase from 'change-case';
 import titleCase from 'title-case';
 import upperCase from 'upper-case';
 import lowerCase from 'lower-case';
-import { PLUGIN_TYPES } from '../constants';
+import { PARTIALS_DIR, PLUGIN_TYPES } from '../constants';
+import { readFileSync, readdirSync } from 'fs';
+import { basename, join } from 'path';
 
 // Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
 export const ifEq = (a: any, b: any, options: HelperOptions) => {
@@ -19,8 +21,11 @@ export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TY
   return changeCase.lowerCase(newOrgName) + '-' + changeCase.lowerCase(newPluginName) + `-${type}`;
 };
 
-// Needed when we are rendering the templates outside of the context of Plop but still would like to support the same helpers
-export function registerHandlebarsHelpers() {
+// Register our helpers and partials with handlebars.
+registerHandlebarsHelpers();
+registerHandlebarsPartials();
+
+function registerHandlebarsHelpers() {
   const helpers = {
     camelCase: changeCase.camelCase,
     snakeCase: changeCase.snakeCase,
@@ -45,7 +50,15 @@ export function registerHandlebarsHelpers() {
   );
 }
 
+function registerHandlebarsPartials() {
+  const partialFiles = readdirSync(PARTIALS_DIR);
+  partialFiles.forEach((fileName) => {
+    const name = basename(fileName, '.md');
+    const template = readFileSync(join(PARTIALS_DIR, fileName), 'utf-8');
+    Handlebars.registerPartial(name, template);
+  });
+}
+
 export function renderHandlebarsTemplate(template: string, data?: any) {
-  registerHandlebarsHelpers();
   return Handlebars.compile(template)(data);
 }

@@ -6,6 +6,9 @@ export class TimeRange extends GrafanaPage {
     super(ctx);
   }
 
+  /**
+   * Opens the time picker and sets the time range to the provided values
+   */
   async set({ from, to, zone }: TimeRangeArgs) {
     try {
       await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.TimePicker.openButton).click();

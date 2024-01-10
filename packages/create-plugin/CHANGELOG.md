@@ -1,3 +1,39 @@
+# v2.11.1 (Wed Jan 10 2024)
+
+#### 🐛 Bug Fix
+
+- Only run ts checker and eslint plugins in webpack dev mode [#647](https://github.com/grafana/plugin-tools/pull/647) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.11.0 (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Remove Plop [#602](https://github.com/grafana/plugin-tools/pull/602) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.10.2 (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
+- Github workflows: Add correct permissions to the release workflow [#642](https://github.com/grafana/plugin-tools/pull/642) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v2.10.1 (Thu Dec 14 2023)
 
 :tada: This release contains work from a new contributor! :tada:

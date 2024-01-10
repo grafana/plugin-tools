@@ -1,6 +1,6 @@
-import { expect, test } from '../../src';
-import { ProvisionFile } from '../../src/types';
-import { GOOGLE_SHEETS_SPREADSHEETS } from './mocks/resource';
+import { expect, test } from '../../../src';
+import { ProvisionFile } from '../../../src/types';
+import { GOOGLE_SHEETS_SPREADSHEETS } from '../mocks/resource';
 
 test('should list spreadsheets when clicking on spreadsheet segment', async ({
   panelEditPage,

@@ -8,10 +8,10 @@ Grafana supports a wide range of data sources, including Prometheus, MySQL, and 
 
 ## Getting started
 
-{{#if hasBackend}}-- INSERT BACKEND GETTING STARTED --{{/if}}
--- INSERT FRONTEND GETTING STARTED --
+{{#if hasBackend}}{{> backend-getting-started }}{{/if}}
+{{> frontend-getting-started packageManagerName=packageManagerName }}
 
--- INSERT DISTRIBUTING YOUR PLUGIN --
+{{> distributing-your-plugin }}
 
 ## Learn more
 

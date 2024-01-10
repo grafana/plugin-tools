@@ -15,6 +15,9 @@ export class DashboardPage extends GrafanaPage {
     this.timeRange = new TimeRange(ctx);
   }
 
+  /**
+   * Navigates to the dashboard page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
+   */
   async goto(options?: NavigateOptions) {
     let url = this.dashboard?.uid
       ? this.ctx.selectors.pages.Dashboard.url(this.dashboard.uid)
@@ -29,12 +32,20 @@ export class DashboardPage extends GrafanaPage {
     return super.navigate(url, options);
   }
 
+  /**
+   * Navigates to the panel edit page for the given panel id
+   *
+   * If the panel id does not exist in the dashboard, Grafana will redirect to the dashboard page
+   */
   async gotoPanelEditPage(panelId: string) {
     const panelEditPage = new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
     await panelEditPage.goto();
     return panelEditPage;
   }
 
+  /**
+   * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
+   */
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages } = this.ctx.selectors;
     if (gte(this.ctx.grafanaVersion, '10.0.0')) {
@@ -54,10 +65,16 @@ export class DashboardPage extends GrafanaPage {
     return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
   }
 
+  /**
+   * Deletes the dashboard
+   */
   async deleteDashboard() {
     await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboard.uid));
   }
 
+  /**
+   * Clicks the run button in the refresh picker to refresh the dashboard
+   */
   async refreshDashboard() {
     await this.ctx.page.getByTestId(this.ctx.selectors.components.RefreshPicker.runButtonV2).click();
   }

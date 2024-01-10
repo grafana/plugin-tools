@@ -8,6 +8,9 @@ export class AnnotationPage extends GrafanaPage {
     super(ctx);
   }
 
+  /**
+   * Navigates to the annotation list page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
+   */
   async goto(options?: NavigateOptions) {
     const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
     let url = this.dashboard?.uid
@@ -17,6 +20,9 @@ export class AnnotationPage extends GrafanaPage {
     return super.navigate(url, options);
   }
 
+  /**
+   * Clicks the add new annotation button and returns the annotation edit page
+   */
   async clickAddNew() {
     const { Dashboard } = this.ctx.selectors.pages;
 
