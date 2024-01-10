@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
-import { expect, test } from '../../src';
-import { clickRadioButton } from '../utils';
+import { expect, test } from '../../../src';
+import { clickRadioButton } from '../../utils';
 
 test('invalid credentials should return an error', async ({ createDataSourceConfigPage, page }) => {
   const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
