@@ -57,6 +57,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-Grafana-v${{ matrix.GRAFANA_VERSION }}-runid${{github.run_id}}
+          name: playwright-report-Grafana-v${{ matrix.GRAFANA_VERSION }}-${{github.run_id}}
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
