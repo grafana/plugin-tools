@@ -1,3 +1,16 @@
+# (Wed Jan 10 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.8.0`
+  - Plugin E2E: Add contributing guidelines [#634](https://github.com/grafana/plugin-tools/pull/634) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Jan 09 2024)
 
 #### 🚀 Enhancement
