@@ -15,7 +15,7 @@ cd plugin-tools
 npm install
 
 #Each version of Playwright needs specific versions of browser binaries to operate. You will need to use the Playwright CLI to install these browsers.
-yarn playwright install
+npx playwright install
 ```
 
 ### Folder structure
@@ -133,10 +133,11 @@ Beware that scenarios provided by @grafana/plugin-e2e needs to be work in older 
 5. Install the pre-release of @grafana/plugin-e2e in [grafana/grafana](https://github.com/grafana/grafana) and run Playwright tests.
 
 ```bash
+# In your local grafana development folder
 yarn add @grafana/plugin-e2e@0.3.0-canary.623.aedff75.0
 yarn e2e:plugin
 ```
 
-6. If all tests pass in `grafana/grafana` and the PR in `grafana/plugin-tools` is approved, you can go ahead and merge the PR.
+6. If all tests pass in `grafana/grafana` and the PR in `grafana/plugin-tools` is approved, tag `@grafana/plugins-platform-frontend` and ask them to merge the PR.
 
-7. Once the PR is merged, `auto` will publish a patch/minor release to npm. Then you can go ahead and install the new release of @grafana/plugin-e2e in grafana/grafana.
+7. Once the PR is merged, `auto` will publish a patch/minor release to npm. Then you discard changes from step 5, and can go ahead and install the new release of @grafana/plugin-e2e in grafana/grafana.
