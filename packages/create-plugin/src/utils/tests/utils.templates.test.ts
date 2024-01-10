@@ -1,5 +1,5 @@
-import { PLUGIN_TYPES } from '../../constants';
-import { getTemplateFiles } from '../utils.templates';
+import { PLUGIN_TYPES } from '../../constants.js';
+import { getTemplateFiles } from '../utils.templates.js';
 
 describe('Utils / Templates', () => {
   describe('getTemplateFiles()', () => {
