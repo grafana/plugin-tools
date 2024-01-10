@@ -1,3 +1,15 @@
+# v2.11.2 (Wed Jan 10 2024)
+
+#### 🐛 Bug Fix
+
+- Fix eslint not generating in plugin migrations [#624](https://github.com/grafana/plugin-tools/pull/624) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v2.11.1 (Wed Jan 10 2024)
 
 #### 🐛 Bug Fix
