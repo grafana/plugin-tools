@@ -1,7 +1,9 @@
-const { marked } = require('marked');
-const chalk = require('chalk');
-const TerminalRenderer = require('marked-terminal');
-const { Confirm, Select } = require('enquirer');
+import { marked } from 'marked';
+import chalk from 'chalk';
+import TerminalRenderer from 'marked-terminal';
+import Enquirer from 'enquirer';
+
+const { prompt } = Enquirer;
 
 marked.setOptions({
   renderer: new TerminalRenderer({
@@ -29,20 +31,23 @@ export function printError(error: string) {
   console.error(displayAsMarkdown(`\n❌ ${error}`));
 }
 
-export function confirmPrompt(message: string): Promise<boolean> {
-  const prompt = new Confirm({
-    name: 'question',
+export async function confirmPrompt(message: string): Promise<boolean> {
+  const question: Record<string, boolean> = await prompt({
+    name: 'confirmPrompt',
+    type: 'confirm',
     message: displayAsMarkdown(message),
   });
 
-  return prompt.run();
+  return question['confirmPrompt'];
 }
 
-export function selectPrompt(message: string, choices: string[]): Promise<string> {
-  const prompt = new Select({
+export async function selectPrompt(message: string, choices: string[]): Promise<string> {
+  const question: Record<string, string> = await prompt({
+    name: 'selectPrompt',
+    type: 'select',
     choices,
     message: displayAsMarkdown(message),
   });
 
-  return prompt.run();
+  return question['selectPrompt'];
 }
