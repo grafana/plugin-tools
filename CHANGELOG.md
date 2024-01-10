@@ -1,5 +1,18 @@
 # (Wed Jan 10 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.11.1`
+  - Only run ts checker and eslint plugins in webpack dev mode [#647](https://github.com/grafana/plugin-tools/pull/647) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Wed Jan 10 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@0.8.0`
