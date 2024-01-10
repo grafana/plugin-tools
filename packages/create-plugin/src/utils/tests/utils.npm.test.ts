@@ -229,8 +229,8 @@ describe('Utils / NPM', () => {
       };
 
       // same package.json for existing and latest
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(packageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(packageJson);
 
       const result = hasNpmDependenciesToUpdate();
       expect(result).toBe(false);
@@ -261,8 +261,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = hasNpmDependenciesToUpdate();
       expect(result).toBe(true);
@@ -294,8 +294,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = hasNpmDependenciesToUpdate({ devOnly: true });
       expect(result).toBe(false);
@@ -316,8 +316,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(packageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(packageJson);
 
       const result = getPackageJsonUpdatesAsText();
       expect(result).toBe('');
@@ -348,8 +348,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = getPackageJsonUpdatesAsText();
       expect(result).toContain('sass');
@@ -381,8 +381,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = getPackageJsonUpdatesAsText({ devOnly: true });
       expect(result).toBe('');
@@ -413,8 +413,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = getPackageJsonUpdatesAsText({ devOnly: true });
       expect(result).toContain('sass');
@@ -435,8 +435,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(packageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(packageJson);
 
       updatePackageJson();
       //should have the same original content
@@ -478,8 +478,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       updatePackageJson();
       //should have the combined content
@@ -521,8 +521,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       updatePackageJson({ devOnly: true });
       //should have the combined content
@@ -564,8 +564,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      vi.mocked(mocks.getPackageJson).mockReturnValue(packageJson);
-      vi.mocked(mocks.getLatestPackageJson).mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       updatePackageJson({ devOnly: true });
       //should have the combined content
