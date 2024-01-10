@@ -16,7 +16,7 @@ declare global {
       [t]: T;
 
       /**
-       * Await the response of a Playwright request and asserts the response was successful (status in the range 200-299).
+       * Asserts that a Playwright response was successful (status in the range 200-299).
        */
       toBeOK(this: Matchers<unknown, Response>): R;
 
