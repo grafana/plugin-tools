@@ -1,0 +1,14 @@
+diff --git a/node_modules/@types/marked-terminal/package.json b/node_modules/@types/marked-terminal/package.json
+index 0cad357..b5cbc0b 100644
+--- a/node_modules/@types/marked-terminal/package.json
++++ b/node_modules/@types/marked-terminal/package.json
+@@ -19,8 +19,7 @@
+             "import": "./index.d.ts",
+             "require": "./index.d.cts"
+         },
+-        "default": "./index.d.ts",
+-        "./package.json": "./package.json"
++        "default": "./index.d.ts"
+     },
+     "repository": {
+         "type": "git",
