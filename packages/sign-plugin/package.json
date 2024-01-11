@@ -1,7 +1,6 @@
 {
   "name": "@grafana/sign-plugin",
   "version": "2.3.0",
-  "main": "index.js",
   "repository": {
     "directory": "packages/sign-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -9,6 +8,13 @@
   "author": "Grafana",
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
+  "type": "module",
+  "exports": {
+    "node": {
+      "import": "./index.js"
+    },
+    "default": "./index.js"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
