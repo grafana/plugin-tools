@@ -1,9 +1,9 @@
 import path from 'path';
 import minimist from 'minimist';
 import { existsSync } from 'fs';
-import { assertRootUrlIsValid } from '../utils/pluginValidation';
-import { buildManifest, signManifest, saveManifest } from '../utils/manifest';
-import { getVersion } from '../utils/getVersion';
+import { assertRootUrlIsValid } from '../utils/pluginValidation.js';
+import { buildManifest, signManifest, saveManifest } from '../utils/manifest.js';
+import { getVersion } from '../utils/getVersion.js';
 
 export const sign = async (argv: minimist.ParsedArgs) => {
   const distDir = argv.distDir ?? 'dist';

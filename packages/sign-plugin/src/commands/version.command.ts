@@ -1,4 +1,4 @@
-import { getVersion } from '../utils/getVersion';
+import { getVersion } from '../utils/getVersion.js';
 
 export const version = async () => {
   try {

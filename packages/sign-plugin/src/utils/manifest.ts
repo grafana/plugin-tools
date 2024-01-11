@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fs from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import { postData } from './request';
+import { postData } from './request.js';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
 
@@ -78,13 +78,16 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
   const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
   const GRAFANA_ACCESS_POLICY_TOKEN = process.env.GRAFANA_ACCESS_POLICY_TOKEN;
 
-  if(!GRAFANA_ACCESS_POLICY_TOKEN && !GRAFANA_API_KEY) {
+  if (!GRAFANA_ACCESS_POLICY_TOKEN && !GRAFANA_API_KEY) {
     throw new Error(
       'You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins. Please see: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token for instructions.'
     );
   }
   if (GRAFANA_API_KEY) {
-    console.warn(`\x1b[33m%s\x1b[0m`,'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead. For more info visit https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin')
+    console.warn(
+      `\x1b[33m%s\x1b[0m`,
+      'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead. For more info visit https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin'
+    );
   }
 
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
