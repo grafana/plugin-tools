@@ -82,7 +82,7 @@ Grafana Enterprise specific features.
 
 ## iam
 
-Identity and Access Management section. Grafana will read this section and initialize a service account for the plugin, with a tailored set of
+Grafana reads the Identity and Access Management section and initializes a service account for the plugin, with a tailored set of
 [Grafana RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes).
 Then its bearer token will be shared with the plugin backend using the `GF_PLUGIN_APP_CLIENT_SECRET` environment variable.
 
