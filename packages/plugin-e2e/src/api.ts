@@ -15,7 +15,19 @@ import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/ExplorePage';
 
 export type PluginOptions = {
-  selectorRegistration: void;
+  /**
+   * When using the readProvisioning fixture, files will be read from this directory. If no directory is provided,
+   * the 'provisioning' directory in the current working directory will be used.
+   * 
+   * eg.
+   * export default defineConfig({
+      use: {
+        provisioningRootDir: 'path/to/provisioning',
+      },
+    });
+   * 
+   */
+  provisioningRootDir: string;
 };
 
 export type PluginFixture = {
@@ -141,7 +153,7 @@ export type PluginFixture = {
 };
 
 // extend Playwright with Grafana plugin specific fixtures
-export const test = base.extend<PluginFixture & PluginOptions>(fixtures);
+export const test = base.extend<PluginFixture, PluginOptions>(fixtures);
 
 export const expect = baseExpect.extend(matchers);
 

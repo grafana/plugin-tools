@@ -4,16 +4,29 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - '.github/workflows/deploy-to-developer-portal-dev.yml'
-      - '.github/workflows/deploy-to-developer-portal-prod.yml'
-      - '.github/workflows/test-build.yml'
-      - 'docusaurus/**'
-      - 'package-lock.json'
 
 jobs:
-  deploy:
-    name: Build docs
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            docs:
+              - '.github/workflows/deploy-to-developer-portal-dev.yml'
+              - '.github/workflows/deploy-to-developer-portal-prod.yml'
+              - '.github/workflows/test-build.yml'
+              - 'docusaurus/**'
+              - 'package-lock.json'
+
+  build-docs:
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
     runs-on: ubuntu-latest
     env:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
@@ -27,7 +40,6 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-
       - name: Install dependencies
         run: npm ci
       - name: Build documentation website (Dev Portal)

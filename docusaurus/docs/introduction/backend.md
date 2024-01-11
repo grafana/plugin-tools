@@ -87,7 +87,7 @@ A plugin's health check endpoint is exposed in the Grafana HTTP API and allows e
 
 ### Collect metrics
 
-A backend plugin can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go.md) to implement your backend plugin, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. To add custom metrics to instrument your backend plugin, refer to [Pull metrics from Grafana backend plugin into Prometheus](https://grafana.com/docs/grafana/latest/setup-grafana/set-up-grafana-monitoring/#pull-metrics-from-grafana-backend-plugin-into-prometheus).
+A backend plugin can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go.md) to implement your backend plugin, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. To add custom metrics to instrument your backend plugin, refer to [Implement metrics in your plugin](../create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins.md#implement-metrics-in-your-plugin).
 
 ### Streaming
 
@@ -101,7 +101,6 @@ Grafana uses a communication model where you can opt in to instance management t
 
 Grafana provides instance management in the backend plugin SDK to ease working with multiple configured Grafana data sources or apps, referred to as instances. This allows a plugin to simply keep state cleanly separated between instances. The SDK makes sure to optimize plugin resources by caching said instances in memory until their configuration changes in Grafana. Refer to the [HTTP Backend plugin example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/main.go) or the [App with backend example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/pkg/main.go), which shows how to use the instance management for data source and app plugins.
 
-Mentioned instance state is especially useful for holding client connections to downstream servers, such as HTTP, gRPC, TCP and UDP etc, to enable usage of connection pooling that optimizes usage and connection reuse to a downstream server. By using connection pooling, the plugin will not use all of the machine's available TCP connections. 
+Mentioned instance state is especially useful for holding client connections to downstream servers, such as HTTP, gRPC, TCP, UDP, and so on, to enable usage of connection pooling that optimizes usage and connection reuse to a downstream server. By using connection pooling, the plugin avoids using all of the machine's available TCP connections.
 
 For an example of a plugin supporting connection pooling, refer to the [HTTP Backend plugin example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-http-backend/pkg/plugin/datasource.go#L40-L66), which shows each plugin instance creating an HTTP client that will be reused throughout the lifetime of the instance and thereby reuse HTTP connections.
-

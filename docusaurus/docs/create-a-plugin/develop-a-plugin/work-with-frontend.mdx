@@ -11,6 +11,12 @@ keywords:
 sidebar_position: 1
 ---
 
+import FrontendCLInpm from '@snippets/createplugin-frontend-npm.md';
+import FrontendCLIpnpm from '@snippets/createplugin-frontend-pnpm.md';
+import FrontendCLIYarn from '@snippets/createplugin-frontend-yarn.md';
+
+# Work with frontend components
+
 Develop the frontend component of a Grafana plugin in Typescript with ReactJS as the View library. Several commands are available within the `plugin` directory for interacting with the frontend.
 
 :::warning
@@ -21,26 +27,12 @@ We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_d
 
 You can run the following commands when developing your plugin:
 
-### <SyncCommand cmd="run dev" />
-
-Builds the plugin in development mode and watches for changes to source code to rebuild the plugin.
-
-### <SyncCommand cmd="run build" />
-
-Builds the plugin for production. The output can be found in the `./dist` directory.
-
-### <SyncCommand cmd="run test" />
-
-Launches the test runner in watch mode.
-
-### <SyncCommand cmd="run e2e" />
-
-Launches the e2e test runner. Make sure to have an instance of Grafana running before you run e2e tests.
-
-### <SyncCommand cmd="run lint" />
-
-Runs the linter against source code to verify that you have adhered to the formatting and styling rules. This command will also report warnings for usage of deprecated code.
-
-### <SyncCommand cmd="run lint:fix" />
-
-Runs the linter in fix mode to automatically format the frontend code.
+<CodeSnippets
+  snippets={[
+    { component: FrontendCLInpm, label: 'npm' },
+    { component: FrontendCLIpnpm, label: 'pnpm' },
+    { component: FrontendCLIYarn, label: 'yarn' },
+  ]}
+  groupId="frontend-cli"
+  queryString="current-frontend-cli"
+/>

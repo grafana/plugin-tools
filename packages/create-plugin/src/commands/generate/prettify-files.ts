@@ -1,14 +1,10 @@
 import { exec as nodeExec } from 'node:child_process';
 import { promisify } from 'node:util';
 import fs from 'fs';
-import { getExportPath } from '../../utils/utils.path';
-import { CliArgs } from '../types';
 
 const exec = promisify(nodeExec);
 
-export async function prettifyFiles({ pluginName, orgName, pluginType }: CliArgs) {
-  const exportPath = getExportPath(pluginName, orgName, pluginType);
-
+export async function prettifyFiles(exportPath: string) {
   if (!fs.existsSync(exportPath)) {
     return '';
   }

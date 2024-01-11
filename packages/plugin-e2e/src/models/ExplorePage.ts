@@ -13,10 +13,16 @@ export class ExplorePage extends GrafanaPage {
     this.timeRange = new TimeRange(ctx);
   }
 
+  /**
+   * Navigates to the explore page.
+   */
   async goto(options?: NavigateOptions) {
     await super.navigate(this.ctx.selectors.pages.Explore.url, options);
   }
 
+  /**
+   * Returns the locator for the query editor row with the given refId
+   */
   async getQueryEditorRow(refId: string): Promise<Locator> {
     const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
       has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
@@ -25,6 +31,9 @@ export class ExplorePage extends GrafanaPage {
     return locator;
   }
 
+  /**
+   * Clicks the "Run Query" button in the refresh picker to run the query. Returns the response promise for the data query
+   */
   async runQuery(options?: RequestOptions) {
     const components = this.ctx.selectors.components;
     const responsePromise = this.ctx.page.waitForResponse(
