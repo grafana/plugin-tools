@@ -116,4 +116,4 @@ For more information see our [documentation](https://grafana.com/developers/plug
 
 ## Contributing
 
-We are always grateful for contributions! See [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
+We are always grateful for contributions! See [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
