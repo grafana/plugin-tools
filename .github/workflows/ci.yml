@@ -30,7 +30,7 @@ jobs:
       - name: Lint
         run: npm exec nx affected -- --target lint --parallel
       - name: Unit tests
-        run: npm exec nx affected -- --target test --ci
+        run: npm exec nx affected -- --target test:ci
       - name: Build all packages
         run: npm run build
 
