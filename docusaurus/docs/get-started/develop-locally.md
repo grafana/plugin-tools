@@ -42,9 +42,11 @@ To clone and run Grafana locally:
 
 Another option is to run Grafana in a container with `docker compose` (or `docker-compose`, which is a version of this command deprecated by Docker). To do so, create the `docker compose` file in your plugin directory:
 
-{{% admonition type="note" %}}
+:::note
+
 If your plugin already includes a `docker compose` file, then skip this step.
-{{% /admonition %}}
+
+:::
 
 ```yaml
 version: '3.7'
@@ -162,9 +164,11 @@ Now that your plugin is ready to run, follow the instructions below for your IDE
 
 1. If Grafana isn't already running, run it.
 
-{{% admonition type="note" %}}
+:::note
+
 If you re-run the configuration, Grafana automatically reloads the plugin.
-{{% /admonition %}}
+
+:::
 
 ### Other IDEs
 
