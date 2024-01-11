@@ -103,9 +103,11 @@ If you make a change in the frontend, you must refresh your browser. However, ch
 
 ## Run your backend plugin with a debugger
 
-{{% admonition type="note" %}}
+:::note
+
 The following method only works with a local Grafana instance and currently doesn't work with Docker.
-{{% /admonition %}}
+
+:::
 
 Running a backend plugin with a debugger is supported in Visual Studio Code and GoLand out of the box, but it can also work with any other IDE or debugger.
 
