@@ -86,7 +86,7 @@ Grafana reads the Identity and Access Management section and initializes a servi
 [Grafana RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes).
 Then its bearer token will be shared with the plugin backend using the `GF_PLUGIN_APP_CLIENT_SECRET` environment variable.
 
-Requires Grafana >= 10.3.0. Currently behind a feature toggle `externalServiceAccounts`.
+Requires Grafana version 10.3.0 or later. Currently, this is behind the `externalServiceAccounts` feature toggle.
 
 ### Properties
 
