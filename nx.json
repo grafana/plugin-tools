@@ -15,12 +15,7 @@
       "cache": true
     },
     "test": {
-      "inputs": [
-        "default",
-        "{projectRoot}/jest.config.js",
-        "{workspaceRoot}/jest.config.base.js",
-        "{projectRoot}/vitest.config.ts"
-      ],
+      "inputs": ["default", "{projectRoot}/jest.config.js", "{workspaceRoot}/jest.config.base.js"],
       "cache": true
     }
   },

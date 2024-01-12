@@ -26,7 +26,6 @@
     "server": "docker-compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "jest",
-    "test:ci": "jest --ci",
     "playwright:test": "npx playwright test",
     "playwright:test:ui": "npx playwright test --ui",
     "playwright:showreport": "npx playwright show-report"

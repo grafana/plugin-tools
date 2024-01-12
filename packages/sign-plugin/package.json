@@ -20,7 +20,6 @@
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "jest",
-    "test:ci": "jest --ci",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
