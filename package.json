@@ -15,7 +15,7 @@
     "lint:fix": "nx run-many --target=lint:fix --parallel",
     "release": "auto shipit",
     "test": "nx run-many --target=test --parallel",
-    "test:ci": "nx run-many --target=test --ci",
+    "test:ci": "nx run-many --target=test",
     "typecheck": "nx run-many --target=typecheck --parallel",
     "prepare": "husky install",
     "postinstall": "patch-package"
