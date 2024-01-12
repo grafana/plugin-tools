@@ -1,3 +1,22 @@
+# (Fri Jan 12 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@3.0.0`
+  - Build: Migrate create-plugin to ESM [#658](https://github.com/grafana/plugin-tools/pull/658) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@3.0.0`
+  - Chore: Fixed liniting issues in template [#657](https://github.com/grafana/plugin-tools/pull/657) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Wed Jan 10 2024)
 
 #### 🐛 Bug Fix
