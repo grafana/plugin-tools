@@ -30,12 +30,13 @@ Grafana plugin development allows for many options depending on the type of user
 - **Data-source plugin** - a connection to a new database or other source of data.
 - **App plugin** - an integrated out-of-the-box experience.
 
+Plugin development is not supported by the Grafana support team. For help, reach out to the [Community forums](https://community.grafana.com/c/plugin-development/30).
+
 :::note
 
 Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](../get-started/prompts-cli.md#what-type-of-plugin-would-you-like) of plugin.
 
 :::
-
 ## Panel (visualization) plugins
 
 Development of panel plugins, also known as visualizations, allows Grafana to use custom visualizations, similar to existing plugins such the [Polystat](https://grafana.com/grafana/plugins/grafana-polystat-panel/) panel.
