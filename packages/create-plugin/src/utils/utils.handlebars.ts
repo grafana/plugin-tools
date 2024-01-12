@@ -3,9 +3,9 @@ import * as changeCase from 'change-case';
 import titleCase from 'title-case';
 import upperCase from 'upper-case';
 import lowerCase from 'lower-case';
-import { PARTIALS_DIR, PLUGIN_TYPES } from '../constants';
-import { readFileSync, readdirSync } from 'fs';
-import { basename, join } from 'path';
+import { PARTIALS_DIR, PLUGIN_TYPES } from '../constants.js';
+import { readFileSync, readdirSync } from 'node:fs';
+import { basename, join } from 'node:path';
 
 // Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
 export const ifEq = (a: any, b: any, options: HelperOptions) => {

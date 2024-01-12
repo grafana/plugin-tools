@@ -1,8 +1,8 @@
-import path from 'path';
-import { TEMPLATE_PATHS } from '../constants';
-import { readJsonFile } from './utils.files';
-import { getTemplateData, renderTemplateFromFile } from './utils.templates';
-import fs from 'fs';
+import path from 'node:path';
+import { TEMPLATE_PATHS } from '../constants.js';
+import { readJsonFile } from './utils.files.js';
+import { getTemplateData, renderTemplateFromFile } from './utils.templates.js';
+import fs from 'node:fs';
 
 export type PackageJson = {
   scripts: Record<string, string>;

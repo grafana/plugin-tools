@@ -1,12 +1,12 @@
-import { TEXT, MIGRATION_CONFIG } from '../constants';
-import { displayArrayAsList, printMessage, printSuccessMessage, confirmPrompt } from '../utils/utils.console';
-import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates';
+import { TEXT, MIGRATION_CONFIG } from '../constants.js';
+import { displayArrayAsList, printMessage, printSuccessMessage, confirmPrompt } from '../utils/utils.console.js';
+import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
 import {
   getExportTemplateName,
   getOnlyExistingInCwd,
   getOnlyNotExistingInCwd,
   removeFilesInCwd,
-} from '../utils/utils.files';
+} from '../utils/utils.files.js';
 import {
   getPackageJsonUpdatesAsText,
   updatePackageJson,
@@ -16,8 +16,8 @@ import {
   updateNpmScripts,
   cleanUpPackageJson,
   writePackageManagerInPackageJson,
-} from '../utils/utils.npm';
-import { getPackageManagerWithFallback } from '../utils/utils.packageManager';
+} from '../utils/utils.npm.js';
+import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 
 export const migrate = async () => {
   try {

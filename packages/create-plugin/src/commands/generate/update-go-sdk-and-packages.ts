@@ -1,6 +1,6 @@
 import which from 'which';
-import fs from 'fs';
-import { exec } from 'child_process';
+import fs from 'node:fs';
+import { exec } from 'node:child_process';
 
 const SDK_GO_MODULE = 'github.com/grafana/grafana-plugin-sdk-go';
 

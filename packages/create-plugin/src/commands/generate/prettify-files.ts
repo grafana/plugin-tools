@@ -1,6 +1,6 @@
 import { exec as nodeExec } from 'node:child_process';
 import { promisify } from 'node:util';
-import fs from 'fs';
+import fs from 'node:fs';
 
 const exec = promisify(nodeExec);
 

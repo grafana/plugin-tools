@@ -1,7 +1,7 @@
 import minimist from 'minimist';
 import Enquirer from 'enquirer';
-import { PLUGIN_TYPES } from '../../constants';
-import { CliArgs } from '../types';
+import { PLUGIN_TYPES } from '../../constants.js';
+import { CliArgs } from '../types.js';
 
 export async function promptUser(argv: minimist.ParsedArgs) {
   let answers: Partial<CliArgs> = {};

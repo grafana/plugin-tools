@@ -1,5 +1,5 @@
-import { PLUGIN_TYPES, TEMPLATE_PATHS } from '../../constants';
-import { filterOutCommonFiles, isFile } from '../utils.files';
+import { PLUGIN_TYPES, TEMPLATE_PATHS } from '../../constants.js';
+import { filterOutCommonFiles, isFile } from '../utils.files.js';
 
 describe('Utils/Files', () => {
   describe('filterOutCommonFiles()', () => {

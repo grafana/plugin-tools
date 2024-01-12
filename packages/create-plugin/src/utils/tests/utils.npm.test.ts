@@ -1,18 +1,27 @@
+import { vi } from 'vitest';
 import {
   updateNpmDependencies,
   getUpdatableNpmDependencies,
   hasNpmDependenciesToUpdate,
   getPackageJsonUpdatesAsText,
   updatePackageJson,
-} from '../utils.npm';
+} from '../utils.npm.js';
 
-import { getPackageJson, getLatestPackageJson, writePackageJson } from '../utils.packagejson';
+const mocks = vi.hoisted(() => {
+  return {
+    getPackageJson: vi.fn(),
+    getLatestPackageJson: vi.fn(),
+    writePackageJson: vi.fn(),
+  };
+});
 
-jest.mock('../utils.packagejson.ts');
-
-const getPackageJsonMock = getPackageJson as jest.Mock;
-const getLatestPackageJsonMock = getLatestPackageJson as jest.Mock;
-const writePackageJsonMock = writePackageJson as jest.Mock;
+vi.mock('../utils.packagejson.js', async () => {
+  return {
+    getPackageJson: mocks.getPackageJson,
+    getLatestPackageJson: mocks.getLatestPackageJson,
+    writePackageJson: mocks.writePackageJson,
+  };
+});
 
 describe('Utils / NPM', () => {
   describe('getUpdatableNpmDependencies()', () => {
@@ -220,8 +229,8 @@ describe('Utils / NPM', () => {
       };
 
       // same package.json for existing and latest
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(packageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(packageJson);
 
       const result = hasNpmDependenciesToUpdate();
       expect(result).toBe(false);
@@ -252,8 +261,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = hasNpmDependenciesToUpdate();
       expect(result).toBe(true);
@@ -285,8 +294,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = hasNpmDependenciesToUpdate({ devOnly: true });
       expect(result).toBe(false);
@@ -307,8 +316,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(packageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(packageJson);
 
       const result = getPackageJsonUpdatesAsText();
       expect(result).toBe('');
@@ -339,8 +348,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = getPackageJsonUpdatesAsText();
       expect(result).toContain('sass');
@@ -372,8 +381,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = getPackageJsonUpdatesAsText({ devOnly: true });
       expect(result).toBe('');
@@ -404,8 +413,8 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       const result = getPackageJsonUpdatesAsText({ devOnly: true });
       expect(result).toContain('sass');
@@ -426,12 +435,12 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(packageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(packageJson);
 
       updatePackageJson();
       //should have the same original content
-      expect(writePackageJsonMock).toHaveBeenCalledWith({
+      expect(mocks.writePackageJson).toHaveBeenCalledWith({
         dependencies: {
           '@grafana/ui': '10.0.0',
           react: '18.2.0',
@@ -469,12 +478,12 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       updatePackageJson();
       //should have the combined content
-      expect(writePackageJsonMock).toHaveBeenCalledWith({
+      expect(mocks.writePackageJson).toHaveBeenCalledWith({
         dependencies: {
           '@grafana/ui': '10.0.0',
           react: '18.2.1', //changed
@@ -512,12 +521,12 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       updatePackageJson({ devOnly: true });
       //should have the combined content
-      expect(writePackageJsonMock).toHaveBeenCalledWith({
+      expect(mocks.writePackageJson).toHaveBeenCalledWith({
         dependencies: {
           '@grafana/ui': '10.0.0',
           react: '18.2.0',
@@ -555,12 +564,12 @@ describe('Utils / NPM', () => {
         scripts: {},
       };
 
-      getPackageJsonMock.mockReturnValue(packageJson);
-      getLatestPackageJsonMock.mockReturnValue(latestPackageJson);
+      mocks.getPackageJson.mockReturnValue(packageJson);
+      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
 
       updatePackageJson({ devOnly: true });
       //should have the combined content
-      expect(writePackageJsonMock).toHaveBeenCalledWith({
+      expect(mocks.writePackageJson).toHaveBeenCalledWith({
         dependencies: {
           '@grafana/ui': '10.0.0',
           react: '18.2.0', //changed but devOnly so should not be changed in the file

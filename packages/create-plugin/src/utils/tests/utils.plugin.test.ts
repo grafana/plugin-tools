@@ -1,5 +1,5 @@
-import { FIXTURES_PATH, TEMPLATE_PATHS } from '../../constants';
-import { getPluginJson } from '../utils.plugin';
+import { FIXTURES_PATH, TEMPLATE_PATHS } from '../../constants.js';
+import { getPluginJson } from '../utils.plugin.js';
 
 describe('Utils / Plugins', () => {
   describe('getPluginJson()', () => {

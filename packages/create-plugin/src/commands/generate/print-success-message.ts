@@ -1,7 +1,7 @@
-import { displayAsMarkdown } from '../../utils/utils.console';
-import { normalizeId } from '../../utils/utils.handlebars';
-import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager';
-import { CliArgs } from '../types';
+import { displayAsMarkdown } from '../../utils/utils.console.js';
+import { normalizeId } from '../../utils/utils.handlebars.js';
+import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager.js';
+import { CliArgs } from '../types.js';
 
 export function printGenerateSuccessMessage(answers: CliArgs) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);

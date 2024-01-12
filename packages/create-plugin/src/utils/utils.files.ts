@@ -1,6 +1,6 @@
-import path from 'path';
-import fs from 'fs';
-import { TEMPLATE_PATHS } from '../constants';
+import path from 'node:path';
+import fs from 'node:fs';
+import { TEMPLATE_PATHS } from '../constants.js';
 import { access, constants } from 'fs/promises';
 
 // Removes common template files from the list in case they have a plugin-specific override

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "esModuleInterop": true,
     "removeComments": true,
@@ -9,6 +10,7 @@
     "noUnusedLocals": true,
     "pretty": true,
     "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "module": "NodeNext"
   }
 }

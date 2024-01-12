@@ -1,7 +1,7 @@
-import { basename } from 'path';
-import { spawnSync } from 'child_process';
+import { basename } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { sync as findUpSync } from 'find-up';
-import { getPackageJson } from './utils.packagejson';
+import { getPackageJson } from './utils.packagejson.js';
 
 const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
