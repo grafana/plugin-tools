@@ -13,15 +13,15 @@ keywords:
   - builds
 ---
 
-# Automated package and signing with CI
+# Automate packaging and signing with CI
 
-If the plugin has been setup to use the supplied git workflows from create-plugin,
-the plugin will be built and packaged in the correct format.
+If your plugin has been set up to use the supplied [Git workflows](../create-a-plugin/develop-a-plugin/set-up-github-workflows.md) from [create-plugin](../get-started/get-started.mdx),
+the plugin should be built and packaged in the correct format.
 
-The zip file produced can be used to test the plugin.
+We recommend using the ZIP file produced from this workflow to test the plugin.
 
-If a signing key is included in the git repo, a signed build is automatically created, which can be tested locally before submission.
+If a signing key is included in the Git repo, a signed build is automatically created, which you can use to test the plugin locally before submission.
 
-By creating a release tag, the whole process is automated, resulting in a zip file that can be submitted for review on grafana.com
+By creating a release tag, the whole process becomes automated, resulting in a ZIP file that you can submit for publication in the [Grafana plugin catalog](https://grafana.com/plugins)
 
-When you've packaged your plugin, you can proceed to [publishing a plugin](./publish-or-update-a-plugin.md) or [installing a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
+When you've packaged your plugin, proceed to [publishing a plugin](./publish-or-update-a-plugin.md) or [installing a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
