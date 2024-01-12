@@ -1,7 +1,6 @@
-import https, { RequestOptions } from 'https';
+import https, { RequestOptions } from 'node:https';
+import { URL } from 'node:url';
 import { ProxyAgent } from 'proxy-agent';
-
-import { URL } from 'url';
 
 interface Headers {
   Authorization: string;

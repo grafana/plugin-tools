@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import fs from 'fs/promises';
-import { readFileSync, writeFileSync } from 'fs';
-import path from 'path';
+import { readFileSync, writeFileSync } from 'node:fs';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { postData } from './request.js';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
