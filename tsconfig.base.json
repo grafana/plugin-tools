@@ -10,6 +10,7 @@
     "noUnusedLocals": true,
     "pretty": true,
     "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "module": "NodeNext"
   }
 }

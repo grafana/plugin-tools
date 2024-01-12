@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    "lib": ["es2023", "dom"],
-    "module": "node16",
-    "target": "es2022",
-    "moduleResolution": "node16",
     "outDir": "./dist"
   },
   "exclude": ["node_modules"],
