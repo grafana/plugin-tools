@@ -1,16 +1,16 @@
 ---
 id: build-automation
-title: Package a plugin
+title: Automate plugin builds
 sidebar_position: 1
-description: Automating Grafana plugin builds and releases
+description: Automate Grafana plugin builds and releases
 keywords:
   - grafana
   - plugins
   - plugin
-  - links
-  - package
-  - packaging
-  - packages
+  - automation
+  - build
+  - automate
+  - builds
 ---
 
 # Automated package and signing with CI
