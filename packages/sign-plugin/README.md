@@ -64,4 +64,4 @@ yarn dlx @grafana/sign-plugin@latest
 
 ## Contributing
 
-We are always grateful for contribution! See the [CONTRIBUTING.md](../CONTRIBUTING.md) for more information.
+We are always grateful for contribution! See the [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
