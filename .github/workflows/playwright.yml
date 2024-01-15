@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'packages/plugin-e2e/**'
+      - '.github/workflows/playwright.yml'
 
 jobs:
   setup-matrix:
@@ -53,9 +54,9 @@ jobs:
         env:
           GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-Grafana${{ matrix.GRAFANA_VERSION }}
+          name: playwright-report-Grafana-v${{ matrix.GRAFANA_VERSION }}-${{github.run_id}}
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
