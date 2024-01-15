@@ -102,7 +102,7 @@ To try this feature out, follow this [example](https://github.com/grafana/grafan
 
 | Property | Type   | Required | Description                |
 | -------- | ------ | -------- | -------------------------- |
-| `action` | string | **Yes**  | Action, e.g: `teams:read`. |
+| `action` | string | **Yes**  | Action, for example: `teams:read`. |
 | `scope`  | string | No       | Scope, e.g: `teams:*`.     |
 
 ## includes
