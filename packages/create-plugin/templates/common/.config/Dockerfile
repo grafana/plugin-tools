@@ -10,8 +10,6 @@ ENV GF_AUTH_ANONYMOUS_ENABLED "true"
 ENV GF_AUTH_BASIC_ENABLED "false"
 # Set development mode so plugins can be loaded without the need to sign
 ENV GF_DEFAULT_APP_MODE "development"
-# Use the config file in this repo
-ENV GF_PATHS_CONFIG "/etc/grafana/provisioning/custom.ini"
 
 # Inject livereload script into grafana index.html
 USER root
