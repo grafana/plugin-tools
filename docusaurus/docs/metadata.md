@@ -94,7 +94,7 @@ To try this feature out, follow this [example](https://github.com/grafana/grafan
 
 | Property      | Type                    | Required | Description                                            |
 | ------------- | ----------------------- | -------- | ------------------------------------------------------ |
-| `permissions` | [object](#permission)[] | No       | RBAC permissions the plugin requires to query Grafana. |
+| `permissions` | [object](#permission)[] | No       | Required RBAC permissions to query Grafana. |
 
 ### permissions
 
