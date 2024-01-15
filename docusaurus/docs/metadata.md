@@ -88,7 +88,7 @@ Grafana will share the service account's bearer token with the plugin backend us
 
 Requires Grafana version 10.3.0 or later. Currently, this is behind the `externalServiceAccounts` feature toggle.
 
-To try this feature out, follow the example provided [here](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-service-account/README.md).
+To try this feature out, follow this [example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-service-account/README.md).
 
 ### Properties
 
