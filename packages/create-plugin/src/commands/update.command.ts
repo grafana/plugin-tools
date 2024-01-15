@@ -9,10 +9,12 @@ import {
   getPackageJsonUpdatesAsText,
   updateNpmScripts,
   writePackageManagerInPackageJson,
+  projectUsesPrettier,
+  runPrettierOnConfigDir,
 } from '../utils/utils.npm.js';
-import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
+import { getPackageManagerExecute, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   try {
@@ -58,6 +60,12 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
     // -----------------------------------
     if (await confirmPrompt(TEXT.updateConfigPrompt)) {
       compileTemplateFiles(UDPATE_CONFIG.filesToOverride, getTemplateData());
+
+      if (projectUsesPrettier()) {
+        const packageManagerExecute = getPackageManagerExecute();
+        runPrettierOnConfigDir(packageManagerExecute);
+      }
+
       printSuccessMessage(TEXT.overrideFilesSuccess);
     } else {
       printMessage(TEXT.overrideFilesAborted);

@@ -1,4 +1,5 @@
 import semver from 'semver';
+import { execSync } from 'child_process';
 import { GRAFANA_FE_PACKAGES } from '../constants.js';
 import { getPackageJson, writePackageJson, getLatestPackageJson } from './utils.packagejson.js';
 import { PackageManager } from './utils.packageManager.js';
@@ -232,4 +233,18 @@ function sortKeysAlphabetically(obj: Record<string, string>) {
       acc[key] = obj[key];
       return acc;
     }, {});
+}
+
+export function projectUsesPrettier() {
+  const packageJson = getPackageJson();
+  return Boolean(packageJson.devDependencies?.prettier);
+}
+
+export function runPrettierOnConfigDir(packageManagerName: string) {
+  const prettierCommand = `${packageManagerName} prettier --write .config`;
+  try {
+    execSync(prettierCommand, { stdio: 'pipe' });
+  } catch (error) {
+    console.error(error.message);
+  }
 }
