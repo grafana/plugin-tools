@@ -3,7 +3,7 @@
     "outDir": "./dist",
     "declaration": true,
     "stripInternal": true,
-    "module": "NodeNext",
+    "module": "Node16",
     "removeComments": false
   },
   "exclude": ["node_modules"],
