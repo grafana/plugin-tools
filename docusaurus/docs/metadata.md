@@ -33,12 +33,13 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | `category`           | string                        | No       | Plugin category used on the "Add data source" page. Possible values are: `tsdb`, `logging`, `cloud`, `tracing`, `profiling`, `sql`, `enterprise`, `iot`, `other`.                                                                                                                                                                                                                                       |
 | `enterpriseFeatures` | [object](#enterprisefeatures) | No       | Grafana Enterprise specific features                                                                                                                                                                                                                                                                                                                                                                    |
 | `executable`         | string                        | No       | The first part of the file name of the backend component executable. There can be multiple executables built for different operating system and architecture. Grafana will check for executables named `<executable>_<$GOOS>_<lower case $GOARCH><.exe for Windows>`, e.g. `plugin_linux_amd64`. Combination of $GOOS and $GOARCH can be found here: https://golang.org/doc/install/source#environment. |
+| `iam`                | [object](#iam)                | No       | Initialize a service account for the plugin, with a tailored set of RBAC permissions.                                                                                                                                                                                                                                                                                                                   |
 | `includes`           | [object](#includes)[]         | No       | Resources to include in plugin.                                                                                                                                                                                                                                                                                                                                                                         |
 | `logs`               | boolean                       | No       | For data source plugins, if the plugin supports logs. It may be used to filter logs only features.                                                                                                                                                                                                                                                                                                      |
 | `metrics`            | boolean                       | No       | For data source plugins, if the plugin supports metric queries. Used to enable the plugin in the panel editor.                                                                                                                                                                                                                                                                                          |
 | `preload`            | boolean                       | No       | Initialize plugin on startup. By default, the plugin initializes on first use, but when preload is set to true the plugin loads when the Grafana web app loads the first time. Only applicable to app plugins.                                                                                                                                                                                          |
 | `queryOptions`       | [object](#queryoptions)       | No       | For data source plugins. There is a query options section in the plugin's query editor and these options can be turned on if needed.                                                                                                                                                                                                                                                                    |
-| `routes`             | [object](#routes)[]           | No       | For data source plugins. Proxy routes used for plugin authentication and adding headers to HTTP requests made by the plugin. For more information, refer to [Authentication for data source plugins](../docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).                                                   |
+| `routes`             | [object](#routes)[]           | No       | For data source plugins. Proxy routes used for plugin authentication and adding headers to HTTP requests made by the plugin. For more information, refer to [Authentication for data source plugins](../docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).                                                                                                            |
 | `skipDataQuery`      | boolean                       | No       | For panel plugins. Hides the query editor.                                                                                                                                                                                                                                                                                                                                                              |
 | `state`              | string                        | No       | Marks a plugin as a pre-release. Possible values are: `alpha`, `beta`.                                                                                                                                                                                                                                                                                                                                  |
 | `streaming`          | boolean                       | No       | For data source plugins, if the plugin supports streaming. Used in Explore to start live streaming.                                                                                                                                                                                                                                                                                                     |
@@ -78,6 +79,31 @@ Grafana Enterprise specific features.
 | Property                  | Type    | Required | Description                                                         |
 | ------------------------- | ------- | -------- | ------------------------------------------------------------------- |
 | `healthDiagnosticsErrors` | boolean | No       | Enable/Disable health diagnostics errors. Requires Grafana >=7.5.5. |
+
+## iam
+
+Grafana reads the Identity and Access Management section and initializes a service account for the plugin, with a tailored set of
+[Grafana RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes).
+Grafana will share the service account's bearer token with the plugin backend using the `GF_PLUGIN_APP_CLIENT_SECRET` environment variable.
+
+Requires Grafana version 10.3.0 or later. Currently, this is behind the `externalServiceAccounts` feature toggle.
+
+To try this feature out, follow this [example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-service-account/README.md).
+
+### Properties
+
+| Property      | Type                    | Required | Description                                            |
+| ------------- | ----------------------- | -------- | ------------------------------------------------------ |
+| `permissions` | [object](#permission)[] | No       | Required RBAC permissions to query Grafana. |
+
+### permissions
+
+#### Properties
+
+| Property | Type   | Required | Description                |
+| -------- | ------ | -------- | -------------------------- |
+| `action` | string | **Yes**  | Action, for example: `teams:read`. |
+| `scope`  | string | No       | Scope, e.g: `teams:*`.     |
 
 ## includes
 
