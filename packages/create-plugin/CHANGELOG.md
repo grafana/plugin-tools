@@ -1,3 +1,15 @@
+# v3.1.0 (Tue Jan 16 2024)
+
+#### 🚀 Enhancement
+
+- Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
+
+#### Authors: 1
+
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
 # v3.0.0 (Fri Jan 12 2024)
 
 #### 💥 Breaking Change
