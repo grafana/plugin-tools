@@ -1,6 +1,6 @@
 {
   "name": "@grafana/sign-plugin",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "repository": {
     "directory": "packages/sign-plugin",
     "url": "https://github.com/grafana/plugin-tools"
