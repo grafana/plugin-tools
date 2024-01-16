@@ -6,6 +6,32 @@ Thank you, Sam Jewell ([@samjewell](https://github.com/samjewell)), for all your
 
 #### 🚀 Enhancement
 
+- `@grafana/plugin-e2e@0.9.0`
+  - Plugin E2E: Use node16 [#670](https://github.com/grafana/plugin-tools/pull/670) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@3.2.0`
+  - Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump nodemon from 3.0.1 to 3.0.2 [#667](https://github.com/grafana/plugin-tools/pull/667) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps-dev): Bump @swc/jest from 0.2.20 to 0.2.29 [#668](https://github.com/grafana/plugin-tools/pull/668) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# (Tue Jan 16 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sam Jewell ([@samjewell](https://github.com/samjewell)), for all your work!
+
+#### 🚀 Enhancement
+
 - `@grafana/create-plugin@3.1.0`
   - Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
 

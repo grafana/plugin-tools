@@ -1,3 +1,15 @@
+# v0.9.0 (Tue Jan 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Use node16 [#670](https://github.com/grafana/plugin-tools/pull/670) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.8.0 (Wed Jan 10 2024)
 
 #### 🚀 Enhancement
