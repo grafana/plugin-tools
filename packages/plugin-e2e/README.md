@@ -18,7 +18,7 @@ E2E test Grafana plugins with ease.
 
 ### Prerequisites
 
-- Node.js (LTS)
+- Node.js 18+
 - Basic knowledge of Playwright
 - Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
 
