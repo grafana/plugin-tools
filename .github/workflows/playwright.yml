@@ -5,6 +5,10 @@ on:
       - 'packages/plugin-e2e/**'
       - '.github/workflows/playwright.yml'
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   setup-matrix:
     runs-on: ubuntu-latest
@@ -34,12 +38,12 @@ jobs:
       - id: get-secrets
         uses: grafana/shared-workflows/actions/get-vault-secrets@main
         with:
-          repo_secrets: |
-            GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY=infra/data/ci/grafana/releng/artifacts-uploader-service-account:GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY
+          common_secrets: |
+            GCP_UPLOAD_ARTIFACTS_KEY=grafana/artifacts-uploader-service-account:credentials.json
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '${{ env.GCP_GRAFANA_UPLOAD_ARTIFACTS_KEY }}'
+          credentials_json: '${{ env.GCP_UPLOAD_ARTIFACTS_KEY }}'
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
