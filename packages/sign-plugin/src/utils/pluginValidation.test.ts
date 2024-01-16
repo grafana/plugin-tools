@@ -1,4 +1,4 @@
-import { getPluginJson, validatePluginJson } from './pluginValidation';
+import { getPluginJson, validatePluginJson } from './pluginValidation.js';
 
 describe('pluginValidation', () => {
   describe('plugin.json', () => {

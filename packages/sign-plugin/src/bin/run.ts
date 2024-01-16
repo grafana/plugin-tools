@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import minimist from 'minimist';
-import { sign, version } from '../commands';
+import { sign, version } from '../commands/index.js';
 
 const args = process.argv.slice(2);
 const argv = minimist(args);

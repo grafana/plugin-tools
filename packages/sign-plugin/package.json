@@ -1,7 +1,6 @@
 {
   "name": "@grafana/sign-plugin",
   "version": "2.3.0",
-  "main": "index.js",
   "repository": {
     "directory": "packages/sign-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -9,6 +8,13 @@
   "author": "Grafana",
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
+  "type": "module",
+  "exports": {
+    "node": {
+      "import": "./index.js"
+    },
+    "default": "./index.js"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
@@ -19,7 +25,7 @@
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -27,7 +33,8 @@
     "proxy-agent": "6.3.1"
   },
   "devDependencies": {
-    "@types/minimist": "^1.2.2"
+    "@types/minimist": "^1.2.2",
+    "vitest": "^1.1.3"
   },
   "nodemonConfig": {
     "watch": [
