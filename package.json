@@ -13,7 +13,7 @@
     "docs:build": "nx build website",
     "lint": "nx run-many --target=lint --parallel",
     "lint:fix": "nx run-many --target=lint:fix --parallel",
-    "release": "auto shipit --dry-run -vv",
+    "release": "auto shipit --dry-run -v",
     "test": "nx run-many --target=test --parallel",
     "test:ci": "nx run-many --target=test --ci",
     "typecheck": "nx run-many --target=typecheck --parallel",
