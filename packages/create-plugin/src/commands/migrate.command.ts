@@ -1,7 +1,12 @@
-import { TEXT, MIGRATION_CONFIG } from '../constants';
-import { displayArrayAsList, printMessage, printSuccessMessage, confirmPrompt } from '../utils/utils.console';
-import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates';
-import { getOnlyExistingInCwd, getOnlyNotExistingInCwd, removeFilesInCwd } from '../utils/utils.files';
+import { TEXT, MIGRATION_CONFIG } from '../constants.js';
+import { displayArrayAsList, printMessage, printSuccessMessage, confirmPrompt } from '../utils/utils.console.js';
+import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
+import {
+  getExportTemplateName,
+  getOnlyExistingInCwd,
+  getOnlyNotExistingInCwd,
+  removeFilesInCwd,
+} from '../utils/utils.files.js';
 import {
   getPackageJsonUpdatesAsText,
   updatePackageJson,
@@ -11,8 +16,8 @@ import {
   updateNpmScripts,
   cleanUpPackageJson,
   writePackageManagerInPackageJson,
-} from '../utils/utils.npm';
-import { getPackageManagerWithFallback } from '../utils/utils.packageManager';
+} from '../utils/utils.npm.js';
+import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 
 export const migrate = async () => {
   try {
@@ -23,7 +28,7 @@ export const migrate = async () => {
     // 1. Add / update configuration files
     // --------------------------
     if (await confirmPrompt(TEXT.overrideFilesPrompt + '\n' + displayArrayAsList(MIGRATION_CONFIG.filesToOverride))) {
-      compileTemplateFiles(MIGRATION_CONFIG.filesToOverride, getTemplateData());
+      compileTemplateFiles(MIGRATION_CONFIG.filesToOverride.map(getExportTemplateName), getTemplateData());
       printSuccessMessage(TEXT.overrideFilesSuccess);
     } else {
       printMessage(TEXT.overrideFilesAborted);

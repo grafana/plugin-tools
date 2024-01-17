@@ -1,6 +1,7 @@
-import path from 'path';
-import fs from 'fs';
-import { TEMPLATE_PATHS } from '../constants';
+import path from 'node:path';
+import fs from 'node:fs';
+import { TEMPLATE_PATHS } from '../constants.js';
+import { access, constants } from 'fs/promises';
 
 // Removes common template files from the list in case they have a plugin-specific override
 export function filterOutCommonFiles(files: string[], pluginType: string) {
@@ -36,6 +37,15 @@ export function readJsonFile(filename: string) {
   }
 }
 
+export async function directoryExists(path: string) {
+  try {
+    await access(path, constants.F_OK);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 export function getOnlyExistingInCwd(files: string[]) {
   return files.filter((file) => fs.existsSync(path.join(process.cwd(), file)));
 }
@@ -48,6 +58,19 @@ export function removeFilesInCwd(files: string[]) {
   for (const file of files) {
     fs.rmSync(path.join(process.cwd(), file), { recursive: true, force: true });
   }
+}
+
+/** Given a exported file name it'll return its equivalent
+ * in the template folder.
+ */
+export function getExportTemplateName(f: string) {
+  const baseName = path.basename(f);
+  for (const [key, value] of Object.entries(configFileNamesMap)) {
+    if (value === baseName) {
+      return key;
+    }
+  }
+  return baseName;
 }
 
 export function getExportFileName(f: string) {

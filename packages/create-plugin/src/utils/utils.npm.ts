@@ -1,7 +1,7 @@
 import semver from 'semver';
-import { GRAFANA_FE_PACKAGES } from '../constants';
-import { getPackageJson, writePackageJson, getLatestPackageJson } from './utils.packagejson';
-import { PackageManager } from './utils.packageManager';
+import { GRAFANA_FE_PACKAGES } from '../constants.js';
+import { getPackageJson, writePackageJson, getLatestPackageJson } from './utils.packagejson.js';
+import { PackageManager } from './utils.packageManager.js';
 
 type UpdateSummary = Record<string, { prev: string | null; next: string | null }>;
 

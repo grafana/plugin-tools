@@ -1,3 +1,262 @@
+# (Tue Jan 16 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sam Jewell ([@samjewell](https://github.com/samjewell)), for all your work!
+
+#### 💥 Breaking Change
+
+- `@grafana/sign-plugin@3.0.0`
+  - Build: Migrate sign-plugin to ESM [#662](https://github.com/grafana/plugin-tools/pull/662) ([@jackw](https://github.com/jackw))
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.0.0`
+  - Plugin E2E: Use node16 [#670](https://github.com/grafana/plugin-tools/pull/670) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@4.0.0`
+  - Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump nodemon from 3.0.1 to 3.0.2 [#667](https://github.com/grafana/plugin-tools/pull/667) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps-dev): Bump @swc/jest from 0.2.20 to 0.2.29 [#668](https://github.com/grafana/plugin-tools/pull/668) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# (Tue Jan 16 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sam Jewell ([@samjewell](https://github.com/samjewell)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.9.0`
+  - Plugin E2E: Use node16 [#670](https://github.com/grafana/plugin-tools/pull/670) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@3.2.0`
+  - Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump nodemon from 3.0.1 to 3.0.2 [#667](https://github.com/grafana/plugin-tools/pull/667) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps-dev): Bump @swc/jest from 0.2.20 to 0.2.29 [#668](https://github.com/grafana/plugin-tools/pull/668) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# (Tue Jan 16 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sam Jewell ([@samjewell](https://github.com/samjewell)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.1.0`
+  - Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump nodemon from 3.0.1 to 3.0.2 [#667](https://github.com/grafana/plugin-tools/pull/667) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps-dev): Bump @swc/jest from 0.2.20 to 0.2.29 [#668](https://github.com/grafana/plugin-tools/pull/668) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# (Fri Jan 12 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@3.0.0`
+  - Build: Migrate create-plugin to ESM [#658](https://github.com/grafana/plugin-tools/pull/658) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@3.0.0`
+  - Chore: Fixed liniting issues in template [#657](https://github.com/grafana/plugin-tools/pull/657) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed Jan 10 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.11.2`
+  - Fix eslint not generating in plugin migrations [#624](https://github.com/grafana/plugin-tools/pull/624) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Wed Jan 10 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.11.1`
+  - Only run ts checker and eslint plugins in webpack dev mode [#647](https://github.com/grafana/plugin-tools/pull/647) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Wed Jan 10 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.8.0`
+  - Plugin E2E: Add contributing guidelines [#634](https://github.com/grafana/plugin-tools/pull/634) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.7.0`
+  - Plugin E2E: Bump playwright to latest version [#649](https://github.com/grafana/plugin-tools/pull/649) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@2.11.0`
+  - Create Plugin: Remove Plop [#602](https://github.com/grafana/plugin-tools/pull/602) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump lerna from 8.0.0 to 8.0.2 [#646](https://github.com/grafana/plugin-tools/pull/646) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.6.1`
+  - Plugin E2E: Re-adding a few selectors [#644](https://github.com/grafana/plugin-tools/pull/644) ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump @swc/jest from 0.2.20 to 0.2.29 [#631](https://github.com/grafana/plugin-tools/pull/631) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@2.10.2`
+  - Github workflows: Add correct permissions to the release workflow [#642](https://github.com/grafana/plugin-tools/pull/642) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Fri Jan 05 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.6.0`
+  - Plugin E2E: Tidy up selectors [#641](https://github.com/grafana/plugin-tools/pull/641) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Jan 04 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.5.0`
+  - Plugin E2E: Comment public apis [#640](https://github.com/grafana/plugin-tools/pull/640) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 02 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.4.0`
+  - Plugin-E2E: Allow provisioningRootDir to be overridden [#623](https://github.com/grafana/plugin-tools/pull/623) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 02 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.3.0`
+  - Plugin E2E: Enable testing panel plugins [#616](https://github.com/grafana/plugin-tools/pull/616) ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump cookiejs from 2.1.2 to 2.1.3 [#601](https://github.com/grafana/plugin-tools/pull/601) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Chore(deps-dev): Bump jest and @types/jest [#598](https://github.com/grafana/plugin-tools/pull/598) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Dec 19 2023)
 
 #### 🚀 Enhancement

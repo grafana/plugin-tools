@@ -1,2 +1,2 @@
-export * from './sign.command';
-export * from './version.command';
+export * from './sign.command.js';
+export * from './version.command.js';

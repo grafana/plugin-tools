@@ -1,10 +1,10 @@
 import glob from 'glob';
-import path from 'path';
-import fs from 'fs';
-import { TEMPLATE_PATHS, TEXT } from '../constants';
-import { getPluginJson } from '../utils/utils.plugin';
-import { compileProvisioningTemplateFile, getTemplateData } from '../utils/utils.templates';
-import { confirmPrompt, printMessage, printSuccessMessage, printError } from '../utils/utils.console';
+import path from 'node:path';
+import fs from 'node:fs';
+import { TEMPLATE_PATHS, TEXT } from '../constants.js';
+import { getPluginJson } from '../utils/utils.plugin.js';
+import { compileProvisioningTemplateFile, getTemplateData } from '../utils/utils.templates.js';
+import { confirmPrompt, printMessage, printSuccessMessage, printError } from '../utils/utils.console.js';
 
 export const provisioning = async () => {
   const { type } = getPluginJson();

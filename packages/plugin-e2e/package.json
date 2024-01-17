@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "0.2.0",
+  "version": "0.9.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -27,16 +27,17 @@
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "jest",
     "playwright:test": "npx playwright test",
-    "playwright:test:ui": "npx playwright test --ui"
+    "playwright:test:ui": "npx playwright test --ui",
+    "playwright:showreport": "npx playwright show-report"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18 <=20"
   },
   "peerDependencies": {
-    "@playwright/test": "^1.39.0"
+    "@playwright/test": "^1.40.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.39.0",
+    "@playwright/test": "^1.40.0",
     "@types/uuid": "^9.0.7",
     "dotenv": "^16.3.1"
   },

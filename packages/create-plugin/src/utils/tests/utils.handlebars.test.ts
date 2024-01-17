@@ -1,5 +1,5 @@
-import { PLUGIN_TYPES } from '../../constants';
-import { normalizeId } from '../utils.handlebars';
+import { PLUGIN_TYPES } from '../../constants.js';
+import { normalizeId } from '../utils.handlebars.js';
 
 describe('Handlebars helpers', () => {
   describe('normalize id', () => {

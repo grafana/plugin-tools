@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import { getVersion } from './utils.version';
+import fs from 'node:fs';
+import path from 'node:path';
+import { getVersion } from './utils.version.js';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;

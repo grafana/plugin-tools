@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import minimist from 'minimist';
-import { generate, update, migrate, version, provisioning } from '../commands';
-import { isUnsupportedPlatform } from '../utils/utils.os';
+import { generate, update, migrate, version, provisioning } from '../commands/index.js';
+import { isUnsupportedPlatform } from '../utils/utils.os.js';
 
 // Exit early if operating system isn't supported.
 if (isUnsupportedPlatform()) {

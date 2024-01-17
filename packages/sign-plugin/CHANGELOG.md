@@ -1,3 +1,20 @@
+# v3.0.0 (Tue Jan 16 2024)
+
+#### 💥 Breaking Change
+
+- Build: Migrate sign-plugin to ESM [#662](https://github.com/grafana/plugin-tools/pull/662) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- "Bump independent versions \[skip ci\]" ([@grafanabot](https://github.com/grafanabot))
+
+#### Authors: 2
+
+- Grot (@grafanabot) ([@grafanabot](https://github.com/grafanabot))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.1.0 (Tue Oct 24 2023)
 
 #### 🚀 Enhancement

@@ -1,3 +1,80 @@
+# v3.1.0 (Tue Jan 16 2024)
+
+#### 🚀 Enhancement
+
+- Use `custom.ini` file provided to configure Grafana docker container [#660](https://github.com/grafana/plugin-tools/pull/660) ([@samjewell](https://github.com/samjewell))
+
+#### Authors: 1
+
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# v3.0.0 (Fri Jan 12 2024)
+
+#### 💥 Breaking Change
+
+- Build: Migrate create-plugin to ESM [#658](https://github.com/grafana/plugin-tools/pull/658) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Chore: Fixed liniting issues in template [#657](https://github.com/grafana/plugin-tools/pull/657) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v2.11.2 (Wed Jan 10 2024)
+
+#### 🐛 Bug Fix
+
+- Fix eslint not generating in plugin migrations [#624](https://github.com/grafana/plugin-tools/pull/624) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.11.1 (Wed Jan 10 2024)
+
+#### 🐛 Bug Fix
+
+- Only run ts checker and eslint plugins in webpack dev mode [#647](https://github.com/grafana/plugin-tools/pull/647) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v2.11.0 (Tue Jan 09 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Remove Plop [#602](https://github.com/grafana/plugin-tools/pull/602) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.10.2 (Fri Jan 05 2024)
+
+#### 🐛 Bug Fix
+
+- Github workflows: Add correct permissions to the release workflow [#642](https://github.com/grafana/plugin-tools/pull/642) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v2.10.1 (Thu Dec 14 2023)
 
 :tada: This release contains work from a new contributor! :tada:

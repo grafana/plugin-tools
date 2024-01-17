@@ -10,9 +10,9 @@ Use panel plugins when you want to do things like visualize data returned by dat
 
 ## Getting started
 
--- INSERT FRONTEND GETTING STARTED --
+{{> frontend-getting-started packageManagerName=packageManagerName }}
 
--- INSERT DISTRIBUTING YOUR PLUGIN --
+{{> distributing-your-plugin }}
 
 ## Learn more
 
