@@ -54,6 +54,6 @@ Access the final release zip file directly from the git repo release path.
 
 [Link to generated ZIP](https://github.com/briangann/grafana-gauge-panel/releases/download/v2.0.1/briangann-gauge-panel-2.0.1.zip)
 
-## Next Steps
+## Next steps
 
 When you've packaged your plugin, proceed to [publishing a plugin](./publish-or-update-a-plugin.md) or [installing a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
