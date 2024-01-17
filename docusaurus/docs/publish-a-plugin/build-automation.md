@@ -48,7 +48,7 @@ git pull origin  main
 
 Once the push is made, you can create the same tag again.
 
-## Downloading the release zip file
+## Download the release ZIP file
 
 Access the final release zip file directly from the git repo release path.
 
