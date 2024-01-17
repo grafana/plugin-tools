@@ -113,6 +113,7 @@ export const versionedPages = {
               [MIN_GRAFANA_VERSION]: 'Variable editor Form Type select',
             },
             previewOfValuesOption: {
+              '10.4.0': 'data-testid Variable editor Preview of Values option',
               [MIN_GRAFANA_VERSION]: 'Variable editor Preview of Values option',
             },
             submitButton: {
