@@ -26,7 +26,7 @@ If a signing key is included in the Git repo, a signed build is automatically cr
 
 By creating a release tag, the whole process becomes automated, resulting in a ZIP file that you can submit for publication in the [Grafana plugin catalog](https://grafana.com/plugins)
 
-## Creating a Release Tag
+## Create a release tag
 
 A tag with the format `vX.X.X` is used to trigger the release workflow. Typically all of your changes will be merged into `main`, and the tag is applied to `main`
 
