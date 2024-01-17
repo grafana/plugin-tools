@@ -162,18 +162,18 @@ When opening a PR please attach the necessary label for the change so releases a
 - **major** -> 💥 Breaking Change
 - **minor** -> 🚀 Enhancement
 - **patch** -> 🐛 Bug Fix
+- **no-changelog** -> 🙈 Don't impact versioning.
 
-Also bear in mind not every PR needs to make a version bump to a package. Please be mindful when labelling PRs.
+If you would like the PR to automatically publish a new release of a package when merged you should also add the `release` label to the PR. This is done using the [`onlyPublishWithReleaseLabel`](https://intuit.github.io/auto/docs/configuration/autorc#only-publish-with-release-label) flag to allow us greater control on when a release occurs.
 
-By default Auto creates a release for every PR that is merged to `main`. However this repo makes use of the [`onlyPublishWithReleaseLabel`](https://intuit.github.io/auto/docs/configuration/autorc#only-publish-with-release-label) flag to allow us greater control on when a release occurs. To make an actual release a PR needs to also have the `release` label attached.
+Bear in mind not every PR needs to make a version bump to a package. Please be mindful when labelling PRs.
 
-When a release occurs a github workflow will run `yarn release` which in turn calls `auto shipit`. This command does the following things:
+When a merge to the `main` branch occurs a github workflow will run `npm run release` which in turn calls `auto shipit`. The `auto shipit` command does the following things:
 
-1. Calculate version bumps 🧮
-2. Independently bump package versions (based on labels of previously unreleased packages) 📦
-3. Update CHANGELOG.md for each package (where necessary) 📚
-4. Update contributors section of README.md (where necessary) 📚
-5. Commit changes and tag the repository 📌
-6. Create github release 📄
-7. Publish packages to NPM 🚀
-8. Push changes to repo ➡️
+1. **Check for 'release' Label**: 🔍 The command only triggers version bumps if the merged PR has a 'release' label.
+1. **Version Calculation**: 🧮 Determines the appropriate version bump per package by analyzing the labels of merged PRs since the last GH release.
+1. **Changelog Updates**: 📝 The command updates the CHANGELOG.md for affected packages and possibly the root CHANGELOG.md.
+1. **Commit and Tag**: 🏷️ It commits these changes and tags the repository.
+1. **GitHub Release Creation**: 📄 Creates a GitHub release for the new version.
+1. **NPM Publishing**: 🚀 If the conditions are met (e.g., 'release' label present), it publishes the packages to NPM.
+1. **Push Changes and Tags**: ⬆️ Finally, it pushes these changes and tags back to the repository.
