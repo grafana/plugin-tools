@@ -33,11 +33,22 @@ export type PluginOptions = {
    * The feature toggles you specify here will only work in the frontend. If you need a feature toggle to work across the entire stack, you
    * need to need to enable the feature in the Grafana config. See https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#feature_toggles
    *
+   * To override feature toggles globally in the playwright.config.ts file:
+   * 
+   * export default defineConfig({
+      use: {
+        featureToggles: {
+          exploreMixedDatasource: true,
+          redshiftAsyncQueryDataSupport: false
+        },
+      },
+    });
+   * 
    * To override feature toggles in a single test file:
-   * test.use({
-   *  featureToggles: {
-   *    exploreMixedDatasource: true,
-   *  },
+     test.use({
+      featureToggles: {
+        exploreMixedDatasource: true,
+      },
    * });
    */
   featureToggles: Record<string, boolean>;
