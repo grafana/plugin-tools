@@ -82,3 +82,6 @@ jobs:
         run: |
           echo "Publish release to Google Cloud Storage:"
           gsutil cp -r packages/plugin-e2e/playwright-report/. gs://releng-pipeline-artifacts-dev/plugin-name/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}
+
+      - name: Write report link to summary
+        run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/plugin-name/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}/index.html">link text</a>' >> $GITHUB_STEP_SUMMARY
