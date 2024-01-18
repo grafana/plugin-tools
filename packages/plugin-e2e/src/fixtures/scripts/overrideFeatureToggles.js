@@ -1,3 +1,5 @@
+// this script is evaluated in the browser context, so we cannot use typescript
+
 export const overrideFeatureToggles = (featureToggles) => {
   const timeout = 5;
   const localStorageKey = 'grafana.featureToggles';
@@ -20,6 +22,7 @@ export const overrideFeatureToggles = (featureToggles) => {
     const version = window?.grafanaBootData?.settings?.buildInfo?.version;
 
     // since Grafana 10.1.0, Grafana reads feature toggles from localStorage
+    // since this script runs in the browser context, we don't have access to semver.gte function that is used in other places of this package
     if (versionGte(version, 10, 1)) {
       const value = Object.entries(featureToggles)
         .map(([key, value]) => `${key}=${value}`)
