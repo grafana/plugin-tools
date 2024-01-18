@@ -72,7 +72,7 @@ jobs:
           GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ github.event.organization.login != 'grafana' }}
         with:
           name: playwright-report-Grafana-v${{ matrix.GRAFANA_VERSION }}-${{github.run_id}}
           path: packages/plugin-e2e/playwright-report/
