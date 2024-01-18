@@ -4,6 +4,9 @@
   "repository": "https://github.com/grafana/plugin-tools",
   "author": "Grafana",
   "private": true,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "clean": "nx run-many --target=clean",
     "build": "nx run-many --target=build --parallel --exclude website",
