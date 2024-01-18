@@ -4,13 +4,13 @@ import fs from 'node:fs';
 
 const exec = promisify(nodeExec);
 
-export async function prettifyFiles(exportPath: string) {
+export async function prettifyFiles(exportPath: string, packageManagerExecute = 'npx') {
   if (!fs.existsSync(exportPath)) {
     return '';
   }
 
   try {
-    let command = 'npx -y prettier@2 . --write';
+    let command = `${packageManagerExecute} -y prettier@2 . --write`;
     await exec(command, { cwd: exportPath });
   } catch (error) {
     throw new Error(

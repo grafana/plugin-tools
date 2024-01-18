@@ -10,11 +10,11 @@ import {
   updateNpmScripts,
   writePackageManagerInPackageJson,
   projectUsesPrettier,
-  runPrettierOnConfigDir,
 } from '../utils/utils.npm.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
 import { getPackageManagerExecute, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
+import { prettifyFiles } from './generate/prettify-files.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   try {
@@ -63,7 +63,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
 
       if (projectUsesPrettier()) {
         const packageManagerExecute = getPackageManagerExecute();
-        runPrettierOnConfigDir(packageManagerExecute);
+        prettifyFiles('.config', packageManagerExecute);
       }
 
       printSuccessMessage(TEXT.overrideFilesSuccess);
