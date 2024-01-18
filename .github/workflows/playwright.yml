@@ -72,18 +72,18 @@ jobs:
           GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
       - uses: actions/upload-artifact@v4
-        if: ${{ github.event.organization.login != 'grafana' }}
+        if: always() && ${{ github.event.organization.login != 'grafana' }}
         with:
           name: playwright-report-Grafana-v${{ matrix.GRAFANA_VERSION }}-${{github.run_id}}
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
 
       - name: Publish report to Cloud Storage
-        if: ${{ github.event.organization.login == 'grafana' }}
+        if: always() && ${{ github.event.organization.login == 'grafana' }}
         run: |
           echo "Publish release to Google Cloud Storage:"
           gsutil cp -r packages/plugin-e2e/playwright-report/. gs://releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}
 
       - name: Write report link to summary
-        if: ${{ github.event.organization.login == 'grafana' }}
+        if: always() && ${{ github.event.organization.login == 'grafana' }}
         run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}/index.html">Link to Playwright report</a>' >> $GITHUB_STEP_SUMMARY
