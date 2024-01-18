@@ -31,7 +31,7 @@ test('should return an error and display panel error when an invalid query is pr
   await page.keyboard.press('Tab');
   await queryEditorRow.getByText('Enter SpreadsheetID').click();
   await page.keyboard.insertText('1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8');
-  const responsePromise = page.waitForResponse((resp) => resp.url().includes('/api/ds/queryY'));
+  const responsePromise = page.waitForResponse((resp) => resp.url().includes('/api/ds/query'));
   await page.keyboard.press('Tab');
   await responsePromise;
   await expect(explorePage.runQuery()).not.toBeOK();
