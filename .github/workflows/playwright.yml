@@ -79,9 +79,11 @@ jobs:
           retention-days: 30
 
       - name: Publish report to Cloud Storage
+        if: ${{ github.event.organization.login == 'grafana' }}
         run: |
           echo "Publish release to Google Cloud Storage:"
           gsutil cp -r packages/plugin-e2e/playwright-report/. gs://releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}
 
       - name: Write report link to summary
+        if: ${{ github.event.organization.login == 'grafana' }}
         run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana${{ matrix.GRAFANA_VERSION }}/index.html">Link to Playwright report</a>' >> $GITHUB_STEP_SUMMARY
