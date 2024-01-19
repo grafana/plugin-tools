@@ -36,7 +36,7 @@
     "generate-datasource-backend": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "test": "vitest run",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -62,8 +62,7 @@
   "devDependencies": {
     "@types/glob": "^7.0.0",
     "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "vitest": "^1.1.3"
+    "eslint-plugin-react-hooks": "^4.2.0"
   },
   "overrides": {
     "@types/marked-terminal": {

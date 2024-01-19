@@ -1,10 +1,12 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vitest/config';
+import { resolve } from 'node:path';
+import { defineProject, mergeConfig } from 'vitest/config';
+import configShared from '../../vitest.config.base.js';
 
-export default defineConfig({
-  test: {
-    root: resolve(__dirname),
-    globals: true,
-    include: ['**/*.test.ts'],
-  },
-});
+export default mergeConfig(
+  configShared,
+  defineProject({
+    test: {
+      root: resolve(__dirname),
+    },
+  })
+);
