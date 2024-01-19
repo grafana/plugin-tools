@@ -90,4 +90,4 @@ jobs:
 
       - name: Write report link to summary
         if: ${{ always() && github.event.organization.login == 'grafana' }}
-        run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana-v${{ matrix.GRAFANA_VERSION }}/index.html">Link to Playwright report</a>' >> $GITHUB_STEP_SUMMARY
+        run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana-v${{ matrix.GRAFANA_VERSION }}/index.html">Browse the Playwright report</a>' >> $GITHUB_STEP_SUMMARY
