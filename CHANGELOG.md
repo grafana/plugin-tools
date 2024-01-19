@@ -1,3 +1,19 @@
+# (Fri Jan 19 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@3.1.1`
+  - Create Plugin: Update outdated plop related packages to latest [#652](https://github.com/grafana/plugin-tools/pull/652) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-e2e@0.9.1`
+  - Plugin E2E: Update changed selector [#672](https://github.com/grafana/plugin-tools/pull/672) ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Jan 16 2024)
 
 #### 💥 Breaking Change

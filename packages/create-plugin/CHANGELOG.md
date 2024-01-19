@@ -1,3 +1,15 @@
+# v3.1.1 (Fri Jan 19 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update outdated plop related packages to latest [#652](https://github.com/grafana/plugin-tools/pull/652) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v3.1.0 (Tue Jan 16 2024)
 
 #### 🚀 Enhancement

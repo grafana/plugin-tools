@@ -1,3 +1,18 @@
+# v0.9.1 (Fri Jan 19 2024)
+
+#### 🐛 Bug Fix
+
+- "Bump independent versions \[skip ci\]" ([@grafanabot](https://github.com/grafanabot))
+- Update CHANGELOG.md \[skip ci\] ([@grafanabot](https://github.com/grafanabot))
+- Plugin E2E: Update changed selector [#672](https://github.com/grafana/plugin-tools/pull/672) ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Grot (@grafanabot) ([@grafanabot](https://github.com/grafanabot))
+
+---
+
 # v0.9.0 (Tue Jan 16 2024)
 
 #### 🚀 Enhancement
