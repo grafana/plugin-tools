@@ -20,7 +20,7 @@ Interested in converting a plugin from AngularJS or Angular, which are deprecate
 
 ## Background
 
-When you convert a panel plugin from Angular to React, the editor customization options are usually found in a new location inside the JSON. Previously, with Angular plugins, the plugin could store custom objects anywhere in the configuration, but now these objects must use a designated section. 
+When you convert a panel plugin from Angular to React, the editor customization options are usually found in a new location inside the JSON. Previously, with Angular plugins, the plugin could store custom objects anywhere in the configuration, but now these objects must use a designated section.
 
 Grafana uses the same designated section by default for all its components. Any custom components you add must use this same location.
 
@@ -43,7 +43,7 @@ Modifications are needed when a panel in a dashboard is using an older AngularJS
 
 Typically, Angular plugins have a `panel.config` object which contains settings particular to the plugin.
 
-The example below is taken from the `grafana-polystat-panel`, a sample plugin which started as an AngularJS panel and was ported to React.  The React version of the plugin makes use of the `.setMigrationHandler` in `module.ts`` like this:
+The example below is taken from the `grafana-polystat-panel`, a sample plugin which started as an AngularJS panel and was ported to React. The React version of the plugin makes use of the `.setMigrationHandler` in `module.ts`` like this:
 
 ```TYPESCRIPT
 .setMigrationHandler(PolystatPanelMigrationHandler)
@@ -53,7 +53,7 @@ The Angular-based polystat panel (v1.x) stored most of the configuration in the 
 
 Detect if this object is present in the migration handler so you can trigger conversion to the new React-based plugin configuration.
 
-React panels store everything inside `panel.options`. If this object doesn’t exist, then the migration handler should at least return a valid empty object. If this object exists, then it should just return the current `panel.options`.  There is an opportunity to modify the React configuration at this stage, in case the newer version has removed or added new features.
+React panels store everything inside `panel.options`. If this object doesn’t exist, then the migration handler should at least return a valid empty object. If this object exists, then it should just return the current `panel.options`. There is an opportunity to modify the React configuration at this stage, in case the newer version has removed or added new features.
 
 :::note
 
@@ -71,11 +71,11 @@ In this case, the migration handler can detect if the option is not present, and
 
 ## Detect the runtime version of Grafana
 
-Your plugin can access the variable `config.buildInfo.version` to determine the running version of Grafana.  The migration handler can use this value to set valid defaults.
+Your plugin can access the variable `config.buildInfo.version` to determine the running version of Grafana. The migration handler can use this value to set valid defaults.
 
-It is possible that multiple versions of Grafana have had a backported patch, and as a result they may have removed a feature that your plugin expected. In the case of the example given previously, it is the Roboto font. 
+It is possible that multiple versions of Grafana have had a backported patch, and as a result they may have removed a feature that your plugin expected. In the case of the example given previously, it is the Roboto font.
 
-The migration handler gets the runtime version and uses semver to determine which font to use. Older versions do not have the newer Inter as a font, and so Roboto is safest to load.  Newer releases have removed Roboto, and so the plugin should load Inter instead.
+The migration handler gets the runtime version and uses semver to determine which font to use. Older versions do not have the newer Inter as a font, and so Roboto is safest to load. Newer releases have removed Roboto, and so the plugin should load Inter instead.
 
 There are two cases here:
 
@@ -84,7 +84,6 @@ There are two cases here:
 The polystat panel has in its `module.ts` a conditional check depending on the runtime:
 
 ```TYPESCRIPT
-// font selection
      .addSelect({
        path: 'globalTextFontFamily',
        name: 'Font Family',
@@ -116,24 +115,96 @@ The `MigrationHandler` in polystat contains this code:
 ```TYPESCRIPT
 import { config } from "@grafana/runtime";
 import { satisfies, coerce } from "semver";
+
+export const PolystatPanelMigrationHandler = (panel: PanelModel<PolystatOptions>): Partial<PolystatOptions> => {
+  // set default font to inter, and check if it available, set to roboto if not
+  options.globalTooltipsFontFamily = FontFamilies.INTER;
+    if (hasRobotoFont()) {
+      options.globalTooltipsFontFamily = FontFamilies.ROBOTO;
+    }
+}
+
 export const hasRobotoFont = () => {
- const version = coerce(config.buildInfo.version);
- if (version !== null) {
-   if (satisfies(version, "<9.4.0")) {
-     return true;
-   }
- }
- return false;
+  const version = coerce(config.buildInfo.version);
+  if (version !== null) {
+    if (satisfies(version, "<9.4.0")) {
+      return true;
+    }
+  }
+  return false;
+};
 ```
 
 ## Detect missing configuration
 
-A new version of a plugin could add new configuration options that the panel does not have defined.  The migration handler can be used to add the new options with "safe" default values.
+A new version of a plugin could add new configuration options that the panel does not have defined. The migration handler can be used to add the new options with "safe" default values.
+
+```TYPESCRIPT
+options.globalTooltipsFontFamily = FontFamilies.INTER;
+  if (hasRobotoFont()) {
+    options.globalTooltipsFontFamily = FontFamilies.ROBOTO;
+  }
+
+export const PolystatPanelMigrationHandler = (panel: PanelModel<PolystatOptions>): Partial<PolystatOptions> => {
+  if (panel.options.NewFeature === undefined) {
+    // add default for new feature
+    panel.options.NewFeature = 5.0;
+  }
+  ...
+  return panel.options;
+}
+```
 
 ## Detect invalid configuration
 
 Since the plugin is loading and receives the entire configuration, it is possible to iterate through the configuration and ensure the values are legitimate.
 
+```TYPESCRIPT
+export const PolystatPanelMigrationHandler = (panel: PanelModel<PolystatOptions>): Partial<PolystatOptions> => {
+  // iterate and validate
+
+  let validConfigOptions = {
+    fontSize: 2,
+    fontFamily: 3,
+    defaultInvalid: 'a'
+  };
+
+  for (const anOption in panel.options) {
+    if (!validConfigOptions.includes(anOption)) {
+      // remove this option
+      console.log(`removing ${anOption}`);
+      delete panel.options.anOption;
+    }
+  }
+
+  return panel.options;
+}
+```
+
 ## Set a safe default
 
-Sometimes a plugin will remove a feature or modify the valid selections for an option.  The migration handler can be used to adjust the configuration as needed.
+Sometimes a plugin will remove a feature or modify the valid selections for an option. The migration handler can be used to adjust the configuration as needed.
+
+```TYPESCRIPT
+export const PolystatPanelMigrationHandler = (panel: PanelModel<PolystatOptions>): Partial<PolystatOptions> => {
+  const featureOptions = [
+    'SelectionA',
+    'SelectionB',
+    'SelectionC'
+  ];
+
+  // detect if a config setting is using a value that has been removed,
+  //  and set a safe default
+  const removedOption = 'a removed option in selector';
+  if (!featureOptions.includes(panel.options.aSelectionSetting) {
+    panel.options.aSelectionSetting = featureOptions[0];
+  }
+  // new feature added, set a safe default for it
+  if (panel.options.aSelectionSetting === undefined) {
+    // add default for new feature
+    panel.options.aSelectionSetting = featureOptions[0];
+  }
+
+  return panel.options;
+}
+```
