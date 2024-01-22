@@ -9,12 +9,12 @@ import {
   getPackageJsonUpdatesAsText,
   updateNpmScripts,
   writePackageManagerInPackageJson,
-  projectUsesPrettier,
+  getPrettierVersion,
 } from '../utils/utils.npm.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
-import { getPackageManagerExecute, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
-import { prettifyFiles } from './generate/prettify-files.js';
+import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
+import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   try {
@@ -61,9 +61,9 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
     if (await confirmPrompt(TEXT.updateConfigPrompt)) {
       compileTemplateFiles(UDPATE_CONFIG.filesToOverride, getTemplateData());
 
-      if (projectUsesPrettier()) {
-        const packageManagerExecute = getPackageManagerExecute();
-        prettifyFiles('.config', packageManagerExecute);
+      const prettierVersion = getPrettierVersion();
+      if (prettierVersion !== '') {
+        prettifyFiles('.config', prettierVersion);
       }
 
       printSuccessMessage(TEXT.overrideFilesSuccess);

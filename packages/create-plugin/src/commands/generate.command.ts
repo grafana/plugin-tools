@@ -12,7 +12,7 @@ import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../
 import { getExportPath } from '../utils/utils.path.js';
 import { renderTemplateFromFile } from '../utils/utils.templates.js';
 import { getVersion } from '../utils/utils.version.js';
-import { prettifyFiles } from './generate/prettify-files.js';
+import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';

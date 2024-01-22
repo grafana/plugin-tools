@@ -234,7 +234,7 @@ function sortKeysAlphabetically(obj: Record<string, string>) {
     }, {});
 }
 
-export function projectUsesPrettier() {
+export function getPrettierVersion() {
   const packageJson = getPackageJson();
-  return Boolean(packageJson.devDependencies?.prettier);
+  return packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier || '';
 }

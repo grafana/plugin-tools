@@ -109,18 +109,3 @@ function getPackageManagerFromPackageJson(): PackageManager | undefined {
 
   return undefined;
 }
-
-export function getPackageManagerExecute() {
-  const packageManager = getPackageManagerWithFallback();
-
-  switch (packageManager.packageManagerName) {
-    case 'yarn':
-      return 'yarn dlx';
-
-    case 'pnpm':
-      return 'pnpm dlx';
-
-    default:
-      return 'npx';
-  }
-}
