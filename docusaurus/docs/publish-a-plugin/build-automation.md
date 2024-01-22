@@ -15,7 +15,7 @@ keywords:
 
 # Automate packaging and signing with CI
 
-If your plugin has been set up to use the supplied [Git workflows](../create-a-plugin/develop-a-plugin/set-up-github-workflows.md) from [create-plugin](../get-started/get-started.mdx),
+If your plugin has been set up to use the supplied [Github workflows](../create-a-plugin/develop-a-plugin/set-up-github-workflows.md) from [create-plugin](../get-started/get-started.mdx),
 the plugin should be built and packaged in the correct format.
 
 If you need to set up the git worklows, see [these docs](https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md)
