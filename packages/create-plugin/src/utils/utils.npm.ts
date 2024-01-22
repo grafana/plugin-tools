@@ -233,8 +233,3 @@ function sortKeysAlphabetically(obj: Record<string, string>) {
       return acc;
     }, {});
 }
-
-export function getPrettierVersion() {
-  const packageJson = getPackageJson();
-  return packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier || '';
-}

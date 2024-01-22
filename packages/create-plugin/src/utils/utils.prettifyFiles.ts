@@ -1,13 +1,17 @@
 import { exec as nodeExec } from 'node:child_process';
 import { promisify } from 'node:util';
 import fs from 'node:fs';
+import { getPackageJson } from './utils.packagejson.js';
 
 const exec = promisify(nodeExec);
 
-export async function prettifyFiles(exportPath: string, prettierVersion = '2') {
+export async function prettifyFiles(exportPath: string, projectRoot = exportPath) {
   if (!fs.existsSync(exportPath)) {
     return '';
   }
+
+  const packageJson = getPackageJson(projectRoot);
+  const prettierVersion = packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier || '2';
 
   try {
     let command = `npx -y prettier@${prettierVersion} . --write`;
@@ -18,4 +22,9 @@ export async function prettifyFiles(exportPath: string, prettierVersion = '2') {
     );
   }
   return 'Successfully ran prettier against new plugin.';
+}
+
+export function isPrettierUsed() {
+  const packageJson = getPackageJson();
+  return Boolean(packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier);
 }
