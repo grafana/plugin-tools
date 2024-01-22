@@ -32,6 +32,8 @@
     "@grafana/tsconfig": "^1.2.0-rc1",
     "@swc/core": "^1.2.162",
     "@swc/jest": "^0.2.20",
+    "@tsconfig/node20": "^20.1.2",
+    "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^29.5.11",
     "@types/node": "20.10.1",
     "auto": "11.0.1",
