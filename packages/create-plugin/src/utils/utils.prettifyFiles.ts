@@ -10,8 +10,7 @@ export async function prettifyFiles(exportPath: string, projectRoot = exportPath
     return '';
   }
 
-  const packageJson = getPackageJson(projectRoot);
-  const prettierVersion = packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier || '2';
+  const prettierVersion = getPrettierVersion() || '2';
 
   try {
     let command = `npx -y prettier@${prettierVersion} . --write`;
@@ -25,6 +24,10 @@ export async function prettifyFiles(exportPath: string, projectRoot = exportPath
 }
 
 export function isPrettierUsed() {
+  return Boolean(getPrettierVersion());
+}
+
+function getPrettierVersion() {
   const packageJson = getPackageJson();
-  return Boolean(packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier);
+  return packageJson.devDependencies?.prettier || packageJson.dependencies?.prettier;
 }
