@@ -26,6 +26,40 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
 
+You can store Access Policy token as a Repository Secret in GitHub:
+
+1. Access Repository Settings:
+
+- Go to your GitHub repository.
+- Navigate to the "Settings" tab.
+
+2. In the left sidebar, click on Secrets and Variables -> Actions
+3. Click on the "New repository secret" button.
+4. Add Secret Information:
+
+- Enter a descriptive name for your secret (e.g., GRAFANA_API_KEY).
+- Paste the Access Policy Token value into the "Secret" field.
+
+5. Click on the "Add secret" button to save the secret.
+
+Once the secret is stored, you can access it in your GitHub Actions workflow:
+
+```json title="release.yml"
+name: Release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: grafana/plugin-actions/build-plugin@release
+        with:
+          grafana_token: ${{ secrets.GRAFANA_API_KEY }}
+
+```
+
+In this example, the `secrets.GRAFANA_API_KEY` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
+
 :::
 
 The release (`release.yml`) workflow is designed to create a new release of your plugin whenever you're ready to publish a new version to Grafana Cloud. This automates the process of creating releases in GitHub and provides instructions for submitting the plugin to the Grafana plugin catalog.
