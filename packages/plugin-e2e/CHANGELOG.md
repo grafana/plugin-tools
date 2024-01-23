@@ -1,14 +1,10 @@
-# v1.0.0 (Wed Jan 17 2024)
-
-#### 🚀 Enhancement
-
-- Plugin E2E: Use node16 [#670](https://github.com/grafana/plugin-tools/pull/670) ([@sunker](https://github.com/sunker))
+# v0.9.1 (Fri Jan 19 2024)
 
 #### 🐛 Bug Fix
 
-- Plugin E2E: Update changed selector [#672](https://github.com/grafana/plugin-tools/pull/672) ([@sunker](https://github.com/sunker))
 - "Bump independent versions \[skip ci\]" ([@grafanabot](https://github.com/grafanabot))
 - Update CHANGELOG.md \[skip ci\] ([@grafanabot](https://github.com/grafanabot))
+- Plugin E2E: Update changed selector [#672](https://github.com/grafana/plugin-tools/pull/672) ([@sunker](https://github.com/sunker))
 
 #### Authors: 2
 
