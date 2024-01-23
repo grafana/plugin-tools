@@ -16,6 +16,7 @@ body:
       options:
         - label: 'Create Plugin'
         - label: 'Sign Plugin'
+        - label: 'Plugin E2E'
     validations:
       required: true
   - type: textarea
