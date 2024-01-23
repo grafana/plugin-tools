@@ -13,6 +13,7 @@ import {
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/ExplorePage';
+import options from './options';
 
 export type PluginOptions = {
   /**
@@ -176,7 +177,7 @@ export type PluginFixture = {
 };
 
 // extend Playwright with Grafana plugin specific fixtures
-export const test = base.extend<PluginFixture, PluginOptions>(fixtures);
+export const test = base.extend<PluginFixture, PluginOptions>({ ...fixtures, ...options });
 
 export const expect = baseExpect.extend(matchers);
 
