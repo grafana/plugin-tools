@@ -22,7 +22,7 @@ If you need to set up the Github worklows, see [these docs](https://github.com/g
 
 We recommend using the ZIP file produced from this workflow to test the plugin.
 
-If a signing key is included in the Git repo, a signed build is automatically created, which you can use to test the plugin locally before submission.
+If a Grafana Access Policy Token is included your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission.
 
 By creating a release tag, the whole process becomes automated, resulting in a ZIP file that you can submit for publication in the [Grafana plugin catalog](https://grafana.com/plugins)
 
