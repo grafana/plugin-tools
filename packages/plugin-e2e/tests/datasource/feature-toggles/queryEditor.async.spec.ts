@@ -1,11 +1,20 @@
 import { expect, test } from '../../../src';
 import { ProvisionFile } from '../../../src/types';
 
+const TRUTHY_CUSTOM_TOGGLE = 'custom_toggle1';
+const FALSY_CUSTOM_TOGGLE = 'custom_toggle2';
 // override the feature toggles defined in playwright.config.ts only for tests in this file
 test.use({
   featureToggles: {
     redshiftAsyncQueryDataSupport: true,
+    [TRUTHY_CUSTOM_TOGGLE]: true,
+    [FALSY_CUSTOM_TOGGLE]: false,
   },
+});
+
+test('should set feature toggles correctly', async ({ isFeatureToggleEnabled }) => {
+  expect(await isFeatureToggleEnabled(TRUTHY_CUSTOM_TOGGLE)).toBeTruthy();
+  expect(await isFeatureToggleEnabled(FALSY_CUSTOM_TOGGLE)).toBeFalsy();
 });
 
 test('async query data handler should return a `finished` status', async ({

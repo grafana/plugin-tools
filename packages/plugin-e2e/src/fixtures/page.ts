@@ -24,6 +24,7 @@ const page: PageFixture = async ({ page, featureToggles }, use) => {
       console.error('Failed to set feature toggles', error);
     }
   }
+  await page.goto('/');
   await use(page);
 };
 
