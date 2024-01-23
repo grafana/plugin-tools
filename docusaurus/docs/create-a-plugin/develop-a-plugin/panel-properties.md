@@ -19,7 +19,7 @@ sidebar_position: 5
 
 If you’re building a [panel plugin](../../introduction/plugin-types-usage.md#panel-visualization-plugins), Grafana already provides the data you need to configure and render your panel. If not, you can usually retrieve the information you need from any of the runtime services, like `BackendSrv` and `TemplateSrv`.
 
-However, in some cases you may want your plugin to react to changes that occur outside of your plugin. For example, you may want your plugin to react when the user hovers their cursor over data in another panel. In this guide, you’ll learn how to make your plugin react to events in Grafana.
+However, in some cases you may want your plugin to react to changes that occur outside of your plugin. For example, you may want your plugin to react when the user zooms in or out of another panel. In this guide, you’ll learn how to make your plugin react to events in Grafana.
 
 :::tip
 
@@ -93,7 +93,7 @@ Remember to call `unsubscribe()` on your subscriber to avoid memory leaks.
 
 ## What events are supported?
 
-While there’s no official documentation of the supported events, you can figure out which events are available for subscription. To do so, search for `static type = '.*';` in the Grafana GitHub repository.
+While there’s no official documentation of the supported events at this time, you may be able to extract events based on their usage in other plugins and the functionality the offer.
 
 Note that while many event types are available but not yet exported, such as the `PanelEditEnteredEvent`, you can still subscribe to them by re-implementing the event type yourself:
 
