@@ -18,13 +18,13 @@ export class DashboardPage extends GrafanaPage {
   /**
    * Navigates to the dashboard page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
    */
-  async goto(options?: NavigateOptions) {
+  async goto(options: NavigateOptions = {}) {
     let url = this.dashboard?.uid
       ? this.ctx.selectors.pages.Dashboard.url(this.dashboard.uid)
       : this.ctx.selectors.pages.AddDashboard.url;
 
     if (this.dashboard?.timeRange) {
-      options.queryParams = options.queryParams ?? new URLSearchParams();
+      options.queryParams = options?.queryParams ?? new URLSearchParams();
       options.queryParams.append('from', this.dashboard.timeRange.from);
       options.queryParams.append('to', this.dashboard.timeRange.to);
     }
@@ -62,14 +62,14 @@ export class DashboardPage extends GrafanaPage {
       return urlParams.get('editPanel');
     });
 
-    return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
+    return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId ?? '' });
   }
 
   /**
    * Deletes the dashboard
    */
   async deleteDashboard() {
-    await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboard.uid));
+    await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboard?.uid ?? ''));
   }
 
   /**

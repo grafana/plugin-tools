@@ -6,14 +6,14 @@ export class DataSourceConfigPage extends GrafanaPage {
     super(ctx);
   }
   async deleteDataSource() {
-    await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid));
+    await this.ctx.request.delete(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid ?? ''));
   }
 
   /**
    * Navigates to the datasource edit page for an existing datasource
    */
   async goto(options?: NavigateOptions) {
-    return super.navigate(this.ctx.selectors.pages.EditDataSource.url(this.datasource.uid), options);
+    return super.navigate(this.ctx.selectors.pages.EditDataSource.url(this.datasource.uid ?? ''), options);
   }
 
   /**
@@ -23,7 +23,7 @@ export class DataSourceConfigPage extends GrafanaPage {
    */
   async mockHealthCheckResponse<T = any>(json: T, status = 200) {
     await this.ctx.page.route(
-      `${this.ctx.selectors.apis.DataSource.health(this.datasource.uid ?? '', this.datasource.id.toString() ?? '')}`,
+      `${this.ctx.selectors.apis.DataSource.health(this.datasource.uid ?? '', this.datasource.id?.toString() ?? '')}`,
       async (route) => {
         await route.fulfill({ json, status });
       }
@@ -41,13 +41,13 @@ export class DataSourceConfigPage extends GrafanaPage {
     }
 
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
-      resp.url().includes(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid))
+      resp.url().includes(this.ctx.selectors.apis.DataSource.datasourceByUID(this.datasource.uid ?? ''))
     );
     const healthResponsePromise = this.ctx.page.waitForResponse((resp) =>
       resp
         .url()
         .includes(
-          this.ctx.selectors.apis.DataSource.health(this.datasource.uid ?? '', this.datasource.id.toString() ?? '')
+          this.ctx.selectors.apis.DataSource.health(this.datasource.uid ?? '', this.datasource.id?.toString() ?? '')
         )
     );
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();

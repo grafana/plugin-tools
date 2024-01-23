@@ -5,7 +5,7 @@ import { PlaywrightCombinedArgs } from './types';
 type GrafanaVersion = TestFixture<string, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
 const grafanaVersion: GrafanaVersion = async ({ page }, use) => {
-  let grafanaVersion = process.env.GRAFANA_VERSION;
+  let grafanaVersion = process.env.GRAFANA_VERSION ?? '';
   if (!grafanaVersion) {
     await page.goto('/');
     grafanaVersion = await page.evaluate('window.grafanaBootData.settings.buildInfo.version');
