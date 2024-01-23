@@ -26,7 +26,7 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
 
-You can store Access Policy token as a Repository Secret in GitHub:
+You can store your Access Policy token as a Repository Secret in GitHub:
 
 1. Access Repository Settings:
 
