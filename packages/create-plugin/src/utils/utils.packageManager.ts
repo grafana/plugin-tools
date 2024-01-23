@@ -94,13 +94,15 @@ function getPackageManagerFromLockFile(): PackageManager | undefined {
     return undefined;
   } catch (error) {
     console.error('Failed to find package manager from lock file. Have you installed dependencies?');
-    throw Error(error);
+    if (error instanceof Error) {
+      throw error;
+    }
   }
 }
 
 function getPackageManagerFromPackageJson(): PackageManager | undefined {
   const packageJson = getPackageJson();
-  if (packageJson.hasOwnProperty('packageManager')) {
+  if (packageJson?.packageManager) {
     const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
     return { packageManagerName, packageManagerVersion };
   }

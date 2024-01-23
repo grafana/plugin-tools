@@ -27,6 +27,12 @@ export const provisioning = async () => {
       process.exit(1);
     }
   } catch (error) {
-    printError(error);
+    let message;
+    if (error instanceof Error) {
+      message = error.message;
+    } else {
+      message = String(error);
+    }
+    printError(message);
   }
 };

@@ -13,7 +13,7 @@ type UpdateOptions = {
 
 export function getNpmDependencyUpdatesAsText(dependencyUpdates: UpdateSummary) {
   return Object.entries(dependencyUpdates)
-    .filter(([packageName, { prev, next }]) => prev !== next)
+    .filter(([_, { prev, next }]) => prev !== next)
     .map(([packageName, { prev, next }]) => {
       // New package
       if (!prev) {
@@ -59,14 +59,11 @@ export function updatePackageJson(options: UpdateOptions = {}) {
   writePackageJson(packageJson);
 }
 
-export function updateNpmDependencies(
-  dependencies: Record<string, string>,
-  updateSummary: UpdateSummary
-): Record<string, string> {
-  const updatedDependencies: Record<string, string> = { ...dependencies };
+export function updateNpmDependencies(dependencies: Record<string, string>, updateSummary: UpdateSummary) {
+  const updatedDependencies = { ...dependencies };
 
   for (const [packageName, summary] of Object.entries(updateSummary)) {
-    updatedDependencies[packageName] = summary.next;
+    updatedDependencies[packageName] = summary.next ?? '';
   }
 
   return updatedDependencies;

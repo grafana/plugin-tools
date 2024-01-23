@@ -23,10 +23,10 @@ export function getConfig(): CreatePluginConfig {
     return {
       ...rootConfig,
       ...userConfig,
-      version: rootConfig.version,
+      version: rootConfig!.version,
       features: createFeatureFlags({
-        ...rootConfig.features,
-        ...userConfig.features,
+        ...rootConfig!.features,
+        ...userConfig!.features,
       }),
     };
   } catch (error) {
@@ -45,7 +45,7 @@ function getUserConfig(): UserConfig | undefined {
     return {
       ...userConfig,
       features: createFeatureFlags({
-        ...userConfig.features,
+        ...userConfig!.features,
       }),
     };
   } catch (error) {
