@@ -1,7 +1,6 @@
 // this script is evaluated in the browser context, so we cannot use typescript
 export const overrideFeatureToggles = (featureToggles) => {
   const timeout = 5;
-  const localStorageKey = 'grafana.featureToggles';
 
   const waitForGrafanaBootData = (cb) => {
     if (window.grafanaBootData) {
