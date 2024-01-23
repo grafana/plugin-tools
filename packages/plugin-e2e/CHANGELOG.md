@@ -1,3 +1,15 @@
+# v0.10.0 (Tue Jan 23 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Change FE feature toggles during test session [#651](https://github.com/grafana/plugin-tools/pull/651) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.9.1 (Fri Jan 19 2024)
 
 #### 🐛 Bug Fix

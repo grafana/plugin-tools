@@ -1,3 +1,21 @@
+# (Tue Jan 23 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.10.0`
+  - Plugin E2E: Change FE feature toggles during test session [#651](https://github.com/grafana/plugin-tools/pull/651) ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump vite from 5.0.11 to 5.0.12 [#680](https://github.com/grafana/plugin-tools/pull/680) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Jan 19 2024)
 
 #### 🐛 Bug Fix
