@@ -121,7 +121,7 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   }
 
   /**
-   * CLicks the "Refresh" button in the panel editor. Returns the response promise for the data query
+   * Clicks the "Refresh" button in the panel editor. Returns the response promise for the data query
    */
   async refreshPanel(options?: RequestOptions) {
     const responsePromise = this.ctx.page.waitForResponse(
