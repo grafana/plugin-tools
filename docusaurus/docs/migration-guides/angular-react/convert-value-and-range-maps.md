@@ -1,6 +1,6 @@
 ﻿---
 id: angular-react-convert-value-and-range-maps
-title: Convert from AngularJS Value and Range Maps to React
+title: Convert Value and Range Maps
 sidebar_position: 5
 description: How to migrate a plugin that uses value and range maps.
 keywords:
@@ -17,7 +17,7 @@ keywords:
 
 # Converting AngularJS Value and Range Maps to React
 
-The AngularJS sdk provided editors for Value and Range Maps that will have to be migrated from the old format to the new format.
+The AngularJS SDK provided editors for Value and Range Maps that produce configuration options that need to be converted from the old format to the new format.
 
 ## Adding new builtin editors
 
