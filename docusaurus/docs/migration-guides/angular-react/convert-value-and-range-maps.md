@@ -1,8 +1,8 @@
 ﻿---
-id: angular-react-convert-value-and-range-maps
-title: Convert Value and Range Maps
-sidebar_position: 5
-description: How to migrate a plugin that uses value and range maps.
+id: angular-react-convert-mappings
+title: Convert value and range maps
+sidebar_position: 3
+description: How to migrate an Angular plugin that uses value and range maps to React
 keywords:
   - grafana
   - plugins
@@ -15,13 +15,13 @@ keywords:
   - valuemap
 ---
 
-# Converting AngularJS Value and Range Maps to React
+# Convert value and range maps
 
-The AngularJS SDK provided editors for Value and Range Maps that produce configuration options that need to be converted from the old format to the new format.
+Grafana plugins built using the AngularJS SDK could use editors for value and range maps. When updating your plugin to React, it is necessary to convert the configuration options of these maps to a new format.
 
-## Adding new builtin editors
+## Add new built-in editors
 
-In your `module.ts` file, add the Mappings option to enable the new editor:
+In your plugin's `module.ts` file, add the `Mappings` option to enable the new editor:
 
 ```ts
 .useFieldConfig({
@@ -31,11 +31,11 @@ In your `module.ts` file, add the Mappings option to enable the new editor:
   })
 ```
 
-See [Value Mappings](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-value-mappings/) for the new components provided by this option.
+Refer to the [Configure value mappings](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-value-mappings/) documentation for descriptions of the new components.
 
-## Conversion to new format
+## Convert mappings to new format
 
-A helper function is provided below to perform the conversion. It's important to clean up the old configuration so the migration does not repeat.
+Use the helper function shown below to update your plugin's configurations.
 
 ```ts
 import { PanelModel, convertOldAngularValueMappings, ValueMapping } from '@grafana/data';
@@ -79,4 +79,10 @@ export const migrateValueAndRangeMaps = (panel: any) => {
 };
 ```
 
-An example of this migration can be found [here](https://github.com/grafana/grafana-polystat-panel/blob/main/src/migrations.ts#L131).
+:::tip
+
+Be sure to clean up the old settings so the migration does not repeat itself.
+
+:::
+
+For another illustration, refer to [this example](https://github.com/grafana/grafana-polystat-panel/blob/main/src/migrations.ts#L131).
