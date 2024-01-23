@@ -1,4 +1,4 @@
-import { Locator, PlaywrightTestArgs } from '@playwright/test';
+import { Locator, PlaywrightTestArgs, Response } from '@playwright/test';
 
 import { E2ESelectors } from './e2e-selectors/types';
 
@@ -74,6 +74,8 @@ export type RequestOptions = {
    * or [page.setDefaultTimeout(timeout)](https://playwright.dev/docs/api/class-page#page-set-default-timeout) methods.
    */
   timeout?: number;
+
+  waitForResponsePredicateCallback?: string | RegExp | ((response: Response) => boolean | Promise<boolean>);
 };
 
 export interface TimeRangeArgs {

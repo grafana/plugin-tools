@@ -29,6 +29,9 @@ export default defineConfig<PluginOptions>({
       username: 'admin',
       password: 'admin',
     },
+    featureToggles: {
+      redshiftAsyncQueryDataSupport: false,
+    },
   },
 
   /* List of projects to run. See https://playwright.dev/docs/test-configuration#projects */
