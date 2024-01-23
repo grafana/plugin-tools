@@ -1,5 +1,18 @@
 # (Tue Jan 23 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.10.1`
+  - Plugin E2E: Fix isFeatureEnabled fixture [#691](https://github.com/grafana/plugin-tools/pull/691) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 23 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@0.10.0`
