@@ -48,7 +48,7 @@ git checkout main
 git pull origin  main
 ```
 
-Once the push is made, you can create the same tag again.
+After you push the tag, you can create the same tag again.
 
 ## Download the release ZIP file
 
