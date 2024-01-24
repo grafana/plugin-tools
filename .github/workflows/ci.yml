@@ -52,23 +52,23 @@ jobs:
     strategy:
       matrix:
         include:
-          - cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
-            workingDir: './sampleorg-sample-app'
+          - workingDir: './sampleorg-sample-app'
+            cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
-            workingDir: './sampleorg-sample-app'
+          - workingDir: './sampleorg-sample-app'
+            cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
-          - cmd: create-plugin --pluginName='Sample panel' --orgName='sample-org' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
-            workingDir: './sampleorg-sample-panel'
+          - workingDir: './sampleorg-sample-panel'
+            cmd: create-plugin --pluginName='Sample panel' --orgName='sample-org' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
-            workingDir: './sampleorg-sample-datasource'
+          - workingDir: './sampleorg-sample-datasource'
+            cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
-            workingDir: './sampleorg-sample-datasource'
+          - workingDir: './sampleorg-sample-datasource'
+            cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
-          - cmd: create-plugin --pluginName='Sample scenesapp' --orgName='sample-org' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
-            workingDir: './sampleorg-sample-scenesapp'
+          - workingDir: './sampleorg-sample-scenesapp'
+            cmd: create-plugin --pluginName='Sample scenesapp' --orgName='sample-org' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
@@ -107,14 +107,14 @@ jobs:
         working-directory: ${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == 'sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.workingDir == './sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == 'sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.workingDir == './sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
