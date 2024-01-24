@@ -93,7 +93,7 @@ Remember to call `unsubscribe()` on your subscriber to avoid memory leaks.
 
 ## What events are supported?
 
-While there’s no official documentation of the supported events at this time, you may be able to extract events based on their usage in other plugins and the functionality the offer.
+While there’s no official documentation of the supported events at this time, you may be able to extract events based on their usage in other plugins and the functionality they offer.
 
 Note that while many event types are available but not yet exported, such as the `PanelEditEnteredEvent`, you can still subscribe to them by re-implementing the event type yourself:
 
