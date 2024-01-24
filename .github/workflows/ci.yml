@@ -52,23 +52,23 @@ jobs:
     strategy:
       matrix:
         include:
-          - workingDir: './sampleorg-sample-app'
-            cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackend-app'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - workingDir: './sampleorg-sample-app'
-            cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-backend-app'
+            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
-          - workingDir: './sampleorg-sample-panel'
-            cmd: create-plugin --pluginName='Sample panel' --orgName='sample-org' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackend-panel'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - workingDir: './sampleorg-sample-datasource'
-            cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackend-datasource'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - workingDir: './sampleorg-sample-datasource'
-            cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-backend-datasource'
+            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
-          - workingDir: './sampleorg-sample-scenesapp'
-            cmd: create-plugin --pluginName='Sample scenesapp' --orgName='sample-org' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackend-scenesapp'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
@@ -92,39 +92,39 @@ jobs:
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
-        working-directory: ${{ matrix.workingDir }}
+        working-directory: ./${{ matrix.workingDir }}
 
       - name: Lint plugin frontend
         run: npm run lint
-        working-directory: ${{ matrix.workingDir }}
+        working-directory: ./${{ matrix.workingDir }}
 
-      - name: Lint plugin frontend
+      - name: Typecheck plugin frontend
         run: npm run typecheck
-        working-directory: ${{ matrix.workingDir }}
+        working-directory: ./${{ matrix.workingDir }}
 
       - name: Build plugin frontend
         run: npm run build
-        working-directory: ${{ matrix.workingDir }}
+        working-directory: ./${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == './sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
-        working-directory: ${{ matrix.workingDir }}
+        working-directory: ./${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == './sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
-        working-directory: ${{ matrix.workingDir }}
+        working-directory: ./${{ matrix.workingDir }}
 
       - uses: actions/setup-go@v5
         with:
           go-version: '~1.20'
           check-latest: true
-          cache-dependency-path: ${{ matrix.workingDir }}/go.sum
+          cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
@@ -132,7 +132,7 @@ jobs:
         with:
           version: latest
           args: -v build:linux
-          workdir: ${{ matrix.workingDir }}
+          workdir: ./${{ matrix.workingDir }}
         if: ${{ matrix.hasBackend == true }}
 
   release:
