@@ -103,4 +103,4 @@ class MyPanelEditEnteredEvent extends BusEventWithPayload<number> {
 }
 ```
 
-We’ll be improving the event bus and adding more events in the future. Let me know how you’re using the event bus, and any events you think would be useful to your plugin!
+We’ll be improving the event bus and adding more events in the future. Let us know how you’re using the event bus, and any events you think would be useful to your plugin!
