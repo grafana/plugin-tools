@@ -18,7 +18,7 @@ keywords:
 We recommend setting up your plugin to use the supplied [Github workflows](../create-a-plugin/develop-a-plugin/set-up-github-workflows.md) from [create-plugin](../get-started/get-started.mdx)
 to ensure that your plugin will be built and packaged in the correct format.
 
-If you need to set up the Github worklows, see [these docs](https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md)
+To do so, refer to [these docs](https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md).
 
 We recommend using the ZIP file produced from this workflow to test the plugin.
 
