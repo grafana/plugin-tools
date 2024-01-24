@@ -50,7 +50,7 @@ git pull origin  main
 
 After you push the tag, you can create the same tag again.
 
-## Download the release ZIP file
+## Download the release zip file
 
 Access the final release zip file directly from the Github repository release path.
 
