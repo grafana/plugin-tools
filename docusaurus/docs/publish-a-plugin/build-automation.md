@@ -13,7 +13,7 @@ keywords:
   - builds
 ---
 
-# Automate packaging and signing with Github CI
+# Automate packaging and signing with GitHub CI
 
 If your plugin has been set up to use the supplied [Github workflows](../create-a-plugin/develop-a-plugin/set-up-github-workflows.md) from [create-plugin](../get-started/get-started.mdx),
 the plugin should be built and packaged in the correct format.
