@@ -33,6 +33,16 @@ jobs:
         run: npm exec nx affected -- --target test
       - name: Build all packages
         run: npm run build
+      - name: Pack packages for testing
+        run: |
+          mkdir ./packed-artifacts
+          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
+      - name: Upload artifacts for testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: packed-artifacts
+          path: ./packed-artifacts
+          retention-days: 3
 
   generate-plugins:
     name: Test plugin scaffolding
@@ -42,28 +52,25 @@ jobs:
     strategy:
       matrix:
         include:
-          - cmd: generate-app
+          - cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            workingDir: './sampleorg-sample-app'
             hasBackend: false
-          - cmd: generate-app-backend
+          - cmd: create-plugin --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            workingDir: './sampleorg-sample-app'
             hasBackend: true
-          - cmd: generate-panel
+          - cmd: create-plugin --pluginName='Sample panel' --orgName='sample-org' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
+            workingDir: './sampleorg-sample-panel'
             hasBackend: false
-          - cmd: generate-datasource
+          - cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            workingDir: './sampleorg-sample-datasource'
             hasBackend: false
-          - cmd: generate-datasource-backend
+          - cmd: create-plugin --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            workingDir: './sampleorg-sample-datasource'
             hasBackend: true
-          - cmd: generate-scenes-app
+          - cmd: create-plugin --pluginName='Sample scenesapp' --orgName='sample-org' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            workingDir: './sampleorg-sample-scenesapp'
             hasBackend: false
-    env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-      NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-          fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v4
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
         with:
@@ -71,49 +78,50 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
-      - name: Install package dependencies
-        run: npm ci --no-audit
+      - name: Download packed artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: packed-artifacts
+          path: ./packed-artifacts
+
+      - name: Install npm packages globally
+        run: for file in *.tgz; do npm install -g "$file"; done
+        working-directory: ./packed-artifacts
 
       - name: Generate plugin
-        run: npm exec nx run @grafana/create-plugin:${{ matrix.cmd }}
+        run: ${{ matrix.cmd }}
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
-        working-directory: ./packages/create-plugin/generated
+        working-directory: ${{ matrix.workingDir }}
 
       - name: Lint plugin frontend
         run: npm run lint
-        working-directory: ./packages/create-plugin/generated
+        working-directory: ${{ matrix.workingDir }}
 
       - name: Build plugin frontend
         run: npm run build
-        working-directory: ./packages/create-plugin/generated
-
-      - name: '@grafana/sign-plugin - build'
-        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
-        env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: npm exec nx run @grafana/sign-plugin:build
+        working-directory: ${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
-        working-directory: ./packages/create-plugin/generated
+        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
         if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-        run: node ../../sign-plugin/dist/bin/run.js --rootUrls http://www.example.com --signatureType private
-        working-directory: ./packages/create-plugin/generated
+        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ${{ matrix.workingDir }}
 
       - uses: actions/setup-go@v5
         with:
           go-version: '~1.20'
           check-latest: true
-          cache-dependency-path: ./packages/create-plugin/generated/go.sum
+          cache-dependency-path: ${{ matrix.workingDir }}/go.sum
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
@@ -121,7 +129,7 @@ jobs:
         with:
           version: latest
           args: -v build:linux
-          workdir: ./packages/create-plugin/generated
+          workdir: ${{ matrix.workingDir }}
         if: ${{ matrix.hasBackend == true }}
 
   release:
