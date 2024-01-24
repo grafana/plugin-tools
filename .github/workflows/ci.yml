@@ -42,7 +42,7 @@ jobs:
         with:
           name: packed-artifacts
           path: ./packed-artifacts
-          retention-days: 3
+          retention-days: 1
 
   generate-plugins:
     name: Test plugin scaffolding
@@ -104,14 +104,14 @@ jobs:
         working-directory: ${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.workingDir == 'sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        if: ${{ matrix.cmd == 'generate-panel' && github.actor != 'dependabot[bot]' }}
+        if: ${{ matrix.workingDir == 'sampleorg-sample-panel' && github.actor != 'dependabot[bot]' }}
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
