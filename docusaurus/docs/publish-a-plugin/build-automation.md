@@ -20,7 +20,7 @@ to ensure that your plugin will be built and packaged in the correct format.
 
 To do so, refer to [these docs](https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md).
 
-We recommend using the ZIP file produced from this workflow to test the plugin.
+Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
 If a Grafana Access Policy Token is included your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission.
 
