@@ -39,7 +39,7 @@ git tag v2.0.1
 git push origin v2.0.1
 ```
 
-If you need to re-tag the release, the current tag can be removed by issuing the commands:
+If you need to re-tag the release, the current tag can be removed with these commands:
 
 ```BASH
 git tag -d v2.0.1
