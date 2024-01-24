@@ -54,7 +54,7 @@ After you push the tag, you can create the same tag again.
 
 Access the final release zip file directly from the GitHub repository release path.
 
-[Link to generated ZIP](https://github.com/briangann/grafana-gauge-panel/releases/download/v2.0.1/briangann-gauge-panel-2.0.1.zip)
+[Link to generated zip file](https://github.com/briangann/grafana-gauge-panel/releases/download/v2.0.1/briangann-gauge-panel-2.0.1.zip)
 
 ## Next steps
 
