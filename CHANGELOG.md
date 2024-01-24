@@ -1,3 +1,16 @@
+# (Wed Jan 24 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.10.2`
+  - Plugin E2E: Add new version for selector [#692](https://github.com/grafana/plugin-tools/pull/692) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Jan 23 2024)
 
 #### 🐛 Bug Fix
