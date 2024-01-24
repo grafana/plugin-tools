@@ -76,7 +76,7 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          # cache: 'npm'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@v4
