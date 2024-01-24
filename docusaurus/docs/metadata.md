@@ -68,7 +68,7 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 | `id`      | string | **Yes**  |                                                                                                                                               |
 | `name`    | string | **Yes**  |                                                                                                                                               |
 | `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                            |
-| `version` | string | **Yes**  | We suggest using [Semver](https://semver.org/) for your plugin versioning to alert users about potential changes, new features, or bug fixes. |
+| `version` | string | **Yes**  | We suggest using [SemVer](https://semver.org/) for your plugin versioning to alert users about potential changes, new features, or bug fixes. |
 
 ## enterpriseFeatures
 
