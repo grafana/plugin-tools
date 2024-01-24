@@ -117,6 +117,7 @@ export const versionedPages = {
               [MIN_GRAFANA_VERSION]: 'Variable editor Preview of Values option',
             },
             submitButton: {
+              '10.4.0': 'data-testid Variable editor Run Query button',
               [MIN_GRAFANA_VERSION]: 'Variable editor Submit button',
             },
           },
