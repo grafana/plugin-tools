@@ -63,12 +63,12 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 
 #### Properties
 
-| Property  | Type   | Required | Description                                        |
-| --------- | ------ | -------- | -------------------------------------------------- |
-| `id`      | string | **Yes**  |                                                    |
-| `name`    | string | **Yes**  |                                                    |
-| `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`. |
-| `version` | string | **Yes**  |                                                    |
+| Property  | Type   | Required | Description                                                                                                                                   |
+| --------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`      | string | **Yes**  |                                                                                                                                               |
+| `name`    | string | **Yes**  |                                                                                                                                               |
+| `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                            |
+| `version` | string | **Yes**  | We suggest using [SemVer](https://semver.org/) for your plugin versioning to alert users about potential changes, new features, or bug fixes. |
 
 ## enterpriseFeatures
 
@@ -92,18 +92,18 @@ To try this feature out, follow this [example](https://github.com/grafana/grafan
 
 ### Properties
 
-| Property      | Type                    | Required | Description                                            |
-| ------------- | ----------------------- | -------- | ------------------------------------------------------ |
+| Property      | Type                    | Required | Description                                 |
+| ------------- | ----------------------- | -------- | ------------------------------------------- |
 | `permissions` | [object](#permission)[] | No       | Required RBAC permissions to query Grafana. |
 
 ### permissions
 
 #### Properties
 
-| Property | Type   | Required | Description                |
-| -------- | ------ | -------- | -------------------------- |
+| Property | Type   | Required | Description                        |
+| -------- | ------ | -------- | ---------------------------------- |
 | `action` | string | **Yes**  | Action, for example: `teams:read`. |
-| `scope`  | string | No       | Scope, e.g: `teams:*`.     |
+| `scope`  | string | No       | Scope, e.g: `teams:*`.             |
 
 ## includes
 
