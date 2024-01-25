@@ -41,7 +41,8 @@ test('should return an error and display panel error when an invalid query is pr
 test('explore page should display table and time series panel only for certain query', async ({
   explorePage,
   grafanaVersion,
-}) => {
+}, testInfo) => {
+  testInfo.skip(semver.lt(grafanaVersion, '9.3.0'), 'Grafana version < 9.3.0 does not support data-testid on panels');
   const url = semver.lt('10.0.0', grafanaVersion)
     ? `panes=%7B"RLf":%7B"datasource":"PB0CCE99F8730D01D","queries":%5B%7B"cacheDurationSeconds":300,"datasource":%7B"type":"grafana-googlesheets-datasource","uid":"PB0CCE99F8730D01D"%7D,"refId":"A","spreadsheet":"1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8","range":""%7D%5D,"range":%7B"from":"1547161200000","to":"1576364400000"%7D%7D%7D&schemaVersion=1&orgId=1`
     : 'left=%7B"datasource":"PB0CCE99F8730D01D","queries":%5B%7B"cacheDurationSeconds":300,"datasource":%7B"type":"grafana-googlesheets-datasource","uid":"PB0CCE99F8730D01D"%7D,"refId":"A","spreadsheet":"1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8","range":""%7D%5D,"range":%7B"from":"1547161200000","to":"1576364400000"%7D%7D&orgId=1';
@@ -50,7 +51,7 @@ test('explore page should display table and time series panel only for certain q
     queryParams: new URLSearchParams(url),
   });
 
-  await expect(explorePage.timeSeriesPanel.locator).toBeVisible();
-  await expect(explorePage.tablePanel.locator).toBeVisible();
-  await expect(explorePage.logsPanel.locator).not.toBeVisible();
+  await expect(explorePage.timeSeriesPanel.locator()).toBeVisible();
+  await expect(explorePage.tablePanel.locator()).toBeVisible();
+  await expect(explorePage.logsPanel.locator()).not.toBeVisible();
 });

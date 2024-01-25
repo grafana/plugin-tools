@@ -6,7 +6,7 @@ import { GrafanaPage } from './GrafanaPage';
 const ERROR_STATUS = 'error';
 
 export class Panel extends GrafanaPage {
-  constructor(readonly ctx: PluginTestCtx, readonly locator: Locator) {
+  constructor(readonly ctx: PluginTestCtx, readonly locator: () => Locator) {
     super(ctx);
   }
 
@@ -22,7 +22,7 @@ export class Panel extends GrafanaPage {
     }
 
     return this.getByTestIdOrAriaLabel(selector, {
-      root: this.locator,
+      root: this.locator(),
     });
   }
 }

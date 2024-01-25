@@ -24,28 +24,45 @@ export class ExplorePage extends GrafanaPage {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
-    const { timeSeriesPanelLocator, tablePanelLocator, logsPanelLocator } = this.getPanelLocators();
-    this.timeSeriesPanel = new Panel(this.ctx, timeSeriesPanelLocator);
-    this.tablePanel = new Panel(this.ctx, tablePanelLocator);
-    this.logsPanel = new Panel(this.ctx, logsPanelLocator);
+    this.timeSeriesPanel = new Panel(this.ctx, () =>
+      this.getPanelLocators(TIME_SERIES_PANEL_SELECTOR_SUFFIX, TIME_SERIES_PANEL_TEXT)
+    );
+    this.tablePanel = new Panel(this.ctx, () => this.getPanelLocators(TABLE_PANEL_SELECTOR_SUFFIX, TABLE_PANEL_TEXT));
+    this.logsPanel = new Panel(this.ctx, () => this.getPanelLocators(LOGS_PANEL_SELECTOR_SUFFIX, LOGS_PANEL_TEXT));
   }
 
-  private getPanelLocators() {
+  private getPanelLocators(suffix: string, text: string) {
     const page = this.ctx.page;
-    const titleSelector = this.ctx.selectors.components.Panels.Panel.title;
-    let timeSeriesPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TIME_SERIES_PANEL_SELECTOR_SUFFIX));
-    let tablePanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TABLE_PANEL_SELECTOR_SUFFIX));
-    let logsPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(LOGS_PANEL_SELECTOR_SUFFIX));
+    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(suffix));
 
     // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
-    if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
-      timeSeriesPanelLocator = page.getByRole('button', { name: TIME_SERIES_PANEL_TEXT }).locator('..');
-      tablePanelLocator = page.getByRole('button', { name: TABLE_PANEL_TEXT }).locator('..');
-      logsPanelLocator = page.getByRole('button', { name: LOGS_PANEL_TEXT }).locator('..');
+    if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
+      throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0`);
+    } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
+      locator = page.getByRole('button', { name: text }).locator('..');
     }
 
-    return { timeSeriesPanelLocator, tablePanelLocator, logsPanelLocator };
+    return locator;
   }
+
+  // private getPanelLocators() {
+  //   const page = this.ctx.page;
+  //   const titleSelector = this.ctx.selectors.components.Panels.Panel.title;
+  //   let timeSeriesPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TIME_SERIES_PANEL_SELECTOR_SUFFIX));
+  //   let tablePanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TABLE_PANEL_SELECTOR_SUFFIX));
+  //   let logsPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(LOGS_PANEL_SELECTOR_SUFFIX));
+
+  //   // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
+  //   if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
+  //     throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0`);
+  //   } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
+  //     timeSeriesPanelLocator = page.getByRole('button', { name: TIME_SERIES_PANEL_TEXT }).locator('..');
+  //     tablePanelLocator = page.getByRole('button', { name: TABLE_PANEL_TEXT }).locator('..');
+  //     logsPanelLocator = page.getByRole('button', { name: LOGS_PANEL_TEXT }).locator('..');
+  //   }
+
+  //   return { timeSeriesPanelLocator, tablePanelLocator, logsPanelLocator };
+  // }
 
   /**
    * Navigates to the explore page.

@@ -17,7 +17,7 @@ export class PanelEditPage extends GrafanaPage {
     this.panel = new Panel(
       ctx,
       // only one panel is allowed in the panel edit page, so we don't need to use panel title to locate it
-      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
+      () => this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
     );
   }
 
