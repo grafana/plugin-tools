@@ -39,7 +39,7 @@ export class ExplorePage extends GrafanaPage {
 
     if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
       // seems there is no way to get the locator for the panels in Grafana versions < 9.3.0
-      throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0`);
+      throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0. Please skip this test.`);
     } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
       // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
       locator = page.getByRole('button', { name: text }).locator('..');
