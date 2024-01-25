@@ -86,7 +86,7 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   /**
    * Returns the name of the visualization currently selected in the panel editor
    */
-  getVisualizationName() {
+  getVisualizationName(): Locator {
     return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
   }
 
@@ -100,12 +100,10 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
   /**
    * Returns the locator for the query editor row with the given refId
    */
-  async getQueryEditorRow(refId: string): Promise<Locator> {
-    const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+  getQueryEditorRow(refId: string): Locator {
+    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
       has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
     });
-    await expect(locator).toBeVisible();
-    return locator;
   }
 
   /**
