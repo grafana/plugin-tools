@@ -33,7 +33,9 @@ export class ExplorePage extends GrafanaPage {
 
   private getPanelLocators(suffix: string, text: string) {
     const page = this.ctx.page;
-    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(suffix));
+    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(suffix), {
+      startsWith: true,
+    });
 
     // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
     if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
