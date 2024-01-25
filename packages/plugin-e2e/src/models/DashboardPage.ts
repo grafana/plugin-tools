@@ -62,14 +62,16 @@ export class DashboardPage extends GrafanaPage {
       return urlParams.get('editPanel');
     });
 
-    return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId ?? '' });
+    return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId ?? '1' });
   }
 
   /**
    * Deletes the dashboard
    */
   async deleteDashboard() {
-    await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboard?.uid ?? ''));
+    if (this.dashboard?.uid) {
+      await this.ctx.request.delete(this.ctx.selectors.apis.Dashboard.delete(this.dashboard.uid));
+    }
   }
 
   /**

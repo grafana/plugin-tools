@@ -16,7 +16,7 @@ export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors } 
 export interface DataSource<T = any> {
   id?: number;
   editable?: boolean;
-  uid?: string;
+  uid: string;
   orgId?: number;
   name?: string;
   type: string;
@@ -43,11 +43,22 @@ export type ProvisionFile<T = DataSource> = {
   datasources: Array<DataSource<T>>;
 };
 
-export type CreateDataSourceArgs = {
+export type CreateDataSourceArgs<T = any> = {
   /**
    * The data source to create
    */
-  datasource: DataSource;
+  id?: number;
+  editable?: boolean;
+  uid?: string;
+  orgId?: number;
+  name?: string;
+  type: string;
+  access?: string;
+  url?: string;
+  database?: string;
+  isDefault?: boolean;
+  jsonData?: T;
+  secureJsonData?: T;
 };
 
 export type CreateDataSourcePageArgs = {
