@@ -1,3 +1,4 @@
+const semver = require('semver');
 import { Locator, expect } from '@playwright/test';
 import { NavigateOptions, PluginTestCtx, RequestOptions } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
@@ -8,6 +9,9 @@ import { Panel } from './Panel';
 const TIME_SERIES_PANEL_SELECTOR_SUFFIX = 'Graph';
 const TABLE_PANEL_SELECTOR_SUFFIX = 'Table';
 const LOGS_PANEL_SELECTOR_SUFFIX = 'Logs';
+const TIME_SERIES_PANEL_TEXT = 'Graph Lines Bars Points';
+const TABLE_PANEL_TEXT = 'Table';
+const LOGS_PANEL_TEXT = 'Logs';
 
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -20,18 +24,27 @@ export class ExplorePage extends GrafanaPage {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
-    this.timeSeriesPanel = new Panel(
-      ctx,
-      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(TIME_SERIES_PANEL_SELECTOR_SUFFIX))
-    );
-    this.tablePanel = new Panel(
-      ctx,
-      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(TABLE_PANEL_SELECTOR_SUFFIX))
-    );
-    this.logsPanel = new Panel(
-      ctx,
-      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(LOGS_PANEL_SELECTOR_SUFFIX))
-    );
+    const { timeSeriesPanelLocator, tablePanelLocator, logsPanelLocator } = this.getPanelLocators();
+    this.timeSeriesPanel = new Panel(this.ctx, timeSeriesPanelLocator);
+    this.tablePanel = new Panel(this.ctx, tablePanelLocator);
+    this.logsPanel = new Panel(this.ctx, logsPanelLocator);
+  }
+
+  private getPanelLocators() {
+    const page = this.ctx.page;
+    const titleSelector = this.ctx.selectors.components.Panels.Panel.title;
+    let timeSeriesPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TIME_SERIES_PANEL_SELECTOR_SUFFIX));
+    let tablePanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TABLE_PANEL_SELECTOR_SUFFIX));
+    let logsPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(LOGS_PANEL_SELECTOR_SUFFIX));
+
+    // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
+    if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
+      timeSeriesPanelLocator = page.getByRole('button', { name: TIME_SERIES_PANEL_TEXT }).locator('..');
+      tablePanelLocator = page.getByRole('button', { name: TABLE_PANEL_TEXT }).locator('..');
+      logsPanelLocator = page.getByRole('button', { name: LOGS_PANEL_TEXT }).locator('..');
+    }
+
+    return { timeSeriesPanelLocator, tablePanelLocator, logsPanelLocator };
   }
 
   /**
