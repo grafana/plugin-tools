@@ -74,6 +74,12 @@ function getTemplateData(answers: CliArgs) {
   return templateData;
 }
 
+type TemplateAction = {
+  templateFile: string;
+  path: string;
+  data: TemplateData;
+};
+
 function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: any }) {
   const commonActions = getActionsForTemplateFolder({
     folderPath: TEMPLATE_PATHS.common,
@@ -97,15 +103,18 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
   // Common, pluginType and backend actions can contain different templates for the same destination.
   // This filtering removes the duplicate file additions to make sure the correct template is scaffolded.
   // Note that the order is reversed so backend > pluginType > common
-  const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce((acc, file) => {
-    const actionExists = acc.find((f) => f.path === file.path);
-    // return early to prevent duplicate file additions
-    if (actionExists) {
+  const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce<TemplateAction[]>(
+    (acc, file) => {
+      const actionExists = acc.find((f) => f.path === file.path);
+      // return early to prevent duplicate file additions
+      if (actionExists) {
+        return acc;
+      }
+      acc.push(file);
       return acc;
-    }
-    acc.push(file);
-    return acc;
-  }, []);
+    },
+    []
+  );
 
   // Copy over Github workflow files (if selected)
   const ciWorkflowActions = templateData.hasGithubWorkflows
@@ -147,7 +156,7 @@ function getActionsForTemplateFolder({
     return path.relative(folderPath, path.dirname(f));
   }
 
-  return files.filter(isFile).map((f) => ({
+  return files.filter(isFile).map<TemplateAction>((f) => ({
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getFileExportPath(f), getExportFileName(f)),
@@ -175,9 +184,15 @@ async function generateFiles({ actions }: { actions: any[] }) {
         path: action.path,
       });
     } catch (error) {
+      let message;
+      if (error instanceof Error) {
+        message = error.message;
+      } else {
+        message = String(error);
+      }
       failures.push({
         path: action.path,
-        error: error.message || error.toString(),
+        error: message,
       });
     }
   }

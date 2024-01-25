@@ -1,9 +1,9 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "lib": ["es2023", "dom"],
     "outDir": "./dist",
-    "declaration": true,
     "stripInternal": true,
-    "module": "Node16",
     "removeComments": false,
     "allowJs": true
   },

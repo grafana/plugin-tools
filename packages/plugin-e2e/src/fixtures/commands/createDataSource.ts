@@ -11,7 +11,7 @@ type CreateDataSourceViaAPIFixture = TestFixture<
 
 export const createDataSourceViaAPI = async (
   request: APIRequestContext,
-  datasource: DataSource
+  datasource: CreateDataSourceArgs
 ): Promise<DataSource> => {
   const { type, name } = datasource;
   const dsName = name ?? `${type}-${uuidv4()}`;
@@ -42,7 +42,7 @@ export const createDataSourceViaAPI = async (
 
 const createDataSource: CreateDataSourceViaAPIFixture = async ({ request }, use) => {
   await use(async (args) => {
-    return createDataSourceViaAPI(request, args.datasource);
+    return createDataSourceViaAPI(request, args);
   });
 };
 

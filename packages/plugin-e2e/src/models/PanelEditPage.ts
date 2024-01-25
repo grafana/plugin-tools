@@ -77,7 +77,7 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     const section = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.OptionsGroup.group(categoryName));
     await expect(section, `Could not find any section for category: ${categoryName}`).toBeVisible();
     const sectionToggle = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.OptionsGroup.toggle(categoryName));
-    const expandedAttr = await sectionToggle.getAttribute('aria-expanded');
+    const expandedAttr = (await sectionToggle.getAttribute('aria-expanded')) ?? '';
     if (/false/.test(expandedAttr)) {
       await section.click();
     }

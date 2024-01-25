@@ -1,11 +1,9 @@
-import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../api';
-import { PlaywrightCombinedArgs } from './types';
+import { PlaywrightTestArgs, TestFixture } from '@playwright/test';
 
-type GrafanaVersion = TestFixture<string, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type GrafanaVersion = TestFixture<string, PlaywrightTestArgs>;
 
 const grafanaVersion: GrafanaVersion = async ({ page }, use) => {
-  let grafanaVersion = process.env.GRAFANA_VERSION;
+  let grafanaVersion = process.env.GRAFANA_VERSION ?? '';
   if (!grafanaVersion) {
     await page.goto('/');
     grafanaVersion = await page.evaluate('window.grafanaBootData.settings.buildInfo.version');

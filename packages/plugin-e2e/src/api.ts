@@ -13,19 +13,20 @@ import {
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/ExplorePage';
+import options from './options';
 
 export type PluginOptions = {
   /**
    * When using the readProvisioning fixture, files will be read from this directory. If no directory is provided,
    * the 'provisioning' directory in the current working directory will be used.
-   * 
+   *
    * eg.
    * export default defineConfig({
       use: {
         provisioningRootDir: 'path/to/provisioning',
       },
     });
-   * 
+   *
    */
   provisioningRootDir: string;
   /**
@@ -138,13 +139,13 @@ export type PluginFixture = {
   createDataSource: (args: CreateDataSourceArgs) => Promise<DataSource>;
 
   /**
-   * Fixture command that login to Grafana using the Grafana API. 
-   * If the same credentials should be used in every test, 
+   * Fixture command that login to Grafana using the Grafana API.
+   * If the same credentials should be used in every test,
    * invoke this fixture in a setup project.
    * See https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
-   * 
+   *
    * If no credentials are provided, the default admin/admin credentials will be used.
-   * 
+   *
    * The default credentials can be overridden in the playwright.config.ts file:
    * eg.
    * export default defineConfig({
@@ -155,7 +156,7 @@ export type PluginFixture = {
         },
       },
     });
-   * 
+   *
    * To override credentials in a single test:
    * test.use({ httpCredentials: { username: 'admin', password: 'admin' } });
    * To avoid authentication in a single test:
@@ -176,7 +177,7 @@ export type PluginFixture = {
 };
 
 // extend Playwright with Grafana plugin specific fixtures
-export const test = base.extend<PluginFixture, PluginOptions>(fixtures);
+export const test = base.extend<PluginFixture, PluginOptions>({ ...fixtures, ...options });
 
 export const expect = baseExpect.extend(matchers);
 
