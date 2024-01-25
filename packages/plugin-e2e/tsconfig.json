@@ -4,7 +4,6 @@
     "lib": ["es2023", "dom"],
     "outDir": "./dist",
     "stripInternal": true,
-    "module": "Node16",
     "removeComments": false,
     "allowJs": true
   },
