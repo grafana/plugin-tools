@@ -6,8 +6,8 @@ import { TimeRange } from './TimeRange';
 import { Panel } from './Panel';
 
 const TIME_SERIES_PANEL_SELECTOR_SUFFIX = 'Graph';
-const TABLE_PANEL_SELECTOR_SUFFIX = 'Graph';
-const LOGS_PANEL_SELECTOR_SUFFIX = 'Graph';
+const TABLE_PANEL_SELECTOR_SUFFIX = 'Table';
+const LOGS_PANEL_SELECTOR_SUFFIX = 'Logs';
 
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
