@@ -1,3 +1,16 @@
+# v0.10.3 (Thu Jan 25 2024)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate plugin-e2e to Vitest and use tsconfigs/base configs [#694](https://github.com/grafana/plugin-tools/pull/694) ([@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.10.2 (Wed Jan 24 2024)
 
 #### 🐛 Bug Fix

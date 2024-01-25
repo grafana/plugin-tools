@@ -1,3 +1,17 @@
+# (Thu Jan 25 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@3.1.2`, `@grafana/plugin-e2e@0.10.3`, `@grafana/sign-plugin@3.0.1`
+  - Build: Migrate plugin-e2e to Vitest and use tsconfigs/base configs [#694](https://github.com/grafana/plugin-tools/pull/694) ([@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jan 24 2024)
 
 #### 🐛 Bug Fix
