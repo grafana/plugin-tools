@@ -5,6 +5,10 @@ import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
 import { Panel } from './Panel';
 
+const TIME_SERIES_PANEL_SELECTOR_SUFFIX = 'Graph';
+const TABLE_PANEL_SELECTOR_SUFFIX = 'Graph';
+const LOGS_PANEL_SELECTOR_SUFFIX = 'Graph';
+
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: any;
@@ -18,10 +22,16 @@ export class ExplorePage extends GrafanaPage {
     this.timeRange = new TimeRange(ctx);
     this.timeSeriesPanel = new Panel(
       ctx,
-      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title('Graph'))
+      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(TIME_SERIES_PANEL_SELECTOR_SUFFIX))
     );
-    this.tablePanel = new Panel(ctx, this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title('Table')));
-    this.logsPanel = new Panel(ctx, this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title('Logs')));
+    this.tablePanel = new Panel(
+      ctx,
+      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(TABLE_PANEL_SELECTOR_SUFFIX))
+    );
+    this.logsPanel = new Panel(
+      ctx,
+      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(LOGS_PANEL_SELECTOR_SUFFIX))
+    );
   }
 
   /**

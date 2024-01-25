@@ -41,11 +41,6 @@ declare global {
        * Asserts that a GrafanaPage contains an alert with the specified severity. Use the options to specify the timeout and to filter the alerts.
        */
       toHaveAlert(this: Matchers<unknown, GrafanaPage>, severity: AlertVariant, options?: AlertPageOptions): R;
-
-      /**
-       * Asserts that the number of panel errors displayed on the page is equal to 1.
-       */
-      toHaveErrorIcon(this: Matchers<unknown, Panel>): R;
     }
   }
 }
