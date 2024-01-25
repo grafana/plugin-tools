@@ -14,7 +14,7 @@ export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors } 
  * The data source object
  */
 export interface DataSource<T = any> {
-  id?: number;
+  id: number;
   editable?: boolean;
   uid: string;
   orgId?: number;
