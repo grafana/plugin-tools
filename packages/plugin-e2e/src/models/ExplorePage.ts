@@ -37,34 +37,16 @@ export class ExplorePage extends GrafanaPage {
       startsWith: true,
     });
 
-    // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
     if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
+      // seems there is no way to get the locator for the panels in Grafana versions < 9.3.0
       throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0`);
     } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
+      // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
       locator = page.getByRole('button', { name: text }).locator('..');
     }
 
     return locator;
   }
-
-  // private getPanelLocators() {
-  //   const page = this.ctx.page;
-  //   const titleSelector = this.ctx.selectors.components.Panels.Panel.title;
-  //   let timeSeriesPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TIME_SERIES_PANEL_SELECTOR_SUFFIX));
-  //   let tablePanelLocator = this.getByTestIdOrAriaLabel(titleSelector(TABLE_PANEL_SELECTOR_SUFFIX));
-  //   let logsPanelLocator = this.getByTestIdOrAriaLabel(titleSelector(LOGS_PANEL_SELECTOR_SUFFIX));
-
-  //   // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
-  //   if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
-  //     throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0`);
-  //   } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
-  //     timeSeriesPanelLocator = page.getByRole('button', { name: TIME_SERIES_PANEL_TEXT }).locator('..');
-  //     tablePanelLocator = page.getByRole('button', { name: TABLE_PANEL_TEXT }).locator('..');
-  //     logsPanelLocator = page.getByRole('button', { name: LOGS_PANEL_TEXT }).locator('..');
-  //   }
-
-  //   return { timeSeriesPanelLocator, tablePanelLocator, logsPanelLocator };
-  // }
 
   /**
    * Navigates to the explore page.
