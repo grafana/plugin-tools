@@ -3,14 +3,25 @@ import { NavigateOptions, PluginTestCtx, RequestOptions } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
+import { Panel } from './Panel';
 
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: any;
+  timeSeriesPanel: Panel;
+  logsPanel: Panel;
+  tablePanel: Panel;
+
   constructor(ctx: PluginTestCtx) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
+    this.timeSeriesPanel = new Panel(
+      ctx,
+      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title('Graph'))
+    );
+    this.tablePanel = new Panel(ctx, this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title('Table')));
+    this.logsPanel = new Panel(ctx, this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title('Logs')));
   }
 
   /**

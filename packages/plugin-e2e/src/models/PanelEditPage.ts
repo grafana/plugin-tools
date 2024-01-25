@@ -1,27 +1,24 @@
 import { expect, Locator, Response } from '@playwright/test';
-import * as semver from 'semver';
-import {
-  DashboardEditViewArgs,
-  NavigateOptions,
-  PanelError,
-  PluginTestCtx,
-  RequestOptions,
-  Visualization,
-} from '../types';
+import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions, Visualization } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
+import { Panel } from './Panel';
 
-const ERROR_STATUS = 'error';
-
-export class PanelEditPage extends GrafanaPage implements PanelError {
+export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
+  panel: Panel;
 
   constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
+    this.panel = new Panel(
+      ctx,
+      // only one panel is allowed in the panel edit page, so we don't need to use panel title to locate it
+      this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
+    );
   }
 
   /**
@@ -106,18 +103,6 @@ export class PanelEditPage extends GrafanaPage implements PanelError {
     });
     await expect(locator).toBeVisible();
     return locator;
-  }
-
-  /**
-   * Returns the locator for the panel error (if any)
-   */
-  getPanelError() {
-    // the selector (not the selector value) used to identify a panel error changed in 9.4.3
-    if (semver.lte(this.ctx.grafanaVersion, '9.4.3')) {
-      return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.headerCornerInfo(ERROR_STATUS));
-    }
-
-    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.status(ERROR_STATUS));
   }
 
   /**

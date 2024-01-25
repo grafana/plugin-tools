@@ -1,5 +1,5 @@
 import { Locator, Request, Response } from '@playwright/test';
-import { NavigateOptions, PluginTestCtx } from '../types';
+import { GetByTestIdOrAriaLabelOptions, NavigateOptions, PluginTestCtx } from '../types';
 
 /**
  * Base class for all Grafana pages.
@@ -24,12 +24,13 @@ export abstract class GrafanaPage {
    * @param selector the data-testid or aria-label of the element
    * @param root optional root locator to search within. If no locator is provided, the page will be used
    */
-  getByTestIdOrAriaLabel(selector: string, root?: Locator): Locator {
+  getByTestIdOrAriaLabel(selector: string, options?: GetByTestIdOrAriaLabelOptions): Locator {
+    const startsWith = options?.startsWith ? '^' : '';
     if (selector.startsWith('data-testid')) {
-      return (root || this.ctx.page).getByTestId(selector);
+      return (options?.root || this.ctx.page).locator(`[data-testid${startsWith}="${selector}"]`);
     }
 
-    return (root || this.ctx.page).locator(`[aria-label="${selector}"]`);
+    return (options?.root || this.ctx.page).locator(`[aria-label${startsWith}="${selector}"]`);
   }
 
   /**
