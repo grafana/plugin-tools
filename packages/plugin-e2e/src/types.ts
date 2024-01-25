@@ -172,6 +172,19 @@ export type NavigateOptions = {
   queryParams?: URLSearchParams;
 };
 
+export type GetByTestIdOrAriaLabelOptions = {
+  /**
+   *Optional root locator to search within. If no locator is provided, the page will be used
+   */
+  root?: Locator;
+
+  /**
+   * Set to true to find locator that resolves elements that starts with a given string
+   * Defaults to false
+   */
+  startsWith?: boolean;
+};
+
 export type TriggerQueryOptions = {
   /**
    * Set this to true to skip waiting for the response. Defaults to false.
@@ -202,17 +215,6 @@ export type Visualization =
   | 'Worldmap Panel';
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
-
-/**
- * Implement this interface in a POM in case you want to enable the `toHavePanelError` matcher for the page.
- * Only applicable to pages that have one panel only, such as the explore page or panel edit page.
- *
- * @internal
- */
-export interface PanelError {
-  ctx: PluginTestCtx;
-  getPanelError: () => Locator;
-}
 
 export interface AlertPageOptions {
   /**

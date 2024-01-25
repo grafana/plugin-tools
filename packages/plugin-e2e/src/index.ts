@@ -1,5 +1,6 @@
 import { GrafanaPage, VariableEditPage } from './models';
-import { AlertPageOptions, AlertVariant, ContainTextOptions, PanelError } from './types';
+import { Panel } from './models/Panel';
+import { AlertPageOptions, AlertVariant, ContainTextOptions } from './types';
 
 export { expect, test, type PluginFixture, type PluginOptions } from './api';
 export * from './e2e-selectors';
@@ -44,7 +45,7 @@ declare global {
       /**
        * Asserts that the number of panel errors displayed on the page is equal to 1.
        */
-      toHavePanelError(this: Matchers<unknown, PanelError>): R;
+      toHaveErrorIcon(this: Matchers<unknown, Panel>): R;
     }
   }
 }
