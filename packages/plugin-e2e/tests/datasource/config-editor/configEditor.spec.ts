@@ -16,6 +16,6 @@ test('valid credentials should return a 200 status code', async ({ createDataSou
 
 test('valid credentials should display a success alert on the page', async ({ createDataSourceConfigPage, page }) => {
   const configPage = await createDataSourceConfigPage({ type: 'testdata' });
-  await configPage.saveAndTest({ skipWaitForResponse: true });
+  configPage.saveAndTest({ skipWaitForResponse: true });
   await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
 });

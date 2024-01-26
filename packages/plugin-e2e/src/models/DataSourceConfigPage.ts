@@ -30,7 +30,8 @@ export class DataSourceConfigPage extends GrafanaPage {
    */
   async saveAndTest(options?: TriggerQueryOptions) {
     if (options?.skipWaitForResponse) {
-      return this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
+      await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
+      return this.ctx.page.waitForResponse(() => true);
     }
 
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
