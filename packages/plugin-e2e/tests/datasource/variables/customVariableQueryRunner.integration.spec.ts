@@ -10,9 +10,7 @@ test('custom variable editor query runner should return data when query is valid
   const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/redshift.yaml' });
   await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(provision.datasources?.[0]!.name!);
-  await page.waitForFunction(() => (window as any).monaco);
-  await variableEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
-  await page.keyboard.insertText('select distinct(environment) from long_format_example');
+  await variableEditPage.ui.codeEditor.insertText('select distinct(environment) from long_format_example');
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();
   await queryDataRequest;

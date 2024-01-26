@@ -1,10 +1,8 @@
-import { Page } from '@playwright/test';
 import { expect, test } from '../../../src';
-import { clickRadioButton } from '../../utils';
 
 test('invalid credentials should return an error', async ({ createDataSourceConfigPage, page }) => {
   const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
-  await clickRadioButton(page, 'API Key', { exact: true });
+  await configPage.ui.radioButton.click('API Key', { exact: true });
   await page.getByPlaceholder('Enter API key').fill('xyz');
   await expect(configPage.saveAndTest()).not.toBeOK();
 });
