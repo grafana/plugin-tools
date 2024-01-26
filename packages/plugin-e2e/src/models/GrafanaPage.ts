@@ -1,5 +1,6 @@
 import { Locator, Request, Response } from '@playwright/test';
 import { GetByTestIdOrAriaLabelOptions, NavigateOptions, PluginTestCtx } from '../types';
+import { ui as grafanaUI } from './uiHelpers';
 
 /**
  * Base class for all Grafana pages.
@@ -7,7 +8,10 @@ import { GetByTestIdOrAriaLabelOptions, NavigateOptions, PluginTestCtx } from '.
  * Exposes methods for locating Grafana specific elements on the page
  */
 export abstract class GrafanaPage {
-  constructor(public readonly ctx: PluginTestCtx) {}
+  ui: ReturnType<typeof grafanaUI>;
+  constructor(public readonly ctx: PluginTestCtx) {
+    this.ui = grafanaUI(this.ctx, this.getByTestIdOrAriaLabel.bind(this));
+  }
 
   protected async navigate(url: string, options?: NavigateOptions) {
     if (options?.queryParams) {
