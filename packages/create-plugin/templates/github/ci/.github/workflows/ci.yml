@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      GRAFANA_ACCESS_POLICY_TOKEN: \${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+      GRAFANA_ACCESS_POLICY_TOKEN: $\{{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
 {{#if_eq packageManagerName "pnpm"}}
@@ -99,7 +99,7 @@ jobs:
 
       - name: Sign plugin
         run: {{ packageManagerName }} run sign
-        if: \${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
+        if: $\{{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
         id: metadata
@@ -117,12 +117,12 @@ jobs:
       - name: Package plugin
         id: package-plugin
         run: |
-          mv dist \${{ steps.metadata.outputs.plugin-id }}
-          zip \${{ steps.metadata.outputs.archive }} \${{ steps.metadata.outputs.plugin-id }} -r
+          mv dist $\{{ steps.metadata.outputs.plugin-id }}
+          zip $\{{ steps.metadata.outputs.archive }} $\{{ steps.metadata.outputs.plugin-id }} -r
 
       - name: Archive Build
         uses: actions/upload-artifact@v3
         with:
-          name: \${{ steps.metadata.outputs.plugin-id }}-\${{ steps.metadata.outputs.plugin-version }}
-          path: \${{ steps.metadata.outputs.plugin-id }}
+          name: $\{{ steps.metadata.outputs.plugin-id }}-$\{{ steps.metadata.outputs.plugin-version }}
+          path: $\{{ steps.metadata.outputs.plugin-id }}
           retention-days: 5
