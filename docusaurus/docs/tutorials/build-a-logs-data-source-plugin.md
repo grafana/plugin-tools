@@ -97,7 +97,7 @@ const result = createDataFrame({
 
 ## Enhance your logs data source plugin with optional features
 
-You can use the following optional features to enhance your logs data source plugin in Explore and Logs panel.
+You can use the following optional features to enhance your logs data source plugin in the Explore and Logs panel.
 
 [Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If the data source produces log results, we highly recommend implementing the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
 
