@@ -1,0 +1,160 @@
+---
+id: installation
+title: Installation
+description: How to setup @grafana/plugin-e2e
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - testing
+  - e2e
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Introduction
+
+Plugin authors usually want their plugins to be compatible with a range of Grafana versions. This can be challenging as things such as environment, APIs and UI components may differ from one Grafana version to another. Manually testing a plugin across multiple versions of Grafana is a tedious process, so in most cases E2E testing offers a better solution.
+
+[`@grafana/plugin-e2e`](https://www.npmjs.com/package/@grafana/plugin-e2e?activeTab=readme) is designed specifically for Grafana plugin developers. It extends [`Playwright test`](https://playwright.dev/) capabilities with fixtures, models, and expect matchers, enabling comprehensive end-to-end testing of Grafana plugins across multiple versions of Grafana. This package simplifies the testing process, ensuring your plugin is robust and compatible with various Grafana environments.
+
+## Prerequisites
+
+You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) with Node.js 18+ setup. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 0.40.0 installed. For instructions on how to install Playwright in your plugin, refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright).
+
+If you don't have any previous experience from working with Playwright, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
+
+## Installing @grafana/plugin-e2e
+
+Now go ahead and install `@grafana/plugin-e2e`.
+
+<Tabs
+defaultValue="npm">
+<TabItem value="npm">
+
+```bash
+npm install @grafana/plugin-e2e@latest --save-dev
+```
+
+</TabItem>
+
+<TabItem value="yarn">
+
+```bash
+yarn add @grafana/plugin-e2e@latest --dev
+```
+
+</TabItem>
+
+<TabItem value="pnpm">
+
+```bash
+yarn add @grafana/plugin-e2e@latest -D
+```
+
+</TabItem>
+</Tabs>
+
+## Configure Playwright
+
+Open the `playwright.config.[js|ts]` file that was generated when Playwright was installed.
+
+1. Change the `baseUrl` to `'http://localhost:3000'`.
+2. Add a new initialization project that login to Grafana and stores the cookie on disk. Then add a dependency to this project in the subsequent project that we'll use to run our plugin tests. By specifying this dependency, all tests in the `chromium` project will load and reuse the authenticated state from the previous project.
+
+```ts
+projects: [
+  {
+    name: 'auth',
+    testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+    testMatch: [/.*\.js/],
+  },
+  {
+    name: 'chromium',
+    use: {
+      ...devices['Desktop Chrome'],
+      storageState: 'playwright/.auth/user.json',
+    },
+    dependencies: ['auth'],
+  },
+],
+```
+
+## Provision Grafana
+
+In many cases, plugin E2E tests rely on the existance of a properly configured data source plugin. We accomplish that using provisioning.
+
+```yml
+apiVersion: 1
+deleteDatasources:
+  - name: Infinity E2E
+    orgId: 1
+datasources:
+  - name: Infinity E2E
+    type: yesoreyeram-infinity-datasource
+```
+
+For details on how to provision Grafana, refer to the [documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/).
+
+## Start Grafana
+
+Next, startup the Grafana instance locally. Optionally, you can specify a version of choice. If you don't, the image that is currently tagged as `latest` in the Docker registry will be used.
+
+<Tabs defaultValue="npm">
+<TabItem value="npm">
+
+```bash
+GRAFANA_VERSION=10.1.6 npm run server
+```
+
+</TabItem>
+
+<TabItem value="yarn">
+
+```bash
+GRAFANA_VERSION=10.1.6 yarn server
+```
+
+</TabItem>
+
+<TabItem value="pnpm">
+
+```bash
+GRAFANA_VERSION=10.1.6 pnpm server
+```
+
+</TabItem>
+</Tabs>
+
+## Run tests
+
+Now you can open the terminal and run the test script from within your local plugin development directory.
+
+<Tabs
+defaultValue="npm">
+<TabItem value="npm">
+
+```bash
+npx playwright test
+```
+
+</TabItem>
+
+<TabItem value="yarn">
+
+```bash
+yarn playwright test
+```
+
+</TabItem>
+
+<TabItem value="pnpm">
+
+```bash
+pnpm playwright test
+```
+
+</TabItem>
+</Tabs>

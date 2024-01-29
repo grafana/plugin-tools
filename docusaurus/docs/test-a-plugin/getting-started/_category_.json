@@ -1,0 +1,9 @@
+{
+  "position": 1,
+  "label": "Getting Started",
+  "customProps": {
+    "description": "Get started with plugin E2E testing"
+  },
+  "collapsible": true,
+  "collapsed": false
+}

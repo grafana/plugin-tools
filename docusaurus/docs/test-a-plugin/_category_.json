@@ -1,0 +1,9 @@
+{
+  "position": 25,
+  "label": "Test a plugin",
+  "customProps": {
+    "description": "Test a Grafana plugin"
+  },
+  "collapsible": true,
+  "collapsed": true
+}
