@@ -2,6 +2,7 @@
 id: installation
 title: Installation
 description: How to setup @grafana/plugin-e2e
+draft: true
 keywords:
   - grafana
   - plugins
