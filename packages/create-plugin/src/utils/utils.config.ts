@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { getVersion } from './utils.version.js';
+import { getRuntimeVersion } from './utils.version.js';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;
@@ -14,6 +14,9 @@ type UserConfig = {
   features: FeatureFlags;
 };
 
+/* The reason for having two config files (a base .cprc.json under the .config/ folder and a user-specific one at the root fo the project)
+ * is that we don't want to update certain user settings during updates, like enabled feature flags.
+ */
 export function getConfig(): CreatePluginConfig {
   try {
     const rootPath = path.resolve(process.cwd(), '.config/.cprc.json');
@@ -31,7 +34,7 @@ export function getConfig(): CreatePluginConfig {
     };
   } catch (error) {
     return {
-      version: getVersion(),
+      version: getRuntimeVersion(),
       features: createFeatureFlags(),
     };
   }

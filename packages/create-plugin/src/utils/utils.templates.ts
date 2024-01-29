@@ -8,7 +8,7 @@ import { getPluginJson } from './utils.plugin.js';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
 import { getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
-import { getVersion } from './utils.version.js';
+import { getRuntimeVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
 /**
@@ -81,7 +81,7 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData() {
   const pluginJson = getPluginJson();
   const { features } = getConfig();
-  const currentVersion = getVersion();
+  const currentVersion = getRuntimeVersion();
 
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
 
