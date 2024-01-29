@@ -6,8 +6,13 @@ import { PackageManager } from './utils.packageManager.js';
 type UpdateSummary = Record<string, { prev: string | null; next: string | null }>;
 
 type UpdateOptions = {
+  // If set to true: only changes package versions that are older than what the create-plugin configuration has (Default: false)
   onlyOutdated?: Boolean;
+
+  // If set to true: skips changing @grafana/* package versions (Default: false)
   ignoreGrafanaDependencies?: boolean;
+
+  // If set to true: only changes devDependencies (Default: false)
   devOnly?: boolean;
 };
 
