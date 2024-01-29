@@ -1,3 +1,15 @@
+# v0.11.1 (Mon Jan 29 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Make getQueryEditorRow method sync [#699](https://github.com/grafana/plugin-tools/pull/699) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.11.0 (Mon Jan 29 2024)
 
 #### 🚀 Enhancement
