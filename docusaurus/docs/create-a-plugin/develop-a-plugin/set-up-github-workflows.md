@@ -37,7 +37,7 @@ You can store your Access Policy token as a Repository Secret in GitHub:
 3. Click on the "New repository secret" button.
 4. Add Secret Information:
 
-- Enter a descriptive name for your secret (e.g., GRAFANA_API_KEY).
+- Enter name for your secret - GRAFANA_ACCESS_POLICY_TOKEN.
 - Paste the Access Policy Token value into the "Secret" field.
 
 5. Click on the "Add secret" button to save the secret.
@@ -54,11 +54,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: grafana/plugin-actions/build-plugin@release
         with:
-          grafana_token: ${{ secrets.GRAFANA_API_KEY }}
+          grafana_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
 
 ```
 
-In this example, the `secrets.GRAFANA_API_KEY` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
+In this example, the `secrets.GRAFANA_ACCESS_POLICY_TOKEN` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
 
 :::
 
