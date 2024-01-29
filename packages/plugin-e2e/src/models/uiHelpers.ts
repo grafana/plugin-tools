@@ -1,5 +1,5 @@
 import * as semver from 'semver';
-import { PluginTestCtx } from '../types';
+import { PluginTestCtx, GetByTestIdOrAriaLabelOptions } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 import { Locator } from '@playwright/test';
 
@@ -21,14 +21,14 @@ export function ui(ctx: PluginTestCtx, getByTestIdOrAriaLabel: GrafanaPage['getB
       },
     },
     codeEditor: {
-      insertText: async (text: string, options?: { root?: Locator }) => {
+      insertText: async (text: string, options?: GetByTestIdOrAriaLabelOptions) => {
         await ctx.page.waitForFunction(() => (window as any).monaco);
-        await getByTestIdOrAriaLabel(ctx.selectors.components.CodeEditor.container, options?.root).click();
+        await getByTestIdOrAriaLabel(ctx.selectors.components.CodeEditor.container, options).click();
         await ctx.page.keyboard.insertText(text);
       },
       click: async (options?: { root?: Locator }) => {
         await ctx.page.waitForFunction(() => (window as any).monaco);
-        await getByTestIdOrAriaLabel(ctx.selectors.components.CodeEditor.container, options?.root).click();
+        await getByTestIdOrAriaLabel(ctx.selectors.components.CodeEditor.container, options).click();
       },
     },
   };
