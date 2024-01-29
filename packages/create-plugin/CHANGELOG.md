@@ -1,3 +1,15 @@
+# v3.1.3 (Mon Jan 29 2024)
+
+#### 🐛 Bug Fix
+
+- create-plugin: adds archive option for CI workflow [#682](https://github.com/grafana/plugin-tools/pull/682) ([@briangann](https://github.com/briangann))
+
+#### Authors: 1
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+
+---
+
 # v3.1.2 (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix

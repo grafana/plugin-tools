@@ -1,3 +1,15 @@
+# v0.10.4 (Mon Jan 29 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add auth test file [#700](https://github.com/grafana/plugin-tools/pull/700) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.10.3 (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix

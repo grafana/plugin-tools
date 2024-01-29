@@ -1,3 +1,19 @@
+# (Mon Jan 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.10.4`
+  - Plugin E2E: Add auth test file [#700](https://github.com/grafana/plugin-tools/pull/700) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@3.1.3`
+  - create-plugin: adds archive option for CI workflow [#682](https://github.com/grafana/plugin-tools/pull/682) ([@briangann](https://github.com/briangann))
+
+#### Authors: 2
+
+- Brian Gann ([@briangann](https://github.com/briangann))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix
