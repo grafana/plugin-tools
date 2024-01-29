@@ -1,5 +1,18 @@
 # (Mon Jan 29 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.11.0`
+  - Plugin E2E: Decouple panel from pages [#698](https://github.com/grafana/plugin-tools/pull/698) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Jan 29 2024)
+
 #### 🐛 Bug Fix
 
 - `@grafana/plugin-e2e@0.10.4`
