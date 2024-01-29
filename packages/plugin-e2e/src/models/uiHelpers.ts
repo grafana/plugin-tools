@@ -22,12 +22,12 @@ export function ui(ctx: PluginTestCtx, getByTestIdOrAriaLabel: GrafanaPage['getB
     },
     codeEditor: {
       insertText: async (text: string, options?: GetByTestIdOrAriaLabelOptions) => {
-        await ctx.page.waitForFunction(() => (window as any).monaco);
+        await ctx.page.waitForFunction(() => window.monaco);
         await getByTestIdOrAriaLabel(ctx.selectors.components.CodeEditor.container, options).click();
         await ctx.page.keyboard.insertText(text);
       },
       click: async (options?: { root?: Locator }) => {
-        await ctx.page.waitForFunction(() => (window as any).monaco);
+        await ctx.page.waitForFunction(() => window.monaco);
         await getByTestIdOrAriaLabel(ctx.selectors.components.CodeEditor.container, options).click();
       },
     },
