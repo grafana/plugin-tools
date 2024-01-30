@@ -39,6 +39,7 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | `metrics`            | boolean                       | No       | For data source plugins, if the plugin supports metric queries. Used to enable the plugin in the panel editor.                                                                                                                                                                                                                                                                                          |
 | `preload`            | boolean                       | No       | Initialize plugin on startup. By default, the plugin initializes on first use, but when preload is set to true the plugin loads when the Grafana web app loads the first time. Only applicable to app plugins.                                                                                                                                                                                          |
 | `queryOptions`       | [object](#queryoptions)       | No       | For data source plugins. There is a query options section in the plugin's query editor and these options can be turned on if needed.                                                                                                                                                                                                                                                                    |
+| `roles`              | [object](#roles)[]            | No       | List of RBAC roles and their default assignments.                                                                                                                                                                                                                                                                                                                                                       |
 | `routes`             | [object](#routes)[]           | No       | For data source plugins. Proxy routes used for plugin authentication and adding headers to HTTP requests made by the plugin. For more information, refer to [Authentication for data source plugins](../docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).                                                                                                            |
 | `skipDataQuery`      | boolean                       | No       | For panel plugins. Hides the query editor.                                                                                                                                                                                                                                                                                                                                                              |
 | `state`              | string                        | No       | Marks a plugin as a pre-release. Possible values are: `alpha`, `beta`.                                                                                                                                                                                                                                                                                                                                  |
@@ -111,6 +112,7 @@ To try this feature out, follow this [example](https://github.com/grafana/grafan
 
 | Property     | Type    | Required | Description                                                                                                                                                                                     |
 | ------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `action`     | string  | No       | The RBAC action a user must have to see this page in the navigation menu.                                                                                                                       |
 | `addToNav`   | boolean | No       | Add the include to the side menu.                                                                                                                                                               |
 | `component`  | string  | No       | (Legacy) The Angular component to use for a page.                                                                                                                                               |
 | `defaultNav` | boolean | No       | Page or dashboard when user clicks the icon in the side menu.                                                                                                                                   |
@@ -207,6 +209,29 @@ For data source plugins. There is a query options section in the plugin's query 
 | `maxDataPoints` | boolean | No       | For data source plugins. If the `max data points` option should be shown in the query options section in the query editor. |
 | `minInterval`   | boolean | No       | For data source plugins. If the `min interval` option should be shown in the query options section in the query editor.    |
 
+## roles
+
+List of RBAC roles defined by the plugin and their default assignments to basic roles (`Viewer`, `Editor`, `Admin`, `Grafana Admin`).
+
+Requires Grafana version 9.4.0 or later. Currently, this is behind the `accessControlOnCall` feature toggle.
+
+### Properties
+
+| Property | Type            | Required | Description                                                                                           |
+| -------- | --------------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `role`   | [object](#role) | **yes**  | RBAC role definition to bundle related RBAC permissions on the plugin.                                |
+| `grant`  | string[]        | no       | Default assignments of the role to Grafana basic roles (`Viewer`, `Editor`, `Admin`, `Grafana Admin`) |
+
+### role
+
+A role bundle a set of related RBAC permissions on your plugin. The RBAC actions defined in your role must start with your plugin id (ex: `grafana-test-app.projects:read`).
+
+| Property      | Type                     | Required | Description                    |
+| ------------- | ------------------------ | -------- | ------------------------------ |
+| `name`        | string                   | **yes**  | Display name of the role.      |
+| `description` | string                   | **yes**  | Describe the aim of the role.  |
+| `permissions` | [object](#permissions)[] | **yes**  | RBAC permission on the plugin. |
+
 ## routes
 
 For data source plugins. Proxy routes used for plugin authentication and adding headers to HTTP requests made by the plugin. For more information, refer to [Authentication for data source plugins](../docs/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).
@@ -220,6 +245,7 @@ For data source plugins. Proxy routes used for plugin authentication and adding 
 | `jwtTokenAuth` | [object](#jwttokenauth) | No       | For data source plugins. Token authentication section used with an JWT OAuth API.                                                         |
 | `method`       | string                  | No       | For data source plugins. Route method matches the HTTP verb like GET or POST. Multiple methods can be provided as a comma-separated list. |
 | `path`         | string                  | No       | For data source plugins. The route path that is replaced by the route URL field when proxying the call.                                   |
+| `reqAction`    | string                  | No       | The RBAC action a user must have to use this route.                                                                                       |
 | `reqRole`      | string                  | No       |                                                                                                                                           |
 | `reqSignedIn`  | boolean                 | No       |                                                                                                                                           |
 | `tokenAuth`    | [object](#tokenauth)    | No       | For data source plugins. Token authentication section used with an OAuth API.                                                             |
