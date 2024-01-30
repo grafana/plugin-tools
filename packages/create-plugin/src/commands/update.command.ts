@@ -12,6 +12,7 @@ import {
 } from '../utils/utils.npm.js';
 import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
+import { isPluginDirectory } from '../utils/utils.plugin.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   try {
@@ -32,6 +33,18 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
         subtitle: '(Commit your changes or stash them.)',
         content: `(This check is necessary to make sure that the updates are easy to revert and don't mess with any changes you currently have.
 In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)`,
+      });
+
+      process.exit(1);
+    }
+
+    if (!isPluginDirectory() && !argv.force) {
+      printRedBox({
+        title: 'Are you inside a plugin directory?',
+        subtitle: 'We couldn\'t find a "src/plugin.json" file under your current directory.',
+        content: `(Please make sure to run this command from the root of your plugin folder. In case you want to proceed as is please use the ${chalk.bold(
+          '--force'
+        )} flag.)`,
       });
 
       process.exit(1);
