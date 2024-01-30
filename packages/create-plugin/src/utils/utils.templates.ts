@@ -97,5 +97,7 @@ export function getTemplateData() {
     packageManagerVersion,
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
+    reactRouterV6: features.reactRouterV6,
+    reactRouterVersion: features.reactRouterV6 ? '6.10.0' : '5.2.0',
   };
 }
