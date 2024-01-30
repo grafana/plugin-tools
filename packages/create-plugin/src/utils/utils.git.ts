@@ -11,15 +11,8 @@ export async function isGitDirectory() {
 
     return response.stdout.trim() === 'true';
   } catch (error) {
-    if (error instanceof Error && error.message.includes('fatal: not a git repository')) {
-      return false;
-    }
-
-    throw new Error(
-      `Failed to detect if you are in a git directory (used "${command}"). 
-This check is necessary so we don't accidentally override any changes you might have made to your files. 
-If you are certain you would like to continue, you can run the command again with the --force flag.`
-    );
+    // We also return `false` if the command fails (e.g. if the user doesn't have git installed)
+    return false;
   }
 }
 
@@ -30,8 +23,7 @@ export async function isGitDirectoryClean() {
 
     return response.stdout.trim() === '';
   } catch (error) {
-    throw new Error(`Failed to detect if your git directory is clean (used "git status --porcelain").
-This check is necessary so we don't accidentally override any changes you might have made to your files. 
-If you are certain you would like to continue, you can run the command again with the --force flag.`);
+    // We also return `false` if the command fails (e.g. if the user doesn't have git installed)
+    return false;
   }
 }
