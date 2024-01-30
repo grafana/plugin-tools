@@ -10,7 +10,7 @@ export function getPluginJson(srcDir?: string) {
 }
 
 // Updates the .config/ directory with the latest templates
-export function updatePluginBuildConfig() {
+export function updateDotConfigFolder() {
   compileTemplateFiles(UDPATE_CONFIG.filesToOverride, getTemplateData());
 }
 

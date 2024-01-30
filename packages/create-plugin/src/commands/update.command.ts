@@ -1,7 +1,7 @@
 import minimist from 'minimist';
 import chalk from 'chalk';
 import { EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
-import { updatePluginBuildConfig, isPluginDirectory } from '../utils/utils.plugin.js';
+import { updateDotConfigFolder, isPluginDirectory } from '../utils/utils.plugin.js';
 import { getRuntimeVersion } from '../utils/utils.version.js';
 import { printRedBox, printBlueBox } from '../utils/utils.console.js';
 import { updatePackageJson, updateNpmScripts } from '../utils/utils.npm.js';
@@ -43,7 +43,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
       process.exit(1);
     }
 
-    updatePluginBuildConfig();
+    updateDotConfigFolder();
     updateNpmScripts();
     updatePackageJson({
       onlyOutdated: true,
