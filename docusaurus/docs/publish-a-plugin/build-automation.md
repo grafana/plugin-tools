@@ -22,11 +22,11 @@ To do so, refer to [these docs](https://github.com/grafana/plugin-actions/blob/m
 
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
-If a Grafana Access Policy Token is included your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission.
+If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission.
 
-By creating a release tag, the whole process becomes automated, resulting in a ZIP file that you can submit for publication in the [Grafana plugin catalog](https://grafana.com/plugins)
+By creating a release tag, the whole process becomes automated, resulting in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins)
 
-The ZIP file can be downloaded from the Summary page of the CI workflow.
+The zip file can be downloaded from the summary page of the CI workflow.
 
 ## Create a release tag
 
@@ -45,16 +45,14 @@ If you need to re-tag the release, the current tag can be removed with these com
 git tag -d v2.0.1
 git push --delete origin v2.0.1
 git checkout main
-git pull origin  main
+git pull origin main
 ```
 
 After you push the tag, you can create the same tag again.
 
 ## Download the release zip file
 
-Access the final release zip file directly from the GitHub repository release path.
-
-[Link to generated zip file](https://github.com/briangann/grafana-gauge-panel/releases/download/v2.0.1/briangann-gauge-panel-2.0.1.zip)
+Access the final release zip file directly from the GitHub repository release path (e.g. https://github.com/org/plugin-id/releases).
 
 ## Next steps
 
