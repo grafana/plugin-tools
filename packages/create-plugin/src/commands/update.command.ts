@@ -1,3 +1,4 @@
+import minimist from 'minimist';
 import chalk from 'chalk';
 import { EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
 import { updatePluginBuildConfig, isPluginDirectory } from '../utils/utils.plugin.js';
@@ -6,9 +7,9 @@ import { printRedBox, printBlueBox } from '../utils/utils.console.js';
 import { updatePackageJson, updateNpmScripts } from '../utils/utils.npm.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 
-export const update = async () => {
+export const update = async (argv: minimist.ParsedArgs) => {
   try {
-    if (!(await isGitDirectory())) {
+    if (!(await isGitDirectory()) && !argv.force) {
       printRedBox({
         title: 'You are not inside a git directory',
         content: `In order to proceed please run "git init" in the root of your project and commit your changes.\n
@@ -19,7 +20,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
       process.exit(1);
     }
 
-    if (!(await isGitDirectoryClean())) {
+    if (!(await isGitDirectoryClean()) && !argv.force) {
       printRedBox({
         title: 'Please clean your repository working tree before updating.',
         subtitle: '(Commit your changes or stash them.)',
@@ -30,7 +31,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
       process.exit(1);
     }
 
-    if (!isPluginDirectory()) {
+    if (!isPluginDirectory() && !argv.force) {
       printRedBox({
         title: 'Are you inside a plugin directory?',
         subtitle: 'We couldn\'t find a "src/plugin.json" file under your current directory.',
