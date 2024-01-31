@@ -1,7 +1,7 @@
 ---
 id: writing-tests
 title: Writing tests
-description: How to write tests
+description: How to write tests for Grafana E2E
 draft: true
 keywords:
   - grafana
@@ -12,9 +12,11 @@ keywords:
 sidebar_position: 2
 ---
 
-# First test
+# Write tests
 
-In the following test, the panel edit page is used to test a data source plugin.
+After you have [set up Grafana Plugin E2E](installation.md), you are ready to write your first test. This guide provides sample tests that you can use to test your plugin against multiple versions of Grafana at once.
+
+n the following test, the panel edit page is used to test a data source plugin.
 
 ```typescript
 import { test, expect } from '@grafana/plugin-e2e';
@@ -29,9 +31,9 @@ test('data query should be OK when URL is valid', async ({ panelEditPage, page }
 
 <!-- ## Using `grafanaVersion` and `isFeatureToggleEnabled` fixtures -->'
 
-## More @grafana/plugin-e2e specific fixtures
+## More features of @grafana/plugin-e2e
 
-In the next test, we're asserting that a new instance of the Snowflake data source can be configured successfully. Notice how the fixtures `isFeatureToggleEnabled` and `grafanaVersion` allows us to customize the test code in case a certain Grafana feature toggle is enabled and for specific Grafana versions.
+In the next test, we're asserting that a new instance of the Snowflake data source can be configured successfully. Notice how the fixtures `isFeatureToggleEnabled` and `grafanaVersion` allow us to customize the test code in case a certain Grafana feature toggle is enabled and for specific Grafana versions.
 
 ```typescript
 import { test, expect } from '@grafana/plugin-e2e';
@@ -53,7 +55,7 @@ test('valid credentials should return a 200 status code', async ({
 });
 ```
 
-## Using Grafana E2E selectors
+## Use Grafana E2E selectors
 
 Ever since Grafana 7.0.0, end-to-end tests in Grafana have been relying on selectors defined in the [`@grafana/e2e-selectors`](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors) package to locate elements in the Grafana UI. In the beginning, the selectors were using the `aria-label` attribute, but now most selectors have been migrated to use the `data-testid` attribute instead. All pages exposed by @grafana/plugin-e2e provide a method for resolving a locator either from `aria-label` or `data-testid`. You should always use this method when locating elements that are part of the Grafana UI.
 
@@ -79,7 +81,7 @@ panelEditPage.getByTestIdOrAriaLabel(selectors.components.PanelEditor.toggleVizP
 page.getByTestId('toggle-viz-picker').click();
 ```
 
-Finally, this is a complete test that demonstrates how the `selectors` fixture can be used to locate the code editor component inside panel options when testing the `Text` panel plugin.
+Finally, this is a complete test that demonstrates how you can use the `selectors` fixture to locate the code editor component inside panel options when testing the `Text` panel plugin.
 
 ```typescript
 test('code editor should be displayed when `Code` is clicked', async ({ panelEditPage, page, selectors }) => {

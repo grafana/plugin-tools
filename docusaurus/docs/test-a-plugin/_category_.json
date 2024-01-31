@@ -2,7 +2,7 @@
   "position": 25,
   "label": "Test a plugin",
   "customProps": {
-    "description": "Test a Grafana plugin"
+    "description": "Test a Grafana plugin using the grafana/plugin-e2e tool."
   },
   "collapsible": true,
   "collapsed": true

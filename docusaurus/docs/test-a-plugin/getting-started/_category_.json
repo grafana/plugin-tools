@@ -1,8 +1,8 @@
 {
   "position": 1,
-  "label": "Getting Started",
+  "label": "Get started with Plugin E2E",
   "customProps": {
-    "description": "Get started with plugin E2E testing"
+    "description": "Get started with plugin end-to-end testing."
   },
   "collapsible": true,
   "collapsed": false

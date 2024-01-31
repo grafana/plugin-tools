@@ -1,7 +1,7 @@
 ---
-id: installation
-title: Installation
-description: How to setup @grafana/plugin-e2e
+id: install-plugin-e2e
+title: Installation and setup
+description: How to install and set up @grafana/plugin-e2e.
 draft: true
 keywords:
   - grafana
@@ -21,13 +21,15 @@ Plugin authors typically want their plugins to be compatible with a range of Gra
 
 [`@grafana/plugin-e2e`](https://www.npmjs.com/package/@grafana/plugin-e2e?activeTab=readme) is designed specifically for Grafana plugin developers. It extends [`Playwright test`](https://playwright.dev/) capabilities with fixtures, models, and expect matchers, enabling comprehensive end-to-end testing of Grafana plugins across multiple versions of Grafana. This package simplifies the testing process, ensuring your plugin is robust and compatible with various Grafana environments.
 
-## Prerequisites
+## Before you begin
 
 You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) with Node.js 18+ setup. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 0.40.0 installed. For instructions on how to install Playwright in your plugin, refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright).
 
-If you don't have any previous experience from working with Playwright, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
+If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
 
-## Installing @grafana/plugin-e2e
+## Set up `plugin-e2e`
+
+### Step 1: Installing @grafana/plugin-e2e
 
 Now go ahead and install `@grafana/plugin-e2e`.
 
@@ -58,12 +60,12 @@ yarn add @grafana/plugin-e2e@latest -D
 </TabItem>
 </Tabs>
 
-## Configure Playwright
+### Step 2: Configure Playwright
 
 Open the `playwright.config.[js|ts]` file that was generated when Playwright was installed.
 
 1. Change the `baseUrl` to `'http://localhost:3000'`.
-2. Add a new initialization project that login to Grafana and stores the cookie on disk. Then add a dependency to this project in the subsequent project that we'll use to run our plugin tests. By specifying this dependency, all tests in the `chromium` project will load and reuse the authenticated state from the previous project.
+2. Add a new initialization project that logins to Grafana and stores the cookie on disk. Then add a dependency to this project in the subsequent project that we'll use to run our plugin tests. By specifying this dependency, all tests in the `chromium` project will load and reuse the authenticated state from the previous project.
 
 ```ts
 projects: [
@@ -83,7 +85,7 @@ projects: [
 ],
 ```
 
-## Provision Grafana
+### Step 3: Provision Grafana
 
 In many cases, plugin E2E tests rely on the existence of a properly configured data source plugin. We accomplish that using provisioning.
 
@@ -99,7 +101,7 @@ datasources:
 
 For details on how to provision Grafana, refer to the [documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/).
 
-## Start Grafana
+### Step 4: Start Grafana
 
 Next, startup the Grafana instance locally. Optionally, you can specify a version of choice. If you don't, the image that is currently tagged as `latest` in the Docker registry will be used.
 
@@ -129,7 +131,7 @@ GRAFANA_VERSION=10.1.6 pnpm server
 </TabItem>
 </Tabs>
 
-## Run tests
+### Step 5: Run tests
 
 Now you can open the terminal and run the test script from within your local plugin development directory.
 
