@@ -17,9 +17,7 @@ sidebar_position: 5
 
 # Subscribe to Grafana events
 
-If you’re building a [panel plugin](../../introduction/plugin-types-usage.md#panel-visualization-plugins), Grafana already provides the data you need to configure and render your panel. If not, you can usually retrieve the information you need from any of the runtime services, like `BackendSrv` and `TemplateSrv`.
-
-However, in some cases you may want your plugin to react to changes that occur outside of your plugin. For example, you may want your plugin to react when the user zooms in or out of another panel. In this guide, you’ll learn how to make your plugin react to events in Grafana.
+If you’re building a [panel plugin](../../introduction/plugin-types-usage.md#panel-visualization-plugins), in some cases you may want your plugin to react to changes that occur outside of your plugin. For example, you may want your plugin to react when the user zooms in or out of another panel. In this guide, you’ll learn how to make your plugin react to events in Grafana.
 
 :::tip
 
@@ -29,7 +27,7 @@ For a step-by-step guide to making your own panel plugin, refer to our [Tutorial
 
 ## Access the event bus
 
-The event bus for subscribing to Grafana events is located on the [`PanelProps`](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbfa3cb9b2d474ad56dc/packages/grafana-data/src/types/panel.ts#L74-L122) interface. This interface exposes runtime information about the panel, such as the panel's dimensions and timing measurements. Refer to the code comments for the property definitions.
+The event bus for subscribing to Grafana events is located in the [`PanelProps`](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbfa3cb9b2d474ad56dc/packages/grafana-data/src/types/panel.ts#L74-L122) interface. This interface exposes runtime information about the panel, such as the panel's dimensions and timing measurements. Refer to the code comments for the property definitions.
 
 You can access the event bus and other panel properties through the `props` argument of your plugin. For example:
 
@@ -38,12 +36,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
 ```
 
 ## Subscribe to Grafana application events
-
-:::note
-
-If you’ve previously built plugins using Angular, note that you don’t need to subscribe to render events to update your visualization in React. React components automatically re-renders whenever any of its dependencies has changed.
-
-:::
 
 Grafana uses an event bus to publish application events to notify different parts of Grafana when the user performs an action. Your plugin can react to these actions by subscribing to one or more events.
 
