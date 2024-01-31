@@ -69,7 +69,9 @@ function getTemplateData(answers: CliArgs) {
     isNPM: packageManagerName === 'npm',
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
-    reactRouterV6: features.reactRouterV6,
+    useReactRouterV6: features.useReactRouterV6,
+    useReactRouterTypes: !features.useReactRouterV6 && isAppType, // v6 is written in typescript, so it's only needed for <v6
+    reactRouterVersion: features.useReactRouterV6 ? '6.10.0' : '5.2.0',
   };
 
   return templateData;

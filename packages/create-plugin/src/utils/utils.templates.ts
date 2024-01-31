@@ -5,7 +5,7 @@ import mkdirp from 'mkdirp';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
-import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
+import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES, PLUGIN_TYPES } from '../constants.js';
 import { getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
@@ -97,7 +97,8 @@ export function getTemplateData() {
     packageManagerVersion,
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
-    reactRouterV6: features.reactRouterV6,
-    reactRouterVersion: features.reactRouterV6 ? '6.10.0' : '5.2.0',
+    useReactRouterV6: features.useReactRouterV6,
+    useReactRouterTypes: !features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app, // v6 is written in typescript, so it's only needed for <v6
+    reactRouterVersion: features.useReactRouterV6 ? '6.10.0' : '5.2.0',
   };
 }
