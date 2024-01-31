@@ -34,7 +34,7 @@ It is possible to create all the plugin code from scratch, as long as you follow
 
 1. Go to the location where you want your plugin directory to be created and run:
 
-```
+```shell
 npx @grafana/create-plugin@latest
 ```
 
@@ -62,7 +62,7 @@ To accomplish this, follow these steps.
 
 1. Replace the `QueryEditor` function in `/src/components/QueryEditor.tsx` with the following code:
 
-```
+```tsx
 export function QueryEditor({ query, onChange, onRunQuery }: Props) {
   const onLowerLimitChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, lowerLimit: event.target.valueAsNumber });
@@ -96,10 +96,9 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
 
 1. In the `src/datasource.ts` file, indicate a query through a stream channel. This file is where the query executed by the frontend part of your plugin is made. Add the following method to the `DataSource` class:
 
-```
+```tsx
   query(request: DataQueryRequest<MyQuery>): Observable<DataQueryResponse> {
-    const observables = request.targets.map((target, index) => {
-      const query = defaults(target, DEFAULT_QUERY);
+    const observables = request.targets.map((query, index) => {
 
       return getGrafanaLiveSrv().getDataStream({
         addr: {
@@ -138,7 +137,7 @@ Now we need to add the necessary code to the backend. For that, we change `pkg/p
 
 1. Add the following part in the replacement of the `var`:
 
-```
+```tsx
 var (
     _ backend.CheckHealthHandler    = (*Datasource)(nil)
     _ instancemgmt.InstanceDisposer = (*Datasource)(nil)
@@ -150,7 +149,7 @@ That means our `DataSource` will implement `backend.CheckHealthHandler`, `instan
 
 1. Add the following code:
 
-```
+```tsx
 func (d *Datasource) SubscribeStream(context.Context, *backend.SubscribeStreamRequest) (*backend.SubscribeStreamResponse, error) {
     return &backend.SubscribeStreamResponse{
         Status: backend.SubscribeStreamStatusOK,
@@ -162,7 +161,7 @@ This code will be called when the user tries to subscribe to a channel. You can 
 
 1. Implement the `PublishStream` method:
 
-```
+```tsx
 func (d *Datasource) PublishStream(context.Context, *backend.PublishStreamRequest) (*backend.PublishStreamResponse, error) {
     return &backend.PublishStreamResponse{
         Status: backend.PublishStreamStatusPermissionDenied,
@@ -174,7 +173,7 @@ This code is called whenever a user tries to publish to a channel. As we don't w
 
 1. Finally, implement the `RunStream` method:
 
-```
+```tsx
 func (d *Datasource) RunStream(ctx context.Context, req *backend.RunStreamRequest, sender *backend.StreamSender) error {
     q := Query{}
     json.Unmarshal(req.Data, &q)
@@ -215,15 +214,15 @@ Therefore, the first part of the method parses the data and the query is defined
 
 1.  Add the following code to `./pkg/plugin/query.go`:
 
-```
-type Query struct {
-    UpperLimit   float64 `json:"upperLimit"`
-    LowerLimit   float64 `json:"lowerLimit"`
-    TickInterval float64 `json:"tickInterval"`
-}
+```tsx
+  type Query struct {
+      UpperLimit   float64 `json:"upperLimit"`
+      LowerLimit   float64 `json:"lowerLimit"`
+      TickInterval float64 `json:"tickInterval"`
+  }
 ```
 
-In this example, have are creating a ticker and an infinity loop based on this ticker. Whenever the ticker times out, we will enter the second case of the `select` and generate a random number `randomValue`. After we will create a data frame using `data.NewFrame`, that contains the `randomValue` and the current time, and send it using `sender.SendFrame`. This loop will run indefinitely until we close the channel.
+In this example, we are creating a ticker and an infinity loop based on this ticker. Whenever the ticker times out, we will enter the second case of the `select` and generate a random number `randomValue`. After we will create a data frame using `data.NewFrame`, that contains the `randomValue` and the current time, and send it using `sender.SendFrame`. This loop will run indefinitely until we close the channel.
 
 :::tip
 
@@ -237,7 +236,7 @@ The coding part of the plugin development process is done. Now we need to genera
 
 1. Build the frontend:
 
-```
+```shell
 npm install
 npm run build
 ```
@@ -246,7 +245,7 @@ This should download all the dependencies and create the frontend plugin files i
 
 1. Compile the backend code and generate the plugin binaries. For that you should have `mage` installed and then you simply need to run:
 
-```
+```shell
 mage -v
 ```
 
@@ -260,7 +259,9 @@ However, there is an easier way of doing all this.
 
 1. Simply run:
 
-`npm run server`
+```shell
+npm run server
+```
 
 This command runs a Grafana container using docker-compose and puts the built plugins in the right place.
 
@@ -282,7 +283,17 @@ You may be using Docker Compose instead of docker-compose. If that is your case,
 
 1. Click on the data source's card, and then click **Save & test** on the next page.
 
-![Data sources - Grafana UI.](/img/data-sources-menu.png)
+Adding this code can help to avoid an error:
+
+````tsx
+  func (d *Datasource) CheckHealth(_ context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+    return &backend.CheckHealthResult{
+      Status:  backend.HealthStatusOk,
+      Message: "Data source is working",
+    }, nil
+  }
+  ```
+
 
 1. If a randomized error occurs, just click **Save & test** until a success message appears:
 
@@ -297,3 +308,4 @@ At that point, you should start seeing data in real-time. You can change the upp
 ![Grafana streaming data source.](/img/streaming-data-source.gif)
 
 You have successfully created a Grafana streaming data source plugin with both a frontend and backend. The plugin is ready for you to customize to suit your specific needs.
+````
