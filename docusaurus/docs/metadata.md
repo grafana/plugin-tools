@@ -219,12 +219,13 @@ Requires Grafana version 9.4.0 or later. Currently, this is behind the `accessCo
 
 | Property | Type            | Required | Description                                                                                           |
 | -------- | --------------- | -------- | ----------------------------------------------------------------------------------------------------- |
-| `role`   | [object](#role) | **Yes**  | RBAC role definition to bundle related RBAC permissions on the plugin.                                |
+| `role`   | [object](#role) | **Yes**  | RBAC role definition to group related RBAC permissions on the plugin.                                 |
 | `grant`  | string[]        | No       | Default assignments of the role to Grafana basic roles (`Viewer`, `Editor`, `Admin`, `Grafana Admin`) |
 
 ### role
 
-A role bundle a set of related RBAC permissions on your plugin. The RBAC actions defined in your role must start with your plugin `id` (ex: `grafana-test-app.projects:read`).
+A role groups your plugin's related RBAC permissions (ex: `Projects Admin` would group permissions to create, read, write and delete projects).
+The RBAC actions defined in your role must start with your plugin `id` (ex: `grafana-test-app.projects:read`).
 
 | Property      | Type                     | Required | Description                    |
 | ------------- | ------------------------ | -------- | ------------------------------ |
