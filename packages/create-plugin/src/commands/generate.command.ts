@@ -45,7 +45,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   if (answers.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
-  await execPostScaffoldFunction(prettifyFiles, exportPath);
+  await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
 
   printGenerateSuccessMessage(answers);
 };
