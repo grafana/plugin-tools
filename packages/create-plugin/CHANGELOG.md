@@ -1,3 +1,15 @@
+# v3.2.0 (Thu Feb 01 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: Check for a clean working tree [#705](https://github.com/grafana/plugin-tools/pull/705) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v3.1.3 (Mon Jan 29 2024)
 
 #### 🐛 Bug Fix

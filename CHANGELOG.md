@@ -1,3 +1,21 @@
+# (Thu Feb 01 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.2.0`
+  - Create-plugin: Check for a clean working tree [#705](https://github.com/grafana/plugin-tools/pull/705) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump lint-staged from 15.2.0 to 15.2.1 [#715](https://github.com/grafana/plugin-tools/pull/715) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Mon Jan 29 2024)
 
 #### 🐛 Bug Fix
