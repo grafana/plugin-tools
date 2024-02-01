@@ -6,3 +6,13 @@ export function getPluginJson(srcDir?: string) {
   const pluginJsonPath = path.join(srcPath, 'plugin.json');
   return readJsonFile(pluginJsonPath);
 }
+
+// Checks if CWD is a valid root directory of a plugin
+export function isPluginDirectory() {
+  try {
+    getPluginJson();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
