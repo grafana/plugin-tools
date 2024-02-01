@@ -13,7 +13,7 @@ if (isUnsupportedPlatform()) {
 }
 
 const args = process.argv.slice(2);
-const argv = minimist(args);
+const argv = minimist(args, { alias: { f: 'force' } });
 const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
   migrate,
   generate,
