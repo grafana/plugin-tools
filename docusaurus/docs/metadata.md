@@ -219,8 +219,8 @@ Requires Grafana version 9.4.0 or later. Currently, this is behind the `accessCo
 
 | Property | Type            | Required | Description                                                                                           |
 | -------- | --------------- | -------- | ----------------------------------------------------------------------------------------------------- |
-| `role`   | [object](#role) | **yes**  | RBAC role definition to bundle related RBAC permissions on the plugin.                                |
-| `grant`  | string[]        | no       | Default assignments of the role to Grafana basic roles (`Viewer`, `Editor`, `Admin`, `Grafana Admin`) |
+| `role`   | [object](#role) | **Yes**  | RBAC role definition to bundle related RBAC permissions on the plugin.                                |
+| `grant`  | string[]        | No       | Default assignments of the role to Grafana basic roles (`Viewer`, `Editor`, `Admin`, `Grafana Admin`) |
 
 ### role
 
@@ -228,9 +228,9 @@ A role bundle a set of related RBAC permissions on your plugin. The RBAC actions
 
 | Property      | Type                     | Required | Description                    |
 | ------------- | ------------------------ | -------- | ------------------------------ |
-| `name`        | string                   | **yes**  | Display name of the role.      |
-| `description` | string                   | **yes**  | Describe the aim of the role.  |
-| `permissions` | [object](#permissions)[] | **yes**  | RBAC permission on the plugin. |
+| `name`        | string                   | **Yes**  | Display name of the role.      |
+| `description` | string                   | No       | Describe the aim of the role.  |
+| `permissions` | [object](#permissions)[] | No       | RBAC permission on the plugin. |
 
 ## routes
 
