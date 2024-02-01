@@ -224,12 +224,12 @@ Requires Grafana version 9.4.0 or later. Currently, this is behind the `accessCo
 
 ### role
 
-A role bundle a set of related RBAC permissions on your plugin. The RBAC actions defined in your role must start with your plugin id (ex: `grafana-test-app.projects:read`).
+A role bundle a set of related RBAC permissions on your plugin. The RBAC actions defined in your role must start with your plugin `id` (ex: `grafana-test-app.projects:read`).
 
 | Property      | Type                     | Required | Description                    |
 | ------------- | ------------------------ | -------- | ------------------------------ |
-| `name`        | string                   | **Yes**  | Display name of the role.      |
-| `description` | string                   | No       | Describe the aim of the role.  |
+| `name`        | string                   | **Yes**  | Name of the role.              |
+| `description` | string                   | No       | Describes the aim of the role. |
 | `permissions` | [object](#permissions)[] | No       | RBAC permission on the plugin. |
 
 ## routes
