@@ -1,5 +1,6 @@
 import { marked } from 'marked';
-import chalk from 'chalk';
+import chalk, { type ForegroundColorName } from 'chalk';
+import boxen from 'boxen';
 import TerminalRenderer from 'marked-terminal';
 import Enquirer from 'enquirer';
 
@@ -50,4 +51,32 @@ export async function selectPrompt(message: string, choices: string[]): Promise<
   });
 
   return question['selectPrompt'];
+}
+
+type PrintBoxArgs = {
+  title: string;
+  content: string;
+  subtitle?: string;
+  color?: ForegroundColorName;
+};
+
+export function printRedBox({ title, subtitle, content }: PrintBoxArgs) {
+  printBox({ title, subtitle, content, color: 'red' });
+}
+
+export function printBlueBox({ title, subtitle, content }: PrintBoxArgs) {
+  printBox({ title, subtitle, content, color: 'blue' });
+}
+
+export function printGreenBox({ title, subtitle, content }: PrintBoxArgs) {
+  printBox({ title, subtitle, content, color: 'green' });
+}
+
+export function printBox({ title, subtitle, content, color = 'gray' }: PrintBoxArgs) {
+  console.log(
+    boxen(chalk[color](`${chalk.bold(title)}${subtitle ? ` ${subtitle}` : ''}\n\n${content}`), {
+      padding: 1,
+      borderColor: color,
+    })
+  );
 }
