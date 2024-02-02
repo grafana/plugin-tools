@@ -1,3 +1,24 @@
+# v3.4.0 (Fri Feb 02 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
+
+#### 🚀 Enhancement
+
+- Update create-plugin workflow action versions [#711](https://github.com/grafana/plugin-tools/pull/711) ([@6nv](https://github.com/6nv))
+
+#### 🐛 Bug Fix
+
+- Fix broken livereload injection when using Grafana 10.2.3 [#696](https://github.com/grafana/plugin-tools/pull/696) ([@samjewell](https://github.com/samjewell))
+
+#### Authors: 2
+
+- Nicolas Ventura ([@6nv](https://github.com/6nv))
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
 # v3.3.0 (Fri Feb 02 2024)
 
 #### 🚀 Enhancement
