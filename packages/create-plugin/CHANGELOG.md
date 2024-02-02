@@ -1,3 +1,15 @@
+# v3.3.0 (Fri Feb 02 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: Check if inside a plugin directory [#706](https://github.com/grafana/plugin-tools/pull/706) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v3.2.0 (Thu Feb 01 2024)
 
 #### 🚀 Enhancement
