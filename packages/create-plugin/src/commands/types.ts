@@ -20,6 +20,5 @@ export type TemplateData = {
   version: string;
   bundleGrafanaUI: boolean;
   useReactRouterV6: boolean;
-  useReactRouterTypes: boolean;
   reactRouterVersion: string;
 };
