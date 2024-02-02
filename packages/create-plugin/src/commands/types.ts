@@ -19,4 +19,6 @@ export type TemplateData = {
   isNPM: boolean;
   version: string;
   bundleGrafanaUI: boolean;
+  useReactRouterV6: boolean;
+  reactRouterVersion: string;
 };

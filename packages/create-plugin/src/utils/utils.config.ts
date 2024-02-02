@@ -4,6 +4,10 @@ import { getVersion } from './utils.version.js';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;
+
+  // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
+  // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
+  useReactRouterV6: boolean;
 };
 
 type CreatePluginConfig = UserConfig & {
@@ -66,6 +70,7 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
   return {
+    useReactRouterV6: true,
     bundleGrafanaUI: false,
     ...flags,
   };

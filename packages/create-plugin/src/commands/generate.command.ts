@@ -59,6 +59,7 @@ function getTemplateData(answers: CliArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+  const useReactRouterV6 = features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app;
   const templateData: TemplateData = {
     ...answers,
     pluginId,
@@ -69,6 +70,8 @@ function getTemplateData(answers: CliArgs) {
     isNPM: packageManagerName === 'npm',
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
+    useReactRouterV6,
+    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
 
   return templateData;
