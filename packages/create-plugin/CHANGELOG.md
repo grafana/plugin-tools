@@ -1,3 +1,15 @@
+# v3.5.0 (Fri Feb 02 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: Use react-router v6 by default [#710](https://github.com/grafana/plugin-tools/pull/710) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v3.4.0 (Fri Feb 02 2024)
 
 :tada: This release contains work from a new contributor! :tada:
