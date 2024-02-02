@@ -252,6 +252,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "6nv",
+      "name": "Nicolas Ventura",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91281131?v=4",
+      "profile": "https://www.nersc.gov/",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7
