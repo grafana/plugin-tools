@@ -98,6 +98,6 @@ export function getTemplateData() {
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
     useReactRouterV6: features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app,
-    reactRouterVersion: features.useReactRouterV6 ? '6.10.0' : '5.2.0',
+    reactRouterVersion: features.useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
 }

@@ -70,7 +70,7 @@ function getTemplateData(answers: CliArgs) {
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
     useReactRouterV6: features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app,
-    reactRouterVersion: features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app ? '6.10.0' : '5.2.0',
+    reactRouterVersion: features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app ? '6.22.0' : '5.2.0',
   };
 
   return templateData;
