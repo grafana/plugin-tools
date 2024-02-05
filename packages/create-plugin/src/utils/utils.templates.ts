@@ -97,6 +97,7 @@ export function getTemplateData() {
     packageManagerVersion,
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
+    useReactRouterV5: !features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app,
     useReactRouterV6: features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app,
     reactRouterVersion: features.useReactRouterV6 ? '6.22.0' : '5.2.0',
   };

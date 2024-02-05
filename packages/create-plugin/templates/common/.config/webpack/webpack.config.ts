@@ -49,8 +49,8 @@ const config = async (env): Promise<Configuration> => {
       'react-redux',
       'redux',
       'rxjs',
-      'react-router',{{#unless useReactRouterV6}}
-      'react-router-dom',{{/unless}}
+      'react-router',{{#if useReactRouterV5}}
+      'react-router-dom',{{/if}}
       'd3',
       'angular',{{#unless bundleGrafanaUI}}
       '@grafana/ui',{{/unless}}
