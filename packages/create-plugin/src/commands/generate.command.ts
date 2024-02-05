@@ -59,8 +59,8 @@ function getTemplateData(answers: CliArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
-  const useReactRouterV5 = !features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app;
-  const useReactRouterV6 = features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app;
+  const useReactRouterV5 = !features.useReactRouterV6 && isAppType;
+  const useReactRouterV6 = features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app; // Not yet supported by @grafana/scenes
   const templateData: TemplateData = {
     ...answers,
     pluginId,
