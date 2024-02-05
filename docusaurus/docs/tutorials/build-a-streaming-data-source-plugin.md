@@ -46,7 +46,7 @@ For a complete list of prerequisites and suggestions for setting up your develop
 
 Create Plugin will prompt you with some questions about your plugin name and type, your organization, and many other options.
 
-1. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
+2. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
 
 The tool will create a skeleton with all the necessary code and dependencies to run a data source backend plugin. And, if you compile the code, you will have a very simple backend plugin. However, this generated code isn't a streaming plugin yet, and we need to make some modifications.
 
@@ -94,7 +94,7 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
 }
 ```
 
-1. In the `src/datasource.ts` file, indicate a query through a stream channel. This file is where the query executed by the frontend part of your plugin is made. Add the following method to the `DataSource` class:
+2. In the `src/datasource.ts` file, indicate a query through a stream channel. This file is where the query executed by the frontend part of your plugin is made. Add the following method to the `DataSource` class:
 
 ```tsx
   query(request: DataQueryRequest<MyQuery>): Observable<DataQueryResponse> {
@@ -147,19 +147,9 @@ var (
 
 That means our `DataSource` will implement `backend.CheckHealthHandler`, `instancemgmt.InstanceDisposer`, and `backend.StreamHandler`. The methods necessary for the first two are already provided in the scaffold; therefore, we need to implement only the methods necessary for `backend.StreamHandler`.
 
-1. Add the following code:
+2. This code will be called when the user tries to subscribe to a channel. You can implement permissions checking here, but in our case we just want the user to connect successfully in each attempt; therefore, we just return a backend: `SubscribeStreamStatusOK`.
 
-```tsx
-func (d *Datasource) SubscribeStream(context.Context, *backend.SubscribeStreamRequest) (*backend.SubscribeStreamResponse, error) {
-    return &backend.SubscribeStreamResponse{
-        Status: backend.SubscribeStreamStatusOK,
-    }, nil
-}
-```
-
-This code will be called when the user tries to subscribe to a channel. You can implement permissions checking here, but in our case we just want the user to connect successfully in each attempt; therefore, we just return a backend: `SubscribeStreamStatusOK`.
-
-1. Implement the `PublishStream` method:
+3. Implement the `PublishStream` method:
 
 ```tsx
 func (d *Datasource) PublishStream(context.Context, *backend.PublishStreamRequest) (*backend.PublishStreamResponse, error) {
@@ -171,7 +161,19 @@ func (d *Datasource) PublishStream(context.Context, *backend.PublishStreamReques
 
 This code is called whenever a user tries to publish to a channel. As we don't want to receive any data from the frontend after the first connection is created, we will just return a `backend.PublishStreamStatusPermissionDenied`.
 
-1. Finally, implement the `RunStream` method:
+4. To prevent a random error, change the `CheckHealth` method provided by default for the following code:
+
+```tsx
+func (d *Datasource) SubscribeStream(context.Context, *backend.SubscribeStreamRequest) (*backend.SubscribeStreamResponse, error) {
+    return &backend.SubscribeStreamResponse{
+        Status: backend.SubscribeStreamStatusOK,
+    }, nil
+}
+```
+
+Note that this code is not related to the streaming plugin itself. It's just to avoid the error that will be caused by not changing the default.
+
+5. Finally, implement the `RunStream` method:
 
 ```tsx
 func (d *Datasource) RunStream(ctx context.Context, req *backend.RunStreamRequest, sender *backend.StreamSender) error {
@@ -212,7 +214,7 @@ Once implemented, this method will be called once per connection and this is whe
 
 Therefore, the first part of the method parses the data and the query is defined as a `struct`.
 
-1.  Add the following code to `./pkg/plugin/query.go`:
+6.  Add the following code to `./pkg/plugin/query.go`:
 
 ```tsx
   type Query struct {
@@ -230,7 +232,22 @@ You can remove the method `QueryData` that is created by the scaffold and all th
 
 :::
 
-## Step 4: Build the plugin
+## Step 4: Modify `plugin.json`
+
+Grafana needs to recognize that the new plugin is a streaming plugin when it's first loaded. To accomplish this, simply add the `"streaming":true` property to your `src/plugin.json`. It should look like this:
+
+```json
+{
+  ...
+  "id": "grafana-streamingbackendexample-datasource",
+  "metrics": true,
+  "backend": true,
+  ...
+  "streaming": true
+}
+```
+
+## Step 5: Build the plugin
 
 The coding part of the plugin development process is done. Now we need to generate our plugin package to be able to run it in Grafana. Since our plugin has both a frontend and a backend part, we do this in two steps.
 
@@ -243,7 +260,7 @@ npm run build
 
 This should download all the dependencies and create the frontend plugin files in the `./dist` directory.
 
-1. Compile the backend code and generate the plugin binaries. For that you should have `mage` installed and then you simply need to run:
+2. Compile the backend code and generate the plugin binaries. For that you should have `mage` installed and then you simply need to run:
 
 ```shell
 mage -v
@@ -251,7 +268,7 @@ mage -v
 
 This command compiles the Go code and generate binaries for all Grafana-supported platforms in `./dist`.
 
-## Step 5: Run the plugin
+## Step 6: Run the plugin
 
 Once the plugin is built, you can copy `./dist` together with its content, rename it to the `id` of your plugin, put it in the plugin's path of your Grafana instance, and test it.
 
@@ -265,7 +282,7 @@ npm run server
 
 This command runs a Grafana container using docker-compose and puts the built plugins in the right place.
 
-1. To verify the build, go to Grafana at `https://localhost:3000`.
+2. To verify the build, go to Grafana at `https://localhost:3000`.
 
 :::note
 
@@ -273,39 +290,45 @@ You may be using Docker Compose instead of docker-compose. If that is your case,
 
 :::
 
-## Step 6: Test the plugin
+## Step 7: Test the plugin
 
 1. From Grafana at `https://localhost:3000`, use the default credentials: username `admin` and password `admin`. If you're not presented with a login page, click **Sign in** in the top of the page and insert the credentials.
 
-1. Add the data source. Since we are running in our `docker-compose` environment, we don't need to install it, and it will be directly available for usage. Go to **Connections > Data sources**, using the left menu as shown in the following image:
+2. Add the data source. Since we are running in our `docker-compose` environment, we don't need to install it, and it will be directly available for usage. Go to **Connections > Data sources**, using the left menu as shown in the following image:
 
-1. A new page opens, and then click **Add data source**. Grafana opens another page where you can search for the data source name that we've just created.
+3. A new page opens, and then click **Add data source**. Grafana opens another page where you can search for the data source name that we've just created.
 
-1. Click on the data source's card, and then click **Save & test** on the next page.
+4. Click the data source's card, and then click **Save & test** on the next page.
 
-Adding this code can help to avoid an error:
+5. Optional: Add the following code to `pkg/plugin/datasource.go`. It should replace the `CheckHealth` method that already exists because it was created by the scaffold.
 
-````tsx
+```tsx
   func (d *Datasource) CheckHealth(_ context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
     return &backend.CheckHealthResult{
       Status:  backend.HealthStatusOk,
       Message: "Data source is working",
     }, nil
   }
-  ```
+```
 
+:::note
 
-1. If a randomized error occurs, just click **Save & test** until a success message appears:
+If a randomized error occurs, just click **Save & test** until a success message appears:
 
 ![Datasource dialog box - Grafana UI.](/img/datasource-dialog.png)
 
-1. Click **Build a dashboard** in the right upper corner. On the next page, click a button to **+ Add visualization**. On the dialog box, click the newly added data source. Data begins to appear like so:
+:::
 
-1. To visualize the data better, change the visualization time range to something like 1 minute from now and apply it.
+6. Click **Build a dashboard** in the right upper corner. On the next page, click a button to **+ Add visualization**. On the dialog box, click the newly added data source. Data begins to appear like so:
+
+7. To visualize the data better, change the visualization time range to something like 1 minute from now and apply it.
 
 At that point, you should start seeing data in real-time. You can change the upper and lower limit or the tick interval if you want. This will generate a new query and the panel will be updated. You can also add more queries if you want.
 
 ![Grafana streaming data source.](/img/streaming-data-source.gif)
 
 You have successfully created a Grafana streaming data source plugin with both a frontend and backend. The plugin is ready for you to customize to suit your specific needs.
-````
+
+```
+
+```
