@@ -79,7 +79,7 @@ The migration handler gets the runtime version and uses semver to determine whic
 
 There are two cases here:
 
-#### Case 1: User runs panel with Roboto selected
+#### Case 2: User runs panel with Roboto selected
 
 In this case, a user is running a current Grafana (9.4.3) and has a panel with Roboto selected. The plugin can offer different Select options based on the runtime.
 
