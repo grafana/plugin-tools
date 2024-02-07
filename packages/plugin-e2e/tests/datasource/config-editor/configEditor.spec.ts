@@ -1,10 +1,8 @@
-import { Page } from '@playwright/test';
 import { expect, test } from '../../../src';
-import { clickRadioButton } from '../../utils';
 
 test('invalid credentials should return an error', async ({ createDataSourceConfigPage, page }) => {
   const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
-  await clickRadioButton(page, 'API Key', { exact: true });
+  await configPage.ui.radioButton.click('API Key', { exact: true });
   await page.getByPlaceholder('Enter API key').fill('xyz');
   await expect(configPage.saveAndTest()).not.toBeOK();
 });
@@ -18,6 +16,6 @@ test('valid credentials should return a 200 status code', async ({ createDataSou
 
 test('valid credentials should display a success alert on the page', async ({ createDataSourceConfigPage, page }) => {
   const configPage = await createDataSourceConfigPage({ type: 'testdata' });
-  await configPage.saveAndTest({ skipWaitForResponse: true });
+  configPage.saveAndTest({ skipWaitForResponse: true });
   await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
 });
