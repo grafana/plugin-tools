@@ -12,7 +12,7 @@ import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../
 import { getExportPath } from '../utils/utils.path.js';
 import { renderTemplateFromFile } from '../utils/utils.templates.js';
 import { getVersion } from '../utils/utils.version.js';
-import { prettifyFiles } from './generate/prettify-files.js';
+import { prettifyFiles } from '../utils/utils.prettify-files.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
@@ -45,7 +45,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   if (answers.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
-  await execPostScaffoldFunction(prettifyFiles, exportPath);
+  await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
 
   printGenerateSuccessMessage(answers);
 };
@@ -122,18 +122,18 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
   // Copy over Github workflow files (if selected)
   const ciWorkflowActions = templateData.hasGithubWorkflows
     ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.ciWorkflows,
-        exportPath,
-        templateData,
-      })
+      folderPath: TEMPLATE_PATHS.ciWorkflows,
+      exportPath,
+      templateData,
+    })
     : [];
 
   const isCompatibleWorkflowActions = templateData.hasGithubLevitateWorkflow
     ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
-        exportPath,
-        templateData,
-      })
+      folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
+      exportPath,
+      templateData,
+    })
     : [];
 
   return [...pluginActions, ...ciWorkflowActions, ...isCompatibleWorkflowActions];

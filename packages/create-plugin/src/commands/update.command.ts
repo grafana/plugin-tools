@@ -13,6 +13,7 @@ import {
 import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
+import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   try {
@@ -59,6 +60,9 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
     if (await confirmPrompt(TEXT.updateConfigPrompt)) {
       compileTemplateFiles(UDPATE_CONFIG.filesToOverride, getTemplateData());
       printSuccessMessage(TEXT.overrideFilesSuccess);
+
+      const prettifyMsg = await prettifyFiles({ targetPath: '.config', projectRoot: '.' });
+      printMessage(prettifyMsg);
     } else {
       printMessage(TEXT.overrideFilesAborted);
       process.exit(0);
