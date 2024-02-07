@@ -48,6 +48,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   await execPostScaffoldFunction(prettifyFiles, exportPath);
 
   printGenerateSuccessMessage(answers);
+  console.log('🎉  Plugin scaffold complete!');
 };
 
 function getTemplateData(answers: CliArgs) {
