@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
 
 # Introduction
 
-All `@grafana/plugin-e2e` API's are tested with all minor versions of Grafana since 8.3.0. This article provides examples on how to run e2e targeting different Grafana versions locally and in CI.
+`@grafana/plugin-e2e` is tested with all minor versions of Grafana since 8.3.0. This article provides examples on how to run e2e tests targeting different Grafana versions locally and in CI.
 
 ## On your local machine
 
@@ -49,7 +49,7 @@ GRAFANA_VERSION=10.1.6 pnpm server
 </TabItem>
 </Tabs>
 
-## Github Workflow
+## CI
 
 The following workflow can be used to run e2e tests against a matrix of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
 
@@ -57,7 +57,7 @@ The following workflow can be used to run e2e tests against a matrix of Grafana 
 <TabItem value="npm">
 
 ```yaml
-name: E2E tests - Playwright
+name: E2E tests
 on:
   pull_request:
 
