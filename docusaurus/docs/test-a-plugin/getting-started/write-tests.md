@@ -14,7 +14,7 @@ sidebar_position: 2
 
 # Write tests
 
-After you have [set up Grafana Plugin E2E](installation.md), you are ready to write your first test. This guide provides sample tests that you can use to test your plugin against multiple versions of Grafana at once.
+After you have [set up Grafana Plugin E2E](installation.md), you are ready to write your first test. 
 
 n the following test, the panel edit page is used to test a data source plugin.
 
