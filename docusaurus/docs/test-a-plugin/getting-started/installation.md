@@ -103,13 +103,13 @@ For details on how to provision Grafana, refer to the [documentation](https://gr
 
 ### Step 4: Start Grafana
 
-Next, startup the Grafana instance locally. Optionally, you can specify a version of choice. If you don't, the image that is currently tagged as `latest` in the Docker registry will be used.
+Next, startup the Grafana instance locally.
 
 <Tabs defaultValue="npm">
 <TabItem value="npm">
 
 ```bash
-GRAFANA_VERSION=10.1.6 npm run server
+npm run server
 ```
 
 </TabItem>
@@ -117,7 +117,7 @@ GRAFANA_VERSION=10.1.6 npm run server
 <TabItem value="yarn">
 
 ```bash
-GRAFANA_VERSION=10.1.6 yarn server
+yarn server
 ```
 
 </TabItem>
@@ -125,7 +125,7 @@ GRAFANA_VERSION=10.1.6 yarn server
 <TabItem value="pnpm">
 
 ```bash
-GRAFANA_VERSION=10.1.6 pnpm server
+pnpm server
 ```
 
 </TabItem>
