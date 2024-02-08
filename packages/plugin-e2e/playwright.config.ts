@@ -39,11 +39,12 @@ export default defineConfig<PluginOptions>({
     // 1. Login to Grafana and store the cookie on disk for use in other tests.
     {
       name: 'authenticate',
+      testDir: './src/auth',
       testMatch: [/.*auth\.setup\.ts/],
     },
     // 2. Run all tests in parallel using Chrome.
     {
-      name: 'chromium',
+      name: 'admin',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
