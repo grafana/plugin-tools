@@ -1,0 +1,9 @@
+{
+  "position": 2,
+  "label": "Guides",
+  "customProps": {
+    "description": "Guides for using the plugin-e2e package"
+  },
+  "collapsible": false,
+  "collapsed": false
+}
