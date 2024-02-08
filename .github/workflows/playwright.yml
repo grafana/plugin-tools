@@ -10,7 +10,8 @@ permissions:
   id-token: write
 
 jobs:
-  setup-matrix:
+  resolve-versions:
+    name: Resolve Grafana images
     runs-on: ubuntu-latest
     timeout-minutes: 3
     outputs:
@@ -25,12 +26,12 @@ jobs:
           version-resolver-type: version-support-policy
 
   playwright-tests:
-    needs: setup-matrix
+    needs: resolve-versions
     timeout-minutes: 60
     strategy:
       matrix:
-        GRAFANA_VERSION: ${{fromJson(needs.setup-matrix.outputs.matrix)}}
-    name: E2E Tests - Grafana@${{ matrix.GRAFANA_VERSION }}
+        GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
+    name: e2e ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +52,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start Grafana
-        run: docker run --rm -d -p 3000:3000 --name=grafana --volume ./packages/plugin-e2e/provisioning:/etc/grafana/provisioning --env AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} --env AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} --env GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} --env "GF_INSTALL_PLUGINS=grafana-googlesheets-datasource 1.2.4,grafana-redshift-datasource 1.13.0,grafana-clock-panel 2.1.3" grafana/grafana:${{ matrix.GRAFANA_VERSION }}; sleep 30
+        run: docker run --rm -d -p 3000:3000 --name=grafana --volume ./packages/plugin-e2e/provisioning:/etc/grafana/provisioning --env AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} --env AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} --env GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} --env "GF_INSTALL_PLUGINS=grafana-googlesheets-datasource 1.2.4,grafana-redshift-datasource 1.13.0,grafana-clock-panel 2.1.3" grafana/${{ matrix.GRAFANA_IMAGE.NAME }}:${{ matrix.GRAFANA_IMAGE.VERSION }}; sleep 30
 
       - name: Run Playwright tests
         run: npm run playwright:test --w @grafana/plugin-e2e
@@ -61,7 +62,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() && github.event.organization.login != 'grafana' }}
         with:
-          name: playwright-report-Grafana-v${{ matrix.GRAFANA_VERSION }}-${{github.run_id}}
+          name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
           path: packages/plugin-e2e/playwright-report/
           retention-days: 30
 
@@ -86,8 +87,8 @@ jobs:
         if: ${{ always() && github.event.organization.login == 'grafana' }}
         run: |
           echo "Publish release to Google Cloud Storage:"
-          gsutil cp -r packages/plugin-e2e/playwright-report/. gs://releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana-v${{ matrix.GRAFANA_VERSION }}
+          gsutil cp -r packages/plugin-e2e/playwright-report/. gs://releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}
 
       - name: Write report link to summary
         if: ${{ always() && github.event.organization.login == 'grafana' }}
-        run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/Grafana-v${{ matrix.GRAFANA_VERSION }}/index.html">Browse the Playwright report</a>' >> $GITHUB_STEP_SUMMARY
+        run: echo '<a href="https://storage.googleapis.com/releng-pipeline-artifacts-dev/${{ github.event.repository.name }}/${{ github.event.number }}/${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}/index.html">Browse the Playwright report</a>' >> $GITHUB_STEP_SUMMARY
