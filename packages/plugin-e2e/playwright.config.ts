@@ -25,6 +25,10 @@ export default defineConfig<PluginOptions>({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    httpCredentials: {
+      username: 'admin',
+      password: 'admin',
+    },
     featureToggles: {
       redshiftAsyncQueryDataSupport: false,
     },
@@ -32,44 +36,20 @@ export default defineConfig<PluginOptions>({
 
   /* List of projects to run. See https://playwright.dev/docs/test-configuration#projects */
   projects: [
-    // Login to Grafana with admin user and store the cookie on disk for use in other tests
+    // 1. Login to Grafana and store the cookie on disk for use in other tests.
     {
       name: 'authenticate',
       testDir: './src/auth',
       testMatch: [/.*auth\.setup\.ts/],
     },
-    // Login to Grafana with new user with viewer role and store the cookie on disk for use in other tests
-    {
-      name: 'createUserAndAuthenticate',
-      testDir: './src/auth',
-      testMatch: [/.*auth\.setup\.ts/],
-      use: {
-        user: {
-          user: 'viewer',
-          password: 'password',
-          role: 'Viewer',
-        },
-      },
-    },
-    // Run all tests in parallel using user with admin role
+    // 2. Run all tests in parallel using Chrome.
     {
       name: 'admin',
-      testDir: './tests/admin',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/admin.json',
+        storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['authenticate'],
-    },
-    // Run all tests in parallel using user with viewer role
-    {
-      name: 'viewer',
-      testDir: './tests/viewer',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/viewer.json',
-      },
-      dependencies: ['createUserAndAuthenticate'],
     },
   ],
 });
