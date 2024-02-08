@@ -46,9 +46,13 @@ const createUser: CreateUserFixture = async ({ request, user }, use) => {
     if (user.role) {
       const updateRoleReq = await request.patch(`/api/org/users/${userId}`, {
         data: { role: user.role },
+        headers,
       });
-
-      expect(updateRoleReq.ok()).toBeTruthy();
+      const updateRoleReqText = await updateRoleReq.text();
+      expect(
+        updateRoleReq.ok(),
+        `Could not assign role ${user.role} to user ${user.user}: ${updateRoleReqText}`
+      ).toBeTruthy();
     }
   });
 };
