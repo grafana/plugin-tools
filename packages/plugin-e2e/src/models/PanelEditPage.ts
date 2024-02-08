@@ -1,9 +1,11 @@
+import * as semver from 'semver';
 import { expect, Locator, Response } from '@playwright/test';
 import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions, Visualization } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from './TimeRange';
 import { Panel } from './Panel';
+import { radioButtonSetChecked } from './utils';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -36,6 +38,25 @@ export class PanelEditPage extends GrafanaPage {
     await super.navigate(url, options);
   }
 
+  async toggleTableView() {
+    await radioButtonSetChecked(this.ctx.page, 'Table view', true);
+    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''), {
+      startsWith: false,
+    });
+    if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
+      locator = this.ctx.page.getByTestId('Panel');
+    }
+
+    this.panel = new Panel(this.ctx, () => locator);
+  }
+
+  async untoggleTableView() {
+    await radioButtonSetChecked(this.ctx.page, 'Table view', false);
+    this.panel = new Panel(this.ctx, () =>
+      this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
+    );
+  }
+
   /**
    * Sets the title of the panel. This method will open the panel options, set the title and close the panel options.
    */
@@ -49,6 +70,7 @@ export class PanelEditPage extends GrafanaPage {
     await vizInput.fill(title);
     await this.ctx.page.keyboard.press('Tab');
   }
+
   /**
    * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
    */

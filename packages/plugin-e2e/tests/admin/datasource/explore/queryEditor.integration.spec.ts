@@ -54,5 +54,4 @@ test('explore page should display table and time series panel only for certain q
 
   await expect(explorePage.timeSeriesPanel.locator()).toBeVisible();
   await expect(explorePage.tablePanel.locator()).toBeVisible();
-  await expect(explorePage.logsPanel.locator()).not.toBeVisible();
 });

@@ -31,6 +31,7 @@ export type Components = {
       title: (title: string) => string;
       headerCornerInfo: (mode: string) => string;
       status: (status: string) => string;
+      toggleTableViewPanel: (title: string) => string;
     };
     Visualization: {
       Table: {

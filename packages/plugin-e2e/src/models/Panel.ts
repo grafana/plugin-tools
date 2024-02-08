@@ -11,6 +11,27 @@ export class Panel extends GrafanaPage {
   }
 
   /**
+   * Returns a locator that resolves element(s) that contain the field name(s) that are currently displayed in the panel.
+   *
+   * Can be used to assert the field names displayed in the panel visualization. e.g
+   * await expect(panelEditPage.panel.getFieldNames()).toHaveValues(['Month', 'Stockholm', 'Berlin', 'Log Angeles']);
+   */
+  getFieldNames(): Locator {
+    const panel = this.locator();
+    return panel.locator('[role="columnheader"]');
+  }
+
+  /**
+   * Returns a locator that resolves element(s) that contain the value(s) that are currently displayed in the panel.
+   *
+   * Can be used to assert the values displayed in the panel visualization. e.g
+   * await expect(panelEditPage.panel.getData()).toContainText(['1', '4', '14']);
+   */
+  getData(): Locator {
+    return this.locator().locator('[role="cell"]');
+  }
+
+  /**
    * Returns the locator for the panel error (if any)
    */
   getErrorIcon(): Locator {

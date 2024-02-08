@@ -17,32 +17,50 @@ export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: any;
   timeSeriesPanel: Panel;
-  logsPanel: Panel;
   tablePanel: Panel;
 
   constructor(ctx: PluginTestCtx) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
-    this.timeSeriesPanel = new Panel(this.ctx, () =>
-      this.getPanelLocators(TIME_SERIES_PANEL_SELECTOR_SUFFIX, TIME_SERIES_PANEL_TEXT)
-    );
-    this.tablePanel = new Panel(this.ctx, () => this.getPanelLocators(TABLE_PANEL_SELECTOR_SUFFIX, TABLE_PANEL_TEXT));
-    this.logsPanel = new Panel(this.ctx, () => this.getPanelLocators(LOGS_PANEL_SELECTOR_SUFFIX, LOGS_PANEL_TEXT));
+    this.timeSeriesPanel = new Panel(this.ctx, () => this.getTimeSeriesPanelLocator());
+    this.tablePanel = new Panel(this.ctx, () => this.getTablePanelLocator());
   }
 
-  private getPanelLocators(suffix: string, text: string) {
-    const page = this.ctx.page;
-    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(suffix), {
-      startsWith: true,
-    });
+  private getTablePanelLocator() {
+    let locator = this.ctx.page.getByTestId('Panel');
+    if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
+      // seems there is no way to get the locator for the panels in Grafana versions < 9.3.0
+      throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0. Please skip this test.`);
+    } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
+      // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
+      locator = this.ctx.page.getByRole('button', { name: TABLE_PANEL_TEXT }).locator('..');
+    } else if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
+      locator = this.getByTestIdOrAriaLabel(
+        this.ctx.selectors.components.Panels.Panel.title(TABLE_PANEL_SELECTOR_SUFFIX),
+        {
+          startsWith: true,
+        }
+      );
+    }
+
+    return locator;
+  }
+
+  private getTimeSeriesPanelLocator() {
+    let locator = this.getByTestIdOrAriaLabel(
+      this.ctx.selectors.components.Panels.Panel.title(TIME_SERIES_PANEL_SELECTOR_SUFFIX),
+      {
+        startsWith: true,
+      }
+    );
 
     if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
       // seems there is no way to get the locator for the panels in Grafana versions < 9.3.0
       throw new Error(`Can't locate panels on Explore page for Grafana versions < 9.3.0. Please skip this test.`);
     } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
       // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
-      locator = page.getByRole('button', { name: text }).locator('..');
+      locator = this.ctx.page.getByRole('button', { name: TIME_SERIES_PANEL_TEXT }).locator('..');
     }
 
     return locator;

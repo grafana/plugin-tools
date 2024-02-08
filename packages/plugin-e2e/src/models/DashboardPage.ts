@@ -1,9 +1,11 @@
 const gte = require('semver/functions/gte');
+import { Locator } from '@playwright/test';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from './TimeRange';
+import { Panel } from './Panel';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -41,6 +43,34 @@ export class DashboardPage extends GrafanaPage {
     const panelEditPage = new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
     await panelEditPage.goto();
     return panelEditPage;
+  }
+
+  /**
+   * Returns a Panel object for the panel with the given title. Only works for panels that currently are in the viewport.
+   *
+   * Note that this won't navigate to the panel edit page, it will only return the Panel object, which
+   * points to the locator for the panel in the dashboard page. Can be used to assert on the panel data, eg.
+   * const panel = await dashboardPage.getPanelByTitle('Table panel');
+   * await expect(panel.getFieldNames()).toContainText(['time', 'temperature']);
+   */
+  getPanelByTitle(title: string): Panel {
+    return new Panel(this.ctx, () => {
+      return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(title));
+    });
+  }
+
+  /**
+   * Returns a Panel object for the panel with the given id. Only works for panels that currently are in the viewport.
+   *
+   * Note that this won't navigate to the panel edit page, it will only return the Panel object, which
+   * points to the locator for the panel in the dashboard page. Can be used to assert on the panel data, eg.
+   * const panel = await dashboardPage.getPanelByTitle('2');
+   * await expect(panel.getFieldNames()).toContainText(['time', 'temperature']);
+   */
+  getPanelById(panelId: string): Panel {
+    return new Panel(this.ctx, () => {
+      return this.ctx.page.locator(`[data-panelid="${panelId}"]`);
+    });
   }
 
   /**

@@ -6,7 +6,7 @@ const FALSY_CUSTOM_TOGGLE = 'custom_toggle2';
 // override the feature toggles defined in playwright.config.ts only for tests in this file
 test.use({
   featureToggles: {
-    redshiftAsyncQueryDataSupport: true,
+    redshiftAsyncQueryDataSupport: false,
     [TRUTHY_CUSTOM_TOGGLE]: true,
     [FALSY_CUSTOM_TOGGLE]: false,
   },

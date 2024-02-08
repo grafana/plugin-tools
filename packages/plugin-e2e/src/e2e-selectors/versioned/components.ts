@@ -35,6 +35,10 @@ export const versionedComponents = {
         ['10.2.0']: (status: string) => `data-testid Panel status ${status}`,
         [MIN_GRAFANA_VERSION]: (_: string) => 'Panel status',
       },
+      toggleTableViewPanel: {
+        '10.4.0': (title: string) => `data-testid Panel header ${title}`,
+        [MIN_GRAFANA_VERSION]: (_: string) => 'data-testid Panel',
+      },
     },
     Visualization: {
       Table: {
