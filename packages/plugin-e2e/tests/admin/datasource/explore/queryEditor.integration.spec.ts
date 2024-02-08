@@ -40,6 +40,7 @@ test('explore page should display table and time series panel only for certain q
   explorePage,
   grafanaVersion,
 }, testInfo) => {
+  console.log('grafanaVersion', grafanaVersion);
   testInfo.skip(
     semver.lt(grafanaVersion, '9.3.0') || semver.gte(grafanaVersion, '10.4.0'),
     'Grafana version < 9.3.0 does not support data-testid on panels'
