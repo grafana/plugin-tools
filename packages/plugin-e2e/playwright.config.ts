@@ -38,15 +38,6 @@ export default defineConfig<PluginOptions>({
       testDir: './src/auth',
       testMatch: [/.*auth\.setup\.ts/],
     },
-    {
-      name: 'admin',
-      testDir: './tests/admin',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/admin.json',
-      },
-      dependencies: ['authenticate'],
-    },
     // Login to Grafana with new user with viewer role and store the cookie on disk for use in other tests
     {
       name: 'createUserAndAuthenticate',
