@@ -83,6 +83,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://ludovic-muller.fr/"><img src="https://avatars.githubusercontent.com/u/9420561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ludovic Muller</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=ludovicm67" title="Code">💻</a></td>
     <td align="center"><a href="https://grafana.com/"><img src="https://avatars.githubusercontent.com/u/43478413?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Grot (@grafanabot)</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=grafanabot" title="Code">💻</a> <a href="https://github.com/grafana/plugin-tools/commits?author=grafanabot" title="Documentation">📖</a></td>
     <td align="center"><a href="https://www.nersc.gov/"><img src="https://avatars.githubusercontent.com/u/91281131?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nicolas Ventura</b></sub></a><br /><a href="#infra-6nv" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://oshirohugo.github.io/"><img src="https://avatars.githubusercontent.com/u/5558280?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hugo Kiyodi Oshiro</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=oshirohugo" title="Code">💻</a></td>
   </tr>
 </table>
 

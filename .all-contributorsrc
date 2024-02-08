@@ -261,6 +261,15 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "oshirohugo",
+      "name": "Hugo Kiyodi Oshiro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5558280?v=4",
+      "profile": "https://oshirohugo.github.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
