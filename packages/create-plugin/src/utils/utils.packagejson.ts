@@ -10,8 +10,8 @@ export type PackageJson = {
   devDependencies: Record<string, string>;
   packageManager?: string;
 } & Record<string, any>;
-export function getPackageJson(): PackageJson {
-  return readJsonFile(path.join(process.cwd(), 'package.json'));
+export function getPackageJson(rootPath = process.cwd()): PackageJson {
+  return readJsonFile(path.join(rootPath, 'package.json'));
 }
 
 // Returns with a package.json that is generated based on the latest templates
