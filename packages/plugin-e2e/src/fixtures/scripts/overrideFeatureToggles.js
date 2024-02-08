@@ -12,7 +12,6 @@ export const overrideFeatureToggles = (featureToggles) => {
   // wait for Grafana boot data to be added to the window object
   waitForGrafanaBootData(() => {
     console.log('@grafana/plugin-e2e: setting the following feature toggles', featureToggles);
-
     // override feature toggles with the ones provided by the test
     window.grafanaBootData.settings.featureToggles = {
       ...window.grafanaBootData.settings.featureToggles,
