@@ -1,6 +1,6 @@
 import { expect, test } from '../../../../src';
 
-test.skip('standard query data handler should only be called once', async ({
+test('standard query data handler should only be called once', async ({
   panelEditPage,
   page,
   selectors,
