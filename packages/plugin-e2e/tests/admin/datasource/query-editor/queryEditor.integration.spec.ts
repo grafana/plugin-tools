@@ -1,5 +1,5 @@
-import { expect, test } from '../../../src';
-import { ProvisionFile } from '../../../src/types';
+import { expect, test } from '../../../../src';
+import { ProvisionFile } from '../../../../src/types';
 
 test('should return data and not display panel error when a valid query is provided', async ({
   panelEditPage,

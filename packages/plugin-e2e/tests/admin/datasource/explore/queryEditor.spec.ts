@@ -1,5 +1,5 @@
-import { expect, test } from '../../../src';
-import { ProvisionFile } from '../../../src/types';
+import { expect, test } from '../../../../src';
+import { ProvisionFile } from '../../../../src/types';
 
 test('editor populates query from url', async ({ explorePage, readProvision }) => {
   const provision = await readProvision<ProvisionFile>({ filePath: 'datasources/google-sheets-datasource-jwt.yaml' });

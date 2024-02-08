@@ -1,5 +1,5 @@
 import semverLt from 'semver/functions/lt';
-import { test, expect, AnnotationEditPage } from '../../../src';
+import { test, expect, AnnotationEditPage } from '../../../../src';
 import { Dashboard, ProvisionFile } from '../../../src/types';
 
 test('should run successfully if valid Redshift query was provided', async ({

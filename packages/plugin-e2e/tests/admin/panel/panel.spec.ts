@@ -1,7 +1,7 @@
 import fs from 'fs';
-import { DashboardPage, PanelEditPage, expect, test } from '../../src';
-import { Dashboard } from '../../src/types';
-import { clickRadioButton } from '../utils';
+import { DashboardPage, PanelEditPage, expect, test } from '../../../src';
+import { Dashboard } from '../../../src/types';
+import { clickRadioButton } from '../../utils';
 
 test.describe.configure({ mode: 'parallel' });
 test('add a clock panel in new dashboard and set time format to "12 hour"', async ({ panelEditPage, page }) => {

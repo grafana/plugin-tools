@@ -1,4 +1,4 @@
-import { expect, test } from '../../../src';
+import { expect, test } from '../../../../src';
 import { ProvisionFile } from '../../../src/types';
 import { REDSHIFT_SCHEMAS, REDSHIFT_TABLES } from '../mocks/resource';
 

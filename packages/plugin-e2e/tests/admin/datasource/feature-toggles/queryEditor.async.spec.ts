@@ -1,5 +1,5 @@
-import { expect, test } from '../../../src';
-import { ProvisionFile } from '../../../src/types';
+import { expect, test } from '../../../../src';
+import { ProvisionFile } from '../../../../src/types';
 
 const TRUTHY_CUSTOM_TOGGLE = 'custom_toggle1';
 const FALSY_CUSTOM_TOGGLE = 'custom_toggle2';

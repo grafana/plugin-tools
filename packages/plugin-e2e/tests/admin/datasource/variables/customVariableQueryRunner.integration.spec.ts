@@ -1,5 +1,5 @@
-import { VariableEditPage, expect, test } from '../../../src';
-import { Dashboard, ProvisionFile } from '../../../src/types';
+import { VariableEditPage, expect, test } from '../../../../src';
+import { Dashboard, ProvisionFile } from '../../../../src/types';
 
 test('custom variable editor query runner should return data when query is valid', async ({
   variableEditPage,

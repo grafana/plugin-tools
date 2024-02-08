@@ -1,5 +1,5 @@
-import { expect, test } from '../../../src';
-import { ProvisionFile } from '../../../src/types';
+import { expect, test } from '../../../../src';
+import { ProvisionFile } from '../../../../src/types';
 
 test('standard query data handler should only be called once', async ({
   panelEditPage,
