@@ -1,5 +1,5 @@
-import { test, expect, PanelEditPage } from '../../../src';
-import { Dashboard } from '../../../src/types';
+import { test, expect, PanelEditPage } from '../../../../src';
+import { Dashboard } from '../../../../src/types';
 
 test('variable interpolation', async ({ readProvision, request, page, selectors, grafanaVersion }) => {
   const provision = await readProvision<Dashboard>({ filePath: 'dashboards/redshift.json' });
