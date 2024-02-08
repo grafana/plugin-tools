@@ -40,7 +40,7 @@ export type OrgRole = 'None' | 'Viewer' | 'Editor' | 'Admin';
 
 export type CreateUserArgs = {
   /**
-   * The username of the user to create
+   * The username of the user to create. Needs to be unique
    */
   user: string;
   /**

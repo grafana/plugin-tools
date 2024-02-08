@@ -160,7 +160,7 @@ export type PluginFixture = {
 
   /**
    * Fixture command that login to Grafana using the Grafana API and stores the cookie state on disk.
-   * The file name for the storage state will be `playwright/.auth/<username>.json`
+   * The file name for the storage state will be `playwright/.auth/<username>.json`, so it's important that the username is unique.
    * 
    * If you have not specified a user, the default admin/admin credentials will be used. 
    * 
