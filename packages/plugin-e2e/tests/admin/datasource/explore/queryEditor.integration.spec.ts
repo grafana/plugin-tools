@@ -40,7 +40,10 @@ test('explore page should display table and time series panel only for certain q
   explorePage,
   grafanaVersion,
 }, testInfo) => {
-  testInfo.skip(semver.lt(grafanaVersion, '9.3.0'), 'Grafana version < 9.3.0 does not support data-testid on panels');
+  testInfo.skip(
+    semver.lt(grafanaVersion, '9.3.0') || semver.gte(grafanaVersion, '10.4.0'),
+    'Grafana version < 9.3.0 does not support data-testid on panels'
+  );
   const url = semver.lt('10.0.0', grafanaVersion)
     ? `panes=%7B"RLf":%7B"datasource":"PB0CCE99F8730D01D","queries":%5B%7B"cacheDurationSeconds":300,"datasource":%7B"type":"grafana-googlesheets-datasource","uid":"PB0CCE99F8730D01D"%7D,"refId":"A","spreadsheet":"1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8","range":""%7D%5D,"range":%7B"from":"1547161200000","to":"1576364400000"%7D%7D%7D&schemaVersion=1&orgId=1`
     : 'left=%7B"datasource":"PB0CCE99F8730D01D","queries":%5B%7B"cacheDurationSeconds":300,"datasource":%7B"type":"grafana-googlesheets-datasource","uid":"PB0CCE99F8730D01D"%7D,"refId":"A","spreadsheet":"1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8","range":""%7D%5D,"range":%7B"from":"1547161200000","to":"1576364400000"%7D%7D&orgId=1';
