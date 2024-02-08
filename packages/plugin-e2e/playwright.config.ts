@@ -25,10 +25,6 @@ export default defineConfig<PluginOptions>({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    httpCredentials: {
-      username: 'admin',
-      password: 'admin',
-    },
     featureToggles: {
       redshiftAsyncQueryDataSupport: false,
     },
@@ -36,20 +32,53 @@ export default defineConfig<PluginOptions>({
 
   /* List of projects to run. See https://playwright.dev/docs/test-configuration#projects */
   projects: [
-    // 1. Login to Grafana and store the cookie on disk for use in other tests.
+    // Login to Grafana with admin user and store the cookie on disk for use in other tests
     {
       name: 'authenticate',
       testDir: './src/auth',
       testMatch: [/.*auth\.setup\.ts/],
     },
-    // 2. Run all tests in parallel using Chrome.
     {
       name: 'admin',
+      testDir: './tests/admin',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/user.json',
+        storageState: 'playwright/.auth/admin.json',
       },
       dependencies: ['authenticate'],
+    },
+    // Login to Grafana with new user with viewer role and store the cookie on disk for use in other tests
+    {
+      name: 'createUserAndAuthenticate',
+      testDir: './src/auth',
+      testMatch: [/.*auth\.setup\.ts/],
+      use: {
+        user: {
+          user: 'viewer',
+          password: 'password',
+          role: 'Viewer',
+        },
+      },
+    },
+    // Run all tests in parallel using user with admin role
+    {
+      name: 'admin',
+      testDir: './tests/admin',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['authenticate'],
+    },
+    // Run all tests in parallel using user with viewer role
+    {
+      name: 'viewer',
+      testDir: './tests/viewer',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/viewer.json',
+      },
+      dependencies: ['createUserAndAuthenticate'],
     },
   ],
 });

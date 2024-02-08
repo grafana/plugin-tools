@@ -12,6 +12,7 @@ import variableEditPage from './variableEditPage';
 import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
+import createUser from './commands/createUser';
 
 const fixtures = {
   selectors,
@@ -28,6 +29,7 @@ const fixtures = {
   readProvision,
   readProvisionedDataSource,
   isFeatureToggleEnabled,
+  createUser,
 };
 
 export default fixtures;

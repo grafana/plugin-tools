@@ -5,9 +5,9 @@ import matchers from './matchers';
 import {
   CreateDataSourceArgs,
   CreateDataSourcePageArgs,
-  Dashboard,
   DataSourceSettings,
   ReadProvisionedDataSourceArgs,
+  CreateUserArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -58,6 +58,14 @@ export type PluginOptions = {
    * });
    */
   featureToggles: Record<string, boolean>;
+
+  /**
+   * The user to use for the tests. If no user is provided, the default admin/admin user will be used.
+   *
+   * You can use different users for different project. See the fixture createUser for more information on how to create a user,
+   * and the fixture login for more information on how to authenticate.
+   */
+  user?: CreateUserArgs;
 };
 
 export type PluginFixture = {
@@ -145,26 +153,64 @@ export type PluginFixture = {
   createDataSource: (args: CreateDataSourceArgs) => Promise<DataSourceSettings>;
 
   /**
-   * Fixture command that login to Grafana using the Grafana API.
-   * If the same credentials should be used in every test,
-   * invoke this fixture in a setup project.
-   * See https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
+   * Fixture command that creates a user via the Grafana API and assigns a role to it if a role is provided
+   * This may be useful if your plugin supports RBAC and you need to create a user with a specific role. See login fixture for more information.
+   */
+  createUser: () => Promise<void>;
+
+  /**
+   * Fixture command that login to Grafana using the Grafana API and stores the cookie state on disk.
+   * The file name for the storage state will be `playwright/.auth/<username>.json`
+   * 
+   * If you have not specified a user, the default admin/admin credentials will be used. 
+   * 
+   * e.g
+   * projects: [
+      {
+        name: 'authenticate',
+        testDir: './src/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+      },
+      {
+        name: 'run tests as admin user',
+        testDir: './tests',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/admin.json',
+        },
+        dependencies: ['authenticate'],
+      }
+    }
    *
-   * If no credentials are provided, the default admin/admin credentials will be used.
-   *
-   * The default credentials can be overridden in the playwright.config.ts file:
-   * eg.
-   * export default defineConfig({
-      use: {
-        httpCredentials: {
-          username: 'user',
-          password: 'pass',
+   * If your plugin supports RBAC, you may want to use different projects for different roles. 
+   * In the following example, a new user with the role `Viewer` gets created and authenticated in a `createUserAndAuthenticate` project.
+   * In the `viewer` project, authentication state from the previous project is used in all tests in the ./tests/viewer folder.
+   * projects: [
+      {
+        name: 'createUserAndAuthenticate',
+        testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+        use: {
+          user: {
+            user: 'viewer',
+            password: 'password',
+            role: 'Viewer',
+          },
         },
       },
-    });
+      {
+        name: 'viewer',
+        testDir: './tests/viewer',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/viewer.json',
+        },
+        dependencies: ['createUserAndAuthenticate'],
+      }
+    }
    *
    * To override credentials in a single test:
-   * test.use({ httpCredentials: { username: 'admin', password: 'admin' } });
+   * test.use({ storageState: 'playwright/.auth/admin.json', user: { user: 'admin', password: 'admin' } });
    * To avoid authentication in a single test:
    * test.use({ storageState: { cookies: [], origins: [] } });
    */
