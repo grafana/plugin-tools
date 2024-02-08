@@ -1,3 +1,15 @@
+# v3.6.0 (Thu Feb 08 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Run prettier on .config after update [#722](https://github.com/grafana/plugin-tools/pull/722) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v3.5.0 (Fri Feb 02 2024)
 
 #### 🚀 Enhancement
