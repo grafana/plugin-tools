@@ -18,5 +18,6 @@ export const overrideFeatureToggles = (featureToggles) => {
       ...window.grafanaBootData.settings.featureToggles,
       ...featureToggles,
     };
+    console.log(window.grafanaBootData.settings.featureToggles);
   });
 };
