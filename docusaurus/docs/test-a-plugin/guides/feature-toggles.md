@@ -15,7 +15,7 @@ sidebar_position: 1
 
 # Introduction
 
-Feature toggles are used to enable or disable features in Grafana. Feature toggles can have big impact on how a plugin behaves, so you may need to cater for that within you e2e tests. `@grafana/plugin-e2e` have a few fixtures that helps while working with feature toggles.
+Feature toggles are used to enable or disable features in Grafana. Feature toggles can have big impact on how a plugin behaves, so you may need to cater for that within you e2e tests. `@grafana/plugin-e2e` has a few fixtures that helps while working with feature toggles.
 
 ## Passing feature toggles to Grafana
 
