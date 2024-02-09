@@ -1,3 +1,15 @@
+# v0.12.1 (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix feature toggles race condition [#730](https://github.com/grafana/plugin-tools/pull/730) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.11.1 (Mon Jan 29 2024)
 
 #### 🐛 Bug Fix
