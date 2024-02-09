@@ -65,7 +65,7 @@ test.use({
 });
 ```
 
-## Checking whether a feature is enabled or not
+## Check whether a feature is enabled
 
 You may use the `isFeatureToggleEnabled` fixture to checks whether a certain frontend feature toggle is enabled or not. Under the hood, `isFeatureToggleEnabled` checks whether the given feature is defined and enabled in the `window.grafanaBootData.settings.featureToggles` object.
 
