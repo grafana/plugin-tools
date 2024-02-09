@@ -145,6 +145,17 @@ const themeConfigFooter = {
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
   additionalLanguages: ['bash', 'diff', 'json'],
+  magicComments: [
+    {
+      className: 'theme-code-block-highlighted-line',
+      line: 'highlight-next-line',
+      block: { start: 'highlight-start', end: 'highlight-end' },
+    },
+    {
+      className: 'code-block-addition-highlighted-line',
+      line: 'addition-highlight-next-line',
+    },
+  ],
 };
 
 const themeConfigColorMode = {
