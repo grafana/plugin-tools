@@ -51,7 +51,7 @@ Feature toggles that are defined this way are propagated to `window.grafanaBootD
 :::
 :::
 
-### Overriding feature toggles in a specific test file
+### Override feature toggles in a specific test file
 
 You can override feature toggles for tests in a certain test file.
 
