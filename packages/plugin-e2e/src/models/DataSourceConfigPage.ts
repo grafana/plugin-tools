@@ -21,7 +21,14 @@ export class DataSourceConfigPage extends GrafanaPage {
    * @param json the json response to return
    * @param status the HTTP status code to return. Defaults to 200
    */
-  async mockHealthCheckResponse<T = any>(json: T, status = 200) {}
+  async mockHealthCheckResponse<T = any>(json: T, status = 200) {
+    await this.ctx.page.route(
+      `${this.ctx.selectors.apis.DataSource.health(this.datasource.uid, this.datasource.id?.toString() ?? '')}`,
+      async (route) => {
+        await route.fulfill({ json, status });
+      }
+    );
+  }
 
   /**
    * Clicks the save and test button and waits for the response
