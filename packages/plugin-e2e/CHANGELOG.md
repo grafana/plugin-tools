@@ -1,3 +1,15 @@
+# v0.12.2 (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Generate dts files [#733](https://github.com/grafana/plugin-tools/pull/733) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.12.1 (Fri Feb 09 2024)
 
 #### 🐛 Bug Fix
