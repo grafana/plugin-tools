@@ -22,11 +22,15 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 ## The release workflow
 
+The release (`release.yml`) workflow is designed to create a new release of your plugin whenever you're ready to publish a new version to Grafana Cloud. This automates the process of creating releases in GitHub and provides instructions for submitting the plugin to the Grafana plugin catalog.
+
 :::warning
 
 This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
 
-You can store your Access Policy token as a Repository Secret in GitHub:
+:::
+
+### Storing your Access Policy token as a Repository Secret in GitHub
 
 1. Access Repository Settings:
 
@@ -60,9 +64,7 @@ jobs:
 
 In this example, the `secrets.GRAFANA_ACCESS_POLICY_TOKEN` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
 
-:::
-
-The release (`release.yml`) workflow is designed to create a new release of your plugin whenever you're ready to publish a new version to Grafana Cloud. This automates the process of creating releases in GitHub and provides instructions for submitting the plugin to the Grafana plugin catalog.
+### Triggering the workflow
 
 To trigger the release workflow, push a Git tag for the plugin version that you want to release:
 
