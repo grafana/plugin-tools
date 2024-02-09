@@ -137,7 +137,7 @@ Now we need to add the necessary code to the backend. For that, we change `pkg/p
 
 1. Add the following part in the replacement of the `var`:
 
-```tsx
+```go
 var (
     _ backend.CheckHealthHandler    = (*Datasource)(nil)
     _ instancemgmt.InstanceDisposer = (*Datasource)(nil)
@@ -147,11 +147,21 @@ var (
 
 That means our `DataSource` will implement `backend.CheckHealthHandler`, `instancemgmt.InstanceDisposer`, and `backend.StreamHandler`. The methods necessary for the first two are already provided in the scaffold; therefore, we need to implement only the methods necessary for `backend.StreamHandler`.
 
-2. This code will be called when the user tries to subscribe to a channel. You can implement permissions checking here, but in our case we just want the user to connect successfully in each attempt; therefore, we just return a backend: `SubscribeStreamStatusOK`.
+2. Let's start by adding the `SubscribeStream` method:
+
+```go
+func (d *Datasource) SubscribeStream(context.Context, *backend.SubscribeStreamRequest) (*backend.SubscribeStreamResponse, error) {
+    return &backend.SubscribeStreamResponse{
+        Status: backend.SubscribeStreamStatusOK,
+    }, nil
+}
+```
+
+This code will be called when the user tries to subscribe to a channel. You can implement permissions checking here, but in our case we just want the user to connect successfully in each attempt; therefore, we just return a backend: `SubscribeStreamStatusOK`.
 
 3. Implement the `PublishStream` method:
 
-```tsx
+```go
 func (d *Datasource) PublishStream(context.Context, *backend.PublishStreamRequest) (*backend.PublishStreamResponse, error) {
     return &backend.PublishStreamResponse{
         Status: backend.PublishStreamStatusPermissionDenied,
@@ -163,19 +173,20 @@ This code is called whenever a user tries to publish to a channel. As we don't w
 
 4. To prevent a random error, change the `CheckHealth` method provided by default for the following code:
 
-```tsx
-func (d *Datasource) SubscribeStream(context.Context, *backend.SubscribeStreamRequest) (*backend.SubscribeStreamResponse, error) {
-    return &backend.SubscribeStreamResponse{
-        Status: backend.SubscribeStreamStatusOK,
+```go
+  func (d *Datasource) CheckHealth(_ context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+    return &backend.CheckHealthResult{
+      Status:  backend.HealthStatusOk,
+      Message: "Data source is working",
     }, nil
-}
+  }
 ```
 
-Note that this code is not related to the streaming plugin itself. It's just to avoid the error that will be caused by not changing the default.
+Note that this code is not related to the streaming plugin itself. It's just to avoid a random error that will be caused by not changing the default.
 
 5. Finally, implement the `RunStream` method:
 
-```tsx
+```go
 func (d *Datasource) RunStream(ctx context.Context, req *backend.RunStreamRequest, sender *backend.StreamSender) error {
     q := Query{}
     json.Unmarshal(req.Data, &q)
@@ -216,7 +227,7 @@ Therefore, the first part of the method parses the data and the query is defined
 
 6.  Add the following code to `./pkg/plugin/query.go`:
 
-```tsx
+```go
   type Query struct {
       UpperLimit   float64 `json:"upperLimit"`
       LowerLimit   float64 `json:"lowerLimit"`
@@ -300,28 +311,9 @@ You may be using Docker Compose instead of docker-compose. If that is your case,
 
 4. Click the data source's card, and then click **Save & test** on the next page.
 
-5. Optional: Add the following code to `pkg/plugin/datasource.go`. It should replace the `CheckHealth` method that already exists because it was created by the scaffold.
+5. Click **Build a dashboard** in the right upper corner. On the next page, click a button to **+ Add visualization**. On the dialog box, click the newly added data source. Data begins to appear like so:
 
-```tsx
-  func (d *Datasource) CheckHealth(_ context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-    return &backend.CheckHealthResult{
-      Status:  backend.HealthStatusOk,
-      Message: "Data source is working",
-    }, nil
-  }
-```
-
-:::note
-
-If a randomized error occurs, just click **Save & test** until a success message appears:
-
-![Datasource dialog box - Grafana UI.](/img/datasource-dialog.png)
-
-:::
-
-6. Click **Build a dashboard** in the right upper corner. On the next page, click a button to **+ Add visualization**. On the dialog box, click the newly added data source. Data begins to appear like so:
-
-7. To visualize the data better, change the visualization time range to something like 1 minute from now and apply it.
+6. To visualize the data better, change the visualization time range to something like 1 minute from now and apply it.
 
 At that point, you should start seeing data in real-time. You can change the upper and lower limit or the tick interval if you want. This will generate a new query and the panel will be updated. You can also add more queries if you want.
 
