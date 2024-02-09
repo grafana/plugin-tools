@@ -19,7 +19,7 @@ Grafana offers a mechanism that allows code to be turned "on" or "off" without t
 
 ## Passing feature toggles to Grafana
 
-The easisest way to configure feature toggles that are available across the entire Grafana stack is by specifying [environment variables](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables) when starting your Grafana instance.
+The easisest way to configure feature toggles that are available across the entire Grafana stack is to specify the [environment variables](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables) operational when starting your Grafana instance.
 
 ## Overriding frontend feature toggles in e2e tests
 
