@@ -33,16 +33,19 @@ When you export a dashboard for sharing externally, Grafana adds a placeholder r
 
 ### App dashboards
 
+For app dashboards that use datasources it is recommended to first create a dashboard data source variable to allow users to reference their own datasource instances once the dashboard has been imported.
+
+You can do this by
+
+1. Create a datasource variable, choose a type and give it a name
+1. Each panel that you create should use the datasource variable as its datasource
+
 #### Export the dashboard
 
 1. Navigate to your dashboard in the Grafana application
 1. Click the Share icon in at the top-left of the dashboard.
 1. Click **Export** and then click **Save to file**.
 1. Open the dashboard json file in your code editor and set it's `id` property to `null`.
-
-:::tip
-For app dashboards that use datasources it is recommended to first create a dashboard data source variable to allow users to reference their own datasource instances once the dashboard has been imported.
-:::
 
 ## Add the dashboard to your plugin
 
