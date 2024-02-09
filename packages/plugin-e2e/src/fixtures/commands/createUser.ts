@@ -40,7 +40,7 @@ const createUser: CreateUserFixture = async ({ request, user }, use) => {
       // user already exists
       userId = await getUserIdByUsername(request, user?.user);
     } else {
-      throw new Error(`Could not create user: ${user?.user}: ${await createUserReq.text()}`);
+      throw new Error(`Could not create user '${user?.user}': ${await createUserReq.text()}`);
     }
 
     if (user.role) {
@@ -51,7 +51,7 @@ const createUser: CreateUserFixture = async ({ request, user }, use) => {
       const updateRoleReqText = await updateRoleReq.text();
       expect(
         updateRoleReq.ok(),
-        `Could not assign role ${user.role} to user ${user.user}: ${updateRoleReqText}`
+        `Could not assign role '${user.role}' to user '${user.user}': ${updateRoleReqText}`
       ).toBeTruthy();
     }
   });

@@ -60,9 +60,9 @@ export type PluginOptions = {
   featureToggles: Record<string, boolean>;
 
   /**
-   * The user to use for the tests. If no user is provided, the default admin/admin user will be used.
+   * The Grafana user to use for the tests. If no user is provided, the default admin/admin user will be used.
    *
-   * You can use different users for different project. See the fixture createUser for more information on how to create a user,
+   * You can use different users for different projects. See the fixture createUser for more information on how to create a user,
    * and the fixture login for more information on how to authenticate.
    */
   user?: CreateUserArgs;
