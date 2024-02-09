@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "stripInternal": true,
     "removeComments": false,
+    "declaration": true,
     "allowJs": true
   },
   "exclude": ["node_modules"],
