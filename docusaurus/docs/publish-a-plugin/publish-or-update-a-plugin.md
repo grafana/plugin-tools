@@ -63,7 +63,7 @@ Follow these steps to publish your plugin for the first time.
 
 ## Update your plugin
 
-To update a plugin, follow the same guidance as for [publishing a plugin](#publishing-a-plugin), except in Step 3 where you can now click **Submit Update** for the plugin you want to update.
+To update a plugin, follow the same guidance as for [publish your plugin](#publish-your-plugin), except in Step 3 where you can now click **Submit Update** for the plugin you want to update.
 
 All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already setup for an existing plugin, plugin update reviews may go faster.
 

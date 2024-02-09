@@ -92,9 +92,9 @@ To try this feature out, follow this [example](https://github.com/grafana/grafan
 
 ### Properties
 
-| Property      | Type                    | Required | Description                                 |
-| ------------- | ----------------------- | -------- | ------------------------------------------- |
-| `permissions` | [object](#permission)[] | No       | Required RBAC permissions to query Grafana. |
+| Property      | Type                     | Required | Description                                 |
+| ------------- | ------------------------ | -------- | ------------------------------------------- |
+| `permissions` | [object](#permissions)[] | No       | Required RBAC permissions to query Grafana. |
 
 ### permissions
 
