@@ -1,7 +1,7 @@
 ---
 id: feature-toggles
 title: Feature toggles
-description: How to use feature toggles in e2e tests
+description: How to use feature toggles in E2E tests
 draft: true
 keywords:
   - grafana
