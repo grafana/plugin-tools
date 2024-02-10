@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
@@ -18,7 +19,13 @@ export class AnnotationEditPage extends GrafanaPage {
       ? Dashboard.Settings.Annotations.Edit.url(this.args.dashboard.uid, this.args.id)
       : AddDashboard.Settings.Annotations.Edit.url(this.args.id);
 
-    return super.navigate(url, options);
+    await super.navigate(url, options);
+
+    if (semver.lt(this.ctx.grafanaVersion, '9.2.0') && this.args.id) {
+      const list = this.ctx.page.locator('tbody tr');
+      const variables = await list.all();
+      await variables[Number(this.args.id)].click();
+    }
   }
 
   /**

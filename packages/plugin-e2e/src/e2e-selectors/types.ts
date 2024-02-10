@@ -170,10 +170,12 @@ export type Pages = {
           newButton: string;
           addVariableCTAV2: (variableName: string) => string;
           addVariableCTAV2Item: string;
+          table: string;
         };
         Edit: {
           url: (dashboardUid: string, editIndex: string) => string;
           General: {
+            selectionOptionsIncludeAllSwitch: string;
             generalTypeSelectV2: string;
             previewOfValuesOption: string;
             submitButton: string;
