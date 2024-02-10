@@ -28,7 +28,8 @@ export class Panel extends GrafanaPage {
    * await expect(panelEditPage.panel.getData()).toContainText(['1', '4', '14']);
    */
   getData(): Locator {
-    return this.locator().locator('[role="cell"]');
+    const panel = this.locator();
+    return panel.locator('[role="cell"]');
   }
 
   /**

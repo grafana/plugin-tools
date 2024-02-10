@@ -8,6 +8,7 @@ test.describe('panel edit page', () => {
     const panelEditPage = new PanelEditPage({ page, selectors, grafanaVersion, request }, { dashboard, id: '3' });
     await panelEditPage.goto();
     await panelEditPage.setVisualization('Table');
+    await expect(panelEditPage.panel.locator()).toBeVisible();
     await expect(panelEditPage.panel.getData()).toContainText(['staging']);
     await expect(panelEditPage.panel.getFieldNames()).toContainText(['time', 'temperature']);
   });
@@ -25,6 +26,7 @@ test.describe('panel edit page', () => {
     await panelEditPage.setVisualization('Time series');
     await panelEditPage.toggleTableView();
     await expect(panelEditPage.panel.getFieldNames()).toContainText(['Stockholm', 'Berlin']);
+    await expect(panelEditPage.panel.getData()).toContainText(['-1', '2.90']);
   });
 });
 

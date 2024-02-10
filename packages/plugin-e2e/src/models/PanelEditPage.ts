@@ -19,7 +19,16 @@ export class PanelEditPage extends GrafanaPage {
     this.panel = new Panel(
       ctx,
       // only one panel is allowed in the panel edit page, so we don't need to use panel title to locate it
-      () => this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
+      () => {
+        const locator = this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(''), {
+          startsWith: true,
+        });
+        // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
+        if (semver.lt(ctx.grafanaVersion, '9.5.0')) {
+          return locator.locator('..').locator('..');
+        }
+        return locator;
+      }
     );
   }
 
@@ -40,11 +49,9 @@ export class PanelEditPage extends GrafanaPage {
 
   async toggleTableView() {
     await radioButtonSetChecked(this.ctx.page, 'Table view', true);
-    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''), {
-      startsWith: false,
-    });
+    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''));
     if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
-      locator = this.ctx.page.getByTestId('Panel');
+      locator = this.ctx.page.getByRole('table');
     }
 
     this.panel = new Panel(this.ctx, () => locator);

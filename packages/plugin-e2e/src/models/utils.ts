@@ -7,7 +7,7 @@ export const radioButtonSetChecked = async (
   options?: { exact?: boolean }
 ) => {
   try {
-    await page.getByLabel(label, options).setChecked(checked);
+    await page.getByLabel(label, options).setChecked(checked, { timeout: 1000 });
   } catch (_) {
     await page.getByText(label, options).setChecked(checked);
   }

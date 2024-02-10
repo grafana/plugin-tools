@@ -55,6 +55,11 @@ export const versionedComponents = {
       },
     },
   },
+  VizLegend: {
+    seriesName: {
+      [MIN_GRAFANA_VERSION]: (name: string) => `VizLegend series ${name}`,
+    },
+  },
   PanelEditor: {
     General: {
       content: {

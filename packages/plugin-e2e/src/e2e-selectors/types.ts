@@ -41,6 +41,9 @@ export type Components = {
       };
     };
   };
+  VizLegend: {
+    seriesName: (name: string) => string;
+  };
   PanelEditor: {
     General: {
       content: string;

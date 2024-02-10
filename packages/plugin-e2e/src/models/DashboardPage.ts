@@ -1,5 +1,4 @@
-const gte = require('semver/functions/gte');
-import { Locator } from '@playwright/test';
+import * as semver from 'semver';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
 import { DataSourcePicker } from './DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
@@ -55,7 +54,14 @@ export class DashboardPage extends GrafanaPage {
    */
   getPanelByTitle(title: string): Panel {
     return new Panel(this.ctx, () => {
-      return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(title));
+      const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(title), {
+        startsWith: true,
+      });
+      // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
+      if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+        return locator.locator('..').locator('..');
+      }
+      return locator;
     });
   }
 
@@ -78,7 +84,7 @@ export class DashboardPage extends GrafanaPage {
    */
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages } = this.ctx.selectors;
-    if (gte(this.ctx.grafanaVersion, '10.0.0')) {
+    if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
       await this.getByTestIdOrAriaLabel(
         components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)
       ).click();
