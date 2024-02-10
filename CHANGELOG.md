@@ -1,3 +1,16 @@
+# (Sat Feb 10 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.13.0`
+  - Plugin E2E: Enable assertion on panel data [#688](https://github.com/grafana/plugin-tools/pull/688) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Feb 09 2024)
 
 #### 🐛 Bug Fix
