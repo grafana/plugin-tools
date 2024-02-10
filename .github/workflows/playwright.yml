@@ -45,7 +45,6 @@ jobs:
             { name: 'grafana', version: '9.1.2' },
             { name: 'grafana', version: '9.0.2' },
             { name: 'grafana', version: '8.5.2' },
-            { name: 'grafana', version: '8.4.2' },
           ]
     name: ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
     runs-on: ubuntu-latest
