@@ -48,6 +48,6 @@ test('explore page should display table and time series panel only for certain q
     queryParams: new URLSearchParams(url),
   });
 
-  await expect(explorePage.timeSeriesPanel.locator()).toBeVisible();
-  await expect(explorePage.tablePanel.locator()).toBeVisible();
+  await expect(explorePage.timeSeriesPanel.locator).toBeVisible();
+  await expect(explorePage.tablePanel.locator).toBeVisible();
 });

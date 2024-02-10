@@ -23,10 +23,11 @@ export class ExplorePage extends GrafanaPage {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
-    this.timeSeriesPanel = new Panel(this.ctx, () =>
+    this.timeSeriesPanel = new Panel(
+      this.ctx,
       this.getPanelLocators(TIME_SERIES_PANEL_SELECTOR_SUFFIX, TIME_SERIES_PANEL_TEXT)
     );
-    this.tablePanel = new Panel(this.ctx, () => this.getPanelLocators(TABLE_PANEL_SELECTOR_SUFFIX, TABLE_PANEL_TEXT));
+    this.tablePanel = new Panel(this.ctx, this.getPanelLocators(TABLE_PANEL_SELECTOR_SUFFIX, TABLE_PANEL_TEXT));
   }
 
   private getPanelLocators(suffix: string, text: string) {

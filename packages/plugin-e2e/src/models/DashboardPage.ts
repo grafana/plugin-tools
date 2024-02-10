@@ -50,19 +50,17 @@ export class DashboardPage extends GrafanaPage {
    * Note that this won't navigate to the panel edit page, it will only return the Panel object, which
    * points to the locator for the panel in the dashboard page. Can be used to assert on the panel data, eg.
    * const panel = await dashboardPage.getPanelByTitle('Table panel');
-   * await expect(panel.getFieldNames()).toContainText(['time', 'temperature']);
+   * await expect(panel.fieldNames).toContainText(['time', 'temperature']);
    */
   getPanelByTitle(title: string): Panel {
-    return new Panel(this.ctx, () => {
-      const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(title), {
-        startsWith: true,
-      });
-      // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
-      if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
-        return locator.locator('..').locator('..');
-      }
-      return locator;
+    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(title), {
+      startsWith: true,
     });
+    // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
+    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+      locator = locator.locator('..').locator('..');
+    }
+    return new Panel(this.ctx, locator);
   }
 
   /**
@@ -71,12 +69,10 @@ export class DashboardPage extends GrafanaPage {
    * Note that this won't navigate to the panel edit page, it will only return the Panel object, which
    * points to the locator for the panel in the dashboard page. Can be used to assert on the panel data, eg.
    * const panel = await dashboardPage.getPanelByTitle('2');
-   * await expect(panel.getFieldNames()).toContainText(['time', 'temperature']);
+   * await expect(panel.fieldNames()).toContainText(['time', 'temperature']);
    */
   getPanelById(panelId: string): Panel {
-    return new Panel(this.ctx, () => {
-      return this.ctx.page.locator(`[data-panelid="${panelId}"]`);
-    });
+    return new Panel(this.ctx, this.ctx.page.locator(`[data-panelid="${panelId}"]`));
   }
 
   /**

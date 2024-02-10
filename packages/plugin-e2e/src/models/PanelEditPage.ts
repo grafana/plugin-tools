@@ -16,20 +16,19 @@ export class PanelEditPage extends GrafanaPage {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
-    this.panel = new Panel(
-      ctx,
-      // only one panel is allowed in the panel edit page, so we don't need to use panel title to locate it
-      () => {
-        const locator = this.getByTestIdOrAriaLabel(ctx.selectors.components.Panels.Panel.title(''), {
-          startsWith: true,
-        });
-        // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
-        if (semver.lt(ctx.grafanaVersion, '9.5.0')) {
-          return locator.locator('..').locator('..');
-        }
-        return locator;
-      }
-    );
+    this.panel = new Panel(ctx, this.getPanelLocator());
+  }
+
+  private getPanelLocator() {
+    // only one panel is allowed in the panel edit page, so we don't need to use panel title to locate it
+    const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(''), {
+      startsWith: true,
+    });
+    // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
+    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+      return locator.locator('..').locator('..');
+    }
+    return locator;
   }
 
   /**
@@ -53,13 +52,13 @@ export class PanelEditPage extends GrafanaPage {
     if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
       locator = this.ctx.page.getByRole('table');
     }
-
-    this.panel = new Panel(this.ctx, () => locator);
+    this.panel = new Panel(this.ctx, locator);
   }
 
   async untoggleTableView() {
     await radioButtonSetChecked(this.ctx.page, 'Table view', false);
-    this.panel = new Panel(this.ctx, () =>
+    this.panel = new Panel(
+      this.ctx,
       this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
     );
   }
