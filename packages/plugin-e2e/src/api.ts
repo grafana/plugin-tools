@@ -2,7 +2,13 @@ import { test as base, expect as baseExpect, selectors } from '@playwright/test'
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
-import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
+import {
+  CreateDataSourceArgs,
+  CreateDataSourcePageArgs,
+  Dashboard,
+  DataSourceSettings,
+  ReadProvisionedDataSourceArgs,
+} from './types';
 import {
   PanelEditPage,
   GrafanaPage,
@@ -136,7 +142,7 @@ export type PluginFixture = {
    * you may use this command in a setup project. Read more about setup projects
    * here: https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
    */
-  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSource>;
+  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSourceSettings>;
 
   /**
    * Fixture command that login to Grafana using the Grafana API.
@@ -165,10 +171,13 @@ export type PluginFixture = {
   login: () => Promise<void>;
 
   /**
-   * Fixture command that reads a the yaml file for a provisioned dashboard
-   * or data source and returns it as json.
+   * Fixture command that reads a yaml file in the provisioning/datasources directory.
+   *
+   * The file name should be the name of the file with the .yaml|.yml extension.
+   * If a data source name is provided, the first data source that matches the name will be returned.
+   * If no name is provided, the first data source in the list of data sources will be returned.
    */
-  readProvision<T = any>(args: ReadProvisionArgs): Promise<T>;
+  readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.

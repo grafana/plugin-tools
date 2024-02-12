@@ -1,9 +1,9 @@
 import { Response } from '@playwright/test';
-import { DataSource, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../types';
+import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, private datasource: DataSource) {
+  constructor(ctx: PluginTestCtx, private datasource: DataSourceSettings) {
     super(ctx);
   }
   async deleteDataSource() {
