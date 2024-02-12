@@ -1,3 +1,15 @@
+# v0.13.2 (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix typing in config page [#741](https://github.com/grafana/plugin-tools/pull/741) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.13.1 (Mon Feb 12 2024)
 
 #### 🐛 Bug Fix

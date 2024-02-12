@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@0.13.2`
+  - Plugin E2E: Fix typing in config page [#741](https://github.com/grafana/plugin-tools/pull/741) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@0.13.1`
   - Plugin E2E:: Add back health check mock [#732](https://github.com/grafana/plugin-tools/pull/732) ([@sunker](https://github.com/sunker))
 
