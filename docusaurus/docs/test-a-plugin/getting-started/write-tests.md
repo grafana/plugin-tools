@@ -18,7 +18,7 @@ After you have [set up Grafana Plugin E2E](installation.md), you are ready to wr
 
 In this example, we're using the panel edit page to test a data source plugin. When the provided query is valid, the response status code is expected to be in the range 200-299.
 
-```typescript
+```ts
 import { test, expect } from '@grafana/plugin-e2e';
 
 test('data query should be OK when URL is valid', async ({ panelEditPage, page }) => {
@@ -35,7 +35,7 @@ test('data query should be OK when URL is valid', async ({ panelEditPage, page }
 
 In the next test, we're asserting that a new instance of the Snowflake data source can be configured successfully. Notice how the fixtures `isFeatureToggleEnabled` and `grafanaVersion` allow us to customize the test code in case a certain Grafana feature toggle is enabled and for specific Grafana versions.
 
-```typescript
+```ts
 import { test, expect } from '@grafana/plugin-e2e';
 import * as semver from 'semver';
 
@@ -52,5 +52,24 @@ test('valid credentials should return a 200 status code', async ({
     page.getByLabel('Enabled').check();
   }
   await expect(configPage.saveAndTest()).toBeOK();
+});
+```
+
+## Asserting on panel data
+
+If you want to assert on what data is being displayed in a panel, you may use the Table panel.
+
+```ts
+test('should return data and not display panel error when a valid query is provided', async ({
+  panelEditPage,
+  page,
+  readProvision,
+}) => {
+  await panelEditPage.datasource.set('Google Sheets Data Source');
+  await panelEditPage.setVisualization('Table');
+  await panelEditPage.timeRange.set({ from: '2019-01-11', to: '2019-12-15' });
+  page.getByText('Enter SpreadsheetID').fill(process.env.SPREADSHEET_ID);
+  await panelEditPage.refreshPanel();
+  await expect(panelEditPage.panel.fieldNames).toContainText(['-1', '2.90']);
 });
 ```
