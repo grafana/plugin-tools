@@ -6,6 +6,7 @@ import {
   CreateDataSourceArgs,
   CreateDataSourcePageArgs,
   DataSourceSettings,
+  ReadProvisionedDashboardArgs,
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
 } from './types';
@@ -224,6 +225,8 @@ export type PluginFixture = {
    * If no name is provided, the first data source in the list of data sources will be returned.
    */
   readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
+
+  readProvisionedDashboard(args: ReadProvisionedDashboardArgs): Promise<Dashboard>;
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
