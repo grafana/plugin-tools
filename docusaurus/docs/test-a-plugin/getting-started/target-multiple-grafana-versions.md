@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 
 ## On your local machine
 
-In the [installation](./installation.md#start-grafana) guide you saw how to start Grafana by running `npm run server`. When running this command, the latest Grafana Enterprise image will be used. If you want to target a different version of Grafana in your e2e tests, you can use the `GRAFANA_VERSION` environment variable to specify a version of choice.
+In the [installation](./installation.md#start-grafana) guide you saw how to start Grafana by running `npm run server`. When running this command, the latest Grafana Enterprise image will be used. If you want to target a different version of Grafana in your e2e tests, you can use the `GRAFANA_VERSION` environment variable to specify a version of choice. Repeat the process of spinning up a version of Grafana and running your tests to validate against the different versions.
 
 <Tabs defaultValue="npm">
 <TabItem value="npm">
