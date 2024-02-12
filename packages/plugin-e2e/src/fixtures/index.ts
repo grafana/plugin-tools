@@ -6,7 +6,6 @@ import createDataSourceConfigPage from './commands/createDataSourceConfigPage';
 import panelEditPage from './panelEditPage';
 import createDataSource from './commands/createDataSource';
 import readProvisionedDataSource from './commands/readProvisionedDataSource';
-import readProvisionedDashboard from './commands/readProvisionedDashboard';
 import newDashboardPage from './newDashboardPage';
 import variableEditPage from './variableEditPage';
 import explorePage from './explorePage';
@@ -27,7 +26,6 @@ const fixtures = {
   explorePage,
   createDataSource,
   readProvisionedDataSource,
-  readProvisionedDashboard,
   isFeatureToggleEnabled,
   createUser,
 };

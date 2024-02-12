@@ -226,8 +226,6 @@ export type PluginFixture = {
    */
   readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
 
-  readProvisionedDashboard(args: ReadProvisionedDashboardArgs): Promise<Dashboard>;
-
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
