@@ -6,7 +6,6 @@ import {
   CreateDataSourceArgs,
   CreateDataSourcePageArgs,
   DataSourceSettings,
-  ReadProvisionedDashboardArgs,
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
 } from './types';
