@@ -13,6 +13,6 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     ports:
-      - 3000:3000/tcp
+      - 3001:3000/tcp
     volumes:
       - ./provisioning:/etc/grafana/provisioning
