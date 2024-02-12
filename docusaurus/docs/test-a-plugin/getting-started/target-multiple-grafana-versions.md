@@ -9,7 +9,7 @@ keywords:
   - testing
   - e2e
   - ci
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 import Tabs from '@theme/Tabs';
