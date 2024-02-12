@@ -128,7 +128,7 @@ For details on how to provision Grafana, refer to the [documentation](https://gr
 
 ### Step 4: Start Grafana
 
-Next, startup the Grafana instance locally.
+Next, startup the latest version of Grafana locally.
 
 <Tabs defaultValue="npm">
 <TabItem value="npm">
@@ -155,6 +155,12 @@ pnpm server
 
 </TabItem>
 </Tabs>
+
+If you wish to start a specific version of Grafana, you can do that by specifying the `GRAFANA_VERSION` environment variable.
+
+```bash
+GRAFANA_VERSION=10.1.6 npm run server
+```
 
 ### Step 5: Run tests
 
