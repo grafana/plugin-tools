@@ -15,7 +15,7 @@ sidebar_position: 2
 
 # Introduction
 
-To be able to interact with the Grafana UI, you need to be logged in to Grafana. `@grafana/plugin-e2e` provides ways to handle authentication and testing your plugin with role-based access control (RBAC).
+To be able to interact with the Grafana UI, you need to be logged in to Grafana. `@grafana/plugin-e2e` provides a declarative way to handle authentication and creating users that can be used to test role-based access control (RBAC) in your plugin.
 
 ## Plugins that don't use RBAC
 
@@ -55,30 +55,36 @@ projects: [
 
 ## Plugins that use RBAC
 
-If your plugin uses RBAC, you may want to write tests that verifies that certain plugin features are role-based. `@grafana/plugin-e2e` provides a declarative way of defining new users and roles. In the following example, a new users with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the viewer user is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
+If your plugin uses RBAC, you may want to write tests that verifies that certain plugin features are role-based. `@grafana/plugin-e2e` lets you define users with roles in the playwright config file. In the following example, a new users with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the viewer user is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
 
 ```ts
-projects: [
-    {
-      name: 'createViewerUserAndAuthenticate',
-      testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
-      testMatch: [/.*auth\.setup\.ts/],
-      use: {
-        user: {
-          user: 'viewer',
-          password: 'password',
-          role: 'Viewer',
+import { defineConfig, devices } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+
+export default defineConfig<PluginOptions>({
+  ...
+  projects: [
+      {
+        name: 'createViewerUserAndAuthenticate',
+        testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+        use: {
+          user: {
+            user: 'viewer',
+            password: 'password',
+            role: 'Viewer',
+          },
         },
       },
-    },
-    {
-      name: 'run-tests-for-viewer',
-      testDir: './tests/viewer',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/viewer.json',
+      {
+        name: 'run-tests-for-viewer',
+        testDir: './tests/viewer',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/viewer.json',
+        },
+        dependencies: ['createViewerUserAndAuthenticate'],
       },
-      dependencies: ['createViewerUserAndAuthenticate'],
-    },
-  ],
+  ]
+})
 ```
