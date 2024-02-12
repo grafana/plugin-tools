@@ -1,3 +1,4 @@
+import { Response } from '@playwright/test';
 import { DataSource, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../types';
 import { GrafanaPage } from './GrafanaPage';
 
@@ -28,9 +29,10 @@ export class DataSourceConfigPage extends GrafanaPage {
    *
    * Optionally, you can skip waiting for the response by passing in { skipWaitForResponse: true } as the options parameter
    */
-  async saveAndTest(options?: TriggerQueryOptions) {
+  async saveAndTest(options?: TriggerQueryOptions): Promise<Response> {
     if (options?.skipWaitForResponse) {
-      return this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
+      await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
+      return this.ctx.page.waitForResponse('');
     }
 
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
