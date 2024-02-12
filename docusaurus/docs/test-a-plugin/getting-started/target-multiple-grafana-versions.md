@@ -1,7 +1,7 @@
 ---
 id: target-multiple-grafana-versions
 title: Target multiple Grafana versions
-description: Target multiple Grafana versions
+description: Test a plugin against multiple Grafana versions
 keywords:
   - grafana
   - plugins
