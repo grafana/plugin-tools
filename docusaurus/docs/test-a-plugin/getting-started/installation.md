@@ -21,11 +21,16 @@ Plugin authors typically want their plugins to be compatible with a range of Gra
 
 [`@grafana/plugin-e2e`](https://www.npmjs.com/package/@grafana/plugin-e2e?activeTab=readme) is designed specifically for Grafana plugin developers. It extends [`Playwright test`](https://playwright.dev/) capabilities with relevant fixtures, models, and expect matchers; enabling comprehensive end-to-end testing of Grafana plugins across multiple versions of Grafana. This package simplifies the testing process, ensuring your plugin is robust and compatible with various Grafana environments.
 
-## Before you begin
+## Prerequisites
 
-You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) with Node.js 18+ setup. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 0.40.0 installed. For instructions on how to install Playwright in your plugin, refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright).
+- You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
+- Node.js 18+
+- Docker
+- Basic Knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
 
-If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
+## Installing Playwright
+
+Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 0.40.0 installed as a dev-devdependency in the package.json file of your plugin.
 
 ## Set up `plugin-e2e`
 
