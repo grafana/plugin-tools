@@ -14,9 +14,9 @@ sidebar_position: 2
 
 # Write tests
 
-After you have [set up Grafana Plugin E2E](installation.md), you are ready to write your first test. 
+After you have [set up Grafana Plugin E2E](installation.md), you are ready to write your first test.
 
-n the following test, the panel edit page is used to test a data source plugin.
+In this example, we're using the panel edit page to test a data source plugin. When the provided query is valid, the response status code is expected to be in the range 200-299.
 
 ```typescript
 import { test, expect } from '@grafana/plugin-e2e';
