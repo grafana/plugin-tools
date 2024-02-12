@@ -1,7 +1,7 @@
 ---
-id: target-multiple-grafana-versions
-title: Target multiple Grafana versions
-description: Test a plugin against multiple Grafana versions
+id: ci
+title: CI
+description: Run e2e tests in CI
 keywords:
   - grafana
   - plugins
@@ -17,37 +17,7 @@ import TabItem from '@theme/TabItem';
 
 # Introduction
 
-`@grafana/plugin-e2e` is tested with all minor versions of Grafana since 8.3.0. This article provides examples on how to run e2e tests targeting different Grafana versions locally and in CI.
-
-## On your local machine
-
-In the [installation](./installation.md#start-grafana) guide you saw how to start Grafana by running `npm run server`. When running this command, the latest Grafana Enterprise image will be used. If you want to target a different version of Grafana in your e2e tests, you can use the `GRAFANA_VERSION` environment variable to specify a version of choice. Repeat the process of spinning up a version of Grafana and running your tests to validate against the different versions.
-
-<Tabs defaultValue="npm">
-<TabItem value="npm">
-
-```bash
-GRAFANA_VERSION=10.1.6 npm run server
-```
-
-</TabItem>
-
-<TabItem value="yarn">
-
-```bash
-GRAFANA_VERSION=10.1.6 yarn server
-```
-
-</TabItem>
-
-<TabItem value="pnpm">
-
-```bash
-GRAFANA_VERSION=10.1.6 pnpm server
-```
-
-</TabItem>
-</Tabs>
+`@grafana/plugin-e2e` is tested with all minor versions of Grafana since 8.3.0. This article provides an example workflow that you can use to run e2e tests targeting different Grafana versions in CI.
 
 ## CI
 
