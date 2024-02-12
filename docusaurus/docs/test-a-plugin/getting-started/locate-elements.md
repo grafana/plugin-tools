@@ -1,5 +1,5 @@
 ---
-id: locating-elements
+id: locate-elements
 title: Locating elements
 description: How to locate elements on the page
 draft: true
