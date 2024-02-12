@@ -11,6 +11,8 @@ on:
       - master
       - main
 
+permissions: read-only
+
 jobs:
   build:
     runs-on: ubuntu-latest
