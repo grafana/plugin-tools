@@ -59,7 +59,7 @@ yarn add @grafana/plugin-e2e@latest --dev
 <TabItem value="pnpm">
 
 ```bash
-yarn add @grafana/plugin-e2e@latest -D
+pnpm add @grafana/plugin-e2e@latest -D
 ```
 
 </TabItem>
