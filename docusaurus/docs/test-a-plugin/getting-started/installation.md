@@ -110,7 +110,7 @@ projects: [
 ],
 ```
 
-### Step 3: Provision Grafana
+### Step 3: Provision any required Grafana resources
 
 In many cases, plugin E2E tests rely on the existence of a properly configured data source plugin. We accomplish that using provisioning.
 
