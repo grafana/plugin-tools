@@ -70,7 +70,26 @@ yarn add @grafana/plugin-e2e@latest -D
 Open the `playwright.config.[js|ts]` file that was generated when Playwright was installed.
 
 1. Change the `baseUrl` to `'http://localhost:3000'`.
+
+```ts
+// playwright.config.ts
+use: {
+  baseURL: 'http://localhost:3000',
+  ...
+}
+```
+
 2. Add a new `auth` initialization project. This will login to Grafana and store the cookie on disk.
+
+```ts
+projects: [
+  {
+    name: 'auth',
+    testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+    testMatch: [/.*\.js/],
+  }
+```
+
 3. Then add a dependency for this project in any browser project you want to run tests against. For example, the code below will ensure that all tests in the `chromium` project will load and reuse the authenticated state from the `auth` project.
 
 ```ts
