@@ -77,7 +77,7 @@ use: {
 }
 ```
 
-2. Add a new `auth` initialization project. This will login to Grafana and store the cookie on disk.
+2. Add a new `auth` setup project. This will login to Grafana and store the authenticated state on disk.
 
 ```ts title="playwright.config.ts"
 projects: [
@@ -88,7 +88,7 @@ projects: [
   }
 ```
 
-3. Then add a dependency for this project in any browser project you want to run tests against. For example, the code below will ensure that all tests in the `chromium` project will load and reuse the authenticated state from the `auth` project.
+3. Then add another project that runs all the tests in a browser of choice. This project needs to depend on the `auth` project we added in the previous step. That will ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
 
 ```ts title="playwright.config.ts"
 projects: [
@@ -98,10 +98,10 @@ projects: [
     testMatch: [/.*\.js/],
   },
   {
-    name: 'chromium',
+    name: 'run-tests',
     use: {
       ...devices['Desktop Chrome'],
-      storageState: 'playwright/.auth/user.json',
+      storageState: 'playwright/.auth/admin.json',
     },
     dependencies: ['auth'],
   },
@@ -110,11 +110,11 @@ projects: [
 
 ### Step 3: Provision any required Grafana resources
 
-If testing your plugin requires certain resources, you may use [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) to configure those.
+If testing your plugin requires certain resources to exist on your Grafana instance, you may use [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) to configure those.
 
-The e2e tests that we'll write in this guide requires the Infinity Data Source plugin to be installed and configured, so the following provisioning file is added to the `provisioning/datasources` folder.
+The e2e tests that we'll write in this guide requires the Infinity Data Source plugin to be configured, so the following provisioning file is added to the `provisioning/datasources` folder.
 
-```yml
+```yml title="infinity.yaml"
 apiVersion: 1
 deleteDatasources:
   - name: Infinity E2E
@@ -126,7 +126,7 @@ datasources:
 
 ### Step 4: Start Grafana
 
-Next, startup the latest version of Grafana locally.
+Next, startup the latest version of Grafana on your local machine.
 
 <Tabs defaultValue="npm">
 <TabItem value="npm">
@@ -213,7 +213,7 @@ The following workflow can be used to run e2e tests against a matrix of Grafana 
 <Tabs defaultValue="npm">
 <TabItem value="npm">
 
-```yaml
+```yaml title=".github/workflows/e2e.yml"
 name: E2E tests
 on:
   pull_request:
@@ -306,7 +306,7 @@ jobs:
 
 <TabItem value="yarn">
 
-```yaml
+```yaml title=".github/workflows/e2e.yml"
 name: E2E tests
 on:
   pull_request:
@@ -399,7 +399,7 @@ jobs:
 
 <TabItem value="pnpm">
 
-```yaml
+```yaml title=".github/workflows/e2e.yml"
 name: E2E tests
 on:
   pull_request:
