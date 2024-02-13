@@ -10,7 +10,7 @@ keywords:
   - testing
   - e2e
   - authentication
-sidebar_position: 2
+sidebar_position: 30
 ---
 
 # Introduction
