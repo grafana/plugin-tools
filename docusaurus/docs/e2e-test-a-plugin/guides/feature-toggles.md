@@ -10,7 +10,7 @@ keywords:
   - testing
   - e2e
   - feature toggles
-sidebar_position: 1
+sidebar_position: 40
 ---
 
 # Introduction
