@@ -8,7 +8,7 @@ on:
     tags:
       - 'v*' # Run workflow on version tags, e.g. v1.0.0.
 
-permissions: read-only
+permissions: read-all
 
 jobs:
   release:
