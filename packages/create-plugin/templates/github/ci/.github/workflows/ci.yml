@@ -11,7 +11,7 @@ on:
       - master
       - main
 
-permissions: read-only
+permissions: read-all
 
 jobs:
   build:
