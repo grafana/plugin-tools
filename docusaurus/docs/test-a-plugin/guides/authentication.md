@@ -55,7 +55,7 @@ projects: [
 
 ## Plugins that use RBAC
 
-If your plugin uses RBAC, you may want to write tests that verifies that certain plugin features are role-based. `@grafana/plugin-e2e` lets you define users with roles in the playwright config file. In the following example, a new users with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the viewer user is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
+If your plugin uses RBAC, you may want to write tests that verifies that certain plugin features are role-based. `@grafana/plugin-e2e` lets you define users with roles in the playwright config file. In the following example, a new user with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the user with the viewer role is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
 
 ```ts
 import { defineConfig, devices } from '@playwright/test';
