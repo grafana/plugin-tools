@@ -56,10 +56,10 @@ Create a dashboards folder within the src directory of your plugin project. Move
 ```shell
 myorg-myplugin-datasource/
 └── src/
-// addition-highlight-next-line
+// addition-highlight-start
     ├── dashboards/
-// addition-highlight-next-line
     │   └── overview.json
+// addition-highlight-end
     ├── module.ts
     └── plugin.json
 ```
