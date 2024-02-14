@@ -2,7 +2,6 @@
 id: introduction
 title: Introduction
 description: Introduction
-draft: true
 keywords:
   - grafana
   - plugins

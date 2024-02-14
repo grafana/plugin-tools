@@ -2,7 +2,6 @@
 id: getting-started
 title: Getting started
 description: Getting started
-draft: true
 keywords:
   - grafana
   - plugins
