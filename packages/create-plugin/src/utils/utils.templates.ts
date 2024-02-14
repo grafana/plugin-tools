@@ -7,7 +7,8 @@ import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES, PLUGIN_TYPES } from '../constants.js';
-import { getPackageManagerWithFallback } from './utils.packageManager.js';
+import { TemplateData } from '../types.js';
+import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
@@ -81,13 +82,13 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData() {
+export function getTemplateData(): TemplateData {
   const pluginJson = getPluginJson();
   const { features } = getConfig();
   const currentVersion = getVersion();
   const useReactRouterV6 = features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app;
-
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+  const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
 
   const templateData = {
     ...EXTRA_TEMPLATE_VARIABLES,
@@ -97,8 +98,11 @@ export function getTemplateData() {
     hasBackend: Boolean(pluginJson.backend),
     orgName: pluginJson.info?.author?.name,
     pluginType: pluginJson.type,
+    isAppType: pluginJson.type === PLUGIN_TYPES.app || pluginJson.type === PLUGIN_TYPES.scenes,
+    isNPM: packageManagerName === 'npm',
     packageManagerName,
     packageManagerVersion,
+    packageManagerInstallCmd,
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
     useReactRouterV6: useReactRouterV6,

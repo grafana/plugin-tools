@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
 import { commandName } from './utils.cli.js';
+import { features } from 'node:process';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;
@@ -20,34 +21,48 @@ type UserConfig = {
 };
 
 export function getConfig(): CreatePluginConfig {
+  const rootConfig = getRootConfig();
+  const userConfig = getUserConfig();
+
+  return {
+    ...rootConfig,
+    ...userConfig,
+    version: rootConfig!.version,
+    features: createFeatureFlags({
+      ...rootConfig!.features,
+      ...userConfig!.features,
+    }),
+  };
+}
+
+function getRootConfig(): CreatePluginConfig {
+  const defaultConfig = {
+    version: getVersion(),
+    features: createFeatureFlags(),
+  };
+
   try {
     const rootPath = path.resolve(process.cwd(), '.config/.cprc.json');
     const rootConfig = readRCFileSync(rootPath);
-    const userConfig = getUserConfig();
 
     return {
-      ...rootConfig,
-      ...userConfig,
-      version: rootConfig!.version,
-      features: createFeatureFlags({
+      ...defaultConfig,
+      features: {
+        ...defaultConfig.features,
         ...rootConfig!.features,
-        ...userConfig!.features,
-      }),
+      },
     };
     // Most likely this happens because of no ".config/.cprc.json" (root configuration) file.
     // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
     // Scaffolding a new plugin
     if (commandName === 'generate') {
-      return {
-        version: getVersion(),
-        features: createFeatureFlags(),
-      };
+      return defaultConfig;
     }
 
     // Most probably updating an existing plugin
     return {
-      version: getVersion(),
+      ...defaultConfig,
       features: createDisabledFeatureFlags(),
     };
   }

@@ -16,7 +16,7 @@ import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
-import { CliArgs, TemplateData } from './types.js';
+import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
