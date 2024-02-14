@@ -83,15 +83,6 @@ groupId="package-manager"
 queryString="current-package-manager"
 />
 
-```ts title="playwright.config.ts"
-projects: [
-  {
-    name: 'auth',
-    testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
-    testMatch: [/.*\.js/],
-  }
-```
-
 ### Step 3: Start Grafana
 
 Next, start up the latest version of Grafana on your local machine.
@@ -114,7 +105,7 @@ GRAFANA_VERSION=10.1.6 npm run server
 
 ### Step 4: Write tests
 
-In this example, we're using the panel edit page to test a data source plugin. When the provided query is valid, the response status code is expected to be in the range 200-299.
+In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](https://github.com/grafana/plugin-tools/tree/main/packages/create-plugin) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
 
 ```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
