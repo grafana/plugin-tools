@@ -126,7 +126,7 @@ datasources:
 
 ### Step 4: Start Grafana
 
-Next, startup the latest version of Grafana on your local machine.
+Next, start up the latest version of Grafana on your local machine.
 
 <Tabs defaultValue="npm">
 <TabItem value="npm">
