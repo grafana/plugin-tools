@@ -154,7 +154,7 @@ pnpm server
 </TabItem>
 </Tabs>
 
-If you wish to start a specific version of Grafana, you can do that by specifying the `GRAFANA_VERSION` environment variable.
+If you want to start a specific version of Grafana, you can do that by specifying the `GRAFANA_VERSION` environment variable.
 
 ```bash
 GRAFANA_VERSION=10.1.6 npm run server
