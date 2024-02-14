@@ -13,8 +13,18 @@ keywords:
 sidebar_position: 2
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import ScaffoldPluginE2InstallNPM from '@snippets/plugin-e2e-install.npm.md';
+import ScaffoldPluginE2EInstallPNPM from '@snippets/plugin-e2e-install.pnpm.md';
+import ScaffoldPluginE2EInstallYarn from '@snippets/plugin-e2e-install.yarn.md';
+import ScaffoldPluginE2EStartGrafanaNPM from '@snippets/plugin-e2e-start-grafana.npm.md';
+import ScaffoldPluginE2EStartGrafanaPNPM from '@snippets/plugin-e2e-start-grafana.pnpm.md';
+import ScaffoldPluginE2EStartGrafanaYarn from '@snippets/plugin-e2e-start-grafana.yarn.md';
+import ScaffoldPluginE2ERunTestsNPM from '@snippets/plugin-e2e-run-tests.npm.md';
+import ScaffoldPluginE2ERunTestsPNPM from '@snippets/plugin-e2e-run-tests.pnpm.md';
+import ScaffoldPluginE2ERunTestsYarn from '@snippets/plugin-e2e-run-tests.yarn.md';
+import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm.md';
+import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
+import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
 
 # Getting started
 
@@ -35,34 +45,17 @@ Please refer to the [Playwright documentation](https://playwright.dev/docs/intro
 
 ### Step 1: Installing @grafana/plugin-e2e
 
-Now open the terminal, cd into your plugin root folder and install `@grafana/plugin-e2e`.
+Now open the terminal and run the following command in your plugin's project directory:
 
-<Tabs
-defaultValue="npm">
-<TabItem value="npm">
-
-```bash
-npm install @grafana/plugin-e2e@latest --save-dev
-```
-
-</TabItem>
-
-<TabItem value="yarn">
-
-```bash
-yarn add @grafana/plugin-e2e@latest --dev
-```
-
-</TabItem>
-
-<TabItem value="pnpm">
-
-```bash
-pnpm add @grafana/plugin-e2e@latest -D
-```
-
-</TabItem>
-</Tabs>
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2InstallNPM, label: 'npm' },
+{ component: ScaffoldPluginE2EInstallYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2EInstallPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
 
 ### Step 2: Configure Playwright
 
@@ -128,31 +121,15 @@ datasources:
 
 Next, start up the latest version of Grafana on your local machine.
 
-<Tabs defaultValue="npm">
-<TabItem value="npm">
-
-```bash
-npm run server
-```
-
-</TabItem>
-
-<TabItem value="yarn">
-
-```bash
-yarn server
-```
-
-</TabItem>
-
-<TabItem value="pnpm">
-
-```bash
-pnpm server
-```
-
-</TabItem>
-</Tabs>
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2EStartGrafanaNPM, label: 'npm' },
+{ component: ScaffoldPluginE2EStartGrafanaYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2EStartGrafanaPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
 
 If you want to start a specific version of Grafana, you can do that by specifying the `GRAFANA_VERSION` environment variable.
 
@@ -179,319 +156,26 @@ test('data query should be OK when URL is valid', async ({ panelEditPage, page }
 
 Now you can open the terminal and run the test script from within your local plugin development directory.
 
-<Tabs
-defaultValue="npm">
-<TabItem value="npm">
-
-```bash
-npx playwright test
-```
-
-</TabItem>
-
-<TabItem value="yarn">
-
-```bash
-yarn playwright test
-```
-
-</TabItem>
-
-<TabItem value="pnpm">
-
-```bash
-pnpm playwright test
-```
-
-</TabItem>
-</Tabs>
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2ERunTestsNPM, label: 'npm' },
+{ component: ScaffoldPluginE2ERunTestsYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2ERunTestsPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
 
 ### CI
 
 The following workflow can be used to run e2e tests against a matrix of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
 
-<Tabs defaultValue="npm">
-<TabItem value="npm">
-
-```yaml title=".github/workflows/e2e.yml"
-name: E2E tests
-on:
-  pull_request:
-
-permissions:
-  contents: read
-  id-token: write
-
-jobs:
-  resolve-versions:
-    name: Resolve Grafana images
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    outputs:
-      matrix: ${{ steps.resolve-versions.outputs.matrix }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Resolve Grafana E2E versions
-        id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@main
-
-  playwright-tests:
-    needs: resolve-versions
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
-    name: e2e ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install Mage
-        uses: magefile/mage-action@v3
-        with:
-          install-only: true
-
-      - name: Install npm dependencies
-        run: npm ci
-
-      - name: Build binaries
-        run: mage -v build:linux
-
-      - name: Build frontend
-        run: npm run build
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Start Grafana
-        run: |
-          docker-compose pull
-          GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker-compose up -d
-
-      - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
-
-      - name: Run Playwright tests
-        id: run-tests
-        run: npx playwright test
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login != 'grafana' }}
-        with:
-          name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
-          path: playwright-report/
-          retention-days: 30
-
-      - name: Publish report to GCS
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login == 'grafana' }}
-        uses: grafana/plugin-actions/publish-report@main
-        with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-```
-
-</TabItem>
-
-<TabItem value="yarn">
-
-```yaml title=".github/workflows/e2e.yml"
-name: E2E tests
-on:
-  pull_request:
-
-permissions:
-  contents: read
-  id-token: write
-
-jobs:
-  resolve-versions:
-    name: Resolve Grafana images
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    outputs:
-      matrix: ${{ steps.resolve-versions.outputs.matrix }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Resolve Grafana E2E versions
-        id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@main
-
-  playwright-tests:
-    needs: resolve-versions
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
-    name: e2e ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install Mage
-        uses: magefile/mage-action@v3
-        with:
-          install-only: true
-
-      - name: Install yarn dependencies
-        run: yarn install
-
-      - name: Build binaries
-        run: mage -v build:linux
-
-      - name: Build frontend
-        run: yarn build
-
-      - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
-
-      - name: Start Grafana
-        run: |
-          docker-compose pull
-          GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker-compose up -d
-
-      - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
-
-      - name: Run Playwright tests
-        id: run-tests
-        run: yarn playwright test
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login != 'grafana' }}
-        with:
-          name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
-          path: playwright-report/
-          retention-days: 30
-
-      - name: Publish report to GCS
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login == 'grafana' }}
-        uses: grafana/plugin-actions/publish-report@main
-        with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-```
-
-</TabItem>
-
-<TabItem value="pnpm">
-
-```yaml title=".github/workflows/e2e.yml"
-name: E2E tests
-on:
-  pull_request:
-
-permissions:
-  contents: read
-  id-token: write
-
-jobs:
-  resolve-versions:
-    name: Resolve Grafana images
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    outputs:
-      matrix: ${{ steps.resolve-versions.outputs.matrix }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Resolve Grafana E2E versions
-        id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@main
-
-  playwright-tests:
-    needs: resolve-versions
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
-    name: e2e ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: ^6.10.0
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install Mage
-        uses: magefile/mage-action@v3
-        with:
-          install-only: true
-
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build binaries
-        run: mage -v build:linux
-
-      - name: Build frontend
-        run: pnpm run build
-
-      - name: Install Playwright Browsers
-        run: pnpm playwright install --with-deps
-
-      - name: Start Grafana
-        run: |
-          docker-compose pull
-          GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker-compose up -d
-
-      - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
-
-      - name: Run Playwright tests
-        id: run-tests
-        run: pnpm playwright test
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login != 'grafana' }}
-        with:
-          name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
-          path: playwright-report/
-          retention-days: 30
-
-      - name: Publish report to GCS
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login == 'grafana' }}
-        uses: grafana/plugin-actions/publish-report@main
-        with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-```
-
-</TabItem>
-</Tabs>
-```
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2EDSWorkflowNPM, label: 'npm' },
+{ component: ScaffoldPluginE2EDSWorkflowYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2EDSWorkflowPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
