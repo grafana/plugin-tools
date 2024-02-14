@@ -132,14 +132,15 @@ GRAFANA_VERSION=10.1.6 npm run server
 
 In this example, we're using the panel edit page to test a data source plugin. When the provided query is valid, the response status code is expected to be in the range 200-299.
 
-```ts
+```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
 
-test('data query should be OK when URL is valid', async ({ panelEditPage, page }) => {
-  const API_URL = 'https://jsonplaceholder.typicode.com/users';
-  await panelEditPage.datasource.set('Infinity E2E');
-  await page.getByTestId('infinity-query-url-input').fill(API_URL);
+test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
+  await panelEditPage.datasource.set(ds.name);
+  await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
+  await expect(panelEditPage.panel.data).toContainText(['1', '3']);
 });
 ```
 
