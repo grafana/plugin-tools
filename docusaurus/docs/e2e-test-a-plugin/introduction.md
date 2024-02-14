@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 
 ## The problem
 
-Plugin authors typically want their plugins to be compatible with a range of Grafana versions. This can be challenging as things such as environment, APIs and UI components may differ from one Grafana version to another. Manually testing a plugin across multiple versions of Grafana is a tedious process, so in most cases E2E testing offers a better solution. `@grafana/plugin-e2e` offers a consitent way to interact with the Grafana UI without having to handle UI deviations in the plugin test code.
+Plugin authors typically want their plugins to be compatible with a range of Grafana versions. This can be challenging as things such as environment, APIs and UI components may differ from one Grafana version to another. Manually testing a plugin across multiple versions of Grafana is a tedious process, so in most cases E2E testing offers a better solution. `@grafana/plugin-e2e` offers a consistent way to interact with the Grafana UI without having to handle UI deviations in the plugin test code.
 
 ## Compatibility
 
