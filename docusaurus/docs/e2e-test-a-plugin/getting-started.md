@@ -24,6 +24,9 @@ import ScaffoldPluginE2ERunTestsYarn from '@snippets/plugin-e2e-run-tests.yarn.m
 import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm.md';
 import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
+import ScaffoldPluginE2EProjectsConfigNPM from '@snippets/plugin-e2e-auth-project.npm.md';
+import ScaffoldPluginE2EProjectsConfigYarn from '@snippets/plugin-e2e-auth-project.yarn.md';
+import ScaffoldPluginE2EProjectsConfigPNPM from '@snippets/plugin-e2e-auth-project.pnpm.md';
 
 # Getting started
 
@@ -58,18 +61,27 @@ queryString="current-package-manager"
 
 ### Step 2: Configure Playwright
 
-Open the `playwright.config.[js|ts]` file that was generated when Playwright was installed.
+Open the Playwright config file that was generated when Playwright was installed.
 
-1. Change the `baseUrl` to `'http://localhost:3000'`.
+1. Uncomment `baseUrl` and change it to `'http://localhost:3000'`.
 
 ```ts title="playwright.config.ts"
-use: {
   baseURL: 'http://localhost:3000',
-  ...
-}
 ```
 
-2. Add a new `auth` setup project. This will login to Grafana and store the authenticated state on disk.
+2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects. The first project called `auth` is a setup project will login to Grafana and store the authenticated state on disk. The second project `run-tests` runs all the tests in a browser of choice. By adding a dependency to the `auth` project we ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
+
+   Your Playwright config should have the following project configuration:
+
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2EProjectsConfigNPM, label: 'npm' },
+{ component: ScaffoldPluginE2EProjectsConfigYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2EProjectsConfigPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
 
 ```ts title="playwright.config.ts"
 projects: [
@@ -78,26 +90,6 @@ projects: [
     testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
     testMatch: [/.*\.js/],
   }
-```
-
-3. Then add another project that runs all the tests in a browser of choice. This project needs to depend on the `auth` project we added in the previous step. That will ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
-
-```ts title="playwright.config.ts"
-projects: [
-  {
-    name: 'auth',
-    testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
-    testMatch: [/.*\.js/],
-  },
-  {
-    name: 'run-tests',
-    use: {
-      ...devices['Desktop Chrome'],
-      storageState: 'playwright/.auth/admin.json',
-    },
-    dependencies: ['auth'],
-  },
-],
 ```
 
 ### Step 3: Provision any required Grafana resources
@@ -153,7 +145,7 @@ test('data query should be OK when URL is valid', async ({ panelEditPage, page }
 
 ### Step 5: Run tests
 
-Now you can open the terminal and run the test script from within your local plugin development directory.
+Now you open a new terminal and run the test script from within your local plugin development directory.
 
 <CodeSnippets
 snippets={[

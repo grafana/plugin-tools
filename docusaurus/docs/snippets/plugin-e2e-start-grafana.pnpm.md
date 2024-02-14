@@ -1,3 +1,3 @@
 ```shell
-pnpm server
+pnpm run server
 ```
