@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
+import { commandName } from './utils.cli.js';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;
@@ -33,10 +34,21 @@ export function getConfig(): CreatePluginConfig {
         ...userConfig!.features,
       }),
     };
+    // Most likely this happens because of no ".config/.cprc.json" (root configuration) file.
+    // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
+    // Scaffolding a new plugin
+    if (commandName === 'generate') {
+      return {
+        version: getVersion(),
+        features: createFeatureFlags(),
+      };
+    }
+
+    // Most probably updating an existing plugin
     return {
       version: getVersion(),
-      features: createFeatureFlags(),
+      features: createDisabledFeatureFlags(),
     };
   }
 }
@@ -52,9 +64,19 @@ function getUserConfig(): UserConfig | undefined {
         ...userConfig!.features,
       }),
     };
+    // Most likely this happens because of no ".cprc.json" (user configuration) file.
+    // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
+    // Scaffolding a new plugin
+    if (commandName === 'generate') {
+      return {
+        features: createFeatureFlags(),
+      };
+    }
+
+    // Most probably updating an existing plugin
     return {
-      features: createFeatureFlags(),
+      features: createDisabledFeatureFlags(),
     };
   }
 }
@@ -69,9 +91,17 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 }
 
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
+  // Default values for new scaffoldings
   return {
     useReactRouterV6: true,
     bundleGrafanaUI: false,
     ...flags,
+  };
+}
+
+function createDisabledFeatureFlags(): FeatureFlags {
+  return {
+    useReactRouterV6: false,
+    bundleGrafanaUI: false,
   };
 }

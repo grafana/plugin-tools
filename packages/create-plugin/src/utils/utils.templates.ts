@@ -2,6 +2,7 @@ import glob from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
 import mkdirp from 'mkdirp';
+import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
@@ -10,6 +11,8 @@ import { getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
+
+const debug = createDebug('templates');
 
 /**
  *
@@ -82,10 +85,11 @@ export function getTemplateData() {
   const pluginJson = getPluginJson();
   const { features } = getConfig();
   const currentVersion = getVersion();
+  const useReactRouterV6 = features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app;
 
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
 
-  return {
+  const templateData = {
     ...EXTRA_TEMPLATE_VARIABLES,
     pluginId: pluginJson.id,
     pluginName: pluginJson.name,
@@ -97,7 +101,11 @@ export function getTemplateData() {
     packageManagerVersion,
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
-    useReactRouterV6: features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app,
-    reactRouterVersion: features.useReactRouterV6 ? '6.22.0' : '5.2.0',
+    useReactRouterV6: useReactRouterV6,
+    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
+
+  debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
+
+  return templateData;
 }

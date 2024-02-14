@@ -59,7 +59,7 @@ function getTemplateData(answers: CliArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
-  const useReactRouterV6 = features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app;
+  const useReactRouterV6 = features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app; // We don't enable this by default yet for new scenes plugins.
   const templateData: TemplateData = {
     ...answers,
     pluginId,
