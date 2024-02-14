@@ -1,19 +1,11 @@
 import minimist from 'minimist';
 import chalk from 'chalk';
-import { TEXT, UDPATE_CONFIG } from '../constants.js';
-import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
-import { confirmPrompt, selectPrompt, printMessage, printSuccessMessage, printRedBox } from '../utils/utils.console.js';
-import {
-  updatePackageJson,
-  hasNpmDependenciesToUpdate,
-  getPackageJsonUpdatesAsText,
-  updateNpmScripts,
-  writePackageManagerInPackageJson,
-} from '../utils/utils.npm.js';
-import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
+import { printRedBox, printBlueBox } from '../utils/utils.console.js';
+import { updatePackageJson, updateNpmScripts } from '../utils/utils.npm.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
-import { isPluginDirectory } from '../utils/utils.plugin.js';
-import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
+import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
+import { EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
+import { getVersion } from '../utils/utils.version.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   try {
@@ -51,73 +43,41 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
       process.exit(1);
     }
 
-    // 0. Warning
-    // ----------
-    printMessage(TEXT.updateCommandWarning);
+    // Updating the plugin (.config/, NPM package dependencies, package.json scripts)
+    // (More info on the why: https://docs.google.com/document/d/15dm4WV9v7Ga9Z_Hp3CJMf2D3meuTyEWqBc3omqiOksQ)
+    // -------------------
+    await updateDotConfigFolder();
+    updateNpmScripts();
+    updatePackageJson({
+      onlyOutdated: true,
+      ignoreGrafanaDependencies: false,
+      devOnly: false,
+    });
 
-    // 1. Add / update configuration files
-    // -----------------------------------
-    if (await confirmPrompt(TEXT.updateConfigPrompt)) {
-      compileTemplateFiles(UDPATE_CONFIG.filesToOverride, getTemplateData());
-      printSuccessMessage(TEXT.overrideFilesSuccess);
+    printBlueBox({
+      title: 'Update successful ✔',
+      content: `${chalk.bold('@grafana/* package version:')} ${EXTRA_TEMPLATE_VARIABLES.grafanaVersion}
+${chalk.bold('@grafana/create-plugin version:')} ${getVersion()}
 
-      const prettifyMsg = await prettifyFiles({ targetPath: '.config', projectRoot: '.' });
-      printMessage(prettifyMsg);
-    } else {
-      printMessage(TEXT.overrideFilesAborted);
-      process.exit(0);
-    }
-
-    // 2. Add / update dev dependencies inside the `package.json`
-    // (skipped automatically if there is nothing to update)
-    // ------------------------------------------------
-    if (hasNpmDependenciesToUpdate({ devOnly: true })) {
-      const updatableText = getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true, devOnly: true });
-
-      if (updatableText.length > 0) {
-        const PROMPT_CHOICES = {
-          ALL: 'Yes, all of them',
-          ONLY_OUTDATED: 'Yes, but only the outdated ones',
-          NONE: 'No',
-        };
-
-        const shouldUpdateDeps = await selectPrompt(TEXT.updateNpmDependenciesPrompt + updatableText, [
-          PROMPT_CHOICES.ALL,
-          PROMPT_CHOICES.ONLY_OUTDATED,
-          PROMPT_CHOICES.NONE,
-        ]);
-
-        if (shouldUpdateDeps && shouldUpdateDeps !== PROMPT_CHOICES.NONE) {
-          updatePackageJson({
-            onlyOutdated: shouldUpdateDeps === PROMPT_CHOICES.ONLY_OUTDATED,
-            ignoreGrafanaDependencies: true,
-            devOnly: true,
-          });
-          printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
-        } else {
-          printMessage(TEXT.updateNpmDependenciesAborted);
-        }
-      }
-    }
-
-    // 3. Add / update NPM scripts
-    // (skipped automatically if there is nothing to update)
-    // ------------------------------------------------
-    if (await confirmPrompt(TEXT.updateNpmScriptsPrompt)) {
-      updateNpmScripts();
-      printSuccessMessage(TEXT.updateNpmScriptsSuccess);
-    } else {
-      printMessage(TEXT.updateNpmScriptsAborted);
-    }
-
-    // Guarantee that the package manager property is set in the package.json file if it is missing
-    const packageManager = getPackageManagerWithFallback();
-    writePackageManagerInPackageJson(packageManager);
-
-    // 4. Summary
-    // -------------
-    printSuccessMessage(TEXT.updateCommandSuccess);
+${chalk.bold.underline('Next steps:')}
+- 1. Run ${chalk.bold('npm install')} to install the package updates
+- 2. Check if your encounter any breaking changes
+  (If yes please check our migration guide: https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions/)
+  
+${chalk.bold('Do you have questions?')}
+Please don't hesitate to reach out in one of the following ways:
+- Open an issue/discussion in https://github.com/grafana/plugin-tools
+- Ask a question in the community forum at https://community.grafana.com/
+- Join our community slack channel at https://slack.grafana.com/`,
+    });
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      printRedBox({
+        title: 'Something went wrong while updating your plugin.',
+        content: error.message,
+      });
+    } else {
+      console.error(error);
+    }
   }
 };
