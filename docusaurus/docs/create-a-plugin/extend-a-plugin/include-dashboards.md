@@ -79,7 +79,7 @@ Then, update your plugin.json file to include a reference to the new dashboard r
 ```
 
 :::info
-Ensure the path is relative to the src directory. This is necessary for the plugin to correctly reference the dashboard.json file from the dist directory once the frontend is built.
+Ensure the path is relative to the src directory. This is necessary for the plugin to correctly reference the dashboard json file from the dist directory once the frontend is built.
 :::
 
 After adding the dashboard to your plugin, rebuild the plugin and restart Grafana to apply the new configuration.
