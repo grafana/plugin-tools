@@ -19,7 +19,7 @@ To be able to interact with the Grafana UI, you need to be logged in to Grafana.
 
 ## Plugins that don't use RBAC
 
-If your plugin don't use RBAC, you can use the default server administrator credentials to login. The following snippet is a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) that invokes a function in the `@grafana/plugin-e2e` package that will login to Grafana using `admin:admin`. The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`.
+If your plugin doesn't use RBAC, you can use the default server administrator credentials to login. The following snippet is a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) that invokes a function in the `@grafana/plugin-e2e` package that will login to Grafana using `admin:admin`. The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`.
 
 ```ts
 // playwright.config.js|ts
