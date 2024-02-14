@@ -1,3 +1,15 @@
+# v4.0.0 (Wed Feb 14 2024)
+
+#### 💥 Breaking Change
+
+- Create-plugin: Change how the `update` command works [#707](https://github.com/grafana/plugin-tools/pull/707) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v3.6.0 (Thu Feb 08 2024)
 
 #### 🚀 Enhancement
