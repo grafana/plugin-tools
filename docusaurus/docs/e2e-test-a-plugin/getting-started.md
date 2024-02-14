@@ -92,23 +92,7 @@ projects: [
   }
 ```
 
-### Step 3: Provision any required Grafana resources
-
-If testing your plugin requires certain resources to exist on your Grafana instance, you may use [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) to configure those.
-
-The e2e tests that we'll write in this guide requires the Infinity Data Source plugin to be configured, so the following provisioning file is added to the `provisioning/datasources` folder.
-
-```yml title="infinity.yaml"
-apiVersion: 1
-deleteDatasources:
-  - name: Infinity E2E
-    orgId: 1
-datasources:
-  - name: Infinity E2E
-    type: yesoreyeram-infinity-datasource
-```
-
-### Step 4: Start Grafana
+### Step 3: Start Grafana
 
 Next, start up the latest version of Grafana on your local machine.
 
@@ -128,7 +112,7 @@ If you want to start a specific version of Grafana, you can do that by specifyin
 GRAFANA_VERSION=10.1.6 npm run server
 ```
 
-## Write tests
+### Step 4: Write tests
 
 In this example, we're using the panel edit page to test a data source plugin. When the provided query is valid, the response status code is expected to be in the range 200-299.
 
@@ -158,7 +142,7 @@ groupId="package-manager"
 queryString="current-package-manager"
 />
 
-### CI
+### Step 6: Run tests in CI
 
 The following workflow can be used to run e2e tests against a matrix of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
 
