@@ -9,6 +9,7 @@ keywords:
   - testing
   - e2e
   - getting-started
+  - get-started
 sidebar_position: 2
 ---
 
