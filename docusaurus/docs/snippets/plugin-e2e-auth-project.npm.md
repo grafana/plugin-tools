@@ -6,7 +6,7 @@ export default defineConfig({
     projects: [
     {
       name: 'auth',
-      testDir: `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`,
+      testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
       testMatch: [/.*\.js/],
     },
     {
