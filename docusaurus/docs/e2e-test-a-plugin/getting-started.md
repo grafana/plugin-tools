@@ -72,7 +72,7 @@ Open the Playwright config file that was generated when Playwright was installed
 2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects:
 
    1. `auth` is a setup project will login to Grafana and store the authenticated state on disk.
-   1. `run-tests` runs all the tests in a browser of choice. By adding a dependency to the `auth` project we ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
+   2. `run-tests` runs all the tests in a browser of choice. By adding a dependency to the `auth` project we ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
 
    Your Playwright config should have the following project configuration:
 
@@ -124,7 +124,7 @@ GRAFANA_VERSION=10.1.6 npm run server
 
 ### Step 4: Write tests
 
-In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](https://github.com/grafana/plugin-tools/tree/main/packages/create-plugin) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
+In this example, we're using the panel edit page to test the query editor for a backend Data Source plugin. The plugin was scaffolded with the [create-plugin](https://github.com/grafana/plugin-tools/tree/main/packages/create-plugin) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
 
 ```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
