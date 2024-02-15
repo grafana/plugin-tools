@@ -67,7 +67,9 @@ Open the Playwright config file that was generated when Playwright was installed
   baseURL: 'http://localhost:3000',
 ```
 
-2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects. The first project called `auth` is a setup project will login to Grafana and store the authenticated state on disk. The second project `run-tests` runs all the tests in a browser of choice. By adding a dependency to the `auth` project we ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
+2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects:
+   1. `auth` is a setup project will login to Grafana and store the authenticated state on disk.
+   1. `run-tests` runs all the tests in a browser of choice. By adding a dependency to the `auth` project we ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
 
    Your Playwright config should have the following project configuration:
 
