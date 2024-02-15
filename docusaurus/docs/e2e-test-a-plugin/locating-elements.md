@@ -20,17 +20,17 @@ Locating Grafana UI elements can be challenging because the selector may be defi
 
 # Locating Grafana UI elements
 
-All pages defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that locates elements using the right HTML attribute. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
+All pages defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright locator that resolves to element(s) selected using the right HTML attribute. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
 
-```tsx
+```ts
 panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
 ```
 
-## The `e2e-selectors` fixture
+## The `selectors` fixture
 
 Selectors defined in the `@grafana/e2e-selectors` package are tied to a specific Grafana version. This means that the selectors can change from one version to another. When a new E2E test session is started, `@grafana/plugin-e2e` checks what version of Grafana is under test and resolves selectors that are associated with the current version. The selectors are provided through the `selectors` fixture.
 
-```tsx
+```ts
 import { test, expect } from '@grafana/plugin-e2e';
 
 test('annotation query should be OK when query is valid', async ({ panelEditPage, page, selectors }) => {
