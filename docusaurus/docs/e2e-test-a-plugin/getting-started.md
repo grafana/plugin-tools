@@ -140,7 +140,7 @@ test('data query should return values 1 and 3', async ({ panelEditPage, readProv
 
 ### Step 5: Run tests
 
-Now you open a new terminal and run the test script from within your local plugin development directory.
+Open a new terminal and run the test script from within your local plugin development directory.
 
 <CodeSnippets
 snippets={[
