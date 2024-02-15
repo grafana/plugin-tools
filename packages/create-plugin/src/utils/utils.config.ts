@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
 import { commandName } from './utils.cli.js';
-import { features } from 'node:process';
 
 type FeatureFlags = {
   bundleGrafanaUI: boolean;
