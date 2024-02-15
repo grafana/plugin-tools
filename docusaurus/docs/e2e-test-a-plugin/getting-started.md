@@ -154,7 +154,7 @@ queryString="current-package-manager"
 
 ### Step 6: Run tests in CI
 
-The following workflow can be used to run e2e tests against a matrix of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
+We recommend updating your CI workflow to include the running of e2e tests to continuously check for breakages. The following workflow can be used to run e2e tests against a matrix of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
 
 <CodeSnippets
 snippets={[
