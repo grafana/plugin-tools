@@ -124,7 +124,7 @@ GRAFANA_VERSION=10.1.6 npm run server
 
 ### Step 4: Write tests
 
-In this example, we're using the panel edit page to test the query editor for a backend Data Source plugin. The plugin was scaffolded with the [create-plugin](https://github.com/grafana/plugin-tools/tree/main/packages/create-plugin) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
+In this example, we're using the panel edit page to test the query editor for a backend Data Source plugin. The plugin was scaffolded with the [create-plugin](https://github.com/grafana/plugin-tools/tree/main/packages/create-plugin) tool, and for this Data Source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
 
 ```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
