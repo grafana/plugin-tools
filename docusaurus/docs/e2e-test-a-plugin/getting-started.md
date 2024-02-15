@@ -1,6 +1,6 @@
 ---
 id: getting-started
-title: Getting started
+title: Get started
 description: Getting started
 keywords:
   - grafana
