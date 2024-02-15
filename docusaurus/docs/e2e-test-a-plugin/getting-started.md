@@ -24,9 +24,6 @@ import ScaffoldPluginE2ERunTestsYarn from '@snippets/plugin-e2e-run-tests.yarn.m
 import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm.md';
 import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
-import ScaffoldPluginE2EProjectsConfigNPM from '@snippets/plugin-e2e-auth-project.npm.md';
-import ScaffoldPluginE2EProjectsConfigYarn from '@snippets/plugin-e2e-auth-project.yarn.md';
-import ScaffoldPluginE2EProjectsConfigPNPM from '@snippets/plugin-e2e-auth-project.pnpm.md';
 
 # Getting started
 
@@ -73,15 +70,31 @@ Open the Playwright config file that was generated when Playwright was installed
 
    Your Playwright config should have the following project configuration:
 
-<CodeSnippets
-snippets={[
-{ component: ScaffoldPluginE2EProjectsConfigNPM, label: 'npm' },
-{ component: ScaffoldPluginE2EProjectsConfigYarn, label: 'yarn' },
-{ component: ScaffoldPluginE2EProjectsConfigPNPM, label: 'pnpm' }
-]}
-groupId="package-manager"
-queryString="current-package-manager"
-/>
+```ts title="playwright.config.ts"
+import { dirname } from 'path';
+import { defineConfig, devices } from '@playwright/test';
+
+const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
+
+export default defineConfig({
+    ...
+    projects: [
+    {
+      name: 'auth',
+      testDir: pluginE2eAuth,
+      testMatch: [/.*\.js/],
+    },
+    {
+      name: 'run-tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['auth'],
+    }
+  ],
+});
+```
 
 ### Step 3: Start Grafana
 

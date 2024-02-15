@@ -33,9 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: ^6.10.0
+      - uses: pnpm/action-setup@v3
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
