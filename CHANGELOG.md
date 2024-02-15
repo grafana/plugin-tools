@@ -1,3 +1,16 @@
+# (Thu Feb 15 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.0.1`
+  - Create plugin: Fix update command [#746](https://github.com/grafana/plugin-tools/pull/746) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Wed Feb 14 2024)
 
 #### 💥 Breaking Change
