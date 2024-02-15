@@ -43,6 +43,8 @@ Please refer to the [Playwright documentation](https://playwright.dev/docs/intro
 
 ## Set up `plugin-e2e`
 
+> If you would like to follow along with our example tests, use the [create-plugin](https://www.npmjs.com/package/@grafana/create-plugin) tool to generate a backend Data Source plugin.
+
 ### Step 1: Installing @grafana/plugin-e2e
 
 Now open the terminal and run the following command in your plugin's project directory:
@@ -68,6 +70,7 @@ Open the Playwright config file that was generated when Playwright was installed
 ```
 
 2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects:
+
    1. `auth` is a setup project will login to Grafana and store the authenticated state on disk.
    1. `run-tests` runs all the tests in a browser of choice. By adding a dependency to the `auth` project we ensure login only happens once, and all tests in the `run-tests` project will start already authenticated.
 
