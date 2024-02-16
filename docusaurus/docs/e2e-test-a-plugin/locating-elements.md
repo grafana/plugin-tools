@@ -13,13 +13,13 @@ keywords:
 sidebar_position: 30
 ---
 
-# Grafana end-to-end selectors
+## Grafana end-to-end selectors
 
 Since Grafana 7.0.0, end-to-end tests in Grafana have relied on selectors defined in the [`@grafana/e2e-selectors`](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors) package to select elements in the Grafana UI.
 
 Selecting Grafana UI elements can be challenging because the selector may be defined on either the `aria-label` attribute or the `data-testid` attribute. In the beginning, the selectors used the `aria-label` attribute, but now most selectors have been migrated to use the `data-testid` attribute instead.
 
-# Playwright locator for Grafana UI elements
+## Playwright locator for Grafana UI elements
 
 All pages defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to element(s) selected, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
 
