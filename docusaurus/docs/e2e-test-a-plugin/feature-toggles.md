@@ -1,7 +1,7 @@
 ---
 id: feature-toggles
 title: Use Grafana feature toggles
-description: How to use Grafana feature toggles in E2E tests
+description: How to use Grafana feature toggles in end-to-end tests
 draft: true
 keywords:
   - grafana
@@ -9,19 +9,20 @@ keywords:
   - plugin
   - testing
   - e2e
+  - end-to-end
   - feature toggles
 sidebar_position: 50
 ---
 
 ## Introduction
 
-Grafana uses a mechanism known as [feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) to enable code to be turned "on" or "off" at runtime. Plugins can optionally react to the state of a feature toggle to change their behaviour as appropriate, if they do, it can be beneficial to cover this within your end-to-end (E2E) tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
+Grafana uses a mechanism known as [feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) to enable code to be turned "on" or "off" at runtime. Plugins can optionally react to the state of a feature toggle to change their behaviour as appropriate, if they do, it can be beneficial to cover this within your end-to-end tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
 
 ### Passing feature toggle configuration to Grafana
 
 The easisest way to configure feature toggles that are available across the entire Grafana stack is to specify the [environment variables](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables) operational when starting your Grafana instance.
 
-### Override frontend feature toggles in E2E tests
+### Override frontend feature toggles in end-to-end tests
 
 `@grafana/plugin-e2e` allows you to override the frontend feature toggles that Grafana is configured to use. You can do that by specifying the custom option `featureToggles` in the Playwright config file.
 
