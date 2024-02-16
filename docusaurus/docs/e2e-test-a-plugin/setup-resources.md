@@ -62,7 +62,7 @@ You can use [provisioning](https://grafana.com/docs/grafana/latest/administratio
 
 ### `readProvisionedDataSource` fixture
 
-The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep sensitive data in one place.
+The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep data source configuration datas in one place.
 
 ```ts title="configEditor.spec.ts"
 const datasource = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
