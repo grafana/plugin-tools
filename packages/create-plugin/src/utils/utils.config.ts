@@ -4,18 +4,18 @@ import { getVersion } from './utils.version.js';
 import { commandName } from './utils.cli.js';
 
 export type FeatureFlags = {
-  bundleGrafanaUI: boolean;
+  bundleGrafanaUI?: boolean;
 
   // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
   // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
-  useReactRouterV6: boolean;
+  useReactRouterV6?: boolean;
 };
 
-type CreatePluginConfig = UserConfig & {
+export type CreatePluginConfig = UserConfig & {
   version: string;
 };
 
-type UserConfig = {
+export type UserConfig = {
   features: FeatureFlags;
 };
 
@@ -46,6 +46,7 @@ function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
 
     return {
       ...defaultConfig,
+      ...rootConfig,
       features: {
         ...defaultConfig.features,
         ...rootConfig!.features,

@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
-import { getConfig, FeatureFlags } from '../utils.config.js';
+import { getConfig, UserConfig, CreatePluginConfig } from '../utils.config.js';
 
 const tmpDir = path.join(os.tmpdir(), 'cp-test-config');
 
@@ -20,17 +20,25 @@ describe('getConfig', () => {
     // Prepare
     const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
     const userConfigPath = path.join(tmpDir, '.cprc.json');
-    const rootConfig = {};
-    const userConfig: FeatureFlags = { useReactRouterV6: false, bundleGrafanaUI: false };
+    const rootConfig: CreatePluginConfig = {
+      version: '1.0.0',
+      features: {},
+    };
+    const userConfig: UserConfig = {
+      features: {
+        useReactRouterV6: false,
+        bundleGrafanaUI: false,
+      },
+    };
 
     await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
-    await fs.writeFile(rootConfigPath, JSON.stringify({ features: rootConfig }));
-    await fs.writeFile(userConfigPath, JSON.stringify({ features: userConfig }));
+    await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
+    await fs.writeFile(userConfigPath, JSON.stringify(userConfig));
 
     // Act
     const config = getConfig(tmpDir);
 
     // Assert
-    expect(config.features).toEqual(userConfig);
+    expect(config).toEqual({ ...rootConfig, ...userConfig });
   });
 });
