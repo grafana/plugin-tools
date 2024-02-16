@@ -1,107 +1,111 @@
 ---
 id: include-dashboards
-title: Including dashboards
-description: Include dashboards in Grafana datasource and app plugins
+title: Include dashboards
+description: Include dashboards in Grafana data source and app plugins.
 keywords:
   - grafana
   - plugin
   - dashboards
   - app
   - datasource
+  - bundling
 ---
 
-# Including dashboards with a plugin
+# Include dashboards with a plugin
 
-This guide focuses on integrating dashboards into app and datasource plugins. By bundling pre-configured dashboards, users can more easily understand the full potential of a plugin without the need to build dashboards from scratch. We'll walk you through the process of including these dashboards in your plugins.
+This guide explains how to add pre-configured dashboards into app and data source Grafana plugins. By integrating pre-configured dashboards into your plugin, you can provide your users with a ready-to-use template, freeing them from having to build a dashboard from scratch.
 
-## Create a dashboard
+We'll walk you through the process of bundling dashboards into plugins. The process involves creating a dashboard, adding it to your plugin, and then importing it into the plugin. You can also optionally add navigation links to make it easier for users to discover all its features.
 
-Start by creating the dashboard you wish to bundle with your plugin. The development environment provided by create-plugin can aid with creating and testings dashboards. Below we cover the steps for both datasource and app plugins, including tips for crafting an effective dashboard.
+## Step 1: Create a dashboard
 
-### Datasource plugins
+Start by creating the dashboard you want to bundle with your plugin. The development environment provided by create-plugin can aid with creating and testings dashboards. The following steps provide instructions for both data source and app plugins, including tips for crafting an effective dashboard.
+
+### Build a dashboard for a data source plugin
 
 #### Export the dashboard
 
-In this step, we export the dashboard to a JSON file so it can be placed in a file along your plugin source code.
+In this step, we export the dashboard to a JSON file so it can be placed in a file along with your plugin source code:
 
 1. Open your dashboard within Grafana.
-1. Click the Share icon in at the top-left of the dashboard.
+1. Click the **Share** icon at the top-left of the dashboard.
 1. Click **Export**.
-1. Enable **Export for sharing externally**, and then click **Save to file**.
+1. Select **Export for sharing externally**, and then click **Save to file**.
 
 Exporting with this option replaces direct data source references with placeholders. This ensures the dashboard can make use of the user's data source instance when imported.
 
-### App plugins
+### Build a dashboard for an app plugin
 
-#### Setting Up a Datasource Variable
+#### Set up a data source variable
 
 To facilitate user customization, create a dashboard data source variable. This allows users to link their own data source instances easily once imported.
 
-1. Create a datasource variable by choosing the data source variable type and give it a name
-   ![Datasource variable](/img/app-dashboard-ds-variable.png)
-1. Each panel that you create should use the datasource variable as its datasource
-   ![Datasource selection](/img/app-dashboard-ds-select.png)
+1. Create a data source variable by choosing the data source variable type and give it a name.
+   ![Data source variable](/img/app-dashboard-ds-variable.png)
+1. Select the data source variable as the data source for each panel that you create.
+   ![Data source selection](/img/app-dashboard-ds-select.png)
 
 #### Export the dashboard
 
-1. Navigate to your dashboard in the Grafana application
-1. Click the Share icon in at the top-left of the dashboard.
-1. Click **Export** and then click **Save to file**.
-1. Open the dashboard json file in your code editor and set it's `id` property to `null`.
+1. Go to your dashboard in the Grafana application.
+1. Click the **Share** icon at the top-left of the dashboard.
+1. Click **Export**, and then click **Save to file**.
+1. Open the dashboard JSON file in your code editor and set its `id` property to `null`.
 
-## Add the dashboard to your plugin
+## Step 2: Add the dashboard to your plugin
 
-Create a dashboards folder within the src directory of your plugin project. Move your exported dashboard JSON file into this folder.
+1. Create a `dashboards` folder within the `src` directory of your plugin project.
 
-```shell
-myorg-myplugin-datasource/
-└── src/
-// addition-highlight-start
-    ├── dashboards/
-    │   └── overview.json
-// addition-highlight-end
-    ├── module.ts
-    └── plugin.json
-```
+1. Move your exported dashboard JSON file into the new `dashboards` folder.
+   ```shell
+   myorg-myplugin-datasource/
+   └── src/
+   // addition-highlight-start
+       ├── dashboards/
+       │   └── overview.json
+   // addition-highlight-end
+       ├── module.ts
+       └── plugin.json
+   ```
+1. Update your `plugin.json` file to include a reference to the new dashboard resource, specifying the relative path to the dashboard file within the src folder.
 
-Then, update your plugin.json file to include a reference to the new dashboard resource, specifying the relative path to the dashboard file within the src folder.
+   ```json title="src/plugin.json"
+   {
+     "includes": [
+       {
+         "name": "overview",
+         "path": "dashboards/overview.json",
+         "type": "dashboard"
+       }
+     ]
+   }
+   ```
 
-```json title="src/plugin.json"
-{
-  "includes": [
-    {
-      "name": "overview",
-      "path": "dashboards/overview.json",
-      "type": "dashboard"
-    }
-  ]
-}
-```
+   :::info
 
-:::info
-Ensure the path is relative to the src directory. This is necessary for the plugin to correctly reference the dashboard json file from the dist directory once the frontend is built.
-:::
+   Ensure the path is relative to the `src` directory. This is necessary for the plugin to correctly reference the dashboard JSON file from the `dist` directory once you build the frontend.
 
-After adding the dashboard to your plugin, rebuild the plugin and restart Grafana to apply the new configuration.
+   :::
 
-## Import the dashboard
+1. After adding the dashboard to your plugin, rebuild the plugin and restart Grafana to apply the new configuration.
 
-To test your newly created dashboard you can import the dashboard:
+## Step 3: Import the dashboard into your plugin
 
-### Datasource dashboards
+To test your newly created dashboard, import the dashboard:
+
+### Import a dashboard into a data source plugin
 
 1. Create or edit an existing instance of your data source.
-1. Click Dashboards to list all included dashboards.
-1. Click Import next to the dashboard you want to import.
-1. Import dashboard
+1. Click **Dashboards** to list all included dashboards.
+1. Click **Import** next to the dashboard you want to import. The dashboard is imported into your plugin.
 
-### App dashboards
+### Import a dashboard into an app plugin
 
 App dashboards are automatically discovered by the Grafana server and imported when the server starts.
 
-### Adding navigation links
+## Step 4 (Optional): Add navigation links
 
-To enhance user navigation, you can add an additional page include to the plugin.json. The path should reference the bundled dashboard `uid` property.
+To enhance user navigation, you can include an additional page in the `plugin.json`. The path of the include should reference the bundled dashboard `uid` property.
 
 ```json title="src/plugin.json"
 {
@@ -127,6 +131,6 @@ To enhance user navigation, you can add an additional page include to the plugin
 }
 ```
 
-## Enhancing User Onboarding
+## Conclusion
 
-By bundling dashboards with your plugin, you significantly improve the user onboarding experience. Pre-configured dashboards serve as ready-to-use templates, eliminating the need for users to set up common variables, panels or queries from scratch. This can greatly enhance user satisfaction and efficiency!
+By bundling dashboards with your plugin, you can significantly improve the user onboarding experience. Pre-configured dashboards eliminate the need for users to set up common variables, panels, or queries from scratch. This can greatly enhance user satisfaction and efficiency!
