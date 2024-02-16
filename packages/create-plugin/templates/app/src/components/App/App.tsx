@@ -1,21 +1,20 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AppRootProps } from '@grafana/data';
 import { ROUTES } from '../../constants';
 import { PageFour, PageOne, PageThree, PageTwo } from '../../pages';
-import { prefixRoute } from '../../utils/utils.routing';
 
 export function App(props: AppRootProps) {
   return (
-      <Switch>
-        <Route exact path={prefixRoute(ROUTES.Two)} component={PageTwo} />
-        <Route exact path={prefixRoute(`${ROUTES.Three}/:id?`)} component={PageThree} />
+      <Routes>
+        <Route path={ROUTES.Two} element={<PageTwo />} />
+        <Route path={`${ROUTES.Three}/:id?`} element={<PageThree />} />
 
         {/* Full-width page (this page will have no side navigation) */}
-        <Route exact path={prefixRoute(ROUTES.Four)} component={PageFour} />
+        <Route path={ROUTES.Four} element={<PageFour />} />
 
         {/* Default page */}
-        <Route component={PageOne} />
-      </Switch>
+        <Route path="*" element={<PageOne />} />
+      </Routes>
   );
 }

@@ -3,6 +3,7 @@
 import minimist from 'minimist';
 import { generate, update, migrate, version, provisioning } from '../commands/index.js';
 import { isUnsupportedPlatform } from '../utils/utils.os.js';
+import { argv, commandName } from '../utils/utils.cli.js';
 
 // Exit early if operating system isn't supported.
 if (isUnsupportedPlatform()) {
@@ -12,8 +13,6 @@ if (isUnsupportedPlatform()) {
   process.exit(1);
 }
 
-const args = process.argv.slice(2);
-const argv = minimist(args);
 const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
   migrate,
   generate,
@@ -21,6 +20,6 @@ const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
   version,
   provisioning,
 };
-const command = commands[argv._[0]] || commands.generate;
+const command = commands[commandName] || 'generate';
 
 command(argv);

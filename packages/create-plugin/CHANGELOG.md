@@ -1,3 +1,96 @@
+# v4.0.1 (Thu Feb 15 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Fix update command [#746](https://github.com/grafana/plugin-tools/pull/746) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v4.0.0 (Wed Feb 14 2024)
+
+#### 💥 Breaking Change
+
+- Create-plugin: Change how the `update` command works [#707](https://github.com/grafana/plugin-tools/pull/707) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v3.6.0 (Thu Feb 08 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Run prettier on .config after update [#722](https://github.com/grafana/plugin-tools/pull/722) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v3.5.0 (Fri Feb 02 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: Use react-router v6 by default [#710](https://github.com/grafana/plugin-tools/pull/710) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v3.4.0 (Fri Feb 02 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
+
+#### 🚀 Enhancement
+
+- Update create-plugin workflow action versions [#711](https://github.com/grafana/plugin-tools/pull/711) ([@6nv](https://github.com/6nv))
+
+#### 🐛 Bug Fix
+
+- Fix broken livereload injection when using Grafana 10.2.3 [#696](https://github.com/grafana/plugin-tools/pull/696) ([@samjewell](https://github.com/samjewell))
+
+#### Authors: 2
+
+- Nicolas Ventura ([@6nv](https://github.com/6nv))
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# v3.3.0 (Fri Feb 02 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: Check if inside a plugin directory [#706](https://github.com/grafana/plugin-tools/pull/706) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v3.2.0 (Thu Feb 01 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: Check for a clean working tree [#705](https://github.com/grafana/plugin-tools/pull/705) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v3.1.3 (Mon Jan 29 2024)
 
 #### 🐛 Bug Fix

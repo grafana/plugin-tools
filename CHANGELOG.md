@@ -1,3 +1,200 @@
+# (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.15.0`
+  - Plugin E2E: Improved support for multiple users and roles [#726](https://github.com/grafana/plugin-tools/pull/726) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.14.0`
+  - Plugin E2E: Add fixture that reads provisioned data source files [#740](https://github.com/grafana/plugin-tools/pull/740) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Feb 15 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.0.1`
+  - Create plugin: Fix update command [#746](https://github.com/grafana/plugin-tools/pull/746) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Wed Feb 14 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@4.0.0`
+  - Create-plugin: Change how the `update` command works [#707](https://github.com/grafana/plugin-tools/pull/707) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.13.2`
+  - Plugin E2E: Fix typing in config page [#741](https://github.com/grafana/plugin-tools/pull/741) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.13.1`
+  - Plugin E2E:: Add back health check mock [#732](https://github.com/grafana/plugin-tools/pull/732) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Sat Feb 10 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.13.0`
+  - Plugin E2E: Enable assertion on panel data [#688](https://github.com/grafana/plugin-tools/pull/688) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.12.2`
+  - Plugin E2E: Generate dts files [#733](https://github.com/grafana/plugin-tools/pull/733) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.12.1`
+  - Plugin E2E: Fix feature toggles race condition [#730](https://github.com/grafana/plugin-tools/pull/730) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Feb 08 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.6.0`
+  - Create Plugin: Run prettier on .config after update [#722](https://github.com/grafana/plugin-tools/pull/722) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Fri Feb 02 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.5.0`
+  - Create-plugin: Use react-router v6 by default [#710](https://github.com/grafana/plugin-tools/pull/710) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Fri Feb 02 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.4.0`
+  - Update create-plugin workflow action versions [#711](https://github.com/grafana/plugin-tools/pull/711) ([@6nv](https://github.com/6nv))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@3.4.0`
+  - Fix broken livereload injection when using Grafana 10.2.3 [#696](https://github.com/grafana/plugin-tools/pull/696) ([@samjewell](https://github.com/samjewell))
+
+#### Authors: 2
+
+- Nicolas Ventura ([@6nv](https://github.com/6nv))
+- Sam Jewell ([@samjewell](https://github.com/samjewell))
+
+---
+
+# (Fri Feb 02 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.3.0`
+  - Create-plugin: Check if inside a plugin directory [#706](https://github.com/grafana/plugin-tools/pull/706) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Thu Feb 01 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@3.2.0`
+  - Create-plugin: Check for a clean working tree [#705](https://github.com/grafana/plugin-tools/pull/705) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump lint-staged from 15.2.0 to 15.2.1 [#715](https://github.com/grafana/plugin-tools/pull/715) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Mon Jan 29 2024)
 
 #### 🐛 Bug Fix

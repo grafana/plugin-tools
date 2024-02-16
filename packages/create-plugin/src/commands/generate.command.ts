@@ -12,11 +12,11 @@ import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../
 import { getExportPath } from '../utils/utils.path.js';
 import { renderTemplateFromFile } from '../utils/utils.templates.js';
 import { getVersion } from '../utils/utils.version.js';
-import { prettifyFiles } from './generate/prettify-files.js';
+import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
-import { CliArgs, TemplateData } from './types.js';
+import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
@@ -45,7 +45,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   if (answers.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
-  await execPostScaffoldFunction(prettifyFiles, exportPath);
+  await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
 
   printGenerateSuccessMessage(answers);
 };
@@ -59,6 +59,7 @@ function getTemplateData(answers: CliArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+  const useReactRouterV6 = features.useReactRouterV6 && pluginType === PLUGIN_TYPES.app; // We don't enable this by default yet for new scenes plugins.
   const templateData: TemplateData = {
     ...answers,
     pluginId,
@@ -69,6 +70,8 @@ function getTemplateData(answers: CliArgs) {
     isNPM: packageManagerName === 'npm',
     version: currentVersion,
     bundleGrafanaUI: features.bundleGrafanaUI,
+    useReactRouterV6,
+    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
 
   return templateData;
