@@ -3,7 +3,7 @@ import path from 'node:path';
 import { getVersion } from './utils.version.js';
 import { commandName } from './utils.cli.js';
 
-type FeatureFlags = {
+export type FeatureFlags = {
   bundleGrafanaUI: boolean;
 
   // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
@@ -19,9 +19,9 @@ type UserConfig = {
   features: FeatureFlags;
 };
 
-export function getConfig(): CreatePluginConfig {
-  const rootConfig = getRootConfig();
-  const userConfig = getUserConfig();
+export function getConfig(workDir = process.cwd()): CreatePluginConfig {
+  const rootConfig = getRootConfig(workDir);
+  const userConfig = getUserConfig(workDir);
 
   return {
     ...rootConfig,
@@ -34,14 +34,14 @@ export function getConfig(): CreatePluginConfig {
   };
 }
 
-function getRootConfig(): CreatePluginConfig {
+function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
   const defaultConfig = {
     version: getVersion(),
     features: createFeatureFlags(),
   };
 
   try {
-    const rootPath = path.resolve(process.cwd(), '.config/.cprc.json');
+    const rootPath = path.resolve(workDir, '.config/.cprc.json');
     const rootConfig = readRCFileSync(rootPath);
 
     return {
@@ -67,9 +67,9 @@ function getRootConfig(): CreatePluginConfig {
   }
 }
 
-function getUserConfig(): UserConfig | undefined {
+function getUserConfig(workDir = process.cwd()): UserConfig | undefined {
   try {
-    const userPath = path.resolve(process.cwd(), '.cprc.json');
+    const userPath = path.resolve(workDir, '.cprc.json');
     const userConfig = readRCFileSync(userPath);
 
     return {
