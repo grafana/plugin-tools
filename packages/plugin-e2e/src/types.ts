@@ -11,21 +11,21 @@ export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors } 
 >;
 
 /**
- * The data source object
+ * The data source settings
  */
-export interface DataSource<T = any> {
+export interface DataSourceSettings<T = {}, S = {}> {
   id: number;
   editable?: boolean;
   uid: string;
   orgId?: number;
-  name?: string;
+  name: string;
   type: string;
   access?: string;
   url?: string;
   database?: string;
   isDefault?: boolean;
-  jsonData?: T;
-  secureJsonData?: T;
+  jsonData: T;
+  secureJsonData?: S;
 }
 
 /**
@@ -35,13 +35,6 @@ export interface Dashboard {
   uid: string;
   title?: string;
 }
-
-/**
- * The YAML provision file parsed to a javascript object
- */
-export type ProvisionFile<T = DataSource> = {
-  datasources: Array<DataSource<T>>;
-};
 
 export type CreateDataSourceArgs<T = any> = {
   /**
@@ -142,6 +135,18 @@ export type ReadProvisionArgs = {
    * The path, relative to the provisioning folder, to the dashboard json file
    */
   filePath: string;
+};
+
+export type ReadProvisionedDataSourceArgs = {
+  /**
+   * The path, relative to the provisioning folder, to the dashboard json file
+   */
+  fileName: string;
+
+  /**
+   * The name of the data source in the datasources list
+   */
+  name?: string;
 };
 
 export type NavigateOptions = {
