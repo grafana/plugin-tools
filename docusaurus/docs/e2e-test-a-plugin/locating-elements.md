@@ -29,7 +29,7 @@ panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).
 
 ## The `selectors` fixture
 
-Selectors defined in the `@grafana/e2e-selectors` package are tied to a specific Grafana version. This means that the selectors can change from one version to another. When a new end-to-end test session is started, `@grafana/plugin-e2e` checks what version of Grafana is under test and resolves selectors that are associated with the current version. The selectors are provided through the `selectors` fixture.
+Selectors defined in the `@grafana/e2e-selectors` package are tied to a specific Grafana version. This means that the selectors can change from one version to another. When a new end-to-end test session is started, `@grafana/plugin-e2e` checks what version of Grafana is under test and resolves selectors that are associated with the running version. The selectors are provided through the `selectors` fixture.
 
 ```ts
 import { test, expect } from '@grafana/plugin-e2e';
