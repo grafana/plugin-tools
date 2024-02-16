@@ -1,3 +1,75 @@
+# v0.15.0 (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Improved support for multiple users and roles [#726](https://github.com/grafana/plugin-tools/pull/726) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.14.0 (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add fixture that reads provisioned data source files [#740](https://github.com/grafana/plugin-tools/pull/740) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.13.2 (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix typing in config page [#741](https://github.com/grafana/plugin-tools/pull/741) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.13.1 (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E:: Add back health check mock [#732](https://github.com/grafana/plugin-tools/pull/732) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.13.0 (Sat Feb 10 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Enable assertion on panel data [#688](https://github.com/grafana/plugin-tools/pull/688) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.12.2 (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Generate dts files [#733](https://github.com/grafana/plugin-tools/pull/733) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.12.1 (Fri Feb 09 2024)
 
 #### 🐛 Bug Fix

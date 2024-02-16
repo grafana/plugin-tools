@@ -6,8 +6,30 @@ import { GrafanaPage } from './GrafanaPage';
 const ERROR_STATUS = 'error';
 
 export class Panel extends GrafanaPage {
-  constructor(readonly ctx: PluginTestCtx, readonly locator: () => Locator) {
+  constructor(readonly ctx: PluginTestCtx, readonly locator: Locator) {
     super(ctx);
+  }
+
+  /**
+   * Returns a locator that resolves element(s) that contain the field name(s) that are currently displayed in the panel.
+   *
+   * Can be used to assert the field names displayed in the panel visualization. e.g
+   * await expect(panelEditPage.panel.fieldNames).toHaveValues(['Month', 'Stockholm', 'Berlin', 'Log Angeles']);
+   */
+  get fieldNames(): Locator {
+    const panel = this.locator;
+    return panel.locator('[role="columnheader"]');
+  }
+
+  /**
+   * Returns a locator that resolves element(s) that contain the value(s) that are currently displayed in the panel.
+   *
+   * Can be used to assert the values displayed in the panel visualization. e.g
+   * await expect(panelEditPage.panel.data).toContainText(['1', '4', '14']);
+   */
+  get data(): Locator {
+    const panel = this.locator;
+    return panel.locator('[role="cell"]');
   }
 
   /**
@@ -22,7 +44,7 @@ export class Panel extends GrafanaPage {
     }
 
     return this.getByTestIdOrAriaLabel(selector, {
-      root: this.locator(),
+      root: this.locator,
     });
   }
 }

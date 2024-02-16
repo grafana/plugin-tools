@@ -2,7 +2,13 @@ import { test as base, expect as baseExpect, selectors } from '@playwright/test'
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
-import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
+import {
+  CreateDataSourceArgs,
+  CreateDataSourcePageArgs,
+  DataSourceSettings,
+  ReadProvisionedDataSourceArgs,
+  CreateUserArgs,
+} from './types';
 import {
   PanelEditPage,
   GrafanaPage,
@@ -52,6 +58,14 @@ export type PluginOptions = {
    * });
    */
   featureToggles: Record<string, boolean>;
+
+  /**
+   * The Grafana user to use for the tests. If no user is provided, the default admin/admin user will be used.
+   *
+   * You can use different users for different projects. See the fixture createUser for more information on how to create a user,
+   * and the fixture login for more information on how to authenticate.
+   */
+  user?: CreateUserArgs;
 };
 
 export type PluginFixture = {
@@ -136,39 +150,80 @@ export type PluginFixture = {
    * you may use this command in a setup project. Read more about setup projects
    * here: https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
    */
-  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSource>;
+  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSourceSettings>;
 
   /**
-   * Fixture command that login to Grafana using the Grafana API.
-   * If the same credentials should be used in every test,
-   * invoke this fixture in a setup project.
-   * See https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
+   * Fixture command that creates a user via the Grafana API and assigns a role to it if a role is provided
+   * This may be useful if your plugin supports RBAC and you need to create a user with a specific role. See login fixture for more information.
+   */
+  createUser: () => Promise<void>;
+
+  /**
+   * Fixture command that login to Grafana using the Grafana API and stores the cookie state on disk.
+   * The file name for the storage state will be `playwright/.auth/<username>.json`, so it's important that the username is unique.
+   * 
+   * If you have not specified a user, the default admin/admin credentials will be used. 
+   * 
+   * e.g
+   * projects: [
+      {
+        name: 'authenticate',
+        testDir: './src/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+      },
+      {
+        name: 'run tests as admin user',
+        testDir: './tests',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/admin.json',
+        },
+        dependencies: ['authenticate'],
+      }
+    }
    *
-   * If no credentials are provided, the default admin/admin credentials will be used.
-   *
-   * The default credentials can be overridden in the playwright.config.ts file:
-   * eg.
-   * export default defineConfig({
-      use: {
-        httpCredentials: {
-          username: 'user',
-          password: 'pass',
+   * If your plugin supports RBAC, you may want to use different projects for different roles. 
+   * In the following example, a new user with the role `Viewer` gets created and authenticated in a `createUserAndAuthenticate` project.
+   * In the `viewer` project, authentication state from the previous project is used in all tests in the ./tests/viewer folder.
+   * projects: [
+      {
+        name: 'createUserAndAuthenticate',
+        testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+        use: {
+          user: {
+            user: 'viewer',
+            password: 'password',
+            role: 'Viewer',
+          },
         },
       },
-    });
+      {
+        name: 'viewer',
+        testDir: './tests/viewer',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/viewer.json',
+        },
+        dependencies: ['createUserAndAuthenticate'],
+      }
+    }
    *
    * To override credentials in a single test:
-   * test.use({ httpCredentials: { username: 'admin', password: 'admin' } });
+   * test.use({ storageState: 'playwright/.auth/admin.json', user: { user: 'admin', password: 'admin' } });
    * To avoid authentication in a single test:
    * test.use({ storageState: { cookies: [], origins: [] } });
    */
   login: () => Promise<void>;
 
   /**
-   * Fixture command that reads a the yaml file for a provisioned dashboard
-   * or data source and returns it as json.
+   * Fixture command that reads a yaml file in the provisioning/datasources directory.
+   *
+   * The file name should be the name of the file with the .yaml|.yml extension.
+   * If a data source name is provided, the first data source that matches the name will be returned.
+   * If no name is provided, the first data source in the list of data sources will be returned.
    */
-  readProvision<T = any>(args: ReadProvisionArgs): Promise<T>;
+  readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
