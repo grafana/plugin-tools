@@ -7,13 +7,15 @@ const authFile = 'playwright/.auth/user.json';
 
 type LoginFixture = TestFixture<() => Promise<void>, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
-const login: LoginFixture = async ({ request, httpCredentials }, use) => {
+const ADMIN_USER = { user: 'admin', password: 'admin' };
+
+const login: LoginFixture = async ({ request, user }, use) => {
   await use(async () => {
-    const data = httpCredentials ? { ...httpCredentials, user: 'admin' } : { user: 'admin', password: 'admin' };
+    const data = user ?? ADMIN_USER;
     const loginReq = await request.post('/login', { data });
     const text = await loginReq.text();
     expect.soft(loginReq.ok(), `Could not log in to Grafana: ${text}`).toBeTruthy();
-    await request.storageState({ path: path.join(process.cwd(), authFile) });
+    await request.storageState({ path: path.join(process.cwd(), `playwright/.auth/${data.user}.json`) });
   });
 };
 

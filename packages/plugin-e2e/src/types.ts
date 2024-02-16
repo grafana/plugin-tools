@@ -36,6 +36,23 @@ export interface Dashboard {
   title?: string;
 }
 
+export type OrgRole = 'None' | 'Viewer' | 'Editor' | 'Admin';
+
+export type CreateUserArgs = {
+  /**
+   * The username of the user to create. Needs to be unique
+   */
+  user: string;
+  /**
+   * The password of the user to create
+   */
+  password: string;
+  /**
+   * The role of the user to create
+   */
+  role?: OrgRole;
+};
+
 export type CreateDataSourceArgs<T = any> = {
   /**
    * The data source to create
