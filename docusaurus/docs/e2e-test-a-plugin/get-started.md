@@ -1,5 +1,5 @@
 ---
-id: getting-started
+id: get-started
 title: Get started
 description: Get started
 keywords:
@@ -8,7 +8,6 @@ keywords:
   - plugin
   - testing
   - e2e
-  - getting-started
   - get-started
 sidebar_position: 2
 ---
@@ -26,7 +25,7 @@ import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm
 import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
 
-# Getting started
+# Get started
 
 This article will guide through how to install and configure `@grafana/plugin-e2e`, write tests and setup a basic Github workflow that can run your e2e tests targeting multiple versions of Grafana.
 
