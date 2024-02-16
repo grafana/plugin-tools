@@ -17,7 +17,7 @@ sidebar_position: 50
 
 Grafana uses a mechanism known as [feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) to enable code to be turned "on" or "off" at runtime. Plugins can optionally react to the state of a feature toggle to change their behaviour as appropriate, if they do, it can be beneficial to cover this within your end-to-end (E2E) tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
 
-## Passing feature toggles to Grafana
+## Passing feature toggle configuration to Grafana
 
 The easisest way to configure feature toggles that are available across the entire Grafana stack is to specify the [environment variables](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables) operational when starting your Grafana instance.
 
