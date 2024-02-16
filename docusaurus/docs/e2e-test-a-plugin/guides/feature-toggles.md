@@ -15,7 +15,7 @@ sidebar_position: 50
 
 # Introduction
 
-Grafana offers a mechanism that allows code to be turned "on" or "off" without the need for deployment. These mechanisms, called _feature toggles_, can have big impact on how a plugin behaves, so you may need to cater for that within your end-to-end (E2E) tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
+Grafana uses a mechanism known as [feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) to enable code to be turned "on" or "off" at runtime. Plugins can optionally react to the state of a feature toggle to change their behaviour as appropriate, if they do, it can be beneficial to cover this within your end-to-end (E2E) tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
 
 ## Passing feature toggles to Grafana
 
