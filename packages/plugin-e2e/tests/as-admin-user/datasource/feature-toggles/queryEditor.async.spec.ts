@@ -1,8 +1,8 @@
 import { expect, test } from '../../../../src';
-import { ProvisionFile } from '../../../../src/types';
 
 const TRUTHY_CUSTOM_TOGGLE = 'custom_toggle1';
 const FALSY_CUSTOM_TOGGLE = 'custom_toggle2';
+
 // override the feature toggles defined in playwright.config.ts only for tests in this file
 test.use({
   featureToggles: {
@@ -21,10 +21,10 @@ test('async query data handler should return a `finished` status', async ({
   selectors,
   panelEditPage,
   page,
-  readProvision,
+  readProvisionedDataSource,
 }) => {
-  const provisionFile = await readProvision<ProvisionFile>({ filePath: 'datasources/redshift.yaml' });
-  await panelEditPage.datasource.set(provisionFile.datasources[0].name!);
+  const ds = await readProvisionedDataSource({ fileName: 'redshift.yaml' });
+  await panelEditPage.datasource.set(ds.name);
   await panelEditPage.timeRange.set({ from: '2020-01-31', to: '2020-02-20' });
   await page.waitForFunction(() => (window as any).monaco);
   await panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();

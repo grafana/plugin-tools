@@ -1,16 +1,15 @@
 import { expect, test } from '../../../../src';
-import { ProvisionFile } from '../../../../src/types';
 
 test('standard query data handler should only be called once', async ({
   panelEditPage,
   page,
   selectors,
-  readProvision,
+  readProvisionedDataSource,
 }) => {
   const requestListener = (request) => request.url().includes(selectors.apis.DataSource.query) && calledTimes++;
 
-  const provisionFile = await readProvision<ProvisionFile>({ filePath: 'datasources/redshift.yaml' });
-  await panelEditPage.datasource.set(provisionFile.datasources[0].name!);
+  const ds = await readProvisionedDataSource({ fileName: 'redshift.yaml' });
+  await panelEditPage.datasource.set(ds.name);
   await panelEditPage.timeRange.set({ from: '2020-01-31', to: '2020-02-20' });
   await page.waitForFunction(() => (window as any).monaco);
   await panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();

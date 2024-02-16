@@ -1,3 +1,42 @@
+# (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.15.0`
+  - Plugin E2E: Improved support for multiple users and roles [#726](https://github.com/grafana/plugin-tools/pull/726) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.14.0`
+  - Plugin E2E: Add fixture that reads provisioned data source files [#740](https://github.com/grafana/plugin-tools/pull/740) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Feb 15 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.0.1`
+  - Create plugin: Fix update command [#746](https://github.com/grafana/plugin-tools/pull/746) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Wed Feb 14 2024)
 
 #### 💥 Breaking Change
