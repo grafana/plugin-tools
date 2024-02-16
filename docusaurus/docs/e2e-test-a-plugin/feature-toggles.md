@@ -66,7 +66,7 @@ test.use({
 
 ## Check whether a feature is enabled in your test
 
-Use the `isFeatureToggleEnabled` fixture to determine whether a certain frontend feature toggle is enabled. Under the hood, `isFeatureToggleEnabled` checks whether the given feature is defined and enabled in the `window.grafanaBootData.settings.featureToggles` object.
+Use the `isFeatureToggleEnabled` fixture to determine whether a certain feature toggle is enabled. Under the hood, `isFeatureToggleEnabled` checks whether the given feature is defined and enabled in the `window.grafanaBootData.settings.featureToggles` object.
 
 ```typescript
 import { test, expect } from '@grafana/plugin-e2e';
