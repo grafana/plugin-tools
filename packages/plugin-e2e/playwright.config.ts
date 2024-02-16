@@ -58,7 +58,7 @@ export default defineConfig<PluginOptions>({
     // Run all tests in parallel using user with admin role
     {
       name: 'admin',
-      testDir: './tests/admin',
+      testDir: './tests/as-admin-user',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/admin.json',
@@ -68,7 +68,7 @@ export default defineConfig<PluginOptions>({
     // Run all tests in parallel using user with viewer role
     {
       name: 'viewer',
-      testDir: './tests/viewer',
+      testDir: './tests/as-viewer-user',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/viewer.json',
