@@ -1,7 +1,7 @@
 ---
 id: setup-resources
 title: Configure the resources you need
-description: Configure any dashboards, data sources or other Grafana resources necessary for e2e testing your plugin, through provisioning.
+description: Configure any dashboards, data sources or other Grafana resources necessary for end-to-end testing your plugin, through provisioning.
 keywords:
   - grafana
   - plugins
@@ -17,7 +17,7 @@ sidebar_position: 60
 
 # Introduction
 
-In many cases, you'll need certain resources to be configured in Grafana before you can run your e2e tests. For example, to test how a panel plugin displays data, you'll need a data source configured to query and return that data. This guide covers how to setup the resources that you need through [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/).s
+In many cases, you'll need certain resources to be configured in Grafana before you can run your end-to-end tests. For example, to test how a panel plugin displays data, you'll need a data source configured to query and return that data. This guide covers how to setup the resources that you need through [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/).s
 
 ## Test isolation
 
