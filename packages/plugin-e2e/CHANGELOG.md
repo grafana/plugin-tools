@@ -1,3 +1,15 @@
+# v0.15.0 (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Improved support for multiple users and roles [#726](https://github.com/grafana/plugin-tools/pull/726) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.14.0 (Fri Feb 16 2024)
 
 #### 🚀 Enhancement

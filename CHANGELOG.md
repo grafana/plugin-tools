@@ -2,6 +2,19 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/plugin-e2e@0.15.0`
+  - Plugin E2E: Improved support for multiple users and roles [#726](https://github.com/grafana/plugin-tools/pull/726) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
 - `@grafana/plugin-e2e@0.14.0`
   - Plugin E2E: Add fixture that reads provisioned data source files [#740](https://github.com/grafana/plugin-tools/pull/740) ([@sunker](https://github.com/sunker))
 
