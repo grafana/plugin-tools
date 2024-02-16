@@ -13,7 +13,7 @@ keywords:
 sidebar_position: 30
 ---
 
-# Grafana e2e-to-e2e selectors
+# Grafana end-to-end selectors
 
 Since Grafana 7.0.0, end-to-end tests in Grafana have relied on selectors defined in the [`@grafana/e2e-selectors`](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors) package to select elements in the Grafana UI.
 
