@@ -130,7 +130,7 @@ In this example, we're using the panel edit page to test the query editor for a 
 import { test, expect } from '@grafana/plugin-e2e';
 
 test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
-  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
