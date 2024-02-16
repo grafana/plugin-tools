@@ -1,7 +1,7 @@
 ---
 id: setup-resources
 title: Configure the resources you need
-description: Configure the resources you need
+description: Configure any dashboards, data sources or other Grafana resources necessary for e2e testing your plugin, through provisioning.
 keywords:
   - grafana
   - plugins
