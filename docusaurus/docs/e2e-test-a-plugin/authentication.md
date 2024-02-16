@@ -9,6 +9,7 @@ keywords:
   - plugin
   - testing
   - e2e
+  - end-to-end
   - authentication
 sidebar_position: 40
 ---
