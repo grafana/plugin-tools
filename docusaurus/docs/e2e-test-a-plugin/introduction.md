@@ -8,6 +8,7 @@ keywords:
   - plugin
   - testing
   - e2e
+  - end-to-end
 sidebar_position: 1
 ---
 
@@ -17,11 +18,11 @@ sidebar_position: 1
 
 ## The problem
 
-Plugin authors typically want their plugins to be compatible with a range of Grafana versions. This can be challenging as things such as environment, APIs and UI components may differ from one Grafana version to another. Manually testing a plugin across multiple versions of Grafana is a tedious process, so in most cases E2E testing offers a better solution.
+Plugin authors typically want their plugins to be compatible with a range of Grafana versions. This can be challenging as things such as environment, APIs and UI components may differ from one Grafana version to another. Manually testing a plugin across multiple versions of Grafana is a tedious process, so in most cases end-to-end testing offers a better solution.
 
 ## The solution
 
-`@grafana/plugin-e2e` offers a consistent way to interact with the Grafana UI without having to handle UI deviations in the plugin test code. The API's of `@grafana/plugin-e2e` are guaranteed to work with all the latest minor versions of Grafana since 8.5.0. In addition to cross version compatibility, it provides a set of features that simplifies the e2e testing experience:
+`@grafana/plugin-e2e` offers a consistent way to interact with the Grafana UI without having to handle UI deviations in the plugin test code. The API's of `@grafana/plugin-e2e` are guaranteed to work with all the latest minor versions of Grafana since 8.5.0. In addition to cross version compatibility, it provides a set of features that simplifies the end-to-end testing experience:
 
 - **Predefined Fixtures:** Offers a set of predefined fixtures that are tailored for Grafana plugin testing.
 - **Custom Models:** Provides custom models that represent pages and components in Grafana, simplifying maintenance and creating reusable code to avoid repetition.
