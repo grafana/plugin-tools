@@ -1,7 +1,7 @@
 ---
-id: locating-elements
-title: Locating elements for E2E tests
-description: How to locate elements on the page
+id: selecting-elements
+title: Selecting elements for E2E tests
+description: How to select elements on the page
 draft: true
 keywords:
   - grafana
