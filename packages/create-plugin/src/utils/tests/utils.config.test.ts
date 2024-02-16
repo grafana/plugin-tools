@@ -1,30 +1,32 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { vi } from 'vitest';
 import os from 'os';
 import { getVersion } from '../utils.version.js';
 import { getConfig, UserConfig, CreatePluginConfig } from '../utils.config.js';
-import { commandName } from '../utils.cli.js';
 
-// Mock "commandName" from "../utils.cli.js"
-jest.mock('../utils.cli.js', () => ({
-  commandName: jest.fn(),
-}));
+const mocks = vi.hoisted(() => {
+  return {
+    commandName: 'generate',
+  };
+});
+
+vi.mock('../utils.cli.js', async () => {
+  return {
+    commandName: mocks.commandName,
+  };
+});
 
 const tmpDir = path.join(os.tmpdir(), 'cp-test-config');
 
-beforeAll(async () => {
+beforeEach(async () => {
   // Create temporary directory for testing
   await fs.mkdir(tmpDir, { recursive: true });
 });
 
-afterAll(async () => {
+afterEach(async () => {
   // Clean up temporary directory
   await fs.rm(tmpDir, { recursive: true, force: true });
-});
-
-afterEach(() => {
-  jest.resetAllMocks();
-  (commandName as unknown as jest.Mock).mockReturnValue(() => 'generate');
 });
 
 describe('getConfig', () => {
@@ -55,6 +57,10 @@ describe('getConfig', () => {
   });
 
   describe('Command: Generate', () => {
+    beforeEach(() => {
+      mocks.commandName = 'generate';
+    });
+
     it('should give back a default config when there are no .cprc.json files', async () => {
       // Act
       const config = getConfig(tmpDir);
@@ -64,7 +70,7 @@ describe('getConfig', () => {
         version: getVersion(),
         features: {
           bundleGrafanaUI: false,
-          useReactRouterV6: false,
+          useReactRouterV6: true,
         },
       });
     });
