@@ -9,7 +9,7 @@ E2E test Grafana plugins with ease.
 ## Features
 
 - **Predefined Fixtures:** Offers a set of predefined fixtures that are tailored for Grafana plugin testing.
-- **Custom Models:** Provides custom models that represent different aspects of Grafana, making it easier to interact with the Grafana UI in tests.
+- **Custom Models:** Provides custom models that represent pages and components in Grafana, simplifying maintenance and creating reusable code to avoid repetition.
 - **Expect Matchers:** Includes a range of expect matchers that are specialized for Grafana plugin assertions, helping you validate plugin behavior more effectively.
 - **Version Compatibility:** Ensures that your plugin is tested across multiple versions of Grafana, guaranteeing compatibility and stability.
 - **Integration with Playwright:** Seamlessly integrates with the Playwright testing framework, leveraging its powerful browser automation capabilities.
