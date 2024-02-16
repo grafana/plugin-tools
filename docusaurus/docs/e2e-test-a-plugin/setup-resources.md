@@ -25,7 +25,7 @@ In many cases, you'll need certain resources to be configured in Grafana before 
 
 ### A concrete example
 
-Let's say you want to test template variable interpolation in your Data Source plugin. For any interpolation to take place in the DataSource file, there needs to be a template variable defined. Since the goal is to test variable interpolation, we don't want to create the template variable within the test code. A better approach is to open a provisioned dashboard that has a template variable defined already and use that in our test.
+Let's say you want to test template variable interpolation in your data source plugin. For any interpolation to take place in the DataSource file, there needs to be a template variable defined. Since the goal is to test variable interpolation, we don't want to create the template variable within the test code. A better approach is to open a provisioned dashboard that has a template variable defined already and use that in our test.
 
 In the following example, we navigate to a provisioned dashboard. The dashboard has a multi-valued template variable `env` with the values `test` and `prod`. We add a new panel and set a SQL query that refers to the `env` variable. We then spy on the query data request, asserting that it was called with the expanded values associated with the template variable.
 
