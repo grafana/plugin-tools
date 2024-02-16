@@ -30,12 +30,15 @@ import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pn
 
 This article will guide through how to install and configure `@grafana/plugin-e2e`, write tests and setup a basic Github workflow that can run your end-to-end tests targeting multiple versions of Grafana.
 
+:::warning
+`@grafana/plugin-e2e` is still in beta and subject to breaking changes.
+:::
+
 ## Prerequisites
 
 - You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
 - Node.js 18+
-- Docker
-- Basic Knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
+- Basic Knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation
 
 ### Installing Playwright
 
@@ -49,7 +52,11 @@ You can remove any test files (`[filename].spec.js|ts`) that was generated when 
 
 ## Set up `plugin-e2e`
 
-> If you would like to follow along with our example tests, use the [create-plugin](https://www.npmjs.com/package/@grafana/create-plugin) tool to generate a backend data source plugin.
+Optional: If you would like to follow along with our example tests, use the [create-plugin](../get-started/get-started.mdx) tool to generate a backend data source plugin.
+
+```shell
+npx @grafana/create-plugin@latest  --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --hasBackend
+```
 
 ### Step 1: Installing @grafana/plugin-e2e
 
@@ -130,7 +137,7 @@ GRAFANA_VERSION=10.1.6 npm run server
 
 ### Step 4: Write tests
 
-In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](https://github.com/grafana/plugin-tools/tree/main/packages/create-plugin) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
+You are now ready to write your tests. In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](../get-started/get-started.mdx) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
 
 ```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
