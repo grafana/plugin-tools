@@ -20,7 +20,7 @@ Locating Grafana UI elements can be challenging because the selector may be defi
 
 # Locating Grafana UI elements
 
-All pages defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright locator that resolves to element(s) selected using the right HTML attribute. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
+All pages defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright locator that resolves to element(s) selected, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
 
 ```ts
 panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
