@@ -1,3 +1,15 @@
+# v0.14.0 (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add fixture that reads provisioned data source files [#740](https://github.com/grafana/plugin-tools/pull/740) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.13.2 (Mon Feb 12 2024)
 
 #### 🐛 Bug Fix
