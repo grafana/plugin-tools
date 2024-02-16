@@ -14,11 +14,11 @@ keywords:
 sidebar_position: 40
 ---
 
-# Introduction
+## Introduction
 
 To be able to interact with the Grafana UI, you need to be logged in to Grafana. `@grafana/plugin-e2e` provides a declarative way to handle authentication and creating users that can be used to test role-based access control (RBAC) in your plugin.
 
-## Plugins that don't use RBAC
+### Plugins that don't use RBAC
 
 If your plugin doesn't use RBAC, you can use the default server administrator credentials to login. The following snippet is a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) that invokes a function in the `@grafana/plugin-e2e` package that will login to Grafana using `admin:admin`. The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`.
 
@@ -54,7 +54,7 @@ projects: [
 ];
 ```
 
-## Plugins that use RBAC
+### Plugins that use RBAC
 
 If your plugin uses RBAC, you may want to write tests that verify that certain plugin features are role-based. `@grafana/plugin-e2e` lets you define users with roles in the playwright config file. In the following example, a new user with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the user with the viewer role is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
 
