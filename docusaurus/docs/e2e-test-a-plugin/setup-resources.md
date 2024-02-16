@@ -15,15 +15,15 @@ keywords:
 sidebar_position: 60
 ---
 
-# Introduction
+## Introduction
 
 In many cases, you'll need certain resources to be configured in Grafana before you can run your end-to-end tests. For example, to test how a panel plugin displays data, you'll need a data source configured to query and return that data. This guide covers how to setup the resources that you need through [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/).s
 
-## Test isolation
+### Test isolation
 
 [Test isolation](https://playwright.dev/docs/browser-contexts#what-is-test-isolation) is a central part of Playwright testing. On this subject, we recommend testing plugin features independently and not run through advanced flows where certain steps have dependencies to the previous steps.
 
-### A concrete example
+#### A concrete example
 
 Let's say you want to test template variable interpolation in your data source plugin. For any interpolation to take place in the DataSource file, there needs to be a template variable defined. Since the goal is to test variable interpolation, we don't want to create the template variable within the test code. A better approach is to open a provisioned dashboard that has a template variable defined already and use that in our test.
 
@@ -50,7 +50,7 @@ test('should expand multi-valued variable before calling backend', async ({
 });
 ```
 
-## Provision any required resources
+### Provision any required resources
 
 You can use [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) to configure resources such as dashboards and data sources.
 
@@ -61,11 +61,11 @@ If running end-to-end tests in CI requires provisioning, you may need to remove 
 :::danger Be careful not to commit secrets to public repositories. Use [environment variable](https://grafana.com/docs/grafana/latest/administration/provisioning/#using-environment-variables) interpolation for sensitive data.
 :::
 
-## Read provisioned files
+### Read provisioned files
 
 `@grafana/plugin-e2e` provides fixtures that enables you to read files that you have placed in the `provisioning` folder.
 
-### `readProvisionedDataSource` fixture
+#### `readProvisionedDataSource` fixture
 
 The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep data source configuration datas in one place.
 
@@ -79,7 +79,7 @@ const datasource = readProvisionedDataSource({ fileName: 'datasources.yaml' });
 await panelEditPage.datasource.set(datasource.name);
 ```
 
-### `readProvisionedDashboard` fixture
+#### `readProvisionedDashboard` fixture
 
 The `readProvisionedDashboard` fixture allows you to read the content of a dashboard json file. It can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
 
