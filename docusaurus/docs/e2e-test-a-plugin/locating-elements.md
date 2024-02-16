@@ -1,6 +1,6 @@
 ---
 id: selecting-elements
-title: Selecting elements for E2E tests
+title: Selecting elements in E2E tests
 description: How to select elements on the page
 draft: true
 keywords:
