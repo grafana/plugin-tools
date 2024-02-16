@@ -54,7 +54,12 @@ test('should expand multi-valued variable before calling backend', async ({
 
 You can use [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) to configure resources such as dashboards and data sources.
 
-> If running end-to-end tests in CI requires provisioning, you may need to remove the `provisioning` folder from your plugin's `.gitignore` file. Be careful not to commit secrets to public repositories. Use [environment variable](https://grafana.com/docs/grafana/latest/administration/provisioning/#using-environment-variables) interpolation for sensitive data.
+:::note
+If running end-to-end tests in CI requires provisioning, you may need to remove the `provisioning` folder from your plugin's `.gitignore` file.
+:::
+
+:::danger Be careful not to commit secrets to public repositories. Use [environment variable](https://grafana.com/docs/grafana/latest/administration/provisioning/#using-environment-variables) interpolation for sensitive data.
+:::
 
 ## Read provisioned files
 
