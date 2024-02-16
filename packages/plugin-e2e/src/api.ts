@@ -6,6 +6,7 @@ import {
   CreateDataSourceArgs,
   CreateDataSourcePageArgs,
   DataSourceSettings,
+  ReadProvisionedDashboardArgs,
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
 } from './types';
@@ -224,6 +225,13 @@ export type PluginFixture = {
    * If no name is provided, the first data source in the list of data sources will be returned.
    */
   readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
+
+  /**
+   * Fixture command that reads a dashboard json file in the provisioning/dashboards directory.
+   *
+   * Can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
+   */
+  readProvisionedDashboard(args: ReadProvisionedDashboardArgs): Promise<Dashboard>;
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
