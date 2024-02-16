@@ -62,16 +62,33 @@ describe('getConfig', () => {
     });
 
     it('should give back a default config when there are no .cprc.json files', async () => {
-      // Act
       const config = getConfig(tmpDir);
 
-      // Assert
       expect(config).toEqual({
         version: getVersion(),
+        // TODO - get this from somewhere and don't wire in the default values here
         features: {
           bundleGrafanaUI: false,
           useReactRouterV6: true,
         },
+      });
+    });
+
+    it('should give back the correct config when there are is no user config', async () => {
+      const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
+      const rootConfig: CreatePluginConfig = {
+        version: '1.0.0',
+        features: {},
+      };
+
+      await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
+      await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
+
+      const config = getConfig(tmpDir);
+
+      expect(config).toEqual({
+        version: rootConfig.version,
+        features: {},
       });
     });
   });
