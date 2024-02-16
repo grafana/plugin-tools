@@ -8,6 +8,7 @@ keywords:
   - plugin
   - testing
   - e2e
+  - end-to-end
   - data-source
   - preparation
 sidebar_position: 60
@@ -15,7 +16,7 @@ sidebar_position: 60
 
 # Introduction
 
-In many cases, you'll need certain resources to be configured in Grafana before you can run your e2e tests. This guide covers how to setup the resources that you need.
+In many cases, you'll need certain resources to be configured in Grafana before you can run your end-to-end tests. This guide covers how to setup the resources that you need.
 
 ## Test isolation
 
@@ -52,7 +53,7 @@ test('should expand multi-valued variable before calling backend', async ({
 
 You may use [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/) to configure resources such as dashboards and data sources.
 
-> If running e2e tests in CI requires provisioning, you may need to remove the `provisioning` folder from your plugin's `.gitignore` file. Be careful not to commit secrets to public repositories. Use [environment variable](https://grafana.com/docs/grafana/latest/administration/provisioning/#using-environment-variables) interpolation for sensitive data.
+> If running end-to-end tests in CI requires provisioning, you may need to remove the `provisioning` folder from your plugin's `.gitignore` file. Be careful not to commit secrets to public repositories. Use [environment variable](https://grafana.com/docs/grafana/latest/administration/provisioning/#using-environment-variables) interpolation for sensitive data.
 
 ## Read provisioned files
 
