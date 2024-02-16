@@ -82,3 +82,5 @@ The workflow contains the following steps:
 1. Comparing the differences between that version and the latest version.
 1. Looking for usages of those changed APIs inside your plugin.
 1. Reporting any potential incompatibilities.
+
+## Run e2e tests
