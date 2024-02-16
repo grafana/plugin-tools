@@ -70,12 +70,12 @@ If running end-to-end tests in CI requires provisioning, you may need to remove 
 The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep data source configuration datas in one place.
 
 ```ts title="configEditor.spec.ts"
-const datasource = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+const datasource = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yml' });
 await page.getByLabel('API Key').fill(datasource.secureJsonData.apiKey);
 ```
 
 ```ts title="queryEditor.spec.ts"
-const datasource = readProvisionedDataSource({ fileName: 'datasources.yaml' });
+const datasource = readProvisionedDataSource({ fileName: 'datasources.yml' });
 await panelEditPage.datasource.set(datasource.name);
 ```
 
