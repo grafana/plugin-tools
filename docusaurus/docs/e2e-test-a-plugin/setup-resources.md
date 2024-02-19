@@ -81,7 +81,7 @@ await panelEditPage.datasource.set(datasource.name);
 
 #### `readProvisionedDashboard` fixture
 
-The `readProvisionedDashboard` fixture allows you to read the content of a dashboard json file. It can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
+The `readProvisionedDashboard` fixture allows you to read the content of a dashboard JSON file from your`provisioning/dashboards` folder. It can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
 
 ```ts title="variableEditPage.spec.ts"
 const dashboard = await readProvisionedDashboard({ fileName: 'demo.json' });
