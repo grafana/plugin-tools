@@ -1,8 +1,7 @@
 ---
 id: selecting-elements
-title: Selecting elements in E2E tests
-description: How to select elements on the page
-draft: true
+title: Selecting UI elements
+description: How to select UI elements on the page
 keywords:
   - grafana
   - plugins
@@ -21,7 +20,7 @@ Selecting Grafana UI elements can be challenging because the selector may be def
 
 ## Playwright locator for Grafana UI elements
 
-All pages defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to element(s) selected, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
+All [pages](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/pages) defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to element(s) selected, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
 
 ```ts
 panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
