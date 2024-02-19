@@ -10,9 +10,11 @@ type ReadProvisionedDashboardFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
+const DASHBOARDS_DIR = 'dashboards';
+
 const readProvisionedDashboard: ReadProvisionedDashboardFixture = async ({ provisioningRootDir }, use) => {
   await use(async ({ fileName }) => {
-    const resolvedPath = path.resolve(path.join(provisioningRootDir, 'dashboards', fileName));
+    const resolvedPath = path.resolve(path.join(provisioningRootDir, DASHBOARDS_DIR, fileName));
     const contents = await promises.readFile(resolvedPath, 'utf8');
     return JSON.parse(contents);
   });
