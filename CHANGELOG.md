@@ -2,6 +2,20 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@4.0.2`
+  - Create Plugin: Add tests for config [#754](https://github.com/grafana/plugin-tools/pull/754) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Mon Feb 19 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@0.17.1`
   - Plugin-e2e: Add yaml as a dependency [#755](https://github.com/grafana/plugin-tools/pull/755) ([@jackw](https://github.com/jackw))
 

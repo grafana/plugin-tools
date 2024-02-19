@@ -1,3 +1,16 @@
+# v4.0.2 (Mon Feb 19 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add tests for config [#754](https://github.com/grafana/plugin-tools/pull/754) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v4.0.1 (Thu Feb 15 2024)
 
 #### 🐛 Bug Fix
