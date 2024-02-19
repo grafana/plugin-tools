@@ -23,9 +23,9 @@ test('custom variable editor query runner should return data when valid query fr
   page,
   selectors,
   grafanaVersion,
-  readProvision,
+  readProvisionedDashboard,
 }) => {
-  const provision = await readProvision<Dashboard>({ filePath: 'dashboards/redshift.json' });
+  const provision = await readProvisionedDashboard({ fileName: 'redshift.json' });
   const variableEditPage = new VariableEditPage(
     { request, page, selectors, grafanaVersion },
     { dashboard: { uid: provision.uid }, id: '2' }

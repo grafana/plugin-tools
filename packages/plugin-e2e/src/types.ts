@@ -147,11 +147,11 @@ export type DashboardEditViewArgs<T> = {
   id: T;
 };
 
-export type ReadProvisionArgs = {
+export type ReadProvisionedDashboardArgs = {
   /**
    * The path, relative to the provisioning folder, to the dashboard json file
    */
-  filePath: string;
+  fileName: string;
 };
 
 export type ReadProvisionedDataSourceArgs = {

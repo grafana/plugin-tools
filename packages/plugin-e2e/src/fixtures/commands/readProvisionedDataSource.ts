@@ -11,9 +11,11 @@ type ReadProvisionedDataSourceFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
+const DATASOURCES_DIR = 'datasources';
+
 const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ provisioningRootDir }, use) => {
   await use(async ({ fileName: filePath, name }) => {
-    const resolvedPath = path.resolve(path.join(provisioningRootDir, 'datasources', filePath));
+    const resolvedPath = path.resolve(path.join(provisioningRootDir, DATASOURCES_DIR, filePath));
     const contents = await promises.readFile(resolvedPath, 'utf8');
     const yml = parseYml(contents);
     if (!name) {
