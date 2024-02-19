@@ -47,6 +47,11 @@ export const EXTRA_TEMPLATE_VARIABLES = {
   grafanaImage: 'grafana-enterprise',
 };
 
+export const DEFAULT_FEATURE_FLAGS = {
+  useReactRouterV6: true,
+  bundleGrafanaUI: false,
+};
+
 export const GRAFANA_FE_PACKAGES = [
   '@grafana/data',
   '@grafana/e2e-selectors',
