@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { PluginFixture, PluginOptions } from '../api';
-import { ExplorePage } from '../models/ExplorePage';
+import { ExplorePage } from '../models/pages/ExplorePage';
 import { PlaywrightCombinedArgs } from './types';
 
 type ExplorePageFixture = TestFixture<ExplorePage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;

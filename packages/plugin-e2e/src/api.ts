@@ -18,7 +18,7 @@ import {
   AnnotationEditPage,
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
-import { ExplorePage } from './models/ExplorePage';
+import { ExplorePage } from './models/pages/ExplorePage';
 import options from './options';
 
 export type PluginOptions = {

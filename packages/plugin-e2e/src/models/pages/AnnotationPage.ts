@@ -1,5 +1,5 @@
 import * as semver from 'semver';
-import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
+import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { AnnotationEditPage } from './AnnotationEditPage';
 import { GrafanaPage } from './GrafanaPage';
 

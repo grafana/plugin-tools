@@ -1,11 +1,11 @@
 import * as semver from 'semver';
 import { expect, Locator, Response } from '@playwright/test';
-import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions, Visualization } from '../types';
-import { DataSourcePicker } from './DataSourcePicker';
+import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions, Visualization } from '../../types';
+import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
-import { TimeRange } from './TimeRange';
-import { Panel } from './Panel';
-import { radioButtonSetChecked } from './utils';
+import { TimeRange } from '../components/TimeRange';
+import { Panel } from '../components/Panel';
+import { radioButtonSetChecked } from '../utils';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
