@@ -6,7 +6,13 @@ import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
-import { TEMPLATE_PATHS, EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES, PLUGIN_TYPES } from '../constants.js';
+import {
+  TEMPLATE_PATHS,
+  EXPORT_PATH_PREFIX,
+  EXTRA_TEMPLATE_VARIABLES,
+  PLUGIN_TYPES,
+  DEFAULT_FEATURE_FLAGS,
+} from '../constants.js';
 import { TemplateData } from '../types.js';
 import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
@@ -104,7 +110,7 @@ export function getTemplateData(): TemplateData {
     packageManagerVersion,
     packageManagerInstallCmd,
     version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI ?? false,
+    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     useReactRouterV6: useReactRouterV6,
     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };

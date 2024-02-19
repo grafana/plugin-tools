@@ -3,7 +3,7 @@ import minimist from 'minimist';
 import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
+import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { getConfig } from '../utils/utils.config.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
@@ -69,7 +69,7 @@ function getTemplateData(answers: CliArgs) {
     isAppType,
     isNPM: packageManagerName === 'npm',
     version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI ?? false,
+    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     useReactRouterV6,
     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
