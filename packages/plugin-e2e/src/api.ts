@@ -9,6 +9,7 @@ import {
   ReadProvisionedDashboardArgs,
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
+  Dashboard,
 } from './types';
 import {
   PanelEditPage,
