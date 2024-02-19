@@ -28,42 +28,28 @@ export function getConfig(workDir = process.cwd()): CreatePluginConfig {
     ...userConfig,
     version: rootConfig!.version,
     features: createFeatureFlags({
-      ...rootConfig!.features,
-      ...userConfig!.features,
+      ...(rootConfig!.features ?? {}),
+      ...(userConfig!.features ?? {}),
     }),
   };
 }
 
 function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
-  const defaultConfig = {
-    version: getVersion(),
-    features: createFeatureFlags(),
-  };
-
   try {
     const rootPath = path.resolve(workDir, '.config/.cprc.json');
     const rootConfig = readRCFileSync(rootPath);
 
     return {
-      ...defaultConfig,
+      version: getVersion(),
       ...rootConfig,
-      features: {
-        ...defaultConfig.features,
-        ...rootConfig!.features,
-      },
+      features: rootConfig!.features ?? {},
     };
     // Most likely this happens because of no ".config/.cprc.json" (root configuration) file.
     // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
-    // Scaffolding a new plugin
-    if (commandName === 'generate') {
-      return defaultConfig;
-    }
-
-    // Most probably updating an existing plugin
     return {
-      ...defaultConfig,
-      features: createDisabledFeatureFlags(),
+      version: getVersion(),
+      features: {},
     };
   }
 }
@@ -75,23 +61,13 @@ function getUserConfig(workDir = process.cwd()): UserConfig | undefined {
 
     return {
       ...userConfig,
-      features: createFeatureFlags({
-        ...userConfig!.features,
-      }),
+      features: userConfig!.features ?? {},
     };
     // Most likely this happens because of no ".cprc.json" (user configuration) file.
     // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
-    // Scaffolding a new plugin
-    if (commandName === 'generate') {
-      return {
-        features: createFeatureFlags(),
-      };
-    }
-
-    // Most probably updating an existing plugin
     return {
-      features: createDisabledFeatureFlags(),
+      features: createFeatureFlags(),
     };
   }
 }
@@ -107,16 +83,12 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
   // Default values for new scaffoldings
-  return {
-    useReactRouterV6: true,
-    bundleGrafanaUI: false,
-    ...flags,
-  };
-}
+  if (commandName === 'generate') {
+    return {
+      useReactRouterV6: true,
+      bundleGrafanaUI: false,
+    };
+  }
 
-function createDisabledFeatureFlags(): FeatureFlags {
-  return {
-    useReactRouterV6: false,
-    bundleGrafanaUI: false,
-  };
+  return flags ?? {};
 }

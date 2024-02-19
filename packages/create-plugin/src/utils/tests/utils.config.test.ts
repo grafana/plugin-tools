@@ -11,25 +11,21 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-vi.mock('../utils.cli.js', async () => {
-  return {
-    commandName: mocks.commandName,
-  };
-});
+vi.mock('../utils.cli.js', async () => mocks);
 
 const tmpDir = path.join(os.tmpdir(), 'cp-test-config');
 
-beforeEach(async () => {
-  // Create temporary directory for testing
-  await fs.mkdir(tmpDir, { recursive: true });
-});
-
-afterEach(async () => {
-  // Clean up temporary directory
-  await fs.rm(tmpDir, { recursive: true, force: true });
-});
-
 describe('getConfig', () => {
+  beforeEach(async () => {
+    // Create temporary directory for testing
+    await fs.mkdir(tmpDir, { recursive: true });
+  });
+
+  afterEach(async () => {
+    // Clean up temporary directory
+    await fs.rm(tmpDir, { recursive: true, force: true });
+  });
+
   it('should correctly read configuration from file system', async () => {
     // Prepare
     const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
@@ -76,9 +72,32 @@ describe('getConfig', () => {
   });
 
   describe('Command: Update', () => {
+    beforeEach(() => {
+      mocks.commandName = 'update';
+    });
+
     it('should give back the correct config when there are no config files at all', async () => {});
-    it('should give back the correct config when there is no user config', async () => {});
+
+    it('should give back the correct config when there is no user config', async () => {
+      const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
+      const rootConfig: CreatePluginConfig = {
+        version: '1.0.0',
+        features: {},
+      };
+
+      await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
+      await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
+
+      const config = getConfig(tmpDir);
+
+      expect(config).toEqual({
+        version: rootConfig.version,
+        features: {},
+      });
+    });
+
     it('should give back the correct config when there is no root config', async () => {});
+
     it('should give back the correct config when config files exist', async () => {});
   });
 });
