@@ -67,7 +67,7 @@ If running end-to-end tests in CI requires provisioning, you may need to remove 
 
 #### `readProvisionedDataSource` fixture
 
-The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep data source configuration datas in one place.
+The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep data source configuration in one place.
 
 ```ts title="configEditor.spec.ts"
 const datasource = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yml' });
@@ -81,10 +81,10 @@ await panelEditPage.datasource.set(datasource.name);
 
 #### `readProvisionedDashboard` fixture
 
-The `readProvisionedDashboard` fixture allows you to read the content of a dashboard JSON file from your`provisioning/dashboards` folder. It can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
+The `readProvisionedDashboard` fixture allows you to read the content of a dashboard JSON file from your `provisioning/dashboards` folder. It can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
 
 ```ts title="variableEditPage.spec.ts"
-const dashboard = await readProvisionedDashboard({ fileName: 'demo.json' });
+const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
 const variableEditPage = new VariableEditPage({ request, page, selectors, grafanaVersion }, { dashboard, id: '2' });
 await variableEditPage.goto();
 ```
