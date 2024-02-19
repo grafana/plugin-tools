@@ -1,3 +1,15 @@
+# v0.17.0 (Mon Feb 19 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add fixture that reads provisioned dashboard files [#749](https://github.com/grafana/plugin-tools/pull/749) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.16.0 (Mon Feb 19 2024)
 
 #### 🚀 Enhancement
