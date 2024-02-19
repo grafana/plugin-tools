@@ -2,7 +2,6 @@
 id: feature-toggles
 title: Use Grafana feature toggles
 description: How to use Grafana feature toggles in end-to-end tests
-draft: true
 keywords:
   - grafana
   - plugins
