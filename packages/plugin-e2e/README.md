@@ -18,9 +18,9 @@ E2E test Grafana plugins with ease.
 - **Version Compatibility:** Ensures that your plugin is tested across multiple versions of Grafana, guaranteeing compatibility and stability.
 - **Integration with Playwright:** Seamlessly integrates with the Playwright testing framework, leveraging its powerful browser automation capabilities.
 
-## Getting Started
+## Get started
 
-Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure and write tests using `@grafana/plugin-e2e`.
+Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure, write tests and run your e2e tests in CI.
 
 ### Prerequisites
 
@@ -36,7 +36,7 @@ Please refer to the [Playwright documentation](https://playwright.dev/docs/intro
 
 Open the Playwright config file that was generated when Playwright was installed and paste the following configuration.
 
-```ts title="playwright.config.ts"
+```ts
 import { dirname } from 'path';
 import { defineConfig, devices } from '@playwright/test';
 const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
@@ -65,13 +65,11 @@ export default defineConfig({
 });
 ```
 
-### Usage
-
 ### Writing Tests
 
 Here's a basic example of how to write an E2E test using `@grafana/plugin-e2e`:
 
-```ts title="queryEditor.spec.ts"
+```ts
 import { test, expect } from '@grafana/plugin-e2e';
 
 test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
@@ -91,6 +89,6 @@ To run your tests, use the following command:
 npx playwright test
 ```
 
-# Contributing
+## Contributing
 
 We welcome contributions to @grafana/plugin-e2e. If you're interested in contributing, please read our [contributing guidelines](./CONTRIBUTING.md).
