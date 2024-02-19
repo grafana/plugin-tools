@@ -2,7 +2,6 @@
 id: authentication
 title: Authentication
 description: Authentication
-draft: true
 keywords:
   - grafana
   - plugins
