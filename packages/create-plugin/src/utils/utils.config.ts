@@ -67,7 +67,7 @@ function getUserConfig(workDir = process.cwd()): UserConfig | undefined {
     // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
     return {
-      features: createFeatureFlags(),
+      features: {},
     };
   }
 }

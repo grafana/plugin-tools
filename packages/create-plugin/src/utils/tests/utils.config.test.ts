@@ -26,32 +26,6 @@ describe('getConfig', () => {
     await fs.rm(tmpDir, { recursive: true, force: true });
   });
 
-  it('should correctly read configuration from file system', async () => {
-    // Prepare
-    const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
-    const userConfigPath = path.join(tmpDir, '.cprc.json');
-    const rootConfig: CreatePluginConfig = {
-      version: '1.0.0',
-      features: {},
-    };
-    const userConfig: UserConfig = {
-      features: {
-        useReactRouterV6: false,
-        bundleGrafanaUI: false,
-      },
-    };
-
-    await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
-    await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
-    await fs.writeFile(userConfigPath, JSON.stringify(userConfig));
-
-    // Act
-    const config = getConfig(tmpDir);
-
-    // Assert
-    expect(config).toEqual({ ...rootConfig, ...userConfig });
-  });
-
   describe('Command: Generate', () => {
     beforeEach(() => {
       mocks.commandName = 'generate';
@@ -76,7 +50,14 @@ describe('getConfig', () => {
       mocks.commandName = 'update';
     });
 
-    it('should give back the correct config when there are no config files at all', async () => {});
+    it('should give back the correct config when there are no config files at all', async () => {
+      const config = getConfig();
+
+      expect(config).toEqual({
+        version: getVersion(),
+        features: {},
+      });
+    });
 
     it('should give back the correct config when there is no user config', async () => {
       const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
@@ -96,8 +77,46 @@ describe('getConfig', () => {
       });
     });
 
-    it('should give back the correct config when there is no root config', async () => {});
+    it('should give back the correct config when there is no root config', async () => {
+      const userConfigPath = path.join(tmpDir, '.cprc.json');
+      const userConfig: UserConfig = {
+        features: {
+          useReactRouterV6: true,
+          bundleGrafanaUI: true,
+        },
+      };
 
-    it('should give back the correct config when config files exist', async () => {});
+      await fs.writeFile(userConfigPath, JSON.stringify(userConfig));
+
+      const config = getConfig(tmpDir);
+
+      expect(config).toEqual({
+        version: getVersion(),
+        features: userConfig.features,
+      });
+    });
+
+    it('should give back the correct config when config files exist', async () => {
+      const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
+      const userConfigPath = path.join(tmpDir, '.cprc.json');
+      const rootConfig: CreatePluginConfig = {
+        version: '1.0.0',
+        features: {},
+      };
+      const userConfig: UserConfig = {
+        features: {
+          useReactRouterV6: false,
+          bundleGrafanaUI: false,
+        },
+      };
+
+      await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
+      await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
+      await fs.writeFile(userConfigPath, JSON.stringify(userConfig));
+
+      const config = getConfig(tmpDir);
+
+      expect(config).toEqual({ ...rootConfig, ...userConfig });
+    });
   });
 });
