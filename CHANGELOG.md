@@ -1,5 +1,18 @@
 # (Mon Feb 19 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.1.0`
+  - create-plugin: update grafana version to `v10.3.3` [#674](https://github.com/grafana/plugin-tools/pull/674) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Mon Feb 19 2024)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@4.0.2`
