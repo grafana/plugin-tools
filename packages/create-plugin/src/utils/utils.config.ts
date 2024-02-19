@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
 import { commandName } from './utils.cli.js';
+import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
@@ -84,10 +85,7 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
   // Default values for new scaffoldings
   if (commandName === 'generate') {
-    return {
-      useReactRouterV6: true,
-      bundleGrafanaUI: false,
-    };
+    return DEFAULT_FEATURE_FLAGS;
   }
 
   return flags ?? {};

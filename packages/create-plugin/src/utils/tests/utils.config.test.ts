@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import os from 'os';
 import { getVersion } from '../utils.version.js';
 import { getConfig, UserConfig, CreatePluginConfig } from '../utils.config.js';
+import { DEFAULT_FEATURE_FLAGS } from '../../constants.js';
 
 const mocks = vi.hoisted(() => {
   return {
@@ -36,11 +37,7 @@ describe('getConfig', () => {
 
       expect(config).toEqual({
         version: getVersion(),
-        // TODO - get this from somewhere and don't wire in the default values here
-        features: {
-          bundleGrafanaUI: false,
-          useReactRouterV6: true,
-        },
+        features: DEFAULT_FEATURE_FLAGS,
       });
     });
   });
