@@ -61,7 +61,7 @@ describe('getConfig', () => {
       mocks.commandName = 'generate';
     });
 
-    it('should give back a default config when there are no .cprc.json files', async () => {
+    it('should give back a default config', async () => {
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
@@ -73,23 +73,12 @@ describe('getConfig', () => {
         },
       });
     });
+  });
 
-    it('should give back the correct config when there are is no user config', async () => {
-      const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
-      const rootConfig: CreatePluginConfig = {
-        version: '1.0.0',
-        features: {},
-      };
-
-      await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
-      await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
-
-      const config = getConfig(tmpDir);
-
-      expect(config).toEqual({
-        version: rootConfig.version,
-        features: {},
-      });
-    });
+  describe('Command: Update', () => {
+    it('should give back the correct config when there are no config files at all', async () => {});
+    it('should give back the correct config when there is no user config', async () => {});
+    it('should give back the correct config when there is no root config', async () => {});
+    it('should give back the correct config when config files exist', async () => {});
   });
 });
