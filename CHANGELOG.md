@@ -1,5 +1,18 @@
 # (Mon Feb 19 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.17.1`
+  - Plugin-e2e: Add yaml as a dependency [#755](https://github.com/grafana/plugin-tools/pull/755) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Feb 19 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@0.17.0`
