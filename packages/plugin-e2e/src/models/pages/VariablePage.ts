@@ -1,4 +1,4 @@
-import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
+import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { VariableEditPage } from './VariableEditPage';
 

@@ -1,5 +1,5 @@
-import { DataSourcePicker } from './DataSourcePicker';
-import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../types';
+import { DataSourcePicker } from '../components/DataSourcePicker';
+import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationEditPage extends GrafanaPage {

@@ -1,5 +1,5 @@
-import { PluginTestCtx, TimeRangeArgs } from '../types';
-import { GrafanaPage } from './GrafanaPage';
+import { PluginTestCtx, TimeRangeArgs } from '../../types';
+import { GrafanaPage } from '../pages/GrafanaPage';
 
 export class TimeRange extends GrafanaPage {
   constructor(ctx: PluginTestCtx) {

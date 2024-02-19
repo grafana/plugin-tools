@@ -1,5 +1,5 @@
-import { PluginTestCtx } from '../types';
-import { GrafanaPage } from './GrafanaPage';
+import { PluginTestCtx } from '../../types';
+import { GrafanaPage } from '../pages/GrafanaPage';
 
 export class DataSourcePicker extends GrafanaPage {
   constructor(ctx: PluginTestCtx) {

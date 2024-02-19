@@ -1,10 +1,10 @@
 const semver = require('semver');
 import { Locator, expect } from '@playwright/test';
-import { NavigateOptions, PluginTestCtx, RequestOptions } from '../types';
-import { DataSourcePicker } from './DataSourcePicker';
+import { NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
+import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
-import { TimeRange } from './TimeRange';
-import { Panel } from './Panel';
+import { TimeRange } from '../components/TimeRange';
+import { Panel } from '../components/Panel';
 
 const TIME_SERIES_PANEL_SELECTOR_SUFFIX = 'Graph';
 const TABLE_PANEL_SELECTOR_SUFFIX = 'Table';

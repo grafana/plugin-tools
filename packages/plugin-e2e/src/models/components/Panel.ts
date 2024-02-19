@@ -1,7 +1,7 @@
 import { Locator } from '@playwright/test';
 import * as semver from 'semver';
-import { PluginTestCtx } from '../types';
-import { GrafanaPage } from './GrafanaPage';
+import { PluginTestCtx } from '../../types';
+import { GrafanaPage } from '../pages/GrafanaPage';
 
 const ERROR_STATUS = 'error';
 

@@ -1,5 +1,5 @@
 import { Response } from '@playwright/test';
-import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../types';
+import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {

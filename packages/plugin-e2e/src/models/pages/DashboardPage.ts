@@ -1,10 +1,10 @@
 import * as semver from 'semver';
-import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../types';
-import { DataSourcePicker } from './DataSourcePicker';
+import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
+import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
-import { TimeRange } from './TimeRange';
-import { Panel } from './Panel';
+import { TimeRange } from '../components/TimeRange';
+import { Panel } from '../components/Panel';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;

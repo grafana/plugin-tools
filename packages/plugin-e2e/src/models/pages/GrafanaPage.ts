@@ -1,5 +1,5 @@
 import { Locator, Request, Response } from '@playwright/test';
-import { GetByTestIdOrAriaLabelOptions, NavigateOptions, PluginTestCtx } from '../types';
+import { GetByTestIdOrAriaLabelOptions, NavigateOptions, PluginTestCtx } from '../../types';
 
 /**
  * Base class for all Grafana pages.

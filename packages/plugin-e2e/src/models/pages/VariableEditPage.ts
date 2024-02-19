@@ -1,7 +1,7 @@
 const gte = require('semver/functions/gte');
 
-import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx } from '../types';
-import { DataSourcePicker } from './DataSourcePicker';
+import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx } from '../../types';
+import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
 
