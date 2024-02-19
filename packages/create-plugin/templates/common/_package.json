@@ -64,11 +64,11 @@
     "@grafana/runtime": "{{ grafanaVersion }}",
     "@grafana/ui": "{{ grafanaVersion }}",
     "@grafana/schema": "{{ grafanaVersion }}",{{#if_eq pluginType "scenesapp"}}
-    "@grafana/scenes": "^1.28.0",{{/if_eq}}
+    "@grafana/scenes": "^3.6.0",{{/if_eq}}
     "react": "18.2.0",
     "react-dom": "18.2.0",{{#if isAppType}}
     "react-router-dom": "^{{ reactRouterVersion }}",
-    "rxjs": "7.8.0",{{/if}}
+    "rxjs": "7.8.1",{{/if}}
     "tslib": "2.5.3"
   },
   "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}"
