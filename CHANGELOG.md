@@ -1,3 +1,16 @@
+# (Mon Feb 19 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.16.0`
+  - Plugin-E2E: Split models into pages and components [#752](https://github.com/grafana/plugin-tools/pull/752) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Feb 16 2024)
 
 #### 🚀 Enhancement
