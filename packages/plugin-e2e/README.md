@@ -2,6 +2,10 @@
 
 E2E test Grafana plugins with ease.
 
+**Links**
+
+- [`@grafana/plugin-e2e` docs](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/introduction)
+
 ## Overview
 
 `@grafana/plugin-e2e` is designed specifically for Grafana plugin developers. It extends [Playwright test](https://github.com/microsoft/playwright/) capabilities with fixtures, models, and expect matchers, enabling comprehensive end-to-end testing of Grafana plugins across multiple versions of Grafana. This package simplifies the testing process, ensuring your plugin is robust and compatible with various Grafana environments.
@@ -16,42 +20,66 @@ E2E test Grafana plugins with ease.
 
 ## Getting Started
 
+Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure and write tests using `@grafana/plugin-e2e`.
+
 ### Prerequisites
 
+- You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
 - Node.js 18+
-- Basic knowledge of Playwright
-- Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
+- Basic Knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation
 
-### Installation
+#### Install Playwright
 
-To install `@grafana/plugin-e2e`, run the following command in your project directory:
+Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 0.40.0 installed as a dev dependency in the package.json file of your plugin.
 
-```bash
-npm install @grafana/plugin-e2e@latest --save-dev
+#### Configure Playwright
+
+Open the Playwright config file that was generated when Playwright was installed and paste the following configuration.
+
+```ts title="playwright.config.ts"
+import { dirname } from 'path';
+import { defineConfig, devices } from '@playwright/test';
+const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
+
+export default defineConfig({
+  testDir: './tests', // change this to the directory that was chosen when installing Playwright
+  reporter: 'html',
+  use: {
+    baseURL: 'http://localhost:3000',
+  },
+  projects: [
+    {
+      name: 'auth',
+      testDir: pluginE2eAuth,
+      testMatch: [/.*\.js/],
+    },
+    {
+      name: 'run-tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['auth'],
+    },
+  ],
+});
 ```
 
-To install Playwright along with the default browsers:
-
-```bash
-npm init playwright@latest
-```
-
-> Note: @grafana/plugin-e2e uses @playwright/test version 1.40.0 internally, so the version you install in the plugin needs to be the same or higher.
-
-## Usage
+### Usage
 
 ### Writing Tests
 
 Here's a basic example of how to write an E2E test using `@grafana/plugin-e2e`:
 
-```typescript
-import { expect, test } from '@grafana/plugin-e2e';
+```ts title="queryEditor.spec.ts"
+import { test, expect } from '@grafana/plugin-e2e';
 
-test('query data request should return 200 when query is valid', async ({ panelEditPage }) => {
-  await panelEditPage.datasource.set('gdev-testdata');
-  const queryEditorRow = await panelEditPage.getQueryEditorRow('A');
-  await queryEditorRow.getByLabel('Labels').fill('key=value1, key2=value3');
+test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await panelEditPage.datasource.set(ds.name);
+  await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
+  await expect(panelEditPage.panel.data).toContainText(['1', '3']);
 });
 ```
 
