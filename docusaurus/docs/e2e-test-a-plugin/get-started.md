@@ -13,6 +13,9 @@ keywords:
 sidebar_position: 2
 ---
 
+import ScaffoldPluginE2ECreateDSPluginNPM from '@snippets/plugin-e2e-create-ds-plugin.npm.md';
+import ScaffoldPluginE2ECreateDSPluginYarn from '@snippets/plugin-e2e-create-ds-plugin.yarn.md';
+import ScaffoldPluginE2ECreateDSPluginPNPM from '@snippets/plugin-e2e-create-ds-plugin.pnpm.md';
 import ScaffoldPluginE2InstallNPM from '@snippets/plugin-e2e-install.npm.md';
 import ScaffoldPluginE2EInstallPNPM from '@snippets/plugin-e2e-install.pnpm.md';
 import ScaffoldPluginE2EInstallYarn from '@snippets/plugin-e2e-install.yarn.md';
@@ -54,11 +57,17 @@ You can remove any test files (`[filename].spec.js|ts`) that was generated when 
 
 Optional: If you would like to follow along with our example tests, use the [create-plugin](../get-started/get-started.mdx) tool to generate a backend data source plugin.
 
-```shell
-npx @grafana/create-plugin@latest  --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --hasBackend
-```
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2ECreateDSPluginNPM, label: 'npm' },
+{ component: ScaffoldPluginE2ECreateDSPluginYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2ECreateDSPluginPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
 
-### Step 1: Installing @grafana/plugin-e2e
+### Step 1: Installing `@grafana/plugin-e2e`
 
 Now open the terminal and run the following command in your plugin's project directory:
 
@@ -167,7 +176,7 @@ queryString="current-package-manager"
 
 ### Step 6: Run tests in CI
 
-We recommend updating your CI workflow to include the running of end-to-end tests to continuously check for breakages. The following workflow can be used to run end-to-end tests against a range of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
+The following Github workflow can be used to run end-to-end tests against a range of Grafana versions for every PR in your Github repository. Note that this is a generic example based on a backend plugin. You may want to alter or remove a few of the steps in the `playwright-tests` job before using it in your plugin.
 
 <CodeSnippets
 snippets={[
