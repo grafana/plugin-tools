@@ -18,13 +18,8 @@ const tmpDir = path.join(os.tmpdir(), 'cp-test-config');
 
 describe('getConfig', () => {
   beforeEach(async () => {
-    // Create temporary directory for testing
-    await fs.mkdir(tmpDir, { recursive: true });
-  });
-
-  afterEach(async () => {
-    // Clean up temporary directory
     await fs.rm(tmpDir, { recursive: true, force: true });
+    await fs.mkdir(tmpDir, { recursive: true });
   });
 
   describe('Command: Generate', () => {
