@@ -86,7 +86,7 @@ export function getTemplateData(): TemplateData {
   const pluginJson = getPluginJson();
   const { features } = getConfig();
   const currentVersion = getVersion();
-  const useReactRouterV6 = features.useReactRouterV6 && pluginJson.type === PLUGIN_TYPES.app;
+  const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
 
@@ -104,7 +104,7 @@ export function getTemplateData(): TemplateData {
     packageManagerVersion,
     packageManagerInstallCmd,
     version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI,
+    bundleGrafanaUI: features.bundleGrafanaUI ?? false,
     useReactRouterV6: useReactRouterV6,
     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
