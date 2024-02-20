@@ -19,7 +19,7 @@ We'll walk you through the process of bundling dashboards into plugins. The proc
 
 ## Step 1: Create a dashboard
 
-Start by creating the dashboard you want to bundle with your plugin. The development environment provided by create-plugin can aid with creating and testings dashboards. The following steps provide instructions for both data source and app plugins, including tips for crafting an effective dashboard.
+Start by creating the dashboard you want to bundle with your plugin. The [development environment](/get-started/set-up-development-environment) provided by create-plugin can aid with creating and testings dashboards. The following steps provide instructions for both data source and app plugins, including tips for crafting an effective dashboard.
 
 ### Build a dashboard for a data source plugin
 
@@ -103,9 +103,9 @@ To test your newly created dashboard, import the dashboard:
 
 App dashboards are automatically discovered by the Grafana server and imported when the server starts.
 
-## Step 4 (Optional): Add navigation links
+### (Optional) Add navigation links in an app plugin
 
-To enhance user navigation, you can include an additional page in the `plugin.json`. The path of the include should reference the bundled dashboard `uid` property.
+An app plugin can enhance user navigation by adding a navigation link in `plugin.json`. The path of the include should reference the bundled dashboard `uid` property.
 
 ```json title="src/plugin.json"
 {
@@ -115,18 +115,14 @@ To enhance user navigation, you can include an additional page in the `plugin.js
       "path": "dashboards/overview.json",
       "type": "dashboard"
     },
-    // addition-highlight-next-line
+    // addition-highlight-start
     {
-      // addition-highlight-next-line
       "addToNav": true,
-      // addition-highlight-next-line
       "name": "My App Dashboard",
-      // addition-highlight-next-line
       "path": "d/ffb13c35-2f2f-4f36-99b1-bde7244e8de3",
-      // addition-highlight-next-line
       "type": "page"
-      // addition-highlight-next-line
     }
+    // addition-highlight-end
   ]
 }
 ```
