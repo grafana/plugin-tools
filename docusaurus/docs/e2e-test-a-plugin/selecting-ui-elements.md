@@ -33,7 +33,7 @@ Selectors defined in the `@grafana/e2e-selectors` package are tied to a specific
 ```ts
 import { test, expect } from '@grafana/plugin-e2e';
 
-test('annotation query should be OK when query is valid', async ({ panelEditPage, page, selectors }) => {
+test('annotation query should be OK when query is valid', async ({ annotationEditPage, page, selectors }) => {
   await annotationEditPage.datasource.set('E2E Test Data Source');
   await annotationEditPage
     .getByTestIdOrAriaLabel(selectors.components.CodeEditor.container)
