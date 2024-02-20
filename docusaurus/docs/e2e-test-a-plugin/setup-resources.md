@@ -17,7 +17,7 @@ sidebar_position: 60
 
 ## Introduction
 
-In many cases, you'll need certain resources to be configured in Grafana before you can run your end-to-end tests. For example, to test how a panel plugin displays data, you'll need a data source configured to query and return that data. This guide covers how to setup the resources that you need through [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/).s
+In many cases, you'll need certain resources to be configured in Grafana before you can run your end-to-end tests. For example, to test how a panel plugin displays data, you'll need a data source configured to query and return that data. This guide covers how to setup the resources that you need through [provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/).
 
 ### Test isolation
 
