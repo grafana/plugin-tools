@@ -22,7 +22,7 @@ The CI (`ci.yml`) workflow is designed to lint, type check, and build the fronte
 
 ## The release workflow
 
-The release (`release.yml`) workflow is designed to create a new release of your plugin whenever you're ready to publish a new version to Grafana Cloud. This automates the process of creating releases in GitHub and provides instructions for submitting the plugin to the Grafana plugin catalog.
+The release (`release.yml`) workflow is designed to build, test, package and sign your plugin whenever you're ready to release a new version. This automates the process of creating releases in GitHub and provides instructions for submitting the plugin to the Grafana plugin catalog.
 
 :::warning
 
