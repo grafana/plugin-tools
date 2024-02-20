@@ -1,6 +1,6 @@
 ---
 id: configuration-editor
-title: Testing the configuration editor
+title: The configuration editor
 description: Testing the configuration editor
 keywords:
   - grafana
@@ -10,16 +10,16 @@ keywords:
   - e2e
   - data-source
   - configuration editor
-sidebar_position: 30
+sidebar_position: 10
 ---
 
-# Introduction
+## Introduction
 
-Testing the configuration of a Data Source plugin is usually straight forward. This guide provides examples on how to test the configuration editor and the health check for backend and frontend Data Source plugins.
+This guide provides examples on how to test the configuration editor and the health check for backend and frontend Data Source plugins.
 
-## Testing the configuration editor
+### Testing the configuration editor
 
-In the following example, we're testing that a certain field is being displayed only in case a certain checkbox is checked.
+In the following example, we're testing that a field is being displayed only in case a certain checkbox is checked.
 
 ```ts
 test('should display custom field when `Show custom field` radio button is clicked ', async ({
@@ -35,9 +35,9 @@ test('should display custom field when `Show custom field` radio button is click
 });
 ```
 
-## Testing the configuration in a backend Data Source plugin
+### Testing the configuration in a backend Data Source plugin
 
-In the next example, the configuration of a backend Data Source plugin is tested. The configuration editor form is populated with valid configuration values and then the `Save & test` button is clicked. Clicking `Save & test` calls Grafana backend to save the configuration and then calls the plugin's backend health check endpoint. The test will be successful Only if both calls yields a successful status code.
+In the next example, the configuration of a backend Data Source plugin is tested. The configuration editor form is populated with valid configuration values, and then the `Save & test` button is clicked. Clicking `Save & test` calls Grafana backend to save the configuration and then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts
 test('"Save & test" should be successful when configuration is valid', async ({
@@ -53,9 +53,9 @@ test('"Save & test" should be successful when configuration is valid', async ({
 });
 ```
 
-## Testing the configuration in a frontend Data Source plugin
+### Testing the configuration in a frontend Data Source plugin
 
-A frontend Data Source plugin may call any endpoint to test whether the provided configuration is valid. You can use Playwright's [`waitForResponse`] method to return the response for the endpoint that is being called.
+A frontend Data Source plugin may call any endpoint to test whether the provided configuration is valid. You can use Playwright's [`waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) method and specify the url of the endpoint that is being called.
 
 ```ts
 test('"Save & test" should be successful when configuration is valid', async ({
@@ -67,9 +67,9 @@ test('"Save & test" should be successful when configuration is valid', async ({
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await page.getByLabel('API Key').fill(ds.secureJsonData.apiKey);
-  const testDataSourceResponse = page.waitForResponse('/api/health');
+  const testDataSourceResponsePromise = page.waitForResponse('/api/health');
   await configPage.saveAndTest({ skipWaitForResponse: true });
-  await expect(testDataSourceResponse).toBeOK();
+  await expect(testDataSourceResponsePromise).toBeOK();
 });
 ```
 

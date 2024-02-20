@@ -1,6 +1,6 @@
 {
-  "position": 25,
-  "label": "How to test a Data Source plugin",
+  "position": 70,
+  "label": "Test a Data Source plugin",
   "customProps": {
     "description": "How to test a Data Source plugin with @grafana/plugin-e2e"
   },
@@ -8,6 +8,6 @@
   "collapsed": true,
   "link": {
     "type": "doc",
-    "id": "e2e-test-a-plugin/how-to-test-a-data-source-plugin/introduction"
+    "id": "e2e-test-a-plugin/test-a-data-source-plugin/introduction"
   }
 }
