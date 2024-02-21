@@ -15,29 +15,11 @@ sidebar_position: 10
 
 ## Introduction
 
-This guide provides examples on how to test the configuration editor and the health check for backend and frontend Data Source plugins.
+Most data source plugins need auth to communicate with third-party services. Users can configure the connection details in the data source configuration page. Data source plugins that need auth cannot function without valid configuration, so it's crucial that the configuration page and the data source health check endpoint that is used to test the configuration work as expected.
 
-### Testing the configuration editor
+### Testing the configuration in a backend data source plugin
 
-In the following example, we're testing that a field is being displayed only in case a certain checkbox is checked.
-
-```ts
-test('should display custom field when `Show custom field` radio button is clicked ', async ({
-  createDataSourceConfigPage,
-  readProvisionedDataSource,
-  page,
-}) => {
-  const ds = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
-  await createDataSourceConfigPage({ type: ds.type });
-  await expect(page.getByPlaceholder('Custom field')).not.toBeVisible();
-  await page.getByLabel('Show custom field').check();
-  await expect(page.getByPlaceholder('Custom field')).toBeVisible();
-});
-```
-
-### Testing the configuration in a backend Data Source plugin
-
-In the next example, the configuration of a backend Data Source plugin is tested. The configuration editor form is populated with valid configuration values, and then the `Save & test` button is clicked. Clicking `Save & test` calls Grafana backend to save the configuration and then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
+In the following example, the configuration of a backend data source plugin is tested. The configuration editor form is populated with valid configuration values, and then the `Save & test` button is clicked. Clicking `Save & test` calls Grafana backend to save the configuration and then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts
 test('"Save & test" should be successful when configuration is valid', async ({
@@ -53,9 +35,27 @@ test('"Save & test" should be successful when configuration is valid', async ({
 });
 ```
 
-### Testing the configuration in a frontend Data Source plugin
+### When configuration is invalid
 
-A frontend Data Source plugin may call any endpoint to test whether the provided configuration is valid. You can use Playwright's [`waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) method and specify the url of the endpoint that is being called.
+In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user.
+
+```ts
+test('"Save & test" should fail when configuration is invalid', async ({
+  createDataSourceConfigPage,
+  readProvisionedDataSource,
+  page,
+}) => {
+  const ds = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+  const configPage = await createDataSourceConfigPage({ type: ds.type });
+  await page.getByLabel('Path').fill(ds.jsonData.path);
+  await expect(configPage.saveAndTest()).not.toBeOK();
+  await expect(configPage).toHaveAlert('error', { hasText: 'API key is missing' });
+});
+```
+
+### Testing the configuration in a frontend data source plugin
+
+A frontend data source plugin may call any endpoint to test whether the provided configuration is valid. You can use Playwright's [`waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) method and specify the url of the endpoint that is being called.
 
 ```ts
 test('"Save & test" should be successful when configuration is valid', async ({
