@@ -35,7 +35,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
 });
 ```
 
-### When configuration is invalid
+#### When configuration is invalid
 
 In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user.
 
