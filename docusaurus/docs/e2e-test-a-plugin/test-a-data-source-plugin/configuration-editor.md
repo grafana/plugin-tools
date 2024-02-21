@@ -21,7 +21,7 @@ Most data source plugins need auth to communicate with third-party services. Use
 
 In the following example, the configuration of a backend data source plugin is tested. The configuration editor form is populated with valid configuration values, and then the `Save & test` button is clicked. Clicking `Save & test` calls Grafana backend to save the configuration and then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
-```ts
+```ts title="configurationEditor.spec.ts"
 test('"Save & test" should be successful when configuration is valid', async ({
   createDataSourceConfigPage,
   readProvisionedDataSource,
@@ -39,7 +39,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
 
 In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user.
 
-```ts
+```ts title="configurationEditor.spec.ts"
 test('"Save & test" should fail when configuration is invalid', async ({
   createDataSourceConfigPage,
   readProvisionedDataSource,
@@ -57,7 +57,7 @@ test('"Save & test" should fail when configuration is invalid', async ({
 
 A frontend data source plugin may call any endpoint to test whether the provided configuration is valid. You can use Playwright's [`waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) method and specify the url of the endpoint that is being called.
 
-```ts
+```ts title="configurationEditor.spec.ts"
 test('"Save & test" should be successful when configuration is valid', async ({
   createDataSourceConfigPage,
   readProvisionedDataSource,
@@ -75,7 +75,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
 
 Alternatively, you can assert that a success alert box is displayed on the page.
 
-```ts
+```ts title="configurationEditor.spec.ts"
 test('"Save & test" should display success alert box when config is valid', async ({
   createDataSourceConfigPage,
   readProvisionedDataSource,
