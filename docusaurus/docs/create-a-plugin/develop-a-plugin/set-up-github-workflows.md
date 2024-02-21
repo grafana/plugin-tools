@@ -30,7 +30,7 @@ This workflow requires a Grafana Cloud API key. Before you begin, follow the ins
 
 :::
 
-### Storing your Access Policy token as a Repository Secret in GitHub
+### Storing your Access Policy token as a repository secret in GitHub
 
 1. Access Repository Settings:
 
