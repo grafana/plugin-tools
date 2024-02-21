@@ -12,4 +12,8 @@ keywords:
 sidebar_position: 10
 ---
 
+## Introduction
+
+The following articles will give some tips and tricks on how to test data source plugins. To write end-to-end tests similar to the ones in this guide, you'll need your data source to be configured using provisioning. If you haven't already checked out our guide on how to [setup the resources](../setup-resources.md) you'll need, do that first.
+
 <DocLinkList />
