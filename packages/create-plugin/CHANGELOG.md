@@ -1,3 +1,15 @@
+# v4.2.0 (Wed Feb 21 2024)
+
+#### 🐛 Bug Fix
+
+- chore: update permissions [#743](https://github.com/grafana/plugin-tools/pull/743) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
 # v4.1.0 (Mon Feb 19 2024)
 
 #### 🚀 Enhancement

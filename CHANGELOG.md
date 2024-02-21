@@ -1,3 +1,27 @@
+# (Wed Feb 21 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.18.0`
+  - Plugin E2E: Bump Playwright version [#757](https://github.com/grafana/plugin-tools/pull/757) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.0`
+  - chore: update permissions [#743](https://github.com/grafana/plugin-tools/pull/743) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump ip from 1.1.8 to 1.1.9 [#759](https://github.com/grafana/plugin-tools/pull/759) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Mon Feb 19 2024)
 
 #### 🚀 Enhancement
