@@ -45,7 +45,7 @@ test('"Save & test" should fail when configuration is invalid', async ({
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await expect(configPage.saveAndTest()).not.toBeOK();
@@ -63,7 +63,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await page.getByLabel('API Key').fill(ds.secureJsonData.apiKey);
@@ -81,7 +81,7 @@ test('"Save & test" should display success alert box when config is valid', asyn
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = readProvisionedDataSource({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await page.getByLabel('API Key').fill(ds.secureJsonData.apiKey);
