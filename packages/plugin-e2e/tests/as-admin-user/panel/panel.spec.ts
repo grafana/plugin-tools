@@ -18,10 +18,10 @@ test('open a clock panel in a provisioned dashboard and set time format to "12 h
   request,
   grafanaVersion,
   readProvisionedDashboard,
-}) => {
+}, testInfo) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'clock-panel.json' });
   const args = { dashboard: { uid: dashboard.uid }, id: '5' };
-  const panelEditPage = await new PanelEditPage({ page, selectors, grafanaVersion, request }, args);
+  const panelEditPage = await new PanelEditPage({ page, selectors, grafanaVersion, request, testInfo }, args);
   await panelEditPage.goto();
   await expect(panelEditPage.getVisualizationName()).toHaveText('Clock');
   await panelEditPage.collapseSection('Clock');
