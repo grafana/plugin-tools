@@ -34,17 +34,17 @@ jobs:
         GRAFANA_IMAGE:
           [
             { name: 'grafana-dev', version: '10.4.0-160354' },
-            { name: 'grafana', version: '10.3.1' },
-            { name: 'grafana', version: '10.2.3' },
-            { name: 'grafana', version: '10.1.6' },
-            { name: 'grafana', version: '10.0.10' },
-            { name: 'grafana', version: '9.5.15' },
-            { name: 'grafana', version: '9.4.2' },
-            { name: 'grafana', version: '9.3.2' },
-            { name: 'grafana', version: '9.2.2' },
-            { name: 'grafana', version: '9.1.2' },
-            { name: 'grafana', version: '9.0.2' },
-            { name: 'grafana', version: '8.5.2' },
+            { name: 'grafana-enterprise', version: '10.3.1' },
+            { name: 'grafana-enterprise', version: '10.2.3' },
+            { name: 'grafana-enterprise', version: '10.1.6' },
+            { name: 'grafana-enterprise', version: '10.0.10' },
+            { name: 'grafana-enterprise', version: '9.5.15' },
+            { name: 'grafana-enterprise', version: '9.4.2' },
+            { name: 'grafana-enterprise', version: '9.3.2' },
+            { name: 'grafana-enterprise', version: '9.2.2' },
+            { name: 'grafana-enterprise', version: '9.1.2' },
+            { name: 'grafana-enterprise', version: '9.0.2' },
+            { name: 'grafana-enterprise', version: '8.5.2' },
           ]
     name: ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
     runs-on: ubuntu-latest
