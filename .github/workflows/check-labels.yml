@@ -8,6 +8,9 @@ on:
       - labeled
       - unlabeled
       - edited
+concurrency:
+  group: check-labels-${{ github.event.number }}
+  cancel-in-progress: true
 
 permissions:
   pull-requests: write
