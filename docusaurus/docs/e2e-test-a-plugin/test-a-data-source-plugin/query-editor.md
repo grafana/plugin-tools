@@ -57,7 +57,11 @@ test('data query should be successful when the query is valid', async ({
 
 ### Make a panel data assertion
 
-In many cases, asserting that the data query response is OK won't be enough to say your data source plugin is functioning properly - you also need to assert on the data that is shown in the panel. Grafana comes with a set of built-in panels, and there's a whole variety of community panels available in the [Plugin catalog](https://grafana.com/grafana/plugins/). All panels can render data differently, so it's impossible to provide a consitent way to assert on the displayed data across all panels. It's therefore recommended to use the `Table` panel for this. The `<page>.panel.data` property returns a [Playwright locator](https://playwright.dev/docs/locators) that resolves element(s) that contain the value(s) that are currently displayed in the Table panel. This means you can use any auto-retrying [matcher](https://playwright.dev/docs/test-assertions#auto-retrying-assertions) that accepts a locator as the receiving type.
+In many cases, asserting that the data query response is OK won't be enough to say your data source plugin is functioning properly. You must also make an assertion on the data that is shown in the panel. 
+
+Grafana comes with a set of built-in panels, and there's a variety of community panels available in the [Grafana plugin catalog](https://grafana.com/grafana/plugins/). Every panel can render data differently, so it's impossible to provide a consitent way to assert on the displayed data across all panels. Therefore, we recommended that you use the `Table` panel for this. 
+
+The `<page>.panel.data` property returns a [Playwright locator](https://playwright.dev/docs/locators) that resolves one or more elements that contain the values that are currently displayed in the Table panel. This means you can use any auto-retrying [matcher](https://playwright.dev/docs/test-assertions#auto-retrying-assertions) that accepts a locator as the receiving type.
 
 ```ts title="queryEditor.spec.ts"
 test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
