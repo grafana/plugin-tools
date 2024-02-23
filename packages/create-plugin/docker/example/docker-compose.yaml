@@ -1,0 +1,28 @@
+version: '3.0'
+
+services:
+  grafana:
+    image: grafana-plugindev-linux-arm64:v1
+    platform: 'linux/arm64'
+    ports:
+      - 4000:3000/tcp
+      - 4345:2345/tcp # delve
+    security_opt:
+      - "apparmor:unconfined"
+      - "seccomp:unconfined"
+    cap_add:
+      - SYS_PTRACE
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/grafana-examplebackend-app
+      - ./provisioning:/etc/grafana/provisioning
+    environment:
+      NODE_ENV: development
+      GF_APP_MODE: development
+      GF_LOG_FILTERS: plugin.grafana-examplebackend-app:debug
+      GF_LOG_LEVEL: debug
+      GF_DATAPROXY_LOGGING: 1
+      GF_AUTH_ANONYMOUS_ENABLED: 1
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: grafana-examplebackend-app
+      GF_PLUGINS_DELVE_ENABLED: true
+      GF_PLUGINS_DELVE_PLUGINID: gpx_examplebackend
