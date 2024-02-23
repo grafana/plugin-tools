@@ -37,10 +37,10 @@ test('should run successfully if valid Redshift query was provided in provisione
   selectors,
   grafanaVersion,
   readProvisionedDashboard,
-}) => {
+}, testInfo) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
   const annotationEditPage = new AnnotationEditPage(
-    { request, page, selectors, grafanaVersion },
+    { request, page, selectors, grafanaVersion, testInfo },
     { dashboard, id: '1' }
   );
   await annotationEditPage.goto();
