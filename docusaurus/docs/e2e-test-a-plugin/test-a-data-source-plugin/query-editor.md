@@ -1,7 +1,7 @@
 ---
 id: query-editor
 title: Test the query editor
-description: Testing the query editor
+description: How to test the query editor
 keywords:
   - grafana
   - plugins
