@@ -17,7 +17,7 @@ sidebar_position: 20
 
 The query editor is a central piece of a data source plugin as this is where users craft the query that is used to fetch data. Your data source plugin can provide a rich query editor which allows various query types that target different APIs. Your query editor can even have features such as visual query builders, IntelliSense, and autocompletion.
 
-### Testing parts of the query editor in isolation
+### Test parts of the query editor in isolation
 
 In the following example, the query editor loads regions via a request to the `/regions` and filters out regions containing `gov` before populating them in a dropdown menu.
 
