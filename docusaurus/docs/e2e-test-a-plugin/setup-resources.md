@@ -36,9 +36,9 @@ test('should expand multi-valued variable before calling backend', async ({
   page,
   selectors,
   grafanaVersion,
-}) => {
+}, testInfo) => {
   const dashboard = await readProvisionDashboard({ fileName: 'variable.json' });
-  const dashboardPage = new DashboardPage({ request, page, selectors, grafanaVersion }, dashboard);
+  const dashboardPage = new DashboardPage({ request, page, selectors, grafanaVersion, testInfo }, dashboard);
   await dashboardPage.goto();
   const panelEditPage = await dashboardPage.addPanel();
   const queryDataSpy = panelEditPage.waitForQueryDataRequest((request) =>
@@ -85,6 +85,9 @@ The `readProvisionedDashboard` fixture allows you to read the content of a dashb
 
 ```ts title="variableEditPage.spec.ts"
 const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
-const variableEditPage = new VariableEditPage({ request, page, selectors, grafanaVersion }, { dashboard, id: '2' });
+const variableEditPage = new VariableEditPage(
+  { request, page, selectors, grafanaVersion, testInfo },
+  { dashboard, id: '2' }
+);
 await variableEditPage.goto();
 ```
