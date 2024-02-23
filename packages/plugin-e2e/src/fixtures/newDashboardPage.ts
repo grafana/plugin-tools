@@ -5,12 +5,8 @@ import { PlaywrightCombinedArgs } from './types';
 
 type NewDashboardPageFixture = TestFixture<DashboardPage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
-const newDashboardPage: NewDashboardPageFixture = async (
-  { page, request, selectors, grafanaVersion },
-  use,
-  testInfo
-) => {
-  const newDashboardPage = new DashboardPage({ page, selectors, grafanaVersion, request, testInfo });
+const newDashboardPage: NewDashboardPageFixture = async ({ page, request, selectors, grafanaVersion }, use) => {
+  const newDashboardPage = new DashboardPage({ page, selectors, grafanaVersion, request });
   await newDashboardPage.goto();
   await use(newDashboardPage);
 };
