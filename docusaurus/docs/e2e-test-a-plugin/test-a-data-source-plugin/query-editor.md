@@ -73,7 +73,7 @@ test('data query should return values 1 and 3', async ({ panelEditPage, readProv
 });
 ```
 
-If you want to assert on what column headers are being displayed in the Table panel, you can use the `<page>.panel.fieldNames` property.
+If you want to assert on what column headers are shown in the `Table` panel, you can use the `<page>.panel.fieldNames` property.
 
 ```ts title="queryEditor.spec.ts"
 test('data query should return headers  and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
