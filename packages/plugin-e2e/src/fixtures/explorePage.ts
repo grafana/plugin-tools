@@ -5,8 +5,8 @@ import { PlaywrightCombinedArgs } from './types';
 
 type ExplorePageFixture = TestFixture<ExplorePage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
-const explorePage: ExplorePageFixture = async ({ page, selectors, grafanaVersion, request }, use, testInfo) => {
-  const explorePage = new ExplorePage({ page, selectors, grafanaVersion, request, testInfo });
+const explorePage: ExplorePageFixture = async ({ page, selectors, grafanaVersion, request }, use) => {
+  const explorePage = new ExplorePage({ page, selectors, grafanaVersion, request });
   await explorePage.goto();
   await use(explorePage);
 };
