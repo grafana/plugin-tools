@@ -14,6 +14,9 @@ import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
 import createUser from './commands/createUser';
 import gotoPanelEditPage from './commands/gotoPanelEditPage';
+import gotoVariableEditPage from './commands/gotoVariableEditPage';
+import gotoAnnotationEditPage from './commands/gotoAnnotationEditPage';
+import gotoDashboardPage from './commands/gotoDashboardPage';
 
 const fixtures = {
   selectors,
@@ -32,6 +35,9 @@ const fixtures = {
   isFeatureToggleEnabled,
   createUser,
   gotoPanelEditPage,
+  gotoVariableEditPage,
+  gotoAnnotationEditPage,
+  gotoDashboardPage,
 };
 
 export default fixtures;

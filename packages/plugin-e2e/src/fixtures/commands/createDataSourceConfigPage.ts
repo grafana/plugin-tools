@@ -12,14 +12,15 @@ type CreateDataSourceConfigPageFixture = TestFixture<
 
 const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   { request, page, selectors, grafanaVersion },
-  use
+  use,
+  testInfo
 ) => {
   let datasourceConfigPage: DataSourceConfigPage | undefined;
   let deleteDataSource = true;
   await use(async (args) => {
     deleteDataSource = args.deleteDataSourceAfterTest ?? true;
     const datasource = await createDataSourceViaAPI(request, args);
-    datasourceConfigPage = new DataSourceConfigPage({ page, selectors, grafanaVersion, request }, datasource);
+    datasourceConfigPage = new DataSourceConfigPage({ page, selectors, grafanaVersion, request, testInfo }, datasource);
     await datasourceConfigPage.goto();
     return datasourceConfigPage;
   });
