@@ -11,7 +11,6 @@ import {
   CreateUserArgs,
   Dashboard,
   DashboardEditViewArgs,
-  DashboardPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -242,9 +241,6 @@ export type PluginFixture = {
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
 
   gotoPanelEditPage: (args: DashboardEditViewArgs<string>) => Promise<PanelEditPage>;
-  gotoVariableEditPage: (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>;
-  gotoAnnotationEditPage: (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>;
-  gotoDashboardPage: (args: DashboardPageArgs) => Promise<DashboardPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures
