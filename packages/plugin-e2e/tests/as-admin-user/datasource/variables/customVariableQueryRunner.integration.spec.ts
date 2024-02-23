@@ -1,4 +1,4 @@
-import { expect, test } from '../../../../src';
+import { VariableEditPage, expect, test } from '../../../../src';
 
 test('custom variable editor query runner should return data when query is valid', async ({
   variableEditPage,
@@ -19,11 +19,18 @@ test('custom variable editor query runner should return data when query is valid
 });
 
 test('custom variable editor query runner should return data when valid query from provisioned dashboard is used', async ({
+  request,
+  page,
+  selectors,
+  grafanaVersion,
   readProvisionedDashboard,
-  gotoVariableEditPage,
-}) => {
+}, testInfo) => {
   const provision = await readProvisionedDashboard({ fileName: 'redshift.json' });
-  const variableEditPage = await gotoVariableEditPage({ dashboard: { uid: provision.uid }, id: '2' });
+  const variableEditPage = new VariableEditPage(
+    { request, page, selectors, grafanaVersion, testInfo },
+    { dashboard: { uid: provision.uid }, id: '2' }
+  );
+  await variableEditPage.goto();
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();
   await queryDataRequest;
