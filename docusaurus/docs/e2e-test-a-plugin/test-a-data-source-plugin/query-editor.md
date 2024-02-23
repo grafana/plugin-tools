@@ -37,7 +37,7 @@ test('should filter out govcloud regions', async ({ panelEditPage, selectors, re
 
 ### Testing the entire data flow
 
-In the next example, we're doing an integration test where the entire data flow of the plugin is tested.
+The following example shows an integration test that tests the entire data flow of a plugin.
 
 :::warning
 Hitting third-party APIs in end-to-end tests can be useful, but it may also have security concerns as well as introduce flakiness to your CI pipeline. You should always think it through carefully and consider using mocks instead.
