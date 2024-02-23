@@ -13,7 +13,6 @@ import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
 import createUser from './commands/createUser';
-import gotoPanelEditPage from './commands/gotoPanelEditPage';
 
 const fixtures = {
   selectors,
@@ -31,7 +30,6 @@ const fixtures = {
   readProvisionedDashboard,
   isFeatureToggleEnabled,
   createUser,
-  gotoPanelEditPage,
 };
 
 export default fixtures;
