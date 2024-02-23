@@ -1,6 +1,6 @@
 ---
 id: query-editor
-title: The query editor
+title: Test the query editor
 description: Testing the query editor
 keywords:
   - grafana
