@@ -19,38 +19,34 @@ To be able to interact with the Grafana UI, you need to be logged in to Grafana.
 
 ### Plugins that don't use RBAC
 
-If your plugin doesn't use RBAC, you can use the default server administrator credentials to login. The following snippet is a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) that invokes a function in the `@grafana/plugin-e2e` package that will login to Grafana using `admin:admin`. The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`.
+If your plugin doesn't use RBAC, you can use the default server administrator credentials to login. In the example below, there's a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) called `auth`. This project invokes a function in the `@grafana/plugin-e2e` package that will login to Grafana using `admin:admin`. The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`.
 
-```ts
-// playwright.config.js|ts
-projects: [
-  {
-    name: 'auth',
-    testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
-    testMatch: [/.*\.js/],
-  },
-];
-```
+The second project, `run-tests`, runs all tests in the `./tests` directory. This project reuses the authentication state from the `auth` project. This means login will only happen once, and all tests in the `run-tests` project will start already authenticated.
 
-The next project we add will run all tests in the `./tests` directory. We're reusing the authentication state from the `auth` project that we just added. This means login will only happen once, and all tests in the `run-tests` project will start already authenticated.
+```ts title="playwright.config.ts"
+import { dirname } from 'path';
+import { defineConfig, devices } from '@playwright/test';
 
-```ts
-projects: [
-  {
-    name: 'auth',
-    testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
-    testMatch: [/.*\.js/],
-  },
-  {
-    name: 'run-tests',
-    testDir: './tests',
-    use: {
-      ...devices['Desktop Chrome'],
-      storageState: 'playwright/.auth/admin.json',
+const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
+
+export default defineConfig({
+    ...
+    projects: [
+    {
+      name: 'auth',
+      testDir: pluginE2eAuth,
+      testMatch: [/.*\.js/],
     },
-    dependencies: ['auth'],
-  },
-];
+    {
+      name: 'run-tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['auth'],
+    }
+  ],
+});
 ```
 
 ### Plugins that use RBAC
@@ -58,15 +54,17 @@ projects: [
 If your plugin uses RBAC, you may want to write tests that verify that certain plugin features are role-based. `@grafana/plugin-e2e` lets you define users with roles in the playwright config file. In the following example, a new user with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the user with the viewer role is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
 
 ```ts title="playwright.config.ts"
+import { dirname } from 'path';
 import { defineConfig, devices } from '@playwright/test';
-import type { PluginOptions } from '@grafana/plugin-e2e';
+
+const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
 
 export default defineConfig<PluginOptions>({
   ...
   projects: [
       {
         name: 'createViewerUserAndAuthenticate',
-        testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+        testDir: pluginE2eAuth,
         testMatch: [/.*auth\.setup\.ts/],
         use: {
           user: {
