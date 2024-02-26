@@ -55,7 +55,7 @@ queryString="current-package-manager"
 
 ### The e2e-versions Action
 
-The example workflows have a job called `resolve-versions` that uses the [e2e-version](https://github.com/grafana/plugin-actions/tree/main/e2e-version) Action to resolve a list of Grafana images. For every image returned, a new job will be fired up that builds the plugin, starts Grafana and runs the end-to-end tests.
+The example workflows have a job called `Resolve Grafana images` that uses the [e2e-version](https://github.com/grafana/plugin-actions/tree/main/e2e-version) Action to resolve a list of Grafana images. For every image returned, a new job will be fired up that builds the plugin, starts Grafana and runs the end-to-end tests.
 
 The Action supports two modes - `plugin-grafana-dependency` and `version-support-policy`.
 
@@ -83,4 +83,4 @@ To use the `version-support-policy` mode you need to specify the `version-resolv
 
 ### Playwright report
 
-A Playwright HTML test report is generated for every Grafana version that is being tested. In case any of tests failed, a Playwright trace viewer is also generated along with the report. The `Upload artifacts` step in the example workflows uploads the report as artifacts. To find information on how to download and view the report, refer to the Playwright [documentatation](https://playwright.dev/docs/ci-intro#html-report).
+A Playwright HTML test report is generated for every Grafana version that is being tested. In case any of the tests failed, a Playwright trace viewer is also generated along with the report. The `Upload artifacts` step in the example workflows uploads the report as artifacts. To find information on how to download and view the report, refer to the Playwright [documentatation](https://playwright.dev/docs/ci-intro#html-report).
