@@ -23,6 +23,7 @@ import { page } from './fixtures/page';
 import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
 import { variableEditPage } from './fixtures/variableEditPage';
+import { alertRuleEditPage } from './fixtures/alertRulePage';
 import { options } from './options';
 import { toHaveAlert } from './matchers/toHaveAlert';
 import { toDisplayPreviews } from './matchers/toDisplayPreviews';
@@ -64,6 +65,7 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   panelEditPage,
   variableEditPage,
   annotationEditPage,
+  alertRuleEditPage,
   explorePage,
   createDataSource,
   readProvisionedDataSource,

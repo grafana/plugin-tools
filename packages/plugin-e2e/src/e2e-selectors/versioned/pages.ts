@@ -6,6 +6,19 @@ export const versionedPages = {
       [MIN_GRAFANA_VERSION]: '/',
     },
   },
+  Alerting: {
+    AddAlertRule: {
+      url: {
+        ['10.0.0']: '/alerting/new/alerting',
+        [MIN_GRAFANA_VERSION]: '/alerting/new',
+      },
+    },
+    EditAlertRule: {
+      url: {
+        [MIN_GRAFANA_VERSION]: (alertRuleUid: string) => `alerting/${alertRuleUid}/edit`,
+      },
+    },
+  },
   DataSource: {
     saveAndTest: {
       '10.0.0': 'data-testid Data source settings page Save and Test button',

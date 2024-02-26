@@ -5,6 +5,9 @@ export type E2ESelectors = {
 };
 
 export type APIs = {
+  Alerting: {
+    eval: string;
+  };
   DataSource: {
     resourcePattern: string;
     resourceUIDPattern: string;
@@ -133,6 +136,14 @@ export type Components = {
 export type Pages = {
   Home: {
     url: string;
+  };
+  Alerting: {
+    AddAlertRule: {
+      url: string;
+    };
+    EditAlertRule: {
+      url: (alertRuleUid: string) => string;
+    };
   };
   DataSource: {
     name: string;

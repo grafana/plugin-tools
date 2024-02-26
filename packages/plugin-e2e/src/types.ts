@@ -17,6 +17,7 @@ import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
 import { ExplorePage } from './models/pages/ExplorePage';
 import { PanelEditPage } from './models/pages/PanelEditPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
+import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 
 export type PluginOptions = {
   /**
@@ -215,6 +216,14 @@ export type PluginFixture = {
   annotationEditPage: AnnotationEditPage;
 
   /**
+   * Isolated {@link AlertRuleEditPage} instance for each test.
+   *
+   * When using this fixture in a test, you will get an empty alert rule page form
+   * To load an existing alert rule, use the {@link gotoAlertRulePage} fixture.
+   */
+  alertRuleEditPage: AlertRuleEditPage;
+
+  /**
    * Isolated {@link ExplorePage} instance for each test.
    */
   explorePage: ExplorePage;
@@ -404,6 +413,10 @@ export type DashboardPageArgs = {
 export type DashboardEditViewArgs<T> = {
   dashboard?: DashboardPageArgs;
   id: T;
+};
+
+export type AlertRuleArgs = {
+  uid: string;
 };
 
 export type ReadProvisionedDashboardArgs = {
