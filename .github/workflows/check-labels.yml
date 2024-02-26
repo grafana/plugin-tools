@@ -9,7 +9,7 @@ on:
       - unlabeled
       - edited
 concurrency:
-  group: check-labels-${{ github.event.number }}
+  group: ${{ github.workflow }}-${{ github.event.number }}
   cancel-in-progress: true
 
 permissions:
