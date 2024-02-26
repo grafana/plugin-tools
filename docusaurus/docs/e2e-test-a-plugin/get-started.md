@@ -50,9 +50,7 @@ This guide will walk through how to get started with end-to-end testing in your 
 
 ### Installing Playwright
 
-Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin.
-
-You can remove any test files (`[filename].spec.js|ts`) that was generated when you installed Playwright.
+`@grafana/plugin-e2e` extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin. Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated when you installed Playwright before you proceed to the next step in this guide.
 
 ## Set up `plugin-e2e`
 
@@ -152,6 +150,8 @@ GRAFANA_VERSION=10.1.6 npm run server
 ```
 
 ### Step 4: Write tests
+
+While installing Playwright in your project, a few example test files were generatated. We won't need those, so you can go ahead and delete these files.
 
 You are now ready to write your tests. In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](../get-started/get-started.mdx) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
 
