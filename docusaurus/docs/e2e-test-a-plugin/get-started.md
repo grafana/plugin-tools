@@ -29,9 +29,14 @@ import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm
 import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
 
-# Get started
+This guide will walk through how to get started with end-to-end testing in your plugin.
 
-This article will guide through how to install and configure `@grafana/plugin-e2e`, write tests and setup a basic Github workflow that can run your end-to-end tests targeting multiple versions of Grafana.
+**You will learn:**
+
+- how to install `@grafana/plugin-e2e`
+- how to configure authentication
+- how to write tests
+- how to setup a basic Github workflow that runs tests against multiple versions of Grafana
 
 :::warning
 `@grafana/plugin-e2e` is still in beta and subject to breaking changes.
