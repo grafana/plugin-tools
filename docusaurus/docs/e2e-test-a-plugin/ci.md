@@ -80,3 +80,7 @@ To use the `version-support-policy` mode you need to specify the `version-resolv
         with:
           version-resolver-type: version-support-policy
 ```
+
+### Playwright report
+
+A Playwright HTML test report is generated for every Grafana version that is being tested. In case any of tests failed, a Playwright trace viewer is also generated along with the report. The `Upload artifacts` step in the example workflows uploads the report as artifacts. To find information on how to download and view the report, refer to the Playwright [documentatation](https://playwright.dev/docs/ci-intro#html-report).
