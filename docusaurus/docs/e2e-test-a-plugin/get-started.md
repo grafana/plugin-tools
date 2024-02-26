@@ -52,7 +52,7 @@ This guide will walk through how to get started with end-to-end testing in your 
 
 `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin. Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated when you installed Playwright before you proceed to the next step in this guide.
 
-## Set up `plugin-e2e`
+## Set up @grafana/plugin-e2e
 
 Optional: If you would like to follow along with our example tests, use the [create-plugin](../get-started/get-started.mdx) tool to generate a backend data source plugin.
 
