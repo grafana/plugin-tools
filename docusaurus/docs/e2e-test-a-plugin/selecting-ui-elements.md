@@ -9,7 +9,7 @@ keywords:
   - e2e
   - end-to-end
   - example test
-sidebar_position: 30
+sidebar_position: 20
 ---
 
 ## Grafana end-to-end selectors
