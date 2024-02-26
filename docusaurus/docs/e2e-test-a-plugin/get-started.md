@@ -47,11 +47,7 @@ This article will guide through how to install and configure `@grafana/plugin-e2
 
 Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin.
 
-You can remove any test files (`[filename].spec.js|ts`) that was generated when you installed Playwright. Let's also add the following line to your `.gitignore` file.
-
-```shell title=".gitignore"
-/playwright/.auth/
-```
+You can remove any test files (`[filename].spec.js|ts`) that was generated when you installed Playwright.
 
 ## Set up `plugin-e2e`
 
@@ -124,6 +120,12 @@ export default defineConfig({
 });
 ```
 
+The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`. To prevent these files from being version controlled, you can add the following line to your `.gitignore` file.
+
+```shell title=".gitignore"
+/playwright/.auth/
+```
+
 ### Step 3: Start Grafana
 
 Next, start up the latest version of Grafana on your local machine.
@@ -176,9 +178,9 @@ queryString="current-package-manager"
 
 ### Step 6: Run tests in CI
 
-We recommend using a CI workflow to run end-to-end tests to continuously check for breakages. The following Github workflow will run end-to-end tests against a range of Grafana versions for every PR in your Github repository. 
+We recommend using a CI workflow to run end-to-end tests to continuously check for breakages. The following Github workflow will run end-to-end tests against a range of Grafana versions for every PR in your Github repository.
 
-:::note 
+:::note
 This is a generic example based on a backend plugin. You may need to alter or remove some of the steps in the `playwright-tests` job before using it in your plugin.
 :::
 
