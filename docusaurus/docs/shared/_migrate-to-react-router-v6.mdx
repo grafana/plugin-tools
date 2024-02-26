@@ -1,0 +1,75 @@
+import UpdateNPM from '@snippets/createplugin-update.npm.md';
+import UpdatePNPM from '@snippets/createplugin-update.pnpm.md';
+import UpdateYarn from '@snippets/createplugin-update.yarn.md';
+
+## Update to React Router v6
+
+Starting from Grafana 10, plugins can start using the v6 of `react-router`. Overall, `react-router` v6 aims to simplify route configuration and provide a more flexible and intuitive API for developers.
+
+If your current plugin version needs to maintain compatibility with Grafana v9, then you can continue to use `react-router@v5` in Grafana v10. Both versions are available for plugins. However, **we strongly encourage developers to update their plugins to use the v6 version `react-router` as soon as possible**, as the v5 version is going to be deprecated in Grafana v11 and subsequently removed.
+
+For more general information, refer to the [Official React Router v5 to v6 migration guide](https://reactrouter.com/en/main/upgrading/v5).
+
+### Update using `@grafana/create-plugin`
+
+Follow the steps below to start using `react-router` v6 in your plugin:
+
+#### 1. Update the build related configuration:
+
+Enable using `react-router@v6` by setting the following feature flag in `<project-root>/.cprc.json`:
+
+```json
+{
+  "features": {
+    "useReactRouterV6": true
+  }
+}
+```
+
+Now update the build configuration using the create-plugin tool:
+
+<CodeSnippets
+snippets={[
+{ component: UpdateNPM, label: 'npm' },
+{ component: UpdatePNPM, label: 'pnpm' },
+{ component: UpdateYarn, label: 'yarn' },
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
+
+After updating the build configuration, it is likely that you will need to make additional updates to your plugin. To do so, follow the steps below:
+
+#### 2. Use `<Routes>` instead of `<Switch>`
+
+```typescript
+// Using <Routes> instead of <Switch> in `react-router` v6
+import { Routes } from 'react-router-dom';
+
+// ...
+
+return (
+  <Routes>
+    <Route path="/" element={<Home />} />
+  </Routes>
+);
+```
+
+#### 3. Remove the `exact` prop from `<Route>` components
+
+```typescript
+return (
+  <Routes>
+    {/* BAD (Until v5) */}
+    <Route exact path="/" element={<Home />} />
+
+    {/* GOOD (From v6) */}
+    {/* (Routes are "exact" by default, you need to use the "*" to match sub-routes) */}
+    <Route path="/" element={<Home />} />
+  </Routes>
+);
+```
+
+#### 4. Follow the original `react-router` migration guide for more in-depth changes
+
+Visit the [official react-router v5 to v6 migration guide](https://reactrouter.com/en/main/upgrading/v5) for more information.
