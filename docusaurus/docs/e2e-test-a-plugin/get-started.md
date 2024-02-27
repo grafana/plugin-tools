@@ -31,7 +31,7 @@ import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pn
 
 This guide walks you through how to get started with end-to-end testing in your plugin.
 
-**You will learn:**
+**Topics include:**
 
 - how to install `@grafana/plugin-e2e`
 - how to configure authentication
