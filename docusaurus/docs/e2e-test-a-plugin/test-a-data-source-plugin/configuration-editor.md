@@ -10,6 +10,7 @@ keywords:
   - e2e
   - data-source
   - configuration editor
+  - config
 sidebar_position: 10
 ---
 
