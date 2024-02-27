@@ -1,7 +1,7 @@
 ---
 id: configuration-editor
 title: The configuration editor
-description: Testing the configuration editor
+description: Testing the configuration editor of backend and frontend data sources with valid and invalid configuration
 keywords:
   - grafana
   - plugins
