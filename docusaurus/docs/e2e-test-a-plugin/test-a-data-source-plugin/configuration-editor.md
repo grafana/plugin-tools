@@ -21,12 +21,15 @@ Most data source plugins need auth to communicate with third-party services. Use
 Backend data sources implement a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts title="configurationEditor.spec.ts"
+import { test, expect } from '@grafana/plugin-e2e';
+import { MyDataSourceOptions, MySecureJsonData } from './src/types';
+
 test('"Save & test" should be successful when configuration is valid', async ({
   createDataSourceConfigPage,
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource<MyDataSourceOptions, MySecureJsonData>({ fileName: 'datasources.yaml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await page.getByLabel('API Key').fill(ds.secureJsonData.apiKey);
@@ -44,7 +47,7 @@ test('"Save & test" should fail when configuration is invalid', async ({
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = await readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource<MyDataSourceOptions, MySecureJsonData>({ fileName: 'datasources.yaml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await expect(configPage.saveAndTest()).not.toBeOK();
@@ -62,7 +65,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = await readProvisionedDataSource<JsonData, SecureJsonData>({ fileName: 'datasources.yaml' });
+  const ds = await readProvisionedDataSource<MyDataSourceOptions, MySecureJsonData>({ fileName: 'datasources.yaml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   await page.getByLabel('Path').fill(ds.jsonData.path);
   await page.getByLabel('API Key').fill(ds.secureJsonData.apiKey);
