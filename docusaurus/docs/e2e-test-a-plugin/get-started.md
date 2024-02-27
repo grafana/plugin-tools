@@ -123,7 +123,7 @@ export default defineConfig({
 });
 ```
 
-The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`. To prevent these files from being version controlled, you can add the following line to your `.gitignore` file.
+The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`. To prevent these files from being version controlled, you can add the following line to your `.gitignore` file:
 
 ```shell title=".gitignore"
 /playwright/.auth/
