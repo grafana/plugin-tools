@@ -21,7 +21,7 @@ To be able to interact with the Grafana UI, you need to be logged in to Grafana.
 
 If your plugin doesn't use RBAC, you can use the default server administrator credentials to login. In the following example, there's a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) called `auth`. This project invokes a function in the `@grafana/plugin-e2e` package that will login to Grafana using `admin:admin`. The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`.
 
-The second project, `run-tests`, runs all tests in the `./tests` directory. This project reuses the authentication state from the `auth` project. This means login will only happen once, and all tests in the `run-tests` project will start already authenticated.
+The second project, `run-tests`, runs all tests in the `./tests` directory. This project reuses the authentication state from the `auth` project. This means login only happens once, and all tests in the `run-tests` project will start already authenticated.
 
 ```ts title="playwright.config.ts"
 import { dirname } from 'path';
