@@ -186,7 +186,9 @@ queryString="current-package-manager"
 We recommend using a CI workflow to run end-to-end tests to continuously check for breakages. The following Github workflow will run end-to-end tests against a range of Grafana versions for every PR in your Github repository.
 
 :::note
+
 This is a generic example based on a backend plugin. You may need to alter or remove some of the steps in the `playwright-tests` job before using it in your plugin.
+
 :::
 
 <CodeSnippets
