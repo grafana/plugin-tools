@@ -29,7 +29,7 @@ import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm
 import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
 
-This guide will walk through how to get started with end-to-end testing in your plugin.
+This guide walks you through how to get started with end-to-end testing in your plugin.
 
 **You will learn:**
 
