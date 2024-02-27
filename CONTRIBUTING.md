@@ -125,6 +125,10 @@ Once you've filed the PR:
 - If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's ok! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
 - If your PR gets accepted, it will be marked as such, and merged into the `latest` branch soon after. Your contribution will be distributed to the masses once the PR is merged.
 
+Redirects:
+
+- In case you have to add a redirect - you can add a new entry to the config section of the following plugin `@docusaurus/plugin-client-redirects` in [docusaurus configuration file](./docusaurus/website/docusaurus.config.base.js).
+
 ## Contribute Code
 
 We like code commits a lot! They're super handy, and they keep the project going and doing the work it needs to do to be useful to others. Before considering contributing code please review [report an error or bug](#report-an-error-or-bug) and [request a feature](#request-a-feature) to make sure an issue has been filed and discussed with the project maintainers. PRs submitted without associated issues risk being closed or rejected.
@@ -148,7 +152,7 @@ Once you've filed the PR:
 - Barring special circumstances, maintainers will not review PRs until all checks pass.
 - One or more maintainers will use GitHub's review feature to review your PR.
 - If the maintainer asks for any changes, edit your changes, push, and ask for another review. Additional tags (such as `needs-tests`) will be added depending on the review.
-- If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's ok! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
+- If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's okay! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
 - If your PR gets accepted, it will be marked as such, and merged into the `main` branch soon after. Your contribution will be distributed to the masses next time the maintainers [create a release](#create-a-release)
 
 ## Create A Release
