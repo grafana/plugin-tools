@@ -18,7 +18,7 @@ Most data source plugins need auth to communicate with third-party services. Use
 
 ### Testing the configuration in a backend data source plugin
 
-In the following example, the configuration of a backend data source plugin is tested. The configuration editor form is populated with valid configuration values, and then the `Save & test` button is clicked. Clicking `Save & test` calls Grafana backend to save the configuration and then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
+In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts title="configurationEditor.spec.ts"
 test('"Save & test" should be successful when configuration is valid', async ({
