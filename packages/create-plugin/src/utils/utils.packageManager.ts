@@ -1,6 +1,6 @@
 import { basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { sync as findUpSync } from 'find-up';
+import { findUpSync } from 'find-up';
 import { getPackageJson } from './utils.packagejson.js';
 
 const NPM_LOCKFILE = 'package-lock.json';
