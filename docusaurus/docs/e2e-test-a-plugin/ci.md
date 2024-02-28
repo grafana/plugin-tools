@@ -60,7 +60,9 @@ The Action supports two modes - `plugin-grafana-dependency` and `version-support
 
 #### Use the plugin-grafana-dependency mode
 
-By default, the e2e-version Action will return the most recent grafana-dev image plus all the latest patch releases of every minor version of Grafana Enterprise since the version that was specified as `grafanaDependency` in the [plugin.json](../metadata.md). To avoid starting too many jobs, to output will be capped 6 versions.
+`plugin-grafana-dependency` is the default mode, so if you don't specify a value for the `version-resolver-type` input paramater, this is the resolver that will be used.
+
+This mode returns the most recent grafana-dev image. Additionally, it returns all the latest patch releases of Grafana Enterprise since the version that was specified as `grafanaDependency` in the [plugin.json](../metadata.md). To avoid starting too many jobs, the output is capped at 6 versions.
 
 ![](/img/e2e-version-plugin-dependency.png)
 
