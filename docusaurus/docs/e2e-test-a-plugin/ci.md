@@ -1,7 +1,7 @@
 ---
 id: ci
 title: CI Workflow
-description: How to run end-to-end tests in CI
+description: How to run end-to-end tests in CI.
 keywords:
   - grafana
   - plugins
