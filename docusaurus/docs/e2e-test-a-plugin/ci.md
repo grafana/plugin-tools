@@ -68,7 +68,7 @@ This mode returns the most recent grafana-dev image. Additionally, it returns al
 
 #### Use the version-support-policy mode
 
-Except for resolving the most recent grafana-dev image, the `version-support-policy` mode will resolve versions according to Grafana's plugin compatibility support policy. Specifically, it retrieves the latest patch release for each minor version within the current major version of Grafana. Additionally, it includes the most recent release for the latest minor version of the previous major Grafana version.
+Except for resolving the most recent `grafana-dev` image, the `version-support-policy` mode resolves versions according to Grafana's plugin compatibility support policy. Specifically, it retrieves the latest patch release for each minor version within the current major version of Grafana. Additionally, it includes the most recent release for the latest minor version of the previous major Grafana version.
 
 ![](/img/e2e-version-version-support-policy.png)
 
