@@ -21,7 +21,7 @@ import FEPluginPNPM from '@snippets/plugin-e2e-fe-plugin-workflow.pnpm.md';
 
 ## Introduction
 
-We recommend using a CI workflow to run end-to-end tests to continuously check for breakages. The following Github workflows will run end-to-end tests against a range of Grafana versions for every PR in your Github repository.
+Using a CI workflow to run end-to-end tests allows you to continuously checking for breakages. We recommend using the following Github workflows for every PR in your Github repository to run end-to-end tests against a range of Grafana versions.
 
 :::note
 These are generic example based on a frontend and backend plugins. You may need to alter or remove some of the steps in the `playwright-tests` job before using it in your plugin.
