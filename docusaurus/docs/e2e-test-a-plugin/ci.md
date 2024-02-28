@@ -54,7 +54,7 @@ queryString="current-package-manager"
 
 ### The e2e-versions Action
 
-The example workflows have a job called `Resolve Grafana images` that uses the [e2e-version](https://github.com/grafana/plugin-actions/tree/main/e2e-version) Action to resolve a list of Grafana images. For every image returned, a new job will be fired up that builds the plugin, starts Grafana and runs the end-to-end tests.
+These example workflows have a job called `Resolve Grafana images` that uses the [e2e-version](https://github.com/grafana/plugin-actions/tree/main/e2e-version) Action to resolve a list of Grafana images. For every image returned, a new job will be fired up that builds the plugin, starts Grafana, and runs the end-to-end tests.
 
 The Action supports two modes - `plugin-grafana-dependency` and `version-support-policy`.
 
