@@ -209,9 +209,9 @@ export type GetByTestIdOrAriaLabelOptions = {
 
 export type TriggerQueryOptions = {
   /**
-   * Set this to true to skip waiting for the response. Defaults to false.
+   * The path to the health check endpoint. Defaults to `/api/datasources/uid/<pluginUid>/health`
    */
-  skipWaitForResponse: boolean;
+  healthCheckPath?: string;
 };
 
 /**
