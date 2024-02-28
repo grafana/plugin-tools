@@ -72,7 +72,7 @@ Except for resolving the most recent `grafana-dev` image, the `version-support-p
 
 ![](/img/e2e-version-version-support-policy.png)
 
-To use the `version-support-policy` mode you need to specify the `version-resolver-type` input argument.
+To use the `version-support-policy` mode, you need to specify the `version-resolver-type` input argument like in this example:
 
 ```yml
 - name: Resolve Grafana E2E versions
