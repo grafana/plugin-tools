@@ -33,7 +33,7 @@ This guide walks you through how to get started with end-to-end testing in your 
 
 **Topics include:**
 
-- How to install `@grafana/plugin-e2e`
+- how to install `@grafana/plugin-e2e`
 - how to configure authentication
 - how to write tests
 - how to setup a basic Github workflow that runs tests against multiple versions of Grafana
