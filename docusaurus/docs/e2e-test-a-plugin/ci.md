@@ -58,13 +58,13 @@ These example workflows have a job called `Resolve Grafana images` that uses the
 
 The Action supports two modes - `plugin-grafana-dependency` and `version-support-policy`.
 
-#### plugin-grafana-dependency mode
+#### Use the plugin-grafana-dependency mode
 
 By default, the e2e-version Action will return the most recent grafana-dev image plus all the latest patch releases of every minor version of Grafana Enterprise since the version that was specified as `grafanaDependency` in the [plugin.json](../metadata.md). To avoid starting too many jobs, to output will be capped 6 versions.
 
 ![](/img/e2e-version-plugin-dependency.png)
 
-#### version-support-policy mode
+#### Use the version-support-policy mode
 
 Except for resolving the most recent grafana-dev image, the `version-support-policy` mode will resolve versions according to Grafana's plugin compatibility support policy. Specifically, it retrieves the latest patch release for each minor version within the current major version of Grafana. Additionally, it includes the most recent release for the latest minor version of the previous major Grafana version.
 
