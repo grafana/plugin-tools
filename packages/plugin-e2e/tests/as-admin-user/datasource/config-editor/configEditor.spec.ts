@@ -27,6 +27,6 @@ test('should call a custom health endpoint when healthCheckPath is provided', as
     await route.fulfill({ status: 200, body: 'OK' });
   });
   await page.getByPlaceholder('http://localhost:8080').fill('http://localhost:8080');
-  await expect(configPage.saveAndTest({ healthCheckPath })).toBeOK();
+  await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
 });
