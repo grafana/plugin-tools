@@ -1,6 +1,6 @@
 {
   "position": 70,
-  "label": "Test a Data Source plugin",
+  "label": "Test a data source plugin",
   "customProps": {
     "description": "How to test a Data Source plugin with @grafana/plugin-e2e"
   },
