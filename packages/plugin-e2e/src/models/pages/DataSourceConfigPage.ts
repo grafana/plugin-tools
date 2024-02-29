@@ -1,5 +1,5 @@
 import { Response } from '@playwright/test';
-import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerQueryOptions } from '../../types';
+import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerRequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
@@ -35,15 +35,15 @@ export class DataSourceConfigPage extends GrafanaPage {
    * Clicks the save and test button and waits for the response
    *
    * By default, this will return the response of the health check call to /api/datasources/uid/<pluginUid>/health.
-   * Optionally, if your plugin uses a custom health check endpoint, you can provide the {@link TriggerQueryOptions.healthCheckPath } of this url.
+   * Optionally, if your plugin uses a custom health check endpoint, you can provide the {@link TriggerRequestOptions.path } of this url.
    * May be useful for data source plugins that don't have a backend.
    */
-  async saveAndTest(options?: TriggerQueryOptions): Promise<Response> {
+  async saveAndTest(options?: TriggerRequestOptions): Promise<Response> {
     const { datasourceByUID, health } = this.ctx.selectors.apis.DataSource;
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
       resp.url().includes(datasourceByUID(this.datasource.uid))
     );
-    const healthPath = options?.healthCheckPath ?? health(this.datasource.uid, this.datasource.id.toString());
+    const healthPath = options?.path ?? health(this.datasource.uid, this.datasource.id.toString());
     const healthResponsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes(healthPath));
     await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
     return saveResponsePromise.then(() => healthResponsePromise);

@@ -207,11 +207,11 @@ export type GetByTestIdOrAriaLabelOptions = {
   startsWith?: boolean;
 };
 
-export type TriggerQueryOptions = {
+export type TriggerRequestOptions = {
   /**
-   * The path to the health check endpoint. Defaults to `/api/datasources/uid/<pluginUid>/health`
+   * The path to the endpoint to trigger
    */
-  healthCheckPath?: string;
+  path?: string;
 };
 
 /**
