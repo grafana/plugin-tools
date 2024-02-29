@@ -1,6 +1,6 @@
 module github.com/{{ kebabCase orgName }}/{{ kebabCase pluginName }}
 
-go 1.19
+go 1.21
 
 require github.com/grafana/grafana-plugin-sdk-go v0.156.0
 

@@ -1,3 +1,53 @@
+# (Thu Feb 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.1`
+  - Create Plugin: Bump go version in backend plugin scaffolding [#786](https://github.com/grafana/plugin-tools/pull/786) ([@sunker](https://github.com/sunker))
+  - Create Plugin: Bump Glob to 10.x.x [#764](https://github.com/grafana/plugin-tools/pull/764) ([@jackw](https://github.com/jackw))
+  - Create Plugin: Bump find-up to 7.x.x [#765](https://github.com/grafana/plugin-tools/pull/765) ([@jackw](https://github.com/jackw))
+
+#### ⚠️ Pushed to `main`
+
+- `@grafana/plugin-e2e@0.18.1`
+  - Revert "pass testInfo" ([@sunker](https://github.com/sunker))
+  - Revert "gotoPanelEditPage" ([@sunker](https://github.com/sunker))
+  - Revert "add goto fixtures" ([@sunker](https://github.com/sunker))
+  - add goto fixtures ([@sunker](https://github.com/sunker))
+  - gotoPanelEditPage ([@sunker](https://github.com/sunker))
+  - pass testInfo ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Feb 21 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.18.0`
+  - Plugin E2E: Bump Playwright version [#757](https://github.com/grafana/plugin-tools/pull/757) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.0`
+  - chore: update permissions [#743](https://github.com/grafana/plugin-tools/pull/743) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump ip from 1.1.8 to 1.1.9 [#759](https://github.com/grafana/plugin-tools/pull/759) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Mon Feb 19 2024)
 
 #### 🚀 Enhancement

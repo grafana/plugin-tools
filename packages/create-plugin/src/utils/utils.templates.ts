@@ -1,4 +1,4 @@
-import glob from 'glob';
+import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
 import mkdirp from 'mkdirp';

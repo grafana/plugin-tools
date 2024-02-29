@@ -30,7 +30,7 @@ Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-tes
 
 #### Install Playwright
 
-Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 0.40.0 installed as a dev dependency in the package.json file of your plugin.
+Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin.
 
 #### Configure Playwright
 
