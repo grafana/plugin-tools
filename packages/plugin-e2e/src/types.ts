@@ -303,3 +303,7 @@ export interface ContainTextOptions {
    */
   useInnerText?: boolean;
 }
+
+export type AppConfigPageArgs = {
+  pluginId: string;
+};

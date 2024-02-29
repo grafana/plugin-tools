@@ -130,4 +130,9 @@ export const versionedPages = {
       [MIN_GRAFANA_VERSION]: '/explore',
     },
   },
+  Plugin: {
+    url: {
+      [MIN_GRAFANA_VERSION]: (pluginId: string) => `/plugins/${pluginId}`,
+    },
+  },
 };
