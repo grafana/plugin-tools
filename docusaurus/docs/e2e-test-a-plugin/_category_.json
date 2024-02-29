@@ -5,9 +5,5 @@
     "description": "Test a Grafana plugin using the @grafana/plugin-e2e tool."
   },
   "collapsible": true,
-  "collapsed": true,
-  "link": {
-    "type": "doc",
-    "id": "e2e-test-a-plugin/introduction"
-  }
+  "collapsed": true
 }
