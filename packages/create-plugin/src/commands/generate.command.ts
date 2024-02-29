@@ -1,4 +1,4 @@
-import glob from 'glob';
+import { glob } from 'glob';
 import minimist from 'minimist';
 import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';

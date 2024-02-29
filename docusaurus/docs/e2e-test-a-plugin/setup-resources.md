@@ -65,7 +65,7 @@ If running end-to-end tests in CI requires provisioning, you may need to remove 
 
 `@grafana/plugin-e2e` provides fixtures that enables you to read files that you have placed in the `provisioning` folder.
 
-#### `readProvisionedDataSource` fixture
+#### readProvisionedDataSource fixture
 
 The `readProvisionedDataSource` fixture allows you to read a file from your plugin's `provisioning/datasources` folder. This gives you typings and it also allows you to keep data source configuration in one place.
 
@@ -79,7 +79,7 @@ const datasource = readProvisionedDataSource({ fileName: 'datasources.yml' });
 await panelEditPage.datasource.set(datasource.name);
 ```
 
-#### `readProvisionedDashboard` fixture
+#### readProvisionedDashboard fixture
 
 The `readProvisionedDashboard` fixture allows you to read the content of a dashboard JSON file from your `provisioning/dashboards` folder. It can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
 

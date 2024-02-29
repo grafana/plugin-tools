@@ -58,12 +58,14 @@ new AppPlugin().configureExtensionLink({
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
 ```ts title="src/module.ts"
+import { AppPlugin, PluginExtensionPanelContext } from '@grafana/data';
+
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
   extensionPointId: 'grafana/dashboard/panel/menu',
   path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
-  configure: (context: PanelContext) => {
+  configure: (context: PluginExtensionPanelContext) => {
     const { timeZone, panelId } = context;
 
     // You only need to return the properties that you would like to override.
@@ -79,12 +81,14 @@ new AppPlugin().configureExtensionLink({
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will only be visible for panels with the time zone set to UTC.
 
 ```ts title="src/module.ts"
+import { AppPlugin, PluginExtensionPanelContext } from '@grafana/data';
+
 new AppPlugin().configureExtensionLink({
   title: 'Go to basic app',
   description: 'Will send the user to the basic app',
   extensionPointId: 'grafana/dashboard/panel/menu',
   path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
-  configure: (context: PanelContext) => {
+  configure: (context: PluginExtensionPanelContext) => {
     const { timeZone } = context;
 
     switch (toLowerCase(timeZone)) {

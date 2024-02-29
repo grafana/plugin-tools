@@ -207,11 +207,11 @@ export type GetByTestIdOrAriaLabelOptions = {
   startsWith?: boolean;
 };
 
-export type TriggerQueryOptions = {
+export type TriggerRequestOptions = {
   /**
-   * Set this to true to skip waiting for the response. Defaults to false.
+   * The path to the endpoint to trigger
    */
-  skipWaitForResponse: boolean;
+  path?: string;
 };
 
 /**
