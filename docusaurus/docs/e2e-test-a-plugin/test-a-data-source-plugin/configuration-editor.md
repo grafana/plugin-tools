@@ -14,7 +14,7 @@ keywords:
 sidebar_position: 10
 ---
 
-Most data source plugins need auth to communicate with third-party services. Users can configure the connection details in the data source configuration page. Data source plugins that need auth cannot function without valid configuration, so it's crucial that the configuration page and the data source health check endpoint that is used to test the configuration work as expected.
+Most data source plugins need authentication to communicate with third-party services. The appropriate place to configure the connection details is the data source configuration page, and the details there must be valid so that the health check endpoint used to test the configuration works as expected.
 
 ### Testing the configuration in a backend data source plugin
 
