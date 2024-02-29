@@ -1,5 +1,18 @@
 # (Thu Feb 29 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.19.0`
+  - Plugin E2E: Improve ds config Save & test for FE plugins [#785](https://github.com/grafana/plugin-tools/pull/785) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Feb 29 2024)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@4.2.1`

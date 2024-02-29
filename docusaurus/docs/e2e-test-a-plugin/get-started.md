@@ -29,9 +29,14 @@ import ScaffoldPluginE2EDSWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm
 import ScaffoldPluginE2EDSWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import ScaffoldPluginE2EDSWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
 
-# Get started
+This guide walks you through how to get started with end-to-end testing in your plugin.
 
-This article will guide through how to install and configure `@grafana/plugin-e2e`, write tests and setup a basic Github workflow that can run your end-to-end tests targeting multiple versions of Grafana.
+**Topics include:**
+
+- how to install `@grafana/plugin-e2e`
+- how to configure authentication
+- how to write tests
+- how to setup a basic Github workflow that runs tests against multiple versions of Grafana
 
 :::warning
 `@grafana/plugin-e2e` is still in beta and subject to breaking changes.
@@ -45,15 +50,9 @@ This article will guide through how to install and configure `@grafana/plugin-e2
 
 ### Installing Playwright
 
-Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. `@grafana/plugin-e2e` extends Playwright APIs, so you need to have `Playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin.
+`@grafana/plugin-e2e` extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the package.json file of your plugin. Please refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated when you installed Playwright before you proceed to the next step in this guide.
 
-You can remove any test files (`[filename].spec.js|ts`) that was generated when you installed Playwright. Let's also add the following line to your `.gitignore` file.
-
-```shell title=".gitignore"
-/playwright/.auth/
-```
-
-## Set up `plugin-e2e`
+## Set up @grafana/plugin-e2e
 
 Optional: If you would like to follow along with our example tests, use the [create-plugin](../get-started/get-started.mdx) tool to generate a backend data source plugin.
 
@@ -124,6 +123,12 @@ export default defineConfig({
 });
 ```
 
+The authenticated state is stored on disk and the file name pattern is as follows: `<plugin-root>/playwright/.auth/<username>.json`. To prevent these files from being version controlled, you can add the following line to your `.gitignore` file:
+
+```shell title=".gitignore"
+/playwright/.auth/
+```
+
 ### Step 3: Start Grafana
 
 Next, start up the latest version of Grafana on your local machine.
@@ -145,6 +150,8 @@ GRAFANA_VERSION=10.1.6 npm run server
 ```
 
 ### Step 4: Write tests
+
+While installing Playwright in your project, a few example test files were generatated. We won't need those, so you can go ahead and delete these files.
 
 You are now ready to write your tests. In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](../get-started/get-started.mdx) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
 
@@ -180,6 +187,7 @@ We recommend using a CI workflow to run end-to-end tests to continuously check f
 
 :::note
 This is a generic example based on a backend plugin. You may need to alter or remove some of the steps in the `playwright-tests` job before using it in your plugin.
+
 :::
 
 <CodeSnippets
