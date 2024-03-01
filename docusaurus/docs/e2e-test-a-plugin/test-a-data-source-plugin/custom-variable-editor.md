@@ -1,6 +1,6 @@
 ---
 id: custom-variable-editor
-title: Test a custom variable editor
+title: Test the custom variable editor
 description: Testing a custom variable query editor and the execution of variable queries
 keywords:
   - grafana

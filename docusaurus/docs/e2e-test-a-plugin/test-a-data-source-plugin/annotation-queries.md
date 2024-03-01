@@ -1,7 +1,7 @@
 ---
 id: annotation-queries
 title: Annotation queries
-description: Test a custom annotation editor and the execution of annotation queries
+description: Test a custom annotation editor and annotation queries
 keywords:
   - grafana
   - plugins
