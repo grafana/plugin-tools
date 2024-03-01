@@ -1,0 +1,53 @@
+{
+  "name": "@grafana/zip-plugin",
+  "version": "3.0.1",
+  "repository": {
+    "directory": "packages/zip-plugin",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "exports": {
+    "node": {
+      "import": "./index.js"
+    },
+    "default": "./index.js"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
+    "dev": "nodemon --exec 'tsc'",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "archiver": "^7.0.0",
+    "minimist": "^1.2.2",
+    "proxy-agent": "6.3.1"
+  },
+  "devDependencies": {
+    "@types/archiver": "^6.0.2",
+    "@types/minimist": "^1.2.2",
+    "i": "^0.3.7"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*"
+    ],
+    "ext": "*",
+    "events": {
+      "start": "cls || clear"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
