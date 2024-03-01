@@ -4,7 +4,6 @@
   "description": "plugin meta extractor",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "devDependencies": {},
   "scripts": {
     "test": "jest"
   },
@@ -25,5 +24,8 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "dependencies": {
+    "typescript": "^5.3.3"
   }
 }
