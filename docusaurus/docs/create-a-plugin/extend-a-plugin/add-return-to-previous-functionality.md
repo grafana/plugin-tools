@@ -1,7 +1,7 @@
 ---
 id: add-return-to-previous-functionality
 title: Add 'Return to previous' functionality
-description: Offer an easy way of return to your context.
+description: Offer an easy way of return to allow users to return to their context.
 keywords:
   - grafana
   - plugins
@@ -11,37 +11,32 @@ keywords:
   - context
 ---
 
-# Introduction to the 'Return to previous' functionality
+# Introduction
 
-The users' context can switch dramatically during their experience browsing Grafana and, in cases where the breadcrumbs do not match the history, the users cannot go back easily.
+A user's _context_ can switch dramatically while browsing Grafana, and sometimes their breadcrumbs don't match their history. In these cases, the users can't go back easily and may become frustrated with their experience. This guide defines _context_ and shows how you can add the `ReturnToPrevious` functionality to your plugin that solves this issue with minimal coding.
 
-The 'Return to previous' functionality, which gives the user an easy way of going back to the previous context, is an opt-in feature that is particularly useful for app plugin developers.
+## Context in Grafana
 
-## Definition of “Context”
-Before we go into details, we need to cover the major concept here:
+For the purposes of Grafana plugin development, term _context_ refers to a user's place along a path from one root URL to another. Note that in Grafana, this term may also be used in connection with other Grafana features such as Explore or Dashboards.
 
-__Context__: 
+Use breadcrumbs to notice a change in a user's context. For example:
 
-This term mainly refers to the different plugins that live within Grafana, but this is also extendable to other sections such as Explore or Dashboards. One trick to notice a change in the context is looking at our breadcrumbs: 
+- Did you go from **Home > Dashboards** to **Home > Explore**? Then you changed the context you were in.
 
-Did you go from *Home > Dashboards* to *Home > Explore*? You changed the context you were in.
+- Did you go from **Home > Dashboards > Playlist > Edit playlist** to **Home > Dashboards > Reporting > Settings**? Then you're in the same context as previously.
 
-Did you go from *Home > Dashboards > Playlist > Edit playlist* to  *Home > Dashboards > Reporting > Settings*? You are in the same context as previously.
+As you can see, the key is the change on the URL from the root level. Because Explore and Dashboards are both at the root level, the user's context changed. But this was not the case with the user's path to Reporting Settings.
 
-As you can see, the key is the change on the URL from the root level.
+## Add functionality to allow users to return to their previous context
 
-
-## Why should I add the 'Return to previous' functionality to my plugin?
-It offers an easy way to return to your app plugin.
-The code changes required to introduce this are minimal.
-
-
-## Add the 'Return to previous' functionality
 1. Select an interactive item, such as a link or button, to trigger the `ReturnToPrevious` functionality. This element is the one that will lead the user to another context within Grafana. For example, the `Go to dashboard` button of an Alert rule.
 
-2. To set the values needed, you can use the `useReturnToPrevious` hook from `@grafana/runtime`: 
+2. To set the values needed, you can use the `useReturnToPrevious` hook from `@grafana/runtime`:
+
 - Specify the `title` to show in the button.
-- Optionally, pass a second argument to set the `href` if it is different from the current URL.
+- (Optional) Pass a second argument to set the `href` if it is different from the current URL.
+
+For example:
 
 ```tsx
 import { config, useReturnToPrevious } from '@grafana/runtime';
@@ -64,18 +59,18 @@ size="sm"
 </LinkButton>
 ```
 
-3. Check it works as expected: when you go from your app plugin to another area of Grafana through that interactive element the 'Return to previous' button will be shown.
-
-
+3. Verify that it works as expected. When you go from your app plugin to another area of Grafana through that interactive element, then the 'Return to previous' button should appear.
 
 ## Usage guidelines
 
-### Do's
-- Do trigger the 'Return to previous' functionality through a link or an interactive element with an onClick event.
-- Do only use the 'Return to previous' functionality when the user is sent to another context, such as from Alerting to a dashboard.
+### Do this
+
+- Do trigger the 'ReturnToPrevious`functionality through a link or an interactive element with an`onClick` event.
+- Do only use the 'ReturnToPrevious' functionality when the user is sent to another context, such as from Alerting to a Dashboard.
 - Do specify a button title that identifies the page to return to in the most understandable way.
 
-### Don't's
-- Do not trigger the 'Return to previous' functionality via an element other than a link or button.
-- Do not use this functionality when going from one page to another in the same context.
-- Do not use text such as 'Back to the previous page'. Be specific.
+### Don't do this
+
+- Don't trigger the 'ReturnToPrevious' functionality via an element other than a link or button.
+- Don't use this functionality when going from one page to another in the same context.
+- Don't use text such as 'Back to the previous page'. Be specific.
