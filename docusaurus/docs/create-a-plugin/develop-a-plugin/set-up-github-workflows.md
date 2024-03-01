@@ -16,6 +16,13 @@ sidebar_position: 4
 
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
 
+:::tip
+
+Want to add the `create-plugin` Github workflows to your existing plugin? Run `npx @grafana/create-plugin@latest cicd` in an existing plugin to generate the `ci.yml` and `release.yml`
+workflows.
+
+:::
+
 ## The CI workflow
 
 The CI (`ci.yml`) workflow is designed to lint, type check, and build the frontend and backend. It is also used to run tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps to catch any issues early in the development process, before they become bigger problems.
