@@ -10,3 +10,5 @@ export { VariablePage } from './pages/VariablePage';
 export { DataSourcePicker } from './components/DataSourcePicker';
 export { Panel } from './components/Panel';
 export { TimeRange } from './components/TimeRange';
+export { AppConfigPage } from './pages/AppConfigPage';
+export { PluginConfigPage } from './pages/PluginConfigPage';
