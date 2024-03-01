@@ -1,6 +1,6 @@
-import { TEXT } from '../constants';
-import { adoptCI } from '../utils/utils.templates';
-import { confirmPrompt, printMessage, printSuccessMessage } from '../utils/utils.console';
+import { TEXT } from '../constants.js';
+import { adoptCI } from '../utils/utils.templates.js';
+import { confirmPrompt, printMessage, printSuccessMessage } from '../utils/utils.console.js';
 
 export const cicd = async () => {
   if (await confirmPrompt(TEXT.adoptCIPrompt)) {

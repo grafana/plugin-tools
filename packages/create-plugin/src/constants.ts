@@ -121,6 +121,10 @@ export const TEXT = {
   updateNpmScriptsSuccess: 'NPM scripts updated successfully.',
   updateNpmScriptsAborted: 'No NPM scripts have been added or updated.',
 
+  adoptCIPrompt: '**Do you want to adopt the Github CI and Release workflows?\nThis will replace any existing files in the `github` directory.**',
+  adoptCISuccess: 'Github CI and Release workflows adopted successfully.',
+  adoptCIAborted: 'No Github CI and Release workflows have been adopted.',
+  
   migrationCommandWarning:  '**⚠️  Warning!**\nThis is going to change files in your current project to make it up-to-date with the latest plugin configuration.\nPlease make sure that you have backed up your changes.',
   migrationCommandSuccess: `
 ## What's next?
