@@ -51,7 +51,8 @@
     "packages/create-plugin",
     "packages/sign-plugin",
     "docusaurus/website",
-    "packages/plugin-e2e"
+    "packages/plugin-e2e",
+    "packages/pme"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [

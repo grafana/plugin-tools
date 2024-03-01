@@ -1,0 +1,29 @@
+{
+  "name": "@grafana/pme",
+  "version": "1.0.0",
+  "description": "plugin meta extractor",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "directory": "packages/pme",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "tool"
+  ],
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  }
+}
