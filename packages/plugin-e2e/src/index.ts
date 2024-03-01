@@ -9,6 +9,7 @@ export * from './types';
 
 declare global {
   interface Window {
+    monaco: any;
     grafanaBootData: {
       settings: {
         featureToggles: Record<string, boolean>;
