@@ -1,6 +1,6 @@
 ---
 id: configuration-editor
-title: The configuration editor
+title: The the configuration editor
 description: Testing the configuration editor of backend and frontend data sources with valid and invalid configuration
 keywords:
   - grafana
@@ -71,7 +71,6 @@ test('"Save & test" should be successful when configuration is valid', async ({
   const healthCheckPath = `${selectors.apis.DataSource.proxy(configPage.datasource.uid)}/test`;
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' }));
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
-  await expect(configPage).toHaveAlert('success');
 });
 ```
 

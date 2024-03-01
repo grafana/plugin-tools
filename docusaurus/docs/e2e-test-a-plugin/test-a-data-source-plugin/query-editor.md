@@ -1,7 +1,7 @@
 ---
 id: query-editor
 title: Test the query editor
-description: How to test the query editor
+description: Testing the query editor and the execution of data queries
 keywords:
   - grafana
   - plugins
@@ -19,7 +19,7 @@ The query editor is a central piece of a data source plugin as this is where use
 
 ### Test parts of the query editor in isolation
 
-In the following example, the query editor loads regions via a request to the `/regions` and filters out regions containing `gov` before populating them in a dropdown menu.
+In the following example, the query editor loads regions via a request to `/regions` and filters out the ones containing `gov` before populating them in a dropdown menu.
 
 The [`<page>.mockResourceResponse`](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/models/pages/GrafanaPage.ts#L53) method allows you to mock the response of a request to the data source [resource API](https://grafana.com/developers/plugin-tools/introduction/backend-plugins#resources). To test that the filtering is working as expected, we use this method to mock the `/regions` response and assert that only the regions without `-gov-` in their name are shown when the regions dropdown is clicked.
 
@@ -37,7 +37,7 @@ test('should filter out govcloud regions', async ({ panelEditPage, selectors, re
 
 ### Testing the entire data flow
 
-The following example shows an integration test that tests the entire data flow of a plugin.
+The following example shows an integration test that tests the entire query data flow of a plugin.
 
 :::warning
 Hitting third-party APIs in end-to-end tests can be useful, but it may also have security concerns as well as introduce flakiness to your CI pipeline. You should always think it through carefully and consider using mocks instead.
@@ -57,9 +57,9 @@ test('data query should be successful when the query is valid', async ({
 
 ### Make a panel data assertion
 
-In many cases, asserting that the data query response is OK won't be enough to say your data source plugin is functioning properly. You must also make an assertion on the data that is shown in the panel. 
+In many cases, asserting that the data query response is OK won't be enough to say your data source plugin is functioning properly. You must also make an assertion on the data that is shown in the panel.
 
-Grafana comes with a set of built-in panels, and there's a variety of community panels available in the [Grafana plugin catalog](https://grafana.com/grafana/plugins/). Every panel can render data differently, so it's impossible to provide a consitent way to assert on the displayed data across all panels. Therefore, we recommended that you use the `Table` panel for this. 
+Grafana comes with a set of built-in panels, and there's a variety of community panels available in the [Grafana plugin catalog](https://grafana.com/grafana/plugins/). Every panel can render data differently, so it's impossible to provide a consitent way to assert on the displayed data across all panels. Therefore, we recommended that you use the `Table` panel for this.
 
 The `<page>.panel.data` property returns a [Playwright locator](https://playwright.dev/docs/locators) that resolves one or more elements that contain the values that are currently displayed in the Table panel. This means you can use any auto-retrying [matcher](https://playwright.dev/docs/test-assertions#auto-retrying-assertions) that accepts a locator as the receiving type.
 
