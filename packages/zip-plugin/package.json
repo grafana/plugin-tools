@@ -35,8 +35,7 @@
   },
   "devDependencies": {
     "@types/archiver": "^6.0.2",
-    "@types/minimist": "^1.2.2",
-    "i": "^0.3.7"
+    "@types/minimist": "^1.2.2"
   },
   "nodemonConfig": {
     "watch": [
