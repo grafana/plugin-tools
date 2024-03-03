@@ -97,7 +97,7 @@ export const zip = async (argv: minimist.ParsedArgs) => {
   }
 
   const buildDir = generateFolder('package-zip');
-  const pluginJson = require(`${pluginDistDir}/plugin.json`);
+  const pluginJson = JSON.parse(readFileSync(`${pluginDistDir}/plugin.json`, 'utf-8'));
   const {
     id: pluginId,
     info: { version: pluginVersion },
