@@ -65,7 +65,7 @@ size="sm"
 
 ### Do this
 
-- Do trigger the 'ReturnToPrevious`functionality through a link or an interactive element with an`onClick` event.
+- Do trigger the 'ReturnToPrevious' functionality through a link or an interactive element with an `onClick` event.
 - Do only use the 'ReturnToPrevious' functionality when the user is sent to another context, such as from Alerting to a Dashboard.
 - Do specify a button title that identifies the page to return to in the most understandable way.
 
