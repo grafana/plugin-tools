@@ -25,7 +25,7 @@ If your data source plugin implements a custom annotation editor, you can write 
 
 ### Test the entire annotation query execution flow
 
-In the next example, we perform an integration test where we test a plugin's entire annotation query data flow.
+In the next example, we perform an integration test where we test a plugin's entire annotation query data flow:
 
 ```ts title="annotations.spec.ts"
 test('should run successfully and display a success alert box when query is valid', async ({
