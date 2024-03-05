@@ -1,5 +1,5 @@
 ---
-id: custom-variable-editor
+id: variable-queries
 title: Test a custom variable editor
 description: Test a custom variable query editor and the execution of variable queries.
 keywords:
