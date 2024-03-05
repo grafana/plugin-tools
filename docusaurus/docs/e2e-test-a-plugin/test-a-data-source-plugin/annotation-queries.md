@@ -15,7 +15,9 @@ sidebar_position: 50
 
 ## Introduction
 
-Annotations can be used to mark points on a visualization with events such as `AB test started` and `Marketing campaign started`. If a data source plugin supports annotations, it means that the data source can be used to query for annotation events. Optionally, data sources plugins can implement a custom annotation editor that can be used to craft the annotation query. In many cases, the execution of annotation queries requires different handling than normal data queries, and in those cases you may want to write end-to-end tests that verifies that data source annotation support work as expected.
+Annotations are used to mark points on a visualization with events such as "AB test started" or "Marketing campaign started". Data source plugins that support annotations can be used to query for annotation events. Optionally, you can implement a custom annotation editor for the data source plugin that assists users in writing the annotation query. 
+
+In many cases, the execution of annotation queries requires different handling than normal data queries, and in those cases we recommend that you write end-to-end tests that verify that data source annotations work as expected.
 
 ### Testing the annotation editor
 
