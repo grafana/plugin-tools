@@ -46,7 +46,7 @@ test('should run successfully and display a success alert box when query is vali
 });
 ```
 
-#### Testing error scenarios
+#### Test error scenarios
 
 If an error occurs in the plugin or if the upstream API returns an error, you may want to capture that and return a meaningful error message to the user.
 
