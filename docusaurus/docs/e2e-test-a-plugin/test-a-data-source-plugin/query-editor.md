@@ -1,5 +1,5 @@
 ---
-id: query-editor
+id: data-queries
 title: Test the query editor
 description: Testing the query editor and the execution of data queries
 keywords:
