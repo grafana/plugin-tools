@@ -19,7 +19,7 @@ Annotations are used to mark points on a visualization with events such as "AB t
 
 In many cases, the execution of annotation queries requires different handling than normal data queries, and in those cases we recommend that you write end-to-end tests that verify that data source annotations work as expected.
 
-### Testing the annotation editor
+### Test the annotation editor
 
 If your data source plugin implements a custom annotation editor, you can write tests that verifies that the editor works as expected. If no custom editor is implemented, the built-in in editor will be used and then you don't need to write tests for that.
 
