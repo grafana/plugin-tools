@@ -12,7 +12,7 @@ datasources:
     jsonData:
       authType: keys
       defaultRegion: us-east-2
-      tracingDatasourceUid: P7DC3E4760CFAC4AKK
+      tracingDatasourceUid: P7DC3E4760CFAC4AK
     secureJsonData:
       accessKey: $AWS_ACCESS_KEY_ID
       secretKey: $AWS_SECRET_ACCESS_KEY
