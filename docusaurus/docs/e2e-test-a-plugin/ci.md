@@ -70,7 +70,7 @@ The `plugin-grafana-dependency` mode is the default, so if you don't specify a v
 
 This mode returns the most recent grafana-dev image. Additionally, it returns all the latest patch releases of Grafana Enterprise since the version that was specified as `grafanaDependency` in the [plugin.json](../metadata.md). To avoid starting too many jobs, the output is capped at 6 versions.
 
-![Plugin dependencies](/img/e2e-version-plugin-dependency.png)
+![[plugin-grafana-dependency mode](/img/e2e-version-plugin-dependency.png)
 
 ### Use the version-support-policy mode
 
@@ -90,6 +90,6 @@ To use the `version-support-policy` mode, you need to specify the `version-resol
 
 ## Playwright report
 
-The end-to-end tooling generates a Playwright HTML test report for every Grafana version that is being tested. In case any of the tests fail, a Playwright trace viewer is also generated along with the report. The `Upload artifacts` step in the example workflows uploads the report as an artifact.
+The end-to-end tooling generates a Playwright HTML test report for every Grafana version that is being tested. In case any of the tests fail, a Playwright trace viewer is also generated along with the report. The `Upload artifacts` step in the example workflows uploads the report to GitHub as an artifact.
 
 To find information on how to download and view the report, refer to the [Playwright documentation](https://playwright.dev/docs/ci-intro#html-report).

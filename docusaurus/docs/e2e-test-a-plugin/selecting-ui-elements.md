@@ -14,7 +14,7 @@ sidebar_position: 20
 
 # Select UI elements
 
-This guide explains the role of selectors in Grafana end-to-end testing and how to use them with multiple versions of Grafana.
+This guide explains the role of selectors in Grafana end-to-end testing and how to use them to safely interact with UI elements across multiple versions of Grafana.
 
 ## Grafana end-to-end selectors
 
@@ -24,7 +24,7 @@ Selecting Grafana UI elements can be challenging because the selector may be def
 
 ## Playwright locator for Grafana UI elements
 
-All [pages](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/pages) defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method that returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to one or more elements selected. The pages do so by using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a Grafana UI selector, you should always use this method.
+All [pages](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/pages) defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method. This method returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to one or more elements, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a [grafana/e2e-selectors](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors), you should always use this method.
 
 ```ts
 panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
@@ -32,7 +32,9 @@ panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).
 
 ## The selectors fixture
 
-Selectors defined in the `@grafana/e2e-selectors` package, provided through the `selectors` fixture, are tied to a specific Grafana version. As a result, the selectors can change from one version to another. When you start a new end-to-end test session, `@grafana/plugin-e2e` checks what version of Grafana is under test and resolves the selectors that are associated with the running version.
+Selectors defined in the `@grafana/e2e-selectors` package are tied to a specific Grafana version. This means that the selectors can change from one version to another, making it hard to use the selectors defined in `@grafana/e2e-selectors` when writing tests that target multiple versions of Grafana.
+
+To overcome this issue, `@grafana/plugin-e2e` has its own copy of end-to-end selectors. These selectors are a subset of the selectors defined in `@grafana/e2e-selectors`, and each selector value has defined a minimum Grafana version. When you start a new end-to-end test session, `@grafana/plugin-e2e` checks what version of Grafana is under test and resolves the selectors that are associated with the running version. The selectors are provided through the `selectors` fixture.
 
 ```ts
 import { test, expect } from '@grafana/plugin-e2e';

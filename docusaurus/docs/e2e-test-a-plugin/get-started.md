@@ -62,11 +62,11 @@ groupId="package-manager"
 queryString="current-package-manager"
 />
 
-### Step 0: Installing Playwright
+### Step 1: Installing Playwright
 
 The `@grafana/plugin-e2e` tool extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the `package.json` file of your plugin. Refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated when you installed Playwright before you proceed to the next step in this guide.
 
-### Step 1: Installing `@grafana/plugin-e2e`
+### Step 2: Installing `@grafana/plugin-e2e`
 
 Open the terminal and run the following command in your plugin's project directory:
 
@@ -80,7 +80,7 @@ groupId="package-manager"
 queryString="current-package-manager"
 />
 
-### Step 2: Configure Playwright
+### Step 3: Configure Playwright
 
 Open the Playwright config file that was generated when Playwright was installed.
 
@@ -131,7 +131,7 @@ To prevent these files from being version controlled, you can add the following 
 /playwright/.auth/
 ```
 
-### Step 3: Start Grafana
+### Step 4: Start Grafana
 
 Start up the latest version of Grafana on your local machine like this:
 
@@ -151,7 +151,7 @@ If you want to start a specific version of Grafana, you can do that by specifyin
 GRAFANA_VERSION=10.1.6 npm run server
 ```
 
-### Step 4: Write tests
+### Step 5: Write tests
 
 While installing Playwright in your project, a few example test files were generated. We won't need those, so you can go ahead and delete these files.
 
@@ -169,7 +169,7 @@ test('data query should return values 1 and 3', async ({ panelEditPage, readProv
 });
 ```
 
-### Step 5: Run tests
+### Step 6: Run tests
 
 Open a new terminal and run the test script from within your local plugin development directory.
 
@@ -183,7 +183,7 @@ groupId="package-manager"
 queryString="current-package-manager"
 />
 
-### Step 6: Run tests in CI
+### Step 7: Run tests in CI
 
 We recommend using a CI workflow to run end-to-end tests to continuously check for breakages. The following Github workflow runs end-to-end tests against a range of Grafana versions for every PR in your Github repository.
 
