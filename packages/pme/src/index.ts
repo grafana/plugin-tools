@@ -29,7 +29,7 @@ function createAppNodeVisitor(registry: MetaRegistry, checker: ts.TypeChecker): 
       node.forEachChild(createAppNodeVisitor(registry, checker));
 
       if (isConfigureExtensionLinkNode(node)) {
-        registry.register(createExtensionLinkMeta(node));
+        registry.register(createExtensionLinkMeta(node, checker));
       }
 
       return;

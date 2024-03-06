@@ -17,7 +17,7 @@ export function isConfigureExtensionLinkNode(node: ts.Node): node is ts.CallExpr
   return false;
 }
 
-export function createExtensionLinkMeta(expression: ts.CallExpression): ExtensionLinkMeta {
+export function createExtensionLinkMeta(expression: ts.CallExpression, checker: ts.TypeChecker): ExtensionLinkMeta {
   const options = expression.arguments.find(ts.isObjectLiteralExpression);
 
   if (!options || !isConfigureExtensionLinkNode(expression)) {
@@ -33,7 +33,7 @@ export function createExtensionLinkMeta(expression: ts.CallExpression): Extensio
       }
       switch (node.name.escapedText.toString()) {
         case 'extensionPointId':
-          meta.extensionPointId = node.initializer.getText();
+          meta.extensionPointId = parseExtensionPointId(node.initializer, checker);
           break;
 
         case 'description':
@@ -56,4 +56,24 @@ export function createExtensionLinkMeta(expression: ts.CallExpression): Extensio
       description: '',
     }
   );
+}
+
+// This needs to be rewritten as well
+function parseExtensionPointId(node: ts.Expression, checker: ts.TypeChecker): string {
+  // If value is simple string
+  if (ts.isStringLiteral(node)) {
+    return node.text;
+  }
+  // If value is an enum e.g. PluginExtensionPointIds
+  if (!ts.isPropertyAccessExpression(node)) {
+    return node.getText();
+  }
+  if (!ts.isIdentifier(node.name)) {
+    return node.getText();
+  }
+  const type = checker.getTypeAtLocation(node.name);
+  if (type.isLiteral()) {
+    return type.value.toString();
+  }
+  return node.getText();
 }
