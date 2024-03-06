@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "tsc --project tsconfig.json --watch"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
