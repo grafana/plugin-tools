@@ -1,15 +1,21 @@
 import * as ts from 'typescript';
 import { MetaRegistry } from './meta/registry';
-import { createExtensionLinkMeta, isConfigureExtensionLinkNode } from './meta/extensions';
+import {
+  createExtensionComponentMeta,
+  createExtensionLinkMeta,
+  isConfigureExtensionComponentNode,
+  isConfigureExtensionLinkNode,
+} from './meta/extensions';
+import { MetaBase } from './meta/base';
 
-export function createProgram(entry: string): void {
+export function createProgram(entry: string): MetaBase[] {
   const program = ts.createProgram([entry], { allowJs: true });
   const sourceFile = program.getSourceFile(entry);
   const checker = program.getTypeChecker();
   const registry = new MetaRegistry();
 
   if (!sourceFile) {
-    return;
+    return [];
   }
 
   ts.forEachChild(sourceFile, (node) => {
@@ -20,7 +26,7 @@ export function createProgram(entry: string): void {
     appNode.forEachChild(createAppNodeVisitor(registry, checker));
   });
 
-  console.log(registry.toJSON());
+  return registry.toArray();
 }
 
 function createAppNodeVisitor(registry: MetaRegistry, checker: ts.TypeChecker): (node: ts.Node) => void {
@@ -30,6 +36,10 @@ function createAppNodeVisitor(registry: MetaRegistry, checker: ts.TypeChecker): 
 
       if (isConfigureExtensionLinkNode(node)) {
         registry.register(createExtensionLinkMeta(node, checker));
+      }
+
+      if (isConfigureExtensionComponentNode(node)) {
+        registry.register(createExtensionComponentMeta(node, checker));
       }
 
       return;

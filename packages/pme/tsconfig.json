@@ -2,13 +2,14 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "lib": ["ESNext"],
+    "types": ["node", "jest"],
     "outDir": "./dist",
     "stripInternal": true,
     "removeComments": false,
     "declaration": true,
     "allowJs": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "*.test.ts"],
   "extends": "../../tsconfig.base.json",
   "include": ["src"]
 }

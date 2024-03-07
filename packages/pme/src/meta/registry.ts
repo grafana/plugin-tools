@@ -10,4 +10,8 @@ export class MetaRegistry {
   toJSON(): string {
     return JSON.stringify(this.meta);
   }
+
+  toArray(): MetaBase[] {
+    return Array.from(this.meta);
+  }
 }
