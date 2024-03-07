@@ -38,13 +38,13 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Install yarn dependencies
+        run: yarn install
+
       - name: Install Mage
         uses: magefile/mage-action@v3
         with:
           install-only: true
-
-      - name: Install yarn dependencies
-        run: yarn install
 
       - name: Build binaries
         run: mage -v build:linux
@@ -74,14 +74,14 @@ jobs:
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login != 'grafana' }}
+        if: ${{ github.repository_owner != 'grafana' && (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
         with:
           name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
           path: playwright-report/
           retention-days: 30
 
       - name: Publish report to GCS
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') && github.event.organization.login == 'grafana' }}
+        if: ${{ github.repository_owner == 'grafana' && (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
         uses: grafana/plugin-actions/publish-report@main
         with:
           grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
