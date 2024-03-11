@@ -1,7 +1,7 @@
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
