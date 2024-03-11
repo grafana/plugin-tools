@@ -10,6 +10,7 @@ import {
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
   Dashboard,
+  PluginConfigPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -18,6 +19,7 @@ import {
   DashboardPage,
   VariableEditPage,
   AnnotationEditPage,
+  AppConfigPage,
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/pages/ExplorePage';
@@ -144,6 +146,14 @@ export type PluginFixture = {
    * data source using the Grafana API, create a new DataSourceConfigPage instance and navigate to the page.
    */
   createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
+
+  /**
+   * Fixture command that will create an isolated AppConfigPage instance for a given plugin.
+   *
+   * By default, when createing the page, the browser will navigate to it. If you want to turn off this
+   * behaviour you can pass an optional second parameter with the property { goto: false }.
+   */
+  createAppConfigPage: (args: PluginConfigPageArgs, options?: { goto?: boolean }) => Promise<AppConfigPage>;
 
   /**
    * Fixture command that creates a data source via the Grafana API.

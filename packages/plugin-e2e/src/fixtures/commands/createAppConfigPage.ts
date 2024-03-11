@@ -5,14 +5,19 @@ import { PlaywrightCombinedArgs } from '../types';
 import { AppConfigPage } from '../../models/pages/AppConfigPage';
 
 type CreateAPPConfigPageFixture = TestFixture<
-  (args: PluginConfigPageArgs) => Promise<AppConfigPage>,
+  (args: PluginConfigPageArgs, options?: { goto?: boolean }) => Promise<AppConfigPage>,
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-export const createAppConfigPage: CreateAPPConfigPageFixture = async (ctx, use) => {
-  await use(async (args) => {
-    const page = new AppConfigPage(ctx, args);
-    await page.goto();
-    return page;
+export const createAppConfigPage: CreateAPPConfigPageFixture = async (
+  { page, selectors, grafanaVersion, request },
+  use
+) => {
+  await use(async (args, options = { goto: true }) => {
+    const appConfigPage = new AppConfigPage({ page, selectors, grafanaVersion, request }, args);
+    if (options.goto) {
+      await appConfigPage.goto();
+    }
+    return appConfigPage;
   });
 };
