@@ -11,7 +11,7 @@ export class AppConfigPage extends PluginConfigPage {
    * Will wait for the settings endpoint to be called e.g. when saving settings
    */
   waitForSettingsResponse(options?: { timeout?: number }): Promise<PlaywrightResponse> {
-    const url = this.ctx.selectors.apis.Plugins.settings(this.args.pluginId);
+    const url = this.ctx.selectors.apis.Plugin.settings(this.args.pluginId);
     return this.ctx.page.waitForResponse(url, options);
   }
 }
