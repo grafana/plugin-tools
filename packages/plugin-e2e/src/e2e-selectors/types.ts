@@ -17,7 +17,7 @@ export type APIs = {
   Dashboard: {
     delete: (uid: string) => string;
   };
-  Plugins: {
+  Plugin: {
     settings: (pluginId: string) => string;
   };
 };
