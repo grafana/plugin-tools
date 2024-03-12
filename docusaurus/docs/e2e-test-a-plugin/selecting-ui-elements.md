@@ -48,13 +48,35 @@ test('annotation query should be OK when query is valid', async ({ annotationEdi
 });
 ```
 
-## Interacting with UI elements defined in the plugin code
+## Interact with UI elements defined in the plugin code
 
 As stated above, you should always use the `getByTestIdOrAriaLabel` method when the UI element you want to interact with has an associated end-to-end selector. However, many Grafana UI elements don't have end-to-end selectors. If that's the case, it's recommended to follow Grafana's best practices for [testing](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md) and the [testing with accessibility in mind](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/accessibility.md#writing-tests-with-accessibility-in-mind) guide when composing your UI and writing tests.
 
+### Scope locators
+
+To make your tests more robust, it's good to scoop locators to your plugin context. The following example may work, but it's brittle as it will no longer work if another element with the text `URL` is added to the page somewhere outside of your plugin.
+
+```ts
+page.getByText('URL').click();
+```
+
+There are many ways to scope selectors. You can wrap the component in a div with an `data-testid` and use the id when accessing the element.
+
+```ts
+page.getByTestId('plugin-url-wrapper').getByText('URL').click();
+```
+
+If you're testing a data source query editor, you can scope the locator to the the query editor row.
+
+```ts
+explorePage.getQueryEditorRow('A').getByLabel('Query').fill('sum(*)');
+```
+
+### Form element examples
+
 Here are some examples demonstrating how to interact with a few UI components that are common in plugins. The `InlineField` and `Field` component can be used interchangeably.
 
-**Input field**
+#### Input field
 
 ```tsx title="UI component"
 <InlineField label="Auth key">
@@ -66,7 +88,7 @@ Here are some examples demonstrating how to interact with a few UI components th
 await page.getByLabel('Auth key').fill('..');
 ```
 
-**Select field**
+#### Select field
 
 Unlike many other components that requires you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop.
 
@@ -85,7 +107,7 @@ test('testing select component', async ({ page, selectors }) => {
 });
 ```
 
-**Checkbox field**
+#### Checkbox field
 
 ```tsx title="UI componevnt"
 <InlineField label="TLS Enabled">
@@ -100,7 +122,7 @@ await page.getByLabel('TLS Enabled').uncheck({ force: true });
 await expect(page.getByLabel('TLS Enabled')).not.toBeChecked();
 ```
 
-**InlineSwitch field**
+#### InlineSwitch field
 
 ```tsx title="UI componevnt"
 <InlineField label="TLS Enabled">
@@ -122,9 +144,13 @@ await expect(switchLocator).not.toBeChecked();
 ```
 
 :::note
-The `InlineSwitch` component didn't forward . If you want to target Grafana versions lower than 9.3.0, you need to
+In Grafana versions older than 9.3.0, the label cannot be associated with the checkbox in the `InlineSwitch` component. If you want your tests to run in Grafana versions prior to 9.3.0, you need to access the field the following way.
 :::
 
+```ts title="Playwright test file"
+const label = 'Inline field with switch';
+let switchLocator = page.getByLabel(label);
 if (semver.lt(grafanaVersion, '9.3.0')) {
-switchLocator = page.locator('[label="TLS Enabled"]').locator('../label');
+  switchLocator = page.locator(`[label="${label}"]`).locator('../label');
 }
+```
