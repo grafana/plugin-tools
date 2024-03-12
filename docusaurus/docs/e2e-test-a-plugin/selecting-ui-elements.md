@@ -50,7 +50,7 @@ test('annotation query should be OK when query is valid', async ({ annotationEdi
 
 ## Interact with UI elements defined in the plugin code
 
-As stated above, you should always use the `getByTestIdOrAriaLabel` method when the UI element you want to interact with has an associated end-to-end selector. However, many Grafana UI elements don't have end-to-end selectors. If that's the case, it's recommended to follow Grafana's best practices for [testing](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md) and the [testing with accessibility in mind](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/accessibility.md#writing-tests-with-accessibility-in-mind) guide when composing your UI and writing tests.
+As stated above, you should always use the `getByTestIdOrAriaLabel` method when the UI element you want to interact with has an associated end-to-end selector. However, many Grafana UI elements don't have end-to-end selectors. If that's the case, we recommended following Grafana's best practices for [testing](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md) and the [testing with accessibility in mind](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/accessibility.md#writing-tests-with-accessibility-in-mind) guide when composing your UI and writing tests.
 
 ### Scope locators
 
@@ -60,7 +60,7 @@ To make your tests more robust, it's good to scoop locators to your plugin conte
 page.getByText('URL').click();
 ```
 
-There are many ways to scope selectors. You can wrap the component in a div with an `data-testid` and use the id when accessing the element.
+There are many ways to scope selectors. You can wrap the component in a div with an `data-testid` and use the ID when accessing the element.
 
 ```ts
 page.getByTestId('plugin-url-wrapper').getByText('URL').click();
@@ -78,6 +78,8 @@ Here are some examples demonstrating how to interact with a few UI components th
 
 #### Input field
 
+You can use the `InlineField` component to interact with the UI.
+
 ```tsx title="UI component"
 <InlineField label="Auth key">
   <Input value={value} onChange={handleOnChange} id="config-auth-key" />
@@ -90,7 +92,7 @@ await page.getByRole('textbox', { name: 'Auth key' }).fill('..');
 
 #### Select field
 
-Unlike many other components that requires you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop. You can find more information about testing the `select` component [here](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md#testing-select-components).
+Unlike many other components that require you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop. You can find more information about testing the `select` component [here](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md#testing-select-components).
 
 ```tsx title="UI component"
 <InlineField label="Auth type">
@@ -109,13 +111,15 @@ test('testing select component', async ({ page, selectors }) => {
 
 #### Checkbox field
 
+You can use the `Checkbox` component to interact with the UI.
+
 ```tsx title="UI componevnt"
 <InlineField label="TLS Enabled">
   <Checkbox id="config-tls-enabled" value={value} onChange={handleOnChange} />
 </InlineField>
 ```
 
-In the `checkbox` component, it's not the input element that is clickable, so you need to bypass the Playwright actionability check by setting `force: true`.
+In the `Checkbox` component, the input element isn't clickable, so you need to bypass the Playwright actionability check by setting `force: true`.
 
 ```ts title="Playwright test"
 await page.getByRole('checkbox', { name: 'TLS Enabled' }).uncheck({ force: true });
@@ -123,6 +127,8 @@ await expect(page.getByRole('checkbox', { name: 'TLS Enabled' })).not.toBeChecke
 ```
 
 #### InlineSwitch field
+
+You can use the `InlineSwitch` component to interact with the UI.
 
 ```tsx title="UI componevnt"
 <InlineField label="TLS Enabled">
@@ -135,7 +141,7 @@ await expect(page.getByRole('checkbox', { name: 'TLS Enabled' })).not.toBeChecke
 </InlineField>
 ```
 
-Like in the `checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
+Like in the `Checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
 
 ```ts title="Playwright test"
 let switchLocator = page.getByLabel('TLS Enabled');
@@ -144,7 +150,9 @@ await expect(switchLocator).not.toBeChecked();
 ```
 
 :::note
-In Grafana versions older than 9.3.0, the label cannot be associated with the checkbox in the `InlineSwitch` component. If you want your tests to run in Grafana versions prior to 9.3.0, you need to access the field the following way.
+
+In Grafana versions older than 9.3.0, the label can't be associated with the checkbox in the `InlineSwitch` component. If you want your tests to run in Grafana versions prior to 9.3.0, you need to access the field in the following way:
+
 :::
 
 ```ts title="Playwright test"
