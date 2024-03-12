@@ -47,3 +47,84 @@ test('annotation query should be OK when query is valid', async ({ annotationEdi
   await expect(annotationEditPage.runQuery()).toBeOK();
 });
 ```
+
+## Interacting with UI elements defined in the plugin code
+
+As stated above, you should always use the `getByTestIdOrAriaLabel` method when the UI element you want to interact with has an associated end-to-end selector. However, many Grafana UI elements don't have end-to-end selectors. If that's the case, it's recommended to follow Grafana's best practices for [testing](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md) and the [testing with accessibility in mind](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/accessibility.md#writing-tests-with-accessibility-in-mind) guide when composing your UI and writing tests.
+
+Here are some examples demonstrating how to interact with a few UI components that are common in plugins. The `InlineField` and `Field` component can be used interchangeably.
+
+**Input field**
+
+```tsx title="UI component"
+<InlineField label="Auth key">
+  <Input value={value} onChange={handleOnChange} id="config-auth-key" />
+</InlineField>
+```
+
+```ts title="Playwright test file"
+await page.getByLabel('Auth key').fill('..');
+```
+
+**Select field**
+
+Unlike many other components that requires you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop.
+
+```tsx title="UI component"
+<InlineField label="Auth type">
+  <Select inputId="config-auth-type" value={value} options={options} onChange={handleOnChange} />
+</InlineField>
+```
+
+```ts title="Playwright test file"
+test('testing select component', async ({ page, selectors }) => {
+  const configPage = await createDataSourceConfigPage({ type: 'test-datasource' });
+  await page.getByLabel('Auth type').click();
+  const option = selectors.components.Select.option;
+  await expect(configPage.getByTestIdOrAriaLabel(option)).toHaveText(['val1', 'val2']);
+});
+```
+
+**Checkbox field**
+
+```tsx title="UI componevnt"
+<InlineField label="TLS Enabled">
+  <Checkbox id="config-tls-enabled" value={value} onChange={handleOnChange} />
+</InlineField>
+```
+
+In the `checkbox` component, it's not the input element that is clickable, so you need to bypass the Playwright actionability check by setting `force: true`.
+
+```ts title="Playwright test file"
+await page.getByLabel('TLS Enabled').uncheck({ force: true });
+await expect(page.getByLabel('TLS Enabled')).not.toBeChecked();
+```
+
+**InlineSwitch field**
+
+```tsx title="UI componevnt"
+<InlineField label="TLS Enabled">
+  <InlineSwitch
+    // the InlineSwitch label needs to match the label of the InlineField
+    label="TLS Enabled"
+    value={value}
+    onChange={handleOnChange}
+  />
+</InlineField>
+```
+
+Like in the `checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
+
+```ts title="Playwright test file"
+let switchLocator = page.getByLabel('TLS Enabled');
+await switchLocator.uncheck({ force: true });
+await expect(switchLocator).not.toBeChecked();
+```
+
+:::note
+The `InlineSwitch` component didn't forward . If you want to target Grafana versions lower than 9.3.0, you need to
+:::
+
+if (semver.lt(grafanaVersion, '9.3.0')) {
+switchLocator = page.locator('[label="TLS Enabled"]').locator('../label');
+}
