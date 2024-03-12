@@ -1,7 +1,7 @@
 ---
 id: feature-toggles
 title: Use Grafana feature toggles
-description: How to use Grafana feature toggles in end-to-end tests
+description: How to use Grafana feature toggles in end-to-end tests.
 keywords:
   - grafana
   - plugins
@@ -15,15 +15,15 @@ sidebar_position: 50
 
 ## Introduction
 
-Grafana uses a mechanism known as [feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) to enable code to be turned "on" or "off" at runtime. Plugins can optionally react to the state of a feature toggle to change their behaviour as appropriate, if they do, it can be beneficial to cover this within your end-to-end tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
+Grafana uses a mechanism known as [feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) to enable code to be turned "on" or "off" at runtime. Plugins can optionally react to the state of a feature toggle to change their behavior as appropriate; if they do, you can cover this within your end-to-end tests. This guide describes the features of `@grafana/plugin-e2e` that make it easier to work with feature toggles.
 
-### Passing feature toggle configuration to Grafana
+## Passing feature toggle configuration to Grafana
 
-The easisest way to configure feature toggles that are available across the entire Grafana stack is to specify the [environment variables](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables) operational when starting your Grafana instance.
+The easiest way to configure feature toggles that are available across the entire Grafana stack is to specify the environment variables operational when starting your Grafana instance. For instructions on how to do so, refer to [our documentation](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables).
 
-### Override frontend feature toggles in end-to-end tests
+## Override frontend feature toggles in end-to-end tests
 
-`@grafana/plugin-e2e` allows you to override the frontend feature toggles that Grafana is configured to use. You can do that by specifying the custom option `featureToggles` in the Playwright config file.
+The `@grafana/plugin-e2e` tool allows you to override the frontend feature toggles that Grafana is configured to use. You can do that by specifying the custom option `featureToggles` in the Playwright config file.
 
 ```typescript
 // playwright.config.ts
@@ -50,9 +50,9 @@ Feature toggles that are defined this way are propagated to `window.grafanaBootD
 
 :::
 
-#### Override feature toggles in a specific test file
+## Override feature toggles in a specific test file
 
-You can override feature toggles for tests in a certain test file.
+To override feature toggles for tests in a specific test file, use code like this.
 
 ```typescript
 import { test, expect } from '@grafana/plugin-e2e';
@@ -64,7 +64,7 @@ test.use({
 });
 ```
 
-### Check whether a feature is enabled in your test
+## Check whether a feature is enabled in your test
 
 Use the `isFeatureToggleEnabled` fixture to determine whether a certain feature toggle is enabled. Under the hood, `isFeatureToggleEnabled` checks whether the given feature is defined and enabled in the `window.grafanaBootData.settings.featureToggles` object.
 
