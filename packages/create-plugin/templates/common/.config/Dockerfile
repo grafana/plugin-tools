@@ -1,7 +1,12 @@
-ARG grafana_version=latest
-ARG grafana_image=grafana-enterprise
+ARG ARCH=amd64
+ARG BASE_IMAGE=grafana/grafana-oss-${ARCH}:development-ubuntu
 
-FROM grafana/${grafana_image}:${grafana_version}
+FROM ${BASE_IMAGE} as plugindev
+
+{{#if hasBackend}}
+ARG GO_VERSION=1.21.6
+ARG GO_ARCH=amd64
+{{/if}}
 
 # Make it as simple as possible to access the grafana instance for development purposes
 # Do NOT enable these settings in a public facing / production grafana instance
@@ -11,6 +16,44 @@ ENV GF_AUTH_BASIC_ENABLED "false"
 # Set development mode so plugins can be loaded without the need to sign
 ENV GF_DEFAULT_APP_MODE "development"
 
-# Inject livereload script into grafana index.html
+
+LABEL maintainer="Grafana Labs <hello@grafana.com>"
+
+ENV GF_PATHS_HOME="/usr/share/grafana"
+WORKDIR $GF_PATHS_HOME
+
 USER root
+
+
+# Installing supervisor and inotify-tools
+RUN apt-get update && \
+    apt-get install -y supervisor && \
+    apt-get install -y  inotify-tools && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+
+{{#if hasBackend}}
+# Installing Go
+RUN curl -O -L https://golang.org/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
+    rm -rf /usr/local/go && \
+    tar -C /usr/local -xzf go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
+    echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bashrc && \
+    rm -f go${GO_VERSION}.linux-${GO_ARCH}.tar.gz
+
+# Installing delve for debugging
+RUN /usr/local/go/bin/go install github.com/go-delve/delve/cmd/dlv@latest
+
+# Installing mage for plugin (re)building
+RUN git clone https://github.com/magefile/mage; \
+    cd mage; \
+    export PATH=$PATH:/usr/local/go/bin; \
+    go run bootstrap.go
+{{/if}}
+
+# Inject livereload script into grafana index.html
 RUN sed -i 's|</body>|<script src="http://localhost:35729/livereload.js"></script></body>|g' /usr/share/grafana/public/views/index.html
+
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
