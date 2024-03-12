@@ -148,10 +148,7 @@ export type PluginFixture = {
   createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
 
   /**
-   * Fixture command that will create an isolated AppConfigPage instance for a given plugin.
-   *
-   * By default, when createing the page, the browser will navigate to it. If you want to turn off this
-   * behaviour you can pass an optional second parameter with the property { goto: false }.
+   * Fixture command that will navigate to the AppConfigPage for a given plugin.
    */
   gotoAppConfigPage: (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>;
 
