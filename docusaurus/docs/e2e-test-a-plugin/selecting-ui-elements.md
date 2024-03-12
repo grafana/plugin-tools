@@ -84,13 +84,13 @@ Here are some examples demonstrating how to interact with a few UI components th
 </InlineField>
 ```
 
-```ts title="Playwright test file"
-await page.getByLabel('Auth key').fill('..');
+```ts title="Playwright test"
+await page.getByRole('textbox', { name: 'Auth key' }).fill('..');
 ```
 
 #### Select field
 
-Unlike many other components that requires you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop.
+Unlike many other components that requires you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop. You can find more information about testing the `select` component [here](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md#testing-select-components).
 
 ```tsx title="UI component"
 <InlineField label="Auth type">
@@ -98,10 +98,10 @@ Unlike many other components that requires you to pass an `id` prop to be able t
 </InlineField>
 ```
 
-```ts title="Playwright test file"
+```ts title="Playwright test"
 test('testing select component', async ({ page, selectors }) => {
   const configPage = await createDataSourceConfigPage({ type: 'test-datasource' });
-  await page.getByLabel('Auth type').click();
+  await page.getByRole('combobox', { name: 'Auth type' }).click();
   const option = selectors.components.Select.option;
   await expect(configPage.getByTestIdOrAriaLabel(option)).toHaveText(['val1', 'val2']);
 });
@@ -117,9 +117,9 @@ test('testing select component', async ({ page, selectors }) => {
 
 In the `checkbox` component, it's not the input element that is clickable, so you need to bypass the Playwright actionability check by setting `force: true`.
 
-```ts title="Playwright test file"
-await page.getByLabel('TLS Enabled').uncheck({ force: true });
-await expect(page.getByLabel('TLS Enabled')).not.toBeChecked();
+```ts title="Playwright test"
+await page.getByRole('checkbox', { name: 'TLS Enabled' }).uncheck({ force: true });
+await expect(page.getByRole('checkbox', { name: 'TLS Enabled' })).not.toBeChecked();
 ```
 
 #### InlineSwitch field
@@ -137,7 +137,7 @@ await expect(page.getByLabel('TLS Enabled')).not.toBeChecked();
 
 Like in the `checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
 
-```ts title="Playwright test file"
+```ts title="Playwright test"
 let switchLocator = page.getByLabel('TLS Enabled');
 await switchLocator.uncheck({ force: true });
 await expect(switchLocator).not.toBeChecked();
@@ -147,7 +147,7 @@ await expect(switchLocator).not.toBeChecked();
 In Grafana versions older than 9.3.0, the label cannot be associated with the checkbox in the `InlineSwitch` component. If you want your tests to run in Grafana versions prior to 9.3.0, you need to access the field the following way.
 :::
 
-```ts title="Playwright test file"
+```ts title="Playwright test"
 const label = 'Inline field with switch';
 let switchLocator = page.getByLabel(label);
 if (semver.lt(grafanaVersion, '9.3.0')) {
