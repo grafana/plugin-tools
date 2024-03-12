@@ -1,6 +1,6 @@
 ---
 id: add-return-to-previous-functionality
-title: Add 'Return to previous' functionality
+title: Allow users to easily return to a specific context
 description: Offer an easy way of return to allow users to return to their context.
 keywords:
   - grafana
