@@ -1,15 +1,15 @@
 import { TestFixture } from '@playwright/test';
 import { PluginFixture, PluginOptions } from '../../api';
-import { PluginConfigPageArgs } from '../../types';
+import { GotoAppConfigPageArgs } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 import { AppConfigPage } from '../../models/pages/AppConfigPage';
 
-type CreateAPPConfigPageFixture = TestFixture<
-  (args: PluginConfigPageArgs) => Promise<AppConfigPage>,
+type GotoAppConfigPageFixture = TestFixture<
+  (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>,
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-export const createAppConfigPage: CreateAPPConfigPageFixture = async (
+export const gotoAppConfigPage: GotoAppConfigPageFixture = async (
   { page, selectors, grafanaVersion, request },
   use
 ) => {

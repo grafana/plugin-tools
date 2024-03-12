@@ -10,7 +10,7 @@ import {
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
   Dashboard,
-  PluginConfigPageArgs,
+  GotoAppConfigPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -153,7 +153,7 @@ export type PluginFixture = {
    * By default, when createing the page, the browser will navigate to it. If you want to turn off this
    * behaviour you can pass an optional second parameter with the property { goto: false }.
    */
-  createAppConfigPage: (args: PluginConfigPageArgs) => Promise<AppConfigPage>;
+  gotoAppConfigPage: (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>;
 
   /**
    * Fixture command that creates a data source via the Grafana API.

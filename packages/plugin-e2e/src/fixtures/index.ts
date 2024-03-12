@@ -13,7 +13,7 @@ import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
 import createUser from './commands/createUser';
-import { createAppConfigPage } from './commands/createAppConfigPage';
+import { gotoAppConfigPage } from './commands/gotoAppConfigPage';
 
 const fixtures = {
   selectors,
@@ -31,7 +31,7 @@ const fixtures = {
   readProvisionedDashboard,
   isFeatureToggleEnabled,
   createUser,
-  createAppConfigPage,
+  gotoAppConfigPage,
 };
 
 export default fixtures;

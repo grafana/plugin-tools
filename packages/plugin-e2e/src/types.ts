@@ -307,3 +307,5 @@ export interface ContainTextOptions {
 export type PluginConfigPageArgs = {
   pluginId: string;
 };
+
+export type GotoAppConfigPageArgs = PluginConfigPageArgs;
