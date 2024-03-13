@@ -11,10 +11,11 @@ type GotoAppConfigPageFixture = TestFixture<
 
 export const gotoAppConfigPage: GotoAppConfigPageFixture = async (
   { page, selectors, grafanaVersion, request },
-  use
+  use,
+  testInfo
 ) => {
   await use(async (args) => {
-    const appConfigPage = new AppConfigPage({ page, selectors, grafanaVersion, request }, args);
+    const appConfigPage = new AppConfigPage({ page, selectors, grafanaVersion, request, testInfo }, args);
     await appConfigPage.goto();
     return appConfigPage;
   });
