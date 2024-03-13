@@ -165,4 +165,10 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'Code editor container',
     },
   },
+  QueryField: {
+    container: {
+      '10.3.0': 'data-testid Query field',
+      [MIN_GRAFANA_VERSION]: 'Query field',
+    },
+  },
 };
