@@ -45,7 +45,9 @@ export abstract class GrafanaPage {
   }
 
   /**
-   * Mocks the response of the datasource resource request
+   * Mocks the response of the datasource resource request.
+   * https://grafana.com/developers/plugin-tools/introduction/backend-plugins#resources
+   *
    * @param path the path of the resource to mock
    * @param json the json response to return
    * @param status the HTTP status code to return. Defaults to 200

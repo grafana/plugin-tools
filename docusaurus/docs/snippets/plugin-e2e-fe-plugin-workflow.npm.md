@@ -33,29 +33,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v3
-
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
 
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Mage
-        uses: magefile/mage-action@v3
-        with:
-          install-only: true
-
-      - name: Build binaries
-        run: mage -v build:linux
+      - name: Install npm dependencies
+        run: npm ci
 
       - name: Build frontend
-        run: pnpm run build
+        run: npm run build
 
       - name: Install Playwright Browsers
-        run: pnpm playwright install --with-deps
+        run: npx playwright install --with-deps
 
       - name: Start Grafana
         run: |
@@ -72,7 +62,7 @@ jobs:
 
       - name: Run Playwright tests
         id: run-tests
-        run: pnpm playwright test
+        run: npx playwright test
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

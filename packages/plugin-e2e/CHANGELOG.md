@@ -1,3 +1,37 @@
+# v0.19.1 (Wed Mar 13 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add QueryField container selector [#810](https://github.com/grafana/plugin-tools/pull/810) ([@kevinwcyu](https://github.com/kevinwcyu))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "add annotations article" ([@sunker](https://github.com/sunker))
+- add annotations article ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu))
+
+---
+
+# v0.19.0 (Thu Feb 29 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Improve ds config Save & test for FE plugins [#785](https://github.com/grafana/plugin-tools/pull/785) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.18.0 (Wed Feb 21 2024)
 
 #### 🚀 Enhancement

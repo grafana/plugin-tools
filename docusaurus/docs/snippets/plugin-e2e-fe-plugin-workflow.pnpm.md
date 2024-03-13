@@ -43,14 +43,6 @@ jobs:
       - name: Install pnpm dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Mage
-        uses: magefile/mage-action@v3
-        with:
-          install-only: true
-
-      - name: Build binaries
-        run: mage -v build:linux
-
       - name: Build frontend
         run: pnpm run build
 

@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -56,7 +56,7 @@
     "marked": "^10.0.0",
     "marked-terminal": "^6.2.0",
     "minimist": "^1.2.8",
-    "mkdirp": "^1.0.4",
+    "mkdirp": "^3.0.1",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
     "which": "^3.0.0"

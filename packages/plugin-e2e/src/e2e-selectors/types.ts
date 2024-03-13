@@ -102,6 +102,9 @@ export type Components = {
   Tooltip: {
     container: string;
   };
+  QueryField: {
+    container: string;
+  };
 };
 
 export type Pages = {
