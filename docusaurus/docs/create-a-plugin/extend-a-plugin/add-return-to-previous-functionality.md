@@ -17,7 +17,7 @@ A user's _context_ can switch dramatically while browsing Grafana, and sometimes
 
 ## Context in Grafana
 
-For the purposes of Grafana plugin development, term _context_ refers to a user's place along a path from one root URL to another. Note that in Grafana, this term may also be used in connection with other Grafana features such as Explore or Dashboards.
+For the purposes of Grafana plugin development, the term _context_ refers to a user's place along a path from one root URL to another. Note that in Grafana, this term may also be used in connection with other Grafana features such as Explore or Dashboards.
 
 Use breadcrumbs to notice a change in a user's context. For example:
 
