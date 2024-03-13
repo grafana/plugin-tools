@@ -1,5 +1,18 @@
 # (Wed Mar 13 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.20.0`
+  - Plugin E2E: Pass testinfo to models [#769](https://github.com/grafana/plugin-tools/pull/769) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 13 2024)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your work!
