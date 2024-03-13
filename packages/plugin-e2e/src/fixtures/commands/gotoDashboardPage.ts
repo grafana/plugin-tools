@@ -1,9 +1,8 @@
 import { TestFixture } from '@playwright/test';
 import { PluginFixture, PluginOptions } from '../../api';
-import { CreateDataSourcePageArgs, DashboardPageArgs } from '../../types';
+import { DashboardPageArgs } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
-import { DashboardPage, DataSourceConfigPage } from '../../models';
-import { createDataSourceViaAPI } from './createDataSource';
+import { DashboardPage } from '../../models';
 
 type GotoDashboardFixture = TestFixture<
   (args: DashboardPageArgs) => Promise<DashboardPage>,

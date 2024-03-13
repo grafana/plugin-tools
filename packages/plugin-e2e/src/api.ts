@@ -11,6 +11,7 @@ import {
   CreateUserArgs,
   Dashboard,
   DashboardPageArgs,
+  DashboardEditViewArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -239,6 +240,11 @@ export type PluginFixture = {
    * Fixture command that navigates to an already exist dashboard. Returns a DashboardPage instance.
    */
   gotoDashboardPage: (args: DashboardPageArgs) => Promise<DashboardPage>;
+
+  /**
+   * Fixture command that navigates a panel edit page for an already existing panel in a dashboard.
+   */
+  gotoPanelEditPage: (args: DashboardEditViewArgs<string>) => Promise<PanelEditPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures

@@ -1,5 +1,5 @@
 import * as semver from 'semver';
-import { test, expect, PanelEditPage, DashboardPage } from '../../../../src';
+import { test, expect } from '../../../../src';
 
 test.describe('panel edit page', () => {
   test('table panel data assertions', async ({
@@ -7,33 +7,20 @@ test.describe('panel edit page', () => {
     selectors,
     grafanaVersion,
     request,
+    gotoPanelEditPage,
     readProvisionedDashboard,
   }, testInfo) => {
     const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
-    const panelEditPage = new PanelEditPage(
-      { page, selectors, grafanaVersion, request, testInfo },
-      { dashboard, id: '3' }
-    );
-    await panelEditPage.goto();
+    const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
     await panelEditPage.setVisualization('Table');
     await expect(panelEditPage.panel.locator).toBeVisible();
     await expect(panelEditPage.panel.data).toContainText(['staging']);
     await expect(panelEditPage.panel.fieldNames).toContainText(['time', 'temperature']);
   });
 
-  test('timeseries panel - table view assertions', async ({
-    page,
-    selectors,
-    grafanaVersion,
-    request,
-    readProvisionedDashboard,
-  }, testInfo) => {
+  test('timeseries panel - table view assertions', async ({ readProvisionedDashboard, gotoPanelEditPage }) => {
     const dashboard = await readProvisionedDashboard({ fileName: 'google-sheets.json' });
-    const panelEditPage = new PanelEditPage(
-      { page, selectors, grafanaVersion, request, testInfo },
-      { dashboard, id: '1' }
-    );
-    await panelEditPage.goto();
+    const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
     await panelEditPage.setVisualization('Time series');
     await panelEditPage.toggleTableView();
     await expect(panelEditPage.panel.fieldNames).toContainText(['Stockholm', 'Berlin']);
