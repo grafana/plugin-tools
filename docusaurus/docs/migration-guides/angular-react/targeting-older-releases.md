@@ -81,7 +81,7 @@ Be certain to test the plugin with all releases in between the minimum version a
 
 These panels target older Grafana releases and function correctly with the latest release.
 
-[Polystat Panel]<https://github.com/grafana/grafana-polystat-panel/blob/main/package.json>
+[Polystat Panel](https://github.com/grafana/grafana-polystat-panel/blob/main/package.json)
 
 
-[D3 Gauge Panel]<https://github.com/briangann/grafana-gauge-panel/blob/main/package.json>
+[D3 Gauge Panel](https://github.com/briangann/grafana-gauge-panel/blob/main/package.json)
