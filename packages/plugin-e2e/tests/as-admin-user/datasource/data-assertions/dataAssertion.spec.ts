@@ -42,31 +42,17 @@ test.describe('panel edit page', () => {
 });
 
 test.describe('dashboard page', () => {
-  test('getting panel by title', async ({
-    page,
-    selectors,
-    grafanaVersion,
-    request,
-    readProvisionedDashboard,
-  }, testInfo) => {
+  test('getting panel by title', async ({ readProvisionedDashboard, gotoDashboardPage }) => {
     const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
-    const dashboardPage = new DashboardPage({ page, selectors, grafanaVersion, request, testInfo }, dashboard);
-    await dashboardPage.goto();
+    const dashboardPage = await gotoDashboardPage(dashboard);
     const panel = await dashboardPage.getPanelByTitle('Basic table example');
     await expect(panel.fieldNames).toContainText(['time', 'temperature', 'humidity', 'environment']);
     await expect(panel.data).toContainText(['25', '32', 'staging']);
   });
 
-  test('getting panel by id', async ({
-    page,
-    selectors,
-    grafanaVersion,
-    request,
-    readProvisionedDashboard,
-  }, testInfo) => {
+  test('getting panel by id', async ({ gotoDashboardPage, readProvisionedDashboard }) => {
     const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
-    const dashboardPage = new DashboardPage({ page, selectors, grafanaVersion, request, testInfo }, dashboard);
-    await dashboardPage.goto();
+    const dashboardPage = await gotoDashboardPage(dashboard);
     const panel = await dashboardPage.getPanelById('3');
     await expect(panel.fieldNames).toContainText(['time', 'temperature', 'humidity', 'environment']);
     await expect(panel.data).toContainText(['25', '32', 'staging']);

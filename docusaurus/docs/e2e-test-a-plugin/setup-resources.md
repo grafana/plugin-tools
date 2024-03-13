@@ -31,15 +31,11 @@ In the following example, we navigate to a provisioned dashboard. The dashboard 
 
 ```ts
 test('should expand multi-valued variable before calling backend', async ({
-  readProvision,
-  request,
-  page,
-  selectors,
-  grafanaVersion,
-}, testInfo) => {
+  gotoDashboardPage,
+  readProvisionedDashboard,
+}) => {
   const dashboard = await readProvisionDashboard({ fileName: 'variable.json' });
-  const dashboardPage = new DashboardPage({ request, page, selectors, grafanaVersion, testInfo }, dashboard);
-  await dashboardPage.goto();
+  const dashboardPage = await gotoDashboardPage(dashboard);
   const panelEditPage = await dashboardPage.addPanel();
   const queryDataSpy = panelEditPage.waitForQueryDataRequest((request) =>
     (request.postData() ?? '').includes(`select * from dataset where env in ('test', 'prod')"`)

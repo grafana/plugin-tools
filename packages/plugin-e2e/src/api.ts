@@ -10,6 +10,7 @@ import {
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
   Dashboard,
+  DashboardPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -238,6 +239,11 @@ export type PluginFixture = {
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Fixture command that navigates to an already exist dashboard. Returns a DashboardPage instance.
+   */
+  gotoDashboardPage: (args: DashboardPageArgs) => Promise<DashboardPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures
