@@ -31,4 +31,9 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
     },
   },
+  Plugin: {
+    settings: {
+      [MIN_GRAFANA_VERSION]: (pluginId: string) => `/api/plugins/${pluginId}/settings`,
+    },
+  },
 };

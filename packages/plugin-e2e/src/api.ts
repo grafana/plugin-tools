@@ -10,6 +10,7 @@ import {
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
   Dashboard,
+  GotoAppConfigPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -18,6 +19,7 @@ import {
   DashboardPage,
   VariableEditPage,
   AnnotationEditPage,
+  AppConfigPage,
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/pages/ExplorePage';
@@ -144,6 +146,11 @@ export type PluginFixture = {
    * data source using the Grafana API, create a new DataSourceConfigPage instance and navigate to the page.
    */
   createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
+
+  /**
+   * Fixture command that will navigate to the AppConfigPage for a given plugin.
+   */
+  gotoAppConfigPage: (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>;
 
   /**
    * Fixture command that creates a data source via the Grafana API.
