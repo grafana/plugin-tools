@@ -15,7 +15,7 @@ sidebar_position: 50
 
 ## Introduction
 
-Annotations are used to mark points on a visualization with events such as "AB test started" or "Marketing campaign started". Data source plugins that support annotations can be used to query for annotation events. Optionally, you can implement a custom annotation editor for the data source plugin that assists users in writing the annotation query. 
+Annotations are used to mark points on a visualization with events such as "AB test started" or "Marketing campaign started". Data source plugins that support annotations can be used to query for annotation events. Optionally, you can implement a custom annotation editor for the data source plugin that assists users in writing the annotation query.
 
 In many cases, the execution of annotation queries requires different handling than normal data queries, and in those cases we recommend that you write end-to-end tests that verify that data source annotations work as expected.
 
@@ -66,5 +66,20 @@ test('should fail and display an error alert box when time field is missing in t
   where humidity > 95`);
   await expect(annotationEditPage.runQuery()).not.toBeOK();
   await expect(annotationEditPage).toHaveAlert('error', { hasText: 'Time field is missing' });
+});
+```
+
+### Testing an annotation in a provisioned dashboard
+
+Sometimes you may want to open the annotation edit page for an already existing dashboard and run the annotation query to make sure everything work as expected.
+
+```ts
+test('annotation query in provisioned dashboard should return a 200 response', async ({
+  readProvisionedDashboard,
+  gotoAnnotationEditPage,
+}) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const annotationEditPage = await gotoAnnotationEditPage({ dashboard, id: '1' });
+  await expect(annotationEditPage.runQuery()).toBeOK();
 });
 ```

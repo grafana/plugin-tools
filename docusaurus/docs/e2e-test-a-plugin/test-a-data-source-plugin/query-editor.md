@@ -91,8 +91,8 @@ Sometimes you may want to open the panel edit page for an already existing panel
 
 ```ts
 test('query in provisioned dashboard should return temp and humidity data', async ({
-  readProvisionedDataSource,
-  gotoDataSourceConfigPage,
+  readProvisionedDashboard,
+  gotoPanelEditPage,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
