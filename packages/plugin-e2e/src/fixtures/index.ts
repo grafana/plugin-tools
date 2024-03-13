@@ -16,6 +16,7 @@ import createUser from './commands/createUser';
 import gotoDashboardPage from './commands/gotoDashboardPage';
 import gotoPanelEditPage from './commands/gotoPanelEditPage';
 import gotoVariableEditPage from './commands/gotoVariableEditPage';
+import gotoAnnotationEditPage from './commands/gotoAnnotationEditPage';
 
 const fixtures = {
   selectors,
@@ -36,6 +37,7 @@ const fixtures = {
   gotoDashboardPage,
   gotoPanelEditPage,
   gotoVariableEditPage,
+  gotoAnnotationEditPage,
 };
 
 export default fixtures;
