@@ -245,6 +245,11 @@ export type PluginFixture = {
    * Fixture command that navigates a panel edit page for an already existing panel in a dashboard.
    */
   gotoPanelEditPage: (args: DashboardEditViewArgs<string>) => Promise<PanelEditPage>;
+
+  /**
+   * Fixture command that navigates a variable edit page for an already existing panel in a dashboard.
+   */
+  gotoVariableEditPage: (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures
