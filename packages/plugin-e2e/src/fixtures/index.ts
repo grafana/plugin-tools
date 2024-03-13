@@ -7,7 +7,7 @@ import panelEditPage from './panelEditPage';
 import createDataSource from './commands/createDataSource';
 import readProvisionedDataSource from './commands/readProvisionedDataSource';
 import readProvisionedDashboard from './commands/readProvisionedDashboard';
-import newDashboardPage from './newDashboardPage';
+import dashboardPage from './dashboardPage';
 import variableEditPage from './variableEditPage';
 import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
@@ -21,7 +21,7 @@ const fixtures = {
   login,
   createDataSourceConfigPage,
   page,
-  newDashboardPage,
+  dashboardPage,
   panelEditPage,
   variableEditPage,
   annotationEditPage,
