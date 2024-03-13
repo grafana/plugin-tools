@@ -38,7 +38,7 @@ describe('plugin meta extractor when app is exported as named export', () => {
   });
 
   describe('and extensions registered in external function', () => {
-    it('should return expected meta from app plugin', () => {
+    it.only('should return expected meta from app plugin', () => {
       const entry = `${fixturesPath}/${fixtureFolder}/wrapped.ts`;
       const meta = createProgram(entry);
 

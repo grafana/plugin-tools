@@ -18,20 +18,22 @@ export function createProgram(entry: string): MetaBase[] {
     return [];
   }
 
-  ts.forEachChild(sourceFile, (node) => {
-    const appNode = findAppPluginNode(node, checker);
-    if (!appNode) {
-      return;
+  const visitor = createAppNodeVisitor(registry, checker);
+
+  for (const file of program.getSourceFiles()) {
+    if (file.fileName.includes('/node_modules/')) {
+      continue;
     }
-    appNode.forEachChild(createAppNodeVisitor(registry, checker));
-  });
+    console.log(file.fileName);
+    ts.forEachChild(file, visitor);
+  }
 
   return registry.toArray();
 }
 
 function createAppNodeVisitor(registry: MetaRegistry, checker: ts.TypeChecker): (node: ts.Node) => void {
   return (node) => {
-    if (ts.isCallExpression(node)) {
+    if (isChainedAppPlugin(node, checker)) {
       node.forEachChild(createAppNodeVisitor(registry, checker));
 
       if (isConfigureExtensionLinkNode(node)) {
@@ -49,19 +51,14 @@ function createAppNodeVisitor(registry: MetaRegistry, checker: ts.TypeChecker): 
   };
 }
 
-function findAppPluginNode(node: ts.Node, checker: ts.TypeChecker): ts.VariableDeclaration | undefined {
-  if (!ts.isVariableStatement(node)) {
-    return;
+function isChainedAppPlugin(node: ts.Node, checker: ts.TypeChecker): boolean {
+  if (!ts.isCallExpression(node)) {
+    return false;
   }
-
-  for (const declaration of node.declarationList.declarations) {
-    const type = checker.getTypeAtLocation(declaration);
-    if (type.symbol.escapedName === 'AppPlugin') {
-      return declaration;
-    }
-  }
+  const type = checker.getTypeAtLocation(node);
+  return type.symbol?.escapedName === 'AppPlugin';
 }
 
-createProgram(
-  '/Users/marcusandersson/Development/grafana/grafana-plugin-examples/examples/app-with-extensions/src/module.tsx'
-);
+// createProgram(
+//   '/Users/marcusandersson/Development/grafana/grafana-plugin-examples/examples/app-with-extensions/src/module.tsx'
+// );
