@@ -7,13 +7,18 @@ import panelEditPage from './panelEditPage';
 import createDataSource from './commands/createDataSource';
 import readProvisionedDataSource from './commands/readProvisionedDataSource';
 import readProvisionedDashboard from './commands/readProvisionedDashboard';
-import newDashboardPage from './newDashboardPage';
+import dashboardPage from './dashboardPage';
 import variableEditPage from './variableEditPage';
 import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
 import createUser from './commands/createUser';
-import { gotoAppConfigPage } from './commands/gotoAppConfigPage';
+import gotoDashboardPage from './commands/gotoDashboardPage';
+import gotoPanelEditPage from './commands/gotoPanelEditPage';
+import gotoVariableEditPage from './commands/gotoVariableEditPage';
+import gotoAnnotationEditPage from './commands/gotoAnnotationEditPage';
+import gotoDataSourceConfigPage from './commands/gotoDataSourceConfigPage';
+import gotoAppConfigPage from './commands/gotoAppConfigPage';
 
 const fixtures = {
   selectors,
@@ -21,7 +26,7 @@ const fixtures = {
   login,
   createDataSourceConfigPage,
   page,
-  newDashboardPage,
+  dashboardPage,
   panelEditPage,
   variableEditPage,
   annotationEditPage,
@@ -31,6 +36,11 @@ const fixtures = {
   readProvisionedDashboard,
   isFeatureToggleEnabled,
   createUser,
+  gotoDashboardPage,
+  gotoPanelEditPage,
+  gotoVariableEditPage,
+  gotoAnnotationEditPage,
+  gotoDataSourceConfigPage,
   gotoAppConfigPage,
 };
 
