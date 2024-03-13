@@ -2,6 +2,21 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/plugin-e2e@0.21.0`
+  - Plugin E2E: Make it easier to navigate to existing resources [#812](https://github.com/grafana/plugin-tools/pull/812) ([@sunker](https://github.com/sunker))
+  - PluginE2E: Added (app) plugin config fixture [#795](https://github.com/grafana/plugin-tools/pull/795) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
 - `@grafana/plugin-e2e@0.20.0`
   - Plugin E2E: Pass testinfo to models [#769](https://github.com/grafana/plugin-tools/pull/769) ([@sunker](https://github.com/sunker))
 
