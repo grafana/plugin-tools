@@ -1,3 +1,29 @@
+# (Wed Mar 13 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.19.1`
+  - Plugin E2E: Add QueryField container selector [#810](https://github.com/grafana/plugin-tools/pull/810) ([@kevinwcyu](https://github.com/kevinwcyu))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "streamline descriptions" ([@sunker](https://github.com/sunker))
+- streamline descriptions ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@0.19.1`
+  - Revert "add annotations article" ([@sunker](https://github.com/sunker))
+  - add annotations article ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu))
+
+---
+
 # (Thu Feb 29 2024)
 
 #### 🚀 Enhancement
