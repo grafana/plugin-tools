@@ -8,6 +8,7 @@ deleteDatasources:
 datasources:
   - editable: true
     enabled: true
+    uid: xpyRJds9h
     jsonData:
       authType: jwt
     name: Google Sheets Service Account

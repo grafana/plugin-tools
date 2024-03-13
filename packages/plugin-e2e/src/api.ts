@@ -255,6 +255,11 @@ export type PluginFixture = {
    * Fixture command that navigates an annotation edit page for an already existing annotation query in a dashboard.
    */
   gotoAnnotationEditPage: (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>;
+
+  /**
+   * Fixture command that navigates a configuration page for an already existing data source instance.
+   */
+  gotoDataSourceConfigPage: (uid: string) => Promise<DataSourceConfigPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures

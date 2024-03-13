@@ -17,6 +17,7 @@ import gotoDashboardPage from './commands/gotoDashboardPage';
 import gotoPanelEditPage from './commands/gotoPanelEditPage';
 import gotoVariableEditPage from './commands/gotoVariableEditPage';
 import gotoAnnotationEditPage from './commands/gotoAnnotationEditPage';
+import gotoDataSourceConfigPage from './commands/gotoDataSourceConfigPage';
 
 const fixtures = {
   selectors,
@@ -38,6 +39,7 @@ const fixtures = {
   gotoPanelEditPage,
   gotoVariableEditPage,
   gotoAnnotationEditPage,
+  gotoDataSourceConfigPage,
 };
 
 export default fixtures;
