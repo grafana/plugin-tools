@@ -1,6 +1,6 @@
 ---
-id: adding-suggestion-supplier
-title: Adding a suggestion supplier to a plugin
+id: add-suggestion-supplier
+title: Add a suggestion supplier
 sidebar_position: 9
 description: How to add a suggestion supplier to a plugin.
 keywords:
@@ -13,15 +13,16 @@ keywords:
   - migration
   - suggestion
 ---
-# Angular to React: Adding a Suggestion Supplier
 
-The suggestion supplier examines query data coming from a panel and suggests usage of the plugin for the type of data detected.
+# Angular to React: Add a suggestion supplier
 
-A single stat panel would be rank "high" for a single series, and "low" for multiple series (or even none).
+You can add a suggestion supplier to examine query data coming from a panel and suggest usage of the plugin for the type of data detected. This guide provides instructions for doing so along with links to relevant examples.
 
-## Adding the suggestion supplier
+A single stat panel would be ranked "high" for a single series, and "low" for multiple series (or even none).
 
-Part of the `module.ts`
+## Add the suggestion supplier
+
+Here is an example suggestion suppler seen as part of `module.ts`:
 
 ```ts
 import { MyDataSuggestionsSupplier } from './suggestions';
@@ -30,7 +31,7 @@ import { MyDataSuggestionsSupplier } from './suggestions';
 .setSuggestionsSupplier(new MyDataSuggestionsSupplier());
 ```
 
-An example suggestion supplier (derived from polystat):
+Here is an example suggestion supplier derived from polystat:
 
 ```ts
 import { VisualizationSuggestionsBuilder } from '@grafana/data';
@@ -58,17 +59,20 @@ export class MyDataSuggestionsSupplier {
     });
   }
 }
+```
 
-## Special Notes
+:::note
 
 When creating a suggestion supplier be certain the plugin can actually render something for the data being provided.
 
-## Additional Resources
+:::
 
-These panels implemement suggestion suppliers, and can be referenced for further customization.
+## Additional resources
 
-[Piechart Panel](https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/piechart/suggestions.ts#L7)
+Reference these suggestion suppliers to get ideas for further customization:
 
-[Stat Panel](https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/stat/suggestions.ts#L7)
+- [Piechart panel](https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/piechart/suggestions.ts#L7)
 
-[Heatmap Panel](https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/heatmap/suggestions.ts#L8)
+- [Stat panel](https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/stat/suggestions.ts#L7)
+
+- [Heatmap panel](https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/heatmap/suggestions.ts#L8)
