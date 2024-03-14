@@ -304,8 +304,12 @@ export interface ContainTextOptions {
   useInnerText?: boolean;
 }
 
-export type PluginConfigPageArgs = {
+export type PluginPageArgs = {
   pluginId: string;
 };
 
-export type GotoAppConfigPageArgs = PluginConfigPageArgs;
+export type GotoAppConfigPageArgs = PluginPageArgs;
+
+export type GotoAppPageArgs = PluginPageArgs & {
+  path?: string;
+};

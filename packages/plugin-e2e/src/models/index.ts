@@ -12,3 +12,4 @@ export { Panel } from './components/Panel';
 export { TimeRange } from './components/TimeRange';
 export { AppConfigPage } from './pages/AppConfigPage';
 export { PluginConfigPage } from './pages/PluginConfigPage';
+export { AppPage } from './pages/AppPage';
