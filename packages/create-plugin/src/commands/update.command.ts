@@ -6,8 +6,10 @@ import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
 import { EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
 import { getVersion } from '../utils/utils.version.js';
+import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
+  const { packageManagerName } = getPackageManagerFromUserAgent();
   try {
     if (!(await isGitDirectory()) && !argv.force) {
       printRedBox({
@@ -60,14 +62,14 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
 ${chalk.bold('@grafana/create-plugin version:')} ${getVersion()}
 
 ${chalk.bold.underline('Next steps:')}
-- 1. Run ${chalk.bold('npm install')} to install the package updates
-- 2. Check if your encounter any breaking changes
-  (If yes please check our migration guide: https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions/)
+- 1. Run ${chalk.bold(`${packageManagerName} install`)} to install the package updates
+- 2. Check if you encounter any breaking changes
+  (refer to our migration guide: https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions/)
   
 ${chalk.bold('Do you have questions?')}
 Please don't hesitate to reach out in one of the following ways:
-- Open an issue/discussion in https://github.com/grafana/plugin-tools
-- Ask a question in the community forum at https://community.grafana.com/
+- Open an issue in https://github.com/grafana/plugin-tools
+- Ask a question in the community forum at https://community.grafana.com/c/plugin-development/30
 - Join our community slack channel at https://slack.grafana.com/`,
     });
   } catch (error) {
