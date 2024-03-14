@@ -62,7 +62,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
 ${chalk.bold('@grafana/create-plugin version:')} ${getVersion()}
 
 ${chalk.bold.underline('Next steps:')}
-- 1. Run ${chalk.bold(packageManagerName, 'install')} to install the package updates
+- 1. Run ${chalk.bold(`${packageManagerName} install`)} to install the package updates
 - 2. Check if you encounter any breaking changes
   (refer to our migration guide: https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions/)
   
