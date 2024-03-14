@@ -8,7 +8,6 @@ type UpdateSummary = Record<string, { prev: string | null; next: string | null }
 type UpdateOptions = {
   onlyOutdated?: Boolean;
   ignoreGrafanaDependencies?: boolean;
-  devOnly?: boolean;
 };
 
 export function getNpmDependencyUpdatesAsText(dependencyUpdates: UpdateSummary) {
@@ -94,7 +93,7 @@ export function getPackageJsonUpdates(options: UpdateOptions = {}) {
   }
 
   return {
-    dependencyUpdates: options.devOnly ? {} : dependencyUpdates,
+    dependencyUpdates,
     devDependencyUpdates,
   };
 }
