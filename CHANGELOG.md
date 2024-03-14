@@ -1,3 +1,16 @@
+# (Thu Mar 14 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.3`
+  - fix: respect package manager in update next steps [#819](https://github.com/grafana/plugin-tools/pull/819) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
 # (Wed Mar 13 2024)
 
 #### 🚀 Enhancement
