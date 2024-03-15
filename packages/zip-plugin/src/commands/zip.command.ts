@@ -128,53 +128,63 @@ export const zip = async (argv: minimist.ParsedArgs) => {
   );
 
   // Take filesWithZipPaths and split them into goBuildFiles and nonGoBuildFiles
-  const goBuildFiles: { [key: string]: string } = {};
-  const nonGoBuildFiles: { [key: string]: string } = {};
+  const goBuildFiles: string[] = [];
+  const nonGoBuildFiles: string[] = [];
 
-  Object.keys(filesWithZipPaths).forEach((filePath: string) => {
-    const zipPath = filesWithZipPaths[filePath];
+  listFiles(pluginDistDir).forEach((filePath: string) => {
     const fileName = filePath.split('/').pop();
     if (!fileName) {
       throw new Error('fileName is undefined or null');
     }
     if (fileName.startsWith('gpx')) {
-      goBuildFiles[filePath] = zipPath;
+      goBuildFiles.push(filePath);
     } else {
-      nonGoBuildFiles[filePath] = zipPath;
+      nonGoBuildFiles.push(filePath);
     }
   });
 
   // Noop if there are no go build files
   // Otherwise, compress each go build file along with all non-go files into a separate zip
   // Creates os/arch specific distributions
-  for (let [filePath, zipPath] of Object.entries(goBuildFiles)) {
+  for (let filePath of goBuildFiles) {
     const fileName = filePath
       .split('/')
       .pop()
       ?.replace(/\.exe$/, '');
+
     if (fileName === null || fileName === undefined) {
       throw new Error('fileName is undefined or null');
     }
+
     const [goos, goarch] = fileName?.split('_').slice(2) ?? [];
+
     // If any of these are null, throw an error
     if (fileName === null || goos === null || goarch === null) {
       throw new Error('fileName, goos, or goarch is undefined or null');
     }
+
     const outputName = `${pluginId}-${pluginVersion}.${goos}_${goarch}.zip`;
     const zipDestination = `${buildDir}/${pluginVersion}/${goos}/${outputName}`;
+
     mkdirSync(path.dirname(zipDestination), { recursive: true });
+
     const workingDir = path.join(path.dirname(zipDestination), 'working');
+
     mkdirSync(workingDir, { recursive: true });
     // Copy filePath to workingDir
     cpSync(filePath, path.join(workingDir, filePath));
+
     // Copy all nonGoBuildFiles into workingDir
     Object.entries(nonGoBuildFiles).forEach(([filePath, zipPath]) => {
       cpSync(filePath, path.join(workingDir, filePath));
     });
+
     // Add the manifest
     buildManifest(workingDir);
     const toCompress = absoluteToRelativePaths(workingDir);
     await compressFilesToZip(zipDestination, pluginId, toCompress);
+
+    rmdirSync(workingDir, { recursive: true });
   }
 
   // Copy all of the files from buildDir/pluginVersion to buildDir/latest
