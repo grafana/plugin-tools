@@ -10,6 +10,7 @@ import {
   rmdirSync,
   readFileSync,
   writeFileSync,
+  chmodSync,
 } from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -49,7 +50,7 @@ function addSha1ForFiles(files: any[]) {
   });
 }
 
-function compressFilesToZip(zipFilePath: string, fileMapping: { [key: string]: string }) {
+function compressFilesToZip(zipFilePath: string, pluginId: string, fileMapping: { [key: string]: string }) {
   return new Promise<void>((resolve, reject) => {
     // Create the folder for output if it does not exist
     const outputDir = path.dirname(zipFilePath);
@@ -77,8 +78,8 @@ function compressFilesToZip(zipFilePath: string, fileMapping: { [key: string]: s
 
     // append files to the archive
     Object.keys(fileMapping).forEach((filePath) => {
-      const fileName = fileMapping[filePath]; // get the file name
-      archive.append(createReadStream(filePath), { name: fileName });
+      const fileName = pluginId + '/' + fileMapping[filePath]; // get the file name
+      archive.append(createReadStream(filePath), { name: fileName, mode: 0o755 });
     });
 
     // finalize the archive
@@ -113,7 +114,12 @@ export const zip = async (argv: minimist.ParsedArgs) => {
     return out;
   })(copiedPath);
 
-  await compressFilesToZip(`${buildDir}/${pluginVersion}/${pluginId}-${pluginVersion}.zip`, filesWithZipPaths);
+  // Binary distribution for any platform
+  await compressFilesToZip(
+    `${buildDir}/${pluginVersion}/${pluginId}-${pluginVersion}.zip`,
+    pluginId,
+    filesWithZipPaths
+  );
 
   // Take filesWithZipPaths and split them into goBuildFiles and nonGoBuildFiles
   const goBuildFiles: { [key: string]: string } = {};
@@ -133,6 +139,7 @@ export const zip = async (argv: minimist.ParsedArgs) => {
 
   // Noop if there are no go build files
   // Otherwise, compress each go build file along with all non-go files into a separate zip
+  // Creates os/arch specific distributions
   for (let [filePath, zipPath] of Object.entries(goBuildFiles)) {
     const fileName = filePath
       .split('/')
@@ -146,7 +153,7 @@ export const zip = async (argv: minimist.ParsedArgs) => {
     const outputName = `${pluginId}-${pluginVersion}.${goos}_${goarch}.zip`;
     const zipDestination = `${buildDir}/${pluginVersion}/${goos}/${outputName}`;
     mkdirSync(path.dirname(zipDestination), { recursive: true });
-    await compressFilesToZip(zipDestination, { [filePath]: zipPath, ...nonGoBuildFiles });
+    await compressFilesToZip(zipDestination, pluginId, { [filePath]: zipPath, ...nonGoBuildFiles });
   }
 
   // Copy all of the files from buildDir/pluginVersion to buildDir/latest
