@@ -45,5 +45,14 @@
     "semver": "^7.5.4",
     "uuid": "^9.0.1",
     "yaml": "^2.3.4"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*"
+    ],
+    "ext": "*",
+    "events": {
+      "start": "cls || clear"
+    }
   }
 }

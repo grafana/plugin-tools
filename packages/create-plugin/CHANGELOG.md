@@ -1,3 +1,15 @@
+# v4.2.3 (Thu Mar 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix: respect package manager in update next steps [#819](https://github.com/grafana/plugin-tools/pull/819) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
 # v4.2.1 (Thu Feb 29 2024)
 
 #### 🐛 Bug Fix
