@@ -1,4 +1,3 @@
-import minimist from 'minimist';
 import {
   existsSync,
   mkdirSync,
@@ -10,11 +9,12 @@ import {
   rmdirSync,
   readFileSync,
   writeFileSync,
-  chmodSync,
 } from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import archiver from 'archiver';
+import minimist from 'minimist';
+import { buildManifest } from '../utils/manifest.js';
 
 function generateFolder(prefix: string): string {
   const randomHash = crypto.createHash('md5').update(new Date().getTime().toString()).digest('hex');
@@ -87,6 +87,14 @@ function compressFilesToZip(zipFilePath: string, pluginId: string, fileMapping: 
   });
 }
 
+export const absoluteToRelativePaths = (dir: string) => {
+  const out: { [key: string]: string } = {};
+  listFiles(dir).forEach((file) => {
+    out[file] = file.replace(dir, '');
+  });
+  return out;
+};
+
 export const zip = async (argv: minimist.ParsedArgs) => {
   const distDir = argv.distDir ?? 'dist';
   const pluginDistDir = path.resolve(distDir);
@@ -105,14 +113,12 @@ export const zip = async (argv: minimist.ParsedArgs) => {
   } = pluginJson;
 
   const copiedPath = path.join(process.cwd(), buildDir, pluginId);
+
   cpSync(pluginDistDir, copiedPath, { recursive: true });
-  const filesWithZipPaths = ((dir) => {
-    const out: { [key: string]: string } = {};
-    listFiles(dir).forEach((file) => {
-      out[file] = file.replace(dir, '');
-    });
-    return out;
-  })(copiedPath);
+
+  const filesWithZipPaths = absoluteToRelativePaths(copiedPath);
+
+  buildManifest(copiedPath);
 
   // Binary distribution for any platform
   await compressFilesToZip(
@@ -124,6 +130,7 @@ export const zip = async (argv: minimist.ParsedArgs) => {
   // Take filesWithZipPaths and split them into goBuildFiles and nonGoBuildFiles
   const goBuildFiles: { [key: string]: string } = {};
   const nonGoBuildFiles: { [key: string]: string } = {};
+
   Object.keys(filesWithZipPaths).forEach((filePath: string) => {
     const zipPath = filesWithZipPaths[filePath];
     const fileName = filePath.split('/').pop();
@@ -145,6 +152,9 @@ export const zip = async (argv: minimist.ParsedArgs) => {
       .split('/')
       .pop()
       ?.replace(/\.exe$/, '');
+    if (fileName === null || fileName === undefined) {
+      throw new Error('fileName is undefined or null');
+    }
     const [goos, goarch] = fileName?.split('_').slice(2) ?? [];
     // If any of these are null, throw an error
     if (fileName === null || goos === null || goarch === null) {
@@ -153,7 +163,18 @@ export const zip = async (argv: minimist.ParsedArgs) => {
     const outputName = `${pluginId}-${pluginVersion}.${goos}_${goarch}.zip`;
     const zipDestination = `${buildDir}/${pluginVersion}/${goos}/${outputName}`;
     mkdirSync(path.dirname(zipDestination), { recursive: true });
-    await compressFilesToZip(zipDestination, pluginId, { [filePath]: zipPath, ...nonGoBuildFiles });
+    const workingDir = path.join(path.dirname(zipDestination), 'working');
+    mkdirSync(workingDir, { recursive: true });
+    // Copy filePath to workingDir
+    cpSync(filePath, path.join(workingDir, filePath));
+    // Copy all nonGoBuildFiles into workingDir
+    Object.entries(nonGoBuildFiles).forEach(([filePath, zipPath]) => {
+      cpSync(filePath, path.join(workingDir, filePath));
+    });
+    // Add the manifest
+    buildManifest(workingDir);
+    const toCompress = absoluteToRelativePaths(workingDir);
+    await compressFilesToZip(zipDestination, pluginId, toCompress);
   }
 
   // Copy all of the files from buildDir/pluginVersion to buildDir/latest
