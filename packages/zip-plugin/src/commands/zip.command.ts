@@ -15,6 +15,7 @@ import crypto from 'node:crypto';
 import archiver from 'archiver';
 import minimist from 'minimist';
 import { buildManifest } from '../utils/manifest.js';
+import { sign } from '../utils/sign.js';
 
 function generateFolder(prefix: string): string {
   const randomHash = crypto.createHash('md5').update(new Date().getTime().toString()).digest('hex');
@@ -58,6 +59,7 @@ function compressFilesToZip(zipFilePath: string, pluginId: string, fileMapping: 
       mkdirSync(outputDir, { recursive: true });
     }
     // create a write stream for the output zip file
+    console.log('Creating zip write stream for ' + zipFilePath);
     const output = createWriteStream(zipFilePath);
     const archive = archiver('zip', {
       zlib: { level: 9 }, // Sets the compression level.
@@ -66,7 +68,7 @@ function compressFilesToZip(zipFilePath: string, pluginId: string, fileMapping: 
     // listen for all archive data to be written
     output.on('close', function () {
       console.log(archive.pointer() + ' total bytes');
-      console.log('archiver has been finalized and the output file descriptor has closed.');
+      console.log(`archiver for ${zipFilePath} has been finalized and the output file descriptor has closed.`);
       resolve();
     });
 
@@ -118,7 +120,7 @@ export const zip = async (argv: minimist.ParsedArgs) => {
 
   const filesWithZipPaths = absoluteToRelativePaths(copiedPath);
 
-  buildManifest(copiedPath);
+  sign(copiedPath);
 
   // Binary distribution for any platform
   await compressFilesToZip(
@@ -128,25 +130,25 @@ export const zip = async (argv: minimist.ParsedArgs) => {
   );
 
   // Take filesWithZipPaths and split them into goBuildFiles and nonGoBuildFiles
-  const goBuildFiles: string[] = [];
-  const nonGoBuildFiles: string[] = [];
-
-  listFiles(pluginDistDir).forEach((filePath: string) => {
+  const goBuildFiles: { [key: string]: string } = {};
+  const nonGoBuildFiles: { [key: string]: string } = {};
+  Object.keys(filesWithZipPaths).forEach((filePath: string) => {
+    const zipPath = filesWithZipPaths[filePath];
     const fileName = filePath.split('/').pop();
     if (!fileName) {
       throw new Error('fileName is undefined or null');
     }
     if (fileName.startsWith('gpx')) {
-      goBuildFiles.push(filePath);
+      goBuildFiles[filePath] = zipPath;
     } else {
-      nonGoBuildFiles.push(filePath);
+      nonGoBuildFiles[filePath] = zipPath;
     }
   });
 
   // Noop if there are no go build files
   // Otherwise, compress each go build file along with all non-go files into a separate zip
   // Creates os/arch specific distributions
-  for (let filePath of goBuildFiles) {
+  for (let [filePath, zipPath] of Object.entries(goBuildFiles)) {
     const fileName = filePath
       .split('/')
       .pop()
@@ -175,12 +177,12 @@ export const zip = async (argv: minimist.ParsedArgs) => {
     cpSync(filePath, path.join(workingDir, filePath));
 
     // Copy all nonGoBuildFiles into workingDir
-    Object.entries(nonGoBuildFiles).forEach(([filePath, zipPath]) => {
-      cpSync(filePath, path.join(workingDir, filePath));
+    Object.entries(nonGoBuildFiles).forEach(([absPath, relPath]) => {
+      cpSync(absPath, path.join(workingDir, relPath));
     });
 
     // Add the manifest
-    buildManifest(workingDir);
+    sign(workingDir);
     const toCompress = absoluteToRelativePaths(workingDir);
     await compressFilesToZip(zipDestination, pluginId, toCompress);
 

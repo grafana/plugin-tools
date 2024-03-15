@@ -1,6 +1,6 @@
 {
   "name": "@sandersaarond/zip-plugin",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": {
     "directory": "packages/zip-plugin",
     "url": "https://github.com/grafana/plugin-tools"
