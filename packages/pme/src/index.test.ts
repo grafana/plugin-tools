@@ -38,7 +38,7 @@ describe('plugin meta extractor when app is exported as named export', () => {
   });
 
   describe('and extensions registered in external function', () => {
-    it.only('should return expected meta from app plugin', () => {
+    it('should return expected meta from app plugin', () => {
       const entry = `${fixturesPath}/${fixtureFolder}/wrapped.ts`;
       const meta = createProgram(entry);
 
@@ -68,7 +68,7 @@ describe('plugin meta extractor when app is exported as named export', () => {
   });
 
   describe('and extensions registered by chaining function calls and in an external function', () => {
-    it('should return expected meta from app plugin', () => {
+    it.only('should return expected meta from app plugin', () => {
       const entry = `${fixturesPath}/${fixtureFolder}/mixed.tsx`;
       const meta = createProgram(entry);
 
@@ -109,7 +109,7 @@ describe('plugin meta extractor when app is exported as named export', () => {
 });
 
 describe('plugin meta extractor when app is exported as default export', () => {
-  const fixtureFolder = 'defaultExport';
+  const fixtureFolder = 'deafultExport';
 
   describe('and extensions registered by chaining function calls', () => {
     it('should return expected meta from app plugin', () => {
