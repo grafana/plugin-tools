@@ -1,3 +1,15 @@
+# v4.2.4 (Fri Mar 15 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: upgrade @grafana/eslint-config to 7.0.0 [#822](https://github.com/grafana/plugin-tools/pull/822) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.2.3 (Thu Mar 14 2024)
 
 #### 🐛 Bug Fix
