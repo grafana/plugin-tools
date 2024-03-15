@@ -1,5 +1,5 @@
 ---
-id: query-editor
+id: data-queries
 title: Test the query editor
 description: Testing the query editor and the execution of data queries
 keywords:
@@ -82,5 +82,35 @@ test('data query should return headers  and 3', async ({ panelEditPage, readProv
   await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
   await expect(panelEditPage.panel.fieldNames).toHaveText(['Stockholm', 'Vienna']);
+});
+```
+
+### Testing a query in a provisioned dashboard
+
+Sometimes you may want to open the panel edit page for an already existing panel and run the query to make sure everything work as expected.
+
+```ts
+test('query in provisioned dashboard should return temp and humidity data', async ({
+  readProvisionedDashboard,
+  gotoPanelEditPage,
+}) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
+  await expect(panelEditPage.refreshPanel()).toBeOK();
+  await expect(panel.fieldNames).toContainText(['temperature', 'humidity']);
+  await expect(panel.data).toContainText(['25', '10']);
+});
+```
+
+You can also open an already existing dashboard and verify that a table panel have rendered the data that you expect.
+
+```ts
+test('getting panel by id', async ({ gotoDashboardPage, readProvisionedDashboard }) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const dashboardPage = await gotoDashboardPage(dashboard);
+  const panel1 = await dashboardPage.getPanelById('3');
+  await expect(panel1.data).toContainText(['25', '32', 'staging']);
+  const panel2 = await dashboardPage.getPanelByTitle('Basic table example');
+  await expect(dashboardPage.panel2.fieldNames).toContainText(['Tokyo', 'Berlin']);
 });
 ```

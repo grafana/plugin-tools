@@ -1,3 +1,83 @@
+# (Fri Mar 15 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.4`
+  - Create Plugin: upgrade @grafana/eslint-config to 7.0.0 [#822](https://github.com/grafana/plugin-tools/pull/822) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Thu Mar 14 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.3`
+  - fix: respect package manager in update next steps [#819](https://github.com/grafana/plugin-tools/pull/819) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
+# (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.21.0`
+  - Plugin E2E: Make it easier to navigate to existing resources [#812](https://github.com/grafana/plugin-tools/pull/812) ([@sunker](https://github.com/sunker))
+  - PluginE2E: Added (app) plugin config fixture [#795](https://github.com/grafana/plugin-tools/pull/795) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.20.0`
+  - Plugin E2E: Pass testinfo to models [#769](https://github.com/grafana/plugin-tools/pull/769) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 13 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.19.1`
+  - Plugin E2E: Add QueryField container selector [#810](https://github.com/grafana/plugin-tools/pull/810) ([@kevinwcyu](https://github.com/kevinwcyu))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "streamline descriptions" ([@sunker](https://github.com/sunker))
+- streamline descriptions ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@0.19.1`
+  - Revert "add annotations article" ([@sunker](https://github.com/sunker))
+  - add annotations article ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu))
+
+---
+
 # (Thu Feb 29 2024)
 
 #### 🚀 Enhancement

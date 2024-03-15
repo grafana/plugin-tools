@@ -1,6 +1,6 @@
 ---
-id: configuration-editor
-title: The the configuration editor
+id: configurations
+title: Test the configuration editor
 description: Testing the configuration editor of backend and frontend data sources with valid and invalid configuration
 keywords:
   - grafana
@@ -88,5 +88,20 @@ test('"Save & test" should display success alert box when config is valid', asyn
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' }));
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success');
+});
+```
+
+### Testing a provisioned data source
+
+Sometimes you may want to open the configuration editor for an already existing data source instance to verify configuration work as expected.
+
+```ts
+test('provisioned data source with valid credentials should return a 200 status code', async ({
+  readProvisionedDataSource,
+  gotoDataSourceConfigPage,
+}) => {
+  const datasource = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  const configPage = await gotoDataSourceConfigPage(datasource.uid);
+  await expect(configPage.saveAndTest()).toBeOK();
 });
 ```

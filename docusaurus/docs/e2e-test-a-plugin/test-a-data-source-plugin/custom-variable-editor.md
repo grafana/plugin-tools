@@ -1,7 +1,7 @@
 ---
-id: custom-variable-editor
-title: Test the custom variable editor
-description: Testing a custom variable query editor and the execution of variable queries
+id: variable-queries
+title: Test a custom variable editor
+description: Test a custom variable query editor and the execution of variable queries.
 keywords:
   - grafana
   - plugins
@@ -78,19 +78,11 @@ If you just want to test the variable query runner without testing the custom va
 
 ```ts title="customVariableEditor.spec.ts"
 test('should return data when valid query from provisioned dashboard is used', async ({
-  request,
-  page,
-  selectors,
-  grafanaVersion,
   readProvisionedDashboard,
+  gotoVariableEditPage,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
-  const variableQueryId = '2';
-  const variableEditPage = new VariableEditPage(
-    { request, page, selectors, grafanaVersion },
-    { dashboard, id: variableQueryId }
-  );
-  await variableEditPage.goto();
+  const variableEditPage = await gotoVariableEditPage({ dashboard, id: '2' });
   await variableEditPage.runQuery();
   await expect(variableEditPage).toDisplayPreviews(['staging', 'test']);
 });

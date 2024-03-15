@@ -19,18 +19,11 @@ test('custom variable editor query runner should return data when query is valid
 });
 
 test('custom variable editor query runner should return data when valid query from provisioned dashboard is used', async ({
-  request,
-  page,
-  selectors,
-  grafanaVersion,
   readProvisionedDashboard,
+  gotoVariableEditPage,
 }) => {
-  const provision = await readProvisionedDashboard({ fileName: 'redshift.json' });
-  const variableEditPage = new VariableEditPage(
-    { request, page, selectors, grafanaVersion },
-    { dashboard: { uid: provision.uid }, id: '2' }
-  );
-  await variableEditPage.goto();
+  const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+  const variableEditPage = await gotoVariableEditPage({ dashboard, id: '2' });
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();
   await queryDataRequest;

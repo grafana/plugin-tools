@@ -1,5 +1,4 @@
-import fs from 'fs';
-import { DashboardPage, PanelEditPage, expect, test } from '../../../src';
+import { expect, test } from '../../../src';
 import { clickRadioButton } from '../../utils';
 
 test.describe.configure({ mode: 'parallel' });
@@ -13,16 +12,13 @@ test('add a clock panel in new dashboard and set time format to "12 hour"', asyn
 });
 
 test('open a clock panel in a provisioned dashboard and set time format to "12 hour"', async ({
-  selectors,
   page,
-  request,
-  grafanaVersion,
+  gotoPanelEditPage,
   readProvisionedDashboard,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'clock-panel.json' });
   const args = { dashboard: { uid: dashboard.uid }, id: '5' };
-  const panelEditPage = await new PanelEditPage({ page, selectors, grafanaVersion, request }, args);
-  await panelEditPage.goto();
+  const panelEditPage = await gotoPanelEditPage(args);
   await expect(panelEditPage.getVisualizationName()).toHaveText('Clock');
   await panelEditPage.collapseSection('Clock');
   await clickRadioButton(page, '12 Hour');

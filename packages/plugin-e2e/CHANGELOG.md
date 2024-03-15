@@ -1,3 +1,51 @@
+# v0.21.0 (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Make it easier to navigate to existing resources [#812](https://github.com/grafana/plugin-tools/pull/812) ([@sunker](https://github.com/sunker))
+- PluginE2E: Added (app) plugin config fixture [#795](https://github.com/grafana/plugin-tools/pull/795) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v0.20.0 (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Pass testinfo to models [#769](https://github.com/grafana/plugin-tools/pull/769) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.19.1 (Wed Mar 13 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add QueryField container selector [#810](https://github.com/grafana/plugin-tools/pull/810) ([@kevinwcyu](https://github.com/kevinwcyu))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "add annotations article" ([@sunker](https://github.com/sunker))
+- add annotations article ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu))
+
+---
+
 # v0.19.0 (Thu Feb 29 2024)
 
 #### 🚀 Enhancement

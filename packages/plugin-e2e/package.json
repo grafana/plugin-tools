@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "0.19.0",
+  "version": "0.21.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -45,5 +45,14 @@
     "semver": "^7.5.4",
     "uuid": "^9.0.1",
     "yaml": "^2.3.4"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*"
+    ],
+    "ext": "*",
+    "events": {
+      "start": "cls || clear"
+    }
   }
 }

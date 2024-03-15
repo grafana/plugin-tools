@@ -1,11 +1,11 @@
-import { Locator, PlaywrightTestArgs, Response } from '@playwright/test';
+import { Locator, PlaywrightTestArgs, Response, TestInfo } from '@playwright/test';
 
 import { E2ESelectors } from './e2e-selectors/types';
 
 /**
  * The context object passed to page object models
  */
-export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors } & Pick<
+export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors; testInfo: TestInfo } & Pick<
   PlaywrightTestArgs,
   'page' | 'request'
 >;
@@ -303,3 +303,9 @@ export interface ContainTextOptions {
    */
   useInnerText?: boolean;
 }
+
+export type PluginConfigPageArgs = {
+  pluginId: string;
+};
+
+export type GotoAppConfigPageArgs = PluginConfigPageArgs;

@@ -5,8 +5,12 @@ import { PlaywrightCombinedArgs } from './types';
 
 type VariableEditPageFixture = TestFixture<VariableEditPage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
-const variableEditPage: VariableEditPageFixture = async ({ page, selectors, grafanaVersion, request }, use) => {
-  const variablePage = new VariablePage({ page, selectors, grafanaVersion, request });
+const variableEditPage: VariableEditPageFixture = async (
+  { page, selectors, grafanaVersion, request },
+  use,
+  testInfo
+) => {
+  const variablePage = new VariablePage({ page, selectors, grafanaVersion, request, testInfo });
   await variablePage.goto();
   const variableEditPage = await variablePage.clickAddNew();
   await use(variableEditPage);

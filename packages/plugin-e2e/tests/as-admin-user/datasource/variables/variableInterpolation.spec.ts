@@ -1,9 +1,15 @@
 import { test, expect, PanelEditPage } from '../../../../src';
 
-test('variable interpolation', async ({ readProvisionedDashboard, request, page, selectors, grafanaVersion }) => {
+test('variable interpolation', async ({
+  readProvisionedDashboard,
+  request,
+  page,
+  selectors,
+  grafanaVersion,
+}, testInfo) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
   const panelEditPage = new PanelEditPage(
-    { request, page, selectors, grafanaVersion },
+    { request, page, selectors, grafanaVersion, testInfo },
     {
       id: '5',
       dashboard,
@@ -24,10 +30,10 @@ test('variable interpolation (navigate to panel from dashboard)', async ({
   page,
   selectors,
   grafanaVersion,
-}) => {
+}, testInfo) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
   const panelEditPage = new PanelEditPage(
-    { request, page, selectors, grafanaVersion },
+    { request, page, selectors, grafanaVersion, testInfo },
     {
       id: '5',
       dashboard,

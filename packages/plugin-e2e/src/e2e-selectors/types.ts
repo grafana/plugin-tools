@@ -17,6 +17,9 @@ export type APIs = {
   Dashboard: {
     delete: (uid: string) => string;
   };
+  Plugin: {
+    settings: (pluginId: string) => string;
+  };
 };
 
 export type Components = {
@@ -102,6 +105,9 @@ export type Components = {
   Tooltip: {
     container: string;
   };
+  QueryField: {
+    container: string;
+  };
 };
 
 export type Pages = {
@@ -178,5 +184,8 @@ export type Pages = {
   };
   Explore: {
     url: string;
+  };
+  Plugin: {
+    url: (pluginId: string) => string;
   };
 };

@@ -10,6 +10,9 @@ import {
   ReadProvisionedDataSourceArgs,
   CreateUserArgs,
   Dashboard,
+  DashboardPageArgs,
+  DashboardEditViewArgs,
+  GotoAppConfigPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -18,6 +21,7 @@ import {
   DashboardPage,
   VariableEditPage,
   AnnotationEditPage,
+  AppConfigPage,
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/pages/ExplorePage';
@@ -87,14 +91,9 @@ export type PluginFixture = {
   /**
    * Isolated {@link DashboardPage} instance for each test.
    *
-   * Navigates to a new dashboard page and adds a new panel.
-   *
-   * Use {@link PanelEditPage.setVisualization} to change the visualization
-   * Use {@link PanelEditPage.datasource.set} to change the datasource
-   * Use {@link PanelEditPage.getQueryEditorEditorRow} to retrieve the query
-   * editor row locator for a given query refId
+   * Navigates to a new to a new dashboard page.
    */
-  newDashboardPage: DashboardPage;
+  dashboardPage: DashboardPage;
 
   /**
    * Isolated {@link PanelEditPage} instance for each test.
@@ -238,6 +237,36 @@ export type PluginFixture = {
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Fixture command that navigates to an already exist dashboard. Returns a DashboardPage instance.
+   */
+  gotoDashboardPage: (args: DashboardPageArgs) => Promise<DashboardPage>;
+
+  /**
+   * Fixture command that navigates a panel edit page for an already existing panel in a dashboard.
+   */
+  gotoPanelEditPage: (args: DashboardEditViewArgs<string>) => Promise<PanelEditPage>;
+
+  /**
+   * Fixture command that navigates a variable edit page for an already existing variable query in a dashboard.
+   */
+  gotoVariableEditPage: (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>;
+
+  /**
+   * Fixture command that navigates an annotation edit page for an already existing annotation query in a dashboard.
+   */
+  gotoAnnotationEditPage: (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>;
+
+  /**
+   * Fixture command that navigates a configuration page for an already existing data source instance.
+   */
+  gotoDataSourceConfigPage: (uid: string) => Promise<DataSourceConfigPage>;
+
+  /**
+   * Fixture command that navigates to the AppConfigPage for a given plugin.
+   */
+  gotoAppConfigPage: (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures

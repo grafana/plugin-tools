@@ -1,4 +1,3 @@
-import { Page } from '@playwright/test';
 import { expect, test } from '../../../../src';
 import { clickRadioButton } from '../../../utils';
 
@@ -29,4 +28,13 @@ test('should call a custom health endpoint when healthCheckPath is provided', as
   await page.getByPlaceholder('http://localhost:8080').fill('http://localhost:8080');
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
+});
+
+test('existing ds instance - valid credentials should return a 200 status code', async ({
+  readProvisionedDataSource,
+  gotoDataSourceConfigPage,
+}) => {
+  const datasource = await readProvisionedDataSource({ fileName: 'google-sheets-datasource-jwt.yaml' });
+  const configPage = await gotoDataSourceConfigPage(datasource.uid);
+  await expect(configPage.saveAndTest()).toBeOK();
 });
