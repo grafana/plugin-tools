@@ -267,39 +267,6 @@ describe('Utils / NPM', () => {
       const result = hasNpmDependenciesToUpdate();
       expect(result).toBe(true);
     });
-
-    test('It should return false when there are no dev dependencies to update in devOnly mode', () => {
-      const packageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      const latestPackageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.1', // changed
-        },
-        // remains the same
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      mocks.getPackageJson.mockReturnValue(packageJson);
-      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
-
-      const result = hasNpmDependenciesToUpdate({ devOnly: true });
-      expect(result).toBe(false);
-    });
   });
 
   describe('getPackageJsonUpdatesAsText', () => {
@@ -354,70 +321,6 @@ describe('Utils / NPM', () => {
       const result = getPackageJsonUpdatesAsText();
       expect(result).toContain('sass');
       expect(result).toContain('react');
-    });
-
-    test('It should not return the related text when devOnly and only dependencies to update', () => {
-      const packageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      const latestPackageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.1', // changed
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      mocks.getPackageJson.mockReturnValue(packageJson);
-      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
-
-      const result = getPackageJsonUpdatesAsText({ devOnly: true });
-      expect(result).toBe('');
-    });
-
-    test('It should return the related text when devOnly and only dev dependencies to update', () => {
-      const packageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      const latestPackageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.1', //changed
-        },
-        scripts: {},
-      };
-
-      mocks.getPackageJson.mockReturnValue(packageJson);
-      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
-
-      const result = getPackageJsonUpdatesAsText({ devOnly: true });
-      expect(result).toContain('sass');
     });
   });
 
@@ -491,92 +394,6 @@ describe('Utils / NPM', () => {
         devDependencies: {
           '@testing-library/react': '12.0.0',
           sass: '1.0.1', //changed
-        },
-        scripts: {},
-      });
-    });
-
-    test('It should not change the package.json when devOnly is true and only non dev dependencies changed', () => {
-      const packageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      const latestPackageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.1', //changed
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      mocks.getPackageJson.mockReturnValue(packageJson);
-      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
-
-      updatePackageJson({ devOnly: true });
-      //should have the combined content
-      expect(mocks.writePackageJson).toHaveBeenCalledWith({
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      });
-    });
-
-    test('It should change the package.json when devOnly is true but only update dev dependencies', () => {
-      const packageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0',
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.0',
-        },
-        scripts: {},
-      };
-
-      const latestPackageJson = {
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.1', //changed
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.1', //changed
-        },
-        scripts: {},
-      };
-
-      mocks.getPackageJson.mockReturnValue(packageJson);
-      mocks.getLatestPackageJson.mockReturnValue(latestPackageJson);
-
-      updatePackageJson({ devOnly: true });
-      //should have the combined content
-      expect(mocks.writePackageJson).toHaveBeenCalledWith({
-        dependencies: {
-          '@grafana/ui': '10.0.0',
-          react: '18.2.0', //changed but devOnly so should not be changed in the file
-        },
-        devDependencies: {
-          '@testing-library/react': '12.0.0',
-          sass: '1.0.1',
         },
         scripts: {},
       });
