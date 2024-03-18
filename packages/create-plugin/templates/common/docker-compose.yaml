@@ -9,7 +9,8 @@ services:
     build:
       context: ./.config
       args:
-        - ARCH=amd64
+        grafana_image: ${GRAFANA_IMAGE:-{{~grafanaImage~}} }
+        grafana_version: ${GRAFANA_VERSION:-{{~grafanaVersion~}} }
     ports:
       - 3000:3000/tcp
 {{#if hasBackend}}

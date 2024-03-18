@@ -1,7 +1,7 @@
-ARG ARCH=amd64
-ARG BASE_IMAGE=grafana/grafana-oss-${ARCH}:development-ubuntu
+ARG grafana_version=latest
+ARG grafana_image=grafana-enterprise
 
-FROM ${BASE_IMAGE} as plugindev
+FROM grafana/${grafana_image}:${grafana_version}
 
 {{#if hasBackend}}
 ARG GO_VERSION=1.21.6
