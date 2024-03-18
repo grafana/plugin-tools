@@ -194,6 +194,10 @@ export type NavigateOptions = {
   queryParams?: URLSearchParams;
 };
 
+export type AppPageNavigateOptions = NavigateOptions & {
+  path?: string;
+};
+
 export type GetByTestIdOrAriaLabelOptions = {
   /**
    *Optional root locator to search within. If no locator is provided, the page will be used
@@ -304,8 +308,12 @@ export interface ContainTextOptions {
   useInnerText?: boolean;
 }
 
-export type PluginConfigPageArgs = {
+export type PluginPageArgs = {
   pluginId: string;
 };
 
-export type GotoAppConfigPageArgs = PluginConfigPageArgs;
+export type GotoAppConfigPageArgs = PluginPageArgs;
+
+export type GotoAppPageArgs = PluginPageArgs & {
+  path?: string;
+};

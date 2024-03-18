@@ -13,6 +13,7 @@ import {
   DashboardPageArgs,
   DashboardEditViewArgs,
   GotoAppConfigPageArgs,
+  GotoAppPageArgs,
 } from './types';
 import {
   PanelEditPage,
@@ -22,6 +23,7 @@ import {
   VariableEditPage,
   AnnotationEditPage,
   AppConfigPage,
+  AppPage,
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/pages/ExplorePage';
@@ -267,6 +269,11 @@ export type PluginFixture = {
    * Fixture command that navigates to the AppConfigPage for a given plugin.
    */
   gotoAppConfigPage: (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>;
+
+  /**
+   * Fixture command that navigates to an AppPage for a given plugin.
+   */
+  gotoAppPage: (args: GotoAppPageArgs) => Promise<AppPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures

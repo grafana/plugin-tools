@@ -1,9 +1,9 @@
 import { Response as PlaywrightResponse } from '@playwright/test';
-import { PluginConfigPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
+import { PluginPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class PluginConfigPage extends GrafanaPage {
-  constructor(readonly ctx: PluginTestCtx, readonly args: PluginConfigPageArgs) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: PluginPageArgs) {
     super(ctx);
   }
 
