@@ -1,3 +1,15 @@
+# v0.22.0 (Mon Mar 18 2024)
+
+#### 🚀 Enhancement
+
+- E2E: Added command and page to interact with app pages [#821](https://github.com/grafana/plugin-tools/pull/821) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v0.21.0 (Wed Mar 13 2024)
 
 #### 🚀 Enhancement
