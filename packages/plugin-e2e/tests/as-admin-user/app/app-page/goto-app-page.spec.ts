@@ -1,4 +1,4 @@
-import { AppPage, expect, test } from '../../../../src';
+import { expect, test } from '../../../../src';
 
 test('should navigate to app root page when calling goto without any path', async ({ gotoAppPage, page }) => {
   await gotoAppPage({ pluginId: 'redis-app' });

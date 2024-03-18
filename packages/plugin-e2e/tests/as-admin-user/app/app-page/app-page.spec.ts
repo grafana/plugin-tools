@@ -19,7 +19,7 @@ test('should navigate to app sub page when calling goto with path', async ({
   request,
 }, testInfo) => {
   const appPage = new AppPage({ grafanaVersion, selectors, page, request, testInfo }, { pluginId: 'redis-app' });
-  await appPage.goto('/create');
+  await appPage.goto({ path: '/create' });
 
   await expect(page).toHaveURL(/.*\/a\/redis-app\/create$/);
 });

@@ -194,6 +194,10 @@ export type NavigateOptions = {
   queryParams?: URLSearchParams;
 };
 
+export type AppPageNavigateOptions = NavigateOptions & {
+  path?: string;
+};
+
 export type GetByTestIdOrAriaLabelOptions = {
   /**
    *Optional root locator to search within. If no locator is provided, the page will be used
