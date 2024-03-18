@@ -1,5 +1,18 @@
 # (Mon Mar 18 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.2.5`
+  - Create Plugin: Remove devOnly parameter and related test cases [#823](https://github.com/grafana/plugin-tools/pull/823) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Mon Mar 18 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@0.22.0`
