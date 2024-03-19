@@ -26,11 +26,18 @@ USER root
 
 
 # Installing supervisor and inotify-tools
-RUN apt-get update && \
-    apt-get install -y supervisor && \
-    apt-get install -y  inotify-tools && \
-    rm -rf /var/lib/apt/lists/*
+RUN if grep -i -q alpine /etc/issue; then \
+      apk add supervisor inotify-tools git; \
+    elif grep -i -q ubuntu /etc/issue; then \
+      DEBIAN_FRONTEND=noninteractive && \
+      apt-get update && \
+      apt-get install -y supervisor inotify-tools git && \
+      rm -rf /var/lib/apt/lists/*; \
+    else \
+      echo 'ERROR: Unsupported base image' && /bin/false; \
+    fi
 
+COPY supervisord/supervisord.conf /etc/supervisor.d/supervisord.ini
 COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
@@ -56,4 +63,6 @@ RUN git clone https://github.com/magefile/mage; \
 RUN sed -i 's|</body>|<script src="http://localhost:35729/livereload.js"></script></body>|g' /usr/share/grafana/public/views/index.html
 
 
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
