@@ -115,6 +115,9 @@ export default defineConfig({
       name: 'run-tests',
       use: {
         ...devices['Desktop Chrome'],
+
+        // @grafana/plugin-e2e writes the auth state to this file,
+        // the path should not be modified
         storageState: 'playwright/.auth/admin.json',
       },
       dependencies: ['auth'],
