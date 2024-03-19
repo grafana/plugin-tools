@@ -19,7 +19,7 @@ The [`create-plugin` tool](./get-started.mdx#use-plugin-tools-to-develop-your-pl
 
 :::info
 
-It's not necessary to [sign a plugin](/publish-a-plugin/sign-a-plugin.md)  during development. The Docker development environment that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
+It's not necessary to [sign a plugin](/publish-a-plugin/sign-a-plugin.md) during development. The Docker development environment that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
 
 :::
 
@@ -71,6 +71,8 @@ services:
       args:
         grafana_version: ${GRAFANA_VERSION:-9.1.2}
         grafana_image: ${GRAFANA_IMAGE:-grafana}
+        GO_VERSION: ${GO_VERSION:-1.22}
+        GO_ARCH: ${GO_ARCH:-amd64}
 ```
 
 This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker-compose` commands.
