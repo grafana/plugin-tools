@@ -134,6 +134,17 @@ To prevent these files from being version controlled, you can add the following 
 /playwright/.auth/
 ```
 
+The `@grafana/plugin-e2e` package also exports a type named `PluginOptions` that you can use to extend the Playwright configuration with the `@grafana/plugin-e2e` specific options.
+
+```ts title="playwright.config.ts"
+import { defineConfig } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+
+export default defineConfig<PluginOptions>({
+    ...
+});
+```
+
 ### Step 4: Start Grafana
 
 Start up the latest version of Grafana on your local machine like this:
