@@ -15,7 +15,8 @@ export function printGenerateSuccessMessage(answers: CliArgs) {
           '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
         ]
       : []),
-    '- `docker-compose up` to start a grafana development server. Restart this command after each time you run mage to run your new backend code.',
+    '- `docker-compose up` to start a grafana development server. ' +
+      (answers.hasBackend ? 'Restart this command after each time you run mage to run your new backend code.' : ''),
     '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
