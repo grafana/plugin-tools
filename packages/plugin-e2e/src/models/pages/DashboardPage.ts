@@ -53,7 +53,7 @@ export class DashboardPage extends GrafanaPage {
    * await expect(panel.fieldNames).toContainText(['time', 'temperature']);
    */
   getPanelByTitle(title: string): Panel {
-    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(title), {
+    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(title), {
       startsWith: true,
     });
     // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
@@ -81,12 +81,12 @@ export class DashboardPage extends GrafanaPage {
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages } = this.ctx.selectors;
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      await this.getByTestIdOrAriaLabel(
+      await this.getByGrafanaSelector(
         components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)
       ).click();
-      await this.getByTestIdOrAriaLabel(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
+      await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
-      await this.getByTestIdOrAriaLabel(pages.AddDashboard.addNewPanel).click();
+      await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
 
     const panelId = await this.ctx.page.evaluate(() => {

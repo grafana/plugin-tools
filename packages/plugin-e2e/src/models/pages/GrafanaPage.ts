@@ -1,5 +1,5 @@
 import { Locator, Request, Response } from '@playwright/test';
-import { GetByTestIdOrAriaLabelOptions, NavigateOptions, PluginTestCtx } from '../../types';
+import { getByGrafanaSelectorOptions, NavigateOptions, PluginTestCtx } from '../../types';
 
 /**
  * Base class for all Grafana pages.
@@ -20,17 +20,24 @@ export abstract class GrafanaPage {
   }
 
   /**
-   * Get a locator for a Grafana element by data-testid or aria-label
-   * @param selector the data-testid or aria-label of the element
-   * @param root optional root locator to search within. If no locator is provided, the page will be used
+   * Get a locator based on a Grafana E2E selector. A grafana E2E selector is defined in @grafana/e2e-selectors or in plugin-e2e/src/e2e-selectors.
+   * An E2E selector is a string that identifies a specific element in the Grafana UI. The element referencing the E2E selector use the data-testid or aria-label attribute.
    */
-  getByTestIdOrAriaLabel(selector: string, options?: GetByTestIdOrAriaLabelOptions): Locator {
+  getByGrafanaSelector(selector: string, options?: getByGrafanaSelectorOptions): Locator {
     const startsWith = options?.startsWith ? '^' : '';
     if (selector.startsWith('data-testid')) {
       return (options?.root || this.ctx.page).locator(`[data-testid${startsWith}="${selector}"]`);
     }
 
     return (options?.root || this.ctx.page).locator(`[aria-label${startsWith}="${selector}"]`);
+  }
+
+  /**
+   * Get a locator for a Grafana element by data-testid or aria-label
+   * @deprecated use getByGrafanaSelector instead
+   */
+  getByTestIdOrAriaLabel(selector: string, options?: getByGrafanaSelectorOptions): Locator {
+    return this.getByGrafanaSelector(selector, options);
   }
 
   /**

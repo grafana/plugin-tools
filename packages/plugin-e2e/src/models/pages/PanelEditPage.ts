@@ -21,7 +21,7 @@ export class PanelEditPage extends GrafanaPage {
 
   private getPanelLocator() {
     // only one panel is allowed in the panel edit page, so we don't need to use panel title to locate it
-    const locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(''), {
+    const locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(''), {
       startsWith: true,
     });
     // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
@@ -48,7 +48,7 @@ export class PanelEditPage extends GrafanaPage {
 
   async toggleTableView() {
     await radioButtonSetChecked(this.ctx.page, 'Table view', true);
-    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''));
+    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''));
     if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
       locator = this.ctx.page.getByRole('table');
     }
@@ -59,7 +59,7 @@ export class PanelEditPage extends GrafanaPage {
     await radioButtonSetChecked(this.ctx.page, 'Table view', false);
     this.panel = new Panel(
       this.ctx,
-      this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
+      this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(''), { startsWith: true })
     );
   }
 
@@ -70,7 +70,7 @@ export class PanelEditPage extends GrafanaPage {
     const { OptionsGroup } = this.ctx.selectors.components;
     await this.collapseSection(OptionsGroup.groupTitle);
     //TODO: add new selector and use it in grafana/ui
-    const vizInput = await this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle))
+    const vizInput = await this.getByGrafanaSelector(OptionsGroup.group(OptionsGroup.groupTitle))
       .locator('input')
       .first();
     await vizInput.fill(title);
@@ -82,15 +82,15 @@ export class PanelEditPage extends GrafanaPage {
    */
   async setVisualization(visualization: Visualization) {
     // toggle options pane if panel edit is not visible
-    const showPanelEditElement = this.getByTestIdOrAriaLabel('Show options pane');
+    const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
     const showPanelEditElementCount = await showPanelEditElement.count();
     if (showPanelEditElementCount > 0) {
       await showPanelEditElement.click();
     }
-    await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
-    await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
+    await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
+    await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
     await expect(
-      this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
+      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
   }
@@ -99,9 +99,9 @@ export class PanelEditPage extends GrafanaPage {
    * Expands the section for the given category name. If the section is already expanded, this method does nothing.
    */
   async collapseSection(categoryName: string) {
-    const section = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.OptionsGroup.group(categoryName));
+    const section = this.getByGrafanaSelector(this.ctx.selectors.components.OptionsGroup.group(categoryName));
     await expect(section, `Could not find any section for category: ${categoryName}`).toBeVisible();
-    const sectionToggle = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.OptionsGroup.toggle(categoryName));
+    const sectionToggle = this.getByGrafanaSelector(this.ctx.selectors.components.OptionsGroup.toggle(categoryName));
     const expandedAttr = (await sectionToggle.getAttribute('aria-expanded')) ?? '';
     if (/false/.test(expandedAttr)) {
       await section.click();
@@ -112,7 +112,7 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the name of the visualization currently selected in the panel editor
    */
   getVisualizationName(): Locator {
-    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
+    return this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
   }
 
   /**
@@ -126,8 +126,8 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the locator for the query editor row with the given refId
    */
   getQueryEditorRow(refId: string): Locator {
-    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
-      has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
+    return this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+      has: this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRow.title(refId)),
     });
   }
 
@@ -151,7 +151,7 @@ export class PanelEditPage extends GrafanaPage {
     );
 
     // in older versions of grafana, the refresh button is rendered twice. this is a workaround to click the correct one
-    const refreshPanelButton = this.getByTestIdOrAriaLabel(
+    const refreshPanelButton = this.getByGrafanaSelector(
       this.ctx.selectors.components.PanelEditor.General.content
     ).locator(`selector=${this.ctx.selectors.components.RefreshPicker.runButtonV2}`);
 

@@ -29,9 +29,9 @@ export class AnnotationPage extends GrafanaPage {
     if (!this.dashboard?.uid) {
       //the dashboard doesn't have any annotations yet (except for the built-in one)
       if (semver.gte(this.ctx.grafanaVersion, '8.3.0')) {
-        await this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTAV2).click();
+        await this.getByGrafanaSelector(Dashboard.Settings.Annotations.List.addAnnotationCTAV2).click();
       } else {
-        await this.getByTestIdOrAriaLabel(Dashboard.Settings.Annotations.List.addAnnotationCTA).click();
+        await this.getByGrafanaSelector(Dashboard.Settings.Annotations.List.addAnnotationCTA).click();
       }
     } else {
       //the dashboard already has annotations

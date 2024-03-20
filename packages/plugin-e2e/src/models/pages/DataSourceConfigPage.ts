@@ -45,7 +45,7 @@ export class DataSourceConfigPage extends GrafanaPage {
     );
     const healthPath = options?.path ?? health(this.datasource.uid, this.datasource.id.toString());
     const healthResponsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes(healthPath));
-    await this.getByTestIdOrAriaLabel(this.ctx.selectors.pages.DataSource.saveAndTest).click();
+    await this.getByGrafanaSelector(this.ctx.selectors.pages.DataSource.saveAndTest).click();
     return saveResponsePromise.then(() => healthResponsePromise);
   }
 }

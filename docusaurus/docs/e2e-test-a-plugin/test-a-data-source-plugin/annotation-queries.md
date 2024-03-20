@@ -37,7 +37,7 @@ test('should run successfully and display a success alert box when query is vali
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.waitForFunction(() => window.monaco);
-  await annotationEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
+  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText(`select time as time, humidity as text
   from dataset
   where $__timeFilter(time) and humidity > 95`);
@@ -60,7 +60,7 @@ test('should fail and display an error alert box when time field is missing in t
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.waitForFunction(() => window.monaco);
-  await annotationEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
+  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText(`select humidity as text
   from dataset
   where humidity > 95`);
