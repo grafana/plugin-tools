@@ -33,14 +33,6 @@ export abstract class GrafanaPage {
   }
 
   /**
-   * Get a locator for a Grafana element by data-testid or aria-label
-   * @deprecated use getByGrafanaSelector instead
-   */
-  getByTestIdOrAriaLabel(selector: string, options?: getByGrafanaSelectorOptions): Locator {
-    return this.getByGrafanaSelector(selector, options);
-  }
-
-  /**
    * Mocks the response of the datasource query call
    * @param json the json response to return
    * @param status the HTTP status code to return. Defaults to 200
