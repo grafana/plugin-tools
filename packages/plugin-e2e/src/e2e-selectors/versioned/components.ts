@@ -173,6 +173,16 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'Code editor container',
     },
   },
+  Annotations: {
+    editor: {
+      testButton: {
+        '10.3.0': 'data-testid annotations-test-button',
+      },
+      resultContainer: {
+        '10.3.0': 'data-testid annotations-query-result-container',
+      },
+    },
+  },
   QueryField: {
     container: {
       '10.3.0': 'data-testid Query field',

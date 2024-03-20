@@ -99,7 +99,12 @@ export type Components = {
   CodeEditor: {
     container: string;
   };
-  Annotations: {};
+  Annotations: {
+    editor: {
+      testButton: string;
+      resultContainer: string;
+    };
+  };
   QueryField: {
     container: string;
   };
