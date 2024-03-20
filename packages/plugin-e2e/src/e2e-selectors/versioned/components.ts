@@ -176,10 +176,10 @@ export const versionedComponents = {
   Annotations: {
     editor: {
       testButton: {
-        '10.3.0': 'data-testid annotations-test-button',
+        '11.0.0': 'data-testid annotations-test-button',
       },
       resultContainer: {
-        '10.3.0': 'data-testid annotations-query-result-container',
+        '11.0.0': 'data-testid annotations-query-result-container',
       },
     },
   },
