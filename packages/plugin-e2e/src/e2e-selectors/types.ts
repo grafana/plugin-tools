@@ -99,16 +99,7 @@ export type Components = {
   CodeEditor: {
     container: string;
   };
-  Variables: {
-    variableOption: string;
-  };
-  Annotations: {
-    annotationsTypeInput: string;
-    annotationsChoosePanelInput: string;
-  };
-  Tooltip: {
-    container: string;
-  };
+  Annotations: {};
   QueryField: {
     container: string;
   };
