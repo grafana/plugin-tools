@@ -161,9 +161,6 @@ export type Pages = {
         };
         List: {
           url: (uid: string) => string;
-          /**
-           * @deprecated use addAnnotationCTAV2 from Grafana 8.3 instead
-           */
           addAnnotationCTA: string;
           addAnnotationCTAV2: string;
         };
