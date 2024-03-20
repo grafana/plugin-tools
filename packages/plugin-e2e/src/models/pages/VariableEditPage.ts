@@ -24,6 +24,8 @@ export class VariableEditPage extends GrafanaPage {
 
     await super.navigate(url, options);
 
+    // In versions before 9.2.0, the variable index is not part of the URL so there's no way to navigate to it directly.
+    // Instead, we have to click the nth row in the variable list to navigate to the edit page for a given variable index.
     if (semver.lt(this.ctx.grafanaVersion, '9.2.0') && this.args.id) {
       const list = this.getByTestIdOrAriaLabel(
         this.ctx.selectors.pages.Dashboard.Settings.Variables.List.table
@@ -63,6 +65,7 @@ export class VariableEditPage extends GrafanaPage {
         this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.submitButton
       ).click();
     } else {
+      // in version before 9.2.0, there's no submit button, so instead we click the "Include all" button to trigger the query
       const queryDataRequest = this.waitForQueryDataRequest();
       const includeAllSwitch = this.getByTestIdOrAriaLabel(
         this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.selectionOptionsIncludeAllSwitch
