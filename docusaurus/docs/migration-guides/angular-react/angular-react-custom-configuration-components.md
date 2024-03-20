@@ -17,7 +17,7 @@ keywords:
 
 ## Background
 
-The Grafana SDK provides many useful configuration components for developers like entering number ranges, thresholds, unit selections, and color selections. You can see descriptions of these elements in the [Grafana design system](https://grafana.com/developers/saga/about/overview).
+The Grafana SDK provides many useful configuration components for developers like entering number ranges, thresholds, unit selections, and color selections. You can see descriptions and examples of these elements in the [@grafana/ui](https://developers.grafana.com/ui/latest/index.html).
 
 Some panels have more complex configuration options than others. These panels require you to build a custom component to support porting from AngularJS to React.
 
@@ -25,7 +25,7 @@ Some panels have more complex configuration options than others. These panels re
 
 This document is focused around the `grafana-polystat-panel` as an example of a large complex plugin that was converted from AngularJS to React.
 
-The AngularJS version of `polystat` has a custom editor for composites. A composite is a synthetic metric made by grouping related metrics source from multiple queries. This allows viewing a service (or any device) as a unit for overall health.
+The AngularJS version of `polystat` has a custom editor for [composites](https://en.wikipedia.org/wiki/Composite_measure). Using composites allows processing a collection of metrics together to determinate overall status.
 
 An example of a composite is a server with queries for CPU usage, memory usage, disk usage, network bandwidth, and an API response rate. A single metric is composed to represent all of these different metrics, with thresholds unique to each of them, and results in a polygon displayed with the “worst” state (that is, the lowest value).
 
@@ -57,6 +57,6 @@ Source code for the component is now self-contained and can be viewed in the [co
 
 The new editor supports re-ordering the composites, naming them for easier identification. The editor also leverages the built-in input fields and validators, reducing the amount of code required to support the panel.
 
-This panel has some very complex configuration options which are easier to implement in React. For example, you have the option to have the name of the composite be derived from regular expressions, template variables, or both.
+This panel has many complex configuration options which are easier to implement in React. For example, it provides the option to have the name of the composite be derived from regular expressions, template variables, or both.
 
-This panel plugin had additional custom editors for thresholds and overrides which needed to be built, and can be used as a reference on how some of the simpler editors can be built.
+This panel plugin has additional custom editors for thresholds and overrides which differ from the common `@grafana/ui` patterns. These editors can be used as a reference on how to implement these types of editors with complex logic.
