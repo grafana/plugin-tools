@@ -74,6 +74,11 @@ export const versionedComponents = {
       '10.0.0': 'data-testid toggle-viz-picker',
       [MIN_GRAFANA_VERSION]: 'toggle-viz-picker',
     },
+    OptionsPane: {
+      fieldInput: {
+        '11.0.0': (title: string) => `data-testid Panel editor option pane field input ${title}`,
+      },
+    },
   },
   RefreshPicker: {
     runButtonV2: {

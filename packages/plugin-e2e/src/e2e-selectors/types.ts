@@ -54,6 +54,9 @@ export type Components = {
     };
     applyButton: string;
     toggleVizPicker: string;
+    OptionsPane: {
+      fieldInput: (title: string) => string;
+    };
   };
   RefreshPicker: {
     runButtonV2: string;
