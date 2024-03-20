@@ -158,6 +158,9 @@ export const versionedComponents = {
       '8.3.0': 'data-testid Time zone picker select container',
       [MIN_GRAFANA_VERSION]: 'Folder picker select container',
     },
+    changeTimeSettingsButton: {
+      '11.0.0': 'data-testid Time zone picker Change time settings button',
+    },
   },
   CodeEditor: {
     container: {

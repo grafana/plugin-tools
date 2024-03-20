@@ -91,6 +91,7 @@ export type Components = {
   };
   TimeZonePicker: {
     containerV2: string;
+    changeTimeSettingsButton: string;
   };
   CodeEditor: {
     container: string;
