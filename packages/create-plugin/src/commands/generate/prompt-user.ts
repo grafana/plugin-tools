@@ -32,7 +32,7 @@ type Prompt = {
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   initial?: any;
   choices?: Array<string | Choice>;
-  shouldPrompt?: ((state: object) => boolean | Promise<boolean>) | boolean;
+  shouldPrompt?: (answers: Partial<CliArgs>) => boolean;
 };
 
 type Choice = {
@@ -85,7 +85,7 @@ const prompts: Prompt[] = [
     type: 'confirm',
     message: 'Do you want a backend part of your plugin?',
     initial: false,
-    shouldPrompt: (answers: CliArgs) => answers.pluginType !== PLUGIN_TYPES.panel,
+    shouldPrompt: (answers) => answers.pluginType !== PLUGIN_TYPES.panel,
   },
   {
     name: 'hasGithubWorkflows',

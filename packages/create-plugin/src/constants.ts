@@ -43,8 +43,13 @@ export enum PLUGIN_TYPES {
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaVersion: '10.0.3',
+  grafanaVersion: '10.3.3',
   grafanaImage: 'grafana-enterprise',
+};
+
+export const DEFAULT_FEATURE_FLAGS = {
+  useReactRouterV6: true,
+  bundleGrafanaUI: false,
 };
 
 export const GRAFANA_FE_PACKAGES = [

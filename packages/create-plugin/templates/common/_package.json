@@ -21,7 +21,7 @@
     "@babel/core": "^7.21.4",
     "@grafana/e2e": "{{ grafanaVersion }}",
     "@grafana/e2e-selectors": "{{ grafanaVersion }}",
-    "@grafana/eslint-config": "^6.0.0",
+    "@grafana/eslint-config": "^7.0.0",
     "@grafana/tsconfig": "^1.2.0-rc1",
     "@swc/core": "^1.3.90",
     "@swc/helpers": "^0.5.0",
@@ -30,8 +30,8 @@
     "@testing-library/react": "14.0.0",
     "@types/jest": "^29.5.0",
     "@types/lodash": "^4.14.194",
-    "@types/node": "^20.8.7",{{#if isAppType}}
-    "@types/react-router-dom": "^5.3.3",{{/if}}
+    "@types/node": "^20.8.7",{{#unless useReactRouterV6}}
+    "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}
     "@types/testing-library__jest-dom": "5.14.8",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
@@ -64,11 +64,11 @@
     "@grafana/runtime": "{{ grafanaVersion }}",
     "@grafana/ui": "{{ grafanaVersion }}",
     "@grafana/schema": "{{ grafanaVersion }}",{{#if_eq pluginType "scenesapp"}}
-    "@grafana/scenes": "^1.28.0",{{/if_eq}}
+    "@grafana/scenes": "^3.6.0",{{/if_eq}}
     "react": "18.2.0",
     "react-dom": "18.2.0",{{#if isAppType}}
-    "react-router-dom": "5.3.3",
-    "rxjs": "7.8.0",{{/if}}
+    "react-router-dom": "^{{ reactRouterVersion }}",
+    "rxjs": "7.8.1",{{/if}}
     "tslib": "2.5.3"
   },
   "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}"

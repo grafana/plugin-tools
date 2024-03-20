@@ -2,7 +2,19 @@ import { test as base, expect as baseExpect, selectors } from '@playwright/test'
 import { E2ESelectors } from './e2e-selectors/types';
 import fixtures from './fixtures';
 import matchers from './matchers';
-import { CreateDataSourceArgs, CreateDataSourcePageArgs, DataSource, ReadProvisionArgs } from './types';
+import {
+  CreateDataSourceArgs,
+  CreateDataSourcePageArgs,
+  DataSourceSettings,
+  ReadProvisionedDashboardArgs,
+  ReadProvisionedDataSourceArgs,
+  CreateUserArgs,
+  Dashboard,
+  DashboardPageArgs,
+  DashboardEditViewArgs,
+  GotoAppConfigPageArgs,
+  GotoAppPageArgs,
+} from './types';
 import {
   PanelEditPage,
   GrafanaPage,
@@ -10,24 +22,58 @@ import {
   DashboardPage,
   VariableEditPage,
   AnnotationEditPage,
+  AppConfigPage,
+  AppPage,
 } from './models';
 import { grafanaE2ESelectorEngine } from './selectorEngine';
-import { ExplorePage } from './models/ExplorePage';
+import { ExplorePage } from './models/pages/ExplorePage';
+import options from './options';
 
 export type PluginOptions = {
   /**
    * When using the readProvisioning fixture, files will be read from this directory. If no directory is provided,
    * the 'provisioning' directory in the current working directory will be used.
-   * 
+   *
    * eg.
    * export default defineConfig({
       use: {
         provisioningRootDir: 'path/to/provisioning',
       },
     });
-   * 
+   *
    */
   provisioningRootDir: string;
+  /**
+   * Optionally, you can add or override feature toggles.
+   * The feature toggles you specify here will only work in the frontend. If you need a feature toggle to work across the entire stack, you
+   * need to need to enable the feature in the Grafana config. See https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#feature_toggles
+   *
+   * To override feature toggles globally in the playwright.config.ts file: 
+   * export default defineConfig({
+      use: {
+        featureToggles: {
+          exploreMixedDatasource: true,
+          redshiftAsyncQueryDataSupport: false
+        },
+      },
+    });
+   * 
+   * To override feature toggles for tests on a certain file:
+     test.use({
+      featureToggles: {
+        exploreMixedDatasource: true,
+      },
+   * });
+   */
+  featureToggles: Record<string, boolean>;
+
+  /**
+   * The Grafana user to use for the tests. If no user is provided, the default admin/admin user will be used.
+   *
+   * You can use different users for different projects. See the fixture createUser for more information on how to create a user,
+   * and the fixture login for more information on how to authenticate.
+   */
+  user?: CreateUserArgs;
 };
 
 export type PluginFixture = {
@@ -47,14 +93,9 @@ export type PluginFixture = {
   /**
    * Isolated {@link DashboardPage} instance for each test.
    *
-   * Navigates to a new dashboard page and adds a new panel.
-   *
-   * Use {@link PanelEditPage.setVisualization} to change the visualization
-   * Use {@link PanelEditPage.datasource.set} to change the datasource
-   * Use {@link PanelEditPage.getQueryEditorEditorRow} to retrieve the query
-   * editor row locator for a given query refId
+   * Navigates to a new to a new dashboard page.
    */
-  newDashboardPage: DashboardPage;
+  dashboardPage: DashboardPage;
 
   /**
    * Isolated {@link PanelEditPage} instance for each test.
@@ -112,48 +153,131 @@ export type PluginFixture = {
    * you may use this command in a setup project. Read more about setup projects
    * here: https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
    */
-  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSource>;
+  createDataSource: (args: CreateDataSourceArgs) => Promise<DataSourceSettings>;
 
   /**
-   * Fixture command that login to Grafana using the Grafana API. 
-   * If the same credentials should be used in every test, 
-   * invoke this fixture in a setup project.
-   * See https://playwright.dev/docs/auth#basic-shared-account-in-all-tests
+   * Fixture command that creates a user via the Grafana API and assigns a role to it if a role is provided
+   * This may be useful if your plugin supports RBAC and you need to create a user with a specific role. See login fixture for more information.
+   */
+  createUser: () => Promise<void>;
+
+  /**
+   * Fixture command that login to Grafana using the Grafana API and stores the cookie state on disk.
+   * The file name for the storage state will be `playwright/.auth/<username>.json`, so it's important that the username is unique.
    * 
-   * If no credentials are provided, the default admin/admin credentials will be used.
+   * If you have not specified a user, the default admin/admin credentials will be used. 
    * 
-   * The default credentials can be overridden in the playwright.config.ts file:
-   * eg.
-   * export default defineConfig({
-      use: {
-        httpCredentials: {
-          username: 'user',
-          password: 'pass',
+   * e.g
+   * projects: [
+      {
+        name: 'authenticate',
+        testDir: './src/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+      },
+      {
+        name: 'run tests as admin user',
+        testDir: './tests',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/admin.json',
+        },
+        dependencies: ['authenticate'],
+      }
+    }
+   *
+   * If your plugin supports RBAC, you may want to use different projects for different roles. 
+   * In the following example, a new user with the role `Viewer` gets created and authenticated in a `createUserAndAuthenticate` project.
+   * In the `viewer` project, authentication state from the previous project is used in all tests in the ./tests/viewer folder.
+   * projects: [
+      {
+        name: 'createUserAndAuthenticate',
+        testDir: 'node_modules/@grafana/plugin-e2e/dist/auth',
+        testMatch: [/.*auth\.setup\.ts/],
+        use: {
+          user: {
+            user: 'viewer',
+            password: 'password',
+            role: 'Viewer',
+          },
         },
       },
-    });
-   * 
+      {
+        name: 'viewer',
+        testDir: './tests/viewer',
+        use: {
+          ...devices['Desktop Chrome'],
+          storageState: 'playwright/.auth/viewer.json',
+        },
+        dependencies: ['createUserAndAuthenticate'],
+      }
+    }
+   *
    * To override credentials in a single test:
-   * test.use({ httpCredentials: { username: 'admin', password: 'admin' } });
+   * test.use({ storageState: 'playwright/.auth/admin.json', user: { user: 'admin', password: 'admin' } });
    * To avoid authentication in a single test:
    * test.use({ storageState: { cookies: [], origins: [] } });
    */
   login: () => Promise<void>;
 
   /**
-   * Fixture command that reads a the yaml file for a provisioned dashboard
-   * or data source and returns it as json.
+   * Fixture command that reads a yaml file in the provisioning/datasources directory.
+   *
+   * The file name should be the name of the file with the .yaml|.yml extension.
+   * If a data source name is provided, the first data source that matches the name will be returned.
+   * If no name is provided, the first data source in the list of data sources will be returned.
    */
-  readProvision<T = any>(args: ReadProvisionArgs): Promise<T>;
+  readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
+
+  /**
+   * Fixture command that reads a dashboard json file in the provisioning/dashboards directory.
+   *
+   * Can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
+   */
+  readProvisionedDashboard(args: ReadProvisionedDashboardArgs): Promise<Dashboard>;
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Fixture command that navigates to an already exist dashboard. Returns a DashboardPage instance.
+   */
+  gotoDashboardPage: (args: DashboardPageArgs) => Promise<DashboardPage>;
+
+  /**
+   * Fixture command that navigates a panel edit page for an already existing panel in a dashboard.
+   */
+  gotoPanelEditPage: (args: DashboardEditViewArgs<string>) => Promise<PanelEditPage>;
+
+  /**
+   * Fixture command that navigates a variable edit page for an already existing variable query in a dashboard.
+   */
+  gotoVariableEditPage: (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>;
+
+  /**
+   * Fixture command that navigates an annotation edit page for an already existing annotation query in a dashboard.
+   */
+  gotoAnnotationEditPage: (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>;
+
+  /**
+   * Fixture command that navigates a configuration page for an already existing data source instance.
+   */
+  gotoDataSourceConfigPage: (uid: string) => Promise<DataSourceConfigPage>;
+
+  /**
+   * Fixture command that navigates to the AppConfigPage for a given plugin.
+   */
+  gotoAppConfigPage: (args: GotoAppConfigPageArgs) => Promise<AppConfigPage>;
+
+  /**
+   * Fixture command that navigates to an AppPage for a given plugin.
+   */
+  gotoAppPage: (args: GotoAppPageArgs) => Promise<AppPage>;
 };
 
 // extend Playwright with Grafana plugin specific fixtures
-export const test = base.extend<PluginFixture, PluginOptions>(fixtures);
+export const test = base.extend<PluginFixture, PluginOptions>({ ...fixtures, ...options });
 
 export const expect = baseExpect.extend(matchers);
 

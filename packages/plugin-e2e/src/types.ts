@@ -1,19 +1,62 @@
-import { Locator, PlaywrightTestArgs } from '@playwright/test';
+import { Locator, PlaywrightTestArgs, Response, TestInfo } from '@playwright/test';
 
 import { E2ESelectors } from './e2e-selectors/types';
 
 /**
  * The context object passed to page object models
  */
-export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors } & Pick<
+export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors; testInfo: TestInfo } & Pick<
   PlaywrightTestArgs,
   'page' | 'request'
 >;
 
 /**
- * The data source object
+ * The data source settings
  */
-export interface DataSource<T = any> {
+export interface DataSourceSettings<T = {}, S = {}> {
+  id: number;
+  editable?: boolean;
+  uid: string;
+  orgId?: number;
+  name: string;
+  type: string;
+  access?: string;
+  url?: string;
+  database?: string;
+  isDefault?: boolean;
+  jsonData: T;
+  secureJsonData?: S;
+}
+
+/**
+ * The dashboard object
+ */
+export interface Dashboard {
+  uid: string;
+  title?: string;
+}
+
+export type OrgRole = 'None' | 'Viewer' | 'Editor' | 'Admin';
+
+export type CreateUserArgs = {
+  /**
+   * The username of the user to create. Needs to be unique
+   */
+  user: string;
+  /**
+   * The password of the user to create
+   */
+  password: string;
+  /**
+   * The role of the user to create
+   */
+  role?: OrgRole;
+};
+
+export type CreateDataSourceArgs<T = any> = {
+  /**
+   * The data source to create
+   */
   id?: number;
   editable?: boolean;
   uid?: string;
@@ -26,28 +69,6 @@ export interface DataSource<T = any> {
   isDefault?: boolean;
   jsonData?: T;
   secureJsonData?: T;
-}
-
-/**
- * The dashboard object
- */
-export interface Dashboard {
-  uid: string;
-  title?: string;
-}
-
-/**
- * The YAML provision file parsed to a javascript object
- */
-export type ProvisionFile<T = DataSource> = {
-  datasources: Array<DataSource<T>>;
-};
-
-export type CreateDataSourceArgs = {
-  /**
-   * The data source to create
-   */
-  datasource: DataSource;
 };
 
 export type CreateDataSourcePageArgs = {
@@ -74,6 +95,8 @@ export type RequestOptions = {
    * or [page.setDefaultTimeout(timeout)](https://playwright.dev/docs/api/class-page#page-set-default-timeout) methods.
    */
   timeout?: number;
+
+  waitForResponsePredicateCallback?: string | RegExp | ((response: Response) => boolean | Promise<boolean>);
 };
 
 export interface TimeRangeArgs {
@@ -124,11 +147,23 @@ export type DashboardEditViewArgs<T> = {
   id: T;
 };
 
-export type ReadProvisionArgs = {
+export type ReadProvisionedDashboardArgs = {
   /**
    * The path, relative to the provisioning folder, to the dashboard json file
    */
-  filePath: string;
+  fileName: string;
+};
+
+export type ReadProvisionedDataSourceArgs = {
+  /**
+   * The path, relative to the provisioning folder, to the dashboard json file
+   */
+  fileName: string;
+
+  /**
+   * The name of the data source in the datasources list
+   */
+  name?: string;
 };
 
 export type NavigateOptions = {
@@ -159,11 +194,28 @@ export type NavigateOptions = {
   queryParams?: URLSearchParams;
 };
 
-export type TriggerQueryOptions = {
+export type AppPageNavigateOptions = NavigateOptions & {
+  path?: string;
+};
+
+export type GetByTestIdOrAriaLabelOptions = {
   /**
-   * Set this to true to skip waiting for the response. Defaults to false.
+   *Optional root locator to search within. If no locator is provided, the page will be used
    */
-  skipWaitForResponse: boolean;
+  root?: Locator;
+
+  /**
+   * Set to true to find locator that resolves elements that starts with a given string
+   * Defaults to false
+   */
+  startsWith?: boolean;
+};
+
+export type TriggerRequestOptions = {
+  /**
+   * The path to the endpoint to trigger
+   */
+  path?: string;
 };
 
 /**
@@ -189,17 +241,6 @@ export type Visualization =
   | 'Worldmap Panel';
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
-
-/**
- * Implement this interface in a POM in case you want to enable the `toHavePanelError` matcher for the page.
- * Only applicable to pages that have one panel only, such as the explore page or panel edit page.
- *
- * @internal
- */
-export interface PanelError {
-  ctx: PluginTestCtx;
-  getPanelError: () => Locator;
-}
 
 export interface AlertPageOptions {
   /**
@@ -266,3 +307,13 @@ export interface ContainTextOptions {
    */
   useInnerText?: boolean;
 }
+
+export type PluginPageArgs = {
+  pluginId: string;
+};
+
+export type GotoAppConfigPageArgs = PluginPageArgs;
+
+export type GotoAppPageArgs = PluginPageArgs & {
+  path?: string;
+};

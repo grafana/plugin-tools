@@ -7,7 +7,7 @@ type FeatureToggleFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const isFeatureToggleEnabled: FeatureToggleFixture = async ({ page }, use) => {
+const isFeatureToggleEnabled: FeatureToggleFixture = async ({ page, grafanaVersion }, use) => {
   await use(async <T = object>(featureToggle: keyof T) => {
     const featureToggles: T = await page.evaluate('window.grafanaBootData.settings.featureToggles');
     return Boolean(featureToggles[featureToggle]);

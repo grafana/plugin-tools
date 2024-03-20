@@ -1,5 +1,3 @@
-import { Fixtures } from '@playwright/test';
-import path from 'path';
 import annotationEditPage from './annotationEditPage';
 import grafanaVersion from './grafanaVersion';
 import selectors from './selectors';
@@ -7,27 +5,45 @@ import login from './commands/login';
 import createDataSourceConfigPage from './commands/createDataSourceConfigPage';
 import panelEditPage from './panelEditPage';
 import createDataSource from './commands/createDataSource';
-import readProvision from './commands/readProvision';
-import newDashboardPage from './newDashboardPage';
+import readProvisionedDataSource from './commands/readProvisionedDataSource';
+import readProvisionedDashboard from './commands/readProvisionedDashboard';
+import dashboardPage from './dashboardPage';
 import variableEditPage from './variableEditPage';
 import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
-import { PluginFixture, PluginOptions } from '../api';
+import page from './page';
+import createUser from './commands/createUser';
+import gotoDashboardPage from './commands/gotoDashboardPage';
+import gotoPanelEditPage from './commands/gotoPanelEditPage';
+import gotoVariableEditPage from './commands/gotoVariableEditPage';
+import gotoAnnotationEditPage from './commands/gotoAnnotationEditPage';
+import gotoDataSourceConfigPage from './commands/gotoDataSourceConfigPage';
+import gotoAppConfigPage from './commands/gotoAppConfigPage';
+import gotoAppPage from './commands/gotoAppPage';
 
-const fixtures: Fixtures<PluginFixture, PluginOptions> = {
-  provisioningRootDir: [path.join(process.cwd(), 'provisioning'), { option: true, scope: 'worker' }],
+const fixtures = {
   selectors,
   grafanaVersion,
   login,
   createDataSourceConfigPage,
-  newDashboardPage,
+  page,
+  dashboardPage,
   panelEditPage,
   variableEditPage,
   annotationEditPage,
   explorePage,
   createDataSource,
-  readProvision,
+  readProvisionedDataSource,
+  readProvisionedDashboard,
   isFeatureToggleEnabled,
+  createUser,
+  gotoDashboardPage,
+  gotoPanelEditPage,
+  gotoVariableEditPage,
+  gotoAnnotationEditPage,
+  gotoDataSourceConfigPage,
+  gotoAppConfigPage,
+  gotoAppPage,
 };
 
 export default fixtures;

@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "0.9.1",
+  "version": "0.22.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -25,7 +25,7 @@
     "lint:fix": "npm run lint -- --fix",
     "server": "docker-compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
-    "test": "jest",
+    "test": "vitest",
     "playwright:test": "npx playwright test",
     "playwright:test:ui": "npx playwright test --ui",
     "playwright:showreport": "npx playwright show-report"
@@ -34,15 +34,25 @@
     "node": ">=18 <=20"
   },
   "peerDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.41.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
+    "@playwright/test": "^1.41.2",
     "@types/uuid": "^9.0.7",
     "dotenv": "^16.3.1"
   },
   "dependencies": {
     "semver": "^7.5.4",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "yaml": "^2.3.4"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*"
+    ],
+    "ext": "*",
+    "events": {
+      "start": "cls || clear"
+    }
   }
 }

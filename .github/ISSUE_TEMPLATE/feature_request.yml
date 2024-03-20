@@ -18,6 +18,7 @@ body:
       options:
         - label: 'Create Plugin'
         - label: 'Sign Plugin'
+        - label: 'Plugin E2E'
         - label: 'Documentation'
   - type: textarea
     id: problem

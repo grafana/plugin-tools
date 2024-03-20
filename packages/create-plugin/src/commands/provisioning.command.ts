@@ -1,4 +1,4 @@
-import glob from 'glob';
+import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
 import { TEMPLATE_PATHS, TEXT } from '../constants.js';
@@ -27,6 +27,12 @@ export const provisioning = async () => {
       process.exit(1);
     }
   } catch (error) {
-    printError(error);
+    let message;
+    if (error instanceof Error) {
+      message = error.message;
+    } else {
+      message = String(error);
+    }
+    printError(message);
   }
 };

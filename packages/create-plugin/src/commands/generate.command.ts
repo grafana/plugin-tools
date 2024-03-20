@@ -1,9 +1,9 @@
-import glob from 'glob';
+import { glob } from 'glob';
 import minimist from 'minimist';
 import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
+import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { getConfig } from '../utils/utils.config.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
@@ -12,11 +12,11 @@ import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../
 import { getExportPath } from '../utils/utils.path.js';
 import { renderTemplateFromFile } from '../utils/utils.templates.js';
 import { getVersion } from '../utils/utils.version.js';
-import { prettifyFiles } from './generate/prettify-files.js';
+import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
-import { CliArgs, TemplateData } from './types.js';
+import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
@@ -45,7 +45,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   if (answers.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
-  await execPostScaffoldFunction(prettifyFiles, exportPath);
+  await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
 
   printGenerateSuccessMessage(answers);
 };
@@ -59,6 +59,7 @@ function getTemplateData(answers: CliArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+  const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app; // We don't enable this by default yet for new scenes plugins.
   const templateData: TemplateData = {
     ...answers,
     pluginId,
@@ -68,11 +69,19 @@ function getTemplateData(answers: CliArgs) {
     isAppType,
     isNPM: packageManagerName === 'npm',
     version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI,
+    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
+    useReactRouterV6,
+    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
   };
 
   return templateData;
 }
+
+type TemplateAction = {
+  templateFile: string;
+  path: string;
+  data: TemplateData;
+};
 
 function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: any }) {
   const commonActions = getActionsForTemplateFolder({
@@ -97,15 +106,18 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
   // Common, pluginType and backend actions can contain different templates for the same destination.
   // This filtering removes the duplicate file additions to make sure the correct template is scaffolded.
   // Note that the order is reversed so backend > pluginType > common
-  const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce((acc, file) => {
-    const actionExists = acc.find((f) => f.path === file.path);
-    // return early to prevent duplicate file additions
-    if (actionExists) {
+  const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce<TemplateAction[]>(
+    (acc, file) => {
+      const actionExists = acc.find((f) => f.path === file.path);
+      // return early to prevent duplicate file additions
+      if (actionExists) {
+        return acc;
+      }
+      acc.push(file);
       return acc;
-    }
-    acc.push(file);
-    return acc;
-  }, []);
+    },
+    []
+  );
 
   // Copy over Github workflow files (if selected)
   const ciWorkflowActions = templateData.hasGithubWorkflows
@@ -147,7 +159,7 @@ function getActionsForTemplateFolder({
     return path.relative(folderPath, path.dirname(f));
   }
 
-  return files.filter(isFile).map((f) => ({
+  return files.filter(isFile).map<TemplateAction>((f) => ({
     templateFile: f,
     // The target path where the compiled template is saved to
     path: path.join(exportPath, getFileExportPath(f), getExportFileName(f)),
@@ -175,9 +187,15 @@ async function generateFiles({ actions }: { actions: any[] }) {
         path: action.path,
       });
     } catch (error) {
+      let message;
+      if (error instanceof Error) {
+        message = error.message;
+      } else {
+        message = String(error);
+      }
       failures.push({
         path: action.path,
-        error: error.message || error.toString(),
+        error: message,
       });
     }
   }

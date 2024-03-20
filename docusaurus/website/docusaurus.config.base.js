@@ -59,6 +59,20 @@ const plugins = [
       disableVersioning: true,
     },
   ],
+  [
+    '@docusaurus/plugin-client-redirects',
+    {
+      // how to use https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-client-redirects#ex-config
+      // This plugin is always inactive in development and only active in production because it works on the build output.
+
+      redirects: [
+        {
+          from: ['/something-that-does-not-exist', '/something-that-does-not-exist/testing'],
+          to: '/get-started/folder-structure',
+        },
+      ],
+    },
+  ],
 ];
 
 const presetsDocs = {
@@ -145,6 +159,13 @@ const themeConfigFooter = {
 const themeConfigPrism = {
   theme: grafanaPrismTheme,
   additionalLanguages: ['bash', 'diff', 'json'],
+  magicComments: [
+    {
+      className: 'code-block-addition-highlighted-line',
+      line: 'addition-highlight-next-line',
+      block: { start: 'addition-highlight-start', end: 'addition-highlight-end' },
+    },
+  ],
 };
 
 const themeConfigColorMode = {

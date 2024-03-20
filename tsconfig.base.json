@@ -1,16 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": ["@tsconfig/recommended/tsconfig.json", "@tsconfig/node20/tsconfig.json"],
   "compilerOptions": {
-    "esModuleInterop": true,
     "removeComments": true,
-    "preserveConstEnums": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "pretty": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "NodeNext"
+    "types": ["vitest/globals"]
   }
 }

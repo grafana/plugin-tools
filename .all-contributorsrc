@@ -112,7 +112,8 @@
       "contributions": [
         "code",
         "doc",
-        "infra"
+        "infra",
+        "test"
       ]
     },
     {
@@ -132,7 +133,8 @@
       "profile": "https://github.com/sympatheticmoose",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "infra"
       ]
     },
     {
@@ -251,6 +253,34 @@
       "contributions": [
         "code",
         "doc"
+      ]
+    },
+    {
+      "login": "6nv",
+      "name": "Nicolas Ventura",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91281131?v=4",
+      "profile": "https://www.nersc.gov/",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "oshirohugo",
+      "name": "Hugo Kiyodi Oshiro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5558280?v=4",
+      "profile": "https://oshirohugo.github.io/",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "kevinwcyu",
+      "name": "Kevin Yu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19530599?v=4",
+      "profile": "https://github.com/kevinwcyu",
+      "contributions": [
+        "code"
       ]
     }
   ],

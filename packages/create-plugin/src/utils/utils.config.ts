@@ -1,56 +1,74 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
+import { commandName } from './utils.cli.js';
+import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
 
-type FeatureFlags = {
-  bundleGrafanaUI: boolean;
+export type FeatureFlags = {
+  bundleGrafanaUI?: boolean;
+
+  // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
+  // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
+  useReactRouterV6?: boolean;
 };
 
-type CreatePluginConfig = UserConfig & {
+export type CreatePluginConfig = UserConfig & {
   version: string;
 };
 
-type UserConfig = {
+export type UserConfig = {
   features: FeatureFlags;
 };
 
-export function getConfig(): CreatePluginConfig {
+export function getConfig(workDir = process.cwd()): CreatePluginConfig {
+  const rootConfig = getRootConfig(workDir);
+  const userConfig = getUserConfig(workDir);
+
+  return {
+    ...rootConfig,
+    ...userConfig,
+    version: rootConfig!.version,
+    features: createFeatureFlags({
+      ...(rootConfig!.features ?? {}),
+      ...(userConfig!.features ?? {}),
+    }),
+  };
+}
+
+function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
   try {
-    const rootPath = path.resolve(process.cwd(), '.config/.cprc.json');
+    const rootPath = path.resolve(workDir, '.config/.cprc.json');
     const rootConfig = readRCFileSync(rootPath);
-    const userConfig = getUserConfig();
 
     return {
+      version: getVersion(),
       ...rootConfig,
-      ...userConfig,
-      version: rootConfig.version,
-      features: createFeatureFlags({
-        ...rootConfig.features,
-        ...userConfig.features,
-      }),
+      features: rootConfig!.features ?? {},
     };
+    // Most likely this happens because of no ".config/.cprc.json" (root configuration) file.
+    // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
     return {
       version: getVersion(),
-      features: createFeatureFlags(),
+      features: {},
     };
   }
 }
 
-function getUserConfig(): UserConfig | undefined {
+function getUserConfig(workDir = process.cwd()): UserConfig | undefined {
   try {
-    const userPath = path.resolve(process.cwd(), '.cprc.json');
+    const userPath = path.resolve(workDir, '.cprc.json');
     const userConfig = readRCFileSync(userPath);
 
     return {
       ...userConfig,
-      features: createFeatureFlags({
-        ...userConfig.features,
-      }),
+      features: userConfig!.features ?? {},
     };
+    // Most likely this happens because of no ".cprc.json" (user configuration) file.
+    // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
     return {
-      features: createFeatureFlags(),
+      features: {},
     };
   }
 }
@@ -65,8 +83,10 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 }
 
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
-  return {
-    bundleGrafanaUI: false,
-    ...flags,
-  };
+  // Default values for new scaffoldings
+  if (commandName === 'generate') {
+    return DEFAULT_FEATURE_FLAGS;
+  }
+
+  return flags ?? {};
 }

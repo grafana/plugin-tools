@@ -11,18 +11,22 @@ on:
       - master
       - main
 
+permissions: read-all
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GRAFANA_ACCESS_POLICY_TOKEN: $\{{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
       - uses: pnpm/action-setup@v2
 {{/if_eq}}
       - name: Setup Node.js environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: '{{ packageManagerName }}'
@@ -49,20 +53,20 @@ jobs:
 
       - name: Setup Go environment
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: '1.21'
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v2
+        uses: magefile/mage-action@v3
         with:
           version: latest
           args: coverage
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v2
+        uses: magefile/mage-action@v3
         with:
           version: latest
           args: buildAll
@@ -88,9 +92,39 @@ jobs:
         run: docker-compose down
 
       - name: Archive E2E output
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: steps.check-for-e2e.outputs.has-e2e == 'true' && steps.run-e2e-tests.outcome != 'success'
         with:
           name: cypress-videos
           path: cypress/videos
+          retention-days: 5
+
+      - name: Sign plugin
+        run: {{ packageManagerName }} run sign
+        if: $\{{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
+
+      - name: Get plugin metadata
+        id: metadata
+        run: |
+          sudo apt-get install jq
+
+          export GRAFANA_PLUGIN_ID=$(cat dist/plugin.json | jq -r .id)
+          export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
+          export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
+
+          echo "plugin-id=${GRAFANA_PLUGIN_ID}" >> $GITHUB_OUTPUT
+          echo "plugin-version=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_OUTPUT
+          echo "archive=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_OUTPUT
+
+      - name: Package plugin
+        id: package-plugin
+        run: |
+          mv dist $\{{ steps.metadata.outputs.plugin-id }}
+          zip $\{{ steps.metadata.outputs.archive }} $\{{ steps.metadata.outputs.plugin-id }} -r
+
+      - name: Archive Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: $\{{ steps.metadata.outputs.plugin-id }}-$\{{ steps.metadata.outputs.plugin-version }}
+          path: $\{{ steps.metadata.outputs.plugin-id }}
           retention-days: 5

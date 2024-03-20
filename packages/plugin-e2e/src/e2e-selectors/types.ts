@@ -12,9 +12,13 @@ export type APIs = {
     query: string;
     health: (uid: string, id: string) => string;
     datasourceByUID: (uid: string) => string;
+    proxy: (uid: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;
+  };
+  Plugin: {
+    settings: (pluginId: string) => string;
   };
 };
 
@@ -31,6 +35,7 @@ export type Components = {
       title: (title: string) => string;
       headerCornerInfo: (mode: string) => string;
       status: (status: string) => string;
+      toggleTableViewPanel: (title: string) => string;
     };
     Visualization: {
       Table: {
@@ -39,6 +44,9 @@ export type Components = {
         body: string;
       };
     };
+  };
+  VizLegend: {
+    seriesName: (name: string) => string;
   };
   PanelEditor: {
     General: {
@@ -95,6 +103,9 @@ export type Components = {
     annotationsChoosePanelInput: string;
   };
   Tooltip: {
+    container: string;
+  };
+  QueryField: {
     container: string;
   };
 };
@@ -173,5 +184,8 @@ export type Pages = {
   };
   Explore: {
     url: string;
+  };
+  Plugin: {
+    url: (pluginId: string) => string;
   };
 };

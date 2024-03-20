@@ -1,3 +1,292 @@
+# v0.22.0 (Mon Mar 18 2024)
+
+#### 🚀 Enhancement
+
+- E2E: Added command and page to interact with app pages [#821](https://github.com/grafana/plugin-tools/pull/821) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v0.21.0 (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Make it easier to navigate to existing resources [#812](https://github.com/grafana/plugin-tools/pull/812) ([@sunker](https://github.com/sunker))
+- PluginE2E: Added (app) plugin config fixture [#795](https://github.com/grafana/plugin-tools/pull/795) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v0.20.0 (Wed Mar 13 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Pass testinfo to models [#769](https://github.com/grafana/plugin-tools/pull/769) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.19.1 (Wed Mar 13 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add QueryField container selector [#810](https://github.com/grafana/plugin-tools/pull/810) ([@kevinwcyu](https://github.com/kevinwcyu))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "add annotations article" ([@sunker](https://github.com/sunker))
+- add annotations article ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu))
+
+---
+
+# v0.19.0 (Thu Feb 29 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Improve ds config Save & test for FE plugins [#785](https://github.com/grafana/plugin-tools/pull/785) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.18.0 (Wed Feb 21 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Bump Playwright version [#757](https://github.com/grafana/plugin-tools/pull/757) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.17.1 (Mon Feb 19 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin-e2e: Add yaml as a dependency [#755](https://github.com/grafana/plugin-tools/pull/755) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v0.17.0 (Mon Feb 19 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add fixture that reads provisioned dashboard files [#749](https://github.com/grafana/plugin-tools/pull/749) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.16.0 (Mon Feb 19 2024)
+
+#### 🚀 Enhancement
+
+- Plugin-E2E: Split models into pages and components [#752](https://github.com/grafana/plugin-tools/pull/752) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.15.0 (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Improved support for multiple users and roles [#726](https://github.com/grafana/plugin-tools/pull/726) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.14.0 (Fri Feb 16 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add fixture that reads provisioned data source files [#740](https://github.com/grafana/plugin-tools/pull/740) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.13.2 (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix typing in config page [#741](https://github.com/grafana/plugin-tools/pull/741) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.13.1 (Mon Feb 12 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E:: Add back health check mock [#732](https://github.com/grafana/plugin-tools/pull/732) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.13.0 (Sat Feb 10 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Enable assertion on panel data [#688](https://github.com/grafana/plugin-tools/pull/688) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.12.2 (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Generate dts files [#733](https://github.com/grafana/plugin-tools/pull/733) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.12.1 (Fri Feb 09 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix feature toggles race condition [#730](https://github.com/grafana/plugin-tools/pull/730) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.11.1 (Mon Jan 29 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Make getQueryEditorRow method sync [#699](https://github.com/grafana/plugin-tools/pull/699) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.11.0 (Mon Jan 29 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Decouple panel from pages [#698](https://github.com/grafana/plugin-tools/pull/698) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.10.4 (Mon Jan 29 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add auth test file [#700](https://github.com/grafana/plugin-tools/pull/700) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.10.3 (Thu Jan 25 2024)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate plugin-e2e to Vitest and use tsconfigs/base configs [#694](https://github.com/grafana/plugin-tools/pull/694) ([@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v0.10.2 (Wed Jan 24 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add new version for selector [#692](https://github.com/grafana/plugin-tools/pull/692) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.10.1 (Tue Jan 23 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix isFeatureEnabled fixture [#691](https://github.com/grafana/plugin-tools/pull/691) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.10.0 (Tue Jan 23 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Change FE feature toggles during test session [#651](https://github.com/grafana/plugin-tools/pull/651) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.9.1 (Fri Jan 19 2024)
 
 #### 🐛 Bug Fix

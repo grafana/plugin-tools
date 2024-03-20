@@ -22,10 +22,18 @@ export const versionedAPIs = {
     datasourceByUID: {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
     },
+    proxy: {
+      [MIN_GRAFANA_VERSION]: (uid: string) => `api/datasources/proxy/uid/${uid}`,
+    },
   },
   Dashboard: {
     delete: {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
+    },
+  },
+  Plugin: {
+    settings: {
+      [MIN_GRAFANA_VERSION]: (pluginId: string) => `/api/plugins/${pluginId}/settings`,
     },
   },
 };
