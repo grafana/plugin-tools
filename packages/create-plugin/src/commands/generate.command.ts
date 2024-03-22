@@ -28,8 +28,6 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
 
-  console.log('Template data:', templateData);
-
   // Prevent generation from writing to an existing, populated directory unless in DEV mode.
   if (exportPathIsPopulated && !IS_DEV) {
     printError(`**Aborting plugin scaffold. '${exportPath}' exists and contains files.**`);
@@ -54,33 +52,6 @@ export const generate = async (argv: minimist.ParsedArgs) => {
 
   printGenerateSuccessMessage(templateData);
 };
-
-// function getTemplateData(answers: CliArgs) {
-//   const { pluginName, orgName, pluginType } = answers;
-//   const { features } = getConfig();
-//   const currentVersion = getVersion();
-//   const pluginId = normalizeId(pluginName, orgName, pluginType);
-//   // Support the users package manager of choice.
-//   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
-//   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-//   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
-//   const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app; // We don't enable this by default yet for new scenes plugins.
-//   const templateData: TemplateData = {
-//     ...answers,
-//     pluginId,
-//     packageManagerName,
-//     packageManagerInstallCmd,
-//     packageManagerVersion,
-//     isAppType,
-//     isNPM: packageManagerName === 'npm',
-//     version: currentVersion,
-//     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-//     useReactRouterV6,
-//     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-//   };
-
-//   return templateData;
-// }
 
 type TemplateAction = {
   templateFile: string;
