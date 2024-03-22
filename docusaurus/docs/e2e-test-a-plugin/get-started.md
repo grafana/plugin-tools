@@ -115,6 +115,8 @@ export default defineConfig({
       name: 'run-tests',
       use: {
         ...devices['Desktop Chrome'],
+        // @grafana/plugin-e2e writes the auth state to this file,
+        // the path should not be modified
         storageState: 'playwright/.auth/admin.json',
       },
       dependencies: ['auth'],
@@ -129,6 +131,17 @@ To prevent these files from being version controlled, you can add the following 
 
 ```shell title=".gitignore"
 /playwright/.auth/
+```
+
+The `@grafana/plugin-e2e` package also exports a type named `PluginOptions` that you can use to extend the Playwright configuration with the `@grafana/plugin-e2e` specific options.
+
+```ts title="playwright.config.ts"
+import { defineConfig } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+
+export default defineConfig<PluginOptions>({
+    ...
+});
 ```
 
 ### Step 4: Start Grafana

@@ -73,7 +73,7 @@ export type CreateDataSourceArgs<T = any> = {
 
 export type CreateDataSourcePageArgs = {
   /**
-   * The data source type to create
+   * The data source type to create. This corresponds to the unique id of the data source plugin (`id` in `plugin.json`).
    */
   type: string;
   /**
