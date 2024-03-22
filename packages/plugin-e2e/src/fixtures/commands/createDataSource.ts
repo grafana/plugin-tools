@@ -40,10 +40,8 @@ export const createDataSourceViaAPI = async (
   return existingDataSource.json();
 };
 
-const createDataSource: CreateDataSourceViaAPIFixture = async ({ request }, use) => {
+export const createDataSource: CreateDataSourceViaAPIFixture = async ({ request }, use) => {
   await use(async (args) => {
     return createDataSourceViaAPI(request, args);
   });
 };
-
-export default createDataSource;

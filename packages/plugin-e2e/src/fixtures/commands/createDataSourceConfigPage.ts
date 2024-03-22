@@ -10,7 +10,7 @@ type CreateDataSourceConfigPageFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
+export const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -26,5 +26,3 @@ const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   });
   deleteDataSource && (await datasourceConfigPage?.deleteDataSource());
 };
-
-export default createDataSourceConfigPage;

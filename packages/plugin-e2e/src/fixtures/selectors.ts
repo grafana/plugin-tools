@@ -7,7 +7,7 @@ import { versionedAPIs } from '../e2e-selectors/versioned/apis';
 
 type SelectorFixture = TestFixture<E2ESelectors, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
 
-const selectors: SelectorFixture = async ({ grafanaVersion }, use) => {
+export const selectors: SelectorFixture = async ({ grafanaVersion }, use) => {
   const selectors = resolveSelectors(
     {
       components: versionedComponents,
@@ -18,5 +18,3 @@ const selectors: SelectorFixture = async ({ grafanaVersion }, use) => {
   );
   await use(selectors);
 };
-
-export default selectors;

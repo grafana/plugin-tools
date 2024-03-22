@@ -16,7 +16,7 @@ type PageFixture = TestFixture<Page, PluginFixture & PluginOptions & PlaywrightC
  *   newly attached frame.
  * The script is evaluated after the document was created but before any of its scripts were run.
  */
-const page: PageFixture = async ({ page, featureToggles }, use) => {
+export const page: PageFixture = async ({ page, featureToggles }, use) => {
   if (Object.keys(featureToggles).length > 0) {
     try {
       await page.addInitScript(overrideFeatureToggles, featureToggles);
@@ -27,5 +27,3 @@ const page: PageFixture = async ({ page, featureToggles }, use) => {
   await page.goto('/');
   await use(page);
 };
-
-export default page;

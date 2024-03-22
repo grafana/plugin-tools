@@ -3,7 +3,7 @@ import { getMessage } from './utils';
 import { VariableEditPage } from '../models';
 import { ContainTextOptions } from '../types';
 
-const toDisplayPreviews = async (
+export const toDisplayPreviews = async (
   variableEditPage: VariableEditPage,
   previewTexts: Array<string | RegExp>,
   options?: ContainTextOptions
@@ -31,5 +31,3 @@ const toDisplayPreviews = async (
     };
   }
 };
-
-export default toDisplayPreviews;

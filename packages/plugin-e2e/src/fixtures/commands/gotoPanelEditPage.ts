@@ -9,7 +9,7 @@ type GotoPanelEditPageFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const gotoPanelEditPage: GotoPanelEditPageFixture = async (
+export const gotoPanelEditPage: GotoPanelEditPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -20,5 +20,3 @@ const gotoPanelEditPage: GotoPanelEditPageFixture = async (
     return panelEditPage;
   });
 };
-
-export default gotoPanelEditPage;

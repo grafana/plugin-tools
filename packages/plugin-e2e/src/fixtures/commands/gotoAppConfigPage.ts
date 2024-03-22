@@ -20,5 +20,3 @@ export const gotoAppConfigPage: GotoAppConfigPageFixture = async (
     return appConfigPage;
   });
 };
-
-export default gotoAppConfigPage;

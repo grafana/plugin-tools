@@ -9,7 +9,7 @@ type LoginFixture = TestFixture<() => Promise<void>, PluginFixture & PluginOptio
 
 const ADMIN_USER = { user: 'admin', password: 'admin' };
 
-const login: LoginFixture = async ({ request, user }, use) => {
+export const login: LoginFixture = async ({ request, user }, use) => {
   await use(async () => {
     const data = user ?? ADMIN_USER;
     const loginReq = await request.post('/login', { data });
@@ -18,5 +18,3 @@ const login: LoginFixture = async ({ request, user }, use) => {
     await request.storageState({ path: path.join(process.cwd(), `playwright/.auth/${data.user}.json`) });
   });
 };
-
-export default login;

@@ -9,7 +9,7 @@ type GotoVariableEditPageFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const gotoVariableEditPage: GotoVariableEditPageFixture = async (
+export const gotoVariableEditPage: GotoVariableEditPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -20,5 +20,3 @@ const gotoVariableEditPage: GotoVariableEditPageFixture = async (
     return variableEditPage;
   });
 };
-
-export default gotoVariableEditPage;

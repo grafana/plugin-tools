@@ -9,7 +9,7 @@ type GotoDataSourceConfigPageFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
+export const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -35,5 +35,3 @@ const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
     return dataSourceConfigPage;
   });
 };
-
-export default gotoDataSourceConfigPage;

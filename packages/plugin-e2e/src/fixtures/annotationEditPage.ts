@@ -8,7 +8,7 @@ type AnnotationEditPageFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const annotationEditPage: AnnotationEditPageFixture = async (
+export const annotationEditPage: AnnotationEditPageFixture = async (
   { page, selectors, grafanaVersion, request },
   use,
   testInfo
@@ -18,5 +18,3 @@ const annotationEditPage: AnnotationEditPageFixture = async (
   const annotationEditPage = await annotationPage.clickAddNew();
   await use(annotationEditPage);
 };
-
-export default annotationEditPage;

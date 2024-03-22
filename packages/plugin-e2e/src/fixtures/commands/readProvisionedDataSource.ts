@@ -13,7 +13,7 @@ type ReadProvisionedDataSourceFixture = TestFixture<
 
 const DATASOURCES_DIR = 'datasources';
 
-const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ provisioningRootDir }, use) => {
+export const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ provisioningRootDir }, use) => {
   await use(async ({ fileName: filePath, name }) => {
     const resolvedPath = path.resolve(path.join(provisioningRootDir, DATASOURCES_DIR, filePath));
     const contents = await promises.readFile(resolvedPath, 'utf8');
@@ -24,5 +24,3 @@ const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ pro
     return yml.datasources.find((ds: DataSourceSettings) => ds.name === name);
   });
 };
-
-export default readProvisionedDataSource;

@@ -17,7 +17,7 @@ const getUserIdByUsername = async (request: APIRequestContext, userName: string)
   return json.id;
 };
 
-const createUser: CreateUserFixture = async ({ request, user }, use) => {
+export const createUser: CreateUserFixture = async ({ request, user }, use) => {
   await use(async () => {
     if (!user) {
       throw new Error('Playwright option `User` was not provided');
@@ -56,5 +56,3 @@ const createUser: CreateUserFixture = async ({ request, user }, use) => {
     }
   });
 };
-
-export default createUser;

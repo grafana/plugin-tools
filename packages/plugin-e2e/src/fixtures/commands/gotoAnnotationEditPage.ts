@@ -9,7 +9,7 @@ type GotoAnnotationEditPageFixture = TestFixture<
   PluginFixture & PluginOptions & PlaywrightCombinedArgs
 >;
 
-const gotoAnnotationEditPage: GotoAnnotationEditPageFixture = async (
+export const gotoAnnotationEditPage: GotoAnnotationEditPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -20,5 +20,3 @@ const gotoAnnotationEditPage: GotoAnnotationEditPageFixture = async (
     return annotationEditPage;
   });
 };
-
-export default gotoAnnotationEditPage;

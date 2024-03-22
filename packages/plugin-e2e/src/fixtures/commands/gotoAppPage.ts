@@ -15,5 +15,3 @@ export const gotoAppPage: GotoAppPageFixture = async ({ page, selectors, grafana
     return appPage;
   });
 };
-
-export default gotoAppPage;
