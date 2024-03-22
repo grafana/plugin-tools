@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { TEMPLATE_PATHS, TEXT } from '../constants.js';
 import { getPluginJson } from '../utils/utils.plugin.js';
-import { compileProvisioningTemplateFile, getTemplateData } from '../utils/utils.templates.js';
+import { compileProvisioningTemplateFile, getTemplateData, buildProxyFromJson } from '../utils/utils.templates.js';
 import { confirmPrompt, printMessage, printSuccessMessage, printError } from '../utils/utils.console.js';
 
 export const provisioning = async () => {
@@ -13,9 +13,9 @@ export const provisioning = async () => {
     if (await confirmPrompt(TEXT.addProvisioning)) {
       if (!fs.existsSync(provisioningFolder)) {
         const provisioningSpecificFiles = glob.sync(`${TEMPLATE_PATHS[type]}/provisioning/**`, { dot: true });
-
+        const templateData = getTemplateData(buildProxyFromJson());
         provisioningSpecificFiles.forEach((file) => {
-          compileProvisioningTemplateFile(type, file, getTemplateData());
+          compileProvisioningTemplateFile(type, file, templateData);
         });
         printSuccessMessage(TEXT.addProvisioningSuccess);
       } else {

@@ -10,7 +10,11 @@ import { directoryExists, getExportFileName, isFile } from '../utils/utils.files
 import { normalizeId } from '../utils/utils.handlebars.js';
 import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
-import { renderTemplateFromFile } from '../utils/utils.templates.js';
+import {
+  renderTemplateFromFile,
+  getTemplateData,
+  buildProxyFromUserPrompt as buildProxyFromUserPrompt,
+} from '../utils/utils.templates.js';
 import { getVersion } from '../utils/utils.version.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
@@ -19,11 +23,12 @@ import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js'
 import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
-  const answers = await promptUser(argv);
-  const templateData = getTemplateData(answers);
-  const exportPath = getExportPath(answers.pluginName, answers.orgName, answers.pluginType);
+  const templateData = getTemplateData(buildProxyFromUserPrompt(await promptUser(argv)));
+  const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
+
+  console.log('Template data:', templateData);
 
   // Prevent generation from writing to an existing, populated directory unless in DEV mode.
   if (exportPathIsPopulated && !IS_DEV) {
@@ -42,40 +47,40 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     printError(`${failure.error}`);
   });
 
-  if (answers.hasBackend) {
+  if (templateData.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
   await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
 
-  printGenerateSuccessMessage(answers);
+  printGenerateSuccessMessage(templateData);
 };
 
-function getTemplateData(answers: CliArgs) {
-  const { pluginName, orgName, pluginType } = answers;
-  const { features } = getConfig();
-  const currentVersion = getVersion();
-  const pluginId = normalizeId(pluginName, orgName, pluginType);
-  // Support the users package manager of choice.
-  const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
-  const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-  const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
-  const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app; // We don't enable this by default yet for new scenes plugins.
-  const templateData: TemplateData = {
-    ...answers,
-    pluginId,
-    packageManagerName,
-    packageManagerInstallCmd,
-    packageManagerVersion,
-    isAppType,
-    isNPM: packageManagerName === 'npm',
-    version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-    useReactRouterV6,
-    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-  };
+// function getTemplateData(answers: CliArgs) {
+//   const { pluginName, orgName, pluginType } = answers;
+//   const { features } = getConfig();
+//   const currentVersion = getVersion();
+//   const pluginId = normalizeId(pluginName, orgName, pluginType);
+//   // Support the users package manager of choice.
+//   const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+//   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+//   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+//   const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app; // We don't enable this by default yet for new scenes plugins.
+//   const templateData: TemplateData = {
+//     ...answers,
+//     pluginId,
+//     packageManagerName,
+//     packageManagerInstallCmd,
+//     packageManagerVersion,
+//     isAppType,
+//     isNPM: packageManagerName === 'npm',
+//     version: currentVersion,
+//     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
+//     useReactRouterV6,
+//     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
+//   };
 
-  return templateData;
-}
+//   return templateData;
+// }
 
 type TemplateAction = {
   templateFile: string;

@@ -12,6 +12,13 @@ export type CliArgs = {
 
 export type TemplateData = {
   pluginId: string;
+  pluginName: string;
+  pluginDescription: string;
+  hasBackend: boolean;
+  orgName: string;
+  pluginType: PLUGIN_TYPES;
+  hasGithubWorkflows?: boolean;
+  hasGithubLevitateWorkflow?: boolean;
   packageManagerName: string;
   packageManagerInstallCmd: string;
   packageManagerVersion: string;
