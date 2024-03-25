@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { DataSourceSettings, PlaywrightArgs } from '../../types';
-import { DataSourceConfigPage } from '../../models';
+import { DataSourceConfigPage } from '../../models/pages/DataSourceConfigPage';
 
 type GotoDataSourceConfigPageFixture = TestFixture<(uid: string) => Promise<DataSourceConfigPage>, PlaywrightArgs>;
 

@@ -1,6 +1,7 @@
 import { TestFixture } from '@playwright/test';
 import { PlaywrightArgs } from '../types';
-import { VariableEditPage, VariablePage } from '../models';
+import { VariableEditPage } from '../models/pages/VariableEditPage';
+import { VariablePage } from '../models/pages/VariablePage';
 
 type VariableEditPageFixture = TestFixture<VariableEditPage, PlaywrightArgs>;
 

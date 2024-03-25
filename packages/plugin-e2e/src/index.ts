@@ -1,6 +1,5 @@
 import { test as base, expect as baseExpect, selectors } from '@playwright/test';
 
-import { GrafanaPage, VariableEditPage } from './models';
 import { AlertPageOptions, AlertVariant, ContainTextOptions, PluginFixture, PluginOptions } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
 import { createDataSource } from './fixtures/commands/createDataSource';
@@ -29,9 +28,31 @@ import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { toHaveAlert } from './matchers/toHaveAlert';
 import { toDisplayPreviews } from './matchers/toDisplayPreviews';
 import { toBeOK } from './matchers/toBeOK';
+import { GrafanaPage } from './models/pages/GrafanaPage';
+import { VariableEditPage } from './models/pages/VariableEditPage';
 
-export * from './e2e-selectors';
-export * from './models';
+// models
+export { DataSourcePicker } from './models/components/DataSourcePicker';
+export { Panel } from './models/components/Panel';
+export { TimeRange } from './models/components/TimeRange';
+export { AnnotationEditPage } from './models/pages/AnnotationEditPage';
+export { AnnotationPage } from './models/pages/AnnotationPage';
+export { DashboardPage } from './models/pages/DashboardPage';
+export { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
+export { ExplorePage } from './models/pages/ExplorePage';
+export { GrafanaPage } from './models/pages/GrafanaPage';
+export { PanelEditPage } from './models/pages/PanelEditPage';
+export { VariableEditPage } from './models/pages/VariableEditPage';
+export { VariablePage } from './models/pages/VariablePage';
+export { AppConfigPage } from './models/pages/AppConfigPage';
+export { PluginConfigPage } from './models/pages/PluginConfigPage';
+export { AppPage } from './models/pages/AppPage';
+
+// e2e-selectors
+export { Components, Pages, APIs, E2ESelectors } from './e2e-selectors/types';
+export { resolveSelectors } from './e2e-selectors/resolver';
+
+// types
 export * from './types';
 
 export const test = base.extend<PluginFixture, PluginOptions>({

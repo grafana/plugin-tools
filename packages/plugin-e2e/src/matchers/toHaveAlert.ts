@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { getMessage } from './utils';
-import { GrafanaPage } from '../models';
 import { AlertPageOptions } from '../types';
+import { GrafanaPage } from '../models/pages/GrafanaPage';
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
 export const toHaveAlert = async (grafanaPage: GrafanaPage, severity: AlertVariant, options?: AlertPageOptions) => {

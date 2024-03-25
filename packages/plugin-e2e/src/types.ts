@@ -9,16 +9,14 @@ import {
 } from '@playwright/test';
 
 import { E2ESelectors } from './e2e-selectors/types';
-import {
-  DashboardPage,
-  PanelEditPage,
-  VariableEditPage,
-  AnnotationEditPage,
-  ExplorePage,
-  DataSourceConfigPage,
-  AppConfigPage,
-  AppPage,
-} from './models';
+import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
+import { AppConfigPage } from './models/pages/AppConfigPage';
+import { AppPage } from './models/pages/AppPage';
+import { DashboardPage } from './models/pages/DashboardPage';
+import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
+import { ExplorePage } from './models/pages/ExplorePage';
+import { PanelEditPage } from './models/pages/PanelEditPage';
+import { VariableEditPage } from './models/pages/VariableEditPage';
 
 export type PluginOptions = {
   /**

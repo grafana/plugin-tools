@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { getMessage } from './utils';
-import { VariableEditPage } from '../models';
 import { ContainTextOptions } from '../types';
+import { VariableEditPage } from '../models/pages/VariableEditPage';
 
 export const toDisplayPreviews = async (
   variableEditPage: VariableEditPage,

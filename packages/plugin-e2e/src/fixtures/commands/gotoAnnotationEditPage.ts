@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { DashboardEditViewArgs, PlaywrightArgs } from '../../types';
-import { AnnotationEditPage } from '../../models';
+import { AnnotationEditPage } from '../../models/pages/AnnotationEditPage';
 
 type GotoAnnotationEditPageFixture = TestFixture<
   (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>,

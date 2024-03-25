@@ -1,6 +1,7 @@
 import { TestFixture } from '@playwright/test';
 import { PlaywrightArgs } from '../types';
-import { AnnotationEditPage, AnnotationPage } from '../models';
+import { AnnotationPage } from '../models/pages/AnnotationPage';
+import { AnnotationEditPage } from '../models/pages/AnnotationEditPage';
 
 type AnnotationEditPageFixture = TestFixture<AnnotationEditPage, PlaywrightArgs>;
 

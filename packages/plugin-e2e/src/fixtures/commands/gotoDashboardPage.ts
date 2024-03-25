@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { DashboardPageArgs, PlaywrightArgs } from '../../types';
-import { DashboardPage } from '../../models';
+import { DashboardPage } from '../../models/pages/DashboardPage';
 
 type GotoDashboardFixture = TestFixture<(args: DashboardPageArgs) => Promise<DashboardPage>, PlaywrightArgs>;
 

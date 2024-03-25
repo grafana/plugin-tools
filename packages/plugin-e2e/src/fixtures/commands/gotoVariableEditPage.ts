@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { DashboardEditViewArgs, PlaywrightArgs } from '../../types';
-import { VariableEditPage } from '../../models';
+import { VariableEditPage } from '../../models/pages/VariableEditPage';
 
 type GotoVariableEditPageFixture = TestFixture<
   (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>,

@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { PlaywrightArgs } from '../types';
-import { DashboardPage } from '../models';
+import { DashboardPage } from '../models/pages/DashboardPage';
 
 type DashboardPageFixture = TestFixture<DashboardPage, PlaywrightArgs>;
 

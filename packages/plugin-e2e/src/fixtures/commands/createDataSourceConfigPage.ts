@@ -1,7 +1,7 @@
 import { TestFixture } from '@playwright/test';
 import { CreateDataSourcePageArgs, PlaywrightArgs } from '../../types';
-import { DataSourceConfigPage } from '../../models';
 import { createDataSourceViaAPI } from './createDataSource';
+import { DataSourceConfigPage } from '../../models/pages/DataSourceConfigPage';
 
 type CreateDataSourceConfigPageFixture = TestFixture<
   (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>,

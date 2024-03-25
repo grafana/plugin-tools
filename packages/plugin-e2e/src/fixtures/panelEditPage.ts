@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
 import { PlaywrightArgs } from '../types';
-import { PanelEditPage } from '../models';
+import { PanelEditPage } from '../models/pages/PanelEditPage';
 
 type PanelEditPageFixture = TestFixture<PanelEditPage, PlaywrightArgs>;
 
