@@ -1,6 +1,5 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
-import { DashboardPageArgs } from '../../types';
+import { DashboardPageArgs, PluginFixture, PluginOptions } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 import { DashboardPage } from '../../models';
 

@@ -1,6 +1,5 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
-import { CreateDataSourcePageArgs } from '../../types';
+import { CreateDataSourcePageArgs, PluginFixture, PluginOptions } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 import { DataSourceConfigPage } from '../../models';
 import { createDataSourceViaAPI } from './createDataSource';

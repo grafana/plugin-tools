@@ -1,8 +1,7 @@
 import path from 'path';
 import { TestFixture } from '@playwright/test';
 import { promises } from 'fs';
-import { PluginFixture, PluginOptions } from '../../api';
-import { ReadProvisionedDashboardArgs } from '../../types';
+import { PluginFixture, PluginOptions, ReadProvisionedDashboardArgs } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 
 type ReadProvisionedDashboardFixture = TestFixture<

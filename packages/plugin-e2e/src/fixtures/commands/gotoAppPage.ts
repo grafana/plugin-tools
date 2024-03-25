@@ -1,5 +1,5 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
+import { PluginFixture, PluginOptions } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 import { AppPage, GotoAppPageArgs } from '../..';
 

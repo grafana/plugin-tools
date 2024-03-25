@@ -1,5 +1,5 @@
 import { APIRequestContext, expect, TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
+import { PluginFixture, PluginOptions } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 
 type CreateUserFixture = TestFixture<() => Promise<void>, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;

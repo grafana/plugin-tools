@@ -2,8 +2,7 @@ import { TestFixture } from '@playwright/test';
 import { promises } from 'fs';
 import path from 'path';
 import { parse as parseYml } from 'yaml';
-import { PluginFixture, PluginOptions } from '../../api';
-import { DataSourceSettings, ReadProvisionedDataSourceArgs } from '../../types';
+import { PluginFixture, PluginOptions, DataSourceSettings, ReadProvisionedDataSourceArgs } from '../../types';
 import { PlaywrightCombinedArgs } from '../types';
 
 type ReadProvisionedDataSourceFixture = TestFixture<

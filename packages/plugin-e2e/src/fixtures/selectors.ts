@@ -1,5 +1,5 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../api';
+import { PluginFixture, PluginOptions } from '../types';
 import { E2ESelectors, resolveSelectors } from '../e2e-selectors';
 import { versionedComponents, versionedPages } from '../e2e-selectors/versioned';
 import { PlaywrightCombinedArgs } from './types';

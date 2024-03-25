@@ -1,4 +1,4 @@
-import { test as setup } from '../api';
+import { test as setup } from '../';
 
 setup('authenticate', async ({ login, createUser, user }) => {
   if (user) {
