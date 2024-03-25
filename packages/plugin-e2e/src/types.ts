@@ -147,6 +147,10 @@ export type DashboardEditViewArgs<T> = {
   id: T;
 };
 
+export type AlertRuleArgs = {
+  uid: string;
+};
+
 export type ReadProvisionedDashboardArgs = {
   /**
    * The path, relative to the provisioning folder, to the dashboard json file

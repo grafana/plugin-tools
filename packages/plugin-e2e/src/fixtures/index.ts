@@ -9,6 +9,7 @@ import readProvisionedDataSource from './commands/readProvisionedDataSource';
 import readProvisionedDashboard from './commands/readProvisionedDashboard';
 import dashboardPage from './dashboardPage';
 import variableEditPage from './variableEditPage';
+import alertRuleEditPage from './alertRuleEditPage';
 import explorePage from './explorePage';
 import isFeatureToggleEnabled from './isFeatureToggleEnabled';
 import page from './page';
@@ -32,6 +33,7 @@ const fixtures = {
   variableEditPage,
   annotationEditPage,
   explorePage,
+  alertRuleEditPage,
   createDataSource,
   readProvisionedDataSource,
   readProvisionedDashboard,

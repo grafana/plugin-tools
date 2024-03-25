@@ -28,6 +28,7 @@ import {
 import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { ExplorePage } from './models/pages/ExplorePage';
 import options from './options';
+import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 
 export type PluginOptions = {
   /**
@@ -126,6 +127,13 @@ export type PluginFixture = {
    * Use {@link AnnotationEditPage.datasource.set} to change the datasource
    */
   annotationEditPage: AnnotationEditPage;
+
+  /**
+   * Isolated {@link AlertRuleEditPage} instance for each test.
+   *
+   * Navigates to an alert rule edit page
+   */
+  alertRuleEditPage: AlertRuleEditPage;
 
   /**
    * Isolated {@link ExplorePage} instance for each test.

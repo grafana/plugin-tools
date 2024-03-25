@@ -1,5 +1,6 @@
 export { AnnotationEditPage } from './pages/AnnotationEditPage';
 export { AnnotationPage } from './pages/AnnotationPage';
+export { AlertRuleEditPage } from './pages/AlertRuleEditPage';
 export { DashboardPage } from './pages/DashboardPage';
 export { DataSourceConfigPage } from './pages/DataSourceConfigPage';
 export { ExplorePage } from './pages/ExplorePage';
