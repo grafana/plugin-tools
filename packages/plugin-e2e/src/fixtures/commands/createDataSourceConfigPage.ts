@@ -1,12 +1,11 @@
 import { TestFixture } from '@playwright/test';
-import { CreateDataSourcePageArgs, PluginFixture, PluginOptions } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { CreateDataSourcePageArgs, PlaywrightArgs } from '../../types';
 import { DataSourceConfigPage } from '../../models';
 import { createDataSourceViaAPI } from './createDataSource';
 
 type CreateDataSourceConfigPageFixture = TestFixture<
   (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 export const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (

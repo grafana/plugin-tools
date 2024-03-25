@@ -1,12 +1,8 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions, DataSourceSettings } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { DataSourceSettings, PlaywrightArgs } from '../../types';
 import { DataSourceConfigPage } from '../../models';
 
-type GotoDataSourceConfigPageFixture = TestFixture<
-  (uid: string) => Promise<DataSourceConfigPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
->;
+type GotoDataSourceConfigPageFixture = TestFixture<(uid: string) => Promise<DataSourceConfigPage>, PlaywrightArgs>;
 
 export const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
   { request, page, selectors, grafanaVersion },

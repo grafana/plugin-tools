@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { APIRequestContext, expect, TestFixture } from '@playwright/test';
-import { CreateDataSourceArgs, DataSourceSettings, PluginFixture, PluginOptions } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { CreateDataSourceArgs, DataSourceSettings, PlaywrightArgs } from '../../types';
 
 type CreateDataSourceViaAPIFixture = TestFixture<
   (args: CreateDataSourceArgs) => Promise<DataSourceSettings>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 export const createDataSourceViaAPI = async (

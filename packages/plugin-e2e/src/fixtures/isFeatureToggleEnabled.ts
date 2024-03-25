@@ -1,11 +1,7 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../types';
-import { PlaywrightCombinedArgs } from './types';
+import { PlaywrightArgs } from '../types';
 
-type FeatureToggleFixture = TestFixture<
-  <T = object>(featureToggle: keyof T) => Promise<boolean>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
->;
+type FeatureToggleFixture = TestFixture<<T = object>(featureToggle: keyof T) => Promise<boolean>, PlaywrightArgs>;
 
 export const isFeatureToggleEnabled: FeatureToggleFixture = async ({ page, grafanaVersion }, use) => {
   await use(async <T = object>(featureToggle: keyof T) => {

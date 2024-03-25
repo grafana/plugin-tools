@@ -1,11 +1,8 @@
 import path from 'path';
 import { expect, TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { PlaywrightArgs } from '../../types';
 
-const authFile = 'playwright/.auth/user.json';
-
-type LoginFixture = TestFixture<() => Promise<void>, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type LoginFixture = TestFixture<() => Promise<void>, PlaywrightArgs>;
 
 const ADMIN_USER = { user: 'admin', password: 'admin' };
 

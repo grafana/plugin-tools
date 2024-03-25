@@ -1,9 +1,8 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../types';
+import { PlaywrightArgs } from '../types';
 import { DashboardPage } from '../models';
-import { PlaywrightCombinedArgs } from './types';
 
-type DashboardPageFixture = TestFixture<DashboardPage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type DashboardPageFixture = TestFixture<DashboardPage, PlaywrightArgs>;
 
 export const dashboardPage: DashboardPageFixture = async (
   { page, request, selectors, grafanaVersion },

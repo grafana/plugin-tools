@@ -1,12 +1,8 @@
 import { TestFixture } from '@playwright/test';
-import { DashboardPageArgs, PluginFixture, PluginOptions } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { DashboardPageArgs, PlaywrightArgs } from '../../types';
 import { DashboardPage } from '../../models';
 
-type GotoDashboardFixture = TestFixture<
-  (args: DashboardPageArgs) => Promise<DashboardPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
->;
+type GotoDashboardFixture = TestFixture<(args: DashboardPageArgs) => Promise<DashboardPage>, PlaywrightArgs>;
 
 export const gotoDashboardPage: GotoDashboardFixture = async (
   { request, page, selectors, grafanaVersion },

@@ -1,9 +1,8 @@
 import { TestFixture, Page } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../types';
-import { PlaywrightCombinedArgs } from './types';
+import { PlaywrightArgs } from '../types';
 import { overrideFeatureToggles } from './scripts/overrideFeatureToggles';
 
-type PageFixture = TestFixture<Page, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type PageFixture = TestFixture<Page, PlaywrightArgs>;
 
 /**
  * This fixture ensures the feature toggles defined in the Playwright config are being used in Grafana frontend.

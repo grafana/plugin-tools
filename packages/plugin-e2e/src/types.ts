@@ -1,4 +1,12 @@
-import { Locator, PlaywrightTestArgs, Response, TestInfo } from '@playwright/test';
+import {
+  Locator,
+  PlaywrightTestArgs,
+  PlaywrightTestOptions,
+  PlaywrightWorkerArgs,
+  PlaywrightWorkerOptions,
+  Response,
+  TestInfo,
+} from '@playwright/test';
 
 import { E2ESelectors } from './e2e-selectors/types';
 import {
@@ -266,6 +274,16 @@ export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors; t
   PlaywrightTestArgs,
   'page' | 'request'
 >;
+
+/**
+ * Playwright args used when defining fixtures
+ */
+export type PlaywrightArgs = PluginFixture &
+  PluginOptions &
+  PlaywrightTestArgs &
+  PlaywrightTestOptions &
+  PlaywrightWorkerArgs &
+  PlaywrightWorkerOptions;
 
 /**
  * The data source settings

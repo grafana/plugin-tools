@@ -2,12 +2,11 @@ import { TestFixture } from '@playwright/test';
 import { promises } from 'fs';
 import path from 'path';
 import { parse as parseYml } from 'yaml';
-import { PluginFixture, PluginOptions, DataSourceSettings, ReadProvisionedDataSourceArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { DataSourceSettings, ReadProvisionedDataSourceArgs, PlaywrightArgs } from '../../types';
 
 type ReadProvisionedDataSourceFixture = TestFixture<
   <T = any>(args: ReadProvisionedDataSourceArgs) => Promise<T>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 const DATASOURCES_DIR = 'datasources';

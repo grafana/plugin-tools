@@ -1,11 +1,10 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions, DashboardEditViewArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { DashboardEditViewArgs, PlaywrightArgs } from '../../types';
 import { VariableEditPage } from '../../models';
 
 type GotoVariableEditPageFixture = TestFixture<
   (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 export const gotoVariableEditPage: GotoVariableEditPageFixture = async (

@@ -1,9 +1,8 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../types';
+import { PlaywrightArgs } from '../types';
 import { ExplorePage } from '../models/pages/ExplorePage';
-import { PlaywrightCombinedArgs } from './types';
 
-type ExplorePageFixture = TestFixture<ExplorePage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type ExplorePageFixture = TestFixture<ExplorePage, PlaywrightArgs>;
 
 export const explorePage: ExplorePageFixture = async ({ page, selectors, grafanaVersion, request }, use, testInfo) => {
   const explorePage = new ExplorePage({ page, selectors, grafanaVersion, request, testInfo });

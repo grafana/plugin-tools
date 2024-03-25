@@ -1,11 +1,10 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions, DashboardEditViewArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { DashboardEditViewArgs, PlaywrightArgs } from '../../types';
 import { AnnotationEditPage } from '../../models';
 
 type GotoAnnotationEditPageFixture = TestFixture<
   (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 export const gotoAnnotationEditPage: GotoAnnotationEditPageFixture = async (

@@ -1,12 +1,11 @@
 import path from 'path';
 import { TestFixture } from '@playwright/test';
 import { promises } from 'fs';
-import { PluginFixture, PluginOptions, ReadProvisionedDashboardArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { PlaywrightArgs, ReadProvisionedDashboardArgs } from '../../types';
 
 type ReadProvisionedDashboardFixture = TestFixture<
   <T = any>(args: ReadProvisionedDashboardArgs) => Promise<T>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 const DASHBOARDS_DIR = 'dashboards';

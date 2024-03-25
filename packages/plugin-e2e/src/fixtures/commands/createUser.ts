@@ -1,8 +1,7 @@
 import { APIRequestContext, expect, TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { PlaywrightArgs } from '../../types';
 
-type CreateUserFixture = TestFixture<() => Promise<void>, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type CreateUserFixture = TestFixture<() => Promise<void>, PlaywrightArgs>;
 
 const headers = {
   Authorization: `Basic ${Buffer.from(`admin:admin`).toString('base64')}`,
