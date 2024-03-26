@@ -1,13 +1,10 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../api';
-import { PanelEditPage } from '../models';
-import { PlaywrightCombinedArgs } from './types';
+import { PlaywrightArgs } from '../types';
+import { PanelEditPage } from '../models/pages/PanelEditPage';
 
-type PanelEditPageFixture = TestFixture<PanelEditPage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type PanelEditPageFixture = TestFixture<PanelEditPage, PlaywrightArgs>;
 
-const panelEditPage: PanelEditPageFixture = async ({ dashboardPage }, use) => {
+export const panelEditPage: PanelEditPageFixture = async ({ dashboardPage }, use) => {
   const panelEditPage = await dashboardPage.addPanel();
   await use(panelEditPage);
 };
-
-export default panelEditPage;

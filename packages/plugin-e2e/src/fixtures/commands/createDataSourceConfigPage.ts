@@ -1,16 +1,14 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
-import { CreateDataSourcePageArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
-import { DataSourceConfigPage } from '../../models';
+import { CreateDataSourcePageArgs, PlaywrightArgs } from '../../types';
 import { createDataSourceViaAPI } from './createDataSource';
+import { DataSourceConfigPage } from '../../models/pages/DataSourceConfigPage';
 
 type CreateDataSourceConfigPageFixture = TestFixture<
   (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
-const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
+export const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -26,5 +24,3 @@ const createDataSourceConfigPage: CreateDataSourceConfigPageFixture = async (
   });
   deleteDataSource && (await datasourceConfigPage?.deleteDataSource());
 };
-
-export default createDataSourceConfigPage;

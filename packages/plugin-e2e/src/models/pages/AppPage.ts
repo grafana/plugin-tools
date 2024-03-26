@@ -1,6 +1,6 @@
 import * as nodePath from 'path';
 import { AppPageNavigateOptions, PluginPageArgs, PluginTestCtx } from '../../types';
-import { GrafanaPage } from '..';
+import { GrafanaPage } from './GrafanaPage';
 
 export class AppPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly args: PluginPageArgs) {

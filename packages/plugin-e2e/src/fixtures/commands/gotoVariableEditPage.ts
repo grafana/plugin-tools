@@ -1,15 +1,13 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
-import { DashboardEditViewArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
-import { VariableEditPage } from '../../models';
+import { DashboardEditViewArgs, PlaywrightArgs } from '../../types';
+import { VariableEditPage } from '../../models/pages/VariableEditPage';
 
 type GotoVariableEditPageFixture = TestFixture<
   (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
-const gotoVariableEditPage: GotoVariableEditPageFixture = async (
+export const gotoVariableEditPage: GotoVariableEditPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -20,5 +18,3 @@ const gotoVariableEditPage: GotoVariableEditPageFixture = async (
     return variableEditPage;
   });
 };
-
-export default gotoVariableEditPage;
