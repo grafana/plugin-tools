@@ -12,7 +12,7 @@ export type APIs = {
     query: string;
     health: (uid: string, id: string) => string;
     datasourceByUID: (uid: string) => string;
-    proxy: (uid: string) => string;
+    proxy: (uid: string, id: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;
