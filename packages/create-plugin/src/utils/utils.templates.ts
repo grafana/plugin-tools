@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
-import { renderHandlebarsTemplate } from './utils.handlebars.js';
+import { renderHandlebarsTemplate, normalizeId } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import {
   TEMPLATE_PATHS,
@@ -13,8 +13,12 @@ import {
   PLUGIN_TYPES,
   DEFAULT_FEATURE_FLAGS,
 } from '../constants.js';
-import { TemplateData } from '../types.js';
-import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
+import { CliArgs, TemplateData } from '../types.js';
+import {
+  getPackageManagerInstallCmd,
+  getPackageManagerWithFallback,
+  getPackageManagerFromUserAgent,
+} from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
@@ -88,23 +92,70 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData(): TemplateData {
+export function buildProxyFromJson() {
   const pluginJson = getPluginJson();
+  return new Proxy(pluginJson, {
+    get(target, prop: string | symbol) {
+      if (prop === 'pluginId') {
+        return target.id;
+      } else if (prop === 'pluginName') {
+        return target.name;
+      } else if (prop === 'pluginDescription') {
+        return target.info?.description;
+      } else if (prop === 'hasBackend') {
+        return target.backend;
+      } else if (prop === 'hasGithubWorkflows') {
+        return undefined;
+      } else if (prop === 'hasGithubLevitateWorkflow') {
+        return undefined;
+      } else if (prop === 'orgName') {
+        return target.info?.author?.name;
+      } else if (prop === 'pluginType') {
+        return target.type;
+      } else if (prop === 'packageManager') {
+        return getPackageManagerWithFallback();
+      } else {
+        throw new Error(`Property ${String(prop)} not found in package.json.`);
+      }
+    },
+  });
+}
+export function buildProxyFromUserPrompt(target: CliArgs) {
+  return new Proxy(target, {
+    get(target: CliArgs, prop: string | symbol) {
+      if (prop in target) {
+        return target[prop as keyof CliArgs];
+      } else if (prop === 'pluginId') {
+        return normalizeId(target.pluginName, target.orgName, target.pluginType);
+      } else if (prop === 'packageManager') {
+        return getPackageManagerFromUserAgent();
+      } else if (prop === 'hasBackend') {
+        return target.hasOwnProperty('hasBackend') && target.hasBackend;
+      } else {
+        throw new Error(`Property ${String(prop)} not found in user's prompt.`);
+      }
+    },
+  });
+}
+
+export function getTemplateData(proxy: any): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
-  const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
-  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+  const useReactRouterV6 = features.useReactRouterV6 === true && proxy.pluginType === PLUGIN_TYPES.app;
+  const { packageManagerName, packageManagerVersion } = proxy.packageManager;
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
 
   const templateData = {
     ...EXTRA_TEMPLATE_VARIABLES,
-    pluginId: pluginJson.id,
-    pluginName: pluginJson.name,
-    pluginDescription: pluginJson.info?.description,
-    hasBackend: Boolean(pluginJson.backend),
-    orgName: pluginJson.info?.author?.name,
-    pluginType: pluginJson.type,
-    isAppType: pluginJson.type === PLUGIN_TYPES.app || pluginJson.type === PLUGIN_TYPES.scenes,
+    pluginId: proxy.pluginId,
+    pluginName: proxy.pluginName,
+    pluginDescription: proxy.pluginDescription,
+    hasBackend: Boolean(proxy.hasBackend),
+    hasGithubWorkflows: Boolean(proxy.hasGithubWorkflows),
+    hasGithubLevitateWorkflow: Boolean(proxy.hasGithubLevitateWorkflow),
+    orgName: proxy.orgName,
+    pluginType: proxy.pluginType,
+    isAppType: proxy.pluginType === PLUGIN_TYPES.app || proxy.pluginType === PLUGIN_TYPES.scenes,
     isNPM: packageManagerName === 'npm',
     packageManagerName,
     packageManagerVersion,

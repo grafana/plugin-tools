@@ -1,6 +1,6 @@
 import { TEXT, MIGRATION_CONFIG } from '../constants.js';
 import { displayArrayAsList, printMessage, printSuccessMessage, confirmPrompt } from '../utils/utils.console.js';
-import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
+import { compileTemplateFiles, getTemplateData, buildProxyFromJson } from '../utils/utils.templates.js';
 import {
   getExportTemplateName,
   getOnlyExistingInCwd,
@@ -28,7 +28,8 @@ export const migrate = async () => {
     // 1. Add / update configuration files
     // --------------------------
     if (await confirmPrompt(TEXT.overrideFilesPrompt + '\n' + displayArrayAsList(MIGRATION_CONFIG.filesToOverride))) {
-      compileTemplateFiles(MIGRATION_CONFIG.filesToOverride.map(getExportTemplateName), getTemplateData());
+      const templateData = getTemplateData(buildProxyFromJson());
+      compileTemplateFiles(MIGRATION_CONFIG.filesToOverride.map(getExportTemplateName), templateData);
       printSuccessMessage(TEXT.overrideFilesSuccess);
     } else {
       printMessage(TEXT.overrideFilesAborted);
@@ -41,7 +42,7 @@ export const migrate = async () => {
     const filesToExist = getOnlyNotExistingInCwd(MIGRATION_CONFIG.filesToExist);
     if (filesToExist.length) {
       if (await confirmPrompt(TEXT.filesToExistPrompt + '\n' + displayArrayAsList(filesToExist))) {
-        compileTemplateFiles(filesToExist, getTemplateData());
+        compileTemplateFiles(filesToExist, getTemplateData(buildProxyFromJson()));
         printSuccessMessage(TEXT.filesToExistSuccess);
       } else {
         printMessage(TEXT.filesToExistAborted);
