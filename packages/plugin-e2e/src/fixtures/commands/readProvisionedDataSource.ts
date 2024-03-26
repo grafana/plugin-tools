@@ -2,18 +2,16 @@ import { TestFixture } from '@playwright/test';
 import { promises } from 'fs';
 import path from 'path';
 import { parse as parseYml } from 'yaml';
-import { PluginFixture, PluginOptions } from '../../api';
-import { DataSourceSettings, ReadProvisionedDataSourceArgs } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
+import { DataSourceSettings, ReadProvisionedDataSourceArgs, PlaywrightArgs } from '../../types';
 
 type ReadProvisionedDataSourceFixture = TestFixture<
   <T = any>(args: ReadProvisionedDataSourceArgs) => Promise<T>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
+  PlaywrightArgs
 >;
 
 const DATASOURCES_DIR = 'datasources';
 
-const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ provisioningRootDir }, use) => {
+export const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ provisioningRootDir }, use) => {
   await use(async ({ fileName: filePath, name }) => {
     const resolvedPath = path.resolve(path.join(provisioningRootDir, DATASOURCES_DIR, filePath));
     const contents = await promises.readFile(resolvedPath, 'utf8');
@@ -24,5 +22,3 @@ const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async ({ pro
     return yml.datasources.find((ds: DataSourceSettings) => ds.name === name);
   });
 };
-
-export default readProvisionedDataSource;

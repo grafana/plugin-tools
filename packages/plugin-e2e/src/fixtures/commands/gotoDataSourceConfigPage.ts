@@ -1,15 +1,10 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
-import { DataSourceSettings } from '../../types';
-import { PlaywrightCombinedArgs } from '../types';
-import { DataSourceConfigPage } from '../../models';
+import { DataSourceSettings, PlaywrightArgs } from '../../types';
+import { DataSourceConfigPage } from '../../models/pages/DataSourceConfigPage';
 
-type GotoDataSourceConfigPageFixture = TestFixture<
-  (uid: string) => Promise<DataSourceConfigPage>,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
->;
+type GotoDataSourceConfigPageFixture = TestFixture<(uid: string) => Promise<DataSourceConfigPage>, PlaywrightArgs>;
 
-const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
+export const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
   { request, page, selectors, grafanaVersion },
   use,
   testInfo
@@ -35,5 +30,3 @@ const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
     return dataSourceConfigPage;
   });
 };
-
-export default gotoDataSourceConfigPage;

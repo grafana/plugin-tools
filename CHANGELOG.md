@@ -1,3 +1,26 @@
+# (Tue Mar 26 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.24.0`
+  - Plugin E2E: Use new e2e selectors [#833](https://github.com/grafana/plugin-tools/pull/833) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.0`
+  - Create plugin: Update data source templates [#836](https://github.com/grafana/plugin-tools/pull/836) ([@sunker](https://github.com/sunker))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump webpack-dev-middleware from 5.3.3 to 5.3.4 [#835](https://github.com/grafana/plugin-tools/pull/835) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Mar 22 2024)
 
 #### 🚀 Enhancement

@@ -1,3 +1,15 @@
+# v0.24.0 (Tue Mar 26 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Use new e2e selectors [#833](https://github.com/grafana/plugin-tools/pull/833) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.22.0 (Mon Mar 18 2024)
 
 #### 🚀 Enhancement

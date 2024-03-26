@@ -2,7 +2,7 @@ import { PlaywrightTestArgs, TestFixture } from '@playwright/test';
 
 type GrafanaVersion = TestFixture<string, PlaywrightTestArgs>;
 
-const grafanaVersion: GrafanaVersion = async ({ page }, use) => {
+export const grafanaVersion: GrafanaVersion = async ({ page }, use) => {
   let grafanaVersion = process.env.GRAFANA_VERSION ?? '';
   if (!grafanaVersion) {
     await page.goto('/');
@@ -11,5 +11,3 @@ const grafanaVersion: GrafanaVersion = async ({ page }, use) => {
 
   await use(grafanaVersion.replace(/\-.*/, ''));
 };
-
-export default grafanaVersion;

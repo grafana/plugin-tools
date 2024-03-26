@@ -79,7 +79,7 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
   const { upperLimit, lowerLimit, tickInterval } = query;
 
   return (
-    <div className="gf-form">
+    <>
       <InlineField label="Lower Limit" labelWidth={16} tooltip="Random numbers lower limit">
         <Input onChange={onLowerLimitChange} onBlur={onRunQuery} value={lowerLimit || ''} type="number" />
       </InlineField>
@@ -89,7 +89,7 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
       <InlineField label="Tick interval" labelWidth={16} tooltip="Server tick interval">
         <Input onChange={onTickIntervalChange} onBlur={onRunQuery} value={tickInterval || ''} type="number" />
       </InlineField>
-    </div>
+    <>
   );
 }
 ```

@@ -1,14 +1,11 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../api';
-import { AnnotationEditPage, AnnotationPage } from '../models';
-import { PlaywrightCombinedArgs } from './types';
+import { PlaywrightArgs } from '../types';
+import { AnnotationPage } from '../models/pages/AnnotationPage';
+import { AnnotationEditPage } from '../models/pages/AnnotationEditPage';
 
-type AnnotationEditPageFixture = TestFixture<
-  AnnotationEditPage,
-  PluginFixture & PluginOptions & PlaywrightCombinedArgs
->;
+type AnnotationEditPageFixture = TestFixture<AnnotationEditPage, PlaywrightArgs>;
 
-const annotationEditPage: AnnotationEditPageFixture = async (
+export const annotationEditPage: AnnotationEditPageFixture = async (
   { page, selectors, grafanaVersion, request },
   use,
   testInfo
@@ -18,5 +15,3 @@ const annotationEditPage: AnnotationEditPageFixture = async (
   const annotationEditPage = await annotationPage.clickAddNew();
   await use(annotationEditPage);
 };
-
-export default annotationEditPage;

@@ -1,4 +1,5 @@
 import {
+  CoreApp,
   DataQueryRequest,
   DataQueryResponse,
   DataSourceApi,
@@ -7,11 +8,20 @@ import {
   FieldType,
 } from '@grafana/data';
 
-import { MyQuery, MyDataSourceOptions } from './types';
+import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
+  }
+
+  getDefaultQuery(_: CoreApp): Partial<MyQuery> {
+    return DEFAULT_QUERY;
+  }
+
+  filterQuery(query: MyQuery): boolean {
+    // if no query has been provided, prevent the query from being executed
+    return !!query.queryText;
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
