@@ -1,3 +1,15 @@
+# v0.25.0 (Tue Mar 26 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Change package imports and exports [#838](https://github.com/grafana/plugin-tools/pull/838) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.24.0 (Tue Mar 26 2024)
 
 #### 🚀 Enhancement
