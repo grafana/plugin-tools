@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import semverLt from 'semver/functions/lt';
 import { test, expect } from '../../../../src';
 
@@ -34,8 +35,12 @@ test('should run successfully if valid Google Sheets query was provided', async 
 test('should run successfully if valid Redshift query was provided in provisioned dashboard', async ({
   gotoAnnotationEditPage,
   readProvisionedDashboard,
+  grafanaVersion,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
   const annotationEditPage = await gotoAnnotationEditPage({ dashboard, id: '1' });
   await expect(annotationEditPage.runQuery()).toBeOK();
+  if (semver.gte(grafanaVersion, '11.0.0')) {
+    await expect(annotationEditPage).toHaveAlert('warning', { hasText: 'No events found' });
+  }
 });

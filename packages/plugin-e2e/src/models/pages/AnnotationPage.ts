@@ -24,19 +24,21 @@ export class AnnotationPage extends GrafanaPage {
    * Clicks the add new annotation button and returns the annotation edit page
    */
   async clickAddNew() {
-    const { Dashboard } = this.ctx.selectors.pages;
+    const { addAnnotationCTAV2, addAnnotationCTA } = this.ctx.selectors.pages.Dashboard.Settings.Annotations.List;
 
     if (!this.dashboard?.uid) {
       //the dashboard doesn't have any annotations yet (except for the built-in one)
       if (semver.gte(this.ctx.grafanaVersion, '8.3.0')) {
-        await this.getByGrafanaSelector(Dashboard.Settings.Annotations.List.addAnnotationCTAV2).click();
+        await this.getByGrafanaSelector(addAnnotationCTAV2).click();
       } else {
-        await this.getByGrafanaSelector(Dashboard.Settings.Annotations.List.addAnnotationCTA).click();
+        await this.getByGrafanaSelector(addAnnotationCTA).click();
       }
     } else {
       //the dashboard already has annotations
-      //TODO: add new selector and use it in grafana/ui
-      await this.ctx.page.getByRole('button', { name: 'New query' }).click();
+      const newQueryButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')
+        ? this.getByGrafanaSelector(addAnnotationCTAV2)
+        : this.ctx.page.getByRole('button', { name: 'New query' });
+      await newQueryButton.click();
     }
 
     const editIndex = await this.ctx.page.evaluate(() => {

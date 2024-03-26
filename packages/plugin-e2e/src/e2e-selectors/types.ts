@@ -54,6 +54,9 @@ export type Components = {
     };
     applyButton: string;
     toggleVizPicker: string;
+    OptionsPane: {
+      fieldInput: (title: string) => string;
+    };
   };
   RefreshPicker: {
     runButtonV2: string;
@@ -91,19 +94,16 @@ export type Components = {
   };
   TimeZonePicker: {
     containerV2: string;
+    changeTimeSettingsButton: string;
   };
   CodeEditor: {
     container: string;
   };
-  Variables: {
-    variableOption: string;
-  };
   Annotations: {
-    annotationsTypeInput: string;
-    annotationsChoosePanelInput: string;
-  };
-  Tooltip: {
-    container: string;
+    editor: {
+      testButton: string;
+      resultContainer: string;
+    };
   };
   QueryField: {
     container: string;
@@ -157,9 +157,6 @@ export type Pages = {
         };
         List: {
           url: (uid: string) => string;
-          /**
-           * @deprecated use addAnnotationCTAV2 from Grafana 8.3 instead
-           */
           addAnnotationCTA: string;
           addAnnotationCTAV2: string;
         };
