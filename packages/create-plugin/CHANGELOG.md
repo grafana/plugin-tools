@@ -1,3 +1,15 @@
+# v4.4.0 (Tue Mar 26 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Update data source templates [#836](https://github.com/grafana/plugin-tools/pull/836) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v4.3.0 (Fri Mar 22 2024)
 
 #### 🚀 Enhancement
