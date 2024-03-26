@@ -66,14 +66,15 @@ export class PanelEditPage extends GrafanaPage {
   /**
    * Sets the title of the panel. This method will open the panel options, set the title and close the panel options.
    */
-  async setPanelTitle(title: string) {
-    const { OptionsGroup } = this.ctx.selectors.components;
+  async setPanelTitle(titleText: string) {
+    const TITLE = 'Title';
+    const { OptionsGroup, PanelEditor } = this.ctx.selectors.components;
     await this.collapseSection(OptionsGroup.groupTitle);
-    //TODO: add new selector and use it in grafana/ui
-    const vizInput = await this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle))
-      .locator('input')
-      .first();
-    await vizInput.fill(title);
+
+    const vizInput = semver.gte(this.ctx.grafanaVersion, '11.0.0')
+      ? this.getByTestIdOrAriaLabel(PanelEditor.OptionsPane.fieldInput(TITLE))
+      : this.getByTestIdOrAriaLabel(OptionsGroup.group(OptionsGroup.groupTitle)).locator('input').first();
+    await vizInput.fill(titleText);
     await this.ctx.page.keyboard.press('Tab');
   }
 

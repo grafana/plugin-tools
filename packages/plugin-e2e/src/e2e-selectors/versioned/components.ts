@@ -74,6 +74,11 @@ export const versionedComponents = {
       '10.0.0': 'data-testid toggle-viz-picker',
       [MIN_GRAFANA_VERSION]: 'toggle-viz-picker',
     },
+    OptionsPane: {
+      fieldInput: {
+        '11.0.0': (title: string) => `data-testid Panel editor option pane field input ${title}`,
+      },
+    },
   },
   RefreshPicker: {
     runButtonV2: {
@@ -158,11 +163,24 @@ export const versionedComponents = {
       '8.3.0': 'data-testid Time zone picker select container',
       [MIN_GRAFANA_VERSION]: 'Folder picker select container',
     },
+    changeTimeSettingsButton: {
+      '11.0.0': 'data-testid Time zone picker Change time settings button',
+    },
   },
   CodeEditor: {
     container: {
       '10.2.3': 'data-testid Code editor container',
       [MIN_GRAFANA_VERSION]: 'Code editor container',
+    },
+  },
+  Annotations: {
+    editor: {
+      testButton: {
+        '11.0.0': 'data-testid annotations-test-button',
+      },
+      resultContainer: {
+        '11.0.0': 'data-testid annotations-query-result-container',
+      },
     },
   },
   QueryField: {

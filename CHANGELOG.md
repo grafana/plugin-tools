@@ -1,3 +1,22 @@
+# (Fri Mar 22 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.3.0`
+  - Create Plugin: add support for remote debugging in docker dev env [#809](https://github.com/grafana/plugin-tools/pull/809) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.3.0`
+  - Add condition about backend to success message [#830](https://github.com/grafana/plugin-tools/pull/830) ([@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 2
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # (Mon Mar 18 2024)
 
 #### 🐛 Bug Fix

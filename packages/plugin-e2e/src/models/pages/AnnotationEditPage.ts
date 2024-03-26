@@ -39,8 +39,11 @@ export class AnnotationEditPage extends GrafanaPage {
       (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
       options
     );
-    //TODO: add new selector and use it in grafana/ui
-    await this.ctx.page.getByRole('button', { name: 'TEST' }).click();
+
+    const testButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')
+      ? this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Annotations.editor.testButton)
+      : this.ctx.page.getByRole('button', { name: 'TEST' });
+    await testButton.click();
     return responsePromise;
   }
 }
