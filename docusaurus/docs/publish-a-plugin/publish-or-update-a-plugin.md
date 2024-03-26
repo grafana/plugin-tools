@@ -114,6 +114,10 @@ For more information on plugin deprecation and how to request your plugin to be 
 
 - The @grafana/toolkit tool is deprecated. Please [migrate to `create-plugin`](../migration-guides/migrate-from-toolkit.mdx). In the future, we will reject submissions based on @grafana/toolkit as it becomes increasingly out-of-date.
 
+### Do all plugins require signatures?
+
+- All plugins require signatures unless they are in development or being submitted to review for the first time.
+
 ### Do plugin signatures expire?
 
 - Plugin signatures do not currently expire.
