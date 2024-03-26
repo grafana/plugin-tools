@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import { test, expect, AnnotationPage } from '../../../../src';
 import { REDSHIFT_SCHEMAS } from '../mocks/resource';
 
@@ -13,7 +14,7 @@ test('should load resources and display them as options when clicking on an inpu
   await expect(annotationEditPage.getByTestIdOrAriaLabel('Select option')).toContainText(REDSHIFT_SCHEMAS);
 });
 
-test('should be able to add a new annotation when there annotations already exist', async ({
+test('should be able to add a new annotation when annotations already exist', async ({
   page,
   selectors,
   grafanaVersion,
@@ -24,5 +25,9 @@ test('should be able to add a new annotation when there annotations already exis
   const annotationPage = new AnnotationPage({ page, selectors, grafanaVersion, request, testInfo }, dashboard);
   await annotationPage.goto();
   await annotationPage.clickAddNew();
-  await expect(page).toHaveTitle(/New annotation.*/);
+  if (semver.gte(grafanaVersion, '9.2.0')) {
+    await expect(page).toHaveTitle(/New annotation.*/);
+  } else {
+    await expect(page.getByText('When enabled the annotation query is issued every dashboard refresh')).toBeVisible();
+  }
 });
