@@ -7,7 +7,7 @@ const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
 const YARN_LOCKFILE = 'yarn.lock';
 const SUPPORTED_PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'];
-const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'yarn', packageManagerVersion: '1.22.19' };
+const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'yarn', packageManagerVersion: '1.22.22' };
 
 export type PackageManager = {
   packageManagerName: string;
