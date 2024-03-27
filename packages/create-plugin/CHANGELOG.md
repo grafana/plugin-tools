@@ -1,3 +1,15 @@
+# v4.4.1 (Wed Mar 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create-Plugin: Improve commands intructions [#843](https://github.com/grafana/plugin-tools/pull/843) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.4.0 (Tue Mar 26 2024)
 
 #### 🐛 Bug Fix
