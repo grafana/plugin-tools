@@ -39,8 +39,8 @@ To start your plugin development project, run the following commands in the orde
 1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
 1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
 1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
-   [http://localhost:3000](http://localhost:3000). Restart this command each time you run `mage` to run your new backend
-   code.
+   [http://localhost:3000](http://localhost:3000). This command will run a `mage -v watch` inside the container
+   and the plugin will be reloaded on every code change. It also allows you to attach a debugger to the plugin backend code on port `2345`.
 
 ### Configure the Grafana version
 
@@ -71,8 +71,6 @@ services:
       args:
         grafana_version: ${GRAFANA_VERSION:-9.1.2}
         grafana_image: ${GRAFANA_IMAGE:-grafana}
-        GO_VERSION: ${GO_VERSION:-1.22}
-        GO_ARCH: ${GO_ARCH:-amd64}
 ```
 
 This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker-compose` commands.
@@ -107,3 +105,29 @@ For example, in VSCode, you can add a `launch.json` configuration like this:
   ]
 }
 ```
+
+You can control the go version and the architecure used to build your plugin in the docker compose by setting `GO_VERSION` and `GO_ARCH` environment variables:
+```yaml title="docker-compose.yaml"
+version: '3.7'
+
+services:
+  grafana:
+    container_name: 'myorg-basic-app'
+    build:
+      context: ./.config
+      args:
+        GO_VERSION: ${GO_VERSION:-1.22}
+        GO_ARCH: ${GO_ARCH:-amd64}
+```
+
+You will also notice that the `docker-compose.yaml` file also has the following settings:
+
+```yaml title="docker-compose.yaml"
+    security_opt:
+      - "apparmor:unconfined"
+      - "seccomp:unconfined"
+    cap_add:
+      - SYS_PTRACE
+```
+
+they are necessary to allow delve to attach to the running process and debug it and should not be used in production environments.
