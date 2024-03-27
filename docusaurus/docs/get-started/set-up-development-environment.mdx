@@ -39,8 +39,7 @@ To start your plugin development project, run the following commands in the orde
 1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
 1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
 1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
-   [http://localhost:3000](http://localhost:3000). This command will run a `mage -v watch` inside the container
-   and the plugin will be reloaded on every code change. It also allows you to attach a debugger to the plugin backend code on port `2345`.
+   [http://localhost:3000](http://localhost:3000). The plugin will be reloaded on every code change and a debugger can be attached on port `2345`.
 
 ### Configure the Grafana version
 

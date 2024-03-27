@@ -16,7 +16,9 @@ export function printGenerateSuccessMessage(answers: CliArgs) {
         ]
       : []),
     '- `docker-compose up` to start a grafana development server. ' +
-      (answers.hasBackend ? 'Restart this command after each time you run mage to run your new backend code.' : ''),
+      (answers.hasBackend
+        ? 'The plugin will be reloaded on every code change and a debugger can be attached on port `2345`.'
+        : ''),
     '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
