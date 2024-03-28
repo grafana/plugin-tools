@@ -30,14 +30,14 @@ export class VariableEditPage extends GrafanaPage {
    * Sets the type of variable in the 'Variable type' dropdown to the given type
    */
   async setVariableType(type: VariableType) {
-    await this.getByTestIdOrAriaLabel(
+    await this.getByGrafanaSelector(
       this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.generalTypeSelectV2
     )
       .locator('input')
       .fill(type);
     await this.ctx.page.keyboard.press('ArrowDown');
     await this.ctx.page.keyboard.press('Enter');
-    await this.getByTestIdOrAriaLabel(
+    await this.getByGrafanaSelector(
       this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.generalTypeSelectV2
     ).scrollIntoViewIfNeeded();
   }
@@ -52,7 +52,7 @@ export class VariableEditPage extends GrafanaPage {
   async runQuery() {
     // in 9.2.0, the submit button got a new purpose. it no longer submits the form, but instead runs the query
     if (gte(this.ctx.grafanaVersion, '9.2.0')) {
-      await this.getByTestIdOrAriaLabel(
+      await this.getByGrafanaSelector(
         this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.submitButton
       ).click();
     } else {

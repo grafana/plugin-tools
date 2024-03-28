@@ -10,7 +10,7 @@ export class DataSourcePicker extends GrafanaPage {
    * Sets the data source picker to the provided name
    */
   async set(name: string) {
-    await this.getByTestIdOrAriaLabel(this.ctx.selectors.components.DataSourcePicker.container)
+    await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container)
       .locator('input')
       .fill(name);
 

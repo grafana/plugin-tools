@@ -33,7 +33,7 @@ export class AnnotationEditPage extends GrafanaPage {
     );
 
     const testButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')
-      ? this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Annotations.editor.testButton)
+      ? this.getByGrafanaSelector(this.ctx.selectors.components.Annotations.editor.testButton)
       : this.ctx.page.getByRole('button', { name: 'TEST' });
     await testButton.click();
     return responsePromise;

@@ -29,14 +29,14 @@ export class AnnotationPage extends GrafanaPage {
     if (!this.dashboard?.uid) {
       //the dashboard doesn't have any annotations yet (except for the built-in one)
       if (semver.gte(this.ctx.grafanaVersion, '8.3.0')) {
-        await this.getByTestIdOrAriaLabel(addAnnotationCTAV2).click();
+        await this.getByGrafanaSelector(addAnnotationCTAV2).click();
       } else {
-        await this.getByTestIdOrAriaLabel(addAnnotationCTA).click();
+        await this.getByGrafanaSelector(addAnnotationCTA).click();
       }
     } else {
       //the dashboard already has annotations
       const newQueryButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')
-        ? this.getByTestIdOrAriaLabel(addAnnotationCTAV2)
+        ? this.getByGrafanaSelector(addAnnotationCTAV2)
         : this.ctx.page.getByRole('button', { name: 'New query' });
       await newQueryButton.click();
     }

@@ -479,7 +479,7 @@ export type AppPageNavigateOptions = NavigateOptions & {
   path?: string;
 };
 
-export type GetByTestIdOrAriaLabelOptions = {
+export type getByGrafanaSelectorOptions = {
   /**
    *Optional root locator to search within. If no locator is provided, the page will be used
    */

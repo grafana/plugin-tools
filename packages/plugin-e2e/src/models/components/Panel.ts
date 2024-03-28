@@ -43,7 +43,7 @@ export class Panel extends GrafanaPage {
       selector = this.ctx.selectors.components.Panels.Panel.headerCornerInfo(ERROR_STATUS);
     }
 
-    return this.getByTestIdOrAriaLabel(selector, {
+    return this.getByGrafanaSelector(selector, {
       root: this.locator,
     });
   }

@@ -24,10 +24,10 @@ Selecting Grafana UI elements can be challenging because the selector may be def
 
 ## Playwright locator for Grafana UI elements
 
-All [pages](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/pages) defined by `@grafana/plugin-e2e` expose a `getByTestIdOrAriaLabel` method. This method returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to one or more elements, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a [grafana/e2e-selectors](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors), you should always use this method.
+All [pages](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/pages) defined by `@grafana/plugin-e2e` expose a `getByGrafanaSelector` method. This method returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to one or more elements, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a [grafana/e2e-selectors](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors), you should always use this method.
 
 ```ts
-panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
+panelEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
 ```
 
 ## The selectors fixture
@@ -41,16 +41,14 @@ import { test, expect } from '@grafana/plugin-e2e';
 
 test('annotation query should be OK when query is valid', async ({ annotationEditPage, page, selectors }) => {
   await annotationEditPage.datasource.set('E2E Test Data Source');
-  await annotationEditPage
-    .getByTestIdOrAriaLabel(selectors.components.CodeEditor.container)
-    .fill('SELECT * FROM users');
+  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).fill('SELECT * FROM users');
   await expect(annotationEditPage.runQuery()).toBeOK();
 });
 ```
 
 ## Interact with UI elements defined in the plugin code
 
-As stated above, you should always use the `getByTestIdOrAriaLabel` method when the UI element you want to interact with has an associated end-to-end selector. However, many Grafana UI elements don't have end-to-end selectors. If that's the case, we recommended following Grafana's best practices for [testing](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md) and the [testing with accessibility in mind](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/accessibility.md#writing-tests-with-accessibility-in-mind) guide when composing your UI and writing tests.
+As stated above, you should always use the `getByGrafanaSelector` method when the UI element you want to interact with has an associated end-to-end selector. However, many Grafana UI elements don't have end-to-end selectors. If that's the case, we recommended following Grafana's best practices for [testing](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md) and the [testing with accessibility in mind](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/accessibility.md#writing-tests-with-accessibility-in-mind) guide when composing your UI and writing tests.
 
 ### Scope locators
 
@@ -105,7 +103,7 @@ test('testing select component', async ({ page, selectors }) => {
   const configPage = await createDataSourceConfigPage({ type: 'test-datasource' });
   await page.getByRole('combobox', { name: 'Auth type' }).click();
   const option = selectors.components.Select.option;
-  await expect(configPage.getByTestIdOrAriaLabel(option)).toHaveText(['val1', 'val2']);
+  await expect(configPage.getByGrafanaSelector(option)).toHaveText(['val1', 'val2']);
 });
 ```
 

@@ -31,7 +31,7 @@ test('should filter out govcloud regions', async ({ panelEditPage, selectors, re
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.mockResourceResponse('regions', regionsMock);
   await panelEditPage.getQueryEditorRow('A').getByText('Regions').click();
-  await expect(panelEditPage.getByTestIdOrAriaLabel(selectors.components.Select.option)).toHaveText(expectedRegions);
+  await expect(panelEditPage.getByGrafanaSelector(selectors.components.Select.option)).toHaveText(expectedRegions);
 });
 ```
 

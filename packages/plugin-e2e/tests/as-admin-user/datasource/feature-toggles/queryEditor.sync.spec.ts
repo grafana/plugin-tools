@@ -12,7 +12,7 @@ test('standard query data handler should only be called once', async ({
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.timeRange.set({ from: '2020-01-31', to: '2020-02-20' });
   await page.waitForFunction(() => (window as any).monaco);
-  await panelEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
+  await panelEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
 
   await page.keyboard.insertText('select * from long_format_example limit 100');
   let calledTimes = 0;
