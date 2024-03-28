@@ -22,6 +22,25 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'data-testid-absolute-time-range-narrow',
     },
   },
+  Menu: {
+    MenuComponent: {
+      [MIN_GRAFANA_VERSION]: (title: string) => `${title} menu`,
+    },
+    MenuGroup: {
+      [MIN_GRAFANA_VERSION]: (title: string) => `${title} menu group`,
+    },
+    MenuItem: { [MIN_GRAFANA_VERSION]: (title: string) => `${title} menu item` },
+    SubMenu: {
+      container: {
+        '10.3.0': 'data-testid SubMenu container',
+        [MIN_GRAFANA_VERSION]: 'SubMenu',
+      },
+      icon: {
+        '10.3.0': 'data-testid SubMenu icon',
+        [MIN_GRAFANA_VERSION]: 'SubMenu icon',
+      },
+    },
+  },
   Panels: {
     Panel: {
       title: {
@@ -75,6 +94,9 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'toggle-viz-picker',
     },
     OptionsPane: {
+      content: {
+        [MIN_GRAFANA_VERSION]: 'Panel editor option pane content',
+      },
       fieldInput: {
         '11.0.0': (title: string) => `data-testid Panel editor option pane field input ${title}`,
       },
