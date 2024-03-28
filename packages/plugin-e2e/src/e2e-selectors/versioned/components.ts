@@ -97,6 +97,9 @@ export const versionedComponents = {
       content: {
         [MIN_GRAFANA_VERSION]: 'Panel editor option pane content',
       },
+      fieldLabel: {
+        [MIN_GRAFANA_VERSION]: (type: string) => `${type} field property editor`,
+      },
       fieldInput: {
         '11.0.0': (title: string) => `data-testid Panel editor option pane field input ${title}`,
       },

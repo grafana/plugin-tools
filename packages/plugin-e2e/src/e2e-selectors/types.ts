@@ -66,6 +66,7 @@ export type Components = {
     toggleVizPicker: string;
     OptionsPane: {
       content: string;
+      fieldLabel: (type: string) => string;
       fieldInput: (title: string) => string;
     };
   };
