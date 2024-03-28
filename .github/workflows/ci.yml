@@ -67,8 +67,8 @@ jobs:
           - workingDir: 'myorg-backend-datasource'
             cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
-          - workingDir: 'myorg-nobackend-scenesapp'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackendscenes-app'
+            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
