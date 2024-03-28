@@ -120,6 +120,9 @@ export const versionedPages = {
               '10.4.0': 'data-testid Variable editor Run Query button',
               [MIN_GRAFANA_VERSION]: 'Variable editor Submit button',
             },
+            selectionOptionsIncludeAllSwitch: {
+              [MIN_GRAFANA_VERSION]: 'Variable editor Form IncludeAll switch',
+            },
           },
         },
       },

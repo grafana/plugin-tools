@@ -21,7 +21,10 @@ test('should call a custom health endpoint when healthCheckPath is provided', as
   selectors,
 }) => {
   const configPage = await createDataSourceConfigPage({ type: 'marcusolsson-json-datasource' });
-  const healthCheckPath = selectors.apis.DataSource.proxy(configPage.datasource.uid);
+  const healthCheckPath = selectors.apis.DataSource.proxy(
+    configPage.datasource.uid,
+    configPage.datasource.id.toString()
+  );
   await page.route(healthCheckPath, async (route) => {
     await route.fulfill({ status: 200, body: 'OK' });
   });

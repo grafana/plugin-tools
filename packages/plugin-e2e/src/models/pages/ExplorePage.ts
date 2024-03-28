@@ -1,4 +1,4 @@
-const semver = require('semver');
+import * as semver from 'semver';
 import { Locator, expect } from '@playwright/test';
 import { NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
