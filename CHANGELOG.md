@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@0.25.1`
+  - Plugin E2E: Add more selectors [#845](https://github.com/grafana/plugin-tools/pull/845) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@4.4.4`
   - Create Plugin: Fix hardcoded path [#846](https://github.com/grafana/plugin-tools/pull/846) ([@oshirohugo](https://github.com/oshirohugo))
 
