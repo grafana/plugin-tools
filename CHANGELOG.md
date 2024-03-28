@@ -1,3 +1,16 @@
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.2`
+  - Create Plugin: Fix grafana running without plugin backend [#844](https://github.com/grafana/plugin-tools/pull/844) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # (Wed Mar 27 2024)
 
 #### 🐛 Bug Fix
