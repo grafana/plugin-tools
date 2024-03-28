@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@4.4.4`
+  - Create Plugin: Fix hardcoded path [#846](https://github.com/grafana/plugin-tools/pull/846) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@4.4.3`
   - Create Plugin: Update default yarn version to 1.22.22 [#839](https://github.com/grafana/plugin-tools/pull/839) ([@jackw](https://github.com/jackw))
 

@@ -1,3 +1,15 @@
+# v4.4.4 (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix hardcoded path [#846](https://github.com/grafana/plugin-tools/pull/846) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.4.3 (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
