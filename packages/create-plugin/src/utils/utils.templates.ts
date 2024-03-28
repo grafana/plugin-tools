@@ -95,6 +95,13 @@ export function getTemplateData(): TemplateData {
   const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+  const hasPlaywright = isFile(path.join(process.cwd(), 'playwright.config.ts'));
+  const e2eTestCmd = hasPlaywright
+    ? 'playwright test'
+    : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
+  const e2eTestUpdateCmd = hasPlaywright
+    ? 'playwright test --update-snapshots'
+    : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run --update-screenshots`;
 
   const templateData = {
     ...EXTRA_TEMPLATE_VARIABLES,
@@ -113,6 +120,8 @@ export function getTemplateData(): TemplateData {
     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     useReactRouterV6: useReactRouterV6,
     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
+    e2eTestCmd,
+    e2eTestUpdateCmd,
   };
 
   debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
