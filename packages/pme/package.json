@@ -1,0 +1,40 @@
+{
+  "name": "@grafana/pme",
+  "version": "1.0.0",
+  "description": "plugin meta extractor",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "dev": "tsc --project tsconfig.json --watch"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "directory": "packages/pme",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "tool"
+  ],
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "dependencies": {
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@grafana/data": "^10.4.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.25",
+    "jest": "^29.7.0",
+    "react": "^18.2.0",
+    "ts-jest": "^29.1.2"
+  }
+}
