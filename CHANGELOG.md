@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@4.4.3`
+  - Create Plugin: Update default yarn version to 1.22.22 [#839](https://github.com/grafana/plugin-tools/pull/839) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@4.4.2`
   - Create Plugin: Fix grafana running without plugin backend [#844](https://github.com/grafana/plugin-tools/pull/844) ([@oshirohugo](https://github.com/oshirohugo))
 

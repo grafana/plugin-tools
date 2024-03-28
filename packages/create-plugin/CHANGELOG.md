@@ -1,3 +1,15 @@
+# v4.4.3 (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update default yarn version to 1.22.22 [#839](https://github.com/grafana/plugin-tools/pull/839) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.4.2 (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
