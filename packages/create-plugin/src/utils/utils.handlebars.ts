@@ -51,7 +51,6 @@ function registerHandlebarsHelpers() {
     properCase: pascalCase,
     pascalCase: pascalCase,
     if_eq: ifEq,
-    normalize_id: normalizeId,
   };
 
   Object.keys(helpers).forEach((helperName) =>
