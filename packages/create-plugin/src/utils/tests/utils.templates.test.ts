@@ -28,11 +28,7 @@ describe('Utils / Templates', () => {
     });
 
     test('should be possible to filter for multiple different files', () => {
-      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, [
-        '.prettierrc.js',
-        'playwright.config.ts',
-        'tsconfig.json',
-      ]);
+      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, ['.prettierrc.js', 'jest.config.js', 'tsconfig.json']);
 
       expect(Array.isArray(templateFiles)).toBe(true);
       expect(templateFiles.length).toBe(3);
