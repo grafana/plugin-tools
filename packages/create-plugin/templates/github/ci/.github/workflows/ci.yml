@@ -74,7 +74,7 @@ jobs:
       - name: Check for E2E
         id: check-for-e2e
         run: |
-          if [ -f "playwright.config.ts"]
+          if [ -f "playwright.config.ts" ]
           then
             echo "has-e2e=true" >> $GITHUB_OUTPUT
           fi
