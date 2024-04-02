@@ -1,3 +1,16 @@
+# (Tue Apr 02 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.5`
+  - Create Plugins: Remove unused env variable [#850](https://github.com/grafana/plugin-tools/pull/850) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
