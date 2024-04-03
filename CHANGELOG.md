@@ -1,3 +1,107 @@
+# (Wed Apr 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.6`, `@grafana/plugin-e2e@0.26.1`
+  - Plugin E2E: Fix APIs that are broken in older versions of Grafana [#739](https://github.com/grafana/plugin-tools/pull/739) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.26.0`
+  - Plugin E2E: Rename getByTestIdOrAriaLabel to getByGrafanaSelector [#832](https://github.com/grafana/plugin-tools/pull/832) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Apr 02 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.5`
+  - Create Plugins: Remove unused env variable [#850](https://github.com/grafana/plugin-tools/pull/850) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@0.25.1`
+  - Plugin E2E: Add more selectors [#845](https://github.com/grafana/plugin-tools/pull/845) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.4`
+  - Create Plugin: Fix hardcoded path [#846](https://github.com/grafana/plugin-tools/pull/846) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.3`
+  - Create Plugin: Update default yarn version to 1.22.22 [#839](https://github.com/grafana/plugin-tools/pull/839) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.2`
+  - Create Plugin: Fix grafana running without plugin backend [#844](https://github.com/grafana/plugin-tools/pull/844) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Wed Mar 27 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.4.1`
+  - Create-Plugin: Improve commands intructions [#843](https://github.com/grafana/plugin-tools/pull/843) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # (Tue Mar 26 2024)
 
 #### 🚀 Enhancement

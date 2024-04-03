@@ -12,8 +12,8 @@ test('should load resources and display them as options when clicking on an inpu
   await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(ds.name);
   await page.getByLabel('Schema').click();
-  await expect(variableEditPage.getByTestIdOrAriaLabel('Select option')).toContainText(REDSHIFT_SCHEMAS);
+  await expect(variableEditPage.getByGrafanaSelector('Select option')).toContainText(REDSHIFT_SCHEMAS);
   await page.keyboard.press('Enter');
   await page.getByLabel('Table').click();
-  await expect(variableEditPage.getByTestIdOrAriaLabel('Select option')).toContainText(REDSHIFT_TABLES);
+  await expect(variableEditPage.getByGrafanaSelector('Select option')).toContainText(REDSHIFT_TABLES);
 });

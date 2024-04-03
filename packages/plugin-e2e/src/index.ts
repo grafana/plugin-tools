@@ -89,7 +89,7 @@ export const expect = baseExpect.extend({
 
 /** Register a custom selector engine that resolves locators for Grafana E2E selectors
  *
- * The same functionality is available in the {@link GrafanaPage.getByTestIdOrAriaLabel} method. However,
+ * The same functionality is available in the {@link GrafanaPage.getByGrafanaSelector} method. However,
  * by registering the selector engine, one can resolve locators by Grafana E2E selectors also within a locator.
  *
  * Example:

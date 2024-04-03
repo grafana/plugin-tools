@@ -13,7 +13,7 @@ test('should run successfully if valid Redshift query was provided', async ({
   const ds = await readProvisionedDataSource({ fileName: 'redshift.yaml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.waitForFunction(() => (window as any).monaco);
-  await annotationEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
+  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText('SELECT starttime, eventname FROM event ORDER BY eventname ASC LIMIT 5 ');
   await expect(annotationEditPage.runQuery()).toBeOK();
   await expect(page.getByText('.38 Special')).toBeTruthy();

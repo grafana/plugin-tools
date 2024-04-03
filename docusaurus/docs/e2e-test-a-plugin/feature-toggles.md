@@ -78,7 +78,7 @@ test('valid credentials should return a 200 status code', async ({
   isFeatureToggleEnabled,
 }) => {
   const configPage = await createDataSourceConfigPage({ type: 'grafana-snowflake-datasource' });
-  await configPage.getByTestIdOrAriaLabel('Data source connection URL').fill('http://localhost:9090');
+  await configPage.getByGrafanaSelector('Data source connection URL').fill('http://localhost:9090');
   const isSecureSocksDSProxyEnabled = await isFeatureToggleEnabled('secureSocksDSProxyEnabled');
   if (isSecureSocksDSProxyEnabled) {
     page.getByLabel('Enabled').check();

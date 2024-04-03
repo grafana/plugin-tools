@@ -10,7 +10,7 @@ export const toHaveAlert = async (grafanaPage: GrafanaPage, severity: AlertVaria
 
   try {
     const filteredAlerts = grafanaPage
-      .getByTestIdOrAriaLabel(grafanaPage.ctx.selectors.components.Alert.alertV2(severity))
+      .getByGrafanaSelector(grafanaPage.ctx.selectors.components.Alert.alertV2(severity))
       .filter({
         hasText: options?.hasText,
         hasNotText: options?.hasNotText,

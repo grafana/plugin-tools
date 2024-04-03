@@ -12,7 +12,7 @@ export type APIs = {
     query: string;
     health: (uid: string, id: string) => string;
     datasourceByUID: (uid: string) => string;
-    proxy: (uid: string) => string;
+    proxy: (uid: string, id: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;
@@ -29,6 +29,16 @@ export type Components = {
     toField: string;
     applyTimeRange: string;
     absoluteTimeRangeTitle: string;
+  };
+
+  Menu: {
+    MenuComponent: (title: string) => string;
+    MenuGroup: (title: string) => string;
+    MenuItem: (title: string) => string;
+    SubMenu: {
+      container: string;
+      icon: string;
+    };
   };
   Panels: {
     Panel: {
@@ -55,6 +65,8 @@ export type Components = {
     applyButton: string;
     toggleVizPicker: string;
     OptionsPane: {
+      content: string;
+      fieldLabel: (type: string) => string;
       fieldInput: (title: string) => string;
     };
   };
@@ -167,10 +179,12 @@ export type Pages = {
           newButton: string;
           addVariableCTAV2: (variableName: string) => string;
           addVariableCTAV2Item: string;
+          table: string;
         };
         Edit: {
           url: (dashboardUid: string, editIndex: string) => string;
           General: {
+            selectionOptionsIncludeAllSwitch: string;
             generalTypeSelectV2: string;
             previewOfValuesOption: string;
             submitButton: string;
