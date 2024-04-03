@@ -30,7 +30,7 @@ test('should display Dimensions field only if ListByDimensions is selected', asy
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
   await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(ds.name);
-  const dimensionField = variableEditPage.getByTestIdOrAriaLabel('Dimensions');
+  const dimensionField = variableEditPage.getByGrafanaSelector('Dimensions');
   await expect(dimensionField).not.toBeVisible();
   await variableEditPage.getByLabel('Query type').fill('ListByDimensions');
   await page.keyboard.press('Enter');
@@ -61,7 +61,7 @@ test('custom variable query runner should return data when query is valid', asyn
   await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(ds.name);
   const codeEditorSelector = selectors.components.CodeEditor.container;
-  await variableEditPage.getByTestIdOrAriaLabel(codeEditorSelector).click();
+  await variableEditPage.getByGrafanaSelector(codeEditorSelector).click();
   await page.keyboard.insertText('select distinct(environment) from dataset');
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();

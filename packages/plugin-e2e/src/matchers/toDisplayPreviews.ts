@@ -14,7 +14,7 @@ export const toDisplayPreviews = async (
 
   try {
     await expect(
-      variableEditPage.getByTestIdOrAriaLabel(
+      variableEditPage.getByGrafanaSelector(
         variableEditPage.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.previewOfValuesOption
       )
     ).toContainText(previewTexts, options);

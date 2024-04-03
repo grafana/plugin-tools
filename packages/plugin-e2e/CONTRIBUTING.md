@@ -111,10 +111,10 @@ If for example the UI for adding a panel to a dashboard is being changed complet
 if (gte(this.ctx.grafanaVersion, '10.4.0')) {
   // logic that ensures adding new panels work in Grafana versions greater than or equals to 10.4.0
 } else if (gte(this.ctx.grafanaVersion, '10.0.0')) {
-  await this.getByTestIdOrAriaLabel(components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)).click();
-  await this.getByTestIdOrAriaLabel(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
+  await this.getByGrafanaSelector(components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)).click();
+  await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
 } else {
-  await this.getByTestIdOrAriaLabel(pages.AddDashboard.addNewPanel).click();
+  await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
 }
 ```
 
