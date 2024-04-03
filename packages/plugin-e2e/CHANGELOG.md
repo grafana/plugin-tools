@@ -1,3 +1,15 @@
+# v0.27.0 (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- Plugin-E2E: Allow setting custom visualization [#853](https://github.com/grafana/plugin-tools/pull/853) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.26.1 (Wed Apr 03 2024)
 
 #### 🐛 Bug Fix
