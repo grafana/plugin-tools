@@ -23,7 +23,8 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
     },
     proxy: {
-      [MIN_GRAFANA_VERSION]: (uid: string) => `api/datasources/proxy/uid/${uid}`,
+      '9.4.0': (uid: string, _: string) => `api/datasources/proxy/uid/${uid}`,
+      [MIN_GRAFANA_VERSION]: (_: string, id: string) => `/api/datasources/proxy/${id}`,
     },
   },
   Dashboard: {
