@@ -1,3 +1,15 @@
+# v0.26.0 (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Rename getByTestIdOrAriaLabel to getByGrafanaSelector [#832](https://github.com/grafana/plugin-tools/pull/832) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.25.1 (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
