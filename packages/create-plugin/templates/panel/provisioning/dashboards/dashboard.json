@@ -50,7 +50,7 @@
         }
       ],
       "title": "Panel Title",
-      "type": "sunker-test-panel"
+      "type": "{{ pluginId }}"
     },
     {
       "datasource": {
@@ -81,7 +81,7 @@
         }
       ],
       "title": "Panel Title",
-      "type": "sunker-test-panel"
+      "type": "{{ pluginId }}"
     }
   ],
   "refresh": "",
@@ -96,7 +96,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Provisioned test-panel dashboard",
+  "title": "Provisioned {{ pluginName }} dashboard",
   "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
   "version": 1,
   "weekStart": ""
