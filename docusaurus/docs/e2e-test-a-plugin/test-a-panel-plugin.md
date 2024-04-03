@@ -20,7 +20,7 @@ Panel plugins allows you to visualize data in different ways. You can use `@graf
 
 To be able to test your panel plugin, you'll need to feed it with test data. Grafana ships with the [TestData](https://grafana.com/docs/grafana/latest/datasources/testdata/) data source, which can be used to simulate [Data Frames](../../introduction/data-frames.md) formatted as time series, logs, traces, annotations and much more. To write end-to-end tests similar to the ones in this guide, you'll need the TestData data source to be configured using provisioning. If you haven't already checked out our guide on how to [setup the resources](../setup-resources.md) you'll need, do that first.
 
-## Testing custom panel options
+## Testing panel options
 
 The Table panel has defined a custom panel option called `Show table header`. This option is enabled by default. If the switch is unchecked, the Table panel should remove headers from the table. The following test verifies that field names (headers) are displayed by default, and that they are removed when `Show table header` option is unchecked.
 
@@ -40,9 +40,7 @@ test('should hide headers when "Show table header" is unchecked', async ({ panel
 
 ## Testing how the panel handles different data types
 
-The Data Frame model is very flexible. This is by design and the purpose is to allow Data Sources to return query responses according to a whole variety of different schemas. You can find more information about the Data Frame specification [here](https://grafana.com/developers/dataplane/).
-
-Not all panels need to support every Data Frame `data type`. However, if your panel is supposed to support a certain `data type`, it's recommended to write end-to-end tests that verifies that it's working as expected.
+The Data Frame model is very flexible. This is by design and the purpose is to allow Data Sources to return query responses according to a whole variety of different [`data types`](https://grafana.com/developers/dataplane/#kinds-and-formats). A panel doesn't have to support every `data type`. However, if your panel is supposed to support a certain `data type`, it's recommended to write end-to-end tests that verifies that it's working as expected.
 
 ### The "No Data" scenario
 
