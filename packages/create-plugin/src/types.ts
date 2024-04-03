@@ -17,8 +17,6 @@ export type TemplateData = {
   hasBackend: boolean;
   orgName: string;
   pluginType: PLUGIN_TYPES;
-  hasGithubWorkflows?: boolean;
-  hasGithubLevitateWorkflow?: boolean;
   packageManagerName: string;
   packageManagerInstallCmd: string;
   packageManagerVersion: string;

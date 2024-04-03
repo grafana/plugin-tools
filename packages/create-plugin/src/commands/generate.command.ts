@@ -7,14 +7,9 @@ import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, 
 import { getConfig } from '../utils/utils.config.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
-import { normalizeId } from '../utils/utils.handlebars.js';
 import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
-import {
-  renderTemplateFromFile,
-  getTemplateData,
-  buildProxyFromUserPrompt as buildProxyFromUserPrompt,
-} from '../utils/utils.templates.js';
+import { renderTemplateFromFile, getTemplateData, normalizeId } from '../utils/utils.templates.js';
 import { getVersion } from '../utils/utils.version.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
@@ -23,7 +18,8 @@ import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js'
 import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
-  const templateData = getTemplateData(buildProxyFromUserPrompt(await promptUser(argv)));
+  const answers = await promptUser(argv);
+  const templateData = getTemplateData(answers);
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;

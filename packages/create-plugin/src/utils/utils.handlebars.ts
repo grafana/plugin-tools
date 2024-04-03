@@ -12,21 +12,21 @@ import {
 import { titleCase } from 'title-case';
 import { PARTIALS_DIR, PLUGIN_TYPES } from '../constants.js';
 import { readFileSync, readdirSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { basename, join, normalize } from 'node:path';
 
 // Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
 export const ifEq = (a: any, b: any, options: HelperOptions) => {
   return a === b ? options.fn(this) : options.inverse(this);
 };
 
-export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
-  const re = new RegExp(`-?${type}$`, 'i');
-  const nameRegex = new RegExp('[^0-9a-zA-Z]', 'g');
+// export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
+//   const re = new RegExp(`-?${type}$`, 'i');
+//   const nameRegex = new RegExp('[^0-9a-zA-Z]', 'g');
 
-  const newPluginName = pluginName.replace(re, '').replace(nameRegex, '');
-  const newOrgName = orgName.replace(nameRegex, '');
-  return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${type}`;
-};
+//   const newPluginName = pluginName.replace(re, '').replace(nameRegex, '');
+//   const newOrgName = orgName.replace(nameRegex, '');
+//   return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${type}`;
+// };
 
 // Register our helpers and partials with handlebars.
 registerHandlebarsHelpers();
@@ -49,12 +49,11 @@ function registerHandlebarsHelpers() {
     properCase: pascalCase,
     pascalCase: pascalCase,
     if_eq: ifEq,
-    normalize_id: normalizeId,
   };
 
-  Object.keys(helpers).forEach((helperName) =>
-    Handlebars.registerHelper(helperName, helpers[helperName as keyof typeof helpers])
-  );
+  Object.keys(helpers).forEach((helperName) => {
+    return Handlebars.registerHelper(helperName, helpers[helperName as keyof typeof helpers]);
+  });
 }
 
 function registerHandlebarsPartials() {

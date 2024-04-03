@@ -1,5 +1,5 @@
 import { displayAsMarkdown } from '../../utils/utils.console.js';
-import { normalizeId } from '../../utils/utils.handlebars.js';
+import { normalizeId } from '../../utils/utils.templates.js';
 import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager.js';
 import { CliArgs, TemplateData } from '../../types.js';
 
