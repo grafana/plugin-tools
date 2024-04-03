@@ -81,7 +81,7 @@ export class PanelEditPage extends GrafanaPage {
   /**
    * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
    */
-  async setVisualization(visualization: Visualization) {
+  async setVisualization(visualization: Visualization | string) {
     // toggle options pane if panel edit is not visible
     const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
     const showPanelEditElementCount = await showPanelEditElement.count();
