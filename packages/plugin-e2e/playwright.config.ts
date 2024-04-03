@@ -1,8 +1,12 @@
-import { dirname } from 'path';
-import { defineConfig, devices } from '@playwright/test';
+// This file is not part of the @grafana/plugin-e2e package. It's only used for testing the plugin-e2e package itself.
 
-const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
-export default defineConfig({
+import { defineConfig, devices } from '@playwright/test';
+import { PluginOptions } from './src';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+export default defineConfig<PluginOptions>({
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -21,24 +25,55 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    httpCredentials: {
+      username: 'admin',
+      password: 'admin',
+    },
+    featureToggles: {
+      redshiftAsyncQueryDataSupport: false,
+    },
   },
 
-  /* Configure projects for major browsers */
+  /* List of projects to run. See https://playwright.dev/docs/test-configuration#projects */
   projects: [
+    // Login to Grafana with admin user and store the cookie on disk for use in other tests
     {
-      name: 'auth',
-      testDir: pluginE2eAuth,
-      testMatch: [/.*\.js/],
+      name: 'authenticate',
+      testDir: './src/auth',
+      testMatch: [/.*auth\.setup\.ts/],
     },
+    // Login to Grafana with new user with viewer role and store the cookie on disk for use in other tests
     {
-      name: 'run-tests',
+      name: 'createUserAndAuthenticate',
+      testDir: './src/auth',
+      testMatch: [/.*auth\.setup\.ts/],
+      use: {
+        user: {
+          user: 'viewer',
+          password: 'password',
+          role: 'Viewer',
+        },
+      },
+    },
+    // Run all tests in parallel using user with admin role
+    {
+      name: 'admin',
+      testDir: './tests/as-admin-user',
       use: {
         ...devices['Desktop Chrome'],
-        // @grafana/plugin-e2e writes the auth state to this file,
-        // the path should not be modified
         storageState: 'playwright/.auth/admin.json',
       },
-      dependencies: ['auth'],
+      dependencies: ['authenticate'],
+    },
+    // Run all tests in parallel using user with viewer role
+    {
+      name: 'viewer',
+      testDir: './tests/as-viewer-user',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/viewer.json',
+      },
+      dependencies: ['createUserAndAuthenticate'],
     },
   ],
 });
