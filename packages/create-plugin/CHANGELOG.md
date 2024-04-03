@@ -1,3 +1,15 @@
+# v4.4.6 (Wed Apr 03 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix APIs that are broken in older versions of Grafana [#739](https://github.com/grafana/plugin-tools/pull/739) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v4.4.5 (Tue Apr 02 2024)
 
 #### 🐛 Bug Fix
