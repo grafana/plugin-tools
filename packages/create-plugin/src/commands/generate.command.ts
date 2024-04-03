@@ -61,6 +61,7 @@ function getTemplateData(answers: CliArgs) {
   const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   // We don't enable this by default yet for new scenes plugins.
   const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
+  const usePlaywright = features.usePlaywright === true;
 
   const templateData: TemplateData = {
     ...answers,
@@ -74,8 +75,8 @@ function getTemplateData(answers: CliArgs) {
     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     useReactRouterV6,
     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
+    usePlaywright,
     e2eTestCmd: 'playwright test',
-    e2eTestUpdateCmd: 'playwright test --update-snapshots',
   };
 
   return templateData;
