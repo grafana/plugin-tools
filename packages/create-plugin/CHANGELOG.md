@@ -1,3 +1,75 @@
+# v4.4.5 (Tue Apr 02 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugins: Remove unused env variable [#850](https://github.com/grafana/plugin-tools/pull/850) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v4.4.4 (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix hardcoded path [#846](https://github.com/grafana/plugin-tools/pull/846) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v4.4.3 (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update default yarn version to 1.22.22 [#839](https://github.com/grafana/plugin-tools/pull/839) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v4.4.2 (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix grafana running without plugin backend [#844](https://github.com/grafana/plugin-tools/pull/844) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v4.4.1 (Wed Mar 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create-Plugin: Improve commands intructions [#843](https://github.com/grafana/plugin-tools/pull/843) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v4.4.0 (Tue Mar 26 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Update data source templates [#836](https://github.com/grafana/plugin-tools/pull/836) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v4.3.0 (Fri Mar 22 2024)
 
 #### 🚀 Enhancement

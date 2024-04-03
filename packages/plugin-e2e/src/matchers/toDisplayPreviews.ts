@@ -1,9 +1,9 @@
 import { expect } from '@playwright/test';
 import { getMessage } from './utils';
-import { VariableEditPage } from '../models';
 import { ContainTextOptions } from '../types';
+import { VariableEditPage } from '../models/pages/VariableEditPage';
 
-const toDisplayPreviews = async (
+export const toDisplayPreviews = async (
   variableEditPage: VariableEditPage,
   previewTexts: Array<string | RegExp>,
   options?: ContainTextOptions
@@ -14,7 +14,7 @@ const toDisplayPreviews = async (
 
   try {
     await expect(
-      variableEditPage.getByTestIdOrAriaLabel(
+      variableEditPage.getByGrafanaSelector(
         variableEditPage.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.previewOfValuesOption
       )
     ).toContainText(previewTexts, options);
@@ -31,5 +31,3 @@ const toDisplayPreviews = async (
     };
   }
 };
-
-export default toDisplayPreviews;

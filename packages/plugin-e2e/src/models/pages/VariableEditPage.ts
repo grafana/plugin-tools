@@ -27,9 +27,9 @@ export class VariableEditPage extends GrafanaPage {
     // In versions before 9.2.0, the variable index is not part of the URL so there's no way to navigate to it directly.
     // Instead, we have to click the nth row in the variable list to navigate to the edit page for a given variable index.
     if (semver.lt(this.ctx.grafanaVersion, '9.2.0') && this.args.id) {
-      const list = this.getByTestIdOrAriaLabel(
-        this.ctx.selectors.pages.Dashboard.Settings.Variables.List.table
-      ).locator('tbody tr');
+      const list = this.getByGrafanaSelector(this.ctx.selectors.pages.Dashboard.Settings.Variables.List.table).locator(
+        'tbody tr'
+      );
       const variables = await list.all();
       await variables[Number(this.args.id)].click();
     }
@@ -39,14 +39,14 @@ export class VariableEditPage extends GrafanaPage {
    * Sets the type of variable in the 'Variable type' dropdown to the given type
    */
   async setVariableType(type: VariableType) {
-    await this.getByTestIdOrAriaLabel(
+    await this.getByGrafanaSelector(
       this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.generalTypeSelectV2
     )
       .locator('input')
       .fill(type);
     await this.ctx.page.keyboard.press('ArrowDown');
     await this.ctx.page.keyboard.press('Enter');
-    await this.getByTestIdOrAriaLabel(
+    await this.getByGrafanaSelector(
       this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.generalTypeSelectV2
     ).scrollIntoViewIfNeeded();
   }
@@ -61,13 +61,13 @@ export class VariableEditPage extends GrafanaPage {
   async runQuery() {
     // in 9.2.0, the submit button got a new purpose. it no longer submits the form, but instead runs the query
     if (semver.gte(this.ctx.grafanaVersion, '9.2.0')) {
-      await this.getByTestIdOrAriaLabel(
+      await this.getByGrafanaSelector(
         this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.submitButton
       ).click();
     } else {
       // in version before 9.2.0, there's no submit button, so instead we click the "Include all" button to trigger the query
       const queryDataRequest = this.waitForQueryDataRequest();
-      const includeAllSwitch = this.getByTestIdOrAriaLabel(
+      const includeAllSwitch = this.getByGrafanaSelector(
         this.ctx.selectors.pages.Dashboard.Settings.Variables.Edit.General.selectionOptionsIncludeAllSwitch
       ).locator('..');
       await includeAllSwitch.click();

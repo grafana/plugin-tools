@@ -32,7 +32,7 @@ export class ExplorePage extends GrafanaPage {
 
   private getPanelLocators(suffix: string, text: string) {
     const page = this.ctx.page;
-    let locator = this.getByTestIdOrAriaLabel(this.ctx.selectors.components.Panels.Panel.title(suffix), {
+    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(suffix), {
       startsWith: true,
     });
 
@@ -57,8 +57,8 @@ export class ExplorePage extends GrafanaPage {
    * Returns the locator for the query editor row with the given refId
    */
   getQueryEditorRow(refId: string): Locator {
-    return this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRows.rows).filter({
-      has: this.getByTestIdOrAriaLabel(this.ctx.selectors.components.QueryEditorRow.title(refId)),
+    return this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+      has: this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRow.title(refId)),
     });
   }
 
@@ -72,13 +72,13 @@ export class ExplorePage extends GrafanaPage {
       options
     );
     try {
-      await this.getByTestIdOrAriaLabel(components.RefreshPicker.runButtonV2).click({
+      await this.getByGrafanaSelector(components.RefreshPicker.runButtonV2).click({
         timeout: 1000,
       });
     } catch (_) {
       // handle the case when the run button is hidden behind the "Show more items" button
-      await this.getByTestIdOrAriaLabel(components.PageToolbar.item(components.PageToolbar.shotMoreItems)).click();
-      await this.getByTestIdOrAriaLabel(components.RefreshPicker.runButtonV2).last().click();
+      await this.getByGrafanaSelector(components.PageToolbar.item(components.PageToolbar.shotMoreItems)).click();
+      await this.getByGrafanaSelector(components.RefreshPicker.runButtonV2).last().click();
     }
     return responsePromise;
   }

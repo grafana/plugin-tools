@@ -30,6 +30,16 @@ export type Components = {
     applyTimeRange: string;
     absoluteTimeRangeTitle: string;
   };
+
+  Menu: {
+    MenuComponent: (title: string) => string;
+    MenuGroup: (title: string) => string;
+    MenuItem: (title: string) => string;
+    SubMenu: {
+      container: string;
+      icon: string;
+    };
+  };
   Panels: {
     Panel: {
       title: (title: string) => string;
@@ -55,6 +65,8 @@ export type Components = {
     applyButton: string;
     toggleVizPicker: string;
     OptionsPane: {
+      content: string;
+      fieldLabel: (type: string) => string;
       fieldInput: (title: string) => string;
     };
   };

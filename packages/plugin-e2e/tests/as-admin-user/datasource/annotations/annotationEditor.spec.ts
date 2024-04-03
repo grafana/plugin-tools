@@ -11,7 +11,7 @@ test('should load resources and display them as options when clicking on an inpu
   const ds = await readProvisionedDataSource({ fileName: 'redshift.yaml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.getByLabel('Schema').click();
-  await expect(annotationEditPage.getByTestIdOrAriaLabel('Select option')).toContainText(REDSHIFT_SCHEMAS);
+  await expect(annotationEditPage.getByGrafanaSelector('Select option')).toContainText(REDSHIFT_SCHEMAS);
 });
 
 test('should be able to add a new annotation when annotations already exist', async ({

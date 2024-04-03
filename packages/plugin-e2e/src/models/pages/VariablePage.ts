@@ -27,9 +27,9 @@ export class VariablePage extends GrafanaPage {
       this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
 
     if (!this.dashboard?.uid) {
-      await this.getByTestIdOrAriaLabel(addVariableCTAV2(addVariableCTAV2Item)).click();
+      await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click();
     } else {
-      await this.getByTestIdOrAriaLabel(newButton).click();
+      await this.getByGrafanaSelector(newButton).click();
     }
 
     const editIndex = await this.ctx.page.evaluate(() => {
