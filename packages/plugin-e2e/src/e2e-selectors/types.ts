@@ -46,6 +46,7 @@ export type Components = {
       headerCornerInfo: (mode: string) => string;
       status: (status: string) => string;
       toggleTableViewPanel: (title: string) => string;
+      PanelDataErrorMessage: string;
     };
     Visualization: {
       Table: {
