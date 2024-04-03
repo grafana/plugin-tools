@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -49,12 +50,42 @@
         }
       ],
       "title": "Panel Title",
-      "type": "{{ pluginId }}"
+      "type": "sunker-test-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "seriesCountSize": "sm",
+        "showSeriesCount": false,
+        "text": "Default value of text input option"
+      },
+      "targets": [
+        {
+          "alias": "",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "db84e60d-b92a-4089-82cb-34842fb1754b"
+          },
+          "refId": "A",
+          "scenarioId": "no_data_points"
+        }
+      ],
+      "title": "Panel Title",
+      "type": "sunker-test-panel"
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
@@ -65,7 +96,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Provisioned {{ pluginName }} dashboard",
-  "version": 0,
+  "title": "Provisioned test-panel dashboard",
+  "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
+  "version": 1,
   "weekStart": ""
 }
