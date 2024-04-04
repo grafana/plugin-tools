@@ -1,4 +1,4 @@
-import { MetaBase } from './base';
+import { MetaBase } from '../types';
 
 export class MetaRegistry {
   private meta: MetaBase[] = [];

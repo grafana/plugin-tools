@@ -6,7 +6,7 @@ import {
   isConfigureExtensionComponentNode,
   isConfigureExtensionLinkNode,
 } from './meta/extensions';
-import { MetaBase } from './meta/base';
+import { MetaBase } from './types';
 
 export function createProgram(entry: string): MetaBase[] {
   const program = ts.createProgram([entry], {

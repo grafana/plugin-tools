@@ -1,6 +1,5 @@
 import { createProgram } from '.';
-import { MetaBase, MetaKind } from './meta/base';
-import { ExtensionComponentMeta, ExtensionLinkMeta } from './meta/extensions';
+import { MetaBase, MetaKind, ExtensionComponentMeta, ExtensionLinkMeta } from './types';
 
 const fixturesPath = `${__dirname}/../fixtures`;
 

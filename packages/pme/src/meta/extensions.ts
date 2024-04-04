@@ -1,19 +1,5 @@
 import * as ts from 'typescript';
-import { MetaBase, MetaKind } from './base';
-
-export interface ExtensionLinkMeta extends MetaBase {
-  kind: MetaKind.extensionLink;
-  extensionPointId: string;
-  title: string;
-  description: string;
-}
-
-export interface ExtensionComponentMeta extends MetaBase {
-  kind: MetaKind.extensionComponent;
-  extensionPointId: string;
-  title: string;
-  description: string;
-}
+import { ExtensionLinkMeta, ExtensionComponentMeta, MetaKind } from '../types';
 
 export function isConfigureExtensionLinkNode(node: ts.Node): node is ts.CallExpression {
   if (ts.isCallExpression(node)) {
