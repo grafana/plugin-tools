@@ -1,8 +1,7 @@
 import { APIRequestContext, expect, TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../../api';
-import { PlaywrightCombinedArgs } from '../types';
+import { PlaywrightArgs } from '../../types';
 
-type CreateUserFixture = TestFixture<() => Promise<void>, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type CreateUserFixture = TestFixture<() => Promise<void>, PlaywrightArgs>;
 
 const headers = {
   Authorization: `Basic ${Buffer.from(`admin:admin`).toString('base64')}`,
@@ -17,7 +16,7 @@ const getUserIdByUsername = async (request: APIRequestContext, userName: string)
   return json.id;
 };
 
-const createUser: CreateUserFixture = async ({ request, user }, use) => {
+export const createUser: CreateUserFixture = async ({ request, user }, use) => {
   await use(async () => {
     if (!user) {
       throw new Error('Playwright option `User` was not provided');
@@ -56,5 +55,3 @@ const createUser: CreateUserFixture = async ({ request, user }, use) => {
     }
   });
 };
-
-export default createUser;

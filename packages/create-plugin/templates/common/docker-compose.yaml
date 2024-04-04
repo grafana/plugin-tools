@@ -2,7 +2,9 @@ version: '3.0'
 
 services:
   grafana:
+    user: root
     container_name: '{{ pluginId }}'
+
     platform: 'linux/amd64'
     build:
       context: ./.config
@@ -11,6 +13,22 @@ services:
         grafana_version: ${GRAFANA_VERSION:-{{~grafanaVersion~}} }
     ports:
       - 3000:3000/tcp
+{{#if hasBackend}}
+      - 2345:2345/tcp # delve
+    security_opt:
+      - "apparmor:unconfined"
+      - "seccomp:unconfined"
+    cap_add:
+      - SYS_PTRACE
+{{/if}}
     volumes:
       - ./dist:/var/lib/grafana/plugins/{{ pluginId }}
       - ./provisioning:/etc/grafana/provisioning
+      - .:/root/{{ pluginId }}
+
+    environment:
+      NODE_ENV: development
+      GF_LOG_FILTERS: plugin.{{ pluginId }}:debug
+      GF_LOG_LEVEL: debug
+      GF_DATAPROXY_LOGGING: 1
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: {{ pluginId }}

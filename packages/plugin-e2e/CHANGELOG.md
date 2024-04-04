@@ -1,3 +1,75 @@
+# v0.27.0 (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- Plugin-E2E: Allow setting custom visualization [#853](https://github.com/grafana/plugin-tools/pull/853) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.26.1 (Wed Apr 03 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix APIs that are broken in older versions of Grafana [#739](https://github.com/grafana/plugin-tools/pull/739) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.26.0 (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Rename getByTestIdOrAriaLabel to getByGrafanaSelector [#832](https://github.com/grafana/plugin-tools/pull/832) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.25.1 (Thu Mar 28 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add more selectors [#845](https://github.com/grafana/plugin-tools/pull/845) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.25.0 (Tue Mar 26 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Change package imports and exports [#838](https://github.com/grafana/plugin-tools/pull/838) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v0.24.0 (Tue Mar 26 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Use new e2e selectors [#833](https://github.com/grafana/plugin-tools/pull/833) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.22.0 (Mon Mar 18 2024)
 
 #### 🚀 Enhancement

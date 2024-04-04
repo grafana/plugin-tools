@@ -10,7 +10,7 @@ test('custom variable editor query runner should return data when query is valid
   await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(ds.name);
   await page.waitForFunction(() => (window as any).monaco);
-  await variableEditPage.getByTestIdOrAriaLabel(selectors.components.CodeEditor.container).click();
+  await variableEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText('select distinct(environment) from long_format_example');
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();
