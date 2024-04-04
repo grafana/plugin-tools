@@ -133,7 +133,7 @@ To run Playwright tests targeting multiple versions of Grafana in CI, use one of
 
 :::note
 
-Note that Grafana does not offer any way to run end-to-end tests targeting multiple versions of Grafana in other CI platforms such as Drone.
+Note that Grafana does not offer any supported way to run end-to-end tests targeting multiple versions of Grafana in other CI platforms such as Drone or CircleCI. But you can easily configure your CI to replicate what the referenced Github Action is doing as there is nothing specific that we do that can not be done in other CI systems.
 
 :::
 
