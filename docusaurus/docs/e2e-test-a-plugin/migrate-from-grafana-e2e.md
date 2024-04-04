@@ -1,0 +1,172 @@
+---
+id: migrate-from-grafana-e2e
+title: Migrate from @grafana/e2e
+description: How to migrate from @grafana/e2e to @grafana/plugin-e2e
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - testing
+  - e2e
+  - end-to-end
+  - migrate
+sidebar_position: 90
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ScaffoldPluginE2InstallNPM from '@snippets/plugin-e2e-install.npm.md';
+import ScaffoldPluginE2EInstallPNPM from '@snippets/plugin-e2e-install.pnpm.md';
+import ScaffoldPluginE2EInstallYarn from '@snippets/plugin-e2e-install.yarn.md';
+
+The [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) tool will be depcrecated when Grafana 11.0.0 is released, and the support for this package will be dropped when Grafana 11.1.0 is released. We recommened all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
+
+In this guide you'll learn:
+
+- how to manually setup `@grafana/plugin-e2e` in your plugin
+- how to migrate tests
+- how to run Playwright tests in CI
+- how to uninstall Cypress and `@grafana/e2e`
+
+## Manually installing @grafana/plugin-e2e
+
+If you have a plugin that was not scaffolded with setup for `@grafana/plugin-e2e` and `@playwright/test`, you can follow these steps to set it up manually.
+
+### Step 1: Installing Playwright
+
+The `@grafana/plugin-e2e` tool extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the `package.json` file of your plugin. Refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated during the installation. If the example tests ran successfully, you may go ahead and delete as they won't be needed anymore.
+
+### Step 2: Installing `@grafana/plugin-e2e`
+
+Open the terminal and run the following command in your plugin's project directory:
+
+<CodeSnippets
+snippets={[
+{ component: ScaffoldPluginE2InstallNPM, label: 'npm' },
+{ component: ScaffoldPluginE2EInstallYarn, label: 'yarn' },
+{ component: ScaffoldPluginE2EInstallPNPM, label: 'pnpm' }
+]}
+groupId="package-manager"
+queryString="current-package-manager"
+/>
+
+### Step 3: Configure Playwright
+
+Open the Playwright config file that was generated when Playwright was installed.
+
+1. Uncomment `baseUrl` and change it to `'http://localhost:3000'`.
+
+```ts title="playwright.config.ts"
+  baseURL: 'http://localhost:3000',
+```
+
+2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects:
+
+   1. `auth` is a setup project that will log in to Grafana and store the authenticated state on disk.
+   2. `run-tests` runs all the tests in your browser of choice. By adding a dependency to the `auth` project we ensure that login only happens once, and all tests in the `run-tests` project will start as already authenticated.
+
+   Your Playwright config should have the following project configuration:
+
+```ts title="playwright.config.ts"
+import { dirname } from 'path';
+import { defineConfig, devices } from '@playwright/test';
+
+const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
+
+export default defineConfig({
+    ...
+    projects: [
+    {
+      name: 'auth',
+      testDir: pluginE2eAuth,
+      testMatch: [/.*\.js/],
+    },
+    {
+      name: 'run-tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        // @grafana/plugin-e2e writes the auth state to this file,
+        // the path should not be modified
+        storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['auth'],
+    }
+  ],
+});
+```
+
+The authenticated state is stored on disk with the following file name pattern: `<plugin-root>/playwright/.auth/<username>.json`.
+
+To prevent these files from being version controlled, you can add the following line to your `.gitignore` file:
+
+```shell title=".gitignore"
+/playwright/.auth/
+```
+
+The `@grafana/plugin-e2e` package also exports a type named `PluginOptions` that you can use to extend the Playwright configuration with the `@grafana/plugin-e2e` specific options.
+
+```ts title="playwright.config.ts"
+import { defineConfig } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+
+export default defineConfig<PluginOptions>({
+    ...
+});
+```
+
+You're now ready to start writing tests. The [Get started](../get-started.md) guide to learn how to run tests locally.
+
+## Migrating tests
+
+There's no tooling in place for migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright test. You may checkout the following resources to get inspiration:
+
+- [How to test data source plugins](./test-a-data-source-plugin/index.md)
+- [How to test panel plugins](./test-a-panel-plugin.md)
+- [App plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/tests)
+- [Panel plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-datalinks/tests)
+- [Best practices around test isolation](./setup-resources.md#test-isolation)
+- `@grafana/plugin-e2e` exposes Grafana end-to-end selectors via the `Selectors` fixture, so you no longer need to use selectors exposed via the `@grafana/e2e-selectors` package. Read more about end-to-end selectors in the [Selecting UI elements](./selecting-ui-elements.md) guide.
+
+## Running tests in CI
+
+To run Playwright tests targeting multiple versions of Grafana in CI, use one of the example workflows in the [CI](./ci.md) guide.
+
+:::note
+
+Note that Grafana does not offer any way to run end-to-end tests targeting multiple versions of Grafana in other CI platforms such as Drone.
+
+:::
+
+## Uninstalling Cypress and @grafana/e2e
+
+Although we recommend moving from `@grafana/e2e` to `@grafana/plugin-e2e` in a timely manner, there's nothing preventing you from having the two side by side during a transitional phase.
+
+When all Cypress tests have been migrated, open the terminal and run the following scripts from within your local plugin development directory:
+
+### 1. Remove tests and config file
+
+```shell
+rm ./cypress.json
+rm -rf ./cypress
+```
+
+### 2. Uninstall dependencies
+
+```shell
+npm uninstall --save-dev @grafana/e2e @grafana/e2e-selectors
+```
+
+### 3. Update scripts
+
+In the `package.json` file, remove the `e2e:update` script entirely and update the `e2e` the following way:
+<Tabs>
+<TabItem value="npm" default>
+`"e2e": "npx playwright test",`
+</TabItem>
+<TabItem value="yarn" >
+`"e2e": "yarn playwright test",`
+</TabItem>
+<TabItem value="npx">
+`"e2e": "npx playwright test",`
+</TabItem>
+</Tabs>
