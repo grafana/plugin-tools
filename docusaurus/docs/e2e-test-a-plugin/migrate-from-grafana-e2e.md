@@ -34,7 +34,7 @@ If you have a plugin that was not scaffolded with setup for `@grafana/plugin-e2e
 
 ### Step 1: Installing Playwright
 
-The `@grafana/plugin-e2e` tool extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the `package.json` file of your plugin. Refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated during the installation. If the example tests ran successfully, you may go ahead and delete as they won't be needed anymore.
+The `@grafana/plugin-e2e` tool extends Playwright APIs, so you need to have `@playwright/test` with a minimum version of 1.41.2 installed as a dev dependency in the `package.json` file of your plugin. Refer to the [Playwright documentation](https://playwright.dev/docs/intro#installing-playwright) for instruction on how to install. Make sure you can run the example tests that were generated during the installation. If the example tests ran successfully, you may go ahead and delete them as they won't be needed anymore.
 
 ### Step 2: Installing `@grafana/plugin-e2e`
 

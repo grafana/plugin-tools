@@ -51,7 +51,7 @@ queryString="current-package-manager"
 If you want to start a specific version of Grafana, you can do that by specifying the `GRAFANA_VERSION` environment variable. For example:
 
 ```bash
-GRAFANA_VERSION=10.1.6 npm run server
+GRAFANA_VERSION=10.4.1 npm run server
 ```
 
 ### Step 2: Run tests
