@@ -25,7 +25,9 @@ export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TY
 
   const newPluginName = pluginName.replace(re, '').replace(nameRegex, '');
   const newOrgName = orgName.replace(nameRegex, '');
-  return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${type}`;
+  const newType = type === PLUGIN_TYPES.scenes ? PLUGIN_TYPES.app : type;
+
+  return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${newType}`;
 };
 
 // Register our helpers and partials with handlebars.
@@ -49,7 +51,6 @@ function registerHandlebarsHelpers() {
     properCase: pascalCase,
     pascalCase: pascalCase,
     if_eq: ifEq,
-    normalize_id: normalizeId,
   };
 
   Object.keys(helpers).forEach((helperName) =>
