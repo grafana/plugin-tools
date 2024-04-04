@@ -50,6 +50,7 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
         <Field label="API Key" description="A secret key for authenticating to our custom API">
           <SecretInput
             width={60}
+            id="config-api-key"
             data-testid={testIds.appConfig.apiKey}
             name="apiKey"
             value={state.apiKey}
@@ -64,6 +65,7 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
           <Input
             width={60}
             name="apiUrl"
+            id="config-api-url"
             data-testid={testIds.appConfig.apiUrl}
             value={state.apiUrl}
             placeholder={`E.g.: http://mywebsite.com/api/v1`}
