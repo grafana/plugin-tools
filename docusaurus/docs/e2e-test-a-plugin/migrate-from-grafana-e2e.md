@@ -118,7 +118,7 @@ You're now ready to start writing tests. The [Get started](./get-started.md) gui
 
 ## Migrating tests
 
-There's no tooling in place for migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright test. You may checkout the following resources to get inspiration:
+There's no tooling in place for automatically migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright tests. This means you would have to convert your tests one by one or replace them with a new set of tests based on Playwright. You may checkout the following resources to get inspiration on how the playwright tests should be written:
 
 - [How to test data source plugins](./test-a-data-source-plugin/index.md)
 <!-- - [How to test panel plugins](./test-a-panel-plugin.md) -->
