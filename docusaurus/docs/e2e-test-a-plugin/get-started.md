@@ -30,9 +30,9 @@ The `create-plugin` tool started scaffolding basic setup for `@grafana/plugin-e2
 
 You need to have the following:
 
+- Grafana [plugin development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
 - Node.js version 18 or later.
 - Basic knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
-- Grafana [plugin development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
 
 ### Step 1: Start Grafana
 
@@ -79,4 +79,4 @@ Next we suggest you checkout the following guides:
 - [Selecting UI elements in end-to-end tests](./selecting-ui-elements.md)
 - [Configure the resources you'll need](./setup-resources.md)
 - [How to test data source plugins](./test-a-data-source-plugin/index.md)
-- [How to test panel plugins](./test-a-panel-plugin.md)
+<!-- - [How to test panel plugins](./test-a-panel-plugin.md) -->

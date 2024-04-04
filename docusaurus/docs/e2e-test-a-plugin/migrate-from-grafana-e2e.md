@@ -114,14 +114,14 @@ export default defineConfig<PluginOptions>({
 });
 ```
 
-You're now ready to start writing tests. The [Get started](../get-started.md) guide to learn how to run tests locally.
+You're now ready to start writing tests. The [Get started](./get-started.md) guide to learn how to run tests locally.
 
 ## Migrating tests
 
 There's no tooling in place for migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright test. You may checkout the following resources to get inspiration:
 
 - [How to test data source plugins](./test-a-data-source-plugin/index.md)
-- [How to test panel plugins](./test-a-panel-plugin.md)
+<!-- - [How to test panel plugins](./test-a-panel-plugin.md) -->
 - [App plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/tests)
 - [Panel plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-datalinks/tests)
 - [Best practices around test isolation](./setup-resources.md#test-isolation)
