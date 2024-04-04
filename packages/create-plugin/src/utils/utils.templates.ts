@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
-import { renderHandlebarsTemplate } from './utils.handlebars.js';
+import { renderHandlebarsTemplate, normalizeId } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import {
   TEMPLATE_PATHS,
@@ -25,15 +25,6 @@ import { getConfig } from './utils.config.js';
 import { get } from 'node:http';
 
 const debug = createDebug('templates');
-
-export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
-  const re = new RegExp(`-?${type}$`, 'i');
-  const nameRegex = new RegExp('[^0-9a-zA-Z]', 'g');
-
-  const newPluginName = pluginName.replace(re, '').replace(nameRegex, '');
-  const newOrgName = orgName.replace(nameRegex, '');
-  return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${type}`;
-};
 
 /**
  *
@@ -101,52 +92,6 @@ export function compileProvisioningTemplateFile(pluginType: string, templateFile
 export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
-
-// export function buildProxyFromJson() {
-//   const pluginJson = getPluginJson();
-//   return new Proxy(pluginJson, {
-//     get(target, prop: string | symbol) {
-//       if (prop === 'pluginId') {
-//         return target.id;
-//       } else if (prop === 'pluginName') {
-//         return target.name;
-//       } else if (prop === 'pluginDescription') {
-//         return target.info?.description;
-//       } else if (prop === 'hasBackend') {
-//         return target.backend;
-//       } else if (prop === 'hasGithubWorkflows') {
-//         return undefined;
-//       } else if (prop === 'hasGithubLevitateWorkflow') {
-//         return undefined;
-//       } else if (prop === 'orgName') {
-//         return target.info?.author?.name;
-//       } else if (prop === 'pluginType') {
-//         return target.type;
-//       } else if (prop === 'packageManager') {
-//         return getPackageManagerWithFallback();
-//       } else {
-//         throw new Error(`Property ${String(prop)} not found in package.json.`);
-//       }
-//     },
-//   });
-// }
-// export function buildProxyFromUserPrompt(target: CliArgs) {
-//   return new Proxy(target, {
-//     get(target: CliArgs, prop: string | symbol) {
-//       if (prop in target) {
-//         return target[prop as keyof CliArgs];
-//       } else if (prop === 'pluginId') {
-//         return normalizeId(target.pluginName, target.orgName, target.pluginType);
-//       } else if (prop === 'packageManager') {
-//         return getPackageManagerFromUserAgent();
-//       } else if (prop === 'hasBackend') {
-//         return target.hasOwnProperty('hasBackend') && target.hasBackend;
-//       } else {
-//         throw new Error(`Property ${String(prop)} not found in user's prompt.`);
-//       }
-//     },
-//   });
-// }
 
 export function getTemplateData(data?: CliArgs): TemplateData {
   const { features } = getConfig();
