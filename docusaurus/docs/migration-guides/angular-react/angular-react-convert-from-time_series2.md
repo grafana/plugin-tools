@@ -20,7 +20,9 @@ The `app/core/time_series2` package is commonly used by AngularJS plugins to ret
 
 This guide provides one method of converting from the old library to the new dataframe format.
 
-Typically an AngularJS plugin would have a method similar to this:
+## Convert data using the AngularJS method
+
+Before the removal of the `app/core/time_series2` package in AngularJS, data was rendered by a panel using a method similar to this:
 
 ```ts
 seriesHandler(seriesData: any) {
@@ -33,7 +35,9 @@ seriesHandler(seriesData: any) {
   }
 ```
 
-## Conversion to dataframes
+## Convert data using dataframes
+
+The following code example shows one way of converting data from panels using dataframes:
 
 ```ts
 import {
@@ -100,3 +104,6 @@ const metrics = getValues();
 ```
 
 ## Additional resources
+
+- Read more [Angular to React conversion guides](https://grafana.com/developers/plugin-tools/migration-guides/angular-react/).
+- Learn more about [dataframes](https://grafana.com/developers/plugin-tools/introduction/data-frames).
