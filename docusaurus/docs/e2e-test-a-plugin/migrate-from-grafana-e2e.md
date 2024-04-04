@@ -143,7 +143,7 @@ Although we recommend moving from `@grafana/e2e` to `@grafana/plugin-e2e` in a t
 
 When all Cypress tests have been migrated, open the terminal and run the following scripts from within your local plugin development directory:
 
-### 1. Remove tests and config file
+### 1. Remove Cypress tests and config file
 
 ```shell
 rm ./cypress.json
