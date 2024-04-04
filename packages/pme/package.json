@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "dev": "tsc --project tsconfig.json --watch"
   },
   "publishConfig": {

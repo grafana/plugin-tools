@@ -1,15 +1,15 @@
-import { createProgram } from '.';
+import { extractPluginMeta } from './meta-extractor';
 import { MetaBase, MetaKind, ExtensionComponentMeta, ExtensionLinkMeta } from './types';
 
 const fixturesPath = `${__dirname}/../fixtures`;
+const defaultExportFixtures = `${__dirname}/../fixtures/defaultExport`;
+const namedExportFixtures = `${__dirname}/../fixtures/namedExport`;
 
 describe('plugin meta extractor when app is exported as named export', () => {
-  const fixtureFolder = 'namedExport';
-
   describe('and extensions registered by chaining function calls', () => {
     it('should return expected meta from app plugin', () => {
-      const entry = `${fixturesPath}/${fixtureFolder}/chained.tsx`;
-      const meta = createProgram(entry);
+      const entry = `${namedExportFixtures}/chained.tsx`;
+      const meta = extractPluginMeta(entry);
 
       expect(meta).toEqual([
         createCommandExtensionMeta({
@@ -38,8 +38,8 @@ describe('plugin meta extractor when app is exported as named export', () => {
 
   describe('and extensions registered in external function', () => {
     it('should return expected meta from app plugin', () => {
-      const entry = `${fixturesPath}/${fixtureFolder}/wrapped.ts`;
-      const meta = createProgram(entry);
+      const entry = `${namedExportFixtures}/wrapped.ts`;
+      const meta = extractPluginMeta(entry);
 
       expect(meta).toEqual([
         createCommandExtensionMeta({
@@ -67,9 +67,9 @@ describe('plugin meta extractor when app is exported as named export', () => {
   });
 
   describe('and extensions registered by chaining function calls and in an external function', () => {
-    it.only('should return expected meta from app plugin', () => {
-      const entry = `${fixturesPath}/${fixtureFolder}/mixed.tsx`;
-      const meta = createProgram(entry);
+    it('should return expected meta from app plugin', () => {
+      const entry = `${namedExportFixtures}/mixed.tsx`;
+      const meta = extractPluginMeta(entry);
 
       expect(meta).toEqual([
         createCommandExtensionMeta({
@@ -112,8 +112,8 @@ describe('plugin meta extractor when app is exported as default export', () => {
 
   describe('and extensions registered by chaining function calls', () => {
     it('should return expected meta from app plugin', () => {
-      const entry = `${fixturesPath}/${fixtureFolder}/chained.tsx`;
-      const meta = createProgram(entry);
+      const entry = `${defaultExportFixtures}/chained.tsx`;
+      const meta = extractPluginMeta(entry);
 
       expect(meta).toEqual([
         createCommandExtensionMeta({
@@ -142,8 +142,8 @@ describe('plugin meta extractor when app is exported as default export', () => {
 
   describe('and extensions registered in external function', () => {
     it('should return expected meta from app plugin', () => {
-      const entry = `${fixturesPath}/${fixtureFolder}/wrapped.ts`;
-      const meta = createProgram(entry);
+      const entry = `${defaultExportFixtures}/wrapped.ts`;
+      const meta = extractPluginMeta(entry);
 
       expect(meta).toEqual([
         createCommandExtensionMeta({
@@ -172,8 +172,8 @@ describe('plugin meta extractor when app is exported as default export', () => {
 
   describe('and extensions registered by chaining function calls and in an external function', () => {
     it('should return expected meta from app plugin', () => {
-      const entry = `${fixturesPath}/${fixtureFolder}/mixed.tsx`;
-      const meta = createProgram(entry);
+      const entry = `${defaultExportFixtures}/mixed.tsx`;
+      const meta = extractPluginMeta(entry);
 
       expect(meta).toEqual([
         createCommandExtensionMeta({
