@@ -155,5 +155,6 @@ npm uninstall --save-dev @grafana/e2e @grafana/e2e-selectors
 
 #### 3. Update scripts
 
-In the `package.json` file, remove the `e2e:update` script entirely and update the `e2e` the following way:
+In the `package.json` file, remove the `e2e:update` script entirely and change the `e2e` script to the following:
+
 `"e2e": "playwright test",`
