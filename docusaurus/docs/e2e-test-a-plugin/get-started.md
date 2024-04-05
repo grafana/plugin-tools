@@ -168,17 +168,17 @@ GRAFANA_VERSION=10.1.6 npm run server
 
 While installing Playwright in your project, a few example test files were generated. We won't need those, so you can go ahead and delete these files.
 
-You are now ready to write your tests. In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](../get-started/get-started.mdx) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `1` and `3` are being displayed in the `Table` panel.
+You are now ready to write your tests. In this example, we're using the panel edit page to test the query editor for a backend data source plugin. The plugin was scaffolded with the [create-plugin](../get-started/get-started.mdx) tool, and for this data source the query endpoint returns hard coded data points. This test asserts that the values `10` and `20` are being displayed in the `Table` panel.
 
 ```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
 
-test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
+test('data query should return values 10 and 20', async ({ panelEditPage, readProvisionedDataSource }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
-  await expect(panelEditPage.panel.data).toContainText(['1', '3']);
+  await expect(panelEditPage.panel.data).toContainText(['10', '20']);
 });
 ```
 
