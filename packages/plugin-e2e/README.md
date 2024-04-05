@@ -20,7 +20,7 @@ end-to-end test Grafana plugins with ease.
 
 ## Get started
 
-Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure, write tests and run your e2e tests in CI.
+Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure, write tests and run your end-to-end tests in CI.
 
 ### Prerequisites
 
@@ -67,7 +67,7 @@ export default defineConfig({
 
 ### Writing Tests
 
-Here's a basic example of how to write an E2E test using `@grafana/plugin-e2e`:
+Here's a basic example of how to write an end-to-end test using `@grafana/plugin-e2e`:
 
 ```ts
 import { test, expect } from '@grafana/plugin-e2e';
