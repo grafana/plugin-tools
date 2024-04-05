@@ -19,7 +19,9 @@ import ScaffoldPluginE2InstallNPM from '@snippets/plugin-e2e-install.npm.md';
 import ScaffoldPluginE2EInstallPNPM from '@snippets/plugin-e2e-install.pnpm.md';
 import ScaffoldPluginE2EInstallYarn from '@snippets/plugin-e2e-install.yarn.md';
 
+:::danger
 When Grafana 11.0.0 is released the [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) will be deprecated and support will be dropped. We recommend all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
+:::
 
 In this guide you'll learn:
 
@@ -30,7 +32,7 @@ In this guide you'll learn:
 
 ## Manually installing @grafana/plugin-e2e
 
-If you have a plugin that was not scaffolded with setup for `@grafana/plugin-e2e` and `@playwright/test`, you can follow these steps to set it up manually.
+Plugins scaffolded with create-plugin v4.6.0 and greater automatically include configuration for `@grafana/plugin-e2e` and `@playwright/test`. To add this configuration manually, follow these steps:
 
 ### Step 1: Installing Playwright
 
@@ -108,9 +110,11 @@ To prevent these files from being version controlled, you can add the following 
 /playwright/.auth/
 ```
 
-You're now ready to start writing tests. The [Get started](./get-started.md) guide to learn how to run tests locally.
+## Migrating from `@grafana/e2e`
 
-## Migrating tests
+Once you have Playwright and `@grafana/plugin-e2e` installed and configured, you can follow these steps to migrate from `@grafana/e2e`.
+
+### Migrating tests
 
 There's no tooling in place for automatically migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright tests. This means you would have to convert your tests one by one or replace them with a new set of tests based on Playwright. Refer to the following resources to get inspiration on how the playwright tests should be written:
 
@@ -118,9 +122,9 @@ There's no tooling in place for automatically migrating existing `@grafana/e2e` 
 - [App plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/tests)
 - [Panel plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-datalinks/tests)
 - [Best practices around test isolation](./setup-resources.md#test-isolation)
-- `@grafana/plugin-e2e` exposes Grafana end-to-end selectors via the `Selectors` fixture, so you no longer need to use selectors exposed via the `@grafana/e2e-selectors` package. Read more about end-to-end selectors in the [Selecting UI elements](./selecting-ui-elements.md) guide.
+- [How to select UI elements](./selecting-ui-elements.md)
 
-## Running tests in CI
+### Running tests in CI
 
 To run Playwright tests targeting multiple versions of Grafana in CI, use one of the example workflows in the [CI](./ci.md) guide.
 
@@ -130,26 +134,26 @@ Note that Grafana does not offer any supported way to run end-to-end tests targe
 
 :::
 
-## Uninstalling Cypress and @grafana/e2e
+### Uninstalling Cypress and @grafana/e2e
 
 Although we recommend moving from `@grafana/e2e` to `@grafana/plugin-e2e` in a timely manner, there's nothing preventing you from having the two side by side during a transitional phase.
 
 When all Cypress tests have been migrated, open the terminal and run the following scripts from within your local plugin development directory:
 
-### 1. Remove Cypress tests and config file
+#### 1. Remove Cypress tests and config file
 
 ```shell
 rm ./cypress.json
 rm -rf ./cypress
 ```
 
-### 2. Uninstall dependencies
+#### 2. Uninstall dependencies
 
 ```shell
 npm uninstall --save-dev @grafana/e2e @grafana/e2e-selectors
 ```
 
-### 3. Update scripts
+#### 3. Update scripts
 
 In the `package.json` file, remove the `e2e:update` script entirely and update the `e2e` the following way:
 `"e2e": "playwright test",`

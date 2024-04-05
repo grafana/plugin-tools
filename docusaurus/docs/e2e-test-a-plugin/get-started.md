@@ -20,10 +20,10 @@ import ScaffoldPluginE2ERunTestsNPM from '@snippets/plugin-e2e-run-tests.npm.md'
 import ScaffoldPluginE2ERunTestsPNPM from '@snippets/plugin-e2e-run-tests.pnpm.md';
 import ScaffoldPluginE2ERunTestsYarn from '@snippets/plugin-e2e-run-tests.yarn.md';
 
-This guide walks you through how to get started with end-to-end testing in your plugin with the `@grafana/plugin-e2e` tool.
+The [create-plugin](https://www.npmjs.com/package/@grafana/create-plugin?activeTab=readme) tool automatically scaffolds the basic setup for `@grafana/plugin-e2e` to help you easily get started with end-to-end testing in your plugin. This guide walks you through the basic usage of running Playwright tests with `@grafana/plugin-e2e`.
 
 :::note
-The `create-plugin` tool started scaffolding basic setup for `@grafana/plugin-e2e` from version 4.5.0. If you already have a plugin and it was scaffolded with an earlier version of the `create-plugin` tool, you may follow the [migration](./migrate-from-grafana-e2e.md) guide for instruction on how to install and configure `@grafana/plugin-e2e` manually.
+If you scaffolded a plugin with a version of create-plugin prior to 4.6.0, follow the [migration guide](./migrate-from-grafana-e2e.md) for instruction on how to install and configure `@grafana/plugin-e2e` manually.
 :::
 
 ## Before you begin
