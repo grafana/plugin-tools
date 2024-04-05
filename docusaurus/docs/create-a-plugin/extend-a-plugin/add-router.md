@@ -20,7 +20,7 @@ With `queryType` populated in queries and sent to your backend plugin below is a
 
 Implemented in this way, each query handler can then `json.Unmarshal` each query JSON field in [`DataQuery`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#DataQuery) to a certain Go struct as shown in this example:
 
-```
+```go
 package mydatasource
 
 import (
