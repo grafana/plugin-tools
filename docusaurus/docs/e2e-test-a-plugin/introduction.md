@@ -17,7 +17,7 @@ sidebar_position: 1
 [`@grafana/plugin-e2e`](https://www.npmjs.com/package/@grafana/plugin-e2e?activeTab=readme) is designed specifically for Grafana plugin developers. It extends [`@playwright/test`](https://playwright.dev/) capabilities with relevant fixtures, models, and expect matchers; enabling comprehensive end-to-end testing of Grafana plugins across multiple versions of Grafana. This package simplifies the testing process, ensuring your plugin is robust and compatible with various Grafana environments.
 
 :::danger
-The [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) tool will be depcrecated when Grafana 11.0.0 is released. We recommened all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
+With the upcoming release of Grafana 11.0.0, [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) tool will be deprecated. We recommend all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress, `@grafana/e2e` and `@grafana/e2e-selectors`.
 :::
 
 ## The problem
