@@ -1,3 +1,15 @@
+# v4.6.1 (Fri Apr 05 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: set plugin-e2e to ^1.0.1 [#862](https://github.com/grafana/plugin-tools/pull/862) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.6.0 (Fri Apr 05 2024)
 
 #### 🚀 Enhancement
