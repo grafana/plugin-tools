@@ -10,7 +10,7 @@ keywords:
   - multiplexer
 ---
 
-# Add a router or multiplexer to your plugin
+# Add a query router or multiplexer to your data source backend
 
 Normally you implement the `QueryData` method in your backend plugin for data queries. But what if you need to support different kinds of queries: metrics, logs, and traces, for instance? That’s where the usage of a query _router_ (also known as a _multiplexer_) comes handy.
 
