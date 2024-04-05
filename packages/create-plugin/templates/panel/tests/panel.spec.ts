@@ -32,7 +32,7 @@ test('should display series counter when "Show series counter" option is enabled
   await panelEditPage.collapseSection('{{kebabToPascalKebab pluginName }}');
   await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
   const showSeriesSwitch = panelEditPage
-    .getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel('Test-Panel Show series counter'))
+    .getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel('{{kebabToPascalKebab pluginName }} Show series counter'))
     .getByLabel('Toggle switch');
   await showSeriesSwitch.click();
   await expect(page.getByTestId('simple-panel-series-counter')).toBeVisible();
