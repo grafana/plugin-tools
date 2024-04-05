@@ -1,3 +1,29 @@
+# (Fri Apr 05 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.5.0`
+  - Create Plugins: Add feature to toggle docker development environment [#857](https://github.com/grafana/plugin-tools/pull/857) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Wed Apr 03 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@0.27.0`
+  - Plugin-E2E: Allow setting custom visualization [#853](https://github.com/grafana/plugin-tools/pull/853) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Wed Apr 03 2024)
 
 #### 🐛 Bug Fix

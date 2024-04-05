@@ -1,6 +1,6 @@
 # Grafana / Plugin E2E
 
-E2E test Grafana plugins with ease.
+end-to-end test Grafana plugins with ease.
 
 **Links**
 
@@ -20,7 +20,7 @@ E2E test Grafana plugins with ease.
 
 ## Get started
 
-Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure, write tests and run your e2e tests in CI.
+Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started) guide for detailed instructions on how to install, configure, write tests and run your end-to-end tests in CI.
 
 ### Prerequisites
 
@@ -67,17 +67,17 @@ export default defineConfig({
 
 ### Writing Tests
 
-Here's a basic example of how to write an E2E test using `@grafana/plugin-e2e`:
+Here's a basic example of how to write an end-to-end test using `@grafana/plugin-e2e`:
 
 ```ts
 import { test, expect } from '@grafana/plugin-e2e';
 
-test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
+test('data query should return values 10 and 20', async ({ panelEditPage, readProvisionedDataSource }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
-  await expect(panelEditPage.panel.data).toContainText(['1', '3']);
+  await expect(panelEditPage.panel.data).toContainText(['10', '20']);
 });
 ```
 
@@ -92,3 +92,7 @@ npx playwright test
 ## Contributing
 
 We welcome contributions to @grafana/plugin-e2e. If you're interested in contributing, please read our [contributing guidelines](./CONTRIBUTING.md).
+
+### Credits
+
+`@grafana/plugin-e2e` wouldn't be possible without [Playwright test](https://playwright.dev/). Many thanks to Microsoft and all the people contributing to this amazing tool!
