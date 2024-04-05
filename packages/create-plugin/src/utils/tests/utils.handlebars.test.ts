@@ -1,5 +1,5 @@
 import { PLUGIN_TYPES } from '../../constants.js';
-import { normalizeId } from '../utils.handlebars.js';
+import { kebabToPascalKebab, normalizeId } from '../utils.handlebars.js';
 
 describe('Handlebars helpers', () => {
   describe('normalize id', () => {
@@ -41,5 +41,12 @@ describe('Handlebars helpers', () => {
         expect(actual).toEqual(`myorg-myplugin-${type}`);
       }
     );
+  });
+
+  describe('pascal to pascal kebab', () => {
+    test('should convert pascal case to pascal kebab case', () => {
+      const actual = kebabToPascalKebab('my-plugin');
+      expect(actual).toEqual('My-Plugin');
+    });
   });
 });

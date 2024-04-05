@@ -28,6 +28,16 @@ export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TY
   return newOrgName.toLowerCase() + '-' + newPluginName.toLowerCase() + `-${type}`;
 };
 
+export const kebabToPascalKebab = (str: string) => {
+  if (typeof str !== 'string') {
+    return '';
+  }
+  return str
+    .split('-')
+    .map((word) => pascalCase(word))
+    .join('-');
+};
+
 // Register our helpers and partials with handlebars.
 registerHandlebarsHelpers();
 registerHandlebarsPartials();
@@ -46,11 +56,7 @@ function registerHandlebarsHelpers() {
     dashCase: kebabCase,
     kabobCase: kebabCase,
     kebabCase: kebabCase,
-    kebabToPascalKebab: (str: string) =>
-      str
-        .split('-')
-        .map((word) => pascalCase(word))
-        .join('-'),
+    kebabToPascalKebab: kebabToPascalKebab,
     properCase: pascalCase,
     pascalCase: pascalCase,
     if_eq: ifEq,
