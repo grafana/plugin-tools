@@ -107,12 +107,12 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Start grafana server for e2e tests
-        if: ${{ matrix.workingDir == 'myorg-nobackend-scenesapp' }}
+        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server for e2e tests
-        if: ${{ matrix.workingDir == 'myorg-nobackend-scenesapp' }}
+        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         uses: nev7n/wait_for_response@v1
         with:
           url: 'http://localhost:3000/'
@@ -122,18 +122,18 @@ jobs:
 
       - name: Run e2e tests
         id: run-e2e-tests
-        if: ${{ matrix.workingDir == 'myorg-nobackend-scenesapp' }}
+        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: npm run e2e
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Stop grafana docker
-        if: ${{ matrix.workingDir == 'myorg-nobackend-scenesapp' }}
+        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: docker-compose down
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Archive E2E output
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.workingDir == 'myorg-nobackend-scenesapp' }} && steps.run-e2e-tests.outcome != 'success'
+        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }} && steps.run-e2e-tests.outcome != 'success'
         with:
           name: ${{ matrix.workingDir }}-playwright-report
           path: ./${{ matrix.workingDir }}/playwright-report/
