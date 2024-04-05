@@ -1,1 +1,1 @@
-export { extractPluginMeta } from './meta-extractor';
+export { extractExtensionPoints } from './meta-extractor';
