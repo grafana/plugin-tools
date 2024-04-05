@@ -26,7 +26,7 @@ test.describe('navigating app', () => {
     // navigating to page four with full width layout without sidebar menu
     await page.getByText('Full-width page example').click();
 
-    // navigate back to page one and verify tat sidebar menu is back
-    await page.getByText('Back').click();
+    // navigate back to page one
+    await page.getByRole('link', { name: 'Back', exact: true }).click();
   });
 });
