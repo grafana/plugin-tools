@@ -1,5 +1,18 @@
 # (Fri Apr 05 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.0.1`
+  - Plugin E2E: Add plugin options in readme snippet [#860](https://github.com/grafana/plugin-tools/pull/860) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Apr 05 2024)
+
 #### 💥 Breaking Change
 
 - `@grafana/plugin-e2e@1.0.0`
