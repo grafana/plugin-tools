@@ -1,5 +1,19 @@
 # (Fri Apr 05 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.6.0`
+  - Create Plugin: Scaffold plugins with playwright for e2e [#847](https://github.com/grafana/plugin-tools/pull/847) ([@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Apr 05 2024)
+
 #### 🐛 Bug Fix
 
 - `@grafana/plugin-e2e@1.0.1`
