@@ -79,4 +79,3 @@ Next we suggest you checkout the following guides:
 - [Selecting UI elements in end-to-end tests](./selecting-ui-elements.md)
 - [Configure the resources you'll need](./setup-resources.md)
 - [How to test data source plugins](./test-a-data-source-plugin/index.md)
-<!-- - [How to test panel plugins](./test-a-panel-plugin.md) -->

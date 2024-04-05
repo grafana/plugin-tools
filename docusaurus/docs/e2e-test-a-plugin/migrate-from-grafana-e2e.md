@@ -70,10 +70,11 @@ Open the Playwright config file that was generated when Playwright was installed
 ```ts title="playwright.config.ts"
 import { dirname } from 'path';
 import { defineConfig, devices } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
 
 const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
 
-export default defineConfig({
+export default defineConfig<PluginOptions>({
     ...
     projects: [
     {
@@ -107,17 +108,6 @@ To prevent these files from being version controlled, you can add the following 
 /playwright/.auth/
 ```
 
-The `@grafana/plugin-e2e` package also exports a type named `PluginOptions` that you can use to extend the Playwright configuration with the `@grafana/plugin-e2e` specific options.
-
-```ts title="playwright.config.ts"
-import { defineConfig } from '@playwright/test';
-import type { PluginOptions } from '@grafana/plugin-e2e';
-
-export default defineConfig<PluginOptions>({
-    ...
-});
-```
-
 You're now ready to start writing tests. The [Get started](./get-started.md) guide to learn how to run tests locally.
 
 ## Migrating tests
@@ -125,7 +115,6 @@ You're now ready to start writing tests. The [Get started](./get-started.md) gui
 There's no tooling in place for automatically migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright tests. This means you would have to convert your tests one by one or replace them with a new set of tests based on Playwright. You may checkout the following resources to get inspiration on how the playwright tests should be written:
 
 - [How to test data source plugins](./test-a-data-source-plugin/index.md)
-<!-- - [How to test panel plugins](./test-a-panel-plugin.md) -->
 - [App plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/tests)
 - [Panel plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-datalinks/tests)
 - [Best practices around test isolation](./setup-resources.md#test-isolation)
@@ -163,14 +152,4 @@ npm uninstall --save-dev @grafana/e2e @grafana/e2e-selectors
 ### 3. Update scripts
 
 In the `package.json` file, remove the `e2e:update` script entirely and update the `e2e` the following way:
-<Tabs>
-<TabItem value="npm" default>
-`"e2e": "npx playwright test",`
-</TabItem>
-<TabItem value="yarn" >
-`"e2e": "yarn playwright test",`
-</TabItem>
-<TabItem value="npx">
-`"e2e": "npx playwright test",`
-</TabItem>
-</Tabs>
+`"e2e": "playwright test",`

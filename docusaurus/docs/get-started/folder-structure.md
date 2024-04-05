@@ -37,6 +37,7 @@ myorg-myplugin-datasource/
 ├── pkg
 │   ├── main.go
 │   └── plugin
+├── playwright.config.ts
 ├── src
 │   ├── README.md
 │   ├── components
