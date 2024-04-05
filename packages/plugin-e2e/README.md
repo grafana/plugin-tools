@@ -39,9 +39,11 @@ Open the Playwright config file that was generated when Playwright was installed
 ```ts
 import { dirname } from 'path';
 import { defineConfig, devices } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+
 const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
 
-export default defineConfig({
+export default defineConfig<PluginOptions>({
   testDir: './tests', // change this to the directory that was chosen when installing Playwright
   reporter: 'html',
   use: {
