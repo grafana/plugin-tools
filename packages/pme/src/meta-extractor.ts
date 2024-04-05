@@ -1,11 +1,4 @@
 import * as ts from 'typescript';
-import { MetaRegistry } from './meta/registry';
-import {
-  createExtensionComponentMeta,
-  createExtensionLinkMeta,
-  isConfigureExtensionComponentNode,
-  isConfigureExtensionLinkNode,
-} from './meta/extensions';
 import { MetaBase } from './types';
 import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
 
@@ -22,7 +15,7 @@ export function extractExtensionPoints(entry: string): MetaBase[] {
     return [];
   }
 
-  const [appNode, rootNodes] = findAppPluginDeclarationNode(sourceFile, checker);
+  const [appNode] = findAppPluginDeclarationNode(sourceFile, checker);
 
   if (!appNode) {
     return [];
@@ -32,65 +25,6 @@ export function extractExtensionPoints(entry: string): MetaBase[] {
   const componentExtensionConfigs = getComponentExtensionConfigs(appNode, checker);
 
   return [...linkExtensionConfigs, ...componentExtensionConfigs];
-}
-
-function createAppNodeVisitor(
-  registry: MetaRegistry,
-  checker: ts.TypeChecker,
-  rootNodes: ts.Node[]
-): (node: ts.Node) => void {
-  return (node) => {
-    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
-      // We are wrapping the app call in a function call(s) and need to include possible
-      // registrations from those functions.
-      const funcName = node.expression.text;
-      const funcNode = rootNodes.find((n) => {
-        if (!ts.isImportDeclaration(n)) {
-          return false;
-        }
-
-        if (!n.importClause || !n.importClause.namedBindings) {
-          return false;
-        }
-
-        if (ts.isNamedImports(n.importClause.namedBindings)) {
-          return Boolean(
-            n.importClause.namedBindings.elements.find((e) => {
-              return e.name.escapedText === funcName;
-            })
-          );
-        }
-      });
-
-      if (funcNode && ts.isImportDeclaration(funcNode)) {
-        // import that file and fetch the function.
-      }
-    }
-
-    if (isChainedAppPlugin(node, checker)) {
-      node.forEachChild(createAppNodeVisitor(registry, checker, rootNodes));
-
-      if (isConfigureExtensionLinkNode(node)) {
-        registry.register(createExtensionLinkMeta(node, checker));
-      }
-
-      if (isConfigureExtensionComponentNode(node)) {
-        registry.register(createExtensionComponentMeta(node, checker));
-      }
-
-      return;
-    }
-
-    node.forEachChild(createAppNodeVisitor(registry, checker, rootNodes));
-  };
-}
-
-function isChainedAppPlugin(node: ts.Node, checker: ts.TypeChecker): boolean {
-  if (!ts.isCallExpression(node)) {
-    return false;
-  }
-  const type = checker.getTypeAtLocation(node);
-  return type.symbol?.escapedName === 'AppPlugin';
 }
 
 function findAppPluginDeclarationNode(entry: ts.SourceFile, checker: ts.TypeChecker): [ts.Node | undefined, ts.Node[]] {
