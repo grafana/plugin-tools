@@ -91,6 +91,7 @@ const configFileNamesMap: Record<string, string> = {
   npmrc: '.npmrc',
   _eslintrc: '.eslintrc',
   '_package.json': 'package.json',
+  'playwright.config': 'playwright.config.ts',
 };
 
 /**

@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/{{ kebabCase orgName }}/{{ kebabCase pluginName }}/pkg/models"
 )
 
 // Make sure Datasource implements required interfaces. This is important to do
@@ -94,16 +94,23 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
 func (d *Datasource) CheckHealth(_ context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	var status = backend.HealthStatusOk
-	var message = "Data source is working"
+	res := &backend.CheckHealthResult{}
+	config, err := models.LoadPluginSettings(*req.PluginContext.DataSourceInstanceSettings)
 
-	if rand.Int()%2 == 0 {
-		status = backend.HealthStatusError
-		message = "randomized error"
+	if err != nil {
+		res.Status = backend.HealthStatusError
+		res.Message = "Unable to load settings"
+		return res, nil
+	}
+
+	if config.Secrets.ApiKey == "" {
+		res.Status = backend.HealthStatusError
+		res.Message = "API key is missing"
+		return res, nil
 	}
 
 	return &backend.CheckHealthResult{
-		Status:  status,
-		Message: message,
+		Status:  backend.HealthStatusOk,
+		Message: "Data source is working",
 	}, nil
 }

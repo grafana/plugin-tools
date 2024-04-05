@@ -1,3 +1,4 @@
+import { getBackendSrv, isFetchError } from '@grafana/runtime';
 import {
   CoreApp,
   DataQueryRequest,
@@ -8,11 +9,16 @@ import {
   FieldType,
 } from '@grafana/data';
 
-import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY } from './types';
+import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY, DataSourceResponse } from './types';
+import { lastValueFrom } from 'rxjs';
+import _ from 'lodash';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
+  baseUrl: string;
+
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
+    this.baseUrl = instanceSettings.url!;
   }
 
   getDefaultQuery(_: CoreApp): Partial<MyQuery> {
@@ -43,11 +49,46 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return { data };
   }
 
+  async request(url: string, params?: string) {
+    const response = getBackendSrv().fetch<DataSourceResponse>({
+      url: `${this.baseUrl}${url}${params?.length ? `?${params}` : ''}`,
+    });
+    return lastValueFrom(response);
+  }
+
+  /**
+   * Checks whether we can connect to the API.
+   */
   async testDatasource() {
-    // Implement a health check for your data source.
-    return {
-      status: 'success',
-      message: 'Success',
-    };
+    const defaultErrorMessage = 'Cannot connect to API';
+
+    try {
+      const response = await this.request('/health');
+      if (response.status === 200) {
+        return {
+          status: 'success',
+          message: 'Success',
+        };
+      } else {
+        return {
+          status: 'error',
+          message: response.statusText ? response.statusText : defaultErrorMessage,
+        };
+      }
+    } catch (err) {
+      let message = '';
+      if (_.isString(err)) {
+        message = err;
+      } else if (isFetchError(err)) {
+        message = 'Fetch error: ' + (err.statusText ? err.statusText : defaultErrorMessage);
+        if (err.data && err.data.error && err.data.error.code) {
+          message += ': ' + err.data.error.code + '. ' + err.data.error.message;
+        }
+      }
+      return {
+        status: 'error',
+        message,
+      };
+    }
   }
 }

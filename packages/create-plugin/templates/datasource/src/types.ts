@@ -10,6 +10,15 @@ export const DEFAULT_QUERY: Partial<MyQuery> = {
   constant: 6.5,
 };
 
+export interface DataPoint {
+  Time: number;
+  Value: number;
+}
+
+export interface DataSourceResponse {
+  datapoints: DataPoint[];
+}
+
 /**
  * These are options configured for each DataSource instance
  */

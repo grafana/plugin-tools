@@ -10,6 +10,7 @@ export type FeatureFlags = {
   // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
   // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
   useReactRouterV6?: boolean;
+  usePlaywright?: boolean;
 };
 
 export type CreatePluginConfig = UserConfig & {
