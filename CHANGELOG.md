@@ -1,3 +1,16 @@
+# (Fri Apr 05 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.5.0`
+  - Create Plugins: Add feature to toggle docker development environment [#857](https://github.com/grafana/plugin-tools/pull/857) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # (Wed Apr 03 2024)
 
 #### 🚀 Enhancement
