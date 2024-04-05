@@ -3,10 +3,14 @@ ARG grafana_image=grafana-enterprise
 
 FROM grafana/${grafana_image}:${grafana_version}
 
+ARG development=true
+
 {{#if hasBackend}}
 ARG GO_VERSION=1.21.6
 ARG GO_ARCH=amd64
 {{/if}}
+
+ENV DEV "${development}"
 
 # Make it as simple as possible to access the grafana instance for development purposes
 # Do NOT enable these settings in a public facing / production grafana instance
@@ -24,10 +28,10 @@ WORKDIR $GF_PATHS_HOME
 
 USER root
 
-
 # Installing supervisor and inotify-tools
-RUN if grep -i -q alpine /etc/issue; then \
-      apk add supervisor inotify-tools git; \
+RUN if [ "${development}" = "true" ]; then \
+    if grep -i -q alpine /etc/issue; then \
+        apk add supervisor inotify-tools git; \
     elif grep -i -q ubuntu /etc/issue; then \
       DEBIAN_FRONTEND=noninteractive && \
       apt-get update && \
@@ -35,6 +39,7 @@ RUN if grep -i -q alpine /etc/issue; then \
       rm -rf /var/lib/apt/lists/*; \
     else \
       echo 'ERROR: Unsupported base image' && /bin/false; \
+    fi \
     fi
 
 COPY supervisord/supervisord.conf /etc/supervisor.d/supervisord.ini
@@ -43,20 +48,26 @@ COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 {{#if hasBackend}}
 # Installing Go
-RUN curl -O -L https://golang.org/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
+RUN if [ "${development}" = "true" ]; then \
+    curl -O -L https://golang.org/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
     rm -rf /usr/local/go && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
     echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bashrc && \
-    rm -f go${GO_VERSION}.linux-${GO_ARCH}.tar.gz
+    rm -f go${GO_VERSION}.linux-${GO_ARCH}.tar.gz; \
+    fi
 
 # Installing delve for debugging
-RUN /usr/local/go/bin/go install github.com/go-delve/delve/cmd/dlv@latest
+RUN if [ "${development}" = "true" ]; then \
+    /usr/local/go/bin/go install github.com/go-delve/delve/cmd/dlv@latest; \
+    fi
 
 # Installing mage for plugin (re)building
-RUN git clone https://github.com/magefile/mage; \
+RUN if [ "${development}" = "true" ]; then \
+    git clone https://github.com/magefile/mage; \
     cd mage; \
     export PATH=$PATH:/usr/local/go/bin; \
-    go run bootstrap.go
+    go run bootstrap.go; \
+    fi
 {{/if}}
 
 # Inject livereload script into grafana index.html
