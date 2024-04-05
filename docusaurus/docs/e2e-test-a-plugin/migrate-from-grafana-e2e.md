@@ -100,6 +100,10 @@ The authenticated state is stored on disk with the following file name pattern: 
 To prevent these files from being version controlled, you can add the following line to your `.gitignore` file:
 
 ```shell title=".gitignore"
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 /playwright/.auth/
 ```
 
