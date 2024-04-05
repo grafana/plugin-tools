@@ -9,6 +9,7 @@ export function printGenerateSuccessMessage(answers: CliArgs) {
   const commands = [
     `- \`cd ./${directory}\``,
     `- \`${packageManagerName} install\` to install frontend dependencies.`,
+    `- \`${packageManagerName} exec playwright install chromium\` to install e2e test dependencies.`,
     `- \`${packageManagerName} run dev\` to build (and watch) the plugin frontend code.`,
     ...(answers.hasBackend
       ? [
