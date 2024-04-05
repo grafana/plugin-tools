@@ -46,6 +46,11 @@ function registerHandlebarsHelpers() {
     dashCase: kebabCase,
     kabobCase: kebabCase,
     kebabCase: kebabCase,
+    kebabToPascalKebab: (str: string) =>
+      str
+        .split('-')
+        .map((word) => pascalCase(word))
+        .join('-'),
     properCase: pascalCase,
     pascalCase: pascalCase,
     if_eq: ifEq,

@@ -16,7 +16,7 @@ test('should display circle when data is passed to the panel', async ({
 }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization('{{ pluginName }}');
+  await panelEditPage.setVisualization('{{kebabToPascalKebab pluginName }}');
   await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
 });
 
@@ -28,8 +28,8 @@ test('should display series counter when "Show series counter" option is enabled
 }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization('{{ pluginName }}');
-  await panelEditPage.collapseSection('{{ pluginName }}');
+  await panelEditPage.setVisualization('{{kebabToPascalKebab pluginName }}');
+  await panelEditPage.collapseSection('{{kebabToPascalKebab pluginName }}');
   await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
   const showSeriesSwitch = panelEditPage
     .getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel('Test-Panel Show series counter'))
