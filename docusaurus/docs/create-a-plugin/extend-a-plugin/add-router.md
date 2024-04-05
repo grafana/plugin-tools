@@ -78,7 +78,7 @@ func (d *MyDatasource) handleQueryFallback(ctx context.Context, req *backend.Que
 
 ## Advanced usage
 
-An example of using [`QueryTypeMux`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/datasource#QueryTypeMux) can be found for Grafana's built-in Grafana Azure Monitor data source. Refer to this code for examples of implementation:
+An example of using [`QueryTypeMux`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/datasource#QueryTypeMux) can be found for Grafana's built-in TestData data source. Refer to this code for examples of implementation:
 
 - [grafana/azuremonitor.go](https://github.com/grafana/grafana/blob/164ce63e280565cc960fb0e0d9f074ec003d5a2a/pkg/tsdb/azuremonitor/azuremonitor.go#L49) at 164ce63e280565cc960fb0e0d9f074ec003d5a2a - See the code at the [grafana/grafana](https://github.com/grafana/grafana/blob/164ce63e280565cc960fb0e0d9f074ec003d5a2a/pkg/tsdb/azuremonitor/azuremonitor.go#L49) repo.
 - [grafana/azuremonitor.go](https://github.com/grafana/grafana/blob/164ce63e280565cc960fb0e0d9f074ec003d5a2a/pkg/tsdb/azuremonitor/azuremonitor.go#L182-L201) at 164ce63e280565cc960fb0e0d9f074ec003d5a2a - See the code at the [grafana/grafana](https://github.com/grafana/grafana/blob/164ce63e280565cc960fb0e0d9f074ec003d5a2a/pkg/tsdb/azuremonitor/azuremonitor.go#L182-L201) repo.
