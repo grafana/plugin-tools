@@ -7,8 +7,9 @@ import {
   isConfigureExtensionLinkNode,
 } from './meta/extensions';
 import { MetaBase } from './types';
+import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
 
-export function extractPluginMeta(entry: string): MetaBase[] {
+export function extractExtensionPoints(entry: string): MetaBase[] {
   const program = ts.createProgram([entry], {
     allowSyntheticDefaultImports: true,
     allowJs: true,
@@ -16,22 +17,21 @@ export function extractPluginMeta(entry: string): MetaBase[] {
 
   const sourceFile = program.getSourceFile(entry);
   const checker = program.getTypeChecker();
-  const registry = new MetaRegistry();
 
   if (!sourceFile) {
     return [];
   }
 
   const [appNode, rootNodes] = findAppPluginDeclarationNode(sourceFile, checker);
-  console.log('appNode', Boolean(appNode));
 
   if (!appNode) {
     return [];
   }
 
-  ts.forEachChild(appNode, createAppNodeVisitor(registry, checker, rootNodes));
+  const linkExtensionConfigs = getLinkExtensionsConfigs(appNode, checker);
+  const componentExtensionConfigs = getComponentExtensionConfigs(appNode, checker);
 
-  return registry.toArray();
+  return [...linkExtensionConfigs, ...componentExtensionConfigs];
 }
 
 function createAppNodeVisitor(

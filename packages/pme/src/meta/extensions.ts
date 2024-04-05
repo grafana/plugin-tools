@@ -1,13 +1,16 @@
 import * as ts from 'typescript';
 import { ExtensionLinkMeta, ExtensionComponentMeta, MetaKind } from '../types';
+import { parseExtensionPointId, parseString } from '../utils';
 
 export function isConfigureExtensionLinkNode(node: ts.Node): node is ts.CallExpression {
-  if (ts.isCallExpression(node)) {
-    if (ts.isPropertyAccessExpression(node.expression)) {
-      return node.expression.name.escapedText === 'configureExtensionLink';
-    }
-  }
-  return false;
+  return true;
+
+  // if (ts.isCallExpression(node)) {
+  //   if (ts.isPropertyAccessExpression(node.expression)) {
+  //     return node.expression.name.escapedText === 'configureExtensionLink';
+  //   }
+  // }
+  // return false;
 }
 
 export function createExtensionLinkMeta(expression: ts.CallExpression, checker: ts.TypeChecker): ExtensionLinkMeta {
@@ -102,32 +105,4 @@ export function createExtensionComponentMeta(
       description: '',
     }
   );
-}
-
-function parseString(node: ts.Expression): string {
-  // If value is simple string
-  if (ts.isStringLiteral(node)) {
-    return node.text;
-  }
-  return node.getText();
-}
-
-// This needs to be rewritten as well
-function parseExtensionPointId(node: ts.Expression, checker: ts.TypeChecker): string {
-  // If value is simple string
-  if (ts.isStringLiteral(node)) {
-    return node.text;
-  }
-  // If value is an enum e.g. PluginExtensionPointIds
-  if (!ts.isPropertyAccessExpression(node)) {
-    return node.getText();
-  }
-  if (!ts.isIdentifier(node.name)) {
-    return node.getText();
-  }
-  const type = checker.getTypeAtLocation(node.name);
-  if (type.isLiteral()) {
-    return type.value.toString();
-  }
-  return node.getText();
 }
