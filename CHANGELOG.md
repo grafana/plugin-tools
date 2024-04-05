@@ -1,5 +1,18 @@
 # (Fri Apr 05 2024)
 
+#### 💥 Breaking Change
+
+- `@grafana/plugin-e2e@1.0.0`
+  - Plugin E2E: Remove custom selector engine [#859](https://github.com/grafana/plugin-tools/pull/859) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Apr 05 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@4.5.0`
