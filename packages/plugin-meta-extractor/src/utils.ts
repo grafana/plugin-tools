@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import * as tsquery from '@phenomnomnominal/tsquery';
-import { MetaKind } from './types';
+import { MetaKind } from './types.js';
 
 const CONFIGURE_FUNCTION_TO_KIND: Record<string, MetaKind> = {
   configureExtensionLink: MetaKind.extensionLink,

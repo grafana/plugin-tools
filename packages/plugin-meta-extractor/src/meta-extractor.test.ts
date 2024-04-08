@@ -1,5 +1,5 @@
-import { extractExtensionPoints } from './meta-extractor';
-import { MetaBase, MetaKind, ExtensionComponentMeta, ExtensionLinkMeta } from './types';
+import { extractExtensionPoints } from './meta-extractor.js';
+import { MetaBase, MetaKind, ExtensionComponentMeta, ExtensionLinkMeta } from './types.js';
 
 const fixturesPath = `${__dirname}/../fixtures`;
 const defaultExportFixtures = `${fixturesPath}/defaultExport`;

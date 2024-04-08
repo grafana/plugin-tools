@@ -1,9 +1,16 @@
 {
-  "name": "@grafana/pme",
+  "name": "@grafana/plugin-meta-extractor",
   "version": "1.0.0",
-  "description": "plugin meta extractor",
-  "main": "./dist/index.js",
+  "description": "Extract meta information from a Grafana plugin source code.",
   "types": "./dist/index.d.ts",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "exports": {
+    "node": {
+      "import": "./index.js"
+    },
+    "default": "./index.js"
+  },
   "scripts": {
     "test": "jest --watch",
     "dev": "tsc --project tsconfig.json --watch"

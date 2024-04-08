@@ -52,7 +52,7 @@
     "packages/sign-plugin",
     "docusaurus/website",
     "packages/plugin-e2e",
-    "packages/pme"
+    "packages/plugin-meta-extractor"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [

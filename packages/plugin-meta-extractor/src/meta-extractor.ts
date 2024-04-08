@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
-import { MetaBase } from './types';
-import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
+import { MetaBase } from './types.js';
+import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils.js';
 
 export function extractExtensionPoints(entry: string): MetaBase[] {
   const program = ts.createProgram([entry], {
