@@ -1,2 +1,2 @@
-export { extractExtensionPoints } from './meta-extractor.js';
-export { GrafanaPluginMetaExtractor, GrafanaPluginMetaExtractorOptions } from './webpack-plugin.js';
+export { extractExtensionPoints } from './meta-extractor';
+export { GrafanaPluginMetaExtractor, GrafanaPluginMetaExtractorOptions } from './webpack-plugin';
