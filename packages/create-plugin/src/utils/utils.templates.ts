@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
 import { directoryExists, filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
-import { renderHandlebarsTemplate } from './utils.handlebars.js';
+import { renderHandlebarsTemplate, normalizeId } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import {
   TEMPLATE_PATHS,
