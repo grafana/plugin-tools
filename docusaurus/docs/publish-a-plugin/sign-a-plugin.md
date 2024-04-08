@@ -17,7 +17,7 @@ All Grafana Labs-authored backend plugins, including Enterprise plugins, are sig
 
 :::info
 
-It's not necessary to sign a plugin during development. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
+It's not necessary to sign a plugin during development or when submitting a plugin for review for the first time. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
 
 :::
 
