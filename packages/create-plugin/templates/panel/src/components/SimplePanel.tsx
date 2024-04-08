@@ -3,6 +3,7 @@ import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
+import { PanelDataErrorView } from '@grafana/runtime';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -26,9 +27,14 @@ const getStyles = () => {
   };
 };
 
-export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
+export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
+
+  if (data.series.length === 0) {
+    return <PanelDataErrorView fieldConfig={fieldConfig} panelId={id} data={data} needsStringField />;
+  }
+
   return (
     <div
       className={cx(
@@ -49,12 +55,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
       >
         <g>
         {{!-- /* 🚨 Escaping the following line because of Handlebars. (this comment is going to be removed after scaffolding) 🚨 */ --}}
-          <circle style=\{{ fill: theme.colors.primary.main }} r={100} />
+          <circle data-testid="simple-panel-circle" style=\{{ fill: theme.colors.primary.main }} r={100} />
         </g>
       </svg>
 
       <div className={styles.textBox}>
-        {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
+        {options.showSeriesCount && <div data-testid="simple-panel-series-counter">Number of series: {data.series.length}</div>}
         <div>Text option value: {options.text}</div>
       </div>
     </div>

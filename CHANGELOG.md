@@ -1,3 +1,69 @@
+# (Fri Apr 05 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.6.1`
+  - Create Plugin: set plugin-e2e to ^1.0.1 [#862](https://github.com/grafana/plugin-tools/pull/862) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Apr 05 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.6.0`
+  - Create Plugin: Scaffold plugins with playwright for e2e [#847](https://github.com/grafana/plugin-tools/pull/847) ([@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Apr 05 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.0.1`
+  - Plugin E2E: Add plugin options in readme snippet [#860](https://github.com/grafana/plugin-tools/pull/860) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Apr 05 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/plugin-e2e@1.0.0`
+  - Plugin E2E: Remove custom selector engine [#859](https://github.com/grafana/plugin-tools/pull/859) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Apr 05 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.5.0`
+  - Create Plugins: Add feature to toggle docker development environment [#857](https://github.com/grafana/plugin-tools/pull/857) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # (Wed Apr 03 2024)
 
 #### 🚀 Enhancement

@@ -70,7 +70,7 @@ The `plugin-grafana-dependency` mode is the default, so if you don't specify a v
 
 This mode returns the most recent grafana-dev image. Additionally, it returns all the latest patch releases of Grafana Enterprise since the version that was specified as `grafanaDependency` in the [plugin.json](../metadata.md). To avoid starting too many jobs, the output is capped at 6 versions.
 
-![[plugin-grafana-dependency mode](/img/e2e-version-plugin-dependency.png)
+![plugin-grafana-dependency mode](/img/e2e-version-plugin-dependency.png)
 
 ### Use the version-support-policy mode
 

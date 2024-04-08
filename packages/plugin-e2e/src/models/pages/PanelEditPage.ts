@@ -152,9 +152,9 @@ export class PanelEditPage extends GrafanaPage {
     );
 
     // in older versions of grafana, the refresh button is rendered twice. this is a workaround to click the correct one
-    const refreshPanelButton = this.getByGrafanaSelector(
-      this.ctx.selectors.components.PanelEditor.General.content
-    ).locator(`selector=${this.ctx.selectors.components.RefreshPicker.runButtonV2}`);
+    const refreshPanelButton = this.getByGrafanaSelector(this.ctx.selectors.components.RefreshPicker.runButtonV2, {
+      root: this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content),
+    });
 
     await refreshPanelButton.click();
 

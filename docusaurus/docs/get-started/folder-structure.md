@@ -26,7 +26,6 @@ myorg-myplugin-datasource/
 ├── LICENSE
 ├── Magefile.go
 ├── README.md
-├── cypress
 │   └── integration
 ├── docker-compose.yaml
 ├── go.mod
@@ -38,6 +37,7 @@ myorg-myplugin-datasource/
 ├── pkg
 │   ├── main.go
 │   └── plugin
+├── playwright.config.ts
 ├── src
 │   ├── README.md
 │   ├── components
@@ -46,7 +46,8 @@ myorg-myplugin-datasource/
 │   ├── module.ts
 │   ├── plugin.json
 │   └── types.ts
-└── tsconfig.json
+├── tsconfig.json
+└── tests
 ```
 
 ## Required files

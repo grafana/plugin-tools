@@ -26,4 +26,6 @@ export type TemplateData = {
   bundleGrafanaUI: boolean;
   useReactRouterV6: boolean;
   reactRouterVersion: string;
+  usePlaywright: boolean;
+  e2eTestCmd: string;
 };

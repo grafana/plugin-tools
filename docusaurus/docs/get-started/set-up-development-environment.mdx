@@ -130,3 +130,19 @@ You will also notice that the `docker-compose.yaml` file also has the following 
 ```
 
 they are necessary to allow delve to attach to the running process and debug it and should not be used in production environments.
+
+If you wish to test your plugin in a environment closer to production you can disable the development mode by modifying the `docker-compose.yaml`:
+
+```yaml title="docker-compose.yaml"
+version: '3.7'
+
+services:
+  grafana:
+    container_name: 'myorg-basic-app'
+    build:
+      context: ./.config
+      args:
+        development: "false"
+```
+
+Doing that, the docker environment will only run grafana and load the content of your projects `dist` directory. Thefore before doing that you should build your plugin with `mage -v build:backend` and <SyncCommand cmd="run server" /> to generate the plugin files.

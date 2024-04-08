@@ -35,7 +35,7 @@ export type PluginOptions = {
   /**
    * Optionally, you can add or override feature toggles.
    * The feature toggles you specify here will only work in the frontend. If you need a feature toggle to work across the entire stack, you
-   * need to need to enable the feature in the Grafana config. See https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#feature_toggles
+   * need to need to enable the feature in the Grafana config. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
    *
    * To override feature toggles globally in the playwright.config.ts file: 
    * export default defineConfig({
@@ -47,7 +47,7 @@ export type PluginOptions = {
       },
     });
    * 
-   * To override feature toggles for tests on a certain file:
+   * To override feature toggles for tests in a certain file:
      test.use({
       featureToggles: {
         exploreMixedDatasource: true,
@@ -60,14 +60,14 @@ export type PluginOptions = {
    * The Grafana user to use for the tests. If no user is provided, the default admin/admin user will be used.
    *
    * You can use different users for different projects. See the fixture createUser for more information on how to create a user,
-   * and the fixture login for more information on how to authenticate.
+   * and the fixture login for more information on how to authenticate. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/use-authentication
    */
   user?: CreateUserArgs;
 };
 
 export type PluginFixture = {
   /**
-   * The current Grafana version.
+   * The Grafana version that was detected when the test runner was started.
    *
    * If a GRAFANA_VERSION environment variable is set, this will be used. Otherwise,
    * the version will be picked from window.grafanaBootData.settings.buildInfo.version.
@@ -75,14 +75,16 @@ export type PluginFixture = {
   grafanaVersion: string;
 
   /**
-   * The E2E selectors to use for the current version of Grafana
+   * The E2E selectors to use for the current version of Grafana.
+   * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/selecting-elements#grafana-end-to-end-selectors for more information.
    */
   selectors: E2ESelectors;
 
   /**
    * Isolated {@link DashboardPage} instance for each test.
    *
-   * Navigates to a new to a new dashboard page.
+   * When using this fixture in a test, you will get a new, empty dashboard page.
+   * To load an existing dashboard, use the {@link gotoDashboardPage} fixture.
    */
   dashboardPage: DashboardPage;
 
@@ -91,39 +93,29 @@ export type PluginFixture = {
    *
    * Navigates to a new dashboard page and adds a new panel.
    *
-   * Use {@link PanelEditPage.setVisualization} to change the visualization
-   * Use {@link PanelEditPage.datasource.set} to change the datasource
-   * Use {@link ExplorePage.getQueryEditorEditorRow} to retrieve the query
-   * editor row locator for a given query refId
+   * When using this fixture in a test, you will get a new dashboard page with a new empty panel edit page
+   * To load an existing dashboard with an existing panel, use the {@link gotoPanelEditPage} fixture.
    */
   panelEditPage: PanelEditPage;
 
   /**
    * Isolated {@link VariableEditPage} instance for each test.
    *
-   * Navigates to a new dashboard page and adds a new variable.
-   *
-   * Use {@link VariableEditPage.setVariableType} to change the variable type
+   * When using this fixture in a test, you will get a new dashboard page with a new empty variable edit page
+   * To load an existing dashboard with an existing variable, use the {@link gotoVariableEditPage} fixture.
    */
   variableEditPage: VariableEditPage;
 
   /**
    * Isolated {@link AnnotationEditPage} instance for each test.
    *
-   * Navigates to a new dashboard page and adds a new annotation.
-   *
-   * Use {@link AnnotationEditPage.datasource.set} to change the datasource
+   * When using this fixture in a test, you will get a new dashboard page with a new empty annotation edit page
+   * To load an existing dashboard with an existing annotation, use the {@link gotoAnnotationEditPage} fixture.
    */
   annotationEditPage: AnnotationEditPage;
 
   /**
    * Isolated {@link ExplorePage} instance for each test.
-   *
-   * Navigates to a the explore page.
-   *
-   * Use {@link ExplorePage.datasource.set} to change the datasource
-   * Use {@link ExplorePage.getQueryEditorEditorRow} to retrieve the query editor
-   * row locator for a given query refId
    */
   explorePage: ExplorePage;
 

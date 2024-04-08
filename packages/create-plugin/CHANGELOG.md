@@ -1,3 +1,40 @@
+# v4.6.1 (Fri Apr 05 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: set plugin-e2e to ^1.0.1 [#862](https://github.com/grafana/plugin-tools/pull/862) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v4.6.0 (Fri Apr 05 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Scaffold plugins with playwright for e2e [#847](https://github.com/grafana/plugin-tools/pull/847) ([@jackw](https://github.com/jackw) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v4.5.0 (Fri Apr 05 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugins: Add feature to toggle docker development environment [#857](https://github.com/grafana/plugin-tools/pull/857) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.4.6 (Wed Apr 03 2024)
 
 #### 🐛 Bug Fix

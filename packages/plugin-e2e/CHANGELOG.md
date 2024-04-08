@@ -1,3 +1,29 @@
+# v1.0.1 (Fri Apr 05 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Add plugin options in readme snippet [#860](https://github.com/grafana/plugin-tools/pull/860) ([@sunker](https://github.com/sunker))
+- Bump independent versions \[skip ci\] ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v1.0.0 (Fri Apr 05 2024)
+
+#### 💥 Breaking Change
+
+- Plugin E2E: Remove custom selector engine [#859](https://github.com/grafana/plugin-tools/pull/859) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v0.27.0 (Wed Apr 03 2024)
 
 #### 🚀 Enhancement
