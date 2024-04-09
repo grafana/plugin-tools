@@ -34,7 +34,7 @@ test('should expand multi-valued variable before calling backend', async ({
   gotoDashboardPage,
   readProvisionedDashboard,
 }) => {
-  const dashboard = await readProvisionDashboard({ fileName: 'variable.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'variable.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
   const panelEditPage = await dashboardPage.addPanel();
   const queryDataSpy = panelEditPage.waitForQueryDataRequest((request) =>

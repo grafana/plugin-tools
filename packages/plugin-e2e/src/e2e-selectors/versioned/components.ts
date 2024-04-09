@@ -58,6 +58,9 @@ export const versionedComponents = {
         '10.4.0': (title: string) => `data-testid Panel header ${title}`,
         [MIN_GRAFANA_VERSION]: (_: string) => 'data-testid Panel',
       },
+      PanelDataErrorMessage: {
+        '10.4.0': 'data-testid Panel data error message',
+      },
     },
     Visualization: {
       Table: {
