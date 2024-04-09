@@ -1,6 +1,6 @@
 ---
 id: configurations
-title: Test the configuration editor
+title: Test configurations
 description: Testing the configuration editor of backend and frontend data sources with valid and invalid configuration
 keywords:
   - grafana

@@ -119,10 +119,10 @@ Once you have Playwright and `@grafana/plugin-e2e` installed and configured, you
 There's no tooling in place for automatically migrating existing `@grafana/e2e` based Cypress tests to `@grafana/plugin-e2e` based Playwright tests. This means you would have to convert your tests one by one or replace them with a new set of tests based on Playwright. Refer to the following resources to get inspiration on how the playwright tests should be written:
 
 - [How to test data source plugins](./test-a-data-source-plugin/index.md)
-- [App plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/tests)
-- [Panel plugin with example tests](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-datalinks/tests)
+- [How to test panel plugins](./test-a-panel-plugin.md)
 - [Best practices around test isolation](./setup-resources.md#test-isolation)
 - [How to select UI elements](./selecting-ui-elements.md)
+- [Plugin examples repository](https://github.com/grafana/grafana-plugin-examples)
 
 ### Running tests in CI
 
