@@ -24,7 +24,7 @@ To write end-to-end tests similar to the ones in this guide, you'll need the `Te
 
 ## Test panel options
 
-The Table panel defines a custom panel option called `Show table header` by default. If the switch is not selected, the Table panel should remove headers from the table.
+The Table panel defines a custom panel option called `Show table header` by default. If the switch is disabled, the Table panel should remove headers from the table.
 
 The following test verifies that field names (headers) are displayed by default, and that they are removed when the `Show table header` option is not selected:
 
