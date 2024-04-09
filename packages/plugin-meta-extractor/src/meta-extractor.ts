@@ -1,8 +1,8 @@
 import * as ts from 'typescript';
-import { MetaBase } from './types';
+import { PluginExtensionMeta, PluginMeta } from './types';
 import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
 
-export function extractExtensionPoints(entry: string): MetaBase[] {
+export function extractExtensionPoints(entry: string): PluginExtensionMeta[] {
   const program = ts.createProgram([entry], {
     allowSyntheticDefaultImports: true,
     allowJs: true,

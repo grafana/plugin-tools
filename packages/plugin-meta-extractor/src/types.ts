@@ -1,22 +1,19 @@
-export enum MetaKind {
-  extensionLink = 'extensionLink',
-  extensionComponent = 'extensionComponent',
-}
+import { PluginExtensionTypes } from '@grafana/data';
 
-export interface MetaBase {
-  kind: MetaKind;
-}
+export type PluginMeta = {
+  extensions: PluginExtensionMeta[];
+};
 
-export interface ExtensionLinkMeta extends MetaBase {
-  kind: MetaKind.extensionLink;
+export type PluginExtensionMeta = {
+  type: PluginExtensionTypes;
   extensionPointId: string;
   title: string;
   description: string;
-}
+};
 
-export interface ExtensionComponentMeta extends MetaBase {
-  kind: MetaKind.extensionComponent;
-  extensionPointId: string;
-  title: string;
-  description: string;
-}
+export type PluginExtensionLinkMeta = PluginExtensionMeta & {
+  icon?: string;
+  category?: string;
+};
+
+export type PluginExtensionComponentMeta = PluginExtensionMeta & {};

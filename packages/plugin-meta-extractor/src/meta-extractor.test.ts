@@ -1,5 +1,6 @@
+import { PluginExtensionTypes } from '@grafana/data';
 import { extractExtensionPoints } from './meta-extractor';
-import { MetaBase, MetaKind, ExtensionComponentMeta, ExtensionLinkMeta } from './types';
+import { PluginExtensionLinkMeta, PluginExtensionComponentMeta } from './types';
 
 const fixturesPath = `${__dirname}/../fixtures`;
 const defaultExportFixtures = `${fixturesPath}/defaultExport`;
@@ -13,28 +14,28 @@ describe('When app is exported as a NAMED-EXPORT', () => {
 
       expect(extensionPoints).toHaveLength(4);
       expect(extensionPoints).toContainEqual(
-        createCommandExtensionMeta({
+        createPluginExtensionComponentMeta({
           extensionPointId: 'grafana/commandpalette/action',
           title: 'Component title 1',
           description: 'Component description 1',
         })
       );
       expect(extensionPoints).toContainEqual(
-        createLinkExtensionMeta({
+        createPluginExtensionLinkMeta({
           extensionPointId: 'grafana/dashboard/panel/menu',
           title: 'Link title 1',
           description: 'Link description 1',
         })
       );
       expect(extensionPoints).toContainEqual(
-        createCommandExtensionMeta({
+        createPluginExtensionComponentMeta({
           extensionPointId: 'grafana/dashboard/panel/menu',
           title: 'Component title 2',
           description: 'Component description 2',
         })
       );
       expect(extensionPoints).toContainEqual(
-        createLinkExtensionMeta({
+        createPluginExtensionLinkMeta({
           extensionPointId: 'grafana/commandpalette/action',
           title: 'Link title 2',
           description: 'Link description 2',
@@ -51,22 +52,22 @@ describe('When app is exported as a NAMED-EXPORT', () => {
   //     expect(extensionPoints).toHaveLength(4);
 
   //       expect(extensionPoints).toEqual([
-  //         createCommandExtensionMeta({
+  //         createPluginExtensionComponentMeta({
   //           extensionPointId: 'grafana/commandpalette/action',
   //           title: 'Component title 1',
   //           description: 'Component description 1',
   //         }),
-  //         createLinkExtensionMeta({
+  //         createPluginExtensionLinkMeta({
   //           extensionPointId: 'grafana/dashboard/panel/menu',
   //           title: 'Link title 1',
   //           description: 'Link description 1',
   //         }),
-  //         createCommandExtensionMeta({
+  //         createPluginExtensionComponentMeta({
   //           extensionPointId: 'grafana/dashboard/panel/menu',
   //           title: 'Component title 2',
   //           description: 'Component description 2',
   //         }),
-  //         createLinkExtensionMeta({
+  //         createPluginExtensionLinkMeta({
   //           extensionPointId: 'grafana/commandpalette/action',
   //           title: 'Link title 2',
   //           description: 'Link description 2',
@@ -83,32 +84,32 @@ describe('When app is exported as a NAMED-EXPORT', () => {
 //     const meta = extractPluginMeta(entry);
 
 //     expect(meta).toEqual([
-//       createCommandExtensionMeta({
+//       createPluginExtensionComponentMeta({
 //         extensionPointId: 'grafana/commandpalette/action',
 //         title: 'Component title 0',
 //         description: 'Component description 0',
 //       }),
-//       createLinkExtensionMeta({
+//       createPluginExtensionLinkMeta({
 //         extensionPointId: 'grafana/dashboard/panel/menu',
 //         title: 'Link title 0',
 //         description: 'Link description 0',
 //       }),
-//       createCommandExtensionMeta({
+//       createPluginExtensionComponentMeta({
 //         extensionPointId: 'grafana/commandpalette/action',
 //         title: 'Component title 1',
 //         description: 'Component description 1',
 //       }),
-//       createLinkExtensionMeta({
+//       createPluginExtensionLinkMeta({
 //         extensionPointId: 'grafana/dashboard/panel/menu',
 //         title: 'Link title 1',
 //         description: 'Link description 1',
 //       }),
-//       createCommandExtensionMeta({
+//       createPluginExtensionComponentMeta({
 //         extensionPointId: 'grafana/dashboard/panel/menu',
 //         title: 'Component title 2',
 //         description: 'Component description 2',
 //       }),
-//       createLinkExtensionMeta({
+//       createPluginExtensionLinkMeta({
 //         extensionPointId: 'grafana/commandpalette/action',
 //         title: 'Link title 2',
 //         description: 'Link description 2',
@@ -126,28 +127,28 @@ describe('When app is exported as a DEFAULT-EXPORT', () => {
 
       expect(extensionPoints).toHaveLength(4);
       expect(extensionPoints).toContainEqual(
-        createCommandExtensionMeta({
+        createPluginExtensionComponentMeta({
           extensionPointId: 'grafana/commandpalette/action',
           title: 'Component title 1',
           description: 'Component description 1',
         })
       );
       expect(extensionPoints).toContainEqual(
-        createLinkExtensionMeta({
+        createPluginExtensionLinkMeta({
           extensionPointId: 'grafana/dashboard/panel/menu',
           title: 'Link title 1',
           description: 'Link description 1',
         })
       );
       expect(extensionPoints).toContainEqual(
-        createCommandExtensionMeta({
+        createPluginExtensionComponentMeta({
           extensionPointId: 'grafana/dashboard/panel/menu',
           title: 'Component title 2',
           description: 'Component description 2',
         })
       );
       expect(extensionPoints).toContainEqual(
-        createLinkExtensionMeta({
+        createPluginExtensionLinkMeta({
           extensionPointId: 'grafana/commandpalette/action',
           title: 'Link title 2',
           description: 'Link description 2',
@@ -162,22 +163,22 @@ describe('When app is exported as a DEFAULT-EXPORT', () => {
   //     const meta = extractPluginMeta(entry);
 
   //     expect(meta).toEqual([
-  //       createCommandExtensionMeta({
+  //       createPluginExtensionComponentMeta({
   //         extensionPointId: 'grafana/commandpalette/action',
   //         title: 'Component title 1',
   //         description: 'Component description 1',
   //       }),
-  //       createLinkExtensionMeta({
+  //       createPluginExtensionLinkMeta({
   //         extensionPointId: 'grafana/dashboard/panel/menu',
   //         title: 'Link title 1',
   //         description: 'Link description 1',
   //       }),
-  //       createCommandExtensionMeta({
+  //       createPluginExtensionComponentMeta({
   //         extensionPointId: 'grafana/dashboard/panel/menu',
   //         title: 'Component title 2',
   //         description: 'Component description 2',
   //       }),
-  //       createLinkExtensionMeta({
+  //       createPluginExtensionLinkMeta({
   //         extensionPointId: 'grafana/commandpalette/action',
   //         title: 'Link title 2',
   //         description: 'Link description 2',
@@ -192,32 +193,32 @@ describe('When app is exported as a DEFAULT-EXPORT', () => {
   //     const meta = extractPluginMeta(entry);
 
   //     expect(meta).toEqual([
-  //       createCommandExtensionMeta({
+  //       createPluginExtensionComponentMeta({
   //         extensionPointId: 'grafana/commandpalette/action',
   //         title: 'Component title 0',
   //         description: 'Component description 0',
   //       }),
-  //       createLinkExtensionMeta({
+  //       createPluginExtensionLinkMeta({
   //         extensionPointId: 'grafana/dashboard/panel/menu',
   //         title: 'Link title 0',
   //         description: 'Link description 0',
   //       }),
-  //       createCommandExtensionMeta({
+  //       createPluginExtensionComponentMeta({
   //         extensionPointId: 'grafana/commandpalette/action',
   //         title: 'Component title 1',
   //         description: 'Component description 1',
   //       }),
-  //       createLinkExtensionMeta({
+  //       createPluginExtensionLinkMeta({
   //         extensionPointId: 'grafana/dashboard/panel/menu',
   //         title: 'Link title 1',
   //         description: 'Link description 1',
   //       }),
-  //       createCommandExtensionMeta({
+  //       createPluginExtensionComponentMeta({
   //         extensionPointId: 'grafana/dashboard/panel/menu',
   //         title: 'Component title 2',
   //         description: 'Component description 2',
   //       }),
-  //       createLinkExtensionMeta({
+  //       createPluginExtensionLinkMeta({
   //         extensionPointId: 'grafana/commandpalette/action',
   //         title: 'Link title 2',
   //         description: 'Link description 2',
@@ -227,16 +228,18 @@ describe('When app is exported as a DEFAULT-EXPORT', () => {
   // });
 });
 
-function createLinkExtensionMeta(meta: Omit<ExtensionLinkMeta, 'kind'>): MetaBase {
+function createPluginExtensionLinkMeta(meta: Omit<PluginExtensionLinkMeta, 'type'>): PluginExtensionLinkMeta {
   return {
-    kind: MetaKind.extensionLink,
+    type: PluginExtensionTypes.link,
     ...meta,
   };
 }
 
-function createCommandExtensionMeta(meta: Omit<ExtensionComponentMeta, 'kind'>): MetaBase {
+function createPluginExtensionComponentMeta(
+  meta: Omit<PluginExtensionComponentMeta, 'type'>
+): PluginExtensionComponentMeta {
   return {
-    kind: MetaKind.extensionComponent,
+    type: PluginExtensionTypes.component,
     ...meta,
   };
 }

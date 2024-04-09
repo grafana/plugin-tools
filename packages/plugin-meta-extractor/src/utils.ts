@@ -1,10 +1,10 @@
 import * as ts from 'typescript';
 import * as tsquery from '@phenomnomnominal/tsquery';
-import { MetaKind } from './types';
+import { PluginExtensionTypes } from '@grafana/data';
 
-const CONFIGURE_FUNCTION_TO_KIND: Record<string, MetaKind> = {
-  configureExtensionLink: MetaKind.extensionLink,
-  configureExtensionComponent: MetaKind.extensionComponent,
+const CONFIGURE_FN_NAME_TO_TYPE: Record<string, PluginExtensionTypes> = {
+  configureExtensionLink: PluginExtensionTypes.link,
+  configureExtensionComponent: PluginExtensionTypes.component,
 };
 
 export function getLinkExtensionsConfigs(ast: ts.Node, checker: ts.TypeChecker) {
@@ -27,7 +27,7 @@ export function getExtensionConfigs(functionName: string, ast: ts.Node, checker:
         const config = parseExtensionPointOptions(options, checker);
         extensionConfigs.push({
           ...config,
-          kind: CONFIGURE_FUNCTION_TO_KIND[functionName],
+          type: CONFIGURE_FN_NAME_TO_TYPE[functionName],
         });
       }
     }
