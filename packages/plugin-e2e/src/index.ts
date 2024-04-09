@@ -1,4 +1,4 @@
-import { test as base, expect as baseExpect, selectors } from '@playwright/test';
+import { test as base, expect as baseExpect } from '@playwright/test';
 
 import { AlertPageOptions, AlertVariant, ContainTextOptions, PluginFixture, PluginOptions } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
@@ -24,7 +24,6 @@ import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
 import { variableEditPage } from './fixtures/variableEditPage';
 import { options } from './options';
-import { grafanaE2ESelectorEngine } from './selectorEngine';
 import { toHaveAlert } from './matchers/toHaveAlert';
 import { toDisplayPreviews } from './matchers/toDisplayPreviews';
 import { toBeOK } from './matchers/toBeOK';
@@ -86,17 +85,6 @@ export const expect = baseExpect.extend({
   toDisplayPreviews,
   toBeOK,
 });
-
-/** Register a custom selector engine that resolves locators for Grafana E2E selectors
- *
- * The same functionality is available in the {@link GrafanaPage.getByGrafanaSelector} method. However,
- * by registering the selector engine, one can resolve locators by Grafana E2E selectors also within a locator.
- *
- * Example:
- * const queryEditorRow = await panelEditPage.getQueryEditorRow('A'); // returns a locator
- * queryEditorRow.locator(`selector=${selectors.components.TimePicker.openButton}`).click();
- * */
-selectors.register('selector', grafanaE2ESelectorEngine);
 
 export { selectors } from '@playwright/test';
 

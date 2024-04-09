@@ -64,12 +64,12 @@ Grafana comes with a set of built-in panels, and there's a variety of community 
 The `<page>.panel.data` property returns a [Playwright locator](https://playwright.dev/docs/locators) that resolves one or more elements that contain the values that are currently displayed in the Table panel. This means you can use any auto-retrying [matcher](https://playwright.dev/docs/test-assertions#auto-retrying-assertions) that accepts a locator as the receiving type.
 
 ```ts title="queryEditor.spec.ts"
-test('data query should return values 1 and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
+test('data query should return values 10 and 20', async ({ panelEditPage, readProvisionedDataSource }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
-  await expect(panelEditPage.panel.data).toContainText(['1', '3']);
+  await expect(panelEditPage.panel.data).toContainText(['10', '20']);
 });
 ```
 

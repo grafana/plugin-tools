@@ -81,7 +81,7 @@ export class PanelEditPage extends GrafanaPage {
   /**
    * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
    */
-  async setVisualization(visualization: Visualization) {
+  async setVisualization(visualization: Visualization | string) {
     // toggle options pane if panel edit is not visible
     const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
     const showPanelEditElementCount = await showPanelEditElement.count();
@@ -152,9 +152,9 @@ export class PanelEditPage extends GrafanaPage {
     );
 
     // in older versions of grafana, the refresh button is rendered twice. this is a workaround to click the correct one
-    const refreshPanelButton = this.getByGrafanaSelector(
-      this.ctx.selectors.components.PanelEditor.General.content
-    ).locator(`selector=${this.ctx.selectors.components.RefreshPicker.runButtonV2}`);
+    const refreshPanelButton = this.getByGrafanaSelector(this.ctx.selectors.components.RefreshPicker.runButtonV2, {
+      root: this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content),
+    });
 
     await refreshPanelButton.click();
 

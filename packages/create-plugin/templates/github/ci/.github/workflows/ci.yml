@@ -23,7 +23,7 @@ jobs:
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
 {{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -74,16 +74,30 @@ jobs:
       - name: Check for E2E
         id: check-for-e2e
         run: |
-          if [ -d "cypress" ]
+          if [ -f "playwright.config.ts" ]
           then
             echo "has-e2e=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Install Playwright Browsers
+        if: steps.check-for-e2e.outputs.has-e2e == 'true'
+        run: {{ packageManagerName }} exec playwright install --with-deps
 
       - name: Start grafana docker
         if: steps.check-for-e2e.outputs.has-e2e == 'true'
         run: docker-compose up -d
 
+      - name: Wait for Grafana to start
+        if: steps.check-for-e2e.outputs.has-e2e == 'true'
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3000/'
+          responseCode: 200
+          timeout: 60000
+          interval: 500
+
       - name: Run e2e tests
+        id: run-e2e-tests
         if: steps.check-for-e2e.outputs.has-e2e == 'true'
         run: {{ packageManagerName }} run e2e
 
@@ -95,8 +109,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: steps.check-for-e2e.outputs.has-e2e == 'true' && steps.run-e2e-tests.outcome != 'success'
         with:
-          name: cypress-videos
-          path: cypress/videos
+          name: playwright-report
+          path: playwright-report/
           retention-days: 5
 
       - name: Sign plugin

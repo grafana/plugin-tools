@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
-import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
+import { directoryExists, filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import {
@@ -17,7 +17,7 @@ import { TemplateData } from '../types.js';
 import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
-import { getConfig } from './utils.config.js';
+import { FeatureFlags, getConfig } from './utils.config.js';
 
 const debug = createDebug('templates');
 
@@ -95,6 +95,10 @@ export function getTemplateData(): TemplateData {
   const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+  const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
+  const e2eTestCmd = usePlaywright
+    ? 'playwright test'
+    : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
 
   const templateData = {
     ...EXTRA_TEMPLATE_VARIABLES,
@@ -113,6 +117,8 @@ export function getTemplateData(): TemplateData {
     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     useReactRouterV6: useReactRouterV6,
     reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
+    usePlaywright,
+    e2eTestCmd,
   };
 
   debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));

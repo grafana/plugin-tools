@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "4.4.5",
+  "version": "4.6.1",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"

@@ -12,7 +12,7 @@ export type APIs = {
     query: string;
     health: (uid: string, id: string) => string;
     datasourceByUID: (uid: string) => string;
-    proxy: (uid: string) => string;
+    proxy: (uid: string, id: string) => string;
   };
   Dashboard: {
     delete: (uid: string) => string;
@@ -180,10 +180,12 @@ export type Pages = {
           newButton: string;
           addVariableCTAV2: (variableName: string) => string;
           addVariableCTAV2Item: string;
+          table: string;
         };
         Edit: {
           url: (dashboardUid: string, editIndex: string) => string;
           General: {
+            selectionOptionsIncludeAllSwitch: string;
             generalTypeSelectV2: string;
             previewOfValuesOption: string;
             submitButton: string;
