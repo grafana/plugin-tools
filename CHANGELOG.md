@@ -1,3 +1,16 @@
+# (Tue Apr 09 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.1.0`
+  - Plugin E2E: Click on panel menu items [#865](https://github.com/grafana/plugin-tools/pull/865) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Apr 05 2024)
 
 #### 🐛 Bug Fix
