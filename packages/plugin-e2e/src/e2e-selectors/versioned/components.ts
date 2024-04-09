@@ -61,6 +61,8 @@ export const versionedComponents = {
       PanelDataErrorMessage: {
         '10.4.0': 'data-testid Panel data error message',
       },
+      menuItems: { '9.5.0': (item: string) => `data-testid Panel menu item ${item}` },
+      menu: { '9.5.0': (item: string) => `data-testid Panel menu ${item}` },
     },
     Visualization: {
       Table: {
@@ -80,6 +82,13 @@ export const versionedComponents = {
   VizLegend: {
     seriesName: {
       [MIN_GRAFANA_VERSION]: (name: string) => `VizLegend series ${name}`,
+    },
+  },
+  Drawer: {
+    General: {
+      title: {
+        [MIN_GRAFANA_VERSION]: (title: string) => `Drawer title ${title}`,
+      },
     },
   },
   PanelEditor: {

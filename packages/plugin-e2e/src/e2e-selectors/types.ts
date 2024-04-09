@@ -47,6 +47,8 @@ export type Components = {
       status: (status: string) => string;
       toggleTableViewPanel: (title: string) => string;
       PanelDataErrorMessage: string;
+      menuItems: (item: string) => string;
+      menu: (title: string) => string;
     };
     Visualization: {
       Table: {
@@ -58,6 +60,11 @@ export type Components = {
   };
   VizLegend: {
     seriesName: (name: string) => string;
+  };
+  Drawer: {
+    General: {
+      title: (title: string) => string;
+    };
   };
   PanelEditor: {
     General: {

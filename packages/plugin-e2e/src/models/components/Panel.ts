@@ -33,6 +33,33 @@ export class Panel extends GrafanaPage {
   }
 
   /**
+   * Click on a menu item in the panel menu.
+   *
+   * Pass options.parentItem to specify the parent item of the menu item to click.
+   */
+  async clickOnMenuItem(item: string, options?: { parentItem?: string }): Promise<void> {
+    let panelMenu = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.menu(''), {
+      startsWith: true,
+      root: this.locator,
+    });
+    let parentMenuItem = this.getByGrafanaSelector(
+      this.ctx.selectors.components.Panels.Panel.menuItems(options?.parentItem ?? '')
+    );
+    let menuItem = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.menuItems(item));
+
+    // before 9.5.0, there were no proper selectors for the panel menu items
+    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+      panelMenu = this.locator.getByRole('heading');
+      this.ctx.page.locator(`[aria-label="Panel header item ${options?.parentItem}"]`);
+      this.ctx.page.locator(`[aria-label="Panel header item ${item}"]`);
+    }
+
+    await panelMenu.click({ force: true });
+    options?.parentItem && parentMenuItem.hover();
+    await menuItem.click();
+  }
+
+  /**
    * Returns the locator for the panel error (if any)
    */
   getErrorIcon(): Locator {
