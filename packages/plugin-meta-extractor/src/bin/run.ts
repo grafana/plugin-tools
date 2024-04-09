@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { extractExtensionPoints } from '../meta-extractor';
+import { extractPluginMeta } from '../meta-extractor';
+const fs = require('fs');
 
 const entryPath = process.argv[2];
 
@@ -10,7 +11,20 @@ if (entryPath === undefined) {
   process.exit(1);
 }
 
-console.log(`Checking extension points for ${entryPath}`);
-const extensionPoints = extractExtensionPoints(entryPath);
-console.log(`Found ${extensionPoints.length} extension points:`);
-console.log(extensionPoints);
+// Check if the file exists
+if (!fs.existsSync(entryPath)) {
+  console.error(`File not found: ${entryPath}`);
+  process.exit(1);
+}
+
+// Check if it is a module file
+const fileName = entryPath.split('/').pop();
+if (!fileName?.match(/^(module\.ts|module\.tsx)$/)) {
+  console.error(
+    `The tool can only run against a "module.ts" or "module.tsx" plugin file.\nThe following path is invalid: "${entryPath}".`
+  );
+  process.exit(1);
+}
+
+const pluginMeta = extractPluginMeta(entryPath);
+console.log(JSON.stringify(pluginMeta, null, 4));

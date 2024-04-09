@@ -1,4 +1,7 @@
-import { PluginExtensionTypes } from '@grafana/data';
+export enum PluginExtensionTypes {
+  link = 'link',
+  component = 'component',
+}
 
 export type PluginMeta = {
   extensions: PluginExtensionMeta[];

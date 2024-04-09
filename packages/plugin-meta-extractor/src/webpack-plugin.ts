@@ -1,6 +1,6 @@
 import path from 'node:path';
 import * as webpack from 'webpack';
-import { extractExtensionPoints } from './meta-extractor.js';
+import { extractPluginMeta } from './meta-extractor.js';
 
 const DEFAULT_GENERATED_FILENAME = 'plugin.generated.json';
 
@@ -22,10 +22,10 @@ export class GrafanaPluginMetaExtractor {
       const { RawSource } = webpack.sources;
       const entryFile = this.options.entryFile || 'index.js';
       const entryFilePath = path.resolve(compiler.context, entryFile);
-      const extensionPoints = extractExtensionPoints(entryFilePath);
+      const pluginMeta = extractPluginMeta(entryFilePath);
 
       const newAssetName = this.options.outputAssetName || DEFAULT_GENERATED_FILENAME;
-      const newAssetContent = JSON.stringify(extensionPoints, null, 2);
+      const newAssetContent = JSON.stringify(pluginMeta, null, 2);
 
       compilation.assets[newAssetName] = new RawSource(newAssetContent);
 

@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import * as tsquery from '@phenomnomnominal/tsquery';
-import { PluginExtensionTypes } from '@grafana/data';
+import { PluginExtensionTypes } from './types';
 
 const CONFIGURE_FN_NAME_TO_TYPE: Record<string, PluginExtensionTypes> = {
   configureExtensionLink: PluginExtensionTypes.link,

@@ -2,7 +2,13 @@ import * as ts from 'typescript';
 import { PluginExtensionMeta, PluginMeta } from './types';
 import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
 
-export function extractExtensionPoints(entry: string): PluginExtensionMeta[] {
+export function extractPluginMeta(entry: string): PluginMeta {
+  const extensionPoints = extractPluginExtensions(entry);
+
+  return { extensions: extensionPoints };
+}
+
+export function extractPluginExtensions(entry: string): PluginExtensionMeta[] {
   const program = ts.createProgram([entry], {
     allowSyntheticDefaultImports: true,
     allowJs: true,

@@ -1,6 +1,5 @@
-import { PluginExtensionTypes } from '@grafana/data';
-import { extractExtensionPoints } from './meta-extractor';
-import { PluginExtensionLinkMeta, PluginExtensionComponentMeta } from './types';
+import { extractPluginExtensions } from './meta-extractor';
+import { PluginExtensionLinkMeta, PluginExtensionComponentMeta, PluginExtensionTypes } from './types';
 
 const fixturesPath = `${__dirname}/../fixtures`;
 const defaultExportFixtures = `${fixturesPath}/defaultExport`;
@@ -10,7 +9,7 @@ describe('When app is exported as a NAMED-EXPORT', () => {
   describe('and extensions registered by chaining function calls', () => {
     it('should return expected meta from app plugin', () => {
       const entry = `${namedExportFixtures}/chained.tsx`;
-      const extensionPoints = extractExtensionPoints(entry);
+      const extensionPoints = extractPluginExtensions(entry);
 
       expect(extensionPoints).toHaveLength(4);
       expect(extensionPoints).toContainEqual(
@@ -47,7 +46,7 @@ describe('When app is exported as a NAMED-EXPORT', () => {
   // describe('and extensions registered in external function', () => {
   //   it('should return expected meta from app plugin', () => {
   //     const entry = `${namedExportFixtures}/wrapped.ts`;
-  //     const extensionPoints = extractExtensionPoints(entry);
+  //     const extensionPoints = extractPluginExtensions(entry);
 
   //     expect(extensionPoints).toHaveLength(4);
 
@@ -123,7 +122,7 @@ describe('When app is exported as a DEFAULT-EXPORT', () => {
   describe('and extensions registered by chaining function calls', () => {
     it('should return expected meta from app plugin', () => {
       const entry = `${defaultExportFixtures}/chained.tsx`;
-      const extensionPoints = extractExtensionPoints(entry);
+      const extensionPoints = extractPluginExtensions(entry);
 
       expect(extensionPoints).toHaveLength(4);
       expect(extensionPoints).toContainEqual(
