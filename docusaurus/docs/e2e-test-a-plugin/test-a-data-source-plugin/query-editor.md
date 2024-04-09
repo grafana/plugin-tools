@@ -1,6 +1,6 @@
 ---
 id: data-queries
-title: Test the query editor
+title: Test data queries
 description: Testing the query editor and the execution of data queries
 keywords:
   - grafana

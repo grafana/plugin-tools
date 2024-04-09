@@ -1,6 +1,6 @@
 ---
 id: annotation-queries
-title: Test an annotation query
+title: Test annotation queries
 description: Test a custom annotation editor and the execution of annotation queries.
 keywords:
   - grafana
