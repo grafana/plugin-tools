@@ -53,9 +53,7 @@ export class DashboardPage extends GrafanaPage {
    * await expect(panel.fieldNames).toContainText(['time', 'temperature']);
    */
   getPanelByTitle(title: string): Panel {
-    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(title), {
-      startsWith: true,
-    });
+    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(title));
     // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
     if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
       locator = locator.locator('..').locator('..');
