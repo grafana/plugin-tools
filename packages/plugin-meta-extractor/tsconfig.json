@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "lib": ["ESNext"],
-    "types": ["node", "jest"],
     "outDir": "./dist",
     "stripInternal": true,
     "removeComments": false,
