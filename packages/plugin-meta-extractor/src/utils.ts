@@ -1,6 +1,9 @@
 import * as ts from 'typescript';
+import createDebug from 'debug';
 import * as tsquery from '@phenomnomnominal/tsquery';
 import { PluginExtensionTypes } from './types';
+
+const _debug = createDebug('plugin-meta-extractor');
 
 const CONFIGURE_FN_NAME_TO_TYPE: Record<string, PluginExtensionTypes> = {
   configureExtensionLink: PluginExtensionTypes.link,
@@ -97,4 +100,8 @@ export function parseExtensionPointOptions(options: ts.ObjectLiteralExpression, 
       description: '',
     }
   );
+}
+
+export function debug(...args: Parameters<typeof _debug>) {
+  _debug(...args);
 }

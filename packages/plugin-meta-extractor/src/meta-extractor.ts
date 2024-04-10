@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { PluginExtensionMeta, PluginMeta } from './types';
-import { getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
+import { debug, getLinkExtensionsConfigs, getComponentExtensionConfigs } from './utils';
 
 export function extractPluginMeta(entry: string): PluginMeta {
   const extensionPoints = extractPluginExtensions(entry);
@@ -18,12 +18,16 @@ export function extractPluginExtensions(entry: string): PluginExtensionMeta[] {
   const checker = program.getTypeChecker();
 
   if (!sourceFile) {
+    debug(`Source file not found for entry "${entry}".`);
     return [];
   }
 
   const [appNode] = findAppPluginDeclarationNode(sourceFile, checker);
 
   if (!appNode) {
+    debug(
+      `No app node found (This probably means that there was no AppPlugin class instantiated in the scanned code).`
+    );
     return [];
   }
 
