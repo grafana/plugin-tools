@@ -20,8 +20,9 @@
   "devDependencies": {
     "@babel/core": "^7.21.4",{{#unless usePlaywright}}
     "@grafana/e2e": "{{ grafanaVersion }}",
-    "@grafana/e2e-selectors": "{{ grafanaVersion }}",
-    "@grafana/eslint-config": "^6.0.0",
+    "@grafana/e2e-selectors": "{{ grafanaVersion }}",{{/unless}}
+    "@grafana/eslint-config": "^7.0.0",{{#if usePlaywright}}
+    "@grafana/plugin-e2e": "^1.0.1",{{/if}}
     "@grafana/tsconfig": "^1.2.0-rc1",{{#if usePlaywright}}
     "@playwright/test": "^1.41.2",{{/if}}
     "@swc/core": "^1.3.90",
