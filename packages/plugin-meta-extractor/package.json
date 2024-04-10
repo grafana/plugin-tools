@@ -16,13 +16,13 @@
     "access": "public"
   },
   "repository": {
-    "directory": "packages/pme",
+    "directory": "packages/plugin-meta-extractor",
     "url": "https://github.com/grafana/plugin-tools"
   },
   "keywords": [
     "grafana",
     "plugin",
-    "tool"
+    "plugin.json"
   ],
   "author": "Grafana",
   "license": "Apache-2.0",
