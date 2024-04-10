@@ -8,7 +8,7 @@
 npm install @grafana/plugin-meta-extractor
 ```
 
-### Usage
+## Usage
 
 #### With Webpack
 
@@ -54,7 +54,7 @@ By calling the binary against a (module.ts|tsx) file, the package will print out
 npx @grafana/plugin-meta-extractor ~/my-grafana-plugin/src/module.ts
 ```
 
-### Returned data format
+## Returned data format
 
 The returned meta-data is in the following format:
 
@@ -69,7 +69,7 @@ The returned meta-data is in the following format:
 }
 ```
 
-### Plugin support
+## Plugin support
 
 At this point the tool requires the `module.(ts|tsx)` to be in a certain format to be able to parse it (we are planning to improve on this in the future).
 
@@ -89,6 +89,6 @@ export const plugin = new AppPlugin<{}>()
 
 ---
 
-### Contributing
+## Contributing
 
 We are always grateful for contributions! See [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
