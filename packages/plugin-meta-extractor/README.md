@@ -2,7 +2,7 @@
 
 `@grafana/plugin-meta-extractor` is a small package that can be used to extract meta-information from the source code of a Grafana plugin. The main use case is to be able to automatically generate static information for a plugin without needing to manually edit the meta-info files (which might get forgotten).
 
-### Install
+## Install
 
 ```
 npm install @grafana/plugin-meta-extractor
