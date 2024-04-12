@@ -32,3 +32,11 @@ Search functionality is handled by a "local search" index built using (docusauru
 $ npm run build
 $ npm run serve
 ```
+
+### Redirects
+
+When moving a file, create a client-side redirect so as not to break links from the old location. It is a best practice to also manually update old links to the new location whenever possible.
+
+Insert the client-side redirect here: /plugin-tools/docusaurus/website/docusaurus.config.dev.js
+
+To test that the redirect works prior to publishing the PR, do this blah blah blah...
