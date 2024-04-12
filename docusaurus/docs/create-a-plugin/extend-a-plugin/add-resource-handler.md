@@ -26,7 +26,7 @@ Resource handler are also useful for building control panels that allow the user
 
 To add a resource handler to your backend plugin, you need to implement the `backend.CallResourceHandler` interface for your data source struct.
 
-```
+```go
 func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
     return sender.Send(&backend.CallResourceResponse{
         Status: http.StatusOK,
@@ -35,9 +35,9 @@ func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResour
 }
 ```
 
-You can then access your resources through the following endpoint: `https://community.grafana.com/api/datasources/<DATASOURCE_ID>/resources/`
+You can then access your resources through the following endpoint: `http://<grafana instance host:port>/api/datasources/uid/<DATASOURCE_IUD>/resources`
 
-In this example code, `DATASOURCE_ID` is an integer that uniquely identifies your data source.
+In this example code, `DATASOURCE_UID` is the data source unique identifier (UID) that uniquely identifies your data source.
 
 :::tip
 
@@ -102,7 +102,7 @@ What’s interesting with using [`http.Handler`](https://pkg.go.dev/net/http#Han
 
 An alternative to using the [`CallResource` method shown in the above example](#add-resource-handler-for-data-source-plugins) is to use [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) and [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) as shown below:
 
-```
+```go
 package mydatasource
 
 import (
