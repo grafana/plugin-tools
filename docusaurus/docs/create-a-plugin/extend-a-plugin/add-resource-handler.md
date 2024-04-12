@@ -26,7 +26,7 @@ Resource handler are also useful for building control panels that allow the user
 
 To add a resource handler to your backend plugin, you need to implement the `backend.CallResourceHandler` interface for your data source struct.
 
-```
+```go
 func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
     return sender.Send(&backend.CallResourceResponse{
         Status: http.StatusOK,
