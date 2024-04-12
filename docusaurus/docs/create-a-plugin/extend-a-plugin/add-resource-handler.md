@@ -153,13 +153,6 @@ Using some other HTTP router library with above example should be straightforwar
 
 :::
 
-### Additional examples
-
-Some other examples of using the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package can be found for some of the built-in Grafana data sources:
-
-- Test data source [grafana/testdata.go](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/testdata.go#L41-L42) at 30aa24a18396f61bfbcbfbeee78b1c0d23685fc3 - See code at the [grafana/grafana](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/testdata.go#L41-L42) repo.
-- Test data source [grafana/resource_handler.go](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/resource_handler.go#L18) at 30aa24a18396f61bfbcbfbeee78b1c0d23685fc3 - See code at the [grafana/grafana](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/resource_handler.go#L18) repo.
-
 ### What if you need access to the backend plugin context?
 
 Use the `PluginConfigFromContext` function to access `backend.PluginContext`:
@@ -180,3 +173,10 @@ func (d *MyDatasource) handleNamespaces(rw http.ResponseWriter, req *http.Reques
 	rw.WriteHeader(http.StatusOK)
 }
 ```
+### Additional examples
+
+Some other examples of using the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package can be found for some of the built-in Grafana data sources:
+
+- Test data source [grafana/testdata.go](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/testdata.go#L41-L42) at 30aa24a18396f61bfbcbfbeee78b1c0d23685fc3 - See code at the [grafana/grafana](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/testdata.go#L41-L42) repo.
+- Test data source [grafana/resource_handler.go](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/resource_handler.go#L18) at 30aa24a18396f61bfbcbfbeee78b1c0d23685fc3 - See code at the [grafana/grafana](https://github.com/grafana/grafana/blob/30aa24a18396f61bfbcbfbeee78b1c0d23685fc3/pkg/tsdb/testdatasource/resource_handler.go#L18) repo.
+
