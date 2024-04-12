@@ -180,5 +180,3 @@ func (d *MyDatasource) handleNamespaces(rw http.ResponseWriter, req *http.Reques
 	rw.WriteHeader(http.StatusOK)
 }
 ```
-
-Adding resource handlers to your backend plugins opens up more ways to make your plugin more dynamic.
