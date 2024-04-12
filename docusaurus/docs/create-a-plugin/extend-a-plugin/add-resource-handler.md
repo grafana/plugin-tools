@@ -14,7 +14,7 @@ keywords:
 
 # Add resource handler for data source plugins
 
-You can add a resource handler to your data source to extend the Grafana HTTP API with your own data source-specific routes. This guide explains why you may want to add resource handlers and some common ways for doing so.
+You can add a resource handler to your data source to extend the Grafana HTTP API with your own data source-specific routes. This guide explains why you may want to add [resource](/introduction/backend-plugins#resources) handlers and some common ways for doing so.
 
 ## Uses of resource handlers
 
