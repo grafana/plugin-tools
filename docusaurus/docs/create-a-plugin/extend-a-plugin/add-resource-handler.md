@@ -155,7 +155,7 @@ Using some other HTTP router library with above example should be straightforwar
 
 ### Additional examples
 
-Some other examples of using the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package can be found for some of the built-in Grafana data sources:
+Some other examples of using resource handlers and the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package:
 
 - [datasource-basic](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-basic) example:
   - [create resource handler](https://github.com/grafana/grafana-plugin-examples/blob/309228fffb09c092c08dbd3d17f45a656b2ec3c6/examples/datasource-basic/pkg/plugin/datasource.go#L39) and [register routes](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-basic/pkg/plugin/resource_handler.go) in the backend. 
