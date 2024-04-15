@@ -41,7 +41,7 @@ In this example code, `DATASOURCE_UID` is the data source unique identifier (UID
 
 :::tip
 
-To verify the data source ID, you can enter `window.grafanaBootData.settings.datasources` in the Developer Console, to list all the data source definitions in your Grafana instance.
+To verify the data source UID, you can enter `window.grafanaBootData.settings.datasources` in the Browser Developer Tools Console, to list all the configured data sources in your Grafana instance.
 
 :::
 
@@ -49,7 +49,7 @@ To verify the data source ID, you can enter `window.grafanaBootData.settings.dat
 
 To support multiple routes in your data source plugin, you can use a switch with the `req.Path`:
 
-```
+```go
 func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
 	switch req.Path {
 	case "namespaces":
@@ -75,7 +75,7 @@ With this, your plugin now has its own REST API that you can query from your que
 ```
 const observable = getBackendSrv()
   .fetch({
-    url: `/api/datasources/${props.datasource.id}/resources/namespaces`,
+    url: `/api/datasources/uid/${props.datasource.uid}/resources/namespaces`,
   });
 
 const response = await lastValueFrom(observable);
