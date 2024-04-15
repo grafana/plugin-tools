@@ -70,21 +70,6 @@ func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResour
 }
 ```
 
-With this, your plugin now has its own REST API that you can query from your query editor, using `BackendSrv.fetch()`.
-
-```
-const observable = getBackendSrv()
-  .fetch({
-    url: `/api/datasources/${props.datasource.id}/resources/namespaces`,
-  });
-
-const response = await lastValueFrom(observable);
-```
-
-In this example code, `props.datasource.id` gives you the data source ID of the query that’s being edited. For more information on how to use `BackendSrv.fetch()`, refer to [this forum post](https://community.grafana.com/t/how-to-migrate-from-backendsrv-datasourcerequest-to-backendsrv-fetch/58770).
-
-## Query resources with additional helpers
-
 You can also query your resources using the `getResource` and `postResource` helpers from the `DataSourceWithBackend` class.
 
 For example, in your query editor component, you can access the data source instance from the `props` object:
