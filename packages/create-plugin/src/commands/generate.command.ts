@@ -20,7 +20,9 @@ import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
-  const templateData = getTemplateData(answers);
+  const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+  const pluginId = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
+  const templateData = getTemplateData({ ...answers, pluginId, packageManagerName, packageManagerVersion });
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;

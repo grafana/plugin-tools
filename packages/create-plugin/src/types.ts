@@ -28,4 +28,6 @@ export type TemplateData = {
   reactRouterVersion: string;
   usePlaywright: boolean;
   e2eTestCmd: string;
+  hasGithubWorkflows: boolean;
+  hasGithubLevitateWorkflow: boolean;
 };

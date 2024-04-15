@@ -93,66 +93,48 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData(data?: CliArgs): TemplateData {
+export function getTemplateData(data?: Partial<TemplateData>): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
-
-  let templateData: TemplateData;
+  const pluginJson = getPluginJson();
+  const pluginType = data?.pluginType ?? pluginJson.type;
+  const packageManagerInfo = getPackageManagerWithFallback();
+  const packageManagerName = data?.packageManagerName ?? packageManagerInfo.packageManagerName;
+  const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+  const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
+  const githubFolder = path.join(process.cwd(), '.github', 'workflows');
+  const hasGithubWorkflows = data?.hasGithubWorkflows ?? isFile(path.join(githubFolder, 'ci.yml'));
+  const hasGithubLevitateWorkflow =
+    data?.hasGithubLevitateWorkflow ?? isFile(path.join(githubFolder, 'is-compatible.yml'));
+  const e2eTestCmd = usePlaywright
+    ? 'playwright test'
+    : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
 
-  if (data) {
-    const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
-    const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-    const e2eTestCmd = usePlaywright
-      ? 'playwright test'
-      : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
-    const useReactRouterV6 = features.useReactRouterV6 === true && data.pluginType === PLUGIN_TYPES.app;
-    templateData = {
-      ...EXTRA_TEMPLATE_VARIABLES,
-      ...data,
-      pluginId: normalizeId(data.pluginName, data.orgName, data.pluginType),
-      packageManagerName,
-      packageManagerInstallCmd,
-      packageManagerVersion,
-      isAppType: data.pluginType === PLUGIN_TYPES.app || data.pluginType === PLUGIN_TYPES.scenes,
-      isNPM: packageManagerName === 'npm',
-      version: currentVersion,
-      bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-      useReactRouterV6,
-      reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-      usePlaywright,
-      e2eTestCmd,
-    };
-  } else {
-    const pluginJson = getPluginJson();
-    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
-    const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-    const e2eTestCmd = usePlaywright
-      ? 'playwright test'
-      : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
-    const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
-    templateData = {
-      ...EXTRA_TEMPLATE_VARIABLES,
-      pluginId: pluginJson.id,
-      pluginName: pluginJson.name,
-      pluginDescription: pluginJson.info?.description,
-      hasBackend: pluginJson.backend,
-      orgName: pluginJson.info?.author?.name,
-      pluginType: pluginJson.type,
-      packageManagerName,
-      packageManagerInstallCmd,
-      packageManagerVersion,
-      isAppType: pluginJson.type === PLUGIN_TYPES.app || pluginJson.type === PLUGIN_TYPES.scenes,
-      isNPM: packageManagerName === 'npm',
-      version: currentVersion,
-      bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-      useReactRouterV6,
-      reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-      usePlaywright,
-      e2eTestCmd,
-    };
-  }
+  const templateData = {
+    ...EXTRA_TEMPLATE_VARIABLES,
+    pluginId: data?.pluginId ?? pluginJson.id,
+    pluginName: data?.pluginName ?? pluginJson.name,
+    pluginDescription: data?.pluginName ?? pluginJson.info?.description,
+    hasBackend: data?.hasBackend ?? pluginJson.backend,
+    orgName: data?.orgName ?? pluginJson.info?.author?.name,
+    pluginType,
+    packageManagerName: packageManagerName,
+    packageManagerInstallCmd: packageManagerInstallCmd,
+    packageManagerVersion: data?.packageManagerVersion ?? packageManagerInfo.packageManagerVersion,
+    isAppType: pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes,
+    isNPM: packageManagerName === 'npm',
+    version: currentVersion,
+    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
+    useReactRouterV6,
+    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
+    usePlaywright,
+    e2eTestCmd,
+    hasGithubWorkflows,
+    hasGithubLevitateWorkflow,
+  };
 
   debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
+
   return templateData;
 }
