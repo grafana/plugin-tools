@@ -7,7 +7,6 @@ import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, 
 import { getConfig } from '../utils/utils.config.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
-import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
 import { renderTemplateFromFile, getTemplateData } from '../utils/utils.templates.js';
 import { normalizeId } from '../utils/utils.handlebars.js';
@@ -20,9 +19,8 @@ import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
-  const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
   const pluginId = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-  const templateData = getTemplateData({ ...answers, pluginId, packageManagerName, packageManagerVersion });
+  const templateData = getTemplateData({ ...answers, pluginId });
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;

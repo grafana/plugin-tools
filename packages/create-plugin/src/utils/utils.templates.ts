@@ -96,10 +96,10 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(data?: Partial<TemplateData>): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
-  const pluginJson = getPluginJson();
-  const pluginType = data?.pluginType ?? pluginJson.type;
-  const packageManagerInfo = getPackageManagerWithFallback();
-  const packageManagerName = data?.packageManagerName ?? packageManagerInfo.packageManagerName;
+  const pluginJson = data ? undefined : getPluginJson();
+  const pluginType = data?.pluginType ?? pluginJson?.type;
+  const packageManagerInfo = data ? getPackageManagerFromUserAgent() : getPackageManagerWithFallback();
+  const packageManagerName = packageManagerInfo.packageManagerName;
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
@@ -113,15 +113,15 @@ export function getTemplateData(data?: Partial<TemplateData>): TemplateData {
 
   const templateData = {
     ...EXTRA_TEMPLATE_VARIABLES,
-    pluginId: data?.pluginId ?? pluginJson.id,
-    pluginName: data?.pluginName ?? pluginJson.name,
-    pluginDescription: data?.pluginName ?? pluginJson.info?.description,
-    hasBackend: data?.hasBackend ?? pluginJson.backend,
-    orgName: data?.orgName ?? pluginJson.info?.author?.name,
+    pluginId: data?.pluginId ?? pluginJson?.id,
+    pluginName: data?.pluginName ?? pluginJson?.name,
+    pluginDescription: data?.pluginName ?? pluginJson?.info?.description,
+    hasBackend: data?.hasBackend ?? pluginJson?.backend,
+    orgName: data?.orgName ?? pluginJson?.info?.author?.name,
     pluginType,
     packageManagerName: packageManagerName,
     packageManagerInstallCmd: packageManagerInstallCmd,
-    packageManagerVersion: data?.packageManagerVersion ?? packageManagerInfo.packageManagerVersion,
+    packageManagerVersion: packageManagerInfo.packageManagerVersion,
     isAppType: pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes,
     isNPM: packageManagerName === 'npm',
     version: currentVersion,
