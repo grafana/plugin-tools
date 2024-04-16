@@ -22,7 +22,6 @@ import {
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
 import { FeatureFlags, getConfig } from './utils.config.js';
-import { get } from 'node:http';
 
 const debug = createDebug('templates');
 
