@@ -37,18 +37,51 @@ When you create an extension point in a plugin, you create a public interface fo
 
 :::
 
-Use the `getPluginLinkExtensions` method in `@grafana/runtime` to create an extension point within your plugin.
+You can easily create an extension point using the following functions (they live in `@grafana/runtime`) to fetch extensions for a certain extension point ID:
 
-The `getPluginLinkExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugins/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can then loop over.
+### `getPluginExtensions()` - _deprecated_
 
-In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID. The context is passed as the second parameter to `getPluginLinkExtensions`, which makes the context immutable before passing it to other plugins.
+The `getPluginExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugins/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can then loop over.
+
+#### Syntax
+
+```tsx
+getPluginExtensions(options);
+getPluginLinkExtensions(options); // Only returns extensions that have type `type="link"`
+getPluginComponentExtensions(options); // Only returns extensions that have type `type="component"`
+```
+
+#### Parameters
+
+##### `options.extensionPointId` - _string_
+
+The unique identifier of your extension point. It must begin with `plugins/<PLUGIN_ID>`, for example: `plugins/myorg-super-app`.
+
+##### `options?.context` - _object (Optional)_
+
+An arbitrary object, that contains information related to your extension point which you would like to share with the extensions, for example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions, for those you can pass contextual information using the component props. **Note:** the provided context object always gets frozen (turned immutable) before being shared with the extensions.
+
+##### `options?.limitPerPlugin` - _number (Optional)_
+
+It can be used to limit maximum how many extensions should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
+
+#### Return value
+
+- `getPluginExtensions()` - returns a mixed list of [`PluginExtensionLink`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L27) and [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35C13-L35C37)
+- `getPluginLinkExtensions()` - returns a list of [`PluginExtensionLink`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L27)
+- `getPluginComponentExtensions()` - returns a list of [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35C13-L35C37)
+
+#### Example - rendering link extensions
+
+In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
 
 ```tsx
 import { getPluginLinkExtensions } from '@grafana/runtime';
 import { LinkButton } from '@grafana/ui';
 
 function AppMenuExtensionPoint() {
-  const { extensions } = getPluginExtensions({
+  // This only returns type="link" extensions
+  const { extensions } = getPluginLinkExtensions({
     extensionPointId: 'plugins/another-app-plugin/menu',
     context: {
       referenceId: '12345',
@@ -79,15 +112,7 @@ function AppMenuExtensionPoint() {
 }
 ```
 
-#### Why does the extension have `onClick` and `path`?
-
-Each extension link has either a `path` or an `onClick` property defined. There's never a scenario where both properties are defined at the same time.
-
-The reason for this behavior is that we want to be able to support both native browser links and callbacks. If the plugin adding the extension wants to navigate the user away from the current view into their app, then they can choose to define a path.
-
-If instead you want to open a modal or trigger a background task without sending the user away from the current page, then you can provide a callback.
-
-### Example: create an extension point for displaying components
+#### Example - rendering component extensions
 
 :::note
 
@@ -101,6 +126,8 @@ Component type extensions are simple React components, which gives much more fre
 import { getPluginComponentExtensions } from '@grafana/runtime';
 
 export const Toolbar = () => {
+  // This only returns type="component" extensions
+  // Heads up! We don't specify a context object below, we pass in the contextual information as a prop to the component later.
   const { extensions } = getPluginComponentExtensions({ extensionPointId: '<extension-point-id>' });
   const version = '1.0.0'; // Let's share this with the extensions
 
@@ -126,7 +153,3 @@ export const Toolbar = () => {
   );
 };
 ```
-
-## Additional options
-
-If you want to limit how many extensions a plugin can register for your extension point, you can pass the `limitPerPlugin` option as part of the `getPluginLinkExtensions` call. The default limit is set to five extensions per plugin to prevent plugins from flooding your extension point.
