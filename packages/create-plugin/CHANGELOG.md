@@ -1,3 +1,15 @@
+# v4.6.2 (Wed Apr 17 2024)
+
+#### 🐛 Bug Fix
+
+- Build: Introduce stricter typechecking [#868](https://github.com/grafana/plugin-tools/pull/868) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.6.1 (Fri Apr 05 2024)
 
 #### 🐛 Bug Fix

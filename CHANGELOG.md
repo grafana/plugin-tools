@@ -1,3 +1,21 @@
+# (Wed Apr 17 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.6.2`, `@grafana/plugin-e2e@1.1.1`
+  - Build: Introduce stricter typechecking [#868](https://github.com/grafana/plugin-tools/pull/868) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump express from 4.18.2 to 4.19.2 [#841](https://github.com/grafana/plugin-tools/pull/841) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Apr 09 2024)
 
 #### 🚀 Enhancement
