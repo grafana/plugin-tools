@@ -1,6 +1,6 @@
 ---
 id: create-an-extension-point
-title: Create an extension point in your app plugin
+title: Create an extension point
 sidebar_label: Create an extension point
 sidebar_position: 2
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
@@ -15,19 +15,25 @@ keywords:
   - apps
 ---
 
-Providing an extension point within your UI enables other plugins to contribute supplementary capabilities, and leverage the context within the current view to guide users to a potential next step. Here's what you need to know about extension points.
+## What is an extension point?
 
-Firstly, you will need to define an extension point ID. This is basically just a string describing the part of the UI where the extension point lives. Extension developers should be able to figure out where in the UI the extension will be added by reading the extension point ID.
+An extension point is a place in the UI which you make extendable by other plugins using extensions. These extensions can be either be links or simple React components (that can basically impelement anything). It's up to you how you are displaying the handling or displaying the extensions, we have some examples below.
+
+You can also share contextual information with the extensions using a `context` object or component props (see the examples below).
+
+### Requirements
+
+- **an extension point ID** _(string)_
+  - In case it's an extension point in core Grafana, it must start with `grafana/`
+  - In case it's inside a plugin, it must start with `plugin/<PLUGIN_ID>/`
+  - It must be unique
+- **an app plugin** - _currently only app plugins can create extension points_
 
 :::note
 
-Extension points living in core Grafana must start with `grafana/` and extension points living in plugins must have IDs starting with `plugins/` followed by the plugin ID, for example, `plugins/<PLUGIN_ID>/`.
+Consider the design the UI of the extension point so it supports a scenario where multiple extensions are being added without breaking the UI. Also consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the functionality being added via the extension.
 
 :::
-
-The second thing you need to consider is how to design the UI of the extension point so it supports a scenario where multiple extensions are being added without breaking the UI.
-
-Finally, consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the functionality being added via the extension.
 
 ## Create an extension point
 
