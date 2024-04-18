@@ -55,6 +55,7 @@ function findAppPluginDeclarationNode(entry: ts.SourceFile, checker: ts.TypeChec
         }
       }
 
+      // Continue to the next node
       return false;
     }
 
@@ -65,6 +66,7 @@ function findAppPluginDeclarationNode(entry: ts.SourceFile, checker: ts.TypeChec
       });
 
       if (!isExported) {
+        // Continue to the next node
         return false;
       }
 
@@ -83,12 +85,14 @@ function findAppPluginDeclarationNode(entry: ts.SourceFile, checker: ts.TypeChec
         return true;
       }
 
+      // Continue to the next node
       return false;
     }
 
     // Check if it is a named re-export
     if (ts.isExportDeclaration(node)) {
       if (!node.exportClause || !ts.isNamedExports(node.exportClause)) {
+        // Continue to the next node
         return false;
       }
 
@@ -107,8 +111,12 @@ function findAppPluginDeclarationNode(entry: ts.SourceFile, checker: ts.TypeChec
         return true;
       }
 
+      // Continue to the next node
       return false;
     }
+
+    // Continue to the next node
+    return false;
   });
 
   return [appNode, rootNodes];
