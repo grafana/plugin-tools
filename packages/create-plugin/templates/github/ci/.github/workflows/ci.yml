@@ -86,6 +86,8 @@ jobs:
       - name: Start grafana docker
         if: steps.check-for-e2e.outputs.has-e2e == 'true'
         run: docker-compose up -d
+        env:
+          DEVELOPMENT: "false"
 
       - name: Wait for Grafana to start
         if: steps.check-for-e2e.outputs.has-e2e == 'true'
