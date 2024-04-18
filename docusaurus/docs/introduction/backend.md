@@ -29,9 +29,9 @@ Since Grafana v7.0, we have supported server-side plugins that remove this limit
 
 The following examples give some common use cases for backend plugins:
 
-- Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for data sources.
+- Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/) and [Query and resource caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching) for data sources.
 - Connect to SQL database servers and other non-HTTP services that normally can't be connected to from a browser.
-- Keep state between users, for example, by query caching for data sources.
+- Keep state between users, for example, by implementing custom caching for data sources.
 - Use custom authentication methods and/or authorization checks that aren't supported in Grafana.
 - Use a custom data source request proxy (refer to [Resources](#resources) for more information).
 
