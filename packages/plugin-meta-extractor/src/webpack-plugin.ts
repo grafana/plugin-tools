@@ -50,11 +50,20 @@ export class GrafanaPluginMetaExtractor {
       const entryFile = this.options.entryFile;
       const entryFilePath = path.resolve(compiler.context, entryFile);
       const pluginMeta = extractPluginMeta(entryFilePath);
+      const pluginJsonFilename = 'plugin.json';
+      const pluginJsonAsset = compilation.getAsset(pluginJsonFilename);
+      const pluginJsonString = pluginJsonAsset ? pluginJsonAsset.source.source().toString() : '{}';
+      const pluginJson = JSON.parse(pluginJsonString);
+      const modifiedPluginJson = JSON.stringify(
+        {
+          ...pluginJson,
+          generated: pluginMeta,
+        },
+        null,
+        4
+      );
 
-      const newAssetName = this.options.outputAssetName || DEFAULT_GENERATED_FILENAME;
-      const newAssetContent = JSON.stringify(pluginMeta, null, 2);
-
-      compilation.emitAsset(newAssetName, new RawSource(newAssetContent));
+      compilation.updateAsset(pluginJsonFilename, new RawSource(modifiedPluginJson));
 
       callback();
     });
