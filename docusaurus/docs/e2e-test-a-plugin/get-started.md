@@ -68,9 +68,11 @@ groupId="package-manager"
 queryString="current-package-manager"
 />
 
-### Step 3: Setup CI
+### Step 3: Run tests in CI
 
-If you chose to add a Github workflow when you scaffolded the plugin, the Playwright end-to-end tests will be run in CI targeting the most recent version of Grafana. To take full advantage of plugin-e2e, it's recommended to follow the instructions in the [CI](./ci.md) guide to run Playwright end-to-end tests targeting all versions of Grafana that your plugin supports.
+The [`grafanaDependency`](../metadata.md#properties-1) property in the plugin.json file dictates what versions of Grafana the plugin is compatible with. It's recommended to run your Playwright end-to-end tests targeting all the supported versions. The Github workflow that was included when scaffolding the plugin ensures this is the case.
+
+If you chose to not add a Github workflow when you scaffolded the plugin, it's recommended to follow the instructions in the [CI](./ci.md) guide to run Playwright end-to-end tests targeting all versions of Grafana that your plugin supports.
 
 ## What's next?
 
