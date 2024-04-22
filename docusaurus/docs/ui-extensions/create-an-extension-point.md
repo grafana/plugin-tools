@@ -71,7 +71,7 @@ The unique identifier of your extension point. It must begin with `plugins/<PLUG
 
 ##### `options?.context` - _object (Optional)_
 
-As an arbitrary object, it contains information related to your extension point that you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions because you can pass contextual information using the component props. 
+As an arbitrary object, it contains information related to your extension point that you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions because you can pass contextual information using the component props.
 
 :::note
 
@@ -199,11 +199,11 @@ function AppMenuExtensionPoint({ referenceId }) {
 
 :::note
 
-**This feature is only available in Grafana versions 10.1.0 and above.
+\*\*This feature is only available in Grafana versions 10.1.0 and above.
 
 :::
 
-Component type extensions are simple React components, which gives much more freedom on what they are able to do. You can pass contextual information to the extension components using props.
+Component type extensions are simple React components, which gives you much more freedom in what you can make them do. You can pass contextual information to the extension components using props.
 
 ```tsx title="src/components/Toolbar.tsx"
 import { usePluginComponentExtensions } from '@grafana/runtime';
@@ -263,9 +263,9 @@ The unique identifier of your extension point. It must begin with `plugins/<PLUG
 
 ##### `options?.context` - _object (Optional)_
 
-As an arbitrary object, it contains information related to your extension point which you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. 
+As an arbitrary object, it contains information related to your extension point which you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`.
 
-This parameter is not available for component extensions; for those, you can pass contextual information using the component props. 
+This parameter is not available for component extensions; for those, you can pass contextual information using the component props.
 
 :::note
 
