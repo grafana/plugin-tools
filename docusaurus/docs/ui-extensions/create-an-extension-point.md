@@ -71,7 +71,7 @@ The unique identifier of your extension point. It must begin with `plugins/<PLUG
 
 ##### `options?.context` - _object (Optional)_
 
-As an arbitrary object, it contains information related to your extension point that you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions because you can pass contextual information using the component props.
+An object containing information related to your extension point that you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions, instead you should pass contextual information using the component props.
 
 :::note
 
