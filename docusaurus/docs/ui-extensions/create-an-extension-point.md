@@ -31,7 +31,7 @@ You can also share contextual information with the extensions using a `context` 
 
 :::note
 
-Consider the design of the UI of the extension point so it supports a scenario where multiple extensions can be added without breaking the UI. Also consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the extension's functionality.
+When designing the UI make sure the extension point supports a scenario where multiple extensions can be added without breaking the UI. Also consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin pre-fill values or other data in the extension's functionality.
 
 :::
 
