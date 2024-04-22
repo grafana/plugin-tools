@@ -200,12 +200,6 @@ function AppMenuExtensionPoint({ referenceId }) {
 
 #### Example - rendering component extensions
 
-:::note
-
-\*\*This feature is only available in Grafana versions 10.1.0 and above.
-
-:::
-
 Component type extensions are simple React components, which gives you much more freedom in what you can make them do. You can pass contextual information to the extension components using props.
 
 ```tsx title="src/components/Toolbar.tsx"
