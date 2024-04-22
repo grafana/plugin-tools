@@ -53,7 +53,7 @@ test('test annotation query', async ({ gotoAnnotationEditPage }) => {
 });
 ```
 
-To learn how to provisiong the Grafana instance with the resources that you need, have a look at [this](./setup-resources.md) guide.
+To learn how to provision the Grafana instance with the resources that you need, refer to the [Set up resources](./setup-resources.md) guide.
 
 ## Expect matchers
 
