@@ -19,7 +19,7 @@ keywords:
 
 An extension point is a place in the UI which you make extendable by other plugins using extensions. These extensions can be either be links or simple React components (that can basically impelement anything). It's up to you how you are displaying the handling or displaying the extensions, we have some examples below.
 
-You can also share contextual information with the extensions using a `context` object or component props (see the examples below).
+You can also share contextual information with the extensions using a `context` object or component props (see the following examples).
 
 ### Requirements
 
@@ -31,7 +31,7 @@ You can also share contextual information with the extensions using a `context` 
 
 :::note
 
-Consider the design the UI of the extension point so it supports a scenario where multiple extensions are being added without breaking the UI. Also consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the functionality being added via the extension.
+Consider the design of the UI of the extension point so it supports a scenario where multiple extensions can be added without breaking the UI. Also consider if there is any information from the current view that should be shared with the extensions added to the extension point. It could be information from the current view that could let the extending plugin prefill values or other data in the extension's functionality.
 
 :::
 
@@ -45,15 +45,15 @@ When you create an extension point in a plugin, you create a public interface fo
 
 You can easily create an extension point using the following functions (they live in `@grafana/runtime`) to fetch extensions for a certain extension point ID:
 
-### `usePluginExtensions()`
+### The `usePluginExtensions()` hook
 
 :::note
 
-**Performance tip:** in case the `context` object is created dynamically, make sure to wrap it into a `useMemo()` to prevent unnecesssary rerenders. [More info](#)
+In case the `context` object is created dynamically, make sure to wrap it into a `useMemo()` to prevent unnecesssary rerenders. [More info](#)
 
 :::
 
-The `usePluginExtensions` react hooks returns the list of extensions that are registered for a certain extension point ID. The hook will dynamically update its return value when the list of extensions changes - this usually happens when extensions are registered during runtime due to dynamic plugin loading.
+The `usePluginExtensions` React hooks returns the list of extensions that are registered for a certain extension point ID. The hook dynamically updates its return value when the list of extensions changes. This behavior usually happens when extensions are registered during runtime due to dynamic plugin loading.
 
 #### Syntax
 
@@ -67,15 +67,21 @@ usePluginComponentExtensions(options); // Only returns extensions that have type
 
 ##### `options.extensionPointId` - _string_
 
-The unique identifier of your extension point. It must begin with `plugins/<PLUGIN_ID>`, for example: `plugins/myorg-super-app`.
+The unique identifier of your extension point. It must begin with `plugins/<PLUGIN_ID>`. For example: `plugins/myorg-super-app`.
 
 ##### `options?.context` - _object (Optional)_
 
-An arbitrary object, that contains information related to your extension point which you would like to share with the extensions, for example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions, for those you can pass contextual information using the component props. **Note:** the provided context object always gets frozen (turned immutable) before being shared with the extensions.
+As an arbitrary object, it contains information related to your extension point that you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions because you can pass contextual information using the component props. 
+
+:::note
+
+The provided context object always gets frozen (turned immutable) before being shared with the extensions.
+
+:::
 
 ##### `options?.limitPerPlugin` - _number (Optional)_
 
-It can be used to limit maximum how many extensions should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
+Use thie parameter to set the maximum value for how many extensions should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
 
 #### Return value
 
@@ -105,7 +111,7 @@ The hooks return an object in the following format:
 
 #### Example - rendering link extensions (static context)
 
-In the following example we render a link component all link-type extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
+The following example shows how to render a link component all link-type extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
 
 ```tsx
 import { usePluginLinkExtensions } from '@grafana/runtime';
@@ -145,12 +151,12 @@ function AppMenuExtensionPoint() {
 
 #### Example - rendering link extensions (dynamic context)
 
-In this example we are creating the context object dynamically. Although this is a common practice, we have to be aware, that the `usePluginLinkExtensions()` hook will rerender in the following scenarios:
+The following example shows how to create the context object dynamically. Although this is a common practice, you should be aware that the `usePluginLinkExtensions()` hook will re-render in the following scenarios:
 
-- IF the `context` object changes _(so the extensions can react to the context changes)_
-- IF the extension-registry changes
+- If the `context` object changes _(so the extensions can react to the context changes)_
+- If the extension-registry changes
 
-Because of these we have to make sure, that we only change the `context` object if its content changes, otherwise we will cause unnecessary rerenders. The following example shows how to approach these scenarios in a safe way:
+Be sure to only change the `context` object if its content changes; otherwise, you could create unnecessary re-renders. The following example shows how to approach these scenarios in a safe way:
 
 ```tsx
 import { useMemo } from 'react';
@@ -193,7 +199,7 @@ function AppMenuExtensionPoint({ referenceId }) {
 
 :::note
 
-**Available in Grafana >=10.1.0** <br /> (_Component type extensions are only available in Grafana 10.1.0 and above._)
+**This feature is only available in Grafana versions 10.1.0 and above.
 
 :::
 
@@ -230,14 +236,14 @@ export const Toolbar = () => {
 };
 ```
 
-### `getPluginExtensions()` - _deprecated_
+### The `getPluginExtensions()` method - _deprecated_
 
 The `getPluginExtensions` method takes an object consisting of the `extensionPointId`, which must begin `plugins/<PLUGIN_ID>`, and any contextual information that you want to provide. The `getPluginLinkExtensions` method returns a list of extension links that your program can then loop over.
 
 :::note
 
 This function only returns the state of the extensions registry (the extensions registered by plugins) at a given time. If there are extensions registered by plugins after that point in time, you won't receive them. <br />
-**We strongly suggest to use the reactive [`usePluginExtensions()`](#usepluginextensions) hook instead wherever possible.**
+As a best practice, use the reactive [`usePluginExtensions()`](#usepluginextensions) hook instead wherever possible.
 
 :::
 
@@ -253,15 +259,23 @@ getPluginComponentExtensions(options); // Only returns extensions that have type
 
 ##### `options.extensionPointId` - _string_
 
-The unique identifier of your extension point. It must begin with `plugins/<PLUGIN_ID>`, for example: `plugins/myorg-super-app`.
+The unique identifier of your extension point. It must begin with `plugins/<PLUGIN_ID>`. For example: `plugins/myorg-super-app`.
 
 ##### `options?.context` - _object (Optional)_
 
-An arbitrary object, that contains information related to your extension point which you would like to share with the extensions, for example: `{ baseUrl: '/foo/bar' }`. This parameter is not available for component extensions, for those you can pass contextual information using the component props. **Note:** the provided context object always gets frozen (turned immutable) before being shared with the extensions.
+As an arbitrary object, it contains information related to your extension point which you would like to share with the extensions. For example: `{ baseUrl: '/foo/bar' }`. 
+
+This parameter is not available for component extensions; for those, you can pass contextual information using the component props. 
+
+:::note
+
+The provided context object always gets frozen (turned immutable) before being shared with the extensions.
+
+:::
 
 ##### `options?.limitPerPlugin` - _number (Optional)_
 
-It can be used to limit maximum how many extensions should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
+Use this method to specify the maximum amount of extensions that should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
 
 #### Return value
 
