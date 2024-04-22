@@ -15,7 +15,6 @@ keywords:
   - apps
 ---
 
-
 In this guide you will learn how to provide an extension point so that other app plugins can add their extensions to your plugin.
 
 ## What is an extension point?
@@ -52,7 +51,7 @@ You can easily create an extension point using the following functions (they liv
 
 :::note
 
-In case the `context` object is created dynamically, make sure to wrap it into a `useMemo()` to prevent unnecesssary rerenders. [More info](#)
+In case the `context` object is created dynamically, make sure to wrap it into a `useMemo()` to prevent unnecesssary rerenders. [More info](#example---rendering-link-extensions-dynamic-context)
 
 :::
 
