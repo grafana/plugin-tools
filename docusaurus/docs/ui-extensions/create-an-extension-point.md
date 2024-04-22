@@ -163,7 +163,7 @@ import { useMemo } from 'react';
 import { usePluginLinkExtensions } from '@grafana/runtime';
 
 function AppMenuExtensionPoint({ referenceId }) {
-  // Instead of just defining the object here (which would result in a new object on every render),
+  // Instead of defining the object here (which would result in a new object on every render),
   // we use `useMemo()` to only update the context object when its "dynamic" dependencies change.
   const context = useMemo(
     () => ({
