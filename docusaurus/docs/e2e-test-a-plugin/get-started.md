@@ -70,7 +70,7 @@ queryString="current-package-manager"
 
 ### Step 3: Run tests in CI
 
-The [`grafanaDependency`](../metadata.md#properties-1) property in the plugin.json file dictates what versions of Grafana the plugin is compatible with. It's recommended to run your Playwright end-to-end tests targeting all the supported versions. The Github workflow that was included when scaffolding the plugin ensures this is the case.
+The [`grafanaDependency`](../metadata.md#properties-1) property in the `plugin.json` file specifies what versions of Grafana the plugin is compatible with. As a best practice, run your Playwright end-to-end tests targeting all the supported versions. The GitHub workflow that was included when scaffolding the plugin ensures this is the case.
 
 If you chose to not add a Github workflow when you scaffolded the plugin, it's recommended to follow the instructions in the [CI](./ci.md) guide to run Playwright end-to-end tests targeting all versions of Grafana that your plugin supports.
 
