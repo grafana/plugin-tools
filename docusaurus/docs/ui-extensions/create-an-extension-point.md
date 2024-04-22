@@ -81,7 +81,7 @@ The provided context object always gets frozen (turned immutable) before being s
 
 ##### `options?.limitPerPlugin` - _number (Optional)_
 
-Use thie parameter to set the maximum value for how many extensions should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
+Use this parameter to set the maximum value for how many extensions should be returned from the same plugin. It can be useful in cases when there is limited space on the UI to display extensions.
 
 #### Return value
 
