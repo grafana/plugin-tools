@@ -42,7 +42,7 @@ test('test variable edit page', async ({ variableEditPage }) => {
 
 #### Using an existing resource
 
-To start a test with a page object model pointing to an aready existing resource, use any of the fixtures prefixed with `goto`.
+To start a test with a page object model that points to an aready existing resource, use any of the fixtures prefixed with `goto`.
 
 The following example uses the `gotoAnnotationEditPage` fixture to resolve an `AnnotationEditPage` model. Invoking this fixture will navigate to the edit form for an existing annotation in an existing dashboard.
 
