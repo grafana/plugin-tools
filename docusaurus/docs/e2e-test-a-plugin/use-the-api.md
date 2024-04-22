@@ -18,7 +18,7 @@ sidebar_position: 10
 
 In the `@grafana/plugin-e2e` package, classes represent pages or components in Grafana. Their purpose is to encapsulate common UI operations in one place. They also handle UI deviations between different versions of Grafana.
 
-Classes are exported by the package, but they're are also exposed through the Playwright API via so called [fixtures](https://playwright.dev/docs/test-fixtures).
+The package exports classes, but the classes are also exposed through the Playwright API via so called [fixtures](https://playwright.dev/docs/test-fixtures).
 
 ## Fixtures
 
