@@ -22,7 +22,9 @@ The package exports classes, but the classes are also exposed through the Playwr
 
 ## Fixtures
 
-`@grafana/plugin-e2e` defines a set of [custom fixtures](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/types.ts/#L21-L258) that facilitates the end-to-end testing of Grafana plugins. In the following section, the different types of page fixtures are being explained.
+The `@grafana/plugin-e2e` package defines a set of [custom fixtures](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/types.ts/#L21-L258) that facilitate the end-to-end testing of Grafana plugins. 
+
+The following section explains the different types of page fixtures:
 
 ### Pages
 
