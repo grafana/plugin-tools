@@ -57,4 +57,4 @@ To learn how to provision the Grafana instance with the resources that you need,
 
 ## Expect matchers
 
-The Playwright API allows extending the default assertions by providing custom matchers. `@grafana/plugin-e2e` defines a set of custom matchers that simplifies assertions for certain pages. To see the full list of matchers, refer to the Github [repository](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/matchers).
+The Playwright API allows you to extend the default assertions by providing custom matchers. `@grafana/plugin-e2e` defines a set of custom matchers that simplify assertions for certain pages. To see the full list of matchers, refer to the Github [repository](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/matchers).
