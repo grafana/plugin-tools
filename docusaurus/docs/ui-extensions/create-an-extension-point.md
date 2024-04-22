@@ -116,8 +116,8 @@ The following example shows how to render a link component as link-type extensio
 ```tsx
 import { usePluginLinkExtensions } from '@grafana/runtime';
 
-// We are defining the `context` outside of the React component for performance reasons.
-// (In case we would declare it inside the component below, then it would result in a new object on every render,
+// We define the `context` outside of the React component for performance reasons.
+// (Declaring it inside the component would result in a new object on every render,
 // which would unnecessarily trigger the `usePluginLinkExtensions()` hook.)
 const context = {
   referenceId: '12345',
