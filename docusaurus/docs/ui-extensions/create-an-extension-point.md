@@ -111,7 +111,7 @@ The hooks return an object in the following format:
 
 #### Example - rendering link extensions (static context)
 
-The following example shows how to render a link component all link-type extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
+The following example shows how to render a link component as link-type extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
 
 ```tsx
 import { usePluginLinkExtensions } from '@grafana/runtime';
