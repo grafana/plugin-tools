@@ -1,4 +1,3 @@
-import { Response as PlaywrightResponse } from '@playwright/test';
 import { PluginPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 

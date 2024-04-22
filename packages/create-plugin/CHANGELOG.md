@@ -1,3 +1,27 @@
+# v4.7.0 (Thu Apr 18 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Run e2e tests against multiple Grafana versions in CI workflow [#870](https://github.com/grafana/plugin-tools/pull/870) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v4.6.2 (Wed Apr 17 2024)
+
+#### 🐛 Bug Fix
+
+- Build: Introduce stricter typechecking [#868](https://github.com/grafana/plugin-tools/pull/868) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.6.1 (Fri Apr 05 2024)
 
 #### 🐛 Bug Fix
