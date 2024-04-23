@@ -1,6 +1,6 @@
 ---
 id: use-authentication
-title: Use authentication
+title: Authentication
 description: Add authentication to end-to-end tests using the plugin-e2e tool.
 keywords:
   - grafana
