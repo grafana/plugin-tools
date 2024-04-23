@@ -1,14 +1,15 @@
 import { TestFixture } from '@playwright/test';
-import { PluginFixture, PluginOptions } from '../api';
-import { PlaywrightCombinedArgs } from './types';
 import { AlertRuleEditPage } from '../models/pages/AlertRuleEditPage';
+import { PlaywrightArgs } from '../types';
 
-type AlertRuleEditPageFixture = TestFixture<AlertRuleEditPage, PluginFixture & PluginOptions & PlaywrightCombinedArgs>;
+type AlertRuleEditPageFixture = TestFixture<AlertRuleEditPage, PlaywrightArgs>;
 
-const alertRuleEditPage: AlertRuleEditPageFixture = async ({ page, selectors, grafanaVersion, request }, use) => {
-  const alertRuleEditPage = new AlertRuleEditPage({ page, selectors, grafanaVersion, request });
+export const alertRuleEditPage: AlertRuleEditPageFixture = async (
+  { page, selectors, grafanaVersion, request },
+  use,
+  testInfo
+) => {
+  const alertRuleEditPage = new AlertRuleEditPage({ page, selectors, grafanaVersion, request, testInfo });
   await alertRuleEditPage.goto();
   await use(alertRuleEditPage);
 };
-
-export default alertRuleEditPage;

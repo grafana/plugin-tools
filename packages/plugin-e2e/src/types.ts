@@ -257,6 +257,11 @@ export type PluginFixture = {
   gotoAnnotationEditPage: (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>;
 
   /**
+   * Fixture command that navigates to an alert rule edit page for an already existing alert query.
+   */
+  gotoAlertRuleEditPage: (args: AlertRuleArgs) => Promise<AlertRuleEditPage>;
+
+  /**
    * Fixture command that navigates a configuration page for an already existing data source instance.
    */
   gotoDataSourceConfigPage: (uid: string) => Promise<DataSourceConfigPage>;
