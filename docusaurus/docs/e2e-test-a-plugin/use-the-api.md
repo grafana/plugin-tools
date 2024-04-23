@@ -1,6 +1,6 @@
 ---
 id: api
-title: The API
+title: Use the API
 description: How to use the grafana/plugin-e2e API
 keywords:
   - grafana
