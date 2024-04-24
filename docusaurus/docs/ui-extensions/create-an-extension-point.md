@@ -19,7 +19,9 @@ In this guide you will learn how to provide an extension point so that app plugi
 
 ## What is an extension point?
 
-An extension point is a place in the UI which you make extendable by other plugins using extensions. These extensions can be either be links or simple React components (that can basically impelement anything). It's up to you how you are displaying the handling or displaying the extensions, we have some examples below.
+An extension point is a place in the UI which you make extendable by other plugins using extensions. These extensions can either be links or React components that can implement virtually anything. 
+
+In the extension point you can control how you want to handle the displaying of extensions to users. You can also share contextual information with the extensions using a `context` object or component props. Refer to the examples below to learn more.
 
 You can also share contextual information with the extensions using a `context` object or component props (see the following examples).
 
