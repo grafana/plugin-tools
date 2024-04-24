@@ -31,7 +31,7 @@ You can also share contextual information with the extensions using a `context` 
   - In case it's an extension point in core Grafana, it must start with `grafana/`
   - In case it's inside a plugin, it must start with `plugin/<PLUGIN_ID>/`
   - It must be unique
-- **an app plugin** - _currently only app plugins can create extension points_
+- **an app plugin** - _apart from core Grafana, currently only app plugins can create extension points and register extensions._
 
 :::note
 
