@@ -79,7 +79,7 @@ An object containing information related to your extension point that you would 
 
 :::note
 
-The provided context object always gets frozen (turned immutable) before being shared with the extensions.
+The provided context object is made immutable before being shared with the extensions.
 
 :::
 
