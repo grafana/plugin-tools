@@ -15,7 +15,7 @@ keywords:
   - apps
 ---
 
-In this guide you will learn how to provide an extension point so that other app plugins can add their extensions to your plugin.
+In this guide you will learn how to provide an extension point so that app plugins can add their extensions to your plugin.
 
 ## What is an extension point?
 
