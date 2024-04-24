@@ -203,7 +203,7 @@ jobs:
           name: $\{{ matrix.GRAFANA_IMAGE.NAME }}-v$\{{ matrix.GRAFANA_IMAGE.VERSION }}-$\{{github.run_id}}-server-log
           path: grafana-server.log
           retention-days: 5
-
+  
       # If your repository is public, uploading the Playwright report will make it public on the Internet.
       # Beware not to expose sensitive information.
       - name: Upload artifacts
@@ -213,3 +213,14 @@ jobs:
           name: playwright-report-$\{{ matrix.GRAFANA_IMAGE.NAME }}-v$\{{ matrix.GRAFANA_IMAGE.VERSION }}-$\{{github.run_id}}
           path: playwright-report/
           retention-days: 5
+
+{{#if_eq orgName "grafana"}}
+      # Repos in the grafana Github org can publish the report to GCS so that they can be browsed without having to download them.
+      # Beware this will make the report public on the Internet, so do not uncomment this step if the report contains sensitive information.
+      # - name: Publish report to GCS
+      #   if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
+      #   uses: grafana/plugin-actions/publish-report@main
+      #   with:
+      #     grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
+      #     path: playwright-report
+{{/if_eq}}
