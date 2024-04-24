@@ -57,7 +57,7 @@ In case the `context` object is created dynamically, make sure to wrap it into a
 
 :::
 
-The `usePluginExtensions` React hooks returns the list of extensions that are registered for a certain extension point ID. The hook dynamically updates its return value when the list of extensions changes. This behavior usually happens when extensions are registered during runtime due to dynamic plugin loading.
+The `usePluginExtensions` React hooks return the list of extensions that are registered for a certain extension point ID. The hook dynamically updates its return value when the list of extensions changes. This behavior usually happens when extensions are registered during runtime due to dynamic plugin loading.
 
 #### Syntax
 
