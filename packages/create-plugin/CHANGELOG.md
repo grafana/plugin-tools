@@ -1,3 +1,15 @@
+# v4.8.0 (Wed Apr 24 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugins: Use non dev docker image on e2e [#883](https://github.com/grafana/plugin-tools/pull/883) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.7.0 (Thu Apr 18 2024)
 
 #### 🚀 Enhancement
