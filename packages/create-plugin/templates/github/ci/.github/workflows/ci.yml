@@ -216,11 +216,11 @@ jobs:
 
 {{#if_eq orgName "grafana"}}
       # Repos in the grafana Github org can publish the report to GCS so that they can be browsed without having to download them.
-      # Beware this will make the report public on the Internet, so do not uncomment this step if the report contains sensitive information.
-      # - name: Publish report to GCS
-      #   if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
-      #   uses: grafana/plugin-actions/publish-report@main
-      #   with:
-      #     grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-      #     path: playwright-report
+      # This will make the report public on the Internet, so beware to skip this step if the report contains sensitive information.
+      - name: Publish report to GCS
+        if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
+        uses: grafana/plugin-actions/publish-report@main
+        with:
+          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
+          path: playwright-report
 {{/if_eq}}
