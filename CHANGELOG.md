@@ -1,3 +1,16 @@
+# (Thu Apr 18 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.7.0`
+  - Create Plugin: Run e2e tests against multiple Grafana versions in CI workflow [#870](https://github.com/grafana/plugin-tools/pull/870) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Wed Apr 17 2024)
 
 #### 🐛 Bug Fix
