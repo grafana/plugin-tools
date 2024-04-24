@@ -72,6 +72,8 @@ jobs:
         id: run-tests
         run: yarn playwright test
 
+      # If your repository is public, uploading the Playwright report will make it public on the Internet.
+      # Beware not to expose sensitive information.
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
