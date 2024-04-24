@@ -4,15 +4,11 @@ import { JSONSchema6 } from 'json-schema';
 import { validate } from 'schema-utils';
 import { extractPluginMeta } from './meta-extractor.js';
 
-const DEFAULT_GENERATED_FILENAME = 'plugin.generated.json';
 const PLUGIN_NAME = 'GrafanaPluginMetaExtractor';
 
 export type GrafanaPluginMetaExtractorOptions = {
   // Can be used to override the entry file path
   entryFile: string;
-
-  // Can be used to override the output asset name
-  outputAssetName?: string;
 };
 
 const schema: JSONSchema6 = {
@@ -20,10 +16,6 @@ const schema: JSONSchema6 = {
   properties: {
     entryFile: {
       description: 'Can be used to override the entry file path.',
-      type: 'string',
-    },
-    outputAssetName: {
-      description: `Can be used to override the output asset name. Default is "${DEFAULT_GENERATED_FILENAME}"`,
       type: 'string',
     },
   },
