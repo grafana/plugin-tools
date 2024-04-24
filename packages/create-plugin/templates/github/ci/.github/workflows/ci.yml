@@ -186,7 +186,7 @@ jobs:
           interval: 500
 
       - name: Install Playwright Browsers
-        run: {{ packageManagerName }} playwright install chromium --with-deps
+        run: {{ packageManagerName }} exec playwright install chromium --with-deps
 
       - name: Run Playwright tests
         id: run-tests
