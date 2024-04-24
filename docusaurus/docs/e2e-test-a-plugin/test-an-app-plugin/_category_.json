@@ -1,0 +1,13 @@
+{
+  "position": 69,
+  "label": "Test an app plugin",
+  "customProps": {
+    "description": "How to test an app plugin with @grafana/plugin-e2e"
+  },
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "e2e-test-a-plugin/test-an-app-plugin/introduction"
+  }
+}
