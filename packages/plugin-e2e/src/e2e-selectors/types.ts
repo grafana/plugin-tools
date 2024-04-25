@@ -90,6 +90,17 @@ export type Components = {
   QueryEditorRow: {
     title: (refId: string) => string;
   };
+  AlertRules: {
+    previewButton: string;
+    ruleNameField: string;
+    newFolderButton: string;
+    newFolderNameCreateButton: string;
+    newEvaluationGroupButton: string;
+    newFolderNameField: string;
+    newEvaluationGroupName: string;
+    newEvaluationGroupInterval: string;
+    newEvaluationGroupCreate: string;
+  };
   Alert: {
     alertV2: (severity: string) => string;
   };

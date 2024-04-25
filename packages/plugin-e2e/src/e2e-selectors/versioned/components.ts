@@ -135,6 +135,17 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: (refId: string) => `Query editor row title ${refId}`,
     },
   },
+  AlertRules: {
+    previewButton: { '11.1.0': 'data-testid alert-rule preview-button' },
+    ruleNameField: { '11.1.0': 'data-testid alert-rule name-field' },
+    newFolderButton: { '11.1.0': 'data-testid alert-rule new-folder-button' },
+    newFolderNameField: { '11.1.0': 'data-testid alert-rule name-folder-name-field' },
+    newFolderNameCreateButton: { '11.1.0': 'data-testid alert-rule name-folder-name-create-button' },
+    newEvaluationGroupButton: { '11.1.0': 'data-testid alert-rule new-evaluation-group-button' },
+    newEvaluationGroupName: { '11.1.0': 'data-testid alert-rule new-evaluation-group-name' },
+    newEvaluationGroupInterval: { '11.1.0': 'data-testid alert-rule new-evaluation-group-interval' },
+    newEvaluationGroupCreate: { '11.1.0': 'data-testid alert-rule new-evaluation-group-create-button' },
+  },
   Alert: {
     alertV2: {
       '8.3.0': (severity: string) => `data-testid Alert ${severity}`,
