@@ -16,6 +16,7 @@ import { gotoVariableEditPage } from './fixtures/commands/gotoVariableEditPage';
 import { login } from './fixtures/commands/login';
 import { readProvisionedDashboard } from './fixtures/commands/readProvisionedDashboard';
 import { readProvisionedDataSource } from './fixtures/commands/readProvisionedDataSource';
+import { readProvisionedAlertRule } from './fixtures/commands/readProvisionedAlertRule';
 import { dashboardPage } from './fixtures/dashboardPage';
 import { explorePage } from './fixtures/explorePage';
 import { grafanaVersion } from './fixtures/grafanaVersion';
@@ -70,6 +71,7 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   explorePage,
   createDataSource,
   readProvisionedDataSource,
+  readProvisionedAlertRule,
   readProvisionedDashboard,
   isFeatureToggleEnabled,
   createUser,

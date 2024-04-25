@@ -170,6 +170,17 @@ export type PluginFixture = {
   readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
 
   /**
+   * Fixture command that reads a yaml file in the provisioning/alerting directory.
+   *
+   * The file name should be the name of the file with the .yaml|.yml extension.
+   * If a group name is provided, the first group that matches the name will be returned.
+   * If no group name is provided, the first group in the list of groups will be returned.
+   * If a rule title is provided, the first rule that matches the title will be returned.
+   * If no rule title is provided, the first rule in the group will be returned.
+   */
+  readProvisionedAlertRule(args: ReadProvisionedAlertRuleArgs): Promise<AlertRule>;
+
+  /**
    * Fixture command that reads a dashboard json file in the provisioning/dashboards directory.
    *
    * Can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
@@ -313,6 +324,12 @@ export interface DataSourceSettings<T = {}, S = {}> {
   secureJsonData?: S;
 }
 
+export interface AlertRule {
+  uid: string;
+  title: string;
+  data: Array<{ refId: string; datasourceUid: string; model: any }>;
+}
+
 /**
  * The dashboard object
  */
@@ -431,14 +448,31 @@ export type ReadProvisionedDashboardArgs = {
   fileName: string;
 };
 
-export type ReadProvisionedDataSourceArgs = {
+export type ReadProvisionedAlertRuleArgs = {
   /**
-   * The path, relative to the provisioning folder, to the dashboard json file
+   * The name of the yaml file in the provisioning/alerting folder
    */
   fileName: string;
 
   /**
-   * The name of the data source in the datasources list
+   * The name of the alert group in the groups list. Will use the first group if not provided
+   */
+  groupName?: string;
+
+  /**
+   * The name of the alert rule in the rules list. Will use the first rule in the group if not provided
+   */
+  ruleTitle?: string;
+};
+
+export type ReadProvisionedDataSourceArgs = {
+  /**
+   * The name of the yaml file in the provisioning/datasources folder
+   */
+  fileName: string;
+
+  /**
+   * The name of the data source in the datasources list. Will use the first data source if not provided
    */
   name?: string;
 };
