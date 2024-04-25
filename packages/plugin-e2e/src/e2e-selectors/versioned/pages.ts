@@ -9,7 +9,7 @@ export const versionedPages = {
   Alerting: {
     AddAlertRule: {
       url: {
-        ['10.0.3']: '/alerting/new/alerting',
+        ['10.1.0']: '/alerting/new/alerting',
         [MIN_GRAFANA_VERSION]: '/alerting/new',
       },
     },
