@@ -1,3 +1,15 @@
+# v4.9.0 (Thu Apr 25 2024)
+
+#### 🚀 Enhancement
+
+- Create plugin: update scaffolded tests when creating an app plugin [#892](https://github.com/grafana/plugin-tools/pull/892) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v4.8.0 (Wed Apr 24 2024)
 
 #### 🚀 Enhancement
