@@ -38,6 +38,10 @@ export class AlertRuleEditPage extends GrafanaPage {
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
       this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
+        if (!response.ok()) {
+          return route.fulfill({ response });
+        }
+
         let body: { results: { [key: string]: { status: number } } } = await response.json();
         const statuses = Object.keys(body.results).map((key) => body.results[key].status);
 
