@@ -6,7 +6,7 @@ test('should evaluate to true if query is valid', async ({ page, alertRuleEditPa
   await alertRuleEditPage.alertRuleNameField.fill('Test Alert Rule');
   await page.waitForFunction(() => window.monaco);
   await queryA.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
-  await page.keyboard.insertText('select * from long_format_example');
+  await page.keyboard.insertText('select * from long_format_example where $__timeFilter(time) ');
   await expect(alertRuleEditPage.evaluate()).toBeOK();
 });
 
