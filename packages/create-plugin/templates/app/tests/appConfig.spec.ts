@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures';
 
 test('should be possible to save app configuration', async ({ appConfigPage, page }) => {
-  const saveForm = page.getByRole('button', { name: /Save API settings/i });
+  const saveButton = page.getByRole('button', { name: /Save API settings/i });
 
   // reset the configured secret
   await page.getByRole('button', { name: /reset/i }).click();
@@ -14,6 +14,6 @@ test('should be possible to save app configuration', async ({ appConfigPage, pag
   // listen for the server response on the saved form
   const saveResponse = appConfigPage.waitForSettingsResponse();
 
-  await saveForm.click();
+  await saveButton.click();
   await expect(saveResponse).toBeOK();
 });
