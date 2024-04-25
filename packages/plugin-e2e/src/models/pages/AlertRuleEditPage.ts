@@ -2,7 +2,6 @@ import * as semver from 'semver';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
-import { v4 as uuidv4 } from 'uuid';
 
 export class AlertRuleEditPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly args?: AlertRuleArgs) {
