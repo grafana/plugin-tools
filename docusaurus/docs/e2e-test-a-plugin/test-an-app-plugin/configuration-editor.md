@@ -1,5 +1,5 @@
 ---
-id: configurations
+id: app-configurations
 title: Test configurations
 description: Testing the configuration editor of an app with valid and invalid configuration
 keywords:
@@ -16,16 +16,20 @@ sidebar_position: 20
 
 ## Introduction
 
-Many app plugins need some kind of configuration to function. The appropriate place for managing this config is in the app configuration page.
+If your app requires some kind of configuration to function, the appropriate place for managing this config is in the app configuration page.
 
-### Define an app specific fixture
+We recommend you to create an app specific fixture to make it easier to write tests and share logic across different tests.
 
-To reduce repetition and the need to import `pluginJson` in all your test files you can define an app specific test fixture which lets you provide your plugin id once so it can be reused in all your tests.
+## Testing an app config page
 
-In the fixture below we are extending playwright with an `appConfigPage` so it can be used, to interact with your plugin app config, in any of your tests.
+Apps has a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the health check endpoint. The test will be successful only if both calls yields a successful status code.
+
+### Config page with a basic UI
+
+In the fixture below we are adding an `appConfigPage` by using a navigation function. The navigation function will return the default `AppConfigPage` defined in `@grafana/plugin-e2e`.
 
 ```ts title="fixtures.ts"
-import { AppConfigPage, AppPage, test as base } from '@grafana/plugin-e2e';
+import { AppConfigPage, test as base } from '@grafana/plugin-e2e';
 import pluginJson from '../src/plugin.json';
 
 type AppTestFixture = {
@@ -44,9 +48,7 @@ export const test = base.extend<AppTestFixture>({
 export { expect } from '@grafana/plugin-e2e';
 ```
 
-### Testing the configuration in an app
-
-Apps has a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the health check endpoint. The test will be successful only if both calls yields a successful status code.
+You use it by importing `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When destructuring the `appConfigPage` in your test function the test will automatically navigate to the config page.
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from './fixtures.ts';
@@ -65,7 +67,66 @@ test('"Save & test" should be successful when configuration is valid', async ({ 
 });
 ```
 
-#### Testing error scenarios
+### Config page with a complex UI
+
+In the fixture below we are adding an `appConfigPage` by using a navigation function. The navigation function will return the default `AppConfigPage` defined in `@grafana/plugin-e2e`.
+
+```ts title="fixtures.ts"
+import { AppConfigPage, test as base } from '@grafana/plugin-e2e';
+import pluginJson from '../src/plugin.json';
+
+class MyAppConfigPage extends AppConfigPage {
+  async fillApiKey(key: string): Promise<void> {
+    await page.getByRole('textbox', { name: 'API Key' }).fill(key);
+  }
+
+  async fillApiUrl(url: string): Promise<void> {
+    await page.getByRole('textbox', { name: 'API Url' }).clear();
+    await page.getByRole('textbox', { name: 'API Url' }).fill(url);
+  }
+
+  async save(): Promise<void> {
+    await page.getByRole('button', { name: /Save & test/i }).click();
+  }
+}
+
+type AppTestFixture = {
+  appConfigPage: MyAppConfigPage;
+};
+
+export const test = base.extend<AppTestFixture>({
+  appConfigPage: async ({ page, selectors, grafanaVersion, request }, use, testInfo) => {
+    const configPage = new MyAppConfigPage(
+      { page, selectors, grafanaVersion, request, testInfo },
+      {
+        pluginId: pluginJson.id,
+      }
+    );
+    await configPage.goto();
+    await use(configPage);
+  },
+});
+
+export { expect } from '@grafana/plugin-e2e';
+```
+
+You use it by importing `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When destructuring the `appConfigPage` in your test function the test will automatically navigate to the config page.
+
+```ts title="configurationEditor.spec.ts"
+import { test, expect } from './fixtures.ts';
+
+test('"Save & test" should be successful when configuration is valid', async ({ appConfigPage, page }) => {
+  await appConfigPage.fillApiKey('secret-api-key');
+  await appConfigPage.fillApiUrl('http://www.my-awsome-grafana-app.com/api');
+
+  const saveResponse = appConfigPage.waitForSettingsResponse();
+
+  await appConfigPage.save();
+  await expect(saveResponse).toBeOK();
+});
+```
+
+## Testing error scenarios
 
 In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user.
 
