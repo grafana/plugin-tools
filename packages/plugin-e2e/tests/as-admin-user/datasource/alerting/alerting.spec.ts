@@ -7,8 +7,6 @@ test('should evaluate to true if query is valid', async ({ page, alertRuleEditPa
   await page.waitForFunction(() => window.monaco);
   await queryA.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText('select * from long_format_example');
-  // await alertRuleEditPage.addNewRuleFolder();
-  // await alertRuleEditPage.addNewEvaluationGroup();
   await expect(alertRuleEditPage.evaluate()).toBeOK();
 });
 
@@ -19,8 +17,6 @@ test('should evaluate to false if query is invalid', async ({ page, alertRuleEdi
   await alertRuleEditPage.alertRuleNameField.fill('Test Alert Rule');
   await queryA.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText('select !');
-  // await alertRuleEditPage.addNewRuleFolder();
-  // await alertRuleEditPage.addNewEvaluationGroup();
   await expect(alertRuleEditPage.evaluate()).not.toBeOK();
 });
 
