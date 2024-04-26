@@ -125,6 +125,16 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'RefreshPicker run button',
     },
   },
+  QueryTab: {
+    addQuery: {
+      '10.2.0': 'data-testid query-tab-add-query',
+      [MIN_GRAFANA_VERSION]: 'Query editor add query button',
+    },
+    addExpression: {
+      '11.0.0': 'data-testid query-tab-add-expression',
+      '9.5.2': 'query-tab-add-expression',
+    },
+  },
   QueryEditorRows: {
     rows: {
       [MIN_GRAFANA_VERSION]: 'Query editor row',

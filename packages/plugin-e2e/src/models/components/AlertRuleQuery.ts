@@ -7,7 +7,7 @@ export class AlertRuleQuery extends GrafanaPage {
   datasource: DataSourcePicker;
   constructor(readonly ctx: PluginTestCtx, public readonly locator: Locator) {
     super(ctx);
-    this.datasource = new DataSourcePicker(ctx);
+    this.datasource = new DataSourcePicker(ctx, locator);
   }
 
   getByGrafanaSelector(selector: string, options: getByGrafanaSelectorOptions = {}): Locator {

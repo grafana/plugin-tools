@@ -20,6 +20,17 @@ test('should evaluate to false if query is invalid', async ({ page, alertRuleEdi
   await expect(alertRuleEditPage.evaluate()).not.toBeOK();
 });
 
+test('should be possible to add multiple rows', async ({ page, alertRuleEditPage, selectors }) => {
+  const { rows } = selectors.components.QueryEditorRows;
+  const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
+  await queryA.datasource.set('AWS Redshift');
+  const rowCount = await alertRuleEditPage.getByGrafanaSelector(rows).count();
+  await alertRuleEditPage.clickAddQueryRow();
+  await expect(alertRuleEditPage.getByGrafanaSelector(rows)).toHaveCount(rowCount + 1);
+  await alertRuleEditPage.clickAddQueryRow();
+  await expect(alertRuleEditPage.getByGrafanaSelector(rows)).toHaveCount(rowCount + 2);
+});
+
 test('should evaluate to true when loading a provisioned query that is valid', async ({
   gotoAlertRuleEditPage,
   readProvisionedAlertRule,

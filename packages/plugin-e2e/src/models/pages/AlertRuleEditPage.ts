@@ -41,6 +41,16 @@ export class AlertRuleEditPage extends GrafanaPage {
   }
 
   /**
+   * Clicks the "Add query" button and returns an instance of the {@link AlertRuleQuery} class for the new query row.
+   */
+  async clickAddQueryRow(): Promise<AlertRuleQuery> {
+    await this.getByGrafanaSelector(this.ctx.selectors.components.QueryTab.addQuery).click();
+    const locator = this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).last();
+
+    return new AlertRuleQuery(this.ctx, locator);
+  }
+
+  /**
    * Clicks the evaluate button and waits for the evaluation to complete. If the evaluation is successful, the status code of the response is 200.
    * If one or more queries are invalid, an error status code is returned.
    */
