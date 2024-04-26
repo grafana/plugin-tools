@@ -142,7 +142,8 @@ services:
     build:
       context: ./.config
       args:
-        development: "false"
+        development: ${DEVELOPMENT:-true}
 ```
 
 Doing that, the docker environment will only run grafana and load the content of your projects `dist` directory. Thefore before doing that you should build your plugin with `mage -v build:backend` and <SyncCommand cmd="run server" /> to generate the plugin files.
+In the example you can also use the `DEVELOPMENT` environment variable to control the development mode.
