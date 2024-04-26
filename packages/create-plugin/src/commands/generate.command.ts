@@ -12,6 +12,7 @@ import { renderTemplateFromFile, getTemplateData } from '../utils/utils.template
 import { normalizeId } from '../utils/utils.handlebars.js';
 import { getVersion } from '../utils/utils.version.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
+import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
@@ -20,7 +21,8 @@ import { CliArgs, TemplateData } from '../types.js';
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
   const pluginId = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-  const templateData = getTemplateData({ ...answers, pluginId });
+  const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+  const templateData = getTemplateData({ ...answers, pluginId, packageManagerName, packageManagerVersion });
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
