@@ -45,6 +45,9 @@ export class AlertRuleEditPage extends GrafanaPage {
    * If one or more queries are invalid, an error status code is returned.
    */
   async evaluate(options?: RequestOptions) {
+    // it seems like when clicking the evaluate button to quickly after filling in the alert query form, form values have not been propagated to the state, so we wait a bit before clicking
+    await this.ctx.page.waitForTimeout(1000);
+
     // Starting from Grafana 10.0.0, the alerting evaluation endpoint started returning errors in a different way.
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
@@ -75,10 +78,10 @@ export class AlertRuleEditPage extends GrafanaPage {
     }
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
-        timeout: 1000,
+        timeout: 5000,
       })
       .catch(async () => {
-        // it seems (intermittently) the first click doesn't trigger the request, so we click again
+        // intermittently, the first click doesn't trigger the request, so in that case we click again
         await evaluateButton.click();
       });
 
