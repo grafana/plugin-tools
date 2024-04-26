@@ -1,7 +1,7 @@
 ---
 id: fetch-data-from-frontend
-title: Fetching data from frontend code
-description: Learn how to use the data proxy API to fetch data from frontend code in data source and app plugins in Grafana and overcome CORS limitations
+title: Fetching data from frontend code using the data proxy
+description: Learn how to use the data proxy API to fetch data from frontend code in data source and app plugins in Grafana
 keywords:
   - grafana
   - plugins
@@ -22,7 +22,7 @@ This page will guide you through how to use the data proxy to fetch data.
 
 ## Why use the data proxy?
 
-If you have a data source or app plugin with frontend code and you need to fetch data, you might have encountered cross-site (CORS) limitations or the need to perform authenticated requests.
+If you have a data source or app plugin with frontend code and you need to fetch data, you might have encountered cross-site (CORS) limitations or the need to perform authenticated requests or send other sensitive data from your plugin configuration.
 
 For these use cases, you want to make use of the data proxy API.
 
@@ -32,40 +32,11 @@ Instead of performing a request directly from the browser to the server, you per
 
 ### Without data proxy
 
-```mermaid
-sequenceDiagram
-
-Participant B as Browser
-
-Participant T as Third Party Server
-
-B ->> T: HTTP Request
-
-T ->> B: Response
-
-```
+Without a data proxy the requests goes directly from the browser to the third party server.
 
 ### With data proxy
 
-```mermaid
-sequenceDiagram
-
-Participant B as Browser
-
-Participant G as Grafana Backend
-
-Participant T as Third Party Server
-
-B ->> G: HTTP Request
-
-G ->> T: HTTP Request
-
-T ->> G: Response
-
-G ->> B: Response
-```
-
-Because the request to the third party server happens from the Grafana backend, there are no restrictions in CORS, and you can instruct Grafana to send the request authenticated.
+Because the request to the third party server happens from the Grafana backend, there are no restrictions in CORS, and you can instruct Grafana to send the request authenticated or using sensitive data stored in the plugin configuration.
 
 # How to use the data proxy
 
@@ -253,6 +224,8 @@ Now you will be able to see in the Grafana server output the requests going out 
 ## I am using the [[DataSourceHttpSettings](https://developers.grafana.com/ui/latest/index.html?path=/story/data-source-datasourcehttpsettings--basic)](https://developers.grafana.com/ui/latest/index.html?path=/story/data-source-datasourcehttpsettings--basic) component. Where's the URL from the user?
 
 The DataSourceHttpSettings sets the URL directly in the options that it is stored in `instanceSettings.url` instead of inside the jsonData. You can query that URL directly.
+
+If you use the `DataSourceHttpSettings` component you also don't need to setup the route in your `plugin.json`.
 
 ## Can I use the data proxy from an App plugin?
 
