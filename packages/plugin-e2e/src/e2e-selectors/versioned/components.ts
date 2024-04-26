@@ -144,6 +144,10 @@ export const versionedComponents = {
     title: {
       [MIN_GRAFANA_VERSION]: (refId: string) => `Query editor row title ${refId}`,
     },
+    actionButton: {
+      '10.4.0': (title: string) => `data-testid ${title}`,
+      [MIN_GRAFANA_VERSION]: (title: string) => `${title}`,
+    },
   },
   AlertRules: {
     previewButton: { '11.1.0': 'data-testid alert-rule preview-button' },
