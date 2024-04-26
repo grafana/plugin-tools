@@ -93,6 +93,7 @@ export type Components = {
   };
   QueryEditorRow: {
     title: (refId: string) => string;
+    actionButton: (title: string) => string;
   };
   AlertRules: {
     previewButton: string;
