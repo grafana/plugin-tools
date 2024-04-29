@@ -95,9 +95,10 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(data?: Partial<TemplateData>): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
-  const pluginJson = getPluginJson();
-  const plåuginType = data?.pluginType ?? pluginJson?.type;
-  const packageManagerInfoFallback = getPackageManagerWithFallback();
+  const pluginJson = data ? undefined : getPluginJson();
+  const pluginType = data?.pluginType ?? pluginJson?.type;
+  const packageManagerInfo = data ? getPackageManagerFromUserAgent() : getPackageManagerWithFallback();
+  const packageManagerName = packageManagerInfo.packageManagerName;
   const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
   const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
@@ -117,9 +118,9 @@ export function getTemplateData(data?: Partial<TemplateData>): TemplateData {
     hasBackend: data?.hasBackend ?? pluginJson?.backend,
     orgName: data?.orgName ?? pluginJson?.info?.author?.name,
     pluginType,
+    packageManagerName: packageManagerName,
     packageManagerInstallCmd: packageManagerInstallCmd,
-    packageManagerName: data?.packageManagerName ?? packageManagerInfoFallback.packageManagerName,
-    packageManagerVersion: data?.packageManagerVersion ?? packageManagerInfoFallback.packageManagerVersion,
+    packageManagerVersion: packageManagerInfo.packageManagerVersion,
     isAppType: pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes,
     isNPM: packageManagerName === 'npm',
     version: currentVersion,

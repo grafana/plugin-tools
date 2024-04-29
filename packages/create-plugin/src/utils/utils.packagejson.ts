@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { TEMPLATE_PATHS } from '../constants.js';
-import { isFile, readJsonFile } from './utils.files.js';
+import { readJsonFile } from './utils.files.js';
 import { getTemplateData, renderTemplateFromFile } from './utils.templates.js';
 import fs from 'node:fs';
 
@@ -10,18 +10,8 @@ export type PackageJson = {
   devDependencies: Record<string, string>;
   packageManager?: string;
 } & Record<string, any>;
-
-export function doesPackageJsonExist(rootPath = process.cwd()): PackageJson {
-  return isFile(path.join(rootPath, 'package.json'));
-}
-
 export function getPackageJson(rootPath = process.cwd()): PackageJson {
-  try {
-    return readJsonFile(path.join(rootPath, 'package.json'));
-  } catch {
-    // In case there is no package.json yet (scaffolding the plugin from scratch), return with an empty object
-    return {};
-  }
+  return readJsonFile(path.join(rootPath, 'package.json'));
 }
 
 // Returns with a package.json that is generated based on the latest templates
