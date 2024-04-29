@@ -3,24 +3,20 @@ import minimist from 'minimist';
 import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
-import { getConfig } from '../utils/utils.config.js';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, TEMPLATE_PATHS } from '../constants.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
 import { getExportPath } from '../utils/utils.path.js';
 import { renderTemplateFromFile, getTemplateData } from '../utils/utils.templates.js';
-import { normalizeId } from '../utils/utils.handlebars.js';
-import { getVersion } from '../utils/utils.version.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
-import { GenerateCliArgs, TemplateData } from '../types.js';
+import { TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
-  const pluginId = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
-  const templateData = getTemplateData({ ...answers, pluginId });
+  const templateData = getTemplateData({ ...answers });
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;

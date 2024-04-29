@@ -1,7 +1,7 @@
 import { displayAsMarkdown } from '../../utils/utils.console.js';
 import { normalizeId } from '../../utils/utils.handlebars.js';
 import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager.js';
-import { GenerateCliArgs, TemplateData } from '../../types.js';
+import { TemplateData } from '../../types.js';
 
 export function printGenerateSuccessMessage(answers: TemplateData) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
