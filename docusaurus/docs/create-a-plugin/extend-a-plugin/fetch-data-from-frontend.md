@@ -1,6 +1,6 @@
 ---
 id: fetch-data-from-frontend
-title: Fetching data from frontend code using the data proxy
+title: Fetch data from frontend code using the data proxy
 description: Learn how to use the data proxy API to fetch data from frontend code in data source and app plugins in Grafana
 keywords:
   - grafana
@@ -11,40 +11,32 @@ keywords:
   - CORS
 ---
 
-# Fetching data from frontend data source and app plugins
+# Fetch data from frontend data source and app plugins
 
-To fetch data from your data source an app plugins you have two options:
+Along with the JavaScript [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), the Grafana data proxy is used to fetch data from a Grafana data source plugin or app plugin.
 
-- Use the browser [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) as you would do for any other javascript project
-- Use the Grafana data proxy.
+The data proxy is especially useful
 
-This page will guide you through how to use the data proxy to fetch data.
+- for overcoming cross-site (CORS) limitations, or
+- for performing authenticated requests, or
+- for sending other sensitive data from your plugin configuration to Grafana.
 
-## Why use the data proxy?
-
-If you have a data source or app plugin with frontend code and you need to fetch data, you might have encountered cross-site (CORS) limitations or the need to perform authenticated requests or send other sensitive data from your plugin configuration.
-
-For these use cases, you want to make use of the data proxy API.
+This guide explains how the data proxy works and explores common issues in its usage.
 
 ## How does it work?
 
-Instead of performing a request directly from the browser to the server, you perform the request through the Grafana backend server, which will handle it and return the response to the plugin.
+Instead of performing a request directly from the browser to the server, you perform the request through the Grafana backend server, which handles it and returns the response to the plugin.
 
-### Without data proxy
+- **Without data proxy**: Without a data proxy the requests go directly from the browser to the third-party server.
+- **With data proxy**: Because the request to the third-party server happens from the Grafana backend, there are no restrictions in CORS, and you can instruct Grafana to send the request authenticated or using sensitive data stored in the plugin configuration.
 
-Without a data proxy the requests goes directly from the browser to the third party server.
+## How to use the data proxy
 
-### With data proxy
+Notice that you can only make use of the data proxy from data source and app plugins. _You can't use the data proxy from panel plugins._
 
-Because the request to the third party server happens from the Grafana backend, there are no restrictions in CORS, and you can instruct Grafana to send the request authenticated or using sensitive data stored in the plugin configuration.
+### Step 1: Declare your route in your plugin metadata
 
-# How to use the data proxy
-
-Notice that you can only make use of the data proxy from data source and app plugins. **You can't use the data proxy from panel plugins.**
-
-## Declare your route in your plugin.json
-
-You first need to set up the routes in your `plugin.json`.
+You first need to set up the routes in your `plugin.json` metadata.
 
 ```json title="src/plugin.json"
 "routes": [
@@ -57,11 +49,15 @@ You first need to set up the routes in your `plugin.json`.
 
 You can see more advanced options to define your routes to include dynamic parameters.
 
-> NOTE: You will have to build your plugin and restart the Grafana server every time you modify your plugin.json file.
+:::note
 
-## Fetch data from your frontend code
+You must build your plugin and restart the Grafana server every time you modify your `plugin.json` file.
 
-In your data source plugin, you can now fetch data by using the proxy URL. Here's a minimal example for your data source plugin using the jsonplaceholder free service:
+:::
+
+### Step 2: Fetch data from your frontend code
+
+In your data source plugin, you can now fetch data by using the proxy URL. Here's a minimal example for your data source plugin using [JSONPlaceholder](https://jsonplaceholder.typicode.com/):
 
 ```typescript
 import {
@@ -84,7 +80,7 @@ export class DataSource extends DataSourceApi {
   baseUrl: string;
   constructor(instanceSettings: DataSourceInstanceSettings) {
     super(instanceSettings);
-    // notice we are storing the url from the instanceSettings
+    // notice we are storing the URL from the instanceSettings
     this.baseUrl = instanceSettings.url!;
   }
 
@@ -92,7 +88,7 @@ export class DataSource extends DataSourceApi {
     const response = getBackendSrv().fetch<TODO[]>({
       // notice we are using the `placeholder` as defined
       // in the routes "path". Everything passed after will
-      // be appended to the API url
+      // be appended to the API URL
       url: `${this.baseUrl}/placeholder/todos`,
     });
     // backendSrv fetch returns an observable object
@@ -125,11 +121,15 @@ export class DataSource extends DataSourceApi {
 }
 ```
 
-# Dynamic values and settings interpolation in routes
+## Dynamic values and settings interpolation in routes
 
-It is most likely that your plugin won't have a hard-coded API URL but will instead use the values the plugin's user will input. For these cases, you can use interpolation of variables in your routes.
+You can use dynamic values for handling user input, authenticating requests, debugging, or handling special headers.
 
-Example:
+### Interpolation with user-provided values
+
+It is most likely that your plugin won't have a hard-coded API URL, but it will instead use user-provided values. For these cases, you can use interpolation of variables in your routes.
+
+**Example:**
 
 ```json title="src/plugin.json"
 "routes": [
@@ -140,9 +140,9 @@ Example:
 ],
 ```
 
-Now in the configuration page, we should ask the user to populate this `apiUrl`, and Grafana will use that value when calling this endpoint.
+The configuration page should ask the user to populate this `apiUrl`. Grafana uses the `apiUrl` value when calling this endpoint.
 
-Here's an example of how your configuration form might look like
+Here's an example of a configuration form:
 
 ```typescript title="src/ConfigEditor.tsx"
 export function ConfigEditor(props: Props) {
@@ -173,7 +173,7 @@ export function ConfigEditor(props: Props) {
 }
 ```
 
-Once the field is set correctly, you may use it inside your data source. Following the previous example for the data source code, you can now simply use it as this:
+Once the field is set correctly, you may use it inside your data source. Following the previous example for the data source code, you can now simply use it like so:
 
 ```typescript
 const response = getBackendSrv().fetch<TODO[]>({
@@ -185,7 +185,7 @@ const response = getBackendSrv().fetch<TODO[]>({
 });
 ```
 
-## Using other HTTP Protocols e.g. POST, PUT, DELETE with the data proxy
+### Use other HTTP methods (for example, POST, PUT, DELETE) with the data proxy
 
 You can specify the method directly in the `fetch` method. Your routes in `src/plugin.json` remain the same:
 
@@ -197,17 +197,17 @@ const response = getBackendSrv().fetch<TODO[]>({
 });
 ```
 
-## Adding authentication to your requests using the data proxy
+### Add authentication to your requests using the data proxy
 
-You can read about adding authentication to the data proxy [here](./add-authentication-for-data-source-plugins.md)
+To learn about adding authentication to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins.md).
 
-## Debugging requests from the data proxy
+### Debug requests from the data proxy
 
-If you wish to debug the requests that are going from the Grafana backend to your API, you can enable the data proxy logging in the [configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#dataproxy)
+If you want to debug the requests that are going from the Grafana backend to your API, enable the data proxy logging in the [configuration](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#dataproxy).
 
-You must also [enable debug logs](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#mode) in Grafana to be able to see the dataproxy logs
+You must also [enable debug logs](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#mode) in Grafana to be able to see the data proxy logs in your Grafana configuration file.
 
-In your Grafana configuration file:
+**Example:**
 
 ```
 [log]
@@ -217,33 +217,11 @@ level = debug
 logging = true
 ```
 
-Now you will be able to see in the Grafana server output the requests going out to your API from the data proxy.
+With this configuration, the Grafana server output shows the requests going out to your API from the data proxy.
 
-# FAQ
+### Send special headers using the data proxy
 
-## I am using the [[DataSourceHttpSettings](https://developers.grafana.com/ui/latest/index.html?path=/story/data-source-datasourcehttpsettings--basic)](https://developers.grafana.com/ui/latest/index.html?path=/story/data-source-datasourcehttpsettings--basic) component. Where's the URL from the user?
-
-The DataSourceHttpSettings sets the URL directly in the options that it is stored in `instanceSettings.url` instead of inside the jsonData. You can query that URL directly.
-
-If you use the `DataSourceHttpSettings` component you also don't need to setup the route in your `plugin.json`.
-
-## Can I use the data proxy from an App plugin?
-
-Yes. The setup of routes in your `plugin.json` remains the same, but since App plugins don't receive the URL as part of the props, you can construct the URL like this:
-
-```typescript
-const url = `api/plugin-proxy/${meta.id}/yourRoutePath`;
-```
-
-> NOTE: The plugin ID is not your plugin name (e.g., myorg-plugin-app) but the app ID. This can be found as part of the meta prop passed to the App plugin constructor. You can also get the plugin meta inside React with the hook `usePluginContext()`
-
-## How can I use Authentication via the data proxy?
-
-You can read about adding authentication to the data proxy [here](./add-authentication-for-data-source-plugins.md)
-
-## Can I send special headers using the data proxy?
-
-Yes. Here's an example of a route that sends additional headers
+You can send special headers using the data proxy. Here's an example of a route with special headers:
 
 ```json title="src/plugin.json"
 "routes": [
@@ -258,3 +236,17 @@ Yes. Here's an example of a route that sends additional headers
 	]
 }]
 ```
+
+## Use the data proxy within an app plugin
+
+The setup of routes in your `plugin.json` metadata remains the same as in a data source plugin; however, since app plugins don't receive the URL as part of the props, the URL is constructed like this:
+
+```typescript
+const url = `api/plugin-proxy/${meta.id}/yourRoutePath`;
+```
+
+:::note
+
+The plugin ID is not your plugin name (for example, `myorg-plugin-app`) but the app ID. The app ID is part of the meta prop passed to the app plugin constructor. You can also get the plugin meta inside React with the hook `usePluginContext()`.
+
+:::
