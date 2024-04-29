@@ -1,6 +1,8 @@
 import { PLUGIN_TYPES } from './constants.js';
 
-export type CliArgs = {
+// The arguments that are passed to the CLI when generating a new plugin.
+// (Either via user prompts or CLI arguments)
+export type GenerateCliArgs = {
   pluginName: string;
   pluginDescription: string;
   orgName: string;

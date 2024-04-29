@@ -1,10 +1,10 @@
 import minimist from 'minimist';
 import Enquirer from 'enquirer';
 import { PLUGIN_TYPES } from '../../constants.js';
-import { CliArgs } from '../../types.js';
+import { GenerateCliArgs } from '../../types.js';
 
 export async function promptUser(argv: minimist.ParsedArgs) {
-  let answers: Partial<CliArgs> = {};
+  let answers: Partial<GenerateCliArgs> = {};
   const enquirer = new Enquirer();
 
   for (const prompt of prompts) {
@@ -22,17 +22,17 @@ export async function promptUser(argv: minimist.ParsedArgs) {
     }
   }
 
-  return answers as CliArgs;
+  return answers as GenerateCliArgs;
 }
 
 type Prompt = {
-  name: keyof CliArgs;
+  name: keyof GenerateCliArgs;
   type: string | (() => string);
   message: string | (() => string) | (() => Promise<string>);
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   initial?: any;
   choices?: Array<string | Choice>;
-  shouldPrompt?: (answers: Partial<CliArgs>) => boolean;
+  shouldPrompt?: (answers: Partial<GenerateCliArgs>) => boolean;
 };
 
 type Choice = {
