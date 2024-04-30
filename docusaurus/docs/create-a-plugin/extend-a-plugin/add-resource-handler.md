@@ -20,7 +20,7 @@ You can add a resource handler to your data source to extend the Grafana HTTP AP
 
 The primary way for a data source to retrieve data from a backend is through the [query method](./add-query-editor-help.md). But sometimes your data source needs to request data on demand; for example, to offer auto-completion automatically inside the data source’s query editor.
 
-Resource handler are also useful for building control panels that allow the user to write back to the data source. For example, you could add a resource handler to update the state of an IoT device.
+Resource handlers are also useful for building control panels that allow the user to write back to the data source. For example, you could add a resource handler to update the state of an IoT device.
 
 ## Implement the resource handler interface
 
