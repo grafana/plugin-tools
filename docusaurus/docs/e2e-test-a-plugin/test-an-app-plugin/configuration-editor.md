@@ -1,7 +1,7 @@
 ---
 id: app-configurations
 title: Test configurations
-description: Testing the configuration editor of an app with valid and invalid configuration
+description: Test the configuration editor of an app
 keywords:
   - grafana
   - plugins
@@ -14,19 +14,21 @@ keywords:
 sidebar_position: 20
 ---
 
-## Introduction
+# Test the configuration editor of an app
 
-If your app requires some kind of configuration to function, the appropriate place for managing this config is in the app configuration page.
+The app configuration page manages the configurations for your app if it requires some kind of configuration to function. This guide explains how to create an app-specific fixture to make it easier to write tests and share logic across different tests.
 
-We recommend you to create an app specific fixture to make it easier to write tests and share logic across different tests.
+## Test an app config page
 
-## Testing an app config page
+Apps have a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test the validity of the configuration. In the following example, the configuration editor form is populated with valid values when the **Save & test** button is clicked. 
 
-Apps has a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the health check endpoint. The test will be successful only if both calls yields a successful status code.
+A click on the **Save & test** button calls the Grafana backend to save the configuration, then passes the configuration to the health check endpoint. The test is successful only if both calls yield a successful status code.
 
 ### Config page with a basic UI
 
-In the fixture below we are adding an `appConfigPage` by using a navigation function. The navigation function will return the default `AppConfigPage` defined in `@grafana/plugin-e2e`.
+Add an `appConfigPage` value by using a navigation function that returns the default `AppConfigPage` defined in `@grafana/plugin-e2e`. 
+
+For example:
 
 ```ts title="fixtures.ts"
 import { AppConfigPage, test as base } from '@grafana/plugin-e2e';
@@ -48,7 +50,9 @@ export const test = base.extend<AppTestFixture>({
 export { expect } from '@grafana/plugin-e2e';
 ```
 
-You use it by importing `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When destructuring the `appConfigPage` in your test function the test will automatically navigate to the config page.
+To use the value, import `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When you destructure the `appConfigPage` in your test function, the rest automatically navigates to the config page. 
+
+For example:
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from './fixtures.ts';
@@ -69,7 +73,9 @@ test('"Save & test" should be successful when configuration is valid', async ({ 
 
 ### Config page with a complex UI
 
-In the fixture below we are adding an `appConfigPage` by using a navigation function. The navigation function will return the default `AppConfigPage` defined in `@grafana/plugin-e2e`.
+Add an `appConfigPage` by using a navigation function that returns the default `AppConfigPage` defined in `@grafana/plugin-e2e`. 
+
+For example:
 
 ```ts title="fixtures.ts"
 import { AppConfigPage, test as base } from '@grafana/plugin-e2e';
@@ -110,7 +116,9 @@ export const test = base.extend<AppTestFixture>({
 export { expect } from '@grafana/plugin-e2e';
 ```
 
-You use it by importing `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When destructuring the `appConfigPage` in your test function the test will automatically navigate to the config page.
+To use the value, import `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When you destructure the `appConfigPage` in your test function, the test automatically navigates to the config page.
+
+For example:
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from './fixtures.ts';
@@ -126,9 +134,11 @@ test('"Save & test" should be successful when configuration is valid', async ({ 
 });
 ```
 
-## Testing error scenarios
+## Test error scenarios
 
-In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user.
+In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user. 
+
+For example:
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from './fixtures.ts';
