@@ -85,7 +85,7 @@ If you have some more advanced use cases or want to use a more Go-agnostic appro
 
 What’s interesting with using [`http.Handler`](https://pkg.go.dev/net/http#Handler) is that you can use it with Go’s builtin router functionality called [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) or use your preferred HTTP router library (for example, [`gorilla/mux`](https://github.com/gorilla/mux)).
 
-An alternative to using the [`CallResource` method shown in the above example](#add-resource-handler-for-data-source-plugins) is to use [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) and [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) as shown below:
+An alternative to using the `CallResource` method shown in the [above example](#implement-the-resource-handler-interface) is to use [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) and [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) as shown below:
 
 ```go
 package mydatasource
