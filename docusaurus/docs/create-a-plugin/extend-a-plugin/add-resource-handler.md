@@ -158,7 +158,7 @@ func (d *MyDatasource) handleNamespaces(rw http.ResponseWriter, req *http.Reques
 	rw.WriteHeader(http.StatusOK)
 }
 ```
-### Additional examples
+## Additional examples
 
 Some other examples of using resource handlers and the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package:
 
