@@ -41,7 +41,7 @@ In this example code, `DATASOURCE_UID` is the data source unique identifier (UID
 
 :::tip
 
-To verify the data source UID, you can enter `window.grafanaBootData.settings.datasources` in the Browser Developer Tools Console, to list all the configured data sources in your Grafana instance.
+To verify the data source UID, you can enter `window.grafanaBootData.settings.datasources` in your browser's developer tools console, to list all the configured data sources in your Grafana instance.
 
 :::
 
