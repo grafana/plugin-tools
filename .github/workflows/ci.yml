@@ -53,23 +53,29 @@ jobs:
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
-          - workingDir: 'myorg-backend-app'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
-            hasBackend: true
           - workingDir: 'myorg-nobackend-panel'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
           - workingDir: 'myorg-nobackend-datasource'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
           - workingDir: 'myorg-backend-datasource'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
           - workingDir: 'myorg-nobackendscenes-app'
-            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --pluginName='no-backend-scenes' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
+
+    outputs:
+      myorg-nobackend-app: ${{ steps.diff.outputs.myorg-nobackend-app }}
+      myorg-backend-app: ${{ steps.diff.outputs.myorg-backend-app }}
+      myorg-nobackend-panel: ${{ steps.diff.outputs.myorg-nobackend-panel }}
+      myorg-nobackend-datasource: ${{ steps.diff.outputs.myorg-nobackend-datasource }}
+      myorg-backend-datasource: ${{ steps.diff.outputs.myorg-backend-datasource }}
+      myorg-nobackend-scenesapp: ${{ steps.diff.outputs.myorg-nobackend-scenesapp }}
+
     steps:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
@@ -87,8 +93,22 @@ jobs:
         run: for file in *.tgz; do npm install -g "$file"; done
         working-directory: ./packed-artifacts
 
+      - name: Generate plugin (with the latest version of @grafana/create-plugin)
+        run: |
+          npx @grafana/create-plugin@latest ${{ matrix.cmdArgs }}
+          mv ${{ matrix.workingDir }} ${{ matrix.workingDir }}-latest
+
       - name: Generate plugin
-        run: ${{ matrix.cmd }}
+        run: create-plugin ${{ matrix.cmdArgs }}
+
+      - name: Compare output with the latest version
+        id: diff
+        run: |
+          DIFF=$(diff -rq -x ".cprc.json" ${{ matrix.workingDir }} ${{ matrix.workingDir }}-latest)
+
+          echo $DIFF
+
+          echo "${{ matrix.workingDir }}=$DIFF" >> $GITHUB_OUTPUT
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
@@ -172,6 +192,14 @@ jobs:
           args: -v build:linux
           workdir: ./${{ matrix.workingDir }}
         if: ${{ matrix.hasBackend == true }}
+
+  generate-plugins-regression:
+    name: Regression testing
+    needs: [generate-plugins]
+    runs-on: ubuntu-latest
+    steps:
+      - name: debug
+        run: echo '${{ toJSON(needs.parallel.outputs) }}'
 
   release:
     runs-on: ubuntu-latest

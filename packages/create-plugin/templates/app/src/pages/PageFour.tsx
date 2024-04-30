@@ -17,7 +17,7 @@ export function PageFour() {
           <LinkButton data-testid={testIds.pageFour.navigateBack} icon="arrow-left" href={prefixRoute(ROUTES.One)}>
             Back
           </LinkButton>
-          <div className={s.content}>This is a full-width page without a navigation bar.</div>
+          <div className={s.content}>This is a full-width page without a navigation bar. And some more random text that should show up in the diffs.</div>
         </div>
       </div>
     </PluginPage>
