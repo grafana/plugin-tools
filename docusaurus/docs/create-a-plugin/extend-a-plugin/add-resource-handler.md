@@ -35,7 +35,7 @@ func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResour
 }
 ```
 
-You can then access your resources through the following endpoint: `http://<grafana instance host:port>/api/datasources/uid/<DATASOURCE_IUD>/resources`
+You can then access your resources through the following endpoint: `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources`
 
 In this example code, `DATASOURCE_UID` is the data source unique identifier (UID) that uniquely identifies your data source.
 
