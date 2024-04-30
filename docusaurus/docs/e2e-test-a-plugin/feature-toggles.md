@@ -46,7 +46,7 @@ export default defineConfig<PluginOptions>({
 
 :::note
 
-Feature toggles that are defined this way are propagated to `window.grafanaBootData.settings.featureToggles`. This means they will only have an impact on the frontend of Grafana. If you need the feature toggle to have an impact across the entire stack, see the [previous section](#passing-feature-toggles-to-grafana).
+Feature toggles that are defined this way are propagated to `window.grafanaBootData.settings.featureToggles`. This means they will only have an impact on the frontend of Grafana. If you need the feature toggle to have an impact across the entire stack, see the [previous section](#passing-feature-toggle-configuration-to-grafana).
 
 :::
 
