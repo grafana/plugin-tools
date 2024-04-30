@@ -83,7 +83,7 @@ props.datasource.postResource('device', { state: "on" });
 
 If you have some more advanced use cases or want to use a more Go-agnostic approach for handling resources, you can use the regular [`http.Handler`](https://pkg.go.dev/net/http#Handler). You can do so by using a package provided by the [Grafana Plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) named [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter). This package provides support for handling resource calls using an [`http.Handler`](https://pkg.go.dev/net/http#Handler).
 
-What’s interesting with using [`http.Handler`](https://pkg.go.dev/net/http#Handler) is that you can use it with Go’s builtin router functionality called [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) or use your preferred HTTP router library (for example, [`gorilla/mux`](https://github.com/gorilla/mux)).
+Using [`http.Handler`](https://pkg.go.dev/net/http#Handler) allows you to also use Go’s built-in router functionality called [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) or your preferred HTTP router library (for example, [`gorilla/mux`](https://github.com/gorilla/mux)).
 
 An alternative to using the `CallResource` method shown in the [above example](#implement-the-resource-handler-interface) is to use [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) and [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) as shown below:
 
