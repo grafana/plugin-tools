@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
-import { directoryExists, filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
+import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import {
@@ -17,7 +17,7 @@ import { TemplateData } from '../types.js';
 import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
-import { FeatureFlags, getConfig } from './utils.config.js';
+import { getConfig } from './utils.config.js';
 
 const debug = createDebug('templates');
 

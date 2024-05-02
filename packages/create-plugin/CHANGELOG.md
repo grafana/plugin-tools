@@ -1,3 +1,51 @@
+# v4.9.0 (Thu Apr 25 2024)
+
+#### 🚀 Enhancement
+
+- Create plugin: update scaffolded tests when creating an app plugin [#892](https://github.com/grafana/plugin-tools/pull/892) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v4.8.0 (Wed Apr 24 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugins: Use non dev docker image on e2e [#883](https://github.com/grafana/plugin-tools/pull/883) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v4.7.0 (Thu Apr 18 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Run e2e tests against multiple Grafana versions in CI workflow [#870](https://github.com/grafana/plugin-tools/pull/870) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v4.6.2 (Wed Apr 17 2024)
+
+#### 🐛 Bug Fix
+
+- Build: Introduce stricter typechecking [#868](https://github.com/grafana/plugin-tools/pull/868) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.6.1 (Fri Apr 05 2024)
 
 #### 🐛 Bug Fix

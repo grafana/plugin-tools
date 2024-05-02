@@ -1,3 +1,31 @@
+# v1.2.0 (Wed Apr 24 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Laura Benz ([@L-M-K-B](https://github.com/L-M-K-B)), for all your work!
+
+#### 🐛 Bug Fix
+
+- e2eTesting: update selectors [#874](https://github.com/grafana/plugin-tools/pull/874) ([@L-M-K-B](https://github.com/L-M-K-B))
+
+#### Authors: 1
+
+- Laura Benz ([@L-M-K-B](https://github.com/L-M-K-B))
+
+---
+
+# v1.1.1 (Wed Apr 17 2024)
+
+#### 🐛 Bug Fix
+
+- Build: Introduce stricter typechecking [#868](https://github.com/grafana/plugin-tools/pull/868) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v1.1.0 (Tue Apr 09 2024)
 
 #### 🚀 Enhancement

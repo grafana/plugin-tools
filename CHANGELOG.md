@@ -1,3 +1,70 @@
+# (Thu Apr 25 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.9.0`
+  - Create plugin: update scaffolded tests when creating an app plugin [#892](https://github.com/grafana/plugin-tools/pull/892) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed Apr 24 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Laura Benz ([@L-M-K-B](https://github.com/L-M-K-B)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.8.0`
+  - Create Plugins: Use non dev docker image on e2e [#883](https://github.com/grafana/plugin-tools/pull/883) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.2.0`
+  - e2eTesting: update selectors [#874](https://github.com/grafana/plugin-tools/pull/874) ([@L-M-K-B](https://github.com/L-M-K-B))
+
+#### Authors: 2
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Laura Benz ([@L-M-K-B](https://github.com/L-M-K-B))
+
+---
+
+# (Thu Apr 18 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.7.0`
+  - Create Plugin: Run e2e tests against multiple Grafana versions in CI workflow [#870](https://github.com/grafana/plugin-tools/pull/870) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Apr 17 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.6.2`, `@grafana/plugin-e2e@1.1.1`
+  - Build: Introduce stricter typechecking [#868](https://github.com/grafana/plugin-tools/pull/868) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump express from 4.18.2 to 4.19.2 [#841](https://github.com/grafana/plugin-tools/pull/841) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Apr 09 2024)
 
 #### 🚀 Enhancement

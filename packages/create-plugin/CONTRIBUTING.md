@@ -21,7 +21,9 @@ npm install
 
 ### Technologies
 
-- [**`Plop`**](https://github.com/plopjs/plop) - we are using Plop for the CLI tool and for scaffolding
+- [**`minimist`**](https://www.npmjs.com/package/minimist) - for parsing cmd line args
+- [**`enquirer`**](https://www.npmjs.com/package/enquirer) - for prompting users for information
+- [**`handlebars`**](https://www.npmjs.com/package/handlebars) - for file templates
 
 ### Folder structure
 
@@ -32,7 +34,7 @@ npm install
 │   ├── bin // the entrypoint file
 │   ├── commands // Code that runs commands
 │   └── utils // Utilities used by commands
-└── templates // Plop templates
+└── templates // Handlebars templates
     ├── _partials // Composable parts of a template
     ├── app // Templates specific to scaffolding an app plugin
     ├── backend // Templates specific to scaffolding backend plugin code
@@ -76,6 +78,6 @@ _Work in progress._
 
 ### Developing the templates
 
-The templates are used by Plop to scaffold Grafana plugins. Whilst they appear to be the intended filetype they are infact treated as markdown by Plop when it runs. As such we need to be mindful of syntax and to [escape particular characters](https://handlebarsjs.com/guide/expressions.html#whitespace-control) where necessary. The [github/ci.yml](./templates/github/ci/.github/workflows/ci.yml) file is a good example of this.
+The templates are used by Handlebars to scaffold Grafana plugins. Whilst they appear to be the intended filetype they are infact treated as markdown by Handlebars when it runs. As such we need to be mindful of syntax and to [escape particular characters](https://handlebarsjs.com/guide/expressions.html#whitespace-control) where necessary. The [github/ci.yml](./templates/github/ci/.github/workflows/ci.yml) file is a good example of this.
 
 Note that certain files are intentionally named differently (e.g. npmrc, package.json). This is done due to other tooling preventing the files from being packaged for NPM or breaking other tools during local development.

@@ -94,6 +94,7 @@ export const versionedComponents = {
   PanelEditor: {
     General: {
       content: {
+        '11.1.0': 'data-testid Panel editor content',
         [MIN_GRAFANA_VERSION]: 'Panel editor content',
       },
     },
@@ -107,6 +108,7 @@ export const versionedComponents = {
     },
     OptionsPane: {
       content: {
+        '11.1.0': 'data-testid Panel editor option pane content',
         [MIN_GRAFANA_VERSION]: 'Panel editor option pane content',
       },
       fieldLabel: {
@@ -162,9 +164,12 @@ export const versionedComponents = {
   },
   OptionsGroup: {
     group: {
+      '11.1.0': (title?: string) => (title ? `data-testid Options group ${title}` : 'data-testid Options group'),
       [MIN_GRAFANA_VERSION]: (title?: string) => (title ? `Options group ${title}` : 'Options group'),
     },
     toggle: {
+      '11.1.0': (title?: string) =>
+        title ? `data-testid Options group ${title} toggle` : 'data-testid Options group toggle',
       [MIN_GRAFANA_VERSION]: (title?: string) => (title ? `Options group ${title} toggle` : 'Options group toggle'),
     },
     groupTitle: {

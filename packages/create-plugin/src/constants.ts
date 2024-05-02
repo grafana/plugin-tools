@@ -39,7 +39,7 @@ export enum PLUGIN_TYPES {
   scenes = 'scenesapp',
 }
 
-// This gets merged into variables coming from user prompts (when using Plop) or any other dynamic variables,
+// This gets merged into variables coming from user prompts (when scaffolding) or any other dynamic variables,
 // and will be available to use in the templates.
 // Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
