@@ -3,14 +3,21 @@ import * as webpack from 'webpack';
 import { extractPluginMeta } from './meta-extractor.js';
 
 const PLUGIN_NAME = 'GrafanaPluginMetaExtractor';
+
 export class GrafanaPluginMetaExtractor {
   apply(compiler: webpack.Compiler) {
-    compiler.hooks.emit.tapAsync(PLUGIN_NAME, async (compilation, callback) => {
-      const pluginEntryPoints = await getPluginEntryPoints(compilation.options.entry);
+    compiler.hooks.compilation.tap(PLUGIN_NAME, (compilation) => {
+      compilation.hooks.processAssets.tap(
+        {
+          name: PLUGIN_NAME,
+          stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+        },
+        async () => {
+          const pluginEntryPoints = await getPluginEntryPoints(compilation.options.entry);
 
-      pluginEntryPoints.forEach((entry) => generatePluginMetaInfo(entry, compiler, compilation));
-
-      callback();
+          pluginEntryPoints.forEach((entry) => generatePluginMetaInfo(entry, compiler, compilation));
+        }
+      );
     });
   }
 }
