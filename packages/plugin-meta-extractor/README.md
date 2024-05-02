@@ -25,9 +25,7 @@ import { GrafanaPluginMetaExtractor } from '@grafana/plugin-meta-extractor';
 export default {
   // ...
   plugins: [
-    // Overrides the "plugin.json" file in the output directory
-    // `entryFile` - an absolute path pointing to the module.(ts|tsx) file of your plugin
-    new GrafanaPluginMetaExtractor({ entryFile: '...' }),
+    new GrafanaPluginMetaExtractor(),
     // ...
   ],
 };
