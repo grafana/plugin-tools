@@ -69,6 +69,9 @@ const plugins = [
         {
           from: ['/something-that-does-not-exist', '/something-that-does-not-exist/testing'],
           to: '/get-started/folder-structure',
+
+          from: ['/reference-plugin-json', '/metadata.md'],
+          to: '/reference/plugin-json',
         },
       ],
     },

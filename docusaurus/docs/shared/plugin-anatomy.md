@@ -10,7 +10,7 @@ While certain plugin types can have specific configuration options, let's look a
 - `name` is what users will see in the list of plugins. If you're creating a data source, this is typically the name of the database it connects to, such as Prometheus, PostgreSQL, or Stackdriver.
 - `id` uniquely identifies your plugin and should follow this naming convention: `<$organization-name>-<$plugin-name>-<$plugin-type>`. The create-plugin tool correctly configures this based on your responses to its prompts.
 
-To see all the available configuration settings for the `plugin.json`, refer to the [plugin.json Schema](../metadata.md).
+To see all the available configuration settings for the `plugin.json`, refer to the [plugin.json Schema](../reference/metadata.md).
 
 ### `module.ts`
 

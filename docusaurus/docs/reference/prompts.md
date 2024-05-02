@@ -1,22 +1,17 @@
 ---
-id: prompt-cli-reference
-title: Prompts and CLI
-description: Reference for prompts and CLI commands.
+id: prompts
+title: Prompts
+description: Reference for prompts of the create-plugin tool.
 keywords:
   - grafana
   - plugins
   - plugin
   - create-plugin
   - prompts
-  - CLI
-sidebar_position: 20
+sidebar_position: 40
 ---
 
-# Prompts and CLI commands reference
-
-Refer to this document for a list of prompts and CLI commands available through the [create-plugin](./get-started.mdx#use-plugin-tools-to-develop-your-plugins-faster) tool.
-
-## Prompts
+# Prompts
 
 When running the `create-plugin` command, the following prompts appear:
 
@@ -61,51 +56,3 @@ Add [GitHub workflows](/create-a-plugin/develop-a-plugin/set-up-github-workflows
 ### Do you want to add a GitHub workflow to automatically check Grafana API compatibility on PRs?
 
 Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
-
-## CLI commands
-
-Use the CLI for essential tasks of plugin development, substituting `npm` for `pnpm`, or `yarn` based on your choice of package manager.
-
-### `npm run build`
-
-Compiles and bundles the project using Webpack in production mode.
-
-### `npm run dev`
-
-Runs Webpack in watch mode for development, continually monitoring for changes.
-
-### `npm run e2e`
-
-Runs Grafana end-to-end tests using Cypress.
-
-### `npm run e2e:update`
-
-Runs Grafana end-to-end tests and tests any test screenshots, using Cypress.
-
-### `npm run lint`
-
-Lints the frontend codebase using ESLint with the `.gitignore` file to ignore certain files. Results are cached locally to speed up future linting tasks.
-
-### `npm run lint:fix`
-
-Lints the frontend codebase using ESLint and automatically fixes detected issues.
-
-### `npm run typecheck`
-
-Performs a type-checking process on the frontend code using TypeScript.
-
-### `npm run server`
-
-Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
-
-### `npm run sign`
-
-Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
-
-### `npm run test`
-
-Executes frontend tests, running only the tests that have changed, and enables a watch mode for ongoing testing.
-
-### `npm run test:ci`
-
-Runs frontend tests for CI, ensuring it passes even with no tests, and utilizes a maximum of four workers for parallel execution.
