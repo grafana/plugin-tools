@@ -1,5 +1,5 @@
 import * as semver from 'semver';
-import { Locator, expect } from '@playwright/test';
+import { Locator } from '@playwright/test';
 import { NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
@@ -8,10 +8,8 @@ import { Panel } from '../components/Panel';
 
 const TIME_SERIES_PANEL_SELECTOR_SUFFIX = 'Graph';
 const TABLE_PANEL_SELECTOR_SUFFIX = 'Table';
-const LOGS_PANEL_SELECTOR_SUFFIX = 'Logs';
 const TIME_SERIES_PANEL_TEXT = 'Graph Lines Bars Points';
 const TABLE_PANEL_TEXT = 'Table';
-const LOGS_PANEL_TEXT = 'Logs';
 
 export class ExplorePage extends GrafanaPage {
   datasource: DataSourcePicker;

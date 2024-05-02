@@ -81,53 +81,6 @@ export type PluginFixture = {
   selectors: E2ESelectors;
 
   /**
-   * Isolated {@link DashboardPage} instance for each test.
-   *
-   * When using this fixture in a test, you will get a new, empty dashboard page.
-   * To load an existing dashboard, use the {@link gotoDashboardPage} fixture.
-   */
-  dashboardPage: DashboardPage;
-
-  /**
-   * Isolated {@link PanelEditPage} instance for each test.
-   *
-   * Navigates to a new dashboard page and adds a new panel.
-   *
-   * When using this fixture in a test, you will get a new dashboard page with a new empty panel edit page
-   * To load an existing dashboard with an existing panel, use the {@link gotoPanelEditPage} fixture.
-   */
-  panelEditPage: PanelEditPage;
-
-  /**
-   * Isolated {@link VariableEditPage} instance for each test.
-   *
-   * When using this fixture in a test, you will get a new dashboard page with a new empty variable edit page
-   * To load an existing dashboard with an existing variable, use the {@link gotoVariableEditPage} fixture.
-   */
-  variableEditPage: VariableEditPage;
-
-  /**
-   * Isolated {@link AnnotationEditPage} instance for each test.
-   *
-   * When using this fixture in a test, you will get a new dashboard page with a new empty annotation edit page
-   * To load an existing dashboard with an existing annotation, use the {@link gotoAnnotationEditPage} fixture.
-   */
-  annotationEditPage: AnnotationEditPage;
-
-  /**
-   * Isolated {@link ExplorePage} instance for each test.
-   */
-  explorePage: ExplorePage;
-
-  /**
-   * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.
-   *
-   * The data source config page cannot be navigated to without a data source uid, so this fixture will create a new
-   * data source using the Grafana API, create a new DataSourceConfigPage instance and navigate to the page.
-   */
-  createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
-
-  /**
    * Fixture command that creates a data source via the Grafana API.
    *
    * If you have tests that depend on the the existance of a data source,
@@ -220,6 +173,53 @@ export type PluginFixture = {
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Isolated {@link DashboardPage} instance for each test.
+   *
+   * When using this fixture in a test, you will get a new, empty dashboard page.
+   * To load an existing dashboard, use the {@link gotoDashboardPage} fixture.
+   */
+  dashboardPage: DashboardPage;
+
+  /**
+   * Isolated {@link PanelEditPage} instance for each test.
+   *
+   * Navigates to a new dashboard page and adds a new panel.
+   *
+   * When using this fixture in a test, you will get a new dashboard page with a new empty panel edit page
+   * To load an existing dashboard with an existing panel, use the {@link gotoPanelEditPage} fixture.
+   */
+  panelEditPage: PanelEditPage;
+
+  /**
+   * Isolated {@link VariableEditPage} instance for each test.
+   *
+   * When using this fixture in a test, you will get a new dashboard page with a new empty variable edit page
+   * To load an existing dashboard with an existing variable, use the {@link gotoVariableEditPage} fixture.
+   */
+  variableEditPage: VariableEditPage;
+
+  /**
+   * Isolated {@link AnnotationEditPage} instance for each test.
+   *
+   * When using this fixture in a test, you will get a new dashboard page with a new empty annotation edit page
+   * To load an existing dashboard with an existing annotation, use the {@link gotoAnnotationEditPage} fixture.
+   */
+  annotationEditPage: AnnotationEditPage;
+
+  /**
+   * Isolated {@link ExplorePage} instance for each test.
+   */
+  explorePage: ExplorePage;
+
+  /**
+   * Fixture command that will create an isolated DataSourceConfigPage instance for a given data source type.
+   *
+   * The data source config page cannot be navigated to without a data source uid, so this fixture will create a new
+   * data source using the Grafana API, create a new DataSourceConfigPage instance and navigate to the page.
+   */
+  createDataSourceConfigPage: (args: CreateDataSourcePageArgs) => Promise<DataSourceConfigPage>;
 
   /**
    * Fixture command that navigates to an already exist dashboard. Returns a DashboardPage instance.

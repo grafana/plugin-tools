@@ -97,6 +97,7 @@ function getPackageManagerFromLockFile(): PackageManager | undefined {
     if (error instanceof Error) {
       throw error;
     }
+    return undefined;
   }
 }
 
