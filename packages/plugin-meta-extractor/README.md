@@ -14,7 +14,7 @@ npm install @grafana/plugin-meta-extractor --save-dev
 
 #### With Webpack
 
-The package exposes a webpack plugin that can be used to generate plugin meta-information on every build based on the source code. The plugin is adding the information to the `plugin.json` file by overriding the `generated` property in the JSON.
+The package exposes a webpack plugin that can be used to generate plugin meta-information on every build based on the source code. The plugin adds additional information to the `plugin.json` file by overriding the `generated` property in the JSON.
 
 ```ts
 // webpack.config.ts
