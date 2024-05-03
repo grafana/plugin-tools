@@ -71,7 +71,7 @@ The returned meta-data is in the following format:
 
 ## Plugin support
 
-At this point the tool requires the `module.(ts|tsx)` to be in a certain format to be able to parse it (we are planning to improve on this in the future). The method calls for registering extensions have to be in the `module.(ts|tsx)`, and they need to be called on the `AppPlugin` instance in a "chained" manner:
+This package requires the `module.(ts|tsx)` to be in a certain format to be able to parse it (we are planning to improve on this in the future). The method calls for registering extensions have to be in the `module.(ts|tsx)`, and they need to be called on the `AppPlugin` instance in a "chained" manner:
 
 ```ts
 // src/module.ts
