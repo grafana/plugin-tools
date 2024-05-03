@@ -2,6 +2,25 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@4.9.2`
+  - Create-plugin: Refactor getTemplateData to be used in generate command and update commands [#837](https://github.com/grafana/plugin-tools/pull/837) ([@oshirohugo](https://github.com/oshirohugo) [@Ukochka](https://github.com/Ukochka) [@leventebalogh](https://github.com/leventebalogh) [@josmperez](https://github.com/josmperez) [@sunker](https://github.com/sunker) [@grafanabot](https://github.com/grafanabot) [@jackw](https://github.com/jackw))
+
+#### Authors: 7
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Grot (@grafanabot) ([@grafanabot](https://github.com/grafanabot))
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Fri May 03 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-meta-extractor@0.0.1`
   - Plugin Meta Extractor: Initial version [#805](https://github.com/grafana/plugin-tools/pull/805) ([@mckn](https://github.com/mckn) [@leventebalogh](https://github.com/leventebalogh))
 
