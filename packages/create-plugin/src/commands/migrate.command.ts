@@ -28,7 +28,8 @@ export const migrate = async () => {
     // 1. Add / update configuration files
     // --------------------------
     if (await confirmPrompt(TEXT.overrideFilesPrompt + '\n' + displayArrayAsList(MIGRATION_CONFIG.filesToOverride))) {
-      compileTemplateFiles(MIGRATION_CONFIG.filesToOverride.map(getExportTemplateName), getTemplateData());
+      const templateData = getTemplateData();
+      compileTemplateFiles(MIGRATION_CONFIG.filesToOverride.map(getExportTemplateName), templateData);
       printSuccessMessage(TEXT.overrideFilesSuccess);
     } else {
       printMessage(TEXT.overrideFilesAborted);

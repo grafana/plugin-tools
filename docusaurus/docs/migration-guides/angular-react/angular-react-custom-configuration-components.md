@@ -61,6 +61,7 @@ The composite editor is now shown vertically and does not require scrolling left
 Source code for the component is now self-contained and can be viewed in the [Grafana GitHub repository](https://github.com/grafana/grafana-polystat-panel/tree/main/src/components/composites).
 
 The new editor has many advantages over the AngularJS version:
+
 - Supports re-ordering the composites and naming them for easier identification. The editor also leverages the built-in input fields and validators, reducing the amount of code required to support the panel.
 - Allows many complex configuration options which are easier to implement in React. For example, the options include the ability to derive a have the name of the composite from regular expressions, template variables, or both.
 - Includes additional custom editors for thresholds and overrides which differ from the common `@grafana/ui` patterns. These editors can be used as a reference on how to implement these types of editors with complex logic.
