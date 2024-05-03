@@ -7,7 +7,7 @@
 ## Install
 
 ```
-npm install @grafana/plugin-meta-extractor
+npm install @grafana/plugin-meta-extractor --save-dev
 ```
 
 ## Usage
