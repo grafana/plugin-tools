@@ -1,3 +1,17 @@
+# (Fri May 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-meta-extractor@0.0.1`
+  - Plugin Meta Extractor: Initial version [#805](https://github.com/grafana/plugin-tools/pull/805) ([@mckn](https://github.com/mckn) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Thu Apr 25 2024)
 
 #### 🚀 Enhancement
