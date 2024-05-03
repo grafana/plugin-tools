@@ -19,7 +19,7 @@ if (!fs.existsSync(entryPath)) {
 
 // Check if it is a module file
 const fileName = entryPath.split('/').pop();
-if (!fileName?.match(/^(module\.ts|module\.tsx)$/)) {
+if (!fileName?.match(/^(module\.tsx?)$/)) {
   console.error(
     `The tool can only run against a "module.ts" or "module.tsx" plugin file.\nThe following path is invalid: "${entryPath}".`
   );
