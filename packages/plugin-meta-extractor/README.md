@@ -1,8 +1,6 @@
 # Grafana / Plugin Meta Extractor
 
-`@grafana/plugin-meta-extractor` is a small package that can be used to extract meta-information from the source code of a Grafana plugin. The main use case is to be able to automatically generate static information for a plugin without the need for manual intervention, which can help Grafana core to understand when a plugin that registers extensions should be preloaded without running the plugin code.
-
-(If you are developing a plugin there is nothing that you _have to_ do - only make sure that your plugin build workflow is up-to-date by running `npx @grafana/create-plugin@latest update`, and the build config will run this tool in the background.)
+`@grafana/plugin-meta-extractor` is a cli tool that can be used to extract meta-information from the source code of a Grafana plugin. It is used to generate plugin metadata without the need for manual intervention, which is then used by the Grafana application to understand features or functionalities a plugin supports or uses.
 
 ## Install
 
