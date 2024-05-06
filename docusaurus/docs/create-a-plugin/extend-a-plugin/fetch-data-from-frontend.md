@@ -151,7 +151,7 @@ You first need to set up the routes in your `plugin.json` metadata.
 ],
 ```
 
-Notice the `url` value contains an interpolation of the `apiUrl` from the `jsonData`. Your configuration page must set `apiUrl` in the Configuration page from user input.
+Notice that the `url` value contains an interpolation of `jsonData.apiUrl`. Your configuration page must take care of setting the `apiUrl` in the `jsonData` object based on the user input.
 
 :::note
 You must build your plugin and restart the Grafana server every time you modify your `plugin.json` file.
