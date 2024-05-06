@@ -227,7 +227,7 @@ import { getBackendSrv } from '@grafana/runtime';
 import { lastValueFrom } from 'rxjs';
 
 async function getDataFromApi() {
-  const dataProxyUrl = `api/plugin-proxy/${your - plugin - id}/myRoutePath`;
+  const dataProxyUrl = `api/plugin-proxy/${PLUGIN_ID}/myRoutePath`;
   const response = getBackendSrv().fetch<TODO[]>({
     url: dataProxyUrl,
   });
