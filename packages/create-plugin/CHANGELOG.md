@@ -1,3 +1,15 @@
+# v4.10.0 (Mon May 06 2024)
+
+#### 🚀 Enhancement
+
+- Webpack: Generate meta-data using the plugin-meta-extractor during builds [#871](https://github.com/grafana/plugin-tools/pull/871) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v4.9.2 (Fri May 03 2024)
 
 #### 🐛 Bug Fix

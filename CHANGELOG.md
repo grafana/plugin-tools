@@ -1,3 +1,21 @@
+# (Mon May 06 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.10.0`
+  - Webpack: Generate meta-data using the plugin-meta-extractor during builds [#871](https://github.com/grafana/plugin-tools/pull/871) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump ejs from 3.1.9 to 3.1.10 [#896](https://github.com/grafana/plugin-tools/pull/896) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Fri May 03 2024)
 
 #### 🐛 Bug Fix
