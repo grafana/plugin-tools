@@ -91,7 +91,7 @@ export class DataSource extends DataSourceApi {
 
   async query(options: DataQueryRequest): Promise<DataQueryResponse> {
     const response = getBackendSrv().fetch<TODO[]>({
-      // see `this.baseUrl` set in the constructor
+      // You can see above that `this.baseUrl` is set in the constructor
       // in this example we assume the configured url is
       // https://jsonplaceholder.typicode.com
       /// if you inspect `this.baseUrl` you'll see the Grafana data proxy url
