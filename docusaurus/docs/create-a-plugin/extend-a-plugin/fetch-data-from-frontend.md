@@ -28,7 +28,7 @@ This guide explains how the data proxy works and explores common issues in its u
 Instead of performing a request directly from the browser to the server, you perform the request through the Grafana backend server, which handles it and returns the response to the plugin.
 
 - **Without data proxy**: The requests go directly from the browser to the third-party server.
-- **With data proxy**: The requests go from the browser to the Grafana backend and then to the third-party server. In this case, there are no restrictions in CORS, and you can instruct Grafana to send the request authenticated or using sensitive data stored in the plugin configuration.
+- **With data proxy**: The requests go from the browser to the Grafana backend and then to the third-party server. In this case, there are no restrictions in CORS, and you can instruct Grafana to send the request authenticated by using sensitive data stored in the plugin configuration.
 
 :::note
 You can only make use of the data proxy from data source and app plugins. _You can't use the data proxy from panel plugins._
