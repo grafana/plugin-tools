@@ -271,21 +271,4 @@ With this configuration, the Grafana server output shows the requests going out 
 
 ## Send special headers using the data proxy
 
-You can send special headers using the data proxy. Here's an example of a route with special headers:
-
-```json title="src/plugin.json"
-"routes": [
-    {
-        "path": "example",
-        "url": "https://api.example.com",
-        "headers": [
-            {
-                "name": "MyHeader",
-                // you can also use jsonData interpolation in headers
-                "content": "{{ .JsonData.headerValue }}"
-            }
-        ]
-    }]
-```
-
-Notice you can also use `.jsonData` interpolation when configuring headers.
+You can send special headers using the data proxy. To learn about adding headers to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins.md).
