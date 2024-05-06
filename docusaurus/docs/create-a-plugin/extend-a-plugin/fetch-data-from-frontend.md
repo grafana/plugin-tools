@@ -203,7 +203,7 @@ See the [previous example](#step-2-create-your-configuration-page) as the code i
 The setup of routes in your `plugin.json` metadata remains the same as in a data source plugin; however, since app plugins don't receive the URL as part of the props, the URL is constructed like this:
 
 ```typescript
-const dataProxyUrl = `api/plugin-proxy/${your - plugin - id}/yourRoutePath`;
+const dataProxyUrl = `api/plugin-proxy/${PLUGIN_ID}/yourRoutePath`;
 ```
 
 Here is an example of a function that fetches data from the data proxy in an app plugin:
