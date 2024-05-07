@@ -1,3 +1,16 @@
+# (Tue May 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.10.1`
+  - Create Plugin: polyfill `TextEncoder` for Jest tests in scaffolded plugins [#899](https://github.com/grafana/plugin-tools/pull/899) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Mon May 06 2024)
 
 #### 🚀 Enhancement
