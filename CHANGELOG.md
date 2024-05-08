@@ -1,3 +1,16 @@
+# (Wed May 08 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-meta-extractor@0.0.2`
+  - PME: Removed dependency on tsquery [#902](https://github.com/grafana/plugin-tools/pull/902) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Tue May 07 2024)
 
 #### 🐛 Bug Fix
