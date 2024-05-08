@@ -1,3 +1,15 @@
+# v4.10.3 (Wed May 08 2024)
+
+#### 🐛 Bug Fix
+
+- CreatePlugin: Updating template to use latest version of plugin meta extractor [#905](https://github.com/grafana/plugin-tools/pull/905) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v4.10.1 (Tue May 07 2024)
 
 #### 🐛 Bug Fix

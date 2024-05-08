@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@4.10.3`
+  - CreatePlugin: Updating template to use latest version of plugin meta extractor [#905](https://github.com/grafana/plugin-tools/pull/905) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed May 08 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-meta-extractor@0.0.2`
   - PME: Removed dependency on tsquery [#902](https://github.com/grafana/plugin-tools/pull/902) ([@mckn](https://github.com/mckn))
 
