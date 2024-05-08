@@ -18,8 +18,7 @@ export function getComponentExtensionConfigs(ast: ts.Node, checker: ts.TypeCheck
 }
 
 export function getExtensionConfigs(functionName: string, ast: ts.Node, checker: ts.TypeChecker) {
-  const matcher = createExtensionMatcher(functionName);
-  const identifiers = query(ast, matcher);
+  const identifiers = query(ast, createIdentifierMatcher(functionName));
   const extensionConfigs = [];
 
   for (const identifier of identifiers) {
@@ -39,7 +38,7 @@ export function getExtensionConfigs(functionName: string, ast: ts.Node, checker:
   return extensionConfigs;
 }
 
-function createExtensionMatcher(functionName: string): (node: ts.Node) => boolean {
+function createIdentifierMatcher(functionName: string): (node: ts.Node) => boolean {
   return (node) => {
     if (!ts.isIdentifier(node)) {
       return false;
