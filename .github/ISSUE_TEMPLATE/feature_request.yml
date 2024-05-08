@@ -19,6 +19,7 @@ body:
         - label: 'Create Plugin'
         - label: 'Sign Plugin'
         - label: 'Plugin E2E'
+        - label: 'Plugin Meta Extractor'
         - label: 'Documentation'
   - type: textarea
     id: problem
