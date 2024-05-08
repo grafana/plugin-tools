@@ -33,7 +33,6 @@ export function extractPluginExtensions(entry: string): PluginExtensionMeta[] {
 
   const linkExtensionConfigs = getLinkExtensionsConfigs(appNode, checker);
   const componentExtensionConfigs = getComponentExtensionConfigs(appNode, checker);
-
   return [...linkExtensionConfigs, ...componentExtensionConfigs];
 }
 
