@@ -49,7 +49,7 @@ When you create an extension point in a plugin, you create a public interface fo
 
 You can easily create an extension point using the following functions (they live in `@grafana/runtime`) to fetch extensions for a certain extension point ID:
 
-### The `usePluginExtensions()` hook
+### The `usePluginExtensions()` hook {#usepluginextensions}
 
 :::note
 
