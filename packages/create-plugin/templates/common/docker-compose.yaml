@@ -9,7 +9,7 @@ services:
       args:
         grafana_image: ${GRAFANA_IMAGE:-{{~grafanaImage~}} }
         grafana_version: ${GRAFANA_VERSION:-{{~grafanaVersion~}} }
-        development: ${DEVELOPMENT:-true}
+        development: ${DEVELOPMENT:-false}
     ports:
       - 3000:3000/tcp
 {{#if hasBackend}}
