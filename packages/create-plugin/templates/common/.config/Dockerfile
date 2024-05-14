@@ -3,7 +3,7 @@ ARG grafana_image=grafana-enterprise
 
 FROM grafana/${grafana_image}:${grafana_version}
 
-ARG development=false
+ARG development=true
 
 {{#if hasBackend}}
 ARG GO_VERSION=1.21.6
