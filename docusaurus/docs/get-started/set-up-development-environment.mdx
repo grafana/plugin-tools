@@ -39,7 +39,7 @@ To start your plugin development project, run the following commands in the orde
 1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
 1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
 1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
-   [http://localhost:3000](http://localhost:3000). The plugin will be reloaded on every code change and a debugger can be attached on port `2345`.
+   [http://localhost:3000](http://localhost:3000).
 
 ### Configure the Grafana version
 
@@ -76,7 +76,7 @@ This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `
 
 ### Debugging Backend plugin
 
-If you're developing a plugin with a backend part, the docker compose file will also expose the port `2345` for debugging, from a headless delve instance running inside the docker environment.
+If you're developing a plugin with a backend part, run `npm run server` with `DEVELOPMENT=true`. The docker compose file exposes the port `2345` for debugging, from a headless delve instance that will run inside the docker environment.
 You can attach a debugger client to this port to debug your backend code.
 For example, in VSCode, you can add a `launch.json` configuration like this:
 
@@ -130,20 +130,3 @@ You will also notice that the `docker-compose.yaml` file also has the following 
 ```
 
 they are necessary to allow delve to attach to the running process and debug it and should not be used in production environments.
-
-If you wish to test your plugin in a environment closer to production you can disable the development mode by modifying the `docker-compose.yaml`:
-
-```yaml title="docker-compose.yaml"
-version: '3.7'
-
-services:
-  grafana:
-    container_name: 'myorg-basic-app'
-    build:
-      context: ./.config
-      args:
-        development: ${DEVELOPMENT:-true}
-```
-
-Doing that, the docker environment will only run grafana and load the content of your projects `dist` directory. Thefore before doing that you should build your plugin with `mage -v build:backend` and <SyncCommand cmd="run server" /> to generate the plugin files.
-In the example you can also use the `DEVELOPMENT` environment variable to control the development mode.
