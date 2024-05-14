@@ -1,3 +1,15 @@
+# v3.0.2 (Tue May 14 2024)
+
+#### 🐛 Bug Fix
+
+- Chore(deps): Bump proxy-agent from 6.3.1 to 6.4.0 [#792](https://github.com/grafana/plugin-tools/pull/792) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v3.0.1 (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix

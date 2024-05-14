@@ -1,3 +1,20 @@
+# (Tue May 14 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/sign-plugin@3.0.2`
+  - Chore(deps): Bump proxy-agent from 6.3.1 to 6.4.0 [#792](https://github.com/grafana/plugin-tools/pull/792) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump follow-redirects from 1.15.4 to 1.15.6 [#827](https://github.com/grafana/plugin-tools/pull/827) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # (Wed May 08 2024)
 
 #### 🐛 Bug Fix
