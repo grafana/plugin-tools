@@ -1,3 +1,15 @@
+# v4.10.4 (Thu May 16 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Disable development mode by default [#910](https://github.com/grafana/plugin-tools/pull/910) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.10.3 (Wed May 08 2024)
 
 #### 🐛 Bug Fix
