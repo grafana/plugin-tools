@@ -179,6 +179,30 @@ The following instructions are based on Grafana v10.1.1, consult the [documentat
 1. Save the dashboard.
 1. After some time the alert rule evaluates and transitions into _Alerting_ state.
 
+## Run multiple queries concurrently
+
+:::note
+This feature is only available for the Grafana backend plugin SDK version 0.232.0 and later.
+:::
+
+By default, multiple queries within a single request (panel) are executed sequentially. To run multiple queries concurrently, you can use the `concurrent.QueryData` function that the SDK exposes. To use it, simply specify how to execute a single query and a limit on the number of concurrent queries to run (the maximum is 10 concurrent queries).
+
+```go
+import (
+  ...
+	"github.com/grafana/grafana-plugin-sdk-go/experimental/concurrent"
+	...
+)
+
+func (d *Datasource) handleSingleQueryData(ctx context.Context, q concurrent.Query) (res backend.DataResponse) {
+  // Implement the query logic here
+}
+
+func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
+	return concurrent.QueryData(ctx, req, d.handleSingleQueryData, 10)
+}
+```
+
 ## Summary
 
 In this tutorial you created a backend for your data source plugin.
