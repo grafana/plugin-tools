@@ -163,7 +163,9 @@ Implementing authentication allows your plugin to access protected resources lik
 ### Create an alert
 
 :::note
+
 The following instructions are based on Grafana v10.1.1, consult the [documentation](https://grafana.com/docs/grafana/latest/alerting/) for alerting for version appropriate guidance.
+
 :::
 
 1. Open the dashboard you created earlier in the _Create a new plugin_ step.
@@ -176,16 +178,19 @@ The following instructions are based on Grafana v10.1.1, consult the [documentat
 1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
 1. Then, click on _New evaluation group_ button and create a new evaluation group; choose a name and set the _Evaluation interval_ to `10s`.
 1. Click _Save rule and exit_ button.
-1. Save the dashboard.
-1. After some time the alert rule evaluates and transitions into _Alerting_ state.
+1. Save the dashboard. After some time, the alert rule evaluates and transitions into the _Alerting_ state.
 
 ## Run multiple queries concurrently
 
 :::note
+
 This feature is only available for the Grafana backend plugin SDK version 0.232.0 and later.
+
 :::
 
-By default, multiple queries within a single request (panel) are executed sequentially. To run multiple queries concurrently, you can use the `concurrent.QueryData` function that the SDK exposes. To use it, simply specify how to execute a single query and a limit on the number of concurrent queries to run (the maximum is 10 concurrent queries).
+By default, multiple queries within a single request (that is, within one panel) are executed sequentially. To run multiple queries concurrently, you can use the `concurrent.QueryData` function that the SDK exposes. 
+
+To use `concurrent.QueryData`, specify how to execute a single query and a limit on the number of concurrent queries to run. Note that the maximum is 10 concurrent queries.
 
 ```go
 import (
