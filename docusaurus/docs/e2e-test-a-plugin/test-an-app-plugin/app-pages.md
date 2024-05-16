@@ -63,7 +63,7 @@ test('start page should welcome users to the app', async ({ gotoPage, page }) =>
 
 If, on the other hand, you have a page with a complex UI that might not be easy to interact with via the standard Playwright APIs, then you need a different approach. As a best practice, create a page object that can encapsulate the page's logic in functions.
 
-This is especially helpful if you want to reuse that selector logic in multiple tests. The example below showcases how to extend the standard fixture with a page object. Simplify the `getWelcomeText` logic because you want to highlight the page object pattern rather than write a complex selector logic.
+This is especially helpful if you want to reuse that selector logic in multiple tests. The example below showcases how to extend the standard fixture with a page object. We have simplified the `getWelcomeText` logic to highlight the page object pattern without introducing unnecessary complexity to this example.
 
 For example:
 
