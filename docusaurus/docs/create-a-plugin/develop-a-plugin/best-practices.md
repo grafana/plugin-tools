@@ -64,7 +64,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Plugins should not execute arbitrary code in the backend** - Again, this is a security risk and should be avoided. If your plugin needs to execute code, provide a list of allowed commands and validate the input before executing it.
 - **In general, any error happening should be logged with level `error`.**
 - **Don't use the `info` level: use the `debug` level instead.**
-- **Enable concurrent query execution** - This allows to run multiple queries in parallel. To learn more, refer to our [documentation](/tutorials/build-a-data-source-backend-plugin#run-multiple-queries-concurrently).
+- **Enable concurrent query execution** - This allows you to run multiple queries in parallel. To learn more, refer to our [documentation](/tutorials/build-a-data-source-backend-plugin#run-multiple-queries-concurrently).
 
 ## App plugins
 
