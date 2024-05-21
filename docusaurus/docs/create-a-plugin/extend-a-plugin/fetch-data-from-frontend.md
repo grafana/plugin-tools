@@ -220,7 +220,7 @@ Declare the route in `src/plugin.json`. You may also use authenticated requests 
 }]
 ```
 
-In your App plugin code you can then fetch data using the data proxy by constructing the data proxy url like this.
+In your app plugin's code, you can then fetch data using the data proxy by constructing the data proxy URL like this:
 
 ```typescript title="src/dataproxy-api-example.ts"
 import { getBackendSrv } from '@grafana/runtime';
