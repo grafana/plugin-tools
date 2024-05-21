@@ -208,7 +208,7 @@ const dataProxyUrl = `api/plugin-proxy/${PLUGIN_ID}/yourRoutePath`;
 
 Here is an example of a function that fetches data from the data proxy in an app plugin:
 
-Declare the route in `src/plugin.json`. You may also use authenticated requests and jsonData interpolation like in data source plugins.
+Declare the route in `src/plugin.json`. You may also use authenticated requests and `jsonData` interpolation like in data source plugins.
 
 ```json title="src/plugin.json"
 "routes": [
