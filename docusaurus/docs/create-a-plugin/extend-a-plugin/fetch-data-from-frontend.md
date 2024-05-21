@@ -62,7 +62,7 @@ The `DataSourceHttpSettings` will display a form with all the options for the us
 
 ### Step 2: Use the data proxy in your data source plugin
 
-Once the user has entered the endpoint details in the data source configuration page, you can query the data proxy url that is passed in the data source instanceSettings (`DataSourceInstanceSettings.url`).
+Once the user has entered the endpoint details in the data source configuration page, you can query the data proxy URL that is passed in the data source instance settings (`DataSourceInstanceSettings.url`).
 
 ```typescript title="src/dataSource.ts"
 import {
