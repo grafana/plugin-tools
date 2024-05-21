@@ -92,3 +92,18 @@ const variableEditPage = new VariableEditPage(
 );
 await variableEditPage.goto();
 ```
+
+### readProvisionedAlertRule fixture
+
+The `readProvisionedAlertRule` fixture allows you to read a file from your plugin's `provisioning/alerting` folder.
+
+```ts title="alerting.spec.ts"
+test('should evaluate to true when loading a provisioned query that is valid', async ({
+  gotoAlertRuleEditPage,
+  readProvisionedAlertRule,
+}) => {
+  const alertRule = await readProvisionedAlertRule({ fileName: 'alerts.yml' });
+  const alertRuleEditPage = await gotoAlertRuleEditPage(alertRule);
+  await expect(alertRuleEditPage.evaluate()).toBeOK();
+});
+```
