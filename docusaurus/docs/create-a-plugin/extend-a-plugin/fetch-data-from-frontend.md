@@ -58,7 +58,7 @@ export function ConfigEditor(props: DataSourcePluginOptionsEditorProps) {
 }
 ```
 
-The `DataSourceHttpSettings` will display a form with all the options for the user to configure an http endpoint, including authentication, TLS, cookies and timeout.
+The `DataSourceHttpSettings` will display a form with all the options for the user to configure an HTTP endpoint, including authentication, TLS, cookies, and timeout.
 
 ### Step 2: Use the data proxy in your data source plugin
 
