@@ -196,7 +196,7 @@ export function ConfigEditor(props: Props) {
 
 In your data source plugin, you can now fetch data by using the proxy URL.
 
-See the [previous example](#step-2-create-your-configuration-page) as the code is the same.
+Refer to the [previous example](#step-2-create-your-configuration-page), as the code is the same.
 
 ## Use the data proxy within an app plugin
 
