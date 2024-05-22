@@ -64,13 +64,13 @@ jobs:
         id: run-tests
         run: yarn playwright test
 
-      # If your repository is public, uploading the Playwright report will make it public on the Internet.
-      # Beware not to expose sensitive information.
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
-        with:
-          name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
-          path: playwright-report/
-          retention-days: 30
+      # Uncomment this step to upload the Playwright report to Github artifacts.
+      # If your repository is public, the report will be public on the Internet so beware not to expose sensitive information.
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
+      #   with:
+      #     name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
+      #     path: playwright-report/
+      #     retention-days: 30
 ```
