@@ -11,11 +11,7 @@ on:
       - master
       - main
 
-permissions:
-  contents: read
-{{#if_eq orgName "grafana"}}
-  id-token: write
-{{/if_eq}}
+permissions: read-all
 
 jobs:
   build:
@@ -217,14 +213,3 @@ jobs:
           name: playwright-report-$\{{ matrix.GRAFANA_IMAGE.NAME }}-v$\{{ matrix.GRAFANA_IMAGE.VERSION }}-$\{{github.run_id}}
           path: playwright-report/
           retention-days: 5
-
-{{#if_eq orgName "grafana"}}
-      # Repos in the grafana Github org can publish the report to GCS so that they can be browsed without having to download them.
-      # This will make the report public on the Internet, so beware to skip this step if the report contains sensitive information.
-      - name: Publish report to GCS
-        if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
-        uses: grafana/plugin-actions/publish-report@main
-        with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-          path: playwright-report
-{{/if_eq}}
