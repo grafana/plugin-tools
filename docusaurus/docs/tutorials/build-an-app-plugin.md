@@ -15,9 +15,9 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
 
-App plugins are Grafana plugins that can bundle data source and panel plugins within one package. They also let you create custom pages within Grafana. Custom pages enable the plugin author to include things like documentation, sign-up forms, or to control other services over HTTP.
+App plugins are Grafana plugins that allow you to bundle data sources and panel plugins within a single package. They also enable you to create custom pages within Grafana, providing a dedicated space for documentation, sign-up forms, or integration with other services via HTTP.
 
-Apps will show up in the navigation menu and they also allow you to define [UI Extensions](../ui-extensions/)
+App plugins are displayed in the navigation menu and offer the flexibility to define [UI Extensions](../ui-extensions/).
 
 ### Prerequisites
 
@@ -30,7 +30,7 @@ Apps will show up in the navigation menu and they also allow you to define [UI E
 
 :::note
 
-If you choose to have a backend for your app plugin you must run `mage -v` before starting Grafana with docker.
+If you choose to have a backend for your app plugin, you must run `mage -v` before starting Grafana with Docker.
 
 :::
 
@@ -88,7 +88,7 @@ Let's add a new page to the navigation menu:
 
 :::note
 
-Because you changed the `plugin.json` file you will also need to restart Grafana. To do this you need to stop docker from the terminal you ran `docker compose up` (use ctrl-c to stop it) and run `docker-compose up` again.
+After saving the `plugin.json` file, you need to restart your Grafana instance to see the new page in the navigation menu.
 
 :::
 
@@ -127,20 +127,18 @@ You can only have one level of pages in the navigation menu. Sub-menu items are 
 
 ## Configuration page
 
-Apps plugins can have a configuration page where your users can store any settings your plugin might need.
-
-Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`
+App plugins can have a configuration page where your users can store any settings your plugin might need. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
 
 ### Saving user settings
 
-You are free to design and implement your own configuration page as you wish, to store the user settings you must send a POST request to `/api/plugins/%PLUGIN_ID%/settings` with `jsonData` and `secureJsonData` as data.
+To store user settings, send a POST request to `/api/plugins/%PLUGIN_ID%/settings` with the `jsonData` and `secureJsonData` as data.
 
 ```ts
 export const updatePluginSettings = async (pluginId: string, data: Partial<PluginMeta>) => {
   const response = await getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',
-    data,
+    data, // data: { jsonData: { ... }, secureJsonData: { ... } }
   });
 
   return lastValueFrom(response);
@@ -149,7 +147,7 @@ export const updatePluginSettings = async (pluginId: string, data: Partial<Plugi
 
 ### Retrieving user settings
 
-The user settings are part of the plugin meta. You can retrieve them inside a react component by using the `usePluginContext` hook
+The user settings are part of the plugin meta. You can retrieve them inside a React component by using the `usePluginContext` hook.
 
 ```tsx
 import React from 'react';
@@ -164,11 +162,11 @@ function MyComponent() {
 
 ## Fetch data from frontend code using the data proxy
 
-If you want to fetch data from your app frontend code without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests you want to use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md)
+If you want to fetch data from your app frontend code without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, you want to use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md).
 
 ## Bundle plugins inside your app
 
-You can bundle datasources and panel plugins inside your app plugins. See [Bundle datasources and panels inside app plugins](../create-a-plugin/extend-a-plugin/bundle-plugins-inside-apps)
+You can bundle data sources and panel plugins inside your app plugins. See [Bundle datasources and panels inside app plugins](../create-a-plugin/extend-a-plugin/bundle-plugins-inside-apps).
 
 ## Include external plugins
 
