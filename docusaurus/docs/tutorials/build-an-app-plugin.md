@@ -28,13 +28,11 @@ Apps will show up in the navigation menu and they also allow you to define [UI E
 
 <CreatePlugin pluginType="app" />
 
-
 :::note
 
 If you choose to have a backend for your app plugin you must run `mage -v` before starting Grafana with docker.
 
-::: 
-
+:::
 
 ## Anatomy of a plugin
 
@@ -49,25 +47,20 @@ First, you need to add your panel to a dashboard:
 1. Open Grafana in your browser.
 1. Navigate to Apps -> Your App Name
 
-
 Now that you can view your app root page (page one in the example), try making a change to the app plugin:
 
 1. In `PageOne.tsx`, change some of the page text content:
 
    ```tsx title="src/pages/PageOne.tsx"
-    <PluginPage>
-        New page content
-    </PluginPage>
-    
+   <PluginPage>New page content</PluginPage>
    ```
 
 1. Save the file.
 1. In the browser, reload Grafana to see the new changes.
 
-
 ## Adding a new page in the navigation menu
 
-To add pages to the navigation menu unders your app menu item you need to modify the `plugin.json` file [`includes` section](http://localhost:4000/developers/plugin-tools/reference/plugin-json#includes).
+To add pages to the navigation menu under your app menu item you need to modify the `plugin.json` file [`includes` section](../reference/metadata.md#includes).
 
 When you scaffold your plugin there will be some example pages added to the navigation menu. Each of them follow a path such as `/a/%PLUGIN_ID%/PAGE_NAME`. Any requests sent to /a/%PLUGIN_ID%, e.g. /a/myorgid-simple-app/, are routed to the root page of the app plugin. The root page is a React component that returns the content for a given route.
 
@@ -75,22 +68,22 @@ Let's add a new page to the navigation menu:
 
 1. Modify the `plugin.json` to add a new page
 
-    ```json title="src/plugin.json"
-    // ...
-    "includes": [
-        // ...
-        {
-            type: "page",
-            name: "New Page",
-            path: "/a/%PLUGIN_ID%/new-page",
-            roles: "Admin"
-            addToNav: true
-            defaultNav: false
-        }
-    ]
-    ```
+   ```json title="src/plugin.json"
+   // ...
+   "includes": [
+       // ...
+       {
+           "type": "page",
+           "name": "New Page",
+           "path": "/a/%PLUGIN_ID%/new-page",
+           "roles": "Admin",
+           "addToNav": true,
+           "defaultNav": false
+       }
+   ]
+   ```
 
-1. Save the `src/plugin.json` file 
+1. Save the `src/plugin.json` file
 1. Restart your Grafana instance.
 
 :::note
@@ -104,28 +97,25 @@ You will now find the new page in the navigation menu. You can now edit the Reac
 1. Create a new file called `src/pages/NewPage.tsx` and add the following code:
 
    ```tsx title="src/pages/NewPage.tsx"
-    import React from 'react';
-    import { PluginPage } from '@grafana/runtime';
+   import React from 'react';
+   import { PluginPage } from '@grafana/runtime';
 
-    export function NewPage() {
-        return (
-            <PluginPage>
-            New Page
-            </PluginPage>
-        );
-    }
-    ```
+   export function NewPage() {
+     return <PluginPage>New Page</PluginPage>;
+   }
+   ```
 
-2. Modify the Routes in `src/components/App/App.tsx` to recognize the new page:
+1. Modify the Routes in `src/components/App/App.tsx` to recognize the new page:
 
+   ```tsx title="src/components/App/App.tsx"
+   {
+     /* .... */
+   }
+   <Route path="new-page" element={<NewPage />} />;
+   ```
 
-    ```tsx title="src/components/App/App.tsx"
-    {/* .... */}
-    <Route path="new-page" element={<NewPage />} />
-    ```
-
-3. Save the file.
-4. Reload Grafana to see the new page in place
+1. Save the file.
+1. Reload Grafana to see the new page in place
 
 You don't need to register all your pages inside `includes` in your `plugin.json`. Only pages that you wish to add to the navigation menu.
 
@@ -134,7 +124,6 @@ You don't need to register all your pages inside `includes` in your `plugin.json
 You can only have one level of pages in the navigation menu. Sub-menu items are not supported.
 
 :::
-
 
 ## Configuration page
 
@@ -162,16 +151,14 @@ export const updatePluginSettings = async (pluginId: string, data: Partial<Plugi
 
 The user settings are part of the plugin meta. You can retrieve them inside a react component by using the `usePluginContext` hook
 
-
 ```tsx
 import React from 'react';
 import usePluginContext from '@grafana/data';
 
 function MyComponent() {
-    const context = usePluginContext()
-    // user settings
-    const jsonData = context.meta.jsonData;
-
+  const context = usePluginContext();
+  // user settings
+  const jsonData = context.meta.jsonData;
 }
 ```
 
@@ -182,7 +169,6 @@ If you want to fetch data from your app frontend code without [CORS](https://dev
 ## Bundle plugins inside your app
 
 You can bundle datasources and panel plugins inside your app plugins. See [Bundle datasources and panels inside app plugins](../create-a-plugin/extend-a-plugin/bundle-plugins-inside-apps)
-
 
 ## Include external plugins
 
