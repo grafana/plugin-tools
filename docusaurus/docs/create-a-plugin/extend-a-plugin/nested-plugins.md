@@ -1,0 +1,83 @@
+---
+id: nested-plugins
+title: Work with nested plugins
+description: How to work with nested plugins, Grafana app plugins.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - advanced
+  - apps
+  - app plugins
+  - nested
+---
+
+import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
+import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
+import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
+
+Grafana app plugins can nest data sources, both frontend and backend, together with panel plugins so that you can provide a complete user experience.
+
+## Before you begin
+
+See the tutorial to [build an app plugin](../../tutorials/build-an-app-plugin) and scaffold an app plugin.
+
+## Anatomy of nested plugins
+
+Nested plugins are located inside the app plugin `src` folder. They generally follow the same structure of a plugin and have their own `plugin.json` but don't have their own `package.json` or `.config` folder.
+
+Here an example of a nested datasource plugin:
+
+```diff bash
+./src
+ ├── README.md
+ ├── components
++├── nested-datasource
++│   ├── components
++│   │   ├── ConfigEditor.tsx
++│   │   └── QueryEditor.tsx
++│   ├── datasource.ts
++│   ├── img
++│   ├── module.ts
++│   ├── plugin.json
++│   └── types.ts
+ ├── img
+ │   └── logo.svg
+ ├── module.ts
+ └── plugin.json
+```
+
+:::note
+Notice the plugin `nested-datasource` doesn't have a `package.json` of its own. The name of the nested plugin folder is not important.
+:::
+
+## How to add a nested plugin to an app plugin
+
+1. Generate the Nested Plugin:
+
+   :::important
+   Begin outside your app plugin's directory.
+   :::
+
+   Use the `create-plugin` tool to generate a new plugin:
+
+   ```bash
+   npx @grafana/create-plugin@latest
+   ```
+
+   Carefully select the desired plugin type (data source or panel) provide a name, and use the same organization as your app plugin.
+
+1. Prepare the Nested Plugin:
+
+   Rename the `src` folder of your newly generated plugin to a name that reflects its specific purpose (e.g., nested-datasource).
+
+1. Integrate into Your App Plugin:
+
+   Copy the renamed `src` folder directly inside the `src` folder of your app plugin.
+   You can safely disregard the other generated files (like package.json, .config, etc.) - they are not needed within your app.
+
+1. Clean Up (Optional):
+
+   You can now delete the entire directory of the initially generated nested plugin.
+
+With these steps, your app plugin now houses the source code for your nested data source or panel, ready for further development.

@@ -166,7 +166,7 @@ If you want to fetch data from your app frontend code without [CORS](https://dev
 
 ## Bundle plugins inside your app
 
-You can bundle data sources and panel plugins inside your app plugins. See [Bundle datasources and panels inside app plugins](../create-a-plugin/extend-a-plugin/bundle-plugins-inside-apps).
+You can bundle data sources and panel plugins inside your app plugins. See [Work with nested plugins](../create-a-plugin/extend-a-plugin/nested-plugins).
 
 ## Include external plugins
 
