@@ -11,7 +11,7 @@
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix",{{#if usePlaywright}}
     "e2e": "playwright test",{{/if}}{{#if useCypress}}
-    "e2e": "${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run",
+    "e2e": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run",
     "e2e:update": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run --update-screenshots",{{/if}}
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest"
@@ -23,7 +23,7 @@
     "@grafana/e2e": "{{ grafanaVersion }}",
     "@grafana/e2e-selectors": "{{ grafanaVersion }}",{{/if}}
     "@grafana/eslint-config": "^7.0.0",{{#if usePlaywright}}
-    "@grafana/plugin-e2e": "^1.0.1",{{/if}}
+    "@grafana/plugin-e2e": "^1.2.0",{{/if}}
     "@grafana/tsconfig": "^1.2.0-rc1",
     "@grafana/plugin-meta-extractor": "^0.0.2",{{#if usePlaywright}}
     "@playwright/test": "^1.41.2",{{/if}}
