@@ -82,7 +82,7 @@ Now, when users write `$service`, the query looks like this:
 SELECT * FROM services WHERE id IN (admin,auth,billing)
 ```
 
-For more information on the available variable formats, refer to [Advanced variable format options](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/index.md#advanced-variable-format-options).
+For more information on the available variable formats, refer to [Advanced variable format options](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/#advanced-variable-format-options).
 
 ## Set a variable from your plugin
 
