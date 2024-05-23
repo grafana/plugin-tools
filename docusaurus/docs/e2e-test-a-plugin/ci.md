@@ -48,7 +48,7 @@ queryString="current-package-manager"
 snippets={[
 { component: FEPluginWorkflowNPM, label: 'npm' },
 { component: FEPluginWorkflowYarn, label: 'yarn' },
-{ component: FEPlugiWorkflowPNPM, label: 'pnpm' }
+{ component: FEPluginWorkflowPNPM, label: 'pnpm' }
 ]}
 groupId="package-manager"
 queryString="current-package-manager"
