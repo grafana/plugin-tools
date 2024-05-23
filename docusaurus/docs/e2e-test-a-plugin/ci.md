@@ -15,9 +15,9 @@ sidebar_position: 30
 import BEPluginWorkflowNPM from '@snippets/plugin-e2e-ds-workflow.npm.md';
 import BEPluginWorkflowYarn from '@snippets/plugin-e2e-ds-workflow.yarn.md';
 import BEPluginWorkflowPNPM from '@snippets/plugin-e2e-ds-workflow.pnpm.md';
-import FEPluginNPM from '@snippets/plugin-e2e-fe-plugin-workflow.npm.md';
-import FEPluginYarn from '@snippets/plugin-e2e-fe-plugin-workflow.yarn.md';
-import FEPluginPNPM from '@snippets/plugin-e2e-fe-plugin-workflow.pnpm.md';
+import FEPluginWorkflowNPM from '@snippets/plugin-e2e-fe-plugin-workflow.npm.md';
+import FEPluginWorkflowYarn from '@snippets/plugin-e2e-fe-plugin-workflow.yarn.md';
+import FEPluginWorkflowPNPM from '@snippets/plugin-e2e-fe-plugin-workflow.pnpm.md';
 
 # CI workflow
 
@@ -46,9 +46,9 @@ queryString="current-package-manager"
   <summary> <h3>Frontend plugin workflow</h3> </summary>
   <CodeSnippets
 snippets={[
-{ component: BEPluginWorkflowNPM, label: 'npm' },
-{ component: BEPluginWorkflowYarn, label: 'yarn' },
-{ component: BEPluginWorkflowPNPM, label: 'pnpm' }
+{ component: FEPluginWorkflowNPM, label: 'npm' },
+{ component: FEPluginWorkflowYarn, label: 'yarn' },
+{ component: FEPlugiWorkflowPNPM, label: 'pnpm' }
 ]}
 groupId="package-manager"
 queryString="current-package-manager"
