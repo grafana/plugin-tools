@@ -1,3 +1,4 @@
+import { lt as semverLt } from 'semver';
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -95,7 +96,10 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
+  const grafanaVersion = EXTRA_TEMPLATE_VARIABLES.grafanaVersion;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
+  const useCypress =
+    !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const shouldUseReactRouterV6 = (pluginType: string) =>
     features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
@@ -103,9 +107,9 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
   const getE2eTestCmd = (packageManagerName: string) =>
-    usePlaywright
-      ? 'playwright test'
-      : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
+    useCypress
+      ? `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`
+      : 'playwright test';
 
   let templateData: TemplateData;
 
@@ -131,6 +135,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useReactRouterV6: shouldUseReactRouterV6(cliArgs.pluginType),
       reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
       usePlaywright,
+      useCypress,
       e2eTestCmd: getE2eTestCmd(packageManagerName),
       hasGithubWorkflows: cliArgs.hasGithubWorkflows,
       hasGithubLevitateWorkflow: cliArgs.hasGithubLevitateWorkflow,
@@ -160,6 +165,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useReactRouterV6: shouldUseReactRouterV6(pluginJson.type),
       reactRouterVersion: getReactRouterVersion(pluginJson.type),
       usePlaywright,
+      useCypress,
       e2eTestCmd: getE2eTestCmd(packageManagerName),
       hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
       hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
