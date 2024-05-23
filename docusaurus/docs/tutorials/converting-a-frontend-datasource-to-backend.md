@@ -18,6 +18,8 @@ This guide walks you through the process of converting an existing frontend only
 
 To convert a frontend data source, we recommend scaffolding a new backend data source plugin using `npx @grafana/create-plugin@latest`, you can then use the following information to extend this foundation to copy over functionality from your original plugin.
 
+Before we dive into the specifics of converting a frontend data source to a backend data source, it would be better to familiarize yourself with the process of creating a backend data source plugin. Please follow the tutorial to [build a backend plugin](https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-backend-plugin) before proceeding with this tutorial.
+
 ## Primary data source components
 
 Before going into specific conversion advice, we will cover the main components of a data source and how these differ between frontend and backend plugins.
@@ -45,9 +47,46 @@ The config editor allows users to configure a connection and create a data sourc
 
 This is a frontend component so no changes are _required_. Config Editors may store sensitive information in `secureJsonData`, and backend plugins can access this information as required - for example as part of handling authentication to the downstream service.
 
-## Introduction to backend plugins
+## Plugin structure comparison
 
-Before we dive into the specifics of converting a frontend data source to a backend data source, it would be better to familiarize yourself with the process of creating a backend data source plugin. Please follow the [backend plugin](https://grafana.com/developers/plugin-tools/introduction/backend-plugins) introduction before proceeding with this tutorial.
+The following is an illustrative example of the new components which are introduced as part of adding a backend to the plugin.
+
+```bash
+myorg-myplugin-datasource/
+├── .config/
+├── .eslintrc
+├── .github
+│   └── workflows
+├── .gitignore
+├── .nvmrc
+├── .prettierrc.js
+├── CHANGELOG.md
+├── LICENSE
+├── Magefile.go # Build definition for backend executable
+├── README.md
+│   └── integration
+├── docker-compose.yaml
+├── go.mod # Dependencies
+├── go.sum # Checksums
+├── jest-setup.js
+├── jest.config.js
+├── node_modules
+├── package.json
+├── pkg
+│   ├── main.go # Entry point for backend
+│   └── plugin # Other plugin packages
+├── playwright.config.ts
+├── src
+│   ├── README.md
+│   ├── components
+│   ├── datasource.ts
+│   ├── img
+│   ├── module.ts
+│   ├── plugin.json # Modified to include backend=true and executable=<name-of-built-binary>
+│   └── types.ts
+├── tsconfig.json
+└── tests
+```
 
 ## Converting functionality
 
@@ -367,4 +406,4 @@ export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptio
 
 ## Summary
 
-This tutorial covered the main steps to convert a frontend data source to a backend data source. The total amount of different use cases is vast so if you have any questions or need help with a specific case, please reach out. Contributions to this guide are also welcome.
+This tutorial covered the main steps to convert a frontend data source to a backend data source. The total amount of different use cases is vast so if you have any questions or need help with a specific case, please reach out in our [Community forum](https://community.grafana.com/c/plugin-development/30). Contributions to this guide are also welcome.
