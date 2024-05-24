@@ -98,6 +98,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const currentVersion = getVersion();
   const grafanaVersion = EXTRA_TEMPLATE_VARIABLES.grafanaVersion;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
+  //@grafana/e2e was deprecated in Grafana 11
   const useCypress =
     !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
