@@ -70,7 +70,7 @@ You can log multiple messages and include certain key-value pairs without repeat
 
 **Example:**
 
-The following example illustrates how you can instantiate a logger per [datasource instance](../../introduction/plugin-types-usage.md#usage-of-data-source-plugins), and use the `With` method to include certain key-value pairs over the life-time of this datasource instance.
+The following example illustrates how you can instantiate a logger per [datasource instance](../../key-concepts/plugin-types-usage#usage-of-data-source-plugins), and use the `With` method to include certain key-value pairs over the life-time of this datasource instance.
 
 ```go
 package plugin
@@ -298,7 +298,7 @@ For further details and an up-to-date list of what metrics are automatically gat
 
 ### Implement metrics in your plugin
 
-The [Grafana plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) uses the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang). Any custom metric registered with the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) will be picked up by the SDK and exposed through the [Collect metrics capability](../../introduction/backend.md#collect-metrics).
+The [Grafana plugin SDK for Go](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) uses the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang). Any custom metric registered with the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) will be picked up by the SDK and exposed through the [Collect metrics capability](../../key-concepts/backend-plugins/#collect-metrics).
 
 For convenience, it's recommended to use the [promauto package](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus/promauto) when creating custom metrics since it automatically registers the metric in the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) and exposes them to Grafana.
 

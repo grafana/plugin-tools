@@ -237,7 +237,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
 
 1. Rebuild your plugin and try it out by adding multiple queries to the panel. Refresh the dashboard.
 
-If you want to know more about data frames, check out our introduction to [Data frames](../introduction/data-frames.md).
+If you want to know more about data frames, check out our introduction to [Data frames](../key-concepts/data-frames.md).
 
 ## Summary
 

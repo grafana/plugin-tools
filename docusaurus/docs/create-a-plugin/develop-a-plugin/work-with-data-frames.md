@@ -13,7 +13,7 @@ sidebar_position: 3
 
 # Work with data frames
 
-The [data frame](../../introduction/data-frames.md) is a columnar data structure that allows for efficient querying of large amounts of data. Since data frames are a central concept when developing plugins for Grafana, in this guide we'll look at some ways you can use them.
+The [data frame](../../key-concepts/data-frames) is a columnar data structure that allows for efficient querying of large amounts of data. Since data frames are a central concept when developing plugins for Grafana, in this guide we'll look at some ways you can use them.
 
 The `DataFrame` interface contains a `name` and an array of `fields` where each field contains the name, type, and the values for the field.
 

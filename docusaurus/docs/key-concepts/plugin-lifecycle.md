@@ -11,12 +11,12 @@ keywords:
   - loading
   - unloading
   - installation
-sidebar_position: 2.5
+sidebar_position: 20
 ---
 
 # Life cycle of a plugin
 
-This document describes the various phases of a plugin such as installation and loading. We will describe the differences in a plugin's life cycle depending on its type and whether or not it has a [backend](backend.md).
+This document describes the various phases of a plugin such as installation and loading. We will describe the differences in a plugin's life cycle depending on its type and whether or not it has a [backend](./backend-plugins/).
 
 ## Installing and uninstalling a plugin
 
@@ -36,7 +36,7 @@ Plugins are loaded either when Grafana starts up or when a plugin has been insta
 
 Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and [troubleshoot](#troubleshooting) any unexpected behavior. For example, why a certain plugin is not marked as installed in the plugins catalog or for use within Grafana even though you've installed it.
 
-For [backend](./backend.md) plugins, there is an additional initialization process (see [Phase 3](#phase-3-backend-plugin-initialization)).
+For [backend](./backend-plugins) plugins, there is an additional initialization process (see [Phase 3](#phase-3-backend-plugin-initialization)).
 
 :::note
 

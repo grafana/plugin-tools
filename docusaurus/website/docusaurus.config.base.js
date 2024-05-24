@@ -67,11 +67,38 @@ const plugins = [
 
       redirects: [
         {
-          from: ['/something-that-does-not-exist', '/something-that-does-not-exist/testing'],
-          to: '/get-started/folder-structure',
+          from: ['/something-that-does-not-exist', '/something/testing'],
+          to: '/something/folder-structure',
 
           from: ['/reference-plugin-json', '/metadata.md'],
           to: '/reference/plugin-json',
+
+          from: ['/introduction/backend.md', '/introduction/backend-plugins'],
+          to: '/key-concepts/backend-plugins',
+
+          from: ['/introduction/data-frames.md', '/introduction/data-frames'],
+          to: '/key-concepts/data-frames',
+
+          from: [
+            '/docs/introduction/grafana-plugin-sdk-for-go.md',
+            '/introduction/backend-plugins/grafana-plugin-sdk-for-go',
+          ],
+          to: '/key-concepts/grafana-plugin-sdk-for-go',
+
+          from: ['/introduction/index.md', '/introduction'],
+          to: '/key-concepts/',
+
+          from: ['/introduction/manage-npm-dependencies.md', '/introduction/npm-dependencies'],
+          to: '/key-concepts/npm-dependencies',
+
+          from: ['/introduction/plugin-lifecycle.md', '/introduction/plugin-lifecycle'],
+          to: '/key-concepts/plugin-lifecycle',
+
+          from: ['/introduction/plugin-protocol.md', '/introduction/backend-plugins/plugin-protocol'],
+          to: '/key-concepts/plugin-protocol',
+
+          from: ['/introduction/plugin-types-usage.md', '/introduction/plugin-types-usage'],
+          to: '/key-concepts/plugin-types-usage',
         },
       ],
     },
