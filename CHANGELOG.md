@@ -2,6 +2,18 @@
 
 #### 🐛 Bug Fix
 
+- Create Plugin: Use latest version of plugin-e2e [#917](https://github.com/grafana/plugin-tools/pull/917) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri May 24 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@4.10.5`
   - Create Plugin: Improve handling of e2e in update cmd [#920](https://github.com/grafana/plugin-tools/pull/920) ([@sunker](https://github.com/sunker))
 
