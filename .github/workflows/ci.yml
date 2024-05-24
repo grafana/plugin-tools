@@ -67,8 +67,8 @@ jobs:
           - workingDir: 'myorg-backend-datasource'
             cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: true
-          - workingDir: 'myorg-nobackend-scenesapp'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackendscenes-app'
+            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
@@ -105,6 +105,25 @@ jobs:
       - name: Build plugin frontend
         run: npm run build
         working-directory: ./${{ matrix.workingDir }}
+
+      - name: Test plugin frontend
+        run: npm run test:ci
+        working-directory: ./${{ matrix.workingDir }}
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '~1.21'
+          check-latest: true
+          cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
+        if: ${{ matrix.hasBackend == true }}
+
+      - name: Build plugin backend
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: -v build:linux
+          workdir: ./${{ matrix.workingDir }}
+        if: ${{ matrix.hasBackend == true }}
 
       - name: Install playwright dependencies
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
@@ -157,21 +176,6 @@ jobs:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
-
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '~1.21'
-          check-latest: true
-          cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
-        if: ${{ matrix.hasBackend == true }}
-
-      - name: Build plugin backend
-        uses: magefile/mage-action@v3
-        with:
-          version: latest
-          args: -v build:linux
-          workdir: ./${{ matrix.workingDir }}
-        if: ${{ matrix.hasBackend == true }}
 
   release:
     runs-on: ubuntu-latest

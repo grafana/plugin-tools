@@ -1,9 +1,9 @@
 import { displayAsMarkdown } from '../../utils/utils.console.js';
 import { normalizeId } from '../../utils/utils.handlebars.js';
 import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager.js';
-import { CliArgs } from '../types.js';
+import { TemplateData } from '../../types.js';
 
-export function printGenerateSuccessMessage(answers: CliArgs) {
+export function printGenerateSuccessMessage(answers: TemplateData) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
   const { packageManagerName } = getPackageManagerFromUserAgent();
   const commands = [
@@ -16,10 +16,7 @@ export function printGenerateSuccessMessage(answers: CliArgs) {
           '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
         ]
       : []),
-    '- `docker-compose up` to start a grafana development server. ' +
-      (answers.hasBackend
-        ? 'The plugin backend will be reloaded on every code change and a debugger can be attached on port `2345`.'
-        : ''),
+    '- `docker-compose up` to start a grafana development server.',
     '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 

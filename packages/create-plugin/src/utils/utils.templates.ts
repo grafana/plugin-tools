@@ -1,10 +1,11 @@
+import { lt as semverLt } from 'semver';
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
 import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
-import { renderHandlebarsTemplate } from './utils.handlebars.js';
+import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
 import {
   TEMPLATE_PATHS,
@@ -13,8 +14,12 @@ import {
   PLUGIN_TYPES,
   DEFAULT_FEATURE_FLAGS,
 } from '../constants.js';
-import { TemplateData } from '../types.js';
-import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
+import { GenerateCliArgs, TemplateData } from '../types.js';
+import {
+  getPackageManagerInstallCmd,
+  getPackageManagerWithFallback,
+  getPackageManagerFromUserAgent,
+} from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
@@ -88,38 +93,79 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData(): TemplateData {
-  const pluginJson = getPluginJson();
+export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
-  const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
-  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
-  const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+  const grafanaVersion = EXTRA_TEMPLATE_VARIABLES.grafanaVersion;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
-  const e2eTestCmd = usePlaywright
-    ? 'playwright test'
-    : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
+  //@grafana/e2e was deprecated in Grafana 11
+  const useCypress =
+    !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
+  const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
+  const shouldUseReactRouterV6 = (pluginType: string) =>
+    features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
+  const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
+  const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+  const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
 
-  const templateData = {
-    ...EXTRA_TEMPLATE_VARIABLES,
-    pluginId: pluginJson.id,
-    pluginName: pluginJson.name,
-    pluginDescription: pluginJson.info?.description,
-    hasBackend: Boolean(pluginJson.backend),
-    orgName: pluginJson.info?.author?.name,
-    pluginType: pluginJson.type,
-    isAppType: pluginJson.type === PLUGIN_TYPES.app || pluginJson.type === PLUGIN_TYPES.scenes,
-    isNPM: packageManagerName === 'npm',
-    packageManagerName,
-    packageManagerVersion,
-    packageManagerInstallCmd,
-    version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-    useReactRouterV6: useReactRouterV6,
-    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-    usePlaywright,
-    e2eTestCmd,
-  };
+  let templateData: TemplateData;
+
+  // `cliArgs` is only passed in when scaffolding a new plugin via the CLI (generate command)
+  if (cliArgs) {
+    const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+
+    templateData = {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      pluginId: normalizeId(cliArgs.pluginName, cliArgs.orgName, cliArgs.pluginType),
+      pluginName: cliArgs.pluginName,
+      pluginDescription: cliArgs.pluginDescription,
+      hasBackend: cliArgs.hasBackend,
+      orgName: cliArgs.orgName,
+      pluginType: cliArgs.pluginType,
+      packageManagerName,
+      packageManagerVersion,
+      packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName),
+      isAppType: isAppType(cliArgs.pluginType),
+      isNPM: isNPM(packageManagerName),
+      version: currentVersion,
+      bundleGrafanaUI,
+      useReactRouterV6: shouldUseReactRouterV6(cliArgs.pluginType),
+      reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
+      usePlaywright,
+      useCypress,
+      hasGithubWorkflows: cliArgs.hasGithubWorkflows,
+      hasGithubLevitateWorkflow: cliArgs.hasGithubLevitateWorkflow,
+    };
+    // Updating or migrating a plugin
+    // (plugin.json and package.json files are only present if it's an existing plugin)
+  } else {
+    const pluginJson = getPluginJson();
+    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+    const githubFolder = path.join(process.cwd(), '.github', 'workflows');
+
+    templateData = {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      pluginId: pluginJson.id,
+      pluginName: pluginJson.name,
+      pluginDescription: pluginJson.info.description,
+      hasBackend: pluginJson.backend,
+      orgName: pluginJson.info.author.name,
+      pluginType: pluginJson.type,
+      packageManagerName: packageManagerName,
+      packageManagerVersion: packageManagerVersion,
+      packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName),
+      isAppType: isAppType(pluginJson.type),
+      isNPM: isNPM(packageManagerName),
+      version: currentVersion,
+      bundleGrafanaUI,
+      useReactRouterV6: shouldUseReactRouterV6(pluginJson.type),
+      reactRouterVersion: getReactRouterVersion(pluginJson.type),
+      usePlaywright,
+      useCypress,
+      hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
+      hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
+    };
+  }
 
   debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
 

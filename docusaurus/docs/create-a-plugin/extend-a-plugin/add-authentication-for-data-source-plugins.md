@@ -131,7 +131,7 @@ The Grafana server comes with a proxy that lets you define templates for your re
 
 :::note
 
-Be sure not to confuse the data source proxy with the [auth proxy](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/auth-proxy/index.md). The data source proxy is used to authenticate a data source, while the auth proxy is used to log into Grafana itself.
+Be sure not to confuse the data source proxy with the [auth proxy](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/auth-proxy). The data source proxy is used to authenticate a data source, while the auth proxy is used to log into Grafana itself.
 
 :::
 

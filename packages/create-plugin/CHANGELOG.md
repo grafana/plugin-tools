@@ -1,3 +1,81 @@
+# v4.10.5 (Fri May 24 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Improve handling of e2e in update cmd [#920](https://github.com/grafana/plugin-tools/pull/920) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v4.10.4 (Thu May 16 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Disable development mode by default [#910](https://github.com/grafana/plugin-tools/pull/910) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# v4.10.3 (Wed May 08 2024)
+
+#### 🐛 Bug Fix
+
+- CreatePlugin: Updating template to use latest version of plugin meta extractor [#905](https://github.com/grafana/plugin-tools/pull/905) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v4.10.1 (Tue May 07 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: polyfill `TextEncoder` for Jest tests in scaffolded plugins [#899](https://github.com/grafana/plugin-tools/pull/899) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v4.10.0 (Mon May 06 2024)
+
+#### 🚀 Enhancement
+
+- Webpack: Generate meta-data using the plugin-meta-extractor during builds [#871](https://github.com/grafana/plugin-tools/pull/871) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v4.9.2 (Fri May 03 2024)
+
+#### 🐛 Bug Fix
+
+- Create-plugin: Refactor getTemplateData to be used in generate command and update commands [#837](https://github.com/grafana/plugin-tools/pull/837) ([@oshirohugo](https://github.com/oshirohugo) [@Ukochka](https://github.com/Ukochka) [@leventebalogh](https://github.com/leventebalogh) [@josmperez](https://github.com/josmperez) [@sunker](https://github.com/sunker) [@grafanabot](https://github.com/grafanabot) [@jackw](https://github.com/jackw))
+
+#### Authors: 7
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Grot (@grafanabot) ([@grafanabot](https://github.com/grafanabot))
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # v4.9.0 (Thu Apr 25 2024)
 
 #### 🚀 Enhancement

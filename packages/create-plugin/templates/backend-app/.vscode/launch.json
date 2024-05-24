@@ -11,6 +11,23 @@
       "args": [
         "-standalone"
       ]
+    },
+    {
+      "name": "Attach to plugin backend in docker",
+      "type": "go",
+      "request": "attach",
+      "mode": "remote",
+      "port": 2345,
+      "host": "127.0.0.1",
+      "showLog": true,
+      "trace": "log",
+      "logOutput": "rpc",
+      "substitutePath": [
+        {
+          "from": "${workspaceFolder}",
+          "to": "/root/{{ pluginId }}"
+        }
+      ]
     }
   ]
 }

@@ -1,3 +1,148 @@
+# (Fri May 24 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Use latest version of plugin-e2e [#917](https://github.com/grafana/plugin-tools/pull/917) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri May 24 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.10.5`
+  - Create Plugin: Improve handling of e2e in update cmd [#920](https://github.com/grafana/plugin-tools/pull/920) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu May 16 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.10.4`
+  - Create plugin: Disable development mode by default [#910](https://github.com/grafana/plugin-tools/pull/910) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
+# (Tue May 14 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/sign-plugin@3.0.2`
+  - Chore(deps): Bump proxy-agent from 6.3.1 to 6.4.0 [#792](https://github.com/grafana/plugin-tools/pull/792) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump follow-redirects from 1.15.4 to 1.15.6 [#827](https://github.com/grafana/plugin-tools/pull/827) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# (Wed May 08 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.10.3`
+  - CreatePlugin: Updating template to use latest version of plugin meta extractor [#905](https://github.com/grafana/plugin-tools/pull/905) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed May 08 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-meta-extractor@0.0.2`
+  - PME: Removed dependency on tsquery [#902](https://github.com/grafana/plugin-tools/pull/902) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Tue May 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.10.1`
+  - Create Plugin: polyfill `TextEncoder` for Jest tests in scaffolded plugins [#899](https://github.com/grafana/plugin-tools/pull/899) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Mon May 06 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.10.0`
+  - Webpack: Generate meta-data using the plugin-meta-extractor during builds [#871](https://github.com/grafana/plugin-tools/pull/871) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump ejs from 3.1.9 to 3.1.10 [#896](https://github.com/grafana/plugin-tools/pull/896) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Fri May 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.9.2`
+  - Create-plugin: Refactor getTemplateData to be used in generate command and update commands [#837](https://github.com/grafana/plugin-tools/pull/837) ([@oshirohugo](https://github.com/oshirohugo) [@Ukochka](https://github.com/Ukochka) [@leventebalogh](https://github.com/leventebalogh) [@josmperez](https://github.com/josmperez) [@sunker](https://github.com/sunker) [@grafanabot](https://github.com/grafanabot) [@jackw](https://github.com/jackw))
+
+#### Authors: 7
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Grot (@grafanabot) ([@grafanabot](https://github.com/grafanabot))
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Fri May 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-meta-extractor@0.0.1`
+  - Plugin Meta Extractor: Initial version [#805](https://github.com/grafana/plugin-tools/pull/805) ([@mckn](https://github.com/mckn) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Thu Apr 25 2024)
 
 #### 🚀 Enhancement
