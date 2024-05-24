@@ -1,6 +1,6 @@
 ### Backend
 
-1. Update [Grafana plugin SDK for Go](https://grafana.com/developers/plugin-tools/introduction/grafana-plugin-sdk-for-go) dependency to the latest minor version:
+1. Update [Grafana plugin SDK for Go](../backend/grafana-plugin-sdk-for-go) dependency to the latest minor version:
 
    ```bash
    go get -u github.com/grafana/grafana-plugin-sdk-go
