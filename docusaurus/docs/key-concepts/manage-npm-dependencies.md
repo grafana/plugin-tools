@@ -9,7 +9,7 @@ keywords:
   - github
   - npm
   - dependencies
-sidebar_position: 5
+sidebar_position: 50
 ---
 
 # Frontend NPM dependencies in a Grafana plugin

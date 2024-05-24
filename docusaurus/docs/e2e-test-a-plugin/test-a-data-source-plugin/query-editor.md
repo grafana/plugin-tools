@@ -21,7 +21,7 @@ The query editor is a central piece of a data source plugin as this is where use
 
 In the following example, the query editor loads regions via a request to `/regions` and filters out the ones containing `gov` before populating them in a dropdown menu.
 
-The [`<page>.mockResourceResponse`](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/models/pages/GrafanaPage.ts#L53) method allows you to mock the response of a request to the data source [resource API](https://grafana.com/developers/plugin-tools/introduction/backend-plugins#resources). To test that the filtering is working as expected, we use this method to mock the `/regions` response and assert that only the regions without `-gov-` in their name are shown when the regions dropdown is clicked.
+The [`<page>.mockResourceResponse`](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/models/pages/GrafanaPage.ts#L53) method allows you to mock the response of a request to the data source [resource API](../../key-concepts/backend-plugins/#resources). To test that the filtering is working as expected, we use this method to mock the `/regions` response and assert that only the regions without `-gov-` in their name are shown when the regions dropdown is clicked.
 
 ```ts title="queryEditor.spec.ts"
 test('should filter out govcloud regions', async ({ panelEditPage, selectors, readProvisionedDataSource }) => {

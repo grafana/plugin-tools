@@ -18,11 +18,11 @@ import CreatePlugin from '@shared/create-plugin-backend.md';
 
 Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
-A backend component provides a number of additional capabilities to your plugin, such as custom authentication methods. To learn more, refer to the documentation on [Backend plugins](../introduction/backend.md).
+A backend component provides a number of additional capabilities to your plugin, such as custom authentication methods. To learn more, refer to the documentation on [Backend plugins](../key-concepts/backend-plugins/).
 
 In this tutorial, you'll:
 
-- Build a [backend](../introduction/backend.md) for your data source
+- Build a [backend](../key-concepts/backend-plugins/) for your data source
 - Implement a health check for your data source
 - Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for your data source
 
@@ -123,7 +123,7 @@ frame.Fields = append(frame.Fields,
 )
 ```
 
-You can read more about how to [build data frames in our docs](../introduction/data-frames).
+You can read more about how to [build data frames in our docs](../key-concepts/data-frames).
 
 ## Add support for health checks
 

@@ -55,7 +55,7 @@ Grafana's backend plugin system exposes several key capabilities, or building bl
 
 ### Query data
 
-The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](./data-frames.md), which are used to visualize metrics, logs, and traces.
+The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](../data-frames), which are used to visualize metrics, logs, and traces.
 
 :::note
 
@@ -87,7 +87,7 @@ A plugin's health check endpoint is exposed in the Grafana HTTP API and allows e
 
 ### Collect metrics
 
-A backend plugin can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go.md) to implement your backend plugin, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. To add custom metrics to instrument your backend plugin, refer to [Implement metrics in your plugin](../create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins.md#implement-metrics-in-your-plugin).
+A backend plugin can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go) to implement your backend plugin, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. To add custom metrics to instrument your backend plugin, refer to [Implement metrics in your plugin](../../create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins).
 
 ### Streaming
 

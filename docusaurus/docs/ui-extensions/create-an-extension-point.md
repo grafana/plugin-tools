@@ -241,7 +241,7 @@ The `getPluginExtensions` method takes an object consisting of the `extensionPoi
 :::note
 
 This function only returns the state of the extensions registry (the extensions registered by plugins) at a given time. If there are extensions registered by plugins after that point in time, you won't receive them. <br />
-As a best practice, use the reactive [`usePluginExtensions()`](#usepluginextensions) hook instead wherever possible.
+As a best practice, use the reactive [`usePluginExtensions()`](#the-usepluginextensions-hook) hook instead wherever possible.
 
 :::
 
