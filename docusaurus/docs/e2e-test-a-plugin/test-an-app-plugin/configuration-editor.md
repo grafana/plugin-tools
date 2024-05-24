@@ -20,7 +20,7 @@ The app configuration page manages the configurations for your app if it require
 
 ## Test an app config page
 
-Apps have a [health check](../../key-concepts/backen-plugins/#health-checks) endpoint that is used to test the validity of the configuration. In the following example, the configuration editor form is populated with valid values when the **Save & test** button is clicked.
+Apps have a [health check](../../key-concepts/backend-plugins/#health-checks) endpoint that is used to test the validity of the configuration. In the following example, the configuration editor form is populated with valid values when the **Save & test** button is clicked.
 
 A click on the **Save & test** button calls the Grafana backend to save the configuration, then passes the configuration to the health check endpoint. The test is successful only if both calls yield a successful status code.
 
