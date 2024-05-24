@@ -29,7 +29,7 @@ export type TemplateData = {
   useReactRouterV6: boolean;
   reactRouterVersion: string;
   usePlaywright: boolean;
-  e2eTestCmd: string;
+  useCypress: boolean;
   hasGithubWorkflows: boolean;
   hasGithubLevitateWorkflow: boolean;
 };
