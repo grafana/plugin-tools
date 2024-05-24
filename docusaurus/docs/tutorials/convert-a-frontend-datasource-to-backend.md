@@ -16,7 +16,7 @@ keywords:
 
 This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](https://grafana.com/developers/plugin-tools/introduction/backend-plugins).
 
-To convert the frontend data source, we recommend scaffolding a new backend data source plugin using []`npx @grafana/create-plugin@latest`](https://grafana.com/developers/plugin-tools/). Use the following instructions to extend this foundation to copy functionality from your original plugin.
+To convert the frontend data source, we recommend scaffolding a new backend data source plugin using [`npx @grafana/create-plugin@latest`](https://grafana.com/developers/plugin-tools/). Use the following instructions to extend this foundation to copy functionality from your original plugin.
 
 ## Before you begin
 
@@ -26,7 +26,7 @@ Before you dive into the details, you should familiarize yourself with the proce
 
 Before going into specific conversion advice, we will discuss the main components of a data source and how these differ between frontend and backend plugins.
 
-### Frontend data source class
+### Frontend `DataSource` class
 
 Data source plugins implement a new `DataSourcePlugin`. This class takes as a parameter a `DataSource` class, which for frontend data sources extends `DataSourceApi`, and for backend data sources extends `DataSourceWithBackend`. Because the `DatasourceWithBackend` class already implements most of the required methods, you can migrate to it to significantly simplify your code.
 
@@ -37,17 +37,9 @@ Data source plugins require two components: a query editor and a config editor.
 - [Frontend data source](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http/src/DataSource.ts#L14).
 - [Backend data source](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/src/datasource.ts#L6).
 
-### Query editor
+### Query and config editor
 
-The query editor allows users to construct a query from a dashboard panel or the Explore view.
-
-No changes are _required_ to implement this frontend component. However, you can add a backend component to a data source and thereby make use of `CallResource`. When you do this, it's possible to add query editor features such as schema validation.
-
-### Config editor
-
-The config editor allows users to configure a connection and create a data source instance.
-
-No changes are _required_ to implement this frontend component. Config editors may store sensitive information in `secureJsonData`, and backend plugins can access this information as required. For example, you can handle authentication to the downstream service.
+These two frontend components do not require to be changed when converting a frontend data source to a backend data source. However, if you add a backend component to a data source you can request `resources` from it. We will talk more about this in the [resource requests section](#other-resource-requests) but resources are additional endpoints that the plugin exposes and can be used to populate or validate the query or config editor.
 
 ## Plugin structure comparison
 
@@ -92,7 +84,7 @@ myorg-myplugin-datasource/
 
 ## Convert frontend to backend functions
 
-Most plugins only need to implement three methods to be fully functional: a function to run queries, a function to test the data source connection, and any additional GET requests to retrieve different resources (used to populate the query editor or config editor). All three methods usually share the same authentication mechanism against the target data source. 
+Most plugins only need to implement three methods to be fully functional: a function to run queries, a function to test the data source connection, and any additional GET requests to retrieve different resources (used to populate the query editor or config editor). All three methods usually share the same authentication mechanism against the target data source.
 
 Now let's discuss how to move the authentication logic from the frontend to the backend.
 
@@ -100,9 +92,9 @@ Now let's discuss how to move the authentication logic from the frontend to the 
 
 Grafana data sources typically include two types of data: `jsonData` and `secureJsonData`. The former is used to store non-sensitive information, while the latter is used to store sensitive information like passwords or API keys.
 
-Both frontend and backend types use the same JSON data to authenticate against the target data source. The main difference is that frontend data sources should read and use credentials for every request while backend data sources should share the same authenticated client between requests. 
+Both frontend and backend types use the same JSON data to authenticate against the target data source. The main difference is that frontend data sources should read and use credentials for every request while backend data sources should share the same authenticated client between requests.
 
-In a frontend-only data source, any request that requires authentication needs to go through the plugin proxy. You need to define a `routes` object within the `plugin.json` file and specify there the URL and credentials to use for each request. For example, you can request a given URL by setting an `Authorization` header with the `jsonData` credentials:
+In a frontend-only data source, any request that requires authentication needs to go through the plugin proxy. You need to define a `routes` object within the `plugin.json` file and specify there the URL and credentials to use for each request. For example, you can authenticate a request to a given URL by setting an `Authorization` header with the `SecureJsonData` credentials:
 
 ```json title="src/plugin.json"
 "routes": [
@@ -172,7 +164,7 @@ You can refer to [this example](https://github.com/grafana/grafana-plugin-exampl
 
 ### Health check
 
-Once you move authentication logic to the backend, you can do a health check in the backend. 
+Once you move authentication logic to the backend, you can do a health check in the backend.
 
 :::note
 
@@ -180,7 +172,7 @@ You need to delete the frontend implementation `testDatasource` in your `Datasou
 
 :::
 
-In the case of a frontend data source, the health check makes an API request to `https://api.example.com` (as defined in the `routes` field in `plugin.json`) and returns an error if the request fails. For example:
+In this frontend example, the health check makes an API request to `https://api.example.com` (as defined in the `routes` field in `plugin.json`) and returns an error if the request fails:
 
 ```typescript title="src/DataSource.ts"
 import { getBackendSrv } from '@grafana/runtime';
@@ -255,7 +247,7 @@ This example covers an HTTP-only data source. So, if your data source requires a
 
 :::
 
-### Copy the query logic
+### Query
 
 The next step is to move the query logic. This will highly vary depending on how the plugin queries the data source and transforms the response into [frames](https://grafana.com/developers/plugin-tools/introduction/data-frames). In this tutorial, let's see how we can migrate a simple example.
 
@@ -292,7 +284,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 }
 ```
 
-Now let's see how this can be translated to the backend. The `Datasource` instance should implement the `QueryData` method. This method should return a list of frames.  
+Now let's see how this can be translated to the backend. The `Datasource` instance should implement the `QueryData` method. This method should return a list of frames.
 
 :::note
 
@@ -300,7 +292,7 @@ As with the health check, you need to delete the frontend implementation `query`
 
 :::
 
-The following examples shows the preceding method:
+The following example shows the preceding method:
 
 ```go title="pkg/plugin/datasource.go"
 func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
