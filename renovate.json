@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "enabledManagers": ["npm"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^_package.json$"],
+      "matchStringsStrategy": "recursive",
+      "matchStrings": [
+        "\"dependencies\":\\s*\\{[^}]*}",
+        "\"(?<depName>.*)\"[^\"]*:\\s*\"(?<currentValue>.*)\""
+      ],
+      "datasourceTemplate": "npm"
+    }
+  ],
+  "packageRules": [{
+		"packagePatterns": ["*"],
+		"enabled": false
+	}, {
+    "matchPackageNames": ["@grafana/plugin-e2e"],
+		"enabled": true
+	}]
+}
