@@ -164,6 +164,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useCypress,
       hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
       hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
+      pluginExecutable: pluginJson.executable,
     };
   }
 

@@ -4,7 +4,7 @@
   "name": "{{ titleCase pluginName }}",
   "id": "{{ pluginId }}",
   "backend": true,
-  "executable": "gpx_{{ snakeCase pluginName }}",
+  "executable": "{{#if pluginExecutable}}{{pluginExecutable}}{{else}}gpx_{{ snakeCase pluginName }}{{/if}}",
   "info": {
     "description": "{{ sentenceCase pluginDescription }}",
     "author": {

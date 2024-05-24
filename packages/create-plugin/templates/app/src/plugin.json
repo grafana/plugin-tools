@@ -4,7 +4,7 @@
   "name": "{{ titleCase pluginName }}",
   "id": "{{ pluginId }}",{{#if hasBackend}}
   "backend": true,
-  "executable": "gpx_{{ snakeCase pluginName }}",{{/if}}
+  "executable": "{{#if pluginExecutable}}{{pluginExecutable}}{{else}}gpx_{{ snakeCase pluginName }}{{/if}}",{{/if}}
   "info": {
     "keywords": ["app"],
     "description": "{{ sentenceCase pluginDescription }}",
