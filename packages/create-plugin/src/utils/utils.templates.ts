@@ -107,10 +107,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
-  const getE2eTestCmd = (packageManagerName: string) =>
-    useCypress
-      ? `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`
-      : 'playwright test';
 
   let templateData: TemplateData;
 
@@ -137,7 +133,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
       usePlaywright,
       useCypress,
-      e2eTestCmd: getE2eTestCmd(packageManagerName),
       hasGithubWorkflows: cliArgs.hasGithubWorkflows,
       hasGithubLevitateWorkflow: cliArgs.hasGithubLevitateWorkflow,
     };
@@ -167,7 +162,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(pluginJson.type),
       usePlaywright,
       useCypress,
-      e2eTestCmd: getE2eTestCmd(packageManagerName),
       hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
       hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
     };
