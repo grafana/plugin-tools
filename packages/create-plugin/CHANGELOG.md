@@ -1,3 +1,15 @@
+# v4.10.6 (Mon May 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: CI workflow improvements [#890](https://github.com/grafana/plugin-tools/pull/890) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v4.10.5 (Fri May 24 2024)
 
 #### 🐛 Bug Fix
