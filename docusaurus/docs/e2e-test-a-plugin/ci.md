@@ -46,9 +46,9 @@ queryString="current-package-manager"
   <summary> <h3>Frontend plugin workflow</h3> </summary>
   <CodeSnippets
 snippets={[
-{ component: BEPluginWorkflowNPM, label: 'npm' },
-{ component: BEPluginWorkflowYarn, label: 'yarn' },
-{ component: BEPluginWorkflowPNPM, label: 'pnpm' }
+{ component: FEPluginNPM, label: 'npm' },
+{ component: FEPluginYarn, label: 'yarn' },
+{ component: FEPluginPNPM, label: 'pnpm' }
 ]}
 groupId="package-manager"
 queryString="current-package-manager"
