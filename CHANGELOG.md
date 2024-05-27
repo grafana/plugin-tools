@@ -1,5 +1,18 @@
 # (Mon May 27 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.11.0`
+  - Create-plugin: stop extracting plugin-meta on builds [#923](https://github.com/grafana/plugin-tools/pull/923) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Mon May 27 2024)
+
 #### 🐛 Bug Fix
 
 - Create Plugin: Use latest version of plugin-e2e [#917](https://github.com/grafana/plugin-tools/pull/917) ([@sunker](https://github.com/sunker))

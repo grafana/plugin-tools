@@ -1,3 +1,15 @@
+# v4.11.0 (Mon May 27 2024)
+
+#### 🚀 Enhancement
+
+- Create-plugin: stop extracting plugin-meta on builds [#923](https://github.com/grafana/plugin-tools/pull/923) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v4.10.6 (Mon May 27 2024)
 
 #### 🐛 Bug Fix
