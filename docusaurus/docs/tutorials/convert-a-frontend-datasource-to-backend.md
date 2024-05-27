@@ -12,15 +12,19 @@ keywords:
   - datasource
 ---
 
-# How to add a frontend data source to a backend component
+# How to convert a frontend data source plugin into a backend plugin
 
-This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](https://grafana.com/developers/plugin-tools/introduction/backend-plugins).
+This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../introduction/backend.md).
 
 To convert the frontend data source, we recommend scaffolding a new backend data source plugin using [`npx @grafana/create-plugin@latest`](https://grafana.com/developers/plugin-tools/). Use the following instructions to extend this foundation to copy functionality from your original plugin.
 
+## Why
+
+There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../introduction/backend.md#use-cases-for-implementing-a-backend-plugin).
+
 ## Before you begin
 
-Before you dive into the details, you should familiarize yourself with the process of creating a backend data source plugin. If you haven't done this before, you can follow our tutorial for [building a backend plugin](https://grafana.com/developers/plugin-tools/tutorials/build-a-data-source-backend-plugin).
+Before you dive into the details, you should familiarize yourself with the process of creating a backend data source plugin. If you haven't done this before, you can follow our tutorial for [building a backend plugin](./build-a-data-source-backend-plugin.md).
 
 ## Key concepts
 
@@ -249,7 +253,7 @@ This example covers an HTTP-only data source. So, if your data source requires a
 
 ### Query
 
-The next step is to move the query logic. This will highly vary depending on how the plugin queries the data source and transforms the response into [frames](https://grafana.com/developers/plugin-tools/introduction/data-frames). In this tutorial, let's see how we can migrate a simple example.
+The next step is to move the query logic. This will highly vary depending on how the plugin queries the data source and transforms the response into [frames](../introduction/data-frames.md). In this tutorial, let's see how we can migrate a simple example.
 
 Our data source is returning a JSON object with a list of `datapoints` when hitting the endpoint `/metrics`. The frontend `query` method transforms those `datapoints` into frames:
 
@@ -408,4 +412,4 @@ export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptio
 
 ## Conclusion
 
-This tutorial covered the main steps to convert a frontend data source into a backend data source. There are many use cases so if you have any questions or need help with a specific case, we encourage you to reach out in our [Community forum](https://community.grafana.com/c/plugin-development/30). Contributions to this guide are also welcome.
+This tutorial covered the main steps to convert a frontend data source into a backend data source. There is a wide variety of plugins so if you have any questions or need help with a specific case, we encourage you to reach out in our [Community forum](https://community.grafana.com/c/plugin-development/30). Contributions to this guide are also welcome.
