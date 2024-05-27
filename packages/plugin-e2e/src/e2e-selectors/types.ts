@@ -1,5 +1,11 @@
 import { versionedComponents, versionedPages } from './versioned';
 import { versionedAPIs } from './versioned/apis';
+import {
+  SelectorResolver,
+  SelectorResolverWithArgs,
+  VersionedSelector,
+  VersionedSelectorWithArgs,
+} from './versioned/types';
 
 export type E2ESelectors = {
   pages: SelectorsOf<typeof versionedPages>;
@@ -16,11 +22,3 @@ export type SelectorsOf<T> = {
     ? SelectorResolverWithArgs<A>
     : SelectorsOf<T[Property]>;
 };
-
-export type SelectorResolver = () => string;
-
-export type SelectorResolverWithArgs<T extends object> = (arg: T) => string;
-
-export type VersionedSelector = Record<string, SelectorResolver>;
-
-export type VersionedSelectorWithArgs<T extends object> = Record<string, SelectorResolverWithArgs<T>>;
