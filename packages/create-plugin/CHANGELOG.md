@@ -1,3 +1,15 @@
+# v4.11.1 (Mon May 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: use existing executable name on update [#924](https://github.com/grafana/plugin-tools/pull/924) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v4.11.0 (Mon May 27 2024)
 
 #### 🚀 Enhancement
