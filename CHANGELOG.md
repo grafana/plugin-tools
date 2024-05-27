@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-meta-extractor@0.0.3`
+  - Plugin meta extractor: add a warning to the README [#928](https://github.com/grafana/plugin-tools/pull/928) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Mon May 27 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@4.11.1`
   - Create plugin: use existing executable name on update [#924](https://github.com/grafana/plugin-tools/pull/924) ([@oshirohugo](https://github.com/oshirohugo))
 

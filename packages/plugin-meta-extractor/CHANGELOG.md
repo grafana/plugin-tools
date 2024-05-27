@@ -1,3 +1,15 @@
+# v0.0.3 (Mon May 27 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin meta extractor: add a warning to the README [#928](https://github.com/grafana/plugin-tools/pull/928) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v0.0.2 (Wed May 08 2024)
 
 #### 🐛 Bug Fix
