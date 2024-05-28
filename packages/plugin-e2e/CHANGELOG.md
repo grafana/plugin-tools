@@ -1,3 +1,19 @@
+# v1.2.2 (Tue May 28 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update select option selector to use `data-testid` [#912](https://github.com/grafana/plugin-tools/pull/912) ([@ashharrison90](https://github.com/ashharrison90))
+
+#### Authors: 1
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+
+---
+
 # v1.2.0 (Wed Apr 24 2024)
 
 :tada: This release contains work from a new contributor! :tada:

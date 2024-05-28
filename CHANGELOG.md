@@ -1,3 +1,20 @@
+# (Tue May 28 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.2.2`
+  - Update select option selector to use `data-testid` [#912](https://github.com/grafana/plugin-tools/pull/912) ([@ashharrison90](https://github.com/ashharrison90))
+
+#### Authors: 1
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+
+---
+
 # (Mon May 27 2024)
 
 #### 🐛 Bug Fix
