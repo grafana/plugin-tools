@@ -183,6 +183,7 @@ export const versionedComponents = {
   },
   Select: {
     option: {
+      '11.1.0': 'data-testid Select option',
       [MIN_GRAFANA_VERSION]: 'Select option',
     },
     input: {
