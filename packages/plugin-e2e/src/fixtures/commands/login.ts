@@ -1,14 +1,14 @@
 import path from 'path';
 import { expect, TestFixture } from '@playwright/test';
-import { PlaywrightArgs } from '../../types';
+import { PlaywrightArgs, User } from '../../types';
 
 type LoginFixture = TestFixture<() => Promise<void>, PlaywrightArgs>;
 
-const ADMIN_USER = { user: 'admin', password: 'admin' };
+export const DEFAULT_ADMIN_USER: User = { user: 'admin', password: 'admin' };
 
 export const login: LoginFixture = async ({ request, user }, use) => {
   await use(async () => {
-    const data = user ?? ADMIN_USER;
+    const data = user ?? DEFAULT_ADMIN_USER;
     const loginReq = await request.post('/login', { data });
     const text = await loginReq.text();
     expect.soft(loginReq.ok(), `Could not log in to Grafana: ${text}`).toBeTruthy();

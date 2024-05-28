@@ -25,6 +25,10 @@ export default defineConfig<PluginOptions>({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    grafanaAPIUser: {
+      user: 'admin',
+      password: 'admin',
+    },
     httpCredentials: {
       username: 'admin',
       password: 'admin',
@@ -41,6 +45,13 @@ export default defineConfig<PluginOptions>({
       name: 'authenticate',
       testDir: './src/auth',
       testMatch: [/.*auth\.setup\.ts/],
+      use: {
+        user: {
+          user: 'admin',
+          password: 'admin',
+          userExists: true,
+        },
+      },
     },
     // Login to Grafana with new user with viewer role and store the cookie on disk for use in other tests
     {
