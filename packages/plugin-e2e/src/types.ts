@@ -62,7 +62,12 @@ export type PluginOptions = {
    * You can use different users for different projects. See the fixture createUser for more information on how to create a user,
    * and the fixture login for more information on how to authenticate. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/use-authentication
    */
-  user?: UserArgs;
+  user?: User & {
+    /**
+     * Set this to true if the user already exist in the database. If omitted or set to false, the user will be created.
+     */
+    skipCreateUser?: boolean;
+  };
 
   /**
    * The user to use when making requests to the Grafana API. For example when creating users, fetching data sources etc.
@@ -307,26 +312,6 @@ export interface Dashboard {
   title?: string;
 }
 
-export type UserArgs = {
-  /**
-   * The username of the user to create. Needs to be unique
-   */
-  user: string;
-  /**
-   * The password of the user to create
-   */
-  password: string;
-  /**
-   * The role of the user to create
-   */
-  role?: OrgRole;
-
-  /**
-   * Set this to true if the user already exist in the database. If omitted or set to false, the user will be created.
-   */
-  skipCreateUser?: boolean;
-};
-
 export type User = {
   /**
    * The username of the user
@@ -337,6 +322,11 @@ export type User = {
    * The passwords
    */
   password: string;
+
+  /**
+   * The role of the user to create
+   */
+  role?: OrgRole;
 };
 
 export type CreateDataSourceArgs<T = any> = {

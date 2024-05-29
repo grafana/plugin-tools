@@ -12,7 +12,6 @@ export const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
   await use(async (uid) => {
     const response = await request.get(`/api/datasources/uid/${uid}`, {
       headers: {
-        // here we call backend as admin user and not on behalf of the logged in user as it might not have required permissions
         Authorization: `Basic ${Buffer.from(`${grafanaAPIUser.user}:${grafanaAPIUser.password}`).toString('base64')}`,
       },
     });
