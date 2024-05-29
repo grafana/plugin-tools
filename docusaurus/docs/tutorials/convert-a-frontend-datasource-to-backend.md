@@ -28,7 +28,7 @@ Before you dive into the details, you should familiarize yourself with the proce
 
 ## Key concepts
 
-Before going into specific conversion advice, we will discuss the main components of a data source and how these differ between frontend and backend plugins.
+Before going into specific conversion advice, it's important to understand the main components of a data source and how these differ between frontend and backend plugins.
 
 ### Frontend `DataSource` class
 
@@ -43,7 +43,7 @@ Data source plugins require two components: a query editor and a config editor.
 
 ### Query and config editor
 
-These two frontend components do not require to be changed when converting a frontend data source to a backend data source. However, if you add a backend component to a data source you can request `resources` from it. We will talk more about this in the [resource requests section](#other-resource-requests) but resources are additional endpoints that the plugin exposes and can be used to populate or validate the query or config editor.
+These two frontend components do not need to be changed when converting a frontend data source to a backend data source. However, if you add a backend component to a data source you can request `resources` from it.  Resources are additional endpoints that the plugin exposes and can be used to populate or validate the query or config editor. Learn about this in the [resource requests section](#other-resource-requests).
 
 ## Plugin structure comparison
 
@@ -129,7 +129,7 @@ const res = getBackendSrv().datasourceRequest({
 // Handle response
 ```
 
-In a backend data source, the authentication logic should be moved to the `Datasource` constructor. This method is called when the data source is created and should be used to create the authenticated client. Store this client in the `Datasource` instance and use it for every request. For example:
+In a backend data source, you should move the authentication logic to the `Datasource` constructor. This method is called when the data source is created and should be used to create the authenticated client. Store this client in the `Datasource` instance and use it for every request. For example:
 
 ```go title="pkg/plugin/datasource.go"
 package plugin
@@ -247,13 +247,13 @@ func (d *Datasource) CheckHealth(ctx context.Context, _ *backend.CheckHealthRequ
 
 :::note
 
-This example covers an HTTP-only data source. So, if your data source requires a database connection, you can use the Golang client for the database and execute a simple query like `SELECT 1` or a `ping` function.
+This example covers an HTTP-only data source. So, if your data source requires a database connection, you can use the Go client for the database and execute a simple query like `SELECT 1` or a `ping` function.
 
 :::
 
 ### Query
 
-The next step is to move the query logic. This will highly vary depending on how the plugin queries the data source and transforms the response into [frames](../introduction/data-frames.md). In this tutorial, let's see how we can migrate a simple example.
+The next step is to move the query logic. This will significantly vary depending on how the plugin queries the data source and transforms the response into [frames](../introduction/data-frames.md). In this guide, you'll see how to migrate a simple example.
 
 Our data source is returning a JSON object with a list of `datapoints` when hitting the endpoint `/metrics`. The frontend `query` method transforms those `datapoints` into frames:
 
@@ -412,4 +412,4 @@ export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptio
 
 ## Conclusion
 
-This tutorial covered the main steps to convert a frontend data source into a backend data source. There is a wide variety of plugins so if you have any questions or need help with a specific case, we encourage you to reach out in our [Community forum](https://community.grafana.com/c/plugin-development/30). Contributions to this guide are also welcome.
+This guide covered the main steps to convert a frontend data source into a backend data source. There are a wide variety of plugins so if you have any questions or need help with a specific case, we encourage you to reach out in our [Community forum](https://community.grafana.com/c/plugin-development/30). Contributions to this guide are also welcome.
