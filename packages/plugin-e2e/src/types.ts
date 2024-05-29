@@ -317,15 +317,7 @@ export type User = {
    * The username of the user
    */
   user: string;
-
-  /**
-   * The passwords
-   */
   password: string;
-
-  /**
-   * The role of the user to create
-   */
   role?: OrgRole;
 };
 
