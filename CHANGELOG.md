@@ -1,3 +1,16 @@
+# (Thu May 30 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.3.0`
+  - Plugin E2E: Allow overriding grafanaAPICredentials [#930](https://github.com/grafana/plugin-tools/pull/930) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue May 28 2024)
 
 :tada: This release contains work from a new contributor! :tada:
