@@ -49,7 +49,6 @@ export default defineConfig<PluginOptions>({
         user: {
           user: 'admin',
           password: 'admin',
-          skipCreateUser: true,
         },
       },
     },
