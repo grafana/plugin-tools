@@ -52,10 +52,12 @@ export class Panel extends GrafanaPage {
       panelMenu = this.locator.getByRole('heading');
       this.ctx.page.locator(`[aria-label="Panel header item ${options?.parentItem}"]`);
       this.ctx.page.locator(`[aria-label="Panel header item ${item}"]`);
+      parentMenuItem = this.ctx.page.getByText(options?.parentItem ?? '');
+      menuItem = this.ctx.page.getByTestId('panel-dropdown').getByText(item);
     }
 
     await panelMenu.click({ force: true });
-    options?.parentItem && parentMenuItem.hover();
+    options?.parentItem && (await parentMenuItem.hover());
     await menuItem.click();
   }
 
