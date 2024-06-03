@@ -202,12 +202,17 @@ export type Pages = {
         };
       };
       Close: string;
-      TemplateVariables: {
-        submenuItemLabels: (item: string) => string;
-        submenuItemValueDropDownValueLinkTexts: (item: string) => string;
-        submenuItemValueDropDownDropDown: string;
-        submenuItemValueDropDownOptionTexts: (item: string) => string;
-      };
+    };
+    TemplateVariables: {
+      submenuItemLabels: (item: string) => string;
+      submenuItemValueDropDownValueLinkTexts: (item: string) => string;
+      submenuItemValueDropDownDropDown: string;
+      submenuItemValueDropDownOptionTexts: (item: string) => string;
+    };
+    Save: {
+      saveButton: string;
+      titleInput: string;
+      saveDashboardButton: string;
     };
   };
   Explore: {

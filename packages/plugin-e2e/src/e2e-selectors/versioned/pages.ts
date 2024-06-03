@@ -137,19 +137,30 @@ export const versionedPages = {
         [MIN_GRAFANA_VERSION]: 'Go Back button',
         '9.5.0': 'data-testid dashboard-settings-close',
       },
-      TemplateVariables: {
-        submenuItemLabels: {
-          [MIN_GRAFANA_VERSION]: (item: string) => `data-testid Dashboard template variables submenu Label ${item}`,
-        },
-        submenuItemValueDropDownValueLinkTexts: {
-          [MIN_GRAFANA_VERSION]: (item: string) =>
-            `data-testid Dashboard template variables Variable Value DropDown value link text ${item}`,
-        },
-        submenuItemValueDropDownDropDown: { [MIN_GRAFANA_VERSION]: 'Variable options' },
-        submenuItemValueDropDownOptionTexts: {
-          [MIN_GRAFANA_VERSION]: (item: string) =>
-            `data-testid Dashboard template variables Variable Value DropDown option text ${item}`,
-        },
+    },
+    TemplateVariables: {
+      submenuItemLabels: {
+        [MIN_GRAFANA_VERSION]: (item: string) => `data-testid Dashboard template variables submenu Label ${item}`,
+      },
+      submenuItemValueDropDownValueLinkTexts: {
+        [MIN_GRAFANA_VERSION]: (item: string) =>
+          `data-testid Dashboard template variables Variable Value DropDown value link text ${item}`,
+      },
+      submenuItemValueDropDownDropDown: { [MIN_GRAFANA_VERSION]: 'Variable options' },
+      submenuItemValueDropDownOptionTexts: {
+        [MIN_GRAFANA_VERSION]: (item: string) =>
+          `data-testid Dashboard template variables Variable Value DropDown option text ${item}`,
+      },
+    },
+    Save: {
+      saveButton: {
+        [MIN_GRAFANA_VERSION]: 'Save dashboard',
+      },
+      titleInput: {
+        [MIN_GRAFANA_VERSION]: 'Save dashboard title field',
+      },
+      saveDashboardButton: {
+        [MIN_GRAFANA_VERSION]: 'Save dashboard button',
       },
     },
   },
