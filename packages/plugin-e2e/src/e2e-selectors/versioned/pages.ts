@@ -133,6 +133,10 @@ export const versionedPages = {
           },
         },
       },
+      Close: {
+        [MIN_GRAFANA_VERSION]: 'Go Back button',
+        '9.5.0': 'data-testid dashboard-settings-close',
+      },
       TemplateVariables: {
         submenuItemLabels: {
           [MIN_GRAFANA_VERSION]: (item: string) => `data-testid Dashboard template variables submenu Label ${item}`,

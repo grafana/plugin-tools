@@ -201,6 +201,7 @@ export type Pages = {
           };
         };
       };
+      Close: string;
       TemplateVariables: {
         submenuItemLabels: (item: string) => string;
         submenuItemValueDropDownValueLinkTexts: (item: string) => string;
