@@ -38,4 +38,5 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: (args) => `/api/plugins/${args.pluginId}/settings`,
     }),
   },
+  A: '',
 };

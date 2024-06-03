@@ -1,16 +1,18 @@
 import { MIN_GRAFANA_VERSION } from './constants';
 import { createSelector, createSelectorWithArgs } from './factory';
+import { L3Selectors } from './types';
 
-export const versionedComponents = {
+export const versionedComponents: L3Selectors = {
   TimePicker: {
     openButton: createSelector({
       '8.1.0': () => 'data-testid TimePicker Open Button',
       [MIN_GRAFANA_VERSION]: () => 'TimePicker open button',
     }),
-    fromField: createSelector({
+    fromField: {
       '10.2.3': () => 'data-testid Time Range from field',
       [MIN_GRAFANA_VERSION]: () => 'Time Range from field',
-    }),
+      '': () => ``,
+    },
     toField: createSelector({
       '10.2.3': () => 'data-testid Time Range to field',
       [MIN_GRAFANA_VERSION]: () => 'Time Range to field',
