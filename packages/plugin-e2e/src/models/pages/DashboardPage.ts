@@ -110,4 +110,22 @@ export class DashboardPage extends GrafanaPage {
   async refreshDashboard() {
     await this.ctx.page.getByTestId(this.ctx.selectors.components.RefreshPicker.runButtonV2).click();
   }
+
+  /**
+   * Saves the dashboard
+   */
+  async saveDashboard(title?: string): Promise<string | undefined> {
+    await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.Save.saveButton).click();
+    if (title) {
+      await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.Save.titleInput).fill(title);
+    }
+    await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.Save.saveDashboardButton).click();
+
+    const resp = await this.ctx.page.waitForResponse(
+      (response) => response.url().includes('/api/dashboards/db') && response.status() === 200
+    );
+    const body = await resp.json();
+
+    return body.uid || undefined;
+  }
 }
