@@ -123,6 +123,13 @@ export const versionedPages = {
             selectionOptionsIncludeAllSwitch: {
               [MIN_GRAFANA_VERSION]: 'Variable editor Form IncludeAll switch',
             },
+            generalNameInputV2: {
+              '8.5.0': 'data-testid Variable editor Form Name field',
+              [MIN_GRAFANA_VERSION]: 'Variable editor Form Name field',
+            },
+            applyButton: {
+              '9.3.0': 'data-testid Variable editor Apply button',
+            },
           },
         },
       },

@@ -196,6 +196,8 @@ export type Pages = {
             generalTypeSelectV2: string;
             previewOfValuesOption: string;
             submitButton: string;
+            generalNameInputV2: string;
+            applyButton: string;
           };
         };
       };
