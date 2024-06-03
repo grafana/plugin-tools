@@ -133,6 +133,20 @@ export const versionedPages = {
           },
         },
       },
+      TemplateVariables: {
+        submenuItemLabels: {
+          [MIN_GRAFANA_VERSION]: (item: string) => `data-testid Dashboard template variables submenu Label ${item}`,
+        },
+        submenuItemValueDropDownValueLinkTexts: {
+          [MIN_GRAFANA_VERSION]: (item: string) =>
+            `data-testid Dashboard template variables Variable Value DropDown value link text ${item}`,
+        },
+        submenuItemValueDropDownDropDown: { [MIN_GRAFANA_VERSION]: 'Variable options' },
+        submenuItemValueDropDownOptionTexts: {
+          [MIN_GRAFANA_VERSION]: (item: string) =>
+            `data-testid Dashboard template variables Variable Value DropDown option text ${item}`,
+        },
+      },
     },
   },
   Explore: {

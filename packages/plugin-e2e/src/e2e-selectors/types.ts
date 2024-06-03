@@ -201,6 +201,12 @@ export type Pages = {
           };
         };
       };
+      TemplateVariables: {
+        submenuItemLabels: (item: string) => string;
+        submenuItemValueDropDownValueLinkTexts: (item: string) => string;
+        submenuItemValueDropDownDropDown: string;
+        submenuItemValueDropDownOptionTexts: (item: string) => string;
+      };
     };
   };
   Explore: {
