@@ -5,6 +5,7 @@ import { VariableEditPage } from './VariableEditPage';
 export class VariablePage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
     super(ctx);
+    this.dashboard = dashboard;
   }
 
   /**
@@ -22,11 +23,11 @@ export class VariablePage extends GrafanaPage {
   /**
    * Clicks the add new variable button and returns the variable edit page
    */
-  async clickAddNew() {
+  async clickAddNew(first?: boolean) {
     const { addVariableCTAV2, addVariableCTAV2Item, newButton } =
       this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
 
-    if (!this.dashboard?.uid) {
+    if (!this.dashboard?.uid || first) {
       await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click();
     } else {
       await this.getByGrafanaSelector(newButton).click();
