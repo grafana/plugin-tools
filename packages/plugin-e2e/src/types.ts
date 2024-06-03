@@ -17,6 +17,7 @@ import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
 import { ExplorePage } from './models/pages/ExplorePage';
 import { PanelEditPage } from './models/pages/PanelEditPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
+import { VariablePage } from './models/pages/VariablePage';
 
 export type PluginOptions = {
   /**
@@ -201,6 +202,14 @@ export type PluginFixture = {
   variableEditPage: VariableEditPage;
 
   /**
+   * Isolated {@link VariablePage} instance for each test.
+   *
+   * When using this fixture in a test, you will get a new dashboard page with a new empty variable edit page
+   * To load an existing dashboard with an existing variable, use the {@link gotoVariableEditPage} fixture.
+   */
+  variablePage: VariablePage;
+
+  /**
    * Isolated {@link AnnotationEditPage} instance for each test.
    *
    * When using this fixture in a test, you will get a new dashboard page with a new empty annotation edit page
@@ -235,6 +244,11 @@ export type PluginFixture = {
    * Fixture command that navigates a variable edit page for an already existing variable query in a dashboard.
    */
   gotoVariableEditPage: (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>;
+
+  /**
+   * Fixture command that navigates a variable edit page for an already existing variable query in a dashboard.
+   */
+  gotoVariablePage: (args: DashboardPageArgs) => Promise<VariablePage>;
 
   /**
    * Fixture command that navigates an annotation edit page for an already existing annotation query in a dashboard.
