@@ -1,42 +1,44 @@
 import { MIN_GRAFANA_VERSION } from './constants';
-import { createSelector, createSelectorWithArgs } from './factory';
+import { verifySelector, verifySelectorWithArgs, verifySelectors } from './utils';
 
-export const versionedAPIs = {
+const selectors = {
   DataSource: {
-    resourcePattern: createSelector({
+    resourcePattern: verifySelector({
       [MIN_GRAFANA_VERSION]: () => '/api/datasources/*/resources',
     }),
-    resourceUIDPattern: createSelector({
+    resourceUIDPattern: verifySelector({
       '9.4.4': () => '/api/datasources/uid/*/resources',
       [MIN_GRAFANA_VERSION]: () => '/api/datasources/*/resources',
     }),
-    queryPattern: createSelector({
+    queryPattern: verifySelector({
       [MIN_GRAFANA_VERSION]: () => '*/**/api/ds/query*',
     }),
-    query: createSelector({
+    query: verifySelector({
       [MIN_GRAFANA_VERSION]: () => '/api/ds/query',
     }),
-    health: createSelectorWithArgs<{ uid: string; id: string }>({
+    health: verifySelectorWithArgs<{ uid: string; id: string }>({
       ['9.5.0']: (args) => `/api/datasources/uid/${args.uid}/health`,
       [MIN_GRAFANA_VERSION]: (args) => `/api/datasources/${args.id}/health`,
     }),
-    datasourceByUID: createSelectorWithArgs<{ uid: string }>({
+    datasourceByUID: verifySelectorWithArgs<{ uid: string }>({
       [MIN_GRAFANA_VERSION]: (args) => `/api/datasources/uid/${args.uid}`,
     }),
-    proxy: createSelectorWithArgs<{ uid: string; id: string }>({
+    proxy: verifySelectorWithArgs<{ uid: string; id: string }>({
       '9.4.0': (args) => `api/datasources/proxy/uid/${args.uid}`,
       [MIN_GRAFANA_VERSION]: (args) => `/api/datasources/proxy/${args.id}`,
     }),
   },
   Dashboard: {
-    delete: createSelectorWithArgs<{ uid: string }>({
+    delete: verifySelectorWithArgs<{ uid: string }>({
       [MIN_GRAFANA_VERSION]: (args) => `/api/datasources/uid/${args.uid}`,
     }),
   },
   Plugin: {
-    settings: createSelectorWithArgs<{ pluginId: string }>({
+    settings: verifySelectorWithArgs<{ pluginId: string }>({
       [MIN_GRAFANA_VERSION]: (args) => `/api/plugins/${args.pluginId}/settings`,
     }),
   },
-  A: '',
 };
+
+export type VersionedAPIs = typeof selectors;
+export const versionedAPIs = verifySelectors<VersionedAPIs>(selectors);

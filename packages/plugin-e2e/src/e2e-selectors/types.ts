@@ -1,19 +1,18 @@
-import { versionedComponents, versionedPages } from './versioned';
-import { versionedAPIs } from './versioned/apis';
 import {
   SelectorResolver,
   SelectorResolverWithArgs,
+  VersionedAPIs,
+  VersionedComponents,
+  VersionedPages,
   VersionedSelector,
   VersionedSelectorWithArgs,
-} from './versioned/types';
+} from './versioned';
 
 export type E2ESelectors = {
-  pages: SelectorsOf<typeof versionedPages>;
-  components: SelectorsOf<typeof versionedComponents>;
-  apis: SelectorsOf<typeof versionedAPIs>;
+  pages: SelectorsOf<VersionedPages>;
+  components: SelectorsOf<VersionedComponents>;
+  apis: SelectorsOf<VersionedAPIs>;
 };
-
-// Types to generate typings from the versioned selectors
 
 export type SelectorsOf<T> = {
   [Property in keyof T]: T[Property] extends VersionedSelector

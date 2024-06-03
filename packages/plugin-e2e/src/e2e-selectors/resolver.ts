@@ -53,3 +53,5 @@ export const resolveSelectors = (versionedSelectors: VersionedSelectors, grafana
   const selectors: E2ESelectors = {} as E2ESelectors;
   return processSelectors(selectors, versionedSelectors, grafanaVersion.replace(/\-.*/, ''));
 };
+
+function resolve(source: VersionedSelectors): E2ESelectors {}

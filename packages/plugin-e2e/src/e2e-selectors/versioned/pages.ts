@@ -1,59 +1,59 @@
 import { MIN_GRAFANA_VERSION } from './constants';
-import { createSelector, createSelectorWithArgs } from './factory';
+import { verifySelector, verifySelectorWithArgs, verifySelectors } from './utils';
 
-export const versionedPages = {
+const selectors = {
   Home: {
-    url: createSelector({
+    url: verifySelector({
       [MIN_GRAFANA_VERSION]: () => '/',
     }),
   },
   DataSource: {
-    saveAndTest: createSelector({
+    saveAndTest: verifySelector({
       '10.0.0': () => 'data-testid Data source settings page Save and Test button',
       [MIN_GRAFANA_VERSION]: () => 'Data source settings page Save and Test button',
     }),
   },
   EditDataSource: {
-    url: createSelectorWithArgs<{ dataSourceUid: string }>({
+    url: verifySelectorWithArgs<{ dataSourceUid: string }>({
       '10.2.0': (args) => `/connections/datasources/edit/${args.dataSourceUid}`,
       [MIN_GRAFANA_VERSION]: (args) => `/datasources/edit/${args.dataSourceUid}`,
     }),
   },
   AddDashboard: {
-    url: createSelector({
+    url: verifySelector({
       [MIN_GRAFANA_VERSION]: () => '/dashboard/new',
     }),
-    itemButton: createSelectorWithArgs<{ title: string }>({
+    itemButton: verifySelectorWithArgs<{ title: string }>({
       //did not exist prior to 9.5.0
       '9.5.0': (args) => `data-testid ${args.title}`,
     }),
-    addNewPanel: createSelector({
+    addNewPanel: verifySelector({
       [MIN_GRAFANA_VERSION]: () => 'Add new panel',
     }),
-    itemButtonAddViz: createSelector({
+    itemButtonAddViz: verifySelector({
       [MIN_GRAFANA_VERSION]: () => 'Add new visualization menu item',
     }),
     Settings: {
       Annotations: {
         List: {
-          url: createSelector({
+          url: verifySelector({
             [MIN_GRAFANA_VERSION]: () => '/dashboard/new?orgId=1&editview=annotations',
           }),
         },
         Edit: {
-          url: createSelectorWithArgs<{ annotationIndex: string }>({
+          url: verifySelectorWithArgs<{ annotationIndex: string }>({
             [MIN_GRAFANA_VERSION]: (args) => `/dashboard/new?editview=annotations&editIndex=${args.annotationIndex}`,
           }),
         },
       },
       Variables: {
         List: {
-          url: createSelector({
+          url: verifySelector({
             [MIN_GRAFANA_VERSION]: () => '/dashboard/new?orgId=1&editview=templating',
           }),
         },
         Edit: {
-          url: createSelectorWithArgs<{ annotationIndex: string }>({
+          url: verifySelectorWithArgs<{ annotationIndex: string }>({
             [MIN_GRAFANA_VERSION]: (args) =>
               `/dashboard/new?orgId=1&editview=templating&editIndex=${args.annotationIndex}`,
           }),
@@ -62,25 +62,25 @@ export const versionedPages = {
     },
   },
   Dashboard: {
-    url: createSelectorWithArgs<{ uid: string }>({
+    url: verifySelectorWithArgs<{ uid: string }>({
       [MIN_GRAFANA_VERSION]: (args) => `/d/${args.uid}`,
     }),
     Settings: {
       Annotations: {
         Edit: {
-          url: createSelectorWithArgs<{ dashboardUid: string; annotationIndex: string }>({
+          url: verifySelectorWithArgs<{ dashboardUid: string; annotationIndex: string }>({
             [MIN_GRAFANA_VERSION]: (args) =>
               `/d/${args.dashboardUid}?editview=annotations&editIndex=${args.annotationIndex}`,
           }),
         },
         List: {
-          url: createSelectorWithArgs<{ dashboardUid: string }>({
+          url: verifySelectorWithArgs<{ dashboardUid: string }>({
             [MIN_GRAFANA_VERSION]: (args) => `/d/${args.dashboardUid}?editview=annotations`,
           }),
-          addAnnotationCTA: createSelector({
+          addAnnotationCTA: verifySelector({
             [MIN_GRAFANA_VERSION]: () => 'Call to action button Add annotation query',
           }),
-          addAnnotationCTAV2: createSelector({
+          addAnnotationCTAV2: verifySelector({
             //did not exist prior to 8.3.0
             '8.3.0': () => 'data-testid Call to action button Add annotation query',
           }),
@@ -88,40 +88,40 @@ export const versionedPages = {
       },
       Variables: {
         List: {
-          url: createSelectorWithArgs<{ dashboardUid: string }>({
+          url: verifySelectorWithArgs<{ dashboardUid: string }>({
             [MIN_GRAFANA_VERSION]: (args) => `/d/${args.dashboardUid}?editview=templating`,
           }),
-          newButton: createSelector({
+          newButton: verifySelector({
             [MIN_GRAFANA_VERSION]: () => 'Variable editor New variable button',
           }),
-          table: createSelector({
+          table: verifySelector({
             [MIN_GRAFANA_VERSION]: () => 'Variable editor Table',
           }),
-          addVariableCTAV2: createSelectorWithArgs<{ name: string }>({
+          addVariableCTAV2: verifySelectorWithArgs<{ name: string }>({
             [MIN_GRAFANA_VERSION]: (args) => `data-testid Call to action button ${args.name}`,
           }),
-          addVariableCTAV2Item: createSelector({
+          addVariableCTAV2Item: verifySelector({
             [MIN_GRAFANA_VERSION]: () => 'Add variable',
           }),
         },
         Edit: {
-          url: createSelectorWithArgs<{ dashboardUid: string; editIndex: string }>({
+          url: verifySelectorWithArgs<{ dashboardUid: string; editIndex: string }>({
             [MIN_GRAFANA_VERSION]: (args) => `/d/${args.dashboardUid}?editview=templating&editIndex=${args.editIndex}`,
           }),
           General: {
-            generalTypeSelectV2: createSelector({
+            generalTypeSelectV2: verifySelector({
               '8.5.0': () => 'data-testid Variable editor Form Type select',
               [MIN_GRAFANA_VERSION]: () => 'Variable editor Form Type select',
             }),
-            previewOfValuesOption: createSelector({
+            previewOfValuesOption: verifySelector({
               '10.4.0': () => 'data-testid Variable editor Preview of Values option',
               [MIN_GRAFANA_VERSION]: () => 'Variable editor Preview of Values option',
             }),
-            submitButton: createSelector({
+            submitButton: verifySelector({
               '10.4.0': () => 'data-testid Variable editor Run Query button',
               [MIN_GRAFANA_VERSION]: () => 'Variable editor Submit button',
             }),
-            selectionOptionsIncludeAllSwitch: createSelector({
+            selectionOptionsIncludeAllSwitch: verifySelector({
               [MIN_GRAFANA_VERSION]: () => 'Variable editor Form IncludeAll switch',
             }),
           },
@@ -130,13 +130,16 @@ export const versionedPages = {
     },
   },
   Explore: {
-    url: createSelector({
+    url: verifySelector({
       [MIN_GRAFANA_VERSION]: () => '/explore',
     }),
   },
   Plugin: {
-    url: createSelectorWithArgs<{ pluginId: string }>({
+    url: verifySelectorWithArgs<{ pluginId: string }>({
       [MIN_GRAFANA_VERSION]: (args) => `/plugins/${args.pluginId}`,
     }),
   },
 };
+
+export type VersionedPages = typeof selectors;
+export const versionedPages = verifySelectors<VersionedPages>(selectors);
