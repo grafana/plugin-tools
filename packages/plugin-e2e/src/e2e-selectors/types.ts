@@ -92,7 +92,7 @@ export type Components = {
   };
   PageToolbar: {
     item: (tooltip: string) => string;
-    shotMoreItems: string;
+    showMoreItems: string;
     itemButton: (title: string) => string;
     itemButtonTitle: string;
   };
