@@ -62,10 +62,12 @@ export const resolveSelectors = (versionedSelectors: VersionedSelectors, grafana
 };
 
 function resolveSelectors2(versionedSelectors: VersionedSelectors, grafanaVersion: string): E2ESelectors {
+  const version = grafanaVersion.replace(/\-.*/, '');
+
   return {
-    apis: resolveSelectorGroup(versionedSelectors.apis, grafanaVersion),
-    pages: resolveSelectorGroup(versionedSelectors.pages, grafanaVersion),
-    components: resolveSelectorGroup(versionedSelectors.components, grafanaVersion),
+    apis: resolveSelectorGroup(versionedSelectors.apis, version),
+    pages: resolveSelectorGroup(versionedSelectors.pages, version),
+    components: resolveSelectorGroup(versionedSelectors.components, version),
   };
 }
 
