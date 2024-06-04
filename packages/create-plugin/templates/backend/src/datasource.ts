@@ -12,7 +12,7 @@ export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptio
     return DEFAULT_QUERY;
   }
 
-  applyTemplateVariables(query: MyQuery, scopedVars: ScopedVars): Record<string, any> {
+  applyTemplateVariables(query: MyQuery, scopedVars: ScopedVars) {
     return {
       ...query,
       queryText: getTemplateSrv().replace(query.queryText, scopedVars),
