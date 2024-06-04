@@ -1,3 +1,19 @@
+# v4.11.3 (Tue Jun 04 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix bad baseUrl path in webpack configuration [#932](https://github.com/grafana/plugin-tools/pull/932) ([@beppemarazzi](https://github.com/beppemarazzi))
+
+#### Authors: 1
+
+- Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi))
+
+---
+
 # v4.11.2 (Tue Jun 04 2024)
 
 #### 🐛 Bug Fix
