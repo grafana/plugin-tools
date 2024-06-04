@@ -23,7 +23,7 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["@grafana/*"],
+      "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
       "matchUpdateTypes": ["minor", "patch", "major"],
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana"
