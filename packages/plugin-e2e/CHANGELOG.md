@@ -1,3 +1,15 @@
+# v1.3.1 (Tue Jun 04 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix - skip creating user if it's the default server admin [#941](https://github.com/grafana/plugin-tools/pull/941) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.3.0 (Thu May 30 2024)
 
 #### 🚀 Enhancement
