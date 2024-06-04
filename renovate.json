@@ -13,13 +13,6 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["plugin.json"],
-      "matchStrings": ["\"grafanaDependency\":\\s*\"\\>=(?<currentValue>.*)\""],
-      "depNameTemplate": "grafana/grafana-enterprise",
-      "datasourceTemplate": "docker"
-    },
-    {
-      "customType": "regex",
       "fileMatch": ["(^|/)(?:docker-)?compose[^/]*\\.ya?ml$"],
       "matchStrings": ["grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"],
       "depNameTemplate": "grafana/grafana-enterprise",
@@ -28,7 +21,7 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
+      "matchPackagePatterns": ["@grafana/*"],
       "matchUpdateTypes": ["minor", "patch", "major"],
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana"
