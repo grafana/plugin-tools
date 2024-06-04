@@ -10,7 +10,6 @@ const selectors = {
     fromField: verifySelector({
       '10.2.3': () => 'data-testid Time Range from field',
       [MIN_GRAFANA_VERSION]: () => 'Time Range from field',
-      '': () => ``,
     }),
     toField: verifySelector({
       '10.2.3': () => 'data-testid Time Range to field',
