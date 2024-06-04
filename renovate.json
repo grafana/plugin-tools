@@ -3,6 +3,8 @@
   "extends": ["config:base"],
   "includePaths": ["packages/create-plugin/templates/**"],
   "separateMajorMinor": false,
+  "labels": ["dependencies"],
+  "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex"],
   "customManagers": [
     {
