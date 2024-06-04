@@ -1,5 +1,5 @@
 import { MIN_GRAFANA_VERSION } from './constants';
-import { verifySelector, verifySelectorWithArgs, verifySelectors } from './utils';
+import { verifySelector, verifySelectorWithArgs, verifySelectorGroup } from './utils';
 
 const selectors = {
   TimePicker: {
@@ -242,4 +242,4 @@ const selectors = {
 };
 
 export type VersionedComponents = typeof selectors;
-export const versionedComponents = verifySelectors<VersionedComponents>(selectors);
+export const versionedComponents = verifySelectorGroup<VersionedComponents>(selectors);

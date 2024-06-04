@@ -1,6 +1,13 @@
-const semver = require('semver');
-import { E2ESelectors } from './types';
-import { VersionedSelectors } from './versioned/types';
+import semver from 'semver';
+import { E2ESelectors, SelectorsOf } from './types';
+import {
+  SelectorResolver,
+  SelectorResolverWithArgs,
+  VersionedSelector,
+  VersionedSelectorGroup,
+  VersionedSelectorWithArgs,
+  VersionedSelectors,
+} from './versioned/types';
 
 const processSelectors = (
   selectors: E2ESelectors,
@@ -54,4 +61,93 @@ export const resolveSelectors = (versionedSelectors: VersionedSelectors, grafana
   return processSelectors(selectors, versionedSelectors, grafanaVersion.replace(/\-.*/, ''));
 };
 
-function resolve(source: VersionedSelectors): E2ESelectors {}
+function resolveSelectors2(versionedSelectors: VersionedSelectors, grafanaVersion: string): E2ESelectors {
+  return {
+    apis: resolveSelectorGroup(versionedSelectors.apis, grafanaVersion),
+    pages: resolveSelectorGroup(versionedSelectors.pages, grafanaVersion),
+    components: resolveSelectorGroup(versionedSelectors.components, grafanaVersion),
+  };
+}
+
+function resolveSelectorGroup<T>(group: VersionedSelectorGroup, grafanaVersion: string): SelectorsOf<T> {
+  const result: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(group)) {
+    if (isVersionedSelector(value)) {
+      result[key] = resolveSelector(value, grafanaVersion);
+    }
+
+    if (isVersionedSelectorWithArgs(value)) {
+      result[key] = resolveSelectorWithArgs(value, grafanaVersion);
+    }
+
+    if (isVersionedSelectorGroup(value)) {
+      result[key] = resolveSelectorGroup(value, grafanaVersion);
+    }
+  }
+
+  return result as SelectorsOf<T>;
+}
+
+function isVersionedSelector(
+  target: VersionedSelectorGroup | VersionedSelector | VersionedSelectorWithArgs<any>
+): target is VersionedSelector {
+  if (typeof target === 'object') {
+    const [first] = Object.keys(target);
+    const value = target[first];
+
+    if (typeof value === 'function') {
+      return value.length === 0;
+    }
+  }
+
+  return false;
+}
+
+function isVersionedSelectorWithArgs(
+  target: VersionedSelectorGroup | VersionedSelector | VersionedSelectorWithArgs<any>
+): target is VersionedSelectorWithArgs<any> {
+  if (typeof target === 'object') {
+    const [first] = Object.keys(target);
+    const value = target[first];
+
+    if (typeof value === 'function') {
+      return value.length === 1;
+    }
+  }
+
+  return false;
+}
+
+function isVersionedSelectorGroup(
+  target: VersionedSelectorGroup | VersionedSelector | VersionedSelectorWithArgs<any>
+): target is VersionedSelectorGroup {
+  return !isVersionedSelectorWithArgs(target) && !isVersionedSelector(target);
+}
+
+function resolveSelectorWithArgs<T extends object>(
+  versionedSelectorWithArgs: VersionedSelectorWithArgs<T>,
+  grafanaVersion: string
+): SelectorResolverWithArgs<T> | undefined {
+  let [versionToUse, ...versions] = Object.keys(versionedSelectorWithArgs).sort(semver.rcompare);
+
+  for (const version of versions) {
+    if (semver.gte(grafanaVersion, version)) {
+      versionToUse = version;
+    }
+  }
+
+  return versionedSelectorWithArgs[versionToUse];
+}
+
+function resolveSelector(versionedSelector: VersionedSelector, grafanaVersion: string): SelectorResolver {
+  let [versionToUse, ...versions] = Object.keys(versionedSelector).sort(semver.rcompare);
+
+  for (const version of versions) {
+    if (semver.gte(grafanaVersion, version)) {
+      versionToUse = version;
+    }
+  }
+
+  return versionedSelector[versionToUse];
+}

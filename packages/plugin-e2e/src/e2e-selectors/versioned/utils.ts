@@ -1,4 +1,4 @@
-import { VersionedSelector, SelectorRecord, VersionedSelectorWithArgs } from './types';
+import { VersionedSelector, VersionedSelectorWithArgs, VersionedSelectorGroup } from './types';
 
 export function verifySelector(selectors: VersionedSelector): VersionedSelector {
   return selectors;
@@ -10,6 +10,6 @@ export function verifySelectorWithArgs<T extends object>(
   return selectors;
 }
 
-export function verifySelectors<T>(selectors: SelectorRecord): T {
-  return selectors as T;
+export function verifySelectorGroup<T>(group: VersionedSelectorGroup): T {
+  return group as T;
 }

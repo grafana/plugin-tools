@@ -1,5 +1,5 @@
 import { MIN_GRAFANA_VERSION } from './constants';
-import { verifySelector, verifySelectorWithArgs, verifySelectors } from './utils';
+import { verifySelector, verifySelectorWithArgs, verifySelectorGroup } from './utils';
 
 const selectors = {
   DataSource: {
@@ -41,4 +41,4 @@ const selectors = {
 };
 
 export type VersionedAPIs = typeof selectors;
-export const versionedAPIs = verifySelectors<VersionedAPIs>(selectors);
+export const versionedAPIs = verifySelectorGroup<VersionedAPIs>(selectors);

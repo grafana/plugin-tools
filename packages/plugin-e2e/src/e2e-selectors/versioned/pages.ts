@@ -1,5 +1,5 @@
 import { MIN_GRAFANA_VERSION } from './constants';
-import { verifySelector, verifySelectorWithArgs, verifySelectors } from './utils';
+import { verifySelector, verifySelectorWithArgs, verifySelectorGroup } from './utils';
 
 const selectors = {
   Home: {
@@ -142,4 +142,4 @@ const selectors = {
 };
 
 export type VersionedPages = typeof selectors;
-export const versionedPages = verifySelectors<VersionedPages>(selectors);
+export const versionedPages = verifySelectorGroup<VersionedPages>(selectors);
