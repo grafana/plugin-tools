@@ -59,7 +59,7 @@
     "mkdirp": "^3.0.1",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
-    "which": "^3.0.0"
+    "which": "^4.0.0"
   },
   "devDependencies": {
     "@types/glob": "^7.0.0",
