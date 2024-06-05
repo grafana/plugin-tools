@@ -54,7 +54,7 @@
     "glob": "^10.3.10",
     "handlebars": "^4.7.8",
     "marked": "^10.0.0",
-    "marked-terminal": "^6.2.0",
+    "marked-terminal": "^7.0.0",
     "minimist": "^1.2.8",
     "mkdirp": "^3.0.1",
     "semver": "^7.3.5",
