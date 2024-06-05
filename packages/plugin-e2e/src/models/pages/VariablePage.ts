@@ -3,9 +3,8 @@ import { GrafanaPage } from './GrafanaPage';
 import { VariableEditPage } from './VariableEditPage';
 
 export class VariablePage extends GrafanaPage {
-  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
+  constructor(readonly ctx: PluginTestCtx, public readonly dashboard?: DashboardPageArgs) {
     super(ctx);
-    this.dashboard = dashboard;
   }
 
   /**
@@ -23,13 +22,13 @@ export class VariablePage extends GrafanaPage {
   /**
    * Clicks the add new variable button and returns the variable edit page
    */
-  async clickAddNew(first?: boolean) {
+  async clickAddNew() {
     const { addVariableCTAV2, addVariableCTAV2Item, newButton } =
       this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
 
-    if (!this.dashboard?.uid || first) {
-      await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click();
-    } else {
+    try {
+      await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click({ timeout: 500 });
+    } catch (_) {
       await this.getByGrafanaSelector(newButton).click();
     }
 
