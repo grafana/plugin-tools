@@ -1,3 +1,15 @@
+# v1.3.2 (Wed Jun 05 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix menuitemclick in Grafana <=9.1.0 [#944](https://github.com/grafana/plugin-tools/pull/944) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.3.1 (Tue Jun 04 2024)
 
 #### 🐛 Bug Fix
