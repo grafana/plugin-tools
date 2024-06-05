@@ -171,6 +171,9 @@ export type Pages = {
   Dashboard: {
     url: (uid: string) => string;
     Settings: {
+      Actions: {
+        close: string;
+      };
       Annotations: {
         Edit: {
           url: (dashboardUid: string, annotationIndex: string) => string;
@@ -201,18 +204,17 @@ export type Pages = {
           };
         };
       };
-      Close: string;
     };
-    TemplateVariables: {
+    SubMenu: {
       submenuItemLabels: (item: string) => string;
       submenuItemValueDropDownValueLinkTexts: (item: string) => string;
       submenuItemValueDropDownDropDown: string;
       submenuItemValueDropDownOptionTexts: (item: string) => string;
     };
-    Save: {
+    SaveDashboardAsModal: {
       saveButton: string;
-      titleInput: string;
-      saveDashboardButton: string;
+      newName: string;
+      save: string;
     };
   };
   Explore: {

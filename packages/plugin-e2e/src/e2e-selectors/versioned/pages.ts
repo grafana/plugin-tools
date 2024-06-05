@@ -66,6 +66,12 @@ export const versionedPages = {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/d/${uid}`,
     },
     Settings: {
+      Actions: {
+        close: {
+          [MIN_GRAFANA_VERSION]: 'Go Back button',
+          '9.5.0': 'data-testid dashboard-settings-close',
+        },
+      },
       Annotations: {
         Edit: {
           url: {
@@ -133,12 +139,8 @@ export const versionedPages = {
           },
         },
       },
-      Close: {
-        [MIN_GRAFANA_VERSION]: 'Go Back button',
-        '9.5.0': 'data-testid dashboard-settings-close',
-      },
     },
-    TemplateVariables: {
+    SubMenu: {
       submenuItemLabels: {
         [MIN_GRAFANA_VERSION]: (item: string) => `data-testid Dashboard template variables submenu Label ${item}`,
       },
@@ -152,14 +154,11 @@ export const versionedPages = {
           `data-testid Dashboard template variables Variable Value DropDown option text ${item}`,
       },
     },
-    Save: {
-      saveButton: {
-        [MIN_GRAFANA_VERSION]: 'Save dashboard',
-      },
-      titleInput: {
+    SaveDashboardAsModal: {
+      newName: {
         [MIN_GRAFANA_VERSION]: 'Save dashboard title field',
       },
-      saveDashboardButton: {
+      save: {
         [MIN_GRAFANA_VERSION]: 'Save dashboard button',
       },
     },

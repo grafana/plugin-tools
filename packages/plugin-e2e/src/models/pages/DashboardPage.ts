@@ -115,11 +115,11 @@ export class DashboardPage extends GrafanaPage {
    * Saves the dashboard
    */
   async saveDashboard(title?: string): Promise<string | undefined> {
-    await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.Save.saveButton).click();
+    await this.ctx.page.getByLabel(this.ctx.selectors.components.PageToolbar.item('Save dashboard')).click();
     if (title) {
-      await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.Save.titleInput).fill(title);
+      await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.SaveDashboardAsModal.newName).fill(title);
     }
-    await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.Save.saveDashboardButton).click();
+    await this.ctx.page.getByLabel(this.ctx.selectors.pages.Dashboard.SaveDashboardAsModal.save).click();
 
     const resp = await this.ctx.page.waitForResponse(
       (response) => response.url().includes('/api/dashboards/db') && response.status() === 200
