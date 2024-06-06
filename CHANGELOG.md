@@ -1,3 +1,19 @@
+# (Thu Jun 06 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.11.4`
+  - Create Plugin: Remove meta-extractor from package.json [#946](https://github.com/grafana/plugin-tools/pull/946) ([@jackw](https://github.com/jackw))
+  - Chore(deps): Bump marked-terminal from 6.2.0 to 7.0.0 [#793](https://github.com/grafana/plugin-tools/pull/793) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Chore(deps): Bump which from 3.0.1 to 4.0.0 [#794](https://github.com/grafana/plugin-tools/pull/794) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jun 05 2024)
 
 #### 🐛 Bug Fix
