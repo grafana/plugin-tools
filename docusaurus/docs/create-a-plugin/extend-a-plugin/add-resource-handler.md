@@ -1,7 +1,7 @@
 ---
 id: add-resource-handler
 title: Add resource handler for data source plugins
-description: Add a resource handler for data source plugins.
+description: Learn how to add a resource handler for data source plugins.
 keywords:
   - grafana
   - plugins
