@@ -15,7 +15,7 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 ## Introduction
 
-App plugins are Grafana plugins that allow you to bundle data sources and panel plugins within a single package. They also enable you to create custom pages within Grafana, providing a dedicated space for documentation, sign-up forms, or integration with other services via HTTP.
+In this tutorial you will learn how to create _app plugins_. App plugins are Grafana plugins that allow you to bundle data sources and panel plugins within a single package. They also enable you to create custom pages within Grafana, providing a dedicated space for documentation, sign-up forms, or integration with other services via HTTP.
 
 App plugins are displayed in the navigation menu and offer the flexibility to define [UI Extensions](../ui-extensions/).
 
@@ -42,10 +42,10 @@ If you choose to have a backend for your app plugin, you must run `mage -v` befo
 
 Next, you'll learn the basic workflow of making a change to your app, building it, and reloading Grafana to reflect the changes you made.
 
-First, you need to add your panel to a dashboard:
+The first step is to add your panel to a dashboard:
 
 1. Open Grafana in your browser.
-1. Navigate to Apps -> Your App Name
+1. Go to **Apps** -> **Your App Name**.
 
 Now that you can view your app root page (page one in the example), try making a change to the app plugin:
 
@@ -56,17 +56,17 @@ Now that you can view your app root page (page one in the example), try making a
    ```
 
 1. Save the file.
-1. In the browser, reload Grafana to see the new changes.
+1. Reload Grafana. Your changes should appear in the browser.
 
-## Adding a new page in the navigation menu
+## Add a new page in the navigation menu
 
-To add pages to the navigation menu under your app menu item you need to modify the `plugin.json` file [`includes` section](../reference/metadata.md#includes).
+To add pages to the navigation menu under your app menu item, modify the `plugin.json` file's [`includes` section](../reference/metadata.md#includes).
 
-When you scaffold your plugin there will be some example pages added to the navigation menu. Each of them follow a path such as `/a/%PLUGIN_ID%/PAGE_NAME`. Any requests sent to /a/%PLUGIN_ID%, e.g. /a/myorgid-simple-app/, are routed to the root page of the app plugin. The root page is a React component that returns the content for a given route.
+When you scaffold your plugin, the `create-plugin` tool adds some example pages to the navigation menu. Each of them follow a path such as `/a/%PLUGIN_ID%/PAGE_NAME`. Any requests sent to /a/%PLUGIN_ID%, for example, `/a/myorgid-simple-app/`, are routed to the root page of the app plugin. The root page is a React component that returns the content for a given route.
 
 Let's add a new page to the navigation menu:
 
-1. Modify the `plugin.json` to add a new page
+1. Modify `plugin.json` to add a new page.
 
    ```json title="src/plugin.json"
    // ...
@@ -92,7 +92,7 @@ After saving the `plugin.json` file, you need to restart your Grafana instance t
 
 :::
 
-You will now find the new page in the navigation menu. You can now edit the React Router in `src/components/App/App.tsx` and point a custom component to it.
+The new page appears in the navigation menu. You can now edit the React router in `src/components/App/App.tsx` and point a custom component to it.
 
 1. Create a new file called `src/pages/NewPage.tsx` and add the following code:
 
@@ -105,7 +105,7 @@ You will now find the new page in the navigation menu. You can now edit the Reac
    }
    ```
 
-1. Modify the Routes in `src/components/App/App.tsx` to recognize the new page:
+1. Modify the routes in `src/components/App/App.tsx` to recognize the new page:
 
    ```tsx title="src/components/App/App.tsx"
    {
@@ -115,9 +115,9 @@ You will now find the new page in the navigation menu. You can now edit the Reac
    ```
 
 1. Save the file.
-1. Reload Grafana to see the new page in place
+1. Reload Grafana to see the new page in place.
 
-You don't need to register all your pages inside `includes` in your `plugin.json`. Only pages that you wish to add to the navigation menu.
+You don't need to register all your pages inside `includes` in your `plugin.json`. Register only pages that you want to add to the navigation menu.
 
 :::note
 
@@ -127,7 +127,7 @@ You can only have one level of pages in the navigation menu. Sub-menu items are 
 
 ## Configuration page
 
-App plugins can have a configuration page where your users can store any settings your plugin might need. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
+You can add a configuration page to your App plugin where your users can store any settings your plugin might need. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
 
 ### Saving user settings
 
@@ -145,9 +145,9 @@ export const updatePluginSettings = async (pluginId: string, data: Partial<Plugi
 };
 ```
 
-### Retrieving user settings
+### Retrieve user settings
 
-The user settings are part of the plugin meta. You can retrieve them inside a React component by using the `usePluginContext` hook.
+The user settings are part of the plugin `meta`. You can retrieve them inside a React component by using the `usePluginContext` hook. For example:
 
 ```tsx
 import React from 'react';
@@ -162,7 +162,7 @@ function MyComponent() {
 
 ## Fetch data from frontend code using the data proxy
 
-If you want to fetch data from your app frontend code without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, you want to use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md).
+If you want to fetch data from your app frontend code without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, then you want to use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md).
 
 ## Bundle plugins inside your app
 
