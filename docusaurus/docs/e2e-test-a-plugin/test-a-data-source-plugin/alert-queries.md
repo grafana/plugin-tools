@@ -19,7 +19,7 @@ For backend data source plugins that have alerting [enabled](../../tutorials/bui
 
 ### Evaluating a new alert rule
 
-The following example uses the `alertRulePage` fixture. With this fixture, the test starts in the page for adding a new alert rule. We then fill in the alert rule query and call the `evaluate` function. Evaluate clicks the `Preview` button which will trigger a call to the `eval` endpoint to evaluate that the response of the data source query can be used to create an alert. The `toBeOK` matcher is used to verify the evaluation was successful.
+The following example uses the `alertRulePage` fixture. With this fixture, the test starts in the page for adding a new alert rule. You then fill in the alert rule query and call the `evaluate` function. Evaluate clicks the `Preview` button which triggers a call to the `eval` endpoint to evaluate that the response of the data source query can be used to create an alert. The `toBeOK` matcher is used to verify that the evaluation was successful.
 
 ```ts
 test('should evaluate to true if query is valid', async ({ page, alertRuleEditPage, selectors }) => {
