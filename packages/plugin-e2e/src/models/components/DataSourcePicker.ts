@@ -1,8 +1,9 @@
+import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
 
 export class DataSourcePicker extends GrafanaPage {
-  constructor(ctx: PluginTestCtx) {
+  constructor(ctx: PluginTestCtx, private root?: Locator) {
     super(ctx);
   }
 
@@ -10,7 +11,7 @@ export class DataSourcePicker extends GrafanaPage {
    * Sets the data source picker to the provided name
    */
   async set(name: string) {
-    await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container)
+    await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, { root: this.root })
       .locator('input')
       .fill(name);
 
