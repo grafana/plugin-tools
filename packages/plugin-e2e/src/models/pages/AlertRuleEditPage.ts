@@ -56,6 +56,8 @@ export class AlertRuleEditPage extends GrafanaPage {
    *
    * Note that this method intercepts the response of the alerting evaluation endpoint and returns the status code of the first failed query.
    * This means that any mocks defined with page.route in your tests will be overriden.
+   *
+   * Only supported for Grafana version 9.5.0 ad later.
    */
   async evaluate(options?: RequestOptions) {
     // it seems like when clicking the evaluate button to quickly after filling in the alert query form, form values have not been propagated to the state, so we wait a bit before clicking

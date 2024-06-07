@@ -17,6 +17,10 @@ sidebar_position: 60
 
 Backend data source plugins that have alerting [enabled](../../tutorials/build-a-data-source-backend-plugin.md#enable-grafana-alerting) can define alerts based on the data source queries. Before you can save an alert, the conditions for an alert definition are evalauted by the alert engine to ensure that the response from the data source is shaped correctly. If it is shaped correctly, then you can use the `alertRulePage` fixture to verify that alert rules can be created from the output of a query returned by the data source.
 
+:::info
+The APIs for end-to-end testing alert rules are only compatible with Grafana >=9.4.0.
+:::
+
 ### Evaluating a new alert rule
 
 The following example uses the `alertRulePage` fixture. With this fixture, the test starts in the page for adding a new alert rule. You then fill in the alert rule query and call the `evaluate` function. Evaluate clicks the `Preview` button which triggers a call to the `eval` endpoint to evaluate that the response of the data source query can be used to create an alert. The `toBeOK` matcher is used to verify that the evaluation was successful.
