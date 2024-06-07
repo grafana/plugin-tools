@@ -1,3 +1,16 @@
+# (Fri Jun 07 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.4.0`
+  - Plugin E2E: Add support for testing alert query [#779](https://github.com/grafana/plugin-tools/pull/779) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Jun 06 2024)
 
 #### 🐛 Bug Fix
