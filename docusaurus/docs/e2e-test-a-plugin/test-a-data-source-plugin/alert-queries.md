@@ -15,7 +15,7 @@ sidebar_position: 60
 
 ## Introduction
 
-For backend data source plugins that have alerting [enabled](../../tutorials/build-a-data-source-backend-plugin.md#enable-grafana-alerting), it should be possible to define alerts based on the data source queries. Before an alert can be saved, the conditions for an alert definition is evalauted by the alert engine to ensure that the response from the data source is shaped correctly. You can use the `alertRulePage` fixture to verify that alert rules can be created from the output of a query returned by the data source.
+Backend data source plugins that have alerting [enabled](../../tutorials/build-a-data-source-backend-plugin.md#enable-grafana-alerting) can define alerts based on the data source queries. Before you can save an alert, the conditions for an alert definition are evalauted by the alert engine to ensure that the response from the data source is shaped correctly. If it is shaped correctly, then you can use the `alertRulePage` fixture to verify that alert rules can be created from the output of a query returned by the data source.
 
 ### Evaluating a new alert rule
 
