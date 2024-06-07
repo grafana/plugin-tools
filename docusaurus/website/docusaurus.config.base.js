@@ -79,11 +79,8 @@ const plugins = [
           from: ['/introduction/data-frames.md', '/introduction/data-frames'],
           to: '/key-concepts/data-frames',
 
-          from: [
-            '/docs/introduction/grafana-plugin-sdk-for-go.md',
-            '/introduction/backend-plugins/grafana-plugin-sdk-for-go',
-          ],
-          to: '/key-concepts/grafana-plugin-sdk-for-go',
+          from: ['/introduction/grafana-plugin-sdk-for-go.md'],
+          to: '/key-concepts/backend-plugins/grafana-plugin-sdk-for-go',
 
           from: ['/introduction/index.md', '/introduction'],
           to: '/key-concepts/',
