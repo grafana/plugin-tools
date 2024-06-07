@@ -35,7 +35,7 @@ test('should evaluate to true if query is valid', async ({ page, alertRuleEditPa
 
 ### Evaluating a provisioned alert rule
 
-You can also use a provisioned alert rule to test that your data source is compatible with alerting.
+You can also use a provisioned alert rule to test that your data source is compatible with alerting. For example:
 
 ```ts
 test('should evaluate to true when loading a provisioned query that is valid', async ({
