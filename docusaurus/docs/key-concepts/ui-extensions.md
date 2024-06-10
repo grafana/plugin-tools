@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 60
 ---
 
-App plugins are able to leverage an extension framework in Grafana to contribute new actions and functionality to the core Grafana UI, and other app plugins.
+Use UI extensions to contribute new actions and functionality to the core Grafana UI and other app plugins.
 
 ## Definition of terms
 
