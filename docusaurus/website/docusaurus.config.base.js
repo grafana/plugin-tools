@@ -64,37 +64,41 @@ const plugins = [
     {
       // how to use https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-client-redirects#ex-config
       // This plugin is always inactive in development and only active in production because it works on the build output.
-
       redirects: [
         {
-          from: ['/something-that-does-not-exist', '/something/testing'],
-          to: '/something/folder-structure',
-
-          from: ['/reference-plugin-json', '/metadata.md'],
+          from: ['/reference-plugin-json'],
           to: '/reference/plugin-json',
-
-          from: ['/introduction/backend.md', '/introduction/backend-plugins'],
+        },
+        {
+          from: ['/introduction/backend-plugins'],
           to: '/key-concepts/backend-plugins',
-
-          from: ['/introduction/data-frames.md', '/introduction/data-frames'],
+        },
+        {
+          from: ['/introduction/data-frames'],
           to: '/key-concepts/data-frames',
-
-          from: ['/introduction/grafana-plugin-sdk-for-go.md'],
+        },
+        {
+          from: ['/introduction/grafana-plugin-sdk-for-go'],
           to: '/key-concepts/backend-plugins/grafana-plugin-sdk-for-go',
-
-          from: ['/introduction/index.md', '/introduction'],
-          to: '/key-concepts/',
-
-          from: ['/introduction/manage-npm-dependencies.md', '/introduction/npm-dependencies'],
+        },
+        {
+          from: ['/introduction'],
+          to: '/key-concepts',
+        },
+        {
+          from: ['/introduction/npm-dependencies'],
           to: '/key-concepts/npm-dependencies',
-
-          from: ['/introduction/plugin-lifecycle.md', '/introduction/plugin-lifecycle'],
+        },
+        {
+          from: ['/introduction/plugin-lifecycle'],
           to: '/key-concepts/plugin-lifecycle',
-
-          from: ['/introduction/plugin-protocol.md', '/introduction/backend-plugins/plugin-protocol'],
-          to: '/key-concepts/plugin-protocol',
-
-          from: ['/introduction/plugin-types-usage.md', '/introduction/plugin-types-usage'],
+        },
+        // { // This is a redirect to a page that doesn't exist yet.
+        //   from: ['/introduction/backend-plugins/plugin-protocol'],
+        //   to: '/key-concepts/plugin-protocol',
+        // },
+        {
+          from: ['/introduction/plugin-types-usage'],
           to: '/key-concepts/plugin-types-usage',
         },
       ],
