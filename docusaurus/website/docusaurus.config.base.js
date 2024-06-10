@@ -93,13 +93,17 @@ const plugins = [
           from: ['/introduction/plugin-lifecycle'],
           to: '/key-concepts/plugin-lifecycle',
         },
-        // { // This is a redirect to a page that doesn't exist yet.
-        //   from: ['/introduction/backend-plugins/plugin-protocol'],
-        //   to: '/key-concepts/plugin-protocol',
-        // },
+        {
+          from: ['/introduction/backend-plugins/plugin-protocol'],
+          to: '/key-concepts/backend-plugins/plugin-protocol',
+        },
         {
           from: ['/introduction/plugin-types-usage'],
           to: '/key-concepts/plugin-types-usage',
+        },
+        {
+          from: ['/introduction/ui-extensions'],
+          to: '/ui-extensions/',
         },
       ],
     },
