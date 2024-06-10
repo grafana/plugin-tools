@@ -103,7 +103,7 @@ const plugins = [
         },
         {
           from: ['/introduction/ui-extensions'],
-          to: '/ui-extensions/',
+          to: '/key-concepts/ui-extensions/',
         },
       ],
     },
