@@ -101,10 +101,6 @@ const plugins = [
           from: ['/introduction/plugin-types-usage'],
           to: '/key-concepts/plugin-types-usage',
         },
-        {
-          from: ['/introduction/ui-extensions'],
-          to: '/key-concepts/ui-extensions/',
-        },
       ],
     },
   ],
