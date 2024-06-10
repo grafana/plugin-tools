@@ -5,15 +5,16 @@ import { DataSourceConfigPage } from '../../models/pages/DataSourceConfigPage';
 type GotoDataSourceConfigPageFixture = TestFixture<(uid: string) => Promise<DataSourceConfigPage>, PlaywrightArgs>;
 
 export const gotoDataSourceConfigPage: GotoDataSourceConfigPageFixture = async (
-  { request, page, selectors, grafanaVersion },
+  { request, page, selectors, grafanaVersion, grafanaAPICredentials },
   use,
   testInfo
 ) => {
   await use(async (uid) => {
     const response = await request.get(`/api/datasources/uid/${uid}`, {
       headers: {
-        // here we call backend as admin user and not on behalf of the logged in user as it might not have required permissions
-        Authorization: `Basic ${Buffer.from(`admin:admin`).toString('base64')}`,
+        Authorization: `Basic ${Buffer.from(`${grafanaAPICredentials.user}:${grafanaAPICredentials.password}`).toString(
+          'base64'
+        )}`,
       },
     });
     if (!response.ok()) {

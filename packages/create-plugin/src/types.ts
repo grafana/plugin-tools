@@ -32,4 +32,5 @@ export type TemplateData = {
   useCypress: boolean;
   hasGithubWorkflows: boolean;
   hasGithubLevitateWorkflow: boolean;
+  pluginExecutable?: string;
 };

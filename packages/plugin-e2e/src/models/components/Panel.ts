@@ -50,12 +50,12 @@ export class Panel extends GrafanaPage {
     // before 9.5.0, there were no proper selectors for the panel menu items
     if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
       panelMenu = this.locator.getByRole('heading');
-      this.ctx.page.locator(`[aria-label="Panel header item ${options?.parentItem}"]`);
-      this.ctx.page.locator(`[aria-label="Panel header item ${item}"]`);
+      parentMenuItem = this.ctx.page.getByText(options?.parentItem ?? '');
+      menuItem = this.ctx.page.getByRole('menu').getByText(item);
     }
 
     await panelMenu.click({ force: true });
-    options?.parentItem && parentMenuItem.hover();
+    options?.parentItem && (await parentMenuItem.hover());
     await menuItem.click();
   }
 
