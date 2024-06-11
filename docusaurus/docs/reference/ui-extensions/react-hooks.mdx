@@ -1,0 +1,124 @@
+---
+id: ui-extensions-hooks
+title: React hooks
+description: React hooks that can be used to fetch UI extensions for a certain extension point.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - extensions
+  - ui-extensions
+sidebar_position: 20
+---
+
+# React hooks
+
+React hooks that can be used to fetch UI extensions for a certain extension point.
+
+## `usePluginLinks(options)`
+
+This react hook can be used to fetch links that are registered to a certain extension point.
+
+```typescript
+const { links, isLoading } = usePluginLinks({
+  extensionPointId: 'grafana/dashboard/panel/menu',
+  limitPerPlugin: 2,
+  context: {
+    panelId: '...',
+  },
+});
+```
+
+### Parameters
+
+The `.usePluginLinks()` method takes a single `options` object with the following properties:
+
+| Property | Description |
+| --- | --- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions.  **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _E.g.: `"grafana/dashboard/panel/menu"`_ |
+| **`context?`** | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions. |
+| **`limitPerPlugin?`** | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit. |
+### Return value
+
+The hook returns the following object (for more info check [`PluginExtensionLink`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L27)):
+
+```typescript
+const {
+  // An empty array if no plugins have registered extensions for this extension point yet
+  links: PluginExtensionLink[];
+  
+  // `true` until any plugins extending this extension point 
+  // are still loading
+  isLoading: boolean;
+} = usePluginLinks(options);
+```
+
+### Examples
+
+
+## `usePluginComponents(options)`
+
+This react hook can be used to fetch _components_ that are registered to a certain extension point. Component extensions can be used to render custom UI components.
+
+```typescript
+const { components, isLoading } = usePluginComponents({
+  extensionPointId: 'grafana/user/profile/tab',
+  limitPerPlugin: 1
+});
+```
+
+### Parameters
+
+The `.usePluginComponents()` method takes a single `options` object with the following properties:
+
+| Property | Description |
+| --- | --- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _E.g.: `"grafana/user/profile/tab"`_ |
+| **`limitPerPlugin?`** | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit. |
+
+### Return value
+
+The hook returns the following object (for more info check [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35)):
+
+```typescript
+const {
+  // An empty array if no plugins have registered extensions for this extension point yet
+  components: PluginExtensionComponent[];
+  
+  // `true` until any plugins extending this extension point 
+  // are still loading
+  isLoading: boolean;
+} = usePluginComponents(options);
+```
+
+### Examples
+
+
+## `usePluginComponent(id)`
+
+This react hook can be used to **fetch a single react component** that was exposed by a plugin with a unique ID. (Plugins can expose components using the [`AppPlugin.exposeComponent()`](https://google.com) method.)
+
+```typescript
+const { component: Component, isLoading } = usePluginComponent('myorg-incidents-app/create-incident-form');
+```
+
+### Parameters
+
+- **`id`** - A unique id that identifies the component.
+
+### Return value
+
+The hook returns the following object:
+
+```typescript
+const {
+  // The react component that was exposed by the plugin 
+  // (`null` if no component is exposed with that id)
+  component: React.ComponentType<Props> | undefined | null;
+  
+  // `true` until the plugin exposing the component is still loading
+  isLoading: boolean;
+} = usePluginComponent(id);
+```
+
+### Examples
