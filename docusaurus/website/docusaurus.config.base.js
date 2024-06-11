@@ -101,6 +101,18 @@ const plugins = [
           from: ['/introduction/plugin-types-usage'],
           to: '/key-concepts/plugin-types-usage',
         },
+        {
+          from: ['/ui-extensions'],
+          to: '/key-concepts/ui-extensions',
+        },
+        {
+          from: ['/ui-extensions/register-an-extension'],
+          to: '/tutorials/ui-extensions/register-an-extension',
+        },
+        {
+          from: ['/ui-extensions/create-an-extension-point'],
+          to: '/tutorials/ui-extensions/create-an-extension-point',
+        },
       ],
     },
   ],
