@@ -32,6 +32,8 @@ import { toDisplayPreviews } from './matchers/toDisplayPreviews';
 import { toBeOK } from './matchers/toBeOK';
 import { GrafanaPage } from './models/pages/GrafanaPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
+import { variablePage } from './fixtures/variablePage';
+import { gotoVariablePage } from './fixtures/commands/gotoVariablePage';
 
 // models
 export { DataSourcePicker } from './models/components/DataSourcePicker';
@@ -66,6 +68,7 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   dashboardPage,
   panelEditPage,
   variableEditPage,
+  variablePage,
   annotationEditPage,
   alertRuleEditPage,
   explorePage,
@@ -78,6 +81,7 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   gotoDashboardPage,
   gotoPanelEditPage,
   gotoVariableEditPage,
+  gotoVariablePage,
   gotoAnnotationEditPage,
   gotoAlertRuleEditPage,
   gotoDataSourceConfigPage,

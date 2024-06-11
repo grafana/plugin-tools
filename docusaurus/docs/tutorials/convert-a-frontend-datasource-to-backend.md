@@ -43,7 +43,7 @@ Data source plugins require two components: a query editor and a config editor.
 
 ### Query and config editor
 
-These two frontend components do not need to be changed when converting a frontend data source to a backend data source. However, if you add a backend component to a data source you can request `resources` from it.  Resources are additional endpoints that the plugin exposes and can be used to populate or validate the query or config editor. Learn about this in the [resource requests section](#other-resource-requests).
+These two frontend components do not need to be changed when converting a frontend data source to a backend data source. However, if you add a backend component to a data source you can request `resources` from it. Resources are additional endpoints that the plugin exposes and can be used to populate or validate the query or config editor. Learn about this in the [resource requests section](#other-resource-requests).
 
 ## Plugin structure comparison
 

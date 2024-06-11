@@ -79,6 +79,12 @@ export const versionedPages = {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/d/${uid}`,
     },
     Settings: {
+      Actions: {
+        close: {
+          [MIN_GRAFANA_VERSION]: 'Go Back button',
+          '9.5.0': 'data-testid dashboard-settings-close',
+        },
+      },
       Annotations: {
         Edit: {
           url: {
@@ -136,8 +142,37 @@ export const versionedPages = {
             selectionOptionsIncludeAllSwitch: {
               [MIN_GRAFANA_VERSION]: 'Variable editor Form IncludeAll switch',
             },
+            generalNameInputV2: {
+              '8.5.0': 'data-testid Variable editor Form Name field',
+              [MIN_GRAFANA_VERSION]: 'Variable editor Form Name field',
+            },
+            applyButton: {
+              '9.3.0': 'data-testid Variable editor Apply button',
+            },
           },
         },
+      },
+    },
+    SubMenu: {
+      submenuItemLabels: {
+        [MIN_GRAFANA_VERSION]: (item: string) => `data-testid Dashboard template variables submenu Label ${item}`,
+      },
+      submenuItemValueDropDownValueLinkTexts: {
+        [MIN_GRAFANA_VERSION]: (item: string) =>
+          `data-testid Dashboard template variables Variable Value DropDown value link text ${item}`,
+      },
+      submenuItemValueDropDownDropDown: { [MIN_GRAFANA_VERSION]: 'Variable options' },
+      submenuItemValueDropDownOptionTexts: {
+        [MIN_GRAFANA_VERSION]: (item: string) =>
+          `data-testid Dashboard template variables Variable Value DropDown option text ${item}`,
+      },
+    },
+    SaveDashboardAsModal: {
+      newName: {
+        [MIN_GRAFANA_VERSION]: 'Save dashboard title field',
+      },
+      save: {
+        [MIN_GRAFANA_VERSION]: 'Save dashboard button',
       },
     },
   },
