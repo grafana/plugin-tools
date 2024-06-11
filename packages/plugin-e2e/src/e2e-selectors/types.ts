@@ -5,6 +5,9 @@ export type E2ESelectors = {
 };
 
 export type APIs = {
+  Alerting: {
+    eval: string;
+  };
   DataSource: {
     resourcePattern: string;
     resourceUIDPattern: string;
@@ -81,11 +84,27 @@ export type Components = {
   RefreshPicker: {
     runButtonV2: string;
   };
+  QueryTab: {
+    addQuery: string;
+    addExpression: string;
+  };
   QueryEditorRows: {
     rows: string;
   };
   QueryEditorRow: {
     title: (refId: string) => string;
+    actionButton: (title: string) => string;
+  };
+  AlertRules: {
+    previewButton: string;
+    ruleNameField: string;
+    newFolderButton: string;
+    newFolderNameCreateButton: string;
+    newEvaluationGroupButton: string;
+    newFolderNameField: string;
+    newEvaluationGroupName: string;
+    newEvaluationGroupInterval: string;
+    newEvaluationGroupCreate: string;
   };
   Alert: {
     alertV2: (severity: string) => string;
@@ -133,6 +152,14 @@ export type Components = {
 export type Pages = {
   Home: {
     url: string;
+  };
+  Alerting: {
+    AddAlertRule: {
+      url: string;
+    };
+    EditAlertRule: {
+      url: (alertRuleUid: string) => string;
+    };
   };
   DataSource: {
     name: string;

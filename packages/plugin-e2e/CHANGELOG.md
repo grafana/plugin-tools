@@ -1,3 +1,51 @@
+# v1.4.0 (Fri Jun 07 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add support for testing alert query [#779](https://github.com/grafana/plugin-tools/pull/779) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.3.2 (Wed Jun 05 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix menuitemclick in Grafana <=9.1.0 [#944](https://github.com/grafana/plugin-tools/pull/944) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.3.1 (Tue Jun 04 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix - skip creating user if it's the default server admin [#941](https://github.com/grafana/plugin-tools/pull/941) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.3.0 (Thu May 30 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Allow overriding grafanaAPICredentials [#930](https://github.com/grafana/plugin-tools/pull/930) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.2.2 (Tue May 28 2024)
 
 :tada: This release contains work from a new contributor! :tada:

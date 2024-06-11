@@ -1,3 +1,88 @@
+# (Fri Jun 07 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.4.0`
+  - Plugin E2E: Add support for testing alert query [#779](https://github.com/grafana/plugin-tools/pull/779) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Jun 06 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.11.4`
+  - Create Plugin: Remove meta-extractor from package.json [#946](https://github.com/grafana/plugin-tools/pull/946) ([@jackw](https://github.com/jackw))
+  - Chore(deps): Bump marked-terminal from 6.2.0 to 7.0.0 [#793](https://github.com/grafana/plugin-tools/pull/793) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Chore(deps): Bump which from 3.0.1 to 4.0.0 [#794](https://github.com/grafana/plugin-tools/pull/794) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jun 05 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.3.2`
+  - Plugin E2E: Fix menuitemclick in Grafana <=9.1.0 [#944](https://github.com/grafana/plugin-tools/pull/944) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jun 04 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.11.3`
+  - Create Plugin: Fix bad baseUrl path in webpack configuration [#932](https://github.com/grafana/plugin-tools/pull/932) ([@beppemarazzi](https://github.com/beppemarazzi))
+
+#### Authors: 1
+
+- Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi))
+
+---
+
+# (Tue Jun 04 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.11.2`, `@grafana/plugin-e2e@1.3.1`
+  - Plugin E2E: Fix - skip creating user if it's the default server admin [#941](https://github.com/grafana/plugin-tools/pull/941) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu May 30 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.3.0`
+  - Plugin E2E: Allow overriding grafanaAPICredentials [#930](https://github.com/grafana/plugin-tools/pull/930) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue May 28 2024)
 
 :tada: This release contains work from a new contributor! :tada:

@@ -11,10 +11,12 @@ import { gotoAppPage } from './fixtures/commands/gotoAppPage';
 import { gotoDashboardPage } from './fixtures/commands/gotoDashboardPage';
 import { gotoDataSourceConfigPage } from './fixtures/commands/gotoDataSourceConfigPage';
 import { gotoPanelEditPage } from './fixtures/commands/gotoPanelEditPage';
+import { gotoAlertRuleEditPage } from './fixtures/commands/gotoAlertRuleEditPage';
 import { gotoVariableEditPage } from './fixtures/commands/gotoVariableEditPage';
 import { login } from './fixtures/commands/login';
 import { readProvisionedDashboard } from './fixtures/commands/readProvisionedDashboard';
 import { readProvisionedDataSource } from './fixtures/commands/readProvisionedDataSource';
+import { readProvisionedAlertRule } from './fixtures/commands/readProvisionedAlertRule';
 import { dashboardPage } from './fixtures/dashboardPage';
 import { explorePage } from './fixtures/explorePage';
 import { grafanaVersion } from './fixtures/grafanaVersion';
@@ -23,6 +25,7 @@ import { page } from './fixtures/page';
 import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
 import { variableEditPage } from './fixtures/variableEditPage';
+import { alertRuleEditPage } from './fixtures/alertRuleEditPage';
 import { options } from './options';
 import { toHaveAlert } from './matchers/toHaveAlert';
 import { toDisplayPreviews } from './matchers/toDisplayPreviews';
@@ -67,9 +70,11 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   variableEditPage,
   variablePage,
   annotationEditPage,
+  alertRuleEditPage,
   explorePage,
   createDataSource,
   readProvisionedDataSource,
+  readProvisionedAlertRule,
   readProvisionedDashboard,
   isFeatureToggleEnabled,
   createUser,
@@ -78,6 +83,7 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   gotoVariableEditPage,
   gotoVariablePage,
   gotoAnnotationEditPage,
+  gotoAlertRuleEditPage,
   gotoDataSourceConfigPage,
   gotoAppConfigPage,
   gotoAppPage,
