@@ -73,6 +73,11 @@ const config = async (env): Promise<Configuration> => {
       },
     ],
 
+    // Support WebAssembly according to latest spec - makes WebAssembly module async
+    experiments: {
+      asyncWebAssembly: true,
+    },
+
     mode: env.production ? 'production' : 'development',
 
     module: {
