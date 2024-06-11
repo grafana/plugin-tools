@@ -26,9 +26,9 @@ export class VariablePage extends GrafanaPage {
     const { addVariableCTAV2, addVariableCTAV2Item, newButton } =
       this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
 
-    try {
-      await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click({ timeout: 500 });
-    } catch (_) {
+    if (!this.dashboard?.uid) {
+      await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click();
+    } else {
       await this.getByGrafanaSelector(newButton).click();
     }
 
