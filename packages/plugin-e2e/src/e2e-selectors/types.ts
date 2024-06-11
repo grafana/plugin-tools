@@ -111,7 +111,7 @@ export type Components = {
   };
   PageToolbar: {
     item: (tooltip: string) => string;
-    shotMoreItems: string;
+    showMoreItems: string;
     itemButton: (title: string) => string;
     itemButtonTitle: string;
   };
@@ -198,6 +198,9 @@ export type Pages = {
   Dashboard: {
     url: (uid: string) => string;
     Settings: {
+      Actions: {
+        close: string;
+      };
       Annotations: {
         Edit: {
           url: (dashboardUid: string, annotationIndex: string) => string;
@@ -223,9 +226,22 @@ export type Pages = {
             generalTypeSelectV2: string;
             previewOfValuesOption: string;
             submitButton: string;
+            generalNameInputV2: string;
+            applyButton: string;
           };
         };
       };
+    };
+    SubMenu: {
+      submenuItemLabels: (item: string) => string;
+      submenuItemValueDropDownValueLinkTexts: (item: string) => string;
+      submenuItemValueDropDownDropDown: string;
+      submenuItemValueDropDownOptionTexts: (item: string) => string;
+    };
+    SaveDashboardAsModal: {
+      saveButton: string;
+      newName: string;
+      save: string;
     };
   };
   Explore: {

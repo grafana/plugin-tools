@@ -170,7 +170,7 @@ export const versionedComponents = {
     item: {
       [MIN_GRAFANA_VERSION]: (tooltip: string) => `${tooltip}`,
     },
-    shotMoreItems: {
+    showMoreItems: {
       [MIN_GRAFANA_VERSION]: 'Show more items',
     },
     itemButton: {
