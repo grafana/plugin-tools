@@ -1,3 +1,16 @@
+# v1.5.0 (Tue Jun 11 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Expose variable list page as fixture [#942](https://github.com/grafana/plugin-tools/pull/942) ([@aangelisc](https://github.com/aangelisc) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.4.0 (Fri Jun 07 2024)
 
 #### 🚀 Enhancement
