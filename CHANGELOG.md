@@ -2,6 +2,19 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/create-plugin@4.12.0`
+  - Create Plugin: Support WASM in plugin builds [#953](https://github.com/grafana/plugin-tools/pull/953) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Jun 11 2024)
+
+#### 🚀 Enhancement
+
 - `@grafana/plugin-e2e@1.5.0`
   - Plugin E2E: Expose variable list page as fixture [#942](https://github.com/grafana/plugin-tools/pull/942) ([@aangelisc](https://github.com/aangelisc) [@sunker](https://github.com/sunker))
 

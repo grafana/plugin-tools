@@ -1,3 +1,15 @@
+# v4.12.0 (Tue Jun 11 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support WASM in plugin builds [#953](https://github.com/grafana/plugin-tools/pull/953) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.11.4 (Thu Jun 06 2024)
 
 #### 🐛 Bug Fix
