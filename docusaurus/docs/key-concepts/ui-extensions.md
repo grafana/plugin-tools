@@ -35,7 +35,7 @@ Add an extension point to your UI to give benefits such as these:
 
 - Define the UI extension point once to enable multiple plugins to extend your UI with new functionality. You don't need any additional effort to provide functionality from more plugins in your UI.
 - Clean separation of concerns. Your application doesn't need to know anything about the plugin extending your UI.
-- Integration build for change. Since your application doesn't know anything about the internal workings of the plugin extending your UI, they are free to change their APIs without the risk of breaking the extension point UI.
+- Integration built for change. Since your application doesn't know anything about the internal workings of the plugin extending your UI, they are free to change their APIs without the risk of breaking the extension point UI.
 - Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed to the user. There is no need for either app to include custom logic to detect the presence of the other.
 - Extensions are fast. We pre-build the extensions registry at Grafana boot time which makes it fast to use while rendering the UI.
 
