@@ -17,7 +17,7 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 In this tutorial you will learn how to create _app plugins_. App plugins are Grafana plugins that allow you to bundle data sources and panel plugins within a single package. They also enable you to create custom pages within Grafana, providing a dedicated space for documentation, sign-up forms, or integration with other services via HTTP.
 
-App plugins are displayed in the navigation menu and offer the flexibility to define [UI Extensions](../ui-extensions/).
+App plugins can be displayed in the [navigation menu](#add-a-page-in-the-navigation-menu) and offer the flexibility to define [UI Extensions](../ui-extensions/).
 
 ### Prerequisites
 
@@ -30,7 +30,7 @@ App plugins are displayed in the navigation menu and offer the flexibility to de
 
 :::note
 
-If you choose to have a backend for your app plugin, you must run `mage -v` before starting Grafana with Docker.
+If you choose to have a backend for your app plugin, you must build the backend plugin binary by running `mage -v` before starting Grafana with Docker.
 
 :::
 
@@ -42,9 +42,10 @@ If you choose to have a backend for your app plugin, you must run `mage -v` befo
 
 Next, you'll learn the basic workflow of making a change to your app, building it, and reloading Grafana to reflect the changes you made.
 
-The first step is to add your panel to a dashboard:
+The first step is to see your scaffolded plugin in action.
 
-1. Open Grafana in your browser.
+1. Start your Grafana instance with `docker compose up`
+1. Open Grafana in your browser. Go to [http://localhost:3000](http://localhost:3000).
 1. Go to **Apps** -> **Your App Name**.
 
 Now that you can view your app root page (page one in the example), try making a change to the app plugin:
@@ -56,9 +57,9 @@ Now that you can view your app root page (page one in the example), try making a
    ```
 
 1. Save the file.
-1. Reload Grafana. Your changes should appear in the browser.
+1. Reload Grafana in your browser. Your changes should appear.
 
-## Add a new page in the navigation menu
+## Add a page in the navigation menu
 
 To add pages to the navigation menu under your app menu item, modify the `plugin.json` file's [`includes` section](../reference/metadata.md#includes).
 
@@ -127,7 +128,7 @@ You can only have one level of pages in the navigation menu. Sub-menu items are 
 
 ## Configuration page
 
-You can add a configuration page to your App plugin where your users can store any settings your plugin might need. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
+You can add a configuration page to your App plugin where users can configure any settings your plugin might need. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
 
 ### Saving user settings
 
@@ -162,11 +163,11 @@ function MyComponent() {
 
 ## Fetch data from frontend code using the data proxy
 
-If you want to fetch data from your app frontend code without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, then you want to use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md).
+If you want to fetch data from your app frontend code (e.g. from a thid party API) without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, then you want to use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md).
 
-## Bundle plugins inside your app
+## Adding nested plugins inside your app
 
-You can bundle data sources and panel plugins inside your app plugins. See [Work with nested plugins](../create-a-plugin/extend-a-plugin/nested-plugins).
+You can nest data sources and panel plugins inside your app plugins. See [Work with nested plugins](../create-a-plugin/extend-a-plugin/nested-plugins).
 
 ## Include external plugins
 
@@ -184,3 +185,8 @@ If you want to let users know that your app requires an existing plugin, you can
   ]
 }
 ```
+
+## Next steps
+
+- [Sign your plugin](../publish-a-plugin/sign-a-plugin.md)
+- [Publish your plugin](../publish-a-plugin/publish-or-update-a-plugin.md)

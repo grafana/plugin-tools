@@ -55,7 +55,7 @@ Notice that the plugin `nested-datasource` doesn't have a `package.json` of its 
 
 ## How to add a nested plugin to an app plugin
 
-1. Generate the nested plugin:
+1. Create a new plugin that will become the nested plugin:
 
    :::important
 
@@ -69,7 +69,7 @@ Notice that the plugin `nested-datasource` doesn't have a `package.json` of its 
    npx @grafana/create-plugin@latest
    ```
 
-   Carefully select the desired plugin type (data source or panel), provide a name, and use the same organization as your app plugin.
+   Select the desired plugin type (data source or panel), provide a name, and use the same organization as your app plugin.
 
 1. Prepare the nested plugin:
 
