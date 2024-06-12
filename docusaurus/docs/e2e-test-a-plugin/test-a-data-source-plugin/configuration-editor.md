@@ -73,7 +73,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
-  )}/third-party-service-path`;);
+  )}/third-party-service-path`);
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
 });
 ```
@@ -92,7 +92,7 @@ test('"Save & test" should display success alert box when config is valid', asyn
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
-  )}/third-party-service-path`;);
+  )}/third-party-service-path`);
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' }));
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success');
