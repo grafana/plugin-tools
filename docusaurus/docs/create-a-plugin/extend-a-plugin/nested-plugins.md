@@ -24,9 +24,9 @@ See the tutorial to [build an app plugin](../../tutorials/build-an-app-plugin) a
 
 ## Anatomy of nested plugins
 
-Nested plugins are located inside the app plugin `src` folder. They generally follow the same structure of a plugin and have their own `plugin.json` but don't have their own `package.json` or `.config` folder.
+Nested plugins are located inside the app plugin `src` folder. They generally follow the same structure of a plugin and have their own `plugin.json`, but they don't have their own `package.json` or `.config` folder.
 
-Here an example of a nested datasource plugin:
+Here's an example of a nested data source plugin:
 
 ```diff bash
 ./src
@@ -48,15 +48,19 @@ Here an example of a nested datasource plugin:
 ```
 
 :::note
-Notice the plugin `nested-datasource` doesn't have a `package.json` of its own. The name of the nested plugin folder is not important.
+
+Notice that the plugin `nested-datasource` doesn't have a `package.json` of its own. The name of the nested plugin folder is not important.
+
 :::
 
 ## How to add a nested plugin to an app plugin
 
-1. Generate the Nested Plugin:
+1. Generate the nested plugin:
 
    :::important
+
    Begin outside your app plugin's directory.
+
    :::
 
    Use the `create-plugin` tool to generate a new plugin:
@@ -65,18 +69,18 @@ Notice the plugin `nested-datasource` doesn't have a `package.json` of its own. 
    npx @grafana/create-plugin@latest
    ```
 
-   Carefully select the desired plugin type (data source or panel) provide a name, and use the same organization as your app plugin.
+   Carefully select the desired plugin type (data source or panel), provide a name, and use the same organization as your app plugin.
 
-1. Prepare the Nested Plugin:
+1. Prepare the nested plugin:
 
-   Rename the `src` folder of your newly generated plugin to a name that reflects its specific purpose (e.g., nested-datasource).
+   Rename the `src` folder of your newly generated plugin to a name that reflects its specific purpose (for example, `nested-datasource`).
 
-1. Integrate into Your App Plugin:
+1. Integrate into your app plugin:
 
    Copy the renamed `src` folder directly inside the `src` folder of your app plugin.
-   You can safely disregard the other generated files (like package.json, .config, etc.) - they are not needed within your app.
+   You can safely disregard the other generated files (like `package.json`, `.config`, and so on). These files aren't needed within your app.
 
-1. Clean Up (Optional):
+1. (Optional) Clean up your directory:
 
    You can now delete the entire directory of the initially generated nested plugin.
 
