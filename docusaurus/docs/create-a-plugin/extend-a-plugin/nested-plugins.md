@@ -80,6 +80,10 @@ Notice that the plugin `nested-datasource` doesn't have a `package.json` of its 
    Copy the renamed `src` folder directly inside the `src` folder of your app plugin.
    You can safely disregard the other generated files (like `package.json`, `.config`, and so on). These files aren't needed within your app.
 
+1. (Optional) Add your datasource to your provisioned datasources:
+
+   If you're adding a nested datasource, remember to add it to the provisioned datasources YAML configuration file, see the documentation on [Provisioning Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more details.
+
 1. (Optional) Clean up your directory:
 
    You can now delete the entire directory of the initially generated nested plugin.
