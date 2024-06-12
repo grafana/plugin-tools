@@ -1,3 +1,4 @@
+import { lt as semverLt } from 'semver';
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -95,17 +96,17 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
+  const grafanaVersion = EXTRA_TEMPLATE_VARIABLES.grafanaVersion;
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
+  //@grafana/e2e was deprecated in Grafana 11
+  const useCypress =
+    !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const shouldUseReactRouterV6 = (pluginType: string) =>
     features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
   const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
-  const getE2eTestCmd = (packageManagerName: string) =>
-    usePlaywright
-      ? 'playwright test'
-      : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
 
   let templateData: TemplateData;
 
@@ -131,7 +132,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useReactRouterV6: shouldUseReactRouterV6(cliArgs.pluginType),
       reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
       usePlaywright,
-      e2eTestCmd: getE2eTestCmd(packageManagerName),
+      useCypress,
       hasGithubWorkflows: cliArgs.hasGithubWorkflows,
       hasGithubLevitateWorkflow: cliArgs.hasGithubLevitateWorkflow,
     };
@@ -160,9 +161,10 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useReactRouterV6: shouldUseReactRouterV6(pluginJson.type),
       reactRouterVersion: getReactRouterVersion(pluginJson.type),
       usePlaywright,
-      e2eTestCmd: getE2eTestCmd(packageManagerName),
+      useCypress,
       hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
       hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
+      pluginExecutable: pluginJson.executable,
     };
   }
 

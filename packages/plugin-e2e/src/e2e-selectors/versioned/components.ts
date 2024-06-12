@@ -125,6 +125,16 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: 'RefreshPicker run button',
     },
   },
+  QueryTab: {
+    addQuery: {
+      '10.2.0': 'data-testid query-tab-add-query',
+      [MIN_GRAFANA_VERSION]: 'Query editor add query button',
+    },
+    addExpression: {
+      '11.0.0': 'data-testid query-tab-add-expression',
+      '9.5.2': 'query-tab-add-expression',
+    },
+  },
   QueryEditorRows: {
     rows: {
       [MIN_GRAFANA_VERSION]: 'Query editor row',
@@ -134,6 +144,21 @@ export const versionedComponents = {
     title: {
       [MIN_GRAFANA_VERSION]: (refId: string) => `Query editor row title ${refId}`,
     },
+    actionButton: {
+      '10.4.0': (title: string) => `data-testid ${title}`,
+      [MIN_GRAFANA_VERSION]: (title: string) => `${title}`,
+    },
+  },
+  AlertRules: {
+    previewButton: { '11.1.0': 'data-testid alert-rule preview-button' },
+    ruleNameField: { '11.1.0': 'data-testid alert-rule name-field' },
+    newFolderButton: { '11.1.0': 'data-testid alert-rule new-folder-button' },
+    newFolderNameField: { '11.1.0': 'data-testid alert-rule name-folder-name-field' },
+    newFolderNameCreateButton: { '11.1.0': 'data-testid alert-rule name-folder-name-create-button' },
+    newEvaluationGroupButton: { '11.1.0': 'data-testid alert-rule new-evaluation-group-button' },
+    newEvaluationGroupName: { '11.1.0': 'data-testid alert-rule new-evaluation-group-name' },
+    newEvaluationGroupInterval: { '11.1.0': 'data-testid alert-rule new-evaluation-group-interval' },
+    newEvaluationGroupCreate: { '11.1.0': 'data-testid alert-rule new-evaluation-group-create-button' },
   },
   Alert: {
     alertV2: {
@@ -145,7 +170,7 @@ export const versionedComponents = {
     item: {
       [MIN_GRAFANA_VERSION]: (tooltip: string) => `${tooltip}`,
     },
-    shotMoreItems: {
+    showMoreItems: {
       [MIN_GRAFANA_VERSION]: 'Show more items',
     },
     itemButton: {
@@ -183,6 +208,7 @@ export const versionedComponents = {
   },
   Select: {
     option: {
+      '11.1.0': 'data-testid Select option',
       [MIN_GRAFANA_VERSION]: 'Select option',
     },
     input: {

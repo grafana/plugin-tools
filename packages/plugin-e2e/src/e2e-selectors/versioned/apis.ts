@@ -1,6 +1,11 @@
 import { MIN_GRAFANA_VERSION } from './constants';
 
 export const versionedAPIs = {
+  Alerting: {
+    eval: {
+      [MIN_GRAFANA_VERSION]: '/api/v1/eval',
+    },
+  },
   DataSource: {
     resourcePattern: {
       [MIN_GRAFANA_VERSION]: '/api/datasources/*/resources',
@@ -29,7 +34,7 @@ export const versionedAPIs = {
   },
   Dashboard: {
     delete: {
-      [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
+      [MIN_GRAFANA_VERSION]: (uid: string) => `/api/dashboards/uid/${uid}`,
     },
   },
   Plugin: {

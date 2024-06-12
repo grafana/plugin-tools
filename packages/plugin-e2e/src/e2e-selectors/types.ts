@@ -5,6 +5,9 @@ export type E2ESelectors = {
 };
 
 export type APIs = {
+  Alerting: {
+    eval: string;
+  };
   DataSource: {
     resourcePattern: string;
     resourceUIDPattern: string;
@@ -81,18 +84,34 @@ export type Components = {
   RefreshPicker: {
     runButtonV2: string;
   };
+  QueryTab: {
+    addQuery: string;
+    addExpression: string;
+  };
   QueryEditorRows: {
     rows: string;
   };
   QueryEditorRow: {
     title: (refId: string) => string;
+    actionButton: (title: string) => string;
+  };
+  AlertRules: {
+    previewButton: string;
+    ruleNameField: string;
+    newFolderButton: string;
+    newFolderNameCreateButton: string;
+    newEvaluationGroupButton: string;
+    newFolderNameField: string;
+    newEvaluationGroupName: string;
+    newEvaluationGroupInterval: string;
+    newEvaluationGroupCreate: string;
   };
   Alert: {
     alertV2: (severity: string) => string;
   };
   PageToolbar: {
     item: (tooltip: string) => string;
-    shotMoreItems: string;
+    showMoreItems: string;
     itemButton: (title: string) => string;
     itemButtonTitle: string;
   };
@@ -134,6 +153,14 @@ export type Pages = {
   Home: {
     url: string;
   };
+  Alerting: {
+    AddAlertRule: {
+      url: string;
+    };
+    EditAlertRule: {
+      url: (alertRuleUid: string) => string;
+    };
+  };
   DataSource: {
     name: string;
     delete: string;
@@ -171,6 +198,9 @@ export type Pages = {
   Dashboard: {
     url: (uid: string) => string;
     Settings: {
+      Actions: {
+        close: string;
+      };
       Annotations: {
         Edit: {
           url: (dashboardUid: string, annotationIndex: string) => string;
@@ -196,9 +226,22 @@ export type Pages = {
             generalTypeSelectV2: string;
             previewOfValuesOption: string;
             submitButton: string;
+            generalNameInputV2: string;
+            applyButton: string;
           };
         };
       };
+    };
+    SubMenu: {
+      submenuItemLabels: (item: string) => string;
+      submenuItemValueDropDownValueLinkTexts: (item: string) => string;
+      submenuItemValueDropDownDropDown: string;
+      submenuItemValueDropDownOptionTexts: (item: string) => string;
+    };
+    SaveDashboardAsModal: {
+      saveButton: string;
+      newName: string;
+      save: string;
     };
   };
   Explore: {

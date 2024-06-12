@@ -1,22 +1,26 @@
 import { APIRequestContext, expect, TestFixture } from '@playwright/test';
-import { PlaywrightArgs } from '../../types';
+import { PlaywrightArgs, User } from '../../types';
 
 type CreateUserFixture = TestFixture<() => Promise<void>, PlaywrightArgs>;
 
-const headers = {
-  Authorization: `Basic ${Buffer.from(`admin:admin`).toString('base64')}`,
-};
+const getHeaders = (user: User) => ({
+  Authorization: `Basic ${Buffer.from(`${user.user}:${user.password}`).toString('base64')}`,
+});
 
-const getUserIdByUsername = async (request: APIRequestContext, userName: string): Promise<number> => {
+const getUserIdByUsername = async (
+  request: APIRequestContext,
+  userName: string,
+  grafanaAPIUser: User
+): Promise<number> => {
   const getUserIdByUserNameReq = await request.get(`/api/users/lookup?loginOrEmail=${userName}`, {
-    headers,
+    headers: getHeaders(grafanaAPIUser),
   });
   expect(getUserIdByUserNameReq.ok()).toBeTruthy();
   const json = await getUserIdByUserNameReq.json();
   return json.id;
 };
 
-export const createUser: CreateUserFixture = async ({ request, user }, use) => {
+export const createUser: CreateUserFixture = async ({ request, user, grafanaAPICredentials }, use) => {
   await use(async () => {
     if (!user) {
       throw new Error('Playwright option `User` was not provided');
@@ -28,7 +32,7 @@ export const createUser: CreateUserFixture = async ({ request, user }, use) => {
         login: user?.user,
         password: user?.password,
       },
-      headers,
+      headers: getHeaders(grafanaAPICredentials),
     });
 
     let userId: number | undefined;
@@ -37,7 +41,7 @@ export const createUser: CreateUserFixture = async ({ request, user }, use) => {
       userId = respJson.id;
     } else if (createUserReq.status() === 412) {
       // user already exists
-      userId = await getUserIdByUsername(request, user?.user);
+      userId = await getUserIdByUsername(request, user?.user, grafanaAPICredentials);
     } else {
       throw new Error(`Could not create user '${user?.user}': ${await createUserReq.text()}`);
     }
@@ -45,7 +49,7 @@ export const createUser: CreateUserFixture = async ({ request, user }, use) => {
     if (user.role) {
       const updateRoleReq = await request.patch(`/api/org/users/${userId}`, {
         data: { role: user.role },
-        headers,
+        headers: getHeaders(grafanaAPICredentials),
       });
       const updateRoleReqText = await updateRoleReq.text();
       expect(

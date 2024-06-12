@@ -23,7 +23,8 @@ jobs:
         id: resolve-versions
         uses: grafana/plugin-actions/e2e-version@main
         with:
-          version-resolver-type: version-support-policy
+          version-resolver-type: plugin-grafana-dependency
+          grafana-dependency: '>=8.5.0'
 
   playwright-tests:
     needs: resolve-versions
@@ -39,6 +40,9 @@ jobs:
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci

@@ -204,7 +204,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/15019026?v=4",
       "profile": "https://github.com/aangelisc",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -282,6 +283,15 @@
       "name": "Kevin Yu",
       "avatar_url": "https://avatars.githubusercontent.com/u/19530599?v=4",
       "profile": "https://github.com/kevinwcyu",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ashharrison90",
+      "name": "Ashley Harrison",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20999846?v=4",
+      "profile": "https://github.com/ashharrison90",
       "contributions": [
         "code"
       ]

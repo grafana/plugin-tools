@@ -8,5 +8,4 @@ test('editor populates query from url', async ({ explorePage }) => {
   });
   const queryEditorRowLocator = explorePage.getQueryEditorRow('A');
   await expect(queryEditorRowLocator).toContainText('SELECT * FROM public.average_temperature');
-  await expect(queryEditorRowLocator).toContainText('Time Series');
 });
