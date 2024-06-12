@@ -18,7 +18,7 @@ Most data source plugins need authentication to communicate with third-party ser
 
 ### Testing the configuration in a backend data source plugin
 
-Backend data sources implement a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
+Backend data sources implement a [health check](../../key-concepts/backend-plugins/#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';

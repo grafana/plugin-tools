@@ -22,7 +22,7 @@ The Grafana server uses a physical wire protocol to communicate with backend plu
 
 :::note
 
-We strongly recommend that backend plugin development not be implemented directly against the protocol. Instead, we prefer that you use the [Grafana Plugin SDK for Go](grafana-plugin-sdk-for-go.md) that implements this protocol and provides higher-level APIs.
+We strongly recommend that backend plugin development not be implemented directly against the protocol. Instead, we prefer that you use the [Grafana Plugin SDK for Go](grafana-plugin-sdk-for-go) that implements this protocol and provides higher-level APIs.
 
 :::
 

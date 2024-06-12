@@ -10,7 +10,7 @@ keywords:
   - examples
 ---
 
-Sample plugins give you insights into the structure, features, and implementation details of [several types](../introduction/plugin-types-usage.md) of Grafana plugins. These are real-world code examples that you can study and even reuse in your projects.
+Sample plugins give you insights into the structure, features, and implementation details of [several types](../key-concepts/plugin-types-usage) of Grafana plugins. These are real-world code examples that you can study and even reuse in your projects.
 
 The following lists describe some of our popular plugins. For a complete list, see the [README](https://github.com/grafana/grafana-plugin-examples/tree/main#readme).
 

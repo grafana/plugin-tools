@@ -14,13 +14,13 @@ keywords:
 
 # How to convert a frontend data source plugin into a backend plugin
 
-This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../introduction/backend.md).
+This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../key-concepts/backend-plugins).
 
 To convert the frontend data source, we recommend scaffolding a new backend data source plugin using [`npx @grafana/create-plugin@latest`](https://grafana.com/developers/plugin-tools/). Use the following instructions to extend this foundation to copy functionality from your original plugin.
 
 ## Why
 
-There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../introduction/backend.md#use-cases-for-implementing-a-backend-plugin).
+There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
 
 ## Before you begin
 
@@ -253,7 +253,7 @@ This example covers an HTTP-only data source. So, if your data source requires a
 
 ### Query
 
-The next step is to move the query logic. This will significantly vary depending on how the plugin queries the data source and transforms the response into [frames](../introduction/data-frames.md). In this guide, you'll see how to migrate a simple example.
+The next step is to move the query logic. This will significantly vary depending on how the plugin queries the data source and transforms the response into [frames](../key-concepts/data-frames). In this guide, you'll see how to migrate a simple example.
 
 Our data source is returning a JSON object with a list of `datapoints` when hitting the endpoint `/metrics`. The frontend `query` method transforms those `datapoints` into frames:
 

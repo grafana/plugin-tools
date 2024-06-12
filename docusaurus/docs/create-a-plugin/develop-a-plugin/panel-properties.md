@@ -17,7 +17,7 @@ sidebar_position: 5
 
 # Subscribe to Grafana events
 
-If you’re building a [panel plugin](../../introduction/plugin-types-usage.md#panel-visualization-plugins), in some cases you may want your plugin to react to changes that occur outside of your plugin. For example, you may want your plugin to react when the user zooms in or out of another panel. In this guide, you’ll learn how to make your plugin react to events in Grafana.
+If you’re building a [panel plugin](../../key-concepts/plugin-types-usage.md#panel-visualization-plugins), in some cases you may want your plugin to react to changes that occur outside of your plugin. For example, you may want your plugin to react when the user zooms in or out of another panel. In this guide, you’ll learn how to make your plugin react to events in Grafana.
 
 :::tip
 

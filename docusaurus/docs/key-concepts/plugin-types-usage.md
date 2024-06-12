@@ -11,7 +11,7 @@ keywords:
   - provision
   - configuration
   - configure
-sidebar_position: 1
+sidebar_position: 10
 ---
 
 # Grafana plugin types and usage
@@ -56,7 +56,7 @@ With the recent introduction of [Grafana Scenes](https://grafana.com/developers/
 
 ## Data source plugins
 
-In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). Data source plugins may be added on the frontend and [the backend](./backend.md).
+In plugin development, you can create new data source plugins to use Grafana with new databases, similar to existing plugins such as [MongoDB](https://grafana.com/grafana/plugins/grafana-mongodb-datasource/) or [Google BigQuery](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). Data source plugins may be added on the frontend and [the backend](../key-concepts/backend-plugins/).
 
 ### Usage of data-source plugins
 
