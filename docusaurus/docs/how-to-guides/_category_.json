@@ -1,0 +1,9 @@
+{
+  "position": 21,
+  "label": "How-to guides",
+  "customProps": {
+    "description": "Learn how to perform tasks in Grafana plugin development."
+  },
+  "collapsible": true,
+  "collapsed": true
+}
