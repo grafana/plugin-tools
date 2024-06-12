@@ -76,7 +76,3 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 - **Add a GitHub badge** - Follow [these steps](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-4-add-dynamic-badges-to-your-readme) to help users find your plugin using GitHub badges.
 - **Add workflow automation** - If your plugin is available on GitHub, consider [adding the GitHub workflows](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-5-automate-your-releases-using-github-actions) for plugin development to your repository.
-
-```
-
-```
