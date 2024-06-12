@@ -58,7 +58,6 @@ test('"Save & test" should fail when configuration is invalid', async ({
 ### Testing the configuration in a frontend data source plugin
 
 Unlike backend data source plugins that always calls its own backend to perform a health check, frontend data source plugins may need make a call to a third-party API to test whether the provided configuration is valid. The `DataSourceConfigPage.saveAndTest` method allows you to provide a custom path for the endpoint that is being used to test the data source configuration.
-You can use Playwright's [`waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) method and specify the url of the endpoint that is being called.
 
 ```ts title="configurationEditor.spec.ts"
 test('"Save & test" should be successful when configuration is valid', async ({
