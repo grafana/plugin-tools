@@ -69,8 +69,7 @@ test('"Save & test" should be successful when configuration is valid', async ({
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   const healthCheckPath = `${selectors.apis.DataSource.proxy(configPage.datasource.uid)}/test`;
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' })
-  // construct a custom health check url using the Grafana plugin proxy.
-  // more details here: https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins#authenticate-using-the-data-source-proxy
+  // construct a custom health check url using the Grafana data source proxy
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
@@ -89,10 +88,11 @@ test('"Save & test" should display success alert box when config is valid', asyn
 }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
+  // construct a custom health check url using the Grafana data source proxy
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
-  )}/test`;
+  )}/third-party-service-path`;);
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' }));
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success');
