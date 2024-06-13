@@ -1,6 +1,6 @@
 ---
-id: work-with-data-frames
-title: Work with data frames
+id: create-data-frames
+title: Create data frames
 description: A guide to working with data frames in plugin development.
 keywords:
   - grafana
@@ -8,10 +8,7 @@ keywords:
   - plugin
   - data frames
   - dataframes
-sidebar_position: 3
 ---
-
-# Work with data frames
 
 The [data frame](../../key-concepts/data-frames) is a columnar data structure that allows for efficient querying of large amounts of data. Since data frames are a central concept when developing plugins for Grafana, in this guide we'll look at some ways you can use them.
 

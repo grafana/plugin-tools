@@ -310,13 +310,13 @@ The majority of data sources in Grafana will return data from an external API. T
 
 This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 
-While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. We strongly recommend this when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md).
+While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. We strongly recommend this when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../how-to-guides/data-source-plugins/add-authentication).
 
 ### Improving your plugin's quality
 
 To learn more about advanced plugin development topics, refer to the following:
 
-- [Add support for variables](../create-a-plugin/extend-a-plugin/add-support-for-variables.md)
-- [Add support for annotations](../create-a-plugin/extend-a-plugin/enable-annotations.md)
-- [Add support for Explore queries](../create-a-plugin/extend-a-plugin/add-support-for-explore-queries.md)
+- [Add support for variables](../how-to-guides/data-source-plugins/add-support-for-variables)
+- [Add support for annotations](../how-to-guides/data-source-plugins/add-annotations)
+- [Add support for Explore queries](../how-to-guides/data-source-plugins/add-features-for-explore-queries)
 - [Build a logs data source](./build-a-logs-data-source-plugin.md)

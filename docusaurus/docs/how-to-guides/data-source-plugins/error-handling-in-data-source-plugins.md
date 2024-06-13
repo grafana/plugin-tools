@@ -1,7 +1,7 @@
 ---
 id: error-handling
 title: Error handling
-description: How to handle errors in plugins.
+description: How to handle errors in data source plugins.
 keywords:
   - grafana
   - plugins
@@ -9,8 +9,6 @@ keywords:
   - errors
   - error handling
 ---
-
-# Error handling
 
 This guide explains how to handle errors in plugins and provides suggestions for common scenarios.
 

@@ -101,6 +101,42 @@ const plugins = [
           from: ['/introduction/plugin-types-usage'],
           to: '/key-concepts/plugin-types-usage',
         },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/enable-for-annotations'],
+          to: '/how-to-guides/data-source-plugins/add-annotations',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-authentication'],
+          to: '/how-to-guides/data-source-plugins/add-authentication',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-features-for-explore-queries'],
+          to: '/how-to-guides/data-source-plugins/add-features-for-explore-queries',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-logs-metrics-traces'],
+          to: '/how-to-guides/data-source-plugins/add-logs-metrics-traces',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-query-editor-help'],
+          to: '/how-to-guides/data-source-plugins/add-query-editor-help',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-support-for-variables'],
+          to: '/how-to-guides/data-source-plugins/add-support-for-variables',
+        },
+        {
+          from: ['/create-a-plugin/develop-a-plugin/work-with-data-frames'],
+          to: '/how-to-guides/data-source-plugins/create-data-frames',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/error-handling'],
+          to: '/how-to-guides/data-source-plugins/error-handling',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/include-dashboards'],
+          to: '/how-to-guides/data-source-plugins/include-dashboards',
+        },
       ],
     },
   ],

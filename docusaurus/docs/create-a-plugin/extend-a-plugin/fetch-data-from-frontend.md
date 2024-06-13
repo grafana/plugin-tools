@@ -249,7 +249,7 @@ const response = getBackendSrv().fetch<TODO[]>({
 
 ## Add authentication to your requests using the data proxy
 
-To learn about adding authentication to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins.md).
+To learn about adding authentication to the data proxy, refer to our [documentation](../../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins.md).
 
 ## Debug requests from the data proxy
 
@@ -271,4 +271,4 @@ With this configuration, the Grafana server output shows the requests going out 
 
 ## Send special headers using the data proxy
 
-You can send special headers using the data proxy. To learn about adding headers to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins.md).
+You can send special headers using the data proxy. To learn about adding headers to the data proxy, refer to our [documentation](../../how-to-guides/data-source-plugins/add-annotations-for-data-source-plugins.md).

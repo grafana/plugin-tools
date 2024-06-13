@@ -10,8 +10,6 @@ keywords:
   - variables
 ---
 
-# Add support for variables
-
 Variables are placeholders for values, and you can use them to create templated queries, and dashboard or panel links. For more information on variables, refer to [Templates and variables](https://grafana.com/docs/grafana/latest/dashboards/variables).
 
 In this guide, you'll see how you can turn a query string like this:

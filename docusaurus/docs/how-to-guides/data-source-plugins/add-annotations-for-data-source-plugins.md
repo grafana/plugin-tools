@@ -1,15 +1,13 @@
 ---
-id: enable-for-annotations
-title: Enable annotations
-description: Add support for annotations in your plugin.
+id: add-annotations
+title: Add annotations
+description: Add support for annotations in your data source plugin.
 keywords:
   - grafana
   - plugins
   - plugin
   - annotations
 ---
-
-# Enable annotations
 
 You can add support to your plugin for annotations that will insert information into Grafana alerts. This guide explains how to add support for [annotations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/) to a data source plugin.
 
