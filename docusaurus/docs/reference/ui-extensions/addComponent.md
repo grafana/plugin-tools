@@ -30,7 +30,7 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 ## Parameters
 
-The `.addComponent()` method takes a single `config` object with the following properties:
+The `addComponent()` method takes a single `config` object with the following properties:
 
 | Property          | Description                                                                                                                                                                                                               |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
