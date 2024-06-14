@@ -46,7 +46,7 @@ Examples where it would be useful:
 
 ## Further instructions
 
-- [Check the API reference](../reference/ui-extensions/extension-points.md)
 - [Learn how to create an extension point](../tutorials/ui-extensions/create-an-extension-point.md)
 - [Learn how to register an extension to an extension point](../tutorials/ui-extensions/register-an-extension.md)
 - [Learn how to expose components from a plugin so other plugins can import them](../tutorials/ui-extensions/exposed-components.md)
+- [Check the API reference](../reference/ui-extensions/extension-points.md)
