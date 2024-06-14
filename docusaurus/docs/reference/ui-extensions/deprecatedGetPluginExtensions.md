@@ -13,7 +13,7 @@ sidebar_position: 200
 
 :::warning
 
-**This function is deprecated** and will be removed in the future (in Grafana v12).
+**This function is deprecated** and will be removed in Grafana v12.
 Please use either the [`usePluginLinks()`](./usePluginLinks.md) or [`usePluginComponents()`](./usePluginComponents.md) hooks instead.
 
 :::
