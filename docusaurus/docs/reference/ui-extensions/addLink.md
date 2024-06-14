@@ -18,13 +18,12 @@ sidebar_position: 10
 This method can be used to register a link extension to a certain extension point. Link extensions are used to add links to different parts of the Grafana UI or other plugins.
 
 ```typescript
-export const plugin = new AppPlugin<{}>()
-    .addLink({
-        targets: ["grafana/dashboard/panel/menu"],
-        title: "Declare incident",
-        description: "Declare an incident and attach the panel context to it",
-        path: "/a/myorg-incidents-app/incidents",
-    });
+export const plugin = new AppPlugin<{}>().addLink({
+  targets: ['grafana/dashboard/panel/menu'],
+  title: 'Declare incident',
+  description: 'Declare an incident and attach the panel context to it',
+  path: '/a/myorg-incidents-app/incidents',
+});
 ```
 
 ## Parameters
@@ -48,8 +47,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 ## Examples
 
-- [Best practices for adding links](../../tutorials/ui-extensions/register-extensions.md#best-practices-for-adding-links)
-- [Hide a link in certain conditions](../../tutorials/ui-extensions/register-extensions.md#hide-a-link-in-certain-conditions)
-- [Update the path based on the context](../../tutorials/ui-extensions/register-extensions.md#update-the-path-based-on-the-context)
-- [Open a modal from the `onClick()`](../../tutorials/ui-extensions/register-extensions.md#open-a-modal-from-the-onclick)
-
+- [Best practices for adding links](../../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-links)
+- [Hide a link in certain conditions](../../tutorials/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
+- [Update the path based on the context](../../tutorials/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
+- [Open a modal from the `onClick()`](../../tutorials/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
