@@ -15,7 +15,9 @@ keywords:
   - apps
 ---
 
-An "extension point" is a part of your plugin UI or Grafana UI where other plugins can hook in with either links or React components to extend the user experience. [Read more about extensions under key concepts](../../key-concepts/ui-extensions.md).
+An "extension point" is a part of your plugin UI or Grafana UI where other plugins can hook in with either links or React components, to extend the user experience based on a context exposed by the extension point.
+
+ Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
 | Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,8 +28,8 @@ An "extension point" is a part of your plugin UI or Grafana UI where other plugi
 
 ### Best practices for rendering links
 
-- **Make sure your UI handles multple links** <br /> It can happen that there are multiple plugins are adding links to your extension point. Make sure that you handle these scenarios and that your extension point still has a good user experience.
-- **Share contextual information** <br /> Think about what contextual information would be useful for the links defined by plugins and **add them to the `context` object**. (E.g. share the "panelId" and the "timeRange" with panel menu links). _The `context{}` object always gets frozen before being passed to the links, so none of them can mutate it._
+- **Make sure your UI handles multiple links** <br /> Multiple plugins may add links to your extension point. Make sure your extension point can handle this and still provide good user experience.
+- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the "panelId" and the "timeRange". Note: the `context{}` object always gets frozen before being passed to the links, so it cannot be mutated.
 - **Avoid unnecessary re-renders** <br />
 
   - **Static `context`**
@@ -98,7 +100,7 @@ export const InstanceToolbar = ({ instanceId }) => {
 
 ### Limit the number of extensions by plugins
 
-You might have limited space on the UI and you would like the limit the number of extensions plugins can register to your extension point. **(By default there is no limit.)**
+You might have limited space on the UI and you would like the limit the number of extensions plugins can register to your extension point. By default there is **no limit**.
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -137,7 +139,7 @@ export const InstanceToolbar = () => {
 ### Best practices for rendering components
 
 - **Make sure your UI controls the behaviour** <br /> Component extensions can render different layouts and can respond to various kind of user interactions. Make sure that your UI defines clear boundaries for rendering components defined by other plugins.
-- **Share contextual information** <br /> Think about what contextual information would be useful for the components defined by plugins and **pass them as `props` to the components**.
+- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as `props` to the components.
 
 ### Creating an extension point for components
 

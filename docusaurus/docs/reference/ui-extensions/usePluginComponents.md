@@ -39,7 +39,7 @@ The `.usePluginComponents()` method takes a single `options` object with the fol
 
 ## Return value
 
-The hook returns the following object (for more info check [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35)):
+The hook returns the following object (for more info check [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35):
 
 ```typescript
 const {

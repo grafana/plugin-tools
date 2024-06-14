@@ -133,9 +133,9 @@ export const plugin = new AppPlugin().addLink({
 
 ### Best practices for adding components
 
-- **Use the props** - check what props the extension point is passing to the components and use them to implement a more tailored experience
-- **Wrap your component with providers** - if you want to access any plugin specific state in your component make sure to wrap it with the necessary React context providers (e.g. for Redux)
-- **Use the enum for Grafana extension point ids** - if you are registering a component to one of the available Grafana extension points, make sure that you use the [`PluginExtensionPoints` enum exposed by the `@grafana/data`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) package.
+- **Use the props** - check what props the extension point is passing to the components and use them to implement a more tailored experience.
+- **Wrap your component with providers** - if you want to access any plugin specific state in your component make sure to wrap it with the necessary React context providers (e.g. for Redux).
+- **Use the enum for Grafana extension point IDs** - if you are registering a component to one of the available Grafana extension points, make sure that you use the [`PluginExtensionPoints` enum exposed by the `@grafana/data`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) package.
 
 ### Register a component
 
@@ -191,7 +191,7 @@ export const plugin = new AppPlugin().addComponent({
 
 ### Hide a component in certain conditions
 
-This is nothing new for developers working with React, just return `null` from your component in order to not render anything (to hide it).
+Simply return `null` from your component in order to not render anything and thereby hide the component.
 
 ```tsx
 import { usePluginContext, PluginExtensionPoints } from '@grafana/data';
