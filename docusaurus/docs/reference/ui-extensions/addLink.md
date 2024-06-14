@@ -1,6 +1,6 @@
 ---
 id: add-link
-title: .addLink()
+title: addLink()
 description: This method can be used to register a link extension to a certain extension point.
 keywords:
   - grafana
@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 10
 ---
 
-# `.addLink(config)`
+# `addLink(config)`
 
 **Available in Grafana >=v11.1.0.**
 
@@ -28,7 +28,7 @@ export const plugin = new AppPlugin<{}>().addLink({
 
 ## Parameters
 
-The `.addLink()` method takes a single `config` object with the following properties:
+The `addLink()` method takes a single `config` object with the following properties:
 
 | Property          | Description                                                                                                                                                                                                                                     |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

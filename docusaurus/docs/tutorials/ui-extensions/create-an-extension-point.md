@@ -17,10 +17,10 @@ keywords:
 
 An "extension point" is a part of your plugin UI or Grafana UI where other plugins can hook in with either links or React components to extend the user experience. [Read more about extensions under key concepts](../../key-concepts/ui-extensions.md).
 
-| Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Link**      | Links have a `path` and an `onClick()` property. <br /><br /> **When to use?** <br /> Use links if you would like to give plugins a way to define custom user actions for a part of your UI. These actions can either just be cross-links to the plugin, or using `onClick()` methods they can implement a more interactive on-page experience with a modal. <br /><br /> **API reference** <br /> - [`.addLink()`](../../reference/ui-extensions/addLink.md) - registering a link from a plugin <br /> - [`usePluginLinks()`](../../reference/ui-extensions/usePluginLinks.md) - fetching links registered for an extension point |
-| **Component** | Components are React components that can be used to render a custom user experience. <br /><br /> **When to use?** <br /> Use components if you would like to give more freedom for plugins to extend your UI, for example to extend a configuration form with custom parts. <br /><br /> **API reference** <br /> - [`.addComponent()`](../../reference/ui-extensions/addComponent.md) - registering a component from a plugin <br /> - [`usePluginComponents()`](../../reference/ui-extensions/usePluginComponents.md) - fetching components registered for an extension point                                                   |
+| Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Link**      | Links have a `path` and an `onClick()` property. <br /><br /> **When to use?** <br /> Use links if you would like to give plugins a way to define custom user actions for a part of your UI. These actions can either just be cross-links to the plugin, or using `onClick()` methods they can implement a more interactive on-page experience with a modal. <br /><br /> **API reference** <br /> - [`addLink()`](../../reference/ui-extensions/addLink.md) - registering a link from a plugin <br /> - [`usePluginLinks()`](../../reference/ui-extensions/usePluginLinks.md) - fetching links registered for an extension point |
+| **Component** | Components are React components that can be used to render a custom user experience. <br /><br /> **When to use?** <br /> Use components if you would like to give more freedom for plugins to extend your UI, for example to extend a configuration form with custom parts. <br /><br /> **API reference** <br /> - [`addComponent()`](../../reference/ui-extensions/addComponent.md) - registering a component from a plugin <br /> - [`usePluginComponents()`](../../reference/ui-extensions/usePluginComponents.md) - fetching components registered for an extension point                                                   |
 
 ## Links
 
@@ -58,7 +58,7 @@ export const InstanceToolbar = () => {
   // - Core Grafana -> prefix with "grafana/"
   // - Plugin       -> prefix with "{your-plugin-id}/"
   //
-  // This is also what plugins use when they call `.addLink()`
+  // This is also what plugins use when they call `addLink()`
   const extensionPointId = 'myorg-foo-app/toolbar';
   const { links, isLoading } = usePluginLinks({ extensionPointId });
 
@@ -149,7 +149,7 @@ export const InstanceToolbar = () => {
   // - Core Grafana -> prefix with "grafana/"
   // - Plugin       -> prefix with "{your-plugin-id}/"
   //
-  // This is also what plugins use when they call `.addComponent()`
+  // This is also what plugins use when they call `addComponent()`
   const extensionPointId = 'myorg-foo-app/toolbar';
   const { components, isLoading } = usePluginComponents({ extensionPointId });
 
