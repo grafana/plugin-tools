@@ -15,7 +15,7 @@ sidebar_position: 20
 
 **Available in Grafana >=v11.1.0.**
 
-This method can be used to register a React component to a certain extension point to implement a new ui experience.
+This method can be used to register a [React component](https://react.dev/learn/your-first-component) to a certain extension point to implement a new ui experience.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addComponent({
@@ -32,12 +32,12 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 The `.addComponent()` method takes a single `config` object with the following properties:
 
-| Property          | Description                                                                                                                                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`targets`**     | A list of identifiers for the extension points you would like to extend. <br /> _E.g.: `"grafana/dashboard/panel/menu"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_ |
-| **`title`**       | A human readable title for the component.                                                                                                                                                                                |
-| **`description`** | A human readable description for the component.                                                                                                                                                                          |
-| **`component`**   | A React component that will be rendered by the extension point. It's up to each extension point to decide what props it is going to pass to the component when rendering.                                                |
+| Property          | Description                                                                                                                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`targets`**     | A list of identifiers for the extension points you would like to extend. <br /> _E.g.: `"grafana/dashboard/panel/menu"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_  |
+| **`title`**       | A human readable title for the component.                                                                                                                                                                                 |
+| **`description`** | A human readable description for the component.                                                                                                                                                                           |
+| **`component`**   | A [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. It's up to each extension point to decide what props it is going to pass to the component when rendering. |
 
 ## Return value
 
