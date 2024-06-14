@@ -1,0 +1,38 @@
+---
+id: work-with-frontend
+title: Work with frontend components
+description: A guide for working with frontend components during Grafana plugin development.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - frontend
+  - CLI
+sidebar_position: 1
+---
+
+import FrontendCLInpm from '@snippets/createplugin-frontend-npm.md';
+import FrontendCLIpnpm from '@snippets/createplugin-frontend-pnpm.md';
+import FrontendCLIYarn from '@snippets/createplugin-frontend-yarn.md';
+
+# Work with frontend components
+
+Develop the frontend component of a Grafana plugin in Typescript with ReactJS as the View library. Several commands are available within the `plugin` directory for interacting with the frontend.
+
+:::warning
+We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in Angular.
+:::
+
+## Frontend CLI reference
+
+You can run the following commands when developing your plugin:
+
+<CodeSnippets
+  snippets={[
+    { component: FrontendCLInpm, label: 'npm' },
+    { component: FrontendCLIpnpm, label: 'pnpm' },
+    { component: FrontendCLIYarn, label: 'yarn' },
+  ]}
+  groupId="frontend-cli"
+  queryString="current-frontend-cli"
+/>

@@ -1,0 +1,70 @@
+---
+id: nested-plugins
+title: Work with nested plugins
+description: How to work with nested plugins, Grafana app plugins.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - advanced
+  - apps 
+  - app plugins 
+  - nested
+---
+
+import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
+import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
+import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
+
+Grafana app plugins can nest data sources, both frontend and backend, together with panel plugins so that you can provide a complete user experience.
+
+## Before you begin
+
+Be sure that you are using the latest `create-plugin` tool:
+
+<CodeSnippets
+  snippets={[
+    { component: ScaffoldNPM, label: 'npm' },
+    { component: ScaffoldPNPM, label: 'pnpm' },
+    { component: ScaffoldYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
+
+## Scaffold an app plugin
+
+To scaffold an app plugin, follow a few easy steps:
+
+1. When prompted `What type of plugin would you like?`, select `app`.
+
+1. Make entries in both the plugin entry file (`module.ts`) and plugin meta file (`plugin.json`). Put them in a directory inside the `./src` directory:
+
+```diff bash
+./src
+ ├── README.md
+ ├── components
++├── datasource
++│   ├── components
++│   │   ├── ConfigEditor.tsx
++│   │   └── QueryEditor.tsx
++│   ├── datasource.ts
++│   ├── img
++│   ├── module.ts
++│   ├── plugin.json
++│   └── types.ts
+ ├── img
+ │   └── logo.svg
+ ├── module.ts
+ └── plugin.json
+```
+
+:::tip
+
+To help speed up development in VS Code, you can download data source and panel plugin source directories directly from the [plugin-examples repo](https://github.dev/grafana/grafana-plugin-examples/tree/main/examples):
+
+1. Press `.` or replace `.com` with `.dev` in the URL to open the repo in the GitHub editor.
+1. In the **Explorer** pane (press Ctrl+Shift+E/Cmd+Shift+E), right-click the required file or folder, and then select **Download**.
+1. On the **Select Folder** dialog, select the directory where you want to put the selected file or folder.
+
+:::

@@ -1,0 +1,122 @@
+---
+id: migrate-from-toolkit
+title: Migrate from toolkit
+sidebar_position: 30
+description: How to migrate your Grafana plugin from Grafana toolkit to create-plugin tool.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - toolkit
+  - Grafana toolkit
+  - migrating
+---
+
+import MigrateNPM from '@snippets/createplugin-migrate.npm.md';
+import MigratePNPM from '@snippets/createplugin-migrate.pnpm.md';
+import MigrateYarn from '@snippets/createplugin-migrate.yarn.md';
+
+The `@grafana/toolkit` tool is now [deprecated](https://grafana.com/docs/grafana/next/breaking-changes/breaking-changes-v10-0/#grafanatoolkit-cli-commands-have-been-removed-and-migrated-to-the-create-plugin-package). If you are still using `@grafana/toolkit` to scaffold and develop plugins, follow this guide to make the jump to our newest plugin tools.
+
+:::warning
+Our plugin tools use ReactJS. We [do not support](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/) plugins written in Angular.
+:::
+
+## Benefits of migrating to the `create-plugin` tool
+
+- **More flexible:** With `create-plugin`, you have more control over your plugins and its dependencies. The additional control translates into greater ease of customizing the tooling to fit your specific needs.
+- **Faster development:** With its out-of-the-box development environment, `create-plugin` can significantly reduce development time compared to using `grafana-toolkit`.
+- **Improved testing capabilities:** Easily test plugins with `create-plugin` GitHub workflows that automate unit and e2e test runs whenever you push changes to GitHub.
+- **Technical support:** The `grafana-toolkit` tool is deprecated and no longer supported by Grafana.
+- **Better documentation:** The documentation for `create-plugin` is more comprehensive and easier to discover than `grafana-toolkit`.
+
+## Migrate your plugin to create-plugin
+
+1. Perform a back up of all your current files. We recommend that you store the plugin code in a Git repository and run the command on a clean branch so that you can easily identify changes made by the migration command.
+
+1. In the root directory of the existing plugin (where the `package.json` file is), run the following command.
+
+<CodeSnippets
+  snippets={[
+    { component: MigrateNPM, label: 'npm' },
+    { component: MigratePNPM, label: 'pnpm' },
+    { component: MigrateYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
+
+1. Follow the prompts that appear. Refer to the list below for details about each potential prompt.
+
+## Prompts
+
+When running the `migrate` command, the following prompts appear. Because of their destructive nature, the prompts have a default value of `no`.
+
+### The following files will be overriden. Would you like to continue?
+
+Select `y` to replace the following files and folders in the plugin directory, or create them if they don't exist:
+
+```
+myplugin-directory/
+├── .config/
+├── .eslintrc
+├── .nvmrc
+├── .prettierrc.js
+├── docker-compose.yaml
+├── jest-setup.js
+├── jest.config.js
+└── tsconfig.json
+```
+
+### The following files are required. Can we scaffold them for you?
+
+Select `y` to make sure a `CHANGELOG.md` file exists in the plugin directory.
+
+### The following files are possibly not needed anymore. Are you ok with us removing them?
+
+Select `y` to delete the following files and folders in the plugin directory:
+
+```
+myplugin-directory/
+├── Dockerfile
+├── docker-compose.yml
+├── webpack/
+├── .webpack/
+└── .prettierrc
+```
+
+### Would you like to update the following dependencies in the package.json?
+
+Select `y` to update all the npm dependencies listed by the prompt. The command purposely avoids updating `@grafana` npm dependencies to reduce potential friction during migration.
+
+### Would you like to remove the following possibly unnecessary NPM dependencies?
+
+Select `y` to delete the following npm dependencies found in `package.json`:
+
+```diff json
+{
+  "devDependencies": {
+-   "ts-loader": "*",
+-   "babel-loader": "*",
+-   "@grafana/toolkit": "*"
+  }
+}
+```
+
+### Would you like to update the scripts in your package.json? All scripts using `grafana-toolkit` will be replaced.
+
+This step updates any npm scripts in the `package.json` file to match the latest configurations. Any scripts that previously used `grafana-toolkit` are replaced.
+
+## Next steps
+
+When the migration command finishes running, follow these following steps:
+
+1. Inspect the changes that were introduced, and then install frontend dependencies.
+
+1. Run each npm script inside `package.json` to confirm that the plugin can be built, tested, and signed.
+
+If the plugin had customizations to the toolkit configs (for example, webpack), then refer to [Extend configurations](/create-a-plugin/extend-a-plugin/extend-configurations) to learn how to update them.
+
+If the plugin can be built, but there are problems with Jest tests, then see the [Jest advanced configuration](/create-a-plugin/extend-a-plugin/extend-configurations#esm-errors-with-jest) issue regarding es modules.
+
+For help with other issues, reach out on [Slack](https://grafana.slack.com/) or the [Community forum](https://community.grafana.com/c/plugin-development/30).

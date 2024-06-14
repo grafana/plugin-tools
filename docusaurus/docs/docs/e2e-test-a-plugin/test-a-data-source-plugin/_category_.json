@@ -1,0 +1,13 @@
+{
+  "position": 70,
+  "label": "Test a data source plugin",
+  "customProps": {
+    "description": "How to test a data source plugin with @grafana/plugin-e2e"
+  },
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "e2e-test-a-plugin/test-a-data-source-plugin/introduction"
+  }
+}

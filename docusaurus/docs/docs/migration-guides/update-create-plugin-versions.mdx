@@ -1,0 +1,30 @@
+---
+id: update-create-plugin-versions
+title: Update create-plugin versions
+sidebar_position: 20
+description: How to update existing plugin create-plugin tool to a newer version.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - create-plugin
+  - migrating
+---
+
+import UpdateNPM from '@snippets/createplugin-update.npm.md';
+import UpdatePNPM from '@snippets/createplugin-update.pnpm.md';
+import UpdateYarn from '@snippets/createplugin-update.yarn.md';
+
+To update an existing plugin to use a newer version of the `create-plugin` tool, run the following command:
+
+<CodeSnippets
+  snippets={[
+    { component: UpdateNPM, label: 'npm' },
+    { component: UpdatePNPM, label: 'pnpm' },
+    { component: UpdateYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
+
+This command reruns the original scaffolding commands against the configuration files, dependencies, and scripts. It automatically uses the latest version of the `create-plugin` tool.
