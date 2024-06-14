@@ -1,6 +1,6 @@
 ---
 id: add-component
-title: .addComponent()
+title: addComponent()
 description: This method can be used to register a React component to a certain extension point to implement a new ui experience.
 keywords:
   - grafana
