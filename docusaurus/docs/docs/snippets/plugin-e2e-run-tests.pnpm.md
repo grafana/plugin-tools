@@ -1,3 +1,0 @@
-```shell
-pnpm playwright test
-```

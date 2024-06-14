@@ -224,4 +224,4 @@ For documentation on the Go implementation of data frames, refer to the [github.
 
 ## Learn more
 
-For a guide to plugin development with data frames, refer to [Work with data frames](../create-a-plugin/develop-a-plugin/work-with-data-frames.md).
+For a guide to plugin development with data frames, refer to [Create data frames](../how-to-guides/data-source-plugins/create-data-frames).

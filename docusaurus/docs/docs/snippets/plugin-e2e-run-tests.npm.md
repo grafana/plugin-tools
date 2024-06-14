@@ -1,3 +1,0 @@
-```shell
-npx playwright test
-```
