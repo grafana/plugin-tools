@@ -1,7 +1,7 @@
 ---
-id: error-handling
-title: Error handling
-description: How to handle errors in plugins.
+id: error-handling-for-panel-plugins
+title: Error handling for panel plugins
+description: How to handle errors in panel plugins.
 keywords:
   - grafana
   - plugins
@@ -12,11 +12,11 @@ keywords:
 
 # Error handling
 
-This guide explains how to handle errors in plugins and provides suggestions for common scenarios.
+This guide explains how to handle errors in panel plugins and provides suggestions for common scenarios.
 
 ## Provide usable defaults
 
-Allow the user to learn your plugin in small steps. Provide a useful default configuration so that:
+Allow the user to learn your panel plugin in small steps. Provide a useful default configuration so that:
 
 - The user can get started right away.
 - You can avoid unnecessary error messages.
@@ -54,24 +54,6 @@ try {
 
 :::note
 
-Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [Documentation style guide](https://grafana.com/docs/writers-toolkit/).
+Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [documentation style guide](https://grafana.com/docs/writers-toolkit/).
 
 :::
-
-## Common error scenarios
-
-Here are some examples of situations where you might want to display an error to the user.
-
-### Invalid query response
-
-Users have full freedom when they create data source queries for panels. If your panel plugin requires a specific format for the query response, then use the panel canvas to guide the user.
-
-```ts
-if (!numberField) {
-  throw new Error('Query result is missing a number field');
-}
-
-if (frame.length === 0) {
-  throw new Error('Query returned an empty result');
-}
-```

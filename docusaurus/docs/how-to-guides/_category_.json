@@ -1,0 +1,8 @@
+{
+  "label": "How-to guides",
+  "customProps": {
+    "description": "Learn how to perform common tasks with Grafana panel plugins."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

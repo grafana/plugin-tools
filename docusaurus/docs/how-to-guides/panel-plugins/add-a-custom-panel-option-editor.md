@@ -1,6 +1,6 @@
 ---
-id: custom-panel-option-editors
-title: Build a custom panel option editor
+id: add-a-custom-panel-option-editor
+title: Add a custom panel option editor
 description: How to build a custom panel option editor.
 keywords:
   - grafana

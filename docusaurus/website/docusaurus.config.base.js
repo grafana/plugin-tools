@@ -101,6 +101,10 @@ const plugins = [
           from: ['/introduction/plugin-types-usage'],
           to: '/key-concepts/plugin-types-usage',
         },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/custom-panel-option-editors'],
+          to: '/how-to-guides/panel-plugins/add-a-custom-panel-option-editor',
+        },
       ],
     },
   ],
