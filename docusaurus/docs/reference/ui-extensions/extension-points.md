@@ -13,7 +13,7 @@ sidebar_position: 0
 
 # Extension points in Grafana
 
-A list of available extension points within Grafana that can be extended by plugins. All these extension point ids can be accessed using the [`PluginExtensionPoints` enum exposed by the `@grafana/data`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) package.
+A list of available extension points within Grafana that can be extended by plugins. All these extension point IDs can be accessed using the [`PluginExtensionPoints` enum exposed by the `@grafana/data`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) package.
 
 ```typescript
 import { PluginExtensionPoints } from '@grafana/data';
