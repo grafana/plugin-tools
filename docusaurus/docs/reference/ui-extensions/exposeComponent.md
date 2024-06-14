@@ -17,7 +17,7 @@ sidebar_position: 30
 Available in Grafana >=v11.1.0.
 :::
 
-This method is exposing a React component and makes it available for other plugins to use. (Any other plugin that knows the `id` can get hold of the exposed component and render it somewhere in their app.)
+This method exposes a React component and makes it available for other plugins to use. Other plugins can render the component within their app by calling [usePluginComponent()](./use-plugin-component) and referencing the `id` of the exposed component.
 
 ```typescript
 export const plugin = new AppPlugin<{}>()
