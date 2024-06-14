@@ -154,7 +154,7 @@ export const plugin = new AppPlugin().addComponent({
 
 ### Accessing plugin meta in a component
 
-You can use the `usePluginContext()` hook to access any plugin specific meta information inside your component. The hook [returns a `PluginMeta` object](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/plugin.ts#L62). (This can be useful because the component that you register from your plugin won't be rendered under the React tree of your plugin, but somewhere else in the UI.)
+You can use the `usePluginContext()` hook to access any plugin specific meta information inside your component. The hook returns a [`PluginMeta`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/plugin.ts#L62) object. This can be useful because the component that you register from your plugin won't be rendered under the React tree of your plugin, but somewhere else in the UI.
 
 ```tsx
 import { usePluginContext, PluginExtensionPoints } from '@grafana/data';
