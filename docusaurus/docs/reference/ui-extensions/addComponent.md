@@ -13,7 +13,9 @@ sidebar_position: 20
 
 # `addComponent(config)`
 
-**Available in Grafana >=v11.1.0.**
+:::info
+Available in Grafana >=v11.1.0.
+:::
 
 This method can be used to register a [React component](https://react.dev/learn/your-first-component) to a certain extension point to contribute a new ui experience.
 
@@ -45,7 +47,10 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 ## Examples
 
-- [Best practices for adding components](../../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-components)
 - [Accessing plugin meta-data in the component](../../tutorials/ui-extensions/register-an-extension.md#accessing-plugin-meta-in-a-component)
 - [Access your plugin's state inside the component](../../tutorials/ui-extensions/register-an-extension.md#access-plugin-state-in-a-component)
 - [Hide a component in certain conditions](../../tutorials/ui-extensions/register-an-extension.md#hide-a-component-in-certain-conditions)
+
+## See also
+
+- [Best practices for adding components](../../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-components)

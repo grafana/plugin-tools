@@ -13,7 +13,9 @@ sidebar_position: 10
 
 # `addLink(config)`
 
-**Available in Grafana >=v11.1.0.**
+:::info
+Available in Grafana >=v11.1.0.
+:::
 
 This method can be used to register a link extension to a certain extension point. Link extensions are used to navigate to different parts of the Grafana UI or other plugins, and can include modal elements declared via an onClick.
 
@@ -47,7 +49,10 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 ## Examples
 
-- [Best practices for adding links](../../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-links)
 - [Hide a link in certain conditions](../../tutorials/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
 - [Update the path based on the context](../../tutorials/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
 - [Open a modal from the `onClick()`](../../tutorials/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
+
+## See also
+
+- [Best practices for adding links](../../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-links)

@@ -21,8 +21,6 @@ import { PluginExtensionPoints } from '@grafana/data';
 const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 ```
 
-We currently have the following extension points available on the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum:
-
 | Property                          | Type      | Description                                                          |
 | --------------------------------- | --------- | -------------------------------------------------------------------- |
 | **`AlertingAlertingRuleAction`**  | Link      | Extend the alert rule menu with custom actions.                      |

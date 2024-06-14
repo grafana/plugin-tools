@@ -13,9 +13,11 @@ sidebar_position: 50
 
 # `usePluginComponents(options)`
 
-**Available in Grafana >=v11.1.0.**
+:::info
+Available in Grafana >=v11.1.0.
+:::
 
-This react hook can be used to fetch _components_ that are registered to a certain extension point. Component extensions can be used to render custom UI components.
+This react hook can be used to fetch _components_ that are registered to a certain extension point. Component extensions can be used to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](./addComponent.md) method.
 
 ```typescript
 import { usePluginComponents } from '@grafana/runtime';
@@ -30,10 +32,10 @@ const { components, isLoading } = usePluginComponents({
 
 The `.usePluginComponents()` method takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                      |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _E.g.: `"grafana/user/profile/tab"`_ |
-| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                       |
+| Property               | Description                                                                                                                                                                                                                                                                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/user/profile/tab"`_ |
+| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                          |
 
 ## Return value
 
@@ -52,6 +54,9 @@ const {
 
 ## Examples
 
-- [Best practices for rendering components added by plugins](../../tutorials/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)
 - [Pass data to the components using props](../../tutorials/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
 - [Limit which plugins can register components to your extension point](../../tutorials/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components)
+
+## See also
+
+- [Best practices for rendering components added by plugins](../../tutorials/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)

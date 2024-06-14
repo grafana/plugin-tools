@@ -13,10 +13,11 @@ sidebar_position: 60
 
 # `usePluginComponent(id)`
 
-**Available in Grafana >=v11.1.0.**
+:::info
+Available in Grafana >=v11.1.0.
+:::
 
-This react hook can be used to **fetch a single react component** that was exposed by a plugin with a unique ID. (Plugins can expose components using the [`AppPlugin.exposeComponent()`](./exposeComponent.md) method.)
-
+This react hook can be used to **fetch a single react component** that was exposed by a plugin with a unique ID. Plugins can expose components using the [`AppPlugin.exposeComponent()`](./exposeComponent.md) method.
 
 ```typescript
 import { usePluginComponent } from '@grafana/runtime';
@@ -45,4 +46,4 @@ const {
 
 ## Examples
 
-- [How to render a component exposed by another plugin?](../../tutorials/ui-extensions/exposed-components.md#using-an-exposed-component)
+- [How to render a component exposed by another plugin?](../../tutorials/ui-extensions/use-an-exposed-component.md#using-an-exposed-component)
