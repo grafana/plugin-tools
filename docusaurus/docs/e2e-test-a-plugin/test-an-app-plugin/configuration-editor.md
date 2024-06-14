@@ -31,8 +31,8 @@ Add an `appConfigPage` value by using a navigation function that returns the def
 For example:
 
 ```ts title="fixtures.ts"
-import { AppConfigPage, test as base } from '@grafana/plugin-e2e';
-import pluginJson from '../src/plugin.json';
+import { AppConfigPage, test as base } from "@grafana/plugin-e2e";
+import pluginJson from "../src/plugin.json";
 
 type AppTestFixture = {
   appConfigPage: AppConfigPage;
@@ -47,7 +47,7 @@ export const test = base.extend<AppTestFixture>({
   },
 });
 
-export { expect } from '@grafana/plugin-e2e';
+export { expect } from "@grafana/plugin-e2e";
 ```
 
 To use the value, import `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When you destructure the `appConfigPage` in your test function, the rest automatically navigates to the config page.
@@ -55,14 +55,19 @@ To use the value, import `test` and `expect` from your fixture instead of `@graf
 For example:
 
 ```ts title="configurationEditor.spec.ts"
-import { test, expect } from './fixtures.ts';
+import { test, expect } from "./fixtures.ts";
 
-test('"Save & test" should be successful when configuration is valid', async ({ appConfigPage, page }) => {
-  const saveButton = page.getByRole('button', { name: /Save & test/i });
+test('"Save & test" should be successful when configuration is valid', async ({
+  appConfigPage,
+  page,
+}) => {
+  const saveButton = page.getByRole("button", { name: /Save & test/i });
 
-  await page.getByRole('textbox', { name: 'API Key' }).fill('secret-api-key');
-  await page.getByRole('textbox', { name: 'API Url' }).clear();
-  await page.getByRole('textbox', { name: 'API Url' }).fill('http://www.my-awsome-grafana-app.com/api');
+  await page.getByRole("textbox", { name: "API Key" }).fill("secret-api-key");
+  await page.getByRole("textbox", { name: "API Url" }).clear();
+  await page
+    .getByRole("textbox", { name: "API Url" })
+    .fill("http://www.my-awsome-grafana-app.com/api");
 
   const saveResponse = appConfigPage.waitForSettingsResponse();
 
@@ -78,21 +83,21 @@ Add an `appConfigPage` by using a navigation function that returns the default `
 For example:
 
 ```ts title="fixtures.ts"
-import { AppConfigPage, test as base } from '@grafana/plugin-e2e';
-import pluginJson from '../src/plugin.json';
+import { AppConfigPage, test as base } from "@grafana/plugin-e2e";
+import pluginJson from "../src/plugin.json";
 
 class MyAppConfigPage extends AppConfigPage {
   async fillApiKey(key: string): Promise<void> {
-    await page.getByRole('textbox', { name: 'API Key' }).fill(key);
+    await page.getByRole("textbox", { name: "API Key" }).fill(key);
   }
 
   async fillApiUrl(url: string): Promise<void> {
-    await page.getByRole('textbox', { name: 'API Url' }).clear();
-    await page.getByRole('textbox', { name: 'API Url' }).fill(url);
+    await page.getByRole("textbox", { name: "API Url" }).clear();
+    await page.getByRole("textbox", { name: "API Url" }).fill(url);
   }
 
   async save(): Promise<void> {
-    await page.getByRole('button', { name: /Save & test/i }).click();
+    await page.getByRole("button", { name: /Save & test/i }).click();
   }
 }
 
@@ -101,7 +106,11 @@ type AppTestFixture = {
 };
 
 export const test = base.extend<AppTestFixture>({
-  appConfigPage: async ({ page, selectors, grafanaVersion, request }, use, testInfo) => {
+  appConfigPage: async (
+    { page, selectors, grafanaVersion, request },
+    use,
+    testInfo
+  ) => {
     const configPage = new MyAppConfigPage(
       { page, selectors, grafanaVersion, request, testInfo },
       {
@@ -113,7 +122,7 @@ export const test = base.extend<AppTestFixture>({
   },
 });
 
-export { expect } from '@grafana/plugin-e2e';
+export { expect } from "@grafana/plugin-e2e";
 ```
 
 To use the value, import `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When you destructure the `appConfigPage` in your test function, the test automatically navigates to the config page.
@@ -121,11 +130,14 @@ To use the value, import `test` and `expect` from your fixture instead of `@graf
 For example:
 
 ```ts title="configurationEditor.spec.ts"
-import { test, expect } from './fixtures.ts';
+import { test, expect } from "./fixtures.ts";
 
-test('"Save & test" should be successful when configuration is valid', async ({ appConfigPage, page }) => {
-  await appConfigPage.fillApiKey('secret-api-key');
-  await appConfigPage.fillApiUrl('http://www.my-awsome-grafana-app.com/api');
+test('"Save & test" should be successful when configuration is valid', async ({
+  appConfigPage,
+  page,
+}) => {
+  await appConfigPage.fillApiKey("secret-api-key");
+  await appConfigPage.fillApiUrl("http://www.my-awsome-grafana-app.com/api");
 
   const saveResponse = appConfigPage.waitForSettingsResponse();
 
@@ -141,19 +153,22 @@ In some cases when the provided configuration is not valid, you may want to capt
 For example:
 
 ```ts title="configurationEditor.spec.ts"
-import { test, expect } from './fixtures.ts';
+import { test, expect } from "./fixtures.ts";
 
-test('"Save & test" should fail when configuration is invalid', async ({ appConfigPage, page }) => {
-  const saveButton = page.getByRole('button', { name: /Save & test/i });
+test('"Save & test" should fail when configuration is invalid', async ({
+  appConfigPage,
+  page,
+}) => {
+  const saveButton = page.getByRole("button", { name: /Save & test/i });
 
-  await page.getByRole('textbox', { name: 'API Url' }).clear();
-  await page.getByRole('textbox', { name: 'API Url' }).fill('not a url');
+  await page.getByRole("textbox", { name: "API Url" }).clear();
+  await page.getByRole("textbox", { name: "API Url" }).fill("not a url");
 
   const saveResponse = appConfigPage.waitForSettingsResponse();
 
   await saveButton.click();
 
-  await expect(appConfigPage).toHaveAlert('error');
+  await expect(appConfigPage).toHaveAlert("error");
   await expect(saveResponse).not.toBeOK();
 });
 ```

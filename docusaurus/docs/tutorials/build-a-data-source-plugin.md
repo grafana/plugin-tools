@@ -90,7 +90,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 1. In the `map` function, use the `lodash/defaults` package to set default values for query properties that haven't been set:
 
    ```ts title="src/datasource.ts"
-   import defaults from 'lodash/defaults';
+   import defaults from "lodash/defaults";
 
    const query = defaults(target, defaultQuery);
    ```
@@ -109,8 +109,8 @@ Let's see how to create and return a data frame from the `query` method. In this
    const frame = new MutableDataFrame({
      refId: query.refId,
      fields: [
-       { name: 'time', type: FieldType.time },
-       { name: 'value', type: FieldType.number },
+       { name: "time", type: FieldType.time },
+       { name: "value", type: FieldType.number },
      ],
    });
    ```
@@ -133,7 +133,10 @@ Next, we'll add the actual values to the data frame. Don't worry about the math 
 
    ```ts title="src/datasource.ts"
    for (let t = 0; t < duration; t += step) {
-     frame.add({ time: from + t, value: Math.sin((2 * Math.PI * t) / duration) });
+     frame.add({
+       time: from + t,
+       value: Math.sin((2 * Math.PI * t) / duration),
+     });
    }
    ```
 
@@ -196,7 +199,7 @@ Now that you've defined the query model you wish to support, the next step is to
    const { queryText, constant, frequency } = query;
 
    <InlineField label="Frequency" labelWidth={16}>
-     <Input onChange={onFrequencyChange} value={frequency || ''} />
+     <Input onChange={onFrequencyChange} value={frequency || ""} />
    </InlineField>;
    ```
 
@@ -221,7 +224,10 @@ The new query model is now ready to use in our `query` method.
 1. In the `query` method, use the `frequency` property to adjust our equation.
 
    ```ts title="src/datasource.ts"
-   frame.add({ time: from + t, value: Math.sin((2 * Math.PI * query.frequency * t) / duration) });
+   frame.add({
+     time: from + t,
+     value: Math.sin((2 * Math.PI * query.frequency * t) / duration),
+   });
    ```
 
 1. Try it out by changing the frequency in the query for your panel.
@@ -255,7 +261,12 @@ Just like query editor, the form field in the config editor calls the registered
 
    ```tsx title="src/components/ConfigEditor.tsx"
    <InlineField label="Resolution" labelWidth={12}>
-     <Input onChange={onResolutionChange} value={jsonData.resolution || ''} placeholder="Enter a number" width={40} />
+     <Input
+       onChange={onResolutionChange}
+       value={jsonData.resolution || ""}
+       placeholder="Enter a number"
+       width={40}
+     />
    </InlineField>
    ```
 

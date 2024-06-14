@@ -43,7 +43,11 @@ In Angular plugins, a common pattern is to use kbn to get a format function for 
 
 ```ts
 const formatFunc = kbn.valueFormats[this.panel.format];
-data.valueFormatted = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
+data.valueFormatted = formatFunc(
+  data.value,
+  decimalInfo.decimals,
+  decimalInfo.scaledDecimals
+);
 ```
 
 There are several methods for formatting a value to include the unit for text output, each addressing different scenarios.
@@ -51,7 +55,12 @@ There are several methods for formatting a value to include the unit for text ou
 Iterate the fields of the frame to get all value fields, then process each of them, as shown in the following example. This is a basic example; typically, more code is required to include `valueMappings` and other overrides.
 
 ```ts
-import { formattedValueToString, getFieldDisplayName, getValueFormat, reduceField } from '@grafana/data';
+import {
+  formattedValueToString,
+  getFieldDisplayName,
+  getValueFormat,
+  reduceField,
+} from "@grafana/data";
 
 const valueFields: Field[] = [];
 for (const aField of frame.fields) {
@@ -60,8 +69,16 @@ for (const aField of frame.fields) {
   }
 }
 for (const valueField of valueFields) {
-  const standardCalcs = reduceField({ field: valueField!, reducers: ['bogus'] });
-  const result = getValueFormat(valueField!.config.unit)(operatorValue, maxDecimals, undefined, undefined);
+  const standardCalcs = reduceField({
+    field: valueField!,
+    reducers: ["bogus"],
+  });
+  const result = getValueFormat(valueField!.config.unit)(
+    operatorValue,
+    maxDecimals,
+    undefined,
+    undefined
+  );
   const valueFormatted = formattedValueToString(result);
 }
 ```
@@ -83,7 +100,7 @@ data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
 Convert this code like so:
 
 ```ts
-import { roundDecimals } from '@grafana/data';
+import { roundDecimals } from "@grafana/data";
 const valueRounded = roundDecimals(data.value, decimalInfo.decimals);
 ```
 

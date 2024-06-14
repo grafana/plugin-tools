@@ -33,10 +33,10 @@ const numberValues = [12.3, 28.6];
 
 // Create data frame from values.
 const frame = toDataFrame({
-  name: 'http_requests_total',
+  name: "http_requests_total",
   fields: [
-    { name: 'Time', type: FieldType.time, values: timeValues },
-    { name: 'Value', type: FieldType.number, values: numberValues },
+    { name: "Time", type: FieldType.time, values: timeValues },
+    { name: "Value", type: FieldType.number, values: numberValues },
   ],
 });
 ```
@@ -56,7 +56,7 @@ const series = [
 ];
 
 const frame = toDataFrame(series);
-frame.name = 'http_requests_total';
+frame.name = "http_requests_total";
 ```
 
 ## Read values from a data frame
@@ -75,7 +75,9 @@ Before you start reading the data, think about what data you expect. For example
 
 ```ts
 const timeField = frame.fields.find((field) => field.type === FieldType.time);
-const valueField = frame.fields.find((field) => field.type === FieldType.number);
+const valueField = frame.fields.find(
+  (field) => field.type === FieldType.number
+);
 ```
 
 Other types of visualizations might need multiple dimensions. For example, a bubble chart that uses three numeric fields: the X-axis, Y-axis, and one for the radius of each bubble. In this case, instead of hard coding the field names, we recommend that you let the user choose the field to use for each dimension.
@@ -109,7 +111,9 @@ Field options let the user control how Grafana displays the data in a data frame
 To apply the field options to a value, use the `display` method on the corresponding field. The result contains information such as the color and suffix to use when display the value.
 
 ```tsx
-const valueField = frame.fields.find((field) => field.type === FieldType.number);
+const valueField = frame.fields.find(
+  (field) => field.type === FieldType.number
+);
 
 return (
   <div>
@@ -118,7 +122,8 @@ return (
           const displayValue = valueField.display!(value);
           return (
             <p style={{ color: displayValue.color }}>
-              {displayValue.text} {displayValue.suffix ? displayValue.suffix : ''}
+              {displayValue.text}{" "}
+              {displayValue.suffix ? displayValue.suffix : ""}
             </p>
           );
         })
@@ -130,6 +135,8 @@ return (
 To apply field options to the name of a field, use `getFieldDisplayName`.
 
 ```ts
-const valueField = frame.fields.find((field) => field.type === FieldType.number);
+const valueField = frame.fields.find(
+  (field) => field.type === FieldType.number
+);
 const valueFieldName = getFieldDisplayName(valueField, frame);
 ```

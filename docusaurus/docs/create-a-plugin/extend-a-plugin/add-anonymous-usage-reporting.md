@@ -23,21 +23,21 @@ In this section, we show an example of tracking usage data from a query editor a
 Let's say you have a `QueryEditor` that looks similar to the example below. It has a `CodeEditor` field where you can write your query and a query type selector so you can select the kind of query result that you expect to return:
 
 ```tsx
-import React, { ReactElement } from 'react';
-import { InlineFieldRow, InlineField, Select, CodeEditor } from '@grafana/ui';
-import type { EditorProps } from './types';
+import React, { ReactElement } from "react";
+import { InlineFieldRow, InlineField, Select, CodeEditor } from "@grafana/ui";
+import type { EditorProps } from "./types";
 
 export function QueryEditor(props: EditorProps): ReactElement {
   const { datasource, query, onChange, onRunQuery } = props;
-  const queryType = { value: query.value ?? 'timeseries' };
+  const queryType = { value: query.value ?? "timeseries" };
   const queryTypes = [
     {
-      label: 'Timeseries',
-      value: 'timeseries',
+      label: "Timeseries",
+      value: "timeseries",
     },
     {
-      label: 'Table',
-      value: 'table',
+      label: "Table",
+      value: "table",
     },
   ];
 
@@ -70,7 +70,11 @@ export function QueryEditor(props: EditorProps): ReactElement {
       </div>
       <InlineFieldRow>
         <InlineField label="Query type" grow>
-          <Select options={queryTypes} onChange={onChangeQueryType} value={queryType} />
+          <Select
+            options={queryTypes}
+            onChange={onChangeQueryType}
+            value={queryType}
+          />
         </InlineField>
       </InlineFieldRow>
     </>
@@ -88,25 +92,25 @@ What you want to do is to add the `usePluginInteractionReporter` to fetch a repo
 - Optional: Attached contextual data. In our example, that is the query type.
 
 ```tsx
-import React, { ReactElement } from 'react';
-import { InlineFieldRow, InlineField, Select, CodeEditor } from '@grafana/ui';
-import { usePluginInteractionReporter } from '@grafana/runtime';
-import type { EditorProps } from './types';
+import React, { ReactElement } from "react";
+import { InlineFieldRow, InlineField, Select, CodeEditor } from "@grafana/ui";
+import { usePluginInteractionReporter } from "@grafana/runtime";
+import type { EditorProps } from "./types";
 
 export function QueryEditor(props: EditorProps): ReactElement {
   const { datasource, query, onChange, onRunQuery } = props;
 
   const report = usePluginInteractionReporter(); //  get the report function
 
-  const queryType = { value: query.value ?? 'timeseries' };
+  const queryType = { value: query.value ?? "timeseries" };
   const queryTypes = [
     {
-      label: 'Timeseries',
-      value: 'timeseries',
+      label: "Timeseries",
+      value: "timeseries",
     },
     {
-      label: 'Table',
-      value: 'table',
+      label: "Table",
+      value: "table",
     },
   ];
 
@@ -125,7 +129,7 @@ export function QueryEditor(props: EditorProps): ReactElement {
     });
 
     //  send this report with two arguments
-    report('grafana_plugin_executed_query', {
+    report("grafana_plugin_executed_query", {
       query_type: queryType.value,
     });
 
@@ -145,7 +149,11 @@ export function QueryEditor(props: EditorProps): ReactElement {
       </div>
       <InlineFieldRow>
         <InlineField label="Query type" grow>
-          <Select options={queryTypes} onChange={onChangeQueryType} value={queryType} />
+          <Select
+            options={queryTypes}
+            onChange={onChangeQueryType}
+            value={queryType}
+          />
         </InlineField>
       </InlineFieldRow>
     </>

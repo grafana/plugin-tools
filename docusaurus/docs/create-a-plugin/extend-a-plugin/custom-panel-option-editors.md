@@ -25,23 +25,32 @@ The simplest editor is a React component that accepts two props:
 The editor in the example below lets the user toggle a boolean value by clicking a button:
 
 ```tsx title="src/SimpleEditor.tsx"
-import React from 'react';
-import { Button } from '@grafana/ui';
-import { StandardEditorProps } from '@grafana/data';
+import React from "react";
+import { Button } from "@grafana/ui";
+import { StandardEditorProps } from "@grafana/data";
 
-export const SimpleEditor = ({ value, onChange }: StandardEditorProps<boolean>) => {
-  return <Button onClick={() => onChange(!value)}>{value ? 'Disable' : 'Enable'}</Button>;
+export const SimpleEditor = ({
+  value,
+  onChange,
+}: StandardEditorProps<boolean>) => {
+  return (
+    <Button onClick={() => onChange(!value)}>
+      {value ? "Disable" : "Enable"}
+    </Button>
+  );
 };
 ```
 
 To use a custom panel option editor, use the `addCustomEditor` on the `OptionsUIBuilder` object in your `module.ts` file and set the `editor` property to the name of your custom editor component.
 
 ```ts title="src/module.ts"
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<SimpleOptions>(
+  SimplePanel
+).setPanelOptions((builder) => {
   return builder.addCustomEditor({
-    id: 'label',
-    path: 'label',
-    name: 'Label',
+    id: "label",
+    path: "label",
+    name: "Label",
     editor: SimpleEditor,
   });
 });
@@ -75,18 +84,26 @@ export const SimpleEditor = ({ item, value, onChange }: Props) => {
     });
   }
 
-  return <Select options={options} value={value} onChange={(selectableValue) => onChange(selectableValue.value)} />;
+  return (
+    <Select
+      options={options}
+      value={value}
+      onChange={(selectableValue) => onChange(selectableValue.value)}
+    />
+  );
 };
 ```
 
 You can now configure the editor for each option by configuring the `settings` property to call `addCustomEditor`:
 
 ```ts title="src/module.ts"
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<SimpleOptions>(
+  SimplePanel
+).setPanelOptions((builder) => {
   return builder.addCustomEditor({
-    id: 'index',
-    path: 'index',
-    name: 'Index',
+    id: "index",
+    path: "index",
+    name: "Index",
     editor: SimpleEditor,
     settings: {
       from: 1,
@@ -103,7 +120,12 @@ Option editors can access the results from the last query. This lets you update 
 The editor context is available through the `context` prop. The data frames returned by the data source are available under `context.data`.
 
 ```tsx title="src/SimpleEditor.tsx"
-export const SimpleEditor = ({ item, value, onChange, context }: StandardEditorProps<string>) => {
+export const SimpleEditor = ({
+  item,
+  value,
+  onChange,
+  context,
+}: StandardEditorProps<string>) => {
   const options: SelectableValue<string>[] = [];
 
   if (context.data) {
@@ -117,6 +139,12 @@ export const SimpleEditor = ({ item, value, onChange, context }: StandardEditorP
     }
   }
 
-  return <Select options={options} value={value} onChange={(selectableValue) => onChange(selectableValue.value)} />;
+  return (
+    <Select
+      options={options}
+      value={value}
+      onChange={(selectableValue) => onChange(selectableValue.value)}
+    />
+  );
 };
 ```

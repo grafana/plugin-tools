@@ -73,14 +73,19 @@ To work around this, we provide a list of known packages to pass to the `[transf
 If need be, this can be extended in the following way:
 
 ```javascript
-process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/utils');
+process.env.TZ = "UTC";
+const {
+  grafanaESModules,
+  nodeModulesToTransform,
+} = require("./.config/jest/utils");
 
 module.exports = {
   // Jest configuration provided by @grafana/create-plugin
-  ...require('./.config/jest.config'),
+  ...require("./.config/jest.config"),
   // Inform Jest to only transform specific node_module packages.
-  transformIgnorePatterns: [nodeModulesToTransform([...grafanaESModules, 'packageName'])],
+  transformIgnorePatterns: [
+    nodeModulesToTransform([...grafanaESModules, "packageName"]),
+  ],
 };
 ```
 

@@ -29,14 +29,21 @@ The Table panel defines a custom panel option called `Show table header` by defa
 The following test verifies that field names (headers) are displayed by default, and that they are removed when the `Show table header` option is not selected:
 
 ```ts
-test('should hide headers when "Show table header" is unchecked', async ({ panelEditPage, selectors }) => {
-  await panelEditPage.datasource.set('gdev-testdata');
-  await panelEditPage.setVisualization('Table');
+test('should hide headers when "Show table header" is unchecked', async ({
+  panelEditPage,
+  selectors,
+}) => {
+  await panelEditPage.datasource.set("gdev-testdata");
+  await panelEditPage.setVisualization("Table");
   await expect(await panelEditPage.panel.fieldNames.count()).toBeGreaterThan(0);
   const showTableHeaderSwitch = panelEditPage
-    .getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel('Table Show table header'))
-    .getByLabel('Toggle switch');
-  await panelEditPage.collapseSection('Table');
+    .getByGrafanaSelector(
+      selectors.components.PanelEditor.OptionsPane.fieldLabel(
+        "Table Show table header"
+      )
+    )
+    .getByLabel("Toggle switch");
+  await panelEditPage.collapseSection("Table");
   await showTableHeaderSwitch.uncheck();
   await expect(panelEditPage.panel.fieldNames).not.toBeVisible();
 });
@@ -53,13 +60,16 @@ A panel doesn't have to support every data type. However, if your panel is suppo
 If a data source returns [`No Data`](https://grafana.com/developers/dataplane/#no-data-and-empty), then it's good practice to indicate that to users. In the following snippet, we test how the Table panel handles the `No Data` scenario:
 
 ```ts
-test('should display "No data" in case no data response was passed to the panel', async ({ panelEditPage, page }) => {
-  await panelEditPage.datasource.set('gdev-testdata');
-  await panelEditPage.setVisualization('Table');
-  await page.getByLabel('Scenario').last().click();
-  await page.getByText('No Data Points').click();
+test('should display "No data" in case no data response was passed to the panel', async ({
+  panelEditPage,
+  page,
+}) => {
+  await panelEditPage.datasource.set("gdev-testdata");
+  await panelEditPage.setVisualization("Table");
+  await page.getByLabel("Scenario").last().click();
+  await page.getByText("No Data Points").click();
   await panelEditPage.refreshPanel();
-  await expect(panelEditPage.panel.locator).toContainText('No data');
+  await expect(panelEditPage.panel.locator).toContainText("No data");
 });
 ```
 
@@ -72,18 +82,20 @@ Additionally, there will also be a dropdown menu in the panel which allow the us
 The following snippet tests that the plugin displays the dropdown menu with two values in case two frames are being passed to the panel:
 
 ```ts
-test('should display dropdown with two values when two frames are passed to the panel', async ({
+test("should display dropdown with two values when two frames are passed to the panel", async ({
   panelEditPage,
   page,
   selectors,
 }) => {
-  await panelEditPage.datasource.set('gdev-testdata');
-  await panelEditPage.setVisualization('Table');
-  await panelEditPage.getQueryEditorRow('A').getByLabel('Alias').fill('a');
-  await page.getByText('Add query').click();
-  await panelEditPage.getQueryEditorRow('B').getByLabel('Alias').fill('b');
+  await panelEditPage.datasource.set("gdev-testdata");
+  await panelEditPage.setVisualization("Table");
+  await panelEditPage.getQueryEditorRow("A").getByLabel("Alias").fill("a");
+  await page.getByText("Add query").click();
+  await panelEditPage.getQueryEditorRow("B").getByLabel("Alias").fill("b");
   await panelEditPage.refreshPanel();
-  await panelEditPage.panel.locator.getByRole('combobox').click();
-  await expect(panelEditPage.getByTestIdOrAriaLabel(selectors.components.Select.option)).toHaveText(['a', 'b']);
+  await panelEditPage.panel.locator.getByRole("combobox").click();
+  await expect(
+    panelEditPage.getByTestIdOrAriaLabel(selectors.components.Select.option)
+  ).toHaveText(["a", "b"]);
 });
 ```

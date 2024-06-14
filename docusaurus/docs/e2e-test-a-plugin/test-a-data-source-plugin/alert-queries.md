@@ -26,13 +26,21 @@ The APIs for end-to-end testing alert rules are only compatible with Grafana >=9
 The following example uses the `alertRulePage` fixture. With this fixture, the test starts in the page for adding a new alert rule. You then fill in the alert rule query and call the `evaluate` function. Evaluate clicks the `Preview` button which triggers a call to the `eval` endpoint to evaluate that the response of the data source query can be used to create an alert. The `toBeOK` matcher is used to verify that the evaluation was successful.
 
 ```ts
-test('should evaluate to true if query is valid', async ({ page, alertRuleEditPage, selectors }) => {
-  const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
-  await queryA.datasource.set('gdev-prometheus');
-  await queryA.locator.getByLabel('Code').click();
+test("should evaluate to true if query is valid", async ({
+  page,
+  alertRuleEditPage,
+  selectors,
+}) => {
+  const queryA = alertRuleEditPage.getAlertRuleQueryRow("A");
+  await queryA.datasource.set("gdev-prometheus");
+  await queryA.locator.getByLabel("Code").click();
   await page.waitForFunction(() => window.monaco);
-  await queryA.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
-  await page.keyboard.insertText('topk(5, max(scrape_duration_seconds) by (job))');
+  await queryA
+    .getByGrafanaSelector(selectors.components.CodeEditor.container)
+    .click();
+  await page.keyboard.insertText(
+    "topk(5, max(scrape_duration_seconds) by (job))"
+  );
   await expect(alertRuleEditPage.evaluate()).toBeOK();
 });
 ```
@@ -42,11 +50,11 @@ test('should evaluate to true if query is valid', async ({ page, alertRuleEditPa
 You can also use a provisioned alert rule to test that your data source is compatible with alerting. For example:
 
 ```ts
-test('should evaluate to true when loading a provisioned query that is valid', async ({
+test("should evaluate to true when loading a provisioned query that is valid", async ({
   gotoAlertRuleEditPage,
   readProvisionedAlertRule,
 }) => {
-  const alertRule = await readProvisionedAlertRule({ fileName: 'alerts.yml' });
+  const alertRule = await readProvisionedAlertRule({ fileName: "alerts.yml" });
   const alertRuleEditPage = await gotoAlertRuleEditPage(alertRule);
   await expect(alertRuleEditPage.evaluate()).toBeOK();
 });

@@ -37,8 +37,8 @@ To start a test in a new, empty page of a certain type, use the camel case repre
 The following example uses the variable edit page. When using the `variableEditPage` fixture, the test will start with an empty variable edit form in a new dashboard.
 
 ```ts
-test('test variable edit page', async ({ variableEditPage }) => {
-  await variableEditPage.setVariableType('Query');
+test("test variable edit page", async ({ variableEditPage }) => {
+  await variableEditPage.setVariableType("Query");
 });
 ```
 
@@ -49,8 +49,11 @@ To start a test with a page object model that points to an aready existing resou
 The following example uses the `gotoAnnotationEditPage` fixture to resolve an `AnnotationEditPage` model. Invoking this fixture will navigate to the edit form for an existing annotation in an existing dashboard.
 
 ```ts
-test('test annotation query', async ({ gotoAnnotationEditPage }) => {
-  const annotationEditPage = await gotoAnnotationEditPage({ dashboard: { uid: 'trlxrdZVk' }, id: '1' });
+test("test annotation query", async ({ gotoAnnotationEditPage }) => {
+  const annotationEditPage = await gotoAnnotationEditPage({
+    dashboard: { uid: "trlxrdZVk" },
+    id: "1",
+  });
   await expect(annotationEditPage.runQuery()).toBeOK();
 });
 ```

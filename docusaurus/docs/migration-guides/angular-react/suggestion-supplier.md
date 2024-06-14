@@ -34,8 +34,8 @@ import { MyDataSuggestionsSupplier } from './suggestions';
 Here is an example suggestion supplier derived from polystat:
 
 ```ts
-import { VisualizationSuggestionsBuilder } from '@grafana/data';
-import { MyOptions } from './types';
+import { VisualizationSuggestionsBuilder } from "@grafana/data";
+import { MyOptions } from "./types";
 
 export class MyDataSuggestionsSupplier {
   getSuggestionsForData(builder: VisualizationSuggestionsBuilder) {
@@ -49,13 +49,13 @@ export class MyDataSuggestionsSupplier {
     }
 
     const list = builder.getListAppender<MyOptions, {}>({
-      name: 'MyPanel',
-      pluginId: 'myorg-description-panel',
+      name: "MyPanel",
+      pluginId: "myorg-description-panel",
       options: {},
     });
 
     list.append({
-      name: 'MyPanel',
+      name: "MyPanel",
     });
   }
 }

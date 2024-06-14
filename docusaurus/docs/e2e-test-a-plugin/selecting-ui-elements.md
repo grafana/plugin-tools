@@ -27,7 +27,9 @@ Selecting Grafana UI elements can be challenging because the selector may be def
 All [pages](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/pages) defined by `@grafana/plugin-e2e` expose a `getByGrafanaSelector` method. This method returns a Playwright [locator](https://playwright.dev/docs/locators) that resolves to one or more elements, using the appropriate HTML attribute as defined on the element. Whenever you want to resolve a Playwright locator based on a [grafana/e2e-selectors](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors), you should always use this method.
 
 ```ts
-panelEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
+panelEditPage
+  .getByGrafanaSelector(selectors.components.CodeEditor.container)
+  .click();
 ```
 
 ## The selectors fixture
@@ -37,11 +39,17 @@ Selectors defined in the `@grafana/e2e-selectors` package are tied to a specific
 To overcome this issue, `@grafana/plugin-e2e` has its own copy of end-to-end selectors. These selectors are a subset of the selectors defined in `@grafana/e2e-selectors`, and each selector value has defined a minimum Grafana version. When you start a new end-to-end test session, `@grafana/plugin-e2e` checks what version of Grafana is under test and resolves the selectors that are associated with the running version. The selectors are provided through the `selectors` fixture.
 
 ```ts
-import { test, expect } from '@grafana/plugin-e2e';
+import { test, expect } from "@grafana/plugin-e2e";
 
-test('annotation query should be OK when query is valid', async ({ annotationEditPage, page, selectors }) => {
-  await annotationEditPage.datasource.set('E2E Test Data Source');
-  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).fill('SELECT * FROM users');
+test("annotation query should be OK when query is valid", async ({
+  annotationEditPage,
+  page,
+  selectors,
+}) => {
+  await annotationEditPage.datasource.set("E2E Test Data Source");
+  await annotationEditPage
+    .getByGrafanaSelector(selectors.components.CodeEditor.container)
+    .fill("SELECT * FROM users");
   await expect(annotationEditPage.runQuery()).toBeOK();
 });
 ```
@@ -55,19 +63,19 @@ As stated above, you should always use the `getByGrafanaSelector` method when th
 To make your tests more robust, it's good to scoop locators to your plugin context. The following example may work, but it's brittle as it will no longer work if another element with the text `URL` is added to the page somewhere outside of your plugin.
 
 ```ts
-page.getByText('URL').click();
+page.getByText("URL").click();
 ```
 
 There are many ways to scope selectors. You can wrap the component in a div with an `data-testid` and use the ID when accessing the element.
 
 ```ts
-page.getByTestId('plugin-url-wrapper').getByText('URL').click();
+page.getByTestId("plugin-url-wrapper").getByText("URL").click();
 ```
 
 If you're testing a data source query editor, you can scope the locator to the the query editor row.
 
 ```ts
-explorePage.getQueryEditorRow('A').getByLabel('Query').fill('sum(*)');
+explorePage.getQueryEditorRow("A").getByLabel("Query").fill("sum(*)");
 ```
 
 ### Form element examples
@@ -85,7 +93,7 @@ You can use the `InlineField` component to interact with the UI.
 ```
 
 ```ts title="Playwright test"
-await page.getByRole('textbox', { name: 'Auth key' }).fill('..');
+await page.getByRole("textbox", { name: "Auth key" }).fill("..");
 ```
 
 #### Select field
@@ -94,16 +102,26 @@ Unlike many other components that require you to pass an `id` prop to be able to
 
 ```tsx title="UI component"
 <InlineField label="Auth type">
-  <Select inputId="config-auth-type" value={value} options={options} onChange={handleOnChange} />
+  <Select
+    inputId="config-auth-type"
+    value={value}
+    options={options}
+    onChange={handleOnChange}
+  />
 </InlineField>
 ```
 
 ```ts title="Playwright test"
-test('testing select component', async ({ page, selectors }) => {
-  const configPage = await createDataSourceConfigPage({ type: 'test-datasource' });
-  await page.getByRole('combobox', { name: 'Auth type' }).click();
+test("testing select component", async ({ page, selectors }) => {
+  const configPage = await createDataSourceConfigPage({
+    type: "test-datasource",
+  });
+  await page.getByRole("combobox", { name: "Auth type" }).click();
   const option = selectors.components.Select.option;
-  await expect(configPage.getByGrafanaSelector(option)).toHaveText(['val1', 'val2']);
+  await expect(configPage.getByGrafanaSelector(option)).toHaveText([
+    "val1",
+    "val2",
+  ]);
 });
 ```
 
@@ -120,8 +138,12 @@ You can use the `Checkbox` component to interact with the UI.
 In the `Checkbox` component, the input element isn't clickable, so you need to bypass the Playwright actionability check by setting `force: true`.
 
 ```ts title="Playwright test"
-await page.getByRole('checkbox', { name: 'TLS Enabled' }).uncheck({ force: true });
-await expect(page.getByRole('checkbox', { name: 'TLS Enabled' })).not.toBeChecked();
+await page
+  .getByRole("checkbox", { name: "TLS Enabled" })
+  .uncheck({ force: true });
+await expect(
+  page.getByRole("checkbox", { name: "TLS Enabled" })
+).not.toBeChecked();
 ```
 
 #### InlineSwitch field
@@ -142,7 +164,7 @@ You can use the `InlineSwitch` component to interact with the UI.
 Like in the `Checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
 
 ```ts title="Playwright test"
-let switchLocator = page.getByLabel('TLS Enabled');
+let switchLocator = page.getByLabel("TLS Enabled");
 await switchLocator.uncheck({ force: true });
 await expect(switchLocator).not.toBeChecked();
 ```
@@ -154,9 +176,9 @@ In Grafana versions older than 9.3.0, the label can't be associated with the che
 :::
 
 ```ts title="Playwright test"
-const label = 'Inline field with switch';
+const label = "Inline field with switch";
 let switchLocator = page.getByLabel(label);
-if (semver.lt(grafanaVersion, '9.3.0')) {
-  switchLocator = page.locator(`[label="${label}"]`).locator('../label');
+if (semver.lt(grafanaVersion, "9.3.0")) {
+  switchLocator = page.locator(`[label="${label}"]`).locator("../label");
 }
 ```

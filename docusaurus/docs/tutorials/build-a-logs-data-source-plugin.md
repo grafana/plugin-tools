@@ -75,18 +75,43 @@ frame.SetMeta(&data.FrameMeta{
 **Example of constructing a logs data frame in TypeScript:**
 
 ```ts
-import { createDataFrame, DataFrameType, FieldType } from '@grafana/data';
+import { createDataFrame, DataFrameType, FieldType } from "@grafana/data";
 
 const result = createDataFrame({
   fields: [
-    { name: 'timestamp', type: FieldType.time, values: [1645030244810, 1645030247027, 1645030247027] },
-    { name: 'body', type: FieldType.string, values: ['message one', 'message two', 'message three'] },
-    { name: 'severity', type: FieldType.string, values: ['critical', 'error', 'warning'] },
-    { name: 'id', type: FieldType.string, values: ['xxx-001', 'xyz-002', '111-003'] },
     {
-      name: 'labels',
+      name: "timestamp",
+      type: FieldType.time,
+      values: [1645030244810, 1645030247027, 1645030247027],
+    },
+    {
+      name: "body",
+      type: FieldType.string,
+      values: ["message one", "message two", "message three"],
+    },
+    {
+      name: "severity",
+      type: FieldType.string,
+      values: ["critical", "error", "warning"],
+    },
+    {
+      name: "id",
+      type: FieldType.string,
+      values: ["xxx-001", "xyz-002", "111-003"],
+    },
+    {
+      name: "labels",
       type: FieldType.other,
-      values: [{}, { hello: 'world' }, { hello: 'world', foo: 123.45, bar: ['yellow', 'red'], baz: { name: 'alice' } }],
+      values: [
+        {},
+        { hello: "world" },
+        {
+          hello: "world",
+          foo: 123.45,
+          bar: ["yellow", "red"],
+          baz: { name: "alice" },
+        },
+      ],
     },
   ],
   meta: {
@@ -274,21 +299,34 @@ Every log line has an expandable part called "Log details" that you can open by 
 - `ADD_FILTER_OUT` - Use to filter for log lines that don't include selected fields.
 
 ```ts
-export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOptions> {
+export class ExampleDatasource extends DataSourceApi<
+  ExampleQuery,
+  ExampleOptions
+> {
   modifyQuery(query: ExampleQuery, action: QueryFixAction): ExampleQuery {
-    let queryText = query.query ?? '';
+    let queryText = query.query ?? "";
     switch (action.type) {
-      case 'ADD_FILTER':
+      case "ADD_FILTER":
         if (action.options?.key && action.options?.value) {
           // Be sure to adjust this example code based on your data source logic.
-          queryText = addLabelToQuery(queryText, action.options.key, '=', action.options.value);
+          queryText = addLabelToQuery(
+            queryText,
+            action.options.key,
+            "=",
+            action.options.value
+          );
         }
         break;
-      case 'ADD_FILTER_OUT':
+      case "ADD_FILTER_OUT":
         {
           if (action.options?.key && action.options?.value) {
             // Be sure to adjust this example code based on your data source logic.
-            queryText = addLabelToQuery(queryText, action.options.key, '!=', action.options.value);
+            queryText = addLabelToQuery(
+              queryText,
+              action.options.key,
+              "!=",
+              action.options.value
+            );
           }
         }
         break;
@@ -323,8 +361,13 @@ Implement this feature data source method and enabled in `plugin.json`
 2. Ensure that your data source's `query` method can handle queries with `liveStreaming` set to true.
 
 ```ts
-export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOptions> {
-  query(request: DataQueryRequest<ExampleQuery>): Observable<DataQueryResponse> {
+export class ExampleDatasource extends DataSourceApi<
+  ExampleQuery,
+  ExampleOptions
+> {
+  query(
+    request: DataQueryRequest<ExampleQuery>
+  ): Observable<DataQueryResponse> {
     // This is a mocked implementation. Be sure to adjust this based on your data source logic.
     if (request.liveStreaming) {
       return this.runLiveStreamQuery(request);
@@ -352,8 +395,8 @@ import {
   LogRowContextOptions,
   LogRowContextQueryDirection,
   LogRowModel,
-} from '@grafana/data';
-import { catchError, lastValueFrom, of, switchMap, Observable } from 'rxjs';
+} from "@grafana/data";
+import { catchError, lastValueFrom, of, switchMap, Observable } from "rxjs";
 
 export class ExampleDatasource
   extends DataSourceApi<ExampleQuery, ExampleOptions>
@@ -372,7 +415,8 @@ export class ExampleDatasource
       this.query(request).pipe(
         catchError((err) => {
           const error: DataQueryError = {
-            message: 'Error during context query. Please check JS console logs.',
+            message:
+              "Error during context query. Please check JS console logs.",
             status: err.status,
             statusText: err.statusText,
           };
@@ -418,13 +462,13 @@ This API must be implemented in data source in typescript code.
 :::
 
 ```ts
-import { queryLogsVolume } from '../features/logs/logsModel'; // This is currently not available for use outside of the Grafana repo
+import { queryLogsVolume } from "../features/logs/logsModel"; // This is currently not available for use outside of the Grafana repo
 import {
   DataSourceWithSupplementaryQueriesSupport,
   LogLevel,
   SupplementaryQueryOptions,
   SupplementaryQueryType,
-} from '@grafana/data';
+} from "@grafana/data";
 
 export class ExampleDatasource
   extends DataSourceApi<ExampleQuery, ExampleOptions>
@@ -437,7 +481,10 @@ export class ExampleDatasource
 
   // Returns a supplementary query to be used to fetch supplementary data based on the provided type and original query.
   // If provided query is not suitable for provided supplementary query type, undefined should be returned.
-  getSupplementaryQuery(options: SupplementaryQueryOptions, query: ExampleQuery): ExampleQuery | undefined {
+  getSupplementaryQuery(
+    options: SupplementaryQueryOptions,
+    query: ExampleQuery
+  ): ExampleQuery | undefined {
     if (!this.getSupportedSupplementaryQueryTypes().includes(options.type)) {
       return undefined;
     }
@@ -445,7 +492,11 @@ export class ExampleDatasource
     switch (options.type) {
       case SupplementaryQueryType.LogsVolume:
         // This is a mocked implementation. Be sure to adjust this based on your data source logic.
-        return { ...query, refId: `logs-volume-${query.refId}`, queryType: 'count' };
+        return {
+          ...query,
+          refId: `logs-volume-${query.refId}`,
+          queryType: "count",
+        };
       default:
         return undefined;
     }
@@ -475,7 +526,12 @@ export class ExampleDatasource
   ): Observable<DataQueryResponse> | undefined {
     const logsVolumeRequest = cloneDeep(request);
     const targets = logsVolumeRequest.targets
-      .map((query) => this.getSupplementaryQuery({ type: SupplementaryQueryType.LogsVolume }, query))
+      .map((query) =>
+        this.getSupplementaryQuery(
+          { type: SupplementaryQueryType.LogsVolume },
+          query
+        )
+      )
       .filter((query): query is ExampleQuery => !!query);
 
     if (!targets.length) {
@@ -510,12 +566,12 @@ The [logs sample](https://grafana.com/docs/grafana/latest/explore/logs-integrati
 To implement the logs sample support in your data source plugin, you can use the `DataSourceWithSupplementaryQueriesSupport` API.
 
 ```ts
-import { queryLogsSample } from '../features/logs/logsModel'; // This is currently not possible to use outside of Grafana repo
+import { queryLogsSample } from "../features/logs/logsModel"; // This is currently not possible to use outside of Grafana repo
 import {
   DataSourceWithSupplementaryQueriesSupport,
   SupplementaryQueryOptions,
   SupplementaryQueryType,
-} from '@grafana/data';
+} from "@grafana/data";
 
 export class ExampleDatasource
   extends DataSourceApi<ExampleQuery, ExampleOptions>
@@ -528,7 +584,10 @@ export class ExampleDatasource
 
   // Returns a supplementary query to be used to fetch supplementary data based on the provided type and original query.
   // If provided query is not suitable for provided supplementary query type, undefined should be returned.
-  getSupplementaryQuery(options: SupplementaryQueryOptions, query: ExampleQuery): ExampleQuery | undefined {
+  getSupplementaryQuery(
+    options: SupplementaryQueryOptions,
+    query: ExampleQuery
+  ): ExampleQuery | undefined {
     if (!this.getSupportedSupplementaryQueryTypes().includes(options.type)) {
       return undefined;
     }
@@ -536,7 +595,11 @@ export class ExampleDatasource
     switch (options.type) {
       case SupplementaryQueryType.LogsSample:
         // Be sure to adjust this example based on your data source logic.
-        return { ...query, refId: `logs-sample-${query.refId}`, queryType: 'logs' };
+        return {
+          ...query,
+          refId: `logs-sample-${query.refId}`,
+          queryType: "logs",
+        };
       default:
         return undefined;
     }
@@ -564,7 +627,12 @@ export class ExampleDatasource
   ): Observable<DataQueryResponse> | undefined {
     const logsSampleRequest = cloneDeep(request);
     const targets = logsVolumeRequest.targets
-      .map((query) => this.getSupplementaryQuery({ type: SupplementaryQueryType.LogsVolume }, query))
+      .map((query) =>
+        this.getSupplementaryQuery(
+          { type: SupplementaryQueryType.LogsVolume },
+          query
+        )
+      )
       .filter((query): query is ExampleQuery => !!query);
 
     if (!targets.length) {

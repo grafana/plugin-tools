@@ -1,21 +1,26 @@
-import React from 'react';
-import { useLocation } from '@docusaurus/router';
-import useIsBrowser from '@docusaurus/useIsBrowser';
+import React from "react";
+import { useLocation } from "@docusaurus/router";
+import useIsBrowser from "@docusaurus/useIsBrowser";
 
 interface SyncCommandProps {
   cmd: string;
 }
 
 function BrowserSyncCommand({ cmd }: SyncCommandProps) {
-  let currentPackageManager = window.localStorage['docusaurus.tab.package-manager'];
+  let currentPackageManager =
+    window.localStorage["docusaurus.tab.package-manager"];
   const location = useLocation();
 
   if (!currentPackageManager) {
-    if (location && location.search && location.search.includes('current-package-manager')) {
+    if (
+      location &&
+      location.search &&
+      location.search.includes("current-package-manager")
+    ) {
       const searchParams = new URLSearchParams(location.search);
-      currentPackageManager = searchParams.get('current-package-manager');
+      currentPackageManager = searchParams.get("current-package-manager");
     } else {
-      currentPackageManager = 'npm';
+      currentPackageManager = "npm";
     }
   }
   const cmdString = `${currentPackageManager} ${cmd}`;
@@ -30,7 +35,11 @@ function ServerSyncCommand({ cmd }: SyncCommandProps) {
 
 function SyncCommand({ cmd }: SyncCommandProps) {
   const isBrowser = useIsBrowser();
-  return isBrowser ? <BrowserSyncCommand cmd={cmd} /> : <ServerSyncCommand cmd={cmd} />;
+  return isBrowser ? (
+    <BrowserSyncCommand cmd={cmd} />
+  ) : (
+    <ServerSyncCommand cmd={cmd} />
+  );
 }
 
 export default SyncCommand;

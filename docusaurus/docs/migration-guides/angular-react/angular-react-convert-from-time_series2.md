@@ -48,7 +48,7 @@ import {
   FieldConfig,
   DisplayValue,
   formattedValueToString,
-} from '@grafana/data';
+} from "@grafana/data";
 
 const theme2 = useTheme2();
 
@@ -56,9 +56,13 @@ const getValues = (): FieldDisplay[] => {
   for (const frame of data.series) {
     for (const field of frame.fields) {
       // Set the Min/Max value automatically for percent and percentunit
-      if (field.config.unit === 'percent' || field.config.unit === 'percentunit') {
+      if (
+        field.config.unit === "percent" ||
+        field.config.unit === "percentunit"
+      ) {
         const min = field.config.min ?? 0;
-        const max = field.config.max ?? (field.config.unit === 'percent' ? 100 : 1);
+        const max =
+          field.config.max ?? (field.config.unit === "percent" ? 100 : 1);
         field.state = field.state ?? {};
         field.state.range = { min, max, delta: max - min };
         field.display = getDisplayProcessor({ field, theme: theme2 });
@@ -78,7 +82,11 @@ const getValues = (): FieldDisplay[] => {
   });
 };
 
-const getThresholdForValue = (field: FieldConfig, value: number, theme: GrafanaTheme2) => {
+const getThresholdForValue = (
+  field: FieldConfig,
+  value: number,
+  theme: GrafanaTheme2
+) => {
   if (fieldConfig.defaults.thresholds) {
     const result = getActiveThreshold(value, field.thresholds?.steps);
     return result;

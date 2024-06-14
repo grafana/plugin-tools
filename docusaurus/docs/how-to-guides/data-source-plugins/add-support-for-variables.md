@@ -33,8 +33,14 @@ For panels, the `replaceVariables` function is available in the `PanelProps`.
 Add `replaceVariables` to the argument list, and pass a user-defined template string to it:
 
 ```tsx
-export function SimplePanel({ options, data, width, height, replaceVariables }: Props) {
-  const query = replaceVariables('Now displaying $service');
+export function SimplePanel({
+  options,
+  data,
+  width,
+  height,
+  replaceVariables,
+}: Props) {
+  const query = replaceVariables("Now displaying $service");
 
   return <div>{query}</div>;
 }
@@ -47,7 +53,7 @@ For data sources, you need to use the `getTemplateSrv`, which returns an instanc
 1. Import `getTemplateSrv` from the `runtime` package:
 
    ```ts
-   import { getTemplateSrv } from '@grafana/runtime';
+   import { getTemplateSrv } from "@grafana/runtime";
    ```
 
 1. In your `query` method, call the `replace` method with a user-defined template string:
@@ -71,7 +77,11 @@ A data source plugin can define the default format option when no format is spec
 Let's change the SQL query to use CSV format by default:
 
 ```ts
-getTemplateSrv().replace('SELECT * FROM services WHERE id IN ($service)', options.scopedVars, 'csv');
+getTemplateSrv().replace(
+  "SELECT * FROM services WHERE id IN ($service)",
+  options.scopedVars,
+  "csv"
+);
 ```
 
 Now, when users write `$service`, the query looks like this:
@@ -92,11 +102,11 @@ The following example shows how to update a variable called `service`.
 - `replace: true` tells Grafana to update the current URL state rather than creating a new history entry.
 
 ```ts
-import { locationService } from '@grafana/runtime';
+import { locationService } from "@grafana/runtime";
 ```
 
 ```ts
-locationService.partial({ 'var-service': 'billing' }, true);
+locationService.partial({ "var-service": "billing" }, true);
 ```
 
 :::note
@@ -147,15 +157,18 @@ Let's create a custom query editor to allow the user to edit the query model.
 1. Create a `VariableQueryEditor` component:
 
    ```tsx title="src/VariableQueryEditor.tsx"
-   import React, { useState } from 'react';
-   import { MyVariableQuery } from './types';
+   import React, { useState } from "react";
+   import { MyVariableQuery } from "./types";
 
    interface VariableQueryProps {
      query: MyVariableQuery;
      onChange: (query: MyVariableQuery, definition: string) => void;
    }
 
-   export const VariableQueryEditor = ({ onChange, query }: VariableQueryProps) => {
+   export const VariableQueryEditor = ({
+     onChange,
+     query,
+   }: VariableQueryProps) => {
      const [state, setState] = useState(query);
 
      const saveQuery = () => {
@@ -202,9 +215,13 @@ Let's create a custom query editor to allow the user to edit the query model.
 1. Configure your plugin to use the query editor:
 
    ```ts
-   import { VariableQueryEditor } from './VariableQueryEditor';
+   import { VariableQueryEditor } from "./VariableQueryEditor";
 
-   export const plugin = new DataSourcePlugin<DataSource, MyQuery, MyDataSourceOptions>(DataSource)
+   export const plugin = new DataSourcePlugin<
+     DataSource,
+     MyQuery,
+     MyDataSourceOptions
+   >(DataSource)
      .setQueryEditor(QueryEditor)
      .setVariableQueryEditor(VariableQueryEditor);
    ```

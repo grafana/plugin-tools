@@ -56,7 +56,9 @@ Wait a minute. Manipulating documents based on data? That's sounds an awful lot 
 
    ```tsx title="src/components/SimplePanel.tsx"
    <div className={styles.textBox}>
-     {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
+     {options.showSeriesCount && (
+       <div>Number of series: {data.series.length}</div>
+     )}
      <div>Text option value: {options.text}</div>
    </div>
    ```
@@ -65,7 +67,13 @@ Wait a minute. Manipulating documents based on data? That's sounds an awful lot 
 
    ```tsx title="src/components/SimplePanel.tsx"
    <g>
-     <rect x={0} y={0} width={30} height={10} fill={theme.visualization.getColorByName('green')} />
+     <rect
+       x={0}
+       y={0}
+       width={30}
+       height={10}
+       fill={theme.visualization.getColorByName("green")}
+     />
    </g>
    ```
 
@@ -94,7 +102,7 @@ One single rectangle might not be very exciting, so let's see how you can create
           y={i * barHeight}
           width={value}
           height={barHeight - 1}
-          fill={theme.visualization.getColorByName('green')}
+          fill={theme.visualization.getColorByName("green")}
         />
       ))}
     </g>
@@ -119,7 +127,7 @@ D3 is already bundled with Grafana, and you can access it by importing the `d3` 
 1. Import `d3`:
 
    ```ts title="src/components/SimplePanel.tsx"
-   import * as d3 from 'd3';
+   import * as d3 from "d3";
    ```
 
 In the previous step, we had to define the width of each bar in pixels. Instead, let's use _scales_ from the D3 library to make the width of each bar depend on the width of the panel.
@@ -148,7 +156,7 @@ Scales are functions that map a range of values to another range of values. In t
              y={i * barHeight}
              width={scale(value)}
              height={barHeight - 1}
-             fill={theme.visualization.getColorByName('green')}
+             fill={theme.visualization.getColorByName("green")}
            />
          ))}
        </g>
@@ -206,12 +214,12 @@ Congrats! You've created a simple and responsive bar chart.
 ## Complete example
 
 ```tsx title="src/components/SimplePanel.tsx"
-import React from 'react';
-import { PanelProps } from '@grafana/data';
-import { SimpleOptions } from 'types';
-import { css, cx } from '@emotion/css';
-import { useStyles2, useTheme2 } from '@grafana/ui';
-import * as d3 from 'd3';
+import React from "react";
+import { PanelProps } from "@grafana/data";
+import { SimpleOptions } from "types";
+import { css, cx } from "@emotion/css";
+import { useStyles2, useTheme2 } from "@grafana/ui";
+import * as d3 from "d3";
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -235,7 +243,12 @@ const getStyles = () => {
   };
 };
 
-export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
+export const SimplePanel: React.FC<Props> = ({
+  options,
+  data,
+  width,
+  height,
+}) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const values = [4, 8, 15, 16, 23, 42];
@@ -273,7 +286,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
               y={i * barHeight}
               width={scale(value)}
               height={barHeight - 1}
-              fill={theme.visualization.getColorByName('green')}
+              fill={theme.visualization.getColorByName("green")}
             />
           ))}
         </g>

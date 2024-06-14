@@ -25,8 +25,8 @@ If you want to test a page with basic UI that is easy to interact with via the s
 For example:
 
 ```ts title="fixtures.ts"
-import { AppPage, test as base } from '@grafana/plugin-e2e';
-import pluginJson from '../src/plugin.json';
+import { AppPage, test as base } from "@grafana/plugin-e2e";
+import pluginJson from "../src/plugin.json";
 
 type AppTestFixture = {
   gotoPage: (path?: string) => Promise<AppPage>;
@@ -43,7 +43,7 @@ export const test = base.extend<AppTestFixture>({
   },
 });
 
-export { expect } from '@grafana/plugin-e2e';
+export { expect } from "@grafana/plugin-e2e";
 ```
 
 To use this function, simply import `test` and `expect` from your fixture instead of importing it from `@grafana/plugin-e2e`, and then write your test as you would normally.
@@ -51,11 +51,16 @@ To use this function, simply import `test` and `expect` from your fixture instea
 For example:
 
 ```ts title="startPage.spec.ts"
-import { test, expect } from './fixtures.ts';
+import { test, expect } from "./fixtures.ts";
 
-test('start page should welcome users to the app', async ({ gotoPage, page }) => {
-  await gotoPage('/start');
-  await expect(page.getByRole('heading', { name: 'Welcome to my app' })).toBeVisible();
+test("start page should welcome users to the app", async ({
+  gotoPage,
+  page,
+}) => {
+  await gotoPage("/start");
+  await expect(
+    page.getByRole("heading", { name: "Welcome to my app" })
+  ).toBeVisible();
 });
 ```
 
@@ -68,8 +73,13 @@ This is especially helpful if you want to reuse that selector logic in multiple 
 For example:
 
 ```ts title="fixtures.ts"
-import { AppPage, PluginTestCtx, PluginPageArgs, test as base } from '@grafana/plugin-e2e';
-import pluginJson from '../src/plugin.json';
+import {
+  AppPage,
+  PluginTestCtx,
+  PluginPageArgs,
+  test as base,
+} from "@grafana/plugin-e2e";
+import pluginJson from "../src/plugin.json";
 
 class StartPage extends AppPage {
   private path: string;
@@ -85,7 +95,7 @@ class StartPage extends AppPage {
 
   getWelcomeText(): Locator {
     const { page } = this.ctx;
-    return page.getByRole('heading', { name: 'Welcome to my app' });
+    return page.getByRole("heading", { name: "Welcome to my app" });
   }
 }
 
@@ -94,12 +104,16 @@ type AppTestFixture = {
 };
 
 export const test = base.extend<AppTestFixture>({
-  startPage: async ({ page, selectors, grafanaVersion, request }, use, testInfo) => {
+  startPage: async (
+    { page, selectors, grafanaVersion, request },
+    use,
+    testInfo
+  ) => {
     const startPage = new StartPage(
       { page, selectors, grafanaVersion, request, testInfo },
       {
         pluginId: pluginJson.id,
-        path: '/start',
+        path: "/start",
       }
     );
     await startPage.goto();
@@ -107,7 +121,7 @@ export const test = base.extend<AppTestFixture>({
   },
 });
 
-export { expect } from '@grafana/plugin-e2e';
+export { expect } from "@grafana/plugin-e2e";
 ```
 
 To use this code, you simply import `test` and `expect` from your fixture instead of importing them from `@grafana/plugin-e2e`, and then you write your test as you would normally. When you destructure the `startPage` in your test function, the test automatically navigates to that page.
@@ -115,9 +129,9 @@ To use this code, you simply import `test` and `expect` from your fixture instea
 For example:
 
 ```ts title="startPage.spec.ts"
-import { test, expect } from './fixtures.ts';
+import { test, expect } from "./fixtures.ts";
 
-test('start page should welcome users to the app', async ({ startPage }) => {
+test("start page should welcome users to the app", async ({ startPage }) => {
   await expect(startPage.getWelcomeText()).toBeVisible();
 });
 ```
