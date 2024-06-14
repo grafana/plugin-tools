@@ -1,7 +1,7 @@
 ---
 id: add-component
 title: addComponent()
-description: This method can be used to register a React component to a certain extension point to implement a new ui experience.
+description: This method can be used to register a React component to a certain extension point to contribute a new ui experience.
 keywords:
   - grafana
   - plugins
@@ -15,7 +15,7 @@ sidebar_position: 20
 
 **Available in Grafana >=v11.1.0.**
 
-This method can be used to register a [React component](https://react.dev/learn/your-first-component) to a certain extension point to implement a new ui experience.
+This method can be used to register a [React component](https://react.dev/learn/your-first-component) to a certain extension point to contribute a new ui experience.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addComponent({
