@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 20
 ---
 
-# `.addComponent(config)`
+# `addComponent(config)`
 
 **Available in Grafana >=v11.1.0.**
 
