@@ -10,7 +10,7 @@ keywords:
   - error handling
 ---
 
-This guide explains how to handle errors in plugins and provides suggestions for common scenarios.
+This guide explains how to handle errors in data source plugins and provides suggestions for common scenarios.
 
 ## Provide usable defaults
 
@@ -60,7 +60,7 @@ Grafana displays the exception message in the UI as written, so use grammaticall
 
 ## Common error scenarios
 
-Here are some examples of situations where you might want to display an error to the user.
+Here are some examples of situations in data source plugins where you might want to display an error to the user.
 
 ### Invalid query response
 
