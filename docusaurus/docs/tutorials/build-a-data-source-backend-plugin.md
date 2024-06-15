@@ -174,7 +174,7 @@ The following instructions are based on Grafana v10.1.1, consult the [documentat
 1. Click on _Create alert rule from this panel_ button.
 1. In _Expressions_ section, in the _Threshold_ expression `C`, set the _IS ABOVE_ to `15`.
 1. Click on _Set as alert condition_ on _Threshold_ expression `C`. Your alert should now look as follows.
-   ![Expression section showing B "reduce" with Input: A, Function: Last, Mode: Strict, C Threshold with Input: B, Is Above: 15 and Alert Condition enabled indicator](/img/create-alert.png "Alert Expression")
+   ![Expression section showing B "reduce" with Input: A, Function: Last, Mode: Strict, C Threshold with Input: B, Is Above: 15 and Alert Condition enabled indicator](/img/create-alert.png 'Alert Expression')
 1. In _Set alert evaluation behavior_ section, click on _New folder_ button and create a new folder to store an evaluation rule.
 1. Then, click on _New evaluation group_ button and create a new evaluation group; choose a name and set the _Evaluation interval_ to `10s`.
 1. Click _Save rule and exit_ button.

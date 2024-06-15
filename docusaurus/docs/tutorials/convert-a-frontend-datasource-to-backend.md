@@ -118,13 +118,13 @@ In a frontend-only data source, any request that requires authentication needs t
 To use this route, the frontend data source should call the `fetch` method from the `DataSourceApi` class. This method proxies the request and adds the `Authorization` header:
 
 ```typescript title="src/DataSource.ts"
-import { getBackendSrv } from "@grafana/runtime";
+import { getBackendSrv } from '@grafana/runtime';
 
-const routePath = "/example";
+const routePath = '/example';
 
 const res = getBackendSrv().datasourceRequest({
-  url: this.url + routePath + "/v1/users",
-  method: "GET",
+  url: this.url + routePath + '/v1/users',
+  method: 'GET',
 });
 // Handle response
 ```
@@ -263,16 +263,16 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const response = await lastValueFrom(
       getBackendSrv().fetch<DataSourceResponse>({
         url: `${this.url}/metrics`,
-        method: "GET",
+        method: 'GET',
       })
     );
     const df: DataFrame = {
       length: response.data.datapoints.length,
       refId: options.targets[0].refId,
       fields: [
-        { name: "Time", values: [], type: FieldType.time, config: {} },
+        { name: 'Time', values: [], type: FieldType.time, config: {} },
         {
-          name: "Value",
+          name: 'Value',
           values: [],
           type: FieldType.number,
           config: {},
@@ -357,7 +357,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const response = await lastValueFrom(
       getBackendSrv().fetch<MetricsResponse>({
         url: `${this.url}/tables`,
-        method: "GET",
+        method: 'GET',
       })
     );
     return response.data;
@@ -402,12 +402,9 @@ func handleTables(w http.ResponseWriter, r *http.Request) {
 To request the resource in the frontend, you can use the methods exposed in the base class `DataSourceWithBackend` (for example, `getResource` or `postResource`):
 
 ```typescript title="src/DataSource.ts"
-export class DataSource extends DataSourceWithBackend<
-  MyQuery,
-  MyDataSourceOptions
-> {
+export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptions> {
   async getTables() {
-    const response = await this.getResource("tables");
+    const response = await this.getResource('tables');
     return response;
   }
 }

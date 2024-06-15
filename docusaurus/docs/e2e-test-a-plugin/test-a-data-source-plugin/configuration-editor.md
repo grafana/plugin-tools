@@ -21,21 +21,18 @@ Most data source plugins need authentication to communicate with third-party ser
 Backend data sources implement a [health check](../../key-concepts/backend-plugins/#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts title="configurationEditor.spec.ts"
-import { test, expect } from "@grafana/plugin-e2e";
-import { MyDataSourceOptions, MySecureJsonData } from "./src/types";
+import { test, expect } from '@grafana/plugin-e2e';
+import { MyDataSourceOptions, MySecureJsonData } from './src/types';
 
 test('"Save & test" should be successful when configuration is valid', async ({
   createDataSourceConfigPage,
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = await readProvisionedDataSource<
-    MyDataSourceOptions,
-    MySecureJsonData
-  >({ fileName: "datasources.yml" });
+  const ds = await readProvisionedDataSource<MyDataSourceOptions, MySecureJsonData>({ fileName: 'datasources.yml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
-  await page.getByLabel("Path").fill(ds.jsonData.path);
-  await page.getByLabel("API Key").fill(ds.secureJsonData.apiKey);
+  await page.getByLabel('Path').fill(ds.jsonData.path);
+  await page.getByLabel('API Key').fill(ds.secureJsonData.apiKey);
   await expect(configPage.saveAndTest()).toBeOK();
 });
 ```
@@ -50,16 +47,11 @@ test('"Save & test" should fail when configuration is invalid', async ({
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = await readProvisionedDataSource<
-    MyDataSourceOptions,
-    MySecureJsonData
-  >({ fileName: "datasources.yml" });
+  const ds = await readProvisionedDataSource<MyDataSourceOptions, MySecureJsonData>({ fileName: 'datasources.yml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
-  await page.getByLabel("Path").fill(ds.jsonData.path);
+  await page.getByLabel('Path').fill(ds.jsonData.path);
   await expect(configPage.saveAndTest()).not.toBeOK();
-  await expect(configPage).toHaveAlert("error", {
-    hasText: "API key is missing",
-  });
+  await expect(configPage).toHaveAlert('error', { hasText: 'API key is missing' });
 });
 ```
 
@@ -94,19 +86,16 @@ test('"Save & test" should display success alert box when config is valid', asyn
   readProvisionedDataSource,
   page,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yml" });
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   // construct a custom health check url using the Grafana data source proxy
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
   )}/third-party-service-path`;
-  await page.route(
-    healthCheckPath,
-    async (route) => await route.fulfill({ status: 200, body: "OK" })
-  );
+  await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' }));
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
-  await expect(configPage).toHaveAlert("success");
+  await expect(configPage).toHaveAlert('success');
 });
 ```
 
@@ -115,13 +104,11 @@ test('"Save & test" should display success alert box when config is valid', asyn
 Sometimes you may want to open the configuration editor for an already existing data source instance to verify configuration work as expected.
 
 ```ts
-test("provisioned data source with valid credentials should return a 200 status code", async ({
+test('provisioned data source with valid credentials should return a 200 status code', async ({
   readProvisionedDataSource,
   gotoDataSourceConfigPage,
 }) => {
-  const datasource = await readProvisionedDataSource({
-    fileName: "datasources.yml",
-  });
+  const datasource = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   const configPage = await gotoDataSourceConfigPage(datasource.uid);
   await expect(configPage.saveAndTest()).toBeOK();
 });

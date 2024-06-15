@@ -1,7 +1,7 @@
-import React, { ElementType } from "react";
+import React, { ElementType } from 'react';
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 interface Props {
   snippets: Array<{
@@ -34,11 +34,7 @@ function CodeSnippets({ snippets = [], groupId, queryString }: Props) {
         const Snippet = snippet.component;
         return (
           // @ts-ignore - TabItem types appear to be broken.
-          <TabItem
-            key={snippet.label}
-            value={snippet.label}
-            label={snippet.label}
-          >
+          <TabItem key={snippet.label} value={snippet.label} label={snippet.label}>
             <Snippet />
           </TabItem>
         );

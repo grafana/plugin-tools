@@ -22,18 +22,18 @@ sidebar_position: 30
 In the following example, we test that the custom variable editor renders a certain field when the `ListByDimensions` query type is chosen:
 
 ```ts title="customVariableEditor.spec.ts"
-test("should display Dimensions field only if ListByDimensions is selected", async ({
+test('should display Dimensions field only if ListByDimensions is selected', async ({
   variableEditPage,
   page,
   readProvisionedDataSource,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yaml" });
-  await variableEditPage.setVariableType("Query");
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
+  await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(ds.name);
-  const dimensionField = variableEditPage.getByGrafanaSelector("Dimensions");
+  const dimensionField = variableEditPage.getByGrafanaSelector('Dimensions');
   await expect(dimensionField).not.toBeVisible();
-  await variableEditPage.getByLabel("Query type").fill("ListByDimensions");
-  await page.keyboard.press("Enter");
+  await variableEditPage.getByLabel('Query type').fill('ListByDimensions');
+  await page.keyboard.press('Enter');
   await expect(dimensionField).toBeVisible();
 });
 ```
@@ -51,22 +51,22 @@ Although calling third-party APIs in end-to-end tests can be useful, it may also
 :::
 
 ```ts title="customVariableEditor.spec.ts"
-test("custom variable query runner should return data when query is valid", async ({
+test('custom variable query runner should return data when query is valid', async ({
   variableEditPage,
   page,
   readProvisionedDataSource,
   selectors,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yaml" });
-  await variableEditPage.setVariableType("Query");
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
+  await variableEditPage.setVariableType('Query');
   await variableEditPage.datasource.set(ds.name);
   const codeEditorSelector = selectors.components.CodeEditor.container;
   await variableEditPage.getByGrafanaSelector(codeEditorSelector).click();
-  await page.keyboard.insertText("select distinct(environment) from dataset");
+  await page.keyboard.insertText('select distinct(environment) from dataset');
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();
   await queryDataRequest;
-  await expect(variableEditPage).toDisplayPreviews(["test", /staging-.*/]);
+  await expect(variableEditPage).toDisplayPreviews(['test', /staging-.*/]);
 });
 ```
 
@@ -77,15 +77,13 @@ Unlike the `panelEditPage.refreshPanel` method, the `variableEditPage.runQuery` 
 If you just want to test the variable query runner without testing the custom variable editor, you can use an already existing variable query from a provisioned dashboard.
 
 ```ts title="customVariableEditor.spec.ts"
-test("should return data when valid query from provisioned dashboard is used", async ({
+test('should return data when valid query from provisioned dashboard is used', async ({
   readProvisionedDashboard,
   gotoVariableEditPage,
 }) => {
-  const dashboard = await readProvisionedDashboard({
-    fileName: "dashboard.json",
-  });
-  const variableEditPage = await gotoVariableEditPage({ dashboard, id: "2" });
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const variableEditPage = await gotoVariableEditPage({ dashboard, id: '2' });
   await variableEditPage.runQuery();
-  await expect(variableEditPage).toDisplayPreviews(["staging", "test"]);
+  await expect(variableEditPage).toDisplayPreviews(['staging', 'test']);
 });
 ```

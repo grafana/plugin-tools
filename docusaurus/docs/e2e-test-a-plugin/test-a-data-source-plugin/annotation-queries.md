@@ -32,28 +32,26 @@ Note that the annotation query result is rendered in an Alert component starting
 :::
 
 ```ts title="annotations.spec.ts"
-import * as semver from "semver";
-import { expect, test } from "@grafana/plugin-e2e";
+import * as semver from 'semver';
+import { expect, test } from '@grafana/plugin-e2e';
 
-test("should run successfully and display a success alert box when query is valid", async ({
+test('should run successfully and display a success alert box when query is valid', async ({
   annotationEditPage,
   page,
   selectors,
   readProvisionedDataSource,
   grafanaVersion,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yml" });
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.waitForFunction(() => window.monaco);
-  await annotationEditPage
-    .getByGrafanaSelector(selectors.components.CodeEditor.container)
-    .click();
+  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText(`select time as time, humidity as text
   from dataset
   where $__timeFilter(time) and humidity > 95`);
   await expect(annotationEditPage.runQuery()).toBeOK();
-  if (semver.gte(grafanaVersion, "11.0.0")) {
-    await expect(annotationEditPage).toHaveAlert("success");
+  if (semver.gte(grafanaVersion, '11.0.0')) {
+    await expect(annotationEditPage).toHaveAlert('success');
   }
 });
 ```
@@ -63,27 +61,23 @@ test("should run successfully and display a success alert box when query is vali
 If an error occurs in the plugin or if the upstream API returns an error, you may want to capture that and return a meaningful error message to the user.
 
 ```ts title="annotations.spec.ts"
-test("should fail and display an error alert box when time field is missing in the response", async ({
+test('should fail and display an error alert box when time field is missing in the response', async ({
   annotationEditPage,
   page,
   selectors,
   readProvisionedDataSource,
   grafanaVersion,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yml" });
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.waitForFunction(() => window.monaco);
-  await annotationEditPage
-    .getByGrafanaSelector(selectors.components.CodeEditor.container)
-    .click();
+  await annotationEditPage.getByGrafanaSelector(selectors.components.CodeEditor.container).click();
   await page.keyboard.insertText(`select humidity as text
   from dataset
   where humidity > 95`);
   await expect(annotationEditPage.runQuery()).not.toBeOK();
-  if (semver.gte(grafanaVersion, "11.0.0")) {
-    await expect(annotationEditPage).toHaveAlert("error", {
-      hasText: "Time field is missing",
-    });
+  if (semver.gte(grafanaVersion, '11.0.0')) {
+    await expect(annotationEditPage).toHaveAlert('error', { hasText: 'Time field is missing' });
   }
 });
 ```
@@ -93,23 +87,16 @@ test("should fail and display an error alert box when time field is missing in t
 Sometimes you may want to open the annotation edit page for an already existing dashboard and run the annotation query to make sure everything work as expected.
 
 ```ts
-test("annotation query in provisioned dashboard should return a 200 response", async ({
+test('annotation query in provisioned dashboard should return a 200 response', async ({
   readProvisionedDashboard,
   gotoAnnotationEditPage,
   grafanaVersion,
 }) => {
-  const dashboard = await readProvisionedDashboard({
-    fileName: "dashboard.json",
-  });
-  const annotationEditPage = await gotoAnnotationEditPage({
-    dashboard,
-    id: "1",
-  });
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const annotationEditPage = await gotoAnnotationEditPage({ dashboard, id: '1' });
   await expect(annotationEditPage.runQuery()).toBeOK();
-  if (semver.gte(grafanaVersion, "11.0.0")) {
-    await expect(annotationEditPage).toHaveAlert("success", {
-      hasText: /2 events.*/,
-    });
+  if (semver.gte(grafanaVersion, '11.0.0')) {
+    await expect(annotationEditPage).toHaveAlert('success', { hasText: /2 events.*/ });
   }
 });
 ```

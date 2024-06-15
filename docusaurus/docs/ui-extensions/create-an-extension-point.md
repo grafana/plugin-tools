@@ -118,20 +118,20 @@ The hooks return an object in the following format:
 The following example shows how to render a link component as link-type extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
 
 ```tsx
-import { usePluginLinkExtensions } from "@grafana/runtime";
+import { usePluginLinkExtensions } from '@grafana/runtime';
 
 // We define the `context` outside of the React component for performance reasons.
 // (Declaring it inside the component would result in a new object on every render,
 // which would unnecessarily trigger the `usePluginLinkExtensions()` hook.)
 const context = {
-  referenceId: "12345",
-  timeZone: "UTC",
+  referenceId: '12345',
+  timeZone: 'UTC',
 };
 
 function AppMenuExtensionPoint() {
   // This only returns type="link" extensions
   const { extensions } = usePluginLinkExtensions({
-    extensionPointId: "plugins/another-app-plugin/menu",
+    extensionPointId: 'plugins/another-app-plugin/menu',
     context,
   });
 
@@ -143,12 +143,7 @@ function AppMenuExtensionPoint() {
     <div>
       {extensions.map((extension) => {
         return (
-          <a
-            href={extension.path}
-            onClick={extension.onClick}
-            title={extension.description}
-            key={extension.key}
-          >
+          <a href={extension.path} onClick={extension.onClick} title={extension.description} key={extension.key}>
             {extension.title}
           </a>
         );
@@ -168,8 +163,8 @@ The following example shows how to create the context object dynamically. Althou
 Be sure to only change the `context` object if its content changes; otherwise, you could create unnecessary re-renders. The following example shows how to approach these scenarios in a safe way:
 
 ```tsx
-import { useMemo } from "react";
-import { usePluginLinkExtensions } from "@grafana/runtime";
+import { useMemo } from 'react';
+import { usePluginLinkExtensions } from '@grafana/runtime';
 
 function AppMenuExtensionPoint({ referenceId }) {
   // Instead of defining the object here (which would result in a new object on every render),
@@ -177,12 +172,12 @@ function AppMenuExtensionPoint({ referenceId }) {
   const context = useMemo(
     () => ({
       referenceId,
-      timeZone: "UTC",
+      timeZone: 'UTC',
     }),
     [referenceId]
   );
   const { extensions } = usePluginLinkExtensions({
-    extensionPointId: "plugins/another-app-plugin/menu",
+    extensionPointId: 'plugins/another-app-plugin/menu',
     context,
   });
 
@@ -194,12 +189,7 @@ function AppMenuExtensionPoint({ referenceId }) {
     <div>
       {extensions.map((extension) => {
         return (
-          <a
-            href={extension.path}
-            onClick={extension.onClick}
-            title={extension.description}
-            key={extension.key}
-          >
+          <a href={extension.path} onClick={extension.onClick} title={extension.description} key={extension.key}>
             {extension.title}
           </a>
         );
@@ -214,14 +204,12 @@ function AppMenuExtensionPoint({ referenceId }) {
 Component type extensions are simple React components, which gives you much more freedom in what you can make them do. You can pass contextual information to the extension components using props.
 
 ```tsx title="src/components/Toolbar.tsx"
-import { usePluginComponentExtensions } from "@grafana/runtime";
+import { usePluginComponentExtensions } from '@grafana/runtime';
 
 export const Toolbar = () => {
   // This only returns type="component" extensions
   // Heads up! We don't specify a context object below, we pass in the contextual information as a prop to the component later.
-  const { extensions } = usePluginComponentExtensions({
-    extensionPointId: "<extension-point-id>",
-  });
+  const { extensions } = usePluginComponentExtensions({ extensionPointId: '<extension-point-id>' });
 
   return (
     <div>
@@ -298,16 +286,16 @@ Use this method to specify the maximum amount of extensions that should be retur
 In the following example, a `<LinkButton />`-component is rendered for all link extensions that other plugins registered for the `plugins/another-app-plugin/menu` extension point ID.
 
 ```tsx
-import { getPluginLinkExtensions } from "@grafana/runtime";
-import { LinkButton } from "@grafana/ui";
+import { getPluginLinkExtensions } from '@grafana/runtime';
+import { LinkButton } from '@grafana/ui';
 
 function AppMenuExtensionPoint() {
   // This only returns type="link" extensions
   const { extensions } = getPluginLinkExtensions({
-    extensionPointId: "plugins/another-app-plugin/menu",
+    extensionPointId: 'plugins/another-app-plugin/menu',
     context: {
-      referenceId: "12345",
-      timeZone: "UTC",
+      referenceId: '12345',
+      timeZone: 'UTC',
     },
   });
 
@@ -345,15 +333,13 @@ function AppMenuExtensionPoint() {
 Component type extensions are simple React components, which gives much more freedom on what they are able to do. In case you would like to make some part of your plugin extendable by other plugins, you can create a component-type extension point using `getPluginComponentExtensions()`. Any contextual information can be shared with the extension components using the `context={}` prop (see the example below).
 
 ```tsx title="src/components/Toolbar.tsx"
-import { getPluginComponentExtensions } from "@grafana/runtime";
+import { getPluginComponentExtensions } from '@grafana/runtime';
 
 export const Toolbar = () => {
   // This only returns type="component" extensions
   // Heads up! We don't specify a context object below, we pass in the contextual information as a prop to the component later.
-  const { extensions } = getPluginComponentExtensions({
-    extensionPointId: "<extension-point-id>",
-  });
-  const version = "1.0.0"; // Let's share this with the extensions
+  const { extensions } = getPluginComponentExtensions({ extensionPointId: '<extension-point-id>' });
+  const version = '1.0.0'; // Let's share this with the extensions
 
   return (
     <div>

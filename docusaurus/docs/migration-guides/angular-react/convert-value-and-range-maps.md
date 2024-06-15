@@ -38,15 +38,9 @@ Refer to the [Configure value mappings](https://grafana.com/docs/grafana/latest/
 Use the helper function shown below to update your plugin's configurations.
 
 ```ts
-import {
-  PanelModel,
-  convertOldAngularValueMappings,
-  ValueMapping,
-} from "@grafana/data";
+import { PanelModel, convertOldAngularValueMappings, ValueMapping } from '@grafana/data';
 
-export const PolystatPanelMigrationHandler = (
-  panel: PanelModel<PolystatOptions>
-): Partial<PolystatOptions> => {
+export const PolystatPanelMigrationHandler = (panel: PanelModel<PolystatOptions>): Partial<PolystatOptions> => {
   // convert range and value maps
   const newMaps = migrateValueAndRangeMaps(panel);
   panel.options.fieldConfig = {

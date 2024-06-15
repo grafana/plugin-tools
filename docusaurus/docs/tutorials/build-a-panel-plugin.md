@@ -65,10 +65,7 @@ Now that you can view your panel, try making a change to the panel plugin:
 1. In `SimplePanel.tsx`, change the fill color of the circle. For example, to change it to green:
 
    ```ts title="src/components/SimplePanel.tsx"
-   <circle
-     style={{ fill: theme.visualization.getColorByName("green") }}
-     r={100}
-   />
+   <circle style={{ fill: theme.visualization.getColorByName('green') }} r={100} />
    ```
 
 1. Save the file.
@@ -99,8 +96,8 @@ Panel options are defined in a _panel options object_. `SimpleOptions` is an int
 Here's the updated options definition:
 
 ```ts title="src/types.ts"
-type SeriesSize = "sm" | "md" | "lg";
-type CircleColor = "red" | "green" | "blue";
+type SeriesSize = 'sm' | 'md' | 'lg';
+type CircleColor = 'red' | 'green' | 'blue';
 
 // interface defining panel options type
 export interface SimpleOptions {
@@ -199,7 +196,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
 
    ```ts title="src/components/SimplePanel.tsx"
    const radii = data.series
-     .map((series) => series.fields.find((field) => field.type === "number"))
+     .map((series) => series.fields.find((field) => field.type === 'number'))
      .map((field) => field?.values.get(field.values.length - 1));
    ```
 
@@ -219,12 +216,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
      <g fill={color}>
        {radii.map((radius, index) => {
          const step = width / radii.length;
-         return (
-           <circle
-             r={radius}
-             transform={`translate(${index * step + step / 2}, 0)`}
-           />
-         );
+         return <circle r={radius} transform={`translate(${index * step + step / 2}, 0)`} />;
        })}
      </g>
    </svg>
@@ -236,12 +228,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
    {
      radii.map((radius, index) => {
        const step = width / radii.length;
-       return (
-         <circle
-           r={radius}
-           transform={`translate(${index * step + step / 2}, 0)`}
-         />
-       );
+       return <circle r={radius} transform={`translate(${index * step + step / 2}, 0)`} />;
      });
    }
    ```

@@ -33,10 +33,10 @@ const numberValues = [12.3, 28.6];
 
 // Create data frame from values.
 const frame = toDataFrame({
-  name: "http_requests_total",
+  name: 'http_requests_total',
   fields: [
-    { name: "Time", type: FieldType.time, values: timeValues },
-    { name: "Value", type: FieldType.number, values: numberValues },
+    { name: 'Time', type: FieldType.time, values: timeValues },
+    { name: 'Value', type: FieldType.number, values: numberValues },
   ],
 });
 ```
@@ -56,7 +56,7 @@ const series = [
 ];
 
 const frame = toDataFrame(series);
-frame.name = "http_requests_total";
+frame.name = 'http_requests_total';
 ```
 
 ## Read values from a data frame
@@ -80,9 +80,7 @@ Field options let the user control how Grafana displays the data in a data frame
 To apply the field options to a value, use the `display` method on the corresponding field. The result contains information such as the color and suffix to use when display the value.
 
 ```tsx
-const valueField = frame.fields.find(
-  (field) => field.type === FieldType.number
-);
+const valueField = frame.fields.find((field) => field.type === FieldType.number);
 
 return (
   <div>
@@ -91,8 +89,7 @@ return (
           const displayValue = valueField.display!(value);
           return (
             <p style={{ color: displayValue.color }}>
-              {displayValue.text}{" "}
-              {displayValue.suffix ? displayValue.suffix : ""}
+              {displayValue.text} {displayValue.suffix ? displayValue.suffix : ''}
             </p>
           );
         })
@@ -104,8 +101,6 @@ return (
 To apply field options to the name of a field, use `getFieldDisplayName`.
 
 ```ts
-const valueField = frame.fields.find(
-  (field) => field.type === FieldType.number
-);
+const valueField = frame.fields.find((field) => field.type === FieldType.number);
 const valueFieldName = getFieldDisplayName(valueField, frame);
 ```

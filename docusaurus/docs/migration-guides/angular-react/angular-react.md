@@ -30,13 +30,13 @@ While there's no standard migration path from an Angular plugin to the new React
 Starting with Grafana 7.0, plugins export a `PanelPlugin` from `module.ts` where `MyPanel`is a React component containing the props from `PanelProps`.
 
 ```ts title="src/module.ts"
-import { PanelPlugin } from "@grafana/data";
+import { PanelPlugin } from '@grafana/data';
 
 export const plugin = new PanelPlugin<MyOptions>(MyPanel);
 ```
 
 ```ts title="src/MyPanel.tsx"
-import { PanelProps } from "@grafana/data";
+import { PanelProps } from '@grafana/data';
 
 interface Props extends PanelProps<SimpleOptions> {}
 

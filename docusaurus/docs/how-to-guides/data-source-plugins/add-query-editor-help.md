@@ -16,8 +16,8 @@ Query editors support the addition of a help component to display examples of po
 1. In the `src` directory of your plugin, create a file `QueryEditorHelp.tsx` with the following content:
 
    ```ts
-   import React from "react";
-   import { QueryEditorHelpProps } from "@grafana/data";
+   import React from 'react';
+   import { QueryEditorHelpProps } from '@grafana/data';
 
    export default (props: QueryEditorHelpProps) => {
      return <h2>My cheat sheet</h2>;
@@ -27,15 +27,11 @@ Query editors support the addition of a help component to display examples of po
 1. Configure the plugin to use `QueryEditorHelp`:
 
    ```ts
-   import QueryEditorHelp from "./QueryEditorHelp";
+   import QueryEditorHelp from './QueryEditorHelp';
    ```
 
    ```ts
-   export const plugin = new DataSourcePlugin<
-     DataSource,
-     MyQuery,
-     MyDataSourceOptions
-   >(DataSource)
+   export const plugin = new DataSourcePlugin<DataSource, MyQuery, MyDataSourceOptions>(DataSource)
      .setConfigEditor(ConfigEditor)
      .setQueryEditor(QueryEditor)
      .setQueryEditorHelp(QueryEditorHelp);
@@ -44,19 +40,19 @@ Query editors support the addition of a help component to display examples of po
 1. Create a few examples of potential queries:
 
    ```tsx
-   import React from "react";
-   import { QueryEditorHelpProps, DataQuery } from "@grafana/data";
+   import React from 'react';
+   import { QueryEditorHelpProps, DataQuery } from '@grafana/data';
 
    const examples = [
      {
-       title: "Addition",
-       expression: "1 + 2",
-       label: "Add two integers",
+       title: 'Addition',
+       expression: '1 + 2',
+       label: 'Add two integers',
      },
      {
-       title: "Subtraction",
-       expression: "2 - 1",
-       label: "Subtract an integer from another",
+       title: 'Subtraction',
+       expression: '2 - 1',
+       label: 'Subtract an integer from another',
      },
    ];
 
@@ -70,12 +66,7 @@ Query editors support the addition of a help component to display examples of po
              {item.expression ? (
                <div
                  className="cheat-sheet-item__example"
-                 onClick={(e) =>
-                   props.onClickExample({
-                     refId: "A",
-                     queryText: item.expression,
-                   } as DataQuery)
-                 }
+                 onClick={(e) => props.onClickExample({ refId: 'A', queryText: item.expression } as DataQuery)}
                >
                  <code>{item.expression}</code>
                </div>

@@ -1,13 +1,13 @@
-import cookie from "cookiejs";
+import cookie from 'cookiejs';
 
-export const cookieName = "consent";
-export const analyticsVersion = "2";
+export const cookieName = 'consent';
+export const analyticsVersion = '2';
 
 export function getCookie(name: string, key: string) {
   let res = cookie.get(name);
 
   try {
-    if (res && typeof res === "string") {
+    if (res && typeof res === 'string') {
       const parsed = JSON.parse(decodeURIComponent(res));
 
       if (parsed[key] !== undefined) {
@@ -25,12 +25,9 @@ export function getCookie(name: string, key: string) {
 export function setCookie(name: string, value: any) {
   let val = value;
 
-  if (typeof value === "object") {
+  if (typeof value === 'object') {
     val = JSON.stringify(value);
   }
 
-  return cookie.set(name, val, {
-    expires: 365,
-    domain: `.${window.location.hostname}`,
-  });
+  return cookie.set(name, val, { expires: 365, domain: `.${window.location.hostname}` });
 }

@@ -24,25 +24,14 @@ In the following example, the query editor loads regions via a request to `/regi
 The [`<page>.mockResourceResponse`](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/models/pages/GrafanaPage.ts#L53) method allows you to mock the response of a request to the data source [resource API](../../key-concepts/backend-plugins/#resources). To test that the filtering is working as expected, we use this method to mock the `/regions` response and assert that only the regions without `-gov-` in their name are shown when the regions dropdown is clicked.
 
 ```ts title="queryEditor.spec.ts"
-test("should filter out govcloud regions", async ({
-  panelEditPage,
-  selectors,
-  readProvisionedDataSource,
-}) => {
-  const regionsMock = [
-    "us-gov-west-1",
-    "us-east-1",
-    "us-west-1",
-    "us-gov-east-1",
-  ];
-  const expectedRegions = ["us-east-1", "us-west-1"];
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yaml" });
+test('should filter out govcloud regions', async ({ panelEditPage, selectors, readProvisionedDataSource }) => {
+  const regionsMock = ['us-gov-west-1', 'us-east-1', 'us-west-1', 'us-gov-east-1'];
+  const expectedRegions = ['us-east-1', 'us-west-1'];
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
   await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.mockResourceResponse("regions", regionsMock);
-  await panelEditPage.getQueryEditorRow("A").getByText("Regions").click();
-  await expect(
-    panelEditPage.getByGrafanaSelector(selectors.components.Select.option)
-  ).toHaveText(expectedRegions);
+  await panelEditPage.mockResourceResponse('regions', regionsMock);
+  await panelEditPage.getQueryEditorRow('A').getByText('Regions').click();
+  await expect(panelEditPage.getByGrafanaSelector(selectors.components.Select.option)).toHaveText(expectedRegions);
 });
 ```
 
@@ -55,16 +44,13 @@ Hitting third-party APIs in end-to-end tests can be useful, but it may also have
 :::
 
 ```ts title="queryEditor.spec.ts"
-test("data query should be successful when the query is valid", async ({
+test('data query should be successful when the query is valid', async ({
   panelEditPage,
   readProvisionedDataSource,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yaml" });
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yaml' });
   await panelEditPage.datasource.set(ds.name);
-  await panelEditPage
-    .getQueryEditorRow("A")
-    .getByText("Query Text")
-    .fill("SELECT * FROM dataset");
+  await panelEditPage.getQueryEditorRow('A').getByText('Query Text').fill('SELECT * FROM dataset');
   await expect(panelEditPage.refreshPanel()).toBeOK();
 });
 ```
@@ -78,33 +64,24 @@ Grafana comes with a set of built-in panels, and there's a variety of community 
 The `<page>.panel.data` property returns a [Playwright locator](https://playwright.dev/docs/locators) that resolves one or more elements that contain the values that are currently displayed in the Table panel. This means you can use any auto-retrying [matcher](https://playwright.dev/docs/test-assertions#auto-retrying-assertions) that accepts a locator as the receiving type.
 
 ```ts title="queryEditor.spec.ts"
-test("data query should return values 10 and 20", async ({
-  panelEditPage,
-  readProvisionedDataSource,
-}) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yml" });
+test('data query should return values 10 and 20', async ({ panelEditPage, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization("Table");
+  await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
-  await expect(panelEditPage.panel.data).toContainText(["10", "20"]);
+  await expect(panelEditPage.panel.data).toContainText(['10', '20']);
 });
 ```
 
 If you want to assert on what column headers are shown in the `Table` panel, you can use the `<page>.panel.fieldNames` property.
 
 ```ts title="queryEditor.spec.ts"
-test("data query should return headers  and 3", async ({
-  panelEditPage,
-  readProvisionedDataSource,
-}) => {
-  const ds = await readProvisionedDataSource({ fileName: "datasources.yml" });
+test('data query should return headers  and 3', async ({ panelEditPage, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization("Table");
+  await panelEditPage.setVisualization('Table');
   await expect(panelEditPage.refreshPanel()).toBeOK();
-  await expect(panelEditPage.panel.fieldNames).toHaveText([
-    "Stockholm",
-    "Vienna",
-  ]);
+  await expect(panelEditPage.panel.fieldNames).toHaveText(['Stockholm', 'Vienna']);
 });
 ```
 
@@ -113,37 +90,27 @@ test("data query should return headers  and 3", async ({
 Sometimes you may want to open the panel edit page for an already existing panel and run the query to make sure everything work as expected.
 
 ```ts
-test("query in provisioned dashboard should return temp and humidity data", async ({
+test('query in provisioned dashboard should return temp and humidity data', async ({
   readProvisionedDashboard,
   gotoPanelEditPage,
 }) => {
-  const dashboard = await readProvisionedDashboard({
-    fileName: "dashboard.json",
-  });
-  const panelEditPage = await gotoPanelEditPage({ dashboard, id: "3" });
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
   await expect(panelEditPage.refreshPanel()).toBeOK();
-  await expect(panel.fieldNames).toContainText(["temperature", "humidity"]);
-  await expect(panel.data).toContainText(["25", "10"]);
+  await expect(panel.fieldNames).toContainText(['temperature', 'humidity']);
+  await expect(panel.data).toContainText(['25', '10']);
 });
 ```
 
 You can also open an already existing dashboard and verify that a table panel have rendered the data that you expect.
 
 ```ts
-test("getting panel by id", async ({
-  gotoDashboardPage,
-  readProvisionedDashboard,
-}) => {
-  const dashboard = await readProvisionedDashboard({
-    fileName: "dashboard.json",
-  });
+test('getting panel by id', async ({ gotoDashboardPage, readProvisionedDashboard }) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
-  const panel1 = await dashboardPage.getPanelById("3");
-  await expect(panel1.data).toContainText(["25", "32", "staging"]);
-  const panel2 = await dashboardPage.getPanelByTitle("Basic table example");
-  await expect(dashboardPage.panel2.fieldNames).toContainText([
-    "Tokyo",
-    "Berlin",
-  ]);
+  const panel1 = await dashboardPage.getPanelById('3');
+  await expect(panel1.data).toContainText(['25', '32', 'staging']);
+  const panel2 = await dashboardPage.getPanelByTitle('Basic table example');
+  await expect(dashboardPage.panel2.fieldNames).toContainText(['Tokyo', 'Berlin']);
 });
 ```

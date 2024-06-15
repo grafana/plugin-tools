@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 // Import the original mapper
-import MDXComponents from "@theme-original/MDXComponents";
-import CodeSnippets from "@site/src/components/CodeSnippets/CodeSnippets";
-import SyncCommand from "@site/src/components/SyncCommand/SyncCommand";
-import DocLinkList from "@site/src/components/DocLinkList/DocLinkList";
+import MDXComponents from '@theme-original/MDXComponents';
+import CodeSnippets from '@site/src/components/CodeSnippets/CodeSnippets';
+import SyncCommand from '@site/src/components/SyncCommand/SyncCommand';
+import DocLinkList from '@site/src/components/DocLinkList/DocLinkList';
 
 export default {
   // Re-use the default mapping

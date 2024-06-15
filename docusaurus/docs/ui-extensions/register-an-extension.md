@@ -46,10 +46,10 @@ In the following example, we add an extension link to the Grafana dashboard pane
 
 ```ts title="src/module.ts"
 new AppPlugin().configureExtensionLink({
-  title: "Go to basic app",
-  description: "Will send the user to the basic app",
-  extensionPointId: "grafana/dashboard/panel/menu",
-  path: "/a/myorg-basic-app/one", // Must start with "/a/<PLUGIN_ID>/"
+  title: 'Go to basic app',
+  description: 'Will send the user to the basic app',
+  extensionPointId: 'grafana/dashboard/panel/menu',
+  path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
 });
 ```
 
@@ -58,13 +58,13 @@ new AppPlugin().configureExtensionLink({
 In the following example, we add an extension link to the Grafana dashboard panel menu. When the user clicks "Go to basic app," they are sent to `/a/myorg-basic-app/one?panelId=12345&timeZone=utc`.
 
 ```ts title="src/module.ts"
-import { AppPlugin, PluginExtensionPanelContext } from "@grafana/data";
+import { AppPlugin, PluginExtensionPanelContext } from '@grafana/data';
 
 new AppPlugin().configureExtensionLink({
-  title: "Go to basic app",
-  description: "Will send the user to the basic app",
-  extensionPointId: "grafana/dashboard/panel/menu",
-  path: "/a/myorg-basic-app/one", // Must start with "/a/<PLUGIN_ID>/"
+  title: 'Go to basic app',
+  description: 'Will send the user to the basic app',
+  extensionPointId: 'grafana/dashboard/panel/menu',
+  path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
   configure: (context: PluginExtensionPanelContext) => {
     const { timeZone, panelId } = context;
 
@@ -81,18 +81,18 @@ new AppPlugin().configureExtensionLink({
 In the following example, we add an extension link to the Grafana dashboard panel menu. It will only be visible for panels with the time zone set to UTC.
 
 ```ts title="src/module.ts"
-import { AppPlugin, PluginExtensionPanelContext } from "@grafana/data";
+import { AppPlugin, PluginExtensionPanelContext } from '@grafana/data';
 
 new AppPlugin().configureExtensionLink({
-  title: "Go to basic app",
-  description: "Will send the user to the basic app",
-  extensionPointId: "grafana/dashboard/panel/menu",
-  path: "/a/myorg-basic-app/one", // Must start with "/a/<PLUGIN_ID>/"
+  title: 'Go to basic app',
+  description: 'Will send the user to the basic app',
+  extensionPointId: 'grafana/dashboard/panel/menu',
+  path: '/a/myorg-basic-app/one', // Must start with "/a/<PLUGIN_ID>/"
   configure: (context: PluginExtensionPanelContext) => {
     const { timeZone } = context;
 
     switch (toLowerCase(timeZone)) {
-      case "utc":
+      case 'utc':
         return {}; // no overrides applied but we want to display the extension.
       default:
         return undefined; // returning undefined from the configure function will hide the extension.
@@ -134,9 +134,9 @@ Using React components as extensions is a powerful way to extend the functionali
 
 ```ts title="src/module.ts"
 new AppPlugin().configureExtensionComponent({
-  title: "My component extension",
-  description: "Renders a button at a pre-defined extension point.",
-  extensionPointId: "grafana/<extension-point-id>",
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
   component: MyExtension,
 });
 ```
@@ -162,12 +162,12 @@ Extension points defined in core Grafana additionally have a type definition ava
 
 ```ts title="src/module.ts"
 // This could also come from another plugin or defined manually if a plugin doesn't expose it.
-import { PluginExtensionSampleContext } from "@grafana/data";
+import { PluginExtensionSampleContext } from '@grafana/data';
 
 new AppPlugin().configureExtensionComponent<PluginExtensionSampleContext>({
-  title: "My component extension",
-  description: "Renders a button at a pre-defined extension point.",
-  extensionPointId: "grafana/<extension-point-id>",
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
   component: MyExtension,
 });
 ```
@@ -196,21 +196,21 @@ If you would like to access meta information about your plugin from within the c
 
 ```ts title="src/module.ts"
 new AppPlugin().configureExtensionComponent({
-  title: "My component extension",
-  description: "Renders a button at a pre-defined extension point.",
-  extensionPointId: "grafana/<extension-point-id>",
+  title: 'My component extension',
+  description: 'Renders a button at a pre-defined extension point.',
+  extensionPointId: 'grafana/<extension-point-id>',
   component: MyExtension,
 });
 ```
 
 ```tsx title="src/components/MyExtension.tsx"
-import { usePluginMeta, usePluginJsonData } from "@grafana/data";
+import { usePluginMeta, usePluginJsonData } from '@grafana/data';
 
 export const MyExtension = () => {
   const meta = usePluginMeta();
   const jsonData = usePluginJsonData();
 
-  if (meta.info.version !== "1.0.0") {
+  if (meta.info.version !== '1.0.0') {
     return null;
   }
 
@@ -232,12 +232,12 @@ export const MyExtension = () => {
 
 ```ts title="src/module.ts"
 new AppPlugin().configureExtensionComponent({
-  title: "Frobnicate dashboards",
-  description: "Opens a modal where the user can frobnicate dashboards",
-  extensionPointId: "grafana/commandpalette/action",
+  title: 'Frobnicate dashboards',
+  description: 'Opens a modal where the user can frobnicate dashboards',
+  extensionPointId: 'grafana/commandpalette/action',
   onClick: (event, { openModal }) => {
     openModal({
-      title: "Frobnicate dashboards",
+      title: 'Frobnicate dashboards',
       body: (props) => <MyModalComponent {...props} />,
     });
   },

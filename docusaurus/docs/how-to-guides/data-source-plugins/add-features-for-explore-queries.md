@@ -22,12 +22,12 @@ To extend Explore functionality for your data source, define an Explore-specific
 1. Create a file `ExploreQueryEditor.tsx` in the `src` directory of your plugin, with content similar to this:
 
    ```tsx title="src/ExploreQueryEditor.tsx"
-   import React from "react";
+   import React from 'react';
 
-   import { QueryEditorProps } from "@grafana/data";
-   import { QueryField } from "@grafana/ui";
-   import { DataSource } from "./DataSource";
-   import { MyQuery, MyDataSourceOptions } from "./types";
+   import { QueryEditorProps } from '@grafana/data';
+   import { QueryField } from '@grafana/ui';
+   import { DataSource } from './DataSource';
+   import { MyQuery, MyDataSourceOptions } from './types';
 
    type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
@@ -40,8 +40,8 @@ To extend Explore functionality for your data source, define an Explore-specific
 
    ```tsx title="src/QueryEditor.tsx"
    // [...]
-   import { CoreApp } from "@grafana/data";
-   import ExploreQueryEditor from "./ExploreQueryEditor";
+   import { CoreApp } from '@grafana/data';
+   import ExploreQueryEditor from './ExploreQueryEditor';
 
    type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 

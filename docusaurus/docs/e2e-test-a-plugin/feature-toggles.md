@@ -55,7 +55,7 @@ Feature toggles that are defined this way are propagated to `window.grafanaBootD
 To override feature toggles for tests in a specific test file, use code like this.
 
 ```typescript
-import { test, expect } from "@grafana/plugin-e2e";
+import { test, expect } from '@grafana/plugin-e2e';
 
 test.use({
   featureToggles: {
@@ -69,25 +69,19 @@ test.use({
 Use the `isFeatureToggleEnabled` fixture to determine whether a certain feature toggle is enabled. Under the hood, `isFeatureToggleEnabled` checks whether the given feature is defined and enabled in the `window.grafanaBootData.settings.featureToggles` object.
 
 ```typescript
-import { test, expect } from "@grafana/plugin-e2e";
-import * as semver from "semver";
+import { test, expect } from '@grafana/plugin-e2e';
+import * as semver from 'semver';
 
-test("valid credentials should return a 200 status code", async ({
+test('valid credentials should return a 200 status code', async ({
   createDataSourceConfigPage,
   page,
   isFeatureToggleEnabled,
 }) => {
-  const configPage = await createDataSourceConfigPage({
-    type: "grafana-snowflake-datasource",
-  });
-  await configPage
-    .getByGrafanaSelector("Data source connection URL")
-    .fill("http://localhost:9090");
-  const isSecureSocksDSProxyEnabled = await isFeatureToggleEnabled(
-    "secureSocksDSProxyEnabled"
-  );
+  const configPage = await createDataSourceConfigPage({ type: 'grafana-snowflake-datasource' });
+  await configPage.getByGrafanaSelector('Data source connection URL').fill('http://localhost:9090');
+  const isSecureSocksDSProxyEnabled = await isFeatureToggleEnabled('secureSocksDSProxyEnabled');
   if (isSecureSocksDSProxyEnabled) {
-    page.getByLabel("Enabled").check();
+    page.getByLabel('Enabled').check();
   }
   await expect(configPage.saveAndTest()).toBeOK();
 });

@@ -62,7 +62,7 @@ Edit the `.prettierrc.js` file in the project root to extend the Prettier config
 ```js title=".prettierrc.js"
 module.exports = {
   // Prettier configuration provided by @grafana/create-plugin
-  ...require("./.config/.prettierrc.js"),
+  ...require('./.config/.prettierrc.js'),
   semi: false,
 };
 ```
@@ -114,9 +114,9 @@ Create a `webpack.config.ts` file in the project root. This file extends the Web
 Use the following [webpack-merge](https://github.com/survivejs/webpack-merge) command:
 
 ```ts title="webpack.config.ts"
-import type { Configuration } from "webpack";
-import { merge } from "webpack-merge";
-import grafanaConfig from "./.config/webpack/webpack.config";
+import type { Configuration } from 'webpack';
+import { merge } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
 
 const config = async (env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
@@ -135,9 +135,9 @@ export default config;
 The following alternative customization excludes "libs" via rules in addition to "node_modules". It also provides fallbacks that are no longer present in Webpack v5.
 
 ```ts title="webpack.config.ts"
-import type { Configuration } from "webpack";
-import { mergeWithRules } from "webpack-merge";
-import grafanaConfig from "./.config/webpack/webpack.config";
+import type { Configuration } from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
 
 const config = async (env: any): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
@@ -151,18 +151,18 @@ const config = async (env: any): Promise<Configuration> => {
     },
     resolve: {
       fallback: {
-        crypto: require.resolve("crypto-browserify"),
+        crypto: require.resolve('crypto-browserify'),
         fs: false,
-        path: require.resolve("path-browserify"),
-        stream: require.resolve("stream-browserify"),
-        util: require.resolve("util"),
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'),
+        util: require.resolve('util'),
       },
     },
   };
   return mergeWithRules({
     module: {
       rules: {
-        exclude: "replace",
+        exclude: 'replace',
       },
     },
   })(baseConfig, customConfig);

@@ -6,16 +6,15 @@
 
 /* You can override the default Infima variables here. */
 
-@import url("./theme.css");
+@import url('./theme.css');
 
 @font-face {
   font-family: Inter;
   font-weight: var(--ifm-font-weight-normal);
   font-style: normal;
   font-display: swap;
-  src: url("/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2")
-    format("woff2");
-  unicode-range: "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD";
+  src: url('/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+  unicode-range: 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD';
 }
 
 @font-face {
@@ -23,9 +22,8 @@
   font-weight: var(--ifm-font-weight-normal);
   font-style: normal;
   font-display: swap;
-  src: url("/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2")
-    format("woff2");
-  unicode-range: "U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;";
+  src: url('/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2') format('woff2');
+  unicode-range: 'U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;';
 }
 
 @font-face {
@@ -33,9 +31,8 @@
   font-weight: var(--ifm-font-weight-semibold);
   font-style: normal;
   font-display: swap;
-  src: url("/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2")
-    format("woff2");
-  unicode-range: "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD";
+  src: url('/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+  unicode-range: 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD';
 }
 
 @font-face {
@@ -43,9 +40,8 @@
   font-weight: var(--ifm-font-weight-semibold);
   font-style: normal;
   font-display: swap;
-  src: url("/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2")
-    format("woff2");
-  unicode-range: "U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;";
+  src: url('/font/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2') format('woff2');
+  unicode-range: 'U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;';
 }
 
 @font-face {
@@ -53,9 +49,8 @@
   font-weight: var(--ifm-font-weight-normal);
   font-style: normal;
   font-display: swap;
-  src: url("/font/roboto/L0xTDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vrtSM1J-gEPT5Ese6hmHSh0mQ.woff2")
-    format("woff2");
-  unicode-range: "U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;";
+  src: url('/font/roboto/L0xTDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vrtSM1J-gEPT5Ese6hmHSh0mQ.woff2') format('woff2');
+  unicode-range: 'U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;';
 }
 
 /* generics */
@@ -71,7 +66,7 @@
 
 /* theme colors */
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --grafana-gradient-brand-vertical: var(--gradients-brandVertical);
   --ifm-background-color: var(--background-canvas);
   --ifm-card-background-color: var(--background-primary);
@@ -106,75 +101,27 @@ html[data-theme="dark"] {
 }
 
 .alert--info {
-  --ifm-alert-background-color-highlight: color-mix(
-    in srgb,
-    var(--info-shade),
-    transparent 70%
-  );
-  --ifm-alert-background-color: color-mix(
-    in srgb,
-    var(--info-main),
-    transparent 75%
-  );
-  --ifm-alert-border-color: color-mix(
-    in srgb,
-    var(--info-border),
-    transparent 15%
-  );
+  --ifm-alert-background-color-highlight: color-mix(in srgb, var(--info-shade), transparent 70%);
+  --ifm-alert-background-color: color-mix(in srgb, var(--info-main), transparent 75%);
+  --ifm-alert-border-color: color-mix(in srgb, var(--info-border), transparent 15%);
 }
 
 .alert--warning {
-  --ifm-alert-background-color-highlight: color-mix(
-    in srgb,
-    var(--warning-shade),
-    transparent 70%
-  );
-  --ifm-alert-background-color: color-mix(
-    in srgb,
-    var(--warning-main),
-    transparent 75%
-  );
-  --ifm-alert-border-color: color-mix(
-    in srgb,
-    var(--warning-border),
-    transparent 15%
-  );
+  --ifm-alert-background-color-highlight: color-mix(in srgb, var(--warning-shade), transparent 70%);
+  --ifm-alert-background-color: color-mix(in srgb, var(--warning-main), transparent 75%);
+  --ifm-alert-border-color: color-mix(in srgb, var(--warning-border), transparent 15%);
 }
 
 .alert--success {
-  --ifm-alert-background-color-highlight: color-mix(
-    in srgb,
-    var(--success-shade),
-    transparent 70%
-  );
-  --ifm-alert-background-color: color-mix(
-    in srgb,
-    var(--success-main),
-    transparent 75%
-  );
-  --ifm-alert-border-color: color-mix(
-    in srgb,
-    var(--success-border),
-    transparent 15%
-  );
+  --ifm-alert-background-color-highlight: color-mix(in srgb, var(--success-shade), transparent 70%);
+  --ifm-alert-background-color: color-mix(in srgb, var(--success-main), transparent 75%);
+  --ifm-alert-border-color: color-mix(in srgb, var(--success-border), transparent 15%);
 }
 
 .alert--danger {
-  --ifm-alert-background-color-highlight: color-mix(
-    in srgb,
-    var(--error-shade),
-    transparent 70%
-  );
-  --ifm-alert-background-color: color-mix(
-    in srgb,
-    var(--error-main),
-    transparent 75%
-  );
-  --ifm-alert-border-color: color-mix(
-    in srgb,
-    var(--error-border),
-    transparent 15%
-  );
+  --ifm-alert-background-color-highlight: color-mix(in srgb, var(--error-shade), transparent 70%);
+  --ifm-alert-background-color: color-mix(in srgb, var(--error-main), transparent 75%);
+  --ifm-alert-border-color: color-mix(in srgb, var(--error-border), transparent 15%);
 }
 
 /* cards */
@@ -200,11 +147,7 @@ html[data-theme="dark"] {
 
 .menu__list-item-collapsible,
 .menu__link {
-  border-image: linear-gradient(
-      var(--ifm-navbar-background-color),
-      var(--ifm-navbar-background-color)
-    )
-    1;
+  border-image: linear-gradient(var(--ifm-navbar-background-color), var(--ifm-navbar-background-color)) 1;
   border-left: 2px solid;
   border-radius: 0;
 }
@@ -245,7 +188,7 @@ html[data-theme="dark"] {
 }
 
 /* Put little triangle infront of suggestions */
-.algolia-autocomplete .ds-dropdown-menu [class^="ds-dataset-"] {
+.algolia-autocomplete .ds-dropdown-menu [class^='ds-dataset-'] {
   z-index: 1;
 }
 
@@ -262,9 +205,7 @@ html[data-theme="dark"] {
 }
 
 /* Set background for suggestions */
-html[data-theme="dark"]
-  .algolia-autocomplete
-  .ds-with-1.ds-dropdown-menu:before {
+html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before {
   background: var(--ifm-background-color);
 }
 
@@ -277,8 +218,7 @@ html[data-theme="dark"]
   border-bottom-color: var(--primary-text);
 }
 
-.algolia-autocomplete.algolia-autocomplete
-  .algolia-docsearch-suggestion--highlight {
+.algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--highlight {
   background: var(--warning-transparent);
   color: var(--primary-text);
 }
@@ -293,20 +233,15 @@ html[data-theme="dark"]
   box-shadow: inset 0 -2px 0 0 var(--primary-border);
 }
 
-.algolia-autocomplete.algolia-autocomplete
-  .ds-cursor
-  .algolia-docsearch-suggestion--wrapper {
+.algolia-autocomplete.algolia-autocomplete .ds-cursor .algolia-docsearch-suggestion--wrapper {
   box-shadow: inset -2px 0 0 var(--primary-shade);
 }
 
-.algolia-autocomplete.algolia-autocomplete
-  .algolia-docsearch-suggestion--category-header {
+.algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--category-header {
   background-color: var(--background-secondary);
 }
 
-.algolia-autocomplete.algolia-autocomplete
-  .algolia-docsearch-suggestion--subcategory-column:before,
-.algolia-autocomplete.algolia-autocomplete
-  .algolia-docsearch-suggestion--content:before {
+.algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column:before,
+.algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--content:before {
   background: var(--ifm-toc-border-color);
 }

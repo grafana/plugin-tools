@@ -63,11 +63,7 @@ To demonstrate how you can add secrets to a data source plugin, let's add suppor
 1. Add type information to your `secureJsonData` object by updating the props for your `ConfigEditor` to accept the interface as a second type parameter. Access the value of the secret from the `options` prop inside your `ConfigEditor`:
 
    ```ts
-   interface Props
-     extends DataSourcePluginOptionsEditorProps<
-       MyDataSourceOptions,
-       MySecureJsonData
-     > {}
+   interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions, MySecureJsonData> {}
    ```
 
    ```ts
@@ -99,8 +95,8 @@ To demonstrate how you can add secrets to a data source plugin, let's add suppor
    ```tsx
    <Input
      type="password"
-     placeholder={secureJsonFields?.apiKey ? "configured" : ""}
-     value={secureJsonData.apiKey ?? ""}
+     placeholder={secureJsonFields?.apiKey ? 'configured' : ''}
+     value={secureJsonData.apiKey ?? ''}
      onChange={onAPIKeyChange}
    />
    ```
@@ -117,7 +113,7 @@ To demonstrate how you can add secrets to a data source plugin, let's add suppor
        },
        secureJsonData: {
          ...options.secureJsonData,
-         apiKey: "",
+         apiKey: '',
        },
      });
    };
@@ -164,9 +160,7 @@ To forward requests through the Grafana proxy, you need to configure one or more
    export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
      url?: string;
 
-     constructor(
-       instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>
-     ) {
+     constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
        super(instanceSettings);
 
        this.url = instanceSettings.url;
@@ -179,15 +173,15 @@ To forward requests through the Grafana proxy, you need to configure one or more
 1. In the `query` method, make a request using `BackendSrv`. The first section of the URL path needs to match the `path` of your proxy route. The data source proxy replaces `this.url + routePath` with the `url` of the route. Based on our example, the URL for the request would be `https://api.example.com/v1/users`:
 
    ```ts
-   import { getBackendSrv } from "@grafana/runtime";
+   import { getBackendSrv } from '@grafana/runtime';
    ```
 
    ```ts
-   const routePath = "/example";
+   const routePath = '/example';
 
    getBackendSrv().datasourceRequest({
-     url: this.url + routePath + "/v1/users",
-     method: "GET",
+     url: this.url + routePath + '/v1/users',
+     method: 'GET',
    });
    ```
 

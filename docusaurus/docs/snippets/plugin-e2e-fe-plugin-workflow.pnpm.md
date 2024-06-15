@@ -57,7 +57,7 @@ jobs:
       - name: Wait for Grafana to start
         uses: nev7n/wait_for_response@v1
         with:
-          url: "http://localhost:3000/"
+          url: 'http://localhost:3000/'
           responseCode: 200
           timeout: 60000
           interval: 500

@@ -41,9 +41,9 @@ The easiest way to use the data proxy from a datasource plugin is using the [`Da
 ### Step 1: Use the `DataSourceHttpSettings` component in your data source plugin configuration page
 
 ```typescript title="src/ConfigEditor.tsx"
-import React from "react";
-import { DataSourceHttpSettings } from "@grafana/ui";
-import { DataSourcePluginOptionsEditorProps } from "@grafana/data";
+import React from 'react';
+import { DataSourceHttpSettings } from '@grafana/ui';
+import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
 export function ConfigEditor(props: DataSourcePluginOptionsEditorProps) {
   const { onOptionsChange, options } = props;
@@ -72,9 +72,9 @@ import {
   DataSourceInstanceSettings,
   FieldType,
   PartialDataFrame,
-} from "@grafana/data";
-import { getBackendSrv } from "@grafana/runtime";
-import { lastValueFrom } from "rxjs";
+} from '@grafana/data';
+import { getBackendSrv } from '@grafana/runtime';
+import { lastValueFrom } from 'rxjs';
 
 type TODO = {
   title: string;
@@ -109,16 +109,8 @@ export class DataSource extends DataSourceApi {
       return {
         refId: target.refId,
         fields: [
-          {
-            name: "Id",
-            type: FieldType.number,
-            values: todos.map((todo) => todo.id),
-          },
-          {
-            name: "Title",
-            type: FieldType.string,
-            values: todos.map((todo) => todo.title),
-          },
+          { name: 'Id', type: FieldType.number, values: todos.map((todo) => todo.id) },
+          { name: 'Title', type: FieldType.string, values: todos.map((todo) => todo.title) },
         ],
       };
     });
@@ -128,8 +120,8 @@ export class DataSource extends DataSourceApi {
 
   async testDatasource() {
     return {
-      status: "success",
-      message: "Success",
+      status: 'success',
+      message: 'Success',
     };
   }
 }
@@ -231,8 +223,8 @@ Declare the route in `src/plugin.json`. You may also use authenticated requests 
 In your app plugin's code, you can then fetch data using the data proxy by constructing the data proxy URL like this:
 
 ```typescript title="src/dataproxy-api-example.ts"
-import { getBackendSrv } from "@grafana/runtime";
-import { lastValueFrom } from "rxjs";
+import { getBackendSrv } from '@grafana/runtime';
+import { lastValueFrom } from 'rxjs';
 
 async function getDataFromApi() {
   const dataProxyUrl = `api/plugin-proxy/${PLUGIN_ID}/myRoutePath`;
@@ -250,7 +242,7 @@ You can specify the method directly in the `fetch` method. Your routes in `src/p
 ```typescript
 const response = getBackendSrv().fetch<TODO[]>({
   url: `${this.baseUrl}`,
-  method: "POST",
+  method: 'POST',
   data: dataToSendViaPost,
 });
 ```
