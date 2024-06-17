@@ -47,7 +47,7 @@ App and data source plugins can have a backend component written in Go. Backend 
 - Connect to non-HTTP services to which a browser normally can’t connect. For example, SQL database servers.
 - Keep state between users. For example, query caching for data sources.
 - Use custom authentication methods and/or authorization checks that aren’t supported in Grafana.
-- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](../introduction/backend.md#resources).
+- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](../key-concepts/backend-plugins/#resources).
 
 ### Do you want to add GitHub CI and Release workflows?
 

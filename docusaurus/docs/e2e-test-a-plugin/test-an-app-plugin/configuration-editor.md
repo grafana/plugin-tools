@@ -20,13 +20,13 @@ The app configuration page manages the configurations for your app if it require
 
 ## Test an app config page
 
-Apps have a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test the validity of the configuration. In the following example, the configuration editor form is populated with valid values when the **Save & test** button is clicked. 
+Apps have a [health check](../../key-concepts/backend-plugins/#health-checks) endpoint that is used to test the validity of the configuration. In the following example, the configuration editor form is populated with valid values when the **Save & test** button is clicked.
 
 A click on the **Save & test** button calls the Grafana backend to save the configuration, then passes the configuration to the health check endpoint. The test is successful only if both calls yield a successful status code.
 
 ### Config page with a basic UI
 
-Add an `appConfigPage` value by using a navigation function that returns the default `AppConfigPage` defined in `@grafana/plugin-e2e`. 
+Add an `appConfigPage` value by using a navigation function that returns the default `AppConfigPage` defined in `@grafana/plugin-e2e`.
 
 For example:
 
@@ -50,7 +50,7 @@ export const test = base.extend<AppTestFixture>({
 export { expect } from '@grafana/plugin-e2e';
 ```
 
-To use the value, import `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When you destructure the `appConfigPage` in your test function, the rest automatically navigates to the config page. 
+To use the value, import `test` and `expect` from your fixture instead of `@grafana/plugin-e2e`. When you destructure the `appConfigPage` in your test function, the rest automatically navigates to the config page.
 
 For example:
 
@@ -73,7 +73,7 @@ test('"Save & test" should be successful when configuration is valid', async ({ 
 
 ### Config page with a complex UI
 
-Add an `appConfigPage` by using a navigation function that returns the default `AppConfigPage` defined in `@grafana/plugin-e2e`. 
+Add an `appConfigPage` by using a navigation function that returns the default `AppConfigPage` defined in `@grafana/plugin-e2e`.
 
 For example:
 
@@ -136,7 +136,7 @@ test('"Save & test" should be successful when configuration is valid', async ({ 
 
 ## Test error scenarios
 
-In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user. 
+In some cases when the provided configuration is not valid, you may want to capture errors from the upstream API and return a meaningful error message to the user.
 
 For example:
 

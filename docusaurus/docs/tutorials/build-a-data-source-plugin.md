@@ -65,7 +65,7 @@ For an example of a health check in a frontend data source, see our [datasource-
 
 ## Returning Data frames
 
-There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called [data frames](../introduction/data-frames.md).
+There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called [data frames](../key-concepts/data-frames).
 
 Let's see how to create and return a data frame from the `query` method. In this step, you'll change the code in the starter plugin to return a [sine wave](https://en.wikipedia.org/wiki/Sine_wave).
 

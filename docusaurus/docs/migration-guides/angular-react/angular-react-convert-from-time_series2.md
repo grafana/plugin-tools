@@ -106,4 +106,5 @@ const metrics = getValues();
 ## Additional resources
 
 - Read more [Angular to React conversion guides](https://grafana.com/developers/plugin-tools/migration-guides/angular-react/).
-- Learn more about [dataframes](https://grafana.com/developers/plugin-tools/introduction/data-frames).
+- Learn more about [data frames](../../key-concepts/data-frames).
+

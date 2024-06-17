@@ -16,7 +16,7 @@ Panel plugins allow you to visualize data in different ways. This guide shows yo
 
 ## Test data
 
-To be able to test your panel plugin, you'll need to feed it with test data. Grafana ships with the [TestData](https://grafana.com/docs/grafana/latest/datasources/testdata/) data source, which can be used to simulate [data frames](../introduction/data-frames.md) formatted as time series, logs, traces, annotations, and more.
+To be able to test your panel plugin, you'll need to feed it with test data. Grafana ships with the [TestData](https://grafana.com/docs/grafana/latest/datasources/testdata/) data source, which can be used to simulate [data frames](../key-concepts/data-frames) formatted as time series, logs, traces, annotations, and more.
 
 ## Before you begin
 

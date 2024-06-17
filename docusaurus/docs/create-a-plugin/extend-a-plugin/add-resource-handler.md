@@ -14,7 +14,7 @@ keywords:
 
 # Add resource handler for data source plugins
 
-You can add a resource handler to your data source backend to extend the Grafana HTTP API with your own data source-specific routes. This guide explains why you may want to add [resource](/introduction/backend-plugins#resources) handlers and some common ways for doing so.
+You can add a resource handler to your data source backend to extend the Grafana HTTP API with your own data source-specific routes. This guide explains why you may want to add [resource](/key-concepts/backend-plugins/#resources) handlers and some common ways for doing so.
 
 ## Uses of resource handlers
 
@@ -81,7 +81,7 @@ props.datasource.postResource('device', { state: "on" });
 
 ## Advanced use cases
 
-If you have some more advanced use cases or want to use a more Go-agnostic approach for handling resources, you can use the regular [`http.Handler`](https://pkg.go.dev/net/http#Handler). You can do so by using a package provided by the [Grafana Plugin SDK for Go](../../introduction/grafana-plugin-sdk-for-go.md) named [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter). This package provides support for handling resource calls using an [`http.Handler`](https://pkg.go.dev/net/http#Handler).
+If you have some more advanced use cases or want to use a more Go-agnostic approach for handling resources, you can use the regular [`http.Handler`](https://pkg.go.dev/net/http#Handler). You can do so by using a package provided by the [Grafana Plugin SDK for Go](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) named [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter). This package provides support for handling resource calls using an [`http.Handler`](https://pkg.go.dev/net/http#Handler).
 
 Using [`http.Handler`](https://pkg.go.dev/net/http#Handler) allows you to also use Go’s built-in router functionality called [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) or your preferred HTTP router library (for example, [`gorilla/mux`](https://github.com/gorilla/mux)).
 
