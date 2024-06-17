@@ -32,8 +32,8 @@ This is a mono-repo of NPM packages to help plugin developers extend Grafana in 
 | Package Name                                                       | Description                             | Version                                                                                                             | Downloads                                                                                                                       |
 | ------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | [**`@grafana/create-plugin`**](./packages/create-plugin/README.md) | A CLI tool for scaffolding a new plugin | [![npm](https://img.shields.io/npm/v/@grafana/create-plugin)](https://www.npmjs.com/package/@grafana/create-plugin) | [![npm](https://img.shields.io/npm/dw/@grafana/create-plugin)](https://npmcharts.com/compare/@grafana/create-plugin?interval=7) |
-| [**`@grafana/sign-plugin`**](./packages/sign-plugin/README.md)     | A CLI tool for signing plugins | [![npm](https://img.shields.io/npm/v/@grafana/sign-plugin)](https://www.npmjs.com/package/@grafana/sign-plugin)     | [![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)](https://npmcharts.com/compare/@grafana/sign-plugin?interval=7)     |
-| [**`@grafana/plugin-e2e`**](./packages/plugin-e2e/README.md)       | Test Grafana plugins with playwright   | [![npm](https://img.shields.io/npm/v/@grafana/plugin-e2e)](https://www.npmjs.com/package/@grafana/plugin-e2e)       | [![npm](https://img.shields.io/npm/dw/@grafana/plugin-e2e)](https://npmcharts.com/compare/@grafana/plugin-e2e?interval=7)       |
+| [**`@grafana/sign-plugin`**](./packages/sign-plugin/README.md)     | A CLI tool for signing plugins          | [![npm](https://img.shields.io/npm/v/@grafana/sign-plugin)](https://www.npmjs.com/package/@grafana/sign-plugin)     | [![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)](https://npmcharts.com/compare/@grafana/sign-plugin?interval=7)     |
+| [**`@grafana/plugin-e2e`**](./packages/plugin-e2e/README.md)       | Test Grafana plugins with playwright    | [![npm](https://img.shields.io/npm/v/@grafana/plugin-e2e)](https://www.npmjs.com/package/@grafana/plugin-e2e)       | [![npm](https://img.shields.io/npm/dw/@grafana/plugin-e2e)](https://npmcharts.com/compare/@grafana/plugin-e2e?interval=7)       |
 
 ### Overview
 
@@ -41,10 +41,10 @@ This Mono-repo uses [NPM](https://nodejs.org) for package management, [NX](https
 
 ### Additional resources
 
-- [Grafana developer portal](https://grafana.com/developers) - learn from tutorials and read the documentation
-- [Plugin examples](https://github.com/grafana/grafana-plugin-examples/) - gain inspiration from our examples to get started quickly
-- [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) - simplify the development of backend components
-- [Plugin validator](https://github.com/grafana/plugin-validator/) - ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/)
+📖 Learn from tutorials and documentation in the [Grafana developer portal](https://grafana.com/developers).<br/>
+✨ Gain inspiration from our [plugin examples](https://github.com/grafana/grafana-plugin-examples/) to get started quickly and implement new features in your plugin.<br/>
+🛠️ Use the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go) to simplify the development of backend components.<br/>
+✅ Ensure your plugin is ready for publishing to the [Grafana plugin catalog](https://grafana.com/grafana/plugins/) with our [validator](https://github.com/grafana/plugin-validator/) tool.
 
 ## Contributors ✨
 
