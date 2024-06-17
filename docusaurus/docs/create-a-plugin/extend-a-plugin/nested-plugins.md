@@ -47,6 +47,12 @@ Here's an example of a nested data source plugin:
  └── plugin.json
 ```
 
+## When to use a nested plugin
+
+When you have a data source or panel plugin that you want to distribute along with your app plugin.
+
+Each nested data source can have its own backend, independent of the app plugin's backend.
+
 :::note
 
 Notice that the plugin `nested-datasource` doesn't have a `package.json` of its own. The name of the nested plugin folder is not important.
