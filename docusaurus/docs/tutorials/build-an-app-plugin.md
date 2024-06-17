@@ -190,3 +190,4 @@ If you want to let users know that your app requires an existing plugin, you can
 
 - [Sign your plugin](../publish-a-plugin/sign-a-plugin.md)
 - [Publish your plugin](../publish-a-plugin/publish-or-update-a-plugin.md)
+- Write [e2e tests](../e2e-test-a-plugin/get-started.md for your plugin
