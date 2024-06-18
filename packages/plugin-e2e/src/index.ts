@@ -2,7 +2,7 @@ import { test as base, expect as baseExpect } from '@playwright/test';
 
 import { AlertPageOptions, AlertVariant, ContainTextOptions, PluginFixture, PluginOptions } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
-// import { GrafanaAPIClient } from './models/GrafanaAPIClient';
+import { grafanaAPIClient } from './fixtures/grafanaAPIClient';
 import { createDataSource } from './fixtures/commands/createDataSource';
 import { createDataSourceConfigPage } from './fixtures/commands/createDataSourceConfigPage';
 import { createUser } from './fixtures/commands/createUser';
@@ -64,7 +64,7 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   selectors: e2eSelectors,
   grafanaVersion,
   login,
-  // grafanaAPIClient,
+  grafanaAPIClient,
   createDataSourceConfigPage,
   page,
   dashboardPage,

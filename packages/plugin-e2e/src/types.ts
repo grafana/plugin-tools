@@ -75,7 +75,7 @@ export type PluginOptions = {
 };
 
 export type PluginFixture = {
-  // grafanaAPIClient: GrafanaAPIClient;
+  grafanaAPIClient: GrafanaAPIClient;
   /**
    * The Grafana version that was detected when the test runner was started.
    *
