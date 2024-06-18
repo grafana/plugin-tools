@@ -137,3 +137,5 @@ See instructions on how to customize your configuration here https://grafana.com
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',
   updateCommandSuccess: '**Done.**\nIf you have any questions please open an issue/discussion in https://github.com/grafana/plugin-tools.',
 }
+
+export const GITHUB_EXAMPLES_REPO = 'grafana/grafana-plugin-examples';

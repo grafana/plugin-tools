@@ -3,36 +3,37 @@ import Enquirer from 'enquirer';
 import { PLUGIN_TYPES } from '../../constants.js';
 import { GenerateCliArgs } from '../../types.js';
 
-export async function promptUser(argv: minimist.ParsedArgs) {
-  let answers: Partial<GenerateCliArgs> = {};
+export async function promptUser<T>(argv: minimist.ParsedArgs, prompts: Array<Prompt<T>>): Promise<T> {
+  let answers: Partial<T> = {};
   const enquirer = new Enquirer();
 
   for (const prompt of prompts) {
     const { name, shouldPrompt } = prompt;
 
-    if (argv.hasOwnProperty(name)) {
-      answers = { ...answers, [name]: argv[name] };
+    if (argv.hasOwnProperty(name as string)) {
+      answers = { ...answers, [name]: argv[name as string] };
     } else {
       if (typeof shouldPrompt === 'function' && !shouldPrompt(answers)) {
         continue;
       } else {
+        //@ts-ignore TODO: fix this later
         const result = await enquirer.prompt(prompt);
         answers = { ...answers, ...result };
       }
     }
   }
 
-  return answers as GenerateCliArgs;
+  return answers as T;
 }
 
-type Prompt = {
-  name: keyof GenerateCliArgs;
+export type Prompt<T> = {
+  name: keyof T;
   type: string | (() => string);
   message: string | (() => string) | (() => Promise<string>);
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   initial?: any;
   choices?: Array<string | Choice>;
-  shouldPrompt?: (answers: Partial<GenerateCliArgs>) => boolean;
+  shouldPrompt?: (answers: Partial<T>) => boolean;
 };
 
 type Choice = {
@@ -45,7 +46,7 @@ type Choice = {
   disabled?: boolean | string;
 };
 
-const prompts: Prompt[] = [
+export const generateCliPrompts: Array<Prompt<GenerateCliArgs>> = [
   {
     name: 'pluginName',
     type: 'input',
