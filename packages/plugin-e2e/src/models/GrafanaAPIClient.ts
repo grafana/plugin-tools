@@ -2,7 +2,7 @@ import { APIRequestContext, expect } from '@playwright/test';
 import { DataSourceSettings, User } from '../types';
 
 export class GrafanaAPIClient {
-  constructor(private request: APIRequestContext) {}
+  constructor(private request: APIRequestContext, private grafanaAPICredentials: User) {}
 
   async getUserIdByUsername(userName: string) {
     const getUserIdByUserNameReq = await this.request.get(`/api/users/lookup?loginOrEmail=${userName}`);
@@ -27,7 +27,11 @@ export class GrafanaAPIClient {
       // user already exists
       userId = await this.getUserIdByUsername(user?.user);
     } else {
-      throw new Error(`Could not create user '${user?.user}': ${await createUserReq.text()}`);
+      throw new Error(
+        `Could not create user '${
+          user?.user
+        }'. Find information on how user can be managed in the plugin-e2e docs: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/use-authentication#managing-users  : ${await createUserReq.text()}`
+      );
     }
 
     if (user.role) {
@@ -35,7 +39,6 @@ export class GrafanaAPIClient {
         data: { role: user.role },
       });
       const updateRoleReqText = await updateRoleReq.text();
-      console.log(updateRoleReqText);
       await expect(
         updateRoleReq.ok(),
         `Could not assign role '${user.role}' to user '${user.user}': ${updateRoleReqText}`
