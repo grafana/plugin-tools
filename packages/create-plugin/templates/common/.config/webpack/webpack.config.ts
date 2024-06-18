@@ -112,7 +112,7 @@ const config = async (env): Promise<Configuration> => {
             {
               loader: 'imports-loader',
               options: {
-                imports: `side-effects ${join(__dirname, 'publicPath.ts')}`,
+                imports: `side-effects ${path.join(__dirname, 'publicPath.ts')}`,
               },
             },
           ],
