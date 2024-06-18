@@ -75,7 +75,6 @@ export type PluginOptions = {
 };
 
 export type PluginFixture = {
-  grafanaAPIClient: GrafanaAPIClient;
   /**
    * The Grafana version that was detected when the test runner was started.
    *
@@ -194,6 +193,19 @@ export type PluginFixture = {
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Client that allows you to use certain endpoints in the Grafana http API.
+   *
+   * Note that this client doesn't call the Grafana HTTP API on behalf of the logged in user -
+   * it uses the {@link types.grafanaAPICredentials} credentials. These defaults to admin:admin, but you may override this
+   * by specifying grafanaAPICredentials in the playwright config options.
+   *
+   * This fixture reuses storage state in all tests, so don't forget to add a dependency to the auth setup project in the playwright config.
+   * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/use-authentication for more info.
+   */
+
+  grafanaAPIClient: GrafanaAPIClient;
 
   /**
    * Isolated {@link DashboardPage} instance for each test.
