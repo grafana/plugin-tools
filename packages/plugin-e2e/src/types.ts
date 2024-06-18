@@ -19,6 +19,7 @@ import { PanelEditPage } from './models/pages/PanelEditPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
 import { VariablePage } from './models/pages/VariablePage';
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
+import { GrafanaAPIClient } from './models/GrafanaAPIClient';
 
 export type PluginOptions = {
   /**
@@ -74,6 +75,7 @@ export type PluginOptions = {
 };
 
 export type PluginFixture = {
+  // grafanaAPIClient: GrafanaAPIClient;
   /**
    * The Grafana version that was detected when the test runner was started.
    *
