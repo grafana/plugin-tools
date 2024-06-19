@@ -1,6 +1,6 @@
 ---
-id: ui-extensions-2
-title: UI extensions 2
+id: ui-extensions
+title: UI extensions
 description: Reference for UI extensions
 keywords:
   - grafana
@@ -60,12 +60,12 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 The `addComponent()` method takes a single `config` object with the following properties:
 
-| Property          | Description                                                                                                                                                                                                                 |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_ |
-| **`title`**       | A human readable title for the component.                                                                                                                                                                                   |
-| **`description`** | A human readable description for the component.                                                                                                                                                                             |
-| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note: the props passed to the component are defined by each extension point.                              |
+| Property          | Description                                                                                                                                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#extension-points-in-grafana)_ |
+| **`title`**       | A human readable title for the component.                                                                                                                                                                     |
+| **`description`** | A human readable description for the component.                                                                                                                                                               |
+| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note: the props passed to the component are defined by each extension point.                |
 
 #### Return value
 
@@ -73,13 +73,13 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Accessing plugin meta-data in the component](../tutorials/ui-extensions/register-an-extension.md#accessing-plugin-meta-in-a-component)
-- [Access your plugin's state inside the component](../tutorials/ui-extensions/register-an-extension.md#access-plugin-state-in-a-component)
-- [Hide a component in certain conditions](../tutorials/ui-extensions/register-an-extension.md#hide-a-component-in-certain-conditions)
+- [Accessing plugin meta-data in the component](../how-to-guides/ui-extensions/register-an-extension.md#accessing-plugin-meta-in-a-component)
+- [Access your plugin's state inside the component](../how-to-guides/ui-extensions/register-an-extension.md#access-plugin-state-in-a-component)
+- [Hide a component in certain conditions](../how-to-guides/ui-extensions/register-an-extension.md#hide-a-component-in-certain-conditions)
 
 #### See also
 
-- [Best practices for adding components](../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-components)
+- [Best practices for adding components](../how-to-guides/ui-extensions/register-an-extension.md#best-practices-for-adding-components)
 
 ### `addLink`
 
@@ -104,7 +104,7 @@ The `addLink()` method takes a single `config` object with the following propert
 
 | Property          | Description                                                                                                                                                                                                                                     |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_                     |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#extension-points-in-grafana)_                                   |
 | **`title`**       | A human readable title for the link.                                                                                                                                                                                                            |
 | **`description`** | A human readable description for the link.                                                                                                                                                                                                      |
 | **`path?`**       | _(Optional)_ A path within your app plugin where you would like to send users when they click the link. <br /> _Example: `"/a/myorg-incidents-app/incidents"`_                                                                                  |
@@ -119,13 +119,13 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Hide a link in certain conditions](../tutorials/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
-- [Update the path based on the context](../tutorials/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
-- [Open a modal from the `onClick()`](../tutorials/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
+- [Hide a link in certain conditions](../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
+- [Update the path based on the context](../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
+- [Open a modal from the `onClick()`](../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
 
 #### See also
 
-- [Best practices for adding links](../tutorials/ui-extensions/register-an-extension.md#best-practices-for-adding-links)
+- [Best practices for adding links](../how-to-guides/ui-extensions/register-an-extension.md#best-practices-for-adding-links)
 
 ### `exposeComponent`
 
@@ -164,11 +164,11 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Access plugin meta information in an exposed component](../tutorials/ui-extensions/expose-a-component.md#access-plugin-meta-information-in-an-exposed-component)
+- [Access plugin meta information in an exposed component](../how-to-guides/ui-extensions/expose-a-component.md#access-plugin-meta-information-in-an-exposed-component)
 
 #### See also
 
-- [Best practices for exposing components](../tutorials/ui-extensions/expose-a-component.md#best-practices)
+- [Best practices for exposing components](../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
 ### `getPluginExtensions` ⚠️
 
@@ -176,7 +176,7 @@ This function can be used to fetch extensions (both links and components) that a
 
 :::warning
 **This function is deprecated** and will be removed in Grafana v12.
-Please use either the [`usePluginLinks()`](#usePluginLinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
+Please use either the [`usePluginLinks()`](#usepluginlinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
 :::
 
 ```typescript
@@ -222,7 +222,7 @@ For more information, see [`PluginExtension`](https://github.com/grafana/grafana
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook can be used to **fetch a single react component** that was exposed by a plugin with a unique ID. Plugins can expose components using the [`AppPlugin.exposeComponent()`](#exposeComponent) method.
+This react hook can be used to **fetch a single react component** that was exposed by a plugin with a unique ID. Plugins can expose components using the [`AppPlugin.exposeComponent()`](#exposecomponent) method.
 
 ```typescript
 import { usePluginComponent } from '@grafana/runtime';
@@ -251,7 +251,7 @@ const {
 
 #### Examples
 
-- [How to render a component exposed by another plugin?](../tutorials/ui-extensions/use-an-exposed-component.md#using-an-exposed-component)
+- [How to render a component exposed by another plugin?](../how-to-guides/ui-extensions/use-an-exposed-component.md#using-an-exposed-component)
 
 ### `usePluginComponents`
 
@@ -259,7 +259,7 @@ const {
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook can be used to fetch _components_ that are registered to a certain extension point. Component extensions can be used to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addComponent) method.
+This react hook can be used to fetch _components_ that are registered to a certain extension point. Component extensions can be used to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addcomponent) method.
 
 ```typescript
 import { usePluginComponents } from '@grafana/runtime';
@@ -296,12 +296,12 @@ const {
 
 #### Examples
 
-- [Pass data to the components using props](../tutorials/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
-- [Limit which plugins can register components to your extension point](../tutorials/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components)
+- [Pass data to the components using props](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
+- [Limit which plugins can register components to your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components)
 
 #### See also
 
-- [Best practices for rendering components added by plugins](../tutorials/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)
+- [Best practices for rendering components added by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)
 
 ### `usePluginLinks`
 
@@ -309,7 +309,7 @@ const {
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook can be used to fetch links that are registered to a certain extension point. Plugins can register links using the [`AppPlugin.addLink()`](#addLink) method.
+This react hook can be used to fetch links that are registered to a certain extension point. Plugins can register links using the [`AppPlugin.addLink()`](#addlink) method.
 
 ```typescript
 import { usePluginLinks } from '@grafana/runtime';
@@ -350,13 +350,13 @@ const {
 
 #### Examples
 
-- [Pass data to the links](../tutorials/ui-extensions/create-an-extension-point.md#passing-data-to-links)
-- [Limit the number of links by plugins](../tutorials/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-by-plugins)
-- [Limit which plugins can register links to your extension point](../tutorials/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links)
+- [Pass data to the links](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
+- [Limit the number of links by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-by-plugins)
+- [Limit which plugins can register links to your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links)
 
 #### See also
 
-- [Best practices for rendering links added by plugins](../tutorials/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
+- [Best practices for rendering links added by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
 
 ### `usePluginExtensions` ⚠️
 
@@ -364,7 +364,7 @@ This react hook can be used to fetch extensions (both links and components) that
 
 :::warning
 **This hook is deprecated** and will be removed in Grafana v12.
-Please use either the [`usePluginLinks()`](#usePluginLinks) or [`usePluginComponents()`](#usePluginComponents) hooks instead.
+Please use either the [`usePluginLinks()`](#usepluginlinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
 :::
 
 ```typescript

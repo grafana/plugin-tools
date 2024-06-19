@@ -46,8 +46,8 @@ Examples where it would be useful:
 
 ## Further instructions
 
-- [Learn how to create an extension point](../tutorials/ui-extensions/create-an-extension-point.md)
-- [Learn how to register an extension to an extension point](../tutorials/ui-extensions/register-an-extension.md)
-- [Learn how to expose components from a plugin so other plugins can import them](../tutorials/ui-extensions/expose-a-component.md)
-- [Learn how to use exposed components](../tutorials/ui-extensions/use-an-exposed-component.md)
-- [Check the API reference](../reference/ui-extensions/extension-points.md)
+- [Learn how to create an extension point](../how-to-guides/ui-extensions/create-an-extension-point.md)
+- [Learn how to register an extension to an extension point](../how-to-guides/ui-extensions/register-an-extension.md)
+- [Learn how to expose components from a plugin so other plugins can import them](../how-to-guides/ui-extensions/expose-a-component.md)
+- [Learn how to use exposed components](../how-to-guides/ui-extensions/use-an-exposed-component.md)
+- [Check the API reference](../reference/ui-extensions.md)
