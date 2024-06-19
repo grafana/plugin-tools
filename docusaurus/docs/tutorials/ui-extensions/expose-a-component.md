@@ -27,7 +27,7 @@ export const plugin = new AppPlugin()
   .exposeComponent({
     // Important!
     // The `id` should always be prefixed with your plugin id, otherwise it won't be exposed.
-    id: `${pluginJson.id}/reusable-component`,
+    id: `${pluginJson.id}/reusable-component/v1`,
     title: 'Reusable component',
     description: 'A component that can be reused by other app plugins.',
     component: ({ name }: { name: string }) => <div>Hello {name}!</div>,
@@ -42,7 +42,7 @@ import pluginJson from './plugin.json';
 
 export const plugin = new AppPlugin()
   .exposeComponent({
-    id: `${pluginJson.id}/reusable-component`,
+    id: `${pluginJson.id}/reusable-component/v1`,
     title: 'Reusable component',
     description: 'A component that can be reused by other app plugins.',
     component: ({ name }: { name: string }) => {

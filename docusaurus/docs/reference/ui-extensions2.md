@@ -47,7 +47,7 @@ This method can be used to register a [React component](https://react.dev/learn/
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addComponent({
-  targets: ['grafana/user/profile/tab'],
+  targets: ['grafana/user/profile/tab/v1'],
   title: 'New user profile tab',
   description: 'A new tab that shows extended user profile information',
   component: () => {
@@ -60,12 +60,12 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 The `addComponent()` method takes a single `config` object with the following properties:
 
-| Property          | Description                                                                                                                                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_ |
-| **`title`**       | A human readable title for the component.                                                                                                                                                                                |
-| **`description`** | A human readable description for the component.                                                                                                                                                                          |
-| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note: the props passed to the component are defined by each extension point.                           |
+| Property          | Description                                                                                                                                                                                                                 |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_ |
+| **`title`**       | A human readable title for the component.                                                                                                                                                                                   |
+| **`description`** | A human readable description for the component.                                                                                                                                                                             |
+| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note: the props passed to the component are defined by each extension point.                              |
 
 #### Return value
 
@@ -91,7 +91,7 @@ This method can be used to register a link extension to a certain extension poin
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addLink({
-  targets: ['grafana/dashboard/panel/menu'],
+  targets: ['grafana/dashboard/panel/menu/v1'],
   title: 'Declare incident',
   description: 'Declare an incident and attach the panel context to it',
   path: '/a/myorg-incidents-app/incidents',
@@ -104,7 +104,7 @@ The `addLink()` method takes a single `config` object with the following propert
 
 | Property          | Description                                                                                                                                                                                                                                     |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_                        |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#available-extension-points-within-grafana)_                     |
 | **`title`**       | A human readable title for the link.                                                                                                                                                                                                            |
 | **`description`** | A human readable description for the link.                                                                                                                                                                                                      |
 | **`path?`**       | _(Optional)_ A path within your app plugin where you would like to send users when they click the link. <br /> _Example: `"/a/myorg-incidents-app/incidents"`_                                                                                  |
@@ -138,7 +138,7 @@ This method exposes a React component and makes it available for other plugins t
 ```typescript
 export const plugin = new AppPlugin<{}>()
     .exposeComponent({
-        id: "myorg-incidents-app/create-incident-form",],
+        id: "myorg-incidents-app/create-incident-form/v1",],
         title: "Create incident form",
         description: "A form to create a new incident.",
         component: () => {
@@ -153,7 +153,7 @@ The `exposeComponent()` method takes a single `config` object with the following
 
 | Property          | Description                                                                                                                                                                                                                                 |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`id`**          | A unique string identifier of the component you are exposing. **It must be prefixed with your plugin ID.** <br /> _Example: `"myorg-incidents-app/create-incident-form"`._                                                                  |
+| **`id`**          | A unique string identifier of the component you are exposing. **It must be prefixed with your plugin ID.** <br /> _Example: `"myorg-incidents-app/create-incident-form/v1"`._                                                               |
 | **`title`**       | A human readable title for the component.                                                                                                                                                                                                   |
 | **`description`** | A human readable description for the component.                                                                                                                                                                                             |
 | **`component`**   | A React component that you are exposing. <br /> _Make sure to wrap it with the necessary React context providers that the component is relying on, as this component is not going to be rendered under the same React tree as your plugin._ |
@@ -188,7 +188,7 @@ Consider using either [`usePluginLinks()`](#usePluginLinks) or [`usePluginCompon
 import { getPluginExtensions } from '@grafana/runtime';
 
 const { extensions } = getPluginExtensions({
-  extensionPointId: 'grafana/dashboard/panel/menu',
+  extensionPointId: 'grafana/dashboard/panel/menu/v1',
   limitPerPlugin: 2,
   context: {
     panelId: '...',
@@ -200,11 +200,11 @@ const { extensions } = getPluginExtensions({
 
 The `getPluginExtensions()` function takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                             |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu"`_ |
-| **`context?`**         | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                   |
-| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                              |
+| Property               | Description                                                                                                                                                                                                                                                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ |
+| **`context?`**         | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                      |
+| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                 |
 
 #### Return value
 
@@ -232,7 +232,7 @@ This react hook can be used to **fetch a single react component** that was expos
 ```typescript
 import { usePluginComponent } from '@grafana/runtime';
 
-const { component: Component, isLoading } = usePluginComponent('myorg-incidents-app/create-incident-form');
+const { component: Component, isLoading } = usePluginComponent('myorg-incidents-app/create-incident-form/v1');
 ```
 
 #### Parameters
@@ -270,7 +270,7 @@ This react hook can be used to fetch _components_ that are registered to a certa
 import { usePluginComponents } from '@grafana/runtime';
 
 const { components, isLoading } = usePluginComponents({
-  extensionPointId: 'grafana/user/profile/tab',
+  extensionPointId: 'grafana/user/profile/tab/v1',
   limitPerPlugin: 1,
 });
 ```
@@ -279,10 +279,10 @@ const { components, isLoading } = usePluginComponents({
 
 The `.usePluginComponents()` method takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                         |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/user/profile/tab"`_ |
-| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                          |
+| Property               | Description                                                                                                                                                                                                                                                                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/user/profile/tab/v1"`_ |
+| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                             |
 
 #### Return value
 
@@ -320,7 +320,7 @@ This react hook can be used to fetch links that are registered to a certain exte
 import { usePluginLinks } from '@grafana/runtime';
 
 const { links, isLoading } = usePluginLinks({
-  extensionPointId: 'grafana/dashboard/panel/menu',
+  extensionPointId: 'grafana/dashboard/panel/menu/v1',
   limitPerPlugin: 2,
   context: {
     panelId: '...',
@@ -332,11 +332,11 @@ const { links, isLoading } = usePluginLinks({
 
 The `.usePluginLinks()` method takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                             |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu"`_ |
-| **`context?`**         | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                   |
-| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                              |
+| Property               | Description                                                                                                                                                                                                                                                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ |
+| **`context?`**         | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                      |
+| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                 |
 
 #### Return value
 
@@ -376,7 +376,7 @@ Please use either the [`usePluginLinks()`](#usePluginLinks) or [`usePluginCompon
 import { usePluginExtensions } from '@grafana/runtime';
 
 const { extensions, isLoading } = usePluginExtensions({
-  extensionPointId: 'grafana/dashboard/panel/menu',
+  extensionPointId: 'grafana/dashboard/panel/menu/v1',
   limitPerPlugin: 2,
   context: {
     panelId: '...',
@@ -388,11 +388,11 @@ const { extensions, isLoading } = usePluginExtensions({
 
 The `.usePluginExtensions()` method takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                             |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu"`_ |
-| **`context?`**         | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                   |
-| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                              |
+| Property               | Description                                                                                                                                                                                                                                                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ |
+| **`context?`**         | _(Optional)_ - An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                      |
+| **`limitPerPlugin?`**  | _(Optional)_ - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                 |
 
 #### Return value
 

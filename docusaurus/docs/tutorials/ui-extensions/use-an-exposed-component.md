@@ -19,7 +19,7 @@ Exposed components are a way to share functionality between plugins.
 import { usePluginComponent } from '@grafana/runtime';
 
 export const MyComponent = () => {
-  const { component: Component, isLoading } = usePluginComponent('myorg-basic-app/reusable-component');
+  const { component: Component, isLoading } = usePluginComponent('myorg-basic-app/reusable-component/v1');
 
   return (
     <>

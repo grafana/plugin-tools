@@ -17,7 +17,7 @@ keywords:
 
 An "extension point" is a part of your plugin UI or Grafana UI where other plugins can hook in with either links or React components, to extend the user experience based on a context exposed by the extension point.
 
- Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
+Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
 | Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -61,7 +61,7 @@ export const InstanceToolbar = () => {
   // - Plugin       -> prefix with "{your-plugin-id}/"
   //
   // This is also what plugins use when they call `addLink()`
-  const extensionPointId = 'myorg-foo-app/toolbar';
+  const extensionPointId = 'myorg-foo-app/toolbar/v1';
   const { links, isLoading } = usePluginLinks({ extensionPointId });
 
   if (isLoading) {
@@ -87,7 +87,7 @@ export const InstanceToolbar = () => {
 import { usePluginLinks } from '@grafana/runtime';
 
 export const InstanceToolbar = ({ instanceId }) => {
-  const extensionPointId = 'myorg-foo-app/toolbar';
+  const extensionPointId = 'myorg-foo-app/toolbar/v1';
   // Heads up! Always use `useMemo()` in case the `context` object has any "dynamic" properties
   // to prevent unnecessary re-renders (Otherwise a new object would be created on every render, that could
   // result in a new links{} object, that could trigger a new re-render, and so on.)
@@ -152,7 +152,7 @@ export const InstanceToolbar = () => {
   // - Plugin       -> prefix with "{your-plugin-id}/"
   //
   // This is also what plugins use when they call `addComponent()`
-  const extensionPointId = 'myorg-foo-app/toolbar';
+  const extensionPointId = 'myorg-foo-app/toolbar/v1';
   const { components, isLoading } = usePluginComponents({ extensionPointId });
 
   if (isLoading) {
@@ -181,7 +181,7 @@ type ComponentProps = {
 };
 
 export const InstanceToolbar = ({ instanceId }) => {
-  const extensionPointId = 'myorg-foo-app/toolbar';
+  const extensionPointId = 'myorg-foo-app/toolbar/v1';
   const { components, isLoading } = usePluginComponents<ComponentProps>({ extensionPointId });
 
   if (isLoading) {
@@ -205,7 +205,7 @@ export const InstanceToolbar = ({ instanceId }) => {
 import { usePluginComponents } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
-  const extensionPointId = 'myorg-foo-app/toolbar';
+  const extensionPointId = 'myorg-foo-app/toolbar/v1';
   const { components, isLoading } = usePluginComponents<ComponentProps>({ extensionPointId });
 
   // You can rely on the `component.pluginId` prop to filter based on the plugin
