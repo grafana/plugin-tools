@@ -107,11 +107,11 @@ const plugins = [
         },
         {
           from: ['/ui-extensions/register-an-extension'],
-          to: '/tutorials/ui-extensions/register-an-extension',
+          to: '/how-to-guides/ui-extensions/register-an-extension',
         },
         {
           from: ['/ui-extensions/create-an-extension-point'],
-          to: '/tutorials/ui-extensions/create-an-extension-point',
+          to: '/how-to-guides/ui-extensions/create-an-extension-point',
         },
       ],
     },
