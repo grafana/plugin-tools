@@ -107,7 +107,7 @@ const config = async (env): Promise<Configuration> => {
           },
         },
         {
-          test: /src\/module\.tsx?$/,
+          test: /src\/(?:.*\/)?module\.tsx?$/,
           use: [
             {
               loader: 'imports-loader',
