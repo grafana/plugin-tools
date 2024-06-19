@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 30
 ---
 
-Exposed components are a way to share functionality between plugins.
+Exposed components are a way to share functionality between plugins. Use this feature when you want to share a react component with other app plugins, but you don't know or care where or under what circumstances it will be rendered.
 
 ## Using an exposed component
 

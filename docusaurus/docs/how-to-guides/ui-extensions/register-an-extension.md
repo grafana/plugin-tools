@@ -21,7 +21,6 @@ An "extension point" is a part of your plugin UI or Grafana UI where other plugi
 
 ### Best practices for adding links
 
-- **Define a `path`** - it is always good if your action can also be opened in a new tab using a link.
 - **Use the `configure()` function** - if your link's path has variables in it that are coming from the context, make sure to use the `configure()` function for updating the path.
 
 ### Register a link
