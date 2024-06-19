@@ -1,4 +1,4 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext } from '@playwright/test';
 import { DataSourceSettings, User } from '../types';
 
 export class GrafanaAPIClient {
