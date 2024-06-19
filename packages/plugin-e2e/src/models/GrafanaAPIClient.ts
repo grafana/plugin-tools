@@ -2,7 +2,7 @@ import { APIRequestContext, expect } from '@playwright/test';
 import { DataSourceSettings, User } from '../types';
 
 export class GrafanaAPIClient {
-  constructor(private request: APIRequestContext, private grafanaAPICredentials: User) {}
+  constructor(private request: APIRequestContext) {}
 
   async getUserIdByUsername(userName: string) {
     const getUserIdByUserNameReq = await this.request.get(`/api/users/lookup?loginOrEmail=${userName}`);
