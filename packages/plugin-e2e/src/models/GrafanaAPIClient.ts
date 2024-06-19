@@ -6,7 +6,6 @@ export class GrafanaAPIClient {
 
   async getUserIdByUsername(userName: string) {
     const getUserIdByUserNameReq = await this.request.get(`/api/users/lookup?loginOrEmail=${userName}`);
-    await expect(getUserIdByUserNameReq.ok()).toBeTruthy();
     const json = await getUserIdByUserNameReq.json();
     return json.id;
   }
@@ -38,11 +37,9 @@ export class GrafanaAPIClient {
       const updateRoleReq = await this.request.patch(`/api/org/users/${userId}`, {
         data: { role: user.role },
       });
-      const updateRoleReqText = await updateRoleReq.text();
-      await expect(
-        updateRoleReq.ok(),
-        `Could not assign role '${user.role}' to user '${user.user}': ${updateRoleReqText}`
-      ).toBeTruthy();
+      if (!updateRoleReq.ok()) {
+        throw new Error(`Could not assign role '${user.role}' to user '${user.user}': ${await updateRoleReq.text()}`);
+      }
     }
   }
 

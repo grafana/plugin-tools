@@ -197,12 +197,12 @@ export type PluginFixture = {
   /**
    * Client that allows you to use certain endpoints in the Grafana http API.
    *
-   * Note that this client doesn't call the Grafana HTTP API on behalf of the logged in user -
-   * it uses the {@link types.grafanaAPICredentials} credentials. These defaults to admin:admin, but you may override this
+   The GrafanaAPIClient doesn't call the Grafana HTTP API on behalf of the logged in user -
+   * it uses the {@link types.grafanaAPICredentials} credentials. grafanaAPICredentials defaults to admin:admin, but you may override this
    * by specifying grafanaAPICredentials in the playwright config options.
    *
-   * This fixture reuses storage state in all tests, so don't forget to add a dependency to the auth setup project in the playwright config.
-   * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/use-authentication for more info.
+   * Note that storage state for the admin client is not persisted throughout the test suite. For every test where the grafanaAPICredentials fixtures is used,
+   * new storage state is created.
    */
 
   grafanaAPIClient: GrafanaAPIClient;
