@@ -179,11 +179,6 @@ This function can be used to fetch extensions (both links and components) that a
 Please use either the [`usePluginLinks()`](#usePluginLinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
 :::
 
-:::info
-This is a synchronous function, which means that it can be unreliable when app plugins are loaded asynchronously.
-Consider using either [`usePluginLinks()`](#usePluginLinks) or [`usePluginComponents()`](#usePluginComponents) instead.
-:::
-
 ```typescript
 import { getPluginExtensions } from '@grafana/runtime';
 
