@@ -1,7 +1,7 @@
 import minimist from 'minimist';
 import Enquirer from 'enquirer';
 import { PLUGIN_TYPES } from '../../constants.js';
-import { GenerateCliArgs } from '../../types.js';
+import { BaseCliArgs, ExampleMetaData, FromTemplateCliArgs, GenerateCliArgs } from '../../types.js';
 
 export async function promptUser<T>(argv: minimist.ParsedArgs, prompts: Array<Prompt<T>>): Promise<T> {
   let answers: Partial<T> = {};
@@ -46,7 +46,7 @@ type Choice = {
   disabled?: boolean | string;
 };
 
-export const generateCliPrompts: Array<Prompt<GenerateCliArgs>> = [
+const basePrompts: Array<Prompt<BaseCliArgs>> = [
   {
     name: 'pluginName',
     type: 'input',
@@ -69,6 +69,10 @@ export const generateCliPrompts: Array<Prompt<GenerateCliArgs>> = [
       return 'Organization name is required';
     },
   },
+];
+
+export const generateCliPrompts: Array<Prompt<GenerateCliArgs>> = [
+  ...basePrompts,
   {
     name: 'pluginDescription',
     type: 'input',
@@ -101,3 +105,18 @@ export const generateCliPrompts: Array<Prompt<GenerateCliArgs>> = [
     initial: false,
   },
 ];
+
+export function getFromTemplatePrompts(templateList: ExampleMetaData[]): Array<Prompt<FromTemplateCliArgs>> {
+  return [
+    ...basePrompts,
+    {
+      name: 'template',
+      type: 'select',
+      message: 'Select a template',
+      choices: templateList.map((template) => ({
+        name: template.name,
+        hint: `(${template.description})`,
+      })),
+    },
+  ];
+}

@@ -1,15 +1,22 @@
 import { PLUGIN_TYPES } from './constants.js';
 
+export type BaseCliArgs = {
+  pluginName: string;
+  orgName: string;
+};
+
 // The arguments that are passed to the CLI when generating a new plugin.
 // (Either via user prompts or CLI arguments)
-export type GenerateCliArgs = {
-  pluginName: string;
+export type GenerateCliArgs = BaseCliArgs & {
   pluginDescription: string;
-  orgName: string;
   pluginType: PLUGIN_TYPES;
   hasBackend: boolean;
   hasGithubWorkflows: boolean;
   hasGithubLevitateWorkflow: boolean;
+};
+
+export type FromTemplateCliArgs = BaseCliArgs & {
+  template: string;
 };
 
 export type TemplateData = {
@@ -34,3 +41,10 @@ export type TemplateData = {
   hasGithubLevitateWorkflow: boolean;
   pluginExecutable?: string;
 };
+
+export interface ExampleMetaData {
+  name: string;
+  path: string;
+  url: string;
+  description: number;
+}
