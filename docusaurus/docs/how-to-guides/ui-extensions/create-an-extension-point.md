@@ -15,15 +15,13 @@ keywords:
   - apps
 ---
 
+import ExtensionPoints from '@shared/extension-points.md';
+
 An "extension point" is a part of your plugin UI or Grafana UI where other plugins can hook in with either links or React components, to extend the user experience based on a context exposed by the extension point.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
-| Type                                                                                                                                                                                                                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Link**                                                                                                                                                                                                                                                | Links have a `path` and an `onClick()` property. <br /><br /> **When to use?** <br /> Use links if you would like to give plugins a way to define custom user actions for a part of your UI. These actions can either just be cross-links to the plugin, or using `onClick()` methods they can implement a more interactive on-page experience with a modal. <br /><br />                                                                                                                                                                                                       |
-| **API reference** <br /> - [`addLink()`](../../reference/ui-extensions.md#addlink) - registering a link from a plugin <br /> - [`usePluginLinks()`](../../reference/ui-extensions.md#usepluginlinks) - fetching links registered for an extension point |
-| **Component**                                                                                                                                                                                                                                           | Components are React components that can be used to render a custom user experience. <br /><br /> **When to use?** <br /> Use components if you would like to give more freedom for plugins to extend your UI, for example to extend a configuration form with custom parts. <br /><br /> **API reference** <br /> - [`addComponent()`](../../reference/ui-extensions.md#addcomponent) - registering a component from a plugin <br /> - [`usePluginComponents()`](../../reference/ui-extensions.md#useplugincomponents) - fetching components registered for an extension point |
+<ExtensionPoints/>
 
 ## Links
 
@@ -33,7 +31,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note: the `context{}` object always gets frozen before being passed to the links, so it cannot be mutated.
 - **Avoid unnecessary re-renders** <br />
 
-  - **Static context*
+  - \*_Static context_
 
     ```ts
     // Define the `context` object outside of the component if it only has static values
