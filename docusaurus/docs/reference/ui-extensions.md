@@ -251,7 +251,7 @@ const {
 
 #### Examples
 
-- [How to render a component exposed by another plugin?](../how-to-guides/ui-extensions/use-an-exposed-component.md#using-an-exposed-component)
+- [How to render a component exposed by another plugin](../how-to-guides/ui-extensions/use-an-exposed-component.md#using-an-exposed-component)
 
 ### `usePluginComponents`
 
