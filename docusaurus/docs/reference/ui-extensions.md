@@ -62,7 +62,7 @@ The `addComponent()` method takes a single `config` object with the following pr
 
 | Property          | Description                                                                                                                                                                                                   |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#extension-points-in-grafana)_ |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_. [See available extension points in Grafana &rarr;](#extension-points-in-grafana) |
 | **`title`**       | A human readable title for the component.                                                                                                                                                                     |
 | **`description`** | A human readable description for the component.                                                                                                                                                               |
 | **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note: the props passed to the component are defined by each extension point.                |
