@@ -24,7 +24,7 @@ import { PluginExtensionPoints } from '@grafana/data';
 const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 ```
 
-| Property                          | Type      | Description                                                          |
+| Extension Point ID                          | Type      | Description                                                          |
 | --------------------------------- | --------- | -------------------------------------------------------------------- |
 | **`AlertingAlertingRuleAction`**  | Link      | Extend the alert rule menu with custom actions.                      |
 | **`AlertingHomePage`**            | Component | Extend the alerting home page with custom alert-creation experience. |
