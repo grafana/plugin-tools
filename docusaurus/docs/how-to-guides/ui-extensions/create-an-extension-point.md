@@ -43,7 +43,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
       const { links, isLoading } = usePluginLinks({ extensionPointId, context });
     ```
 
-  - **Dynamic `context`**
+  - **Dynamic context**
     ```ts
     export const InstanceToolbar = ({ instanceId }) => {
       // Always use `useMemo()` when the `context` object has "dynamic" values
