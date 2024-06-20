@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 30
 ---
 
-Exposed components are a way to share functionality between plugins. Use this feature when you want to share a react component with other app plugins, but you don't know or care where or under what circumstances it will be rendered.
+App plugins can [expose additional functionality through a React Component](./expose-a-component.md) which can then be imported within your own plugin. Use exposed components to augment your own App plugin with additional features to extend a user workflow.
 
 ## Using an exposed component
 

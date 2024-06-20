@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 30
 ---
 
-Exposed components are a way to share functionality between plugins.
+Exposing components allows for App plugins to easily share functionality with other App plugins. Compared to [registering an extension](link), they do not require the component extension provider to explicitly register against any extension points, and can therefore be [used by any App plugin](link-to-use) with no action required by the provider.
 
 ## Best practices
 
