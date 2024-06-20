@@ -21,10 +21,6 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 
 ## Links
 
-### Best practices for adding links
-
-- **Use the `configure()` function** - if your link's path has variables in it that are coming from the context, make sure to use the `configure()` function for updating the path.
-
 ### Register a link
 
 ```tsx
