@@ -8,11 +8,10 @@
  * We fallback to the plugin root so that older versions of Grafana will continue to load the plugin correctly.
  */
 
-// @ts-ignore
-import module from 'amd-module';
+// @ts-nocheck
+import amdMetaModule from 'amd-module';
 
-// @ts-ignore
 __webpack_public_path__ =
-  module && module.uri
-    ? module.uri.slice(0, module.uri.lastIndexOf('/') + 1)
-    : 'public/plugins/{{ pluginId }}/';
+  amdMetaModule && amdMetaModule.uri
+    ? amdMetaModule.uri.slice(0, amdMetaModule.uri.lastIndexOf('/') + 1)
+    : 'public/plugins/heywesty-trafficlight-panel/';
