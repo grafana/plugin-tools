@@ -14,7 +14,7 @@ import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { type Configuration, BannerPlugin } from 'webpack';
 
-import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL } from './utils';
+import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL, getCPConfigVersion } from './utils';
 import { SOURCE_DIR, DIST_DIR } from './constants';
 
 const pluginJson = getPluginJson();
