@@ -11,12 +11,14 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import LiveReloadPlugin from 'webpack-livereload-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
-import { Configuration } from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
+import { type Configuration, BannerPlugin } from 'webpack';
 
 import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL } from './utils';
 import { SOURCE_DIR, DIST_DIR } from './constants';
 
 const pluginJson = getPluginJson();
+const cpVersion = getCPConfigVersion();
 
 const config = async (env): Promise<Configuration> => {
   const baseConfig: Configuration = {
@@ -133,6 +135,28 @@ const config = async (env): Promise<Configuration> => {
       ],
     },
 
+    optimization: {
+      minimize: Boolean(env.production),
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              comments: (_, comment) => /^\**!|@preserve|@license|@cc_on|\[create-plugin\]/i.test(comment.value),
+            },
+          },
+          extractComments: (_, comment) => {
+            const { value, type } = comment;
+            // Keep `[create-plugin]` comments in the output
+            if (type === 'comment2' && value.startsWith('[create-plugin]')) {
+              return false;
+            }
+            // Extract other comments
+            return /^\**!|@preserve|@license|@cc_on/i.test(value);
+          },
+        }),
+      ],
+    },
+
     output: {
       clean: {
         keep: new RegExp(`(.*?_(amd64|arm(64)?)(.exe)?|go_plugin_build_manifest)`),
@@ -147,6 +171,12 @@ const config = async (env): Promise<Configuration> => {
     },
 
     plugins: [
+      // Insert create plugin version information into the bundle
+      new BannerPlugin({
+        banner: "/* [create-plugin] version: " + cpVersion + "*/",
+        raw: true,
+        entryOnly: true,
+      }),
       new CopyWebpackPlugin({
         patterns: [
           // If src/README.md exists use it; otherwise the root README
