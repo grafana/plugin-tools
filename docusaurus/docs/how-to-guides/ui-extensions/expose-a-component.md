@@ -11,13 +11,15 @@ keywords:
 sidebar_position: 30
 ---
 
-Exposing components allows for App plugins to easily share functionality with other App plugins. Compared to [registering an extension](link), they do not require the component extension provider to explicitly register against any extension points, and can therefore be [used by any App plugin](link-to-use) with no action required by the provider.
+Expose components to allow app plugins to easily share functionality with other app plugins. Compared to [registering an extension](./register-an-extension), they do not require the extension provider to explicitly register a component against any extension points, and can therefore be [used by any app plugin](link-to-use) with no action required by the provider.
 
 ## Best practices
 
-- **Wrap your component with providers** - if you want to access any plugin specific state in your component make sure to wrap it with the necessary React context providers (e.g. for Redux)
+- **Wrap your component with providers** - if you want to access any plugin-specific state in your component, make sure to wrap it with the necessary React context providers (for example, a wrapping for Redux).
 
-## Exposing a component from an app plugin
+## Expose a component from an app plugin
+
+You can expose multiple components from within the same app plugin. For example:
 
 ```tsx
 import pluginJson from './plugin.json';
@@ -35,6 +37,8 @@ export const plugin = new AppPlugin()
 ```
 
 ## Access plugin meta information in an exposed component
+
+You can access metadata for the extended component. For example:
 
 ```tsx
 import { usePluginContext } from "@grafana/runtime";

@@ -13,7 +13,7 @@ sidebar_position: 20
 
 import ExtensionPoints from '@shared/extension-points.md';
 
-An "extension" is either a link or a React component defined by a plugin and rendered either somewhere in the core Grafana UI or in an other app plugin.
+An _extension_ is a plugin-defined link or a React component that is rendered in either in the core Grafana UI or in another app plugin.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
@@ -22,6 +22,8 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 ## Links
 
 ### Register a link
+
+You can add an extension point for a link. For example:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';
@@ -36,6 +38,8 @@ export const plugin = new AppPlugin().addLink({
 ```
 
 ### Hide a link in certain conditions
+
+You can hide the link at the extension point. For example:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';

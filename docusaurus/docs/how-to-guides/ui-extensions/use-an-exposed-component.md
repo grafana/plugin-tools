@@ -11,9 +11,11 @@ keywords:
 sidebar_position: 30
 ---
 
-App plugins can [expose additional functionality through a React Component](./expose-a-component.md) which can then be imported within your own plugin. Use exposed components to augment your own App plugin with additional features to extend a user workflow.
+App plugins can [expose additional functionality through a React component](./expose-a-component.md) which can then be imported into your own plugin. Use exposed components to augment your own app plugin with additional features to extend a user workflow.
 
-## Using an exposed component
+## Use an exposed component
+
+The following example shows how to use a component exposed by the plugin:
 
 ```tsx
 import { usePluginComponent } from '@grafana/runtime';

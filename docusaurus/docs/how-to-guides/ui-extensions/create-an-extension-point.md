@@ -28,7 +28,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 ### Best practices for rendering links
 
 - **Make sure your UI handles multiple links** <br /> Multiple plugins may add links to your extension point. Make sure your extension point can handle this and still provide good user experience. See how you can [limit the number of extensions displayed by plugins](#limit-the-number-of-extensions-by-plugins).
-- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note: the `context{}` object always gets frozen before being passed to the links, so it cannot be mutated.
+- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note that the `context{}` object always gets frozen before being passed to the links, so it can't be mutated.
 - **Avoid unnecessary re-renders** <br />
 
   - \*_Static context_
@@ -99,7 +99,7 @@ export const InstanceToolbar = ({ instanceId }) => {
 
 ### Limit the number of extensions by plugins
 
-You might have limited space on the UI and you would like the limit the number of extensions plugins can register to your extension point. By default there is **no limit**.
+You might have limited space on the UI and you would like the limit the number of extensions plugins can register to your extension point. By default there is _no limit_.
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -137,7 +137,7 @@ export const InstanceToolbar = () => {
 
 ### Best practices for rendering components
 
-- **Make sure your UI controls the behaviour** <br /> Component extensions can render different layouts and can respond to various kind of user interactions. Make sure that your UI defines clear boundaries for rendering components defined by other plugins.
+- **Make sure your UI controls the behavior** <br /> Component extensions can render different layouts and can respond to various kind of user interactions. Make sure that your UI defines clear boundaries for rendering components defined by other plugins.
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as `props` to the components.
 
 ### Creating an extension point for components
@@ -174,7 +174,7 @@ export const InstanceToolbar = () => {
 ```tsx
 import { usePluginComponents } from '@grafana/runtime';
 
-// Types for the props (passed as a generic to the hook below)
+// Types for the props (passed as a generic to the following hook)
 type ComponentProps = {
   instanceId: string;
 };
