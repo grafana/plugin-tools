@@ -24,14 +24,14 @@ import { PluginExtensionPoints } from '@grafana/data';
 const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 ```
 
-| Extension Point ID                          | Type      | Description                                                          |
+| Extension Point ID                | Type      | Description                                                          |
 | --------------------------------- | --------- | -------------------------------------------------------------------- |
 | **`AlertingAlertingRuleAction`**  | Link      | Extend the alert rule menu with custom actions.                      |
 | **`AlertingHomePage`**            | Component | Extend the alerting home page with custom alert-creation experience. |
 | **`AlertingRecordingRuleAction`** | Link      | Extend the alert rule menu with custom actions.                      |
 | **`AlertInstanceAction`**         | Link      | Extend the alert instances table with custom actions.                |
-| **`CommandPalette`**              | Link      | Extend the command palette with plugin specific actions.             |
-| **`DashboardPanelMenu`**          | Link      | Extend the panel menu with plugin specific actions.                  |
+| **`CommandPalette`**              | Link      | Extend the command palette with custom actions.                      |
+| **`DashboardPanelMenu`**          | Link      | Extend the panel menu with custom actions.                           |
 | **`ExploreToolbarAction`**        | Link      | Extend the "Add" button on the Explore page with custom actions.     |
 | **`UserProfileTab`**              | Component | Extend the user profile page with custom tabs.                       |
 
