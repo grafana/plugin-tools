@@ -227,7 +227,7 @@ export const plugin = new AppPlugin().addComponent({
 
 ### My component is not appearing
 
-1. **Check the console logs** - there is a good chance that your component is not appearing due to some validation errors. In this case you should see some relevant logs in your browsers console.
+1. **Check the console logs** - there is a good chance that your component is not appearing due to some validation errors. In this case you should see some relevant logs in your browser's console.
 1. **Check the `targets`** - make sure that you are using the correct extension point ids (always use the `PluginExtensionPoints` enum for Grafana extension points)
 1. **Check your components implementation** - in case your component returns `null` under certain conditions, then it won't be rendered at the extension point.
 1. **Check if you register too many components** - certain extension points limit the number of components allowed per plugin, and in case your plugin registers more than one component for the same extension point there is a chance that some of them are filtered out.
