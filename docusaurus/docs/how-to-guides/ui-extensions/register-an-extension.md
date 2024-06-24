@@ -13,7 +13,7 @@ sidebar_position: 20
 
 import ExtensionPoints from '@shared/extension-points.md';
 
-An _extension_ is a plugin-defined link or a React component that is rendered in either in the core Grafana UI or in another app plugin.
+An _extension_ is a plugin-defined link or a React component that is rendered in either the core Grafana UI or in another app plugin.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
