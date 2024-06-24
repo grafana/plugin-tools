@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 30
 ---
 
-Expose components to allow app plugins to easily share functionality with other app plugins. Compared to [registering an extension](./register-an-extension), they do not require the extension provider to explicitly register a component against any extension points, and can therefore be [used by any app plugin](link-to-use) with no action required by the provider.
+Expose components to allow app plugins to easily share functionality with other app plugins. Compared to [registering an extension](./register-an-extension), they do not require the extension provider to explicitly register a component against any extension points, and can therefore be [used by any app plugin](./use-an-exposed-component.md) with no action required by the provider.
 
 ## Best practices
 
