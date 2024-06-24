@@ -1,3 +1,16 @@
+# (Mon Jun 24 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.6.0`
+  - Plugin E2E: Interact with Grafana http api on behalf of logged in user [#965](https://github.com/grafana/plugin-tools/pull/965) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Jun 11 2024)
 
 #### 🚀 Enhancement
