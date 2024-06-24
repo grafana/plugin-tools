@@ -31,7 +31,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note that the `context{}` object always gets frozen before being passed to the links, so it can't be mutated.
 - **Avoid unnecessary re-renders** <br />
 
-  - \*_Static context_
+  - **Static context**
 
     ```ts
     // Define the `context` object outside of the component if it only has static values
