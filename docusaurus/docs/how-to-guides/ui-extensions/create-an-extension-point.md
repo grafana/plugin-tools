@@ -174,7 +174,7 @@ export const InstanceToolbar = () => {
 ```tsx
 import { usePluginComponents } from '@grafana/runtime';
 
-// Types for the props (passed as a generic to the following hook)
+// Types for the props (passed as a generic to the hook in the following code block)
 type ComponentProps = {
   instanceId: string;
 };
