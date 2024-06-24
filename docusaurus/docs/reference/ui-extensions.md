@@ -26,9 +26,9 @@ const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 
 | Extension Point ID                | Type      | Description                                                          |
 | --------------------------------- | --------- | -------------------------------------------------------------------- |
-| **`AlertingAlertingRuleAction`**  | Link      | Extend the alert rule menu with custom actions.                      |
+| **`AlertingAlertingRuleAction`**  | Link      | Extend the alert rule menu with custom actions for alerting rules.   |
 | **`AlertingHomePage`**            | Component | Extend the alerting home page with custom alert-creation experience. |
-| **`AlertingRecordingRuleAction`** | Link      | Extend the alert rule menu with custom actions.                      |
+| **`AlertingRecordingRuleAction`** | Link      | Extend the alert rule menu with custom actions for recording rules.  |
 | **`AlertInstanceAction`**         | Link      | Extend the alert instances table with custom actions.                |
 | **`CommandPalette`**              | Link      | Extend the command palette with custom actions.                      |
 | **`DashboardPanelMenu`**          | Link      | Extend the panel menu with custom actions.                           |
