@@ -39,7 +39,7 @@ export const plugin = new AppPlugin().addLink({
 
 ### Hide a link in certain conditions
 
-You can hide the link at the extension point. For example:
+You can hide a link at the extension point. For example:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';
