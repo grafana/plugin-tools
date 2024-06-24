@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 50
 ---
 
-This page describes the UI Extensions API in detail.
+This page describes the UI extensions API in detail.
 
 ## Extension points in Grafana
 
