@@ -23,7 +23,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 
 ### Register a link
 
-You can add an extension point for a link. For example:
+You can add an extension for a link. For example:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';
