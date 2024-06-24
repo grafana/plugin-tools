@@ -15,7 +15,7 @@ App plugins can [expose additional functionality through a React component](./ex
 
 ## Use an exposed component
 
-The following example shows how to use a component exposed by the plugin:
+The following example shows how to use a component exposed by another plugin:
 
 ```tsx
 import { usePluginComponent } from '@grafana/runtime';
