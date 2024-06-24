@@ -19,7 +19,7 @@ Expose components to allow app plugins to easily share functionality with other 
 
 ## Expose a component from an app plugin
 
-You can expose a component from within the same app plugin. For example:
+You can expose one or multiple components from within the same app plugin. For example:
 
 ```tsx
 import pluginJson from './plugin.json';
