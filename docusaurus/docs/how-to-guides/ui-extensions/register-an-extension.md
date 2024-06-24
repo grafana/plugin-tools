@@ -219,7 +219,7 @@ export const plugin = new AppPlugin().addComponent({
 
 ### My link is not appearing
 
-1. **Check the console logs** - there is a good chance that your link is not appearing due to some validation errors. In this case you should see some relevant logs in your browsers console.
+1. **Check the console logs** - there is a good chance that your link is not appearing due to some validation errors. In this case you should see some relevant logs in your browser's console.
 1. **Check the `targets`** - make sure that you are using the correct extension point ids (always use the `PluginExtensionPoints` enum for Grafana extension points)
 1. **Check the links `configure()` function** - in case your link has a `configure()` function it can happen that it is returning `undefined` under certain conditions, which hides the link.
 1. **Check if you register too many links** - certain extension points limit the number of links allowed per plugin, and in case your plugin registers more than one links for the same extension point there is a chance that some of them are filtered out.
