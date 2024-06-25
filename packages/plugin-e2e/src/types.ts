@@ -19,6 +19,7 @@ import { PanelEditPage } from './models/pages/PanelEditPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
 import { VariablePage } from './models/pages/VariablePage';
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
+import { GrafanaAPIClient } from './models/GrafanaAPIClient';
 
 export type PluginOptions = {
   /**
@@ -192,6 +193,19 @@ export type PluginFixture = {
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Client that allows you to use certain endpoints in the Grafana http API.
+   *
+   The GrafanaAPIClient doesn't call the Grafana HTTP API on behalf of the logged in user -
+   * it uses the {@link types.grafanaAPICredentials} credentials. grafanaAPICredentials defaults to admin:admin, but you may override this
+   * by specifying grafanaAPICredentials in the playwright config options.
+   *
+   * Note that storage state for the admin client is not persisted throughout the test suite. For every test where the grafanaAPICredentials fixtures is used,
+   * new storage state is created.
+   */
+
+  grafanaAPIClient: GrafanaAPIClient;
 
   /**
    * Isolated {@link DashboardPage} instance for each test.
