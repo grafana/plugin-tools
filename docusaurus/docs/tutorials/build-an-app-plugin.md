@@ -44,7 +44,7 @@ Next, you'll learn the basic workflow of making a change to your app, building i
 
 The first step is to see your scaffolded plugin in action.
 
-1. Start your Grafana instance with `docker compose up`
+1. Start your Grafana instance with `docker compose up`.
 1. Open Grafana in your browser. Go to [http://localhost:3000](http://localhost:3000).
 1. Go to **Apps** -> **Your App Name**.
 
