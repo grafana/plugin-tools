@@ -49,7 +49,7 @@ Here's an example of a nested data source plugin:
 
 ## When to use a nested plugin
 
-When you have a data source or panel plugin that you want to distribute along with your app plugin.
+When you have a data source or panel plugin that you want to distribute along with your app plugin,
 
 Each nested data source can have its own backend, independent of the app plugin's backend.
 
