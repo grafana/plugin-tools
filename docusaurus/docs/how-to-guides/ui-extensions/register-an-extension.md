@@ -15,6 +15,8 @@ import ExtensionPoints from '@shared/extension-points.md';
 
 An _extension_ is a plugin-defined link or a React component that is rendered in either the core Grafana UI or in another app plugin.
 
+Compared to [exposing a component](./expose-a-component.md), they are explicitly registered against one or more extension point IDs. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
+
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
 <ExtensionPoints/>
