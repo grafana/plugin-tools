@@ -22,10 +22,6 @@ If you want to migrate an existing plugin to use the data frame format, refer to
 
 :::
 
-## Create a data frame
-
-If you build a data source plugin, then you'll most likely want to convert a response from an external API to a data frame. Learn how to do this in [Create a data frame](../../key-concepts/data-frames)
-
 ## Read values from a data frame
 
 When you're building a panel plugin, the data frames returned by the data source are available from the `data` prop in your panel component.
