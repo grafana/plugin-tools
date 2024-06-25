@@ -11,6 +11,6 @@ keywords:
   - panel
 ---
 
-Learn how to perform common tasks in Grafana panel plugin development.
+Learn how to add additional functionality and capabilities to Grafana panel plugins.
 
 <DocLinkList />
