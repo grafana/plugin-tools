@@ -84,7 +84,7 @@ Let's add a new page to the navigation menu:
    ]
    ```
 
-1. Save the `src/plugin.json` file
+1. Save the `src/plugin.json` file.
 1. Restart your Grafana instance.
 
 :::note
