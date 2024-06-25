@@ -128,7 +128,7 @@ You can only have one level of pages in the navigation menu. Sub-menu items are 
 
 ## Configuration page
 
-You can add a configuration page to your App plugin where users can configure any settings your plugin might need. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
+You can add a configuration page to your app plugin where users can configure any settings your plugin needs. Your plugin should already have an example configuration page with its source code located in `src/components/AppConfig/AppConfig.tsx`.
 
 ### Saving user settings
 
