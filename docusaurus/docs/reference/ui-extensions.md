@@ -123,10 +123,6 @@ The method returns the `AppPlugin` instance to allow for chaining.
 - [Update the path based on the context](../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
 - [Open a modal from the `onClick()`](../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
 
-#### See also
-
-- [Best practices for adding links](../how-to-guides/ui-extensions/register-an-extension.md#best-practices-for-adding-links)
-
 ### `exposeComponent`
 
 :::info
@@ -251,7 +247,7 @@ const {
 
 #### Examples
 
-- [How to render a component exposed by another plugin](../how-to-guides/ui-extensions/use-an-exposed-component.md#using-an-exposed-component)
+- [How to render a component exposed by another plugin](../how-to-guides/ui-extensions/use-an-exposed-component.md#use-an-exposed-component)
 
 ### `usePluginComponents`
 
