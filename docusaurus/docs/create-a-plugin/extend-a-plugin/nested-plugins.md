@@ -88,7 +88,7 @@ Notice that the plugin `nested-datasource` doesn't have a `package.json` of its 
 
 1. (Optional) Add your data source to your provisioned data sources:
 
-   If you're adding a nested datasource, remember to add it to the provisioned datasources YAML configuration file, see the documentation on [Provisioning Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more details.
+   If you're adding a nested data source, remember to add it to the provisioned datasources YAML configuration file. Refer to the documentation on [Provisioning Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources) for more details.
 
 1. (Optional) Clean up your directory:
 
