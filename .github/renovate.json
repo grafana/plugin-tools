@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "includePaths": ["packages/create-plugin/templates/**"],
+  "separateMajorMinor": false,
+  "labels": ["dependencies", "release", "patch"],
+  "reviewers": ["team:grafana/plugins-platform-frontend"],
+  "enabledManagers": ["regex"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["_package.json"],
+      "matchStrings": ["\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\""],
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)(?:docker-)?compose[^/]*\\.ya?ml$"],
+      "matchStrings": ["grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"],
+      "depNameTemplate": "grafana/grafana-enterprise",
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
+      "matchUpdateTypes": ["minor", "patch", "major"],
+      "groupName": "grafana dependencies",
+      "groupSlug": "all-grafana"
+    }
+  ]
+}
