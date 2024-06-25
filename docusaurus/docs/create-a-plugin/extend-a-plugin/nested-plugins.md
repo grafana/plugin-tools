@@ -20,7 +20,7 @@ Grafana app plugins can nest data sources, both frontend and backend, together w
 
 ## Before you begin
 
-See the tutorial to [build an app plugin](../../tutorials/build-an-app-plugin) and scaffold an app plugin.
+Scaffold an app plugin. For instructions, refer to the tutorial to [build an app plugin](../../tutorials/build-an-app-plugin).
 
 ## Anatomy of nested plugins
 
