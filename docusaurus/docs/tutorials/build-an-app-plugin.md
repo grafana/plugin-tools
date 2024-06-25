@@ -165,7 +165,7 @@ function MyComponent() {
 
 If you want to fetch data from your app frontend code (for example, from a thid party API) without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, then you can use the [data proxy](../create-a-plugin/extend-a-plugin/fetch-data-from-frontend.md).
 
-## Adding nested plugins inside your app
+## Add nested plugins inside your app
 
 You can nest data sources and panel plugins inside your app plugins. See [Work with nested plugins](../create-a-plugin/extend-a-plugin/nested-plugins).
 
