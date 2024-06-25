@@ -25,13 +25,15 @@
   <br />
 </div>
 
+### Packages
+
 This is a mono-repo of NPM packages to help plugin developers extend Grafana in amazing ways!
 
-| Package Name  | Description               | Readme                                     | Version                                                                                                             | Downloads                                                                                                                       |
-| ------------- | ------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Create Plugin | Scaffold a Grafana Plugin | [Link](./packages/create-plugin/README.md) | [![npm](https://img.shields.io/npm/v/@grafana/create-plugin)](https://www.npmjs.com/package/@grafana/create-plugin) | [![npm](https://img.shields.io/npm/dw/@grafana/create-plugin)](https://npmcharts.com/compare/@grafana/create-plugin?interval=7) |
-| Sign Plugin   | Sign a Grafana Plugin     | [Link](./packages/sign-plugin/README.md)   | [![npm](https://img.shields.io/npm/v/@grafana/sign-plugin)](https://www.npmjs.com/package/@grafana/sign-plugin)     | [![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)](https://npmcharts.com/compare/@grafana/sign-plugin?interval=7)     |
-| Plugin e2e    | Test a Grafana Plugin     | [Link](./packages/plugin-e2e/README.md)    | [![npm](https://img.shields.io/npm/v/@grafana/plugin-e2e)](https://www.npmjs.com/package/@grafana/plugin-e2e)       | [![npm](https://img.shields.io/npm/dw/@grafana/plugin-e2e)](https://npmcharts.com/compare/@grafana/plugin-e2e?interval=7)       |
+| Package Name                                                       | Description                             | Version                                                                                                             | Downloads                                                                                                                       |
+| ------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| [**`@grafana/create-plugin`**](./packages/create-plugin/README.md) | A CLI tool for scaffolding a new plugin | [![npm](https://img.shields.io/npm/v/@grafana/create-plugin)](https://www.npmjs.com/package/@grafana/create-plugin) | [![npm](https://img.shields.io/npm/dw/@grafana/create-plugin)](https://npmcharts.com/compare/@grafana/create-plugin?interval=7) |
+| [**`@grafana/sign-plugin`**](./packages/sign-plugin/README.md)     | A CLI tool for signing plugins          | [![npm](https://img.shields.io/npm/v/@grafana/sign-plugin)](https://www.npmjs.com/package/@grafana/sign-plugin)     | [![npm](https://img.shields.io/npm/dw/@grafana/sign-plugin)](https://npmcharts.com/compare/@grafana/sign-plugin?interval=7)     |
+| [**`@grafana/plugin-e2e`**](./packages/plugin-e2e/README.md)       | Test Grafana plugins with playwright    | [![npm](https://img.shields.io/npm/v/@grafana/plugin-e2e)](https://www.npmjs.com/package/@grafana/plugin-e2e)       | [![npm](https://img.shields.io/npm/dw/@grafana/plugin-e2e)](https://npmcharts.com/compare/@grafana/plugin-e2e?interval=7)       |
 
 ### Overview
 

@@ -4,8 +4,7 @@ import { printRedBox, printBlueBox } from '../utils/utils.console.js';
 import { updatePackageJson, updateNpmScripts } from '../utils/utils.npm.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
-import { EXTRA_TEMPLATE_VARIABLES } from '../constants.js';
-import { getVersion } from '../utils/utils.version.js';
+import { getVersion, getGrafanaRuntimeVersion } from '../utils/utils.version.js';
 import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
@@ -57,7 +56,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
 
     printBlueBox({
       title: 'Update successful ✔',
-      content: `${chalk.bold('@grafana/* package version:')} ${EXTRA_TEMPLATE_VARIABLES.grafanaVersion}
+      content: `${chalk.bold('@grafana/* package version:')} ${getGrafanaRuntimeVersion()}
 ${chalk.bold('@grafana/create-plugin version:')} ${getVersion()}
 
 ${chalk.bold.underline('Next steps:')}

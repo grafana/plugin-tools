@@ -104,6 +104,17 @@ const plugins = [
         {
           from: ['/create-a-plugin/extend-a-plugin/custom-panel-option-editors'],
           to: '/how-to-guides/panel-plugins/add-a-custom-panel-option-editor',
+        {
+          from: ['/ui-extensions'],
+          to: '/key-concepts/ui-extensions',
+        },
+        {
+          from: ['/ui-extensions/register-an-extension'],
+          to: '/how-to-guides/ui-extensions/register-an-extension',
+        },
+        {
+          from: ['/ui-extensions/create-an-extension-point'],
+          to: '/how-to-guides/ui-extensions/create-an-extension-point',
         },
       ],
     },
