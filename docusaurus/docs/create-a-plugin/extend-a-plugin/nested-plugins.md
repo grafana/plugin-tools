@@ -55,7 +55,7 @@ each nested data source can have its own backend, independent of the app plugin'
 
 :::note
 
-Notice that the plugin `nested-datasource` doesn't have a `package.json` of its own. The name of the nested plugin folder is not important.
+Notice that the plugin `nested-datasource` doesn't have a `package.json` of its own. The name of the nested plugin folder isn't important.
 
 :::
 
