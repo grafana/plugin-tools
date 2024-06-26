@@ -1,7 +1,7 @@
 ---
-id: include-dashboards
-title: Include dashboards
-description: Include dashboards in Grafana data source and app plugins.
+id: include-dashboards-in-app-plugins
+title: Include dashboards in app plugins
+description: Include dashboards in Grafana app plugins.
 keywords:
   - grafana
   - plugin
@@ -11,7 +11,7 @@ keywords:
   - bundling
 ---
 
-# Include dashboards with a plugin
+# Include dashboards with an app plugin
 
 This guide explains how to add pre-configured dashboards into app and data source Grafana plugins. By integrating pre-configured dashboards into your plugin, you can provide your users with a ready-to-use template, freeing them from having to build a dashboard from scratch.
 
@@ -20,19 +20,6 @@ We'll walk you through the process of bundling dashboards into plugins. The proc
 ## Step 1: Create a dashboard
 
 Start by creating the dashboard you want to bundle with your plugin. The [development environment](/get-started/set-up-development-environment) provided by create-plugin can aid with creating and testings dashboards. The following steps provide instructions for both data source and app plugins, including tips for crafting an effective dashboard.
-
-### Build a dashboard for a data source plugin
-
-#### Export the dashboard
-
-In this step, we export the dashboard to a JSON file so it can be placed in a file along with your plugin source code:
-
-1. Open your dashboard within Grafana.
-1. Click the **Share** icon at the top-left of the dashboard.
-1. Click **Export**.
-1. Select **Export for sharing externally**, and then click **Save to file**.
-
-Exporting with this option replaces direct data source references with placeholders. This ensures the dashboard can make use of the user's data source instance when imported.
 
 ### Build a dashboard for an app plugin
 
@@ -93,12 +80,6 @@ To facilitate user customization, create a dashboard data source variable. This 
 
 To test your newly created dashboard, import the dashboard:
 
-### Import a dashboard into a data source plugin
-
-1. Create or edit an existing instance of your data source.
-1. Click **Dashboards** to list all included dashboards.
-1. Click **Import** next to the dashboard you want to import. The dashboard is imported into your plugin.
-
 ### Import a dashboard into an app plugin
 
 App dashboards are automatically discovered by the Grafana server and imported when the server starts.
@@ -129,4 +110,4 @@ An app plugin can enhance user navigation by adding a navigation link in `plugin
 
 ## Conclusion
 
-By bundling dashboards with your plugin, you can significantly improve the user onboarding experience. Pre-configured dashboards eliminate the need for users to set up common variables, panels, or queries from scratch. This can greatly enhance user satisfaction and efficiency!
+By bundling dashboards with your app plugin, you can significantly improve the user onboarding experience. Pre-configured dashboards eliminate the need for users to set up common variables, panels, or queries from scratch. This can greatly enhance user satisfaction and efficiency!

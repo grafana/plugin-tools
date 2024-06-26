@@ -167,7 +167,7 @@ If you want to fetch data from your app frontend code (for example, from a thid 
 
 ## Add nested plugins inside your app
 
-You can nest data sources and panel plugins inside your app plugins. See [Work with nested plugins](../create-a-plugin/extend-a-plugin/nested-plugins).
+You can nest data sources and panel plugins inside your app plugins. See [Work with nested plugins](../how-to-guides/app-plugins/work-with-nested-plugins).
 
 ## Include external plugins
 

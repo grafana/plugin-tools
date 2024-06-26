@@ -1,0 +1,9 @@
+{
+  "position": 10,
+  "label": "App plugins",
+  "customProps": {
+    "description": "Guides for creating and optimizing app plugins."
+  },
+  "collapsible": true,
+  "collapsed": true
+}
