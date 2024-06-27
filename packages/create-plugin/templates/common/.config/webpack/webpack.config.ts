@@ -141,17 +141,8 @@ const config = async (env): Promise<Configuration> => {
         new TerserPlugin({
           terserOptions: {
             format: {
-              comments: (_, comment) => /^\**!|@preserve|@license|@cc_on|\[create-plugin\]/i.test(comment.value),
+              comments: (_, { type, value }) => type === 'comment2' && value.trim().startsWith('[create-plugin]'),
             },
-          },
-          extractComments: (_, comment) => {
-            const { value, type } = comment;
-            // Keep `[create-plugin]` comments in the output
-            if (type === 'comment2' && value.startsWith('[create-plugin]')) {
-              return false;
-            }
-            // Extract other comments
-            return /^\**!|@preserve|@license|@cc_on/i.test(value);
           },
         }),
       ],
