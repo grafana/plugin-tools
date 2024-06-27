@@ -139,7 +139,7 @@ To learn more, refer to other Health Check implementations in our [examples repo
 
 ## Add authentication
 
-Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../how-to-guides/data-source-plugins/add-authentication#authenticate-using-a-backend-plugin).
+Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
 
 ## Enable Grafana Alerting
 

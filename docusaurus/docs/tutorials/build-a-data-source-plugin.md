@@ -310,7 +310,7 @@ The majority of data sources in Grafana will return data from an external API. T
 
 This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 
-While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. We strongly recommend this when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../how-to-guides/data-source-plugins/add-authentication).
+While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. We strongly recommend this when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins).
 
 ### Improving your plugin's quality
 
