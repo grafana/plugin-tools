@@ -173,7 +173,7 @@ const config = async (env): Promise<Configuration> => {
     plugins: [
       // Insert create plugin version information into the bundle
       new BannerPlugin({
-        banner: "/* [create-plugin] version: " + cpVersion + "*/",
+        banner: "/* [create-plugin] version: " + cpVersion + " */",
         raw: true,
         entryOnly: true,
       }),
