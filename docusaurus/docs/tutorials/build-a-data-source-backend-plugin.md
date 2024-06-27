@@ -139,7 +139,7 @@ To learn more, refer to other Health Check implementations in our [examples repo
 
 ## Add authentication
 
-Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins.md#authenticate-using-a-backend-plugin).
+Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../how-to-guides/data-source-plugins/add-authentication#authenticate-using-a-backend-plugin).
 
 ## Enable Grafana Alerting
 
@@ -188,7 +188,7 @@ This feature is only available for the Grafana backend plugin SDK version 0.232.
 
 :::
 
-By default, multiple queries within a single request (that is, within one panel) are executed sequentially. To run multiple queries concurrently, you can use the `concurrent.QueryData` function that the SDK exposes. 
+By default, multiple queries within a single request (that is, within one panel) are executed sequentially. To run multiple queries concurrently, you can use the `concurrent.QueryData` function that the SDK exposes.
 
 To use `concurrent.QueryData`, specify how to execute a single query and a limit on the number of concurrent queries to run. Note that the maximum is 10 concurrent queries.
 

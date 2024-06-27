@@ -1,7 +1,7 @@
 {
   "label": "Data source plugins",
   "customProps": {
-    "description": "Learn how to perform tasks in Grafana data source plugin development."
+    "description": "Learn how to perform common development tasks for Grafana data source plugins."
   },
   "collapsible": true,
   "collapsed": true

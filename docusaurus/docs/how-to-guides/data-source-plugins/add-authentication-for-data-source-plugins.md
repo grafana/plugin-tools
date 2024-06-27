@@ -1,5 +1,5 @@
 ---
-id: add-authentication
+id: add-authentication-for-data-source-plugins
 title: Add authentication
 description: How to add authentication for data source plugins.
 keywords:
