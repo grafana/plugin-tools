@@ -164,7 +164,7 @@ res, err := d.httpClient.Get("https://api.example.com/v1/users")
 
 The same principle applies to any other authentication mechanism. For example, SQL-based data sources should use the `Datasource` constructor to create a connection to the database and store it in the `Datasource` instance.
 
-You can refer to [this example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go) and get more information about [plugin authentication](https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
+You can refer to [this example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go) and get more information about [plugin authentication](https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/add-authentication#authenticate-using-a-backend-plugin).
 
 ### Health check
 

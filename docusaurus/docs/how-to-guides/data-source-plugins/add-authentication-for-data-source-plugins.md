@@ -1,6 +1,6 @@
 ---
 id: add-authentication-for-data-source-plugins
-title: Add authentication for data source plugins
+title: Add authentication
 description: How to add authentication for data source plugins.
 keywords:
   - grafana
@@ -10,8 +10,6 @@ keywords:
   - data source
   - datasource
 ---
-
-# Add authentication for data source plugins
 
 Grafana plugins can perform authenticated requests against a third-party API by using the _data source proxy_ or through a custom a _backend plugin_.
 

@@ -13,24 +13,26 @@ keywords:
   - migration
   - kbn
 ---
+
 # Angular to React: Convert from kbn
 
-The kbn package is often used to provide formatted output from data sources in Angular-based Grafana plugins. However, you may need to migrate from kbn package because it is no longer available from the Grafana core. 
+The kbn package is often used to provide formatted output from data sources in Angular-based Grafana plugins. However, you may need to migrate from kbn package because it is no longer available from the Grafana core.
 
 Specifically your plugin may use these kbn API calls:
 
 ```ts
-getUnitFormats()
-valueFormats()
-roundValue()
+getUnitFormats();
+valueFormats();
+roundValue();
 ```
+
 ## Conversion to new methods
 
 ### Convert from `getUnitFormats`
 
 For plugins that make use of `kbn.getUnitFormats()`, the new method to use comes from `@grafana/data`, called `getValueFormats()`.
 
-This method returns an object with categorized unit formats instead of a flat list of units, and should be handled accordingly. 
+This method returns an object with categorized unit formats instead of a flat list of units, and should be handled accordingly.
 
 Generally, a configuration editor can just use the default unit format provider. However, if you need to have a unit picker, you can use the `UnitPicker` component from `@grafana/ui`.
 An example of this component is the [Grafana design system unit picker](https://developers.grafana.com/ui/latest/index.html?path=/story/pickers-and-editors-unitpicker--basic).
@@ -49,13 +51,7 @@ There are several methods for formatting a value to include the unit for text ou
 Iterate the fields of the frame to get all value fields, then process each of them, as shown in the following example. This is a basic example; typically, more code is required to include `valueMappings` and other overrides.
 
 ```ts
-import {
-  formattedValueToString,
-  getFieldDisplayName,
-  getValueFormat,
-  reduceField
-} from '@grafana/data';
-
+import { formattedValueToString, getFieldDisplayName, getValueFormat, reduceField } from '@grafana/data';
 
 const valueFields: Field[] = [];
 for (const aField of frame.fields) {
@@ -76,7 +72,7 @@ There are many examples of processing frames into formatted text output througho
 - `getValueFormat`
 - `reduceField`
 
-### Convert from `roundValue` 
+### Convert from `roundValue`
 
 Your plugin may include code like this:
 

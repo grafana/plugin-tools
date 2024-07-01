@@ -1,6 +1,6 @@
 ---
-id: add-support-for-explore-queries
-title: Add features to Explore queries
+id: add-features-for-explore-queries
+title: Add features for Explore queries
 description: Add features to Explore queries in Grafana plugin development.
 keywords:
   - grafana
@@ -10,8 +10,6 @@ keywords:
   - explore queries
   - explore
 ---
-
-# Add features to Explore queries
 
 [Explore](https://grafana.com/docs/grafana/latest/explore/) allows users can make ad-hoc queries without the use of a dashboard. This is useful when they want to troubleshoot or learn more about the data.
 

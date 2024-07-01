@@ -36,7 +36,7 @@ You can only make use of the data proxy from data source and app plugins. _You c
 
 ## How to use the data proxy in data source plugins
 
-The easiest way to use the data proxy from a datasource plugin is using the [`DataSourceHttpSettings`](https://developers.grafana.com/ui/latest/index.html?path=/docs/data-source-datasourcehttpsettings--docs) component.
+The easiest way to use the data proxy from a data source plugin is using the [`DataSourceHttpSettings`](https://developers.grafana.com/ui/latest/index.html?path=/docs/data-source-datasourcehttpsettings--docs) component.
 
 ### Step 1: Use the `DataSourceHttpSettings` component in your data source plugin configuration page
 
@@ -136,7 +136,7 @@ endpoint to send the request to.
 ## How to use the data proxy in data source plugins with a custom configuration page
 
 If you don't want to use the `DataSourceHttpSettings` component and instead create your own configuration page
-you will have to do some additonal setup in your plugin.
+you will have to do some additional setup in your plugin.
 
 ### Step 1: Declare your route in your plugin metadata
 
@@ -249,7 +249,7 @@ const response = getBackendSrv().fetch<TODO[]>({
 
 ## Add authentication to your requests using the data proxy
 
-To learn about adding authentication to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins.md).
+To learn about adding authentication to the data proxy, refer to our [documentation](https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/add-annotations-for-data-source-plugins) (./add-annotations-for-data-source-plugins).
 
 ## Debug requests from the data proxy
 
@@ -271,4 +271,4 @@ With this configuration, the Grafana server output shows the requests going out 
 
 ## Send special headers using the data proxy
 
-You can send special headers using the data proxy. To learn about adding headers to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins.md).
+You can send special headers using the data proxy. To learn about adding headers to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins).

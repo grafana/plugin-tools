@@ -11,8 +11,6 @@ keywords:
   - query editor help
 ---
 
-# Add query editor help
-
 Query editors support the addition of a help component to display examples of potential queries. When the user clicks on one of the examples, the query editor is automatically updated. This helps the user to make faster queries.
 
 1. In the `src` directory of your plugin, create a file `QueryEditorHelp.tsx` with the following content:

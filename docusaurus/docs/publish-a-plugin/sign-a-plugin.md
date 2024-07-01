@@ -35,7 +35,7 @@ To verify ownership of your plugin, generate an Access Policy token that you'll 
 
 1. [Create a Grafana Cloud account](https://grafana.com/signup).
 
-1. Login into your account, and then go to **My Account > Security > Access Policies**. 
+1. Login into your account, and then go to **My Account > Security > Access Policies**.
 
 1. Click **Create access policy**.
 
