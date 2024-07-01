@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
-import { commandName } from './utils.cli.js';
+import { argv, commandName } from './utils.cli.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
 
 export type FeatureFlags = {
@@ -84,9 +84,17 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 }
 
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
-  // Default values for new scaffoldings
+  // For new scaffolds override any defaults with args passed in the CLI.
   if (commandName === 'generate') {
-    return DEFAULT_FEATURE_FLAGS;
+    const flags = Object.entries(DEFAULT_FEATURE_FLAGS).reduce((acc, [flag, value]) => {
+      if (argv.hasOwnProperty(flag)) {
+        return { ...acc, [flag]: argv[flag] };
+      } else {
+        return { ...acc, [flag]: value };
+      }
+    }, {} as FeatureFlags);
+
+    return flags;
   }
 
   return flags ?? {};
