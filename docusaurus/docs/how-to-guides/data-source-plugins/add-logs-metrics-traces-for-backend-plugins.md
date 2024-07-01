@@ -1,5 +1,5 @@
 ---
-id: add-logs-metrics-traces
+id: add-logs-metrics-traces-in-backend-plugins
 title: Add logs, metrics, and traces
 description: How to add logs, metrics and traces for backend plugins.
 keywords:
