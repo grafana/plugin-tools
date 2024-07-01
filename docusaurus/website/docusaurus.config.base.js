@@ -113,6 +113,14 @@ const plugins = [
           from: ['/ui-extensions/create-an-extension-point'],
           to: '/how-to-guides/ui-extensions/create-an-extension-point',
         },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/include-dashboards'],
+          to: '/how-to-guides/app-plugins/include-dashboards-in-app-plugins',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/nested-plugins'],
+          to: '/how-to-guides/app-plugins/work-with-nested-plugins',
+        },
       ],
     },
   ],
