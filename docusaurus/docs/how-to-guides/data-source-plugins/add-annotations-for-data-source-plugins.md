@@ -1,7 +1,7 @@
 ---
-id: add-annotations
-title: Add annotations
-description: Add support for annotations in your data source plugin.
+id: add-support-for-annotation-queries
+title: Add support for annotation queries
+description: Add support for annotation queries in your data source plugin.
 keywords:
   - grafana
   - plugins
@@ -9,9 +9,9 @@ keywords:
   - annotations
 ---
 
-You can add support to your plugin for annotations that will insert information into Grafana alerts. This guide explains how to add support for [annotations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/) to a data source plugin.
+You can add support to your plugin for annotation queries that will insert information into Grafana alerts. This guide explains how to add support for [annotation queries](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/) to a data source plugin.
 
-## Support annotations in your data source plugin
+## Support annotation queries in your data source plugin
 
 To enable annotations, simply add two lines of code to your plugin. Grafana uses your default query editor for editing annotation queries.
 
