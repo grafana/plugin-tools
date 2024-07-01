@@ -7,6 +7,8 @@ keywords:
   - plugins
   - plugin
   - annotations
+  - annotation query
+  - annotation queries
 ---
 
 You can add support to your plugin for annotation queries that will insert information into Grafana alerts. This guide explains how to add support for [annotation queries](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/) to a data source plugin.
