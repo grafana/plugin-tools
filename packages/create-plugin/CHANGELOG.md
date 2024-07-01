@@ -1,3 +1,15 @@
+# v4.14.0 (Mon Jul 01 2024)
+
+#### 🚀 Enhancement
+
+- Create-Plugin: Add version comment to bundled Javascript [#970](https://github.com/grafana/plugin-tools/pull/970) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.12.0 (Tue Jun 11 2024)
 
 #### 🚀 Enhancement
