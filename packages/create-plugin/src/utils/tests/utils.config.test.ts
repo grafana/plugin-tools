@@ -9,6 +9,7 @@ import { DEFAULT_FEATURE_FLAGS } from '../../constants.js';
 const mocks = vi.hoisted(() => {
   return {
     commandName: 'generate',
+    argv: {},
   };
 });
 
