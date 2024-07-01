@@ -26,6 +26,7 @@ describe('getConfig', () => {
   describe('Command: Generate', () => {
     beforeEach(() => {
       mocks.commandName = 'generate';
+      mocks.argv = {};
     });
 
     it('should give back a default config', async () => {
@@ -34,6 +35,19 @@ describe('getConfig', () => {
       expect(config).toEqual({
         version: getVersion(),
         features: DEFAULT_FEATURE_FLAGS,
+      });
+    });
+
+    it('should override default feature flags via cli args', async () => {
+      mocks.argv = {
+        useReactRouterV6: false,
+        bundleGrafanaUI: true,
+      };
+      const config = getConfig(tmpDir);
+
+      expect(config).toEqual({
+        version: getVersion(),
+        features: { ...DEFAULT_FEATURE_FLAGS, useReactRouterV6: false, bundleGrafanaUI: true },
       });
     });
   });
