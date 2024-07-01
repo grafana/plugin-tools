@@ -64,5 +64,5 @@ frame.name = 'http_requests_total';
 
 ## See also
 
-- [Introduction to Data Frames](../../key-concepts/data-frames.md)
+- [Introduction to data frames](../../key-concepts/data-frames.md)
 - [Read data from a data source](../../how-to-guides/panel-plugins/read-data-from-a-data-source.md)
