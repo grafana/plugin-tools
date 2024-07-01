@@ -172,3 +172,12 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
 
   return templateData;
 }
+
+export function adoptCI() {
+  const data = getTemplateData();
+  const ciFiles = glob.sync(`${TEMPLATE_PATHS.ciWorkflows}/**/*.yml`, { dot: true });
+  ciFiles.forEach((file) => {
+    const fileData = renderTemplateFromFile(file, data);
+    fs.writeFileSync(`.github/workflows/${path.basename(file)}`, fileData);
+  });
+}
