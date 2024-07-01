@@ -1,7 +1,7 @@
 ---
 id: include-dashboards
 title: Include dashboards
-description: Include dashboards in Grafana data source and app plugins.
+description: Include dashboards in Grafana data source plugins.
 keywords:
   - grafana
   - plugin
@@ -11,7 +11,7 @@ keywords:
   - bundling
 ---
 
-This guide explains how to add pre-configured dashboards into app and data source Grafana plugins. By integrating pre-configured dashboards into your plugin, you can provide your users with a ready-to-use template, freeing them from having to build a dashboard from scratch.
+This guide explains how to add pre-configured dashboards into data source Grafana plugins. By integrating pre-configured dashboards into your plugin, you can provide your users with a ready-to-use template, freeing them from having to build a dashboard from scratch.
 
 We'll walk you through the process of bundling dashboards into plugins. The process involves creating a dashboard, adding it to your plugin, and then importing it into the plugin. You can also optionally add navigation links to make it easier for users to discover all its features.
 
