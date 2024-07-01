@@ -10,7 +10,7 @@ keywords:
   - error handling
 ---
 
-This guide explains how to handle errors in data source plugins and provides suggestions for common scenarios.
+This guide explains how to handle errors in data source plugins.
 
 ## Provide usable defaults
 
@@ -55,21 +55,3 @@ try {
 Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [Documentation style guide](https://grafana.com/docs/writers-toolkit/).
 
 :::
-
-## Common error scenarios
-
-Here are some examples of situations in data source plugins where you might want to display an error to the user.
-
-### Invalid query response
-
-Users have full freedom when they create data source queries for panels. If your panel plugin requires a specific format for the query response, then use the panel canvas to guide the user.
-
-```ts
-if (!numberField) {
-  throw new Error('Query result is missing a number field');
-}
-
-if (frame.length === 0) {
-  throw new Error('Query returned an empty result');
-}
-```
