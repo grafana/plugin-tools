@@ -85,17 +85,28 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
   // For new scaffolds override any defaults with args passed in the CLI.
-  if (commandName === 'generate') {
-    const flags = Object.entries(DEFAULT_FEATURE_FLAGS).reduce((acc, [flag, value]) => {
-      if (argv.hasOwnProperty(flag)) {
-        return { ...acc, [flag]: argv[flag] };
-      } else {
-        return { ...acc, [flag]: value };
-      }
-    }, {} as FeatureFlags);
 
-    return flags;
-  }
+  const featureFlags = commandName === 'generate' ? DEFAULT_FEATURE_FLAGS : flags ?? {};
 
-  return flags ?? {};
+  return Object.entries(featureFlags).reduce((acc, [flag, value]) => {
+    if (argv.hasOwnProperty(flag)) {
+      return { ...acc, [flag]: argv[flag] };
+    } else {
+      return { ...acc, [flag]: value };
+    }
+  }, {} as FeatureFlags);
+
+  // if (commandName === 'generate') {
+  //   const flags = Object.entries(DEFAULT_FEATURE_FLAGS).reduce((acc, [flag, value]) => {
+  //     if (argv.hasOwnProperty(flag)) {
+  //       return { ...acc, [flag]: argv[flag] };
+  //     } else {
+  //       return { ...acc, [flag]: value };
+  //     }
+  //   }, {} as FeatureFlags);
+
+  //   return flags;
+  // }
+
+  // return flags ?? {};
 }
