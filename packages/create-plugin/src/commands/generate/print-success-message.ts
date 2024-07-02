@@ -13,7 +13,7 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
     `- \`${packageManagerName} run dev\` to build (and watch) the plugin frontend code.`,
     ...(answers.hasBackend
       ? [
-          '- `mage -v build:linux` to build the plugin backend code. Rerun this command every time you edit your backend files.',
+          '- `mage -v build:backend` to build the plugin backend code. Rerun this command every time you edit your backend files.',
         ]
       : []),
     '- `docker-compose up` to start a grafana development server.',
