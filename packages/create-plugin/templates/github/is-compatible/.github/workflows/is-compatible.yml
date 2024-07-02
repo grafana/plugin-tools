@@ -20,5 +20,15 @@ jobs:
         run: {{ packageManagerInstallCmd }}
       - name: Build plugin
         run: {{ packageManagerName }} run build
-      - name: Compatibility check
+      - name: Get metadata
+        id: metadata
+        run: |
+          sudo apt-get install jq tr
+          export GRAFANA_PLUGIN_DEPENDENCY=$(cat dist/plugin.json | jq -r | tr -d '<>=~^')
+          echo "plugin-dependency=${GRAFANA_PLUGIN_DEPENDENCY}" >> $GITHUB_OUTPUT
+          
+      - name: Compatibility check latest
         run: npx @grafana/levitate@latest is-compatible --path src/module.ts --target @grafana/data,@grafana/ui,@grafana/runtime
+
+      - name: Compatibility check minimum
+        run: npx @grafana/levitate@latest is-compatible --path src/module.ts --target @grafana/data@{{ steps.metadata.outputs.plugin-dependency }},@grafana/ui@{{ steps.metadata.outputs.plugin-dependency }},@grafana/runtime@{{ steps.metadata.outputs.plugin-dependency }}
