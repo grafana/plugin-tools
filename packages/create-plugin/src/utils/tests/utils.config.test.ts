@@ -47,7 +47,7 @@ describe('getConfig', () => {
 
       expect(config).toEqual({
         version: getVersion(),
-        features: { ...DEFAULT_FEATURE_FLAGS, useReactRouterV6: false, bundleGrafanaUI: true },
+        features: { ...DEFAULT_FEATURE_FLAGS, ...mocks.argv },
       });
     });
   });
