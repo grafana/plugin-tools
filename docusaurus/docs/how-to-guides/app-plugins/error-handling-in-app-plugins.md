@@ -14,7 +14,7 @@ keywords:
 
 # Error handling in app plugins
 
-This guide explains how to handle errors in app plugins and provides suggestions for common scenarios.
+This guide explains how to handle errors in app plugins.
 
 ## Provide usable defaults
 
@@ -60,20 +60,14 @@ Grafana displays the exception message in the UI as written, so use grammaticall
 
 :::
 
-## Common error scenarios
+## See also
 
-Here are some examples of situations where you might want to display an error to the user.
+If your app plugin bundles other plugin types, refer to the error handling guidance for:
 
-### Invalid query response
+- [Panel plugins](../panel-plugins/error-handling-for-panel-plugins.md)
 
-Users have full freedom when they create data source queries for panels. If your panel plugin requires a specific format for the query response, then use the panel canvas to guide the user.
+For general guidance on displaying alerts to users, refer to the [Saga Design System](https://grafana.com/developers/saga/patterns/alert/).
 
-```ts
-if (!numberField) {
-  throw new Error('Query result is missing a number field');
-}
+```
 
-if (frame.length === 0) {
-  throw new Error('Query returned an empty result');
-}
 ```
