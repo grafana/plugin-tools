@@ -14,4 +14,4 @@ import amdMetaModule from 'amd-module';
 __webpack_public_path__ =
   amdMetaModule && amdMetaModule.uri
     ? amdMetaModule.uri.slice(0, amdMetaModule.uri.lastIndexOf('/') + 1)
-    : 'public/plugins/heywesty-trafficlight-panel/';
+    : 'public/plugins/{{ pluginId }}/';
