@@ -83,19 +83,16 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
   }
 }
 
+// This function creates feature flags based on the defaults for generate command else flags read from config.
+// In both cases it will override the flags if any cli args with the same name are passed in.
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
-  // For new scaffolds override any defaults with args passed in the CLI.
-  if (commandName === 'generate') {
-    const flags = Object.entries(DEFAULT_FEATURE_FLAGS).reduce((acc, [flag, value]) => {
-      if (argv.hasOwnProperty(flag)) {
-        return { ...acc, [flag]: argv[flag] };
-      } else {
-        return { ...acc, [flag]: value };
-      }
-    }, {} as FeatureFlags);
+  const featureFlags = commandName === 'generate' ? DEFAULT_FEATURE_FLAGS : flags ?? {};
 
-    return flags;
-  }
-
-  return flags ?? {};
+  return Object.entries(featureFlags).reduce((acc, [flag, value]) => {
+    if (argv.hasOwnProperty(flag)) {
+      return { ...acc, [flag]: argv[flag] };
+    } else {
+      return { ...acc, [flag]: value };
+    }
+  }, {} as FeatureFlags);
 }

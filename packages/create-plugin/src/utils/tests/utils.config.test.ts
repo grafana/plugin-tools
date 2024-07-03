@@ -55,6 +55,7 @@ describe('getConfig', () => {
   describe('Command: Update', () => {
     beforeEach(() => {
       mocks.commandName = 'update';
+      mocks.argv = {};
     });
 
     it('should give back the correct config when there are no config files at all', async () => {
