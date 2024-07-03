@@ -1,13 +1,14 @@
-ARG TARGETARCH
 ARG grafana_version=latest
 ARG grafana_image=grafana-enterprise
 
 FROM grafana/${grafana_image}:${grafana_version}
 
 ARG development=false
+ARG TARGETARCH
 
 {{#if hasBackend}}
 ARG GO_VERSION=1.21.6
+ARG GO_ARCH=${TARGETARCH:-amd64}
 {{/if}}
 
 ENV DEV "${development}"
@@ -49,11 +50,11 @@ COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 {{#if hasBackend}}
 # Installing Go
 RUN if [ "${development}" = "true" ]; then \
-    curl -O -L https://golang.org/dl/go${GO_VERSION}.linux-${TARGETARCH}.tar.gz && \
+    curl -O -L https://golang.org/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
     rm -rf /usr/local/go && \
-    tar -C /usr/local -xzf go${GO_VERSION}.linux-${TARGETARCH}.tar.gz && \
+    tar -C /usr/local -xzf go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
     echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bashrc && \
-    rm -f go${GO_VERSION}.linux-${TARGETARCH}.tar.gz; \
+    rm -f go${GO_VERSION}.linux-${GO_ARCH}.tar.gz; \
     fi
 
 # Installing delve for debugging
