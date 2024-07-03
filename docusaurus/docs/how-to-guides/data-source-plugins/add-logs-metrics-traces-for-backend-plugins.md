@@ -112,7 +112,7 @@ Use a contextual logger to automatically include additional key-value pairs atta
 
 :::note
 
-Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.186.0). Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) for update instructions.
+Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.186.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend#update-the-go-sdk) for update instructions.
 
 :::
 
