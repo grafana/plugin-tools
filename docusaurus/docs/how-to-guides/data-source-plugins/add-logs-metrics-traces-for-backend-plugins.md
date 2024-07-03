@@ -1,6 +1,6 @@
 ---
 id: add-logs-metrics-traces-for-backend-plugins
-title: Add logs, metrics and traces for backend plugins
+title: Add logs, metrics, and traces for backend plugins
 description: How to add logs, metrics and traces for backend plugins.
 keywords:
   - grafana
@@ -15,8 +15,6 @@ keywords:
   - backend
   - back-end
 ---
-
-# Add logs, metrics and traces for backend plugins
 
 Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) for backend plugins makes it easier to diagnose and resolve issues for both plugin developers and Grafana operators. This document provides guidance, conventions and best practices to help you effectively instrument your plugins, as well as how to access this data when the plugin is installed.
 
@@ -114,7 +112,7 @@ Use a contextual logger to automatically include additional key-value pairs atta
 
 :::note
 
-Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.186.0). See [Update the Go SDK](../develop-a-plugin/work-with-backend#update-the-go-sdk) for update instructions.
+Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.186.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend#update-the-go-sdk) for update instructions.
 
 :::
 
@@ -396,7 +394,7 @@ If tracing is disabled in Grafana, `backend.DefaultTracer()` returns a no-op tra
 
 :::note
 
-Make sure you are using at least [`grafana-plugin-sdk-go v0.157.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.157.0). Refer to [Update the Go SDK](../develop-a-plugin/work-with-backend#update-the-go-sdk) for update instructions.
+Make sure you are using at least [`grafana-plugin-sdk-go v0.157.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.157.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend) for update instructions.
 
 :::
 

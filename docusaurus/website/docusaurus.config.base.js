@@ -121,6 +121,50 @@ const plugins = [
           from: ['/create-a-plugin/extend-a-plugin/custom-panel-option-editors'],
           to: '/how-to-guides/panel-plugins/custom-panel-option-editors',
         },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/enable-for-annotations'],
+          to: '/how-to-guides/data-source-plugins/add-support-for-annotation-queries',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins'],
+          to: '/how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-support-for-explore-queries'],
+          to: '/how-to-guides/data-source-plugins/add-features-for-explore-queries',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins'],
+          to: '/how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-query-editor-help'],
+          to: '/how-to-guides/data-source-plugins/add-query-editor-help',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-router'],
+          to: '/how-to-guides/data-source-plugins/add-router',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-support-for-variables'],
+          to: '/how-to-guides/data-source-plugins/add-support-for-variables',
+        },
+        {
+          from: ['/create-a-plugin/develop-a-plugin/work-with-data-frames'],
+          to: '/how-to-guides/data-source-plugins/create-data-frames',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/error-handling'],
+          to: '/how-to-guides/data-source-plugins/error-handling',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/fetch-data-from-frontend'],
+          to: '/how-to-guides/data-source-plugins/fetch-data-from-frontend',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/include-dashboards'],
+          to: '/how-to-guides/data-source-plugins/include-dashboards',
+        },
       ],
     },
   ],
