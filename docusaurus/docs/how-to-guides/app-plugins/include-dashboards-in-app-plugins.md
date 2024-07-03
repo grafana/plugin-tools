@@ -76,15 +76,9 @@ To facilitate user customization, create a dashboard data source variable. This 
 
 1. After adding the dashboard to your plugin, rebuild the plugin and restart Grafana to apply the new configuration.
 
-## Step 3: Import the dashboard into your plugin
+1. Dashboards included in app plugins are automatically imported by the Grafana server. Navigate to your dashboard to verify it works as intended.
 
-To test your newly created dashboard, import the dashboard:
-
-### Import a dashboard into an app plugin
-
-App dashboards are automatically discovered by the Grafana server and imported when the server starts.
-
-### (Optional) Add navigation links in an app plugin
+## Step 3: Add navigation links in an app plugin (optional)
 
 An app plugin can enhance user navigation by adding a navigation link in `plugin.json`. The path of the include should reference the bundled dashboard `uid` property.
 
