@@ -33,7 +33,7 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 
 Follow these steps to publish your plugin for the first time.
 
-1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account.
+1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account. Note that you need to be an administrator for the Grafana Cloud organization being used to publish the plugin.
 1. In the left menu, under Org Settings, click **My Plugins**.
 1. Click **Submit New Plugin**. The Create Plugin Submission dialog box appears.
 
