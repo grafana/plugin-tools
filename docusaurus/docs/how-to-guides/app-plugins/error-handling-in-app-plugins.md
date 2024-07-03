@@ -67,7 +67,3 @@ If your app plugin bundles other plugin types, refer to the error handling guida
 - [Panel plugins](../panel-plugins/error-handling-for-panel-plugins.md)
 
 For general guidance on displaying alerts to users, refer to the [Saga Design System](https://grafana.com/developers/saga/patterns/alert/).
-
-```
-
-```
