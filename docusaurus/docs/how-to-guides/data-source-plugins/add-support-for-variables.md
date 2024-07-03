@@ -24,21 +24,7 @@ into
 SELECT * FROM services WHERE id = "auth-api"
 ```
 
-Grafana provides a couple of helper functions to interpolate variables in a string template. Let's see how you can use them in your plugin.
-
-## Interpolate variables in panel plugins
-
-For panels, the `replaceVariables` function is available in the `PanelProps`.
-
-Add `replaceVariables` to the argument list, and pass a user-defined template string to it:
-
-```tsx
-export function SimplePanel({ options, data, width, height, replaceVariables }: Props) {
-  const query = replaceVariables('Now displaying $service');
-
-  return <div>{query}</div>;
-}
-```
+Grafana provides helper functions to interpolate variables in a string template. Let's see how you can use them in your plugin.
 
 ## Interpolate variables in data source plugins
 
