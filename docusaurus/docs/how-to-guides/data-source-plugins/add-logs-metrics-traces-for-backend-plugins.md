@@ -1,6 +1,6 @@
 ---
-id: add-logs-metrics-traces-in-backend-plugins
-title: Add logs, metrics, and traces in backend plugins
+id: add-logs-metrics-traces-for-backend-plugins
+title: Add logs, metrics, and traces for backend plugins
 description: How to add logs, metrics and traces for backend plugins.
 keywords:
   - grafana

@@ -317,6 +317,6 @@ While you can use something like [axios](https://github.com/axios/axios) or the 
 To learn more about advanced plugin development topics, refer to the following:
 
 - [Add support for variables](../how-to-guides/data-source-plugins/add-support-for-variables)
-- [Add support for annotations](../how-to-guides/data-source-plugins/add-annotations)
+- [Add support for annotations](../how-to-guides/data-source-plugins/add-support-for-annotation-queries)
 - [Add support for Explore queries](../how-to-guides/data-source-plugins/add-features-for-explore-queries)
 - [Build a logs data source](./build-a-logs-data-source-plugin.md)

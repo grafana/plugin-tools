@@ -119,7 +119,7 @@ const plugins = [
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/enable-for-annotations'],
-          to: '/how-to-guides/data-source-plugins/add-annotations',
+          to: '/how-to-guides/data-source-plugins/add-support-for-annotation-queries',
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/add-authentication-for-data-source-plugins'],
@@ -131,7 +131,7 @@ const plugins = [
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/add-logs-metrics-traces-for-backend-plugins'],
-          to: '/how-to-guides/data-source-plugins/add-logs-metrics-traces',
+          to: '/how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins',
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/add-query-editor-help'],
