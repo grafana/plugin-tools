@@ -21,9 +21,7 @@ We'll walk you through the process of bundling dashboards into plugins. The proc
 
 Start by creating the dashboard you want to bundle with your plugin. The [development environment](/get-started/set-up-development-environment) provided by create-plugin can aid with creating and testing dashboards.
 
-### Build a dashboard for an app plugin
-
-#### Set up a data source variable
+### Set up a data source variable
 
 To facilitate user customization, create a dashboard data source variable. This allows users to link their own data source instances easily once imported.
 
@@ -32,7 +30,7 @@ To facilitate user customization, create a dashboard data source variable. This 
 1. Select the data source variable as the data source for each panel that you create.
    ![Data source selection](/img/app-dashboard-ds-select.png)
 
-#### Export the dashboard
+### Export the dashboard
 
 1. Go to your dashboard in the Grafana application.
 1. Click the **Share** icon at the top-left of the dashboard.
