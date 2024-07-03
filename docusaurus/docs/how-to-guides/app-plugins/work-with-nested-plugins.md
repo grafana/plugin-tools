@@ -1,5 +1,5 @@
 ---
-id: nested-plugins
+id: work-with-nested-plugins
 title: Work with nested plugins
 description: How to work with nested plugins, Grafana app plugins.
 keywords:
