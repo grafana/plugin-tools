@@ -114,6 +114,10 @@ const plugins = [
           to: '/how-to-guides/ui-extensions/create-an-extension-point',
         },
         {
+          from: ['/create-a-plugin/extend-a-plugin/custom-panel-option-editors'],
+          to: '/how-to-guides/panel-plugins/custom-panel-option-editors',
+        },
+        {
           from: ['/create-a-plugin/extend-a-plugin/enable-for-annotations'],
           to: '/how-to-guides/data-source-plugins/add-annotations',
         },

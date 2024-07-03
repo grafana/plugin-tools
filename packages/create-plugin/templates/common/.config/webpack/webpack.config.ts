@@ -11,12 +11,14 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import LiveReloadPlugin from 'webpack-livereload-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
-import { Configuration } from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
+import { type Configuration, BannerPlugin } from 'webpack';
 
-import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL } from './utils';
+import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL, getCPConfigVersion } from './utils';
 import { SOURCE_DIR, DIST_DIR } from './constants';
 
 const pluginJson = getPluginJson();
+const cpVersion = getCPConfigVersion();
 
 const config = async (env): Promise<Configuration> => {
   const baseConfig: Configuration = {
@@ -133,6 +135,19 @@ const config = async (env): Promise<Configuration> => {
       ],
     },
 
+    optimization: {
+      minimize: Boolean(env.production),
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              comments: (_, { type, value }) => type === 'comment2' && value.trim().startsWith('[create-plugin]'),
+            },
+          },
+        }),
+      ],
+    },
+
     output: {
       clean: {
         keep: new RegExp(`(.*?_(amd64|arm(64)?)(.exe)?|go_plugin_build_manifest)`),
@@ -147,6 +162,12 @@ const config = async (env): Promise<Configuration> => {
     },
 
     plugins: [
+      // Insert create plugin version information into the bundle
+      new BannerPlugin({
+        banner: "/* [create-plugin] version: " + cpVersion + " */",
+        raw: true,
+        entryOnly: true,
+      }),
       new CopyWebpackPlugin({
         patterns: [
           // If src/README.md exists use it; otherwise the root README
