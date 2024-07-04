@@ -253,6 +253,10 @@ Here's an example of adding `name` and `content` as URL parameters:
 ]
 ```
 
+:::note
+Be aware that `urlParams` configuration is only supported in Data source plugins. It is **NOT** supported in App plugins.
+:::
+
 #### Add a request body to a proxy route
 
 Here's an example of adding `username` and `password` to the request body:
@@ -296,6 +300,10 @@ Any parameters defined in `tokenAuth.params` are encoded as `application/x-www-f
   ]
 }
 ```
+
+:::note
+Be aware that `tokenAuth` configuration is only supported in Data source plugins. It is **NOT** supported in App plugins.
+:::
 
 ## Authenticate using a backend plugin
 
