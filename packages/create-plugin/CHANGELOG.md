@@ -1,3 +1,15 @@
+# v4.14.1 (Thu Jul 04 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix backend dev env for arm64 hosts [#990](https://github.com/grafana/plugin-tools/pull/990) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.14.0 (Mon Jul 01 2024)
 
 #### 🚀 Enhancement
