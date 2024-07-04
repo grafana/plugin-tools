@@ -1,3 +1,15 @@
+# v4.15.0 (Thu Jul 04 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Dynamic webpack publicPath [#966](https://github.com/grafana/plugin-tools/pull/966) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.14.1 (Thu Jul 04 2024)
 
 #### 🐛 Bug Fix
