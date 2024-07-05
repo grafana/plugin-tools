@@ -1,7 +1,7 @@
 {
   "features": {
     {{#if bundleGrafanaUI}}
-    "bundleGrafanaUI": true{{/if}}{{#if useReactRouterV6}}
+    "bundleGrafanaUI": true{{#if useReactRouterV6}},{{/if}}{{/if}}{{#if useReactRouterV6}}
     "useReactRouterV6": true{{/if}}
   }
 }
