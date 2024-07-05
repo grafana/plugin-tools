@@ -65,12 +65,12 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 
 #### Properties
 
-| Property  | Type   | Required | Description                                                                                                                                   |
-| --------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`      | string | **Yes**  |                                                                                                                                               |
-| `name`    | string | **Yes**  |                                                                                                                                               |
-| `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                            |
-| `version` | string | **Yes**  | We suggest using [SemVer](https://semver.org/) for your plugin versioning to alert users about potential changes, new features, or bug fixes. |
+| Property  | Type   | Required | Description                                                                                                                                           |
+| --------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`      | string | **Yes**  |                                                                                                                                                       |
+| `name`    | string | **Yes**  |                                                                                                                                                       |
+| `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                                    |
+| `version` | string | **No**   | We suggest using [SemVer](https://semver.org/) as your plugin versioning scheme. This property should use a specific, pinned version and not a range. |
 
 ## enterpriseFeatures
 
