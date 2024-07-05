@@ -40,14 +40,13 @@ describe('getConfig', () => {
 
     it('should override default feature flags via cli args', async () => {
       mocks.argv = {
-        useReactRouterV6: false,
-        bundleGrafanaUI: true,
+        featureFlags: 'bundleGrafanaUI',
       };
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
         version: getVersion(),
-        features: { ...DEFAULT_FEATURE_FLAGS, ...mocks.argv },
+        features: { ...DEFAULT_FEATURE_FLAGS, bundleGrafanaUI: true },
       });
     });
   });

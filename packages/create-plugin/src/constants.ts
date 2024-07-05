@@ -85,7 +85,7 @@ export const MIGRATION_CONFIG = {
 
 export const UDPATE_CONFIG = {
   // Files that should be overriden between configuration version updates.
-  filesToOverride: ['.config/'],
+  filesToOverride: ['.config/', '.cprc.json'],
 };
 
 // prettier-ignore
