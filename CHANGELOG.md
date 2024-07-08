@@ -1,3 +1,16 @@
+# (Mon Jul 08 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.16.0`
+  - Create Plugin: Allow setting feature flags via cli args [#984](https://github.com/grafana/plugin-tools/pull/984) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Jul 04 2024)
 
 #### 🚀 Enhancement
