@@ -3,6 +3,8 @@ import path from 'node:path';
 import { getVersion } from './utils.version.js';
 import { argv, commandName } from './utils.cli.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
+import { printBox } from './utils.console.js';
+import { partitionArr } from './utils.helpers.js';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
@@ -20,6 +22,9 @@ export type CreatePluginConfig = UserConfig & {
 export type UserConfig = {
   features: FeatureFlags;
 };
+
+// TODO: Create a config manager of sorts so we don't call getConfig multiple times rendering multiple warnings.
+let hasShownConfigWarnings = false;
 
 export function getConfig(workDir = process.cwd()): CreatePluginConfig {
   const rootConfig = getRootConfig(workDir);
@@ -92,8 +97,22 @@ function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
 }
 
 function parseFeatureFlagsFromCliArgs() {
-  const flagsfromCliArgs: string[] = argv.featureFlags ? argv.featureFlags.split(',') : [];
-  const knownFlags = flagsfromCliArgs.filter((item) => Object.keys(DEFAULT_FEATURE_FLAGS).includes(item));
+  const flagsfromCliArgs: string[] = argv['feature-flags'] ? argv['feature-flags'].split(',') : [];
+  const availableFeatureFlags = Object.keys(DEFAULT_FEATURE_FLAGS);
+  const [knownFlags, unknownFlags] = partitionArr(flagsfromCliArgs, (item) => availableFeatureFlags.includes(item));
+
+  if (unknownFlags.length > 0 && !hasShownConfigWarnings) {
+    printBox({
+      title: 'Warning! Unknown feature flags detected.',
+      subtitle: ``,
+      content: `The following feature-flags are unknown: ${unknownFlags.join(
+        ', '
+      )}.\n\nAvailable feature-flags are: ${availableFeatureFlags.join(', ')}`,
+      color: 'yellow',
+    });
+    hasShownConfigWarnings = true;
+  }
+
   return knownFlags.reduce((acc, flag) => {
     return { ...acc, [flag]: true };
   }, {} as FeatureFlags);
