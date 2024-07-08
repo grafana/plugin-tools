@@ -40,7 +40,7 @@ describe('getConfig', () => {
 
     it('should override default feature flags via cli args', async () => {
       mocks.argv = {
-        featureFlags: 'bundleGrafanaUI',
+        'feature-flags': 'bundleGrafanaUI',
       };
       const config = getConfig(tmpDir);
 
