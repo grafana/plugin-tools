@@ -1,22 +1,23 @@
 ---
-id: error-handling
-title: Error handling
-description: How to handle errors in plugins.
+id: error-handling-for-panel-plugins
+title: Error handling for panel plugins
+description: How to handle errors in panel plugins.
 keywords:
   - grafana
   - plugins
   - plugin
   - errors
   - error handling
+  - panel
 ---
 
 # Error handling
 
-This guide explains how to handle errors in plugins and provides suggestions for common scenarios.
+This guide explains how to handle errors in panel plugins and provides suggestions for common scenarios.
 
 ## Provide usable defaults
 
-Allow the user to learn your plugin in small steps. Provide a useful default configuration so that:
+Allow the user to learn your panel plugin in small steps. Provide a useful default configuration so that:
 
 - The user can get started right away.
 - You can avoid unnecessary error messages.
@@ -54,7 +55,7 @@ try {
 
 :::note
 
-Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [Documentation style guide](https://grafana.com/docs/writers-toolkit/).
+Grafana displays the exception message in the UI as written, so use grammatically correct sentences. For more information, refer to the [documentation style guide](https://grafana.com/docs/writers-toolkit/).
 
 :::
 
