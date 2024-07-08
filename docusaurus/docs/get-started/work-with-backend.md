@@ -1,22 +1,22 @@
 ---
 id: work-with-backend
-title: Work with the backend
-description: A guide to the Go commands frequently used in plugin development.
+title: Work with backend components
+description: A guide to the Go commands frequently used in backend plugin development.
 keywords:
   - grafana
   - plugins
   - plugin
   - go
   - CLI commands
-sidebar_position: 2
+sidebar_position: 50
 ---
 
 Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used during backend plugin development:
 
 ## Update the Go SDK
 
-To keep the [Grafana plugin SDK for Go](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) up to date:
-To keep the [Grafana plugin SDK for Go](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) up to date:
+To keep the [Grafana plugin SDK for Go](../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) up to date:
+To keep the [Grafana plugin SDK for Go](../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) up to date:
 
 ```bash
 go get -u github.com/grafana/grafana-plugin-sdk-go

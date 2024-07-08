@@ -11,7 +11,7 @@ keywords:
   - CI
   - continuous integration
   - automation
-sidebar_position: 4
+sidebar_position: 30
 ---
 
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
@@ -26,7 +26,7 @@ The release (`release.yml`) workflow is designed to build, test, package and sig
 
 :::warning
 
-This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
+This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
 
 :::
 
@@ -84,5 +84,3 @@ The workflow contains the following steps:
 1. Comparing the differences between that version and the latest version.
 1. Looking for usages of those changed APIs inside your plugin.
 1. Reporting any potential incompatibilities.
-
-## Run e2e tests

@@ -8,7 +8,7 @@ keywords:
   - plugin
   - create-plugin
   - folders
-sidebar_position: 2
+sidebar_position: 25
 ---
 
 After you [install](./get-started.mdx#step-1-install-the-create-plugin-tool) the `create-plugin` tool and have answered the prompts, your project should look similar to this:

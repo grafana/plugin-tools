@@ -1,9 +1,0 @@
-{
-  "position": 20,
-  "label": "Create a plugin",
-  "customProps": {
-    "description": "Guides for creating your Grafana plugin."
-  },
-  "collapsible": true,
-  "collapsed": true
-}

@@ -8,6 +8,7 @@ keywords:
   - plugin
   - advanced
   - configuration
+sidebar_position: 60
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
@@ -79,7 +80,7 @@ There are two files in the project root that belong to Jest: `jest-setup.js` and
 
 ### ESM errors with Jest
 
-If you see `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test` see [Troubleshooting](../../troubleshooting.md#i-get-syntaxerror-cannot-use-import-statement-outside-a-module-when-running-jest-or-npm-run-test).
+If you see `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test` see [Troubleshooting](../troubleshooting#i-get-syntaxerror-cannot-use-import-statement-outside-a-module-when-running-jest-or-npm-run-test).
 
 ---
 
