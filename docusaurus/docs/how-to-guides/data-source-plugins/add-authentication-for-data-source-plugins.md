@@ -302,7 +302,7 @@ Any parameters defined in `tokenAuth.params` are encoded as `application/x-www-f
 ```
 
 :::note
-Be aware that `tokenAuth` configuration is only supported in Data source plugins. It is **NOT** supported in App plugins.
+Be aware that `tokenAuth` configuration is only supported in data source plugins. It is _not_ supported in app plugins.
 :::
 
 ## Authenticate using a backend plugin
