@@ -1,3 +1,16 @@
+# (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.1`, `@grafana/plugin-e2e@1.6.1`, `@grafana/plugin-meta-extractor@0.0.4`, `@grafana/sign-plugin@3.0.3`
+  - Adjust license text [#994](https://github.com/grafana/plugin-tools/pull/994) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Mon Jul 08 2024)
 
 #### 🚀 Enhancement
