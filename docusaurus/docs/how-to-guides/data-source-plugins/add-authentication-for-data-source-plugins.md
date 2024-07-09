@@ -254,7 +254,7 @@ Here's an example of adding `name` and `content` as URL parameters:
 ```
 
 :::note
-Be aware that `urlParams` configuration is only supported in Data source plugins. It is **NOT** supported in App plugins.
+Be aware that `urlParams` configuration is only supported in data source plugins. It is _not_ supported in app plugins.
 :::
 
 #### Add a request body to a proxy route
