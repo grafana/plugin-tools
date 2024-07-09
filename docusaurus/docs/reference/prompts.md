@@ -13,7 +13,7 @@ sidebar_position: 40
 
 # Prompts
 
-When running the `create-plugin` command, the following prompts appear:
+When running the `create-plugin` command, the following prompts will appear.
 
 ### Select a plugin type
 
@@ -49,3 +49,17 @@ Give your plugin a name which helps identify its purpose.
 ### Enter your organization name (usually your Grafana Cloud org)
 
 Enter the name of your organization. This must be your [Grafana Cloud](https://grafana.com/signup/) organization to allow you to [sign](../publish-a-plugin/sign-a-plugin.md) and optionally [publish](../publish-a-plugin/publish-or-update-a-plugin.md) the plugin to the [catalog](https://grafana.com/grafana/plugins).
+Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
+
+## Bypassing Prompts
+
+All the above prompts can be bypassed using cli arguments. These can be passed in when running the `create-plugin` command (e.g. `npx @grafana/create-plugin --pluginName="myPlugin" --orgName="myorg"`). To pass in false for a boolean create-plugin uses the naming convention `--no-<promptName>` (e.g. `--no-hasBackend`).
+
+Please refer to the following table for the full list of prompt bypass options.
+
+| Prompt                                     | Equivalent Argument Name                                         |
+| ------------------------------------------ | ---------------------------------------------------------------- |
+| **Plugin Type**                            | `--pluginType`                                                   |
+| **Backend**                                | `--hasBackend` / `--no-hasBackend`                               |
+| **Name**                                   | `--pluginName`                                                   |
+| **Organization**                           | `--orgName`                                                      |
