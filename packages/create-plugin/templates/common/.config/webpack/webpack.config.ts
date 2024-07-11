@@ -231,6 +231,9 @@ const config = async (env): Promise<Configuration> => {
           ],
         },
       ]),
+      new SubresourceIntegrityPlugin({
+        hashFuncNames: ["sha256"],
+      }),
       ...(env.development ? [
         new LiveReloadPlugin(),
         new ForkTsCheckerWebpackPlugin({
