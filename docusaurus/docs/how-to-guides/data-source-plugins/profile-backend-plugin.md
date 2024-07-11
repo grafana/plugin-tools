@@ -13,14 +13,14 @@ keywords:
   - back-end
 ---
 
-You can configure a backend plugin to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information
+This guide provides instructions for configuring a backend plugin to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information
 for investigating certain performance problems, such as high CPU or memory usage, or when you want to use [continuous profiling](https://grafana.com/oss/pyroscope/).
 
 ## Configure profiling data
 
 The [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) allows you to configure profiling under the `[plugin.<plugin ID>]`. 
 
-1. In this section of the file, specify the `<plugin ID>`, a unique identifier, for your backend plugin you want to profile, e.g., [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/). For example:
+1. In this section of the file, specify the `<plugin ID>`, a unique identifier, for the backend plugin you want to profile, for example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/):
 
   ```ini title="custom.ini"
   [plugin.<plugin ID>]
@@ -36,18 +36,20 @@ The [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-g
   INFO [07-09|19:15:00] Profiling enabled   logger=plugin.<plugin ID> blockProfileRate=1 mutexProfileRate=1
   ```
 
-1. Check what debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`. In this file, `localhost` is used, implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, adjust as needed.
+1. Check which debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`. In this file, `localhost` is used, implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, adjust as needed.
 
-There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available. These endpoints are more suitable in a continuous profiling scenario. 
+## Additional endpoints
 
-These endpoints are 
+There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available for profiling. These endpoints are more suitable in a continuous profiling scenario. 
+
+These endpoints are:
 - `/debug/pprof/delta_heap`
 - `/debug/pprof/delta_block` 
 - `/debug/pprof/delta_mutex`
 
 :::note
 
-To be able to use `profiling_block_rate` and `profiling_mutex_rate`, your plugin needs to use at least [`grafana-plugin-sdk-go v0.238.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.238.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend) for update instructions.
+To be able to use `profiling_block_rate` and `profiling_mutex_rate`, your plugin needs to use at least [`grafana-plugin-sdk-go v0.238.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.238.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend) for instructions on how to update the SDK.
 
 :::
 
@@ -89,11 +91,17 @@ On the other hand, there are potential issues. For example, if you experience re
 
 ## Collect and analyze profiles
 
-In general, you use the [Go command pprof](https://golang.org/cmd/pprof/) to both collect and analyze profiling data. You can also use [curl](https://curl.se/) or similar to collect profiles which could be convenient in environments where you don't have the Go/pprof command available. Next, some usage examples of using curl and pprof to collect and analyze memory and CPU profiles.
+In general, you use the [Go command `pprof`](https://golang.org/cmd/pprof/) to both collect and analyze profiling data. You can also use [`curl`](https://curl.se/) or similar tools to collect profiles which could be convenient in environments where you don't have the Go `pprof` command available. 
 
-### Analyzing high memory usage/memory leaks
+Next, let's look at some examples of using `curl` and `pprof` to collect and analyze memory and CPU profiles.
 
-When experiencing high memory usage or potential memory leaks it's useful to collect several heap profiles and later when analyzing, compare them. It's a good idea to wait some time, e.g. 30 seconds, between collecting each profile to allow memory consumption to increase. Below `localhost` is used implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, please adjust as needed.
+### Analyze high memory usage and memory leaks
+
+When experiencing high memory usage or potential memory leaks it's useful to collect several heap profiles. And then later you can analyze and compare them. 
+
+It's a good idea to wait some time, for example, 30 seconds, between collecting each profile to allow memory consumption to increase.
+
+In the following example, `localhost` is used to imply that you're connected to the host where Grafana and the plugin are running. If you're connecting from another host, then adjust the command as needed.
 
 ```bash
 curl http://localhost:<profiling_port>/debug/pprof/heap > heap1.pprof
@@ -101,21 +109,23 @@ sleep 30
 curl http://localhost:<profiling_port>/debug/pprof/heap > heap2.pprof
 ```
 
-You can then use pprof tool to compare two heap profiles:
+You can then use the `pprof` tool to compare two heap profiles. For example:
 
 ```bash
 go tool pprof -http=localhost:8081 --base heap1.pprof heap2.pprof
 ```
 
-### Analyzing high CPU usage
+### Analyze high CPU usage
 
-When experiencing high CPU usage it's suggested to collect CPU profiles over a period of time, e.g. 30 seconds. Below `localhost` is used implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, please adjust as needed.
+When you experience high CPU usage, it's a good idea to collect CPU profiles over a period of time, for example, 30 seconds. 
+
+In the following example, `localhost` is used to imply that you're connected to the host where Grafana and the plugin are running. If you're connecting from another host, then adjust the command as needed.
 
 ```bash
 curl 'http://localhost:<profiling_port>/debug/pprof/profile?seconds=30' > profile.pprof
 ```
 
-You can then use pprof tool to analyze the collected CPU profile:
+You can then use the `pprof` tool to compare two heap profiles. For example:
 
 ```bash
 go tool pprof -http=localhost:8081 profile.pprof
@@ -123,4 +133,4 @@ go tool pprof -http=localhost:8081 profile.pprof
 
 ## More information
 
-Please refer to the [Grafana profiling documentation](https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/configure-tracing/#turn-on-profiling-and-collect-profiles) for further information and instructions of how to profile Grafana.
+Refer to the [Grafana profiling documentation](https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/configure-tracing/#turn-on-profiling-and-collect-profiles) for further information and instructions of how to profile Grafana.
