@@ -1,6 +1,6 @@
 ---
-id: profiling-backend-plugin
-title: Profiling a backend plugin
+id: profile-backend-plugin
+title: Profile a backend plugin
 description: How to profile a backend plugin.
 keywords:
   - grafana
@@ -13,50 +13,55 @@ keywords:
   - back-end
 ---
 
-You can configure a backend plugin to enable certain diagnostics when it starts, so-called profiling data. This can be useful
-when investigating certain performance problems, such as high CPU or memory usage, or when usage of [continous profiling](https://grafana.com/oss/pyroscope/) is desired.
+You can configure a backend plugin to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information
+for investigating certain performance problems, such as high CPU or memory usage, or when you want to use [continuous profiling](https://grafana.com/oss/pyroscope/).
 
-## Configure profiling
+## Configure profiling data
 
-In the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) you can configure profiling under a `[plugin.<plugin ID>]` section where `<plugin ID>` is the plugin identifier of your backend plugin you want to profile, e.g. [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/).
+The [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) allows you to configure profiling under the `[plugin.<plugin ID>]`. 
 
-**Example:**
+1. In this section of the file, specify the `<plugin ID>`, a unique identifier, for your backend plugin you want to profile, e.g., [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/). For example:
 
-```ini title="custom.ini"
-[plugin.<plugin ID>]
-profiling_enabled = true
-profiling_port = 6060
-profiling_block_rate = 5
-profiling_mutex_rate = 5
-```
+  ```ini title="custom.ini"
+  [plugin.<plugin ID>]
+  profiling_enabled = true
+  profiling_port = 6060
+  profiling_block_rate = 5
+  profiling_mutex_rate = 5
+  ```
 
-Restart Grafana after applying the configuration changes. You should see a log message similar to below telling you whether profiling was enabled:
+1. Restart Grafana after applying the configuration changes. You should see a log message that indicates whether profiling was enabled. For example:
 
-```shell
-INFO [07-09|19:15:00] Profiling enabled   logger=plugin.<plugin ID> blockProfileRate=1 mutexProfileRate=1
-```
+  ```shell
+  INFO [07-09|19:15:00] Profiling enabled   logger=plugin.<plugin ID> blockProfileRate=1 mutexProfileRate=1
+  ```
 
-Check what debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`. Here `localhost` is used implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, please adjust as needed.
+1. Check what debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`. In this file, `localhost` is used, implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, adjust as needed.
 
-There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available which are more suitable in a continuous profiling scenario. These endpoints are `/debug/pprof/delta_heap`, `/debug/pprof/delta_block`, `/debug/pprof/delta_mutex`.
+There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available. These endpoints are more suitable in a continuous profiling scenario. 
+
+These endpoints are 
+- `/debug/pprof/delta_heap`
+- `/debug/pprof/delta_block` 
+- `/debug/pprof/delta_mutex`
 
 :::note
 
-To be able to use `profiling_block_rate` and `profiling_mutex_rate` your plugin needs to use at least [`grafana-plugin-sdk-go v0.238.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.238.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend) for update instructions.
+To be able to use `profiling_block_rate` and `profiling_mutex_rate`, your plugin needs to use at least [`grafana-plugin-sdk-go v0.238.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.238.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend) for update instructions.
 
 :::
 
-### profiling_enabled
+### The profiling_enabled endpoint
 
-Enable/disable profiling. Default `false`.
+Use this to enable/disable profiling. The default is `false`.
 
-### profiling_port
+### The profiling_port endpoint
 
-Optionally customize the HTTP port where profile data is exposed, if for example profiling multiple plugins or the default port is taken. Default `6060`.
+Optionally, customize the HTTP port where profile data is exposed. For example, use if you want to profile multiple plugins or if the default port is taken. The default is `6060`.
 
-### profiling_block_rate
+### The profiling_block_rate endpoint
 
-Controls the fraction of goroutine blocking events that are reported in the blocking profile, default `0` (i.e. track no events). Using `5` would report 20% of all events as an example. See https://pkg.go.dev/runtime#SetBlockProfileRate for more detailed information.
+Use this to control the fraction of `goroutine` blocking events that are reported in the blocking profile. The default is `0` (that is, track no events). For example, use `5` to report 20 percent of all events. Refer to https://pkg.go.dev/runtime#SetBlockProfileRate for more detailed information.
 
 :::note
 
@@ -64,9 +69,9 @@ The higher the fraction (that is, the smaller this value) the more overhead it a
 
 :::
 
-### profiling_mutex_rate
+### The profiling_mutex_rate endpoint
 
-Controls the fraction of mutex contention events that are reported in the mutex profile, default `0` (i.e. track no events). Using `5` would report 20% of all events as an example. See https://pkg.go.dev/runtime#SetMutexProfileFraction for more detailed information.
+Use this to control the fraction of mutex contention events that are reported in the mutex profile. The default is `0` (that is, track no events). For example, use `5` to report 20 percent of all events. Refer to https://pkg.go.dev/runtime#SetMutexProfileFraction for more detailed information.
 
 :::note
 
