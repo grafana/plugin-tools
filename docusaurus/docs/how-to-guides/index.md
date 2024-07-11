@@ -15,6 +15,6 @@ keywords:
   - ui extensions
 ---
 
-Learn how to add additional functionality and capabilities to Grafana plugins based on their plugin type.
+Learn how to extend plugins with additional functionality and capabilities with short guides grouped by plugin type.
 
 <DocLinkList />
