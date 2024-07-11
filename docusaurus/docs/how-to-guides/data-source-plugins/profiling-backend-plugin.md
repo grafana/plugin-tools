@@ -14,13 +14,11 @@ keywords:
 ---
 
 You can configure a backend plugin to enable certain diagnostics when it starts, so-called profiling data. This can be useful
-when investigating certain performance problems, such as high CPU or memory usage, or enabling [continous profiling](https://grafana.com/oss/pyroscope/).
+when investigating certain performance problems, such as high CPU or memory usage, or when usage of [continous profiling](https://grafana.com/oss/pyroscope/) is desired.
 
 ## Configure profiling
 
 In the [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) you can configure profiling under a `[plugin.<plugin ID>]` section where `<plugin ID>` is the plugin identifier of your backend plugin you want to profile, e.g. [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/).
-
-Running a backend plugin with profiling enabled and without block and mutex profiling enabled should only add a fraction of overhead and is suitable for production or continuous profiling scenarios. Adding a small fraction of block and mutex profiling, such as 10-5 (10%-20%) should in general be fine, but each plugin might vary.
 
 **Example:**
 
@@ -38,7 +36,7 @@ Restart Grafana after applying the configuration changes. You should see a log m
 INFO [07-09|19:15:00] Profiling enabled   logger=plugin.<plugin ID> blockProfileRate=1 mutexProfileRate=1
 ```
 
-Check what debugging endpoints are available by browsing `http://<host>:<profiling_port>/debug/pprof`.
+Check what debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`. Here `localhost` is used implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, please adjust as needed.
 
 There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available which are more suitable in a continuous profiling scenario. These endpoints are `/debug/pprof/delta_heap`, `/debug/pprof/delta_block`, `/debug/pprof/delta_mutex`.
 
@@ -58,12 +56,6 @@ Optionally customize the HTTP port where profile data is exposed, if for example
 
 ### profiling_block_rate
 
-:::note
-
-The higher the fraction (that is, the smaller this value) the more overhead it adds to normal operations.
-
-:::
-
 Controls the fraction of goroutine blocking events that are reported in the blocking profile, default `0` (i.e. track no events). Using `5` would report 20% of all events as an example. See https://pkg.go.dev/runtime#SetBlockProfileRate for more detailed information.
 
 :::note
@@ -82,18 +74,24 @@ The higher the fraction (that is, the smaller this value) the more overhead it a
 
 :::
 
+## Overhead
+
+Running a backend plugin with profiling enabled and without [block](#profiling_block_rate) and [mutex](#profiling_mutex_rate) profiles enabled should only add a fraction of overhead and is suitable for production or continuous profiling scenarios. Adding a small fraction of block and mutex profiles, such as 5 or 10 (10%-20%) should in general be fine, but experience might vary depending on the plugin.
+
+On the other hand, if you experience for example requests being slow/queued up and you're out of clues you could temporarily configure profiling to collect 100% of block and mutex profiles to get the full picture and then turn it off when profiles have been collected.
+
 ## Collect and analyze profiles
 
 In general, you use the [Go command pprof](https://golang.org/cmd/pprof/) to both collect and analyze profiling data. You can also use [curl](https://curl.se/) or similar to collect profiles which could be convenient in environments where you don't have the Go/pprof command available. Next, some usage examples of using curl and pprof to collect and analyze memory and CPU profiles.
 
 ### Analyzing high memory usage/memory leaks
 
-When experiencing high memory usage or potential memory leaks it's useful to collect several heap profiles and later when analyzing, compare them. It's a good idea to wait some time, e.g. 30 seconds, between collecting each profile to allow memory consumption to increase.
+When experiencing high memory usage or potential memory leaks it's useful to collect several heap profiles and later when analyzing, compare them. It's a good idea to wait some time, e.g. 30 seconds, between collecting each profile to allow memory consumption to increase. Below `localhost` is used implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, please adjust as needed.
 
 ```bash
-curl http://<profile-addr>:<profile-port>/debug/pprof/heap > heap1.pprof
+curl http://localhost:<profiling_port>/debug/pprof/heap > heap1.pprof
 sleep 30
-curl http://<profile-addr>:<profile-port>/debug/pprof/heap > heap2.pprof
+curl http://localhost:<profiling_port>/debug/pprof/heap > heap2.pprof
 ```
 
 You can then use pprof tool to compare two heap profiles:
@@ -104,10 +102,10 @@ go tool pprof -http=localhost:8081 --base heap1.pprof heap2.pprof
 
 ### Analyzing high CPU usage
 
-When experiencing high CPU usage it's suggested to collect CPU profiles over a period of time, e.g. 30 seconds.
+When experiencing high CPU usage it's suggested to collect CPU profiles over a period of time, e.g. 30 seconds. Below `localhost` is used implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, please adjust as needed.
 
 ```bash
-curl 'http://<profile-addr>:<profile-port>/debug/pprof/profile?seconds=30' > profile.pprof
+curl 'http://localhost:<profiling_port>/debug/pprof/profile?seconds=30' > profile.pprof
 ```
 
 You can then use pprof tool to analyze the collected CPU profile:
