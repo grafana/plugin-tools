@@ -46,11 +46,26 @@ function DocCategoryLink({ category }) {
   const categoryHref = findFirstSidebarItemLink(category);
   const doc = useDocById(category.docId ?? undefined);
   const description = category.description || category.customProps?.description || doc?.description;
+  const renderSubItems = (items) => {
+    return (
+      <ul>
+        {items.map((subItem) => {
+          if (subItem.type === 'link') {
+            return <DocLink key={subItem.docId} item={subItem} />;
+          }
+          if (subItem.type === 'category') {
+            return <DocCategoryLink key={subItem.docId} category={subItem} />;
+          }
+        })}
+      </ul>
+    );
+  };
 
   return (
     <li key={category.docId} className="margin-bottom--md">
       <Link to={categoryHref}>{category.label}</Link>
       {description && <small className={styles.description}>{description}</small>}
+      {category.items && renderSubItems(category.items)}
     </li>
   );
 }
