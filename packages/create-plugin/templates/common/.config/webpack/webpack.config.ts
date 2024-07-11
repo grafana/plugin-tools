@@ -12,6 +12,7 @@ import LiveReloadPlugin from 'webpack-livereload-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import { SubresourceIntegrityPlugin } from "webpack-subresource-integrity";
 import { type Configuration, BannerPlugin } from 'webpack';
 
 import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL, getCPConfigVersion } from './utils';
