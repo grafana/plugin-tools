@@ -8,7 +8,7 @@ keywords:
   - plugin
   - advanced
   - configuration
-sidebar_position: 60
+sidebar_position: 25
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.

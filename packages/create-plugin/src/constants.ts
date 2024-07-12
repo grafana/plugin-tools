@@ -129,7 +129,7 @@ export const TEXT = {
  * Run \`yarn build\` and observe the output for any errors.
  * Test your plugin in grafana and make sure everything works as expected.
 
-See instructions on how to customize your configuration here https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations
+See instructions on how to customize your configuration here https://grafana.com/developers/plugin-tools/get-started/extend-configurations
   `,
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',

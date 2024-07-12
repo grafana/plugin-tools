@@ -8,7 +8,7 @@ keywords:
   - plugin
   - go
   - CLI commands
-sidebar_position: 50
+sidebar_position: 40
 ---
 
 Develop backend components for a Grafana plugin in [Go](https://go.dev/). The following commands are frequently used during backend plugin development:
