@@ -6,10 +6,12 @@ keywords:
   - grafana
   - plugins
   - plugin
-  - develop
-  - development
-  - datasource
-  - data source
+  - expose
+  - register
+  - component
+  - extension point
+  - extension
+  - app
 ---
 
 Guides for creating UI extensions and extension points.
