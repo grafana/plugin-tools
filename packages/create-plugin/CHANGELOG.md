@@ -1,3 +1,15 @@
+# v4.16.2 (Fri Jul 12 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix CI workflow for E2E tests to successfully run [#1001](https://github.com/grafana/plugin-tools/pull/1001) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.16.1 (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix
