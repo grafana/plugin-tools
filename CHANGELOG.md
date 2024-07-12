@@ -1,3 +1,24 @@
+# (Fri Jul 12 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.2`
+  - Create Plugin: Fix CI workflow for E2E tests to successfully run [#1001](https://github.com/grafana/plugin-tools/pull/1001) ([@jackw](https://github.com/jackw))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "rm file" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Revert "docs: move and rename convert ds tutorial" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- rm file ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- docs: move and rename convert ds tutorial ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 2
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix
