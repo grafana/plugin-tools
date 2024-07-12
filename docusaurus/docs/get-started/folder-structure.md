@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 60
 ---
 
-After you [install](./get-started.mdx#step-1-install-the-create-plugin-tool) the `create-plugin` tool and have answered the prompts, your project should look similar to this:
+After you [Run](./get-started.mdx#run-the-create-plugin-tool) the `create-plugin` tool and have answered the prompts, your project should look similar to this:
 
 ```
 myorg-myplugin-datasource/

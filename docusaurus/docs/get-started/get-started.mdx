@@ -17,6 +17,12 @@ import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
 import InstallNPM from '@snippets/createplugin-install.npm.md';
 import InstallPNPM from '@snippets/createplugin-install.pnpm.md';
 import InstallYarn from '@snippets/createplugin-install.yarn.md';
+import BuildFEDevNPM from '@snippets/createplugin-build-fe-dev.npm.md';
+import BuildFEDevPNPM from '@snippets/createplugin-build-fe-dev.pnpm.md';
+import BuildFEDevYarn from '@snippets/createplugin-build-fe-dev.yarn.md';
+import BuildFEProdNPM from '@snippets/createplugin-build-fe-prod.npm.md';
+import BuildFEProdPNPM from '@snippets/createplugin-build-fe-prod.pnpm.md';
+import BuildFEProdYarn from '@snippets/createplugin-build-fe-prod.yarn.md';
 
 # Get started
 
@@ -97,7 +103,7 @@ When you first run `@grafana/create-plugin`, choose your package manager: `npm`,
 
 ## Scaffold a plugin
 
-### Step 1: Install the `create-plugin` tool
+### Run the `create-plugin` tool
 
 Run the following command and answer the prompts:
 
@@ -113,19 +119,9 @@ Run the following command and answer the prompts:
 
 For help with the prompts, refer to the [Prompts reference](../reference/prompts.md).
 
-### Step 2: Open the generated folder structure
+### Open the generated folder structure
 
-When you've finished installing the tools, open the plugin folder:
-
-<CodeSnippets
-  snippets={[
-    { component: InstallNPM, label: 'npm' },
-    { component: InstallPNPM, label: 'pnpm' },
-    { component: InstallYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+Open the plugin folder to browse the generated plugin:
 
 The directory name `<orgName>-<pluginName>-<pluginType>` is based on the answers you gave to the prompts. Use the name of the generated folder when prompted. This directory contains the initial project structure to kickstart your plugin development.
 
@@ -169,49 +165,100 @@ The file structure should look like this:
 
 For more information about these files, refer to [Folder structure](get-started/folder-structure/).
 
-### Step 3: Run your plugin in Docker
+## Build and run your plugin in Docker
 
 With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](get-started/set-up-development-environment/).
 
-Key CLI commands include:
-- Install (`npm i`)
-- Build the frontend in development mode (`npm run dev`)
-- Build the backend (optional) (`mage -v build:linux`)
-- Run the Grafana server (`npm run server`)
+Refer to the "Next steps" terminal output following the [scaffolding of a new plugin](#scaffold-a-plugin) to install dependecies, build and run your plugin.
 
-## Frequently used CLI commands
 
-Use the CLI for essential tasks of plugin development, substituting `npm` for `pnpm`, or `yarn` based on your choice of package manager.
+Example output:
+```
+## What's next?
 
-### `mage -v`
+Run the following commands to get started:
 
-Builds backend plugin binaries for Linux, Windows and Darwin.
+    * cd ./orgName-pluginName-app
+    * npm install to install frontend dependencies.
+    * npm exec playwright install chromium to install e2e test dependencies.
+    * npm run dev to build (and watch) the plugin frontend code.
+    * mage -v build:backend to build the plugin backend code. Rerun this command every time you edit your backend files.
+    * docker-compose up to start a grafana development server.
+    * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.
 
-### `npm run build`
+Note: We strongly recommend creating a new Git repository by running git init in ./org-pluginname-app before continuing.
 
-Compiles and bundles the project using Webpack in production mode.
+    * Learn more about Grafana Plugin Development at https://grafana.com/developers/plugin-tools
 
-### `npm run dev`
+```
 
-Runs Webpack in watch mode for development, continually monitoring for changes.
+### Install dependencies
 
-### `npm run typecheck`
+<CodeSnippets
+  snippets={[
+    { component: InstallNPM, label: 'npm' },
+    { component: InstallPNPM, label: 'pnpm' },
+    { component: InstallYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
-Performs a type-checking process on the frontend code using TypeScript.
+### Build the frontend
 
-### `npm run server`
+To build the plugin in watch mode for development, continually monitoring for changes, run:
+<CodeSnippets
+  snippets={[
+    { component: BuildFEDevNPM, label: 'npm' },
+    { component: BuildFEDevPNPM, label: 'pnpm' },
+    { component: BuildFEDevYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
-Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
 
-### `npm run sign`
+To build for production, run:
 
-Signs the Grafana plugin using the latest version of `@grafana/sign-plugin`.
+<CodeSnippets
+  snippets={[
+    { component: BuildFEProdNPM, label: 'npm' },
+    { component: BuildFEProdPNPM, label: 'pnpm' },
+    { component: BuildFEProdYarn, label: 'yarn' },
+  ]}
+  groupId="package-manager"
+  queryString="current-package-manager"
+/>
 
-:::info
+### Build the backend
 
-For a complete list of available CLI commands, refer to the [CLI reference](/reference/cli-commands.md).
+If your plugin includes a [backend](../key-concepts/backend-plugins/index.md) component, you can build using mage:
 
-:::
+```shell
+mage -v build:linux
+```
+
+#### Build targets
+
+| Option         | Description                                  | Example               |
+| -------------- | -------------------------------------------- | --------------------- |
+| `build:[arch]` | Builds a binary for a specific architecture. | `mage -v build:Linux` |
+
+List all available Mage targets for additional commands:
+
+```bash
+mage -l
+```
+
+### Run the Grafana server
+
+To launch the Grafana development server using Docker, run:
+
+```shell
+docker-compose up --build
+```
+
+Congratulations! You've just scaffolded your first plugin which you can now access at [http://localhost:3000](http://localhost:3000).
 
 ## Next steps
 
@@ -219,3 +266,6 @@ For a complete list of available CLI commands, refer to the [CLI reference](/ref
 - Learn how to [extend](/how-to-guides) its functionality.
 - Review the [plugin examples](https://github.com/grafana/grafana-plugin-examples) to learn about good practices.
 - Learn how to [package](/publish-a-plugin/package-a-plugin), [sign](/publish-a-plugin/sign-a-plugin), and [publish](/publish-a-plugin/publish-or-update-a-plugin.md) your plugin to the Grafana [plugin catalog](https://grafana.com/plugins).
+
+## See also
+For a complete list of available CLI commands, refer to the [CLI reference](/reference/cli-commands.md).

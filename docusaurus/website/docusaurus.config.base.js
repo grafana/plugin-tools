@@ -167,11 +167,11 @@ const plugins = [
         },
         {
           from: ['/create-a-plugin/develop-a-plugin/work-with-frontend'],
-          to: '/get-started/work-with-frontend',
+          to: '/reference/cli-commands/',
         },
         {
           from: ['/create-a-plugin/develop-a-plugin/work-with-backend'],
-          to: '/get-started/work-with-backend',
+          to: '/reference/cli-commands/',
         },
         {
           from: ['/create-a-plugin/develop-a-plugin/set-up-github-workflows'],
