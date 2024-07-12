@@ -1,3 +1,37 @@
+# (Fri Jul 12 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.2`
+  - Create Plugin: Fix CI workflow for E2E tests to successfully run [#1001](https://github.com/grafana/plugin-tools/pull/1001) ([@jackw](https://github.com/jackw))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "rm file" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Revert "docs: move and rename convert ds tutorial" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- rm file ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- docs: move and rename convert ds tutorial ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 2
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.1`, `@grafana/plugin-e2e@1.6.1`, `@grafana/plugin-meta-extractor@0.0.4`, `@grafana/sign-plugin@3.0.3`
+  - Adjust license text [#994](https://github.com/grafana/plugin-tools/pull/994) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Mon Jul 08 2024)
 
 #### 🚀 Enhancement
