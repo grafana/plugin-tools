@@ -75,4 +75,4 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 ## Publishing a plugin
 
 - **Add a GitHub badge** - Follow [these steps](https://grafana.com/blog/2024/06/06/6-tips-to-improve-your-grafana-plugin-before-you-publish/#tip-4-add-dynamic-badges-to-your-readme) to help users find your plugin using GitHub badges.
-- **Add workflow automation** - If your plugin is available on GitHub, consider [adding the GitHub workflows](../get-started/set-up-github-workflows) for plugin development to your repository.
+- **Add workflow automation** - If your plugin is available on GitHub, consider [adding the GitHub workflows](../get-started/set-up-development-environment.mdx#set-up-github-workflows) for plugin development to your repository.

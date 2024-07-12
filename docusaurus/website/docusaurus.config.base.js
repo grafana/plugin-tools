@@ -175,7 +175,7 @@ const plugins = [
         },
         {
           from: ['/create-a-plugin/develop-a-plugin/set-up-github-workflows'],
-          to: '/get-started/set-up-github-workflows',
+          to: '/get-started/set-up-development-environment#set-up-github-workflows',
         },
         {
           from: ['/create-a-plugin/develop-a-plugin/subscribe-events'],
@@ -187,11 +187,11 @@ const plugins = [
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/add-return-to-previous-functionality'],
-          to: '/how-to-guides/add-return-to-previous-functionality',
+          to: '/how-to-guides/app-plugins/add-return-to-previous-functionality',
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/extend-configurations'],
-          to: '/get-started/extend-configurations',
+          to: '/get-started/set-up-development-environment#extend-configurations',
         },
       ],
     },
