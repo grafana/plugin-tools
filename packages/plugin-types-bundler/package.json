@@ -1,0 +1,52 @@
+{
+  "name": "@grafana/plugin-types-bundler",
+  "version": "0.0.0",
+  "description": "Bundle grafana plugin typescript types for sharing with other plugins",
+  "types": "./dist/index.d.ts",
+  "bin": "./dist/run.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "build": "esbuild src/bin/run.ts --bundle --external:@grafana/levitate --platform=node --outdir=dist --minify",
+    "dev": "esbuild src/bin/run.ts --bundle --external:@grafana/levitate --platform=node --outdir=dist --watch",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "directory": "packages/plugin-types-bundler",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "typescript",
+    "types",
+    "bundle"
+  ],
+  "tsup": {
+    "entry": [
+      "src/index.ts",
+      "src/bin/run.ts"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true
+  },
+  "author": "Grafana labs",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "dependencies": {
+    "@grafana/levitate": "^0.14.0",
+    "dts-bundle-generator": "^9.5.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  }
+}
