@@ -51,8 +51,8 @@ App and data source plugins can have a backend component written in Go. Backend 
 
 ### Do you want to add GitHub CI and Release workflows?
 
-Add [GitHub workflows](/create-a-plugin/develop-a-plugin/set-up-github-workflows) to your development cycle to help catch issues early or release your plugin to the community.
+Add [GitHub workflows](../get-started/set-up-development-environment.mdx#set-up-github-workflows) to your development cycle to help catch issues early or release your plugin to the community.
 
 ### Do you want to add a GitHub workflow to automatically check Grafana API compatibility on PRs?
 
-Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
+Add a [GitHub workflow](../get-started/set-up-development-environment.mdx#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
