@@ -65,12 +65,12 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 
 #### Properties
 
-| Property  | Type   | Required | Description                                                                                                                                   |
-| --------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`      | string | **Yes**  |                                                                                                                                               |
-| `name`    | string | **Yes**  |                                                                                                                                               |
-| `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                            |
-| `version` | string | **Yes**  | We suggest using [SemVer](https://semver.org/) for your plugin versioning to alert users about potential changes, new features, or bug fixes. |
+| Property  | Type   | Required | Description                                                                                                                                                                     |
+| --------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`      | string | **Yes**  |                                                                                                                                                                                 |
+| `name`    | string | **Yes**  |                                                                                                                                                                                 |
+| `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                                                              |
+| `version` | string | **No**   | This property should use a specific, pinned [SemVer](https://semver.org/) version and not a range. If no version is specified, it will resolve to the latest supported version. |
 
 ## enterpriseFeatures
 
@@ -135,7 +135,7 @@ Metadata for the plugin. Some fields are used on the plugins page in Grafana and
 | `keywords`    | string[]                 | **Yes**  | Array of plugin keywords. Used for search on grafana.com.                                                                     |
 | `logos`       | [object](#logos)         | **Yes**  | SVG images that are used as plugin icons.                                                                                     |
 | `updated`     | string                   | **Yes**  | Date when this plugin was built.                                                                                              |
-| `version`     | string                   | **Yes**  | Project version of this commit, e.g. `6.7.x`.                                                                                 |
+| `version`     | string                   | **Yes**  | [SemVer](https://semver.org/) version of the plugin, e.g. `6.7.1`.                                                            |
 | `author`      | [object](#author)        | No       | Information about the plugin author.                                                                                          |
 | `build`       | [object](#build)         | No       | Build information                                                                                                             |
 | `description` | string                   | No       | Description of plugin. Used on the plugins page in Grafana and for search on grafana.com.                                     |
