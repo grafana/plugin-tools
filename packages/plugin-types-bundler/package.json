@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@grafana/levitate": "^0.14.0",
-    "dts-bundle-generator": "^9.5.1"
+    "jackw-dts-bundle-gen-test": "^9.5.1"
   },
   "devDependencies": {
     "esbuild": "^0.23.0"
