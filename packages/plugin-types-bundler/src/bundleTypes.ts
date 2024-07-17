@@ -1,11 +1,7 @@
 import { getImportsInfo } from '@grafana/levitate';
 import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
-import { fileURLToPath } from 'node:url';
 import { writeFileSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { resolve } from 'node:path';
 
 export const generateTypes = (entrypoint: string) => {
   const inlinedLibraries = getImportedPackages(entrypoint);
@@ -23,7 +19,7 @@ export const generateTypes = (entrypoint: string) => {
   ];
 
   const options = {
-    preferredConfigPath: resolve(__dirname, '../tsconfig.json'),
+    preferredConfigPath: resolve(process.cwd(), 'tsconfig.json'),
   };
 
   const dts = generateDtsBundle(entryPoints, options);
