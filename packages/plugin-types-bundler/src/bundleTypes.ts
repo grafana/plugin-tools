@@ -1,7 +1,11 @@
 import { getImportsInfo } from '@grafana/levitate';
 import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
+import { fileURLToPath } from 'node:url';
 import { writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const generateTypes = (entrypoint: string) => {
   const inlinedLibraries = getImportedPackages(entrypoint);
