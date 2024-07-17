@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { generateTypes } from '../bundleTypes.js';
-const fs = require('fs');
+import { existsSync } from 'fs';
 
 const entryPath = process.argv[2];
 
@@ -12,7 +12,7 @@ if (entryPath === undefined) {
 }
 
 // Check if the file exists
-if (!fs.existsSync(entryPath)) {
+if (!existsSync(entryPath)) {
   console.error(`File not found: ${entryPath}`);
   process.exit(1);
 }
