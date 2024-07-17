@@ -1,5 +1,5 @@
 import { getImportsInfo } from '@grafana/levitate';
-import { EntryPointConfig, generateDtsBundle } from 'dts-bundle-generator';
+import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
