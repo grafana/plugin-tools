@@ -12,7 +12,7 @@
     "default": "./index.js"
   },
   "scripts": {
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
     "dev": "tsc --project tsconfig.json --watch",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
@@ -40,8 +40,11 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "dependencies": {
+    "@types/minimist": "^1.2.2",
+    "@types/node": "20.10.1",
     "@grafana/levitate": "^0.14.0",
-    "jackw-dts-bundle-gen-test": "^9.5.1"
+    "jackw-dts-bundle-gen-test": "^9.5.1",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {}
 }
