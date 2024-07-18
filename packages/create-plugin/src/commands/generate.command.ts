@@ -38,6 +38,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     'Configured Development environment (Docker)',
     'Added default GitHub actions for CI, releases and Grafana compatibility',
   ];
+  console.log('');
   changes.forEach((change) => {
     console.log(`${chalk.green('✔︎')} ${change}`);
   });
@@ -51,7 +52,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
   await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
-
+  console.log('\n');
   printGenerateSuccessMessage(templateData);
 };
 
