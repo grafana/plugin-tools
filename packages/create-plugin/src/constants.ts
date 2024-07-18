@@ -35,7 +35,8 @@ export enum PLUGIN_TYPES {
   app = 'app',
   panel = 'panel',
   datasource = 'datasource',
-  secretsmanager = 'secretsmanager',
+  // TODO: Don't understand why this is here. Cannot create a secretsmanager or a renderer.
+  // secretsmanager = 'secretsmanager',
   scenes = 'scenesapp',
 }
 
