@@ -8,8 +8,6 @@ export type GenerateCliArgs = {
   orgName: string;
   pluginType: PLUGIN_TYPES;
   hasBackend: boolean;
-  hasGithubWorkflows: boolean;
-  hasGithubLevitateWorkflow: boolean;
 };
 
 export type TemplateData = {
@@ -30,7 +28,5 @@ export type TemplateData = {
   reactRouterVersion: string;
   usePlaywright: boolean;
   useCypress: boolean;
-  hasGithubWorkflows: boolean;
-  hasGithubLevitateWorkflow: boolean;
   pluginExecutable?: string;
 };

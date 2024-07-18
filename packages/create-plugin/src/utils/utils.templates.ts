@@ -133,15 +133,12 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
       usePlaywright,
       useCypress,
-      hasGithubWorkflows: cliArgs.hasGithubWorkflows,
-      hasGithubLevitateWorkflow: cliArgs.hasGithubLevitateWorkflow,
     };
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
     const pluginJson = getPluginJson();
     const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
-    const githubFolder = path.join(process.cwd(), '.github', 'workflows');
 
     templateData = {
       ...EXTRA_TEMPLATE_VARIABLES,
@@ -162,8 +159,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(pluginJson.type),
       usePlaywright,
       useCypress,
-      hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
-      hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
       pluginExecutable: pluginJson.executable,
     };
   }
