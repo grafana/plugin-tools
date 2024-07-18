@@ -3,7 +3,7 @@ import minimist from 'minimist';
 import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, TEMPLATE_PATHS } from '../constants.js';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
 import { getExportPath } from '../utils/utils.path.js';
@@ -28,13 +28,22 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   }
 
   const actions = getTemplateActions({ templateData, exportPath });
-  const { changes, failures } = await generateFiles({ actions });
-
+  const failures = await generateFiles({ actions });
+  const changes = [
+    `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin ${
+      templateData.hasBackend ? '(with Go backend)' : ''
+    }`,
+    'Added basic e2e test with Playwright',
+    `${provisioningMsg[templateData.pluginType]}`,
+    'Configured Development environment (Docker)',
+    'Added default GitHub actions for CI, releases and Grafana compatibility',
+  ];
   changes.forEach((change) => {
-    console.log(`${chalk.green('✔︎ ++')} ${change.path}`);
+    console.log(`${chalk.green('✔︎')} ${change}`);
   });
 
   failures.forEach((failure) => {
+    console.log({ failure });
     printError(`${failure.error}`);
   });
 
@@ -131,7 +140,6 @@ function getActionsForTemplateFolder({
 
 async function generateFiles({ actions }: { actions: any[] }) {
   const failures = [];
-  const changes = [];
   for (const action of actions) {
     try {
       const rootDir = path.dirname(action.path);
@@ -142,9 +150,6 @@ async function generateFiles({ actions }: { actions: any[] }) {
 
       const rendered = renderTemplateFromFile(action.templateFile, action.data);
       await writeFile(action.path, rendered);
-      changes.push({
-        path: action.path,
-      });
     } catch (error) {
       let message;
       if (error instanceof Error) {
@@ -158,7 +163,7 @@ async function generateFiles({ actions }: { actions: any[] }) {
       });
     }
   }
-  return { failures, changes };
+  return failures;
 }
 
 type AsyncFunction<T> = (...args: any[]) => Promise<T>;
@@ -170,6 +175,14 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
       console.log(`${chalk.green('✔︎')} ${resultMsg}`);
     }
   } catch (error) {
+    console.log('error', error);
     printError(`${error}`);
   }
 }
+
+const provisioningMsg = {
+  [PLUGIN_TYPES.app]: 'Provisioning provided for app',
+  [PLUGIN_TYPES.datasource]: 'Provisioning provided for data source instance',
+  [PLUGIN_TYPES.panel]: 'Provisioning provided for basic dashboard and TestData data source instance',
+  [PLUGIN_TYPES.scenes]: 'Provisioning provided for app and TestData data source instance',
+};

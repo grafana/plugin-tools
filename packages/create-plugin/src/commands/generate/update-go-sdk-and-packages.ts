@@ -20,14 +20,15 @@ export async function updateGoSdkAndModules(exportPath: string) {
   }
 
   try {
+    const version = await getLatestSdkVersion(exportPath);
     await updateSdk(exportPath);
     await updateGoMod(exportPath);
+    return `Updated Grafana go sdk to ${version} (latest)`;
   } catch {
     throw new Error(
       'There was an error trying to update the grafana go sdk. Please run `go get github.com/grafana/grafana-plugin-sdk-go` manually in your plugin directory.'
     );
   }
-  return 'Grafana go sdk updated successfully.';
 }
 
 function updateSdk(exportPath: string): Promise<void> {
@@ -52,6 +53,20 @@ function updateGoMod(exportPath: string): Promise<void> {
         reject();
       }
       resolve();
+    });
+  });
+}
+
+function getLatestSdkVersion(exportPath: string): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    // run go list SDK_GO_MODULE@latest to get the latest version number
+    const command = `go list -m -json ${SDK_GO_MODULE}@latest`;
+    exec(command, { cwd: exportPath }, (error, stdout) => {
+      if (error) {
+        reject();
+      }
+      const version = JSON.parse(stdout).Version;
+      resolve(version);
     });
   });
 }
