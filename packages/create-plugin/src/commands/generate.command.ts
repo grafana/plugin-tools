@@ -88,24 +88,14 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
     []
   );
 
-  // Copy over Github workflow files (if selected)
-  const ciWorkflowActions = templateData.hasGithubWorkflows
-    ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.ciWorkflows,
-        exportPath,
-        templateData,
-      })
-    : [];
+  // Copy over Github workflow files
+  const ciWorkflowActions = getActionsForTemplateFolder({
+    folderPath: TEMPLATE_PATHS.ciWorkflows,
+    exportPath,
+    templateData,
+  });
 
-  const isCompatibleWorkflowActions = templateData.hasGithubLevitateWorkflow
-    ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
-        exportPath,
-        templateData,
-      })
-    : [];
-
-  return [...pluginActions, ...ciWorkflowActions, ...isCompatibleWorkflowActions];
+  return [...pluginActions, ...ciWorkflowActions];
 }
 
 function getActionsForTemplateFolder({
