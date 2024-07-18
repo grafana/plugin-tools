@@ -8,7 +8,7 @@ export async function promptUser(argv: minimist.ParsedArgs) {
   const enquirer = new Enquirer();
 
   for (const prompt of prompts) {
-    const { name, shouldPrompt } = prompt;
+    const { name, shouldPrompt } = prompt(answers);
 
     if (argv.hasOwnProperty(name)) {
       answers = { ...answers, [name]: argv[name] };
@@ -16,7 +16,7 @@ export async function promptUser(argv: minimist.ParsedArgs) {
       if (typeof shouldPrompt === 'function' && !shouldPrompt(answers)) {
         continue;
       } else {
-        const result = await enquirer.prompt(prompt);
+        const result = await enquirer.prompt(prompt(answers));
         answers = { ...answers, ...result };
       }
     }
@@ -45,58 +45,66 @@ type Choice = {
   disabled?: boolean | string;
 };
 
-const prompts: Prompt[] = [
-  {
+const prompts: Array<(answers: Partial<GenerateCliArgs>) => Prompt> = [
+  () => ({
+    name: 'pluginType',
+    type: 'select',
+    choices: [
+      {
+        name: 'App (Custom pages, UI Extensions and bundling other plugins)',
+        value: PLUGIN_TYPES.app,
+      },
+      {
+        name: 'Data source (Query data from a custom source)',
+        value: PLUGIN_TYPES.datasource,
+      },
+      {
+        name: 'Panel (New visualization for data or a widget)',
+        value: PLUGIN_TYPES.panel,
+      },
+      {
+        name: 'App with Scenes (Create dynamic dashboards in app pages)',
+        value: PLUGIN_TYPES.scenes,
+      },
+    ],
+    message: 'Select plugin type',
+  }),
+  (answers) => ({
+    name: 'hasBackend',
+    type: 'confirm',
+    message:
+      answers.pluginType === PLUGIN_TYPES.app
+        ? 'Does your plugin require a backend to support server-side functionality (e.g. calling external APIs, custom backend logic, advanced authentication, etc)?'
+        : 'Does your plugin require a backend to support server-side functionality (e.g. alerting, advanced authentication, public dashboards, etc)?',
+    initial: false,
+    shouldPrompt: (answers) => answers.pluginType !== PLUGIN_TYPES.panel,
+  }),
+  () => ({
     name: 'pluginName',
     type: 'input',
-    message: 'What is going to be the name of your plugin?',
+    message: 'Enter a name for your plugin',
     validate: (value: string) => {
       if (/.+/.test(value)) {
         return true;
       }
       return 'Plugin name is required';
     },
-  },
-  {
+  }),
+  () => ({
     name: 'orgName',
     type: 'input',
-    message: 'What is the organization name of your plugin?',
+    message: 'Enter your organization name (usually your Grafana Cloud org)',
     validate: (value: string) => {
       if (/.+/.test(value)) {
         return true;
       }
       return 'Organization name is required';
     },
-  },
-  {
+  }),
+  () => ({
     name: 'pluginDescription',
     type: 'input',
     message: 'How would you describe your plugin?',
     initial: '',
-  },
-  {
-    name: 'pluginType',
-    type: 'select',
-    choices: [PLUGIN_TYPES.app, PLUGIN_TYPES.datasource, PLUGIN_TYPES.panel, PLUGIN_TYPES.scenes],
-    message: 'What type of plugin would you like?',
-  },
-  {
-    name: 'hasBackend',
-    type: 'confirm',
-    message: 'Do you want a backend part of your plugin?',
-    initial: false,
-    shouldPrompt: (answers) => answers.pluginType !== PLUGIN_TYPES.panel,
-  },
-  {
-    name: 'hasGithubWorkflows',
-    type: 'confirm',
-    message: 'Do you want to add Github CI and Release workflows?',
-    initial: false,
-  },
-  {
-    name: 'hasGithubLevitateWorkflow',
-    type: 'confirm',
-    message: 'Do you want to add a Github workflow for automatically checking "Grafana API compatibility" on PRs?',
-    initial: false,
-  },
+  }),
 ];
