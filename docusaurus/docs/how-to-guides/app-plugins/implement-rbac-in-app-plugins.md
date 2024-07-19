@@ -1,7 +1,7 @@
 ---
-id: implementing-rbac-in-app-plugins
-title: Implementing role-based access control in app plugins
-description: How to add Role Based Access Control to Grafana app plugins.
+id: implement-rbac-in-app-plugins
+title: Implement RBAC in app plugins
+description: How to add Role Based Access Control (RBAC) to Grafana app plugins.
 keywords:
   - grafana
   - plugins
