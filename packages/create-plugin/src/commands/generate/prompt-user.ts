@@ -72,8 +72,8 @@ const prompts: Array<(answers: Partial<GenerateCliArgs>) => Prompt> = [
   (answers) => {
     const isAppType = answers.pluginType === PLUGIN_TYPES.app || answers.pluginType === PLUGIN_TYPES.scenes;
     const message = isAppType
-      ? 'Does your plugin require a backend to support server-side functionality? (e.g. calling external APIs, custom backend logic, advanced authentication, etc.)'
-      : 'Does your plugin require a backend to support server-side functionality? (e.g. alerting, advanced authentication, public dashboards, etc.)';
+      ? 'Does your plugin require a backend to support server-side functionality (calling external APIs, custom backend logic, advanced authentication, etc)?'
+      : 'Does your plugin require a backend to support server-side functionality (alerting, advanced authentication, public dashboards, etc)?';
 
     return {
       name: 'hasBackend',
