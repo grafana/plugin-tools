@@ -1,7 +1,7 @@
 ---
 id: implement-rbac-in-app-plugins
 title: Implement RBAC in app plugins
-description: How to add Role Based Access Control (RBAC) to Grafana app plugins.
+description: How to add role-based access control (RBAC) to Grafana app plugins.
 keywords:
   - grafana
   - plugins
@@ -14,18 +14,18 @@ keywords:
   - access control
 ---
 
-Role-Based Access Control (RBAC) in Grafana App plugins is essential for creating secure and tailored user experiences. By implementing RBAC, you ensure that sensitive functionalities and data are only accessible to users with appropriate permissions, enhancing both security and usability. Proper configuration is crucial as misconfigurations can lead to security vulnerabilities.
+Role-based access control (RBAC) in Grafana app plugins is essential for creating secure and tailored user experiences. By implementing RBAC, you ensure that sensitive functionalities and data are only accessible to users with appropriate permissions, enhancing both security and usability. Proper configuration is crucial as misconfigurations can lead to security vulnerabilities.
 
-You can find an example App plugin that makes use of RBAC in our [grafana-plugin-examples GitHub repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-rbac).
+You can find an example app plugin that makes use of RBAC in our [grafana-plugin-examples GitHub repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-rbac).
 
-## Prerequisites
+## Before you begin
 
 Ensure your development environment meets the following prerequisites:
 
-- **Grafana Version:** Use Grafana version `11.2.0` or later to access the most up-to-date RBAC features.
-- **Feature Toggle:** Activate the `accessControlOnCall` feature toggle to enable RBAC features in Grafana, which are essential for managing access controls within your plugin.
+- **Grafana version:** Use Grafana version 11.2.0 or later to access the most up-to-date RBAC features.
+- **Feature toggle:** Activate the `accessControlOnCall` feature toggle to enable RBAC features in Grafana, which are essential for managing access controls within your plugin.
 
-You can ensure the correct feature toggle is enabled by adding the following to your `docker-compose.yaml` file.
+You can ensure the correct feature toggle is enabled by adding the following to your `docker-compose.yaml` file:
 
 ```yaml
 environment:
@@ -34,7 +34,7 @@ environment:
 
 ## Defining roles
 
-To establish roles for your plugin, insert a `roles` section into your `plugin.json` file. Here’s an example to guide you:
+To establish roles for your plugin, insert a `roles` section into your `plugin.json` file. For example:
 
 ```json
 "roles": [
@@ -46,7 +46,7 @@ To establish roles for your plugin, insert a `roles` section into your `plugin.j
         {"action": "grafana-appwithrbac-app.patents:read"}
       ]
     },
-    "grants": ["Admin"] // Automatically grants this role to users with the 'Admin' role.
+    "grants": ["Admin"] // Automatically grants this role to users with the Admin role.
   },
   {
     "role": {
@@ -56,7 +56,7 @@ To establish roles for your plugin, insert a `roles` section into your `plugin.j
         {"action": "grafana-appwithrbac-app.papers:read"}
       ]
     },
-    "grants": ["Viewer"] // Automatically grants this role to users with the 'Viewer' role.
+    "grants": ["Viewer"] // Automatically grants this role to users with the Viewer role.
   }
 ]
 ```
@@ -155,7 +155,7 @@ import "github.com/grafana/authlib/authz"
 
 To set up the authorization client, start by retrieving the client secret from the plugin context of the incoming request. Since the client secret remains constant, you only need to initialize the authorization client once. This approach utilizes the client cache efficiently.
 
-Below is the function to obtain the authorization client:
+Use the following function to obtain the authorization client:
 
 ```go
 // GetAuthZClient returns an authz enforcement client configured thanks to the plugin context.
@@ -195,7 +195,7 @@ func (a *App) GetAuthZClient(req *http.Request) (authz.EnforcementClient, error)
 		// Grafana is signing the JWTs on local setups
 		JWKsURL: strings.TrimRight(grafanaURL, "/") + "/api/signing-keys/keys",
 	},
-		// Fetch all the user permission prefixed with grafana-appwithrbac-app
+		// Fetch all user permissions prefixed with grafana-appwithrbac-app
 		authz.WithSearchByPrefix("grafana-appwithrbac-app"),
 		// Use a cache with a lower expiry time
 		authz.WithCache(cache.NewLocalCache(cache.Config{
@@ -223,7 +223,7 @@ The `WithCache` option enables customization of the library's internal cache, al
 
 :::
 
-Following this setup, you can implement access control using the client as detailed below:
+Following this setup, you can implement access control using the client. For example:
 
 ```go
 func (a *App) HasAccess(req *http.Request, action string) (bool, error) {
@@ -247,7 +247,7 @@ func (a *App) HasAccess(req *http.Request, action string) (bool, error) {
 }
 ```
 
-This function is designed to be used within a Resources endpoint to conduct an access control check, verifying that the user possesses the necessary permissions to access the specified resource.
+Use function within a `Resources` endpoint to conduct an access control check and verify the user possesses the necessary permissions to access the specified resource.
 
 ```go
 if hasAccess, err := a.HasAccess(req, "grafana-appwithrbac-app.patents:read"); err != nil || !hasAccess {
@@ -259,9 +259,9 @@ if hasAccess, err := a.HasAccess(req, "grafana-appwithrbac-app.patents:read"); e
 }
 ```
 
-## Implementing frontend access control checks
+## Implement frontend access control checks
 
-Implementing frontend access checks prevents unauthorized users from navigating to restricted UI sections, ensuring a consistent and secure user experience that aligns with backend permissions.
+Implement frontend access checks to prevent unauthorized users from navigating to restricted UI sections, and ensure a consistent and secure user experience that aligns with backend permissions.
 
 To prevent a broken UI, it is crucial to implement these checks by only registering routes and displaying links based on users' permissions. This proactive approach ensures that the user interface reflects the security policies defined by the backend, providing a seamless and secure user experience.
 
@@ -275,7 +275,7 @@ Then checks can be performed as follow:
 
 ```ts
 if (hasPermission('grafana-appwithrbac-app.papers:read')) {
-  // Example: register route, display link etc...
+  // Examples: register route, display link, and so on
 }
 ```
 
