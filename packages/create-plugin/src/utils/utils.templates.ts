@@ -24,7 +24,7 @@ import { getExportFileName } from '../utils/utils.files.js';
 import { getGrafanaRuntimeVersion, getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
-const debug = createDebug('templates');
+const debug = createDebug('create-plugin:templates');
 
 /**
  *

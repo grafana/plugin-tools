@@ -44,7 +44,6 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   });
 
   failures.forEach((failure) => {
-    console.log({ failure });
     printError(`${failure.error}`);
   });
 
@@ -176,7 +175,6 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
       console.log(`${chalk.green('✔︎')} ${resultMsg}`);
     }
   } catch (error) {
-    console.log('error', error);
     printError(`${error}`);
   }
 }
