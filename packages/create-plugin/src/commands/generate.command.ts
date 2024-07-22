@@ -100,7 +100,7 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
   // Copy over Github workflow files
   const ciWorkflowActions = getActionsForTemplateFolder({
     folderPath: TEMPLATE_PATHS.ciWorkflows,
-    exportPath,
+    exportPath: path.join(exportPath, '.github'),
     templateData,
   });
 
