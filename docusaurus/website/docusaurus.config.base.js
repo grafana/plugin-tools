@@ -159,7 +159,7 @@ const plugins = [
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/fetch-data-from-frontend'],
-          to: '/how-to-guides/data-source-plugins/fetch-data-from-frontend',
+          to: '/how-to-guides/data-source-plugins/fetch-data-from-frontend-data-source-plugins',
         },
         {
           from: ['/create-a-plugin/extend-a-plugin/include-dashboards'],
