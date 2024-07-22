@@ -1,6 +1,6 @@
 ---
 id: fetch-data-from-frontend-app-plugins
-title: Fetch data from frontend code using the data proxy
+title: Fetch data from frontend app plugin using the data proxy
 description: Learn how to use the data proxy API to fetch data from a frontend app plugin
 keywords:
   - grafana
@@ -38,7 +38,6 @@ You can only make use of the data proxy from app plugins and data source plugins
 
 :::
 
-
 ## Use the data proxy within an app plugin
 
 The setup of routes in your `plugin.json` metadata remains the same as in a data source plugin. However, since app plugins don't receive the URL as part of the props, the URL is constructed like this:
@@ -51,30 +50,30 @@ Here is an example of a function that fetches data from the data proxy in an app
 
 1. Declare the route in `src/plugin.json`. You may also use authenticated requests and `jsonData` interpolation like in data source plugins.
 
-  ```json title="src/plugin.json"
-  "routes": [
-  {
-          "path": "myRoutePath",
-          "url": "https://api.example.com",
-          // jsonData interpolation is also possible
-          //"url": "{{ .JsonData.apiUrl }}",
-  }]
-  ```
+   ```json title="src/plugin.json"
+   "routes": [
+   {
+           "path": "myRoutePath",
+           "url": "https://api.example.com",
+           // jsonData interpolation is also possible
+           //"url": "{{ .JsonData.apiUrl }}",
+   }]
+   ```
 
 1. In your app plugin's code, you can then fetch data using the data proxy by constructing the data proxy URL like this:
 
-  ```typescript title="src/dataproxy-api-example.ts"
-  import { getBackendSrv } from '@grafana/runtime';
-  import { lastValueFrom } from 'rxjs';
+   ```typescript title="src/dataproxy-api-example.ts"
+   import { getBackendSrv } from '@grafana/runtime';
+   import { lastValueFrom } from 'rxjs';
 
-  async function getDataFromApi() {
-    const dataProxyUrl = `api/plugin-proxy/${PLUGIN_ID}/myRoutePath`;
-    const response = getBackendSrv().fetch<TODO[]>({
-      url: dataProxyUrl,
-    });
-    return await lastValueFrom(response);
-  }
-  ```
+   async function getDataFromApi() {
+     const dataProxyUrl = `api/plugin-proxy/${PLUGIN_ID}/myRoutePath`;
+     const response = getBackendSrv().fetch<TODO[]>({
+       url: dataProxyUrl,
+     });
+     return await lastValueFrom(response);
+   }
+   ```
 
 ## Use other HTTP methods (for example, POST, PUT, DELETE) with the data proxy
 

@@ -1,6 +1,6 @@
 ---
 id: fetch-data-from-frontend-data-source-plugins
-title: Fetch data from frontend code using the data proxy
+title: Fetch data from frontend data source plugin using the data proxy
 description: Learn how to use the data proxy API to fetch data from frontend code in data source plugins.
 keywords:
   - grafana
@@ -214,7 +214,7 @@ const response = getBackendSrv().fetch<TODO[]>({
 
 ## Add authentication to your requests using the data proxy
 
-To learn about adding authentication to the data proxy, refer to our [documentation](https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/add-annotations-for-data-source-plugins) (./add-annotations-for-data-source-plugins).
+To learn about adding authentication to the data proxy, refer to our [documentation](https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/add-annotations-for-data-source-plugins).
 
 ## Debug requests from the data proxy
 
