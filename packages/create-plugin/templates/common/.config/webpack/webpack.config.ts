@@ -8,17 +8,29 @@
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import LiveReloadPlugin from 'webpack-livereload-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { type Configuration, BannerPlugin } from 'webpack';
+import LiveReloadPlugin from 'webpack-livereload-plugin';
+import VirtualModulesPlugin from 'webpack-virtual-modules';
 
-import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL, getCPConfigVersion } from './utils';
-import { SOURCE_DIR, DIST_DIR } from './constants';
+import { DIST_DIR, SOURCE_DIR } from './constants';
+import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
 
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
+
+const virtualPublicPath = new VirtualModulesPlugin({
+  'node_modules/grafana-public-path.js': `
+import amdMetaModule from 'amd-module';
+
+__webpack_public_path__ =
+  amdMetaModule && amdMetaModule.uri
+    ? amdMetaModule.uri.slice(0, amdMetaModule.uri.lastIndexOf('/') + 1)
+    : 'public/plugins/${pluginJson.id}/';
+`,
+});
 
 const config = async (env): Promise<Configuration> => {
   const baseConfig: Configuration = {
@@ -112,7 +124,7 @@ const config = async (env): Promise<Configuration> => {
             {
               loader: 'imports-loader',
               options: {
-                imports: `side-effects ${path.join(__dirname, 'publicPath.ts')}`,
+                imports: `side-effects grafana-public-path`,
               },
             },
           ],
@@ -169,6 +181,7 @@ const config = async (env): Promise<Configuration> => {
     },
 
     plugins: [
+      virtualPublicPath,
       // Insert create plugin version information into the bundle
       new BannerPlugin({
         banner: "/* [create-plugin] version: " + cpVersion + " */",
