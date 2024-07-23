@@ -33,7 +33,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin ${
       templateData.hasBackend ? '(with Go backend)' : ''
     }`,
-    'Added basic e2e test with Playwright',
+    'Added basic E2E test (Playwright)',
     `${provisioningMsg[templateData.pluginType]}`,
     'Configured Development environment (Docker)',
     'Added default GitHub actions for CI, releases and Grafana compatibility',
@@ -180,8 +180,8 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
 }
 
 const provisioningMsg = {
-  [PLUGIN_TYPES.app]: 'Provisioning provided for app',
-  [PLUGIN_TYPES.datasource]: 'Provisioning provided for data source instance',
-  [PLUGIN_TYPES.panel]: 'Provisioning provided for basic dashboard and TestData data source instance',
-  [PLUGIN_TYPES.scenes]: 'Provisioning provided for app and TestData data source instance',
+  [PLUGIN_TYPES.app]: 'Set up provisioning for app',
+  [PLUGIN_TYPES.datasource]: 'Set up provisioning for data source instance',
+  [PLUGIN_TYPES.panel]: 'Set up provisioning for basic dashboard and TestData data source instance',
+  [PLUGIN_TYPES.scenes]: 'Set up provisioning for app and TestData data source instance',
 };

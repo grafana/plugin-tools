@@ -51,19 +51,19 @@ const prompts: Array<(answers: Partial<GenerateCliArgs>) => Prompt> = [
     type: 'select',
     choices: [
       {
-        message: 'App (Custom pages, UI Extensions and bundling other plugins)',
+        message: 'App (add custom pages, UI extensions and bundle other plugins)',
         value: PLUGIN_TYPES.app,
       },
       {
-        message: 'Data source (Query data from a custom source)',
+        message: 'Data source (query data from a custom source)',
         value: PLUGIN_TYPES.datasource,
       },
       {
-        message: 'Panel (New visualization for data or a widget)',
+        message: 'Panel (add a visualization for data or a widget)',
         value: PLUGIN_TYPES.panel,
       },
       {
-        message: 'App with Scenes (Create dynamic dashboards in app pages)',
+        message: 'App with Scenes (create dynamic dashboards in app pages)',
         value: PLUGIN_TYPES.scenes,
       },
     ],
@@ -72,8 +72,8 @@ const prompts: Array<(answers: Partial<GenerateCliArgs>) => Prompt> = [
   (answers) => {
     const isAppType = answers.pluginType === PLUGIN_TYPES.app || answers.pluginType === PLUGIN_TYPES.scenes;
     const message = isAppType
-      ? 'Does your plugin require a backend to support server-side functionality (calling external APIs, custom backend logic, advanced authentication, etc)?'
-      : 'Does your plugin require a backend to support server-side functionality (alerting, advanced authentication, public dashboards, etc)?';
+      ? 'Add a backend to support server-side functionality? (calling external APIs, custom backend logic, advanced authentication, etc)'
+      : 'Add a backend to support server-side functionality? (alerting, advanced authentication, public dashboards, etc)';
 
     return {
       name: 'hasBackend',
