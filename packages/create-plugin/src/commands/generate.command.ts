@@ -35,7 +35,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     }`,
     'Added basic E2E test (Playwright)',
     `${provisioningMsg[templateData.pluginType]}`,
-    'Configured Development environment (Docker)',
+    'Configured development environment (Docker)',
     'Added default GitHub actions for CI, releases and Grafana compatibility',
   ];
   console.log('');
