@@ -12,6 +12,7 @@ import LiveReloadPlugin from 'webpack-livereload-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import { SubresourceIntegrityPlugin } from "webpack-subresource-integrity";
 import { type Configuration, BannerPlugin } from 'webpack';
 
 import { getPackageJson, getPluginJson, hasReadme, getEntries, isWSL, getCPConfigVersion } from './utils';
@@ -166,6 +167,7 @@ const config = async (env): Promise<Configuration> => {
       path: path.resolve(process.cwd(), DIST_DIR),
       publicPath: `public/plugins/${pluginJson.id}/`,
       uniqueName: pluginJson.id,
+      crossOriginLoading: 'anonymous',
     },
 
     plugins: [
@@ -214,6 +216,9 @@ const config = async (env): Promise<Configuration> => {
           ],
         },
       ]),
+      new SubresourceIntegrityPlugin({
+        hashFuncNames: ["sha256"],
+      }),
       ...(env.development ? [
         new LiveReloadPlugin(),
         new ForkTsCheckerWebpackPlugin({
