@@ -1,3 +1,15 @@
+# v4.16.3 (Mon Jul 29 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Template dynamic public path [#1023](https://github.com/grafana/plugin-tools/pull/1023) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.16.2 (Fri Jul 12 2024)
 
 #### 🐛 Bug Fix
