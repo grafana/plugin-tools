@@ -35,7 +35,7 @@ export async function prettifyFiles(options: PrettifyFilesArgs) {
       'There was a problem running prettier on the plugin files. Please run `npx -y prettier@2 . --write` manually in your plugin directory.'
     );
   }
-  return 'Successfully ran prettier against new plugin.';
+  return '';
 }
 
 function isPrettierUsed(projectRoot?: string) {

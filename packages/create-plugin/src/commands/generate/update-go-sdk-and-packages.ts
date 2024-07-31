@@ -1,8 +1,11 @@
 import which from 'which';
 import fs from 'node:fs';
+import createDebug from 'debug';
 import { exec } from 'node:child_process';
 
 const SDK_GO_MODULE = 'github.com/grafana/grafana-plugin-sdk-go';
+
+const debug = createDebug('create-plugin:update-go');
 
 export async function updateGoSdkAndModules(exportPath: string) {
   // check if there is a go.mod file in exportPath
@@ -20,14 +23,15 @@ export async function updateGoSdkAndModules(exportPath: string) {
   }
 
   try {
+    const version = await getLatestSdkVersion(exportPath);
     await updateSdk(exportPath);
     await updateGoMod(exportPath);
+    return `Updated Grafana go sdk to ${version} (latest)`;
   } catch {
     throw new Error(
       'There was an error trying to update the grafana go sdk. Please run `go get github.com/grafana/grafana-plugin-sdk-go` manually in your plugin directory.'
     );
   }
-  return 'Grafana go sdk updated successfully.';
 }
 
 function updateSdk(exportPath: string): Promise<void> {
@@ -36,6 +40,7 @@ function updateSdk(exportPath: string): Promise<void> {
     const command = `go get ${SDK_GO_MODULE}`;
     exec(command, { cwd: exportPath }, (error) => {
       if (error) {
+        debug(error);
         reject();
       }
       resolve();
@@ -49,9 +54,25 @@ function updateGoMod(exportPath: string): Promise<void> {
     const command = `go mod tidy`;
     exec(command, { cwd: exportPath }, (error) => {
       if (error) {
+        debug(error);
         reject();
       }
       resolve();
+    });
+  });
+}
+
+function getLatestSdkVersion(exportPath: string): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    // run go list SDK_GO_MODULE@latest to get the latest version number
+    const command = `go list -m -json ${SDK_GO_MODULE}@latest`;
+    exec(command, { cwd: exportPath }, (error, stdout) => {
+      if (error) {
+        debug(error);
+        reject();
+      }
+      const version = JSON.parse(stdout).Version;
+      resolve(version);
     });
   });
 }
