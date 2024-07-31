@@ -1,3 +1,15 @@
+# v5.0.0 (Wed Jul 31 2024)
+
+#### 💥 Breaking Change
+
+- Create-Plugin: Simplify Prompts [#1018](https://github.com/grafana/plugin-tools/pull/1018) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v4.16.3 (Mon Jul 29 2024)
 
 #### 🐛 Bug Fix
