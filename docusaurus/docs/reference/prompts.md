@@ -24,7 +24,7 @@ Select the type of plugin you would like to create:
 - Panel (add a visualization for data or a widget)
 - App with Scenes (create dynamic dashboards in app pages)
 
-To learn more about the various types of plugins, refer to the [plugin types and usage](../key-concepts/plugin-types-usage.md).
+To learn more about the various types of plugins, refer to [Grafana plugin types and usage](../key-concepts/plugin-types-usage.md).
 
 For more information on how Scenes allows you to create dashboard-like experiences in app plugins, see the [Scenes](https://grafana.com/developers/scenes) documentation.
 
