@@ -15,44 +15,37 @@ sidebar_position: 40
 
 When running the `create-plugin` command, the following prompts appear:
 
-### What is the name of your plugin?
+### Select a plugin type
 
-Enter the name of your plugin. This helps to identify its purpose.
+Select the type of plugin you would like to create:
 
-### What is the organization name of your plugin?
+- App (add custom pages, UI extensions and bundle other plugins)
+- Data source (query data from a custom source)
+- Panel (add a visualization for data or a widget)
+- App with Scenes (create dynamic dashboards in app pages)
 
-Enter the name of your organization. This is normally your [Grafana account](https://grafana.com/signup/) username which Grafana uses to help uniquely identify your plugin.
+To learn more about the various types of plugins, refer to the [plugin types and usage](../key-concepts/plugin-types-usage.md).
 
-### How would you describe your plugin?
+For more information on how Scenes allows you to create dashboard-like experiences in app plugins, see the [Scenes](https://grafana.com/developers/scenes) documentation.
 
-Give your plugin a description. This helps users more easily understand what it does when Grafana distributes the plugin.
+### Add a backend to support server-side functionality? (y/N)
 
-### What type of plugin would you like?
+If you are creating an app or a data source plugin, you will be asked whether to additionally add a backend component.
 
-Select from the following choices:
-
-- **app**: Create a custom out-of-the-box monitoring experience.
-- **datasource**: Add support for new databases or external APIs.
-- **panel**: Add new visualizations to dashboards.
-- **scenesapp**: Create Scenes applications or Scenes plugins. For more information on how Scenes allows you to create dashboard-like experiences in app plugins, see [Scenes](https://grafana.com/developers/scenes).
-
-To learn more about the types of plugins, refer to the [plugin management guidelines](https://grafana.com/docs/grafana/latest/administration/plugin-management/).
-To learn more about scenes, refer to the [Scenes documentation](https://grafana.com/developers/scenes).
-
-### Do you want a backend part of your plugin?
-
-App and data source plugins can have a backend component written in Go. Backend plugins offer powerful features such as:
+Backend plugins offer powerful features such as:
 
 - Enable [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) for data sources.
 - Connect to non-HTTP services to which a browser normally can’t connect. For example, SQL database servers.
 - Keep state between users. For example, query caching for data sources.
 - Use custom authentication methods and/or authorization checks that aren’t supported in Grafana.
-- Use a custom data source request proxy. To learn more, refer to [Backend developer resources](../key-concepts/backend-plugins/#resources).
+- Use a custom data source request proxy.
 
-### Do you want to add GitHub CI and Release workflows?
+To learn more, refer to [Backend plugins](../key-concepts/backend-plugins/index.md).
 
-Add [GitHub workflows](../get-started/set-up-development-environment.mdx#set-up-github-workflows) to your development cycle to help catch issues early or release your plugin to the community.
+### Enter a name for your plugin
 
-### Do you want to add a GitHub workflow to automatically check Grafana API compatibility on PRs?
+Give your plugin a name which helps identify its purpose.
 
-Add a [GitHub workflow](../get-started/set-up-development-environment.mdx#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
+### Enter your organization name (usually your Grafana Cloud org)
+
+Enter the name of your organization. This must be your [Grafana Cloud](https://grafana.com/signup/) organization to allow you to [sign](../publish-a-plugin/sign-a-plugin.md) and optionally [publish](../publish-a-plugin/publish-or-update-a-plugin.md) the plugin to the [catalog](https://grafana.com/grafana/plugins).
