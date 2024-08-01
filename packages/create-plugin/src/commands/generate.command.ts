@@ -3,7 +3,7 @@ import minimist from 'minimist';
 import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, TEMPLATE_PATHS } from '../constants.js';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { printError } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
 import { getExportPath } from '../utils/utils.path.js';
@@ -28,10 +28,19 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   }
 
   const actions = getTemplateActions({ templateData, exportPath });
-  const { changes, failures } = await generateFiles({ actions });
-
+  const failures = await generateFiles({ actions });
+  const changes = [
+    `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin ${
+      templateData.hasBackend ? '(with Go backend)' : ''
+    }`,
+    'Added basic E2E test (Playwright)',
+    `${provisioningMsg[templateData.pluginType]}`,
+    'Configured development environment (Docker)',
+    'Added default GitHub actions for CI, releases and Grafana compatibility',
+  ];
+  console.log('');
   changes.forEach((change) => {
-    console.log(`${chalk.green('✔︎ ++')} ${change.path}`);
+    console.log(`${chalk.green('✔︎')} ${change}`);
   });
 
   failures.forEach((failure) => {
@@ -42,7 +51,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
   await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
-
+  console.log('\n');
   printGenerateSuccessMessage(templateData);
 };
 
@@ -88,24 +97,14 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
     []
   );
 
-  // Copy over Github workflow files (if selected)
-  const ciWorkflowActions = templateData.hasGithubWorkflows
-    ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.ciWorkflows,
-        exportPath,
-        templateData,
-      })
-    : [];
+  // Copy over Github workflow files
+  const ciWorkflowActions = getActionsForTemplateFolder({
+    folderPath: TEMPLATE_PATHS.ciWorkflows,
+    exportPath: path.join(exportPath, '.github'),
+    templateData,
+  });
 
-  const isCompatibleWorkflowActions = templateData.hasGithubLevitateWorkflow
-    ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
-        exportPath,
-        templateData,
-      })
-    : [];
-
-  return [...pluginActions, ...ciWorkflowActions, ...isCompatibleWorkflowActions];
+  return [...pluginActions, ...ciWorkflowActions];
 }
 
 function getActionsForTemplateFolder({
@@ -141,7 +140,6 @@ function getActionsForTemplateFolder({
 
 async function generateFiles({ actions }: { actions: any[] }) {
   const failures = [];
-  const changes = [];
   for (const action of actions) {
     try {
       const rootDir = path.dirname(action.path);
@@ -152,9 +150,6 @@ async function generateFiles({ actions }: { actions: any[] }) {
 
       const rendered = renderTemplateFromFile(action.templateFile, action.data);
       await writeFile(action.path, rendered);
-      changes.push({
-        path: action.path,
-      });
     } catch (error) {
       let message;
       if (error instanceof Error) {
@@ -168,7 +163,7 @@ async function generateFiles({ actions }: { actions: any[] }) {
       });
     }
   }
-  return { failures, changes };
+  return failures;
 }
 
 type AsyncFunction<T> = (...args: any[]) => Promise<T>;
@@ -183,3 +178,10 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
     printError(`${error}`);
   }
 }
+
+const provisioningMsg = {
+  [PLUGIN_TYPES.app]: 'Set up provisioning for app',
+  [PLUGIN_TYPES.datasource]: 'Set up provisioning for data source instance',
+  [PLUGIN_TYPES.panel]: 'Set up provisioning for basic dashboard and TestData data source instance',
+  [PLUGIN_TYPES.scenes]: 'Set up provisioning for app and TestData data source instance',
+};

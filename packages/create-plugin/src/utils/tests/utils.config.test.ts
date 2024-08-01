@@ -9,6 +9,7 @@ import { DEFAULT_FEATURE_FLAGS } from '../../constants.js';
 const mocks = vi.hoisted(() => {
   return {
     commandName: 'generate',
+    argv: {},
   };
 });
 
@@ -25,6 +26,7 @@ describe('getConfig', () => {
   describe('Command: Generate', () => {
     beforeEach(() => {
       mocks.commandName = 'generate';
+      mocks.argv = {};
     });
 
     it('should give back a default config', async () => {
@@ -35,11 +37,24 @@ describe('getConfig', () => {
         features: DEFAULT_FEATURE_FLAGS,
       });
     });
+
+    it('should override default feature flags via cli args', async () => {
+      mocks.argv = {
+        'feature-flags': 'bundleGrafanaUI',
+      };
+      const config = getConfig(tmpDir);
+
+      expect(config).toEqual({
+        version: getVersion(),
+        features: { ...DEFAULT_FEATURE_FLAGS, bundleGrafanaUI: true },
+      });
+    });
   });
 
   describe('Command: Update', () => {
     beforeEach(() => {
       mocks.commandName = 'update';
+      mocks.argv = {};
     });
 
     it('should give back the correct config when there are no config files at all', async () => {

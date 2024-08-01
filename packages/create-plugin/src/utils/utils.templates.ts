@@ -24,7 +24,7 @@ import { getExportFileName } from '../utils/utils.files.js';
 import { getGrafanaRuntimeVersion, getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
-const debug = createDebug('templates');
+const debug = createDebug('create-plugin:templates');
 
 /**
  *
@@ -118,7 +118,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       ...EXTRA_TEMPLATE_VARIABLES,
       pluginId: normalizeId(cliArgs.pluginName, cliArgs.orgName, cliArgs.pluginType),
       pluginName: cliArgs.pluginName,
-      pluginDescription: cliArgs.pluginDescription,
       hasBackend: cliArgs.hasBackend,
       orgName: cliArgs.orgName,
       pluginType: cliArgs.pluginType,
@@ -133,21 +132,17 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
       usePlaywright,
       useCypress,
-      hasGithubWorkflows: cliArgs.hasGithubWorkflows,
-      hasGithubLevitateWorkflow: cliArgs.hasGithubLevitateWorkflow,
     };
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
     const pluginJson = getPluginJson();
     const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
-    const githubFolder = path.join(process.cwd(), '.github', 'workflows');
 
     templateData = {
       ...EXTRA_TEMPLATE_VARIABLES,
       pluginId: pluginJson.id,
       pluginName: pluginJson.name,
-      pluginDescription: pluginJson.info.description,
       hasBackend: pluginJson.backend,
       orgName: pluginJson.info.author.name,
       pluginType: pluginJson.type,
@@ -162,8 +157,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(pluginJson.type),
       usePlaywright,
       useCypress,
-      hasGithubWorkflows: isFile(path.join(githubFolder, 'ci.yml')),
-      hasGithubLevitateWorkflow: isFile(path.join(githubFolder, 'is-compatible.yml')),
       pluginExecutable: pluginJson.executable,
     };
   }

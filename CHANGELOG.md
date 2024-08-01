@@ -1,3 +1,76 @@
+# (Wed Jul 31 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@5.0.0`
+  - Create-Plugin: Simplify Prompts [#1018](https://github.com/grafana/plugin-tools/pull/1018) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Jul 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.3`
+  - Create Plugin: Template dynamic public path [#1023](https://github.com/grafana/plugin-tools/pull/1023) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Jul 12 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.2`
+  - Create Plugin: Fix CI workflow for E2E tests to successfully run [#1001](https://github.com/grafana/plugin-tools/pull/1001) ([@jackw](https://github.com/jackw))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "rm file" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Revert "docs: move and rename convert ds tutorial" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- rm file ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- docs: move and rename convert ds tutorial ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 2
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.1`, `@grafana/plugin-e2e@1.6.1`, `@grafana/plugin-meta-extractor@0.0.4`, `@grafana/sign-plugin@3.0.3`
+  - Adjust license text [#994](https://github.com/grafana/plugin-tools/pull/994) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# (Mon Jul 08 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@4.16.0`
+  - Create Plugin: Allow setting feature flags via cli args [#984](https://github.com/grafana/plugin-tools/pull/984) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Jul 04 2024)
 
 #### 🚀 Enhancement

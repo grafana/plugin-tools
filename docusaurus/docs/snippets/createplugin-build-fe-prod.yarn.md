@@ -1,0 +1,3 @@
+```shell
+yarn run build
+```

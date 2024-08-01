@@ -6,10 +6,14 @@ keywords:
   - grafana
   - plugins
   - plugin
-  - upgrade
-  - update
-  - migrate
-  - migration
+  - tutorial
+  - data source
+  - logs
+  - backend
+  - panel
+  - app
 ---
+
+Learn how to create a Grafana plugin from scratch by following our end-to-end tutorials for every type of Grafana plugin.
 
 <DocLinkList />

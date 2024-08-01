@@ -1,3 +1,15 @@
+# v3.0.3 (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- Adjust license text [#994](https://github.com/grafana/plugin-tools/pull/994) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v3.0.2 (Tue May 14 2024)
 
 #### 🐛 Bug Fix
