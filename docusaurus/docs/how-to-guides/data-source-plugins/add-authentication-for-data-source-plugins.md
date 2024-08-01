@@ -20,13 +20,13 @@ Configure your data source plugin to authenticate against a third-party API in o
 - Use the [_data source proxy_](#authenticate-using-the-data-source-proxy) method, or
 - Build a [_backend plugin_](#authenticate-using-a-backend-plugin).
 
-| Case                                                                                            | Use                             |
-| ----------------------------------------------------------------------------------------------- | ------------------------------- |
-| Do you need to authenticate your plugin using Basic Auth or API keys?                           | Use the data source proxy.      |
-| Does your API support OAuth 2.0 using client credentials?                                       | Use the data source proxy.      |
-| Does your API use a custom authentication method that isn't supported by the data source proxy? | Use a backend plugin.           |
-| Does your API communicate over a protocol other than HTTP?                                      | Build and use a backend plugin. |
-| Does your plugin require alerting support?                                                      | Build and use a backend plugin. |
+| Case                                                                                            | Use                        |
+| ----------------------------------------------------------------------------------------------- | -------------------------- |
+| Do you need to authenticate your plugin using Basic Auth or API keys?                           | Use the data source proxy. |
+| Does your API support OAuth 2.0 using client credentials?                                       | Use the data source proxy. |
+| Does your API use a custom authentication method that isn't supported by the data source proxy? | Use a backend plugin.      |
+| Does your API communicate over a protocol other than HTTP?                                      | Use a backend plugin.      |
+| Does your plugin require alerting support?                                                      | Use a backend plugin.      |
 
 ## Encrypt data source configuration
 
@@ -48,7 +48,7 @@ If you need to store sensitive information, use `secureJsonData` instead of `jso
 
 Once you have encrypted the secure configuration, it can no longer be accessed from the browser. The only way to access secrets after they've been saved is by using the [_data source proxy_](#authenticate-using-the-data-source-proxy).
 
-### Add secret configuration to your data source plugin
+### Add secrets configuration to your data source plugin
 
 To demonstrate how you can add secrets to a data source plugin, let's add support for configuring an API key.
 
@@ -150,7 +150,7 @@ To forward requests through the Grafana proxy, you need to configure one or more
 
    :::note
 
-   You need to restart the Grafana server every time you make a change to your `plugin.json` file.
+   You need build your plugin and restart the Grafana server every time you make a change to your `plugin.json` file.
 
    :::
 
@@ -454,7 +454,7 @@ func (ds *dataSource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 
 ## Forward user header for the logged-in user
 
-When `send_user_header` is enabled, Grafana passes the user header to the plugin using the `X-Grafana-User` header. You can forward this header as well as [authorization headers](#forward-oauth-identity-for-the-logged-in-user) or [configured cookies](#forward-cookies-for-the-logged-in-user).
+When [`send_user_header`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#send_user_header) is enabled, Grafana passes the user header to the plugin using the `X-Grafana-User` header. You can forward this header as well as [authorization headers](#forward-oauth-identity-for-the-logged-in-user) or [configured cookies](#forward-cookies-for-the-logged-in-user).
 
 **`QueryData`**
 
