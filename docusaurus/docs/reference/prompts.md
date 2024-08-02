@@ -53,13 +53,23 @@ Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflow
 
 ## Bypassing Prompts
 
-All the above prompts can be bypassed using cli arguments. These can be passed in when running the `create-plugin` command (e.g. `npx @grafana/create-plugin --pluginName="myPlugin" --orgName="myorg"`). To pass in false for a boolean create-plugin uses the naming convention `--no-<promptName>` (e.g. `--no-hasBackend`).
+All the above prompts can be bypassed using cli arguments. To scaffold a plugin with cli arguments pass them to the create-plugin command like so:
+
+```
+npx @grafana/create-plugin --plugin-type="app" --plugin-name="myPlugin" --org-name="myorg" --backend
+```
+
+Scaffolding plugins using cli arguments not only makes it quicker to get started but allows you to run the tool in a non-interactive environment such as CI or to scaffold plugins with other tooling too.
+
+:::info
+To pass in false for a boolean create-plugin uses the naming convention `--no-<promptName>` (e.g. `--no-backend`).
+:::
 
 Please refer to the following table for the full list of prompt bypass options.
 
-| Prompt                                     | Equivalent Argument Name                                         |
-| ------------------------------------------ | ---------------------------------------------------------------- |
-| **Plugin Type**                            | `--pluginType`                                                   |
-| **Backend**                                | `--hasBackend` / `--no-hasBackend`                               |
-| **Name**                                   | `--pluginName`                                                   |
-| **Organization**                           | `--orgName`                                                      |
+| Prompt           | Equivalent Argument Name     | Values                                             |
+| ---------------- | ---------------------------- | -------------------------------------------------- |
+| **Plugin Type**  | `--plugin-type`              | one of `app`, `datasource`, `panel` or `scenesapp` |
+| **Backend**      | `--backend` / `--no-backend` | boolean                                            |
+| **Name**         | `--plugin-name`              | string                                             |
+| **Organization** | `--org-name`                 | string                                             |
