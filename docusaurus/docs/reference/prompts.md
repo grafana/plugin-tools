@@ -49,7 +49,6 @@ Give your plugin a name which helps identify its purpose.
 ### Enter your organization name (usually your Grafana Cloud org)
 
 Enter the name of your organization. This must be your [Grafana Cloud](https://grafana.com/signup/) organization to allow you to [sign](../publish-a-plugin/sign-a-plugin.md) and optionally [publish](../publish-a-plugin/publish-or-update-a-plugin.md) the plugin to the [catalog](https://grafana.com/grafana/plugins).
-Add a [GitHub workflow](/create-a-plugin/develop-a-plugin/set-up-github-workflows#the-compatibility-check-is-compatibleyml) to regularly check that your plugin is compatible with the latest version of Grafana.
 
 ## Bypassing Prompts
 
@@ -60,10 +59,6 @@ npx @grafana/create-plugin --plugin-type="app" --plugin-name="myPlugin" --org-na
 ```
 
 Scaffolding plugins using cli arguments not only makes it quicker to get started but allows you to run the tool in a non-interactive environment such as CI or to scaffold plugins with other tooling too.
-
-:::info
-To pass in false for a boolean create-plugin uses the naming convention `--no-<promptName>` (e.g. `--no-backend`).
-:::
 
 Please refer to the following table for the full list of prompt bypass options.
 
