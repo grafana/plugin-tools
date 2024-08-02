@@ -1,7 +1,7 @@
 ---
-id: add-a-authentication-for-app-plugins
-title: Add authentication to app plugin requests
-description: How to add authentication for app plugins
+id: add-authentication-for-app-plugins
+title: Add authentication for app plugins
+description: How to add authentication to app plugin requests
 keywords:
   - grafana
   - plugins
@@ -13,18 +13,14 @@ keywords:
 
 import CreatePlugin from '@shared/create-plugin-backend.md';
 
-## Introduction
-
-Grafana app plugins allow you bundle panels and datasources. They also allow you to create custom pages in Grafana with complex functionality.
-
-In this guide you'll learn how to add authentication to your app plugin, either using the [_data source proxy_](#authenticate-using-the-data-source-proxy) method, or via a [backend component](#authenticate-using-a-backend-component).
+Grafana app plugins allow you bundle panels and data sources. Apps also allow you to create custom pages in Grafana with complex functionality.
 
 ## Choose an authentication method
 
-Configure your app plugin to authenticate against a third-party API in one of either of two ways:
+There are two ways to add authentication to an app plugin. Configure your app plugin to authenticate against a third-party API in one of either of two ways:
 
 - Use the [_data source proxy_](#authenticate-using-the-data-source-proxy) method, or
-- Build a [_backend plugin_](#authenticate-using-a-backend-plugin).
+- Build a [_backend plugin_](#authenticate-using-a-backend-component).
 
 | Case                                                                                            | Use                        |
 | ----------------------------------------------------------------------------------------------- | -------------------------- |
@@ -34,55 +30,59 @@ Configure your app plugin to authenticate against a third-party API in one of ei
 
 ## Encrypt secrets configuration
 
-App plugins have two ways of storing custom configuration: `jsonData` and `secureJsonFields`.
+App plugins have two ways of storing custom configuration:
 
-:::danger
+- `jsonData`
+- `secureJsonFields`
 
-Do not use `jsonData` with sensitive data such as password, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
+:::warning
+
+Do not use `jsonData` with sensitive data such as passwords, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
 
 :::
 
 ### Store configuration in `secureJsonData`
 
-If you need to store sensitive information (secrets), use `secureJsonData` instead of `jsonData`. Whenever the user saves the app configuration, the secrets in `secureJsonData` are sent to the Grafana server and encrypted before they're stored.
+If you need to store sensitive information (secrets), use `secureJsonData` instead of `jsonData`. Whenever the user saves the app configuration, the secrets in `secureJsonData` are sent to the Grafana server and they're encrypted before they're stored.
 
-Once you have encrypted the secure configuration, it can no longer be accessed from the browser. The only way to access secrets after they've been saved is by using the [_data source proxy_](#authenticate-using-the-data-source-proxy) or through a [backend component](#authenticate-using-a-backend-component)
+Once you have encrypted the secure configuration, the configuration can no longer be accessed from the browser. The only way to access secrets after they've been saved is by using the [_data source proxy_](#authenticate-using-the-data-source-proxy) or through a [backend component](#authenticate-using-a-backend-component).
 
 ### Add secrets configuration to your app plugin
 
-Your boostrapped app plugin should have an `AppConfig` component that allows the user to configure the app. This component contains example code to store an `apiKey` in `secureJsonData`. Here are some highlight of the code:
+Your bootstrapped app plugin should have an `AppConfig` component that allows the user to configure the app. This component contains example code to store an `apiKey` in `secureJsonData`. You can check the properties of `secureJsonData` in `secureJsonFields`, which is part of `plugin.meta`. The `secureJsonFields` object contains the keys that have been configured by the user.
 
-1. `secureJsonData` never comes with populated values regardless of whether the user has configured it or not, instead you can determine if a property has been configured by checking if the key is true inside `secureJsonFields` (part of `plugin.meta`).
-   `secureJsonFields` is an object that contains the keys that have been configured by the user.
+Here are some code highlights:
 
-```ts
-const { jsonData, secureJsonFields } = plugin.meta;
-const [state, setState] = useState<State>({
-  apiUrl: jsonData?.apiUrl || '',
-  apiKey: '',
-  // check if the key is true or false to determine if it has been configured
-  isApiKeySet: Boolean(secureJsonFields?.apiKey),
-});
-```
+1. The `secureJsonData` never comes with populated values regardless of whether the user has configured it or not. Instead, you can determine if a property has been configured by checking if the key is `true` inside `secureJsonFields`. For example:
 
-1. You can update `secureJsonData` POSTing to the `/api/plugins/<pluginId>/settings` endpoint.
+   ```ts
+   const { jsonData, secureJsonFields } = plugin.meta;
+   const [state, setState] = useState<State>({
+     apiUrl: jsonData?.apiUrl || '',
+     apiKey: '',
+     // check if the key is true or false to determine if it has been configured
+     isApiKeySet: Boolean(secureJsonFields?.apiKey),
+   });
+   ```
 
-If you are setting keys in `secureJsonData` you should only send the keys with values modified by the user. Sending any value (including empty strings) will overwrite the existing configuration.
+1. You can update `secureJsonData` by sending a POST to the `/api/plugins/<pluginId>/settings` endpoint.
 
-```ts
-const secureJsonData = apiKey.length > 0 ? { apiKey } : undefined;
-await getBackendSrv().fetch({
-  url: `/api/plugins/${pluginId}/settings`,
-  method: 'POST',
-  data: {
-    secureJsonData,
-  },
-});
-```
+   If you are setting keys in `secureJsonData`, then you should only send the keys with values modified by the user. Sending any value (including empty strings) overwrites the existing configuration.
+
+   ```ts
+   const secureJsonData = apiKey.length > 0 ? { apiKey } : undefined;
+   await getBackendSrv().fetch({
+     url: `/api/plugins/${pluginId}/settings`,
+     method: 'POST',
+     data: {
+       secureJsonData,
+     },
+   });
+   ```
 
 ## Authenticate using the data source proxy
 
-Once the user has saved the configuration for your app, the secrets configuration will no longer be available in the browser. Encrypted secrets can only be accessed on the server. So how do you add them to your request?
+Once the user has saved the configuration for your app, the secrets configuration becomes unavailable in the browser. Encrypted secrets can only be accessed on the server. So how do you add them to your request?
 
 The Grafana server comes with a proxy that lets you define templates for your requests: _proxy routes_. Grafana sends the proxy route to the server, decrypts the secrets along with other configuration, and adds them to the request before sending it.
 
@@ -113,7 +113,7 @@ To forward requests through the data proxy, you need to configure one or more _p
 
    :::
 
-1. In your app plugin, you can now fetch data from the proxy route using the `getBackendSrv` function from the `@grafana/runtime` package:
+1. In your app plugin, fetch data from the proxy route using the `getBackendSrv` function from the `@grafana/runtime` package:
 
    ```ts
    import { getBackendSrv } from '@grafana/runtime';
@@ -130,7 +130,7 @@ To forward requests through the data proxy, you need to configure one or more _p
 
 ### Add a dynamic proxy route to your plugin
 
-Grafana sends the data proxy requests to the server, where the data source proxy decrypts any sensitive data and interpolates the template variables with the decrypted data before making the request.
+After Grafana sends the data proxy requests to the server, the data source proxy decrypts the sensitive data. The data source proxy then interpolates the template variables with the decrypted data before making the request.
 
 To add user-defined configuration to your routes:
 
@@ -145,7 +145,7 @@ To add user-defined configuration to your routes:
   ]
   ```
 
-- Use `.SecureJsonData` for sensitive data stored in `secureJsonData`. For example, where `password` is the name of a property in the `secureJsonData` object:
+- Use `.SecureJsonData` for sensitive data stored in `secureJsonData`. For example, use `.SecureJsonData` where `password` is the name of a property in the `secureJsonData` object:
 
   ```json title="src/plugin.json"
   "routes": [
@@ -197,20 +197,20 @@ Here's an example of adding `username` and `password` to the request body:
 #### Limitations of the data proxy in app plugins
 
 - `urlParams` configuration is not supported in app plugins.
-- `tokenAuth` configuration is not supported in app plugins (for oauth 2.0).
+- `tokenAuth` configuration is not supported in app plugins (for OAuth 2.0).
 
 ## Authenticate using a backend component
 
-While the data proxy supports the most common authentication methods for HTTP APIs, using proxy routes has a few limitations:
+While the data proxy supports the most common authentication methods for HTTP APIs, there are some limitations to using proxy routes:
 
 - Proxy routes only support HTTP or HTTPS.
 - Proxy routes don't support custom token authentication.
-- Proxy routes for apps don't support urlParams.
-- Proxy routes for apps don't support tokenAuth.
+- Proxy routes for apps don't support `urlParams`.
+- Proxy routes for apps don't support `tokenAuth`.
 
-If any of these limitations apply to your plugin, you need to add a backend component to your plugin.. Because the backend component run on the server, they can access decrypted secrets, which makes it easier to implement custom authentication methods.
+If any of these limitations apply to your plugin, you need to add a backend component to your plugin.. Because backend components are run on the server, they can access decrypted secrets, which makes it easier to implement custom authentication methods.
 
-### Accessing secrets in the backend component
+### Access secrets in the backend component
 
 The decrypted secrets are available from the `DecryptedSecureJSONData` field in the app instance settings.
 
@@ -259,6 +259,6 @@ func (a *App) handleMyRequest(w http.ResponseWriter, req *http.Request) {
 }
 ```
 
-### Forward user header for the logged-in user
+### Forward the user header for the logged-in user
 
 When [`send_user_header`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#send_user_header) is enabled, Grafana passes the user header to the plugin using the `X-Grafana-User` header.
