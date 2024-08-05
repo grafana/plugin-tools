@@ -1,13 +1,6 @@
 import minimist from 'minimist';
 import chalk from 'chalk';
-import {
-  printRedBox,
-  printBlueBox,
-  confirmPrompt,
-  displayArrayAsList,
-  printMessage,
-  printSuccessMessage,
-} from '../utils/utils.console.js';
+import { printRedBox, printBlueBox } from '../utils/utils.console.js';
 import { updatePackageJson, updateNpmScripts } from '../utils/utils.npm.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
