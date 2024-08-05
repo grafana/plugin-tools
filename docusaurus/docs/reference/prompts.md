@@ -13,7 +13,7 @@ sidebar_position: 40
 
 # Prompts
 
-When running the `create-plugin` command, the following prompts will appear.
+When running the `create-plugin` command, the following prompts appear.
 
 ### Select a plugin type
 
@@ -48,23 +48,23 @@ Give your plugin a name which helps identify its purpose.
 
 ### Enter your organization name (usually your Grafana Cloud org)
 
-Enter the name of your organization. This must be your [Grafana Cloud](https://grafana.com/signup/) organization to allow you to [sign](../publish-a-plugin/sign-a-plugin.md) and optionally [publish](../publish-a-plugin/publish-or-update-a-plugin.md) the plugin to the [catalog](https://grafana.com/grafana/plugins).
+Enter the name of your organization. This must be your [Grafana Cloud](https://grafana.com/signup/) organization. With the organization name you can [sign](../publish-a-plugin/sign-a-plugin.md) and optionally [publish](../publish-a-plugin/publish-or-update-a-plugin.md) the plugin to the [Grafana plugin catalog](https://grafana.com/grafana/plugins).
 
-## Bypassing Prompts
+## Bypass prompts
 
-All the above prompts can be bypassed using cli arguments. To scaffold a plugin with cli arguments pass them to the create-plugin command like so:
+You can bypass all the preceding prompts by using `create-plugin` CLI arguments. To scaffold a plugin with the CLI arguments, pass them to the `create-plugin` command like so:
 
 ```
 npx @grafana/create-plugin --plugin-type="app" --plugin-name="myPlugin" --org-name="myorg" --backend
 ```
 
-Scaffolding plugins using cli arguments not only makes it quicker to get started but allows you to run the tool in a non-interactive environment such as CI or to scaffold plugins with other tooling too.
+You can scaffold plugins using CLI arguments to get started faster. This also allows you to run the tool in a non-interactive environment such as CI or to scaffold plugins with other tooling.
 
-Please refer to the following table for the full list of prompt bypass options.
+Refer to the following table for the full list of prompt bypass options.
 
 | Prompt           | Equivalent Argument Name     | Values                                             |
 | ---------------- | ---------------------------- | -------------------------------------------------- |
-| **Plugin Type**  | `--plugin-type`              | one of `app`, `datasource`, `panel` or `scenesapp` |
+| **Plugin type**  | `--plugin-type`              | one of `app`, `datasource`, `panel` or `scenesapp` |
 | **Backend**      | `--backend` / `--no-backend` | boolean                                            |
 | **Name**         | `--plugin-name`              | string                                             |
 | **Organization** | `--org-name`                 | string                                             |
