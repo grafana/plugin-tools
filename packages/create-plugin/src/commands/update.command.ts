@@ -6,7 +6,7 @@ import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
 import { getVersion, getGrafanaRuntimeVersion } from '../utils/utils.version.js';
 import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
-import { TEXT, UDPATE_CONFIG } from '../constants.js';
+import { UDPATE_CONFIG } from '../constants.js';
 import { getOnlyExistingInCwd, removeFilesInCwd } from '../utils/utils.files.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
