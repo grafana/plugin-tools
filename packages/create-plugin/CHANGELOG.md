@@ -1,3 +1,19 @@
+# v5.1.0 (Tue Aug 06 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Improve cli args and add docs [#1030](https://github.com/grafana/plugin-tools/pull/1030) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Clean up unused publicPath.ts when updating [#1035](https://github.com/grafana/plugin-tools/pull/1035) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.0.0 (Wed Jul 31 2024)
 
 #### 💥 Breaking Change
