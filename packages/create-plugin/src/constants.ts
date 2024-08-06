@@ -87,7 +87,7 @@ export const UDPATE_CONFIG = {
   // Files that should be overriden between configuration version updates.
   filesToOverride: ['.config/', '.cprc.json'],
   // Files that are no longer needed for the project and can be removed.
-  filesToRemove: ['./config/webpack/publicPath.ts'],
+  filesToRemove: ['.config/webpack/publicPath.ts'],
 };
 
 // prettier-ignore
