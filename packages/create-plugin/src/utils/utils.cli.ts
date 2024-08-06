@@ -12,8 +12,6 @@ export const argv = minimist(args, {
     pluginName: 'plugin-name',
     orgName: 'org-name',
   },
-  boolean: ['force', 'hasBackend'],
-  string: ['pluginType', 'pluginName', 'orgName', 'feature-flags'],
   unknown: (arg) => {
     printWarning(`Ignoring unknown option: ${arg}.`);
     return false;
