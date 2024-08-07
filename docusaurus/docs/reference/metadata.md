@@ -315,9 +315,9 @@ The list of extensions that the plugin registers below other extension points.
 
 ### Properties
 
-| Property           | Type   | Required | Description                               |
-| ------------------ | ------ | -------- | ----------------------------------------- |
-| `extensionPointId` | string | **Yes**  |                                           |
-| `type`             | string | **Yes**  | Available values: `"link"`, `"component"` |
-| `title`            | string | **Yes**  |                                           |
-| `description`      | string | No       |                                           |
+| Property           | Type   | Required | Description                                                             |
+| ------------------ | ------ | -------- | ----------------------------------------------------------------------- |
+| `extensionPointId` | string | **Yes**  | The string ID of the extension point where the extension is registered. |
+| `type`             | string | **Yes**  | Available values: `"link"`, `"component"`                               |
+| `title`            | string | **Yes**  |                                                                         |
+| `description`      | string | No       |                                                                         |
