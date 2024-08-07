@@ -1,5 +1,4 @@
 import minimist from 'minimist';
-import { printWarning } from './utils.console.js';
 
 export const args = process.argv.slice(2);
 
@@ -11,12 +10,6 @@ export const argv = minimist(args, {
     hasBackend: 'backend',
     pluginName: 'plugin-name',
     orgName: 'org-name',
-  },
-  boolean: ['force', 'hasBackend'],
-  string: ['pluginType', 'pluginName', 'orgName', 'feature-flags'],
-  unknown: (arg) => {
-    printWarning(`Ignoring unknown option: ${arg}.`);
-    return false;
   },
 });
 
