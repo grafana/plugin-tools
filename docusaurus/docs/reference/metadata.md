@@ -45,7 +45,7 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | `state`              | string                        | No       | Marks a plugin as a pre-release. Possible values are: `alpha`, `beta`.                                                                                                                                                                                                                                                                                                                                  |
 | `streaming`          | boolean                       | No       | For data source plugins, if the plugin supports streaming. Used in Explore to start live streaming.                                                                                                                                                                                                                                                                                                     |
 | `tracing`            | boolean                       | No       | For data source plugins, if the plugin supports tracing. Used for example to link logs (e.g. Loki logs) with tracing plugins.                                                                                                                                                                                                                                                                           |
-| `extensions`         | [object](#extensions)[]       | No       | The list of extensions that the plugin registers under other extension points.                                                                                                                                                                                                                                                                                                                          |
+| `extensions`         | [object](#extensions)[]       | No       | The list of extensions that the plugin registers below other extension points.                                                                                                                                                                                                                                                                                                                          |
 
 ## dependencies
 
@@ -311,7 +311,7 @@ Parameters for the token authentication request.
 
 ## extensions
 
-The list of extensions that the plugin registers under other extension points.
+The list of extensions that the plugin registers below other extension points.
 
 ### Properties
 
