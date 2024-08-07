@@ -1,5 +1,18 @@
 # (Wed Aug 07 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.1`
+  - Update grafana dependencies [#971](https://github.com/grafana/plugin-tools/pull/971) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Aug 07 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@5.2.0`
