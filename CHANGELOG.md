@@ -2,6 +2,32 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.2.1`
+  - Update grafana dependencies [#971](https://github.com/grafana/plugin-tools/pull/971) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.2.0`
+  - Create-Plugin: Add smoke tests to scenes app template [#1039](https://github.com/grafana/plugin-tools/pull/1039) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.1.1`
   - Create-Plugin: Prevent defaulting values causing prompts to bypass [#1037](https://github.com/grafana/plugin-tools/pull/1037) ([@jackw](https://github.com/jackw))
 
