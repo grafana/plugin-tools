@@ -6,6 +6,8 @@ import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
 import { getVersion, getGrafanaRuntimeVersion } from '../utils/utils.version.js';
 import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
+import { UDPATE_CONFIG } from '../constants.js';
+import { getOnlyExistingInCwd, removeFilesInCwd } from '../utils/utils.files.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   const { packageManagerName } = getPackageManagerFromUserAgent();
@@ -53,6 +55,11 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
       onlyOutdated: true,
       ignoreGrafanaDependencies: false,
     });
+
+    const filesToRemove = getOnlyExistingInCwd(UDPATE_CONFIG.filesToRemove);
+    if (filesToRemove.length) {
+      removeFilesInCwd(filesToRemove);
+    }
 
     printBlueBox({
       title: 'Update successful ✔',

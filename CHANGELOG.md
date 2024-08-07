@@ -1,3 +1,39 @@
+# (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.1.1`
+  - Create-Plugin: Prevent defaulting values causing prompts to bypass [#1037](https://github.com/grafana/plugin-tools/pull/1037) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Aug 06 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.1.0`
+  - Create Plugin: Improve cli args and add docs [#1030](https://github.com/grafana/plugin-tools/pull/1030) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.1.0`
+  - Create Plugin: Clean up unused publicPath.ts when updating [#1035](https://github.com/grafana/plugin-tools/pull/1035) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump husky from 8.0.3 to 9.1.4 [#1026](https://github.com/grafana/plugin-tools/pull/1026) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jul 31 2024)
 
 #### 💥 Breaking Change
