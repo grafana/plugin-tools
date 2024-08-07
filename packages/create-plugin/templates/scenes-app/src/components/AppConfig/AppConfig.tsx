@@ -33,6 +33,8 @@ export const AppConfig = ({ plugin }: Props) => {
     isApiKeySet: Boolean(jsonData?.isApiKeySet),
   });
 
+  const isSubmitDisabled = Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey));
+
   const onResetApiKey = () =>
     setState({
       ...state,
@@ -54,106 +56,62 @@ export const AppConfig = ({ plugin }: Props) => {
     });
   };
 
+  const onSubmit = () => {
+    updatePluginAndReload(plugin.meta.id, {
+      enabled,
+      pinned,
+      jsonData: {
+        apiUrl: state.apiUrl,
+        isApiKeySet: true,
+      },
+      // This cannot be queried later by the frontend.
+      // We don't want to override it in case it was set previously and left untouched now.
+      secureJsonData: state.isApiKeySet
+        ? undefined
+        : {
+            apiKey: state.apiKey,
+          },
+    });
+  };
+
   return (
     <div data-testid={testIds.appConfig.container}>
-      {/* ENABLE / DISABLE PLUGIN */}
-      <FieldSet label="Enable / Disable">
-        {!enabled && (
-          <>
-            <div className={s.colorWeak}>The plugin is currently not enabled.</div>
-            <Button
-              className={s.marginTop}
-              variant="primary"
-              onClick={() =>
-                updatePluginAndReload(plugin.meta.id, {
-                  enabled: true,
-                  pinned: true,
-                  jsonData,
-                })
-              }
-            >
-              Enable plugin
+      <form onSubmit={onSubmit}>
+        <FieldSet label="API Settings" className={s.marginTopXl}>
+          {/* API Key */}
+          <Field label="API Key" description="A secret key for authenticating to our custom API">
+            <SecretInput
+              width={60}
+              data-testid={testIds.appConfig.apiKey}
+              id="api-key"
+              value={state?.apiKey}
+              isConfigured={state.isApiKeySet}
+              placeholder={'Your secret API key'}
+              onChange={onChangeApiKey}
+              onReset={onResetApiKey}
+            />
+          </Field>
+
+          {/* API Url */}
+          <Field label="API Url" description="" className={s.marginTop}>
+            <Input
+              width={60}
+              id="api-url"
+              data-testid={testIds.appConfig.apiUrl}
+              label={`API Url`}
+              value={state?.apiUrl}
+              placeholder={`E.g.: http://mywebsite.com/api/v1`}
+              onChange={onChangeApiUrl}
+            />
+          </Field>
+
+          <div className={s.marginTop}>
+            <Button type="submit" data-testid={testIds.appConfig.submit} disabled={isSubmitDisabled}>
+              Save API settings
             </Button>
-          </>
-        )}
-
-        {/* Disable the plugin */}
-        {enabled && (
-          <>
-            <div className={s.colorWeak}>The plugin is currently enabled.</div>
-            <Button
-              className={s.marginTop}
-              variant="destructive"
-              onClick={() =>
-                updatePluginAndReload(plugin.meta.id, {
-                  enabled: false,
-                  pinned: false,
-                  jsonData,
-                })
-              }
-            >
-              Disable plugin
-            </Button>
-          </>
-        )}
-      </FieldSet>
-
-      {/* CUSTOM SETTINGS */}
-      <FieldSet label="API Settings" className={s.marginTopXl}>
-        {/* API Key */}
-        <Field label="API Key" description="A secret key for authenticating to our custom API">
-          <SecretInput
-            width={60}
-            data-testid={testIds.appConfig.apiKey}
-            id="api-key"
-            value={state?.apiKey}
-            isConfigured={state.isApiKeySet}
-            placeholder={'Your secret API key'}
-            onChange={onChangeApiKey}
-            onReset={onResetApiKey}
-          />
-        </Field>
-
-        {/* API Url */}
-        <Field label="API Url" description="" className={s.marginTop}>
-          <Input
-            width={60}
-            id="api-url"
-            data-testid={testIds.appConfig.apiUrl}
-            label={`API Url`}
-            value={state?.apiUrl}
-            placeholder={`E.g.: http://mywebsite.com/api/v1`}
-            onChange={onChangeApiUrl}
-          />
-        </Field>
-
-        <div className={s.marginTop}>
-          <Button
-            type="submit"
-            data-testid={testIds.appConfig.submit}
-            onClick={() =>
-              updatePluginAndReload(plugin.meta.id, {
-                enabled,
-                pinned,
-                jsonData: {
-                  apiUrl: state.apiUrl,
-                  isApiKeySet: true,
-                },
-                // This cannot be queried later by the frontend.
-                // We don't want to override it in case it was set previously and left untouched now.
-                secureJsonData: state.isApiKeySet
-                  ? undefined
-                  : {
-                      apiKey: state.apiKey,
-                    },
-              })
-            }
-            disabled={Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey))}
-          >
-            Save API settings
-          </Button>
-        </div>
-      </FieldSet>
+          </div>
+        </FieldSet>
+      </form>
     </div>
   );
 };
