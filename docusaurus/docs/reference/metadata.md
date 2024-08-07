@@ -45,6 +45,7 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | `state`              | string                        | No       | Marks a plugin as a pre-release. Possible values are: `alpha`, `beta`.                                                                                                                                                                                                                                                                                                                                  |
 | `streaming`          | boolean                       | No       | For data source plugins, if the plugin supports streaming. Used in Explore to start live streaming.                                                                                                                                                                                                                                                                                                     |
 | `tracing`            | boolean                       | No       | For data source plugins, if the plugin supports tracing. Used for example to link logs (e.g. Loki logs) with tracing plugins.                                                                                                                                                                                                                                                                           |
+| `extensions`         | [object](#extensions)[]       | No       | The list of extensions that the plugin registers below other extension points.                                                                                                                                                                                                                                                                                                                          |
 
 ## dependencies
 
@@ -308,3 +309,15 @@ Parameters for the token authentication request.
 | `grant_type`    | string | No       | OAuth grant type                                                                          |
 | `resource`      | string | No       | OAuth resource                                                                            |
 
+## extensions
+
+The list of extensions that the plugin registers below other extension points.
+
+### Properties
+
+| Property           | Type   | Required | Description                                                             |
+| ------------------ | ------ | -------- | ----------------------------------------------------------------------- |
+| `extensionPointId` | string | **Yes**  | The string ID of the extension point where the extension is registered. |
+| `type`             | string | **Yes**  | Available values: `"link"`, `"component"`                               |
+| `title`            | string | **Yes**  |                                                                         |
+| `description`      | string | No       |                                                                         |
