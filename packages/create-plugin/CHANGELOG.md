@@ -1,3 +1,15 @@
+# v5.1.1 (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- Create-Plugin: Prevent defaulting values causing prompts to bypass [#1037](https://github.com/grafana/plugin-tools/pull/1037) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.1.0 (Tue Aug 06 2024)
 
 #### 🚀 Enhancement
