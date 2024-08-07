@@ -30,6 +30,8 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
     isApiKeySet: Boolean(secureJsonFields?.apiKey),
   });
 
+  const isSubmitDisabled = Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey));
+
   const onResetApiKey = () =>
     setState({
       ...state,
@@ -44,8 +46,30 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
     });
   };
 
+  const onSubmit = () => {
+    if (isSubmitDisabled) {
+      return;
+    }
+
+    updatePluginAndReload(plugin.meta.id, {
+      enabled,
+      pinned,
+      jsonData: {
+        apiUrl: state.apiUrl,
+      },
+      // This cannot be queried later by the frontend.
+      // We don't want to override it in case it was set previously and left untouched now.
+      secureJsonData: state.isApiKeySet
+        ? undefined
+        : {
+            apiKey: state.apiKey,
+          },
+    });
+  };
+
   return (
     <div data-testid={testIds.appConfig.container}>
+    <form onSubmit={onSubmit}>
       <FieldSet label="API Settings">
         <Field label="API Key" description="A secret key for authenticating to our custom API">
           <SecretInput
@@ -77,28 +101,13 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
           <Button
             type="submit"
             data-testid={testIds.appConfig.submit}
-            onClick={() =>
-              updatePluginAndReload(plugin.meta.id, {
-                enabled,
-                pinned,
-                jsonData: {
-                  apiUrl: state.apiUrl,
-                },
-                // This cannot be queried later by the frontend.
-                // We don't want to override it in case it was set previously and left untouched now.
-                secureJsonData: state.isApiKeySet
-                  ? undefined
-                  : {
-                      apiKey: state.apiKey,
-                    },
-              })
-            }
-            disabled={Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey))}
+            disabled={isSubmitDisabled}
           >
             Save API settings
           </Button>
         </div>
       </FieldSet>
+      </form>
     </div>
   );
 };
