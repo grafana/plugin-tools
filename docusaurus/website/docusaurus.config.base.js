@@ -193,6 +193,10 @@ const plugins = [
           from: ['/create-a-plugin/extend-a-plugin/extend-configurations'],
           to: '/get-started/set-up-development-environment#extend-configurations',
         },
+        {
+          from: ['/migration-guides/update-create-plugin-versions'],
+          to: '/reference/prompts#update-plugin-tooling',
+        },
       ],
     },
   ],
