@@ -195,11 +195,11 @@ const plugins = [
         },
         {
           from: ['/migration-guides/update-create-plugin-versions'],
-          to: '/reference/cli-commands#update-plugin-tooling',
+          to: '/reference/cli-commands/#update-plugin-tooling',
         },
         {
           from: ['/reference/prompts'],
-          to: '/reference/cli-commands',
+          to: '/reference/cli-commands/',
         },
       ],
     },
