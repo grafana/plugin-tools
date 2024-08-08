@@ -29,6 +29,7 @@ In this tutorial, you'll:
 #### Prerequisites
 
 - Grafana v9.0 or later
+- [Docker](https://docs.docker.com/get-docker/)
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
