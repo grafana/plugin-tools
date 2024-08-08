@@ -1,6 +1,6 @@
 ---
 id: add-authentication-for-data-source-plugins
-title: Add authentication
+title: Add authentication for data source plugins
 description: How to add authentication for data source plugins.
 keywords:
   - grafana
@@ -20,13 +20,13 @@ Configure your data source plugin to authenticate against a third-party API in o
 - Use the [_data source proxy_](#authenticate-using-the-data-source-proxy) method, or
 - Build a [_backend plugin_](#authenticate-using-a-backend-plugin).
 
-| Case                                                                                            | Use                             |
-| ----------------------------------------------------------------------------------------------- | ------------------------------- |
-| Do you need to authenticate your plugin using Basic Auth or API keys?                           | Use the data source proxy.      |
-| Does your API support OAuth 2.0 using client credentials?                                       | Use the data source proxy.      |
-| Does your API use a custom authentication method that isn't supported by the data source proxy? | Use a backend plugin.           |
-| Does your API communicate over a protocol other than HTTP?                                      | Build and use a backend plugin. |
-| Does your plugin require alerting support?                                                      | Build and use a backend plugin. |
+| Case                                                                                            | Use                        |
+| ----------------------------------------------------------------------------------------------- | -------------------------- |
+| Do you need to authenticate your plugin using Basic Auth or API keys?                           | Use the data source proxy. |
+| Does your API support OAuth 2.0 using client credentials?                                       | Use the data source proxy. |
+| Does your API use a custom authentication method that isn't supported by the data source proxy? | Use a backend plugin.      |
+| Does your API communicate over a protocol other than HTTP?                                      | Use a backend plugin.      |
+| Does your plugin require alerting support?                                                      | Use a backend plugin.      |
 
 ## Encrypt data source configuration
 
@@ -34,23 +34,25 @@ Data source plugins have two ways of storing custom configuration: `jsonData` an
 
 Users with the Viewer role can access data source configuration such as the contents of `jsonData` in cleartext. If you've enabled anonymous access, anyone who can access Grafana in their browser can see the contents of `jsonData`.
 
-Users of [Grafana Enterprise](https://grafana.com/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](https://grafana.com/docs/grafana/latest/enterprise/datasource_permissions). You can see the settings that the current user has access to by entering `window.grafanaBootData` in the developer console of your browser.
+Users of [Grafana Enterprise](https://grafana.com/products/enterprise/grafana/) can restrict access to data sources to specific users and teams. For more information, refer to [Data source permissions](https://grafana.com/docs/grafana/latest/enterprise/datasource_permissions).
 
-:::danger
+You can see the settings that the current user has access to by entering `window.grafanaBootData` in the developer console of your browser.
 
-Do not use `jsonData` with sensitive data such as password, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
+:::warning
+
+Do not use `jsonData` with sensitive data such as passwords, tokens, and API keys. If you need to store sensitive information, use `secureJsonData` instead.
 
 :::
 
-### Store configuration in `secureJsonData`
+### Store configuration in secureJsonData
 
-If you need to store sensitive information, use `secureJsonData` instead of `jsonData`. Whenever the user saves the data source configuration, the secrets in `secureJsonData` are sent to the Grafana server and encrypted before they're stored.
+If you need to store sensitive information, use `secureJsonData` instead of `jsonData`. Whenever the user saves the data source configuration, the secrets in `secureJsonData` are sent to the Grafana server and they're encrypted before they're stored.
 
 Once you have encrypted the secure configuration, it can no longer be accessed from the browser. The only way to access secrets after they've been saved is by using the [_data source proxy_](#authenticate-using-the-data-source-proxy).
 
-### Add secret configuration to your data source plugin
+### Add secrets configuration to your data source plugin
 
-To demonstrate how you can add secrets to a data source plugin, let's add support for configuring an API key.
+To add secrets to a data source plugin, you can add support for configuring an API key.
 
 1. Create a new interface in `types.ts` to hold the API key:
 
@@ -119,7 +121,7 @@ To demonstrate how you can add secrets to a data source plugin, let's add suppor
    };
    ```
 
-Now that users can configure secrets, the next step is to see how we can add them to our requests.
+Once users can configure secrets, the next step is to see how we can add them to our requests.
 
 ## Authenticate using the data source proxy
 
@@ -150,7 +152,7 @@ To forward requests through the Grafana proxy, you need to configure one or more
 
    :::note
 
-   You need to restart the Grafana server every time you make a change to your `plugin.json` file.
+   You need to build your plugin and restart the Grafana server every time you make a change to your `plugin.json` file.
 
    :::
 
@@ -254,7 +256,9 @@ Here's an example of adding `name` and `content` as URL parameters:
 ```
 
 :::note
-Be aware that `urlParams` configuration is only supported in data source plugins. It is _not_ supported in app plugins.
+
+Be aware that `urlParams` configuration is only supported in data source plugins. It is _not_ supported in [app plugins](../app-plugins/add-authentication-for-app-plugins).
+
 :::
 
 #### Add a request body to a proxy route
@@ -302,7 +306,9 @@ Any parameters defined in `tokenAuth.params` are encoded as `application/x-www-f
 ```
 
 :::note
-Be aware that `tokenAuth` configuration is only supported in data source plugins. It is _not_ supported in app plugins.
+
+Be aware that `tokenAuth` configuration is only supported in data source plugins. It is _not_ supported in [app plugins](../app-plugins/add-authentication-for-app-plugins).
+
 :::
 
 ## Authenticate using a backend plugin
@@ -330,13 +336,13 @@ func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 
 ## Forward OAuth identity for the logged-in user
 
-If your data source uses the same OAuth provider as Grafana itself, for example using [Generic OAuth Authentication](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/generic-oauth), then your data source plugin can reuse the access token for the logged-in Grafana user.
+If your data source uses the same OAuth provider as Grafana itself, for example, using [generic OAuth authentication](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/generic-oauth), then your data source plugin can reuse the access token for the logged-in Grafana user.
 
 To allow Grafana to pass the access token to the plugin, update the data source configuration and set the `jsonData.oauthPassThru` property to `true`. The [DataSourceHttpSettings](https://developers.grafana.com/ui/latest/index.html?path=/story/data-source-datasourcehttpsettings--basic) settings provide a toggle, the **Forward OAuth Identity** option, for this. You can also build an appropriate toggle to set `jsonData.oauthPassThru` in your data source configuration page UI.
 
 When configured, Grafana can forward authorization HTTP headers such as `Authorization` or `X-ID-Token` to a backend data source. This information is available across the `QueryData`, `CallResource` and `CheckHealth` requests.
 
-To get Grafana to forward the headers, create a HTTP client using the [Grafana plugin SDK for Go](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient) and set the `ForwardHTTPHeaders` option to `true` (by default, it's set to `false`). This package exposes request information which can be subsequently forwarded downstream and/or used directly within the plugin.
+To get Grafana to forward the headers, create an HTTP client using the [Grafana plugin SDK for Go](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/httpclient) and set the `ForwardHTTPHeaders` option to `true` (by default, it's set to `false`). This package exposes request information which can be subsequently forwarded downstream or used directly within the plugin, or both.
 
 ```go
 func NewDatasource(ctx context.Context, settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
@@ -364,7 +370,7 @@ func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
     if err != nil {
       return nil, fmt.Errorf("new request with context: %w", err)
     }
-    // Authorization header will be automatically injected if oauthPassThru is configured
+    // Authorization header is automatically injected if oauthPassThru is configured
     resp, err := ds.httpClient.Do(req)
     // ...
 }
@@ -420,7 +426,7 @@ When configured, as with [authorization headers](#forward-oauth-identity-for-the
 
 ### Extract cookies for the logged-in user
 
-You can also extract the cookies in the `QueryData`, `CallResource` and `CheckHealth` requests if required.
+You can also extract the cookies in the `QueryData`, `CallResource`, and `CheckHealth` requests if required.
 
 **`QueryData`**
 
@@ -454,9 +460,11 @@ func (ds *dataSource) CheckHealth(ctx context.Context, req *backend.CheckHealthR
 
 ## Forward user header for the logged-in user
 
-When `send_user_header` is enabled, Grafana passes the user header to the plugin using the `X-Grafana-User` header. You can forward this header as well as [authorization headers](#forward-oauth-identity-for-the-logged-in-user) or [configured cookies](#forward-cookies-for-the-logged-in-user).
+When [`send_user_header`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#send_user_header) is enabled, Grafana passes the user header to the plugin using the `X-Grafana-User` header. You can forward this header as well as [authorization headers](#forward-oauth-identity-for-the-logged-in-user) or [configured cookies](#forward-cookies-for-the-logged-in-user).
 
-**`QueryData`**
+### QueryData
+
+Forward the `QueryData` header like this:
 
 ```go
 func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
@@ -466,7 +474,9 @@ func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 ```
 
-**`CallResource`**
+### CallResource
+
+Forward the `CallResource` header like this:
 
 ```go
 func (ds *dataSource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
@@ -476,7 +486,9 @@ func (ds *dataSource) CallResource(ctx context.Context, req *backend.CallResourc
 }
 ```
 
-**`CheckHealth`**
+### CheckHealth
+
+Forward the `CheckHealth` header like this:
 
 ```go
 func (ds *dataSource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
