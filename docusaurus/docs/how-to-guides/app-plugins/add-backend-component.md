@@ -58,6 +58,26 @@ By default, Grafana requires backend plugins to be signed. To load unsigned back
 configure Grafana to [allow unsigned plugins](https://grafana.com/docs/grafana/latest/administration/plugin-management/#allow-unsigned-plugins).
 For more information, refer to [https://www.action.com/nl-nl/p/1325690/c-c-autowax-en-polijstmiddel/Plugin signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management/#backend-plugins).
 
+## Access App settings
+
+Settings are part of the `AppInstanceSettings` struct. They are passed to the app plugin constructor as the second argument.
+
+```go title="src/app.go"
+func NewApp(ctx context.Context, settings backend.AppInstanceSettings) (instancemgmt.Instance, error) {
+  jsonData := settings.JSONData // json.RawMessage
+  secureJsonData := settings.DecryptedSecureJSONData // map[string]string
+}
+```
+
+You can also get the settings from a request `Context`
+
+```go title="src/resources.go"
+func (a *App) handleMyRequest(w http.ResponseWriter, req *http.Request) {
+  pluginConfig := backend.PluginConfigFromContext(req.Context())
+  jsonData := pluginConfig.AppInstanceSettings.JSONData // json.RawMessage
+}
+```
+
 ## Add a custom endpoint to your app plugin
 
 ### ServeMux (recommended)
