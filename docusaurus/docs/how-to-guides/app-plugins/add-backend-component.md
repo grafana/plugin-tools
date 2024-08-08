@@ -12,6 +12,7 @@ keywords:
 
 import CreatePlugin from '@shared/create-plugin-backend.md';
 import BackendPluginAnatomy from '@shared/backend-plugin-anatomy.md';
+import TroubleshootPluginLoad from '@shared/troubleshoot-plugin-doesnt-load.md';
 
 # Add a backend component to an app plugin
 
@@ -20,7 +21,7 @@ A backend component for an app plugin allows you to extend the app plugin for ad
 # Use cases for backend components in app plugins
 
 - Use custom authentication methods and/or authorization checks that aren't supported in Grafana.
-- Running workloads in the background
+- Running workloads in the server side
 - Connect to non-HTTP services that normally can't be connected to from a browser
 
 # Add a backend component to an app plugin
@@ -42,21 +43,11 @@ A backend component for an app plugin allows you to extend the app plugin for ad
 
 ## Troubleshooting
 
-### Grafana doesn't load my plugin
+<TroubleshootPluginLoad />
 
-Ensure that Grafana has been started in development mode. If you are running Grafana from source, you'll need to add the following line to your `conf/custom.ini` file (if you don't have one already, go ahead and create this file before proceeding):
+## Add authentication to your app plugin
 
-```ini
-app_mode = development
-```
-
-You can then start Grafana in development mode by running `make run & make run-frontend` in the Grafana repository root.
-
-If you are running Grafana from a binary or inside a Docker container, you can start it in development mode by setting the environment variable `GF_DEFAULT_APP_MODE` to `development`.
-
-By default, Grafana requires backend plugins to be signed. To load unsigned backend plugins, you need to
-configure Grafana to [allow unsigned plugins](https://grafana.com/docs/grafana/latest/administration/plugin-management/#allow-unsigned-plugins).
-For more information, refer to [https://www.action.com/nl-nl/p/1325690/c-c-autowax-en-polijstmiddel/Plugin signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management/#backend-plugins).
+To learn more about adding authentication to your app plugin (e.g. to call a custom backend or third-party API) and handling secrets, refer to [Add authentication for app plugins](./add-authentication-for-app-plugins.md).
 
 ## Access App settings
 
@@ -82,9 +73,32 @@ func (a *App) handleMyRequest(w http.ResponseWriter, req *http.Request) {
 
 ### ServeMux (recommended)
 
-Your scaffoled app plugin already has a default CallResource that uses [ServeMux](https://pkg.go.dev/net/http#ServeMux).
+Your scaffoled app plugin already has a default CallResource that uses [ServeMux](https://pkg.go.dev/net/http#ServeMux). It looks like this:
 
-You can add custom endpoints to your app plugin in the `resources.go` file. E.g.:
+```go title="app.go"
+type App struct {
+	backend.CallResourceHandler
+}
+
+// NewApp creates a new example *App instance.
+func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Instance, error) {
+	var app App
+
+	// Use a httpadapter (provided by the SDK) for resource calls. This allows us
+	// to use a *http.ServeMux for resource calls, so we can map multiple routes
+	// to CallResource without having to implement extra logic.
+	mux := http.NewServeMux()
+	app.registerRoutes(mux)
+  // implement the CallResourceHandler interface
+	app.CallResourceHandler = httpadapter.New(mux)
+
+	return &app, nil
+}
+```
+
+Now you can add custom endpoints to your app plugin.
+
+The scaffolded code already contains a `resources.go` file with the `registerRoutes` function.
 
 ```go title="resources.go"
 // this function already exists in the scaffolded app plugin
@@ -140,6 +154,6 @@ function getMyCustomEndpoint() {
 }
 ```
 
-## Add authentication to your app plugin
+### Next steps
 
-To learn more about adding authentication to your app plugin and handling secrets, refer to [Add authentication for app plugins](./add-authentication-for-app-plugins.md).
+Take a look at our [example app plugin with backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) for a complete example.
