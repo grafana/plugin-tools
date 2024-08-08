@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 40
 ---
 
-# `create-plugin` commands
+# CLI commands
 
 Below you can find the available commands in `@grafana/create-plugin`.
 
