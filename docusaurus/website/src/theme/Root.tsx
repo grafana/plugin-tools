@@ -14,7 +14,7 @@ export default function Root({ children }) {
 
   const rudderStackConfig = customFields.rudderStackTracking as RudderStackTrackingConfig;
   const faroConfig = customFields.faroConfig as FaroConfig;
-  const shouldTrack = customFields.node_env === 'production';
+  const shouldTrack = customFields.nodeEnv === 'production';
 
   const setCookieAndStartTracking = useCallback(() => {
     setCookie(cookieName, {
