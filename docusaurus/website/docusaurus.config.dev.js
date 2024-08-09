@@ -13,8 +13,8 @@ const {
 } = require('./docusaurus.config.base');
 
 const devPortalHome = 'https://grafana-dev.com/developers';
-
 const [docsFooterLinks, ...otherFooterLinks] = themeConfigFooter.links;
+const gitHash = process.env.GITHUB_SHA || 'local';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -74,6 +74,12 @@ const config = {
       sdkUrl: 'https://rsdk.grafana.com',
     },
     canSpamUrl: 'https://grafana-dev.com/canspam',
+    faroConfig: {
+      url: '/connect/af1fca71911a9641ebdffddb56889e97',
+      appName: 'grafana-website',
+      version: gitHash,
+      environment: 'development',
+    },
   },
 };
 
