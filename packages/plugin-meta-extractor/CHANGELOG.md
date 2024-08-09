@@ -1,3 +1,15 @@
+# v0.0.5 (Fri Aug 09 2024)
+
+#### 🐛 Bug Fix
+
+- Chore: Bump micromatch [#1040](https://github.com/grafana/plugin-tools/pull/1040) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.0.4 (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix

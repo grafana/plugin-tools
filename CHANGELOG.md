@@ -1,3 +1,18 @@
+# (Fri Aug 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.2`
+  - Create Plugin: Update CI workflow for latest GH runners [#1046](https://github.com/grafana/plugin-tools/pull/1046) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-meta-extractor@0.0.5`
+  - Chore: Bump micromatch [#1040](https://github.com/grafana/plugin-tools/pull/1040) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Aug 07 2024)
 
 #### 🐛 Bug Fix
