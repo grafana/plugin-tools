@@ -17,13 +17,14 @@ export function Rating() {
   const [storageValue, setStorageValue] = useRatingStorage(pageId);
   const faroIsConfigured = isFaroSetup(customFields.faroConfig as FaroConfig);
   const shouldTrack = customFields.nodeEnv === 'production';
-  const onClick = (rating) => {
+  const onClick = (rating: string) => {
     if (shouldTrack && faroIsConfigured) {
       faro.api.pushMeasurement(
         {
           type: 'docs_feedback',
+          // website doesn't include this but pushMeasurement types require it
           values: {
-            rating: rating,
+            rating: rating === 'yes' ? 1 : 0,
           },
         },
         {
