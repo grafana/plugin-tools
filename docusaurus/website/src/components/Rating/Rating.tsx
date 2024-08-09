@@ -16,8 +16,9 @@ export function Rating() {
   const pageId = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '_');
   const [storageValue, setStorageValue] = useRatingStorage(pageId);
   const faroIsConfigured = isFaroSetup(customFields.faroConfig as FaroConfig);
+  const shouldTrack = customFields.nodeEnv === 'production';
   const onClick = (rating) => {
-    if (customFields.shouldTrack && faroIsConfigured) {
+    if (shouldTrack && faroIsConfigured) {
       faro.api.pushMeasurement(
         {
           type: 'docs_feedback',
