@@ -78,7 +78,7 @@ const config = {
       url: '/connect/af1fca71911a9641ebdffddb56889e97',
       appName: 'grafana-website',
       version: gitHash,
-      environment: process.env.NODE_ENV,
+      environment: 'production',
     },
   },
 };
