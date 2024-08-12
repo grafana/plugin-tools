@@ -1,3 +1,3 @@
 ```shell
-npx @grafana/plugin update --force
+npx @grafana/create-plugin@latest update --force
 ```
