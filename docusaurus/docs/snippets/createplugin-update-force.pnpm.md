@@ -1,3 +1,3 @@
 ```shell
-pnpm dlx @grafana/plugin update --force
+pnpm dlx @grafana/create-plugin@latest update --force
 ```
