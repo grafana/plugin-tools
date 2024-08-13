@@ -30,7 +30,7 @@ Grafana plugin development allows for many options depending on the type of user
 - **Data-source plugin** - a connection to a new database or other source of data.
 - **App plugin** - an integrated out-of-the-box experience.
 
-Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](https://grafana.com/developers/plugin-tools/reference/prompts.md/#what-type-of-plugin-would-you-like) of plugin.
+Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](https://grafana.com/developers/plugin-tools/reference/prompts#select-a-plugin-type) of plugin.
 
 :::note
 
@@ -88,7 +88,7 @@ Note that a plugin of type `datasource` must be installed before it can be provi
 
 ### Bundling of dashboards
 
-Data-source plugins can [include dashboards](https://grafana.com/developers/docs/reference/metadata.md#includes) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
+Data-source plugins can [include dashboards](https://grafana.com/developers/plugin-tools/reference/plugin-json#includes) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
 
 ## App plugins
 
@@ -122,7 +122,7 @@ Note that the plugin must be installed before provisioning can succeed with a `p
 
 ### Bundling of apps
 
-The app plugin type allows you to [nest other plugins inside it](../how-to-guides/app-plugins/work-with-nested-plugins); in other words, to bundle or [include](https://grafana.com/developers/docs/reference/metadata.md#includes) multiple plugins in the same package.
+The app plugin type allows you to [nest other plugins inside it](../how-to-guides/app-plugins/work-with-nested-plugins); in other words, to bundle or [include](https://grafana.com/developers/plugin-tools/reference/plugin-json#includes) multiple plugins in the same package.
 
 ### Bundling of dashboards
 
