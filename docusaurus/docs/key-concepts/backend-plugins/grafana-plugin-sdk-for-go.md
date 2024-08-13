@@ -24,6 +24,15 @@ The Grafana plugin Go SDK is still in development. It is based on the [plugin pr
 
 When we update the plugin SDK, those plugins that use an older version of the SDK should still work with Grafana. However, these older plugins may be unable to use the new features and capabilities we introduce in updated SDK versions.
 
+## Update the Go SDK
+
+To keep the Grafana plugin SDK for Go up to date:
+
+```bash
+go get -u github.com/grafana/grafana-plugin-sdk-go
+go mod tidy
+```
+
 ## See also
 
 - [SDK source code](https://github.com/grafana/grafana-plugin-sdk-go)

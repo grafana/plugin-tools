@@ -12,7 +12,6 @@ keywords:
   - event bus
   - subscribe
   - events
-sidebar_position: 5
 ---
 
 # Subscribe to Grafana events

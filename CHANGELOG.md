@@ -1,3 +1,106 @@
+# (Fri Aug 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.2`
+  - Create Plugin: Update CI workflow for latest GH runners [#1046](https://github.com/grafana/plugin-tools/pull/1046) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-meta-extractor@0.0.5`
+  - Chore: Bump micromatch [#1040](https://github.com/grafana/plugin-tools/pull/1040) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.1`
+  - Update grafana dependencies [#971](https://github.com/grafana/plugin-tools/pull/971) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.2.0`
+  - Create-Plugin: Add smoke tests to scenes app template [#1039](https://github.com/grafana/plugin-tools/pull/1039) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.1.1`
+  - Create-Plugin: Prevent defaulting values causing prompts to bypass [#1037](https://github.com/grafana/plugin-tools/pull/1037) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Aug 06 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.1.0`
+  - Create Plugin: Improve cli args and add docs [#1030](https://github.com/grafana/plugin-tools/pull/1030) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.1.0`
+  - Create Plugin: Clean up unused publicPath.ts when updating [#1035](https://github.com/grafana/plugin-tools/pull/1035) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump husky from 8.0.3 to 9.1.4 [#1026](https://github.com/grafana/plugin-tools/pull/1026) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jul 31 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@5.0.0`
+  - Create-Plugin: Simplify Prompts [#1018](https://github.com/grafana/plugin-tools/pull/1018) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Jul 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.3`
+  - Create Plugin: Template dynamic public path [#1023](https://github.com/grafana/plugin-tools/pull/1023) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Jul 12 2024)
 
 #### 🐛 Bug Fix

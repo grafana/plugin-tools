@@ -165,6 +165,34 @@ const plugins = [
           from: ['/create-a-plugin/extend-a-plugin/include-dashboards'],
           to: '/how-to-guides/data-source-plugins/include-dashboards',
         },
+        {
+          from: ['/create-a-plugin/develop-a-plugin/work-with-frontend'],
+          to: '/reference/cli-commands/',
+        },
+        {
+          from: ['/create-a-plugin/develop-a-plugin/work-with-backend'],
+          to: '/reference/cli-commands/',
+        },
+        {
+          from: ['/create-a-plugin/develop-a-plugin/set-up-github-workflows'],
+          to: '/get-started/set-up-development-environment#set-up-github-workflows',
+        },
+        {
+          from: ['/create-a-plugin/develop-a-plugin/subscribe-events'],
+          to: '/how-to-guides/panel-plugins/subscribe-events',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-anonymous-usage-reporting'],
+          to: '/how-to-guides/add-anonymous-usage-reporting',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/add-return-to-previous-functionality'],
+          to: '/how-to-guides/app-plugins/add-return-to-previous-functionality',
+        },
+        {
+          from: ['/create-a-plugin/extend-a-plugin/extend-configurations'],
+          to: '/get-started/set-up-development-environment#extend-configurations',
+        },
       ],
     },
   ],

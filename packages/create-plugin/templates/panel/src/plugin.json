@@ -5,7 +5,7 @@
   "id": "{{ pluginId }}",
   "info": {
     "keywords": ["panel"],
-    "description": "{{ sentenceCase pluginDescription }}",
+    "description": "",
     "author": {
       "name": "{{ sentenceCase orgName }}"
     },
