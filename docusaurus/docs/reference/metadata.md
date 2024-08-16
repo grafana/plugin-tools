@@ -311,7 +311,7 @@ Parameters for the token authentication request.
 
 ## extensions
 
-List of link and component extensions which the plugin registers to a given extension point.
+List of link and component extensions which the plugin registers to given extension points.
 
 ### Properties
 
