@@ -240,7 +240,7 @@ For example:
  ]
 ```
 
-For more information, see the plugin.json [reference](../../reference/metadata.md#extensions).
+For more information, see the `plugin.json` [reference](../../reference/metadata.md#extensions).
 
 ## Troubleshooting
 
