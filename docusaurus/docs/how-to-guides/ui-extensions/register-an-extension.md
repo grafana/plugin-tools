@@ -225,7 +225,7 @@ export const plugin = new AppPlugin().addComponent({
 
 ## Updating plugin.json metadata
 
-Once you have defined a link or component extension to be registered against an extension point, you must update your plugin.json metadata.
+Once you have defined a link or component extension to be registered against an extension point, you must update your `plugin.json` metadata.
 
 For example:
 
