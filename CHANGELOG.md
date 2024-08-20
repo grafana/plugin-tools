@@ -1,3 +1,21 @@
+# (Tue Aug 20 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.4`
+  - Update grafana dependencies [#1061](https://github.com/grafana/plugin-tools/pull/1061) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump axios from 1.7.2 to 1.7.4 [#1059](https://github.com/grafana/plugin-tools/pull/1059) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Fri Aug 16 2024)
 
 #### 🐛 Bug Fix
