@@ -249,7 +249,7 @@ const response = getBackendSrv().fetch<TODO[]>({
 
 ## Add authentication to your requests using the data proxy
 
-To learn about adding authentication to the data proxy, refer to our [documentation](./add-annotations-for-data-source-plugins.md).
+To learn about adding authentication to the data proxy, refer to our [documentation](./add-authentication-for-data-source-plugins).
 
 ## Debug requests from the data proxy
 
