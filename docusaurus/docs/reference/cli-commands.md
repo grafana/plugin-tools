@@ -46,7 +46,7 @@ Performs a type-checking process on the frontend code using TypeScript.
 
 ### `npm run server`
 
-Launches the [Grafana development server](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment) using Docker.
+Launches the [Grafana development server](/get-started/set-up-development-environment) using Docker.
 
 ### `npm run sign`
 
