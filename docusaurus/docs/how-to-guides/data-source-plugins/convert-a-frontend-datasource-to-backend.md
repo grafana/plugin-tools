@@ -13,7 +13,7 @@ keywords:
 
 This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../../key-concepts/backend-plugins).
 
-To convert the frontend data source, we recommend scaffolding a new backend data source plugin using [`npx @grafana/create-plugin@latest`](https://grafana.com/developers/plugin-tools/). Use the following instructions to extend this foundation to copy functionality from your original plugin.
+To convert the frontend data source, we recommend scaffolding a new backend data source plugin using `npx @grafana/create-plugin@latest`. Use the following instructions to extend this foundation to copy functionality from your original plugin.
 
 ## Why
 
