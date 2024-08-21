@@ -18,7 +18,7 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
           `- ${getBackendCmd()} to build the plugin backend code. Rerun this command every time you edit your backend files.`,
         ]
       : []),
-    '- `docker-compose up` to start a grafana development server.',
+    '- `docker compose up` to start a grafana development server.',
     '- Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.',
   ];
 
