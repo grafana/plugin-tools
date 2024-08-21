@@ -1,3 +1,16 @@
+# (Wed Aug 21 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.3.0`, `@grafana/plugin-e2e@1.7.0`
+  - Chore: replace docker-compose with docker compose commands [#1064](https://github.com/grafana/plugin-tools/pull/1064) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Aug 20 2024)
 
 #### 🐛 Bug Fix

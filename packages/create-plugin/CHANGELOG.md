@@ -1,3 +1,15 @@
+# v5.3.0 (Wed Aug 21 2024)
+
+#### 🚀 Enhancement
+
+- Chore: replace docker-compose with docker compose commands [#1064](https://github.com/grafana/plugin-tools/pull/1064) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.2.4 (Tue Aug 20 2024)
 
 #### 🐛 Bug Fix
