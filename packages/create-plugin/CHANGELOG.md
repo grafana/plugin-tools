@@ -1,3 +1,15 @@
+# v5.3.1 (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1068](https://github.com/grafana/plugin-tools/pull/1068) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.3.0 (Wed Aug 21 2024)
 
 #### 🚀 Enhancement
