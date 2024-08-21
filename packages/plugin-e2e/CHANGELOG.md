@@ -1,3 +1,15 @@
+# v1.7.1 (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix typings for the toHaveAlert matcher [#1070](https://github.com/grafana/plugin-tools/pull/1070) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.7.0 (Wed Aug 21 2024)
 
 #### 🚀 Enhancement
