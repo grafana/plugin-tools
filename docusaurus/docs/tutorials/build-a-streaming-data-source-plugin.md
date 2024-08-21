@@ -295,12 +295,6 @@ This command runs a Grafana container using docker compose and puts the built pl
 
 2. To verify the build, go to Grafana at `https://localhost:3000`.
 
-:::note
-
-You may be using Docker Compose instead of docker compose. If that is your case, you just need to change the command in the `package.json` in the project's root directory.
-
-:::
-
 ## Step 7: Test the plugin
 
 1. From Grafana at `https://localhost:3000`, use the default credentials: username `admin` and password `admin`. If you're not presented with a login page, click **Sign in** in the top of the page and insert the credentials.
