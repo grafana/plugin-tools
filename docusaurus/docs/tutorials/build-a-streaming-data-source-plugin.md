@@ -40,13 +40,13 @@ npx @grafana/create-plugin@latest
 
 :::note
 
-For a complete list of prerequisites and suggestions for setting up your development environment, refer to [Get started](https://grafana.com/developers/plugin-tools/).
+For a complete list of prerequisites and suggestions for setting up your development environment, refer to [Get started](/).
 
 :::
 
 Create Plugin will prompt you with some questions about your plugin name and type, your organization, and many other options.
 
-2. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
+1. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
 
 The tool will create a skeleton with all the necessary code and dependencies to run a data source backend plugin. And, if you compile the code, you will have a very simple backend plugin. However, this generated code isn't a streaming plugin yet, and we need to make some modifications.
 
