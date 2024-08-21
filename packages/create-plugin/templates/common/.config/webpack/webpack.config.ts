@@ -22,7 +22,7 @@ const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 
 const virtualPublicPath = new VirtualModulesPlugin({
-  'node_modules/grafana-public-path.js': `
+  'virtual_modules/grafana-public-path.js': `
 import amdMetaModule from 'amd-module';
 
 __webpack_public_path__ =
@@ -247,7 +247,7 @@ const config = async (env): Promise<Configuration> => {
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
       // handle resolving "rootDir" paths
-      modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
+      modules: [path.resolve(process.cwd(), 'src'), 'node_modules', 'virtual_modules'],
       unsafeCache: true,
     },
   };
