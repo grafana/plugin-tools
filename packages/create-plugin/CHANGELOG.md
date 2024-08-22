@@ -1,3 +1,15 @@
+# v5.3.2 (Thu Aug 22 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix missing module.ts in sourcemaps [#1071](https://github.com/grafana/plugin-tools/pull/1071) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.3.1 (Wed Aug 21 2024)
 
 #### 🐛 Bug Fix
