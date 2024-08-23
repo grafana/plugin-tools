@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "1.6.1",
+  "version": "1.7.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -23,7 +23,7 @@
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "server": "docker-compose up --build",
+    "server": "docker compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "vitest",
     "playwright:test": "npx playwright test",

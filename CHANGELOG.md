@@ -1,3 +1,55 @@
+# (Thu Aug 22 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.2`
+  - Create Plugin: Fix missing module.ts in sourcemaps [#1071](https://github.com/grafana/plugin-tools/pull/1071) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.1`
+  - Update grafana dependencies [#1068](https://github.com/grafana/plugin-tools/pull/1068) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.7.1`
+  - Plugin E2E: Fix typings for the toHaveAlert matcher [#1070](https://github.com/grafana/plugin-tools/pull/1070) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 21 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.3.0`, `@grafana/plugin-e2e@1.7.0`
+  - Chore: replace docker-compose with docker compose commands [#1064](https://github.com/grafana/plugin-tools/pull/1064) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Aug 20 2024)
 
 #### 🐛 Bug Fix

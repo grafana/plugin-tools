@@ -183,7 +183,7 @@ Run the following commands to get started:
     * npm exec playwright install chromium to install e2e test dependencies.
     * npm run dev to build (and watch) the plugin frontend code.
     * mage -v build:backend to build the plugin backend code. Rerun this command every time you edit your backend files.
-    * docker-compose up to start a grafana development server.
+    * docker compose up to start a grafana development server.
     * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.
 
 Note: We strongly recommend creating a new Git repository by running git init in ./org-pluginname-app before continuing.
@@ -255,7 +255,7 @@ mage -l
 To launch the Grafana development server using Docker, run:
 
 ```shell
-docker-compose up --build
+docker compose up --build
 ```
 
 Congratulations! You've just scaffolded your first plugin which you can now access at [http://localhost:3000](http://localhost:3000).
