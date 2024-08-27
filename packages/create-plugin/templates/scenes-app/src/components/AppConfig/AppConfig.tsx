@@ -75,44 +75,42 @@ export const AppConfig = ({ plugin }: Props) => {
   };
 
   return (
-    <div data-testid={testIds.appConfig.container}>
-      <form onSubmit={onSubmit}>
-        <FieldSet label="API Settings" className={s.marginTopXl}>
-          {/* API Key */}
-          <Field label="API Key" description="A secret key for authenticating to our custom API">
-            <SecretInput
-              width={60}
-              data-testid={testIds.appConfig.apiKey}
-              id="api-key"
-              value={state?.apiKey}
-              isConfigured={state.isApiKeySet}
-              placeholder={'Your secret API key'}
-              onChange={onChangeApiKey}
-              onReset={onResetApiKey}
-            />
-          </Field>
+    <form onSubmit={onSubmit}>
+      <FieldSet label="API Settings" className={s.marginTopXl}>
+        {/* API Key */}
+        <Field label="API Key" description="A secret key for authenticating to our custom API">
+          <SecretInput
+            width={60}
+            data-testid={testIds.appConfig.apiKey}
+            id="api-key"
+            value={state?.apiKey}
+            isConfigured={state.isApiKeySet}
+            placeholder={'Your secret API key'}
+            onChange={onChangeApiKey}
+            onReset={onResetApiKey}
+          />
+        </Field>
 
-          {/* API Url */}
-          <Field label="API Url" description="" className={s.marginTop}>
-            <Input
-              width={60}
-              id="api-url"
-              data-testid={testIds.appConfig.apiUrl}
-              label={`API Url`}
-              value={state?.apiUrl}
-              placeholder={`E.g.: http://mywebsite.com/api/v1`}
-              onChange={onChangeApiUrl}
-            />
-          </Field>
+        {/* API Url */}
+        <Field label="API Url" description="" className={s.marginTop}>
+          <Input
+            width={60}
+            id="api-url"
+            data-testid={testIds.appConfig.apiUrl}
+            label={`API Url`}
+            value={state?.apiUrl}
+            placeholder={`E.g.: http://mywebsite.com/api/v1`}
+            onChange={onChangeApiUrl}
+          />
+        </Field>
 
-          <div className={s.marginTop}>
-            <Button type="submit" data-testid={testIds.appConfig.submit} disabled={isSubmitDisabled}>
-              Save API settings
-            </Button>
-          </div>
-        </FieldSet>
-      </form>
-    </div>
+        <div className={s.marginTop}>
+          <Button type="submit" data-testid={testIds.appConfig.submit} disabled={isSubmitDisabled}>
+            Save API settings
+          </Button>
+        </div>
+      </FieldSet>
+    </form>
   );
 };
 

@@ -68,7 +68,6 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
   };
 
   return (
-    <div data-testid={testIds.appConfig.container}>
     <form onSubmit={onSubmit}>
       <FieldSet label="API Settings">
         <Field label="API Key" description="A secret key for authenticating to our custom API">
@@ -108,7 +107,6 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
         </div>
       </FieldSet>
       </form>
-    </div>
   );
 };
 
