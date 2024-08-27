@@ -92,7 +92,7 @@ The higher the fraction (that is, the smaller this value) the more overhead it a
 
 ## Overhead
 
-Running a backend plugin with profiling enabled and without [block](##the-profiling-block-rate-endpoint) and [mutex](#the-profiling-mutex-rate-endpoint) profiles enabled should only add a fraction of overhead. These endpoints are therefore suitable for production or continuous profiling scenarios.
+Running a backend plugin with profiling enabled and without [block](#the-profiling_block_rate-endpoint) and [mutex](#the-profiling_mutex_rate-endpoint) profiles enabled should only add a fraction of overhead. These endpoints are therefore suitable for production or continuous profiling scenarios.
 
 Adding a small fraction of block and mutex profiles, such as 5 or 10 (that is, 10 to 20 percent) should in general be fine, but your experience might vary depending on the plugin.
 
