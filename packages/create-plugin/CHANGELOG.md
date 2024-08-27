@@ -1,3 +1,127 @@
+# v5.3.2 (Thu Aug 22 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix missing module.ts in sourcemaps [#1071](https://github.com/grafana/plugin-tools/pull/1071) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.1 (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1068](https://github.com/grafana/plugin-tools/pull/1068) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.3.0 (Wed Aug 21 2024)
+
+#### 🚀 Enhancement
+
+- Chore: replace docker-compose with docker compose commands [#1064](https://github.com/grafana/plugin-tools/pull/1064) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v5.2.4 (Tue Aug 20 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1061](https://github.com/grafana/plugin-tools/pull/1061) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.2.3 (Fri Aug 16 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1047](https://github.com/grafana/plugin-tools/pull/1047) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.2.2 (Fri Aug 09 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Update CI workflow for latest GH runners [#1046](https://github.com/grafana/plugin-tools/pull/1046) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.2.1 (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#971](https://github.com/grafana/plugin-tools/pull/971) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.2.0 (Wed Aug 07 2024)
+
+#### 🚀 Enhancement
+
+- Create-Plugin: Add smoke tests to scenes app template [#1039](https://github.com/grafana/plugin-tools/pull/1039) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v5.1.1 (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- Create-Plugin: Prevent defaulting values causing prompts to bypass [#1037](https://github.com/grafana/plugin-tools/pull/1037) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.1.0 (Tue Aug 06 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Improve cli args and add docs [#1030](https://github.com/grafana/plugin-tools/pull/1030) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Clean up unused publicPath.ts when updating [#1035](https://github.com/grafana/plugin-tools/pull/1035) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.0.0 (Wed Jul 31 2024)
 
 #### 💥 Breaking Change

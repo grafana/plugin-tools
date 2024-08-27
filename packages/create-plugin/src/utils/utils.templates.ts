@@ -118,7 +118,8 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       ...EXTRA_TEMPLATE_VARIABLES,
       pluginId: normalizeId(cliArgs.pluginName, cliArgs.orgName, cliArgs.pluginType),
       pluginName: cliArgs.pluginName,
-      hasBackend: cliArgs.hasBackend,
+      // check plugintype and hasBackend as they can both be passed via user input (cli args).
+      hasBackend: cliArgs.pluginType !== PLUGIN_TYPES.panel && cliArgs.hasBackend,
       orgName: cliArgs.orgName,
       pluginType: cliArgs.pluginType,
       packageManagerName,
