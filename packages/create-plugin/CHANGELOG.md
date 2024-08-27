@@ -1,3 +1,15 @@
+# v5.3.3 (Tue Aug 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Wrap app config fields with `<form>` [#1041](https://github.com/grafana/plugin-tools/pull/1041) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v5.3.2 (Thu Aug 22 2024)
 
 #### 🐛 Bug Fix
