@@ -1,3 +1,29 @@
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.4`
+  - Create Plugin: Bump typescript to v5 for plugins [#1073](https://github.com/grafana/plugin-tools/pull/1073) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Aug 27 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.3`
+  - Create Plugin: Wrap app config fields with `<form>` [#1041](https://github.com/grafana/plugin-tools/pull/1041) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Thu Aug 22 2024)
 
 #### 🐛 Bug Fix
