@@ -12,6 +12,6 @@ keywords:
   - data source
 ---
 
-Learn how to perform common tasks in Grafana data source plugin development.
+Guides for optimizing and adding capabilities to data source plugins.
 
 <DocLinkList />

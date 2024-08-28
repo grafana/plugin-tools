@@ -1,6 +1,6 @@
 ---
 id: set-up-development-environment
-title: Set up development environment
+title: Set up your development environment
 description: Set up your development environment with Docker for Grafana plugin development.
   - grafana
   - plugins
@@ -8,12 +8,23 @@ description: Set up your development environment with Docker for Grafana plugin 
   - create-plugin
   - Docker
   - setup
-sidebar_position: 3
+  - CI
+  - continuous integration
+  - automation
+  - configuration
+sidebar_position: 20
 ---
 
 import DockerNPM from '@snippets/docker-grafana-version.npm.md';
 import DockerPNPM from '@snippets/docker-grafana-version.pnpm.md';
 import DockerYarn from '@snippets/docker-grafana-version.yarn.md';
+
+This guide walks you through setting up your development environment for Grafana plugin development. Including:
+- Running a development Grafana server with your plugin installed using Docker
+- Setting up GitHub workflows to automate your development and release process
+- Extending configurations for ESLint, Prettier, Jest, TypeScript, and Webpack
+
+## Docker development environment
 
 The [`create-plugin` tool](./get-started.mdx#use-plugin-tools-to-develop-your-plugins-faster) includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
 
@@ -23,7 +34,7 @@ It's not necessary to [sign a plugin](/publish-a-plugin/sign-a-plugin.md) during
 
 :::
 
-## Why use the Docker environment
+### Why use the Docker environment
 
 We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
 
@@ -31,7 +42,7 @@ With the `create-plugin` tool, the Docker container is configured with the neces
 
 The docker environment also allows you to attach a debugger to the plugin backend code, making the development process easier.
 
-## Get started with Docker
+### Get started with Docker
 
 To start your plugin development project, run the following commands in the order listed:
 
@@ -72,7 +83,7 @@ services:
         grafana_image: ${GRAFANA_IMAGE:-grafana}
 ```
 
-This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker-compose` commands.
+This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker compose` commands.
 
 ### Debugging Backend plugin
 
@@ -130,3 +141,252 @@ You will also notice that the `docker-compose.yaml` file also has the following 
 ```
 
 they are necessary to allow delve to attach to the running process and debug it and should not be used in production environments.
+
+## Set up GitHub workflows
+
+Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
+
+### The CI workflow
+
+The CI (`ci.yml`) workflow is designed to lint, type check, and build the frontend and backend. It is also used to run tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps to catch any issues early in the development process, before they become bigger problems. For more information on end-to-end testing as part of the CI workflow, refer to our [documentation](../e2e-test-a-plugin/ci.md).
+
+### The release workflow
+
+The release (`release.yml`) workflow is designed to build, test, package and sign your plugin whenever you're ready to release a new version. This automates the process of creating releases in GitHub and provides instructions for submitting the plugin to the Grafana plugin catalog.
+
+:::warning
+
+This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](../publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
+
+:::
+
+#### Storing your Access Policy token as a repository secret in GitHub
+
+1. Access Repository Settings:
+
+- Go to your GitHub repository.
+- Navigate to the "Settings" tab.
+
+2. In the left sidebar, click on Secrets and Variables -> Actions
+3. Click on the "New repository secret" button.
+4. Add Secret Information:
+
+- Enter name for your secret - GRAFANA_ACCESS_POLICY_TOKEN.
+- Paste the Access Policy Token value into the "Secret" field.
+
+5. Click on the "Add secret" button to save the secret.
+
+Once the secret is stored, you can access it in your GitHub Actions workflow:
+
+```json title="release.yml"
+name: Release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: grafana/plugin-actions/build-plugin@release
+        with:
+          grafana_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+
+```
+
+In this example, the `secrets.GRAFANA_ACCESS_POLICY_TOKEN` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
+
+#### Triggering the workflow
+
+To trigger the release workflow, push a Git tag for the plugin version that you want to release:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+### The compatibility check (`is-compatible.yml`)
+
+The compatibility check (`is-compatible.yml`) workflow is designed to check the Grafana API compatibility of your plugin every time you push changes to your repository. This helps to catch potential frontend runtime issues before they occur.
+
+The workflow contains the following steps:
+
+1. Finding `@grafana` npm packages in your plugin.
+1. Extracting the exported types of the specified version.
+1. Comparing the differences between that version and the latest version.
+1. Looking for usages of those changed APIs inside your plugin.
+1. Reporting any potential incompatibilities.
+
+
+## Extend configurations
+
+The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
+
+:::danger
+
+Do not edit the `.config/` directory or extend the tooling configurations. If you attempt to do so, then you may experience issues such as failure to compile or load in Grafana. Instead of changing the files directly, follow the instructions in this topic to make advanced configurations.
+
+:::
+
+### Extend the ESLint config
+
+Edit the `.eslintrc` file in the project root to extend the ESLint configuration:
+
+**Example:**
+
+```json title=".eslintrc"
+{
+  // Eslint configuration provided by @grafana/create-plugin
+  "extends": "./.config/.eslintrc",
+  "rules": {
+    "react/prop-types": "off"
+  }
+}
+```
+
+The following example can be used to disable deprecation notices.
+
+```json title=".eslintrc"
+{
+  // Eslint configuration provided by @grafana/create-plugin
+  "extends": "./.config/.eslintrc",
+  "overrides": [
+    {
+      "files": ["src/**/*.{ts,tsx}"],
+      "rules": {
+        "deprecation/deprecation": "off"
+      }
+    }
+  ]
+}
+```
+
+---
+
+### Extend the Prettier config
+
+Edit the `.prettierrc.js` file in the project root to extend the Prettier configuration:
+
+**Example:**
+
+```js title=".prettierrc.js"
+module.exports = {
+  // Prettier configuration provided by @grafana/create-plugin
+  ...require('./.config/.prettierrc.js'),
+  semi: false,
+};
+```
+
+---
+
+### Extend the Jest config
+
+There are two files in the project root that belong to Jest: `jest-setup.js` and `jest.config.js`.
+
+**`jest-setup.js`:** This file is run before each test file in the suite is executed. It sets up Jest DOM for the testing library and applies some polyfills. For more information, refer to the [Jest documentation](https://jestjs.io/docs/configuration#setupfilesafterenv-array).
+
+**`jest.config.js`:** This is the Jest config file that extends the Grafana config. For more information, refer to the [Jest configuration documentation](https://jestjs.io/docs/configuration).
+
+#### ESM errors with Jest
+
+If you see `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test` see [Troubleshooting](../troubleshooting#i-get-syntaxerror-cannot-use-import-statement-outside-a-module-when-running-jest-or-npm-run-test).
+
+---
+
+### Extend the TypeScript config
+
+To extend the TS configuration, edit the `tsconfig.json` file in the project root:
+
+**Example:**
+
+```json title="tsconfig.json"
+{
+  // TypeScript configuration provided by @grafana/create-plugin
+  "extends": "./.config/tsconfig.json",
+  "compilerOptions": {
+    "preserveConstEnums": true
+  }
+}
+```
+
+---
+
+### Extend the Webpack config
+
+Follow these steps to extend the Webpack configuration that lives in `.config/`:
+
+#### 1. Create a new Webpack configuration file
+
+Create a `webpack.config.ts` file in the project root. This file extends the Webpack config provided by `create-plugin`.
+
+#### 2. Merge the Grafana config with your custom config
+
+Use the following [webpack-merge](https://github.com/survivejs/webpack-merge) command:
+
+```ts title="webpack.config.ts"
+import type { Configuration } from 'webpack';
+import { merge } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
+
+const config = async (env): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+
+  return merge(baseConfig, {
+    // Add custom config here...
+    output: {
+      asyncChunks: true,
+    },
+  });
+};
+
+export default config;
+```
+
+The following alternative customization excludes "libs" via rules in addition to "node_modules". It also provides fallbacks that are no longer present in Webpack v5.
+
+```ts title="webpack.config.ts"
+import type { Configuration } from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
+
+const config = async (env: any): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+  const customConfig = {
+    module: {
+      rules: [
+        {
+          exclude: /(node_modules|libs)/,
+        },
+      ],
+    },
+    resolve: {
+      fallback: {
+        crypto: require.resolve('crypto-browserify'),
+        fs: false,
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'),
+        util: require.resolve('util'),
+      },
+    },
+  };
+  return mergeWithRules({
+    module: {
+      rules: {
+        exclude: 'replace',
+      },
+    },
+  })(baseConfig, customConfig);
+};
+
+export default config;
+```
+
+#### 3. Update the `package.json` to use the new Webpack config
+
+Update the `scripts` in the `package.json` to use the extended Webpack configuration:
+
+```diff title="package.json"
+-"build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
++"build": "webpack -c ./webpack.config.ts --env production",
+-"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
++"dev": "webpack -w -c ./webpack.config.ts --env development",
+```
+

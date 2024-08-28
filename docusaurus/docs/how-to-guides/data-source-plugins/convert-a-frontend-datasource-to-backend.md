@@ -1,7 +1,6 @@
 ---
 id: convert-a-frontend-datasource-to-backend
-title: How to convert a frontend data source plugin into a backend plugin
-sidebar_position: 10
+title: Convert a frontend data source plugin into a backend plugin
 description: Learn how to convert a frontend data source plugin into a backend plugin
 keywords:
   - grafana
@@ -12,19 +11,17 @@ keywords:
   - datasource
 ---
 
-# How to convert a frontend data source plugin into a backend plugin
+This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../../key-concepts/backend-plugins).
 
-This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../key-concepts/backend-plugins).
-
-To convert the frontend data source, we recommend scaffolding a new backend data source plugin using [`npx @grafana/create-plugin@latest`](https://grafana.com/developers/plugin-tools/). Use the following instructions to extend this foundation to copy functionality from your original plugin.
+To convert the frontend data source, we recommend scaffolding a new backend data source plugin using `npx @grafana/create-plugin@latest`. Use the following instructions to extend this foundation to copy functionality from your original plugin.
 
 ## Why
 
-There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
+There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
 
 ## Before you begin
 
-Before you dive into the details, you should familiarize yourself with the process of creating a backend data source plugin. If you haven't done this before, you can follow our tutorial for [building a backend plugin](./build-a-data-source-backend-plugin.md).
+Before you dive into the details, you should familiarize yourself with the process of creating a backend data source plugin. If you haven't done this before, you can follow our tutorial for [building a backend plugin](../../tutorials/build-a-data-source-backend-plugin.md).
 
 ## Key concepts
 
@@ -164,7 +161,7 @@ res, err := d.httpClient.Get("https://api.example.com/v1/users")
 
 The same principle applies to any other authentication mechanism. For example, SQL-based data sources should use the `Datasource` constructor to create a connection to the database and store it in the `Datasource` instance.
 
-You can refer to [this example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go) and get more information about [plugin authentication](https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/add-authentication#authenticate-using-a-backend-plugin).
+You can refer to [this example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go) and get more information about [plugin authentication](./add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
 
 ### Health check
 
@@ -253,7 +250,7 @@ This example covers an HTTP-only data source. So, if your data source requires a
 
 ### Query
 
-The next step is to move the query logic. This will significantly vary depending on how the plugin queries the data source and transforms the response into [frames](../key-concepts/data-frames). In this guide, you'll see how to migrate a simple example.
+The next step is to move the query logic. This will significantly vary depending on how the plugin queries the data source and transforms the response into [frames](../../key-concepts/data-frames). In this guide, you'll see how to migrate a simple example.
 
 Our data source is returning a JSON object with a list of `datapoints` when hitting the endpoint `/metrics`. The frontend `query` method transforms those `datapoints` into frames:
 

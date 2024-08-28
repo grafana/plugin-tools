@@ -1,3 +1,268 @@
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.6`
+  - Create Plugin: Bump ts-node [#1077](https://github.com/grafana/plugin-tools/pull/1077) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.5`
+  - Update grafana dependencies [#1075](https://github.com/grafana/plugin-tools/pull/1075) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump micromatch from 4.0.7 to 4.0.8 [#1076](https://github.com/grafana/plugin-tools/pull/1076) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.4`
+  - Create Plugin: Bump typescript to v5 for plugins [#1073](https://github.com/grafana/plugin-tools/pull/1073) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Aug 27 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.3`
+  - Create Plugin: Wrap app config fields with `<form>` [#1041](https://github.com/grafana/plugin-tools/pull/1041) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Thu Aug 22 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.2`
+  - Create Plugin: Fix missing module.ts in sourcemaps [#1071](https://github.com/grafana/plugin-tools/pull/1071) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.1`
+  - Update grafana dependencies [#1068](https://github.com/grafana/plugin-tools/pull/1068) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.7.1`
+  - Plugin E2E: Fix typings for the toHaveAlert matcher [#1070](https://github.com/grafana/plugin-tools/pull/1070) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 21 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.3.0`, `@grafana/plugin-e2e@1.7.0`
+  - Chore: replace docker-compose with docker compose commands [#1064](https://github.com/grafana/plugin-tools/pull/1064) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Tue Aug 20 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.4`
+  - Update grafana dependencies [#1061](https://github.com/grafana/plugin-tools/pull/1061) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump axios from 1.7.2 to 1.7.4 [#1059](https://github.com/grafana/plugin-tools/pull/1059) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Aug 16 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.3`
+  - Update grafana dependencies [#1047](https://github.com/grafana/plugin-tools/pull/1047) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Aug 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.2`
+  - Create Plugin: Update CI workflow for latest GH runners [#1046](https://github.com/grafana/plugin-tools/pull/1046) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-meta-extractor@0.0.5`
+  - Chore: Bump micromatch [#1040](https://github.com/grafana/plugin-tools/pull/1040) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.2.1`
+  - Update grafana dependencies [#971](https://github.com/grafana/plugin-tools/pull/971) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.2.0`
+  - Create-Plugin: Add smoke tests to scenes app template [#1039](https://github.com/grafana/plugin-tools/pull/1039) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 07 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.1.1`
+  - Create-Plugin: Prevent defaulting values causing prompts to bypass [#1037](https://github.com/grafana/plugin-tools/pull/1037) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Aug 06 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.1.0`
+  - Create Plugin: Improve cli args and add docs [#1030](https://github.com/grafana/plugin-tools/pull/1030) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.1.0`
+  - Create Plugin: Clean up unused publicPath.ts when updating [#1035](https://github.com/grafana/plugin-tools/pull/1035) ([@jackw](https://github.com/jackw))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump husky from 8.0.3 to 9.1.4 [#1026](https://github.com/grafana/plugin-tools/pull/1026) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jul 31 2024)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@5.0.0`
+  - Create-Plugin: Simplify Prompts [#1018](https://github.com/grafana/plugin-tools/pull/1018) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Jul 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.3`
+  - Create Plugin: Template dynamic public path [#1023](https://github.com/grafana/plugin-tools/pull/1023) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Jul 12 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@4.16.2`
+  - Create Plugin: Fix CI workflow for E2E tests to successfully run [#1001](https://github.com/grafana/plugin-tools/pull/1001) ([@jackw](https://github.com/jackw))
+
+#### ⚠️ Pushed to `main`
+
+- Revert "rm file" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Revert "docs: move and rename convert ds tutorial" ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- rm file ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- docs: move and rename convert ds tutorial ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 2
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix

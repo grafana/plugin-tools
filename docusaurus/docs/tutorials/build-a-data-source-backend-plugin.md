@@ -13,6 +13,8 @@ keywords:
 ---
 
 import CreatePlugin from '@shared/create-plugin-backend.md';
+import BackendPluginAnatomy from '@shared/backend-plugin-anatomy.md';
+import TroubleshootPluginLoad from '@shared/troubleshoot-plugin-doesnt-load.md';
 
 ## Introduction
 
@@ -29,6 +31,7 @@ In this tutorial, you'll:
 #### Prerequisites
 
 - Grafana v9.0 or later
+- [Docker](https://docs.docker.com/get-docker/)
 - Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
@@ -54,42 +57,11 @@ To add the data source to the dashboard:
 
 ### Troubleshooting
 
-#### Grafana doesn't load my plugin
-
-Ensure that Grafana has been started in development mode. If you are running Grafana from source, you'll need to add the following line to your `conf/custom.ini` file (if you don't have one already, go ahead and create this file before proceeding):
-
-```ini
-app_mode = development
-```
-
-You can then start Grafana in development mode by running `make run & make run-frontend` in the Grafana repository root.
-
-If you are running Grafana from a binary or inside a Docker container, you can start it in development mode by setting the environment variable `GF_DEFAULT_APP_MODE` to `development`.
-
-By default, Grafana requires backend plugins to be signed. To load unsigned backend plugins, you need to
-configure Grafana to [allow unsigned plugins](https://grafana.com/docs/grafana/latest/administration/plugin-management/#allow-unsigned-plugins).
-For more information, refer to [Plugin signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management/#backend-plugins).
+<TroubleshootPluginLoad />
 
 ## Anatomy of a backend plugin
 
-The folders and files used to build the backend for the data source are:
-
-| file/folder        | description                                                                                                                                          |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Magefile.go`      | It’s not a requirement to use mage build files, but we strongly recommend using it so that you can use the build targets provided by the plugin SDK. |
-| `/go.mod `         | Go [modules dependencies](https://golang.org/cmd/go/#hdr-The_go_mod_file)                                                                            |
-| `/src/plugin.json` | A JSON file describing the backend plugin                                                                                                            |
-| `/pkg/main.go`     | Starting point of the plugin binary.                                                                                                                 |
-
-#### plugin.json
-
-The [plugin.json](../reference/metadata.md) file is required for all plugins. When building a backend plugin these properties are important:
-
-| property   | description                                                                                                                          |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| backend    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                         |
-| executable | This is the name of the executable that Grafana expects to start, see [plugin.json reference](../reference/metadata.md) for details. |
-| alerting   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                                |
+<BackendPluginAnatomy pluginType="data source" />
 
 In the next step we will look at the query endpoint!
 

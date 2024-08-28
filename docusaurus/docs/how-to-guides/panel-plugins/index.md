@@ -11,6 +11,6 @@ keywords:
   - panel
 ---
 
-Learn how to add additional functionality and capabilities to Grafana panel plugins.
+Guides for optimizing and adding capabilities to panel plugins.
 
 <DocLinkList />

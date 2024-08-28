@@ -142,7 +142,7 @@ Using some other HTTP router library with above example should be straightforwar
 
 Use the `PluginConfigFromContext` function to access `backend.PluginContext`:
 
-```
+```go
 func (d *MyDatasource) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
 	pCtx := httpadapter.PluginConfigFromContext(req.Context())
 
