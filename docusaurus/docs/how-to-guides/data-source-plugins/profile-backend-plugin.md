@@ -20,9 +20,9 @@ for investigating certain performance problems, such as high CPU or memory usage
 
 The [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) allows you to configure profiling under the `[plugin.<plugin ID>]`.
 
-### Specify the plugin ID
+In this section of the file, specify the `<plugin ID>`, a unique identifier, for the backend plugin you want to profile, for example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/), together with the profiling configuration options (detailed in sub-sections below).
 
-In this section of the file, specify the `<plugin ID>`, a unique identifier, for the backend plugin you want to profile, for example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/):
+**Example configuration:**
 
 ```ini title="custom.ini"
 [plugin.<plugin ID>]
@@ -32,45 +32,27 @@ profiling_block_rate = 5
 profiling_mutex_rate = 5
 ```
 
-### Confirm success
-
 Restart Grafana after applying the configuration changes. You should see a log message that indicates whether profiling was enabled. For example:
 
 ```shell
-INFO [07-09|19:15:00] Profiling enabled   logger=plugin.<plugin ID> blockProfileRate=1 mutexProfileRate=1
+INFO [07-09|19:15:00] Profiling enabled   logger=plugin.<plugin ID> blockProfileRate=5 mutexProfileRate=5
 ```
-
-### Check for debugging endpoints
-
-Check which debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`.
-
-In this file, `localhost` is used, implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, adjust as needed.
-
-## Additional endpoints
-
-There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available for profiling. These endpoints are more suitable in a continuous profiling scenario.
-
-These endpoints are:
-
-- `/debug/pprof/delta_heap`
-- `/debug/pprof/delta_block`
-- `/debug/pprof/delta_mutex`
 
 :::note
 
-To be able to use `profiling_block_rate` and `profiling_mutex_rate`, your plugin needs to use at least [`grafana-plugin-sdk-go v0.238.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.238.0). Refer to [Update the Go SDK](../../create-a-plugin/develop-a-plugin/work-with-backend) for instructions on how to update the SDK.
+To be able to use `profiling_block_rate` and `profiling_mutex_rate`, your plugin needs to use at least [`grafana-plugin-sdk-go v0.238.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.238.0). Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for instructions on how to update the SDK.
 
 :::
 
-### The profiling_enabled endpoint
+### The profiling_enabled option
 
 Use this to enable/disable profiling. The default is `false`.
 
-### The profiling_port endpoint
+### The profiling_port option
 
 Optionally, customize the HTTP port where profile data is exposed. For example, use if you want to profile multiple plugins or if the default port is taken. The default is `6060`.
 
-### The profiling_block_rate endpoint
+### The profiling_block_rate option
 
 Use this to control the fraction of `goroutine` blocking events that are reported in the blocking profile. The default is `0` (that is, track no events). For example, use `5` to report 20 percent of all events. Refer to https://pkg.go.dev/runtime#SetBlockProfileRate for more detailed information.
 
@@ -80,7 +62,7 @@ The higher the fraction (that is, the smaller this value) the more overhead it a
 
 :::
 
-### The profiling_mutex_rate endpoint
+### The profiling_mutex_rate option
 
 Use this to control the fraction of mutex contention events that are reported in the mutex profile. The default is `0` (that is, track no events). For example, use `5` to report 20 percent of all events. Refer to https://pkg.go.dev/runtime#SetMutexProfileFraction for more detailed information.
 
@@ -90,13 +72,29 @@ The higher the fraction (that is, the smaller this value) the more overhead it a
 
 :::
 
-## Overhead
+## A note about overhead
 
 Running a backend plugin with profiling enabled and without [block](#the-profiling_block_rate-endpoint) and [mutex](#the-profiling_mutex_rate-endpoint) profiles enabled should only add a fraction of overhead. These endpoints are therefore suitable for production or continuous profiling scenarios.
 
 Adding a small fraction of block and mutex profiles, such as 5 or 10 (that is, 10 to 20 percent) should in general be fine, but your experience might vary depending on the plugin.
 
 On the other hand, there are potential issues. For example, if you experience requests being slow or queued and you're out of clues, then you could temporarily configure profiling to collect 100 percent of block and mutex profiles to get the full picture. When this is done, turn it off after the profiles have been collected.
+
+## Check for debugging endpoints
+
+Check which debugging endpoints are available by browsing `http://localhost:<profiling_port>/debug/pprof`.
+
+In this file, `localhost` is used, implying that you're connected to the host where Grafana and the plugin are running. If connecting from another host, adjust as needed.
+
+### Additional endpoints
+
+There are some additional [godeltaprof](https://github.com/grafana/pyroscope-go/tree/main/godeltaprof) endpoints available for profiling. These endpoints are more suitable in a continuous profiling scenario.
+
+These endpoints are:
+
+- `/debug/pprof/delta_heap`
+- `/debug/pprof/delta_block`
+- `/debug/pprof/delta_mutex`
 
 ## Collect and analyze profiles
 
@@ -142,4 +140,4 @@ go tool pprof -http=localhost:8081 profile.pprof
 
 ## More information
 
-Refer to the [Grafana profiling documentation](https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/configure-tracing/#turn-on-profiling-and-collect-profiles) for further information and instructions of how to profile Grafana.
+Refer to the [Grafana profiling documentation](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/configure-tracing/#turn-on-profiling-and-collect-profiles) for further information and instructions of how to profile Grafana.
