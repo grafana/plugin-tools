@@ -1,3 +1,15 @@
+# v5.3.4 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump typescript to v5 for plugins [#1073](https://github.com/grafana/plugin-tools/pull/1073) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.3.3 (Tue Aug 27 2024)
 
 #### 🐛 Bug Fix
