@@ -367,15 +367,6 @@ This feature requires at least Grafana 9.5.0, and your plugin needs to be built 
 
 :::
 
-### Plugin configuration
-
-Plugin tracing must be enabled manually on a per-plugin basis. To do so, specify`tracing = true` in the plugin's config section:
-
-```
-[plugin.myorg-myplugin-datasource]
-tracing = true
-```
-
 ### OpenTelemetry configuration in Grafana
 
 Grafana supports [OpenTelemetry](https://opentelemetry.io/) for distributed tracing. If Grafana is configured to use a deprecated tracing system (Jaeger or OpenTracing), then tracing is disabled in the plugin provided by the SDK and configured when calling `datasource.Manage | app.Manage`.
