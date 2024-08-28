@@ -212,7 +212,7 @@ jobs:
         run: npm ci --no-audit
 
       - name: Debug
-        run: git diff
+        run: git --no-pager diff
 
       - name: Build
         run: npm run build
