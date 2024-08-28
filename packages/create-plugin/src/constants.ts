@@ -27,15 +27,15 @@ export const TEMPLATE_PATHS: Record<string, string> = {
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),
-  ciWorkflows: path.join(TEMPLATES_DIR, 'github', 'ci'),
-  isCompatibleWorkflow: path.join(TEMPLATES_DIR, 'github', 'is-compatible'),
+  ciWorkflows: path.join(TEMPLATES_DIR, 'github'),
 };
 
 export enum PLUGIN_TYPES {
   app = 'app',
   panel = 'panel',
   datasource = 'datasource',
-  secretsmanager = 'secretsmanager',
+  // TODO: Don't understand why this is here. Cannot create a secretsmanager or a renderer.
+  // secretsmanager = 'secretsmanager',
   scenes = 'scenesapp',
 }
 
@@ -86,6 +86,8 @@ export const MIGRATION_CONFIG = {
 export const UDPATE_CONFIG = {
   // Files that should be overriden between configuration version updates.
   filesToOverride: ['.config/', '.cprc.json'],
+  // Files that are no longer needed for the project and can be removed.
+  filesToRemove: ['.config/webpack/publicPath.ts'],
 };
 
 // prettier-ignore

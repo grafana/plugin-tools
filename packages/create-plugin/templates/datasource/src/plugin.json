@@ -7,7 +7,7 @@
   "backend": true,
   "executable": "gpx_{{ snakeCase pluginName }}",{{/if}}
   "info": {
-    "description": "{{ sentenceCase pluginDescription }}",
+    "description": "",
     "author": {
       "name": "{{ sentenceCase orgName }}"
     },

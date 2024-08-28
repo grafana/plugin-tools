@@ -32,6 +32,10 @@ export function printError(error: string) {
   console.error(displayAsMarkdown(`\n❌ ${error}`));
 }
 
+export function printWarning(error: string) {
+  console.warn(displayAsMarkdown(`\n⚠️ ${error}`));
+}
+
 export async function confirmPrompt(message: string): Promise<boolean> {
   const question: Record<string, boolean> = await prompt({
     name: 'confirmPrompt',

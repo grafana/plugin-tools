@@ -53,22 +53,22 @@ jobs:
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
             hasBackend: false
           - workingDir: 'myorg-backend-app'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
             hasBackend: true
           - workingDir: 'myorg-nobackend-panel'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
             hasBackend: false
           - workingDir: 'myorg-nobackend-datasource'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
             hasBackend: false
           - workingDir: 'myorg-backend-datasource'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
             hasBackend: true
           - workingDir: 'myorg-nobackendscenes-app'
-            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
@@ -152,7 +152,7 @@ jobs:
 
       - name: Stop grafana docker
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        run: docker-compose down
+        run: docker compose down
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Archive E2E output

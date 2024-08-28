@@ -9,7 +9,7 @@
     "keywords": [
       "app"
     ],
-    "description": "{{ sentenceCase pluginDescription }}",
+    "description": "",
     "author": {
       "name": "{{ sentenceCase orgName }}"
     },

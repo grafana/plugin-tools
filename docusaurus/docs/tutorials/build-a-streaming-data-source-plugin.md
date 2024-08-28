@@ -40,13 +40,13 @@ npx @grafana/create-plugin@latest
 
 :::note
 
-For a complete list of prerequisites and suggestions for setting up your development environment, refer to [Get started](https://grafana.com/developers/plugin-tools/).
+For a complete list of prerequisites and suggestions for setting up your development environment, refer to [Get started](/).
 
 :::
 
 Create Plugin will prompt you with some questions about your plugin name and type, your organization, and many other options.
 
-2. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
+1. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
 
 The tool will create a skeleton with all the necessary code and dependencies to run a data source backend plugin. And, if you compile the code, you will have a very simple backend plugin. However, this generated code isn't a streaming plugin yet, and we need to make some modifications.
 
@@ -291,21 +291,15 @@ However, there is an easier way of doing all this.
 npm run server
 ```
 
-This command runs a Grafana container using docker-compose and puts the built plugins in the right place.
+This command runs a Grafana container using docker compose and puts the built plugins in the right place.
 
 2. To verify the build, go to Grafana at `https://localhost:3000`.
-
-:::note
-
-You may be using Docker Compose instead of docker-compose. If that is your case, you just need to change the command in the `package.json` in the project's root directory.
-
-:::
 
 ## Step 7: Test the plugin
 
 1. From Grafana at `https://localhost:3000`, use the default credentials: username `admin` and password `admin`. If you're not presented with a login page, click **Sign in** in the top of the page and insert the credentials.
 
-2. Add the data source. Since we are running in our `docker-compose` environment, we don't need to install it, and it will be directly available for usage. Go to **Connections > Data sources**, using the left menu as shown in the following image:
+2. Add the data source. Since we are running in our `docker compose` environment, we don't need to install it, and it will be directly available for usage. Go to **Connections > Data sources**, using the left menu as shown in the following image:
 
 3. A new page opens, and then click **Add data source**. Grafana opens another page where you can search for the data source name that we've just created.
 

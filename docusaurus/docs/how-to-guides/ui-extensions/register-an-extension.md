@@ -21,6 +21,12 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 
 <ExtensionPoints/>
 
+:::warning
+
+You must [update](#updating-pluginjson-metadata) your `plugin.json` metadata to list any registered extensions.
+
+:::
+
 ## Links
 
 ### Register a link
@@ -216,6 +222,25 @@ export const plugin = new AppPlugin().addComponent({
   },
 });
 ```
+
+## Updating plugin.json metadata
+
+Once you have defined a link or component extension to be registered against an extension point, you must update your `plugin.json` metadata.
+
+For example:
+
+```json
+"extensions": [
+    {
+      "extensionPointId": "grafana/dashboard/panel/menu/v1",
+      "type": "link"
+      "title": "My app",
+      "description": "Link to my app"
+    }
+ ]
+```
+
+For more information, see the `plugin.json` [reference](../../reference/metadata.md#extensions).
 
 ## Troubleshooting
 
