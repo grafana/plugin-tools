@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.3.6`
+  - Create Plugin: Bump ts-node [#1077](https://github.com/grafana/plugin-tools/pull/1077) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.3.5`
   - Update grafana dependencies [#1075](https://github.com/grafana/plugin-tools/pull/1075) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh))
 

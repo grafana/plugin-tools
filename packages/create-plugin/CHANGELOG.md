@@ -1,3 +1,15 @@
+# v5.3.6 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump ts-node [#1077](https://github.com/grafana/plugin-tools/pull/1077) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.3.5 (Wed Aug 28 2024)
 
 #### 🐛 Bug Fix
