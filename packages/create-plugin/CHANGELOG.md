@@ -1,3 +1,40 @@
+# v5.3.5 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1075](https://github.com/grafana/plugin-tools/pull/1075) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v5.3.4 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump typescript to v5 for plugins [#1073](https://github.com/grafana/plugin-tools/pull/1073) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.3 (Tue Aug 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Wrap app config fields with `<form>` [#1041](https://github.com/grafana/plugin-tools/pull/1041) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v5.3.2 (Thu Aug 22 2024)
 
 #### 🐛 Bug Fix
