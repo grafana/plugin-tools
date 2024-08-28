@@ -2,6 +2,25 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.3.5`
+  - Update grafana dependencies [#1075](https://github.com/grafana/plugin-tools/pull/1075) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps): Bump micromatch from 4.0.7 to 4.0.8 [#1076](https://github.com/grafana/plugin-tools/pull/1076) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.3.4`
   - Create Plugin: Bump typescript to v5 for plugins [#1073](https://github.com/grafana/plugin-tools/pull/1073) ([@jackw](https://github.com/jackw))
 
