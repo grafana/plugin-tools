@@ -16,7 +16,7 @@
     "docs:build": "nx build website",
     "lint": "nx run-many --target=lint --parallel",
     "lint:fix": "nx run-many --target=lint:fix --parallel",
-    "release": "auto shipit -v",
+    "release": "auto shipit -vv",
     "test": "nx run-many --target=test --parallel",
     "test:ci": "nx run-many --target=test --run",
     "typecheck": "nx run-many --target=typecheck --parallel",
