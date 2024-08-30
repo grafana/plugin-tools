@@ -7,7 +7,7 @@ const PageTwo = React.lazy(() => import('../../pages/PageTwo'));
 const PageThree = React.lazy(() => import('../../pages/PageThree'));
 const PageFour = React.lazy(() => import('../../pages/PageFour'));
 
-export function App(props: AppRootProps) {
+function App(props: AppRootProps) {
   return (
     <Routes>
       <Route path={ROUTES.Two} element={<PageTwo />} />
@@ -21,3 +21,5 @@ export function App(props: AppRootProps) {
     </Routes>
   );
 }
+
+export default App;
