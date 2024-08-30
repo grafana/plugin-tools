@@ -22,9 +22,9 @@ type State = {
   apiKey: string;
 };
 
-interface Props extends PluginConfigPageProps<AppPluginMeta<JsonData>> {}
+export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<JsonData>> {}
 
-const AppConfig = ({ plugin }: Props) => {
+const AppConfig = ({ plugin }: AppConfigProps) => {
   const s = useStyles2(getStyles);
   const { enabled, pinned, jsonData } = plugin.meta;
   const [state, setState] = useState<State>({
