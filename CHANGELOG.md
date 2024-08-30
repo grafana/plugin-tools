@@ -1,3 +1,29 @@
+# (Thu Aug 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-meta-extractor@0.0.6`
+  - Chore: Bump lerna to latest [#1082](https://github.com/grafana/plugin-tools/pull/1082) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.6`
+  - Create Plugin: Bump ts-node [#1077](https://github.com/grafana/plugin-tools/pull/1077) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Wed Aug 28 2024)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,15 @@
+# v0.0.6 (Thu Aug 29 2024)
+
+#### 🐛 Bug Fix
+
+- Chore: Bump lerna to latest [#1082](https://github.com/grafana/plugin-tools/pull/1082) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.0.5 (Fri Aug 09 2024)
 
 #### 🐛 Bug Fix

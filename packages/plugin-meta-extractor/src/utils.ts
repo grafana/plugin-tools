@@ -68,7 +68,7 @@ function traverse(
     ancestors.unshift(node.parent);
   }
   iterator(node, ancestors);
-  let children: ts.Node[] = [];
+  let children: readonly ts.Node[] = [];
   try {
     // We need to use `getChildren()` to traverse JSDoc nodes
     children = node.getChildren();
