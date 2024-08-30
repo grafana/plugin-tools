@@ -1,3 +1,30 @@
+# (Fri Aug 30 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.7`
+  - Create Plugin: Drop console statements in production builds [#1066](https://github.com/grafana/plugin-tools/pull/1066) ([@jackw](https://github.com/jackw))
+  - Create Plugin): Bump Webpack to >5.94.0 [#1083](https://github.com/grafana/plugin-tools/pull/1083) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Aug 29 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-meta-extractor@0.0.6`
+  - Chore: Bump lerna to latest [#1082](https://github.com/grafana/plugin-tools/pull/1082) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Aug 28 2024)
 
 #### 🐛 Bug Fix

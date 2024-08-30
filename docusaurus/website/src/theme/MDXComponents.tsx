@@ -4,6 +4,7 @@ import MDXComponents from '@theme-original/MDXComponents';
 import CodeSnippets from '@site/src/components/CodeSnippets/CodeSnippets';
 import SyncCommand from '@site/src/components/SyncCommand/SyncCommand';
 import DocLinkList from '@site/src/components/DocLinkList/DocLinkList';
+import YouTubeEmbed from '@site/src/components/YouTubeEmbed/YouTubeEmbed';
 
 export default {
   // Re-use the default mapping
@@ -13,4 +14,5 @@ export default {
   CodeSnippets,
   SyncCommand,
   DocLinkList,
+  YouTubeEmbed,
 };
