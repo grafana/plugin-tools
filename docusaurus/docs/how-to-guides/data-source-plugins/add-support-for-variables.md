@@ -133,7 +133,7 @@ Let's create a custom query editor to allow the user to edit the query model.
 1. Create a `VariableQueryEditor` component:
 
    ```tsx title="src/VariableQueryEditor.tsx"
-   import React, { useState } from 'react';
+   import { useState } from 'react';
    import { MyVariableQuery } from './types';
 
    interface VariableQueryProps {

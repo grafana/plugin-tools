@@ -1,4 +1,3 @@
-import React from 'react';
 import { css } from '@emotion/css';
 import { useParams, Link } from 'react-router-dom';
 import { GrafanaTheme2 } from '@grafana/data';

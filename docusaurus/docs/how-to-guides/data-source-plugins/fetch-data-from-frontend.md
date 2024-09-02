@@ -41,7 +41,6 @@ The easiest way to use the data proxy from a data source plugin is using the [`D
 ### Step 1: Use the `DataSourceHttpSettings` component in your data source plugin configuration page
 
 ```typescript title="src/ConfigEditor.tsx"
-import React from 'react';
 import { DataSourceHttpSettings } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 
@@ -160,7 +159,7 @@ You must build your plugin and restart the Grafana server every time you modify 
 ### Step 2: Create your configuration page
 
 ```typescript title="src/ConfigEditor.tsx"
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { InlineField, Input } from '@grafana/ui';
 
 export function ConfigEditor(props: Props) {

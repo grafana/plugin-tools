@@ -1,4 +1,3 @@
-import React from 'react';
 import { SceneComponentProps, SceneObjectBase, SceneObjectState } from '@grafana/scenes';
 import { Input } from '@grafana/ui';
 

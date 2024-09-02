@@ -206,7 +206,6 @@ Congrats! You've created a simple and responsive bar chart.
 ## Complete example
 
 ```tsx title="src/components/SimplePanel.tsx"
-import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';

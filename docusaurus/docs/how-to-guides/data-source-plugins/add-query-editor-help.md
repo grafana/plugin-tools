@@ -16,7 +16,6 @@ Query editors support the addition of a help component to display examples of po
 1. In the `src` directory of your plugin, create a file `QueryEditorHelp.tsx` with the following content:
 
    ```ts
-   import React from 'react';
    import { QueryEditorHelpProps } from '@grafana/data';
 
    export default (props: QueryEditorHelpProps) => {
@@ -40,7 +39,6 @@ Query editors support the addition of a help component to display examples of po
 1. Create a few examples of potential queries:
 
    ```tsx
-   import React from 'react';
    import { QueryEditorHelpProps, DataQuery } from '@grafana/data';
 
    const examples = [

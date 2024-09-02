@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { SceneApp, SceneAppPage } from '@grafana/scenes';
 import { getBasicScene } from './scenes';

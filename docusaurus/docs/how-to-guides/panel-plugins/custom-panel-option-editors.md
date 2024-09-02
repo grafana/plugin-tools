@@ -25,7 +25,6 @@ The simplest editor is a React component that accepts two props:
 The editor in the example below lets the user toggle a boolean value by clicking a button:
 
 ```tsx title="src/SimpleEditor.tsx"
-import React from 'react';
 import { Button } from '@grafana/ui';
 import { StandardEditorProps } from '@grafana/data';
 
