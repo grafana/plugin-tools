@@ -5,7 +5,7 @@
   "separateMajorMinor": false,
   "labels": ["dependencies", "release", "patch"],
   "reviewers": ["team:grafana/plugins-platform-frontend"],
-  "enabledManagers": ["regex"],
+  "enabledManagers": ["regex", "gomod"],
   "customManagers": [
     {
       "customType": "regex",
@@ -23,10 +23,17 @@
   ],
   "packageRules": [
     {
+      "matchManagers": ["regex"],
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
       "matchUpdateTypes": ["minor", "patch", "major"],
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana"
+    },
+    {
+      "reviewers": ["team:grafana/plugins-platform-backend"],
+      "matchManagers": ["gomod"],
+      "matchDepNames": ["grafana-plugin-sdk-go"],
+      "matchUpdateTypes": ["minor", "patch"]
     }
   ]
 }
