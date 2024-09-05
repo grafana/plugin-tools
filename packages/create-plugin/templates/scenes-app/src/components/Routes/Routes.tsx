@@ -1,11 +1,11 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { HomePage } from '../../pages/Home';
-import { PageWithTabs } from '../../pages/WithTabs';
-import { WithDrilldown } from '../../pages/WithDrilldown';
 import { prefixRoute } from '../../utils/utils.routing';
 import { ROUTES } from '../../constants';
-import { HelloWorldPluginPage } from '../../pages/HelloWorld';
+const HomePage = React.lazy(() => import('../../pages/Home/Home'));
+const PageWithTabs = React.lazy(() => import('../../pages/WithTabs/WithTabs'));
+const WithDrilldown = React.lazy(() => import('../../pages/WithDrilldown/WithDrilldown'));
+const HelloWorld = React.lazy(() => import('../../pages/HelloWorld/HelloWorld'));
 
 export const Routes = () => {
   return (
@@ -13,7 +13,7 @@ export const Routes = () => {
       <Route path={prefixRoute(`${ROUTES.WithTabs}`)} component={PageWithTabs} />
       <Route path={prefixRoute(`${ROUTES.WithDrilldown}`)} component={WithDrilldown} />
       <Route path={prefixRoute(`${ROUTES.Home}`)} component={HomePage} />
-      <Route path={prefixRoute(`${ROUTES.HelloWorld}`)} component={HelloWorldPluginPage} />
+      <Route path={prefixRoute(`${ROUTES.HelloWorld}`)} component={HelloWorld} />
       <Redirect to={prefixRoute(ROUTES.Home)} />
     </Switch>
   );
