@@ -28,4 +28,5 @@ export type TemplateData = {
   useCypress: boolean;
   useExperimentalRspack: boolean;
   pluginExecutable?: string;
+  frontendBundler: 'webpack' | 'rspack';
 };
