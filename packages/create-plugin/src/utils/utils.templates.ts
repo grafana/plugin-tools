@@ -131,6 +131,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
       useCypress,
+      useExperimentalRspack: Boolean(features.useExperimentalRspack),
     };
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
@@ -158,6 +159,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       usePlaywright,
       useCypress,
       pluginExecutable: pluginJson.executable,
+      useExperimentalRspack: Boolean(features.useExperimentalRspack),
     };
   }
 
