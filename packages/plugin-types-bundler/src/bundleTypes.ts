@@ -1,41 +1,50 @@
 import { getImportsInfo } from '@grafana/levitate';
 import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
 import { writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { extname, join } from 'node:path';
+import { parsedArgs } from './utils.js';
 
-export const generateTypes = (entrypoint: string) => {
-  const inlinedLibraries = getImportedPackages(entrypoint);
+export const generateTypes = () => {
+  const { entryPoint, tsConfig, outDir } = parsedArgs;
+
+  if (!entryPoint) {
+    throw new Error('Please provide the path for the entry types file as an argument.');
+  }
 
   const entryPoints: EntryPointConfig[] = [
     {
-      filePath: entrypoint,
+      filePath: entryPoint,
       libraries: {
-        inlinedLibraries,
-      },
-      output: {
-        exportReferencedTypes: false,
+        inlinedLibraries: getImportedPackages(entryPoint),
       },
     },
   ];
-
   const options = {
-    preferredConfigPath: resolve(__dirname, '../tsconfig.json'),
+    preferredConfigPath: tsConfig,
   };
-
   const dts = generateDtsBundle(entryPoints, options);
   const cleanedDts = cleanDTS(dts);
-  // TODO: Add a cli arg to specify the output path??
-  writeFileSync('./dist/index.d.ts', cleanedDts);
+
+  writeFileSync(join(outDir, 'index.d.ts'), cleanedDts);
 };
 
-export function getImportedPackages(entryFile: string) {
-  const { imports } = getImportsInfo(entryFile);
-
-  return imports.map((importInfo) => importInfo.packageName);
+export function getImportedPackages(entryPoint: string) {
+  const { imports } = getImportsInfo(entryPoint);
+  const npmPackages = imports
+    .map((importInfo) => importInfo.packageName)
+    .filter((packageName) => isBareSpecifier(packageName));
+  // Remove duplicates
+  return Array.from(new Set(npmPackages));
 }
 
 function cleanDTS(dtsContent: string[]) {
   let dtsString = dtsContent.join('\n');
   dtsString = dtsString.replace('export {};', '');
   return dtsString.trim() + '\n';
+}
+
+function isBareSpecifier(packageName: string) {
+  const isRelative = packageName.startsWith('./') || packageName.startsWith('../') || packageName.startsWith('/');
+  const hasExtension = extname(packageName) !== '';
+  return !isRelative && !hasExtension;
 }
