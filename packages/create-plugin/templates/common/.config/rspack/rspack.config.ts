@@ -5,15 +5,13 @@
  * https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#extend-the-webpack-config
  */
 
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import rspack, { type Configuration } from '@rspack/core';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import { type Configuration, BannerPlugin } from 'webpack';
-import LiveReloadPlugin from 'webpack-livereload-plugin';
-import VirtualModulesPlugin from 'webpack-virtual-modules';
+import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 
 import { DIST_DIR, SOURCE_DIR } from './constants';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
@@ -21,8 +19,8 @@ import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadm
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 
-const virtualPublicPath = new VirtualModulesPlugin({
-  'node_modules/grafana-public-path.js': `
+const virtualPublicPath = new RspackVirtualModulePlugin({
+  'grafana-public-path': `
 import amdMetaModule from 'amd-module';
 
 __webpack_public_path__ =
@@ -34,13 +32,6 @@ __webpack_public_path__ =
 
 const config = async (env): Promise<Configuration> => {
   const baseConfig: Configuration = {
-    cache: {
-      type: 'filesystem',
-      buildDependencies: {
-        config: [__filename],
-      },
-    },
-
     context: path.join(process.cwd(), SOURCE_DIR),
 
     devtool: env.production ? 'source-map' : 'eval-source-map',
@@ -65,17 +56,15 @@ const config = async (env): Promise<Configuration> => {
       'react-redux',
       'redux',
       'rxjs',
-      'react-router',{{#unless useReactRouterV6}}
-      'react-router-dom',{{/unless}}
+      'react-router',
       'd3',
-      'angular',{{#unless bundleGrafanaUI}}
-      '@grafana/ui',{{/unless}}
+      'angular',
+      '@grafana/ui',
       '@grafana/runtime',
-      '@grafana/data',{{#if bundleGrafanaUI}}
-      'react-inlinesvg',
-      'i18next',{{/if}}
+      '@grafana/data',
 
       // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
+      //@ts-ignore - rspack types seem to be a bit broken here.
       ({ request }, callback) => {
         const prefix = 'grafana/';
         const hasPrefix = (request) => request.indexOf(prefix) === 0;
@@ -114,18 +103,23 @@ const config = async (env): Promise<Configuration> => {
           exclude: /(node_modules)/,
           test: /\.[tj]sx?$/,
           use: {
-            loader: 'swc-loader',
+            loader: 'builtin:swc-loader',
             options: {
               jsc: {
-                baseUrl: path.resolve(process.cwd(), SOURCE_DIR),
-                target: 'es2015',
-                loose: false,
+                externalHelpers: true,
                 parser: {
                   syntax: 'typescript',
                   tsx: true,
-                  decorators: false,
-                  dynamicImport: true,
                 },
+                transform: {
+                  react: {
+                    development: !env.production,
+                    refresh: false,
+                  },
+                },
+              },
+              env: {
+                target: 'es2020',
               },
             },
           },
@@ -164,35 +158,32 @@ const config = async (env): Promise<Configuration> => {
               comments: (_, { type, value }) => type === 'comment2' && value.trim().startsWith('[create-plugin]'),
             },
             compress: {
-              drop_console: ['log', 'info']
-            }
+              drop_console: ['log', 'info'],
+            },
           },
         }),
       ],
     },
 
     output: {
-      clean: {
-        keep: new RegExp(`(.*?_(amd64|arm(64)?)(.exe)?|go_plugin_build_manifest)`),
-      },
       filename: '[name].js',
       library: {
         type: 'amd',
       },
       path: path.resolve(process.cwd(), DIST_DIR),
-      publicPath: `public/plugins/${pluginJson.id}/`,
+      publicPath: `./`,
       uniqueName: pluginJson.id,
     },
 
     plugins: [
       virtualPublicPath,
       // Insert create plugin version information into the bundle
-      new BannerPlugin({
-        banner: "/* [create-plugin] version: " + cpVersion + " */",
+      new rspack.BannerPlugin({
+        banner: '/* [create-plugin] version: ' + cpVersion + ' */',
         raw: true,
         entryOnly: true,
       }),
-      new CopyWebpackPlugin({
+      new rspack.CopyRspackPlugin({
         patterns: [
           // If src/README.md exists use it; otherwise the root README
           // To `compiler.options.output`
@@ -231,27 +222,28 @@ const config = async (env): Promise<Configuration> => {
           ],
         },
       ]),
-      ...(env.development ? [
-        new LiveReloadPlugin(),
-        new ForkTsCheckerWebpackPlugin({
-          async: Boolean(env.development),
-          issue: {
-            include: [{ file: '**/*.{ts,tsx}' }],
-          },
-          typescript: { configFile: path.join(process.cwd(), 'tsconfig.json') },
-        }),
-        new ESLintPlugin({
-          extensions: ['.ts', '.tsx'],
-          lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
-        }),
-      ] : []),
+      ...(env.development
+        ? [
+            // new LiveReloadPlugin(), Unsupported in rspack.
+            new ForkTsCheckerWebpackPlugin({
+              async: Boolean(env.development),
+              issue: {
+                include: [{ file: '**/*.{ts,tsx}' }],
+              },
+              typescript: { configFile: path.join(process.cwd(), 'tsconfig.json') },
+            }),
+            new ESLintPlugin({
+              extensions: ['.ts', '.tsx'],
+              lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
+            }),
+          ]
+        : []),
     ],
 
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
       // handle resolving "rootDir" paths
       modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
-      unsafeCache: true,
     },
   };
 
