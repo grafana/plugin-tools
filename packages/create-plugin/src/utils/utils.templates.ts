@@ -106,6 +106,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
+  const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
 
   let templateData: TemplateData;
 
@@ -133,6 +134,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       usePlaywright,
       useCypress,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
+      frontendBundler,
     };
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
@@ -160,6 +162,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useCypress,
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
+      frontendBundler,
     };
   }
 

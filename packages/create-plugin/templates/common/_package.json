@@ -2,8 +2,8 @@
   "name": "{{ kebabCase pluginName }}",
   "version": "1.0.0",
   "scripts": {
-    "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-    "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
+    "build": "{{frontendBundler}} -c ./.config/{{frontendBundler}}/{{frontendBundler}}.config.ts --env production",
+    "dev": "{{frontendBundler}} -w -c ./.config/{{frontendBundler}}/{{frontendBundler}}.config.ts --env development",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
