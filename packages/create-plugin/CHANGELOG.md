@@ -1,3 +1,15 @@
+# v5.3.8 (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Code split scaffolded apps [#1072](https://github.com/grafana/plugin-tools/pull/1072) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.3.7 (Fri Aug 30 2024)
 
 #### 🐛 Bug Fix

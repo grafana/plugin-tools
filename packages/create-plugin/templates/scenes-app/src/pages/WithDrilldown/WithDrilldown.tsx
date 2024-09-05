@@ -93,8 +93,10 @@ const getDrilldownsAppScene = () => {
   });
 };
 
-export const WithDrilldown = () => {
+const WithDrilldown = () => {
   const scene = useMemo(() => getDrilldownsAppScene(), []);
 
   return <scene.Component model={scene} />;
 };
+
+export default WithDrilldown;

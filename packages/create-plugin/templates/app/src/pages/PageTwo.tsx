@@ -2,7 +2,7 @@ import React from 'react';
 import { testIds } from '../components/testIds';
 import { PluginPage } from '@grafana/runtime';
 
-export function PageTwo() {
+function PageTwo() {
   return (
     <PluginPage>
       <div data-testid={testIds.pageTwo.container}>
@@ -11,3 +11,5 @@ export function PageTwo() {
     </PluginPage>
   );
 }
+
+export default PageTwo;
