@@ -21,7 +21,7 @@ type State = {
 
 export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<AppPluginSettings>> {}
 
-export const AppConfig = ({ plugin }: AppConfigProps) => {
+const AppConfig = ({ plugin }: AppConfigProps) => {
   const s = useStyles2(getStyles);
   const { enabled, pinned, jsonData, secureJsonFields } = plugin.meta;
   const [state, setState] = useState<State>({
@@ -109,6 +109,8 @@ export const AppConfig = ({ plugin }: AppConfigProps) => {
       </form>
   );
 };
+
+export default AppConfig;
 
 const getStyles = (theme: GrafanaTheme2) => ({
   colorWeak: css`

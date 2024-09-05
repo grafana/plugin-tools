@@ -22,7 +22,8 @@ const getScene = () => {
     ],
   });
 };
-export const HomePage = () => {
+
+const HomePage = () => {
   const scene = useMemo(() => getScene(), []);
 
   return (
@@ -47,3 +48,5 @@ export const HomePage = () => {
     </>
   );
 };
+
+export default HomePage;

@@ -7,7 +7,7 @@ import { ROUTES } from '../constants';
 import { testIds } from '../components/testIds';
 import { PluginPage } from '@grafana/runtime';
 
-export function PageOne() {
+function PageOne() {
   const s = useStyles2(getStyles);
 
   return (
@@ -23,6 +23,8 @@ export function PageOne() {
     </PluginPage>
   );
 }
+
+export default PageOne;
 
 const getStyles = (theme: GrafanaTheme2) => ({
   marginTop: css`
