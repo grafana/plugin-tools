@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRootProps, PluginType } from '@grafana/data';
 import { render, screen } from '@testing-library/react';
-import { App } from './App';
+import App from './App';
 
 describe('Components/App', () => {
   let props: AppRootProps;
@@ -25,13 +25,13 @@ describe('Components/App', () => {
     } as unknown as AppRootProps;
   });
 
-  test('renders without an error"', () => {
+  test('renders without an error"', async () => {
     render(
       <BrowserRouter>
         <App {...props} />
       </BrowserRouter>
     );
 
-    expect(screen.queryByText(/this is page one./i)).toBeInTheDocument();
+    expect(await screen.findByText(/this is page one./i)).toBeInTheDocument();
   });
 });
