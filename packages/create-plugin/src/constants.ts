@@ -49,6 +49,7 @@ export const DEFAULT_FEATURE_FLAGS = {
   useReactRouterV6: true,
   bundleGrafanaUI: false,
   usePlaywright: true,
+  useExperimentalRspack: false,
 };
 
 export const GRAFANA_FE_PACKAGES = [

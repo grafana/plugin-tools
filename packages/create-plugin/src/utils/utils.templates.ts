@@ -132,6 +132,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
       usePlaywright,
       useCypress,
+      useExperimentalRspack: Boolean(features.useExperimentalRspack),
     };
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
@@ -158,6 +159,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       usePlaywright,
       useCypress,
       pluginExecutable: pluginJson.executable,
+      useExperimentalRspack: Boolean(features.useExperimentalRspack),
     };
   }
 
