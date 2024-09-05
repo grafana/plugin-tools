@@ -2,6 +2,20 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.3.9`
+  - Update dependency @grafana/scenes to v5.13.0 [#1080](https://github.com/grafana/plugin-tools/pull/1080) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.3.8`
   - Create Plugin: Code split scaffolded apps [#1072](https://github.com/grafana/plugin-tools/pull/1072) ([@jackw](https://github.com/jackw))
 
