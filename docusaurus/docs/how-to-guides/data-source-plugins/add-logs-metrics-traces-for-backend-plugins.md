@@ -22,6 +22,23 @@ Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) for backend plug
 
 Logs are files that record events, warnings and errors as they occur within a software environment. Most logs include contextual information, such as the time an event occurred and which user or endpoint was associated with it.
 
+### Automatic instrumentation by the SDK
+
+The SDK automates some instrumentation to ease developer and operator experience. A message `Plugin Request Completed` is logged after each method call (`QueryData`, `CallResource`, `CheckHealth`, and so on) is completed. Further, if `QueryData` response includes any error a message `Partial data response error` is logged for each data response error. Below, some examples of messages logged:
+
+```shell
+DEBUG[09-05|17:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=ok
+DEBUG[09-05|18:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=cancelled error=context.Canceled error
+ERROR[09-05|19:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=error error=something is not working as expected
+ERROR[09-06|15:29:47] Partial data response error   logger=plugin.grafana-test-datasource status=500.000 statusSource=plugin dsName=grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData refID=A error="no handler found for query type 'noise'" pluginID=grafana-test-datasource traceID=981b7761aa295e371757582c7a4043d1 uname=admin
+```
+
+:::note
+
+It's recommended to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0) to make use of this functionality reliabily.
+
+:::
+
 ### Implement logging in your plugin
 
 Using the global logger, `backend.Logger`, from the [backend package](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend) works everywhere and for most use cases.
@@ -285,6 +302,10 @@ See [Prometheus metric types](https://prometheus.io/docs/concepts/metric_types/)
 
 ### Automatic instrumentation by the SDK
 
+The SDK automates some instrumentation to ease developer and operator experience. This section explores the default metrics collected and exposed.
+
+#### Go runtime metrics
+
 The SDK provides automatic collection and exposure of Go runtime, CPU, memory and process metrics to ease developer and operator experience. These metrics are exposed under the `go_` and `process_` namespaces and includes to name a few:
 
 - `go_info`: Information about the Go environment.
@@ -293,6 +314,23 @@ The SDK provides automatic collection and exposure of Go runtime, CPU, memory an
 - `process_cpu_seconds_total`: Total user and system CPU time spent in seconds.
 
 For further details and an up-to-date list of what metrics are automatically gathered and exposed for your plugin it's suggested to call Grafana's HTTP API, `/api/plugins/:pluginID/metrics`. See also [Collect and visualize metrics locally](#collect-and-visualize-metrics-locally) for further instructions how to pull metrics into Promethus.
+
+#### Request metrics
+
+The SDK provides automatic collection and exposure of a new counter metric named `grafana_plugin_request_total` allowing to track the success rate of plugin requests per endpoint (`QueryData`, `CallResource`, `CheckHealth`, and so on), `status` (ok, cancelled, error), `status_source` (plugin, downstream). Example output of metric by calling the Grafana HTTP API, `/api/plugins/:pluginID/metrics`:
+
+```shell
+# HELP grafana_plugin_request_total The total amount of plugin requests
+# TYPE grafana_plugin_request_total counter
+grafana_plugin_request_total{endpoint="queryData",status="error",status_source="plugin"} 1
+grafana_plugin_request_total{endpoint="queryData",status="ok",status_source="plugin"} 4
+```
+
+:::note
+
+It's recommended to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0) to make use of this functionality reliabily.
+
+:::
 
 ### Implement metrics in your plugin
 
@@ -460,6 +498,16 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
     // ...
 }
 ```
+
+#### Tracing method calls
+
+When tracing is enabled, a new span is created automatically for each method call named `sdk.<endpoint>` where endpoint is `QueryData`, `CallResource`, `CheckHealth`, and so on. Span attributes may include `plugin_id`, `org_id`, `datasource_name`, `datasource_uid`, `user`, `request_status` (ok, cancelled, error), `status_source` (plugin, downstream).
+
+:::note
+
+It's recommended to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0) to make use of this functionality reliabily.
+
+:::
 
 #### Tracing outgoing HTTP requests
 
