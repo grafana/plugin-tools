@@ -55,6 +55,10 @@ npm run dev # watches for changes to files and rebuilds @grafana/plugin-e2e auto
 ```
 
 ```shell
+npm run server # starts the e2e test server
+```
+
+```shell
 npm run playwright:test # runs all playwright tests headlessly
 ```
 
