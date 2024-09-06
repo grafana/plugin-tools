@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: master
       # limit releases to version changes - https://github.com/EndBug/version-check
       - name: Check version changes
-        uses: EndBug/version-check@v1
+        uses: EndBug/version-check@v2
         id: version_check
         with:
           # diff the commits rather than commit message for version changes
@@ -27,14 +27,14 @@ jobs:
 
       - name: Setup .npmrc file for NPM registry
         if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         if: steps.version_check.outputs.changed == 'true'
-        run: yarn
+        run: yarn install --immutable
 
       - name: Publish package to NPM
         if: steps.version_check.outputs.changed == 'true'
@@ -44,9 +44,9 @@ jobs:
 
       - name: Setup .npmrc file for GitHub Packages
         if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "20"
           registry-url: "https://npm.pkg.github.com"
           scope: "@grafana"
 
