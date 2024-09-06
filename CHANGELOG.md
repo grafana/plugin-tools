@@ -1,3 +1,16 @@
+# (Fri Sep 06 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.7.2`
+  - Chore: Bump uuid [#1098](https://github.com/grafana/plugin-tools/pull/1098) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Sep 05 2024)
 
 #### 🐛 Bug Fix
