@@ -54,9 +54,18 @@ npm run build # used to build @grafana/plugin-e2e
 npm run dev # watches for changes to files and rebuilds @grafana/plugin-e2e automatically
 ```
 
+#### Running e2e tests locally
+
+Some of the e2e tests involves data source plugins that integrates with third-party services. To be able to run these tests, you need to add a `/packages/plugin-e2e/.env` file and provide the necessary credentials. See `/packages/plugin-e2e/.env.example` to get an understanding of what variables you need to provide.
+
+1. Start the e2e test server:
+
 ```shell
-npm run server # starts the e2e test server
+npm run server
+
 ```
+
+2. Run the Playwright tests
 
 ```shell
 npm run playwright:test # runs all playwright tests headlessly
