@@ -3,7 +3,6 @@
   "extends": ["config:base", ":disableDependencyDashboard"],
   "includePaths": ["packages/create-plugin/templates/**"],
   "separateMajorMinor": false,
-  "labels": ["dependencies", "release", "patch"],
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex"],
   "customManagers": [
@@ -23,6 +22,7 @@
   ],
   "packageRules": [
     {
+      "labels": ["dependencies", "patch"],
       "automerge": true,
       "matchCurrentVersion": "!/^0/",
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
@@ -31,6 +31,7 @@
       "groupSlug": "all-grafana-patch"
     },
     {
+      "labels": ["dependencies", "release", "patch"],
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
       "matchUpdateTypes": ["minor", "major"],
       "groupName": "grafana dependencies",
