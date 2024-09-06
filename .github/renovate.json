@@ -32,7 +32,7 @@
     },
     {
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
-      "matchUpdateTypes": ["minor", "patch", "major"],
+      "matchUpdateTypes": ["minor", "major"],
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana"
     }
