@@ -69,7 +69,7 @@ jobs:
 
       - name: Run Playwright tests
         id: run-tests
-        run: npm run playwright:test --w @grafana/plugin-e2e
+        run: npx playwright test # run all tests
         env:
           GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
