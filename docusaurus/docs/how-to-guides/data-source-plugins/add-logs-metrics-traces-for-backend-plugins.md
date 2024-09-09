@@ -18,6 +18,12 @@ keywords:
 
 Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) for backend plugins makes it easier to diagnose and resolve issues for both plugin developers and Grafana operators. This document provides guidance, conventions and best practices to help you effectively instrument your plugins, as well as how to access this data when the plugin is installed.
 
+:::note
+
+This document expects you to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0). However, the recommendation is to keep Grafana plugin SDK for Go up to date to get the latest improvements, security and bug fixes. Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for update instructions.
+
+:::
+
 ## Logs
 
 Logs are files that record events, warnings and errors as they occur within a software environment. Most logs include contextual information, such as the time an event occurred and which user or endpoint was associated with it.
@@ -32,12 +38,6 @@ DEBUG[09-05|18:24:16] Plugin Request Completed  logger=plugin.grafana-test-datas
 ERROR[09-05|19:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=error error=something is not working as expected
 ERROR[09-06|15:29:47] Partial data response error   logger=plugin.grafana-test-datasource status=500.000 statusSource=plugin dsName=grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData refID=A error="no handler found for query type 'noise'" pluginID=grafana-test-datasource traceID=981b7761aa295e371757582c7a4043d1 uname=admin
 ```
-
-:::note
-
-It's recommended to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0) to make use of this functionality reliabily.
-
-:::
 
 ### Implement logging in your plugin
 
@@ -126,12 +126,6 @@ You can also use `backend.NewLoggerWith` from the [backend package](https://pkg.
 #### Use a contextual logger
 
 Use a contextual logger to automatically include additional key-value pairs attached to `context.Context`. For example, you can use `traceID` to allow correlating logs with traces and correlate logs with a common identifier. You can create a new contextual logger by using the `FromContext` method on your instantiated logger; you can also combine this method when [reusing logger with certain key-value pairs](#reuse-logger-with-certain-keyvalue-pairs). We recommend using a contextual logger whenever you have access to a `context.Context`.
-
-:::note
-
-Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.186.0). Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for update instructions.
-
-:::
 
 By default, the following key-value pairs are included in logs when using a contextual logger:
 
@@ -326,12 +320,6 @@ grafana_plugin_request_total{endpoint="queryData",status="error",status_source="
 grafana_plugin_request_total{endpoint="queryData",status="ok",status_source="plugin"} 4
 ```
 
-:::note
-
-It's recommended to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0) to make use of this functionality reliabily.
-
-:::
-
 ### Implement metrics in your plugin
 
 The [Grafana plugin SDK for Go](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) uses the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang). Any custom metric registered with the [default registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#pkg-variables) will be picked up by the SDK and exposed through the [Collect metrics capability](../../key-concepts/backend-plugins/#collect-metrics).
@@ -399,12 +387,6 @@ Further, see [How to collect and visualize logs, metrics and traces](#collect-an
 
 Distributed tracing allows backend plugin developers to create custom spans in their plugins, and then send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
 
-:::note
-
-This feature requires at least Grafana 9.5.0, and your plugin needs to be built at least with `grafana-plugins-sdk-go v0.157.0`. If you run a plugin with tracing features on an older version of Grafana, tracing will be disabled.
-
-:::
-
 ### OpenTelemetry configuration in Grafana
 
 Grafana supports [OpenTelemetry](https://opentelemetry.io/) for distributed tracing. If Grafana is configured to use a deprecated tracing system (Jaeger or OpenTracing), then tracing is disabled in the plugin provided by the SDK and configured when calling `datasource.Manage | app.Manage`.
@@ -420,14 +402,6 @@ If tracing is disabled in Grafana, `backend.DefaultTracer()` returns a no-op tra
 :::
 
 ### Implement tracing in your plugin
-
-:::note
-
-Make sure you are using at least [`grafana-plugin-sdk-go v0.157.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.157.0). Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for update instructions.
-
-:::
-
-#### Configure a global tracer
 
 When OpenTelemetry tracing is enabled on the main Grafana instance and tracing is enabled for a plugin, the OpenTelemetry endpoint address and propagation format is passed to the plugin during startup. These parameters are used to configure a global tracer.
 
@@ -502,12 +476,6 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 #### Tracing method calls
 
 When tracing is enabled, a new span is created automatically for each method call named `sdk.<endpoint>` where endpoint is `QueryData`, `CallResource`, `CheckHealth`, and so on. Span attributes may include `plugin_id`, `org_id`, `datasource_name`, `datasource_uid`, `user`, `request_status` (ok, cancelled, error), `status_source` (plugin, downstream).
-
-:::note
-
-It's recommended to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0) to make use of this functionality reliabily.
-
-:::
 
 #### Tracing outgoing HTTP requests
 
