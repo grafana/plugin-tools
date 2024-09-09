@@ -1,3 +1,15 @@
+# v1.7.2 (Fri Sep 06 2024)
+
+#### 🐛 Bug Fix
+
+- Chore: Bump uuid [#1098](https://github.com/grafana/plugin-tools/pull/1098) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.7.1 (Wed Aug 21 2024)
 
 #### 🐛 Bug Fix

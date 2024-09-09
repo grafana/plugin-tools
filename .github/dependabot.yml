@@ -32,3 +32,12 @@ updates:
         patterns:
           - '@auto-it/*'
           - 'auto'
+  - package-ecosystem: 'npm'
+    directory: '/packages/plugin-e2e'
+    schedule:
+      interval: 'monthly'
+    # Specify labels for npm pull requests
+    labels:
+      - 'javascript'
+      - 'dependencies'
+      - 'no stalebot'

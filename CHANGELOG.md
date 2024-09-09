@@ -1,3 +1,43 @@
+# (Mon Sep 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.10`
+  - Update grafana dependencies [#1094](https://github.com/grafana/plugin-tools/pull/1094) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Sep 06 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.7.2`
+  - Chore: Bump uuid [#1098](https://github.com/grafana/plugin-tools/pull/1098) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.9`
+  - Update dependency @grafana/scenes to v5.13.0 [#1080](https://github.com/grafana/plugin-tools/pull/1080) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Sep 05 2024)
 
 #### 🐛 Bug Fix
