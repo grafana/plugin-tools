@@ -56,7 +56,9 @@ npm run dev # watches for changes to files and rebuilds @grafana/plugin-e2e auto
 
 #### Running e2e tests locally
 
-Some of the e2e tests involves data source plugins that integrates with third-party services. To be able to run these tests, you need to add a `/packages/plugin-e2e/.env` file and provide the necessary credentials. See `/packages/plugin-e2e/.env.example` to get an understanding of what variables you need to provide.
+There are two types of Playwright tests - those that require data source credentials (only available to members of the Grafana team) and those that don't.
+
+To run the Playwright tests that don't require credentials.
 
 1. Start the e2e test server:
 
@@ -68,15 +70,22 @@ npm run server
 2. Run the Playwright tests
 
 ```shell
-npm run playwright:test # runs all playwright tests headlessly
+npm run playwright:test # runs all the playwright tests that don't require credentials
 ```
 
-```shell
-npm run playwright:test:ui # runs all playwright tests in Google chrome
-```
+To run the e2e tests that require data source credentials, you need to add a `/packages/plugin-e2e/.env` file and provide the necessary credentials (see `/packages/plugin-e2e/.env.example` to get an understanding of what variables you need to provide). You'll find all the necessary credentials in the [plugin-provisioning](https://github.com/grafana/plugin-provisioning) repo.
+
+1. Start the e2e test server:
 
 ```shell
-npm run playwright:showreport # show Playwright report for the last test session
+npm run server
+
+```
+
+2. Run the Playwright integration tests
+
+```shell
+npm run playwright:test:integration #runs all the playwright tests that integrates with third-party services
 ```
 
 ### VS Code Playwright extension
