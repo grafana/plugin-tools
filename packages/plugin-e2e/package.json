@@ -27,7 +27,8 @@
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "vitest",
     "playwright:test": "npx playwright test --grep-invert @integration",
-    "playwright:test:integration": "npx playwright test --grep @integration"
+    "playwright:test:integration": "npx playwright test --grep @integration",
+    "playwright:all": "npx playwright test"
   },
   "engines": {
     "node": ">=18 <=20"
