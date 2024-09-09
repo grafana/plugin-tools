@@ -18,9 +18,26 @@ keywords:
 
 Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) for backend plugins makes it easier to diagnose and resolve issues for both plugin developers and Grafana operators. This document provides guidance, conventions and best practices to help you effectively instrument your plugins, as well as how to access this data when the plugin is installed.
 
+:::note
+
+This document expects you to use at least [grafana-plugin-sdk-go v0.246.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.246.0). However, the recommendation is to keep Grafana plugin SDK for Go up to date to get the latest improvements, security and bug fixes. Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for update instructions.
+
+:::
+
 ## Logs
 
 Logs are files that record events, warnings and errors as they occur within a software environment. Most logs include contextual information, such as the time an event occurred and which user or endpoint was associated with it.
+
+### Automatic instrumentation by the SDK
+
+The SDK automates some instrumentation to ease developer and operator experience. A message `Plugin Request Completed` is logged after each method call (`QueryData`, `CallResource`, `CheckHealth`, and so on) is completed. Further, if `QueryData` response includes any error a message `Partial data response error` is logged for each data response error. Below, some examples of messages logged:
+
+```shell
+DEBUG[09-05|17:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=ok
+DEBUG[09-05|18:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=cancelled error=context.Canceled error
+ERROR[09-05|19:24:16] Plugin Request Completed  logger=plugin.grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData pluginID=grafana-test-datasource statusSource=plugin uname=admin dsName=grafana-test-datasource traceID=604e15b6345c2c0896e6902fa86b82f5 duration=1.482975875s status=error error=something is not working as expected
+ERROR[09-06|15:29:47] Partial data response error   logger=plugin.grafana-test-datasource status=500.000 statusSource=plugin dsName=grafana-test-datasource dsUID=edeuvt04gim0we endpoint=queryData refID=A error="no handler found for query type 'noise'" pluginID=grafana-test-datasource traceID=981b7761aa295e371757582c7a4043d1 uname=admin
+```
 
 ### Implement logging in your plugin
 
@@ -109,12 +126,6 @@ You can also use `backend.NewLoggerWith` from the [backend package](https://pkg.
 #### Use a contextual logger
 
 Use a contextual logger to automatically include additional key-value pairs attached to `context.Context`. For example, you can use `traceID` to allow correlating logs with traces and correlate logs with a common identifier. You can create a new contextual logger by using the `FromContext` method on your instantiated logger; you can also combine this method when [reusing logger with certain key-value pairs](#reuse-logger-with-certain-keyvalue-pairs). We recommend using a contextual logger whenever you have access to a `context.Context`.
-
-:::note
-
-Make sure you are using at least [grafana-plugin-sdk-go v0.186.0](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.186.0). Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for update instructions.
-
-:::
 
 By default, the following key-value pairs are included in logs when using a contextual logger:
 
@@ -285,6 +296,10 @@ See [Prometheus metric types](https://prometheus.io/docs/concepts/metric_types/)
 
 ### Automatic instrumentation by the SDK
 
+The SDK automates some instrumentation to ease developer and operator experience. This section explores the default metrics collected and exposed.
+
+#### Go runtime metrics
+
 The SDK provides automatic collection and exposure of Go runtime, CPU, memory and process metrics to ease developer and operator experience. These metrics are exposed under the `go_` and `process_` namespaces and includes to name a few:
 
 - `go_info`: Information about the Go environment.
@@ -293,6 +308,17 @@ The SDK provides automatic collection and exposure of Go runtime, CPU, memory an
 - `process_cpu_seconds_total`: Total user and system CPU time spent in seconds.
 
 For further details and an up-to-date list of what metrics are automatically gathered and exposed for your plugin it's suggested to call Grafana's HTTP API, `/api/plugins/:pluginID/metrics`. See also [Collect and visualize metrics locally](#collect-and-visualize-metrics-locally) for further instructions how to pull metrics into Promethus.
+
+#### Request metrics
+
+The SDK provides automatic collection and exposure of a new counter metric named `grafana_plugin_request_total` allowing to track the success rate of plugin requests per endpoint (`QueryData`, `CallResource`, `CheckHealth`, and so on), `status` (ok, cancelled, error), `status_source` (plugin, downstream). Example output of metric by calling the Grafana HTTP API, `/api/plugins/:pluginID/metrics`:
+
+```shell
+# HELP grafana_plugin_request_total The total amount of plugin requests
+# TYPE grafana_plugin_request_total counter
+grafana_plugin_request_total{endpoint="queryData",status="error",status_source="plugin"} 1
+grafana_plugin_request_total{endpoint="queryData",status="ok",status_source="plugin"} 4
+```
 
 ### Implement metrics in your plugin
 
@@ -361,12 +387,6 @@ Further, see [How to collect and visualize logs, metrics and traces](#collect-an
 
 Distributed tracing allows backend plugin developers to create custom spans in their plugins, and then send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
 
-:::note
-
-This feature requires at least Grafana 9.5.0, and your plugin needs to be built at least with `grafana-plugins-sdk-go v0.157.0`. If you run a plugin with tracing features on an older version of Grafana, tracing will be disabled.
-
-:::
-
 ### OpenTelemetry configuration in Grafana
 
 Grafana supports [OpenTelemetry](https://opentelemetry.io/) for distributed tracing. If Grafana is configured to use a deprecated tracing system (Jaeger or OpenTracing), then tracing is disabled in the plugin provided by the SDK and configured when calling `datasource.Manage | app.Manage`.
@@ -382,14 +402,6 @@ If tracing is disabled in Grafana, `backend.DefaultTracer()` returns a no-op tra
 :::
 
 ### Implement tracing in your plugin
-
-:::note
-
-Make sure you are using at least [`grafana-plugin-sdk-go v0.157.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.157.0). Refer to [Update the Go SDK](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go.md#update-the-go-sdk) for update instructions.
-
-:::
-
-#### Configure a global tracer
 
 When OpenTelemetry tracing is enabled on the main Grafana instance and tracing is enabled for a plugin, the OpenTelemetry endpoint address and propagation format is passed to the plugin during startup. These parameters are used to configure a global tracer.
 
@@ -460,6 +472,10 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
     // ...
 }
 ```
+
+#### Tracing method calls
+
+When tracing is enabled, a new span is created automatically for each method call named `sdk.<endpoint>` where endpoint is `QueryData`, `CallResource`, `CheckHealth`, and so on. Span attributes may include `plugin_id`, `org_id`, `datasource_name`, `datasource_uid`, `user`, `request_status` (ok, cancelled, error), `status_source` (plugin, downstream).
 
 #### Tracing outgoing HTTP requests
 
