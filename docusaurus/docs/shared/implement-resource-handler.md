@@ -38,7 +38,6 @@ func New() *MyPlugin {
   mux := http.NewServeMux()
   mux.HandleFunc("/namespaces", p.handleNamespaces)
   mux.HandleFunc("/projects", p.handleProjects)
-  mux.HandleFunc("/device", p.updateDevice)
   p.resourceHandler := httpadapter.New(mux)
   return p
 }
@@ -48,111 +47,41 @@ func (p *MyPlugin) CallResource(ctx context.Context, req *backend.CallResourceRe
 }
 
 func (p *MyPlugin) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
-  if req.Method != http.MethodGet {
-    rw.WriteHeader(http.StatusNotFound)
-    return
-  }
-
-  ctxLogger := backend.Logger.FromContext(req.Context())
-
   rw.Header().Add("Content-Type", "application/json")
   _, err := rw.Write([]byte(`{ "namespaces": ["ns-1", "ns-2"] }`))
   if err != nil {
-    ctxLogger.Error("Failed to write response", "error", err)
     return
   }
   rw.WriteHeader(http.StatusOK)
 }
 
 func (p *MyPlugin) handleProjects(rw http.ResponseWriter, req *http.Request) {
-  if req.Method != http.MethodGet {
-    rw.WriteHeader(http.StatusNotFound)
-    return
-  }
-
-  ctxLogger := backend.Logger.FromContext(req.Context())
-
   rw.Header().Add("Content-Type", "application/json")
   _, err := rw.Write([]byte(`{ "projects": ["project-1", "project-2"] }`))
   if err != nil {
-    ctxLogger.Error("Failed to write response", "error", err)
     return
   }
-  rw.WriteHeader(http.StatusOK)
-}
-
-func (p *MyPlugin) updateDevice(rw http.ResponseWriter, req *http.Request) {
-  if req.Method != http.MethodPost {
-    rw.WriteHeader(http.StatusNotFound)
-    return
-  }
-
-  if req.Body == nil {
-    rw.WriteHeader(http.StatusBadRequest)
-    return
-  }
-
-  ctxLogger := backend.Logger.FromContext(req.Context())
-
-  defer func() {
-    if err := req.Body.Close(); err != nil {
-      ctxLogger.Warn("Failed to close response body", "error", err)
-    }
-  }()
-
-  var payload map[string]any
-  b, err := io.ReadAll(req.Body)
-  if err != nil {
-    ctxLogger.Error("Failed to read request body to bytes", "error", err)
-    rw.WriteHeader(http.StatusInternalServerError)
-    return
-  }
-
-  err = json.Unmarshal(b, &payload)
-  if err != nil {
-    ctxLogger.Error("Failed to unmarshal request body to JSON", "error", err)
-    rw.WriteHeader(http.StatusInternalServerError)
-    return
-  }
-
-  state := payload["state"]
-  // update device with state...
-
-  rw.Header().Add("Content-Type", "application/json")
-  _, err = rw.Write([]byte(fmt.Sprintf(`{ "message": "device updated", "state": "%s" }`, state)))
-  if err != nil {
-    ctxLogger.Error("Failed to write response", "error", err)
-    return
-  }
-
   rw.WriteHeader(http.StatusOK)
 }
 ```
 
 #### Accessing the backend plugin context
 
-Use the `backend.PluginConfigFromContext` function to access `backend.PluginContext`:
+You can use the [backend.PluginConfigFromContext](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#PluginConfigFromContext) function to access [backend.PluginContext](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#PluginContext). This holds contextual information about a plugin request, such as the user performing the request:
 
 ```go
-func (p *MyPlugin) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
+func (p *MyPlugin) handleSomeRoute(rw http.ResponseWriter, req *http.Request) {
 	pCtx := backend.PluginConfigFromContext(req.Context())
-	ctxLogger := backend.Logger.FromContext(req.Context())
-
 	bytes, err := json.Marshal(pCtx.User)
 	if err != nil {
-		ctxLogger.Error("Failed to marshal user to JSON bytes", "error", err)
-		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	rw.Header().Add("Content-Type", "application/json")
 	_, err := rw.Write(bytes)
 	if err != nil {
-		ctxLogger.Error("Failed to write response", "error", err)
-		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
 	rw.WriteHeader(http.StatusOK)
 }
 ```
@@ -163,12 +92,6 @@ Manually implementing the `backend.CallResourceHandler` interface might be enoug
 
 ```go
 func (p *MyPlugin) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
-	if req.Method != http.MethodGet {
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusNotFound,
-		})
-	}
-
 	switch req.Path {
 	case "namespaces":
 		return sender.Send(&backend.CallResourceResponse{

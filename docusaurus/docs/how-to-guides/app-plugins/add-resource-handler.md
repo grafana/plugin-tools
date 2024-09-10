@@ -19,12 +19,9 @@ You can add a resource handler to your app backend to extend the Grafana HTTP AP
 
 ## Uses of resource handlers
 
-The use case and functionality for an app is very broad and therefore also for uses of resource handlers. But in general, an app normally integrates with a HTTP service of some kind, e.g. a 3rd party service, to retrieve and send data. For example, this service might have
+An app often integrates with a HTTP service of some kind, e.g. a 3rd party service, to retrieve and send data. For example, this service might have specific authentication and authorization needs or a response format not suitable to return to Grafana and the plugin frontend.
 
-- specific authentication and authorization needs.
-- a format not suitable to return to Grafana and the plugin frontend.
-
-In addition, you might want to [secure your resources](implement-rbac-in-app-plugins.md#secure-backend-resources) so that only users with a certain permission can access those.
+In addition, you might want to [secure your resources](implement-rbac-in-app-plugins.md#secure-backend-resources) so that only users with a certain permission can access certain routes.
 
 Resource handlers are also useful for building control panels that allow the user to write back to the app. For example, you could add a resource handler to update the state of an IoT device.
 
@@ -42,45 +39,15 @@ With the above example you can access the following resources:
 
 - HTTP GET `http://<GRAFANA_HOSTNAME>:<PORT>/api/plugins/<PLUGIN_ID>/resources/namespaces`
 - HTTP GET `http://<GRAFANA_HOSTNAME>:<PORT>/api/plugins/<PLUGIN_ID>/resources/projects`
-- HTTP POST `http://<GRAFANA_HOSTNAME>:<PORT>/api/plugins/<PLUGIN_ID>/resources/device`
 
 ### From the frontend
 
-You can access your resources using the `get` and `post` functions from the `backendSrv` runtime service. To provide a nicer and more convenient API for your components it's recommended to provide a helper class with functions for each route as shown in the following example:
+You can access your resources in a compontent using the `get` function of the `backendSrv` runtime service to send a HTTP GET request to `http://<GRAFANA_HOSTNAME>:<PORT>/api/plugins/<PLUGIN_ID>/resources/namespaces`
 
 ```typescript
 import { getBackendSrv } from '@grafana/runtime';
 
-export class API {
-  private backend = getBackendSrv();
-
-  constructor(public PluginId: string) {}
-
-  getNamespaces(): Promise<NamespacesResponse> {
-    return this.backend.get(`/api/plugins/${this.PluginID}/resources/namespaces`);
-  }
-
-  getProjects(): Promise<ProjectsResponse> {
-    return this.backend.get(`/api/plugins/${this.PluginID}/resources/projects`);
-  }
-
-  updateDevice(state: string): Promise<string> {
-    return this.backend.post(`/api/plugins/${this.PluginID}/resources/device`, { state: state });
-  }
-}
-```
-
-For example, in your app or component you can instantiate your API class and use `getNamespaces` to send a HTTP GET request to `http://<GRAFANA_HOSTNAME>:<PORT>/api/plugins/<PLUGIN_ID>/resources/namespaces`
-
-```typescript
-const api = new API('my-app-id');
-const namespaces = await api.getNamespaces();
-```
-
-As another example, you can use `updateDevice` to send a HTTP POST request to `http://<GRAFANA_HOSTNAME>:<PORT>/api/plugins/<PLUGIN_ID>/resources/device` with the provided JSON payload as the second argument:
-
-```typescript
-const result = await api.updateDevice('on');
+const namespaces = await getBackendSrv().get(`/api/plugins/<PLUGIN_ID>/resources/namespaces`);
 ```
 
 ## Additional examples

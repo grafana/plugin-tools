@@ -38,7 +38,6 @@ With the above example you can access the following resources:
 
 - HTTP GET `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/namespaces`
 - HTTP GET `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/projects`
-- HTTP POST `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/device`
 
 :::tip
 
@@ -63,10 +62,6 @@ export class MyDataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOpt
   getProjects(): Promise<ProjectsResponse> {
     return this.getResource('/projects');
   }
-
-  updateDevice(state: string): Promise<string> {
-    return this.postResource('device', { state: state });
-  }
 }
 ```
 
@@ -74,12 +69,6 @@ For example, in your query editor component, you can access the data source inst
 
 ```typescript
 const namespaces = await props.datasource.getNamespaces();
-```
-
-As another example, you can use `updateDevice` to send a HTTP POST request to `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/device` with the provided JSON payload as the second argument:
-
-```typescript
-const result = await props.datasource.updateDevice('on');
 ```
 
 ## Additional examples
