@@ -12,6 +12,7 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
+import RspackLiveReloadPlugin from './liveReloadPlugin';
 
 import { DIST_DIR, SOURCE_DIR } from './constants';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
@@ -224,7 +225,7 @@ const config = async (env): Promise<Configuration> => {
       ]),
       ...(env.development
         ? [
-            // new LiveReloadPlugin(), Unsupported in rspack.
+            new RspackLiveReloadPlugin(),
             new ForkTsCheckerWebpackPlugin({
               async: Boolean(env.development),
               issue: {
@@ -253,6 +254,8 @@ const config = async (env): Promise<Configuration> => {
       ignored: /node_modules/,
     };
   }
+
+
 
   return baseConfig;
 };
