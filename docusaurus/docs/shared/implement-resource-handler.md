@@ -43,7 +43,7 @@ func New() *MyPlugin {
 }
 
 func (p *MyPlugin) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
-  return p.resourceHandler.CallResource(ctx, req)
+  return p.resourceHandler.CallResource(ctx, req, sender)
 }
 
 func (p *MyPlugin) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
