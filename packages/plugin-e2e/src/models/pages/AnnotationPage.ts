@@ -5,7 +5,7 @@ import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
-    super(ctx);
+    super(ctx, dashboard);
   }
 
   /**

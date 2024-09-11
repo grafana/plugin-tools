@@ -1,5 +1,5 @@
 import { Locator, Request, Response } from '@playwright/test';
-import { getByGrafanaSelectorOptions, NavigateOptions, PluginTestCtx } from '../../types';
+import { getByGrafanaSelectorOptions, GrafanaPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 
 /**
  * Base class for all Grafana pages.
@@ -7,14 +7,16 @@ import { getByGrafanaSelectorOptions, NavigateOptions, PluginTestCtx } from '../
  * Exposes methods for locating Grafana specific elements on the page
  */
 export abstract class GrafanaPage {
-  constructor(public readonly ctx: PluginTestCtx) {}
+  constructor(public readonly ctx: PluginTestCtx, public readonly pageArgs: GrafanaPageArgs = {}) {}
 
   protected async navigate(url: string, options?: NavigateOptions) {
-    if (options?.queryParams) {
-      url += `?${options.queryParams.toString()}`;
+    let queryParams = options?.queryParams ? options.queryParams : this.pageArgs.queryParams;
+    if (queryParams) {
+      url += `?${queryParams.toString()}`;
     }
     await this.ctx.page.goto(url, {
       waitUntil: 'networkidle',
+      ...this.pageArgs,
       ...options,
     });
   }

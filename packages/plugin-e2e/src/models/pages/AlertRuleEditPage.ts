@@ -5,7 +5,7 @@ import { AlertRuleQuery } from '../components/AlertRuleQuery';
 
 export class AlertRuleEditPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly args?: AlertRuleArgs) {
-    super(ctx);
+    super(ctx, args);
   }
 
   /**
