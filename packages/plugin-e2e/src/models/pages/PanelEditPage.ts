@@ -13,7 +13,7 @@ export class PanelEditPage extends GrafanaPage {
   panel: Panel;
 
   constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
-    super(ctx);
+    super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
     this.panel = new Panel(ctx, this.getPanelLocator());
