@@ -4,7 +4,7 @@ import { VariableEditPage } from './VariableEditPage';
 
 export class VariablePage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, public readonly dashboard?: DashboardPageArgs) {
-    super(ctx);
+    super(ctx, dashboard);
   }
 
   /**

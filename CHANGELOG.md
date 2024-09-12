@@ -1,3 +1,29 @@
+# (Wed Sep 11 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.8.0`
+  - Plugin E2E: Allow overriding `waitUntil` in goto page fixtures [#1111](https://github.com/grafana/plugin-tools/pull/1111) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Sep 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.3.10`
+  - Update grafana dependencies [#1094](https://github.com/grafana/plugin-tools/pull/1094) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Fri Sep 06 2024)
 
 #### 🐛 Bug Fix

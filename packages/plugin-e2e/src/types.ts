@@ -438,7 +438,9 @@ export interface TimeRangeArgs {
   zone?: string;
 }
 
-export type DashboardPageArgs = {
+export type GrafanaPageArgs = NavigateOptions;
+
+export type DashboardPageArgs = GrafanaPageArgs & {
   /**
    * The uid of the dashboard to go to
    */
@@ -460,12 +462,12 @@ export type DashboardPageArgs = {
  * If dashboard is not specified, it's assumed that it's a new dashboard. Otherwise, the dashboard uid is used to
  * navigate to an already existing dashboard.
  */
-export type DashboardEditViewArgs<T> = {
+export type DashboardEditViewArgs<T> = GrafanaPageArgs & {
   dashboard?: DashboardPageArgs;
   id: T;
 };
 
-export type AlertRuleArgs = {
+export type AlertRuleArgs = GrafanaPageArgs & {
   uid: string;
 };
 
@@ -505,7 +507,7 @@ export type ReadProvisionedDataSourceArgs = {
   name?: string;
 };
 
-export type PluginPageArgs = {
+export type PluginPageArgs = GrafanaPageArgs & {
   pluginId: string;
 };
 
