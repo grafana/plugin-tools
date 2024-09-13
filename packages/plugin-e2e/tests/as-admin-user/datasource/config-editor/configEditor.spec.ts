@@ -8,12 +8,16 @@ test('invalid credentials should return an error', async ({ createDataSourceConf
   await expect(configPage.saveAndTest()).not.toBeOK();
 });
 
-test('valid credentials should return a 200 status code', async ({ createDataSourceConfigPage, page }) => {
-  const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
-  await page.getByTestId('Paste JWT button').click();
-  await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!.replace(/'/g, ''));
-  await expect(configPage.saveAndTest()).toBeOK();
-});
+test(
+  'valid credentials should return a 200 status code',
+  { tag: '@integration' },
+  async ({ createDataSourceConfigPage, page }) => {
+    const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
+    await page.getByTestId('Paste JWT button').click();
+    await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!.replace(/'/g, ''));
+    await expect(configPage.saveAndTest()).toBeOK();
+  }
+);
 
 test('should call a custom health endpoint when healthCheckPath is provided', async ({
   createDataSourceConfigPage,
@@ -33,11 +37,12 @@ test('should call a custom health endpoint when healthCheckPath is provided', as
   await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
 });
 
-test('existing ds instance - valid credentials should return a 200 status code', async ({
-  readProvisionedDataSource,
-  gotoDataSourceConfigPage,
-}) => {
-  const datasource = await readProvisionedDataSource({ fileName: 'google-sheets-datasource-jwt.yaml' });
-  const configPage = await gotoDataSourceConfigPage(datasource.uid);
-  await expect(configPage.saveAndTest()).toBeOK();
-});
+test(
+  'existing ds instance - valid credentials should return a 200 status code',
+  { tag: '@integration' },
+  async ({ readProvisionedDataSource, gotoDataSourceConfigPage }) => {
+    const datasource = await readProvisionedDataSource({ fileName: 'google-sheets-datasource-jwt.yaml' });
+    const configPage = await gotoDataSourceConfigPage(datasource.uid);
+    await expect(configPage.saveAndTest()).toBeOK();
+  }
+);
