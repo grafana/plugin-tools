@@ -1,6 +1,6 @@
 import { getImportsInfo } from '@grafana/levitate';
 import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { parsedArgs } from './utils.js';
 
@@ -25,6 +25,7 @@ export const generateTypes = () => {
   const dts = generateDtsBundle(entryPoints, options);
   const cleanedDts = cleanDTS(dts);
 
+  mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'index.d.ts'), cleanedDts);
 };
 
