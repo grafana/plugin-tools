@@ -42,16 +42,17 @@ Insert the client-side redirect here: /plugin-tools/docusaurus/website/docusauru
 ```
 {
     from: ['/something-that-does-not-exist', '/something-that-does-not-exist/testing'],
-    to: '/get-started/folder-structure',
+    to: '/get-started/anatomy-of-a-plugin',
 },
 
 ```
-`from` - being the old location and `to` being the new one. You can have multiple `from` urls for a single `to` url.
 
+`from` - being the old location and `to` being the new one. You can have multiple `from` urls for a single `to` url.
 
 To test that the redirect works prior to publishing the PR deploy your branch to DEV Stage of developer portal. You can do so by [running this action](https://github.com/grafana/plugin-tools/actions/workflows/deploy-to-developer-portal-dev.yml) called `Deploy to Developer Portal DEV Bucket`.
 
 Hit the `run workflow` button and choose following parameters:
+
 - Use workflow from: Branch `main` (keep it as it is by default)
 - Which branch to use? Here you should enter your branch name.
 - Hit the `run workflow` button
