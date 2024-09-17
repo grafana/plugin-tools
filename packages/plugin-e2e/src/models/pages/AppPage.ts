@@ -4,7 +4,7 @@ import { GrafanaPage } from './GrafanaPage';
 
 export class AppPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly args: PluginPageArgs) {
-    super(ctx);
+    super(ctx, args);
   }
 
   /**

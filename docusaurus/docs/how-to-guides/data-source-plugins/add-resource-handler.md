@@ -12,6 +12,8 @@ keywords:
   - resource handler
 ---
 
+import ImplementResourceHandler from '@shared/implement-resource-handler.md';
+
 # Add resource handler for data source plugins
 
 You can add a resource handler to your data source backend to extend the Grafana HTTP API with your own data source-specific routes. This guide explains why you may want to add [resource](../../key-concepts/backend-plugins/#resources) handlers and some common ways for doing so.
@@ -22,22 +24,20 @@ The primary way for a data source to retrieve data from a backend is through the
 
 Resource handlers are also useful for building control panels that allow the user to write back to the data source. For example, you could add a resource handler to update the state of an IoT device.
 
-## Implement the resource handler interface
+<ImplementResourceHandler />
 
-To add a resource handler to your backend plugin, you need to implement the `backend.CallResourceHandler` interface for your data source struct.
+## Accessing datasource resources
 
-```go
-func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
-    return sender.Send(&backend.CallResourceResponse{
-        Status: http.StatusOK,
-        Body: []byte("Hello, world!"),
-    })
-}
-```
+Once implemented you can access the resources using the Grafana HTTP API and from the frontend.
 
-You can then access your resources through the following endpoint: `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources`
+### Using the Grafana HTTP API
 
-In this example code, `DATASOURCE_UID` is the data source unique identifier (UID) that uniquely identifies your data source.
+You can access the resources through the Grafana HTTP API by using the endpoint, `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources{/<RESOURCE>}`. The `DATASOURCE_UID` is the data source unique identifier (UID) that uniquely identifies your data source and the `RESOURCE` depends on how the resource handler is implemented and what resources (routes) are supported.
+
+With the above example you can access the following resources:
+
+- HTTP GET `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/namespaces`
+- HTTP GET `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/projects`
 
 :::tip
 
@@ -45,118 +45,30 @@ To verify the data source UID, you can enter `window.grafanaBootData.settings.da
 
 :::
 
-## Add support for multiple routes
+### From the frontend
 
-To support multiple routes in your data source plugin, you can use a switch with the `req.Path`:
+You can query your resources using the `getResource` and `postResource` helpers from the `DataSourceWithBackend` class. To provide a nicer and more convenient API for your components it's recommended to extend your datasource class and instance with functions for each route as shown in the following example:
 
-```go
-func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
-	switch req.Path {
-	case "namespaces":
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   []byte(`{ namespaces: ["ns-1", "ns-2"] }`),
-		})
-	case "projects":
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   []byte(`{ projects: ["project-1", "project-2"] }`),
-		})
-	default:
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusNotFound,
-		})
-	}
+```typescript
+export class MyDataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptions> {
+  constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
+    super(instanceSettings);
+  }
+
+  getNamespaces(): Promise<NamespacesResponse> {
+    return this.getResource('/namespaces');
+  }
+
+  getProjects(): Promise<ProjectsResponse> {
+    return this.getResource('/projects');
+  }
 }
 ```
 
-You can also query your resources using the `getResource` and `postResource` helpers from the `DataSourceWithBackend` class.
+For example, in your query editor component, you can access the data source instance from the `props` object and use `getNamespaces` to send a HTTP GET request to `http://<GRAFANA_HOSTNAME>:<PORT>/api/datasources/uid/<DATASOURCE_UID>/resources/namespaces`:
 
-For example, in your query editor component, you can access the data source instance from the `props` object:
-
-```
-const namespaces = await props.datasource.getResource('namespaces');
-props.datasource.postResource('device', { state: "on" });
-```
-
-## Advanced use cases
-
-If you have some more advanced use cases or want to use a more Go-agnostic approach for handling resources, you can use the regular [`http.Handler`](https://pkg.go.dev/net/http#Handler). You can do so by using a package provided by the [Grafana Plugin SDK for Go](../../key-concepts/backend-plugins/grafana-plugin-sdk-for-go) named [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter). This package provides support for handling resource calls using an [`http.Handler`](https://pkg.go.dev/net/http#Handler).
-
-Using [`http.Handler`](https://pkg.go.dev/net/http#Handler) allows you to also use Go’s built-in router functionality called [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) or your preferred HTTP router library (for example, [`gorilla/mux`](https://github.com/gorilla/mux)).
-
-An alternative to using the `CallResource` method shown in the [above example](#implement-the-resource-handler-interface) is to use [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) and [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) as shown below:
-
-```go
-package mydatasource
-
-import (
-	"context"
-	"net/http"
-
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter"
-)
-
-type MyDatasource struct {
-	resourceHandler backend.CallResourceHandler
-}
-
-func New() *MyDatasource {
-	ds := &MyDatasource{}
-	mux := http.NewServeMux()
-	mux.HandleFunc("/namespaces", ds.handleNamespaces)
-	mux.HandleFunc("/projects", ds.handleProjects)
-	ds.resourceHandler := httpadapter.New(mux)
-	return ds
-}
-
-func (d *MyDatasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
-	return d.resourceHandler.CallResource(ctx, req)
-}
-
-func (d *MyDatasource) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
-	_, err := rw.Write([]byte(`{ namespaces: ["ns-1", "ns-2"] }`))
-	if err != nil {
-		return
-	}
-	rw.WriteHeader(http.StatusOK)
-}
-
-func (d *MyDatasource) handleProjects(rw http.ResponseWriter, req *http.Request) {
-	_, err := rw.Write([]byte(`{ projects: ["project-1", "project-2"] }`))
-	if err != nil {
-		return
-	}
-	rw.WriteHeader(http.StatusOK)
-}
-```
-
-:::note
-
-Using some other HTTP router library with above example should be straightforward. Just replace the use of [`ServeMux`](https://pkg.go.dev/net/http#ServeMux) with another router.
-
-:::
-
-### What if you need access to the backend plugin context?
-
-Use the `PluginConfigFromContext` function to access `backend.PluginContext`:
-
-```go
-func (d *MyDatasource) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
-	pCtx := httpadapter.PluginConfigFromContext(req.Context())
-
-	bytes, err := json.Marshal(pCtx.User)
-	if err != nil {
-		rw.WriteHeader(http.StatusInternalServerError)
-	}
-
-	_, err := rw.Write(bytes)
-	if err != nil {
-		return
-	}
-	rw.WriteHeader(http.StatusOK)
-}
+```typescript
+const namespaces = await props.datasource.getNamespaces();
 ```
 
 ## Additional examples

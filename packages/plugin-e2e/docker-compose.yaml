@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   grafana:
     image: grafana/${GRAFANA_IMAGE:-grafana-enterprise}:${GRAFANA_VERSION:-main}

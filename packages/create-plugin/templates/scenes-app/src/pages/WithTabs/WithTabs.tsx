@@ -38,8 +38,10 @@ const getScene = () =>
     ],
   });
 
-export const PageWithTabs = () => {
+const PageWithTabs = () => {
   const scene = useMemo(() => getScene(), []);
 
   return <scene.Component model={scene} />;
 };
+
+export default PageWithTabs;

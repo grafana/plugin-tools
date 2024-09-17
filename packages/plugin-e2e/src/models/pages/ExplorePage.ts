@@ -1,6 +1,6 @@
 import * as semver from 'semver';
 import { Locator } from '@playwright/test';
-import { NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
+import { GrafanaPageArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from '../components/TimeRange';
@@ -17,8 +17,8 @@ export class ExplorePage extends GrafanaPage {
   timeSeriesPanel: Panel;
   tablePanel: Panel;
 
-  constructor(ctx: PluginTestCtx) {
-    super(ctx);
+  constructor(ctx: PluginTestCtx, readonly args?: GrafanaPageArgs) {
+    super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
     this.timeSeriesPanel = new Panel(

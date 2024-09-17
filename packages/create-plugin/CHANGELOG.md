@@ -1,3 +1,102 @@
+# v5.3.10 (Mon Sep 09 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1094](https://github.com/grafana/plugin-tools/pull/1094) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.3.9 (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/scenes to v5.13.0 [#1080](https://github.com/grafana/plugin-tools/pull/1080) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.8 (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Code split scaffolded apps [#1072](https://github.com/grafana/plugin-tools/pull/1072) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.7 (Fri Aug 30 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Drop console statements in production builds [#1066](https://github.com/grafana/plugin-tools/pull/1066) ([@jackw](https://github.com/jackw))
+- Create Plugin): Bump Webpack to >5.94.0 [#1083](https://github.com/grafana/plugin-tools/pull/1083) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.6 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump ts-node [#1077](https://github.com/grafana/plugin-tools/pull/1077) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v5.3.5 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1075](https://github.com/grafana/plugin-tools/pull/1075) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v5.3.4 (Wed Aug 28 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump typescript to v5 for plugins [#1073](https://github.com/grafana/plugin-tools/pull/1073) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.3 (Tue Aug 27 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Wrap app config fields with `<form>` [#1041](https://github.com/grafana/plugin-tools/pull/1041) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v5.3.2 (Thu Aug 22 2024)
 
 #### 🐛 Bug Fix
