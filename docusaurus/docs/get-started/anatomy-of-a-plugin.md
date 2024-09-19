@@ -118,39 +118,23 @@ After running the `create-plugin` tool, a new folder for your plugin will be gen
 
 ```
 myorg-myplugin-datasource/
-├── .config/
-├── .eslintrc
-├── .github
-│   └── workflows
-├── .gitignore
-├── .nvmrc
-├── .prettierrc.js
+├── pkg/
+│   ├── main.go
+│   └── plugin/
+├── src/
+│   ├── module.ts
+│   ├── plugin.json
+└── tests/
 ├── CHANGELOG.md
+├── docker-compose.yaml
+├── go.mod
+├── package.json
 ├── LICENSE
 ├── Magefile.go
 ├── README.md
-├── docker-compose.yaml
-├── go.mod
-├── go.sum
-├── jest-setup.js
-├── jest.config.js
-├── node_modules
-├── package.json
-├── pkg
-│   ├── main.go
-│   └── plugin
-├── playwright.config.ts
-├── src
-│   ├── README.md
-│   ├── components
-│   ├── datasource.ts
-│   ├── img
-│   ├── module.ts
-│   ├── plugin.json
-│   └── types.ts
-├── tsconfig.json
-└── tests
 ```
+
+Please note that the `create-plugin` CLI tool is constantly being improved and as such there may be minor differences between this documentation and your scaffolded plugin project.
 
 ### Required files
 
