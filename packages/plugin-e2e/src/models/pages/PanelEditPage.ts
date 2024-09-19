@@ -69,11 +69,12 @@ export class PanelEditPage extends GrafanaPage {
   async setPanelTitle(titleText: string) {
     const TITLE = 'Title';
     const { OptionsGroup, PanelEditor } = this.ctx.selectors.components;
-    await this.collapseSection(OptionsGroup.groupTitle);
+    const sectionGroupTitle = 'Panel options';
+    await this.collapseSection(sectionGroupTitle);
 
     const vizInput = semver.gte(this.ctx.grafanaVersion, '11.0.0')
       ? this.getByGrafanaSelector(PanelEditor.OptionsPane.fieldInput(TITLE))
-      : this.getByGrafanaSelector(OptionsGroup.group(OptionsGroup.groupTitle)).locator('input').first();
+      : this.getByGrafanaSelector(OptionsGroup.group(sectionGroupTitle)).locator('input').first();
     await vizInput.fill(titleText);
     await this.ctx.page.keyboard.press('Tab');
   }
