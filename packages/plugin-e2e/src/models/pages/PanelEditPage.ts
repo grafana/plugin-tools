@@ -48,7 +48,7 @@ export class PanelEditPage extends GrafanaPage {
 
   async toggleTableView() {
     await radioButtonSetChecked(this.ctx.page, 'Table view', true);
-    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''));
+    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(''));
     if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
       locator = this.ctx.page.getByRole('table');
     }
