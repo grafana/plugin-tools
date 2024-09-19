@@ -5,7 +5,8 @@
   "types": "./dist/index.d.ts",
   "files": [
     "./dist",
-    "./package.json"
+    "./package.json",
+    "./@grafana-e2e-selectors-11.3.0-pre.tgz"
   ],
   "repository": {
     "directory": "packages/plugin-e2e",
