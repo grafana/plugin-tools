@@ -42,6 +42,7 @@
     "dotenv": "^16.3.1"
   },
   "dependencies": {
+    "@grafana/e2e-selectors": "file:@grafana-e2e-selectors-11.3.0-pre.tgz",
     "semver": "^7.5.4",
     "uuid": "^10.0.0",
     "yaml": "^2.3.4"

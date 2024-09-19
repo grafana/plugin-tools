@@ -1,19 +1,10 @@
 import { TestFixture } from '@playwright/test';
 import { PlaywrightArgs } from '../types';
-import { E2ESelectors, resolveSelectors } from '../e2e-selectors';
-import { versionedComponents, versionedPages } from '../e2e-selectors/versioned';
-import { versionedAPIs } from '../e2e-selectors/versioned/apis';
+import { E2ESelectorGroup, resolveSelectors } from '@grafana/e2e-selectors';
 
-type SelectorFixture = TestFixture<E2ESelectors, PlaywrightArgs>;
+type SelectorFixture = TestFixture<E2ESelectorGroup, PlaywrightArgs>;
 
 export const selectors: SelectorFixture = async ({ grafanaVersion }, use) => {
-  const selectors = resolveSelectors(
-    {
-      components: versionedComponents,
-      pages: versionedPages,
-      apis: versionedAPIs,
-    },
-    grafanaVersion
-  );
+  const selectors = resolveSelectors(grafanaVersion);
   await use(selectors);
 };
