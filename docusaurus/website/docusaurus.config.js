@@ -41,8 +41,8 @@ const config = {
       id: 'community_callout',
       content:
         'Learn more and connect with fellow plugin developers in the <a href="https://community.grafana.com/c/plugin-development/30?utm_source=plugin-docs&utm_medium=banner&utm_campaign=community-announcement" target="_blank" rel="noopener">Grafana Community Forum</a>. Ask questions, share knowledge, and get support from the Grafana team and community.',
-      backgroundColor: '#EE6D27',
-      textColor: '#fff',
+      backgroundColor: '#EC7E39',
+      textColor: '#000',
       isCloseable: false,
     },
     navbar: {
