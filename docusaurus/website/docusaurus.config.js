@@ -37,6 +37,14 @@ const config = {
   ],
 
   themeConfig: {
+    announcementBar: {
+      id: 'community_callout',
+      content:
+        'Learn more and connect with fellow plugin developers in the <a href="https://community.grafana.com/c/plugin-development/30" target="_blank" rel="noopener">Grafana Community Forum</a>. Ask questions, share knowledge, and get support from the Grafana team and community.',
+      backgroundColor: '#EE6D27',
+      textColor: '#fff',
+      isCloseable: false,
+    },
     navbar: {
       ...themeConfigNavbar,
       items: [
