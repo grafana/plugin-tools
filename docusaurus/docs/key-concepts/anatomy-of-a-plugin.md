@@ -36,11 +36,15 @@ App plugins provide maximum flexibility, allowing developers to build custom exp
 
 ### Pages
 
-Apps can add custom pages accessible from the Grafana navigation. These pages are essentially React components that allow developers to create custom user interfaces. To add a page, developers can use the `PluginPage` component from the `@grafana/runtime` package. You can [learn more about adding pages to apps](/tutorials/build-an-app-plugin#development-workflow) in our App guide.
+Apps can add custom pages accessible from the Grafana navigation. These pages are essentially React components that allow developers to create custom user interfaces. To add a page, developers can use the `PluginPage` component from the `@grafana/runtime` package. You can [learn more about adding pages to apps](/tutorials/build-an-app-plugin#add-a-page-in-the-navigation-menu) in our App guide.
+
+![An example custom App page](./images/app-pages.png)
 
 ### Configuration
 
 App plugins often include configuration pages where users can input necessary settings like API credentials or other parameters. You can [learn more about adding configuration pages to apps](/tutorials/build-an-app-plugin#configuration-page) in our App guide.
+
+![An example App configuration page](./images/app-configuration.png)
 
 ### UI extensions
 
@@ -70,13 +74,19 @@ The config editor is where users provide connection details (e.g., API keys, URL
 
 Ensure sensitive data is stored securely using `secureJson`. Read our guide on [adding authentication for data source plugins](/how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#store-configuration-in-securejsondata) for more details.
 
+![An example Data Source config editor](./images/datasource-configeditor.png)
+
 ### Query editor
 
 The query editor allows users to construct queries against the connected service. This editor is used when adding a panel in a dashboard, when using Explore, and when creating a new Alert Rule. Query editors can be customized to provide a [code editor](https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Monaco/CodeEditor.tsx) as well as a guided query builder. You can see [how to define a query editor in our datasource example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-basic/src/components/QueryEditor/QueryEditor.tsx).
 
+![An example Data Source query editor](./images/datasource-queryeditor.png)
+
 ### Health check
 
 The "Save and Test" button in the data source config page allows users to verify that the connection works. Plugins can customize this behavior by [adding custom health checks](/how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend#health-check).
+
+![A Data Source health check being performed](./images/datasource-healthcheck.png)
 
 ### Query data
 
@@ -104,11 +114,15 @@ Panel plugins provide visual representations of data in Grafana dashboards. To c
 
 For more details on panel visualizations, you can refer to the [panel plugin example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-basic).
 
+![An example panel visualization](./images/panel-visualization.png)
+
 ### Panel Options
 
 Panel options allow users to customize the behavior and appearance of the panel plugin. Developers can define these options by implementing the `OptionsEditor` component, where they can expose options relevant to the visualization. These options are passed into the panel’s `render()` function, allowing for dynamic updates based on user inputs.
 
 You can see an example of how to implement panel options in the [basic panel example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/panel-basic/src/types.ts#L5).
+
+![An example of custom panel options on the right](./images/panel-options.png)
 
 ## Plugin folder structure
 
