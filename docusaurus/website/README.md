@@ -42,7 +42,7 @@ Insert the client-side redirect here: /plugin-tools/docusaurus/website/docusauru
 ```
 {
     from: ['/something-that-does-not-exist', '/something-that-does-not-exist/testing'],
-    to: '/get-started/anatomy-of-a-plugin',
+    to: '/key-concepts/anatomy-of-a-plugin',
 },
 
 ```
