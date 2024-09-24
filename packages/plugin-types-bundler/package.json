@@ -6,9 +6,9 @@
   "type": "module",
   "exports": {
     "node": {
-      "import": "./index.js"
+      "import": "./dist/bundleTypes.js"
     },
-    "default": "./index.js"
+    "default": "./dist/bundleTypes.js"
   },
   "scripts": {
     "test": "vitest --passWithNoTests",

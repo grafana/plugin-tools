@@ -2,11 +2,9 @@ import { getImportsInfo } from '@grafana/levitate';
 import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
-import { parsedArgs } from './utils.js';
+import type { ParsedArgs } from './utils.js';
 
-export const generateTypes = () => {
-  const { entryPoint, tsConfig, outDir } = parsedArgs;
-
+export const generateTypes = ({ entryPoint, tsConfig, outDir }: ParsedArgs) => {
   if (!entryPoint) {
     throw new Error('Please provide the path for the entry types file as an argument.');
   }
@@ -29,7 +27,7 @@ export const generateTypes = () => {
   writeFileSync(join(outDir, 'index.d.ts'), cleanedDts);
 };
 
-export function getImportedPackages(entryPoint: string) {
+function getImportedPackages(entryPoint: string) {
   const { imports } = getImportsInfo(entryPoint);
   const npmPackages = imports
     .map((importInfo) => importInfo.packageName)

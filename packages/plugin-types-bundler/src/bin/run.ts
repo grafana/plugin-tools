@@ -3,7 +3,7 @@ import { existsSync } from 'fs';
 import { generateTypes } from '../bundleTypes.js';
 import { parsedArgs } from '../utils.js';
 
-const { entryPoint } = parsedArgs;
+const { entryPoint, tsConfig, outDir } = parsedArgs;
 
 // Check if the first argument is present
 if (entryPoint === undefined) {
@@ -21,7 +21,7 @@ if (!existsSync(entryPoint)) {
 const startTime = Date.now().valueOf();
 try {
   console.log('⚡️ Starting to bundle types for plugin...');
-  generateTypes();
+  generateTypes({ entryPoint, tsConfig, outDir });
 } catch (error) {
   console.error('Error while bundling types:', error);
   process.exit(1);
