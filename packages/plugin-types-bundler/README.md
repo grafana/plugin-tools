@@ -19,10 +19,10 @@ By calling the binary against an (module.ts|tsx) file, the package will output a
 
 ```bash
 # Run local build
-./dist/run.js ~/my-grafana-plugin/src/types/index.ts
+./dist/run.js --entry-point ~/my-grafana-plugin/src/types/index.ts
 
 # Run latest remote version
-npx @grafana/plugin-types-bundler ~/my-grafana-plugin/src/types/index.ts
+npx @grafana/plugin-types-bundler --entry-point ~/my-grafana-plugin/src/types/index.ts
 ```
 
 ### Output
