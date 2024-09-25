@@ -20,7 +20,7 @@
     "test": "nx run-many --target=test --parallel",
     "test:ci": "nx run-many --target=test --run",
     "typecheck": "nx run-many --target=typecheck --parallel",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@auto-it/all-contributors": "11.2.0",
@@ -49,7 +49,8 @@
     "packages/sign-plugin",
     "docusaurus/website",
     "packages/plugin-e2e",
-    "packages/plugin-meta-extractor"
+    "packages/plugin-meta-extractor",
+    "packages/plugin-types-bundler"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [

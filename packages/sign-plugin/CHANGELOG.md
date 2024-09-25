@@ -1,3 +1,15 @@
+# v3.0.4 (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v3.0.3 (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix
