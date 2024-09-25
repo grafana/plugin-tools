@@ -1,3 +1,23 @@
+# (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.1`
+  - Types Bundler: Add package [#1092](https://github.com/grafana/plugin-tools/pull/1092) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+- `@grafana/create-plugin@5.3.11`, `@grafana/plugin-e2e@1.8.1`, `@grafana/plugin-meta-extractor@0.0.7`, `@grafana/sign-plugin@3.0.4`
+  - Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@5.3.11`
+  - Update dependency @grafana/scenes to v5.14.7 [#1119](https://github.com/grafana/plugin-tools/pull/1119) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 4
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Wed Sep 11 2024)
 
 #### 🚀 Enhancement

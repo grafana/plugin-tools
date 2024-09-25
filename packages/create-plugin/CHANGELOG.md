@@ -1,3 +1,17 @@
+# v5.3.11 (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Update dependency @grafana/scenes to v5.14.7 [#1119](https://github.com/grafana/plugin-tools/pull/1119) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.3.10 (Mon Sep 09 2024)
 
 #### 🐛 Bug Fix
