@@ -5,7 +5,7 @@ import {
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
-  MutableDataFrame,
+  createDataFrame,
   FieldType,
 } from '@grafana/data';
 
@@ -37,7 +37,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     // Return a constant for each query.
     const data = options.targets.map((target) => {
-      return new MutableDataFrame({
+      return createDataFrame({
         refId: target.refId,
         fields: [
           { name: 'Time', values: [from, to], type: FieldType.time },
