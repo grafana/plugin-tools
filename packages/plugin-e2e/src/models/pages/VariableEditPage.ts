@@ -19,7 +19,7 @@ export class VariableEditPage extends GrafanaPage {
   async goto(options?: NavigateOptions) {
     const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
     const url = this.args.dashboard?.uid
-      ? Dashboard.Settings.Variables.Edit.url(this.args.dashboard.uid, this.args.id)
+      ? `${Dashboard.url(this.args.dashboard.uid)}?${Dashboard.Settings.Variables.Edit.urlParams(this.args.id)}`
       : AddDashboard.Settings.Variables.Edit.url(this.args.id);
 
     await super.navigate(url, options);

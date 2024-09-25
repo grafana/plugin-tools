@@ -77,10 +77,9 @@ export class DashboardPage extends GrafanaPage {
    * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
    */
   async addPanel(): Promise<PanelEditPage> {
-    const { pages, components } = this.ctx.selectors;
+    const { pages, components, constants } = this.ctx.selectors;
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      const itemButtonTitle = semver.gte(this.ctx.grafanaVersion, '10.1.0') ? 'Add button' : 'Add panel button';
-      await this.getByGrafanaSelector(components.PageToolbar.itemButton(itemButtonTitle)).click();
+      await this.getByGrafanaSelector(components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)).click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();

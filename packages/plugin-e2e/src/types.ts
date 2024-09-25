@@ -20,6 +20,7 @@ import { VariablePage } from './models/pages/VariablePage';
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 import { GrafanaAPIClient } from './models/GrafanaAPIClient';
 import { E2ESelectorGroup } from '@grafana/e2e-selectors';
+import { CustomSelectorGroup } from './selectors/types';
 
 export type PluginOptions = {
   /**
@@ -87,7 +88,7 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana.
    * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/selecting-elements#grafana-end-to-end-selectors for more information.
    */
-  selectors: E2ESelectorGroup;
+  selectors: E2ESelectors;
 
   /**
    * Fixture command that creates a data source via the Grafana API.
@@ -319,7 +320,7 @@ export type PluginFixture = {
 /**
  * The context object passed to page object models
  */
-export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectorGroup; testInfo: TestInfo } & Pick<
+export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors; testInfo: TestInfo } & Pick<
   PlaywrightTestArgs,
   'page' | 'request'
 >;
@@ -662,3 +663,5 @@ export type Visualization =
   | 'Worldmap Panel';
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
+
+export type E2ESelectors = E2ESelectorGroup & CustomSelectorGroup;
