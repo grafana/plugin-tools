@@ -49,7 +49,8 @@
     "packages/sign-plugin",
     "docusaurus/website",
     "packages/plugin-e2e",
-    "packages/plugin-meta-extractor"
+    "packages/plugin-meta-extractor",
+    "packages/plugin-types-bundler"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
