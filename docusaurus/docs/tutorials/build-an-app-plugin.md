@@ -21,7 +21,7 @@ App plugins can be displayed in the [navigation menu](#add-a-page-in-the-navigat
 
 ### Prerequisites
 
-- Grafana v9.0 or later
+- Grafana v10.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new app plugin
