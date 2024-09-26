@@ -58,5 +58,10 @@
       "prettier --write"
     ],
     "*.{css,md,json}": "prettier --write"
+  },
+  "overrides": {
+    "serve-handler": {
+      "path-to-regexp": "3.3.0"
+    }
   }
 }
