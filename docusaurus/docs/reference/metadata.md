@@ -89,7 +89,17 @@ Grafana reads the Identity and Access Management section and initializes a servi
 [Grafana RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes).
 Grafana will share the service account's bearer token with the plugin backend using the `GF_PLUGIN_APP_CLIENT_SECRET` environment variable.
 
-Requires Grafana version 10.3.0 or later. Currently, this is behind the `externalServiceAccounts` feature toggle.
+Requires Grafana version 10.3.0 or later.
+
+**Enabling the Feature:**
+
+1. **Feature Toggle:** This feature is currently behind the **`externalServiceAccounts`** feature toggle.
+2. **Configuration:** Activate the **`managed_service_accounts_enabled`** configuration option in the [auth section](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#auth-section) of your Grafana configuration file.
+
+**Limitations:**
+This feature currently **only supports single-organization deployments**.
+The plugin's service account is automatically created in the default organization. This means the plugin can only access data and resources within that specific organization.
+**If your plugin needs to work with multiple organizations, this feature is currently not suitable.**
 
 To try this feature out, follow this [example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-service-account/README.md).
 
@@ -241,18 +251,18 @@ For data source plugins. Proxy routes used for plugin authentication and adding 
 
 ### Properties
 
-| Property       | Type                    | Required | Description                                                                                                                                                                           |
-| -------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `body`         | [object](#body)         | No       | For data source plugins. Route headers set the body content and length to the proxied request.                                                                                        |
-| `headers`      | array                   | No       | For data source plugins. Route headers adds HTTP headers to the proxied request.                                                                                                      |
-| `jwtTokenAuth` | [object](#jwttokenauth) | No       | For data source plugins. Token authentication section used with an JWT OAuth API.                                                                                                     |
-| `method`       | string                  | No       | For data source plugins. Route method matches the HTTP verb like GET or POST. Multiple methods can be provided as a comma-separated list.                                             |
-| `path`         | string                  | No       | For data source plugins. The route path that is replaced by the route URL field when proxying the call.                                                                               |
+| Property       | Type                    | Required | Description                                                                                                                                                                                 |
+| -------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `body`         | [object](#body)         | No       | For data source plugins. Route headers set the body content and length to the proxied request.                                                                                              |
+| `headers`      | array                   | No       | For data source plugins. Route headers adds HTTP headers to the proxied request.                                                                                                            |
+| `jwtTokenAuth` | [object](#jwttokenauth) | No       | For data source plugins. Token authentication section used with an JWT OAuth API.                                                                                                           |
+| `method`       | string                  | No       | For data source plugins. Route method matches the HTTP verb like GET or POST. Multiple methods can be provided as a comma-separated list.                                                   |
+| `path`         | string                  | No       | For data source plugins. The route path that is replaced by the route URL field when proxying the call.                                                                                     |
 | `reqAction`    | string                  | No       | The RBAC action a user must have to use this route. **Warning**: unless the action targets the plugin (or a nested datasource plugin), only the action is verified, not what it applies to. |
-| `reqRole`      | string                  | No       |                                                                                                                                                                                       |
-| `reqSignedIn`  | boolean                 | No       |                                                                                                                                                                                       |
-| `tokenAuth`    | [object](#tokenauth)    | No       | For data source plugins. Token authentication section used with an OAuth API.                                                                                                         |
-| `url`          | string                  | No       | For data source plugins. Route URL is where the request is proxied to.                                                                                                                |
+| `reqRole`      | string                  | No       |                                                                                                                                                                                             |
+| `reqSignedIn`  | boolean                 | No       |                                                                                                                                                                                             |
+| `tokenAuth`    | [object](#tokenauth)    | No       | For data source plugins. Token authentication section used with an OAuth API.                                                                                                               |
+| `url`          | string                  | No       | For data source plugins. Route URL is where the request is proxied to.                                                                                                                      |
 
 ### body
 
