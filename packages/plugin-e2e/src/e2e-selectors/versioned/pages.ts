@@ -63,12 +63,15 @@ export const versionedPages = {
         List: {
           url: {
             [MIN_GRAFANA_VERSION]: '/dashboard/new?orgId=1&editview=templating',
+            '11.3.0': '/dashboard/new?orgId=1&editview=variables',
           },
         },
         Edit: {
           url: {
-            [MIN_GRAFANA_VERSION]: (annotationIndex: string) =>
-              `/dashboard/new?orgId=1&editview=templating&editIndex=${annotationIndex}`,
+            [MIN_GRAFANA_VERSION]: (variableIndex: string) =>
+              `/dashboard/new?orgId=1&editview=templating&editIndex=${variableIndex}`,
+              '11.3.0': (variableIndex: string) =>
+              `/dashboard/new?orgId=1&editview=variables&editIndex=${variableIndex}`,
           },
         },
       },
@@ -107,6 +110,7 @@ export const versionedPages = {
         List: {
           url: {
             [MIN_GRAFANA_VERSION]: (dashboardUid: string) => `/d/${dashboardUid}?editview=templating`,
+            '11.3.0': (dashboardUid: string) => `/d/${dashboardUid}?editview=variables`,
           },
           newButton: {
             [MIN_GRAFANA_VERSION]: 'Variable editor New variable button',
@@ -125,6 +129,8 @@ export const versionedPages = {
           url: {
             [MIN_GRAFANA_VERSION]: (dashboardUid: string, editIndex: string) =>
               `/d/${dashboardUid}?editview=templating&editIndex=${editIndex}`,
+            '11.3.0': (dashboardUid: string, editIndex: string) =>
+              `/d/${dashboardUid}?editview=variables&editIndex=${editIndex}`,
           },
           General: {
             generalTypeSelectV2: {
