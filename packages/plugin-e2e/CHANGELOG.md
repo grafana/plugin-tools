@@ -1,3 +1,19 @@
+# v1.8.2 (Mon Sep 30 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update dashboard variables settings URL [#1144](https://github.com/grafana/plugin-tools/pull/1144) ([@ivanortegaalba](https://github.com/ivanortegaalba))
+
+#### Authors: 1
+
+- Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba))
+
+---
+
 # v1.8.1 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix

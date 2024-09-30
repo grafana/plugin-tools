@@ -1,3 +1,15 @@
+# v5.3.12 (Mon Sep 30 2024)
+
+#### 🐛 Bug Fix
+
+- Switch to createDataFrame [#1133](https://github.com/grafana/plugin-tools/pull/1133) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.3.11 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix
