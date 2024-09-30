@@ -1,13 +1,14 @@
-import minimist from 'minimist';
 import chalk from 'chalk';
-import { printRedBox, printBlueBox } from '../utils/utils.console.js';
-import { updatePackageJson, updateNpmScripts } from '../utils/utils.npm.js';
-import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
-import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
-import { getVersion, getGrafanaRuntimeVersion } from '../utils/utils.version.js';
-import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
+import minimist from 'minimist';
 import { UDPATE_CONFIG } from '../constants.js';
+import { printBlueBox, printRedBox } from '../utils/utils.console.js';
 import { getOnlyExistingInCwd, removeFilesInCwd } from '../utils/utils.files.js';
+import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
+import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
+import { updateNpmScripts, updatePackageJson } from '../utils/utils.npm.js';
+import { getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
+import { isPluginDirectory, updateDotConfigFolder } from '../utils/utils.plugin.js';
+import { getGrafanaRuntimeVersion, getVersion } from '../utils/utils.version.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   const { packageManagerName } = getPackageManagerFromUserAgent();
@@ -55,6 +56,7 @@ In case you want to proceed as is please use the ${chalk.bold('--force')} flag.)
       onlyOutdated: true,
       ignoreGrafanaDependencies: false,
     });
+    await updateGoSdkAndModules(process.cwd());
 
     const filesToRemove = getOnlyExistingInCwd(UDPATE_CONFIG.filesToRemove);
     if (filesToRemove.length) {
