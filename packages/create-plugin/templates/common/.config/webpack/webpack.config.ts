@@ -8,6 +8,7 @@
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -131,12 +132,13 @@ const config = async (env): Promise<Configuration> => {
           },
         },
         {
-          test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
-        },
-        {
-          test: /\.s[ac]ss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          test: /\.(sa|sc|c)ss$/,
+          use: [
+            env.development ? "style-loader" : MiniCssExtractPlugin.loader,
+            "css-loader",
+            "postcss-loader",
+            "sass-loader",
+          ],
         },
         {
           test: /\.(png|jpe?g|gif|svg)$/,
@@ -244,7 +246,7 @@ const config = async (env): Promise<Configuration> => {
           extensions: ['.ts', '.tsx'],
           lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
         }),
-      ] : []),
+      ] : [new MiniCssExtractPlugin()]),
     ],
 
     resolve: {
