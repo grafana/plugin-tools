@@ -1,5 +1,18 @@
 # (Mon Sep 30 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.4.0`
+  - Create Plugin: Update go sdk when running update cmd [#1143](https://github.com/grafana/plugin-tools/pull/1143) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Sep 30 2024)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba)), for all your work!

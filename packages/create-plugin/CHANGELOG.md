@@ -1,3 +1,15 @@
+# v5.4.0 (Mon Sep 30 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Update go sdk when running update cmd [#1143](https://github.com/grafana/plugin-tools/pull/1143) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.3.12 (Mon Sep 30 2024)
 
 #### 🐛 Bug Fix
