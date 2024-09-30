@@ -1,3 +1,61 @@
+# (Mon Sep 30 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.4.0`
+  - Create Plugin: Update go sdk when running update cmd [#1143](https://github.com/grafana/plugin-tools/pull/1143) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Sep 30 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.8.2`
+  - Update dashboard variables settings URL [#1144](https://github.com/grafana/plugin-tools/pull/1144) ([@ivanortegaalba](https://github.com/ivanortegaalba))
+- `@grafana/create-plugin@5.3.12`
+  - Switch to createDataFrame [#1133](https://github.com/grafana/plugin-tools/pull/1133) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump vite from 5.2.11 to 5.4.8 [#1135](https://github.com/grafana/plugin-tools/pull/1135) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.1`
+  - Types Bundler: Add package [#1092](https://github.com/grafana/plugin-tools/pull/1092) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+- `@grafana/create-plugin@5.3.11`, `@grafana/plugin-e2e@1.8.1`, `@grafana/plugin-meta-extractor@0.0.7`, `@grafana/sign-plugin@3.0.4`
+  - Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@5.3.11`
+  - Update dependency @grafana/scenes to v5.14.7 [#1119](https://github.com/grafana/plugin-tools/pull/1119) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 4
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Wed Sep 11 2024)
 
 #### 🚀 Enhancement

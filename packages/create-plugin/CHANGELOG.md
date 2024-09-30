@@ -1,3 +1,41 @@
+# v5.4.0 (Mon Sep 30 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Update go sdk when running update cmd [#1143](https://github.com/grafana/plugin-tools/pull/1143) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.12 (Mon Sep 30 2024)
+
+#### 🐛 Bug Fix
+
+- Switch to createDataFrame [#1133](https://github.com/grafana/plugin-tools/pull/1133) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v5.3.11 (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Update dependency @grafana/scenes to v5.14.7 [#1119](https://github.com/grafana/plugin-tools/pull/1119) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.3.10 (Mon Sep 09 2024)
 
 #### 🐛 Bug Fix
