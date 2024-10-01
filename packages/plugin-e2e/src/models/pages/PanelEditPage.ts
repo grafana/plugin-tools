@@ -122,7 +122,7 @@ export class PanelEditPage extends GrafanaPage {
    * In versions prior to 10.3.0, this method clicks the "Apply" button instead
    */
   async backToDashboard() {
-    if (semver.gte(this.ctx.grafanaVersion, '10.3.0')) {
+    if (semver.gte(this.ctx.grafanaVersion, '11.3.0')) {
       await this.getByGrafanaSelector(
         this.ctx.selectors.components.NavToolbar.editDashboard.backToDashboardButton
       ).click();
