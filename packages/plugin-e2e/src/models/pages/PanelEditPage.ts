@@ -6,6 +6,7 @@ import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
+import { DashboardPage } from './DashboardPage';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -117,10 +118,28 @@ export class PanelEditPage extends GrafanaPage {
   }
 
   /**
+   * Clicks the "Back to dashboard" button in the panel editor
+   * In versions prior to 10.3.0, this method clicks the "Apply" button instead
+   */
+  async backToDashboard() {
+    if (semver.gte(this.ctx.grafanaVersion, '10.3.0')) {
+      await this.getByGrafanaSelector(
+        this.ctx.selectors.components.NavToolbar.editDashboard.backToDashboardButton
+      ).click();
+    } else {
+      await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.applyButton).click();
+    }
+
+    return new DashboardPage(this.ctx, this.args);
+  }
+
+  /**
    * Clicks the "Apply" button in the panel editor
+   *
+   * @deprecated use {@link PanelEditPage.backToDashboard} method instead.
    */
   async apply() {
-    await this.ctx.page.getByTestId(this.ctx.selectors.components.PanelEditor.applyButton).click();
+    return this.backToDashboard();
   }
 
   /**

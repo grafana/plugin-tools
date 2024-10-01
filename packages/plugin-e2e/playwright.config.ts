@@ -25,6 +25,7 @@ export default defineConfig<PluginOptions>({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    provisioningRootDir: './packages/plugin-e2e/provisioning',
     grafanaAPICredentials: {
       user: 'admin',
       password: 'admin',

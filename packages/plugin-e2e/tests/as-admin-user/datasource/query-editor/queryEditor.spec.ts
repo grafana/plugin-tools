@@ -47,3 +47,14 @@ test('should set correct cache time on query passed to the backend', async ({
   await panelEditPage.refreshPanel();
   await expect(await queryReq).toBeTruthy();
 });
+
+test('backToDashboard method should be backwards compatible and navigate to dashboard page', async ({
+  gotoPanelEditPage,
+  readProvisionedDashboard,
+  page,
+}) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3', waitUntil: 'load' });
+  await panelEditPage.backToDashboard();
+  await expect(page.url).not.toContain('editPanel');
+});

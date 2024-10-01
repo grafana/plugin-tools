@@ -109,6 +109,11 @@ export type Components = {
   Alert: {
     alertV2: (severity: string) => string;
   };
+  NavToolbar: {
+    editDashboard: {
+      backToDashboardButton: string;
+    };
+  };
   PageToolbar: {
     item: (tooltip: string) => string;
     showMoreItems: string;
