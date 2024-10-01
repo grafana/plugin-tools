@@ -28,7 +28,7 @@ export default defineConfig<PluginOptions>({
     trace: 'on-first-retry',
     provisioningRootDir: path.join(
       process.cwd(),
-      process.env.CI ? 'provisioning' : '/packages/plugin-e2e/provisioning'
+      !!process.env.CI ? 'provisioning' : '/packages/plugin-e2e/provisioning'
     ),
     grafanaAPICredentials: {
       user: 'admin',
