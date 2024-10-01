@@ -23,11 +23,10 @@ export class VariablePage extends GrafanaPage {
    * Clicks the add new variable button and returns the variable edit page
    */
   async clickAddNew() {
-    const { addVariableCTAV2, addVariableCTAV2Item, newButton } =
-      this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
+    const { addVariableCTAV2, newButton } = this.ctx.selectors.pages.Dashboard.Settings.Variables.List;
 
     if (!this.dashboard?.uid) {
-      await this.getByGrafanaSelector(addVariableCTAV2(addVariableCTAV2Item)).click();
+      await this.getByGrafanaSelector(addVariableCTAV2).click();
     } else {
       await this.getByGrafanaSelector(newButton).click();
     }

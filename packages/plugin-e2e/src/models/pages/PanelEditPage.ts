@@ -48,7 +48,7 @@ export class PanelEditPage extends GrafanaPage {
 
   async toggleTableView() {
     await radioButtonSetChecked(this.ctx.page, 'Table view', true);
-    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.toggleTableViewPanel(''));
+    let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(''));
     if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
       locator = this.ctx.page.getByRole('table');
     }
@@ -69,11 +69,12 @@ export class PanelEditPage extends GrafanaPage {
   async setPanelTitle(titleText: string) {
     const TITLE = 'Title';
     const { OptionsGroup, PanelEditor } = this.ctx.selectors.components;
-    await this.collapseSection(OptionsGroup.groupTitle);
+    const sectionGroupTitle = 'Panel options';
+    await this.collapseSection(sectionGroupTitle);
 
     const vizInput = semver.gte(this.ctx.grafanaVersion, '11.0.0')
       ? this.getByGrafanaSelector(PanelEditor.OptionsPane.fieldInput(TITLE))
-      : this.getByGrafanaSelector(OptionsGroup.group(OptionsGroup.groupTitle)).locator('input').first();
+      : this.getByGrafanaSelector(OptionsGroup.group(sectionGroupTitle)).locator('input').first();
     await vizInput.fill(titleText);
     await this.ctx.page.keyboard.press('Tab');
   }
