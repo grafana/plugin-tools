@@ -90,6 +90,9 @@ export class DashboardPage extends GrafanaPage {
       ).click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
+      if (this.dashboard?.uid) {
+        await this.getByGrafanaSelector(components.PageToolbar.item('Add panel')).click();
+      }
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
 

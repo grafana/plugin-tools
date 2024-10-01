@@ -40,6 +40,7 @@ export const versionedPages = {
       '9.5.0': (title: string) => `data-testid ${title}`,
     },
     addNewPanel: {
+      '11.1.0': 'data-testid Add new panel',
       [MIN_GRAFANA_VERSION]: 'Add new panel',
     },
     itemButtonAddViz: {
@@ -70,8 +71,7 @@ export const versionedPages = {
           url: {
             [MIN_GRAFANA_VERSION]: (variableIndex: string) =>
               `/dashboard/new?orgId=1&editview=templating&editIndex=${variableIndex}`,
-              '11.3.0': (variableIndex: string) =>
-              `/dashboard/new?orgId=1&editview=variables&editIndex=${variableIndex}`,
+            '11.3.0': (variableIndex: string) => `/dashboard/new?orgId=1&editview=variables&editIndex=${variableIndex}`,
           },
         },
       },
