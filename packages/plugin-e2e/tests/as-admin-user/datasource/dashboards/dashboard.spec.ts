@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { expect, test } from '../../../../src';
 
 test('add panel in already existing dashboard', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
