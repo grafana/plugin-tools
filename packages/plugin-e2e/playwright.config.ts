@@ -3,7 +3,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import { PluginOptions } from './src';
 import dotenv from 'dotenv';
-import path from 'path';
 
 dotenv.config();
 
