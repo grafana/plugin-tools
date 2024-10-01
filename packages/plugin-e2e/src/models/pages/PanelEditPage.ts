@@ -119,7 +119,7 @@ export class PanelEditPage extends GrafanaPage {
 
   /**
    * Clicks the "Back to dashboard" button in the panel editor
-   * In versions prior to 10.3.0, this method clicks the "Apply" button instead
+   * In versions prior to 11.3.0, this method clicks the "Apply" button instead
    */
   async backToDashboard() {
     if (semver.gte(this.ctx.grafanaVersion, '11.3.0')) {
