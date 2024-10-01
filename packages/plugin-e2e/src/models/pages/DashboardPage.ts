@@ -78,6 +78,12 @@ export class DashboardPage extends GrafanaPage {
    */
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages } = this.ctx.selectors;
+
+    // From Grafana 10.3.0, one needs to click the edit button before adding a new panel in already existing dashboards
+    if (semver.gte(this.ctx.grafanaVersion, '10.3.0') && this.dashboard?.uid) {
+      await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
+    }
+
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
       await this.getByGrafanaSelector(
         components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)

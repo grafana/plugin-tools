@@ -112,6 +112,7 @@ export type Components = {
   NavToolbar: {
     editDashboard: {
       backToDashboardButton: string;
+      editButton: string;
     };
   };
   PageToolbar: {

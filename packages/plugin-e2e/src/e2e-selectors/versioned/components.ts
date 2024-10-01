@@ -168,7 +168,12 @@ export const versionedComponents = {
   },
   NavToolbar: {
     editDashboard: {
-      backToDashboardButton: { '11.1.0': 'data-testid Back to dashboard button' },
+      editButton: {
+        '11.1.0': 'data-testid Edit dashboard button',
+      },
+      backToDashboardButton: {
+        '11.1.0': 'data-testid Back to dashboard button',
+      },
     },
   },
   PageToolbar: {

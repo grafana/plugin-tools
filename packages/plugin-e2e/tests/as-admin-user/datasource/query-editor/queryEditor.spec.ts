@@ -54,7 +54,7 @@ test('backToDashboard method should be backwards compatible and navigate to dash
   page,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
-  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3', waitUntil: 'load' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
   await panelEditPage.backToDashboard();
-  await expect(page.url).not.toContain('editPanel');
+  await expect(page.url()).not.toContain('editPanel');
 });
