@@ -3,6 +3,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import { PluginOptions } from './src';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
@@ -25,7 +26,10 @@ export default defineConfig<PluginOptions>({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    provisioningRootDir: './packages/plugin-e2e/provisioning',
+    provisioningRootDir: path.join(
+      process.cwd(),
+      process.env.CI ? 'provisioning' : '/packages/plugin-e2e/provisioning'
+    ),
     grafanaAPICredentials: {
       user: 'admin',
       password: 'admin',
