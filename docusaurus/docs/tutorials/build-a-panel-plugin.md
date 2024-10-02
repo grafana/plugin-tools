@@ -26,7 +26,7 @@ For more information about panels, refer to the documentation on [Panels](https:
 
 ### Prerequisites
 
-- Grafana v9.0 or later
+- Grafana v10.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin

@@ -201,6 +201,10 @@ const plugins = [
           from: ['/reference/prompts'],
           to: '/reference/cli-commands/',
         },
+        {
+          from: ['/get-started/folder-structure'],
+          to: '/key-concepts/anatomy-of-a-plugin',
+        },
       ],
     },
   ],
