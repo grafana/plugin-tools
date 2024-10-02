@@ -1,3 +1,16 @@
+# (Wed Oct 02 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.8.3`
+  - Plugin E2e: Support scenes powered dashboard UI [#1155](https://github.com/grafana/plugin-tools/pull/1155) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Oct 01 2024)
 
 #### 🐛 Bug Fix
