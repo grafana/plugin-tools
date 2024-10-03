@@ -22,7 +22,7 @@ to create dynamic badges that update automatically when you publish a new versio
   - Catalog Version: `$.version`
   - Grafana Dependency: `$.grafanaDependency`
   - Signature Type: `$.versionSignatureType`
-- Optionally, for the logo parameter use `grafana'`.
+- Optionally, for the logo parameter use `grafana`.
 
 Full example: ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?logo=grafana&query=$.version&url=https://grafana.com/api/plugins/grafana-polystat-panel&label=Marketplace&prefix=v&color=F47A20)
 
