@@ -16,12 +16,13 @@ Remove any remaining comments before publishing as these may be displayed on Gra
 Badges convey useful information at a glance for users whether in the Catalog or viewing the source code. You can use the generator on [Shields.io](https://shields.io/badges/dynamic-json-badge) together with the Grafana.com API
 to create dynamic badges that update automatically when you publish a new version to the marketplace.
 
-- For the logo field use 'grafana'.
-- Examples (label: query)
-  - Downloads: $.downloads
-  - Catalog Version: $.version
-  - Grafana Dependency: $.grafanaDependency
-  - Signature Type: $.versionSignatureType
+- For the URL parameter use `https://grafana.com/api/plugins/your-plugin-id`.
+- Example queries:
+  - Downloads: `$.downloads`
+  - Catalog Version: `$.version`
+  - Grafana Dependency: `$.grafanaDependency`
+  - Signature Type: `$.versionSignatureType`
+- Optionally, for the logo parameter use `grafana'`.
 
 Full example: ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?logo=grafana&query=$.version&url=https://grafana.com/api/plugins/grafana-polystat-panel&label=Marketplace&prefix=v&color=F47A20)
 
