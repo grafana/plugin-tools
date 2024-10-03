@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-types-bundler@0.0.2`
+  - Types-bundler: Update readme [#1162](https://github.com/grafana/plugin-tools/pull/1162) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.4.2`
   - Create Plugin: Remove topnav feature flag from Scenes templates [#1139](https://github.com/grafana/plugin-tools/pull/1139) ([@jackw](https://github.com/jackw))
   - Update grafana patch dependencies [#1156](https://github.com/grafana/plugin-tools/pull/1156) ([@renovate[bot]](https://github.com/renovate[bot]))
