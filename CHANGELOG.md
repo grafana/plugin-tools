@@ -1,5 +1,18 @@
 # (Fri Oct 04 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.1`
+  - chore: update shields.io template [#1160](https://github.com/grafana/plugin-tools/pull/1160) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
+# (Fri Oct 04 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@5.5.0`
