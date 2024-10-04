@@ -372,7 +372,7 @@ This list must contain all components that your plugin exposes using `.exposeCom
 
 ### extensionPoints
 
-This list has to contain all extension points that your plugin defines using `usePluginLinks()` or `usePluginComponents()`. **Extension points that are not listed in here won't work.**
+This list must contain all extension points that your plugin defines using `usePluginLinks()` or `usePluginComponents()`. **Extension points that are not listed in here won't work.**
 
 #### Properties
 
