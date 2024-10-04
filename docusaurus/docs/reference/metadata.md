@@ -54,12 +54,12 @@ Dependencies needed by the plugin.
 
 ### Properties
 
-| Property            | Type                    | Required                                                      | Description                                                                                                                   |
-| ------------------- | ----------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `grafanaDependency` | string                  | **Yes**                                                       | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.                                 |
-| `grafanaVersion`    | string                  | No                                                            | (Deprecated) Required Grafana version for this plugin, e.g. `6.x.x 7.x.x` to denote plugin requires Grafana v6.x.x or v7.x.x. |
-| `plugins`           | [object](#plugins)[]    | No                                                            | An array of required plugins on which this plugin depends.                                                                    |
-| `extensions`        | [object](#extensions)[] | Only if you depend on extensions. | An object defining your plugins dependencies on extensions, such as exposed components.                                           |
+| Property            | Type                    | Required                          | Description                                                                                                                   |
+| ------------------- | ----------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `grafanaDependency` | string                  | **Yes**                           | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.                                 |
+| `grafanaVersion`    | string                  | No                                | (Deprecated) Required Grafana version for this plugin, e.g. `6.x.x 7.x.x` to denote plugin requires Grafana v6.x.x or v7.x.x. |
+| `plugins`           | [object](#plugins)[]    | No                                | An array of required plugins on which this plugin depends.                                                                    |
+| `extensions`        | [object](#extensions)[] | Only if you depend on extensions. | An object defining your plugins dependencies on extensions, such as exposed components.                                       |
 
 ### plugins
 
@@ -76,12 +76,12 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 
 ### extensions
 
-If your plugin depends on an exposed component using `usePluginComponent()`, you must register the id of the exposed component here, otherwise it won't work.
+If your plugin depends on an exposed component using [`usePluginComponent()`](./ui-extensions.md#useplugincomponent), you must register the id of the exposed component here, otherwise it won't work.
 
 #### Properties
 
-| Property            | Type     | Required                                                 | Description                                                            |
-| ------------------- | -------- | -------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Property            | Type     | Required                                     | Description                                                      |
+| ------------------- | -------- | -------------------------------------------- | ---------------------------------------------------------------- |
 | `exposedComponents` | string[] | Only if your plugin uses exposed components. | A list of the exposed component ids that your plugin depends on. |
 
 ## enterpriseFeatures
@@ -336,48 +336,48 @@ Extensions specific metadata.
 
 ### addedComponents
 
-This list must contain all component extensions that your plugin registers to other extension points using `.addComponent()`. **Components that are not listed here won't work.**
+This list must contain all component extensions that your plugin registers to other extension points using [`.addComponent()`](./ui-extensions.md#addcomponent). **Components that are not listed here won't work.**
 
 #### Properties
 
-| Property      | Type     | Required | Description                                                                                                           |
-| ------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| Property      | Type     | Required | Description                                                                                         |
+| ------------- | -------- | -------- | --------------------------------------------------------------------------------------------------- |
 | `targets`     | string[] | **Yes**  | The extension point ids your plugin registers the extension to, e.g. `["grafana/user/profile/tab"]` |
-| `title`       | string   | **Yes**  | The title of your component extension.                                                                                |
-| `description` | string   | No       | An optional description of your component extensions.                                                                 |
+| `title`       | string   | **Yes**  | The title of your component extension.                                                              |
+| `description` | string   | No       | An optional description of your component extensions.                                               |
 
 ### addedLinks
 
-This list must contain all link extensions that your plugin registers to other extension points using `.addLink()`. **Links that are not listed here won't work.**
+This list must contain all link extensions that your plugin registers to other extension points using [`.addLink()`](./ui-extensions.md#addlink). **Links that are not listed here won't work.**
 
 #### Properties
 
-| Property      | Type     | Required | Description                                                                                                               |
-| ------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Property      | Type     | Required | Description                                                                                             |
+| ------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------- |
 | `targets`     | string[] | **Yes**  | The extension point ids your plugin registers the extension to, e.g. `["grafana/dashboard/panel/menu"]` |
-| `title`       | string   | **Yes**  | The title of your link extension.                                                                                         |
-| `description` | string   | No       | An optional description of your link extensions.                                                                          |
+| `title`       | string   | **Yes**  | The title of your link extension.                                                                       |
+| `description` | string   | No       | An optional description of your link extensions.                                                        |
 
 ### exposedComponents
 
-This list must contain all components that your plugin exposes using `.exposeComponent()`. **Components that are not listed here won't work.**
+This list must contain all components that your plugin exposes using [`.exposeComponent()`](./ui-extensions.md#exposecomponent). **Components that are not listed here won't work.**
 
 #### Properties
 
-| Property      | Type   | Required | Description                                                                                                                                                                                                                 |
-| ------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Property      | Type   | Required | Description                                                                                                                                                                                         |
+| ------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `id`          | string | **Yes**  | A unique id for your exposed component prefixed with the plugin id. It is recommended to add a version suffix to prevent future breaking changes. E.g.: `myorg-extensions-app/exposed-component/v1` |
-| `title`       | string | No       | The title of your exposed component.                                                                                                                                                                                        |
-| `description` | string | No       | An optional description of your exposed component.                                                                                                                                                                          |
+| `title`       | string | No       | The title of your exposed component.                                                                                                                                                                |
+| `description` | string | No       | An optional description of your exposed component.                                                                                                                                                  |
 
 ### extensionPoints
 
-This list must contain all extension points that your plugin defines using `usePluginLinks()` or `usePluginComponents()`. **Extension points that are not listed in here won't work.**
+This list must contain all extension points that your plugin defines using [`usePluginLinks()`](./ui-extensions.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions.md#useplugincomponents). **Extension points that are not listed in here won't work.**
 
 #### Properties
 
-| Property      | Type   | Required | Description                                                                                                                                                                                                             |
-| ------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Property      | Type   | Required | Description                                                                                                                                                                                     |
+| ------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `id`          | string | **Yes**  | A unique id for your extension point prefixed with the plugin id. It is recommended to add a version suffix to prevent future breaking changes. E.g.: `myorg-extensions-app/extension-point/v1` |
-| `title`       | string | No       | The title of your extension point.                                                                                                                                                                                      |
-| `description` | string | No       | An optional description of your extension point.                                                                                                                                                                        |
+| `title`       | string | No       | The title of your extension point.                                                                                                                                                              |
+| `description` | string | No       | An optional description of your extension point.                                                                                                                                                |
