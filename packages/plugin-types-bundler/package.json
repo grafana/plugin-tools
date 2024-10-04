@@ -11,6 +11,11 @@
     "./package.json": "./package.json",
     "./tsconfig.json": "./tsconfig/tsconfig.json"
   },
+  "files": [
+    "dist",
+    "tsconfig",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "test": "vitest --passWithNoTests",
     "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
