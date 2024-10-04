@@ -5,10 +5,11 @@
   "bin": "./dist/bin/run.js",
   "type": "module",
   "exports": {
-    "node": {
+    ".": {
       "import": "./dist/bundleTypes.js"
     },
-    "default": "./dist/bundleTypes.js"
+    "./package.json": "./package.json",
+    "./tsconfig.json": "./tsconfig/tsconfig.json"
   },
   "scripts": {
     "test": "vitest --passWithNoTests",
