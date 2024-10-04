@@ -1,3 +1,22 @@
+# (Fri Oct 04 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.5.0`
+  - Create Plugin: Support SRI in dynamic imported chunks [#999](https://github.com/grafana/plugin-tools/pull/999) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.0`
+  - Update dependency @grafana/scenes to v5.16.3 [#1161](https://github.com/grafana/plugin-tools/pull/1161) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Oct 03 2024)
 
 #### 🐛 Bug Fix
