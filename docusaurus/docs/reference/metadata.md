@@ -348,7 +348,7 @@ This list must contain all component extensions that your plugin registers to ot
 
 ### addedLinks
 
-This list has to contain all link extensions that your plugin registers to other extension points using `.addLink()`. **Added links that are not listed in here won't work.**
+This list must contain all link extensions that your plugin registers to other extension points using `.addLink()`. **Links that are not listed here won't work.**
 
 #### Properties
 
