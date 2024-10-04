@@ -360,7 +360,7 @@ This list must contain all link extensions that your plugin registers to other e
 
 ### exposedComponents
 
-This list has to contain all components that your plugin exposes using `.exposeComponent()`. **Exposed components that are not listed in here won't work.**
+This list must contain all components that your plugin exposes using `.exposeComponent()`. **Components that are not listed here won't work.**
 
 #### Properties
 
