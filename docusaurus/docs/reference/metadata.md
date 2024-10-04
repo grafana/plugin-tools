@@ -342,7 +342,7 @@ This list must contain all component extensions that your plugin registers to ot
 
 | Property      | Type     | Required | Description                                                                                                           |
 | ------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| `targets`     | string[] | **Yes**  | The list of the extension point ids you would like to register your extension to, e.g. `["grafana/user/profile/tab"]` |
+| `targets`     | string[] | **Yes**  | The extension point ids your plugin registers the extension to, e.g. `["grafana/user/profile/tab"]` |
 | `title`       | string   | **Yes**  | The title of your component extension.                                                                                |
 | `description` | string   | No       | An optional description of your component extensions.                                                                 |
 
