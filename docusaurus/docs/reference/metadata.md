@@ -46,7 +46,7 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | `state`                     | string                        | No       | Marks a plugin as a pre-release. Possible values are: `alpha`, `beta`.                                                                                                                                                                                                                                                                                                                                  |
 | `streaming`                 | boolean                       | No       | For data source plugins, if the plugin supports streaming. Used in Explore to start live streaming.                                                                                                                                                                                                                                                                                                     |
 | `tracing`                   | boolean                       | No       | For data source plugins, if the plugin supports tracing. Used for example to link logs (e.g. Loki logs) with tracing plugins.                                                                                                                                                                                                                                                                           |
-| `extensions`                | [object](#extensions)[]       | No       | The list of extensions that the plugin registers below other extension points.                                                                                                                                                                                                                                                                                                                          |
+| `extensions`                | [object](#extensions)         | No       | Extensions related meta-info.                                                                                                                                                                                                                                                                                                                                                                           |
 
 ## dependencies
 
@@ -241,18 +241,18 @@ For data source plugins. Proxy routes used for plugin authentication and adding 
 
 ### Properties
 
-| Property       | Type                    | Required | Description                                                                                                                                                                           |
-| -------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `body`         | [object](#body)         | No       | For data source plugins. Route headers set the body content and length to the proxied request.                                                                                        |
-| `headers`      | array                   | No       | For data source plugins. Route headers adds HTTP headers to the proxied request.                                                                                                      |
-| `jwtTokenAuth` | [object](#jwttokenauth) | No       | For data source plugins. Token authentication section used with an JWT OAuth API.                                                                                                     |
-| `method`       | string                  | No       | For data source plugins. Route method matches the HTTP verb like GET or POST. Multiple methods can be provided as a comma-separated list.                                             |
-| `path`         | string                  | No       | For data source plugins. The route path that is replaced by the route URL field when proxying the call.                                                                               |
+| Property       | Type                    | Required | Description                                                                                                                                                                                 |
+| -------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `body`         | [object](#body)         | No       | For data source plugins. Route headers set the body content and length to the proxied request.                                                                                              |
+| `headers`      | array                   | No       | For data source plugins. Route headers adds HTTP headers to the proxied request.                                                                                                            |
+| `jwtTokenAuth` | [object](#jwttokenauth) | No       | For data source plugins. Token authentication section used with an JWT OAuth API.                                                                                                           |
+| `method`       | string                  | No       | For data source plugins. Route method matches the HTTP verb like GET or POST. Multiple methods can be provided as a comma-separated list.                                                   |
+| `path`         | string                  | No       | For data source plugins. The route path that is replaced by the route URL field when proxying the call.                                                                                     |
 | `reqAction`    | string                  | No       | The RBAC action a user must have to use this route. **Warning**: unless the action targets the plugin (or a nested datasource plugin), only the action is verified, not what it applies to. |
-| `reqRole`      | string                  | No       |                                                                                                                                                                                       |
-| `reqSignedIn`  | boolean                 | No       |                                                                                                                                                                                       |
-| `tokenAuth`    | [object](#tokenauth)    | No       | For data source plugins. Token authentication section used with an OAuth API.                                                                                                         |
-| `url`          | string                  | No       | For data source plugins. Route URL is where the request is proxied to.                                                                                                                |
+| `reqRole`      | string                  | No       |                                                                                                                                                                                             |
+| `reqSignedIn`  | boolean                 | No       |                                                                                                                                                                                             |
+| `tokenAuth`    | [object](#tokenauth)    | No       | For data source plugins. Token authentication section used with an OAuth API.                                                                                                               |
+| `url`          | string                  | No       | For data source plugins. Route URL is where the request is proxied to.                                                                                                                      |
 
 ### body
 
@@ -312,13 +312,61 @@ Parameters for the token authentication request.
 
 ## extensions
 
-List of link and component extensions which the plugin registers to given extension points.
+Extensions related meta-info.
 
 ### Properties
 
-| Property           | Type   | Required | Description                                                             |
-| ------------------ | ------ | -------- | ----------------------------------------------------------------------- |
-| `extensionPointId` | string | **Yes**  | The string ID of the extension point where the extension is registered. |
-| `type`             | string | **Yes**  | Available values: `"link"`, `"component"`                               |
-| `title`            | string | **Yes**  |                                                                         |
-| `description`      | string | No       |                                                                         |
+| Property            | Type        | Required                                     | Description                                            |
+| ------------------- | ----------- | -------------------------------------------- | ------------------------------------------------------ |
+| `addedComponents`   | [object](#) | Only if your plugin has component extensions | The list of component extensions added by your plugin. |
+| `addedLinks`        | [object](#) | Only if your plugin has link extensinos      | The list of link extensions added by your plugin.      |
+| `exposedComponents` | [object](#) | Only if your plugin exposes components       | The list of components exposed by your plugin.         |
+| `extensionPoints`   | [object](#) | Only if your plugin defines extension points | The list of extension points defined by your plugin.   |
+
+### addedComponents
+
+This list has to contain all component extensions that your plugin registers to other extension points using `.addComponent()`. **Added components that are not listed in here won't work.**
+
+#### Properties
+
+| Property      | Type     | Required | Description                                                                                                           |
+| ------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `targets`     | string[] | **Yes**  | The list of the extension point ids you would like to register your extension to, e.g. `["grafana/user/profile/tab"]` |
+| `title`       | string   | **Yes**  | The title of your component extension.                                                                                |
+| `description` | string   | No       | An optional description of your component extensions.                                                                 |
+
+### addedLinks
+
+This list has to contain all link extensions that your plugin registers to other extension points using `.addLink()`. **Added links that are not listed in here won't work.**
+
+#### Properties
+
+| Property      | Type     | Required | Description                                                                                                               |
+| ------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `targets`     | string[] | **Yes**  | The list of the extension point ids you would like to register your extension to, e.g. `["grafana/dashboard/panel/menu"]` |
+| `title`       | string   | **Yes**  | The title of your link extension.                                                                                         |
+| `description` | string   | No       | An optional description of your link extensions.                                                                          |
+
+### exposedComponents
+
+This list has to contain all components that your plugin exposes using `.exposeComponent()`. **Exposed components that are not listed in here won't work.**
+
+#### Properties
+
+| Property      | Type   | Required | Description                                                                                                                                                                                                                 |
+| ------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`          | string | **Yes**  | An id for your exposed component prefixed with your plugin id. It needs to be unique. A best practice is to also add a version suffix to prevent future breaking changes. E.g.: `myorg-extensions-app/exposed-component/v1` |
+| `title`       | string | No       | The title of your exposed component.                                                                                                                                                                                        |
+| `description` | string | No       | An optional description of your exposed component.                                                                                                                                                                          |
+
+### extensionPoints
+
+This list has to contain all extension points that your plugin defines using `usePluginLinks()` or `usePluginComponents()`. **Extension points that are not listed in here won't work.**
+
+#### Properties
+
+| Property      | Type   | Required | Description                                                                                                                                                                                                             |
+| ------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`          | string | **Yes**  | An id for your extension point prefixed with your plugin id. It needs to be unique. A best practice is to also add a version suffix to prevent future breaking changes. E.g.: `myorg-extensions-app/extension-point/v1` |
+| `title`       | string | No       | The title of your extension point.                                                                                                                                                                                      |
+| `description` | string | No       | An optional description of your extension point.                                                                                                                                                                        |
