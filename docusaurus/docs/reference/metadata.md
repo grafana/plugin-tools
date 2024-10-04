@@ -323,7 +323,7 @@ Parameters for the token authentication request.
 
 ## extensions
 
-Extensions related meta-info.
+Extensions specific metadata.
 
 ### Properties
 
