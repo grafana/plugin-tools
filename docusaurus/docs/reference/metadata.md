@@ -93,8 +93,8 @@ Requires Grafana version 10.3.0 or later.
 
 **Enabling the Feature:**
 
-1. **Feature Toggle:** This feature is currently behind the **`externalServiceAccounts`** feature toggle.
-2. **Configuration:** Activate the **`managed_service_accounts_enabled`** configuration option in the [auth section](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#auth-section) of your Grafana configuration file.
+- Grafana versions **below 11.3.0**: Enable the `externalServiceAccounts` feature toggle.
+- Grafana **11.3.0 and later**: Activate the `managed_service_accounts_enabled` configuration option in the [auth section](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#auth-section) of your Grafana configuration file.
 
 **Limitations:**
 This feature currently **only supports single-organization deployments**.
