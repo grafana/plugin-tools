@@ -76,7 +76,7 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 
 ### extensions
 
-In case your plugin depends on an exposed component using `usePluginComponent()`, you need to register the id of the exposed component under here, otherwise it won't work.
+If your plugin depends on an exposed component using `usePluginComponent()`, you must register the id of the exposed component here, otherwise it won't work.
 
 #### Properties
 
