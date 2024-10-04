@@ -8,8 +8,7 @@
     ".": {
       "import": "./dist/bundleTypes.js"
     },
-    "./package.json": "./package.json",
-    "./tsconfig.json": "./tsconfig/tsconfig.json"
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
