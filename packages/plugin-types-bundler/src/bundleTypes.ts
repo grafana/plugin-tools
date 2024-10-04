@@ -20,6 +20,7 @@ export const generateTypes = ({ entryPoint, tsConfig, outDir }: ParsedArgs) => {
   const options = {
     preferredConfigPath: tsConfig,
   };
+
   const dts = generateDtsBundle(entryPoints, options);
   const cleanedDts = cleanDTS(dts);
 

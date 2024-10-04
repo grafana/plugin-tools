@@ -5,11 +5,16 @@
   "bin": "./dist/bin/run.js",
   "type": "module",
   "exports": {
-    "node": {
+    ".": {
       "import": "./dist/bundleTypes.js"
     },
-    "default": "./dist/bundleTypes.js"
+    "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "tsconfig",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "test": "vitest --passWithNoTests",
     "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
