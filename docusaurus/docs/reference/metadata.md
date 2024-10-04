@@ -59,7 +59,7 @@ Dependencies needed by the plugin.
 | `grafanaDependency` | string                  | **Yes**                                                       | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.                                 |
 | `grafanaVersion`    | string                  | No                                                            | (Deprecated) Required Grafana version for this plugin, e.g. `6.x.x 7.x.x` to denote plugin requires Grafana v6.x.x or v7.x.x. |
 | `plugins`           | [object](#plugins)[]    | No                                                            | An array of required plugins on which this plugin depends.                                                                    |
-| `extensions`        | [object](#extensions)[] | Only if you depend on extensions, e.g. on exposed components. | An object defining your plugins dependencies on extensions like exposed components.                                           |
+| `extensions`        | [object](#extensions)[] | Only if you depend on extensions. | An object defining your plugins dependencies on extensions, such as exposed components.                                           |
 
 ### plugins
 
