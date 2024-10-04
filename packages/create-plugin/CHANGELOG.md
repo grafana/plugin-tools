@@ -1,3 +1,54 @@
+# v5.4.2 (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Remove topnav feature flag from Scenes templates [#1139](https://github.com/grafana/plugin-tools/pull/1139) ([@jackw](https://github.com/jackw))
+- Update grafana patch dependencies [#1156](https://github.com/grafana/plugin-tools/pull/1156) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.4.1 (Tue Oct 01 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1113](https://github.com/grafana/plugin-tools/pull/1113) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update grafana patch dependencies [#1141](https://github.com/grafana/plugin-tools/pull/1141) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.4.0 (Mon Sep 30 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Update go sdk when running update cmd [#1143](https://github.com/grafana/plugin-tools/pull/1143) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.3.12 (Mon Sep 30 2024)
+
+#### 🐛 Bug Fix
+
+- Switch to createDataFrame [#1133](https://github.com/grafana/plugin-tools/pull/1133) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.3.11 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix

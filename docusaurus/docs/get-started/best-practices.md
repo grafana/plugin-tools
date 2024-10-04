@@ -7,7 +7,7 @@ keywords:
   - plugins
   - plugin
   - best practices
-sidebar_position: 10
+sidebar_position: 30
 ---
 
 # Best practices for plugin development

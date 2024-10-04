@@ -5,6 +5,8 @@
 
 `@grafana/plugin-types-bundler` is a cli tool that can be used to bundle types from the source code of a Grafana plugin. This single file will wrap all the types up into a single d.ts file which can then be shared with other Grafana plugins.
 
+It is recommended that you create a separate `.ts` file that exports only the types you want to expose rather than run this tool against the plugins `module.{ts,tsx}` file.
+
 ## Install
 
 ```

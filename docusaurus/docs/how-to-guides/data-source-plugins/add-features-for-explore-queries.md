@@ -66,7 +66,7 @@ However, if you want a custom visualization, you can add a hint to your returned
 Construct a data frame with specific metadata like this:
 
 ```ts
-const firstResult = new MutableDataFrame({
+const firstResult = createDataFrame({
     fields: [...],
     meta: {
         preferredVisualisationType: 'logs',

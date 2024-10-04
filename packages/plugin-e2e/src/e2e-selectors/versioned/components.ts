@@ -166,6 +166,16 @@ export const versionedComponents = {
       [MIN_GRAFANA_VERSION]: (severity: string) => `Alert ${severity}`,
     },
   },
+  NavToolbar: {
+    editDashboard: {
+      editButton: {
+        '11.1.0': 'data-testid Edit dashboard button',
+      },
+      backToDashboardButton: {
+        '11.1.0': 'data-testid Back to dashboard button',
+      },
+    },
+  },
   PageToolbar: {
     item: {
       [MIN_GRAFANA_VERSION]: (tooltip: string) => `${tooltip}`,
