@@ -354,7 +354,7 @@ This list must contain all link extensions that your plugin registers to other e
 
 | Property      | Type     | Required | Description                                                                                                               |
 | ------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `targets`     | string[] | **Yes**  | The list of the extension point ids you would like to register your extension to, e.g. `["grafana/dashboard/panel/menu"]` |
+| `targets`     | string[] | **Yes**  | The extension point ids your plugin registers the extension to, e.g. `["grafana/dashboard/panel/menu"]` |
 | `title`       | string   | **Yes**  | The title of your link extension.                                                                                         |
 | `description` | string   | No       | An optional description of your link extensions.                                                                          |
 
