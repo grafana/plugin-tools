@@ -54,11 +54,12 @@ Dependencies needed by the plugin.
 
 ### Properties
 
-| Property            | Type                 | Required | Description                                                                                                                   |
-| ------------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `grafanaDependency` | string               | **Yes**  | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.                                 |
-| `grafanaVersion`    | string               | No       | (Deprecated) Required Grafana version for this plugin, e.g. `6.x.x 7.x.x` to denote plugin requires Grafana v6.x.x or v7.x.x. |
-| `plugins`           | [object](#plugins)[] | No       | An array of required plugins on which this plugin depends.                                                                    |
+| Property            | Type                    | Required                                                      | Description                                                                                                                   |
+| ------------------- | ----------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `grafanaDependency` | string                  | **Yes**                                                       | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.                                 |
+| `grafanaVersion`    | string                  | No                                                            | (Deprecated) Required Grafana version for this plugin, e.g. `6.x.x 7.x.x` to denote plugin requires Grafana v6.x.x or v7.x.x. |
+| `plugins`           | [object](#plugins)[]    | No                                                            | An array of required plugins on which this plugin depends.                                                                    |
+| `extensions`        | [object](#extensions)[] | Only if you depend on extensions, e.g. on exposed components. | An object defining your plugins dependencies on extensions like exposed components.                                           |
 
 ### plugins
 
@@ -72,6 +73,16 @@ Plugin dependency. Used to display information about plugin dependencies in the 
 | `name`    | string | **Yes**  |                                                                                                                                                                                 |
 | `type`    | string | **Yes**  | Possible values are: `app`, `datasource`, `panel`.                                                                                                                              |
 | `version` | string | **No**   | This property should use a specific, pinned [SemVer](https://semver.org/) version and not a range. If no version is specified, it will resolve to the latest supported version. |
+
+### extensions
+
+In case your plugin depends on an exposed component using `usePluginComponent()`, you need to register the id of the exposed component under here, otherwise it won't work.
+
+#### Properties
+
+| Property            | Type     | Required                                                 | Description                                                            |
+| ------------------- | -------- | -------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `exposedComponents` | string[] | Only if you are using exposed components in your plugin. | A list of the exposed component ids that you are using in your plugin. |
 
 ## enterpriseFeatures
 
@@ -316,12 +327,12 @@ Extensions related meta-info.
 
 ### Properties
 
-| Property            | Type        | Required                                     | Description                                            |
-| ------------------- | ----------- | -------------------------------------------- | ------------------------------------------------------ |
-| `addedComponents`   | [object](#) | Only if your plugin has component extensions | The list of component extensions added by your plugin. |
-| `addedLinks`        | [object](#) | Only if your plugin has link extensinos      | The list of link extensions added by your plugin.      |
-| `exposedComponents` | [object](#) | Only if your plugin exposes components       | The list of components exposed by your plugin.         |
-| `extensionPoints`   | [object](#) | Only if your plugin defines extension points | The list of extension points defined by your plugin.   |
+| Property            | Type                         | Required                                     | Description                                            |
+| ------------------- | ---------------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `addedComponents`   | [object](#addedcomponents)   | Only if your plugin has component extensions | The list of component extensions added by your plugin. |
+| `addedLinks`        | [object](#addedlinks)        | Only if your plugin has link extensinos      | The list of link extensions added by your plugin.      |
+| `exposedComponents` | [object](#exposedcomponents) | Only if your plugin exposes components       | The list of components exposed by your plugin.         |
+| `extensionPoints`   | [object](#extensionpoints)   | Only if your plugin defines extension points | The list of extension points defined by your plugin.   |
 
 ### addedComponents
 
