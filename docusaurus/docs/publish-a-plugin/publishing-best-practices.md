@@ -41,7 +41,7 @@ Ensure your plugin specifies the minimum Grafana version it is compatible with. 
 
 **Other Grafana plugin dependencies (`plugins`)**
 
-If your plugin relies on any other published Grafana plugins in order to function correctly, be sure to add them to this array field. Plugins listed as dependencies here will be automatically installed by Grafana when a user installs your plugin.
+If your plugin relies on any other external Grafana plugins (i.e. non-core plugins) in order to function correctly, be sure to add them to this array field. Plugins listed as dependencies here will be automatically installed by Grafana when a user installs your plugin.
 
 ## Creating a comprehensive README
 
