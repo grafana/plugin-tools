@@ -336,7 +336,7 @@ Extensions specific metadata.
 
 ### addedComponents
 
-This list has to contain all component extensions that your plugin registers to other extension points using `.addComponent()`. **Added components that are not listed in here won't work.**
+This list must contain all component extensions that your plugin registers to other extension points using `.addComponent()`. **Components that are not listed here won't work.**
 
 #### Properties
 
