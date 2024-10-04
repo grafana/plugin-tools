@@ -82,7 +82,7 @@ If your plugin depends on an exposed component using `usePluginComponent()`, you
 
 | Property            | Type     | Required                                                 | Description                                                            |
 | ------------------- | -------- | -------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `exposedComponents` | string[] | Only if you are using exposed components in your plugin. | A list of the exposed component ids that you are using in your plugin. |
+| `exposedComponents` | string[] | Only if your plugin uses exposed components. | A list of the exposed component ids that your plugin depends on. |
 
 ## enterpriseFeatures
 
