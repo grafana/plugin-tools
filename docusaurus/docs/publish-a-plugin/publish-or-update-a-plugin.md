@@ -21,6 +21,7 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 ## Before you begin
 
 - [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins.
+- [Review our publishing best practices](../publish-a-plugin/publishing-best-practices.md) - Ensure your plugin is in the best state it can be before submitting it for review.
 - [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 - Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
 
