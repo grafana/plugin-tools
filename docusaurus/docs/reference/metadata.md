@@ -366,7 +366,7 @@ This list has to contain all components that your plugin exposes using `.exposeC
 
 | Property      | Type   | Required | Description                                                                                                                                                                                                                 |
 | ------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`          | string | **Yes**  | An id for your exposed component prefixed with your plugin id. It needs to be unique. A best practice is to also add a version suffix to prevent future breaking changes. E.g.: `myorg-extensions-app/exposed-component/v1` |
+| `id`          | string | **Yes**  | A unique id for your exposed component prefixed with the plugin id. It is recommended to add a version suffix to prevent future breaking changes. E.g.: `myorg-extensions-app/exposed-component/v1` |
 | `title`       | string | No       | The title of your exposed component.                                                                                                                                                                                        |
 | `description` | string | No       | An optional description of your exposed component.                                                                                                                                                                          |
 
