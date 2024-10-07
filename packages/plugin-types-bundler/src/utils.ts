@@ -1,7 +1,9 @@
 import parseArgs from 'minimist';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export type ParsedArgs = {
   entryPoint?: string;
@@ -22,7 +24,7 @@ export const parsedArgs = parseArgs<ParsedArgs>(args, {
   },
   default: {
     entryPoint: undefined,
-    tsConfig: join(process.cwd(), 'tsconfig.json'),
+    tsConfig: resolve(__dirname, '../tsconfig', 'tsconfig.json'),
     outDir: join(process.cwd(), 'dist'),
   },
 });

@@ -1,3 +1,46 @@
+# v5.5.1 (Fri Oct 04 2024)
+
+#### 🐛 Bug Fix
+
+- chore: update shields.io template [#1160](https://github.com/grafana/plugin-tools/pull/1160) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
+# v5.5.0 (Fri Oct 04 2024)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support SRI in dynamic imported chunks [#999](https://github.com/grafana/plugin-tools/pull/999) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/scenes to v5.16.3 [#1161](https://github.com/grafana/plugin-tools/pull/1161) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.4.2 (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Remove topnav feature flag from Scenes templates [#1139](https://github.com/grafana/plugin-tools/pull/1139) ([@jackw](https://github.com/jackw))
+- Update grafana patch dependencies [#1156](https://github.com/grafana/plugin-tools/pull/1156) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.4.1 (Tue Oct 01 2024)
 
 #### 🐛 Bug Fix

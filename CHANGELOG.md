@@ -1,3 +1,76 @@
+# (Fri Oct 04 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.3`
+  - Types bundler: Add a default TSConfig for bundling types [#1164](https://github.com/grafana/plugin-tools/pull/1164) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Oct 04 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.1`
+  - chore: update shields.io template [#1160](https://github.com/grafana/plugin-tools/pull/1160) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
+# (Fri Oct 04 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.5.0`
+  - Create Plugin: Support SRI in dynamic imported chunks [#999](https://github.com/grafana/plugin-tools/pull/999) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.0`
+  - Update dependency @grafana/scenes to v5.16.3 [#1161](https://github.com/grafana/plugin-tools/pull/1161) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.2`
+  - Types-bundler: Update readme [#1162](https://github.com/grafana/plugin-tools/pull/1162) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.4.2`
+  - Create Plugin: Remove topnav feature flag from Scenes templates [#1139](https://github.com/grafana/plugin-tools/pull/1139) ([@jackw](https://github.com/jackw))
+  - Update grafana patch dependencies [#1156](https://github.com/grafana/plugin-tools/pull/1156) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Oct 02 2024)
 
 #### 🐛 Bug Fix
