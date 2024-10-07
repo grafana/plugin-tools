@@ -13,7 +13,9 @@ keywords:
 
 # Publishing best practices
 
-When publishing a Grafana plugin, adhering to best practices ensures not only a smooth submission and review process but also a higher quality experience for users. By following established guidelines, you improve the plugin’s performance, security, and discoverability within the Grafana ecosystem, ensuring that your plugin stands out as a shining example of what a Grafana plugin can be.
+When publishing a Grafana plugin, following best practices ensures not only a smooth submission and review process but also a higher quality experience for users. By following established guidelines, you improve the plugin’s performance, security, and discoverability within the Grafana ecosystem, ensuring that your plugin stands out as a shining example of what a Grafana plugin can be.
+
+Before proceeding, we assume that you've already [created your initial plugin](../), reviewed the [best practices for plugin development guide](../get-started/best-practices), and familiarized yourself with the guidance on [plugin signature levels](../publish-a-plugin/sign-a-plugin#public-or-private-plugins).
 
 This document outlines the essential best practices for you to follow before publishing your Grafana plugin. These recommendations will help you avoid common pitfalls, streamline the review process, and create a plugin that integrates seamlessly into users' workflows while maintaining the high standards expected in the Grafana ecosystem. Whether you’re fine-tuning your plugin’s functionality or preparing your documentation, following these practices will ensure that your plugin is optimized for success from the start.
 
@@ -90,7 +92,7 @@ Before submitting your plugin for review, you should validate your plugin to ens
 
 **Key points:**
 
-- **Run locally or in CI:** You can run the validator locally or integrate it into your CI workflow to automate the validation process.
+- **Run locally or in CI:** You can run the validator locally or integrate it into your CI workflow to automate the validation process. Note, the validator runs automatically during the default release workflow.
 - **Validation reports:** The tool generates a report, highlighting any errors or warnings that need to be addressed before submission.
 
 For more information on using the validator, refer to the [Plugin Validator documentation](https://github.com/grafana/plugin-validator).
