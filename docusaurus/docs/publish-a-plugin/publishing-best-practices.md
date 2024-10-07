@@ -23,25 +23,41 @@ Metadata plays a crucial role in making your Grafana plugin discoverable and use
 
 Here’s a breakdown of the key components to focus on:
 
-**Plugin name (`name`)**
+**[Plugin name](../reference/plugin-json#properties)**
+
+`name`
 
 The name of your plugin should be clear, concise, and descriptive. It is the first point of interaction for potential users, so avoid overly generic or cryptic names. Aim for a name that reflects the plugin’s primary functionality, making it easy to understand its purpose at a glance.
 
-**Description (`description`)**
+**[Description](../reference/plugin-json#info)**
+
+`info.description`
 
 The description field should succinctly summarize what your plugin does and why users should install it. Limit the description to two sentences, highlighting the core functionality and use cases. A well-written description not only informs users but also contributes to better search results in the catalog.
 
-**Keywords (`keywords`)**
+**[Keywords](../reference/plugin-json#info)**
+
+`info.keywords`
 
 Keywords improve the searchability of your plugin within Grafana’s catalog. Choose terms that accurately describe your plugin’s functionality and data types it supports (e.g., "JSON", "SQL", "visualization"). However, avoid keyword stuffing; irrelevant keywords will be flagged during the review process, potentially delaying publication.
 
-**Grafana version compatibility (`grafanaDependency`)**
+**[Logos](../reference/plugin-json#info)**
 
-Ensure your plugin specifies the minimum Grafana version it is compatible with. This guarantees that users running different versions of Grafana know whether your plugin will work for them. Regularly update this field as new versions of Grafana are released, and [run end-to-end tests](../e2e-test-a-plugin/introduction.md) to confirm compatibility with those releases.
+`info.logos`
 
-**Other Grafana plugin dependencies (`plugins`)**
+Adding logos improves the overall look and feel of your plugin within the plugin catalog. Providing a logo adds legitimacy and professionalism to your plugin.
 
-If your plugin relies on any other external Grafana plugins (i.e. non-core plugins) in order to function correctly, be sure to add them to this array field. Plugins listed as dependencies here will be automatically installed by Grafana when a user installs your plugin.
+**[Screenshots](../reference/plugin-json#info)**
+
+`info.screenshots`
+
+The screenshots field should be used to provide an array of screenshot images that will be displayed within the plugin catalog. This is great for providing users with a visual representation of your plugin and can help them establish whether or not this plugin solves their problem before they even install it. Be sure to provide screenshots of your plugin in action, highlighting the standout features.
+
+**[Grafana version compatibility](../reference/plugin-json#dependencies)**
+
+`dependencies.grafanaDependency`
+
+Ensure your plugin specifies the minimum Grafana version it is compatible with. This guarantees that users running different versions of Grafana know whether your plugin will work for them. Be sure to [run end-to-end tests](../e2e-test-a-plugin/introduction.md) to confirm compatibility with releases you support.
 
 ## Creating a comprehensive README
 
