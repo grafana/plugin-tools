@@ -33,7 +33,7 @@ The name of your plugin should be clear, concise, and descriptive. It is the fir
 
 `info.description`
 
-The description field should succinctly summarize what your plugin does and why users should install it. Limit the description to two sentences, highlighting the core functionality and use cases. A well-written description not only informs users but also contributes to better search results in the catalog.
+The description field should succinctly summarize what your plugin does and why users should install it. Limit the description to two sentences, highlighting the core functionality and use cases. A well-written description not only informs users, but also contributes to better search results in the catalog.
 
 **[Keywords](../reference/plugin-json#info)**
 
