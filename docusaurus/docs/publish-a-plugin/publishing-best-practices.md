@@ -41,7 +41,13 @@ The description field should succinctly summarize what your plugin does and why 
 
 `info.keywords`
 
-Keywords improve the searchability of your plugin within Grafana’s catalog. Choose terms that accurately describe your plugin’s functionality and data types it supports (e.g., "JSON", "SQL", "visualization"). However, avoid keyword stuffing; irrelevant keywords will be flagged during the review process, potentially delaying publication.
+Keywords improve the searchability of your plugin within Grafana’s catalog. Choose terms that accurately describe your plugin’s functionality and data types it supports (e.g., "JSON", "SQL", "visualization").
+
+:::note
+
+Avoid keyword stuffing; irrelevant keywords will be flagged during the review process, potentially delaying publication.
+
+:::
 
 **[Logos](../reference/plugin-json#info)**
 
@@ -54,6 +60,12 @@ Adding logos improves the overall look and feel of your plugin within the plugin
 `info.screenshots`
 
 The screenshots field should be used to provide an array of screenshot images that will be displayed within the plugin catalog. This is great for providing users with a visual representation of your plugin and can help them establish whether or not this plugin solves their problem before they even install it. Be sure to provide screenshots of your plugin in action, highlighting the standout features.
+
+:::note
+
+Ensure your screenshots are a suitable resolution and file type (e.g. png, jpeg, or gif).
+
+:::
 
 **[Grafana version compatibility](../reference/plugin-json#dependencies)**
 
@@ -71,7 +83,7 @@ Beyond a basic overview of your plugin, its use cases, and requirements, there a
 
 - **Screenshots or screen captures:** Visual aids often communicate better than text alone. Including screenshots or even video demonstrations allows users to quickly grasp the plugin’s capabilities and setup process, giving them confidence to use it effectively.
 - **Dynamic badges:** Badges provide quick, at-a-glance information about your plugin, such as the latest release version or whether it has passed security and code checks. Tools like [shields.io](https://shields.io/) can be used with the Grafana.com API to automatically update these badges whenever you publish a new version, adding transparency and trustworthiness to your plugin.
-- **Contribution guidance:** Maintaining a plugin can be demanding, especially for solo developers. Clearly outlining how users can provide feedback, report bugs, or contribute code improvements helps foster community involvement, making it easier to maintain and improve your plugin over time.
+- **Contribution guidance:** Maintaining a plugin can be demanding, especially for individual developers. Clearly outlining how users can provide feedback, report bugs, or contribute code improvements helps foster community involvement, making it easier to maintain and improve your plugin over time.
 
 This structure ensures that your README is both informative and engaging, providing users with everything they need to confidently use and contribute to your plugin.
 
@@ -121,6 +133,8 @@ For detailed setup instructions, refer to our [Automate packaging and signing wi
 
 ## Next steps
 
-By following these best practices - such as carefully populating metadata, creating a comprehensive README, validating your plugin, provisioning test environments, and automating releases - you significantly increase the chances of a successful plugin submission. Each step is designed to ensure that your plugin not only passes our review process but also delivers an exceptional experience for users. Adopting these practices will streamline your workflow and help create plugins that stand out in the Grafana ecosystem.
+By following these best practices - such as carefully populating metadata, creating a comprehensive README, validating your plugin, provisioning test environments, and automating releases - you significantly increase the chances of a successful plugin submission.
+
+Each of these best practices are designed to ensure that your plugin not only passes our review process but also delivers an exceptional experience for users. Adopting these practices will streamline your workflow and help create plugins that stand out in the Grafana ecosystem.
 
 Once your ready for your plugin to be published, head on over to Grafana Cloud and follow our guide for [submitting your plugin for review](../publish-a-plugin/publish-or-update-a-plugin.md) - we look forward to seeing what you create!
