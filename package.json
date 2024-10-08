@@ -62,6 +62,9 @@
   "overrides": {
     "serve-handler": {
       "path-to-regexp": "3.3.0"
+    },
+    "express": {
+      "cookie": "^0.7.0"
     }
   }
 }
