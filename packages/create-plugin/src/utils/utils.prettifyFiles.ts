@@ -1,6 +1,7 @@
 import { exec as nodeExec } from 'node:child_process';
-import { promisify } from 'node:util';
 import fs from 'node:fs';
+import { resolve } from 'node:path';
+import { promisify } from 'node:util';
 import { getPackageJson } from './utils.packagejson.js';
 
 const exec = promisify(nodeExec);
@@ -26,10 +27,11 @@ export async function prettifyFiles(options: PrettifyFilesArgs) {
   }
 
   const prettierVersion = getPrettierVersion(projectRoot);
+  const directoryToWrite = resolve(projectRoot, targetPath);
 
   try {
-    let command = `npx -y prettier@${prettierVersion} . --write`;
-    await exec(command, { cwd: targetPath });
+    let command = `npx -y prettier@${prettierVersion} ${directoryToWrite} --write`;
+    await exec(command);
   } catch (error) {
     throw new Error(
       'There was a problem running prettier on the plugin files. Please run `npx -y prettier@2 . --write` manually in your plugin directory.'
