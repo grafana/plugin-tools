@@ -137,4 +137,4 @@ By following these best practices - such as carefully populating metadata, creat
 
 Each of these best practices are designed to ensure that your plugin not only passes our review process but also delivers an exceptional experience for users. Adopting these practices will streamline your workflow and help create plugins that stand out in the Grafana ecosystem.
 
-Once your ready for your plugin to be published, head on over to Grafana Cloud and follow our guide for [submitting your plugin for review](../publish-a-plugin/publish-or-update-a-plugin.md) - we look forward to seeing what you create!
+Once your ready for your plugin to be published, head on over to [Grafana Cloud](https://grafana.com/get/) and follow our guide for [submitting your plugin for review](../publish-a-plugin/publish-or-update-a-plugin.md) - we look forward to seeing what you create!
