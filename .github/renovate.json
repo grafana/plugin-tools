@@ -1,10 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":disableDependencyDashboard"],
-  "includePaths": ["packages/create-plugin/templates/**"],
+  "extends": ["config:base"],
+  "includePaths": ["package.json", "packages/**", "docusaurus/**"],
   "separateMajorMinor": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
-  "enabledManagers": ["regex"],
+  "enabledManagers": ["regex", "npm"],
   "customManagers": [
     {
       "customType": "regex",
@@ -36,6 +36,37 @@
       "matchUpdateTypes": ["minor", "major"],
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana"
+    },
+    {
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "automerge": true,
+      "matchCurrentVersion": "!/^0/",
+      "matchDepTypes": ["devDependencies"],
+      "excludePackagePatterns": ["^@?docusaurus", "^@auto-it", "^auto", "@grafana/*"],
+      "groupName": "auto-merged devDependencies",
+      "groupSlug": "dev-dependencies-automerge"
+    },
+    {
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchPackageNames": ["@?docusaurus/*"],
+      "groupName": "docusaurus dependencies"
+    },
+    {
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchPackageNames": ["@auto-it/**", "^auto"],
+      "groupName": "auto dependencies"
+    },
+    {
+      "labels": ["dependencies", "javascript"],
+      "matchDepTypes": ["dependencies"],
+      "excludePackagePatterns": ["@grafana/*"],
+      "groupName": "default production dependencies",
+      "groupSlug": "prod-dependencies-default"
     }
-  ]
+  ],
+  "prConcurrentLimit": 10,
+  "rebaseWhen": "conflicted",
+  "vulnerabilityAlerts": {
+    "addLabels": ["security"]
+  }
 }
