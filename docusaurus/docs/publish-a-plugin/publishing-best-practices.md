@@ -77,7 +77,7 @@ This structure ensures that your README is both informative and engaging, provid
 
 ## End-to-end testing
 
-End-to-end (E2E) testing ensures that your Grafana plugin functions correctly across various environments and Grafana versions. It replicates real-world usage by testing the plugin in an environment similar to the end-user's setup. Implementing E2E tests helps catch issues before submission, saving time during the review process and ensuring a smoother user experience.
+End-to-end (E2E) testing ensures that your Grafana plugin works correctly across various environments and supported Grafana versions. It replicates real-world usage by testing the plugin in an environment similar to the end-user's setup. Implementing E2E tests helps catch issues before submission, saving time during the review process and ensuring a smoother user experience.
 
 **Key points:**
 
