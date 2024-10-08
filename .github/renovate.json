@@ -9,7 +9,7 @@
     {
       "customType": "regex",
       "fileMatch": ["_package.json"],
-      "matchStrings": ["\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\""],
+      "matchStrings": ["\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","],
       "datasourceTemplate": "npm"
     },
     {
