@@ -6,6 +6,7 @@
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
   "postUpdateOptions": ["npmDedupe"],
+  // These custom managers are used to bump dependencies in create-plugin template files
   "customManagers": [
     {
       "customType": "regex",
@@ -38,11 +39,13 @@
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
       "matchUpdateTypes": ["minor", "major"]
     },
+    // Docusaurus dependencies have to be grouped together otherwise error out when building website.
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchPackageNames": ["@?docusaurus"]
     },
+    // Auto dependencies should be grouped together to avoid issues
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
@@ -57,12 +60,14 @@
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies"]
     },
+    // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
+    // which would be misleading to consumers.
     {
       "automerge": true,
       "excludePackagePatterns": ["^@?docusaurus", "@grafana/*"],
       "groupName": "auto-merged patch dependencies",
       "groupSlug": "prod-dependencies-automerge",
-      "labels": ["dependencies", "javascript", "patch"],
+      "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch"]
