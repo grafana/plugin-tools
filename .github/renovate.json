@@ -41,12 +41,12 @@
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
-      "matchPackageNames": ["@?docusaurus/*"]
+      "matchPackageNames": ["@?docusaurus"]
     },
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
-      "matchPackageNames": ["^@auto-it/**", "^auto"]
+      "matchPackageNames": ["^@auto-it", "^auto"]
     },
     {
       "automerge": true,
