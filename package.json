@@ -25,7 +25,7 @@
   "devDependencies": {
     "@auto-it/all-contributors": "11.2.0",
     "@auto-it/first-time-contributor": "11.2.0",
-    "@auto-it/omit-commits": "11.2.0",
+    "@auto-it/omit-commits": "11.2.1",
     "@auto-it/slack": "11.2.0",
     "@grafana/eslint-config": "^7.0.0",
     "@swc/core": "^1.2.162",
