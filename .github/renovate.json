@@ -1,10 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":disableDependencyDashboard"],
-  "includePaths": ["packages/create-plugin/templates/**"],
+  "extends": ["config:base"],
+  "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
   "separateMajorMinor": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
-  "enabledManagers": ["regex"],
+  "enabledManagers": ["regex", "npm", "github-actions"],
+  "postUpdateOptions": ["npmDedupe"],
   "customManagers": [
     {
       "customType": "regex",
@@ -22,20 +23,60 @@
   ],
   "packageRules": [
     {
-      "labels": ["dependencies", "patch"],
       "automerge": true,
+      "groupName": "grafana patch dependencies",
+      "groupSlug": "all-grafana-patch",
+      "labels": ["dependencies", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
-      "matchUpdateTypes": ["patch"],
-      "groupName": "grafana patch dependencies",
-      "groupSlug": "all-grafana-patch"
+      "matchUpdateTypes": ["patch"]
     },
     {
+      "groupName": "grafana dependencies",
+      "groupSlug": "all-grafana",
       "labels": ["dependencies", "release", "patch"],
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
-      "matchUpdateTypes": ["minor", "major"],
-      "groupName": "grafana dependencies",
-      "groupSlug": "all-grafana"
+      "matchUpdateTypes": ["minor", "major"]
+    },
+    {
+      "groupName": "docusaurus dependencies",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchPackageNames": ["@?docusaurus/*"]
+    },
+    {
+      "groupName": "auto dependencies",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchPackageNames": ["^@auto-it/**", "^auto"]
+    },
+    {
+      "automerge": true,
+      "excludePackagePatterns": ["^@?docusaurus", "^@auto-it", "^auto", "@grafana/*"],
+      "groupName": "auto-merged devDependencies",
+      "groupSlug": "dev-dependencies-automerge",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchCurrentVersion": "!/^0/",
+      "matchDepTypes": ["devDependencies"]
+    },
+    {
+      "automerge": true,
+      "excludePackagePatterns": ["^@?docusaurus", "@grafana/*"],
+      "groupName": "auto-merged patch dependencies",
+      "groupSlug": "prod-dependencies-automerge",
+      "labels": ["dependencies", "javascript", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch"]
+    },
+    {
+      "automerge": true,
+      "groupName": "auto-merged gitHub actions",
+      "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
+      "matchManagers": ["github-actions"]
     }
-  ]
+  ],
+  "prConcurrentLimit": 10,
+  "rebaseWhen": "conflicted",
+  "vulnerabilityAlerts": {
+    "addLabels": ["security"]
+  }
 }
