@@ -1,3 +1,16 @@
+# (Wed Oct 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.3`, `@grafana/plugin-types-bundler@0.0.4`
+  - Update grafana dependencies [#1165](https://github.com/grafana/plugin-tools/pull/1165) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Tue Oct 08 2024)
 
 #### 🐛 Bug Fix
