@@ -43,13 +43,13 @@
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
-      "matchPackageNames": ["@?docusaurus"]
+      "matchPackagePatterns": ["@?docusaurus"]
     },
     // Auto dependencies should be grouped together to avoid issues
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
-      "matchPackageNames": ["^@auto-it", "^auto"]
+      "matchPackagePatterns": ["^@auto-it", "^auto"]
     },
     {
       "automerge": true,
