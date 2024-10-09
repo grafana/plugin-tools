@@ -6,6 +6,7 @@
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
   "postUpdateOptions": ["npmDedupe"],
+  "labels": ["dependencies", "javascript", "patch"],
   // These custom managers are used to bump dependencies in create-plugin template files
   "customManagers": [
     {
@@ -71,16 +72,6 @@
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch"]
-    },
-    // minor and major will touch package.json files so we apply the patch label here to ensure changelog entries
-    {
-      "excludePackagePatterns": ["^@?docusaurus", "@grafana/*"],
-      "groupName": "dependencies",
-      "groupSlug": "prod-dependencies",
-      "labels": ["dependencies", "javascript", "patch"],
-      "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["minor", "major"]
     },
     {
       "automerge": true,
