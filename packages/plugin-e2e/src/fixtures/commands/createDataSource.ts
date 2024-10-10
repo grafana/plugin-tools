@@ -15,15 +15,15 @@ export const createDataSourceViaAPI = async (
   const { type, name } = datasource;
   const dsName = name ?? `${type}-${uuidv4()}`;
 
-  const existingDataSource = await grafanaAPIClient.getDataSourceByName(`/api/datasources/name/${dsName}`);
-  if (await existingDataSource.ok()) {
+  const existingDataSource = await grafanaAPIClient.getDataSourceByName(dsName);
+  if (existingDataSource.ok()) {
     const json = await existingDataSource.json();
     await grafanaAPIClient.deleteDataSourceByUID(json.uid);
   }
 
   const createDsReq = await grafanaAPIClient.createDataSource(datasource, dsName);
   const text = await createDsReq.text();
-  const status = await createDsReq.status();
+  const status = createDsReq.status();
   if (status === 200) {
     return createDsReq.json().then((r) => r.datasource);
   }
