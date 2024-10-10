@@ -28,10 +28,10 @@ async function run() {
         const isOnlyLockFileChanged = files.every((file) => file.filename.endsWith('package-lock.json'));
         if (isOnlyLockFileChanged) {
           console.log('Detected renovate PR with only lock file changes. Applying `no-changelog` label.');
-          await updateLabels({ octokit, labels: [...labels, 'no-changelog'] });
+          await updateLabels({ octokit, labels: [...labelNames, 'no-changelog'] });
         } else {
           console.log('Detected renovate PR with file changes. Applying `patch` label.');
-          await updateLabels({ octokit, labels: [...labels, 'patch'] });
+          await updateLabels({ octokit, labels: [...labelNames, 'patch'] });
         }
       }
       core.setOutput('canMerge', 'Renovate PR');
