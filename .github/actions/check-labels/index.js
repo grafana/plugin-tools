@@ -25,6 +25,7 @@ async function run() {
 
     const files = await getPullRequestFiles({ octokit });
 
+
     console.log(inspect({ userName, branchName, files }, { depth: null, colors: true }));
 
     if (isMissingSemverLabel) {
@@ -103,10 +104,10 @@ async function getPullRequestFiles({ octokit }) {
     payload: { pull_request },
     repo,
   } = context;
-  const prNumber = pull_request.number;
+  // const prNumber = pull_request.number;
   const { data } = await octokit.rest.pulls.listFiles({
     ...repo,
-    pull_number: prNumber,
+    pull_number: 1191,
   });
 
   return data;
