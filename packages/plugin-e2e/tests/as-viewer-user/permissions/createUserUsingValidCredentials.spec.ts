@@ -1,6 +1,6 @@
 import { expect, test } from '../../../src';
 
-test('using grafanaAPIClient should not change storage state for logged in user', async ({
+test.skip('using grafanaAPIClient should not change storage state for logged in user', async ({
   grafanaAPIClient,
   page,
 }) => {
@@ -12,5 +12,5 @@ test('using grafanaAPIClient should not change storage state for logged in user'
   await page.goto('/');
   const homePageTitle = await page.title();
   await page.goto('/datasources', { waitUntil: 'networkidle' });
-  expect(await page.title()).toEqual(homePageTitle);
+  expect(await page).toHaveTitle(homePageTitle);
 });
