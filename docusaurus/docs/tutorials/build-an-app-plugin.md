@@ -98,7 +98,6 @@ The new page appears in the navigation menu. You can now edit the React router i
 1. Create a new file called `src/pages/NewPage.tsx` and add the following code:
 
    ```tsx title="src/pages/NewPage.tsx"
-   import React from 'react';
    import { PluginPage } from '@grafana/runtime';
 
    export function NewPage() {
@@ -151,7 +150,6 @@ export const updatePluginSettings = async (pluginId: string, data: Partial<Plugi
 The user settings are part of the plugin `meta`. You can retrieve them inside a React component by using the `usePluginContext` hook. For example:
 
 ```tsx
-import React from 'react';
 import usePluginContext from '@grafana/data';
 
 function MyComponent() {

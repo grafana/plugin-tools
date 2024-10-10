@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { prefixRoute } from '../../utils/utils.routing';
 import { DATASOURCE_REF, ROUTES } from '../../constants';
 import {
