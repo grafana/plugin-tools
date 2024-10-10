@@ -2,6 +2,7 @@
 const core = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
 const { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } = require('./messages');
+const { inspect } = require('util');
 
 async function run() {
   try {
@@ -19,6 +20,8 @@ async function run() {
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
+
+    console.log(inspect(pull_request, { depth: null, colors: true }));
 
     if (isMissingSemverLabel) {
       let errorMsg = [
