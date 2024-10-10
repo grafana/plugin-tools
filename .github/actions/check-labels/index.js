@@ -22,7 +22,10 @@ async function run() {
     const hasReleaseLabel = labelNames.includes('release');
     const userName = pull_request.user.login;
     const branchName = pull_request.head.ref;
-    console.log(inspect({ userName, branchName }, { depth: null, colors: true }));
+
+    const files = await getPullRequestFiles({ octokit });
+
+    console.log(inspect({ userName, branchName, files }, { depth: null, colors: true }));
 
     if (isMissingSemverLabel) {
       let errorMsg = [
@@ -93,6 +96,20 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
+}
+
+async function getPullRequestFiles({ octokit }) {
+  const {
+    payload: { pull_request },
+    repo,
+  } = context;
+  const prNumber = pull_request.number;
+  const { data } = await octokit.rest.pulls.listFiles({
+    ...repo,
+    pull_number: prNumber,
+  });
+
+  return data;
 }
 
 async function doComment({ octokit, message }) {
