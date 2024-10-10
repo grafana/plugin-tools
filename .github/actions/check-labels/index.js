@@ -21,12 +21,13 @@ async function run() {
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
     const userName = pull_request.user.login;
-    const branchName = pull_request.head.ref;
 
     const files = await getPullRequestFiles({ octokit });
-
-
-    console.log(inspect({ userName, branchName, files }, { depth: null, colors: true }));
+    const isOnlyLockFileChanged = files.every((file) => file.filename.endsWith('package-lock.json'));
+    if (userName === 'jackw' && isOnlyLockFileChanged) {
+      console.log('Dependabot PR with only lock file changes. Skipping semver label check.');
+      // console.log(inspect({ userName, isOnlyLockFileChanged, files }, { depth: null, colors: true }));
+    }
 
     if (isMissingSemverLabel) {
       let errorMsg = [
