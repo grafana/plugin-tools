@@ -27,6 +27,8 @@ async function run() {
     if (userName === 'jackw' && isOnlyLockFileChanged) {
       console.log('Dependabot PR with only lock file changes. Skipping semver label check.');
       // console.log(inspect({ userName, isOnlyLockFileChanged, files }, { depth: null, colors: true }));
+    } else {
+      console.log('Checking semver labels...');
     }
 
     if (isMissingSemverLabel) {
@@ -105,10 +107,10 @@ async function getPullRequestFiles({ octokit }) {
     payload: { pull_request },
     repo,
   } = context;
-  // const prNumber = pull_request.number;
+  const prNumber = pull_request.number;
   const { data } = await octokit.rest.pulls.listFiles({
     ...repo,
-    pull_number: 1191,
+    pull_number: prNumber,
   });
 
   return data;
