@@ -21,7 +21,7 @@ async function run() {
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
 
-    console.log(inspect(pull_request, { depth: null, colors: true }));
+    console.log(inspect({ user: pull_request.user }, { depth: null, colors: true }));
 
     if (isMissingSemverLabel) {
       let errorMsg = [
