@@ -14,6 +14,7 @@
     "docs": "nx start website",
     "docs:clear": "nx clear website",
     "docs:build": "nx build website",
+    "docs:serve": "nx serve website",
     "lint": "nx run-many --target=lint --parallel",
     "lint:fix": "nx run-many --target=lint:fix --parallel",
     "release": "auto shipit -v",
