@@ -43,7 +43,7 @@
   "dependencies": {
     "@types/marked-terminal": "^6.0.1",
     "@types/minimist": "^1.2.2",
-    "@types/mkdirp": "^1.0.2",
+    "@types/mkdirp": "^2.0.0",
     "@types/semver": "^7.3.9",
     "@types/which": "^2.0.2",
     "boxen": "^7.1.1",
