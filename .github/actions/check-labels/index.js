@@ -2,7 +2,6 @@
 const core = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
 const { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } = require('./messages');
-const { inspect } = require('util');
 
 async function run() {
   try {
@@ -22,13 +21,20 @@ async function run() {
     const hasReleaseLabel = labelNames.includes('release');
     const userName = pull_request.user.login;
 
-    const files = await getPullRequestFiles({ octokit });
-    const isOnlyLockFileChanged = files.every((file) => file.filename.endsWith('package-lock.json'));
-    if (userName === 'jackw' && isOnlyLockFileChanged) {
-      console.log('Dependabot PR with only lock file changes. Skipping semver label check.');
-      // console.log(inspect({ userName, isOnlyLockFileChanged, files }, { depth: null, colors: true }));
-    } else {
-      console.log('Checking semver labels...');
+    if (userName === 'renovate[bot]') {
+      if (isMissingSemverLabel) {
+        const files = await getPullRequestFiles({ octokit });
+
+        const isOnlyLockFileChanged = files.every((file) => file.filename.endsWith('package-lock.json'));
+        if (isOnlyLockFileChanged) {
+          console.log('Detected renovate PR with only lock file changes. Applying `no-changelog` label.');
+          await updateLabels({ octokit, labels: ['no-changelog'] });
+        } else {
+          console.log('Detected renovate PR with file changes. Applying `patch` label.');
+          await updateLabels({ octokit, labels: ['patch'] });
+        }
+      }
+      core.setOutput('canMerge', 'Renovate PR');
     }
 
     if (isMissingSemverLabel) {
@@ -114,6 +120,24 @@ async function getPullRequestFiles({ octokit }) {
   });
 
   return data;
+}
+
+async function updateLabels({ octokit, labels }) {
+  try {
+    const {
+      payload: { pull_request },
+      repo,
+    } = context;
+    const prNumber = pull_request.number;
+
+    await octokit.rest.issues.setLabels({
+      ...repo,
+      issue_number: prNumber,
+      labels,
+    });
+  } catch (error) {
+    core.setFailed(error.message);
+  }
 }
 
 async function doComment({ octokit, message }) {
