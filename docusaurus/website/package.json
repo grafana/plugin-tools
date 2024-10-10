@@ -31,6 +31,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.0.1",
     "@docusaurus/tsconfig": "^3.0.1",
+    "esbuild-loader": "^2.20.0",
     "raw-loader": "^4.0.2",
     "typescript": "^5.2.2"
   },

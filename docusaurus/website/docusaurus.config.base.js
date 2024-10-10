@@ -210,6 +210,17 @@ const plugins = [
   ],
 ];
 
+const webpackConfig = {
+  jsLoader: (isServer) => ({
+    loader: require.resolve('esbuild-loader'),
+    options: {
+      loader: 'tsx',
+      format: isServer ? 'cjs' : undefined,
+      target: isServer ? `node18` : `es2017`,
+    },
+  }),
+};
+
 const presetsDocs = {
   path: '../docs',
   exclude: ['**/snippets/**', '**/shared/**', '**/drafts/**'],
@@ -319,4 +330,5 @@ module.exports = {
   themeConfigFooter,
   themeConfigPrism,
   themeConfigColorMode,
+  webpackConfig,
 };

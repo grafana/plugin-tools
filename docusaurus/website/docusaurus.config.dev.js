@@ -10,6 +10,7 @@ const {
   themeConfigFooter,
   themeConfigPrism,
   themeConfigColorMode,
+  webpackConfig,
 } = require('./docusaurus.config.base');
 
 const devPortalHome = 'https://grafana-dev.com/developers';
@@ -35,6 +36,8 @@ const config = {
       },
     ],
   ],
+
+  webpack: webpackConfig,
 
   themeConfig: {
     navbar: {
