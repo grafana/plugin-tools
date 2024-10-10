@@ -20,8 +20,9 @@ async function run() {
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
-
-    console.log(inspect({ user: pull_request.user }, { depth: null, colors: true }));
+    const userName = pull_request.user.login;
+    const branchName = pull_request.head.ref;
+    console.log(inspect({ userName, branchName }, { depth: null, colors: true }));
 
     if (isMissingSemverLabel) {
       let errorMsg = [
