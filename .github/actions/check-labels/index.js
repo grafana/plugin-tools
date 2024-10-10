@@ -35,6 +35,7 @@ async function run() {
         }
       }
       core.setOutput('canMerge', 'Renovate PR');
+      return;
     }
 
     if (isMissingSemverLabel) {
