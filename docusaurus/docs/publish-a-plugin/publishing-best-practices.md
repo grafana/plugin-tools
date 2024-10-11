@@ -100,7 +100,7 @@ For a comprehensive guide on setting up E2E tests, refer to our [E2E test a plug
 
 ## Validate your plugin
 
-Before submitting your plugin for review, you should validate your plugin to ensure that it meets Grafana's standards for functionality, security, and structure. The easiest way to do this is by using the Plugin Validator tool. This tool checks for potential issues that could prevent your plugin from being accepted, such as security vulnerabilities or structural problems.
+Before submitting your plugin for review, validate your plugin to ensure that it meets Grafana's standards for functionality, security, and structure. The easiest way to do this is with the Plugin Validator. This tool checks for potential issues that could prevent your plugin from being accepted, such as security vulnerabilities or structural problems.
 
 **Key points:**
 
