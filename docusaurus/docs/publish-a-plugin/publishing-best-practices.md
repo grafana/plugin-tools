@@ -59,7 +59,7 @@ Adding logos improves the overall look and feel of your plugin within the plugin
 
 `info.screenshots`
 
-The screenshots field should be used to provide an array of screenshot images that will be displayed within the plugin catalog. This is great for providing users with a visual representation of your plugin and can help them establish whether or not this plugin solves their problem before they even install it. Be sure to provide screenshots of your plugin in action, highlighting the standout features.
+The screenshots field should be used to provide an array with one or more screenshot images that will be displayed within the plugin catalog. This is great for providing users with a visual representation of your plugin and can help them establish whether or not this plugin solves their problem before they even install it. Be sure to provide screenshots of your plugin in action, highlighting the standout features.
 
 :::note
 
