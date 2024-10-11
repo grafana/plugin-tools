@@ -83,7 +83,7 @@ Beyond a basic overview of your plugin, its use cases, and requirements, there a
 
 - **Screenshots or screen captures:** Visual aids often communicate better than text alone. Including screenshots or even video demonstrations allows users to quickly grasp the plugin’s capabilities and setup process, giving them confidence to use it effectively.
 - **Dynamic badges:** Badges provide quick, at-a-glance information about your plugin, such as the latest release version or whether it has passed security and code checks. Tools like [shields.io](https://shields.io/) can be used with the Grafana.com API to automatically update these badges whenever you publish a new version, adding transparency and trustworthiness to your plugin.
-- **Contribution guidance:** Maintaining a plugin can be demanding, especially for individual developers. Clearly outlining how users can provide feedback, report bugs, or contribute code improvements helps foster community involvement, making it easier to maintain and improve your plugin over time.
+- **Contribution guidance:** Maintaining a plugin can be demanding, especially for individual developers. Clearly outlining how users can provide feedback, report bugs, and directing potential code contributors to your `contributing.md` are all ways to help foster community involvement, making it easier to maintain and improve your plugin over time.
 
 This structure ensures that your README is both informative and engaging, providing users with everything they need to confidently use and contribute to your plugin.
 
