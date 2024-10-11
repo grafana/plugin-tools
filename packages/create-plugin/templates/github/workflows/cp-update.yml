@@ -6,8 +6,9 @@ on:
     - cron: '0 0 1 * *' # run once a month on the 1st day
 
 # To use the default github token with the following elevated permissions make sure to check:
-# **Allow GitHub Actions to create and approve pull requests** in https://github.com/USER_NAME/REPO_NAME/settings/actions.
-# Alternatively create a fine-grained personal access token for your repository with `contents: read and write` and `pull requests: read and write` and pass it to the action.
+# **Allow GitHub Actions to create and approve pull requests** in https://github.com/ORG_NAME/REPO_NAME/settings/actions.
+# Alternatively create a fine-grained personal access token for your repository with
+# `contents: read and write` and `pull requests: read and write` and pass it to the action.
 
 permissions:
   contents: write
