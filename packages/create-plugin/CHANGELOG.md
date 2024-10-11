@@ -1,3 +1,27 @@
+# v5.5.3 (Wed Oct 09 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1165](https://github.com/grafana/plugin-tools/pull/1165) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.5.2 (Tue Oct 08 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Stop prettier from writing files outside the target path [#1166](https://github.com/grafana/plugin-tools/pull/1166) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.5.1 (Fri Oct 04 2024)
 
 #### 🐛 Bug Fix
