@@ -26,7 +26,7 @@ In this tutorial, you'll:
 
 ### Prerequisites
 
-- Grafana v9.0 or later
+- Grafana v10.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
 ## Create a new plugin
@@ -106,7 +106,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 1. Create a data frame with a time field and a number field:
 
    ```ts title="src/datasource.ts"
-   const frame = new MutableDataFrame({
+   const frame = createDataFrame({
      refId: query.refId,
      fields: [
        { name: 'time', type: FieldType.time },

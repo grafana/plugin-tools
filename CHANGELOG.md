@@ -1,3 +1,187 @@
+# (Wed Oct 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.3`, `@grafana/plugin-types-bundler@0.0.4`
+  - Update grafana dependencies [#1165](https://github.com/grafana/plugin-tools/pull/1165) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Tue Oct 08 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.2`
+  - Create Plugin: Stop prettier from writing files outside the target path [#1166](https://github.com/grafana/plugin-tools/pull/1166) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Oct 04 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.3`
+  - Types bundler: Add a default TSConfig for bundling types [#1164](https://github.com/grafana/plugin-tools/pull/1164) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Oct 04 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.1`
+  - chore: update shields.io template [#1160](https://github.com/grafana/plugin-tools/pull/1160) ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+#### Authors: 1
+
+- David Harris ([@sympatheticmoose](https://github.com/sympatheticmoose))
+
+---
+
+# (Fri Oct 04 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.5.0`
+  - Create Plugin: Support SRI in dynamic imported chunks [#999](https://github.com/grafana/plugin-tools/pull/999) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.5.0`
+  - Update dependency @grafana/scenes to v5.16.3 [#1161](https://github.com/grafana/plugin-tools/pull/1161) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.2`
+  - Types-bundler: Update readme [#1162](https://github.com/grafana/plugin-tools/pull/1162) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Oct 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.4.2`
+  - Create Plugin: Remove topnav feature flag from Scenes templates [#1139](https://github.com/grafana/plugin-tools/pull/1139) ([@jackw](https://github.com/jackw))
+  - Update grafana patch dependencies [#1156](https://github.com/grafana/plugin-tools/pull/1156) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Oct 02 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.8.3`
+  - Plugin E2e: Support scenes powered dashboard UI [#1155](https://github.com/grafana/plugin-tools/pull/1155) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Oct 01 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.4.1`
+  - Update grafana dependencies [#1113](https://github.com/grafana/plugin-tools/pull/1113) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update grafana patch dependencies [#1141](https://github.com/grafana/plugin-tools/pull/1141) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Mon Sep 30 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.4.0`
+  - Create Plugin: Update go sdk when running update cmd [#1143](https://github.com/grafana/plugin-tools/pull/1143) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Sep 30 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.8.2`
+  - Update dashboard variables settings URL [#1144](https://github.com/grafana/plugin-tools/pull/1144) ([@ivanortegaalba](https://github.com/ivanortegaalba))
+- `@grafana/create-plugin@5.3.12`
+  - Switch to createDataFrame [#1133](https://github.com/grafana/plugin-tools/pull/1133) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### 🔩 Dependency Updates
+
+- Chore(deps-dev): Bump vite from 5.2.11 to 5.4.8 [#1135](https://github.com/grafana/plugin-tools/pull/1135) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.1`
+  - Types Bundler: Add package [#1092](https://github.com/grafana/plugin-tools/pull/1092) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+- `@grafana/create-plugin@5.3.11`, `@grafana/plugin-e2e@1.8.1`, `@grafana/plugin-meta-extractor@0.0.7`, `@grafana/sign-plugin@3.0.4`
+  - Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@5.3.11`
+  - Update dependency @grafana/scenes to v5.14.7 [#1119](https://github.com/grafana/plugin-tools/pull/1119) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 4
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Wed Sep 11 2024)
 
 #### 🚀 Enhancement

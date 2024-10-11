@@ -90,6 +90,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/kevinwcyu"><img src="https://avatars.githubusercontent.com/u/19530599?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Yu</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=kevinwcyu" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ashharrison90"><img src="https://avatars.githubusercontent.com/u/20999846?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ashley Harrison</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=ashharrison90" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/ivanortegaalba"><img src="https://avatars.githubusercontent.com/u/5699976?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ivan Ortega Alba</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=ivanortegaalba" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

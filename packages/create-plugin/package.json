@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "5.3.10",
+  "version": "5.5.3",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -17,7 +17,8 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
@@ -62,7 +63,7 @@
     "which": "^4.0.0"
   },
   "devDependencies": {
-    "@types/glob": "^7.0.0",
+    "@types/glob": "^8.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0"
   },
