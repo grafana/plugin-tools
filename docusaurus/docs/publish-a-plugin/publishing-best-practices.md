@@ -96,7 +96,7 @@ End-to-end (E2E) testing ensures that your Grafana plugin works correctly across
 - **Test compatibility across versions:** Ensure your plugin works seamlessly with various versions of Grafana by setting up E2E tests targeting multiple releases.
 - **Automate testing:** Integrate E2E testing into your continuous integration (CI) pipeline to catch issues early and frequently, reducing potential problems during review.
 
-For a comprehensive guide on setting up E2E tests, see our [E2E test a plugin](../e2e-test-a-plugin/introduction.md) section.
+For a comprehensive guide on setting up E2E tests, refer to our [E2E test a plugin](../e2e-test-a-plugin/introduction.md) documentation.
 
 ## Validate your plugin
 
