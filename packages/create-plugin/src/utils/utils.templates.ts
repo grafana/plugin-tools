@@ -2,7 +2,6 @@ import { lt as semverLt } from 'semver';
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
-import { mkdirp } from 'mkdirp';
 import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
@@ -72,7 +71,7 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '');
   const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
-  mkdirp.sync(path.dirname(exportPath));
+  fs.mkdirSync(path.dirname(exportPath), { recursive: true });
   fs.writeFileSync(exportPath, rendered);
 }
 
@@ -85,7 +84,7 @@ export function compileProvisioningTemplateFile(pluginType: string, templateFile
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS[pluginType], '.');
   const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
-  mkdirp.sync(path.dirname(exportPath));
+  fs.mkdirSync(path.dirname(exportPath), { recursive: true });
   fs.writeFileSync(exportPath, rendered);
 }
 
