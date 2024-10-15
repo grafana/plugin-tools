@@ -59,13 +59,8 @@ jobs:
           docker compose pull
           AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
-      - name: Wait for Grafana to start
-        run: ./.github/workflows/scripts/wait-for.sh
-        env:
-          WAIT_FOR_URL: 'http://localhost:3000/'
-          WAIT_FOR_RESPONSE_CODE: 200
-          WAIT_FOR_TIMEOUT: 60000
-          WAIT_FOR_INTERVAL: 500
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
 
       - name: Run Playwright tests
         id: run-tests

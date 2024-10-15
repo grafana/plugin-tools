@@ -135,8 +135,8 @@ jobs:
         run: docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Wait for grafana server for e2e tests
-        uses: grafana/plugin-actions/wait-for-grafana@academo/add-wait-for-action
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
 
       - name: Run e2e tests
