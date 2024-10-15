@@ -61,12 +61,9 @@ jobs:
           GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
 
       - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
+        uses: docker://benel/wait-for-response:1
         with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
+          args: http://localhost:3000/ 200 60000 500
 
       - name: Run Playwright tests
         id: run-tests

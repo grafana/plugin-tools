@@ -137,13 +137,10 @@ jobs:
 
       - name: Wait for grafana server for e2e tests
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        uses: nev7n/wait_for_response@v1
+        uses: docker://benel/wait-for-response:1
         with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
-
+          args: http://localhost:3000/ 200 60000 500
+          
       - name: Run e2e tests
         id: run-e2e-tests
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
