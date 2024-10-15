@@ -137,12 +137,12 @@ jobs:
 
       - name: Wait for grafana server for e2e tests
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
+        run: ./.github/workflows/scripts/wait-for.sh
+        env:
+          WAIT_FOR_URL: 'http://localhost:3000/'
+          WAIT_FOR_RESPONSE_CODE: 200
+          WAIT_FOR_TIMEOUT: 60000
+          WAIT_FOR_INTERVAL: 500
 
       - name: Run e2e tests
         id: run-e2e-tests
