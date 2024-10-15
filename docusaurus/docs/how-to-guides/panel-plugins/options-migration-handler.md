@@ -16,7 +16,7 @@ keywords:
 
 As you develop and maintain your Grafana panel plugin, you may need to make changes to the panel options structure. These changes can potentially break existing dashboard configurations.
 
-We encourage you to try to minimize the breaking changes in your plugins in-between versions as much as possible, but in the cases they are necssary and to ensure a smooth transition for users when they update your plugin, you can implement a migration handler.
+When you introduce breaking changes to your plugin, you should increase the major number of your plugin version (e.g. from 1.2.1 to 2.0.0). We encourage you to try to minimize the breaking changes in your plugins in-between versions as much as possible, but in the cases they are necssary and to ensure a smooth transition for users when they update your plugin, you can implement a migration handler.
 
 ## Migration handler basics
 
@@ -120,9 +120,33 @@ if (options.displayType) {
 
 ### Version-specific adjustments
 
-Use the Grafana version to make appropriate adjustments:
+Use the Grafana version to make appropriate adjustments
 
-```ts
+#### Using string comparison
+
+```ts title="migrationHandler.ts"
+import { config } from '@grafana/runtime';
+
+function migrationHandler(panel: PanelModel<SimpleOptions>) {
+  const options = Object.assign({}, panel.options);
+
+  // pluginVersion contains the current (newest) plugin version
+  const pluginVersion = panel?.pluginVersion ?? '';
+
+  // new version of the plugin introduced a new option
+  if (pluginVersion.startsWith('2.0')) {
+    options.displayMode = 'compact';
+  }
+
+  return options;
+}
+```
+
+#### Using semver comparison
+
+Sometimes you may need to use semver comparison to make adjustments based on the Grafana version.
+
+```ts title="migrationHandler.ts"
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
