@@ -40,9 +40,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel)
 
 :::note
 
-The migration handler is only called when the stored panel version differs from the loaded panel version. (e.g. after an update)
-
-The migration handler will be called until the user manually edits and saves the panel.
+The migration handler is only called when the installed plugin version differs from the version used to generate a panel. Changes made to the panel are not automatically persisted, users need to manually save the dashboard after a panel is migrated.
 :::
 
 ## Implement a migration handler
