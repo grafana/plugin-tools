@@ -137,7 +137,9 @@ jobs:
 
       - name: Wait for grafana server for e2e tests
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        run: ./.github/workflows/scripts/wait-for.sh
+        run: |
+          ls
+          echo "$PWD"
         env:
           WAIT_FOR_URL: 'http://localhost:3000/'
           WAIT_FOR_RESPONSE_CODE: 200
