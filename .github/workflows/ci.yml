@@ -136,15 +136,8 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server for e2e tests
+        uses: grafana/plugin-actions/wait-for-grafana@academo/add-wait-for-action
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        run: |
-          ls
-          echo "$PWD"
-        env:
-          WAIT_FOR_URL: 'http://localhost:3000/'
-          WAIT_FOR_RESPONSE_CODE: 200
-          WAIT_FOR_TIMEOUT: 60000
-          WAIT_FOR_INTERVAL: 500
 
       - name: Run e2e tests
         id: run-e2e-tests
