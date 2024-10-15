@@ -123,7 +123,7 @@ You might want to run specific adjustments based on the previously installed plu
 you can use the `pluginVersion` property. This property:
 
 - is empty if it is the first time a migration handler is ever called. e.g. the plugin didn't implement a migration handler before.
-- is set to the last version of the plugin that ran a migration handler.
+- is set to the version of the plugin when the panel was last saved after a migration handler was called.
 
 #### Using string comparison
 
@@ -134,8 +134,8 @@ function migrationHandler(panel: PanelModel<SimpleOptions>) {
   const options = Object.assign({}, panel.options);
 
   // pluginVersion will be empty
-  // if this is the first time a migration handler is called
-  // or contain the version of the plugin when the last migration handler was called
+  // if the plugin didn't implement a migration handler before
+  // or contain the version of the plugin when the panel was last saved after a migration handler was called.
   const pluginVersion = panel?.pluginVersion ?? '';
 
   if (pluginVersion === '' || pluginVersion.startsWith('1.')) {
