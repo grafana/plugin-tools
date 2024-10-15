@@ -118,7 +118,12 @@ if (options.displayType) {
 
 ### Version-specific adjustments
 
-Use the Grafana version to make appropriate adjustments
+You might want to run specific adjustments based on the previously installed plugin version.
+
+you can use the `pluginVersion` property. This property:
+
+- is empty if it is the first time a migration handler is ever called. e.g. the plugin didn't implement a migration handler before.
+- is set to the last version of the plugin that ran a migration handler.
 
 #### Using string comparison
 
@@ -128,34 +133,13 @@ import { config } from '@grafana/runtime';
 function migrationHandler(panel: PanelModel<SimpleOptions>) {
   const options = Object.assign({}, panel.options);
 
-  // pluginVersion contains the current (newest) plugin version
+  // pluginVersion will be empty
+  // if this is the first time a migration handler is called
+  // or contain the version of the plugin when the last migration handler was called
   const pluginVersion = panel?.pluginVersion ?? '';
 
-  // new version of the plugin introduced a new option
-  if (pluginVersion.startsWith('2.0')) {
+  if (pluginVersion === '' || pluginVersion.startsWith('1.')) {
     options.displayMode = 'compact';
-  }
-
-  return options;
-}
-```
-
-#### Using semver comparison
-
-Sometimes you may need to use semver comparison to make adjustments based on the Grafana version.
-
-```ts title="migrationHandler.ts"
-import { config } from '@grafana/runtime';
-import { satisfies, coerce } from 'semver';
-
-function migrationHandler(panel: PanelModel<SimpleOptions>) {
-  const options = Object.assign({}, panel.options);
-
-  const grafanaVersion = coerce(config.buildInfo.version);
-  if (grafanaVersion && satisfies(grafanaVersion, '>=9.4.0')) {
-    options.fontFamily = 'Inter';
-  } else {
-    options.fontFamily = 'Roboto';
   }
 
   return options;
