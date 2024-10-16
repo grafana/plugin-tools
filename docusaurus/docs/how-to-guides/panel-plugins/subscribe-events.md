@@ -54,7 +54,7 @@ Here are a few other events you can subscribe to:
 You can access the event bus available from the panel props, and subscribe to events of a certain type using the `getStream()` method. The callback passed to the subscribe method will be called for every new event, as in this example:
 
 ```tsx
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { RefreshEvent } from '@grafana/runtime';
 
 // ...
