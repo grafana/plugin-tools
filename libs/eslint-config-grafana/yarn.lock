@@ -107,7 +107,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.0.0"
     typescript: "npm:^5.5.0"
   peerDependencies:
-    "@stylistic/eslint-plugin-ts": ^2.9.0
+    "@stylistic/eslint-plugin-ts": ">=2.9.0"
     "@typescript-eslint/eslint-plugin": ">=6.18.0"
     "@typescript-eslint/parser": ">=6.18.0"
     eslint: ">=8.0.0"
