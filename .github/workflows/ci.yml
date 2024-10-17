@@ -135,14 +135,9 @@ jobs:
         run: docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Wait for grafana server for e2e tests
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
 
       - name: Run e2e tests
         id: run-e2e-tests
