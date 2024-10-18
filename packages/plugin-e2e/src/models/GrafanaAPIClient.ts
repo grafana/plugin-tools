@@ -1,5 +1,5 @@
 import { APIRequestContext } from '@playwright/test';
-import { DataSourceSettings, User } from '../types';
+import { CreateDataSourceArgs, DataSourceSettings, User } from '../types';
 
 export class GrafanaAPIClient {
   constructor(private request: APIRequestContext) {}
@@ -52,5 +52,24 @@ export class GrafanaAPIClient {
     }
     const settings: DataSourceSettings = await response.json();
     return settings;
+  }
+
+  async createDataSource(datasource: CreateDataSourceArgs, dsName: string) {
+    return this.request.post('/api/datasources', {
+      data: {
+        ...datasource,
+        name: dsName,
+        access: 'proxy',
+        isDefault: false,
+      },
+    });
+  }
+
+  async getDataSourceByName(name: string) {
+    return this.request.get(`/api/datasources/name/${name}`);
+  }
+
+  async deleteDataSourceByUID(uid: string) {
+    return this.request.delete(`/api/datasources/uid/${uid}`);
   }
 }
