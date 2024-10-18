@@ -11,7 +11,7 @@ keywords:
 
 # Best practices for data source plugin configuration
 
-To deliver a consistent and user-friendly experience to Grafana users, we recommend that Grafana plugin developers follow uniform guidelines when building data source plugins. This guide outlines recommended best practices to help you achieve this goal.
+To deliver a consistent and user-friendly experience to Grafana users, we recommend that Grafana plugin developers follow uniform guidelines when building the pages that set the options for data source plugins. This guide outlines recommended best practices to help you achieve this goal.
 
 ## Logos
 
