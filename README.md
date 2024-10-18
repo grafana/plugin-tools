@@ -92,6 +92,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/ivanortegaalba"><img src="https://avatars.githubusercontent.com/u/5699976?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ivan Ortega Alba</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=ivanortegaalba" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/s4kh"><img src="https://avatars.githubusercontent.com/u/15072209?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Syerikjan Kh</b></sub></a><br /><a href="#infra-s4kh" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
   </tr>
 </table>
 
