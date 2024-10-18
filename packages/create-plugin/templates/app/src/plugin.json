@@ -53,6 +53,7 @@
       "icon": "cog",
       "name": "Configuration",
       "path": "/plugins/%PLUGIN_ID%",
+      "role": "Admin",
       "addToNav": true
     }
   ],
