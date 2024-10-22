@@ -1,3 +1,29 @@
+# v5.6.0 (Fri Oct 18 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
+
+#### 🚀 Enhancement
+
+- Create Plugin: Introduce create plugin update workflow [#1211](https://github.com/grafana/plugin-tools/pull/1211) ([@jackw](https://github.com/jackw))
+- chore: bump go version to 1.22 [#1212](https://github.com/grafana/plugin-tools/pull/1212) ([@s4kh](https://github.com/s4kh))
+
+#### 🐛 Bug Fix
+
+- Update dependency @types/which to v3 [#1193](https://github.com/grafana/plugin-tools/pull/1193) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Create Plugin: Remove mkdirp package [#1210](https://github.com/grafana/plugin-tools/pull/1210) ([@jackw](https://github.com/jackw))
+- Update dependency @types/mkdirp to v2 [#1192](https://github.com/grafana/plugin-tools/pull/1192) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/scenes to v5.19.1 [#1189](https://github.com/grafana/plugin-tools/pull/1189) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
 # v5.5.3 (Wed Oct 09 2024)
 
 #### 🐛 Bug Fix

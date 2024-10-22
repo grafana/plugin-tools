@@ -10,7 +10,6 @@ test('using grafanaAPIClient should not change storage state for logged in user'
 
   // but logged in user should still only have viewer persmissions
   await page.goto('/');
-  const homePageTitle = await page.title();
   await page.goto('/datasources', { waitUntil: 'networkidle' });
-  expect(await page.title()).toEqual(homePageTitle);
+  expect(page.url()).not.toContain('datasources');
 });
