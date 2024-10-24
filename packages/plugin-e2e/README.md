@@ -47,7 +47,7 @@ export default defineConfig<PluginOptions>({
   testDir: './tests', // change this to the directory that was chosen when installing Playwright
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.GRAFANA_URL || 'http://localhost:3000',
   },
   projects: [
     {
