@@ -1,4 +1,3 @@
-import React from 'react';
 import { css } from '@emotion/css';
 import { GrafanaTheme2, PageLayoutType } from '@grafana/data';
 import { LinkButton, useStyles2 } from '@grafana/ui';
