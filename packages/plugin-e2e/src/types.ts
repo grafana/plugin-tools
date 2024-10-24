@@ -8,7 +8,6 @@ import {
   TestInfo,
 } from '@playwright/test';
 
-import { E2ESelectors } from './e2e-selectors/types';
 import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
 import { AppConfigPage } from './models/pages/AppConfigPage';
 import { AppPage } from './models/pages/AppPage';
@@ -20,6 +19,9 @@ import { VariableEditPage } from './models/pages/VariableEditPage';
 import { VariablePage } from './models/pages/VariablePage';
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 import { GrafanaAPIClient } from './models/GrafanaAPIClient';
+import { versionedPages, versionedComponents, SelectorsOf } from '@grafana/e2e-selectors';
+import { VersionedAPIs } from './selectors/versionedAPIs';
+import { VersionedConstants } from './selectors/versionedConstants';
 
 export type PluginOptions = {
   /**
@@ -664,3 +666,10 @@ export type Visualization =
   | 'Worldmap Panel';
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
+
+export type E2ESelectors = {
+  constants: SelectorsOf<VersionedConstants>;
+  apis: SelectorsOf<VersionedAPIs>;
+  pages: SelectorsOf<typeof versionedPages>;
+  components: SelectorsOf<typeof versionedComponents>;
+};
