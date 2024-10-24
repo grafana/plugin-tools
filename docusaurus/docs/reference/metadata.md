@@ -100,7 +100,17 @@ Grafana reads the Identity and Access Management section and initializes a servi
 [Grafana RBAC permissions](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/custom-role-actions-scopes/#rbac-permissions-actions-and-scopes).
 Grafana will share the service account's bearer token with the plugin backend using the `GF_PLUGIN_APP_CLIENT_SECRET` environment variable.
 
-Requires Grafana version 10.3.0 or later. Currently, this is behind the `externalServiceAccounts` feature toggle.
+Requires Grafana version 10.3.0 or later.
+
+**Enabling the Feature:**
+
+- Grafana versions **below 11.3.0**: Enable the `externalServiceAccounts` feature toggle.
+- Grafana **11.3.0 and later**: Activate the `managed_service_accounts_enabled` configuration option in the [auth section](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#auth-section) of your Grafana configuration file.
+
+**Limitations:**
+This feature currently **only supports single-organization deployments**.
+The plugin's service account is automatically created in the default organization. This means the plugin can only access data and resources within that specific organization.
+**If your plugin needs to work with multiple organizations, this feature is currently not suitable.**
 
 To try this feature out, follow this [example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-service-account/README.md).
 
