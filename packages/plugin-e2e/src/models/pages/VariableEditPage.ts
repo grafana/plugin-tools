@@ -8,7 +8,10 @@ export type VariableType = 'Query' | 'Constant' | 'Custom';
 
 export class VariableEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly args: DashboardEditViewArgs<string>
+  ) {
     super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
   }
@@ -19,7 +22,7 @@ export class VariableEditPage extends GrafanaPage {
   async goto(options?: NavigateOptions) {
     const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
     const url = this.args.dashboard?.uid
-      ? Dashboard.Settings.Variables.Edit.url(this.args.dashboard.uid, this.args.id)
+      ? `${Dashboard.url(this.args.dashboard.uid)}?${Dashboard.Settings.Variables.Edit.urlParams(this.args.id)}`
       : AddDashboard.Settings.Variables.Edit.url(this.args.id);
 
     await super.navigate(url, options);
