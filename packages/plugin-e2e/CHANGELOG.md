@@ -1,3 +1,19 @@
+# v1.10.0 (Thu Oct 24 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Jeff Levin ([@jalevin](https://github.com/jalevin)), for all your work!
+
+#### 🚀 Enhancement
+
+- Config: check environment for Grafana admin URL, username, and password [#1244](https://github.com/grafana/plugin-tools/pull/1244) ([@jalevin](https://github.com/jalevin))
+
+#### Authors: 1
+
+- Jeff Levin ([@jalevin](https://github.com/jalevin))
+
+---
+
 # v1.8.3 (Wed Oct 02 2024)
 
 #### 🐛 Bug Fix

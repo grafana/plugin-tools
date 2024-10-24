@@ -1,3 +1,26 @@
+# (Thu Oct 24 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Jeff Levin ([@jalevin](https://github.com/jalevin)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.7.0`, `@grafana/plugin-e2e@1.10.0`
+  - Config: check environment for Grafana admin URL, username, and password [#1244](https://github.com/grafana/plugin-tools/pull/1244) ([@jalevin](https://github.com/jalevin))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.7.0`
+  - Update dependency @grafana/e2e to v11.0.7 [#1247](https://github.com/grafana/plugin-tools/pull/1247) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jeff Levin ([@jalevin](https://github.com/jalevin))
+
+---
+
 # (Fri Oct 18 2024)
 
 :tada: This release contains work from a new contributor! :tada:
