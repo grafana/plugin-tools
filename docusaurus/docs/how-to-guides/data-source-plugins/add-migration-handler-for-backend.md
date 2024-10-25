@@ -16,7 +16,11 @@ This guide walks you through the steps necessary to use the latest tooling to au
 
 For the last step in this guide, there are two suggested approaches. The first one requires that Grafana to be configured to run data source as standalone API servers, this behavior is currently behind the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/3457f219be1c8bce99f713d7a907ee339ef38229/pkg/services/featuremgmt/registry.go#L519) and also requires to run on a Grafana version bigger or equal to 11.4. The second approach requires more boilerplate code but uses stable APIs that can be used in any recent Grafana version.
 
-Also, it’s not the goal of this migration system to support two-way migrations. Only forward migrations are supported. Migrations are not automatically persisted, users need to manually save changes to ensure the migration works as expected. 
+:::note
+
+The migration system detailed in this guide does not support two-way migrations. Only forward migrations are covered. Query migrations are not automatically persisted, users need to manually save changes to ensure the process works as expected. 
+
+:::
 
 # Step 1 (optional): Add a query schema
 
@@ -26,7 +30,7 @@ See the following example: [grafana-plugin-examples#400](https://github.com/graf
 
  - `query.go`: This file defines the Golang types for your query. For automatic migrations to work, it’s important that your query extends the new `v0alpha1.CommonQueryProperties`. After that, just define your query custom properties.
  - `query_test.go`: This test file is both used to check that all the JSON files are up to date with the query model and to generate them. The first time you execute the test, it will generate these files (take into account that query.types.json needs to exist, even if empty).
- - `query.*.json`: Automatically generated files. These schemas will be used for OpenAPI documentation. This is a feature in progress that is still not available for external plugins.
+ - `query.*.json`: Automatically generated files. These schemas can be used for OpenAPI documentation but it is a feature still in progress that is not available yet.
 
 # Step 2: Making the "breaking" change
 
