@@ -33,7 +33,6 @@ test('should display series counter when "Show series counter" option is enabled
   await panelEditPage.setVisualization('{{kebabToPascalKebab pluginName }}');
   await panelEditPage.collapseSection('{{kebabToPascalKebab pluginName }}');
   await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
-
   const seriesCounterLabel = panelEditPage.getByGrafanaSelector(
     selectors.components.PanelEditor.OptionsPane.fieldLabel('{{kebabToPascalKebab pluginName }} Show series counter')
   );
