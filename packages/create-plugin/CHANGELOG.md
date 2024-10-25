@@ -1,3 +1,15 @@
+# v5.7.1 (Fri Oct 25 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix broken panel test [#1253](https://github.com/grafana/plugin-tools/pull/1253) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.7.0 (Thu Oct 24 2024)
 
 :tada: This release contains work from a new contributor! :tada:
