@@ -89,7 +89,7 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana.
    * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/selecting-elements#grafana-end-to-end-selectors for more information.
    */
-  selectors: E2ESelectors;
+  selectors: E2ESelectorGroups;
 
   /**
    * Fixture command that creates a data source via the Grafana API.
@@ -321,7 +321,7 @@ export type PluginFixture = {
 /**
  * The context object passed to page object models
  */
-export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors; testInfo: TestInfo } & Pick<
+export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectorGroups; testInfo: TestInfo } & Pick<
   PlaywrightTestArgs,
   'page' | 'request'
 >;
@@ -667,7 +667,7 @@ export type Visualization =
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
 
-export type E2ESelectors = {
+export type E2ESelectorGroups = {
   constants: SelectorsOf<VersionedConstants>;
   apis: SelectorsOf<VersionedAPIs>;
   pages: SelectorsOf<typeof versionedPages>;

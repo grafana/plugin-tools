@@ -35,7 +35,7 @@ export const versionedAPIs = {
   },
   Dashboard: {
     delete: {
-      [MIN_GRAFANA_VERSION]: (uid: string) => `/ap  i/dashboards/uid/${uid}`,
+      [MIN_GRAFANA_VERSION]: (uid: string) => `/api/dashboards/uid/${uid}`,
     },
   },
   Plugin: {
