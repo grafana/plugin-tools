@@ -80,7 +80,8 @@
       "groupSlug": "dev-dependencies-automerge",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["devDependencies"]
+      "matchDepTypes": ["devDependencies"],
+      "excludePackageNames": ["@grafana/e2e-selectors"],
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
     // which would be misleading to consumers.
