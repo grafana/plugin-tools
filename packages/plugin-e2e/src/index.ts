@@ -53,10 +53,6 @@ export { AppConfigPage } from './models/pages/AppConfigPage';
 export { PluginConfigPage } from './models/pages/PluginConfigPage';
 export { AppPage } from './models/pages/AppPage';
 
-// e2e-selectors
-export { Components, Pages, APIs, E2ESelectors } from './e2e-selectors/types';
-export { resolveSelectors } from './e2e-selectors/resolver';
-
 // types
 export * from './types';
 

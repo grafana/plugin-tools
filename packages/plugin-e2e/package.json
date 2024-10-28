@@ -26,7 +26,7 @@
     "lint:fix": "npm run lint -- --fix",
     "server": "docker compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "playwright:test": "npx playwright test --grep-invert @integration",
     "playwright:test:integration": "npx playwright test --grep @integration",
     "playwright:all": "npx playwright test"
@@ -43,6 +43,7 @@
     "dotenv": "^16.3.1"
   },
   "dependencies": {
+    "@grafana/e2e-selectors": "^11.4.0-204289",
     "semver": "^7.5.4",
     "uuid": "^10.0.0",
     "yaml": "^2.3.4"
