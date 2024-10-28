@@ -77,7 +77,6 @@ Let's add a new page to the navigation menu:
            "type": "page",
            "name": "New Page",
            "path": "/a/%PLUGIN_ID%/new-page",
-           "roles": "Admin",
            "addToNav": true,
            "defaultNav": false
        }
@@ -119,6 +118,12 @@ The new page appears in the navigation menu. You can now edit the React router i
 1. Reload Grafana to see the new page in place.
 
 You don't need to register all your pages inside `includes` in your `plugin.json`. Register only pages that you want to add to the navigation menu.
+
+:::tip
+
+You can limit which users have access to pages in the navigation menu by using the [`role`](/reference/plugin-json#properties-7) property.
+
+:::
 
 :::note
 
