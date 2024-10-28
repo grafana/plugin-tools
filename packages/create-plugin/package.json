@@ -51,7 +51,7 @@
     "debug": "^4.3.4",
     "enquirer": "^2.4.1",
     "find-up": "^7.0.0",
-    "glob": "^10.3.10",
+    "glob": "^11.0.0",
     "handlebars": "^4.7.8",
     "marked": "^10.0.0",
     "marked-terminal": "^7.0.0",
