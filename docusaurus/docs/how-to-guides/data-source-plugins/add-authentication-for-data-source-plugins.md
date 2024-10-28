@@ -326,7 +326,7 @@ The decrypted secrets are available from the `DecryptedSecureJSONData` field in 
 func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
   instanceSettings := req.PluginContext.DataSourceInstanceSettings
 
-  if apiKey, exists := settings.DecryptedSecureJSONData["apiKey"]; exists {
+  if apiKey, exists := instanceSettings.DecryptedSecureJSONData["apiKey"]; exists {
     // Use the decrypted API key.
   }
 
