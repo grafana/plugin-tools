@@ -1,3 +1,16 @@
+# (Mon Oct 28 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.11.0`
+  - Plugin E2E: Use selectors from grafana/e2e-selectors package [#1123](https://github.com/grafana/plugin-tools/pull/1123) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Oct 25 2024)
 
 #### 🐛 Bug Fix
