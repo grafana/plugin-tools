@@ -36,7 +36,7 @@
     },
     {
       "automerge": true,
-      "groupName": "e2e-selector dependencies in scaffolded plugin ",
+      "groupName": "e2e-selector dependencies in scaffolded plugin",
       "groupSlug": "scaffolded-plugin-e2e-selectors",
       "labels": ["dependencies", "patch", "release"],
       "matchPackageNames": ["@grafana/e2e-selectors"],
