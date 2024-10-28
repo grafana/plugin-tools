@@ -18,12 +18,12 @@ To ensure compatibility and maintain seamless performance, query migration handl
 
 ## Before you begin
 
-Depending on the approach you take for performing [one of the steps](#step-6-optional-add-an-admissionhandler) in this guide, you may need to fulfill certain prerequisites. These prerequisites are:
+Depending on the approach you take for performing [one of the steps](#step-5-use-migration-code-from-the-frontend-using-experimental-apis) in this guide, you may need to fulfill certain prerequisites. These prerequisites are:
 
 1. Grafana must be configured to run data sources as standalone API servers, a behavior which is behind the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/3457f219be1c8bce99f713d7a907ee339ef38229/pkg/services/featuremgmt/registry.go#L519).
 1. The plugin must be run on a Grafana version 11.4 or later.
 
-More information about these prerequisites is found in [step 6](#step-6-optional-add-an-admissionhandler).
+More information about these prerequisites is found in [step 5](#step-5-use-migration-code-from-the-frontend-using-experimental-apis) but if your plugin can't adhere to these requirements, there is an alternative approach using existing APIs
 
 ## Implement a backend migration handler
 
@@ -37,17 +37,17 @@ The migration system detailed in this guide doesn't support two-way migrations. 
 
 ### Step 1 (optional): Add a query schema
 
-First of all, plugins don’t need to have strongly typed queries. While this lowers the barrier for plugin development, plugins that don’t define types are harder to scale and maintain. The first step in this guide is to add the required files to define the plugin query.
+First of all, plugins don't need to have strongly typed queries. While this lowers the barrier for plugin development, plugins that don't define types are harder to scale and maintain. The first step in this guide is to add the required files to define the plugin query.
 
 See the following example: [grafana-plugin-examples#400](https://github.com/grafana/grafana-plugin-examples/pull/400). As you can see, there are multiple files to create. These files are used for both generating OpenAPI documentation and validating that the received queries are valid.
 
 Create these files:
 
-- `query.go`: This file defines the Golang types for your query. For automatic migrations to work, it’s important that your query extends the new `v0alpha1.CommonQueryProperties`. After that, just define your query custom properties.
+- `query.go`: This file defines the Golang types for your query. For automatic migrations to work, it's important that your query extends the new `v0alpha1.CommonQueryProperties`. After that, just define your query custom properties.
 - `query_test.go`: This test file is both used to check that all the JSON files are up to date with the query model and to generate them. The first time you execute the test, it will generate these files (so take into account that `query.types.json` needs to exist, even if it's empty).
 - `query.*.json`: Automatically generated files. These schemas can be used for OpenAPI documentation, but it's a feature still in progress that isn't available yet.
 
-### Step 2: Making the "breaking" change
+### Step 2: Changing the query model
 
 :::note
 
@@ -55,9 +55,9 @@ For a complete example of how to add a query migration (steps 2, 3 and 4), refer
 
 :::
 
-Once your plugin has its own schemas, add the "breaking" change. In this context, "breaking" simply means that that your legacy migration logic won't work after it's been upgraded. Since queries within the major version (or same API version) need to be compatible, maintain a reference to the legacy data format. This reference helps to enable an easy migration path.
+Once your plugin has its own schemas, add the model change. Since queries within the major version (or same API version) need to be compatible, maintain a reference to the legacy data format. This reference helps to enable an easy migration path.
 
-For example, let’s assume that you want to change the query format of your plugin and the `Multiplier` property that you were using is changing to `Multiply` like so:
+For example, let's assume that you want to change the query format of your plugin and the `Multiplier` property that you were using is changing to `Multiply` like so:
 
 ```patch
  type DataQuery struct {
@@ -74,7 +74,7 @@ For example, let’s assume that you want to change the query format of your plu
 
 In this example, you can regenerate the schema running the test in `query_test.go` so your new data type will become ready to be used.
 
-Note that you haven't yet made a breaking change because all new parameters (in this case `Multiply`) are marked as optional. Also, you haven't modified any of the business logic, so everything should work as before, using the deprecated property. You're going to actually make a breaking change in the next step.
+Note that we haven't yet made a breaking change because all new parameters (in this case `Multiply`) are marked as optional. Also, we haven't modified any of the business logic, so everything should work as before, using the deprecated property. We're going to actually make a breaking change in the next step.
 
 ### Step 3: Use the new query format
 
@@ -156,7 +156,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 
 :::note
 
-This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/build-go-fast/pkg/services/featuremgmt/registry.go#L528). It also requires the package **@grafana/runtime > 11.4** (still experimental functionality). If your plugin implements this feature, bump its **grafanaDepencency to ">=11.4.0"**. If your plugin can't adhere to these requirements, refer to [Step 4: Add migration code in the backend](#step-4-add-migration-using-stable-apis).
+This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/build-go-fast/pkg/services/featuremgmt/registry.go#L528). It also requires the package **@grafana/runtime > 11.4** (still experimental functionality). If your plugin implements this feature, bump its **grafanaDepencency to ">=11.4.0"**. If your plugin can't adhere to these requirements, refer to [Run migrations using legacy APIs](#run-migrations-using-legacy-apis).
 
 :::
 
@@ -164,8 +164,8 @@ You should be able to invoke your `convertQuery` function from the frontend as w
 
 Finally, adapt the frontend so `@grafana/runtime` knows if it should run the migration action. Do this in two steps:
 
-1. Implement the `MigrationHandler` that `@grafana/runtime` exposes in the plugin's `DataSource` class. Set the property `hasBackendMigration` (to `true`) and implement the function `shouldMigrate`. The `shouldMigrate` function receives a query and verifies if it requires migration (for example, by checking the latest properties or checking the expected plugin version, if it’s part of the model). This verification avoids unnecessary queries to the backend.
-1. Create a wrapper for the plugin `QueryEditor` that ensures that the given query is migrated before rendering the editor. Do this by adding the `QueryEditorWithMigration` wrapper to your query editor.
+1. Implement the `MigrationHandler` that `@grafana/runtime` exposes in the plugin's `DataSource` class. Set the property `hasBackendMigration` (to `true`) and implement the function `shouldMigrate`. The `shouldMigrate` function receives a query and verifies if it requires migration (for example, by checking the latest properties or checking the expected plugin version, if it's part of the model). This verification avoids unnecessary queries to the backend.
+1. Use the wrapper `QueryEditorWithMigration` along with your `QueryEditor` component. This wrapper will ensure that the query is migrated before rendering the editor.
 
 That's it. Once the plugin implements these steps, existing and new queries will continue working without the need for duplicate migration logic in multiple places.
 
@@ -200,9 +200,9 @@ This step is optional. It's only needed if you're running Grafana with the featu
 
 When running Grafana with experimental APIs, each data source will run as an isolated API server. This means that queries will be routed to a server such as `https://<grafana-host>/apis/<datasource>.datasource.grafana.app/v0alpha1/namespaces/stack-1/connections/<uid>/query`.
 
-In this scenario, and to ensure that your plugin runs with the expected API version (`v0alpha1` at the beginning), implement an `AdmissionHandler`. This `AdmissionHandler` ensures that the given data source settings satisfy what's expected for the running API version, and therefore they can handle queries for versions earlier than that version of Grafana.
+In this scenario, and to ensure that your plugin runs with the expected API version (`v0alpha1` at the beginning), implement an `AdmissionHandler`. This `AdmissionHandler` ensures that the given data source settings satisfy what's expected for the running API version, and therefore they can handle queries for that API version.
 
-This step isn't mandatory while the plugin is at `v0*`, but it is mandatory once the plugin reaches `v1`. It's used to [validate data source settings when saving them](https://github.com/grafana/grafana/blob/a46ff09bf91895ee3de0d8f6c4ab88d70b47bfe6/pkg/services/datasources/service/datasource.go#L373).
+This step isn't mandatory while the plugin is at `v0*`, but it is mandatory once the plugin reaches `v1`. At the moment, it's used to [validate data source settings when saving them](https://github.com/grafana/grafana/blob/a46ff09bf91895ee3de0d8f6c4ab88d70b47bfe6/pkg/services/datasources/service/datasource.go#L373).
 
 The `AdmissionHandler` method should implement two main functions:
 
