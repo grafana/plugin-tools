@@ -1,3 +1,15 @@
+# v5.7.2 (Mon Oct 28 2024)
+
+#### 🐛 Bug Fix
+
+- Fix: Dont default navigation page permissions to admin [#1243](https://github.com/grafana/plugin-tools/pull/1243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.7.1 (Fri Oct 25 2024)
 
 #### 🐛 Bug Fix

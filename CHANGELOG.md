@@ -1,5 +1,18 @@
 # (Mon Oct 28 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.7.2`
+  - Fix: Dont default navigation page permissions to admin [#1243](https://github.com/grafana/plugin-tools/pull/1243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Oct 28 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@1.11.0`
