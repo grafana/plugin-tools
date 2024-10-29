@@ -7,16 +7,14 @@ import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
+import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
   panel: Panel;
 
-  constructor(
-    readonly ctx: PluginTestCtx,
-    readonly args: DashboardEditViewArgs<string>
-  ) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
     super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
@@ -184,5 +182,12 @@ export class PanelEditPage extends GrafanaPage {
     await refreshPanelButton.click();
 
     return responsePromise;
+  }
+
+  /** Return page object for the panel edit options group with the given label */
+  getOptionsGroup(label: string): PanelEditOptionsGroup {
+    const { selectors } = this.ctx;
+    const locator = this.getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel(label));
+    return new PanelEditOptionsGroup(this.ctx, locator, label);
   }
 }
