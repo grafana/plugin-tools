@@ -27,8 +27,6 @@ The plugin-e2e workspace consists of the following folder structure:
 ├── provisioning // Dashboards and data sources used to provision Grafana when running E2E tests in CI and locally
 ├── dist // Generated code and typescript definition files which constitutes the npm package
 ├── src //
-│   ├── e2e-selectors // Types and utility functions for resolving e2e selectors for a given Grafana version
-│   │   └── versioned // Selector values defined for a range of Grafana versions
 │   ├── fixtures // Grafana specific Playwright fixtures
 │   │   └── commands // Fixtures that need to be invoked by the consumer
 │   ├── matchers // Grafana specific Playwright expect matchers
@@ -94,35 +92,11 @@ If you're using VS Code as your development editor, it's recommended to install 
 
 ## How to fix broken test scenarios after changes in Grafana
 
-If you find that fixtures, models or expect matchers provided by @grafana/plugin-e2e are no longer valid after you've made changes in core Grafana, it's likely due to one of the following reasons:
+If you find that fixtures, models or expect matchers provided by @grafana/plugin-e2e are no longer working, it's likely because the Grafana UI has been changed.
 
-- you have changed a value of a selector defined in @grafana/e2e-selector
-- you have made structural changes to the UI
+A few examples of changes in the Grafana UI that can break functionality in @grafana/plugin-e2e:
 
-### Fix broken E2E selectors
-
-The selectors used by @grafana/plugin-e2e are defined in [`/src/e2e-selectors`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/e2e-selectors). These selectors make up a subset of the selectors in [`@grafana/e2e-selectors`](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors). If you have changed the value of a selector in ` @grafana/e2e-selectors`` and the same selector is being used in @grafana/plugin-e2e, you need to change the value of the corresponding selector in [ `/src/e2e-selectors/versioned`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/e2e-selectors/versioned).
-
-> Note: The long term goal is to externalize the @grafana/e2e-selectors package so that it's detached from the Grafana release cycle. Then there would be no need to duplicate the selectors in @grafana/e2e-selectors and @grafana/plugin-e2e.
-
-All selectors defined in @grafana/plugin-e2e is associated with a minimum Grafana version. If you for example have change the value of the `DataSourcePicker.container` selector in Grafana 10.0.0, you need to add a new key-value pair for the combination of Grafana version and selector value. Beware that the minimum version resolver follow strict semver, so if you've introduced the change in 10.0.0 but it's been backported to 9.5.6, you should specify 9.5.6 as the minimum Grafana version.
-
-```javascript
-...
-DataSourcePicker: {
-    container: {
-      '9.5.6': 'data-testid Data source picker select container',
-      '8.3.0': 'Data source picker select container',
-    },
-}
-...
-```
-
-### Fix scenario after structural UI changes
-
-A few examples of structural UI changes that can break functionality in @grafana/plugin-e2e:
-
-- a selector has been renamed (you should avoid this in most cases)
+- a selector has been renamed (you should never do this)
 - the sequence of user interactions needed to reach a certain state has changed
 - a Grafana api url has been changed
 
