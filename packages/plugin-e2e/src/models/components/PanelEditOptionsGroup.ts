@@ -1,41 +1,28 @@
 import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
-import { GrafanaPage } from '../pages/GrafanaPage';
 
-export class PanelEditOptionsGroup extends GrafanaPage {
-  constructor(readonly ctx: PluginTestCtx, readonly locator: Locator, readonly groupLabel: string) {
-    super(ctx);
+export class PanelEditOptionsGroup {
+  constructor(private ctx: PluginTestCtx, private root: Locator, private groupLabel: string) {}
+
+  getLocator(): Locator {
+    return this.root;
   }
 
-  // Option 1 - we provide function to fetch corresponding components from grafana UI
-
-  input(optionLabel: string): Locator {
-    return this.getByLabel(optionLabel).getByRole('textbox');
+  getRadioButtonGroup(label: string): Locator {
+    return this.getByLabel(label).getByRole('radiogroup');
   }
 
-  switch(optionLabel: string): Locator {
-    return this.getByLabel(optionLabel).getByRole('checkbox');
+  async getSwitch(label: string): Promise<Locator> {
+    // we need to add logic to select by a switch or a checkbox role depending on grafana version.
+    const id = await this.getByLabel(label).getByRole('checkbox').getAttribute('id');
+    return this.getByLabel(label).locator(`label[for='${id}']`);
   }
 
-  // Option 2 - we provide functions to directly take an action on an component.
-
-  uncheck(optionLabel: string): Promise<void> {
-    return this.getByLabel(optionLabel).getByRole('checkbox').uncheck();
-  }
-
-  check(optionLabel: string): Promise<void> {
-    return this.getByLabel(optionLabel).getByRole('checkbox').check();
-  }
-
-  fill(optionLabel: string, value: string): Promise<void> {
-    return this.getByLabel(optionLabel).getByRole('textbox').fill(value);
-  }
-
-  clear(optionLabel: string): Promise<void> {
-    return this.getByLabel(optionLabel).getByRole('textbox').clear();
+  getInput(label: string): Locator {
+    return this.getByLabel(label).getByRole('textbox');
   }
 
   private getByLabel(optionLabel: string): Locator {
-    return this.locator.getByLabel(`${this.groupLabel} ${optionLabel}`);
+    return this.root.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
   }
 }

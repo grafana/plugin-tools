@@ -85,7 +85,6 @@ export class PanelEditPage extends GrafanaPage {
    * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
    */
   async setVisualization(visualization: Visualization | string) {
-    // toggle options pane if panel edit is not visible
     const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
     const showPanelEditElementCount = await showPanelEditElement.count();
     if (showPanelEditElementCount > 0) {
@@ -186,8 +185,7 @@ export class PanelEditPage extends GrafanaPage {
 
   /** Return page object for the panel edit options group with the given label */
   getOptionsGroup(label: string): PanelEditOptionsGroup {
-    const { selectors } = this.ctx;
-    const locator = this.getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel(label));
+    const locator = this.ctx.page.getByLabel(`Options group ${label}`, { exact: true });
     return new PanelEditOptionsGroup(this.ctx, locator, label);
   }
 }
