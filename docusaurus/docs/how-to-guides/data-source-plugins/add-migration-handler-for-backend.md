@@ -23,7 +23,7 @@ Depending on the approach you take for performing [one of the steps](#step-5-use
 1. Grafana must be configured to run data sources as standalone API servers, a behavior which is behind the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/3457f219be1c8bce99f713d7a907ee339ef38229/pkg/services/featuremgmt/registry.go#L519).
 1. The plugin must be run on a Grafana version 11.4 or later.
 
-More information about these prerequisites is found in [step 5](#step-5-use-migration-code-from-the-frontend-using-experimental-apis) but if your plugin can't adhere to these requirements, there is an alternative approach using existing APIs
+More information about these prerequisites is found in [step 5](#step-5-use-migration-code-from-the-frontend-using-experimental-apis) but if your plugin can't adhere to these requirements, there is an [alternative approach](#run-migrations-using-legacy-apis) using existing APIs
 
 ## Implement a backend migration handler
 
@@ -39,13 +39,13 @@ The migration system detailed in this guide doesn't support two-way migrations. 
 
 First of all, plugins don't need to have strongly typed queries. While this lowers the barrier for plugin development, plugins that don't define types are harder to scale and maintain. The first step in this guide is to add the required files to define the plugin query.
 
-See the following example: [grafana-plugin-examples#400](https://github.com/grafana/grafana-plugin-examples/pull/400). As you can see, there are multiple files to create. These files are used for both generating OpenAPI documentation and validating that the received queries are valid.
+See the following example: [grafana-plugin-examples#400](https://github.com/grafana/grafana-plugin-examples/pull/400). As you can see, there are multiple files to create. These files will be used for both generating OpenAPI documentation and validating that the received queries are valid but it's a feature still in progress that isn't available yet.
 
 Create these files:
 
 - `query.go`: This file defines the Golang types for your query. For automatic migrations to work, it's important that your query extends the new `v0alpha1.CommonQueryProperties`. After that, just define your query custom properties.
 - `query_test.go`: This test file is both used to check that all the JSON files are up to date with the query model and to generate them. The first time you execute the test, it will generate these files (so take into account that `query.types.json` needs to exist, even if it's empty).
-- `query.*.json`: Automatically generated files. These schemas can be used for OpenAPI documentation, but it's a feature still in progress that isn't available yet.
+- `query.*.json`: Automatically generated files. These schemas can be used for OpenAPI documentation.
 
 ### Step 2: Changing the query model
 
@@ -55,7 +55,7 @@ For a complete example of how to add a query migration (steps 2, 3 and 4), refer
 
 :::
 
-Once your plugin has its own schemas, add the model change. Since queries within the major version (or same API version) need to be compatible, maintain a reference to the legacy data format. This reference helps to enable an easy migration path.
+Once your plugin has its own schemas, you can start introducing model changes. Since queries within the major version (or same API version) need to be compatible, you have to maintain a reference to the legacy data format. This reference also helps you to enable an easy migration path.
 
 For example, let's assume that you want to change the query format of your plugin and the `Multiplier` property that you were using is changing to `Multiply` like so:
 
@@ -175,7 +175,7 @@ To see how steps 2 to 5 are done in a complete example, refer to [this example](
 
 :::
 
-#### Run migrations using legacy APIs
+### Step 5 (alternative): Run migrations using legacy APIs
 
 In addition to running migrations using experimental APIs, it's also possible to run them with legacy APIs. There are no additional requirements.
 
