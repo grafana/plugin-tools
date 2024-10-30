@@ -118,12 +118,36 @@ if (options.displayType) {
 
 ### Version-specific adjustments
 
-You might want to run specific adjustments based on the previously installed plugin version.
+You might want to base migration decissions based on the version that was used to write a panel. For this, you can use the `pluginVersion` property. This property is empty the first time the migration handler is ever used but after that it will be set to the plugin version used to save the panel.
 
-you can use the `pluginVersion` property. This property:
+For example, imagine the following history for a plugin:
 
-- is empty if it is the first time a migration handler is ever called. e.g. the plugin didn't implement a migration handler before.
-- is set to the version of the plugin when the panel was last saved after a migration handler was called.
+ - In v1, the plugin didn't have any migration code.
+ - In v2, the plugin introduced the first migration code.
+ - In v3, the plugin changed again with new migration steps.
+ 
+In that scenario, the migration handler would look like this:
+
+```ts title="migrationHandler.ts"
+function migrationHandler(panel: PanelModel<SimpleOptions>) {
+  const options = Object.assign({}, panel.options);
+  const pluginVersion = panel?.pluginVersion ?? '';
+
+  if (pluginVersion === '') {
+    // Plugin version was v1.x
+    // Needs logic to migrate v1 -> v3
+    options.displayMode = 'compact';
+    options.displayType = 'linePlot';
+  }
+  
+  if (pluginVersion.startsWith('2.') {
+    // Panel was last saved with version v2.x
+    // Needs logic to migrate v2 -> v3
+    options.displayMode = 'compact';
+  }
+
+  return options;
+}
 
 #### Using string comparison
 
