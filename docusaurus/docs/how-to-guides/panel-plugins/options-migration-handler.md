@@ -148,6 +148,7 @@ function migrationHandler(panel: PanelModel<SimpleOptions>) {
 
   return options;
 }
+```
 
 #### Using string comparison
 
