@@ -27,7 +27,7 @@ If your plugin requires a logo, follow these recommendations:
 
 ## Description and required fields
 
-We recommend using the `DataSourceDescription` component from the [@grafana/experimental](https://github.com/grafana/grafana-experimental) repository. The plugin name and documentation link are required, but details about other fields is optional.
+We recommend using the `DataSourceDescription` component from the [@grafana/plugin-ui](https://github.com/grafana/plugin-ui/blob/main/src/components/ConfigEditor/DataSourceDescription.tsx) repository. The plugin name and documentation link are required, but details about other fields is optional.
 
 For required fields, avoid manually typing `*`. Instead, pass the `required` prop to the `InlineField` component. This prop automatically adds a `*` to the label.
 
