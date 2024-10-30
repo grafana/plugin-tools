@@ -42,14 +42,14 @@
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
-      "enabledManagers": ["npm"],
+      "ignorePaths": ["/packages/create-plugin/templates/common/**"],
     },
     {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
       "labels": ["dependencies", "release", "patch"],
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
-      "excludePackageNames": ["@grafana/e2e-selectors"],
+      "excludePackageNames": ["@grafana/e2e-selectors", "@grafana/eslint-config"],
       "matchUpdateTypes": ["minor", "major"]
     },
     // Docusaurus dependencies have to be grouped together otherwise error out when building website.
