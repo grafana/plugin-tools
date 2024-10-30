@@ -1,3 +1,17 @@
+# (Wed Oct 30 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.7.4`
+  - Update grafana dependencies [#1199](https://github.com/grafana/plugin-tools/pull/1199) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Mon Oct 28 2024)
 
 #### 🐛 Bug Fix
