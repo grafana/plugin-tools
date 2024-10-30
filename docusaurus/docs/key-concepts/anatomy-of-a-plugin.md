@@ -166,15 +166,15 @@ The `create-plugin` CLI tool is constantly being improved and as such there may 
 
 The following files are crucial for your plugin's development and functionality:
 
-- **Frontend code** (`src/`): This directory contains all the frontend code for your plugin. The main files to be aware of here are `plugin.json` and `module.ts`.
+- **Frontend code** (`src/`): Required. This directory contains all the frontend code for your plugin. The main files to be aware of here are `plugin.json` and `module.ts`.
   - `plugin.json`: Stores [metadata about your plugin](/reference/plugin-json), including information like its description, supported Grafana versions, and dependencies.
   - `module.ts`: The entry point for your plugin's frontend logic.
-- **Backend code** (`pkg/`): If your plugin includes backend functionality, the code will reside in this directory, typically within `pkg/plugin/`. Backend plugins are written in Go, and `main.go` serves as the entry point for your backend logic.
-- **Test files** (`tests/`): This folder contains your plugin’s test files, typically suffixed with `.spec.ts` for frontend tests. You can [learn more about testing your plugin](/e2e-test-a-plugin/introduction) in our E2E testing guide.
+- **Backend code** (`pkg/`): Required if your plugin has a backend component. If your plugin includes backend functionality, the code will reside in this directory, typically within `pkg/plugin/`. Backend plugins are written in Go, and `main.go` serves as the entry point for your backend logic.
+- **Test files** (`tests/`): Optional, but strongly recommended to ensure plugin quality. This folder contains your plugin’s test files, typically suffixed with `.spec.ts` for frontend tests. You can [learn more about testing your plugin](/e2e-test-a-plugin/introduction) in our E2E testing guide.
 - **Other files**:
-  - `docker-compose.yaml`: Contains the Docker configuration for running a local development instance of Grafana.
-  - `CHANGELOG.md`: Documents the history of changes and updates made to the plugin.
-  - `README.md`: Provides an overview of the plugin, including installation instructions and usage guidelines.
+  - `docker-compose.yaml`: Required for Docker environment only. Contains the Docker configuration for running a local development instance of Grafana.
+  - `CHANGELOG.md`: Required. Documents the history of changes and updates made to the plugin.
+  - `README.md`: Required. Provides an overview of the plugin, including installation instructions and usage guidelines.
 
 ## Next steps
 
