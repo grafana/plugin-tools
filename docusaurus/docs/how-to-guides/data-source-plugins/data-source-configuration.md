@@ -69,6 +69,8 @@ The `DataSourceHttpSettings` component is deprecated, and you should migrate to 
 - **Authentication** (refer to [Authentication section](#authentication-component))
 - **Advanced settings subsection**
 
+To migrate from `DataSourceHttpSettings` to the new 'Auth' component, refer to our [documentation](https://github.com/grafana/plugin-ui/blob/main/src/components/ConfigEditor/Auth/README.md).
+
 ### Edge case handling
 
 If your authentication method doesn't require fields, include text explaining this. Add descriptions or external links as needed.
