@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.21.4",{{#if useCypress}}
-    "@grafana/e2e": "^11.0.6",
+    "@grafana/e2e": "^11.0.7",
     "@grafana/e2e-selectors": "^11.2.2",{{/if}}
     "@grafana/eslint-config": "^7.0.0",{{#if usePlaywright}}
     "@grafana/plugin-e2e": "^1.8.3",{{/if}}
@@ -47,7 +47,8 @@
     "prettier": "^2.8.7",
     "replace-in-file-webpack-plugin": "^1.0.6",
     "sass": "1.63.2",
-    "sass-loader": "13.3.1",
+    "sass-loader": "13.3.1",{{#if usePlaywright}}
+    "semver": "^7.6.3",{{/if}}
     "style-loader": "3.3.3",
     "swc-loader": "^0.2.3",
     "terser-webpack-plugin": "^5.3.10",

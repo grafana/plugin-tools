@@ -31,13 +31,25 @@
       "labels": ["dependencies", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
-      "matchUpdateTypes": ["patch"]
+      "excludePackageNames": ["@grafana/e2e-selectors"],
+      "matchUpdateTypes": ["patch"],
+    },
+    {
+      "automerge": true,
+      "groupName": "e2e-selector dependencies",
+      "groupSlug": "plugin-e2e-selectors",
+      "labels": ["dependencies", "patch"],
+      "matchPackageNames": ["@grafana/e2e-selectors"],
+      "followTag": "modified",
+      "rangeStrategy": "bump",
+      "enabledManagers": ["npm"],
     },
     {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
       "labels": ["dependencies", "release", "patch"],
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
+      "excludePackageNames": ["@grafana/e2e-selectors"],
       "matchUpdateTypes": ["minor", "major"]
     },
     // Docusaurus dependencies have to be grouped together otherwise error out when building website.
@@ -59,7 +71,8 @@
       "groupSlug": "dev-dependencies-automerge",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["devDependencies"]
+      "matchDepTypes": ["devDependencies"],
+      "excludePackageNames": ["@grafana/e2e-selectors"],
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
     // which would be misleading to consumers.

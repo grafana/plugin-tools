@@ -10,7 +10,10 @@ export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
 
-  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly dashboard?: DashboardPageArgs
+  ) {
     super(ctx, dashboard);
     this.dataSourcePicker = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
@@ -77,7 +80,7 @@ export class DashboardPage extends GrafanaPage {
    * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
    */
   async addPanel(): Promise<PanelEditPage> {
-    const { components, pages } = this.ctx.selectors;
+    const { components, pages, constants } = this.ctx.selectors;
 
     // From Grafana 11.3.0, one needs to click the edit button before adding a new panel in already existing dashboards
     if (semver.gte(this.ctx.grafanaVersion, '11.3.0') && this.dashboard?.uid) {
@@ -85,9 +88,7 @@ export class DashboardPage extends GrafanaPage {
     }
 
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      await this.getByGrafanaSelector(
-        components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)
-      ).click();
+      await this.getByGrafanaSelector(components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)).click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       if (this.dashboard?.uid) {

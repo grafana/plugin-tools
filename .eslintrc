@@ -1,6 +1,7 @@
 {
   "extends": ["@grafana/eslint-config"],
   "rules": {
-    "react/prop-types": "off"
-  }
+    "react/prop-types": "off",
+    "react-hooks/rules-of-hooks": "off",
+  },
 }
