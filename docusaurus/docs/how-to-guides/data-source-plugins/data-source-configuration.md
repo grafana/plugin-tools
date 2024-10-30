@@ -22,8 +22,8 @@ If your plugin requires a logo, follow these recommendations:
 - Use logos with a transparent background, avoiding white backgrounds.
 - Logos should be in SVG format.
 
-**Example:** MongoDB  
-**Example:** Datadog
+**Example:** [MongoDB](https://www.mongodb.com/company/newsroom/brand-resources)  
+**Example:** [Datadog](https://www.datadoghq.com/about/resources/)
 
 ## Description and required fields
 
