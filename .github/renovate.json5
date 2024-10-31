@@ -42,7 +42,7 @@
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
-      "ignorePaths": ["/packages/create-plugin/templates/common/**"],
+      "matchCategories": ["npm"],
     },
     {
       "groupName": "grafana dependencies",
