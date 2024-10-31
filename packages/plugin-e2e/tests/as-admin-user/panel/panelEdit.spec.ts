@@ -135,3 +135,17 @@ test('select unit in unit picker', async ({ gotoPanelEditPage }) => {
 
   await expect(unitPicker.value()).toHaveValue('Pixels');
 });
+
+test('select timezone in timezone picker', async ({ gotoPanelEditPage }) => {
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const standardOptions = panelEdit.getOptionsGroup('Axis');
+  const timeZonePicker = standardOptions.getSelect('Time zone');
+
+  await expect(timeZonePicker.value()).toHaveText('Default');
+
+  await timeZonePicker.open();
+  const option = await timeZonePicker.getOption('Europe/Stockholm');
+  await option.click();
+
+  await expect(timeZonePicker.value()).toHaveText('Europe/Stockholm');
+});
