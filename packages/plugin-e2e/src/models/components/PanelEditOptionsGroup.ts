@@ -2,6 +2,7 @@ import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { Select } from './Select';
 import { ColorPicker } from './ColorPicker';
+import { UnitPicker } from './UnitPicker';
 
 export class PanelEditOptionsGroup {
   constructor(private ctx: PluginTestCtx, public readonly element: Locator, private groupLabel: string) {}
@@ -34,6 +35,10 @@ export class PanelEditOptionsGroup {
 
   getColorPicker(label: string): ColorPicker {
     return new ColorPicker(this.ctx, this.getByLabel(label));
+  }
+
+  getUnitPicker(label: string): UnitPicker {
+    return new UnitPicker(this.ctx, this.getByLabel(label));
   }
 
   private getByLabel(optionLabel: string): Locator {
