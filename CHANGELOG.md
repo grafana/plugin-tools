@@ -1,3 +1,16 @@
+# (Thu Oct 31 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.0.6`
+  - Types Bundler: Add debugger and process args [#1269](https://github.com/grafana/plugin-tools/pull/1269) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Oct 30 2024)
 
 #### 🐛 Bug Fix

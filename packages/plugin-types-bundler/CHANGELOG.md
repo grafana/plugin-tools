@@ -1,3 +1,15 @@
+# v0.0.6 (Thu Oct 31 2024)
+
+#### 🐛 Bug Fix
+
+- Types Bundler: Add debugger and process args [#1269](https://github.com/grafana/plugin-tools/pull/1269) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.0.4 (Wed Oct 09 2024)
 
 #### 🐛 Bug Fix
