@@ -23,7 +23,7 @@ Depending on the approach you take for performing [one of the steps](#step-5-use
 1. Grafana must be configured to run data sources as standalone API servers, a behavior which is behind the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/3457f219be1c8bce99f713d7a907ee339ef38229/pkg/services/featuremgmt/registry.go#L519).
 1. The plugin must be run on a Grafana version 11.4 or later.
 
-More information about these prerequisites is found in [step 5](#step-5-use-migration-code-from-the-frontend-using-experimental-apis) but if your plugin can't adhere to these requirements, there is an [alternative approach](#step-5-alternative-run-migrations-using-legacy-apis) using existing APIs
+More information about these prerequisites is found in [step 5](#step-5-use-migration-code-from-the-frontend-using-experimental-apis), but if your plugin can't adhere to these requirements, there is an [alternative approach](#step-5-alternative-run-migrations-using-legacy-apis) using existing APIs.
 
 ## Implement a backend migration handler
 
@@ -39,7 +39,7 @@ The migration system detailed in this guide doesn't support two-way migrations. 
 
 First of all, plugins don't need to have strongly typed queries. While this lowers the barrier for plugin development, plugins that don't define types are harder to scale and maintain. The first step in this guide is to add the required files to define the plugin query.
 
-See the following example: [grafana-plugin-examples#400](https://github.com/grafana/grafana-plugin-examples/pull/400). As you can see, there are multiple files to create. These files will be used for both generating OpenAPI documentation and validating that the received queries are valid but it's a feature still in progress that isn't available yet.
+See the following example: [grafana-plugin-examples#400](https://github.com/grafana/grafana-plugin-examples/pull/400). As you can see, there are multiple files to create. These files will be used for both generating OpenAPI documentation and validating that the received queries are valid (but it's a feature still in progress that isn't available yet).
 
 Create these files:
 
@@ -55,7 +55,7 @@ For a complete example of how to add a query migration (steps 2, 3 and 4), refer
 
 :::
 
-Once your plugin has its own schemas, you can start introducing model changes. Since queries within the major version (or same API version) need to be compatible, you have to maintain a reference to the legacy data format. This reference also helps you to enable an easy migration path.
+Once your plugin has its own schemas, start introducing model changes. Since queries within the major version (or same API version) need to be compatible, maintain a reference to the legacy data format. This reference also helps to enable an easy migration path.
 
 For example, let's assume that you want to change the query format of your plugin and the `Multiplier` property that you were using is changing to `Multiply` like so:
 
@@ -74,7 +74,7 @@ For example, let's assume that you want to change the query format of your plugi
 
 In this example, you can regenerate the schema running the test in `query_test.go` so your new data type will become ready to be used.
 
-Note that we haven't yet made a breaking change because all new parameters (in this case `Multiply`) are marked as optional. Also, we haven't modified any of the business logic, so everything should work as before, using the deprecated property. We're going to actually make a breaking change in the next step.
+Note that there is not yet a breaking change because all the new parameters (in this case `Multiply`) are marked as optional. Also, none of the other business logic has been modified, so everything should work as before, using the deprecated property. In the next step, there is actually a breaking change. 
 
 ### Step 3: Use the new query format
 
@@ -202,7 +202,7 @@ When running Grafana with experimental APIs, each data source will run as an iso
 
 In this scenario, and to ensure that your plugin runs with the expected API version (`v0alpha1` at the beginning), implement an `AdmissionHandler`. This `AdmissionHandler` ensures that the given data source settings satisfy what's expected for the running API version, and therefore they can handle queries for that API version.
 
-This step isn't mandatory while the plugin is at `v0*`, but it is mandatory once the plugin reaches `v1`. At the moment, it's used to [validate data source settings when saving them](https://github.com/grafana/grafana/blob/a46ff09bf91895ee3de0d8f6c4ab88d70b47bfe6/pkg/services/datasources/service/datasource.go#L373).
+This step isn't mandatory while the plugin is at `v0*`, but it's mandatory once the plugin reaches `v1`. At the moment, it's used to [validate data source settings when saving them](https://github.com/grafana/grafana/blob/a46ff09bf91895ee3de0d8f6c4ab88d70b47bfe6/pkg/services/datasources/service/datasource.go#L373).
 
 The `AdmissionHandler` method should implement two main functions:
 
