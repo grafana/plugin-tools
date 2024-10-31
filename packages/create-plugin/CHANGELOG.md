@@ -1,3 +1,55 @@
+# v5.7.4 (Wed Oct 30 2024)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1199](https://github.com/grafana/plugin-tools/pull/1199) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v5.7.3 (Mon Oct 28 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency which to v5 [#1242](https://github.com/grafana/plugin-tools/pull/1242) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency boxen to v8 [#1194](https://github.com/grafana/plugin-tools/pull/1194) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+- Update dependency glob to v11 [#1209](https://github.com/grafana/plugin-tools/pull/1209) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.7.2 (Mon Oct 28 2024)
+
+#### 🐛 Bug Fix
+
+- Fix: Dont default navigation page permissions to admin [#1243](https://github.com/grafana/plugin-tools/pull/1243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.7.1 (Fri Oct 25 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix broken panel test [#1253](https://github.com/grafana/plugin-tools/pull/1253) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.7.0 (Thu Oct 24 2024)
 
 :tada: This release contains work from a new contributor! :tada:

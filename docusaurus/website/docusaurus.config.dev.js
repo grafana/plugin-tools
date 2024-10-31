@@ -81,6 +81,11 @@ const config = {
       environment: 'development',
     },
   },
+
+  scripts: [
+    // adobe target
+    'https://grafana-dev.com/at.js',
+  ],
 };
 
 module.exports = config;

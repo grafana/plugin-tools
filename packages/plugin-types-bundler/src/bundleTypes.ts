@@ -1,14 +1,12 @@
 import { getImportsInfo } from '@grafana/levitate';
 import { EntryPointConfig, generateDtsBundle } from 'jackw-dts-bundle-gen-test';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { extname, join } from 'node:path';
-import type { ParsedArgs } from './utils.js';
+import { DEFAULT_ARGS, type ParsedArgs } from './args.js';
+import { debug } from './debug.js';
 
-export const generateTypes = ({ entryPoint, tsConfig, outDir }: ParsedArgs) => {
-  if (!entryPoint) {
-    throw new Error('Please provide the path for the entry types file as an argument.');
-  }
-
+export const generateTypes = (args: ParsedArgs) => {
+  const { entryPoint, tsConfig, outDir } = handleArgs(args);
   const entryPoints: EntryPointConfig[] = [
     {
       filePath: entryPoint,
@@ -20,6 +18,8 @@ export const generateTypes = ({ entryPoint, tsConfig, outDir }: ParsedArgs) => {
   const options = {
     preferredConfigPath: tsConfig,
   };
+
+  debug({ ...entryPoints[0], ...options });
 
   const dts = generateDtsBundle(entryPoints, options);
   const cleanedDts = cleanDTS(dts);
@@ -47,4 +47,30 @@ function isBareSpecifier(packageName: string) {
   const isRelative = packageName.startsWith('./') || packageName.startsWith('../') || packageName.startsWith('/');
   const hasExtension = extname(packageName) !== '';
   return !isRelative && !hasExtension;
+}
+
+function handleArgs(args: ParsedArgs) {
+  let { entryPoint, tsConfig, outDir } = args;
+
+  if (entryPoint === undefined) {
+    throw new Error(
+      'Please provide the path for the entry types file as an argument. (E.g. "npx @grafana/plugin-types-bundler --entry-point ./src/types/index.ts")'
+    );
+  }
+
+  if (!existsSync(entryPoint)) {
+    throw new Error(`Entry point not found: ${entryPoint}`);
+  }
+
+  if (!Boolean(tsConfig)) {
+    debug("No tsconfig provided, using default tsconfig.json ('../tsconfig/tsconfig.json')");
+    tsConfig = DEFAULT_ARGS.tsConfig;
+  }
+
+  if (!Boolean(outDir)) {
+    debug("No outDir provided, using default dist ('./dist')");
+    outDir = DEFAULT_ARGS.outDir;
+  }
+
+  return { entryPoint, tsConfig, outDir };
 }

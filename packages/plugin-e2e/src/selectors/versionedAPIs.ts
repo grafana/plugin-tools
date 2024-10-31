@@ -1,4 +1,5 @@
-import { MIN_GRAFANA_VERSION } from './constants';
+import { VersionedSelectorGroup } from '@grafana/e2e-selectors';
+import { MIN_GRAFANA_VERSION } from './minGrafanaVersion';
 
 export const versionedAPIs = {
   Alerting: {
@@ -21,7 +22,7 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: '/api/ds/query',
     },
     health: {
-      ['9.5.0']: (uid: string, _: string) => `/api/datasources/uid/${uid}/health`,
+      '9.5.0': (uid: string, _: string) => `/api/datasources/uid/${uid}/health`,
       [MIN_GRAFANA_VERSION]: (_: string, id: string) => `/api/datasources/${id}/health`,
     },
     datasourceByUID: {
@@ -42,4 +43,6 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: (pluginId: string) => `/api/plugins/${pluginId}/settings`,
     },
   },
-};
+} satisfies VersionedSelectorGroup;
+
+export type VersionedAPIs = typeof versionedAPIs;

@@ -1,3 +1,75 @@
+# (Wed Oct 30 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.7.4`
+  - Update grafana dependencies [#1199](https://github.com/grafana/plugin-tools/pull/1199) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Oct 28 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v11.4.0-204832 [#1262](https://github.com/grafana/plugin-tools/pull/1262) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.7.3`
+  - Update dependency which to v5 [#1242](https://github.com/grafana/plugin-tools/pull/1242) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency boxen to v8 [#1194](https://github.com/grafana/plugin-tools/pull/1194) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+  - Update dependency glob to v11 [#1209](https://github.com/grafana/plugin-tools/pull/1209) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `website@3.4.8`
+  - Update dependency clsx to v2 [#1205](https://github.com/grafana/plugin-tools/pull/1205) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Oct 28 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.7.2`
+  - Fix: Dont default navigation page permissions to admin [#1243](https://github.com/grafana/plugin-tools/pull/1243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Oct 28 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.11.0`
+  - Plugin E2E: Use selectors from grafana/e2e-selectors package [#1123](https://github.com/grafana/plugin-tools/pull/1123) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Oct 25 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.7.1`
+  - Create Plugin: Fix broken panel test [#1253](https://github.com/grafana/plugin-tools/pull/1253) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Oct 24 2024)
 
 :tada: This release contains work from a new contributor! :tada:

@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { existsSync } from 'fs';
+import { parsedArgs } from '../args.js';
 import { generateTypes } from '../bundleTypes.js';
-import { parsedArgs } from '../utils.js';
+import { debug } from '../debug.js';
 
-const { entryPoint, tsConfig, outDir } = parsedArgs;
+let { entryPoint, tsConfig, outDir } = parsedArgs;
 
-// Check if the first argument is present
+// Check if the entrypoint argument is present
 if (entryPoint === undefined) {
   console.error('Please provide the path for the entry types file as an argument.');
   console.error('(E.g. "npx @grafana/plugin-types-bundler ./src/types/index.ts")');
@@ -21,6 +22,9 @@ if (!existsSync(entryPoint)) {
 const startTime = Date.now().valueOf();
 try {
   console.log('⚡️ Starting to bundle types for plugin...');
+
+  debug({ entryPoint, tsConfig, outDir });
+
   generateTypes({ entryPoint, tsConfig, outDir });
 } catch (error) {
   console.error('Error while bundling types:', error);

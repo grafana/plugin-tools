@@ -5,7 +5,10 @@ import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly args: DashboardEditViewArgs<string>
+  ) {
     super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
   }
@@ -16,7 +19,7 @@ export class AnnotationEditPage extends GrafanaPage {
   async goto(options?: NavigateOptions) {
     const { Dashboard, AddDashboard } = this.ctx.selectors.pages;
     const url = this.args.dashboard?.uid
-      ? Dashboard.Settings.Annotations.Edit.url(this.args.dashboard.uid, this.args.id)
+      ? `${Dashboard.url(this.args.dashboard.uid)}?${Dashboard.Settings.Annotations.Edit.urlParams(this.args.id)}`
       : AddDashboard.Settings.Annotations.Edit.url(this.args.id);
 
     await super.navigate(url, options);
