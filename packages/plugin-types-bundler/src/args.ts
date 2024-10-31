@@ -22,9 +22,10 @@ export const parsedArgs = parseArgs<ParsedArgs>(args, {
     console.error(`Unknown argument: ${arg}`);
     process.exit(1);
   },
-  default: {
-    entryPoint: undefined,
-    tsConfig: resolve(__dirname, '../tsconfig', 'tsconfig.json'),
-    outDir: join(process.cwd(), 'dist'),
-  },
 });
+
+export const DEFAULT_ARGS: ParsedArgs = {
+  entryPoint: undefined,
+  tsConfig: resolve(__dirname, '../tsconfig', 'tsconfig.json'),
+  outDir: join(process.cwd(), 'dist'),
+};
