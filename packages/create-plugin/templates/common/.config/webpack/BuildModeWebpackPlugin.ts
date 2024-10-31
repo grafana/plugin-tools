@@ -11,17 +11,22 @@ export class BuildModeWebpackPlugin {
           stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
         },
         async () => {
-          const pluginJsonAsset = compilation.getAsset('plugin.json');
-          const pluginJsonString = pluginJsonAsset ? pluginJsonAsset?.source.source().toString() : '{}';
-          const pluginJsonWithBuildMode = JSON.stringify(
-            {
-              ...JSON.parse(pluginJsonString),
-              buildMode: compilation.options.mode,
-            },
-            null,
-            4
-          );
-          compilation.updateAsset('plugin.json', new webpack.sources.RawSource(pluginJsonWithBuildMode));
+          const assets = compilation.getAssets();
+          for (const asset of assets) {
+            if (asset.name.endsWith('plugin.json')) {
+              console.log(asset.name);
+              const pluginJsonString = asset.source.source().toString();
+              const pluginJsonWithBuildMode = JSON.stringify(
+                {
+                  ...JSON.parse(pluginJsonString),
+                  buildMode: compilation.options.mode,
+                },
+                null,
+                4
+              );
+              compilation.updateAsset(asset.name, new webpack.sources.RawSource(pluginJsonWithBuildMode));
+            }
+          }
         }
       );
     });
