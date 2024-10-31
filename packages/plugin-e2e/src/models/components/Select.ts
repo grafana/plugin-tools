@@ -2,17 +2,22 @@ import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 
 export class Select {
-  constructor(private ctx: PluginTestCtx, public readonly locator: Locator) {}
+  constructor(private ctx: PluginTestCtx, public readonly element: Locator) {}
 
   getOption(label: string): Locator {
+    // This one is opened in a portal so it is outside of the element
     return this.ctx.page.getByLabel('Select options menu').getByText(label);
   }
 
   open(): Promise<void> {
-    return this.locator.click();
+    return this.element.getByRole('combobox').click();
   }
 
   value(): Locator {
-    return this.ctx.page.locator(this.ctx.selectors.components.Select.singleValue(''));
+    return this.element.locator('div[class*="-grafana-select-value-container"]');
+  }
+
+  values(): Locator {
+    return this.element.locator('div[class*="-grafana-select-multi-value-container"]');
   }
 }
