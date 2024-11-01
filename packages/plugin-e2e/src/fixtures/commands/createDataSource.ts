@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { APIRequestContext, expect, TestFixture } from '@playwright/test';
+import { expect, TestFixture } from '@playwright/test';
 import { CreateDataSourceArgs, DataSourceSettings, PlaywrightArgs } from '../../types';
+import { GrafanaAPIClient } from '../../models/GrafanaAPIClient';
 
 type CreateDataSourceViaAPIFixture = TestFixture<
   (args: CreateDataSourceArgs) => Promise<DataSourceSettings>,
@@ -8,28 +9,21 @@ type CreateDataSourceViaAPIFixture = TestFixture<
 >;
 
 export const createDataSourceViaAPI = async (
-  request: APIRequestContext,
+  grafanaAPIClient: GrafanaAPIClient,
   datasource: CreateDataSourceArgs
 ): Promise<DataSourceSettings> => {
   const { type, name } = datasource;
   const dsName = name ?? `${type}-${uuidv4()}`;
 
-  const existingDataSource = await request.get(`/api/datasources/name/${dsName}`);
-  if (await existingDataSource.ok()) {
+  const existingDataSource = await grafanaAPIClient.getDataSourceByName(dsName);
+  if (existingDataSource.ok()) {
     const json = await existingDataSource.json();
-    await request.delete(`/api/datasources/uid/${json.uid}`);
+    await grafanaAPIClient.deleteDataSourceByUID(json.uid);
   }
 
-  const createDsReq = await request.post('/api/datasources', {
-    data: {
-      ...datasource,
-      name: dsName,
-      access: 'proxy',
-      isDefault: false,
-    },
-  });
+  const createDsReq = await grafanaAPIClient.createDataSource(datasource, dsName);
   const text = await createDsReq.text();
-  const status = await createDsReq.status();
+  const status = createDsReq.status();
   if (status === 200) {
     return createDsReq.json().then((r) => r.datasource);
   }
@@ -38,8 +32,8 @@ export const createDataSourceViaAPI = async (
   return existingDataSource.json();
 };
 
-export const createDataSource: CreateDataSourceViaAPIFixture = async ({ request }, use) => {
+export const createDataSource: CreateDataSourceViaAPIFixture = async ({ grafanaAPIClient }, use) => {
   await use(async (args) => {
-    return createDataSourceViaAPI(request, args);
+    return createDataSourceViaAPI(grafanaAPIClient, args);
   });
 };
