@@ -1,3 +1,17 @@
+# v1.11.1 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Use api client when creating new datasources [#1201](https://github.com/grafana/plugin-tools/pull/1201) ([@sunker](https://github.com/sunker))
+- Update dependency @grafana/e2e-selectors to v11.4.0-205417 [#1270](https://github.com/grafana/plugin-tools/pull/1270) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.11.0 (Mon Oct 28 2024)
 
 #### 🚀 Enhancement

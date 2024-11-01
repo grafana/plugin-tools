@@ -1,3 +1,21 @@
+# (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.11.1`
+  - Plugin E2E: Use api client when creating new datasources [#1201](https://github.com/grafana/plugin-tools/pull/1201) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@5.7.5`, `@grafana/plugin-e2e@1.11.1`
+  - Update dependency @grafana/e2e-selectors to v11.4.0-205417 [#1270](https://github.com/grafana/plugin-tools/pull/1270) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.7.5`
+  - Update dependency @grafana/scenes to v5.21.1 [#1283](https://github.com/grafana/plugin-tools/pull/1283) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Oct 31 2024)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,16 @@
+# v5.7.5 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v11.4.0-205417 [#1270](https://github.com/grafana/plugin-tools/pull/1270) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/scenes to v5.21.1 [#1283](https://github.com/grafana/plugin-tools/pull/1283) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.7.4 (Wed Oct 30 2024)
 
 #### 🐛 Bug Fix
