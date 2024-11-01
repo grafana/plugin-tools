@@ -1,5 +1,24 @@
 # (Fri Nov 01 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.11.2`
+  - Update dependency @grafana/e2e-selectors to ^11.4.0-205558 [#1294](https://github.com/grafana/plugin-tools/pull/1294) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/e2e-selectors to ^11.4.0-205544 [#1292](https://github.com/grafana/plugin-tools/pull/1292) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency uuid to v11 [#1263](https://github.com/grafana/plugin-tools/pull/1263) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.8.1`
+  - Update dependency @grafana/scenes to v5.21.2 [#1291](https://github.com/grafana/plugin-tools/pull/1291) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v1.11.1 [#1286](https://github.com/grafana/plugin-tools/pull/1286) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Nov 01 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@5.8.0`

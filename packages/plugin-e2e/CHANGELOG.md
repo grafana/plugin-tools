@@ -1,3 +1,17 @@
+# v1.11.2 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205558 [#1294](https://github.com/grafana/plugin-tools/pull/1294) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205544 [#1292](https://github.com/grafana/plugin-tools/pull/1292) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency uuid to v11 [#1263](https://github.com/grafana/plugin-tools/pull/1263) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v1.11.1 (Fri Nov 01 2024)
 
 #### 🐛 Bug Fix

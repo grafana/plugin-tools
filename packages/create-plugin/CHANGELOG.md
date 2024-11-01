@@ -1,3 +1,17 @@
+# v5.8.1 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/scenes to v5.21.2 [#1291](https://github.com/grafana/plugin-tools/pull/1291) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v1.11.1 [#1286](https://github.com/grafana/plugin-tools/pull/1286) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.8.0 (Fri Nov 01 2024)
 
 #### 🚀 Enhancement
