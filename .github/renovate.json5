@@ -38,7 +38,7 @@
       "automerge": true,
       "groupName": "e2e-selector dependencies",
       "groupSlug": "plugin-e2e-selectors",
-      "labels": ["dependencies", "patch"],
+      "labels": ["dependencies", "patch", "release"],
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
