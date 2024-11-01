@@ -1,5 +1,18 @@
 # (Fri Nov 01 2024)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.8.0`
+  - Create Plugin: Add `buildMode` property to plugin.json asset [#1281](https://github.com/grafana/plugin-tools/pull/1281) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Nov 01 2024)
+
 #### 🐛 Bug Fix
 
 - `@grafana/plugin-e2e@1.11.1`
