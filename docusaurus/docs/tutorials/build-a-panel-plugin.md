@@ -55,10 +55,36 @@ Next, you'll learn the basic workflow of making a change to your panel, building
 
 First, you need to add your panel to a dashboard:
 
-1. Open Grafana in your browser.
-1. Create a new dashboard, and add a new panel.
-1. Select your panel from the list of visualization types.
-1. Save the dashboard.
+### Steps to Add Your Panel to a Dashboard
+
+1. **Open Grafana in your browser**  
+   Grafana is usually accessible at [http://localhost:3000](http://localhost:3000).
+
+2. **Create a new dashboard**
+
+   - From the left-side menu, click on **Dashboards**.
+   - On the top right, click **New** -> **Dashboard**.
+   - Press **+ Add Visualization** to start configuring your new panel.
+
+3. **Configure TestData data source**  
+   In the data source configuration modal, choose the **TestData DB** data source for this dashboard.
+
+4. **Search and select your panel plugin**  
+   In the panel configuration view, look at the **Visualization** list on the right side, search for your panel plugin, and select it.
+
+5. **Save the dashboard**  
+   Save your dashboard to retain the configuration.
+
+---
+
+### Alternative Way: Use the Provisioned Sample Panel Dashboard
+
+You can also view your panel in action through a pre-configured dashboard:
+
+1. Go to **Dashboards** and select the **Provisioned Sample Panel Dashboard**.
+   - The **TestData DB** data source is already configured with sample data for this dashboard.
+2. To edit, find your panel in this dashboard and click the **3-dot menu** (vertical dots) at the top right corner of your panel.
+3. From the dropdown, select **Edit** to customize or examine your panel's settings.
 
 Now that you can view your panel, try making a change to the panel plugin:
 
