@@ -200,6 +200,22 @@ Most panels visualize dynamic data from a Grafana data source. In this step, you
 To use data from queries in your panel, you need to set up a data source. If you don't have one available, you can use the [TestData](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source while developing.
 :::
 
+When adding your panel to a dashboard, configure it with a data source to populate it with data dynamically. Alternatively, you can use the **Provisioned Sample Panel Dashboard**, which is already configured with a sample data source.
+
+### Using Provisioned Sample Panel Dashboard
+
+The **Provisioned Sample Panel Dashboard** comes preconfigured with the **TestData** data source. This setup includes sample data for testing and development. The sample data is in the `raw_frame` scenario of the [TestData](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source and consists of two timeseries with the same timestamps, as shown below. The table displays these two timeseries joined by timestamp:
+
+| Timestamp           | Label1 | Value1 | Label2 | Value2 |
+| ------------------- | ------ | ------ | ------ | ------ |
+| 2020-12-31 19:00:00 | A      | 10     | A      | 40     |
+| 2020-12-31 20:00:00 | B      | 20     | B      | 50     |
+| 2020-12-31 21:00:00 | C      | 15     | C      | 45     |
+| 2020-12-31 22:00:00 | D      | 25     | D      | 55     |
+| 2020-12-31 23:00:00 | E      | 30     | E      | 60     |
+
+This setup allows you to test your panel’s dynamic elements using real sample data, structured with multiple series for more complex visualization.
+
 The results from a data source query within your panel are available in the `data` property inside your panel component.
 
 ```ts
@@ -215,6 +231,15 @@ Here's an example of a data frame with a time field, `Time`, and a number field,
 | 1589189388597 | 32.4  |
 | 1589189406480 | 27.2  |
 | 1589189513721 | 15.0  |
+
+**Provisioned Sample Panel Dashboard** sample data:
+| Timestamp | Label1 | Value1 | Label2 | Value2 |
+| ------------------- | ------ | ------ | ------ | ------ |
+| 2020-12-31 19:00:00 | A | 10 | A | 40 |
+| 2020-12-31 20:00:00 | B | 20 | B | 50 |
+| 2020-12-31 21:00:00 | C | 15 | C | 45 |
+| 2020-12-31 22:00:00 | D | 25 | D | 55 |
+| 2020-12-31 23:00:00 | E | 30 | E | 60 |
 
 Let's see how you can retrieve data from a data frame and use it in your visualization.
 
