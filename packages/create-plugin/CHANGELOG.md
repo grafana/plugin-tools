@@ -1,3 +1,15 @@
+# v5.8.2 (Mon Nov 04 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v1.11.2 [#1295](https://github.com/grafana/plugin-tools/pull/1295) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.8.1 (Fri Nov 01 2024)
 
 #### 🐛 Bug Fix
