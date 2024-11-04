@@ -49,6 +49,8 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     strategy:
       matrix:
         include:
@@ -129,6 +131,19 @@ jobs:
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: npm exec playwright install chromium
         working-directory: ./${{ matrix.workingDir }}
+
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Start grafana server for e2e tests
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}

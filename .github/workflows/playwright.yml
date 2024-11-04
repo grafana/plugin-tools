@@ -53,7 +53,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - uses: grafana/shared-workflows/actions/get-vault-secrets@main
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
