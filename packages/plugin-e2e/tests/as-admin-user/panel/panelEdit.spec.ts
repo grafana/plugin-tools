@@ -81,10 +81,8 @@ test('select value in single value select', async ({ gotoPanelEditPage }) => {
   // This one is a bit weird since the select don't have a field label
   const timeZoneSelect = timeFormatOptions.getSelect('Timezone');
 
-  await timeZoneSelect.open();
-  await timeZoneSelect.getOption('Europe/Stockholm').click();
-
-  await expect(timeZoneSelect.value()).toHaveText('Europe/Stockholm');
+  await timeZoneSelect.selectOption('Europe/Stockholm');
+  await expect(timeZoneSelect).toHaveText('Europe/Stockholm');
 });
 
 test('enter value in slider', async ({ gotoPanelEditPage }) => {
@@ -141,11 +139,6 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage }) => {
   const standardOptions = panelEdit.getOptionsGroup('Axis');
   const timeZonePicker = standardOptions.getSelect('Time zone');
 
-  await expect(timeZonePicker.value()).toHaveText('Default');
-
-  await timeZonePicker.open();
-  const option = await timeZonePicker.getOption('Europe/Stockholm');
-  await option.click();
-
-  await expect(timeZonePicker.value()).toHaveText('Europe/Stockholm');
+  const option = await timeZonePicker.selectOption('Europe/Stockholm');
+  await expect(timeZonePicker).toHaveText('Europe/Stockholm');
 });

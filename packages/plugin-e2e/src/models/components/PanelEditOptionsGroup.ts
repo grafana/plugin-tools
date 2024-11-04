@@ -1,6 +1,6 @@
 import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
-import { Select } from './Select';
+import { createSelectProxy } from './SelectProxy';
 import { ColorPicker } from './ColorPicker';
 import { UnitPicker } from './UnitPicker';
 
@@ -29,8 +29,8 @@ export class PanelEditOptionsGroup {
     return this.getNumberInput(label);
   }
 
-  getSelect(label: string): Select {
-    return new Select(this.ctx, this.getByLabel(label));
+  getSelect(label: string): Locator {
+    return createSelectProxy(this.getByLabel(label));
   }
 
   getColorPicker(label: string): ColorPicker {
