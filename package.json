@@ -31,7 +31,7 @@
     "@swc/core": "^1.2.162",
     "@tsconfig/node20": "^20.1.2",
     "@tsconfig/recommended": "^1.0.1",
-    "@types/node": "22.8.7",
+    "@types/node": "22.9.0",
     "auto": "11.3.0",
     "husky": "^9.1.4",
     "lerna": "^8.0.0",
