@@ -32,7 +32,7 @@
     "playwright:all": "npx playwright test"
   },
   "engines": {
-    "node": ">=18 <=20"
+    "node": ">=18 <=22"
   },
   "peerDependencies": {
     "@playwright/test": "^1.41.2"
