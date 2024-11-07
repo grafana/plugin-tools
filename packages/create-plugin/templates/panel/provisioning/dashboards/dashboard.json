@@ -24,8 +24,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "grafana",
-        "uid": "grafana"
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
       },
       "gridPos": {
         "h": 8,
@@ -42,14 +42,15 @@
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "grafana-testdata-datasource",
+            "uid": "db84e60d-b92a-4089-82cb-34842fb1754b"
           },
-          "queryType": "randomWalk",
-          "refId": "A"
+          "refId": "A",
+          "scenarioId": "raw_frame",
+          "rawFrameContent": "[\n  {\n    \"columns\": [\n      {\n        \"text\": \"Time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"Label\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"Value\",\n        \"type\": \"number\"\n      }\n    ],\n    \"rows\": [\n      [1609459200000, \"A\", 10],\n      [1609462800000, \"B\", 20],\n      [1609466400000, \"C\", 15],\n      [1609470000000, \"D\", 25],\n      [1609473600000, \"E\", 30]\n    ]\n  },\n{\n    \"columns\": [\n      {\n        \"text\": \"Time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"Label\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"Value\",\n        \"type\": \"number\"\n      }\n    ],\n    \"rows\": [\n      [1609459200000, \"A\", 40],\n      [1609462800000, \"B\", 50],\n      [1609466400000, \"C\", 45],\n      [1609470000000, \"D\", 55],\n      [1609473600000, \"E\", 60]\n    ]\n  }\n]"
         }
       ],
-      "title": "Panel Title",
+      "title": "Sample Panel Title",
       "type": "{{ pluginId }}"
     },
     {
@@ -80,7 +81,7 @@
           "scenarioId": "no_data_points"
         }
       ],
-      "title": "Panel Title",
+      "title": "Sample Panel Title",
       "type": "{{ pluginId }}"
     }
   ],
