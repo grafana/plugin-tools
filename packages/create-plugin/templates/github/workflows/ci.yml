@@ -108,6 +108,12 @@ jobs:
           mv dist $\{{ steps.metadata.outputs.plugin-id }}
           zip $\{{ steps.metadata.outputs.archive }} $\{{ steps.metadata.outputs.plugin-id }} -r
 
+      - name: Check plugin.json
+        run: |
+          docker run --pull=always \
+            -v $PWD/${{ steps.metadata.outputs.archive }}:/archive.zip \
+            grafana/plugin-validator-cli /archive.zip
+
       - name: Archive Build
         uses: actions/upload-artifact@v4
         with:
