@@ -24,7 +24,6 @@
       "type": "page",
       "name": "Page One",
       "path": "/a/%PLUGIN_ID%/one",
-      "role": "Admin",
       "addToNav": true,
       "defaultNav": true
     },
@@ -32,7 +31,6 @@
       "type": "page",
       "name": "Page Two",
       "path": "/a/%PLUGIN_ID%/two",
-      "role": "Admin",
       "addToNav": true,
       "defaultNav": false
     },
@@ -40,7 +38,6 @@
       "type": "page",
       "name": "Page Three",
       "path": "/a/%PLUGIN_ID%/three",
-      "role": "Admin",
       "addToNav": true,
       "defaultNav": false
     },
@@ -48,7 +45,6 @@
       "type": "page",
       "name": "Page Four",
       "path": "/a/%PLUGIN_ID%/four",
-      "role": "Admin",
       "addToNav": true,
       "defaultNav": false
     },

@@ -304,6 +304,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "s4kh",
+      "name": "Syerikjan Kh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15072209?v=4",
+      "profile": "https://github.com/s4kh",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "jalevin",
+      "name": "Jeff Levin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1669620?v=4",
+      "profile": "https://github.com/jalevin",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7

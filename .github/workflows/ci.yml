@@ -49,6 +49,8 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     strategy:
       matrix:
         include:
@@ -112,7 +114,7 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: '~1.21'
+          go-version: '~1.22'
           check-latest: true
           cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
         if: ${{ matrix.hasBackend == true }}
@@ -130,19 +132,27 @@ jobs:
         run: npm exec playwright install chromium
         working-directory: ./${{ matrix.workingDir }}
 
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+
       - name: Start grafana server for e2e tests
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Wait for grafana server for e2e tests
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
 
       - name: Run e2e tests
         id: run-e2e-tests

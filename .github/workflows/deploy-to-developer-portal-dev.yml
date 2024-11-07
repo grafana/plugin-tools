@@ -36,9 +36,10 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY_DEV }}
-      - name: Deploy to Developer Portal Bucket
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: './docusaurus/website/build/'
-          destination: 'staging-developer-portal/plugin-tools'
-          parent: false
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+     
+      - name: 'Deploy to Developer Portal Bucket'
+        run: |
+          gsutil -m rsync -r -d -c ./docusaurus/website/build/ gs://staging-developer-portal/plugin-tools

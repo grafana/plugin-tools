@@ -1,3 +1,71 @@
+# v1.11.3 (Mon Nov 04 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205692 [#1301](https://github.com/grafana/plugin-tools/pull/1301) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.11.2 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205558 [#1294](https://github.com/grafana/plugin-tools/pull/1294) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205544 [#1292](https://github.com/grafana/plugin-tools/pull/1292) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency uuid to v11 [#1263](https://github.com/grafana/plugin-tools/pull/1263) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.11.1 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Use api client when creating new datasources [#1201](https://github.com/grafana/plugin-tools/pull/1201) ([@sunker](https://github.com/sunker))
+- Update dependency @grafana/e2e-selectors to v11.4.0-205417 [#1270](https://github.com/grafana/plugin-tools/pull/1270) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.11.0 (Mon Oct 28 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Use selectors from grafana/e2e-selectors package [#1123](https://github.com/grafana/plugin-tools/pull/1123) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.10.0 (Thu Oct 24 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Jeff Levin ([@jalevin](https://github.com/jalevin)), for all your work!
+
+#### 🚀 Enhancement
+
+- Config: check environment for Grafana admin URL, username, and password [#1244](https://github.com/grafana/plugin-tools/pull/1244) ([@jalevin](https://github.com/jalevin))
+
+#### Authors: 1
+
+- Jeff Levin ([@jalevin](https://github.com/jalevin))
+
+---
+
 # v1.8.3 (Wed Oct 02 2024)
 
 #### 🐛 Bug Fix

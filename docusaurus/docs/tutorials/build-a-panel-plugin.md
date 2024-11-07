@@ -55,10 +55,33 @@ Next, you'll learn the basic workflow of making a change to your panel, building
 
 First, you need to add your panel to a dashboard:
 
+### Add your panel to a dashboard
+
 1. Open Grafana in your browser.
-1. Create a new dashboard, and add a new panel.
-1. Select your panel from the list of visualization types.
+   By default, Grafana is accessible at [http://localhost:3000](http://localhost:3000).
+
+1. Create a new dashboard.
+
+   - From the menu, select **Dashboards**.
+   - On the top right, select **New** -> **Dashboard**.
+   - Select **Add Visualization** to start configuring your new panel.
+
+1. Configure the `TestData` data source. In the data source configuration modal, select the **TestData DB** data source for this dashboard.
+
+1. Search and select your panel plugin. In the panel configuration view, go to the **Visualization** list on the right side, search for your panel plugin, and select it.
+
 1. Save the dashboard.
+
+---
+
+### Alternative: Use the provisioned sample panel dashboard
+
+You can also view your panel in action through a pre-configured dashboard:
+
+1. Go to **Dashboards** and select the **Provisioned Sample Panel Dashboard**.
+   - The **TestData DB** data source is already configured with sample data for this dashboard.
+1. To edit, find your panel in this dashboard and click the menu (that is, the three vertical dots) at the top right corner of your panel.
+1. From the dropdown menu, select **Edit** to customize or examine your panel's settings.
 
 Now that you can view your panel, try making a change to the panel plugin:
 
@@ -69,7 +92,7 @@ Now that you can view your panel, try making a change to the panel plugin:
    ```
 
 1. Save the file.
-1. In the browser, reload Grafana to see the new changes.
+1. In the browser, reload Grafana. The changes should appear.
 
 ## Add panel options
 
@@ -174,13 +197,29 @@ Most panels visualize dynamic data from a Grafana data source. In this step, you
 To use data from queries in your panel, you need to set up a data source. If you don't have one available, you can use the [TestData](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source while developing.
 :::
 
+When adding your panel to a dashboard, configure it with a data source to populate it with data dynamically. Alternatively, you can use the **Provisioned Sample Panel Dashboard**, which is already configured with a sample data source.
+
+### Using the provisioned sample panel dashboard
+
+The Provisioned Sample Panel Dashboard comes preconfigured with the `TestData` data source. This setup includes sample data for testing and development. The sample data is in the `raw_frame` scenario of the [`TestData`](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source and consists of two time series with the same timestamps, as shown in the following table. The table displays these two time series joined by a timestamp:
+
+| Timestamp           | Label1 | Value1 | Label2 | Value2 |
+| ------------------- | ------ | ------ | ------ | ------ |
+| 2020-12-31 19:00:00 | A      | 10     | A      | 40     |
+| 2020-12-31 20:00:00 | B      | 20     | B      | 50     |
+| 2020-12-31 21:00:00 | C      | 15     | C      | 45     |
+| 2020-12-31 22:00:00 | D      | 25     | D      | 55     |
+| 2020-12-31 23:00:00 | E      | 30     | E      | 60     |
+
+This setup allows you to test your panel’s dynamic elements using real sample data, structured with multiple series for more complex visualization.
+
 The results from a data source query within your panel are available in the `data` property inside your panel component.
 
 ```ts
 const { data } = props;
 ```
 
-`data.series` contains the series returned from a data source query. Each series is represented as a data structure called _data frame_. A data frame resembles a table, where data is stored by columns, or _fields_, instead of rows. Every value in a field share the same data type, such as string, number, or time.
+The `data.series` contains the series returned from a data source query. Each series is represented as a data structure called _data frame_. A data frame resembles a table, where data is stored by columns, or _fields_, instead of rows. Every value in a field share the same data type, such as string, number, or time.
 
 Here's an example of a data frame with a time field, `Time`, and a number field, `Value`:
 
@@ -189,6 +228,15 @@ Here's an example of a data frame with a time field, `Time`, and a number field,
 | 1589189388597 | 32.4  |
 | 1589189406480 | 27.2  |
 | 1589189513721 | 15.0  |
+
+Provisioned sample panel dashboard\*\* sample data:
+| Timestamp | Label1 | Value1 | Label2 | Value2 |
+| ------------------- | ------ | ------ | ------ | ------ |
+| 2020-12-31 19:00:00 | A | 10 | A | 40 |
+| 2020-12-31 20:00:00 | B | 20 | B | 50 |
+| 2020-12-31 21:00:00 | C | 15 | C | 45 |
+| 2020-12-31 22:00:00 | D | 25 | D | 55 |
+| 2020-12-31 23:00:00 | E | 30 | E | 60 |
 
 Let's see how you can retrieve data from a data frame and use it in your visualization.
 

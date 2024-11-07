@@ -53,19 +53,27 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+
       - name: Start Grafana
         run: |
           cd packages/plugin-e2e
           docker compose pull
           AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
-      - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
 
       - name: Run Playwright tests
         id: run-tests

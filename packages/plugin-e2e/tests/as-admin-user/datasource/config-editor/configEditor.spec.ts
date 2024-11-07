@@ -8,17 +8,6 @@ test('invalid credentials should return an error', async ({ createDataSourceConf
   await expect(configPage.saveAndTest()).not.toBeOK();
 });
 
-test(
-  'valid credentials should return a 200 status code',
-  { tag: '@integration' },
-  async ({ createDataSourceConfigPage, page }) => {
-    const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
-    await page.getByTestId('Paste JWT button').click();
-    await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!.replace(/'/g, ''));
-    await expect(configPage.saveAndTest()).toBeOK();
-  }
-);
-
 test('should call a custom health endpoint when healthCheckPath is provided', async ({
   createDataSourceConfigPage,
   page,
