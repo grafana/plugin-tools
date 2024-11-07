@@ -55,36 +55,33 @@ Next, you'll learn the basic workflow of making a change to your panel, building
 
 First, you need to add your panel to a dashboard:
 
-### Steps to Add Your Panel to a Dashboard
+### Add your panel to a dashboard
 
-1. **Open Grafana in your browser**  
-   Grafana is usually accessible at [http://localhost:3000](http://localhost:3000).
+1. Open Grafana in your browser.
+   By default, Grafana is accessible at [http://localhost:3000](http://localhost:3000).
 
-2. **Create a new dashboard**
+1. Create a new dashboard.
 
-   - From the left-side menu, click on **Dashboards**.
-   - On the top right, click **New** -> **Dashboard**.
-   - Press **+ Add Visualization** to start configuring your new panel.
+   - From the menu, select **Dashboards**.
+   - On the top right, select **New** -> **Dashboard**.
+   - Select **Add Visualization** to start configuring your new panel.
 
-3. **Configure TestData data source**  
-   In the data source configuration modal, choose the **TestData DB** data source for this dashboard.
+1. Configure the `TestData` data source. In the data source configuration modal, select the **TestData DB** data source for this dashboard.
 
-4. **Search and select your panel plugin**  
-   In the panel configuration view, look at the **Visualization** list on the right side, search for your panel plugin, and select it.
+1. Search and select your panel plugin. In the panel configuration view, go to the **Visualization** list on the right side, search for your panel plugin, and select it.
 
-5. **Save the dashboard**  
-   Save your dashboard to retain the configuration.
+1. Save the dashboard.
 
 ---
 
-### Alternative Way: Use the Provisioned Sample Panel Dashboard
+### Alternative: Use the provisioned sample panel dashboard
 
 You can also view your panel in action through a pre-configured dashboard:
 
 1. Go to **Dashboards** and select the **Provisioned Sample Panel Dashboard**.
    - The **TestData DB** data source is already configured with sample data for this dashboard.
-2. To edit, find your panel in this dashboard and click the **3-dot menu** (vertical dots) at the top right corner of your panel.
-3. From the dropdown, select **Edit** to customize or examine your panel's settings.
+1. To edit, find your panel in this dashboard and click the menu (that is, the three vertical dots) at the top right corner of your panel.
+1. From the dropdown menu, select **Edit** to customize or examine your panel's settings.
 
 Now that you can view your panel, try making a change to the panel plugin:
 
@@ -95,7 +92,7 @@ Now that you can view your panel, try making a change to the panel plugin:
    ```
 
 1. Save the file.
-1. In the browser, reload Grafana to see the new changes.
+1. In the browser, reload Grafana. The changes should appear.
 
 ## Add panel options
 
@@ -202,9 +199,9 @@ To use data from queries in your panel, you need to set up a data source. If you
 
 When adding your panel to a dashboard, configure it with a data source to populate it with data dynamically. Alternatively, you can use the **Provisioned Sample Panel Dashboard**, which is already configured with a sample data source.
 
-### Using Provisioned Sample Panel Dashboard
+### Using the provisioned sample panel dashboard
 
-The **Provisioned Sample Panel Dashboard** comes preconfigured with the **TestData** data source. This setup includes sample data for testing and development. The sample data is in the `raw_frame` scenario of the [TestData](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source and consists of two timeseries with the same timestamps, as shown below. The table displays these two timeseries joined by timestamp:
+The Provisioned Sample Panel Dashboard comes preconfigured with the `TestData` data source. This setup includes sample data for testing and development. The sample data is in the `raw_frame` scenario of the [`TestData`](https://grafana.com/docs/grafana/latest/features/datasources/testdata) data source and consists of two time series with the same timestamps, as shown in the following table. The table displays these two time series joined by a timestamp:
 
 | Timestamp           | Label1 | Value1 | Label2 | Value2 |
 | ------------------- | ------ | ------ | ------ | ------ |
@@ -222,7 +219,7 @@ The results from a data source query within your panel are available in the `dat
 const { data } = props;
 ```
 
-`data.series` contains the series returned from a data source query. Each series is represented as a data structure called _data frame_. A data frame resembles a table, where data is stored by columns, or _fields_, instead of rows. Every value in a field share the same data type, such as string, number, or time.
+The `data.series` contains the series returned from a data source query. Each series is represented as a data structure called _data frame_. A data frame resembles a table, where data is stored by columns, or _fields_, instead of rows. Every value in a field share the same data type, such as string, number, or time.
 
 Here's an example of a data frame with a time field, `Time`, and a number field, `Value`:
 
@@ -232,7 +229,7 @@ Here's an example of a data frame with a time field, `Time`, and a number field,
 | 1589189406480 | 27.2  |
 | 1589189513721 | 15.0  |
 
-**Provisioned Sample Panel Dashboard** sample data:
+Provisioned sample panel dashboard\*\* sample data:
 | Timestamp | Label1 | Value1 | Label2 | Value2 |
 | ------------------- | ------ | ------ | ------ | ------ |
 | 2020-12-31 19:00:00 | A | 10 | A | 40 |
