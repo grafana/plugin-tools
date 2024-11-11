@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Which branch to use?"
-        default: "main"
+        description: 'Which branch to use?'
+        default: 'main'
 jobs:
   deploy:
     name: Deploy docs to Developer Portal Bucket
@@ -22,7 +22,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -39,7 +39,7 @@ jobs:
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
-     
+
       - name: 'Deploy to Developer Portal Bucket'
         run: |
           gsutil -m rsync -r -d -c ./docusaurus/website/build/ gs://staging-developer-portal/plugin-tools

@@ -19,7 +19,7 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -76,7 +76,7 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
@@ -217,7 +217,7 @@ jobs:
       - name: Setup environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
