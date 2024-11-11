@@ -1,3 +1,34 @@
+# (Mon Nov 11 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.9.0`, `@grafana/plugin-e2e@1.12.0`
+  - Support node 22 [#1298](https://github.com/grafana/plugin-tools/pull/1298) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@5.9.0`
+  - Create Plugin: Add plugin.json check step to CI [#1307](https://github.com/grafana/plugin-tools/pull/1307) ([@oshirohugo](https://github.com/oshirohugo))
+  - ref: set testdata-db DS for panel plugin [#1282](https://github.com/grafana/plugin-tools/pull/1282) ([@s4kh](https://github.com/s4kh) [@josmperez](https://github.com/josmperez))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.9.0`
+  - Update dependency @grafana/scenes to v5.23.4 [#1311](https://github.com/grafana/plugin-tools/pull/1311) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/scenes to v5.23.2 [#1310](https://github.com/grafana/plugin-tools/pull/1310) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Create plugin: Remove console.log from webpack buildmode plugin [#1306](https://github.com/grafana/plugin-tools/pull/1306) ([@jackw](https://github.com/jackw))
+  - Update dependency marked to v14 [#1220](https://github.com/grafana/plugin-tools/pull/1220) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+  - Update dependency @grafana/scenes to v5.23.1 [#1299](https://github.com/grafana/plugin-tools/pull/1299) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v1.11.3 [#1303](https://github.com/grafana/plugin-tools/pull/1303) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 6
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joseph Perez ([@josmperez](https://github.com/josmperez))
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
 # (Mon Nov 04 2024)
 
 #### 🐛 Bug Fix

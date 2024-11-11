@@ -1,3 +1,15 @@
+# v1.12.0 (Mon Nov 11 2024)
+
+#### 🚀 Enhancement
+
+- Support node 22 [#1298](https://github.com/grafana/plugin-tools/pull/1298) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.11.3 (Mon Nov 04 2024)
 
 #### 🐛 Bug Fix
