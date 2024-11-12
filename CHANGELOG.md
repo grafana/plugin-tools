@@ -1,3 +1,20 @@
+# (Tue Nov 12 2024)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency cookie to v1 [#1309](https://github.com/grafana/plugin-tools/pull/1309) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh))
+- `@grafana/create-plugin@5.9.1`
+  - Create Plugin: Fix failing scaffolds due to marked [#1319](https://github.com/grafana/plugin-tools/pull/1319) ([@jackw](https://github.com/jackw))
+  - Update dependency @grafana/plugin-e2e to v1.12.0 [#1317](https://github.com/grafana/plugin-tools/pull/1317) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Mon Nov 11 2024)
 
 #### 🚀 Enhancement

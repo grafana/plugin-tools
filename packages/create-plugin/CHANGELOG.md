@@ -1,3 +1,17 @@
+# v5.9.1 (Tue Nov 12 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix failing scaffolds due to marked [#1319](https://github.com/grafana/plugin-tools/pull/1319) ([@jackw](https://github.com/jackw))
+- Update dependency @grafana/plugin-e2e to v1.12.0 [#1317](https://github.com/grafana/plugin-tools/pull/1317) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.9.0 (Mon Nov 11 2024)
 
 #### 🚀 Enhancement
