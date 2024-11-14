@@ -39,6 +39,9 @@ const generalConfig = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  future: {
+    experimental_faster: true,
+  },
 };
 
 const plugins = [
