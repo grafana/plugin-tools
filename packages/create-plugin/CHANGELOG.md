@@ -1,3 +1,17 @@
+# v5.9.2 (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add error-handling for JSON parsing in utils [#1323](https://github.com/grafana/plugin-tools/pull/1323) ([@leventebalogh](https://github.com/leventebalogh))
+- chore(deps): update dependency @grafana/scenes to v5.24.0 [#1320](https://github.com/grafana/plugin-tools/pull/1320) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v5.9.1 (Tue Nov 12 2024)
 
 #### 🐛 Bug Fix

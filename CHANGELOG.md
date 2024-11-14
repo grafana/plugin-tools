@@ -1,3 +1,20 @@
+# (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.9.2`
+  - Create Plugin: Add error-handling for JSON parsing in utils [#1323](https://github.com/grafana/plugin-tools/pull/1323) ([@leventebalogh](https://github.com/leventebalogh))
+  - chore(deps): update dependency @grafana/scenes to v5.24.0 [#1320](https://github.com/grafana/plugin-tools/pull/1320) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/plugin-e2e@1.12.1`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-207766 - autoclosed [#1324](https://github.com/grafana/plugin-tools/pull/1324) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # (Tue Nov 12 2024)
 
 #### 🐛 Bug Fix
