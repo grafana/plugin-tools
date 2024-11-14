@@ -71,8 +71,14 @@ function getLatestSdkVersion(exportPath: string): Promise<string> {
         debug(error);
         reject();
       }
-      const version = JSON.parse(stdout).Version;
-      resolve(version);
+
+      try {
+        const version = JSON.parse(stdout).Version;
+        resolve(version);
+      } catch (e) {
+        debug(e);
+        reject();
+      }
     });
   });
 }
