@@ -167,7 +167,7 @@ jobs:
 
       - name: Check plugin.json
         run: |
-          cp dist/ ${{ matrix.workingDir }}
+          cp -r dist/ ${{ matrix.workingDir }}
           zip ${{ matrix.workingDir }}.zip ${{ matrix.workingDir }} -r
           rm -r ${{ matrix.workingDir }}
 
