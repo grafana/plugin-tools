@@ -35,6 +35,8 @@ import { GrafanaPage } from './models/pages/GrafanaPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
 import { variablePage } from './fixtures/variablePage';
 import { gotoVariablePage } from './fixtures/commands/gotoVariablePage';
+import { toHaveOption } from './matchers/toHaveOption';
+import { toHaveOptions } from './matchers/toHaveOptions';
 
 // models
 export { DataSourcePicker } from './models/components/DataSourcePicker';
@@ -92,6 +94,8 @@ export const expect = baseExpect.extend({
   toHaveAlert,
   toDisplayPreviews,
   toBeOK,
+  toHaveOption,
+  toHaveOptions,
 });
 
 export { selectors } from '@playwright/test';

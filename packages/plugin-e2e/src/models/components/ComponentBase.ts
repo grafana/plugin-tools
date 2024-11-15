@@ -1,0 +1,11 @@
+import { Locator } from '@playwright/test';
+
+type LocatorParams = Parameters<Locator['locator']>;
+
+export abstract class ComponentBase {
+  constructor(protected readonly element: Locator) {}
+
+  locator(selectorOrLocator: LocatorParams[0], options?: LocatorParams[1]): Locator {
+    return this.element.locator(selectorOrLocator, options);
+  }
+}

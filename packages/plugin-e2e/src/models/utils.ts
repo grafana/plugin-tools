@@ -1,5 +1,4 @@
-import { Locator, Page } from '@playwright/test';
-import { getByGrafanaSelectorOptions } from '../types';
+import { Page } from '@playwright/test';
 
 export const radioButtonSetChecked = async (
   page: Page,
@@ -13,16 +12,3 @@ export const radioButtonSetChecked = async (
     await page.getByText(label, options).setChecked(checked);
   }
 };
-
-export function getByGrafanaSelector(
-  locator: Page['locator'],
-  selector: string,
-  options?: getByGrafanaSelectorOptions
-): Locator {
-  const startsWith = options?.startsWith ? '^' : '';
-  if (selector.startsWith('data-testid')) {
-    return locator(`[data-testid${startsWith}="${selector}"]`);
-  }
-
-  return locator(`[aria-label${startsWith}="${selector}"]`);
-}

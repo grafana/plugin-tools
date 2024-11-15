@@ -1,6 +1,5 @@
 import { Locator, Request, Response } from '@playwright/test';
 import { getByGrafanaSelectorOptions, GrafanaPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
-import { getByGrafanaSelector } from '../utils';
 
 /**
  * Base class for all Grafana pages.
