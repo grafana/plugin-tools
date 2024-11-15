@@ -17,7 +17,21 @@ sidebar_position: 30
 
 [Variable queries](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#add-a-query-variable) allow users to query a data source to load lists of data such as metric names. You can then reference variables in queries to make your dashboards more interactive and dynamic. If your data source plugin implements the custom variable support API, you may want to use the `variableEditPage` fixture to test that your plugin's variable implementation works as expected.
 
-### Test the custom variable editor
+### Test that the custom variable editor loads
+
+The following example is a simple smoke test that verifies that the custom variable editor loads.
+
+```ts title="customVariableEditor.spec.ts"
+import { expect, test } from '@grafana/plugin-e2e';
+
+test('should render variable editor', async ({ variableEditPage, page, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await variableEditPage.datasource.set(ds.name);
+  await expect(page.getByRole('textbox', { name: 'Query Text' })).toBeVisible();
+});
+```
+
+### Test the custom variable editor in isolation
 
 In the following example, we test that the custom variable editor renders a certain field when the `ListByDimensions` query type is chosen:
 

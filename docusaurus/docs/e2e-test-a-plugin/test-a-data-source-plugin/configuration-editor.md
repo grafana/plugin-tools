@@ -16,6 +16,20 @@ sidebar_position: 10
 
 Most data source plugins need authentication to communicate with third-party services. The appropriate place to configure the connection details is the data source configuration page, and the details there must be valid so that the health check endpoint used to test the configuration works as expected.
 
+### Test that the configuration editor loads
+
+The following example is a simple smoke test that verifies that the data source configuration editor loads.
+
+```ts title="configurationEditor.spec.ts"
+import { test, expect } from '@grafana/plugin-e2e';
+
+test('should render config editor', async ({ createDataSourceConfigPage, readProvisionedDataSource, page }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await createDataSourceConfigPage({ type: ds.type });
+  await expect(page.getByLabel('Path')).toBeVisible();
+});
+```
+
 ### Testing the configuration in a backend data source plugin
 
 Backend data sources implement a [health check](../../key-concepts/backend-plugins/#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
