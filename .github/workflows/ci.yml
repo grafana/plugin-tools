@@ -165,6 +165,17 @@ jobs:
         run: docker compose down
         working-directory: ./${{ matrix.workingDir }}
 
+      - name: Check plugin.json
+        run: |
+          mv dist/ ${{ matrix.workingDir }}
+          zip ${{ matrix.workingDir }}.zip ${{ matrix.workingDir }} -r
+
+          docker run --pull=always \
+            -v $PWD/${{ matrix.workingDir }}.zip:/archive.zip \
+            grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
+
+        working-directory: ./${{ matrix.workingDir }}
+
       - name: Archive E2E output
         uses: actions/upload-artifact@v4
         if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' && steps.run-e2e-tests.outcome != 'success' }}
