@@ -169,7 +169,7 @@ jobs:
         run: |
           cp dist/ ${{ matrix.workingDir }}
           zip ${{ matrix.workingDir }}.zip ${{ matrix.workingDir }} -r
-          rm -rf ${{ matrix.workingDir }}
+          rm -r ${{ matrix.workingDir }}
 
           docker run --pull=always \
             -v $PWD/${{ matrix.workingDir }}.zip:/archive.zip \
