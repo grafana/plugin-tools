@@ -167,8 +167,9 @@ jobs:
 
       - name: Check plugin.json
         run: |
-          mv dist/ ${{ matrix.workingDir }}
+          cp dist/ ${{ matrix.workingDir }}
           zip ${{ matrix.workingDir }}.zip ${{ matrix.workingDir }} -r
+          rm -rf ${{ matrix.workingDir }}
 
           docker run --pull=always \
             -v $PWD/${{ matrix.workingDir }}.zip:/archive.zip \
