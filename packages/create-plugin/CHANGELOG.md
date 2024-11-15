@@ -1,3 +1,17 @@
+# v5.9.3 (Fri Nov 15 2024)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Fix plugin.json check step on CI [#1330](https://github.com/grafana/plugin-tools/pull/1330) ([@oshirohugo](https://github.com/oshirohugo))
+- chore(deps): update dependency @grafana/plugin-e2e to v1.12.1 [#1326](https://github.com/grafana/plugin-tools/pull/1326) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v5.9.2 (Thu Nov 14 2024)
 
 #### 🐛 Bug Fix
