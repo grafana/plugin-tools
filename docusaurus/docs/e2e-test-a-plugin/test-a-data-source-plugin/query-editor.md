@@ -19,7 +19,7 @@ The query editor is a central piece of a data source plugin as this is where use
 
 ### Test that the query editor loads
 
-The following example is a simple smoke test that verifies that the data source query editor loads.
+The following example is a simple smoke test that verifies that the data source query editor loads:
 
 ```ts title="queryEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
