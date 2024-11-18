@@ -18,7 +18,7 @@ Most data source plugins need authentication to communicate with third-party ser
 
 ### Test that the configuration editor loads
 
-The following example is a simple smoke test that verifies that the data source configuration editor loads.
+The following example is a simple smoke test that verifies that the data source configuration editor loads:
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
