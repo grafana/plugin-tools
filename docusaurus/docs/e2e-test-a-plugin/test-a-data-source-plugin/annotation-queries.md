@@ -21,7 +21,7 @@ In many cases, the execution of annotation queries requires different handling t
 
 ### Test the annotation editor
 
-If your data source plugin implements a custom annotation editor, you can write tests that verify that the editor works as expected. If you haven't implemented a custom editor, then the plugin will use the built-in in editor. In that case, you don't need to write tests.
+If your data source plugin implements a custom annotation editor, you can write tests that verify that the editor works as expected. If you haven't implemented a custom editor, then the plugin uses the built-in editor. In that case, it's not necessary to write tests.
 
 The following example is a simple smoke test that verifies that a custom annotation editor loads.
 
