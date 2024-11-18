@@ -19,7 +19,7 @@ sidebar_position: 30
 
 ### Test that the custom variable editor loads
 
-The following example is a simple smoke test that verifies that the custom variable editor loads.
+The following example is a simple smoke test that verifies that the custom variable editor loads:
 
 ```ts title="customVariableEditor.spec.ts"
 import { expect, test } from '@grafana/plugin-e2e';
