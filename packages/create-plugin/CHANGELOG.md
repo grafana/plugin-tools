@@ -1,3 +1,16 @@
+# v5.9.4 (Thu Nov 21 2024)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana/grafana-enterprise docker tag to v11.3.1 [#1339](https://github.com/grafana/plugin-tools/pull/1339) ([@renovate[bot]](https://github.com/renovate[bot]))
+- chore(deps): update grafana patch dependencies to v11.3.1 [#1338](https://github.com/grafana/plugin-tools/pull/1338) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.9.3 (Fri Nov 15 2024)
 
 #### 🐛 Bug Fix

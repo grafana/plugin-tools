@@ -1,3 +1,19 @@
+# (Thu Nov 21 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.12.2`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-209206 [#1324](https://github.com/grafana/plugin-tools/pull/1324) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.9.4`
+  - chore(deps): update grafana/grafana-enterprise docker tag to v11.3.1 [#1339](https://github.com/grafana/plugin-tools/pull/1339) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - chore(deps): update grafana patch dependencies to v11.3.1 [#1338](https://github.com/grafana/plugin-tools/pull/1338) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Fri Nov 15 2024)
 
 #### 🐛 Bug Fix
