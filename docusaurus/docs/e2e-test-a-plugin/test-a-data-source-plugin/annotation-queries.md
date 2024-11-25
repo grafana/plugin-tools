@@ -37,7 +37,7 @@ test('should render annotations editor', async ({ annotationEditPage, page, read
 
 ### Test the entire annotation query execution flow
 
-In the next example, we perform an integration test where we test a plugin's entire annotation query data flow.
+In the following example, an integration test covers a plugin's entire annotation query data flow:
 
 :::note
 Note that the annotation query result is rendered in an Alert component starting from Grafana 11.0.0, so using the `toHaveAlert` matcher won't work in earlier versions.
