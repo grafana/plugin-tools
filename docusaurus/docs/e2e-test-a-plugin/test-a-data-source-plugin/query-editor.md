@@ -17,6 +17,20 @@ sidebar_position: 20
 
 The query editor is a central piece of a data source plugin as this is where users craft the query that is used to fetch data. Your data source plugin can provide a rich query editor which allows various query types that target different APIs. Your query editor can even have features such as visual query builders, IntelliSense, and autocompletion.
 
+### Test that the query editor loads
+
+The following example is a simple smoke test that verifies that the data source query editor loads:
+
+```ts title="queryEditor.spec.ts"
+import { test, expect } from '@grafana/plugin-e2e';
+
+test('should render query editor', async ({ panelEditPage, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await panelEditPage.datasource.set(ds.name);
+  await expect(panelEditPage.getQueryEditorRow('A').getByRole('textbox', { name: 'Query Text' })).toBeVisible();
+});
+```
+
 ### Test parts of the query editor in isolation
 
 In the following example, the query editor loads regions via a request to `/regions` and filters out the ones containing `gov` before populating them in a dropdown menu.
