@@ -1,3 +1,25 @@
+# (Mon Nov 25 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Matias Chomicki ([@matyax](https://github.com/matyax)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Docs: Update DataSourceWithSupplementaryQueriesSupport instructions [#1342](https://github.com/grafana/plugin-tools/pull/1342) ([@matyax](https://github.com/matyax))
+- `@grafana/plugin-e2e@1.12.3`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-209710 [#1348](https://github.com/grafana/plugin-tools/pull/1348) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.9.5`
+  - chore(deps): update dependency @grafana/e2e-selectors to v11.3.1 [#1336](https://github.com/grafana/plugin-tools/pull/1336) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - chore(deps): update dependency @grafana/plugin-e2e to v1.12.2 [#1340](https://github.com/grafana/plugin-tools/pull/1340) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Matias Chomicki ([@matyax](https://github.com/matyax))
+
+---
+
 # (Thu Nov 21 2024)
 
 #### 🐛 Bug Fix
