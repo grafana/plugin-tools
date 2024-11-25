@@ -94,6 +94,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/ivanortegaalba"><img src="https://avatars.githubusercontent.com/u/5699976?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ivan Ortega Alba</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=ivanortegaalba" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/s4kh"><img src="https://avatars.githubusercontent.com/u/15072209?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Syerikjan Kh</b></sub></a><br /><a href="#infra-s4kh" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/grafana/plugin-tools/commits?author=s4kh" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/jalevin"><img src="https://avatars.githubusercontent.com/u/1669620?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeff Levin</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=jalevin" title="Documentation">📖</a> <a href="https://github.com/grafana/plugin-tools/commits?author=jalevin" title="Code">💻</a></td>
+    <td align="center"><a href="http://matyax.com/"><img src="https://avatars.githubusercontent.com/u/1069378?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matias Chomicki</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=matyax" title="Documentation">📖</a></td>
   </tr>
 </table>
 
