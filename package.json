@@ -27,7 +27,7 @@
     "@auto-it/first-time-contributor": "11.3.0",
     "@auto-it/omit-commits": "11.3.0",
     "@auto-it/slack": "11.3.0",
-    "@grafana/eslint-config": "^7.0.0",
+    "@grafana/eslint-config": "^8.0.0",
     "@swc/core": "^1.2.162",
     "@tsconfig/node20": "^20.1.2",
     "@tsconfig/recommended": "^1.0.1",
