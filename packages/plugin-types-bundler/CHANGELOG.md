@@ -1,3 +1,15 @@
+# v0.1.0 (Tue Nov 26 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @types/node to v22.10.0 [#1352](https://github.com/grafana/plugin-tools/pull/1352) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v0.0.6 (Thu Oct 31 2024)
 
 #### 🐛 Bug Fix

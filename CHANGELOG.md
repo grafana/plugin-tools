@@ -1,3 +1,24 @@
+# (Tue Nov 26 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.10.0`
+  - chore(deps): update dependency @grafana/eslint-config to v8 [#1277](https://github.com/grafana/plugin-tools/pull/1277) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.10.0`
+  - chore(deps): update dependency marked to v15 [#1313](https://github.com/grafana/plugin-tools/pull/1313) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/plugin-types-bundler@0.1.0`
+  - fix(deps): update dependency @types/node to v22.10.0 [#1352](https://github.com/grafana/plugin-tools/pull/1352) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Mon Nov 25 2024)
 
 :tada: This release contains work from a new contributor! :tada:

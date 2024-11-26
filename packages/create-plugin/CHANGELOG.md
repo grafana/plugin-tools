@@ -1,3 +1,20 @@
+# v5.10.0 (Tue Nov 26 2024)
+
+#### 🚀 Enhancement
+
+- chore(deps): update dependency @grafana/eslint-config to v8 [#1277](https://github.com/grafana/plugin-tools/pull/1277) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency marked to v15 [#1313](https://github.com/grafana/plugin-tools/pull/1313) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.9.5 (Mon Nov 25 2024)
 
 #### 🐛 Bug Fix
