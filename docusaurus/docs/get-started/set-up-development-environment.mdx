@@ -266,6 +266,34 @@ jobs:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
 
+### The bundle stats workflow
+
+The bundle stats (`bundle-stats.yml`) workflow is intended to help developers keep an eye on the size of their plugins frontend assets. Changes in PRs trigger this workflow which will compare two webpack stats files; one from the default branch and the other from the PR. It then calculates differences between these assets sizes and posts a formatted comment to the PR giving an overview of any size differences.
+
+```yaml title="bundle-stats.yml"
+name: Bundle Stats
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: grafana/plugin-actions/bundle-size@main
+```
+
 ## Extend configurations
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
