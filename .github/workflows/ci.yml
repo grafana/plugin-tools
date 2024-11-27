@@ -203,6 +203,7 @@ jobs:
       - name: Frontend Knip Report
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
+          cat .config/webpack/webpack.config.ts
           npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
         working-directory: ./${{ matrix.workingDir }}
 
