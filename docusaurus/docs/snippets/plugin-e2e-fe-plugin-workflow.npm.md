@@ -2,6 +2,8 @@
 name: E2E tests
 on:
   pull_request:
+  schedule:
+    - cron: '0 11 * * *' #Run e2e tests once a day at 11 UTC
 
 permissions:
   contents: read
