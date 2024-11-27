@@ -204,6 +204,7 @@ jobs:
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           cp ../packed-artifacts/knip.json .
+          cat ./knip.json
           npx -y knip --reporter markdown --no-exit-code
         working-directory: ./${{ matrix.workingDir }}
 
