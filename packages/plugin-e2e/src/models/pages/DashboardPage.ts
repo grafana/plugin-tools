@@ -96,8 +96,9 @@ export class DashboardPage extends GrafanaPage {
       }
       if (semver.gte(this.ctx.grafanaVersion, '8.0.0') && semver.lte(this.ctx.grafanaVersion, '8.5.0')) {
         await this.getByGrafanaSelector('Add panel').click();
+      } else {
+        await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
       }
-      await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
 
     const panelId = await this.ctx.page.evaluate(() => {
