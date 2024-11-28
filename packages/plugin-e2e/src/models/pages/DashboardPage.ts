@@ -97,6 +97,10 @@ export class DashboardPage extends GrafanaPage {
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
 
+    if (semver.gte(this.ctx.grafanaVersion, '8.0.0')) {
+      await this.getByGrafanaSelector('Add panel').click();
+    }
+
     const panelId = await this.ctx.page.evaluate(() => {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('editPanel');
