@@ -47,6 +47,7 @@ export function QueryEditor(props: Props): ReactElement {
   ];
   const storage = usePluginUserStorage();
   useEffect(() => {
+    // Load the default query type from user storage
     storage.getItem('queryType').then((value) => {
       if (value && !query.queryType) {
         onChange({
@@ -55,13 +56,14 @@ export function QueryEditor(props: Props): ReactElement {
         });
       }
     });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const onChangeQueryType = (type: SelectableValue<string>) => {
     onChange({
       ...query,
       queryType: type.value!,
     });
+    // Save the query type to user storage to be used by default for the next time
     storage.setItem('queryType', type.value!);
   };
 
