@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir ./packed-artifacts
           npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
-          cp ./.github/knip.js ./packed-artifacts
+          cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@v4
         with:
@@ -203,7 +203,7 @@ jobs:
       - name: Frontend Knip Report
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
-          cp ./packed-artifacts/knip.js ./${{ matrix.workingDir }}/knip.js
+          cp ./packed-artifacts/knip.json ./${{ matrix.workingDir }}/knip.json
           cd ./${{ matrix.workingDir }}
           npx -y knip --reporter markdown --no-exit-code --debug
 
