@@ -205,7 +205,7 @@ jobs:
         run: |
           cp ./packed-artifacts/knip.js ./${{ matrix.workingDir }}/knip.js
           cd ./${{ matrix.workingDir }}
-          npx -y knip --reporter markdown --no-exit-code
+          npx -y knip --reporter markdown --no-exit-code --debug
 
   release:
     runs-on: ubuntu-latest
