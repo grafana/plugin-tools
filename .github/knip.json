@@ -1,7 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": ["src/module.{js,ts,tsx}"],
-  "ignore": ["!**/work", "!**/work/**"],
   "project": ["src/**/*", "tests/**/*", ".config/**/*"],
   "eslint": {
     "config": [".config/.eslintrc", "./.eslintrc"]

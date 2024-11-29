@@ -97,13 +97,6 @@ jobs:
         run: npm install --no-audit
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Frontend Knip Report
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        run: |
-          cp ./packed-artifacts/knip.json ./${{ matrix.workingDir }}/knip.json
-          cd ./${{ matrix.workingDir }}
-          npx -y knip --reporter markdown --no-exit-code --debug
-
       - name: Lint plugin frontend
         run: npm run lint
         working-directory: ./${{ matrix.workingDir }}
@@ -206,6 +199,14 @@ jobs:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
+
+      - name: Frontend Knip Report
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        run: |
+          cp ./packed-artifacts/knip.json ./${{ matrix.workingDir }}/knip.json
+          cd ./${{ matrix.workingDir }}
+          sed -i '/^work\/$/d' .gitignore
+          npx -y knip --reporter markdown --no-exit-code --debug
 
   release:
     runs-on: ubuntu-latest
