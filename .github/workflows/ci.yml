@@ -37,6 +37,7 @@ jobs:
         run: |
           mkdir ./packed-artifacts
           npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
+          cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@v4
         with:
@@ -197,6 +198,16 @@ jobs:
         env:
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Frontend Knip Report
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        # Knip uses the scaffolded plugin .gitignore file for ignore paths.
+        # github workflows use paths like home/runner/work/plugin-tools/plugin-tools
+        # so we need to remove /work otherwise knip returns false positives
+        run: |
+          sed -i '/^work\/$/d' .gitignore
+          npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
         working-directory: ./${{ matrix.workingDir }}
 
   release:
