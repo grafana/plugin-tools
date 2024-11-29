@@ -55,24 +55,24 @@ jobs:
     strategy:
       matrix:
         include:
-          # - workingDir: 'myorg-nobackend-app'
-          #   cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
-          #   hasBackend: false
+          - workingDir: 'myorg-nobackend-app'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
+            hasBackend: false
           - workingDir: 'myorg-backend-app'
             cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
             hasBackend: true
-          # - workingDir: 'myorg-nobackend-panel'
-          #   cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
-          #   hasBackend: false
-          # - workingDir: 'myorg-nobackend-datasource'
-          #   cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
-          #   hasBackend: false
-          # - workingDir: 'myorg-backend-datasource'
-          #   cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
-          #   hasBackend: true
-          # - workingDir: 'myorg-nobackendscenes-app'
-          #   cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
-          #   hasBackend: false
+          - workingDir: 'myorg-nobackend-panel'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
+            hasBackend: false
+          - workingDir: 'myorg-nobackend-datasource'
+            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
+            hasBackend: false
+          - workingDir: 'myorg-backend-datasource'
+            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
+            hasBackend: true
+          - workingDir: 'myorg-nobackendscenes-app'
+            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
+            hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
@@ -202,11 +202,13 @@ jobs:
 
       - name: Frontend Knip Report
         if: ${{ github.actor != 'dependabot[bot]' }}
+        # Knip uses the scaffolded plugin .gitignore file for ignore paths.
+        # github workflows use paths like home/runner/work/plugin-tools/plugin-tools
+        # so we need to remove /work otherwise knip returns false positives
         run: |
-          cp ./packed-artifacts/knip.json ./${{ matrix.workingDir }}/knip.json
-          cd ./${{ matrix.workingDir }}
           sed -i '/^work\/$/d' .gitignore
-          npx -y knip --reporter markdown --no-exit-code --debug
+          npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
+        working-directory: ./${{ matrix.workingDir }}
 
   release:
     runs-on: ubuntu-latest
