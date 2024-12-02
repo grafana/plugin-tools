@@ -8,5 +8,12 @@
   "webpack": {
     "config": [".config/webpack/webpack.config.ts"]
   },
-  "ignoreDependencies": ["@grafana/schema", "@swc/helpers", "semver", "ts-node"]
+  "ignoreDependencies": [
+    "@emotion/css",
+    "@grafana/schema",
+    "@swc/helpers",
+    "@testing-library/react",
+    "semver",
+    "ts-node"
+  ]
 }
