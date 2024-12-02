@@ -122,6 +122,7 @@ const config = async (env): Promise<Configuration> => {
                 baseUrl: path.resolve(process.cwd(), SOURCE_DIR),
                 target: 'es2015',
                 loose: false,
+                externalHelpers: true,
                 parser: {
                   syntax: 'typescript',
                   tsx: true,
