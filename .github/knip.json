@@ -7,5 +7,6 @@
   },
   "webpack": {
     "config": [".config/webpack/webpack.config.ts"]
-  }
+  },
+  "ignoreDependencies": ["@grafana/schema", "@swc/helpers", "semver", "ts-node"]
 }
