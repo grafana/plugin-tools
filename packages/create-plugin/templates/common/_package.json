@@ -33,8 +33,8 @@
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",
     "@types/jest": "^29.5.0",
-    "@types/node": "^20.8.7",{{#unless useReactRouterV6}}
-    "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}
+    "@types/node": "^20.8.7",{{#if isAppType}}{{#unless useReactRouterV6}}
+    "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}{{/if}}
     "@types/testing-library__jest-dom": "5.14.8",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
