@@ -7,9 +7,9 @@
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write ./src",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix",{{#if usePlaywright}}
-    "format": "prettier --write ./src",
     "e2e": "playwright test",{{/if}}{{#if useCypress}}
     "e2e": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run",
     "e2e:update": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run --update-screenshots",{{/if}}
@@ -78,7 +78,7 @@
     "@grafana/schema": "^11.3.2",{{#if_eq pluginType "scenesapp"}}
     "@grafana/scenes": "^5.28.1",{{/if_eq}}
     "react": "18.2.0",
-    "react-dom": "18.2.0",{{#if isAppType}}
+    "react-dom": "18.2.0"{{#if isAppType}},
     "react-router-dom": "^{{ reactRouterVersion }}",
     "rxjs": "7.8.1"{{/if}}
   },
