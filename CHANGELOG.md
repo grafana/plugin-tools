@@ -1,3 +1,17 @@
+# (Tue Dec 03 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.10.1`
+  - fix(deps): update grafana dependencies [#1322](https://github.com/grafana/plugin-tools/pull/1322) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - chore(deps): update dependency @grafana/plugin-e2e to v1.12.3 [#1349](https://github.com/grafana/plugin-tools/pull/1349) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Tue Nov 26 2024)
 
 #### 🚀 Enhancement
