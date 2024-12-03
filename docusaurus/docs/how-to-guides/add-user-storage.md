@@ -11,11 +11,11 @@ keywords:
 
 # Add user storage to your plugin
 
-Add user storage to your plugin to store user-specific data in the Grafana backend. This data is stored per user and is accessible only to that user. It will also persist independently of the user browser. Note that this data is not encrypted and should not be used to store sensitive information. The typical use case for user storage is to store user preferences or settings.
+Add user storage to your plugin to store user-specific data in Grafana. This data is stored in the Grafana database and is accessible only to that user. Note that this data is not encrypted and should not be used to store sensitive information. The typical use case for this feature is to store user preferences or other settings.
 
 :::important
 
-This feature is only available in Grafana 11.5 and later.
+This feature is only available in Grafana 11.5 and later. It also requires the feature flag `userStorageAPI` to be enabled. If a plugin uses this feature but it's not enabled in the Grafana instance, the browser `localStorage` will be used as the storage mechanism instead.
 
 :::
 
@@ -27,9 +27,10 @@ Let's say you have a `QueryEditor` that looks similar to the example below. It h
 import React, { ReactElement, useEffect } from 'react';
 import { InlineFieldRow, InlineField, Select } from '@grafana/ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
+import { usePluginUserStorage } from '@grafana/runtime';
+
 import { DataSource } from 'datasource';
 import { MyDataSourceOptions, MyQuery } from 'types';
-import { usePluginUserStorage } from '@grafana/runtime';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
@@ -59,12 +60,14 @@ export function QueryEditor(props: Props): ReactElement {
   }, []);
 
   const onChangeQueryType = (type: SelectableValue<string>) => {
-    onChange({
-      ...query,
-      queryType: type.value!,
-    });
-    // Save the query type to user storage to be used by default for the next time
-    storage.setItem('queryType', type.value!);
+    if (type.value) {
+      onChange({
+        ...query,
+        queryType: type.value,
+      });
+      // Save the query type to user storage to be used by default for the next time
+      storage.setItem('queryType', type.value);
+    }
   };
 
   return (
