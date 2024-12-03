@@ -5,7 +5,7 @@ import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
 
 export class MultiSelect extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
+  constructor(element: Locator) {
     super(element);
   }
 

@@ -1,10 +1,9 @@
 import { Locator } from '@playwright/test';
-import { PluginTestCtx } from '../../types';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
 
 export class Select extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
+  constructor(element: Locator) {
     super(element);
   }
 

@@ -1,10 +1,9 @@
 import { Locator } from '@playwright/test';
-import { PluginTestCtx } from '../../types';
 import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 
 export class RadioGroup extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
+  constructor(element: Locator) {
     super(element);
   }
 
