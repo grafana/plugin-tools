@@ -1,5 +1,4 @@
 import { Locator } from '@playwright/test';
-import { PluginTestCtx } from '../../types';
 import { openSelect, selectByValueOrLabel } from './Select';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
