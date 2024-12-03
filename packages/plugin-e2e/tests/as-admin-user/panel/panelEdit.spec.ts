@@ -126,7 +126,7 @@ test('select unit in unit picker', async ({ gotoPanelEditPage }) => {
 
   await unitPicker.selectOption('Misc > Pixels');
 
-  //await expect(unitPicker).toHaveOption('Pixels');
+  await expect(unitPicker).toHaveSelected('Pixels');
 });
 
 test('select timezone in timezone picker', async ({ gotoPanelEditPage }) => {

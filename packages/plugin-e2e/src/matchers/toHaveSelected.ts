@@ -4,41 +4,43 @@ import { ContainTextOptions } from '../types';
 
 import { Select } from '../models/components/Select';
 import { MultiSelect } from '../models/components/MultiSelect';
+import { UnitPicker } from '../models/components/UnitPicker';
 
 export async function toHaveSelected(
-  select: Select | MultiSelect,
+  target: Select | MultiSelect | UnitPicker,
   value: string | RegExp | string[] | RegExp[],
   options?: ContainTextOptions
 ): Promise<MatcherReturnType> {
-  if (isMultiSelect(select)) {
+  if (target instanceof MultiSelect) {
     if (Array.isArray(value)) {
-      return expectMultiToBe(select, value);
+      return expectMultiSelectToBe(target, value);
     }
-    return expectMultiToBe(select, [value]);
+    return expectMultiSelectToBe(target, [value]);
   }
 
-  if (isSingleSelect(select)) {
+  if (target instanceof Select) {
     if (Array.isArray(value)) {
       throw new Error(
-        `Select only support a single value to be selected. You are expecting multiple values to be selected: "${value}"`
+        `Select only support a single value to be selected. You are asserting that multiple values have been selected: "${value}"`
       );
     }
 
-    return expectSingleToBe(select, value, options);
+    return expectSelectToBe(target, value, options);
+  }
+
+  if (target instanceof UnitPicker) {
+    if (Array.isArray(value)) {
+      throw new Error(
+        `UnitPicker only support a single value to be selected. You are asserting that multiple values have been selected: "${value}"`
+      );
+    }
+    return expectUnitPickerToBe(target, value, options);
   }
 
   throw Error('Unsupported parameters passed to "toBeSelected"');
 }
 
-function isMultiSelect(select: Select | MultiSelect): select is MultiSelect {
-  return 'selectOptions' in select;
-}
-
-function isSingleSelect(select: Select | MultiSelect): select is Select {
-  return 'selectOption' in select;
-}
-
-async function expectSingleToBe(
+async function expectSelectToBe(
   select: Select,
   value: string | RegExp,
   options?: ContainTextOptions
@@ -68,7 +70,7 @@ async function expectSingleToBe(
   }
 }
 
-async function expectMultiToBe(select: MultiSelect, values: Array<string | RegExp>): Promise<MatcherReturnType> {
+async function expectMultiSelectToBe(select: MultiSelect, values: Array<string | RegExp>): Promise<MatcherReturnType> {
   let actual = '';
 
   try {
@@ -91,6 +93,34 @@ async function expectMultiToBe(select: MultiSelect, values: Array<string | RegEx
       pass: false,
       actual,
       expected: values,
+    };
+  }
+}
+
+async function expectUnitPickerToBe(
+  unitPicker: UnitPicker,
+  value: string | RegExp,
+  options?: ContainTextOptions
+): Promise<MatcherReturnType> {
+  let actual = '';
+
+  try {
+    const input = unitPicker.locator().getByRole('textbox');
+
+    actual = await input.inputValue(options);
+    await expect(input).toHaveValue(value);
+
+    return {
+      pass: true,
+      actual: actual,
+      expected: value,
+      message: () => `Value successfully selected`,
+    };
+  } catch (err: unknown) {
+    return {
+      message: () => getMessage(value.toString(), err instanceof Error ? err.toString() : 'Unknown error'),
+      pass: false,
+      actual,
     };
   }
 }
