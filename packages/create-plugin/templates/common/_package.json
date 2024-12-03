@@ -7,9 +7,8 @@
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write ./src",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix",{{#if usePlaywright}}
+    "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix && prettier --write --list-different .",{{#if usePlaywright}}
     "e2e": "playwright test",{{/if}}{{#if useCypress}}
     "e2e": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run",
     "e2e:update": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run --update-screenshots",{{/if}}
