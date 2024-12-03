@@ -11,17 +11,19 @@ keywords:
 
 # Add user storage to your plugin
 
-Add user storage to your plugin to store user-specific data in Grafana. This data is stored in the Grafana database and is accessible only to that user. Note that this data is not encrypted and should not be used to store sensitive information. The typical use case for this feature is to store user preferences or other settings.
+User storage allows your Grafana plugin to store user-specific data in the Grafana database. This data is accessible only to the individual user. However, keep in mind that the data is not encrypted and should not be used to store sensitive information. Typical use cases for user storage include saving user preferences or settings.
 
 :::important
 
-This feature is only available in Grafana 11.5 and later. It also requires the feature flag `userStorageAPI` to be enabled. If a plugin uses this feature but it's not enabled in the Grafana instance, the browser `localStorage` will be used as the storage mechanism instead.
+- This feature is available in Grafana 11.5 and later.
+- It requires the `userStorageAPI` feature flag to be enabled.
+- If a plugin uses this feature but it's not enabled in the Grafana instance, the browser `localStorage` will be used as the storage mechanism instead.
 
 :::
 
-## Sample query editor
+## Example: Adding user storage to a query editor
 
-Let's say you have a `QueryEditor` that looks similar to the example below. It has a `Select` field where you can select the kind of query result that you expect to return. We will add user storage to this component to save the user's preferred query type so that it can be used as the default next time the user opens the query editor.
+In this example, we'll enhance a `QueryEditor` component by incorporating user storage. It has a `Select` field where you can select the kind of query result that you expect to return. The goal is to remember the user's preferred query type (for example, "Timeseries" or "Table") and use it as the default the next time the query editor is opened.
 
 ```tsx
 import React, { ReactElement, useEffect } from 'react';
