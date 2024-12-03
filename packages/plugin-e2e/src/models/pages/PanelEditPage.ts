@@ -184,8 +184,32 @@ export class PanelEditPage extends GrafanaPage {
   }
 
   /** Return page object for the panel edit options group with the given label */
-  getOptionsGroup(label: string): PanelEditOptionsGroup {
-    const locator = this.ctx.page.getByLabel(`Options group ${label}`, { exact: true });
+  getCustomOptions(label: string): PanelEditOptionsGroup {
+    const locator = this.getOptionsGroupLocator(label);
     return new PanelEditOptionsGroup(this.ctx, locator, label);
+  }
+
+  getStandardOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Standard options');
+  }
+
+  getValueMappingOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Value mappings');
+  }
+
+  getDataLinksOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Data links');
+  }
+
+  getThresholdsOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Thresholds');
+  }
+
+  private getOptionsGroupLocator(label: string): Locator {
+    if (semver.gte(this.ctx.grafanaVersion, '11.4.0')) {
+      return this.ctx.page.getByTestId(`data-testid Options group ${label}`);
+    }
+
+    return this.ctx.page.getByLabel(`Options group ${label}`, { exact: true });
   }
 }

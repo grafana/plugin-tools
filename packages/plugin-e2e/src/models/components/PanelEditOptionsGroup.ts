@@ -4,18 +4,25 @@ import { ColorPicker } from './ColorPicker';
 import { UnitPicker } from './UnitPicker';
 import { Select } from './Select';
 import { MultiSelect } from './MultiSelect';
+import { Switch } from './Switch';
+import { gte } from 'semver';
+import { RadioGroup } from './RadioGroup';
 
 export class PanelEditOptionsGroup {
   constructor(private ctx: PluginTestCtx, public readonly element: Locator, private groupLabel: string) {}
 
-  getRadioGroup(label: string): Locator {
-    return this.getByLabel(label).getByRole('radiogroup');
+  getRadio(label: string): RadioGroup {
+    return new RadioGroup(this.ctx, this.getByLabel(label).getByRole('radiogroup'));
   }
 
-  async getSwitch(label: string): Promise<Locator> {
-    // we need to add logic to select by a switch or a checkbox role depending on grafana version.
+  async getSwitch(label: string): Promise<Switch> {
+    if (gte(this.ctx.grafanaVersion, '11.4.0')) {
+      const id = await this.getByLabel(label).getByRole('switch').getAttribute('id');
+      return new Switch(this.ctx, this.getByLabel(label).locator(`label[for='${id}']`));
+    }
+
     const id = await this.getByLabel(label).getByRole('checkbox').getAttribute('id');
-    return this.getByLabel(label).locator(`label[for='${id}']`);
+    return new Switch(this.ctx, this.getByLabel(label).locator(`label[for='${id}']`));
   }
 
   getTextInput(label: string): Locator {

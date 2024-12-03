@@ -1,14 +1,20 @@
 import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
+import { SelectOptionsType } from './types';
+import { ComponentBase } from './ComponentBase';
 
-export class UnitPicker {
-  constructor(private ctx: PluginTestCtx, public readonly element: Locator) {}
-
-  async open(): Promise<void> {
-    this.element.getByRole('textbox').click();
+export class UnitPicker extends ComponentBase {
+  constructor(private ctx: PluginTestCtx, element: Locator) {
+    super(element);
   }
 
-  async getOption(selector: string): Promise<Locator> {
+  async selectOption(value: string, options?: SelectOptionsType): Promise<void> {
+    await this.element.getByRole('textbox').click();
+    const option = await this.getOption(value, options);
+    await option.click(options);
+  }
+
+  private async getOption(selector: string, options?: SelectOptionsType): Promise<Locator> {
     const steps = selector.split('>').map((step) => step.trim());
     const container = this.ctx.page.locator('div[class="rc-cascader-menus"]');
 
@@ -19,13 +25,9 @@ export class UnitPicker {
     const last = steps.pop();
 
     for (const step of steps) {
-      await container.getByRole('menuitemcheckbox', { exact: true, name: step }).click();
+      await container.getByRole('menuitemcheckbox', { exact: true, name: step }).click(options);
     }
 
     return container.getByRole('menuitemcheckbox', { exact: true, name: last });
-  }
-
-  value(): Locator {
-    return this.element.getByRole('textbox');
   }
 }

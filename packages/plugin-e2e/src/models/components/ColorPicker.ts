@@ -1,22 +1,20 @@
 import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
+import { ComponentBase } from './ComponentBase';
+import { SelectOptionsType } from './types';
 
-export class ColorPicker {
-  constructor(private ctx: PluginTestCtx, public readonly element: Locator) {}
+export type SelectableColors = 'red' | 'blue' | 'orange' | 'green' | 'yellow';
 
-  clear(): Promise<void> {
-    return this.element.locator('svg[class*="-Icon"]').click();
+export class ColorPicker extends ComponentBase {
+  constructor(private ctx: PluginTestCtx, element: Locator) {
+    super(element);
   }
 
-  async fill(color: 'red' | 'blue' | 'orange' | 'green' | 'yellow'): Promise<void> {
-    await this.element.getByRole('button').click();
+  async selectOption(color: SelectableColors, options?: SelectOptionsType): Promise<void> {
+    await this.element.getByRole('button').click(options);
     await this.ctx.page
       .locator('#grafana-portal-container')
       .getByRole('button', { name: `${color} color`, exact: true })
-      .click();
-  }
-
-  value(): Locator {
-    return this.element.getByRole('textbox');
+      .click(options);
   }
 }
