@@ -4,7 +4,7 @@ test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const countdownOptions = panelEdit.getCustomOptions('Countdown');
-  const clockMode = clockOptions.getRadio('Mode');
+  const clockMode = clockOptions.getRadioGroup('Mode');
 
   await expect(countdownOptions.element).not.toBeVisible();
 
@@ -18,7 +18,7 @@ test('re-selecting value in radio button group', async ({ gotoPanelEditPage }) =
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const countdownOptions = panelEdit.getCustomOptions('Countdown');
-  const clockMode = clockOptions.getRadio('Mode');
+  const clockMode = clockOptions.getRadioGroup('Mode');
 
   await expect(countdownOptions.element).not.toBeVisible();
 
@@ -38,7 +38,7 @@ test('checking switch', async ({ gotoPanelEditPage }) => {
 
   await expect(monospaceFont).toBeSwitched({ on: false });
   await monospaceFont.check();
-  await expect(monospaceFont).toBeSwitched({ on: true });
+  await expect(monospaceFont).toBeSwitched();
 });
 
 test('unchecking switch', async ({ gotoPanelEditPage }) => {
@@ -46,9 +46,10 @@ test('unchecking switch', async ({ gotoPanelEditPage }) => {
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const monospaceFont = await clockOptions.getSwitch('Font monospace');
 
+  // Investigate if we can rename this to `toBeChecked` without conflict.
   await expect(monospaceFont).toBeSwitched({ on: false });
   await monospaceFont.check();
-  await expect(monospaceFont).toBeSwitched({ on: true });
+  await expect(monospaceFont).toBeSwitched();
 
   await monospaceFont.uncheck();
   await expect(monospaceFont).toBeSwitched({ on: false });
@@ -60,7 +61,7 @@ test('enter value in input', async ({ gotoPanelEditPage }) => {
   const fontSize = timeFormatOptions.getTextInput('Font size');
 
   await expect(fontSize).toHaveValue('12px');
-  fontSize.fill('19px');
+  await fontSize.fill('19px');
   await expect(fontSize).toHaveValue('19px');
 });
 
@@ -70,7 +71,7 @@ test('clear input', async ({ gotoPanelEditPage }) => {
   const fontSize = timeFormatOptions.getTextInput('Font size');
 
   await expect(fontSize).toHaveValue('12px');
-  fontSize.clear();
+  await fontSize.clear();
   await expect(fontSize).toHaveValue('');
 });
 

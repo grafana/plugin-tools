@@ -11,12 +11,13 @@ import { RadioGroup } from './RadioGroup';
 export class PanelEditOptionsGroup {
   constructor(private ctx: PluginTestCtx, public readonly element: Locator, private groupLabel: string) {}
 
-  getRadio(label: string): RadioGroup {
+  getRadioGroup(label: string): RadioGroup {
     return new RadioGroup(this.getByLabel(label).getByRole('radiogroup'));
   }
 
   async getSwitch(label: string): Promise<Switch> {
     if (gte(this.ctx.grafanaVersion, '11.4.0')) {
+      // Try to force click the input instead of clicking the label
       const id = await this.getByLabel(label).getByRole('switch').getAttribute('id');
       return new Switch(this.getByLabel(label).locator(`label[for='${id}']`));
     }
