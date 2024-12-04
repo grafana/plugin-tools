@@ -25,6 +25,7 @@ jobs:
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
+          limit: 0
 
   playwright-tests:
     needs: resolve-versions
