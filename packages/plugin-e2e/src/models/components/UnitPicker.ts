@@ -25,7 +25,8 @@ export class UnitPicker extends ComponentBase {
     const last = steps.pop();
 
     for (const step of steps) {
-      await container.getByRole('menuitemcheckbox', { exact: true, name: step }).click(options);
+      await container.getByTitle(step, { exact: true }).click(options);
+      //await container.getByRole('menuitemcheckbox', { exact: true, name: step }).click(options);
     }
 
     return container.getByRole('menuitemcheckbox', { exact: true, name: last });

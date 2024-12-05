@@ -2,9 +2,10 @@ import { Locator } from '@playwright/test';
 import { openSelect, selectByValueOrLabel } from './Select';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
+import { PluginTestCtx } from '../../types';
 
 export class MultiSelect extends ComponentBase {
-  constructor(element: Locator) {
+  constructor(private ctx: PluginTestCtx, element: Locator) {
     super(element);
   }
 
@@ -13,7 +14,7 @@ export class MultiSelect extends ComponentBase {
 
     return Promise.all(
       values.map((value) => {
-        return selectByValueOrLabel(value, menu, options);
+        return selectByValueOrLabel(value, menu, this.ctx, options);
       })
     );
   }

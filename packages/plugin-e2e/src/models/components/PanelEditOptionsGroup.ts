@@ -39,11 +39,11 @@ export class PanelEditOptionsGroup {
   }
 
   getSelect(label: string): Select {
-    return new Select(this.getByLabel(label));
+    return new Select(this.ctx, this.getByLabel(label));
   }
 
   getMultiSelect(label: string): MultiSelect {
-    return new MultiSelect(this.getByLabel(label));
+    return new MultiSelect(this.ctx, this.getByLabel(label));
   }
 
   getColorPicker(label: string): ColorPicker {
