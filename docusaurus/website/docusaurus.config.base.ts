@@ -1,28 +1,25 @@
-const path = require('path');
-const remarkFigureCaption = require('gridsome-remark-figure-caption');
-const prism = require('prism-react-renderer');
-
-const {
-  themes: { oneDark },
-} = prism;
+import type { Config } from '@docusaurus/types';
+import path from 'path';
+import remarkFigureCaption from 'gridsome-remark-figure-caption';
+import { themes } from 'prism-react-renderer';
 
 // Replace background and color to better match Grafana theme.
 const grafanaPrismTheme = {
-  ...oneDark,
+  ...themes.oneDark,
   plain: {
     color: 'rgb(204, 204, 220)',
     backgroundColor: '#181b1f',
   },
 };
 
-const customFields = {
+export const customFields = {
   nodeEnv: process.env.NODE_ENV,
 };
 
-/** @type {import('@docusaurus/types').Config} */
-const generalConfig = {
+export const generalConfig: Config = {
   title: 'Grafana Plugin Tools',
   tagline: 'Scaffold a Grafana plugin with one command',
+  url: '',
   baseUrl: 'plugin-tools/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,7 +38,7 @@ const generalConfig = {
   },
 };
 
-const plugins = [
+export const plugins = [
   [
     './plugins/docusaurus-custom-webpack-plugin',
     {
@@ -210,7 +207,7 @@ const plugins = [
   ],
 ];
 
-const presetsDocs = {
+export const presetsDocs = {
   path: '../docs',
   exclude: ['**/snippets/**', '**/shared/**', '**/drafts/**'],
   sidebarPath: require.resolve('./sidebars.js'),
@@ -229,11 +226,11 @@ const presetsDocs = {
   ],
 };
 
-const presetsTheme = {
+export const presetsTheme = {
   customCss: require.resolve('./src/css/custom.css'),
 };
 
-const themeConfigNavbar = {
+export const themeConfigNavbar = {
   title: 'Grafana Plugin Tools',
   logo: {
     alt: 'Grafana Logo',
@@ -249,7 +246,7 @@ const themeConfigNavbar = {
   ],
 };
 
-const themeConfigFooter = {
+export const themeConfigFooter = {
   style: 'dark',
   links: [
     {
@@ -291,7 +288,7 @@ const themeConfigFooter = {
   copyright: `Copyright © ${new Date().getFullYear()} Grafana Labs. Built with Docusaurus.`,
 };
 
-const themeConfigPrism = {
+export const themeConfigPrism = {
   theme: grafanaPrismTheme,
   additionalLanguages: ['bash', 'diff', 'json'],
   magicComments: [
@@ -303,20 +300,20 @@ const themeConfigPrism = {
   ],
 };
 
-const themeConfigColorMode = {
+export const themeConfigColorMode = {
   defaultMode: 'dark',
   disableSwitch: true,
   respectPrefersColorScheme: false,
 };
 
-module.exports = {
-  customFields,
-  generalConfig,
-  plugins,
-  presetsDocs,
-  presetsTheme,
-  themeConfigNavbar,
-  themeConfigFooter,
-  themeConfigPrism,
-  themeConfigColorMode,
-};
+// module.exports = {
+//   customFields,
+//   generalConfig,
+//   plugins,
+//   presetsDocs,
+//   presetsTheme,
+//   themeConfigNavbar,
+//   themeConfigFooter,
+//   themeConfigPrism,
+//   themeConfigColorMode,
+// };
