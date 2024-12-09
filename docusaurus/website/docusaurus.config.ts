@@ -1,6 +1,6 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-const {
+import type { Config } from '@docusaurus/types';
+import type * as Preset from '@docusaurus/preset-classic';
+import {
   customFields,
   generalConfig,
   plugins,
@@ -10,14 +10,13 @@ const {
   themeConfigFooter,
   themeConfigPrism,
   themeConfigColorMode,
-} = require('./docusaurus.config.base');
+} from './docusaurus.config.base';
 
 const devPortalHome = 'https://grafana.com/developers';
 const [docsFooterLinks, ...otherFooterLinks] = themeConfigFooter.links;
 const gitHash = process.env.GITHUB_SHA || 'local';
 
-/** @type {import('@docusaurus/types').Config} */
-const config = {
+const config: Config = {
   ...generalConfig,
   url: 'https://grafana.com/',
   baseUrl: 'developers/plugin-tools/',
@@ -32,7 +31,7 @@ const config = {
         },
         theme: presetsTheme,
         blog: false,
-      },
+      } satisfies Preset.Options,
     ],
   ],
 
@@ -95,4 +94,4 @@ const config = {
   ],
 };
 
-module.exports = config;
+export default config;
