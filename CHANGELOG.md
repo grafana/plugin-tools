@@ -1,5 +1,18 @@
 # (Mon Dec 09 2024)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.11.1`
+  - Dependencies: Use latest release of plugin-e2e [#1390](https://github.com/grafana/plugin-tools/pull/1390) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Dec 09 2024)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@5.11.0`
