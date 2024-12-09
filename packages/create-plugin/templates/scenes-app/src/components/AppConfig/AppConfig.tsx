@@ -6,7 +6,7 @@ import { css } from '@emotion/css';
 import { testIds } from '../testIds';
 import { lastValueFrom } from 'rxjs';
 
-export type JsonData = {
+type JsonData = {
   apiUrl?: string;
   isApiKeySet?: boolean;
 };
@@ -140,7 +140,7 @@ const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<
   }
 };
 
-export const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
+const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
   const response = getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',
