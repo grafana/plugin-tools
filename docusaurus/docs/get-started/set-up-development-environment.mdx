@@ -442,7 +442,7 @@ Update the `scripts` in the `package.json` to use the extended Webpack configura
 ```
 ## Add a dependency for local development
 
-Grafana’s plugin development environment is designed to simplify the process of creating and testing plugins. Here’s how it operates:
+Grafana’s plugin development environment is designed to allow for plugins to be dependent upon other plugins if necessary. Here’s how it operates:
 
 Plugin distribution path:
 
@@ -452,7 +452,7 @@ Plugin initialization:
 
 When the Grafana server starts, its plugin loader runs a [Load](https://github.com/grafana/grafana/blob/b53f14ca83eeec6b0f624c2dbbaa417d08bbadbf/pkg/plugins/manager/loader/loader.go#L55-L56) function. This scans the `/var/lib/grafana/` plugins directory for plugins, validates `plugin.json` files, checks signatures and manifests, and initializes valid plugins.
 
-Dependency management:
+Plugin dependency management:
 
 Although some validations occur on the server side, the plugin path itself doesn't include dependency validation. Developers are responsible for ensuring dependencies are correctly managed.
 
