@@ -166,9 +166,22 @@ Some data sources return data in a _long_ format (also called _narrow_ format). 
 
 In the long format, string values are represented as separate fields rather than as labels. As a result, a data form in long form may have duplicated time values.
 
-Grafana can detect and convert data frames in long format into wide format.
+With the Grafana plugin SDK for Go, a plugin can detect can detect and convert data frames in long format into wide format.
 
-For example, the following data frame appears in long format:
+For detecting and converting a data frame, refer to this example:
+
+```go
+		tsSchema := frame.TimeSeriesSchema()
+		if tsSchema.Type == data.TimeSeriesTypeLong {
+			wideFrame, err := data.LongToWide(frame, nil)
+			if err == nil {
+				// handle error
+			}
+			// return wideFrame
+		}
+```
+
+Here's an additional example. The following data frame appears in long format:
 
 ```text
 Name: Long
