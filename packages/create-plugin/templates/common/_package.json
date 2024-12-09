@@ -85,5 +85,8 @@
     "rxjs": "7.8.1",{{/if}}
     "tslib": "2.5.3"
   },
+  "overrides": {
+    "@grafana/e2e-selectors": "11.5.0-211617"
+  },
   "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}"
 }
