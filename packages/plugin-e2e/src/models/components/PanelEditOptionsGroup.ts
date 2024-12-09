@@ -12,7 +12,7 @@ export class PanelEditOptionsGroup {
   constructor(private ctx: PluginTestCtx, public readonly element: Locator, private groupLabel: string) {}
 
   getRadioGroup(label: string): RadioGroup {
-    return new RadioGroup(this.getByLabel(label).getByRole('radiogroup'));
+    return new RadioGroup(this.ctx, getRadioGroupLocator(this.getByLabel(label), this.ctx));
   }
 
   async getSwitch(label: string): Promise<Switch> {
@@ -35,7 +35,10 @@ export class PanelEditOptionsGroup {
   }
 
   getSliderInput(label: string): Locator {
-    return this.getNumberInput(label);
+    if (gte(this.ctx.grafanaVersion, '9.1.9')) {
+      return this.getNumberInput(label);
+    }
+    return this.getByLabel(label).getByRole('textbox');
   }
 
   getSelect(label: string): Select {
@@ -57,4 +60,11 @@ export class PanelEditOptionsGroup {
   private getByLabel(optionLabel: string): Locator {
     return this.element.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
   }
+}
+
+function getRadioGroupLocator(root: Locator, ctx: PluginTestCtx): Locator {
+  if (gte(ctx.grafanaVersion, '10.2.0')) {
+    return root.getByRole('radiogroup');
+  }
+  return root;
 }
