@@ -20,7 +20,6 @@ export class PanelEditOptionsGroup {
 
   getSwitch(label: string): Switch {
     if (gte(this.ctx.grafanaVersion, '11.4.0')) {
-      // Try to force click the input instead of clicking the label
       return new Switch(this.getByLabel(label).getByRole('switch'));
     }
     return new Switch(this.getByLabel(label).getByRole('checkbox'));

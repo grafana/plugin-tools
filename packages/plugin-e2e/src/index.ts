@@ -1,4 +1,4 @@
-import { test as base, expect as baseExpect } from '@playwright/test';
+import { test as base, expect as baseExpect, Locator } from '@playwright/test';
 
 import { AlertPageOptions, AlertVariant, ContainTextOptions, PluginFixture, PluginOptions } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
@@ -38,7 +38,7 @@ import { gotoVariablePage } from './fixtures/commands/gotoVariablePage';
 import { toHaveSelected } from './matchers/toHaveSelected';
 import { Select } from './models/components/Select';
 import { Switch } from './models/components/Switch';
-import { toBeSwitched } from './matchers/toBeSwitched';
+import { toBeChecked } from './matchers/toBeChecked';
 import { RadioGroup } from './models/components/RadioGroup';
 import { toHaveChecked } from './matchers/toHaveChecked';
 import { MultiSelect } from './models/components/MultiSelect';
@@ -102,7 +102,7 @@ export const expect = baseExpect.extend({
   toDisplayPreviews,
   toBeOK,
   toHaveSelected,
-  toBeSwitched,
+  toBeChecked,
   toHaveChecked,
   toHaveColor,
 });
@@ -157,7 +157,7 @@ declare global {
       /**
        * Asserts that a Switch is on or off (on by default)
        */
-      toBeSwitched(target: Switch, options?: { on?: boolean; timeout?: number }): Promise<R>;
+      toBeChecked(target: Switch | Locator, options?: { on?: boolean; timeout?: number }): Promise<R>;
 
       /**
        * Asserts that a Radio has expected value selected

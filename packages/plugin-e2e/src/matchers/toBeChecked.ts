@@ -1,15 +1,19 @@
-import { expect, MatcherReturnType } from '@playwright/test';
+import { expect, Locator, MatcherReturnType } from '@playwright/test';
 import { getMessage } from './utils';
 
 import { Switch } from '../models/components/Switch';
 
-export async function toBeSwitched(
-  target: Switch,
-  options?: { on?: boolean; timeout?: number }
+export async function toBeChecked(
+  target: Switch | Locator,
+  options?: { checked?: boolean; timeout?: number }
 ): Promise<MatcherReturnType> {
-  const expected = options?.on ?? true;
+  const expected = options?.checked ?? true;
   try {
-    await expect(target.locator()).toBeChecked({ ...options, checked: expected });
+    if (target instanceof Switch) {
+      await expect(target.locator()).toBeChecked({ ...options, checked: expected });
+    } else {
+      await expect(target).toBeChecked(options);
+    }
 
     return {
       pass: true,

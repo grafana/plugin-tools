@@ -38,9 +38,9 @@ test('checking switch', async ({ gotoPanelEditPage }) => {
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const monospaceFont = clockOptions.getSwitch('Font monospace');
 
-  await expect(monospaceFont).toBeSwitched({ on: false });
+  await expect(monospaceFont).toBeChecked({ checked: false });
   await monospaceFont.check();
-  await expect(monospaceFont).toBeSwitched();
+  await expect(monospaceFont).toBeChecked();
 });
 
 test('unchecking switch', async ({ gotoPanelEditPage }) => {
@@ -48,13 +48,12 @@ test('unchecking switch', async ({ gotoPanelEditPage }) => {
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const monospaceFont = clockOptions.getSwitch('Font monospace');
 
-  // Investigate if we can rename this to `toBeChecked` without conflict.
-  await expect(monospaceFont).toBeSwitched({ on: false });
+  await expect(monospaceFont).toBeChecked({ checked: false });
   await monospaceFont.check();
-  await expect(monospaceFont).toBeSwitched();
+  await expect(monospaceFont).toBeChecked();
 
   await monospaceFont.uncheck();
-  await expect(monospaceFont).toBeSwitched({ on: false });
+  await expect(monospaceFont).toBeChecked({ checked: false });
 });
 
 test('enter value in input', async ({ gotoPanelEditPage }) => {
