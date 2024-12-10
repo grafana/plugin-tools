@@ -7,16 +7,14 @@ import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
+import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
   panel: Panel;
 
-  constructor(
-    readonly ctx: PluginTestCtx,
-    readonly args: DashboardEditViewArgs<string>
-  ) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
     super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
@@ -87,7 +85,6 @@ export class PanelEditPage extends GrafanaPage {
    * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
    */
   async setVisualization(visualization: Visualization | string) {
-    // toggle options pane if panel edit is not visible
     const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
     const showPanelEditElementCount = await showPanelEditElement.count();
     if (showPanelEditElementCount > 0) {
@@ -184,5 +181,35 @@ export class PanelEditPage extends GrafanaPage {
     await refreshPanelButton.click();
 
     return responsePromise;
+  }
+
+  /** Return page object for the panel edit options group with the given label */
+  getCustomOptions(label: string): PanelEditOptionsGroup {
+    const locator = this.getOptionsGroupLocator(label);
+    return new PanelEditOptionsGroup(this.ctx, locator, label);
+  }
+
+  getStandardOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Standard options');
+  }
+
+  getValueMappingOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Value mappings');
+  }
+
+  getDataLinksOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Data links');
+  }
+
+  getThresholdsOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Thresholds');
+  }
+
+  private getOptionsGroupLocator(label: string): Locator {
+    if (semver.gte(this.ctx.grafanaVersion, '11.1.0')) {
+      return this.ctx.page.getByTestId(`data-testid Options group ${label}`);
+    }
+
+    return this.ctx.page.getByLabel(`Options group ${label}`, { exact: true });
   }
 }
