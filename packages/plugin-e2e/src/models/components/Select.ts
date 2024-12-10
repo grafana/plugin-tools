@@ -29,10 +29,6 @@ export async function selectByValueOrLabel(
   ctx: PluginTestCtx,
   options?: SelectOptionsType
 ): Promise<string> {
-  if (!labelOrValue) {
-    throw new Error(`Could not select option: "${labelOrValue}"`);
-  }
-
   const option = getOption(menu, ctx).getByText(labelOrValue, { exact: true });
   const value = await option.textContent(options);
   await option.click(options);
