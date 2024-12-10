@@ -8,10 +8,10 @@ export class Switch extends ComponentBase {
   }
 
   async check(options?: CheckOptionsType): Promise<void> {
-    return this.element.check(options);
+    return this.element.check({ force: true, ...options });
   }
 
   async uncheck(options?: CheckOptionsType): Promise<void> {
-    return this.element.uncheck(options);
+    return this.element.uncheck({ force: true, ...options });
   }
 }

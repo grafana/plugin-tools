@@ -36,7 +36,7 @@ test('re-selecting value in radio button group', async ({ gotoPanelEditPage }) =
 test('checking switch', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
-  const monospaceFont = await clockOptions.getSwitch('Font monospace');
+  const monospaceFont = clockOptions.getSwitch('Font monospace');
 
   await expect(monospaceFont).toBeSwitched({ on: false });
   await monospaceFont.check();
@@ -46,7 +46,7 @@ test('checking switch', async ({ gotoPanelEditPage }) => {
 test('unchecking switch', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
-  const monospaceFont = await clockOptions.getSwitch('Font monospace');
+  const monospaceFont = clockOptions.getSwitch('Font monospace');
 
   // Investigate if we can rename this to `toBeChecked` without conflict.
   await expect(monospaceFont).toBeSwitched({ on: false });

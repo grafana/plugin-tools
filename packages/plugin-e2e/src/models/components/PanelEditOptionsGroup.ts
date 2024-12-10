@@ -15,15 +15,12 @@ export class PanelEditOptionsGroup {
     return new RadioGroup(this.ctx, getRadioGroupLocator(this.getByLabel(label), this.ctx));
   }
 
-  async getSwitch(label: string): Promise<Switch> {
+  getSwitch(label: string): Switch {
     if (gte(this.ctx.grafanaVersion, '11.4.0')) {
       // Try to force click the input instead of clicking the label
-      const id = await this.getByLabel(label).getByRole('switch').getAttribute('id');
-      return new Switch(this.getByLabel(label).locator(`label[for='${id}']`));
+      return new Switch(this.getByLabel(label).getByRole('switch'));
     }
-
-    const id = await this.getByLabel(label).getByRole('checkbox').getAttribute('id');
-    return new Switch(this.getByLabel(label).locator(`label[for='${id}']`));
+    return new Switch(this.getByLabel(label).getByRole('checkbox'));
   }
 
   getTextInput(label: string): Locator {
