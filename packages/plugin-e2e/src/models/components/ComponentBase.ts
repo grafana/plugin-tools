@@ -4,7 +4,7 @@ import { PluginTestCtx } from '../../types';
 type LocatorParams = Parameters<Locator['locator']>;
 
 export abstract class ComponentBase {
-  constructor(protected readonly ctx: PluginTestCtx, protected readonly element: Locator) {}
+  constructor(public readonly ctx: PluginTestCtx, protected readonly element: Locator) {}
 
   locator(selectorOrLocator?: LocatorParams[0], options?: LocatorParams[1]): Locator {
     if (!selectorOrLocator) {

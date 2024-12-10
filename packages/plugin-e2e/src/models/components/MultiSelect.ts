@@ -10,7 +10,7 @@ export class MultiSelect extends ComponentBase {
   }
 
   async selectOptions(values: string[], options?: SelectOptionsType): Promise<string[]> {
-    const menu = await openSelect(this.element, options);
+    const menu = await openSelect(this, options);
 
     return Promise.all(
       values.map((value) => {

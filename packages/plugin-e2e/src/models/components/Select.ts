@@ -10,12 +10,13 @@ export class Select extends ComponentBase {
   }
 
   async selectOption(values: string, options?: SelectOptionsType): Promise<string> {
-    const menu = await openSelect(this.element, options);
+    const menu = await openSelect(this, options);
     return selectByValueOrLabel(values, menu, this.ctx, options);
   }
 }
 
-export async function openSelect(element: Locator, options?: SelectOptionsType): Promise<Locator> {
+export async function openSelect(component: ComponentBase, options?: SelectOptionsType): Promise<Locator> {
+  const element = component.locator();
   await element.getByRole('combobox').click(options);
   return element.page().getByLabel('Select options menu', {
     exact: true,
