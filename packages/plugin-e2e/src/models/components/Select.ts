@@ -5,8 +5,8 @@ import { PluginTestCtx } from '../../types';
 import { gte } from 'semver';
 
 export class Select extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
-    super(element);
+  constructor(ctx: PluginTestCtx, element: Locator) {
+    super(ctx, element);
   }
 
   async selectOption(values: string, options?: SelectOptionsType): Promise<string> {

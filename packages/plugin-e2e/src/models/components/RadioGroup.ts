@@ -5,8 +5,8 @@ import { PluginTestCtx } from '../../types';
 import { gte } from 'semver';
 
 export class RadioGroup extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
-    super(element);
+  constructor(ctx: PluginTestCtx, element: Locator) {
+    super(ctx, element);
   }
 
   async check(labelOrValue: string, options?: CheckOptionsType): Promise<void> {

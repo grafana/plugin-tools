@@ -4,8 +4,8 @@ import { SelectOptionsType } from './types';
 import { ComponentBase } from './ComponentBase';
 
 export class UnitPicker extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
-    super(element);
+  constructor(ctx: PluginTestCtx, element: Locator) {
+    super(ctx, element);
   }
 
   async selectOption(value: string, options?: SelectOptionsType): Promise<void> {

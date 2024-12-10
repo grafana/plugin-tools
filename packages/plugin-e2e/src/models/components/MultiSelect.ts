@@ -5,8 +5,8 @@ import { SelectOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
 
 export class MultiSelect extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
-    super(element);
+  constructor(ctx: PluginTestCtx, element: Locator) {
+    super(ctx, element);
   }
 
   async selectOptions(values: string[], options?: SelectOptionsType): Promise<string[]> {

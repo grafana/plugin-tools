@@ -7,8 +7,8 @@ import { lte } from 'semver';
 export type SelectableColors = 'red' | 'blue' | 'orange' | 'green' | 'yellow';
 
 export class ColorPicker extends ComponentBase {
-  constructor(private ctx: PluginTestCtx, element: Locator) {
-    super(element);
+  constructor(ctx: PluginTestCtx, element: Locator) {
+    super(ctx, element);
   }
 
   async selectOption(color: SelectableColors, options?: SelectOptionsType): Promise<void> {

@@ -1,10 +1,11 @@
 import { Locator } from '@playwright/test';
 import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
+import { PluginTestCtx } from '../../types';
 
 export class Switch extends ComponentBase {
-  constructor(element: Locator) {
-    super(element);
+  constructor(ctx: PluginTestCtx, element: Locator) {
+    super(ctx, element);
   }
 
   async check(options?: CheckOptionsType): Promise<void> {
