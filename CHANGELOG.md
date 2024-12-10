@@ -1,3 +1,39 @@
+# (Mon Dec 09 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.11.1`
+  - Dependencies: Use latest release of plugin-e2e [#1390](https://github.com/grafana/plugin-tools/pull/1390) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Dec 09 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.11.0`
+  - Create Plugin: Add bundle stats workflow [#1357](https://github.com/grafana/plugin-tools/pull/1357) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.11.0`, `@grafana/plugin-e2e@1.13.0`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-211617 [#1385](https://github.com/grafana/plugin-tools/pull/1385) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@5.11.0`
+  - chore(deps): update grafana patch dependencies to v11.3.2 [#1381](https://github.com/grafana/plugin-tools/pull/1381) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - chore(deps): update dependency @grafana/plugin-e2e to v1.12.4 [#1373](https://github.com/grafana/plugin-tools/pull/1373) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Dec 03 2024)
 
 #### 🐛 Bug Fix
