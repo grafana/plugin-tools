@@ -1,3 +1,28 @@
+# v1.13.1 (Wed Dec 11 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix some APIs that were broken in older versions of Grafana [#1391](https://github.com/grafana/plugin-tools/pull/1391) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.13.0 (Mon Dec 09 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-211617 [#1385](https://github.com/grafana/plugin-tools/pull/1385) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.12.4 (Tue Dec 03 2024)
 
 #### 🐛 Bug Fix

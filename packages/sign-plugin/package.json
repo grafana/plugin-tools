@@ -1,6 +1,6 @@
 {
   "name": "@grafana/sign-plugin",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "repository": {
     "directory": "packages/sign-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "minimist": "^1.2.2",
-    "proxy-agent": "6.4.0"
+    "proxy-agent": "6.5.0"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2"

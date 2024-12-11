@@ -40,6 +40,8 @@ playwright-report/
 packages/plugin-e2e/test-results/
 packages/plugin-e2e/playwright/.cache/
 packages/plugin-e2e/playwright/.auth
+playwright/.cache/
+playwright/.auth
 .nx
 
 # Used in CI to pass built packages to the next job
