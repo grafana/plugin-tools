@@ -462,6 +462,12 @@ To manage dependencies during local plugin development, you can use one of the f
 
 * Add dependencies explicitly to your Grafana instance with `GF_INSTALL_PLUGINS=dependency`.
 
+For example:
+
+`GF_INSTALL_PLUGINS=grafana-clock-panel`
+
+tells Grafana to install that the clock panel plugin.
+
 Note that this approach is commonly used during development but requires manual tracking and updates for dependencies.
 
 ### Build and install the plugin via the Grafana CLI
