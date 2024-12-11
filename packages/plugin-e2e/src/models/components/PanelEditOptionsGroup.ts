@@ -31,7 +31,7 @@ export class PanelEditOptionsGroup {
   }
 
   getSliderInput(label: string): Locator {
-    if (gte(this.ctx.grafanaVersion, '9.1.9')) {
+    if (gte(this.ctx.grafanaVersion, '9.1.0')) {
       return this.getNumberInput(label);
     }
     return this.getByLabel(label).getByRole('textbox');
