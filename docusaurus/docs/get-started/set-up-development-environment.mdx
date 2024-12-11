@@ -454,7 +454,7 @@ When the Grafana server starts, its plugin loader runs a [Load](https://github.c
 
 Plugin dependency management:
 
-Although some validations occur on the server side, the plugin path itself doesn't include dependency validation. Developers are responsible for ensuring dependencies are correctly managed.
+Although some validations occur on the server side, the plugin path itself doesn't include validation of other plugins your plugin may be dependent upon. You are responsible for ensuring that your plugin's dependencies are correctly managed.
 
 To manage dependencies during local plugin development, you can use one of the following methods:
 
