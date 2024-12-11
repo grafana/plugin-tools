@@ -111,8 +111,8 @@ test('select color in color picker', async ({ gotoPanelEditPage, grafanaVersion,
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const backgroundColor = clockOptions.getColorPicker('Background color');
 
-  await backgroundColor.selectOption('green');
-  await expect(backgroundColor).toHaveColor('green');
+  await backgroundColor.selectOption('#73bf69');
+  await expect(backgroundColor).toHaveColor('#73bf69');
 
   // Not the best way to select the color of the panel need to fix this
   await expect(getPanelContent(grafanaVersion, page).locator('div')).toHaveCSS(

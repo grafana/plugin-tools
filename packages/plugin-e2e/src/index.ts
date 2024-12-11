@@ -43,7 +43,7 @@ import { RadioGroup } from './models/components/RadioGroup';
 import { toHaveChecked } from './matchers/toHaveChecked';
 import { MultiSelect } from './models/components/MultiSelect';
 import { toHaveColor } from './matchers/toHaveColor';
-import { ColorPicker, SelectableColors } from './models/components/ColorPicker';
+import { ColorPicker } from './models/components/ColorPicker';
 
 // models
 export { DataSourcePicker } from './models/components/DataSourcePicker';
@@ -167,7 +167,7 @@ declare global {
       /**
        * Asserts that a color picker has expected color selected
        */
-      toHaveColor(colorPicker: ColorPicker, color: SelectableColors, options?: { timeout?: number }): Promise<R>;
+      toHaveColor(colorPicker: ColorPicker, rgbOrHex: string, options?: { timeout?: number }): Promise<R>;
     }
   }
 }

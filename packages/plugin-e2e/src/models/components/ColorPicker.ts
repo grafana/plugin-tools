@@ -2,29 +2,26 @@ import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
-import { lte } from 'semver';
-
-export type SelectableColors = 'red' | 'blue' | 'orange' | 'green' | 'yellow';
+import { gte } from 'semver';
 
 export class ColorPicker extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
     super(ctx, element);
   }
 
-  async selectOption(color: SelectableColors, options?: SelectOptionsType): Promise<void> {
+  async selectOption(rgbOrHex: string, options?: SelectOptionsType): Promise<void> {
     await this.element.getByRole('button').click(options);
+    await this.getContainer().getByRole('button', { name: 'Custom', exact: true }).click(options);
 
-    if (lte(this.ctx.grafanaVersion, '8.6.0')) {
-      return await this.ctx.page
-        .locator('body > div')
-        .last()
-        .getByRole('button', { name: `${color} color`, exact: true })
-        .click(options);
+    const colorInput = this.getContainer().getByTestId('input-wrapper').getByRole('textbox');
+    await colorInput.hover(options);
+    await colorInput.fill(rgbOrHex, options);
+  }
+
+  private getContainer(): Locator {
+    if (gte(this.ctx.grafanaVersion, '8.7.0')) {
+      return this.ctx.page.locator('#grafana-portal-container');
     }
-
-    await this.ctx.page
-      .locator('#grafana-portal-container')
-      .getByRole('button', { name: `${color} color`, exact: true })
-      .click(options);
+    return this.ctx.page.locator('body > div').last();
   }
 }
