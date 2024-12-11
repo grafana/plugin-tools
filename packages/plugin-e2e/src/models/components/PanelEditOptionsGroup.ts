@@ -19,10 +19,7 @@ export class PanelEditOptionsGroup {
   }
 
   getSwitch(label: string): Switch {
-    if (gte(this.ctx.grafanaVersion, '11.4.0')) {
-      return new Switch(this.ctx, this.getByLabel(label).getByRole('switch'));
-    }
-    return new Switch(this.ctx, this.getByLabel(label).getByRole('checkbox'));
+    return new Switch(this.ctx, this.getByLabel(label));
   }
 
   getTextInput(label: string): Locator {

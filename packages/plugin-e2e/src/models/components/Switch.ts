@@ -2,17 +2,40 @@ import { Locator } from '@playwright/test';
 import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
+import { gte } from 'semver';
 
 export class Switch extends ComponentBase {
-  constructor(ctx: PluginTestCtx, element: Locator) {
-    super(ctx, element);
+  private group: Locator;
+
+  constructor(ctx: PluginTestCtx, group: Locator) {
+    super(ctx, Switch.getElement(ctx, group));
+    this.group = group;
+  }
+
+  private static getElement(ctx: PluginTestCtx, group: Locator): Locator {
+    if (gte(ctx.grafanaVersion, '11.4.0')) {
+      return group.getByRole('switch');
+    } else {
+      return group.getByRole('checkbox');
+    }
   }
 
   async check(options?: CheckOptionsType): Promise<void> {
-    return this.element.check({ force: true, ...options });
+    const target = await this.getSwitch(options);
+    return target.check({ force: true, ...options });
   }
 
   async uncheck(options?: CheckOptionsType): Promise<void> {
-    return this.element.uncheck({ force: true, ...options });
+    const target = await this.getSwitch(options);
+    return target.uncheck({ force: true, ...options });
+  }
+
+  private async getSwitch(options: CheckOptionsType): Promise<Locator> {
+    if (gte(this.ctx.grafanaVersion, '11.3.0')) {
+      return this.element;
+    }
+
+    const id = await this.element.getAttribute('id', options);
+    return this.group.locator(`label[for='${id}']`);
   }
 }
