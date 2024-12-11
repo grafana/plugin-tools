@@ -204,10 +204,7 @@ export class PanelEditPage extends GrafanaPage {
   }
 
   private getOptionsGroupLocator(label: string): Locator {
-    if (semver.gte(this.ctx.grafanaVersion, '11.1.0')) {
-      return this.ctx.page.getByTestId(`data-testid Options group ${label}`);
-    }
-
-    return this.ctx.page.getByLabel(`Options group ${label}`, { exact: true });
+    const { selectors } = this.ctx;
+    return this.getByGrafanaSelector(selectors.components.OptionsGroup.group(label));
   }
 }
