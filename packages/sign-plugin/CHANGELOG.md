@@ -1,3 +1,15 @@
+# v3.0.5 (Wed Dec 11 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency proxy-agent to v6.5.0 [#1387](https://github.com/grafana/plugin-tools/pull/1387) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v3.0.4 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix
