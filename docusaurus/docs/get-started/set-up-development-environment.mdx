@@ -450,7 +450,7 @@ Refer to [Grafana documentation](https://grafana.com/docs/grafana/latest/setup-g
 
 Plugin initialization:
 
-When the Grafana server starts, its plugin loader runs a [Load](https://github.com/grafana/grafana/blob/b53f14ca83eeec6b0f624c2dbbaa417d08bbadbf/pkg/plugins/manager/loader/loader.go#L55-L56) function. This scans the `/var/lib/grafana/` plugins directory for plugins, validates `plugin.json` files, checks signatures and manifests, and initializes valid plugins.
+When the Grafana server starts, its plugin loader runs a [Load](https://github.com/grafana/grafana/blob/b53f14ca83eeec6b0f624c2dbbaa417d08bbadbf/pkg/plugins/manager/loader/loader.go#L55-L56) function. This scans the defined [plugins directory](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#plugins) for plugins, validates `plugin.json` files, checks signatures and manifests, and initializes valid plugins.
 
 Plugin dependency management:
 
