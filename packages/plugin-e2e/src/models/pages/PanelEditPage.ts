@@ -127,10 +127,8 @@ export class PanelEditPage extends GrafanaPage {
       await this.getByGrafanaSelector(
         this.ctx.selectors.components.NavToolbar.editDashboard.backToDashboardButton
       ).click();
-    } else if (semver.gte(this.ctx.grafanaVersion, '9.0.0')) {
-      await this.ctx.page.getByTestId(this.ctx.selectors.components.PanelEditor.applyButton).click();
     } else {
-      await this.ctx.page.getByLabel('panel editor apply').click();
+      await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.applyButton).click();
     }
 
     return new DashboardPage(this.ctx, this.args);
