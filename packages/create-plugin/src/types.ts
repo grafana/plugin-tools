@@ -26,5 +26,6 @@ export type TemplateData = {
   reactRouterVersion: string;
   usePlaywright: boolean;
   useCypress: boolean;
+  hasCustomWebpackConfig: boolean;
   pluginExecutable?: string;
 };
