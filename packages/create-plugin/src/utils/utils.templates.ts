@@ -100,7 +100,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   //@grafana/e2e was deprecated in Grafana 11
   const useCypress =
     !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
-  const hasCustomWebpackConfig = isFile(path.join(process.cwd(), 'webpack.config.js'));
+  const hasCustomWebpackConfig = isFile(path.join(process.cwd(), 'webpack.config.ts'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const shouldUseReactRouterV6 = (pluginType: string) =>
     features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
