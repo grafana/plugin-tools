@@ -23,7 +23,7 @@
   "panels": [
     {
       "datasource": {
-        "name": "test-datasource",
+        "default": false,
         "type": "grafana-test-datasource",
         "uid": "P6E498B96656A7F9B"
       },
@@ -108,6 +108,8 @@
             "type": "grafana-test-datasource",
             "uid": "P6E498B96656A7F9B"
           },
+          "project": "project-1",
+          "queryText": "test",
           "refId": "A"
         }
       ],
@@ -121,7 +123,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "A",
           "value": "A"
         },
@@ -148,7 +150,6 @@
       }
     ]
   },
-
   "time": {
     "from": "now-6h",
     "to": "now"
@@ -157,6 +158,6 @@
   "timezone": "browser",
   "title": "Test datasource",
   "uid": "be6sir7o1iccgb",
-  "version": 2,
+  "version": 5,
   "weekStart": ""
 }
