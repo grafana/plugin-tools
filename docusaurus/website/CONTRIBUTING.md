@@ -46,7 +46,9 @@ docusaurus/
     ├── static/ // folder for static assets
     │   ├── font
     │   └── img
-    ├── docusaurus.config.js
+    ├── docusaurus.config.base.ts // base config dev and prod share settings from
+    ├── docusaurus.config.dev.ts
+    ├── docusaurus.config.prod.ts
     └── package.json
 ```
 
