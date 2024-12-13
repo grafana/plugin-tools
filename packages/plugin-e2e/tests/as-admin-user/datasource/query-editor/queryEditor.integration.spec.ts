@@ -15,7 +15,6 @@ test('should return data and not display panel error when a valid query is provi
 
 test('should return an error and display panel error when query is invalid', async ({
   panelEditPage,
-  page,
   readProvisionedDataSource,
 }) => {
   const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
@@ -28,7 +27,6 @@ test('should return an error and display panel error when query is invalid', asy
 
 test('should be possible to load and execute an existing valid query', async ({
   gotoPanelEditPage,
-  page,
   readProvisionedDashboard,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
