@@ -10,6 +10,6 @@ test('variable interpolation', async ({ readProvisionedDashboard, gotoDashboardP
   const queryReq = panelEditPage.waitForQueryDataRequest((request) =>
     (request.postData() ?? '').includes(`"queryText":"A"`)
   );
-  panelEditPage.refreshPanel();
+  await panelEditPage.refreshPanel();
   await expect(await queryReq).toBeTruthy();
 });
