@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import { expect, test } from '../../../../src';
 
 const TRUTHY_CUSTOM_TOGGLE = 'custom_toggle1';
@@ -15,8 +16,14 @@ test.use({
 test('should display TLS enabled field when tlsEnabled feature toggle is set to true', async ({
   gotoPanelEditPage,
   readProvisionedDashboard,
+  grafanaVersion,
+  page,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
-  await expect(panelEditPage.getQueryEditorRow('A').getByLabel('TLS Enabled')).toBeVisible();
+  const row = panelEditPage.getQueryEditorRow('A');
+  const locator = semver.lt(grafanaVersion, '9.3.0')
+    ? row.locator(`[label="TLS Enabled"]`).locator('../label')
+    : row.getByLabel('TLS Enabled');
+  await expect(locator).toBeVisible();
 });
