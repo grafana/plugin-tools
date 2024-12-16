@@ -17,7 +17,6 @@ test('should display TLS enabled field when tlsEnabled feature toggle is set to 
   gotoPanelEditPage,
   readProvisionedDashboard,
   grafanaVersion,
-  page,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
