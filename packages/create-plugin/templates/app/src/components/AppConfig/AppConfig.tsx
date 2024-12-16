@@ -6,7 +6,7 @@ import { getBackendSrv } from '@grafana/runtime';
 import { Button, Field, FieldSet, Input, SecretInput, useStyles2 } from '@grafana/ui';
 import { testIds } from '../testIds';
 
-export type AppPluginSettings = {
+type AppPluginSettings = {
   apiUrl?: string;
 };
 
@@ -133,7 +133,7 @@ const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<
   }
 };
 
-export const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
+const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
   const response = await getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',

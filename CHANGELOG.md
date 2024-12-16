@@ -1,3 +1,19 @@
+# (Wed Dec 11 2024)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.13.1`
+  - Plugin E2E: Fix some APIs that were broken in older versions of Grafana [#1391](https://github.com/grafana/plugin-tools/pull/1391) ([@sunker](https://github.com/sunker))
+- `@grafana/sign-plugin@3.0.5`
+  - fix(deps): update dependency proxy-agent to v6.5.0 [#1387](https://github.com/grafana/plugin-tools/pull/1387) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Mon Dec 09 2024)
 
 #### 🐛 Bug Fix

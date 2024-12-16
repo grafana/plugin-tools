@@ -87,7 +87,7 @@ export class DashboardPage extends GrafanaPage {
       await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
     }
 
-    if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
+    if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
       await this.getByGrafanaSelector(components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)).click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
