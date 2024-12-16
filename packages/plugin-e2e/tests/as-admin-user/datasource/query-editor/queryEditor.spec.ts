@@ -58,7 +58,7 @@ test('backToDashboard method should be backwards compatible and navigate to dash
   readProvisionedDashboard,
   page,
 }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
   const panelEditPage = await dashboardPage.addPanel();
   await panelEditPage.backToDashboard();

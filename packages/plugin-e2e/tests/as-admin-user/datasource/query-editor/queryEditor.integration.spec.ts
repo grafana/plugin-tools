@@ -29,7 +29,7 @@ test('should be possible to load and execute an existing valid query', async ({
   gotoPanelEditPage,
   readProvisionedDashboard,
 }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
   await expect(panelEditPage.refreshPanel()).toBeOK();
   await expect(panelEditPage.panel.getErrorIcon()).not.toBeVisible();

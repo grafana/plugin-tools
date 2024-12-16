@@ -24,7 +24,7 @@ test.skip('open existing variable and execute successful query', async ({
   gotoVariableEditPage,
   readProvisionedDashboard,
 }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const variableEditPage = await gotoVariableEditPage({ dashboard, id: '0' });
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
   await variableEditPage.runQuery();

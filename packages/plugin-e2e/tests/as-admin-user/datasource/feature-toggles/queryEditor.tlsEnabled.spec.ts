@@ -18,7 +18,7 @@ test('should display TLS enabled field when tlsEnabled feature toggle is set to 
   readProvisionedDashboard,
   grafanaVersion,
 }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
   const row = panelEditPage.getQueryEditorRow('A');
   const locator = semver.lt(grafanaVersion, '9.3.0')

@@ -3,7 +3,7 @@ import { test, expect } from '../../../../src';
 
 test.describe('panel edit page', () => {
   test('table panel data assertions', async ({ gotoPanelEditPage, readProvisionedDashboard }, testInfo) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '2' });
     await expect(panelEditPage.panel.locator).toBeVisible();
     await expect(panelEditPage.panel.data).toContainText(['22.2', '70', 'Staging']);
@@ -11,7 +11,7 @@ test.describe('panel edit page', () => {
   });
 
   test('timeseries panel - table view assertions', async ({ readProvisionedDashboard, gotoPanelEditPage }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '4' });
     await panelEditPage.toggleTableView();
     await expect(panelEditPage.panel.fieldNames).toContainText(['time', 'temperature', 'humidity', 'environment']);
@@ -21,7 +21,7 @@ test.describe('panel edit page', () => {
 
 test.describe('dashboard page', () => {
   test('getting panel by title', async ({ readProvisionedDashboard, gotoDashboardPage }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const dashboardPage = await gotoDashboardPage(dashboard);
     const panel = await dashboardPage.getPanelByTitle('Single row');
     await expect(panel.data).toContainText(['22.2', '70', 'Staging']);
@@ -29,7 +29,7 @@ test.describe('dashboard page', () => {
   });
 
   test('getting panel by id', async ({ gotoDashboardPage, readProvisionedDashboard }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const dashboardPage = await gotoDashboardPage(dashboard);
     const panel = await dashboardPage.getPanelById('2');
     await expect(panel.data).toContainText(['22.2', '70', 'Staging']);

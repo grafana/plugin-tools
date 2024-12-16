@@ -1,7 +1,7 @@
 import { test, expect, PanelEditPage } from '../../../../src';
 
 test('variable interpolation', async ({ readProvisionedDashboard, gotoDashboardPage }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'test-datasource.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
   const panelEditPage = await dashboardPage.addPanel();
   await panelEditPage.datasource.set('test-datasource');
