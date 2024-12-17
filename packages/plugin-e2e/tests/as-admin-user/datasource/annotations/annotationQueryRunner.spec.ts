@@ -36,7 +36,6 @@ test('open provisioned, successful annotation query', async ({
   grafanaVersion,
   gotoAnnotationEditPage,
   readProvisionedDashboard,
-  page,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource-annotations.json' });
   const annotationEditPage = await gotoAnnotationEditPage({ dashboard, id: '1' });
