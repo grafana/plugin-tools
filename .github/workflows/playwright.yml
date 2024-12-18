@@ -25,7 +25,7 @@ jobs:
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
-          limit: 0 # Uncomment to test all versions since 8.5.0. Useful when testing compatibility for new APIs.
+          # limit: 0 # Uncomment to test all versions since 8.5.0. Useful when testing compatibility for new APIs.
 
   playwright-tests:
     needs: resolve-versions
@@ -71,7 +71,7 @@ jobs:
         run: |
           cd packages/plugin-e2e
           docker compose pull
-          GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@main
