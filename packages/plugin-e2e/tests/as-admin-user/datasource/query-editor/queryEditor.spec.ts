@@ -1,17 +1,5 @@
 import { expect, test } from '../../../../src';
 
-export interface SheetsJsonData {
-  authenticationType: string;
-  tokenUri?: string;
-  clientEmail?: string;
-  defaultProject?: string;
-  privateKeyPath?: string;
-}
-
-export interface SheetsSecureJsonData {
-  privateKey?: string;
-}
-
 test('should render query editor', async ({ panelEditPage, readProvisionedDataSource }) => {
   const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
   await panelEditPage.datasource.set(ds.name);
