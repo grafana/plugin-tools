@@ -52,10 +52,30 @@ npm run build # used to build @grafana/plugin-e2e
 npm run dev # watches for changes to files and rebuilds @grafana/plugin-e2e automatically
 ```
 
+### Tests
+
+The [tests](./tests/) folder contains a suite of Playwright tests designed to validate its own APIs. These tests run continuously for every PR in the plugin-tools repository to identify potential breakages in the plugin-e2e package. Since all plugin-e2e APIs must remain compatible with Grafana 9.5 and later, the tests are executed against a matrix of Grafana versions. The test environment is configured using the docker-compose file in this workspace, which installs a set of plugins to ensure comprehensive coverage of the plugin-e2e APIs throughout the test suite.
+
+To run the tests locally:
+
+1. Start the Grafana e2e instance:
+
 ```shell
-npm run server # starts the test server
+# starts the test server using the main branch of Grafana
+npm run server
+# if you want to test a specific version of Grafana
+GRAFANA_VERSION=11.2.1 npm run server
+```
+
+2. Run the tests
+
+```shell
 npm run playwright:test # runs all the playwright
 ```
+
+### The [Test DataSource](https://github.com/grafana/grafana-test-datasource)
+
+Many of the Playwright tests in the [test suite](./tests/) use a custom made data source plugin. This data source it not published to the catalog - its only purpose is to verify that the plugin-e2e APIs work as expected. If you need to change the functionality of this plugin, refer to the [plugin readme](https://github.com/grafana/grafana-test-datasource?tab=readme-ov-file#distributing-changes-in-the-plugin).
 
 ### VS Code Playwright extension
 
