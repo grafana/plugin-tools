@@ -39,14 +39,12 @@ test.describe('dashboard page', () => {
 
 test.describe('explore page', () => {
   test('table panel', async ({ grafanaVersion, explorePage }) => {
-    const url = semver.lt('10.0.0', grafanaVersion)
-      ? `panes=%7B"_t4":%7B"datasource":"grafana","queries":%5B%7B"queryType":"randomWalk","refId":"A","datasource":%7B"type":"datasource","uid":"grafana"%7D%7D%5D,"range":%7B"from":"now-6h","to":"now"%7D%7D%7D&orgId=1&left=%7B"datasource":"grafana","queries":%5B%7B"refId":"A","datasource":%7B"type":"datasource","uid":"grafana"%7D,"queryType":"randomWalk"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D`
-      : 'left=%7B"datasource":"grafana","queries":%5B%7B"queryType":"randomWalk","refId":"A","datasource":%7B"type":"datasource","uid":"grafana"%7D%7D%5D,"range":%7B"from":"1547161200000","to":"1576364400000"%7D%7D&orgId=1';
+    const params = semver.lt(grafanaVersion, '10.0.0')
+      ? 'orgId=1&left=%7B"datasource":"P6E498B96656A7F9B","queries":%5B%7B"refId":"A","datasource":%7B"type":"grafana-test-datasource","uid":"P6E498B96656A7F9B"%7D,"constant":9,"project":"project-2","queryText":"test%20query"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D'
+      : `?schemaVersion=1&panes=%7B"9ye":%7B"datasource":"P6E498B96656A7F9B","queries":%5B%7B"constant":6.5,"refId":"A","datasource":%7B"type":"grafana-test-datasource","uid":"P6E498B96656A7F9B"%7D,"queryText":"test%20query"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D%7D&orgId=1`;
 
-    await explorePage.goto({
-      queryParams: new URLSearchParams(url),
-    });
+    await explorePage.goto({ queryParams: new URLSearchParams(params) });
 
-    await expect(explorePage.tablePanel.fieldNames).toContainText(['time', 'A-series']);
+    await expect(explorePage.tablePanel.fieldNames).toContainText(['time', 'values']);
   });
 });

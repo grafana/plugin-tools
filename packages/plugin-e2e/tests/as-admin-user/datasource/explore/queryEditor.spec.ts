@@ -1,11 +1,12 @@
+import * as semver from 'semver';
 import { expect, test } from '../../../../src';
 
-test('editor populates query from url', async ({ explorePage }) => {
-  await explorePage.goto({
-    queryParams: new URLSearchParams(
-      `schemaVersion=1&panes=%7B%22oae%22:%7B%22datasource%22:%22--%20Mixed%20--%22,%22queries%22:%5B%7B%22constant%22:9,%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22grafana-test-datasource%22,%22uid%22:%22P6E498B96656A7F9B%22%7D,%22queryText%22:%22test%20query%22,%22project%22:%22project-2%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1`
-    ),
-  });
+test('editor populates query from url', async ({ explorePage, grafanaVersion }) => {
+  const params = semver.lt(grafanaVersion, '10.0.0')
+    ? 'orgId=1&left=%7B"datasource":"P6E498B96656A7F9B","queries":%5B%7B"refId":"A","datasource":%7B"type":"grafana-test-datasource","uid":"P6E498B96656A7F9B"%7D,"constant":9,"project":"project-2","queryText":"test%20query"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D'
+    : `?schemaVersion=1&panes=%7B"9ye":%7B"datasource":"P6E498B96656A7F9B","queries":%5B%7B"constant":9,"refId":"A","datasource":%7B"type":"grafana-test-datasource","uid":"P6E498B96656A7F9B"%7D,"queryText":"test%20query"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D%7D&orgId=1`;
+
+  await explorePage.goto({ queryParams: new URLSearchParams(params) });
   const queryEditorRowLocator = explorePage.getQueryEditorRow('A');
   await expect(queryEditorRowLocator.getByRole('textbox', { name: 'Query Text' })).toHaveValue('test query');
   await expect(queryEditorRowLocator.getByRole('spinbutton', { name: 'Constant' })).toHaveValue('9');
