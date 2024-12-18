@@ -19,6 +19,9 @@ export interface ManifestInfo {
   signPlugin?: {
     version: string;
   };
+  createPlugin?: {
+    version: string;
+  };
 }
 
 type RecursiveWalk = AsyncGenerator<string, void | RecursiveWalk>;
