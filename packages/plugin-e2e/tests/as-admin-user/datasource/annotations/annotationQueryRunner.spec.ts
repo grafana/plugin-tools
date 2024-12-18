@@ -26,9 +26,9 @@ test('create new, unsuccessful annotation query', async ({
   const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
   await annotationEditPage.datasource.set(ds.name);
   await page.getByRole('textbox', { name: 'Query Text' }).fill('error');
-  await expect(annotationEditPage.runQuery()).toBeOK();
+  await expect(annotationEditPage.runQuery()).not.toBeOK();
   if (semver.gte(grafanaVersion, '11.0.0')) {
-    await expect(annotationEditPage).toHaveAlert('success');
+    await expect(annotationEditPage).toHaveAlert('error');
   }
 });
 
