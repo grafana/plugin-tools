@@ -73,7 +73,11 @@ export class DashboardPage extends GrafanaPage {
    * await expect(panel.fieldNames()).toContainText(['time', 'temperature']);
    */
   getPanelById(panelId: string): Panel {
-    return new Panel(this.ctx, this.ctx.page.locator(`[data-panelid="${panelId}"]`));
+    if (semver.lt(this.ctx.grafanaVersion, '11.3.0')) {
+      return new Panel(this.ctx, this.ctx.page.locator(`[data-panelid="${panelId}"]`));
+    }
+
+    return new Panel(this.ctx, this.ctx.page.locator(`[data-viz-panel-key="panel-${panelId}"]`));
   }
 
   /**
