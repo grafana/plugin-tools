@@ -10,6 +10,8 @@ export const argv = minimist(args, {
     hasBackend: 'backend',
     pluginName: 'plugin-name',
     orgName: 'org-name',
+    // temporary flag whilst we work on the migration updates
+    experimentalUpdates: 'experimental-updates',
   },
 });
 
