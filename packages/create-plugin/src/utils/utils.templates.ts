@@ -2,10 +2,10 @@ import { lt as semverLt } from 'semver';
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
-import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
+import { debug } from './utils.cli.js';
 import {
   TEMPLATE_PATHS,
   EXPORT_PATH_PREFIX,
@@ -23,7 +23,7 @@ import { getExportFileName } from '../utils/utils.files.js';
 import { getGrafanaRuntimeVersion, getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
-const debug = createDebug('create-plugin:templates');
+const templatesDebugger = debug.extend('templates');
 
 /**
  *
@@ -161,7 +161,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
     };
   }
 
-  debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
+  templatesDebugger('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
 
   return templateData;
 }
