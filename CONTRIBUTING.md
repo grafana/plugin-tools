@@ -128,7 +128,7 @@ Once you've filed the PR:
 
 Redirects:
 
-- In case you have to add a redirect - you can add a new entry to the config section of the following plugin `@docusaurus/plugin-client-redirects` in [docusaurus configuration file](./docusaurus/website/docusaurus.config.base.js).
+- In case you have to add a redirect - you can add a new entry to the config section of the following plugin `@docusaurus/plugin-client-redirects` in [docusaurus configuration file](./docusaurus/website/docusaurus.config.base.ts).
 
 ## Contribute Code
 

@@ -1,3 +1,22 @@
+# v5.12.0 (Wed Dec 18 2024)
+
+#### 🚀 Enhancement
+
+- Chore: Switching to main [#1399](https://github.com/grafana/plugin-tools/pull/1399) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Create-plugin: Remove unused dependencies according to Knip report [#1369](https://github.com/grafana/plugin-tools/pull/1369) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v1.13.1 [#1397](https://github.com/grafana/plugin-tools/pull/1397) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.11.1 (Mon Dec 09 2024)
 
 #### 🐛 Bug Fix

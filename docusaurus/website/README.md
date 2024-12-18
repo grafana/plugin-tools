@@ -37,7 +37,7 @@ $ npm run serve
 
 When moving a file, create a client-side redirect so as not to break links from the old location. It is a best practice to also manually update old links to the new location whenever possible.
 
-Insert the client-side redirect here: /plugin-tools/docusaurus/website/docusaurus.config.base.js into the [configuration section](https://github.com/grafana/plugin-tools/blob/0d436bb669a5f3ca37ea267d97e88cfa8508a25e/docusaurus/website/docusaurus.config.base.js#L63) of `@docusaurus/plugin-client-redirects`. The format is:
+Insert the client-side redirect here: /plugin-tools/docusaurus/website/docusaurus.config.base.ts into the [configuration section](https://github.com/grafana/plugin-tools/blob/main/docusaurus/website/docusaurus.config.base.js#L41) of `@docusaurus/plugin-client-redirects`. The format is:
 
 ```
 {

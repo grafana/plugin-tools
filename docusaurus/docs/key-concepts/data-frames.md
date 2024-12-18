@@ -47,7 +47,7 @@ export interface Field<T = any, V = Vector<T>> {
   /**
    * The raw field values
    * In Grafana 10, this accepts both simple arrays and the Vector interface
-   * In Grafana 11, the Vector interface will be removed
+   * In Grafana 11, the Vector interface has been removed
    */
   values: V | T[];
 

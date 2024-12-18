@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Build documentation website
-        run: npm run docs:build -- --config docusaurus.config.dev.js
+        run: npm run docs:build -- --config docusaurus.config.dev.ts
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'

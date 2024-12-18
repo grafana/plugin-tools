@@ -20,7 +20,7 @@ import ScaffoldPluginE2EInstallPNPM from '@snippets/plugin-e2e-install.pnpm.md';
 import ScaffoldPluginE2EInstallYarn from '@snippets/plugin-e2e-install.yarn.md';
 
 :::danger
-When Grafana 11.0.0 is released the [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) will be deprecated and support will be dropped. We recommend all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
+With the release of Grafana 11.0.0 the [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) package has been deprecated and support has been dropped. We recommend all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
 :::
 
 In this guide you'll learn:
