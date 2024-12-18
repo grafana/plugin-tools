@@ -1,3 +1,27 @@
+# (Wed Dec 18 2024)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.12.0`
+  - Chore: Switching to main [#1399](https://github.com/grafana/plugin-tools/pull/1399) ([@tolzhabayev](https://github.com/tolzhabayev))
+  - Create-plugin: Remove unused dependencies according to Knip report [#1369](https://github.com/grafana/plugin-tools/pull/1369) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.14.0`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-213998 [#1396](https://github.com/grafana/plugin-tools/pull/1396) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@5.12.0`
+  - chore(deps): update dependency @grafana/plugin-e2e to v1.13.1 [#1397](https://github.com/grafana/plugin-tools/pull/1397) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 4
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Wed Dec 11 2024)
 
 #### 🐛 Bug Fix
