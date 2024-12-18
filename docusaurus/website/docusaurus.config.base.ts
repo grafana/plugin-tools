@@ -305,15 +305,3 @@ export const themeConfigColorMode = {
   disableSwitch: true,
   respectPrefersColorScheme: false,
 };
-
-// module.exports = {
-//   customFields,
-//   generalConfig,
-//   plugins,
-//   presetsDocs,
-//   presetsTheme,
-//   themeConfigNavbar,
-//   themeConfigFooter,
-//   themeConfigPrism,
-//   themeConfigColorMode,
-// };
