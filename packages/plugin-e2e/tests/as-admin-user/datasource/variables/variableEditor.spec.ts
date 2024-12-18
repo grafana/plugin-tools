@@ -6,7 +6,7 @@ test('should render variable editor', async ({ variableEditPage, page, readProvi
   await expect(page.getByRole('textbox', { name: 'Query Text' })).toBeVisible();
 });
 
-test.skip('create new variable and execute successful query', async ({
+test('create new variable and execute successful query', async ({
   variableEditPage,
   readProvisionedDataSource,
   page,
@@ -20,7 +20,7 @@ test.skip('create new variable and execute successful query', async ({
   await expect(variableEditPage).toDisplayPreviews(['A', 'B']);
 });
 
-test.skip('open existing variable and execute successful query', async ({
+test('open existing variable and execute successful query', async ({
   gotoVariableEditPage,
   readProvisionedDashboard,
 }) => {
