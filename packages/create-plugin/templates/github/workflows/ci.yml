@@ -193,6 +193,8 @@ jobs:
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@main
+        with:
+          url: http://localhost:3000/login
 
       - name: Install Playwright Browsers
         run: {{ packageManagerName }} exec playwright install chromium --with-deps
