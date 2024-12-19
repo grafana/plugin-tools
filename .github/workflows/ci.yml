@@ -23,7 +23,7 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
         with:
-          node-grafanaVersion: '22'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -62,43 +62,21 @@ jobs:
           - workingDir: 'myorg-nobackend-app'
             cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
             hasBackend: false
-            grafanaVersion: latest
-          - workingDir: 'myorg-nobackend-app'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
-            hasBackend: false
-            grafanaVersion: '10.4.0'
           - workingDir: 'myorg-backend-app'
             cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
             hasBackend: true
-            grafanaVersion: latest
           - workingDir: 'myorg-nobackend-panel'
             cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
             hasBackend: false
-            grafanaVersion: latest
-          - workingDir: 'myorg-nobackend-panel'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
-            hasBackend: false
-            grafanaVersion: '10.4.0'
           - workingDir: 'myorg-nobackend-datasource'
             cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
             hasBackend: false
-            grafanaVersion: latest
-          - workingDir: 'myorg-nobackend-datasource'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
-            hasBackend: false
-            grafanaVersion: '10.4.0'
           - workingDir: 'myorg-backend-datasource'
             cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
             hasBackend: true
-            grafanaVersion: latest
           - workingDir: 'myorg-nobackendscenes-app'
             cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
             hasBackend: false
-            grafanaVersion: latest
-          - workingDir: 'myorg-nobackendscenes-app'
-            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
-            hasBackend: false
-            grafanaVersion: '10.4.0'
     steps:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
@@ -172,7 +150,7 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Start grafana server for e2e tests
-        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ matrix.grafanaVersion }} docker compose up -d
+        run: ANONYMOUS_AUTH_ENABLED=false docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server
