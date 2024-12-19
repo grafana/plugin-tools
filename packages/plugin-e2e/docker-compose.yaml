@@ -4,7 +4,7 @@ services:
     environment:
       - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=grafana-test-datasource
       - GF_INSTALL_PLUGINS=https://github.com/grafana/grafana-test-datasource/releases/download/v0.0.7/grafana-test-datasource-0.0.7.zip;grafana-test-datasource,grafana-clock-panel 2.1.3,marcusolsson-json-datasource 1.3.12,redis-app 2.2.1
-      - GF_AUTH_ANONYMOUS_ENABLED=${ANONYMOUS_AUTH_ENABLED:-false}
+      - GF_AUTH_ANONYMOUS_ENABLED=${ANONYMOUS_AUTH_ENABLED:-true}
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ID=1
