@@ -1,3 +1,17 @@
+# v5.12.1 (Thu Dec 19 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix scaffolded panel plugin tests [#1421](https://github.com/grafana/plugin-tools/pull/1421) ([@sunker](https://github.com/sunker))
+- Update dependency @grafana/e2e-selectors to v11.4.0 [#1412](https://github.com/grafana/plugin-tools/pull/1412) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.12.0 (Wed Dec 18 2024)
 
 #### 🚀 Enhancement

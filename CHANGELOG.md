@@ -2,6 +2,21 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.12.1`
+  - Create Plugin: Fix scaffolded panel plugin tests [#1421](https://github.com/grafana/plugin-tools/pull/1421) ([@sunker](https://github.com/sunker))
+  - Update dependency @grafana/e2e-selectors to v11.4.0 [#1412](https://github.com/grafana/plugin-tools/pull/1412) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Dec 19 2024)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@1.14.1`
   - Update dependency @grafana/e2e-selectors to ^11.5.0-214310 [#1415](https://github.com/grafana/plugin-tools/pull/1415) ([@renovate[bot]](https://github.com/renovate[bot]))
 
