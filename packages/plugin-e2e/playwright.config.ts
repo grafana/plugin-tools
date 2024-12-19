@@ -3,6 +3,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import { PluginOptions } from './src';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ export default defineConfig<PluginOptions>({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     // provisioningRootDir: './packages/plugin-e2e/provisioning',
+    provisioningRootDir: process.env.PROVISIONING_ROOT_DIR || path.join(process.cwd(), 'provisioning'),
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:3000',
 
@@ -71,7 +73,6 @@ export default defineConfig<PluginOptions>({
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/admin.json',
-        viewport: { width: 1920, height: 1080 },
       },
       dependencies: ['authenticate'],
     },

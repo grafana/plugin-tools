@@ -13,6 +13,11 @@ test.use({
   },
 });
 
+test('should set feature toggles correctly', async ({ isFeatureToggleEnabled }) => {
+  expect(await isFeatureToggleEnabled(TRUTHY_CUSTOM_TOGGLE)).toBeTruthy();
+  expect(await isFeatureToggleEnabled(FALSY_CUSTOM_TOGGLE)).toBeFalsy();
+});
+
 test('should display TLS enabled field when tlsEnabled feature toggle is set to true', async ({
   gotoPanelEditPage,
   readProvisionedDashboard,

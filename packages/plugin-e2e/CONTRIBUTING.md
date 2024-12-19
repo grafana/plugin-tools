@@ -54,7 +54,7 @@ npm run dev # watches for changes to files and rebuilds @grafana/plugin-e2e auto
 
 ### Tests
 
-The [tests](./tests/) folder contains a suite of Playwright tests designed to validate its own APIs. These tests run continuously for every PR in the plugin-tools repository to identify potential breakages in the plugin-e2e package. Since all plugin-e2e APIs must remain compatible with Grafana 9.5 and later, the tests are executed against a matrix of Grafana versions. The test environment is configured using the docker-compose file in this workspace, which installs a set of plugins to ensure comprehensive coverage of the plugin-e2e APIs throughout the test suite.
+The [tests](./tests/) folder contains a suite of Playwright tests designed to validate that the plugin-e2e APIs work as expected. These tests run continuously for every PR in the plugin-tools repository to identify potential breakages in the plugin-e2e package. Since all plugin-e2e APIs must remain compatible with Grafana 9.5 and later, the tests are executed against a matrix of Grafana versions. The test environment is configured using the docker-compose file in this workspace, which installs a set of plugins to ensure comprehensive coverage of the plugin-e2e APIs throughout the test suite.
 
 To run the tests locally:
 
