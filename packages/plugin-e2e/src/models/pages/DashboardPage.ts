@@ -90,9 +90,18 @@ export class DashboardPage extends GrafanaPage {
     if (semver.gte(this.ctx.grafanaVersion, '11.3.0') && this.dashboard?.uid) {
       await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
     }
+    const count = await this.ctx.page.getByLabel('Show more items').count();
+    if (count > 0) {
+      await this.ctx.page.getByLabel('Show more items').click();
+    }
 
     if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
-      await this.getByGrafanaSelector(components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)).click();
+      let itemButton = this.getByGrafanaSelector(
+        components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
+      );
+      const count = await itemButton.count();
+      itemButton = count > 1 ? itemButton.last() : itemButton;
+      await itemButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       if (this.dashboard?.uid) {
