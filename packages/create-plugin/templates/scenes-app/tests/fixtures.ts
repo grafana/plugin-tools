@@ -1,4 +1,5 @@
 import { AppConfigPage, AppPage, test as base } from '@grafana/plugin-e2e';
+import { PLUGIN_BASE_URL } from '../src/constants';
 import pluginJson from '../src/plugin.json';
 
 type AppTestFixture = {
@@ -16,7 +17,7 @@ export const test = base.extend<AppTestFixture>({
   gotoPage: async ({ gotoAppPage }, use) => {
     await use((path) =>
       gotoAppPage({
-        path,
+        path: path?.replace(PLUGIN_BASE_URL, ''),
         pluginId: pluginJson.id,
       })
     );
