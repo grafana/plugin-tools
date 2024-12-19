@@ -1,37 +1,31 @@
 apiVersion: 1
-
-
-deleteRules:
-  - name: working_rule
-  - name: broken_rule
-
 groups:
     - orgId: 1
-      name: test_group
-      folder: redshift
-      interval: 5m
+      name: test-datasource
+      folder: testdatasource
+      interval: 1m
       rules:
-        - uid: uid1
-          title: working_rule
+        - uid: ee6sapq2x30u8a
+          title: successful-alert
           condition: C
           data:
             - refId: A
               relativeTimeRange:
                 from: 600
                 to: 0
-              datasourceUid: P7DC3E4760CFAC4AH
+              datasourceUid: P6E498B96656A7F9B
               model:
+                constant: 6.5
                 datasource:
-                    type: grafana-redshift-datasource
-                    uid: P7DC3E4760CFAC4AH
+                    type: grafana-test-datasource
+                    uid: P6E498B96656A7F9B
+                hide: false
                 intervalMs: 1000
                 maxDataPoints: 43200
-                rawSQL: select * from long_format_example
+                project: project-2
+                queryText: test
                 refId: A
             - refId: B
-              relativeTimeRange:
-                from: 600
-                to: 0
               datasourceUid: __expr__
               model:
                 conditions:
@@ -57,9 +51,6 @@ groups:
                 refId: B
                 type: reduce
             - refId: C
-              relativeTimeRange:
-                from: 600
-                to: 0
               datasourceUid: __expr__
               model:
                 conditions:
@@ -86,31 +77,28 @@ groups:
                 type: threshold
           noDataState: NoData
           execErrState: Error
-          for: 5m
-          annotations: {}
-          labels: {}
+          for: 1m
           isPaused: false
-        - uid: uid2
-          title: broken_rule
-          condition: A
+        - uid: ce6say4zyst1ce
+          title: broken-alert
+          condition: C
           data:
             - refId: A
               relativeTimeRange:
                 from: 600
                 to: 0
-              datasourceUid: P7DC3E4760CFAC4AH
+              datasourceUid: P6E498B96656A7F9B
               model:
+                constant: 6.5
                 datasource:
-                    type: grafana-redshift-datasource
-                    uid: P7DC3E4760CFAC4AH
+                    type: grafana-test-datasource
+                    uid: P6E498B96656A7F9B
                 intervalMs: 1000
                 maxDataPoints: 43200
-                rawSQL: \!select
+                project: project-2
+                queryText: error
                 refId: A
             - refId: B
-              relativeTimeRange:
-                from: 600
-                to: 0
               datasourceUid: __expr__
               model:
                 conditions:
@@ -136,9 +124,6 @@ groups:
                 refId: B
                 type: reduce
             - refId: C
-              relativeTimeRange:
-                from: 600
-                to: 0
               datasourceUid: __expr__
               model:
                 conditions:
@@ -165,8 +150,6 @@ groups:
                 type: threshold
           noDataState: NoData
           execErrState: Error
-          for: 5m
-          annotations: {}
-          labels: {}
+          for: 1m
           isPaused: false
-
+  
