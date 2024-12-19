@@ -76,6 +76,21 @@ export default defineConfig<PluginOptions>({
       },
       dependencies: ['authenticate'],
     },
+
+    // Run all tests in parallel using user with admin role
+    {
+      name: 'admin-wide-screen',
+      testDir: './tests/as-admin-user',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+        viewport: {
+          width: 1920,
+          height: 1080,
+        },
+      },
+      dependencies: ['authenticate'],
+    },
     // Run all tests in parallel using user with viewer role
     {
       name: 'viewer',
