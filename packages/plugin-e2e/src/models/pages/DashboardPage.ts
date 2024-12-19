@@ -100,10 +100,10 @@ export class DashboardPage extends GrafanaPage {
     }
 
     if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
-      let itemButton = this.getByGrafanaSelector(
+      let addButton = this.getByGrafanaSelector(
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
       );
-      toolbarButtonsHidden ? await itemButton.last().click() : await itemButton.click();
+      toolbarButtonsHidden ? await addButton.last().click() : await addButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       if (this.dashboard?.uid) {
