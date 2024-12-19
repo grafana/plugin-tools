@@ -1,6 +1,10 @@
 name: Node CI
 on: [push]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -204,6 +208,13 @@ jobs:
           name: ${{ matrix.workingDir }}-playwright-report
           path: ./${{ matrix.workingDir }}/playwright-report/
           retention-days: 5
+
+      - name: Publish report to GCS
+        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests.outcome == 'failure') }}
+        uses: grafana/plugin-actions/publish-report@main
+        with:
+          grafana-version: ${{ matrix.workingDir }}-${{ matrix.grafanaVersion }}
+          path: ./${{ matrix.workingDir }}/playwright-report
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
