@@ -103,8 +103,6 @@ export class DashboardPage extends GrafanaPage {
       let itemButton = this.getByGrafanaSelector(
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
       );
-      const count = await itemButton.count();
-      itemButton = count > 1 ? itemButton.last() : itemButton;
       toolbarButtonsHidden ? await itemButton.last().click() : await itemButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
