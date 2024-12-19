@@ -24,7 +24,7 @@
     "dev": "nodemon --exec 'tsc'",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "server": "docker compose up --build",
+    "server": "ANONYMOUS_AUTH_ENABLED=true docker compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "vitest --passWithNoTests",
     "playwright:test": "npx playwright test"

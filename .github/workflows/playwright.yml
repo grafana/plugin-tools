@@ -71,7 +71,7 @@ jobs:
         run: |
           cd packages/plugin-e2e
           docker compose pull
-          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
+          GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@main
