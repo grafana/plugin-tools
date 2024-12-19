@@ -1,6 +1,10 @@
 name: Node CI
 on: [push]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -145,23 +149,55 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
-      - name: Start grafana server for e2e tests
-        run: ANONYMOUS_AUTH_ENABLED=false docker compose up -d
+      - name: Start grafana server for e2e tests (latest)
+        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=latest docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Wait for grafana server
+      - name: Wait for grafana server (latest)
         uses: grafana/plugin-actions/wait-for-grafana@main
         with:
           url: http://localhost:3000/login
 
-      - name: Run e2e tests
+      - name: Run e2e tests (latest)
         id: run-e2e-tests
         run: npm run e2e
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Stop grafana docker
+      - name: Stop grafana docker (latest)
         run: docker compose down
         working-directory: ./${{ matrix.workingDir }}
+
+      - name: Publish report to GCS (latest)
+        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests.outcome == 'failure') }}
+        uses: grafana/plugin-actions/publish-report@main
+        with:
+          grafana-version: ${{ matrix.workingDir }}-latest
+          path: ./${{ matrix.workingDir }}/playwright-report
+
+      - name: Start grafana server for e2e tests (oldest)
+        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=10.4.0 docker compose up -d
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Wait for grafana server (oldest)
+        uses: grafana/plugin-actions/wait-for-grafana@main
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run e2e tests (oldest)
+        id: run-e2e-tests-oldest
+        run: npm run e2e
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Stop grafana docker (oldest)
+        run: docker compose down
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Publish report to GCS (oldest)
+        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests-oldest.outcome == 'failure') }}
+        uses: grafana/plugin-actions/publish-report@main
+        with:
+          grafana-version: ${{ matrix.workingDir }}-oldest
+          path: ./${{ matrix.workingDir }}/playwright-report
 
       - name: Check plugin.json
         run: |
@@ -174,14 +210,6 @@ jobs:
             grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
 
         working-directory: ./${{ matrix.workingDir }}
-
-      - name: Archive E2E output
-        uses: actions/upload-artifact@v4
-        if: ${{ steps.run-e2e-tests.outcome != 'success' }}
-        with:
-          name: ${{ matrix.workingDir }}-playwright-report
-          path: ./${{ matrix.workingDir }}/playwright-report/
-          retention-days: 5
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
