@@ -1,0 +1,9 @@
+{
+  "migrations": {
+    "migration-key": {
+      "version": "5.4.0",
+      "description": "Update project to use new cache directory",
+      "migrationScript": "./5-4-0-cache-directory.js"
+    }
+  }
+}
