@@ -1,11 +1,13 @@
+import * as semver from 'semver';
 import { expect, test } from '../../../../src';
 
-test('editor populates query from url', async ({ explorePage }) => {
-  await explorePage.goto({
-    queryParams: new URLSearchParams(
-      `panes=%7B%22xlX%22:%7B%22datasource%22:%22undefined%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22grafana-redshift-datasource%22,%22uid%22:%22P7DC3E4760CFAC4AH%22%7D,%22rawSQL%22:%22SELECT%20%2A%20FROM%20public.average_temperature%22,%22format%22:0%7D%5D,%22range%22:%7B%22from%22:%221579046400000%22,%22to%22:%221607990400000%22%7D%7D%7D&schemaVersion=1&orgId=1&left=%7B%22datasource%22:%22P7DC3E4760CFAC4AH%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22grafana-redshift-datasource%22,%22uid%22:%22P7DC3E4760CFAC4AH%22%7D,%22rawSQL%22:%22SELECT%20%2A%20FROM%20public.average_temperature%22,%22format%22:0%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D`
-    ),
-  });
+test('editor populates query from url', async ({ explorePage, grafanaVersion }) => {
+  const params = semver.lt(grafanaVersion, '10.1.0')
+    ? 'orgId=1&left=%7B"datasource":"P6E498B96656A7F9B","queries":%5B%7B"refId":"A","datasource":%7B"type":"grafana-test-datasource","uid":"P6E498B96656A7F9B"%7D,"constant":9,"project":"project-2","queryText":"test%20query"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D'
+    : `?schemaVersion=1&panes=%7B"9ye":%7B"datasource":"P6E498B96656A7F9B","queries":%5B%7B"constant":9,"refId":"A","datasource":%7B"type":"grafana-test-datasource","uid":"P6E498B96656A7F9B"%7D,"queryText":"test%20query"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D%7D&orgId=1`;
+
+  await explorePage.goto({ queryParams: new URLSearchParams(params) });
   const queryEditorRowLocator = explorePage.getQueryEditorRow('A');
-  await expect(queryEditorRowLocator).toContainText('SELECT * FROM public.average_temperature');
+  await expect(queryEditorRowLocator.getByRole('textbox', { name: 'Query Text' })).toHaveValue('test query');
+  await expect(queryEditorRowLocator.getByRole('spinbutton', { name: 'Constant' })).toHaveValue('9');
 });
