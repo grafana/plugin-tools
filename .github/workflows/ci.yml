@@ -174,10 +174,6 @@ jobs:
           grafana-version: latest-${{ matrix.workingDir }}
           path: ./${{ matrix.workingDir }}/playwright-report
 
-      - name: Delete plawyright report
-        run: rm -rf ./playwright-report && rm -rf ./test-results && rm -rf ./playwright
-        working-directory: ./${{ matrix.workingDir }}
-
       - name: Get plugin min version
         id: min-version
         run: |
@@ -192,8 +188,8 @@ jobs:
       - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
         run: |
           docker compose pull 
-          docker compose build --no-cache
-          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose up -d
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
+          docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
