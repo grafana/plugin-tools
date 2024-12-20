@@ -9,6 +9,7 @@ import path from 'node:path';
 import { satisfies } from 'semver';
 import { readJsonFile } from '../utils/utils.files.js';
 import { fileURLToPath } from 'node:url';
+import { access, constants, readFile } from 'node:fs/promises';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultMigrationsJsonPath = path.join(__dirname, 'migrations.json');
@@ -52,66 +53,73 @@ type ContextFile = Record<
   }
 >;
 
-class Context {
+export class Context {
   private files: ContextFile = {};
+  basePath: string;
 
-  constructor() {}
+  constructor(basePath: string) {
+    this.basePath = basePath;
+  }
 
   // Adds a new file to the plugins
   // `filePath` is always relative to the plugin root
-  addFile(filePath: string, content: string) {
-    if (!(await this.doesHavePermissionToWrite(filePath))) {
+  async addFile(filePath: string, content: string) {
+    if (!(await this.doesFileExist(filePath))) {
+      this.files[filePath] = { content };
     }
 
-    this.files[filePath] = { content };
-    // Error if no permission to write
+    // Error if file exists
   }
 
   // `filePath` is always relative to the plugin root
   // Errors out if the file does not exist
-  deleteFile(filePath: string) {
-    if (!(await this.doesHavePermissionToWrite(filePath))) {
+  async deleteFile(filePath: string) {
+    if (await this.doesFileExist(filePath)) {
+      this.files[filePath] = { ...this.files[filePath], deleted: true };
     }
-
-    this.files[filePath] = { ...this.files[filePath], deleted: true };
+    // Error if file does not exist
   }
 
   // Applies update to a file in the plugins source code
-  updateFile(filePath: string, content: string) {
-    if (!(await this.doesHavePermissionToWrite(filePath))) {
+  async updateFile(filePath: string, content: string) {
+    if (await this.doesFileExist(filePath)) {
+      this.files[filePath] = { content };
     }
-
-    this.files[filePath] = { content };
+    // Error if file does not exist
   }
 
   async doesFileExist(filePath: string) {
-    // check if a file with filepath exists on the disk
+    try {
+      await access(filePath, constants.R_OK | constants.W_OK);
+      return true;
+    } catch {
+      return false;
+    }
   }
-
-  async doesHavePermissionToWrite(filePath: string) {}
 
   // Searches a file based on a path in the plugins source code
   async getFile(filePath: string) {
     if (!(await this.doesFileExist(filePath))) {
-      // log error
-      return;
+      return null;
     }
-
-    const contents = fs.readFileSync(filePath, 'utf-8');
-
+    const contents = await readFile(filePath, 'utf-8');
     return contents;
   }
 }
 
 export async function runMigrations(migrations: MigrationMeta[]) {
+  const basePath = process.cwd();
   for (const migration of migrations) {
     try {
-      const context = await runMigration(migration, new Context());
+      const context = await runMigration(migration, new Context(basePath));
+      console.log(context);
 
       // logDiffForMigration(migration, context);
       // applyChangesForMigration(migration, context);
+      // writeCPRCFile(migration.version);
     } catch (error) {
       // Log the error
+      // We stop if any migration fails
     }
   }
 
@@ -119,7 +127,8 @@ export async function runMigrations(migrations: MigrationMeta[]) {
   // applyChangesToFiles(context);
 }
 
-export async function runMigration(migration: MigrationMeta, context: Context): Context {
+export async function runMigration(migration: MigrationMeta, context: Context): Promise<Context> {
   // Run the migration script
   console.log(`Running migration: ${migration.description}`);
+  return context;
 }
