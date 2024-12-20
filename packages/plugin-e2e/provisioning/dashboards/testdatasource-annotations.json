@@ -12,22 +12,45 @@
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
         "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "grafana-test-datasource",
+          "uid": "P6E498B96656A7F9B"
+        },
+        "enable": true,
+        "hide": false,
+        "iconColor": "red",
+        "name": "anno",
+        "target": {
+          "constant": 6.5,
+          "datasource": {
+            "type": "grafana-test-datasource",
+            "uid": "P6E498B96656A7F9B"
+          },
+          "enable": true,
+          "iconColor": "red",
+          "name": "New annotation",
+          "queryMode": "Annotations",
+          "queryText": "annotationQuery",
+          "refId": "annotationQuery",
+          "region": "default",
+          "statistic": "Average"
+        }
       }
     ]
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 10,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "datasource": {
-        "type": "grafana-googlesheets-datasource",
-        "uid": "PB0CCE99F8730D01D"
+        "type": "grafana-test-datasource",
+        "uid": "P6E498B96656A7F9B"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -40,6 +63,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -101,98 +125,37 @@
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.0-213591",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "constant": 6.5,
           "datasource": {
-            "type": "grafana-googlesheets-datasource",
-            "uid": "PB0CCE99F8730D01D"
+            "type": "grafana-test-datasource",
+            "uid": "P6E498B96656A7F9B"
           },
-          "refId": "A",
-          "spreadsheet": "1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8"
+          "queryText": "annotationQuesdf",
+          "refId": "A"
         }
       ],
-      "title": "Monthly average",
+      "title": "With annotation",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "grafana-googlesheets-datasource",
-        "uid": "PB0CCE99F8730D01D"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["mean"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.1",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "datasource": {
-            "type": "grafana-googlesheets-datasource",
-            "uid": "PB0CCE99F8730D01D"
-          },
-          "refId": "A",
-          "spreadsheet": "1TZlZX67Y0s4CvRro_3pCYqRCKuXer81oFp_xcsjPpe8"
-        }
-      ],
-      "title": "Yearly average",
-      "type": "stat"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 38,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "2019-01-10T23:00:00.000Z",
-    "to": "2019-12-14T23:00:00.000Z"
+    "from": "2024-12-15T23:00:00.000Z",
+    "to": "2024-12-17T23:00:00.000Z"
   },
   "timepicker": {},
-  "timezone": "",
-  "title": "Google Sheets",
-  "uid": "eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2",
-  "version": 3,
+  "timezone": "browser",
+  "title": "Test dashboard with annotations",
+  "uid": "ae766j91d6xhcf",
+  "version": 5,
   "weekStart": ""
 }
