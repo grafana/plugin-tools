@@ -8,7 +8,9 @@
 import path from 'node:path';
 import { satisfies } from 'semver';
 import { readJsonFile } from '../utils/utils.files.js';
+import { fileURLToPath } from 'node:url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultMigrationsJsonPath = path.join(__dirname, 'migrations.json');
 
 type MigrationMeta = {
