@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from 'react';
+import { usePluginComponents } from '@grafana/runtime';
 import { InlineField, Input, Stack } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
@@ -7,6 +8,10 @@ import { MyDataSourceOptions, MyQuery } from '../types';
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export function QueryEditor({ query, onChange, onRunQuery }: Props) {
+  const { components } = usePluginComponents({
+    extensionPointId: 'plugins/grafana-extensionstest-app/addComponent/v1',
+  });
+  console.log(components)
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, queryText: event.target.value });
   };
