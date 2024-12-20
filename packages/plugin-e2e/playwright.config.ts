@@ -3,6 +3,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import { PluginOptions } from './src';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
@@ -14,12 +15,12 @@ export default defineConfig<PluginOptions>({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    // provisioningRootDir: './packages/plugin-e2e/provisioning',
+    provisioningRootDir: process.env.PROVISIONING_ROOT_DIR || path.join(process.cwd(), 'provisioning'),
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:3000',
 
@@ -72,6 +73,21 @@ export default defineConfig<PluginOptions>({
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['authenticate'],
+    },
+
+    // Run all tests in parallel using user with admin role
+    {
+      name: 'admin-wide-screen',
+      testDir: './tests/as-admin-user',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+        viewport: {
+          width: 1920,
+          height: 1080,
+        },
       },
       dependencies: ['authenticate'],
     },
