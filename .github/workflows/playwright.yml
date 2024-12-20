@@ -79,8 +79,6 @@ jobs:
       - name: Run Playwright tests
         id: run-tests
         run: npm run playwright:test --w @grafana/plugin-e2e
-        env:
-          GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
       - name: Publish report to GCS
         if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-tests.outcome == 'failure') }}
