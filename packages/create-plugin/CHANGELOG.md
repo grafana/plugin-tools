@@ -1,3 +1,15 @@
+# v5.12.2 (Fri Dec 20 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix incorrect interpolation for anonymous auth variable [#1425](https://github.com/grafana/plugin-tools/pull/1425) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.12.1 (Thu Dec 19 2024)
 
 #### 🐛 Bug Fix
