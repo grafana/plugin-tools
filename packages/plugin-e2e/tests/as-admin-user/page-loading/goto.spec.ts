@@ -6,18 +6,18 @@ test.describe('gotoDashboardPage', () => {
     gotoDashboardPage,
     readProvisionedDashboard,
   }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const dashboardPage = await gotoDashboardPage({ ...dashboard, waitUntil: 'load' });
-    await expect(dashboardPage.getPanelByTitle('Basic table example').locator).toHaveCount(0);
+    await expect(dashboardPage.getPanelByTitle('Table data').locator).toHaveCount(0);
   });
 
   test('should not display elements when waitUntil `networkidle` (default) is used', async ({
     gotoDashboardPage,
     readProvisionedDashboard,
   }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const dashboardPage = await gotoDashboardPage(dashboard);
-    await expect(dashboardPage.getPanelByTitle('Basic table example').locator).toBeVisible();
+    await expect(dashboardPage.getPanelByTitle('Table data').locator).toBeVisible();
   });
 });
 
@@ -26,7 +26,7 @@ test.describe('gotoPanelEditPage', () => {
     gotoPanelEditPage,
     readProvisionedDashboard,
   }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3', waitUntil: 'load' });
     await expect(panelEditPage.panel.locator).toHaveCount(0);
   });
@@ -35,7 +35,7 @@ test.describe('gotoPanelEditPage', () => {
     gotoPanelEditPage,
     readProvisionedDashboard,
   }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
     await expect(panelEditPage.panel.locator).toBeVisible();
   });
