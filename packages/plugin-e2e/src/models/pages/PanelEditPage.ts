@@ -176,7 +176,14 @@ export class PanelEditPage extends GrafanaPage {
       root: this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content),
     });
 
-    await refreshPanelButton.click();
+    try {
+      await refreshPanelButton.click({ timeout: 2000 });
+    } catch (error) {
+      // refresh button may be hidden behind the visualization options
+      await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizOptions).click();
+      await refreshPanelButton.click();
+      await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizOptions).click();
+    }
 
     return responsePromise;
   }
