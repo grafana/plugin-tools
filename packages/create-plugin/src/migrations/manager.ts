@@ -42,7 +42,26 @@ export function getMigrationsToRun(
   return migrationsToRun;
 }
 
-export function runMigrations(migration: MigrationMeta): void {
+class Context {
+  private files = {
+    'src/index.ts': {
+      originalContent: 'export const foo = 1;',
+    },
+  };
+}
+
+for (migration of migrationsToRun) {
+  try {
+    const changes = await runMigration({
+      version: migration.version,
+      description: migration.description,
+      migrationScript: migration.migrationScript,
+    });
+
+  } catch (error) {}
+}
+
+export async function runMigration(migration: MigrationMeta): void {
   // Run the migration script
   console.log(`Running migration: ${migration.description}`);
 }
