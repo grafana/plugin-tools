@@ -41,3 +41,8 @@ export function getMigrationsToRun(
 
   return migrationsToRun;
 }
+
+export function runMigrations(migration: MigrationMeta): void {
+  // Run the migration script
+  console.log(`Running migration: ${migration.description}`);
+}
