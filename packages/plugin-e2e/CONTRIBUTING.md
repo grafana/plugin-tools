@@ -52,39 +52,30 @@ npm run build # used to build @grafana/plugin-e2e
 npm run dev # watches for changes to files and rebuilds @grafana/plugin-e2e automatically
 ```
 
-#### Running e2e tests locally
+### Tests
 
-There are two types of Playwright tests - those that require data source credentials (only available to members of the Grafana team) and those that don't.
+The [tests](./tests/) folder contains a suite of Playwright tests designed to validate that the plugin-e2e APIs work as expected. These tests run continuously for every PR in the plugin-tools repository to identify potential breakages in the plugin-e2e package. Since all plugin-e2e APIs must remain compatible with Grafana 9.5 and later, the tests are executed against a matrix of Grafana versions. The test environment is configured using the docker-compose file in this workspace, which installs a set of plugins to ensure comprehensive coverage of the plugin-e2e APIs throughout the test suite.
 
-To run the Playwright tests that don't require credentials.
+To run the tests locally:
 
-1. Start the e2e test server:
+1. Start the Grafana e2e instance:
 
 ```shell
+# starts the test server using the main branch of Grafana
 npm run server
-
+# if you want to test a specific version of Grafana
+GRAFANA_VERSION=11.2.1 npm run server
 ```
 
-2. Run the Playwright tests
+2. Run the tests
 
 ```shell
-npm run playwright:test # runs all the playwright tests that don't require credentials
+npm run playwright:test # runs all the playwright
 ```
 
-To run the e2e tests that require data source credentials, you need to add a `/packages/plugin-e2e/.env` file and provide the necessary credentials (see `/packages/plugin-e2e/.env.example` to get an understanding of what variables you need to provide). You'll find all the necessary credentials in the [plugin-provisioning](https://github.com/grafana/plugin-provisioning) repo.
+### The [Test DataSource](https://github.com/grafana/grafana-test-datasource)
 
-1. Start the e2e test server:
-
-```shell
-npm run server
-
-```
-
-2. Run the Playwright integration tests
-
-```shell
-npm run playwright:test:integration #runs all the playwright tests that integrates with third-party services
-```
+Many of the Playwright tests in the [test suite](./tests/) use a custom made data source plugin. This data source it not published to the catalog - its only purpose is to verify that the plugin-e2e APIs work as expected. If you need to change the functionality of this plugin, refer to the [plugin readme](https://github.com/grafana/grafana-test-datasource?tab=readme-ov-file#distributing-changes-in-the-plugin).
 
 ### VS Code Playwright extension
 
