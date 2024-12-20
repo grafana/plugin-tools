@@ -7,7 +7,8 @@ test('smoke: should render query editor', async ({ panelEditPage, readProvisione
   await expect(panelEditPage.getQueryEditorRow('A').getByRole('textbox', { name: 'Query Text' })).toBeVisible();
 });
 
-test('data query should return a value', async ({ panelEditPage, readProvisionedDataSource }) => {
+test('data query should return a value', async ({ panelEditPage, readProvisionedDataSource, grafanaVersion}) => {
+  console.log('grafanaVersion: ', grafanaVersion);
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
   await panelEditPage.setVisualization('Table');
