@@ -1,7 +1,7 @@
 import { expect, test } from '../../../../src';
 
 test('add panel in already existing dashboard', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
   await dashboardPage.addPanel();
   await expect(page.url()).toContain('editPanel');
