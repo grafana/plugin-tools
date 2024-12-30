@@ -1,3 +1,15 @@
+# v5.12.3 (Mon Dec 30 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix cache busting chunks using contenthash [#1426](https://github.com/grafana/plugin-tools/pull/1426) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.12.2 (Fri Dec 20 2024)
 
 #### 🐛 Bug Fix
