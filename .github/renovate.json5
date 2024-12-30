@@ -74,7 +74,8 @@
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies"],
-      "excludePackageNames": ["@grafana/e2e-selectors"]
+      "excludePackageNames": ["@grafana/e2e-selectors"],
+      "rangeStrategy": "bump"
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
     // which would be misleading to consumers.
