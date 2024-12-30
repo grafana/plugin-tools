@@ -22,7 +22,7 @@
     "clean": "rm -rf ./dist",
     "build": "tsc --project tsconfig.json",
     "dev": "nodemon --exec 'tsc'",
-    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "server": "docker compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",

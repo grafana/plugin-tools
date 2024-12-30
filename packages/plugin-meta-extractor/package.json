@@ -9,7 +9,7 @@
     "test": "vitest",
     "build": "tsc --project tsconfig.json",
     "dev": "tsc --project tsconfig.json --watch",
-    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit"
   },
