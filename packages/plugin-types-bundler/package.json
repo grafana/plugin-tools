@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-types-bundler",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Bundle grafana plugin typescript types for sharing with other plugins",
   "bin": "./dist/bin/run.js",
   "type": "module",
@@ -19,7 +19,7 @@
     "test": "vitest --passWithNoTests",
     "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
     "dev": "tsc --project tsconfig.json --watch",
-    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit"
   },
