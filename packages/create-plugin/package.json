@@ -57,13 +57,13 @@
     "which": "^5.0.0"
   },
   "devDependencies": {
-    "@types/glob": "^8.0.0",
-    "@types/marked-terminal": "^6.0.1",
-    "@types/minimist": "^1.2.2",
-    "@types/semver": "^7.3.9",
-    "@types/which": "^3.0.0",
-    "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^5.0.0"
+    "@types/glob": "^8.1.0",
+    "@types/marked-terminal": "^6.1.1",
+    "@types/minimist": "^1.2.5",
+    "@types/semver": "^7.5.8",
+    "@types/which": "^3.0.4",
+    "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-react-hooks": "^5.1.0"
   },
   "overrides": {
     "@types/marked-terminal": {

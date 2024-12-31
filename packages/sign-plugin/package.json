@@ -34,7 +34,7 @@
     "proxy-agent": "6.5.0"
   },
   "devDependencies": {
-    "@types/minimist": "^1.2.2"
+    "@types/minimist": "^1.2.5"
   },
   "nodemonConfig": {
     "watch": [
