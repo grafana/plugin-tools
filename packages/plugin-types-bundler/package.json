@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-types-bundler",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Bundle grafana plugin typescript types for sharing with other plugins",
   "bin": "./dist/bin/run.js",
   "type": "module",
