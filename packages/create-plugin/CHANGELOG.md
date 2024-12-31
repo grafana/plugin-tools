@@ -1,3 +1,17 @@
+# v5.12.4 (Tue Dec 31 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Use `module.tsx` in is-compatible workflow for apps [#1384](https://github.com/grafana/plugin-tools/pull/1384) ([@leventebalogh](https://github.com/leventebalogh))
+- chore: align nvmrc node with package.json [#1424](https://github.com/grafana/plugin-tools/pull/1424) ([@s4kh](https://github.com/s4kh))
+
+#### Authors: 2
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
 # v5.12.3 (Mon Dec 30 2024)
 
 #### 🐛 Bug Fix
