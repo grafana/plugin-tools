@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
-  "ignoreDeps": ["react"],
+  "ignoreDeps": ["react", "react-dom"],
   "separateMajorMinor": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
