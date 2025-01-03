@@ -4,6 +4,7 @@ import path from 'node:path';
 import { getVersion } from '../utils/getVersion.js';
 import { buildManifest, saveManifest, signManifest } from '../utils/manifest.js';
 import { assertRootUrlIsValid } from '../utils/pluginValidation.js';
+import { getCreatePluginVersion } from '../utils/getCreatePluginVersion.js';
 
 export const sign = async (argv: minimist.ParsedArgs) => {
   const distDir = argv.distDir ?? 'dist';
@@ -29,6 +30,11 @@ export const sign = async (argv: minimist.ParsedArgs) => {
     }
 
     manifest.signPlugin = { version: getVersion() };
+    const createPluginVersion = getCreatePluginVersion();
+    if (createPluginVersion) {
+      manifest.createPlugin = { version: createPluginVersion };
+    }
+
     const signedManifest = await signManifest(manifest);
 
     console.log('Saving signed manifest...');
