@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test';
-import { test, expect } from '../../../src';
+import { test, expect, PanelEditPage } from '../../../src';
 import { gte, lte } from 'semver';
+import { selectors as E2ESelectors } from '@grafana/e2e-selectors';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -106,7 +107,7 @@ test('enter value in number input', async ({ gotoPanelEditPage }) => {
   await expect(lineWith).toHaveValue('10');
 });
 
-test('select color in color picker', async ({ gotoPanelEditPage, grafanaVersion, page }) => {
+test('select color in color picker', async ({ gotoPanelEditPage, grafanaVersion, page, selectors }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '3' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const backgroundColor = clockOptions.getColorPicker('Background color');
@@ -114,11 +115,9 @@ test('select color in color picker', async ({ gotoPanelEditPage, grafanaVersion,
   await backgroundColor.selectOption('#73bf69');
   await expect(backgroundColor).toHaveColor('#73bf69');
 
-  // Not the best way to select the color of the panel need to fix this
-  await expect(getPanelContent(grafanaVersion, page).locator('div')).toHaveCSS(
-    'background-color',
-    'rgb(115, 191, 105)'
-  );
+  // We want to check that the background color is properly set in the clock panel.
+  const panelContent = panelEdit.panel.locator.locator('div').last();
+  await expect(panelContent).toHaveCSS('background-color', 'rgb(115, 191, 105)');
 });
 
 test('select unit in unit picker', async ({ gotoPanelEditPage }) => {
@@ -141,10 +140,3 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
   await timeZonePicker.selectOption('Europe/Stockholm');
   await expect(timeZonePicker).toHaveSelected('Europe/Stockholm');
 });
-
-function getPanelContent(grafanaVersion: string, page: Page): Locator {
-  if (gte(grafanaVersion, '9.5.0')) {
-    return page.locator('div[class*="-panel-content"]');
-  }
-  return page.locator('div.panel-content');
-}

@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
-import { gte } from 'semver';
+import { gte, lt } from 'semver';
 
 export class Switch extends ComponentBase {
   private group: Locator;
@@ -31,11 +31,10 @@ export class Switch extends ComponentBase {
   }
 
   private async getSwitch(options: CheckOptionsType): Promise<Locator> {
-    if (gte(this.ctx.grafanaVersion, '11.3.0')) {
-      return this.element;
+    if (lt(this.ctx.grafanaVersion, '11.3.0')) {
+      const id = await this.element.getAttribute('id', options);
+      return this.group.locator(`label[for='${id}']`);
     }
-
-    const id = await this.element.getAttribute('id', options);
-    return this.group.locator(`label[for='${id}']`);
+    return this.element;
   }
 }
