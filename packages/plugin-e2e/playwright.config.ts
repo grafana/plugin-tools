@@ -77,7 +77,7 @@ export default defineConfig<PluginOptions>({
       dependencies: ['authenticate'],
     },
 
-    // Run all tests in parallel using user with admin role
+    // Run all tests in parallel using user with admin role but with wide screen
     {
       name: 'admin-wide-screen',
       testDir: './tests/as-admin-user',
