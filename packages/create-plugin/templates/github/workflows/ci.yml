@@ -189,10 +189,12 @@ jobs:
       - name: Start Grafana
         run: |
           docker compose pull
-          DEVELOPMENT=false GRAFANA_VERSION=$\{{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=$\{{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
+          ANONYMOUS_AUTH_ENABLED=false DEVELOPMENT=false GRAFANA_VERSION=$\{{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=$\{{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@main
+        with:
+          url: http://localhost:3000/login
 
       - name: Install Playwright Browsers
         run: {{ packageManagerName }} exec playwright install chromium --with-deps

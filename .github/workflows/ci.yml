@@ -129,7 +129,6 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Install playwright dependencies
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: npm exec playwright install chromium
         working-directory: ./${{ matrix.workingDir }}
 
@@ -147,22 +146,20 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Start grafana server for e2e tests
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        run: docker compose up -d
+        run: ANONYMOUS_AUTH_ENABLED=false docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@main
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
+        with:
+          url: http://localhost:3000/login
 
       - name: Run e2e tests
         id: run-e2e-tests
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: npm run e2e
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Stop grafana docker
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: docker compose down
         working-directory: ./${{ matrix.workingDir }}
 
@@ -180,7 +177,7 @@ jobs:
 
       - name: Archive E2E output
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' && steps.run-e2e-tests.outcome != 'success' }}
+        if: ${{ steps.run-e2e-tests.outcome != 'success' }}
         with:
           name: ${{ matrix.workingDir }}-playwright-report
           path: ./${{ matrix.workingDir }}/playwright-report/

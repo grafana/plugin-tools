@@ -1,3 +1,74 @@
+# v5.12.4 (Tue Dec 31 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Use `module.tsx` in is-compatible workflow for apps [#1384](https://github.com/grafana/plugin-tools/pull/1384) ([@leventebalogh](https://github.com/leventebalogh))
+- chore: align nvmrc node with package.json [#1424](https://github.com/grafana/plugin-tools/pull/1424) ([@s4kh](https://github.com/s4kh))
+
+#### Authors: 2
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
+# v5.12.3 (Mon Dec 30 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix cache busting chunks using contenthash [#1426](https://github.com/grafana/plugin-tools/pull/1426) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.12.2 (Fri Dec 20 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix incorrect interpolation for anonymous auth variable [#1425](https://github.com/grafana/plugin-tools/pull/1425) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v5.12.1 (Thu Dec 19 2024)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix scaffolded panel plugin tests [#1421](https://github.com/grafana/plugin-tools/pull/1421) ([@sunker](https://github.com/sunker))
+- Update dependency @grafana/e2e-selectors to v11.4.0 [#1412](https://github.com/grafana/plugin-tools/pull/1412) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v5.12.0 (Wed Dec 18 2024)
+
+#### 🚀 Enhancement
+
+- Chore: Switching to main [#1399](https://github.com/grafana/plugin-tools/pull/1399) ([@tolzhabayev](https://github.com/tolzhabayev))
+- Create-plugin: Remove unused dependencies according to Knip report [#1369](https://github.com/grafana/plugin-tools/pull/1369) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v1.13.1 [#1397](https://github.com/grafana/plugin-tools/pull/1397) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.11.1 (Mon Dec 09 2024)
 
 #### 🐛 Bug Fix

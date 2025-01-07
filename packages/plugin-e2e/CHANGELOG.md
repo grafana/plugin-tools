@@ -1,3 +1,40 @@
+# v1.14.3 (Mon Jan 06 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-215208 [#1433](https://github.com/grafana/plugin-tools/pull/1433) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.1 (Thu Dec 19 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.5.0-214310 [#1415](https://github.com/grafana/plugin-tools/pull/1415) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.0 (Wed Dec 18 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-213998 [#1396](https://github.com/grafana/plugin-tools/pull/1396) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.13.1 (Wed Dec 11 2024)
 
 #### 🐛 Bug Fix

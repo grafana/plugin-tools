@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
+  "ignoreDeps": ["react", "react-dom"],
   "separateMajorMinor": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
@@ -32,7 +33,7 @@
       "matchCurrentVersion": "!/^0/",
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
       "excludePackageNames": ["@grafana/e2e-selectors"],
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": ["patch"]
     },
     {
       "automerge": true,
@@ -42,7 +43,7 @@
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
-      "matchFileNames": ["packages/plugin-e2e/package.json", "package-lock.json"],
+      "matchFileNames": ["packages/plugin-e2e/package.json", "package-lock.json"]
     },
     {
       "groupName": "grafana dependencies",
@@ -56,7 +57,8 @@
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
-      "matchPackagePatterns": ["@?docusaurus"]
+      "matchPackagePatterns": ["@?docusaurus"],
+      "rangeStrategy": "bump"
     },
     // Auto dependencies should be grouped together to avoid issues
     {
@@ -73,6 +75,7 @@
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies"],
       "excludePackageNames": ["@grafana/e2e-selectors"],
+      "rangeStrategy": "bump"
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
     // which would be misleading to consumers.
