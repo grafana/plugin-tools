@@ -81,7 +81,7 @@ const config: Config = {
         docs: {
           path: '../docs',
           exclude: ['**/snippets/**', '**/shared/**', '**/drafts/**'],
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/grafana/plugin-tools/edit/main/docusaurus/website',
