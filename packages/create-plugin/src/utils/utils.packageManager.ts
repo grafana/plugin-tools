@@ -14,6 +14,24 @@ export type PackageManager = {
   packageManagerVersion: string;
 };
 
+export async function configureYarnBerry(cwd: string) {
+  try {
+    spawnSync('yarn', ['set', 'version', 'stable'], {
+      shell: true,
+      cwd,
+    });
+    spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
+      shell: true,
+      cwd,
+    });
+    return 'Configured Yarn Berry (Yarn 1.x is not supported)';
+  } catch (error) {
+    throw new Error(
+      'There was an error trying to configure Yarn Berry. Please run `yarn set version stable && yarn config set nodeLinker node-modules` manually in your plugin directory.'
+    );
+  }
+}
+
 export function getPackageManagerFromUserAgent(): PackageManager {
   const agent = process.env.npm_config_user_agent;
 

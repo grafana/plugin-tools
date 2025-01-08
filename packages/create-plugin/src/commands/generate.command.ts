@@ -13,10 +13,12 @@ import { printGenerateSuccessMessage } from './generate/print-success-message.js
 import { promptUser } from './generate/prompt-user.js';
 import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
 import { TemplateData } from '../types.js';
+import { lt } from 'semver';
+import { configureYarnBerry } from '../utils/utils.packageManager.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
-  const templateData = getTemplateData({ ...answers });
+  const templateData = getTemplateData(answers);
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
@@ -51,9 +53,14 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     printError(`${failure.error}`);
   });
 
+  if (templateData.packageManagerName === 'yarn' && lt(templateData.packageManagerVersion, '2.0.0')) {
+    await execPostScaffoldFunction(configureYarnBerry, exportPath);
+  }
+
   if (templateData.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
+
   await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
   console.log('\n');
   printGenerateSuccessMessage(templateData);
