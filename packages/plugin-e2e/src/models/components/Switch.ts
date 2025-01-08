@@ -13,7 +13,7 @@ export class Switch extends ComponentBase {
   }
 
   private static getElement(ctx: PluginTestCtx, group: Locator): Locator {
-    if (gte(ctx.grafanaVersion, '11.5.0')) {
+    if (gte(ctx.grafanaVersion, '11.4.0')) {
       return group.getByRole('switch');
     } else {
       return group.getByRole('checkbox');

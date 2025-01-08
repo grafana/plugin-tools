@@ -3,6 +3,7 @@ import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
 import { gte } from 'semver';
+import { getByGrafanaSelector } from '../utils';
 
 export class Select extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
@@ -17,9 +18,10 @@ export class Select extends ComponentBase {
 
 export async function openSelect(component: ComponentBase, options?: SelectOptionsType): Promise<Locator> {
   const element = component.locator();
+  const selectors = component.ctx.selectors;
   await element.getByRole('combobox').click(options);
-  return element.page().getByLabel('Select options menu', {
-    exact: true,
+  return getByGrafanaSelector(selectors.components.Select.menu, {
+    root: element.page(),
   });
 }
 
