@@ -66,7 +66,7 @@ export function getPackageManagerWithFallback() {
 export function getPackageManagerInstallCmd(packageManagerName: string) {
   switch (packageManagerName) {
     case 'yarn':
-      return 'yarn install --immutable --prefer-offline';
+      return 'yarn install --immutable';
 
     case 'pnpm':
       return 'pnpm install --frozen-lockfile --prefer-offline';
