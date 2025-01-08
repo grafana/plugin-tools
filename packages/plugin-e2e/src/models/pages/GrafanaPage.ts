@@ -1,6 +1,6 @@
 import { Locator, Request, Response } from '@playwright/test';
 import { getByGrafanaSelectorOptions, GrafanaPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
-import { getByGrafanaSelector } from '../utils';
+import { resolveGrafanaSelector } from '../utils';
 
 /**
  * Base class for all Grafana pages.
@@ -30,8 +30,7 @@ export abstract class GrafanaPage {
    * An E2E selector is a string that identifies a specific element in the Grafana UI. The element referencing the E2E selector use the data-testid or aria-label attribute.
    */
   getByGrafanaSelector(selector: string, options?: getByGrafanaSelectorOptions): Locator {
-    const root = options?.root ?? this.ctx.page;
-    return getByGrafanaSelector(selector, { ...options, root });
+    return (options?.root ?? this.ctx.page).locator(resolveGrafanaSelector(selector, options));
   }
 
   /**
