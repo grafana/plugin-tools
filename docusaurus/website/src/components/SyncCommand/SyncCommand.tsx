@@ -1,15 +1,30 @@
-import React from 'react';
-import { useLocation } from '@docusaurus/router';
+import React, { useEffect } from 'react';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 
 interface SyncCommandProps {
   cmd: string;
 }
 
-function BrowserSyncCommand({ cmd }: SyncCommandProps) {
-  let currentPackageManager = window.localStorage['docusaurus.tab.npm2yarn'];
+const LOCAL_STORAGE_KEY = 'docusaurus.tab.npm2yarn';
 
-  const cmdString = `${currentPackageManager} ${cmd}`;
+function BrowserSyncCommand({ cmd }: SyncCommandProps) {
+  let currentPackageManager = window.localStorage[LOCAL_STORAGE_KEY];
+  const [packageManager, setPackageManager] = React.useState(currentPackageManager ?? 'npm');
+
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === LOCAL_STORAGE_KEY) {
+      setPackageManager(event.newValue);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
+
+  const cmdString = `${packageManager} ${cmd}`;
 
   return <code>{cmdString}</code>;
 }
