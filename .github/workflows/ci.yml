@@ -56,22 +56,22 @@ jobs:
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
-            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='app' --no-backend
             hasBackend: false
           - workingDir: 'myorg-backend-app'
-            cmdArgs: --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
+            cmdArgs: --plugin-name='backend' --org-name='myorg' --plugin-type='app' --backend
             hasBackend: true
           - workingDir: 'myorg-nobackend-panel'
-            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
             hasBackend: false
           - workingDir: 'myorg-nobackend-datasource'
-            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='datasource' --no-backend
             hasBackend: false
           - workingDir: 'myorg-backend-datasource'
-            cmdArgs: --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
+            cmdArgs: --plugin-name='backend' --org-name='myorg' --plugin-type='datasource' --backend
             hasBackend: true
           - workingDir: 'myorg-nobackendscenes-app'
-            cmdArgs: --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
+            cmdArgs: --plugin-name='no-backend-scenes' --org-name='myorg' --plugin-type='scenesapp' --no-backend
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
