@@ -2,6 +2,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
 import dotenv from 'dotenv';
 import remarkFigureCaption from 'gridsome-remark-figure-caption';
+import npm2yarn from '@docusaurus/remark-plugin-npm2yarn';
 import { resolve } from 'node:path';
 import { themes, type PrismTheme } from 'prism-react-renderer';
 import redirects from './websiteRedirects.json';
@@ -95,6 +96,7 @@ const config: Config = {
               },
             ],
           ],
+          remarkPlugins: [[npm2yarn, { sync: true }]],
           routeBasePath: '/',
         },
         theme: {
