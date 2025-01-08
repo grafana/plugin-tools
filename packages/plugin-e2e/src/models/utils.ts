@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { getByGrafanaSelectorOptions, PluginTestCtx } from '../types';
+import { getByGrafanaSelectorOptions } from '../types';
 
 export const radioButtonSetChecked = async (
   page: Page,

@@ -3,6 +3,7 @@ import { PluginTestCtx } from '../../types';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
 import { gte } from 'semver';
+import { getByGrafanaSelector } from '../utils';
 
 export class ColorPicker extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
@@ -19,9 +20,15 @@ export class ColorPicker extends ComponentBase {
   }
 
   private getContainer(): Locator {
-    if (gte(this.ctx.grafanaVersion, '8.7.0')) {
-      return this.ctx.page.locator('#grafana-portal-container');
+    const { grafanaVersion, page } = this.ctx;
+    // if (gte(grafanaVersion, '11.4.1')) {
+    //   return getByGrafanaSelector('', {
+    //     root: page,
+    //   });
+    // }
+    if (gte(grafanaVersion, '8.7.0')) {
+      return page.locator('#grafana-portal-container');
     }
-    return this.ctx.page.locator('body > div').last();
+    return page.locator('body > div').last();
   }
 }
