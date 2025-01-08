@@ -56,22 +56,22 @@ jobs:
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
+            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
             hasBackend: false
           - workingDir: 'myorg-backend-app'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
+            cmdArgs: --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
             hasBackend: true
           - workingDir: 'myorg-nobackend-panel'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
+            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
             hasBackend: false
           - workingDir: 'myorg-nobackend-datasource'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
+            cmdArgs: --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
             hasBackend: false
           - workingDir: 'myorg-backend-datasource'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
+            cmdArgs: --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
             hasBackend: true
           - workingDir: 'myorg-nobackendscenes-app'
-            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
+            cmdArgs: --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
@@ -91,7 +91,7 @@ jobs:
         working-directory: ./packed-artifacts
 
       - name: Generate plugin
-        run: ${{ matrix.cmd }}
+        run: npx create-plugin ${{ matrix.cmdArgs }}
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
