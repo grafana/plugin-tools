@@ -12,10 +12,6 @@ keywords:
   - nested
 ---
 
-import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
-import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
-import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
-
 Grafana app plugins can nest data sources, both frontend and backend, together with panel plugins so that you can provide a complete user experience.
 
 ## Before you begin
