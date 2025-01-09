@@ -1,20 +1,19 @@
+import chalk from 'chalk';
 import { glob } from 'glob';
 import minimist from 'minimist';
-import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
+import { TemplateData } from '../types.js';
 import { printError, printWarning } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
+import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
+import { configureYarnBerry } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
-import { renderTemplateFromFile, getTemplateData } from '../utils/utils.templates.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
+import { getTemplateData, renderTemplateFromFile } from '../utils/utils.templates.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
-import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
-import { TemplateData } from '../types.js';
-import { lt } from 'semver';
-import { configureYarnBerry } from '../utils/utils.packageManager.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
