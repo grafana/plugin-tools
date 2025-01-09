@@ -103,11 +103,15 @@ You'll need to have the following tools set up:
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 - [Docker](https://docs.docker.com/get-docker/)
-- Optionally, [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
+- Optionally, [Yarn](https://yarnpkg.com/getting-started/install) or [PNPM](https://pnpm.io/installation)
 
 #### Supported package managers
 
 When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
+
+:::note
+Yarn 1 is no longer supported by create-plugin. If you choose to run create-plugin using yarn 1 (`yarn create @grafana/plugin`) create-plugin will scaffold the plugin using the latest version of Yarn.
+:::
 
 ## Scaffold a plugin
 
@@ -179,8 +183,8 @@ With the `create-plugin` tool, you can use a Docker container to simplify the co
 
 Refer to the "Next steps" terminal output following the [scaffolding of a new plugin](#scaffold-a-plugin) to install dependencies, build and run your plugin.
 
-
 Example output:
+
 ```
 ## What's next?
 
@@ -215,6 +219,7 @@ Note: We strongly recommend creating a new Git repository by running git init in
 ### Build the frontend
 
 To build the plugin in watch mode for development, continually monitoring for changes, run:
+
 <CodeSnippets
   snippets={[
     { component: BuildFEDevNPM, label: 'npm' },
@@ -224,7 +229,6 @@ To build the plugin in watch mode for development, continually monitoring for ch
   groupId="package-manager"
   queryString="current-package-manager"
 />
-
 
 To build for production, run:
 
