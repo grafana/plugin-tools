@@ -53,8 +53,8 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     printError(`${failure.error}`);
   });
 
-  if (templateData.packageManagerName === 'yarn' && lt(templateData.packageManagerVersion, '2.0.0')) {
-    await execPostScaffoldFunction(configureYarnBerry, exportPath);
+  if (templateData.packageManagerName === 'yarn') {
+    await execPostScaffoldFunction(configureYarnBerry, exportPath, templateData.packageManagerVersion);
   }
 
   if (templateData.hasBackend) {

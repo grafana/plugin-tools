@@ -2,6 +2,7 @@ import { basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { findUpSync } from 'find-up';
 import { getPackageJson } from './utils.packagejson.js';
+import { lt } from 'semver';
 
 const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
@@ -14,17 +15,20 @@ export type PackageManager = {
   packageManagerVersion: string;
 };
 
-export async function configureYarnBerry(cwd: string) {
+export async function configureYarnBerry(cwd: string, packageManagerVersion: string) {
   try {
-    spawnSync('yarn', ['set', 'version', 'stable'], {
-      shell: true,
-      cwd,
-    });
+    const isYarn1 = lt(packageManagerVersion, '2.0.0');
+    if (isYarn1) {
+      spawnSync('yarn', ['set', 'version', 'stable'], {
+        shell: true,
+        cwd,
+      });
+    }
     spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
       shell: true,
       cwd,
     });
-    return 'Configured Yarn Berry (Yarn 1.x is not supported)';
+    return `Configured Yarn Berry${isYarn1 ? ' (Yarn 1.x is not supported)' : ''}`;
   } catch (error) {
     throw new Error(
       'There was an error trying to configure Yarn Berry. Please run `yarn set version stable && yarn config set nodeLinker node-modules` manually in your plugin directory.'
