@@ -16,7 +16,7 @@ export class UnitPicker extends ComponentBase {
 
   private async getOption(selector: string, options?: SelectOptionsType): Promise<Locator> {
     const steps = selector.split('>').map((step) => step.trim());
-    const container = this.ctx.page.locator(this.ctx.selectors.constants.Cascader.menu());
+    const container = this.ctx.page.locator(this.ctx.selectors.constants.Cascader.menu(''));
 
     if (steps.length === 0) {
       throw new Error(`Could not find options from passed selector: ${selector}`);

@@ -48,7 +48,7 @@ async function expectSelectToBe(
   let actual = '';
 
   try {
-    actual = await select.locator(select.ctx.selectors.constants.Select.singleValueContainer()).innerText(options);
+    actual = await select.locator(select.ctx.selectors.constants.Select.singleValueContainer('')).innerText(options);
     expect(actual).toMatch(value);
 
     return {
@@ -70,7 +70,7 @@ async function expectMultiSelectToBe(select: MultiSelect, values: Array<string |
   let actual = '';
 
   try {
-    const actual = await select.locator(select.ctx.selectors.constants.Select.multiValueContainer()).allInnerTexts();
+    const actual = await select.locator(select.ctx.selectors.constants.Select.multiValueContainer('')).allInnerTexts();
     expect(actual).toMatchObject(values);
 
     return {
