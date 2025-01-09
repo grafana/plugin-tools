@@ -13,7 +13,6 @@ export const getCreatePluginVersion = () => {
     const { version } = JSON.parse(crpcJSON);
     return version as string;
   } catch (err) {
-    console.log('(Optional) Not able to get create-plugin version - you can ignore this message.');
     return null;
   }
 };
