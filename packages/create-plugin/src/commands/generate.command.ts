@@ -8,7 +8,7 @@ import { TemplateData } from '../types.js';
 import { printError, printWarning } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
 import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
-import { configureYarnBerry } from '../utils/utils.packageManager.js';
+import { configureYarn } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { getTemplateData, renderTemplateFromFile } from '../utils/utils.templates.js';
@@ -53,7 +53,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   });
 
   if (templateData.packageManagerName === 'yarn') {
-    await execPostScaffoldFunction(configureYarnBerry, exportPath, templateData.packageManagerVersion);
+    await execPostScaffoldFunction(configureYarn, exportPath, templateData.packageManagerVersion);
   }
 
   if (templateData.hasBackend) {

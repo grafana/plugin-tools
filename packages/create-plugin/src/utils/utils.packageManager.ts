@@ -2,7 +2,7 @@ import { basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { findUpSync } from 'find-up';
 import { getPackageJson } from './utils.packagejson.js';
-import { lt } from 'semver';
+import { gte, lt } from 'semver';
 
 const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
@@ -15,23 +15,20 @@ export type PackageManager = {
   packageManagerVersion: string;
 };
 
-export async function configureYarnBerry(cwd: string, packageManagerVersion: string) {
+export async function configureYarn(cwd: string, packageManagerVersion: string) {
   try {
-    const isYarn1 = lt(packageManagerVersion, '2.0.0');
-    if (isYarn1) {
-      spawnSync('yarn', ['set', 'version', 'stable'], {
+    const isYarnBerry = gte(packageManagerVersion, '2.0.0');
+    if (isYarnBerry) {
+      spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
         shell: true,
         cwd,
       });
+      return 'Configured Yarn Berry to use node_modules (PnP is not supported)';
     }
-    spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
-      shell: true,
-      cwd,
-    });
-    return `Configured Yarn Berry${isYarn1 ? ' (Yarn 1.x is not supported)' : ''}`;
+    return '';
   } catch (error) {
     throw new Error(
-      'There was an error trying to configure Yarn Berry. Please run `yarn set version stable && yarn config set nodeLinker node-modules` manually in your plugin directory.'
+      'There was an error configuring Yarn. Please run `yarn set version stable && yarn config set nodeLinker node-modules` in your plugin directory.'
     );
   }
 }
@@ -67,9 +64,13 @@ export function getPackageManagerWithFallback() {
   return DEFAULT_PACKAGE_MANAGER;
 }
 
-export function getPackageManagerInstallCmd(packageManagerName: string) {
+export function getPackageManagerInstallCmd(packageManagerName: string, packageManagerVersion: string) {
   switch (packageManagerName) {
     case 'yarn':
+      if (lt(packageManagerVersion, '2.0.0')) {
+        return 'yarn install --immutable --prefer-offline';
+      }
+      // Yarn Berry does not support prefer-offline
       return 'yarn install --immutable';
 
     case 'pnpm':
