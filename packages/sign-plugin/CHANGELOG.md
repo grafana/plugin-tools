@@ -1,3 +1,15 @@
+# v3.0.8 (Thu Jan 09 2025)
+
+#### 🐛 Bug Fix
+
+- Sign Plugin: Remove console.log on failed version check [#1444](https://github.com/grafana/plugin-tools/pull/1444) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v3.0.5 (Wed Dec 11 2024)
 
 #### 🐛 Bug Fix
