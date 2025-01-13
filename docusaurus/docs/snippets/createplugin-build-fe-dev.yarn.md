@@ -1,3 +1,0 @@
-```shell
-yarn run dev
-```
