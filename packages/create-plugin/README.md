@@ -10,10 +10,12 @@ Create Grafana plugins with ease.
       - [`npx`](#npx)
       - [`npm`](#npm)
       - [`pnpm`](#pnpm)
+      - [`yarn` (berry)](#yarn-berry)
       - [`yarn` (1.x)](#yarn-1x)
   - [Migrate your existing plugin](#migrate-your-existing-plugin)
   - [Update your plugin build config](#update-your-plugin-build-config)
   - [Customizing or extending the basic configs](#customizing-or-extending-the-basic-configs)
+  - [Add provisioning to your existing plugin](#add-provisioning-to-your-existing-plugin)
   - [Contributing](#contributing)
 
 **Links**
@@ -50,7 +52,13 @@ npm init @grafana/plugin
 pnpm dlx @grafana/create-plugin@latest
 ```
 
-#### [`yarn`](https://classic.yarnpkg.com/blog/2017/05/12/introducing-yarn/) (1.x)
+#### [`yarn`](https://yarnpkg.com/getting-started) (berry)
+
+```bash
+yarn dlx @grafana/create-plugin@latest
+```
+
+#### [`yarn`](https://classic.yarnpkg.com/en/docs/getting-started) (1.x)
 
 ```bash
 yarn create @grafana/plugin

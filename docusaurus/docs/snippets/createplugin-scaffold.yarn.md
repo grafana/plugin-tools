@@ -1,3 +1,3 @@
 ```shell
-yarn create @grafana/plugin
+yarn dlx @grafana/create-plugin@latest
 ```
