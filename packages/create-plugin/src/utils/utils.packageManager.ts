@@ -2,6 +2,7 @@ import { basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { findUpSync } from 'find-up';
 import { getPackageJson } from './utils.packagejson.js';
+import { gte, lt } from 'semver';
 
 const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
@@ -13,6 +14,24 @@ export type PackageManager = {
   packageManagerName: string;
   packageManagerVersion: string;
 };
+
+export async function configureYarn(cwd: string, packageManagerVersion: string) {
+  try {
+    const isYarnBerry = gte(packageManagerVersion, '2.0.0');
+    if (isYarnBerry) {
+      spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
+        shell: true,
+        cwd,
+      });
+      return 'Configured Yarn Berry to use node_modules (PnP is not supported)';
+    }
+    return '';
+  } catch (error) {
+    throw new Error(
+      'There was an error configuring Yarn. Please run `yarn set version stable && yarn config set nodeLinker node-modules` in your plugin directory.'
+    );
+  }
+}
 
 export function getPackageManagerFromUserAgent(): PackageManager {
   const agent = process.env.npm_config_user_agent;
@@ -45,10 +64,14 @@ export function getPackageManagerWithFallback() {
   return DEFAULT_PACKAGE_MANAGER;
 }
 
-export function getPackageManagerInstallCmd(packageManagerName: string) {
+export function getPackageManagerInstallCmd(packageManagerName: string, packageManagerVersion: string) {
   switch (packageManagerName) {
     case 'yarn':
-      return 'yarn install --immutable --prefer-offline';
+      if (lt(packageManagerVersion, '2.0.0')) {
+        return 'yarn install --immutable --prefer-offline';
+      }
+      // Yarn Berry does not support prefer-offline
+      return 'yarn install --immutable';
 
     case 'pnpm':
       return 'pnpm install --frozen-lockfile --prefer-offline';

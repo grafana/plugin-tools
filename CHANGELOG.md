@@ -1,3 +1,16 @@
+# (Mon Jan 13 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.13.0`
+  - Create Plugin: Support Yarn Berry [#1438](https://github.com/grafana/plugin-tools/pull/1438) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Jan 10 2025)
 
 #### 🐛 Bug Fix

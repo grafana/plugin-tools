@@ -1,3 +1,0 @@
-```shell
-yarn playwright test
-```

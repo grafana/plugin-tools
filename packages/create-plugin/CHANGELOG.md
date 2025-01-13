@@ -1,3 +1,15 @@
+# v5.13.0 (Mon Jan 13 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support Yarn Berry [#1438](https://github.com/grafana/plugin-tools/pull/1438) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.12.4 (Tue Dec 31 2024)
 
 #### 🐛 Bug Fix

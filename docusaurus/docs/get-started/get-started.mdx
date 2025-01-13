@@ -11,18 +11,10 @@ keywords:
 slug: /
 ---
 
-import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
-import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
-import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
-import InstallNPM from '@snippets/createplugin-install.npm.md';
-import InstallPNPM from '@snippets/createplugin-install.pnpm.md';
-import InstallYarn from '@snippets/createplugin-install.yarn.md';
-import BuildFEDevNPM from '@snippets/createplugin-build-fe-dev.npm.md';
-import BuildFEDevPNPM from '@snippets/createplugin-build-fe-dev.pnpm.md';
-import BuildFEDevYarn from '@snippets/createplugin-build-fe-dev.yarn.md';
-import BuildFEProdNPM from '@snippets/createplugin-build-fe-prod.npm.md';
-import BuildFEProdPNPM from '@snippets/createplugin-build-fe-prod.pnpm.md';
-import BuildFEProdYarn from '@snippets/createplugin-build-fe-prod.yarn.md';
+import ScaffoldNPM from '@shared/createplugin-scaffold.md';
+import InstallNPM from '@shared/createplugin-install.md';
+import BuildFEDevNPM from '@shared/createplugin-build-fe-dev.md';
+import BuildFEProdNPM from '@shared/createplugin-build-fe-prod.md';
 
 # Get started
 
@@ -36,15 +28,7 @@ Welcome to the world of Grafana plugin creation, where you can enhance Grafana's
 
 Scaffold a new plugin with a single command! Run the following and answer the prompts:
 
-<CodeSnippets
-  snippets={[
-    { component: ScaffoldNPM, label: 'npm' },
-    { component: ScaffoldPNPM, label: 'pnpm' },
-    { component: ScaffoldYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<ScaffoldNPM />
 
 ## Why create a Grafana plugin?
 
@@ -103,11 +87,15 @@ You'll need to have the following tools set up:
 - [Mage](https://magefile.org/)
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 - [Docker](https://docs.docker.com/get-docker/)
-- Optionally, [Yarn 1](https://classic.yarnpkg.com/lang/en/docs/install) or [PNPM](https://pnpm.io/installation)
+- Optionally, [Yarn](https://yarnpkg.com/getting-started/install) or [PNPM](https://pnpm.io/installation)
 
 #### Supported package managers
 
 When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
+
+::: note
+The Yarn commands on this website are compatible with Yarn Berry (>=2.0.0). If you are using Yarn 1.x.x we suggest you upgrade to [Yarn Berry](https://yarnpkg.com/migration/guide). Alternatively you can use `yarn create @grafana/plugin` to run commands with Yarn 1.x.x.
+:::
 
 ## Scaffold a plugin
 
@@ -115,15 +103,7 @@ When you first run `@grafana/create-plugin`, choose your package manager: `npm`,
 
 Run the following command and answer the prompts:
 
-<CodeSnippets
-  snippets={[
-    { component: ScaffoldNPM, label: 'npm' },
-    { component: ScaffoldPNPM, label: 'pnpm' },
-    { component: ScaffoldYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<ScaffoldNPM />
 
 For help with the prompts, refer to the [CLI commands](../reference/cli-commands.mdx).
 
@@ -179,8 +159,8 @@ With the `create-plugin` tool, you can use a Docker container to simplify the co
 
 Refer to the "Next steps" terminal output following the [scaffolding of a new plugin](#scaffold-a-plugin) to install dependencies, build and run your plugin.
 
-
 Example output:
+
 ```
 ## What's next?
 
@@ -202,41 +182,17 @@ Note: We strongly recommend creating a new Git repository by running git init in
 
 ### Install dependencies
 
-<CodeSnippets
-  snippets={[
-    { component: InstallNPM, label: 'npm' },
-    { component: InstallPNPM, label: 'pnpm' },
-    { component: InstallYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<InstallNPM />
 
 ### Build the frontend
 
 To build the plugin in watch mode for development, continually monitoring for changes, run:
-<CodeSnippets
-  snippets={[
-    { component: BuildFEDevNPM, label: 'npm' },
-    { component: BuildFEDevPNPM, label: 'pnpm' },
-    { component: BuildFEDevYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
 
+<BuildFEDevNPM />
 
 To build for production, run:
 
-<CodeSnippets
-  snippets={[
-    { component: BuildFEProdNPM, label: 'npm' },
-    { component: BuildFEProdPNPM, label: 'pnpm' },
-    { component: BuildFEProdYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<BuildFEProdNPM />
 
 ### Build the backend
 

@@ -13,9 +13,7 @@ keywords:
   - packages
 ---
 
-import BuildNPM from '@snippets/createplugin-build-ci.npm.md';
-import BuildPNPM from '@snippets/createplugin-build-ci.pnpm.md';
-import BuildYarn from '@snippets/createplugin-build-ci.yarn.md';
+import BuildNPM from '@shared/createplugin-build-ci.md';
 
 # Package a plugin
 
@@ -23,15 +21,7 @@ Package a plugin to organize the plugin code and make it ready for use in your o
 
 1. Build the plugin
 
-   <CodeSnippets
-   snippets={[
-   { component: BuildNPM, label: 'npm' },
-   { component: BuildPNPM, label: 'pnpm' },
-   { component: BuildYarn, label: 'yarn' },
-   ]}
-   groupId="package-manager"
-   queryString="current-package-manager"
-   />
+   <BuildNPM />
 
 1. Optional: If your data source plugin has a backend plugin, build it as well.
 

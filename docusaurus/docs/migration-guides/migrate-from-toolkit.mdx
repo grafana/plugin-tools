@@ -12,9 +12,7 @@ keywords:
   - migrating
 ---
 
-import MigrateNPM from '@snippets/createplugin-migrate.npm.md';
-import MigratePNPM from '@snippets/createplugin-migrate.pnpm.md';
-import MigrateYarn from '@snippets/createplugin-migrate.yarn.md';
+import MigrateNPM from '@shared/createplugin-migrate.md';
 
 The `@grafana/toolkit` tool is now [deprecated](https://grafana.com/docs/grafana/next/breaking-changes/breaking-changes-v10-0/#grafanatoolkit-cli-commands-have-been-removed-and-migrated-to-the-create-plugin-package). If you are still using `@grafana/toolkit` to scaffold and develop plugins, follow this guide to make the jump to our newest plugin tools.
 
@@ -36,15 +34,7 @@ Our plugin tools use ReactJS. We [do not support](https://grafana.com/docs/grafa
 
 1. In the root directory of the existing plugin (where the `package.json` file is), run the following command.
 
-<CodeSnippets
-  snippets={[
-    { component: MigrateNPM, label: 'npm' },
-    { component: MigratePNPM, label: 'pnpm' },
-    { component: MigrateYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<MigrateNPM />
 
 1. Follow the prompts that appear. Refer to the list below for details about each potential prompt.
 

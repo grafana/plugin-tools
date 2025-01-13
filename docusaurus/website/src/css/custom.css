@@ -226,6 +226,11 @@ html[data-theme='dark'] {
   margin-bottom: var(--ifm-global-spacing);
 }
 
+/* npm2yarn plugin renders Yarn which looks weird */
+.theme-doc-markdown .tabs__item {
+  text-transform: lowercase;
+}
+
 .code-block-addition-highlighted-line {
   background-color: rgb(56, 64, 51);
   box-shadow: inset 3px 0 0 0 rgb(128, 164, 102);

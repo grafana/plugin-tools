@@ -1,6 +1,10 @@
 name: Node CI
 on: [push]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -56,22 +60,22 @@ jobs:
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='app' --no-hasBackend
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='app' --no-backend
             hasBackend: false
           - workingDir: 'myorg-backend-app'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='app' --hasBackend
+            cmdArgs: --plugin-name='backend' --org-name='myorg' --plugin-type='app' --backend
             hasBackend: true
           - workingDir: 'myorg-nobackend-panel'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='panel'
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
             hasBackend: false
           - workingDir: 'myorg-nobackend-datasource'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginType='datasource' --no-hasBackend
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='datasource' --no-backend
             hasBackend: false
           - workingDir: 'myorg-backend-datasource'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginType='datasource' --hasBackend
+            cmdArgs: --plugin-name='backend' --org-name='myorg' --plugin-type='datasource' --backend
             hasBackend: true
           - workingDir: 'myorg-nobackendscenes-app'
-            cmd: create-plugin --pluginName='no-backend-scenes' --orgName='myorg' --pluginType='scenesapp' --no-hasBackend
+            cmdArgs: --plugin-name='no-backend-scenes' --org-name='myorg' --plugin-type='scenesapp' --no-backend
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
@@ -91,7 +95,7 @@ jobs:
         working-directory: ./packed-artifacts
 
       - name: Generate plugin
-        run: ${{ matrix.cmd }}
+        run: npx create-plugin ${{ matrix.cmdArgs }}
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
@@ -227,6 +231,13 @@ jobs:
           app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
           private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
 
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
+
       - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
@@ -251,5 +262,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # comes from the get-secrets step (shared get-vault-secrets workflow)
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         run: npm run release

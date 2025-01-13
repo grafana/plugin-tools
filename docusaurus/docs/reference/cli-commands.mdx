@@ -12,33 +12,19 @@ keywords:
 sidebar_position: 40
 ---
 
-import ScaffoldNPM from '@snippets/createplugin-scaffold.npm.md';
-import ScaffoldPNPM from '@snippets/createplugin-scaffold.pnpm.md';
-import ScaffoldYarn from '@snippets/createplugin-scaffold.yarn.md';
-import UpdateNPM from '@snippets/createplugin-update.npm.md';
-import UpdatePNPM from '@snippets/createplugin-update.pnpm.md';
-import UpdateYarn from '@snippets/createplugin-update.yarn.md';
-import UpdateForceNPM from '@snippets/createplugin-update-force.npm.md';
-import UpdateForcePNPM from '@snippets/createplugin-update-force.pnpm.md';
-import UpdateForceYarn from '@snippets/createplugin-update-force.yarn.md';
+import ScaffoldNPM from '@shared/createplugin-scaffold.md';
+import UpdateNPM from '@shared/createplugin-update.md';
+import UpdateForceNPM from '@shared/createplugin-update-force.md';
 
 # CLI commands
 
 Below you can find the available commands in `@grafana/create-plugin`.
 
-## create-plugin 
+## create-plugin
 
 Use the `create-plugin` command to scaffold your plugin.
 
-<CodeSnippets
-  snippets={[
-    { component: ScaffoldNPM, label: 'npm' },
-    { component: ScaffoldPNPM, label: 'pnpm' },
-    { component: ScaffoldYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<ScaffoldNPM />
 
 
 When running the `create-plugin` command, the following prompts appear:
@@ -81,7 +67,7 @@ Enter the name of your organization. This must be your [Grafana Cloud](https://g
 
 ### Bypass prompts
 
-You can bypass all the preceding prompts by using `create-plugin` CLI arguments. 
+You can bypass all the preceding prompts by using `create-plugin` CLI arguments.
 To scaffold a plugin with the CLI arguments, pass them to the `create-plugin` command like so:
 
 ```
@@ -108,15 +94,7 @@ Refer to the following table for the full list of prompt bypass options:
 
 To update an existing plugin to use the latest version of the `create-plugin` tool, run the following command from your plugin's root directory:
 
-<CodeSnippets
-  snippets={[
-    { component: UpdateNPM, label: 'npm' },
-    { component: UpdatePNPM, label: 'pnpm' },
-    { component: UpdateYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<UpdateNPM />
 
 This command updates the following:
 * **`/.config`** - configuration files for building a plugin
@@ -127,13 +105,5 @@ This command updates the following:
 
 By default, the `update` command will stop if there are any uncommitted changes in the repository. If you want to force the update, you can use the `--force` flag:
 
-<CodeSnippets
-  snippets={[
-    { component: UpdateForceNPM, label: 'npm' },
-    { component: UpdateForcePNPM, label: 'pnpm' },
-    { component: UpdateForceYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<UpdateForceNPM />
 

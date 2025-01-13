@@ -15,9 +15,7 @@ description: Set up your development environment with Docker for Grafana plugin 
 sidebar_position: 20
 ---
 
-import DockerNPM from '@snippets/docker-grafana-version.npm.md';
-import DockerPNPM from '@snippets/docker-grafana-version.pnpm.md';
-import DockerYarn from '@snippets/docker-grafana-version.yarn.md';
+import DockerNPM from '@shared/docker-grafana-version.md';
 
 This guide walks you through setting up your development environment for Grafana plugin development. Including:
 
@@ -57,15 +55,7 @@ To start your plugin development project, run the following commands in the orde
 
 To test a plugin across different versions of Grafana, set an environment variable. Use `GRAFANA_VERSION` to set the Grafana version:
 
-<CodeSnippets
-  snippets={[
-    { component: DockerNPM, label: 'npm' },
-    { component: DockerPNPM, label: 'pnpm' },
-    { component: DockerYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<DockerNPM />
 
 ### Configure the Grafana image
 
