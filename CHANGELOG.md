@@ -1,3 +1,17 @@
+# (Wed Jan 15 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.15.0`
+  - E2E: Improve support to interact with panel edit options [#1272](https://github.com/grafana/plugin-tools/pull/1272) ([@mckn](https://github.com/mckn) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Tue Jan 14 2025)
 
 #### 🐛 Bug Fix
