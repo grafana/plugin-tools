@@ -1,4 +1,4 @@
-import { test as base, expect as baseExpect } from '@playwright/test';
+import { test as base, expect as baseExpect, Locator } from '@playwright/test';
 
 import { AlertPageOptions, AlertVariant, ContainTextOptions, PluginFixture, PluginOptions } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
@@ -35,6 +35,15 @@ import { GrafanaPage } from './models/pages/GrafanaPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
 import { variablePage } from './fixtures/variablePage';
 import { gotoVariablePage } from './fixtures/commands/gotoVariablePage';
+import { toHaveSelected } from './matchers/toHaveSelected';
+import { Select } from './models/components/Select';
+import { Switch } from './models/components/Switch';
+import { toBeChecked } from './matchers/toBeChecked';
+import { RadioGroup } from './models/components/RadioGroup';
+import { toHaveChecked } from './matchers/toHaveChecked';
+import { MultiSelect } from './models/components/MultiSelect';
+import { toHaveColor } from './matchers/toHaveColor';
+import { ColorPicker } from './models/components/ColorPicker';
 
 // models
 export { DataSourcePicker } from './models/components/DataSourcePicker';
@@ -92,6 +101,10 @@ export const expect = baseExpect.extend({
   toHaveAlert,
   toDisplayPreviews,
   toBeOK,
+  toHaveSelected,
+  toBeChecked,
+  toHaveChecked,
+  toHaveColor,
 });
 
 export { selectors } from '@playwright/test';
@@ -131,6 +144,30 @@ declare global {
        * Asserts that a GrafanaPage contains an alert with the specified severity. Use the options to specify the timeout and to filter the alerts.
        */
       toHaveAlert(this: Matchers<unknown, GrafanaPage>, severity: AlertVariant, options?: AlertPageOptions): Promise<R>;
+
+      /**
+       * Asserts that a Selector has the specified value selected
+       */
+      toHaveSelected(
+        select: Select | MultiSelect,
+        value: string | RegExp | string[] | RegExp[],
+        options?: ContainTextOptions
+      ): Promise<R>;
+
+      /**
+       * Asserts that a Switch is on or off (on by default)
+       */
+      toBeChecked(target: Switch | Locator, options?: { on?: boolean; timeout?: number }): Promise<R>;
+
+      /**
+       * Asserts that a Radio has expected value selected
+       */
+      toHaveChecked(radioGroup: RadioGroup, expected: string, options?: { timeout?: number }): Promise<R>;
+
+      /**
+       * Asserts that a color picker has expected color selected
+       */
+      toHaveColor(colorPicker: ColorPicker, rgbOrHex: string, options?: { timeout?: number }): Promise<R>;
     }
   }
 }
