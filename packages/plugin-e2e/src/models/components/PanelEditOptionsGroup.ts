@@ -31,11 +31,6 @@ export class PanelEditOptionsGroup {
     await this.element.click();
   }
 
-  private async isExpanded(): Promise<boolean> {
-    const expanded = await this.element.getAttribute('aria-expanded');
-    return expanded === 'true';
-  }
-
   getRadioGroup(label: string): RadioGroup {
     if (gte(this.ctx.grafanaVersion, '10.2.0')) {
       return new RadioGroup(this.ctx, this.getByLabel(label).getByRole('radiogroup'));
@@ -80,5 +75,10 @@ export class PanelEditOptionsGroup {
 
   private getByLabel(optionLabel: string): Locator {
     return this.element.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
+  }
+
+  private async isExpanded(): Promise<boolean> {
+    const expanded = await this.element.getAttribute('aria-expanded');
+    return expanded === 'true';
   }
 }
