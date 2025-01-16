@@ -7,6 +7,7 @@ import { MultiSelect } from './MultiSelect';
 import { Switch } from './Switch';
 import { gte } from 'semver';
 import { RadioGroup } from './RadioGroup';
+import { resolveGrafanaSelector } from '../utils';
 
 export class PanelEditOptionsGroup {
   constructor(
@@ -20,7 +21,7 @@ export class PanelEditOptionsGroup {
     if (!expanded) {
       return;
     }
-    await this.element.click();
+    await this.getOptionsGroupToggle().click();
   }
 
   async expand(): Promise<void> {
@@ -28,7 +29,7 @@ export class PanelEditOptionsGroup {
     if (expanded) {
       return;
     }
-    await this.element.click();
+    await this.getOptionsGroupToggle().click();
   }
 
   getRadioGroup(label: string): RadioGroup {
@@ -78,7 +79,12 @@ export class PanelEditOptionsGroup {
   }
 
   private async isExpanded(): Promise<boolean> {
-    const expanded = await this.element.getAttribute('aria-expanded');
+    const expanded = await this.getOptionsGroupToggle().getAttribute('aria-expanded');
     return expanded === 'true';
+  }
+
+  private getOptionsGroupToggle(): Locator {
+    const selector = resolveGrafanaSelector(this.ctx.selectors.components.OptionsGroup.toggle(this.groupLabel));
+    return this.element.locator(selector);
   }
 }

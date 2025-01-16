@@ -1,7 +1,5 @@
-import { Locator, Page } from '@playwright/test';
-import { test, expect, PanelEditPage } from '../../../src';
-import { gte, lte } from 'semver';
-import { selectors as E2ESelectors } from '@grafana/e2e-selectors';
+import { test, expect } from '../../../src';
+import { lte } from 'semver';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -139,4 +137,30 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
 
   await timeZonePicker.selectOption('Europe/Stockholm');
   await expect(timeZonePicker).toHaveSelected('Europe/Stockholm');
+});
+
+test('collapse expanded options group', async ({ gotoPanelEditPage, selectors }) => {
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+  const optionsGroupButton = panelEdit.getByGrafanaSelector(selectors.components.OptionsGroup.toggle('Data links'), {
+    startsWith: true,
+  });
+
+  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'true');
+  await dataLinksOptions.collapse();
+  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('expand collapsed options group', async ({ gotoPanelEditPage, selectors }) => {
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+  const optionsGroupButton = panelEdit.getByGrafanaSelector(selectors.components.OptionsGroup.toggle('Data links'), {
+    startsWith: true,
+  });
+
+  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'true');
+  await dataLinksOptions.collapse();
+  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'false');
+  await dataLinksOptions.expand();
+  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'true');
 });
