@@ -14,7 +14,10 @@ export class PanelEditPage extends GrafanaPage {
   timeRange: TimeRange;
   panel: Panel;
 
-  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly args: DashboardEditViewArgs<string>
+  ) {
     super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
@@ -185,6 +188,10 @@ export class PanelEditPage extends GrafanaPage {
   getCustomOptions(label: string): PanelEditOptionsGroup {
     const locator = this.getOptionsGroupLocator(label);
     return new PanelEditOptionsGroup(this.ctx, locator, label);
+  }
+
+  getPanelOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Panel options');
   }
 
   getStandardOptions(): PanelEditOptionsGroup {

@@ -9,7 +9,32 @@ import { gte } from 'semver';
 import { RadioGroup } from './RadioGroup';
 
 export class PanelEditOptionsGroup {
-  constructor(private ctx: PluginTestCtx, public readonly element: Locator, private groupLabel: string) {}
+  constructor(
+    private ctx: PluginTestCtx,
+    public readonly element: Locator,
+    private groupLabel: string
+  ) {}
+
+  async collapse(): Promise<void> {
+    const expanded = await this.isExpanded();
+    if (!expanded) {
+      return;
+    }
+    await this.element.click();
+  }
+
+  async expand(): Promise<void> {
+    const expanded = await this.isExpanded();
+    if (expanded) {
+      return;
+    }
+    await this.element.click();
+  }
+
+  private async isExpanded(): Promise<boolean> {
+    const expanded = await this.element.getAttribute('aria-expanded');
+    return expanded === 'true';
+  }
 
   getRadioGroup(label: string): RadioGroup {
     if (gte(this.ctx.grafanaVersion, '10.2.0')) {
