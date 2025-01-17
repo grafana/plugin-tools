@@ -103,6 +103,7 @@ export class PanelEditPage extends GrafanaPage {
 
   /**
    * Expands the section for the given category name. If the section is already expanded, this method does nothing.
+   * @deprecated use {@link PanelEditOptionsGroup.expand} method instead.
    */
   async collapseSection(categoryName: string) {
     const section = this.getByGrafanaSelector(this.ctx.selectors.components.OptionsGroup.group(categoryName));
