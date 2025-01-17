@@ -16,6 +16,11 @@ export class PanelEditOptionsGroup {
     private groupLabel: string
   ) {}
 
+  async isExpanded(): Promise<boolean> {
+    const expanded = await this.getOptionsGroupToggle().getAttribute('aria-expanded');
+    return expanded === 'true';
+  }
+
   async collapse(): Promise<void> {
     const expanded = await this.isExpanded();
     if (!expanded) {
@@ -78,13 +83,13 @@ export class PanelEditOptionsGroup {
     return this.element.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
   }
 
-  private async isExpanded(): Promise<boolean> {
-    const expanded = await this.getOptionsGroupToggle().getAttribute('aria-expanded');
-    return expanded === 'true';
-  }
-
   private getOptionsGroupToggle(): Locator {
     const selector = resolveGrafanaSelector(this.ctx.selectors.components.OptionsGroup.toggle(this.groupLabel));
-    return this.element.locator(selector);
+
+    if (gte(this.ctx.grafanaVersion, '10.0.0')) {
+      return this.element.locator(selector);
+    }
+
+    return this.element.locator(selector).getByRole('button');
   }
 }

@@ -1,5 +1,6 @@
-import { test, expect } from '../../../src';
-import { lte } from 'semver';
+import { Locator } from '@playwright/test';
+import { test, expect, PanelEditPage, E2ESelectorGroups } from '../../../src';
+import { gte, lte } from 'semver';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -139,28 +140,22 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
   await expect(timeZonePicker).toHaveSelected('Europe/Stockholm');
 });
 
-test('collapse expanded options group', async ({ gotoPanelEditPage, selectors }) => {
+test('collapse expanded options group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
   const dataLinksOptions = panelEdit.getCustomOptions('Data links');
-  const optionsGroupButton = panelEdit.getByGrafanaSelector(selectors.components.OptionsGroup.toggle('Data links'), {
-    startsWith: true,
-  });
 
-  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'true');
+  expect(await dataLinksOptions.isExpanded()).toBeTruthy();
   await dataLinksOptions.collapse();
-  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'false');
+  expect(await dataLinksOptions.isExpanded()).toBeFalsy();
 });
 
-test('expand collapsed options group', async ({ gotoPanelEditPage, selectors }) => {
+test('expand collapsed options group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
   const dataLinksOptions = panelEdit.getCustomOptions('Data links');
-  const optionsGroupButton = panelEdit.getByGrafanaSelector(selectors.components.OptionsGroup.toggle('Data links'), {
-    startsWith: true,
-  });
 
-  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'true');
+  expect(await dataLinksOptions.isExpanded()).toBeTruthy();
   await dataLinksOptions.collapse();
-  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'false');
+  expect(await dataLinksOptions.isExpanded()).toBeFalsy();
   await dataLinksOptions.expand();
-  await expect(optionsGroupButton).toHaveAttribute('aria-expanded', 'true');
+  expect(await dataLinksOptions.isExpanded()).toBeTruthy();
 });
