@@ -5,6 +5,7 @@ import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
+import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -86,17 +87,28 @@ export class DashboardPage extends GrafanaPage {
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages, constants } = this.ctx.selectors;
 
-    // From Grafana 11.3.0, one needs to click the edit button before adding a new panel in already existing dashboards
-    if (semver.gte(this.ctx.grafanaVersion, '11.3.0') && this.dashboard?.uid) {
+    const scenesEnabled = await isFeatureEnabled(this.ctx.page, 'dashboardScene');
+
+    // In scenes powered dashboards, one needs to click the edit button before adding a new panel in already existing dashboards
+    if (scenesEnabled && this.dashboard?.uid) {
       await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
+    }
+    // on small screens, the toolbar buttons are hidden behind a "Show more items" button
+    const toolbarButtonsHidden = !scenesEnabled && !!(await this.ctx.page.getByLabel('Show more items').count());
+    if (toolbarButtonsHidden) {
+      await this.ctx.page.getByLabel('Show more items').click();
     }
 
     if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
-      await this.getByGrafanaSelector(components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)).click();
+      let addButton = this.getByGrafanaSelector(
+        components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
+      );
+      toolbarButtonsHidden ? await addButton.last().click() : await addButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       if (this.dashboard?.uid) {
-        await this.getByGrafanaSelector(components.PageToolbar.item('Add panel')).click();
+        const addPanelButton = this.getByGrafanaSelector(components.PageToolbar.item('Add panel'));
+        toolbarButtonsHidden ? await addPanelButton.last().click() : await addPanelButton.click();
       }
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
