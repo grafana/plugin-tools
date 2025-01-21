@@ -17,7 +17,7 @@ The approach for performing these runtime checks depends on the specific feature
 
 ## Example: Conditionally invoking functions
 
-Starting with Grafana 10.1.0, the @grafana/data package introduced the createDataFrame function, marking the deprecation of the MutableDataFrame class. To maintain compatibility with versions prior to 10.1.0, plugins must implement conditional logic to determine whether these APIs are available at runtime.
+Starting with Grafana 10.1.0, the `@grafana/data` package introduced the `createDataFrame` function, marking the deprecation of the `MutableDataFrame` class. To maintain compatibility with versions prior to 10.1.0, plugins must implement conditional logic to determine whether these APIs are available at runtime.
 
 ```tsx
 import { createDataFrame, DataFrameDTO, MutableDataFrame } from '@grafana/data';
@@ -38,13 +38,13 @@ function getDataFrame(data: DataFrameDTO) {
 In Grafana 11.1.0, the syncronous `getPluginLinkExtensions` function got depcrecated in favour of the new reactive `usePluginLinks` hook. The following example shows how to dynamically alternate between the two APIs based on their availability.
 
 ```tsx
+import { useMemo } from 'react';
 import { PluginExtensionLink } from '@grafana/data';
 import {
   GetPluginExtensionsOptions,
   getPluginLinkExtensions,
   usePluginLinks as usePluginLinksOriginal,
 } from '@grafana/runtime';
-import { useMemo } from 'react';
 
 function useLegacyLinkExtensions({ context, extensionPointId }: GetPluginExtensionsOptions): {
   links: PluginExtensionLink[];
