@@ -75,3 +75,23 @@ export function ToolbarExtensionPoint() {
   ...
 }
 ```
+
+## Example: Conditionally rendering a React component
+
+The `UserIcon` was introduced in Grafana 10.1.0 and does not have a predecessor in earlier versions. To ensure compatibility, you can render the UserIcon component only when it is available in the current runtime environment.
+
+```tsx
+import React from 'react';
+import { Card, UserIcon, UserView } from '@grafana/ui';
+
+export const Profile = ({ userView }: { userView: UserView }) => {
+  return (
+    <Card>
+      <Card.Heading>Profile</Card.Heading>
+      <Card.Meta>{['tag 1', 'tag 2']}</Card.Meta>
+      {/* Conditionally render the UserIcon component if it exists */}
+      {UserIcon && <UserIcon userView={userView} />}
+    </Card>
+  );
+};
+```
