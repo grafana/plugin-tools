@@ -88,10 +88,39 @@ export const Profile = ({ userView }: { userView: UserView }) => {
   return (
     <Card>
       <Card.Heading>Profile</Card.Heading>
-      <Card.Meta>{['tag 1', 'tag 2']}</Card.Meta>
+      <Card.Meta>{['Tag 1']}</Card.Meta>
       {/* Conditionally render the UserIcon component if it exists */}
       {UserIcon && <UserIcon userView={userView} />}
     </Card>
   );
 };
 ```
+
+## Example: Cover conditional rendering in an end-to-end test
+
+When a feature is only available in certain Grafana versions, it’s a good practice to validate its conditional rendering through end-to-end (E2E) tests. These tests ensure that the plugin behaves correctly in both newer environments where the feature exists and older environments where it is unavailable.
+
+In the following example, the test verifies that the `UserIcon` is rendered only if the Grafana version is 10.1.0 or later, while the rest of the user profile is always rendered.
+
+```tsx
+import * as semver from 'semver';
+import { test, expect } from '@grafana/plugin-e2e';
+
+test('should render profile', async ({ page, grafanaVersion }) => {
+  const userProfile = page.getByTestId('user-profile');
+
+  // verify the visibility of shared components
+  await expect(userProfile.getByText('Heading')).toBeVisible();
+  await expect(userProfile.getByText('Tag 1')).toBeVisible();
+
+  // conditionally validate the rendering of the UserIcon component
+  if (semver.gte(grafanaVersion, '10.1.0')) {
+    await expect(userProfile.getByText('Jane Doe')).toBeVisible();
+  }
+});
+```
+
+### Further reading
+
+- **end-to-end testing for plugins**: For comprehensive guidance on writing and running E2E tests for Grafana plugins, refer to the [documentation](../e2e-test-a-plugin/introduction.md).
+- **Running end-to-end tests across multiple Grafana versions**: To learn how to configure your workflows to test plugins against different Grafana versions, see the [example workflows](../e2e-test-a-plugin/ci.md).
