@@ -14,7 +14,10 @@ export class PanelEditPage extends GrafanaPage {
   timeRange: TimeRange;
   panel: Panel;
 
-  constructor(readonly ctx: PluginTestCtx, readonly args: DashboardEditViewArgs<string>) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly args: DashboardEditViewArgs<string>
+  ) {
     super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
@@ -100,6 +103,7 @@ export class PanelEditPage extends GrafanaPage {
 
   /**
    * Expands the section for the given category name. If the section is already expanded, this method does nothing.
+   * @deprecated use {@link PanelEditOptionsGroup.expand} method instead.
    */
   async collapseSection(categoryName: string) {
     const section = this.getByGrafanaSelector(this.ctx.selectors.components.OptionsGroup.group(categoryName));
@@ -192,6 +196,10 @@ export class PanelEditPage extends GrafanaPage {
   getCustomOptions(label: string): PanelEditOptionsGroup {
     const locator = this.getOptionsGroupLocator(label);
     return new PanelEditOptionsGroup(this.ctx, locator, label);
+  }
+
+  getPanelOptions(): PanelEditOptionsGroup {
+    return this.getCustomOptions('Panel options');
   }
 
   getStandardOptions(): PanelEditOptionsGroup {

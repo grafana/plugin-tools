@@ -1,7 +1,6 @@
-import { Locator, Page } from '@playwright/test';
-import { test, expect, PanelEditPage } from '../../../src';
+import { Locator } from '@playwright/test';
+import { test, expect, PanelEditPage, E2ESelectorGroups } from '../../../src';
 import { gte, lte } from 'semver';
-import { selectors as E2ESelectors } from '@grafana/e2e-selectors';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -139,4 +138,24 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
 
   await timeZonePicker.selectOption('Europe/Stockholm');
   await expect(timeZonePicker).toHaveSelected('Europe/Stockholm');
+});
+
+test('collapse expanded options group', async ({ gotoPanelEditPage }) => {
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+
+  expect(await dataLinksOptions.isExpanded()).toBeTruthy();
+  await dataLinksOptions.collapse();
+  expect(await dataLinksOptions.isExpanded()).toBeFalsy();
+});
+
+test('expand collapsed options group', async ({ gotoPanelEditPage }) => {
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+
+  expect(await dataLinksOptions.isExpanded()).toBeTruthy();
+  await dataLinksOptions.collapse();
+  expect(await dataLinksOptions.isExpanded()).toBeFalsy();
+  await dataLinksOptions.expand();
+  expect(await dataLinksOptions.isExpanded()).toBeTruthy();
 });

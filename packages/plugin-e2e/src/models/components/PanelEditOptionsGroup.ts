@@ -7,9 +7,35 @@ import { MultiSelect } from './MultiSelect';
 import { Switch } from './Switch';
 import { gte } from 'semver';
 import { RadioGroup } from './RadioGroup';
+import { resolveGrafanaSelector } from '../utils';
 
 export class PanelEditOptionsGroup {
-  constructor(private ctx: PluginTestCtx, public readonly element: Locator, private groupLabel: string) {}
+  constructor(
+    private ctx: PluginTestCtx,
+    public readonly element: Locator,
+    private groupLabel: string
+  ) {}
+
+  async isExpanded(): Promise<boolean> {
+    const expanded = await this.getOptionsGroupToggle().getAttribute('aria-expanded');
+    return expanded === 'true';
+  }
+
+  async collapse(): Promise<void> {
+    const expanded = await this.isExpanded();
+    if (!expanded) {
+      return;
+    }
+    await this.getOptionsGroupToggle().click();
+  }
+
+  async expand(): Promise<void> {
+    const expanded = await this.isExpanded();
+    if (expanded) {
+      return;
+    }
+    await this.getOptionsGroupToggle().click();
+  }
 
   getRadioGroup(label: string): RadioGroup {
     if (gte(this.ctx.grafanaVersion, '10.2.0')) {
@@ -55,5 +81,15 @@ export class PanelEditOptionsGroup {
 
   private getByLabel(optionLabel: string): Locator {
     return this.element.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
+  }
+
+  private getOptionsGroupToggle(): Locator {
+    const selector = resolveGrafanaSelector(this.ctx.selectors.components.OptionsGroup.toggle(this.groupLabel));
+
+    if (gte(this.ctx.grafanaVersion, '10.0.0')) {
+      return this.element.locator(selector);
+    }
+
+    return this.element.locator(selector).getByRole('button');
   }
 }
