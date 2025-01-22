@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-meta-extractor",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "Extract meta information from a Grafana plugin source code.",
   "types": "./dist/index.d.ts",
   "bin": "./dist/bin/run.js",
