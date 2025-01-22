@@ -1,3 +1,21 @@
+# (Wed Jan 22 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.16.0`
+  - E2E: Added missing APIs while writing tests for panel editor [#1462](https://github.com/grafana/plugin-tools/pull/1462) ([@mckn](https://github.com/mckn))
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/faro-web-sdk to v1.12.3 [#1466](https://github.com/grafana/plugin-tools/pull/1466) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Wed Jan 15 2025)
 
 #### 🚀 Enhancement

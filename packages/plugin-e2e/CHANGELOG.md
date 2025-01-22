@@ -1,3 +1,15 @@
+# v1.16.0 (Wed Jan 22 2025)
+
+#### 🚀 Enhancement
+
+- E2E: Added missing APIs while writing tests for panel editor [#1462](https://github.com/grafana/plugin-tools/pull/1462) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v1.15.0 (Wed Jan 15 2025)
 
 #### 🚀 Enhancement
