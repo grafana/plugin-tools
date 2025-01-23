@@ -15,13 +15,15 @@ export class DataSourcePicker extends GrafanaPage {
    * Sets the data source picker to the provided name
    */
   async set(name: string) {
-    if (semver.gte(this.ctx.grafanaVersion, '10.1.0')) {
-      await this.ctx.page.getByTestId(this.ctx.selectors.components.DataSourcePicker.inputV2).fill(name);
-    } else {
-      await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
+    let datasourcePicker = this.ctx.page.getByTestId(this.ctx.selectors.components.DataSourcePicker.inputV2);
+
+    if (semver.lt(this.ctx.grafanaVersion, '10.1.0')) {
+      datasourcePicker = this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
         root: this.root,
-      });
+      }).locator('input');
     }
+
+    await datasourcePicker.fill(name);
 
     // this is a hack to get the selection to work in 10.ish versions of Grafana.
     // TODO: investigate if the select component can somehow be refactored so that its easier to test with playwright
