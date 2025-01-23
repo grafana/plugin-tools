@@ -141,7 +141,7 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
 });
 
 test('collapse expanded options group', async ({ gotoPanelEditPage }) => {
-  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
   const dataLinksOptions = panelEdit.getCustomOptions('Data links');
 
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
@@ -150,7 +150,7 @@ test('collapse expanded options group', async ({ gotoPanelEditPage }) => {
 });
 
 test('expand collapsed options group', async ({ gotoPanelEditPage }) => {
-  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'eda84f4d-0b3c-4e4d-815d-7fcb9aa702c2' }, id: '1' });
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
   const dataLinksOptions = panelEdit.getCustomOptions('Data links');
 
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
