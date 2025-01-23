@@ -38,6 +38,7 @@ test.describe('Test new alert rules', () => {
     alertRuleEditPage,
     selectors,
     readProvisionedDataSource,
+    page,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const { rows } = selectors.components.QueryEditorRows;
@@ -45,6 +46,7 @@ test.describe('Test new alert rules', () => {
     const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
     await queryA.datasource.set(ds.name);
     const rowCount = await alertRuleEditPage.getByGrafanaSelector(rows).count();
+    await page.getByLabel('Advanced options').nth(1).check();
     await alertRuleEditPage.clickAddQueryRow();
     await expect(alertRuleEditPage.getByGrafanaSelector(rows)).toHaveCount(rowCount + 1);
     await alertRuleEditPage.clickAddQueryRow();

@@ -1,9 +1,13 @@
+import * as semver from 'semver';
 import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
 
 export class DataSourcePicker extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, private root?: Locator) {
+  constructor(
+    ctx: PluginTestCtx,
+    private root?: Locator
+  ) {
     super(ctx);
   }
 
@@ -11,9 +15,13 @@ export class DataSourcePicker extends GrafanaPage {
    * Sets the data source picker to the provided name
    */
   async set(name: string) {
-    await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, { root: this.root })
-      .locator('input')
-      .fill(name);
+    if (semver.gte(this.ctx.grafanaVersion, '10.1.0')) {
+      await this.ctx.page.getByTestId(this.ctx.selectors.components.DataSourcePicker.inputV2).fill(name);
+    } else {
+      await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
+        root: this.root,
+      });
+    }
 
     // this is a hack to get the selection to work in 10.ish versions of Grafana.
     // TODO: investigate if the select component can somehow be refactored so that its easier to test with playwright
