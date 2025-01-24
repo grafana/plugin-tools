@@ -7,23 +7,21 @@
       "cache": true
     },
     "typecheck": {
-      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"],
+      "inputs": ["default", "{projectRoot}/tsconfig.json", "{workspaceRoot}/tsconfig.base.json"],
       "cache": true
     },
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc"],
+      "inputs": ["default", "{workspaceRoot}/eslint.config.js"],
       "cache": true
     },
     "test": {
-      "inputs": ["default", "{projectRoot}/jest.config.js", "{workspaceRoot}/jest.config.base.js"],
+      "inputs": ["default", "{projectRoot}/vitest.config.ts", "{workspaceRoot}/vitest.config.base.ts"],
       "cache": true
     }
   },
   "namedInputs": {
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
-  "affected": {
-    "defaultBase": "main"
-  },
+  "defaultBase": "main",
   "nxCloudAccessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ="
 }
