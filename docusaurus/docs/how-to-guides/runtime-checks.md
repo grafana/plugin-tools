@@ -35,7 +35,7 @@ function getDataFrame(data: DataFrameDTO) {
 
 ## Example: Conditionally using React hooks
 
-In Grafana 11.1.0, the syncronous `getPluginLinkExtensions` function got depcrecated in favour of the new reactive `usePluginLinks` hook. The following example shows how to dynamically alternate between the two APIs based on their availability.
+In Grafana 11.1.0, the synchronous `getPluginLinkExtensions` function was deprecated and replaced by the reactive `usePluginLinks` hook. The following example demonstrates how to dynamically switch between the two APIs based on their availability.
 
 ```tsx
 import { useMemo } from 'react';
