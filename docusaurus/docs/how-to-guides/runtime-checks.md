@@ -23,12 +23,12 @@ Starting with Grafana 10.1.0, the `@grafana/data` package introduced the `create
 import { createDataFrame, DataFrameDTO, MutableDataFrame } from '@grafana/data';
 
 function getDataFrame(data: DataFrameDTO) {
-  if (typeof createDataFrame !== 'undefined') {
-    // use the new API if available
-    return createDataFrame(data);
-  } else {
+  if (typeof createDataFrame === 'undefined') {
     // fallback to the deprecated class for older versions
     return new MutableDataFrame(data);
+  } else {
+    // use the new API if available
+    return createDataFrame(data);
   }
 }
 ```
