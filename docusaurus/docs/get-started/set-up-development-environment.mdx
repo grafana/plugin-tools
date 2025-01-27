@@ -66,9 +66,10 @@ version: '3.7'
 
 services:
   grafana:
-    container_name: 'myorg-basic-app'
+    extends:
+      file: .config/docker-compose-base.yaml
+      service: grafana
     build:
-      context: ./.config
       args:
         grafana_version: ${GRAFANA_VERSION:-9.1.2}
         grafana_image: ${GRAFANA_IMAGE:-grafana}
@@ -106,33 +107,6 @@ For example, in VSCode, you can add a `launch.json` configuration like this:
   ]
 }
 ```
-
-You can control the go version and the architecure used to build your plugin in the docker compose by setting `GO_VERSION` and `GO_ARCH` environment variables:
-
-```yaml title="docker-compose.yaml"
-version: '3.7'
-
-services:
-  grafana:
-    container_name: 'myorg-basic-app'
-    build:
-      context: ./.config
-      args:
-        GO_VERSION: ${GO_VERSION:-1.22}
-        GO_ARCH: ${GO_ARCH:-amd64}
-```
-
-You will also notice that the `docker-compose.yaml` file also has the following settings:
-
-```yaml title="docker-compose.yaml"
-security_opt:
-  - 'apparmor:unconfined'
-  - 'seccomp:unconfined'
-cap_add:
-  - SYS_PTRACE
-```
-
-they are necessary to allow delve to attach to the running process and debug it and should not be used in production environments.
 
 ## Set up GitHub workflows
 
