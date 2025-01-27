@@ -17,7 +17,7 @@ The method for performing these runtime checks varies depending on the feature a
 
 ## Example: Conditionally invoke functions
 
-Starting with Grafana 10.1.0, the `@grafana/data` package introduced the `createDataFrame` function, marking the deprecation of the `MutableDataFrame` class. To maintain compatibility with versions prior to 10.1.0, plugins must implement conditional logic to determine whether these APIs are available at runtime.
+Grafana 10.1.0 introduced the `createDataFrame` function in the `@grafana/data` package, deprecatiing the `MutableDataFrame` class. To maintain compatibility with Grafana versions prior to 10.1.0, plugins must implement conditional logic to determine whether these APIs are available at runtime.
 
 ```tsx
 import { createDataFrame, DataFrameDTO, MutableDataFrame } from '@grafana/data';
