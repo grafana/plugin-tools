@@ -100,7 +100,7 @@ export const Profile = ({ userView }: { userView: UserView }) => {
 
 When a feature is only available in certain Grafana versions, it’s a good practice to validate its conditional rendering through end-to-end (E2E) tests. These tests ensure that the plugin behaves correctly in both newer environments where the feature exists and older environments where it is unavailable.
 
-In the following example, the test verifies that the `UserIcon` is rendered only if the Grafana version is 10.1.0 or later, while the rest of the user profile is always rendered.
+The following example tests whether the `UserIcon` component is rendered only in Grafana 10.1.0 or later, while ensuring that the rest of the user profile is always displayed.
 
 ```tsx
 import * as semver from 'semver';
