@@ -56,9 +56,9 @@ Access the final release zip file directly from the GitHub repository release pa
 
 ## Provenance attestation for plugin builds
 
-Provenance attestation, that is, _a feature that generating verifiable records of the build's origin and process_,  enhances the security of your plugin builds. This feature allows users to confirm that the plugin they are installing was created through your official build pipeline.
+Provenance attestation, that is, _a feature that generating verifiable records of the build's origin and process_, enhances the security of your plugin builds. This feature allows users to confirm that the plugin they are installing was created through your official build pipeline.
 
-Currently, this feature is available only with GitHub Actions. While we recommend using GitHub Actions with provenance attestation for improved security, you can still build and distribute plugins using other CI/CD platforms or manual methods.
+Currently, this feature is available only with GitHub Actions in public repositories. While we recommend using GitHub Actions with provenance attestation for improved security, you can still build and distribute plugins using other CI/CD platforms or manual methods.
 
 ### Enable provenance attestation
 
