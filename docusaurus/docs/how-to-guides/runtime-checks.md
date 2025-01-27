@@ -76,7 +76,7 @@ export function ToolbarExtensionPoint() {
 }
 ```
 
-## Example: Conditionally rendering a React component
+## Example: Conditionally render a React component
 
 The `UserIcon` was introduced in Grafana 10.1.0 and does not have a predecessor in earlier versions. To ensure compatibility, you can render the UserIcon component only when it is available in the current runtime environment.
 
