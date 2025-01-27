@@ -33,7 +33,7 @@ function getDataFrame(data: DataFrameDTO) {
 }
 ```
 
-## Example: Conditionally using React hooks
+## Example: Conditionally use React hooks
 
 In Grafana 11.1.0, the synchronous `getPluginLinkExtensions` function was deprecated and replaced by the reactive `usePluginLinks` hook. The following example demonstrates how to dynamically switch between the two APIs based on their availability.
 
