@@ -73,7 +73,7 @@ permissions:
   attestations: write
 ```
 
-2. Enable attestation in the build-plugin action:
+2. Enable attestation in the `build-plugin` action:
 
 ```yaml
 - uses: grafana/plugin-actions/build-plugin@main
