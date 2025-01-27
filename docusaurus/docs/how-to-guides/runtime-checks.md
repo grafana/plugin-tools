@@ -78,7 +78,7 @@ export function ToolbarExtensionPoint() {
 
 ## Example: Conditionally render a React component
 
-The `UserIcon` was introduced in Grafana 10.1.0 and does not have a predecessor in earlier versions. To ensure compatibility, you can render the UserIcon component only when it is available in the current runtime environment.
+The `UserIcon` component was introduced in Grafana 10.1.0 and has no equivalent in earlier versions. To maintain compatibility, render the UserIcon component only if it is available in the current runtime environment.
 
 ```tsx
 import React from 'react';
