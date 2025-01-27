@@ -52,7 +52,7 @@ After you push the tag, you can create the same tag again.
 
 ## Download the release zip file
 
-Access the final release zip file directly from the GitHub repository release path (e.g. https://github.com/org/plugin-id/releases).
+Access the final release zip file directly from the GitHub repository release path (for example, `https://github.com/org/plugin-id/releases`).
 
 ## Provenance attestation for plugin builds
 
