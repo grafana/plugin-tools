@@ -15,7 +15,7 @@ To take advantage of new Grafana features in plugins while maintaining compatibi
 
 The method for performing these runtime checks varies depending on the feature and how it is made available to plugin developers. The following examples demonstrate best practices for handling these scenarios effectively.
 
-## Example: Conditionally invoking functions
+## Example: Conditionally invoke functions
 
 Starting with Grafana 10.1.0, the `@grafana/data` package introduced the `createDataFrame` function, marking the deprecation of the `MutableDataFrame` class. To maintain compatibility with versions prior to 10.1.0, plugins must implement conditional logic to determine whether these APIs are available at runtime.
 
