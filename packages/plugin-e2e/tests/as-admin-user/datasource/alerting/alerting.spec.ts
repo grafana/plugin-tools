@@ -3,6 +3,8 @@ import { test, expect } from '../../../../src';
 
 const skipMsg = 'Alerting rule test API are only compatible with Grafana 9.5.0 and later';
 
+test.use({ featureToggles: { alertingQueryAndExpressionsStepMode: false, alertingNotificationsStepMode: false } });
+
 test.describe('Test new alert rules', () => {
   test('should evaluate to true if query is valid', async ({
     grafanaVersion,
@@ -46,7 +48,6 @@ test.describe('Test new alert rules', () => {
     const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
     await queryA.datasource.set(ds.name);
     const rowCount = await alertRuleEditPage.getByGrafanaSelector(rows).count();
-    semver.gte(grafanaVersion, '11.5.0') && (await page.getByLabel('Advanced options').nth(1).check());
     await alertRuleEditPage.clickAddQueryRow();
     await expect(alertRuleEditPage.getByGrafanaSelector(rows)).toHaveCount(rowCount + 1);
     await alertRuleEditPage.clickAddQueryRow();

@@ -15,7 +15,9 @@ export class DataSourcePicker extends GrafanaPage {
    * Sets the data source picker to the provided name
    */
   async set(name: string) {
-    let datasourcePicker = this.ctx.page.getByTestId(this.ctx.selectors.components.DataSourcePicker.inputV2);
+    let datasourcePicker = (this.root || this.ctx.page).getByTestId(
+      this.ctx.selectors.components.DataSourcePicker.inputV2
+    );
 
     if (semver.lt(this.ctx.grafanaVersion, '10.1.0')) {
       datasourcePicker = this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
