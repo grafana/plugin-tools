@@ -3,6 +3,8 @@ import { test, expect } from '../../../../src';
 
 const skipMsg = 'Alerting rule test API are only compatible with Grafana 9.5.0 and later';
 
+test.use({ featureToggles: { alertingQueryAndExpressionsStepMode: false, alertingNotificationsStepMode: false } });
+
 test.describe('Test new alert rules', () => {
   test('should evaluate to true if query is valid', async ({
     grafanaVersion,
