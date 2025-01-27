@@ -11,7 +11,7 @@ keywords:
 
 # Manage backwards compatibility with runtime checks
 
-To leverage new Grafana features in plugins while ensuring backward compatibility with older versions, plugin authors must implement conditional logic to adapt to feature availability at runtime. Neglecting backward compatibility can lead to plugin crashes and a degraded user experience.
+To take advantage of new Grafana features in plugins while maintaining compatibility with older versions, plugin authors need to implement conditional logic that checks for feature availability during runtime. Failing to account for backward compatibility can result in plugin crashes and a poor user experience.
 
 The approach for performing these runtime checks depends on the specific feature and how it is exposed to plugin developers. Below are examples illustrating how to handle such scenarios effectively.
 
