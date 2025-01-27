@@ -84,7 +84,7 @@ permissions:
 
 The workflow will generate attestations automatically when building your plugin zip file.
 
-### Troubleshooting provenance attestation
+### Troubleshoot provenance attestation
 
 If you encounter errors in the plugin validator or your plugin submission like these:
 
