@@ -1,3 +1,15 @@
+# v1.16.3 (Mon Jan 27 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix datasource picker root locator [#1483](https://github.com/grafana/plugin-tools/pull/1483) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.16.2 (Fri Jan 24 2025)
 
 #### 🐛 Bug Fix
