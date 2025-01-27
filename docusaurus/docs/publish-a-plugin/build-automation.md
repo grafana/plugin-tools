@@ -88,7 +88,7 @@ The workflow will generate attestations automatically when building your plugin 
 
 If you encounter errors in the plugin validator or your plugin submission like these:
 
-- `No provenance attestation. This plugin was built without build verification`
+- "No provenance attestation. This plugin was built without build verification."
 - `Cannot verify plugin build`
 
 Follow the steps above to enable provenance attestation in your GitHub Actions workflow.
