@@ -1,11 +1,11 @@
 import which from 'which';
 import fs from 'node:fs';
-import createDebug from 'debug';
 import { exec } from 'node:child_process';
+import { debug } from './utils.cli.js';
 
 const SDK_GO_MODULE = 'github.com/grafana/grafana-plugin-sdk-go';
 
-const debug = createDebug('create-plugin:update-go');
+const updateGoDebugger = debug.extend('update-go');
 
 export async function updateGoSdkAndModules(exportPath: string) {
   // check if there is a go.mod file in exportPath
@@ -40,7 +40,7 @@ function updateSdk(exportPath: string): Promise<void> {
     const command = `go get ${SDK_GO_MODULE}`;
     exec(command, { cwd: exportPath }, (error) => {
       if (error) {
-        debug(error);
+        updateGoDebugger(error);
         reject();
       }
       resolve();
@@ -54,7 +54,7 @@ function updateGoMod(exportPath: string): Promise<void> {
     const command = `go mod tidy`;
     exec(command, { cwd: exportPath }, (error) => {
       if (error) {
-        debug(error);
+        updateGoDebugger(error);
         reject();
       }
       resolve();
@@ -68,7 +68,7 @@ function getLatestSdkVersion(exportPath: string): Promise<string> {
     const command = `go list -m -json ${SDK_GO_MODULE}@latest`;
     exec(command, { cwd: exportPath }, (error, stdout) => {
       if (error) {
-        debug(error);
+        updateGoDebugger(error);
         reject();
       }
 
@@ -76,7 +76,7 @@ function getLatestSdkVersion(exportPath: string): Promise<string> {
         const version = JSON.parse(stdout).Version;
         resolve(version);
       } catch (e) {
-        debug(e);
+        updateGoDebugger(e);
         reject();
       }
     });
