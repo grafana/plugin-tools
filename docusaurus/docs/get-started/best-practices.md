@@ -76,7 +76,25 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **To generate dynamic apps, consider using [Grafana Scenes](https://grafana.com/developers/scenes/).**
 - **Consider contributing a [UI extension](../key-concepts/ui-extensions)** - UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that can be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
 
-## Publishing a plugin
+## Publish a plugin
 
 - **Add a GitHub badge** - Follow [these steps](https://grafana.com/blog/2024/06/06/6-tips-to-improve-your-grafana-plugin-before-you-publish/#tip-4-add-dynamic-badges-to-your-readme) to help users find your plugin using GitHub badges.
 - **Add workflow automation** - If your plugin is available on GitHub, consider [adding the GitHub workflows](../get-started/set-up-development-environment.mdx#set-up-github-workflows) for plugin development to your repository.
+
+## Manage plugin compatibility
+
+In the Grafana plugin ecosystem, plugin compatibility with specific Grafana versions is determined by the semantic versioning range defined in the `grafanaDependency` property of the plugin's `plugin.json` file. Plugin authors must carefully select a version range that balances broad compatibility with the need for manageable maintenance efforts.
+
+Grafana plugin development present rather unique challenges because many npm dependencies used during compilation are replaced with different versions at runtime. For more details, refer to [Managing Frontend NPM Dependencies in Grafana Plugins](../key-concepts/manage-npm-dependencies.md). This runtime substitution can cause crashes if a plugin relies on APIs that are unavailable in the active Grafana environment. As a result, managing compatibility is a critical and complex aspect of plugin development.
+
+### Best practices
+
+- **Adopt the latest plugin APIs:** Using the latest plugin API versions allows developers to leverage new Grafana features and ensures alignment with the platform's evolving capabilities. It also encourages regular maintenance and updates of plugins and its dependencies.
+- **Maintain a single development branch:** Aim to maintain a single branch for the entire range of Grafana versions supported by the plugin (as specified in the `grafanaDependency`). This approach reduces the maintenance burden and aligns with practices used in the plugin Catalog
+
+Adopting the latest version of the plugin APIs offers significant advantages but also introduces the potential for plugin breakages if not handled carefully. To create robust plugins compatible with the full range of Grafana versions specified in the `grafanaDependency` property, consider the following:
+
+- **Manage backward compatibility with runtime checks:** To utilize new Grafana features while maintaining compatibility with older versions, implement conditional logic that verifies feature availability at runtime. For guidance, see the article on [Runtime Checks](../how-to-guides/runtime-checks.md).
+  <!-- Uncomment when this article is written - **Manage backward compatibility by using the compatibility packge:** -->
+  <!-- Uncomment when this article is written - **Manage backward compatibility by bundling `grafana/ui`:** -->
+- **Perform end-to-end testing using a Grafana version matrix:** Due to Grafana’s dependency sharing mechanism, many plugin related issues only surface at runtime. Such issues can be detected easily by running end-to-end smoke tests across a matrix of Grafana versions corresponding to the range specified in the plugin's `plugin.json`.Continuously testing against Grafana’s main branch helps ensure forward compatibility, enabling plugin maintainers to verify functionality with upcoming Grafana releases.
