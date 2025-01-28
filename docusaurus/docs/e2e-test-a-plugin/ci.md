@@ -19,9 +19,13 @@ import FEPluginNPM from '@snippets/plugin-e2e-fe-plugin-workflow.npm.md';
 import FEPluginYarn from '@snippets/plugin-e2e-fe-plugin-workflow.yarn.md';
 import FEPluginPNPM from '@snippets/plugin-e2e-fe-plugin-workflow.pnpm.md';
 
-Due to Grafana’s [dependency sharing mechanism](../key-concepts/manage-npm-dependencies.md), many plugin-related issues only emerge at runtime. For instance, if a datasource plugin’s query editor calls the `createDataFrame` function (introduced in `grafana/data` version 10.1.0), it will cause crashes on all pages rendering the query editor in Grafana versions prior to 10.1.0, unless proper [fallbacks](../how-to-guides/runtime-checks.md) are implemented.
+This article walks through the process of running end-to-end tests against a matrix of Grafana versions.
 
-These runtime-specific issues cannot be detected through unit tests, but they can be effectively identified by running end-to-end tests. The `grafana/plugin-e2e` library, compatible with all Grafana versions since 8.5, enables developers to write a single test suite that works across multiple Grafana versions. You can then leverage the `e2e-version` GitHub Action to run Playwright tests against a range of versions of Grafana that the plugin supports. This article guides you through setting up a CI workflow using the `e2e-version` matrix.
+## Why you should run end-to-end tests against a matrix of Grafana versions
+
+Due to Grafana’s [dependency sharing mechanism](../key-concepts/manage-npm-dependencies.md), many plugin-related issues only emerge at runtime. For example, if a plugin invokes a function, component or class that is unavailable in the Grafana runtime environment, any page loading that part of the plugin will crash. These runtime-specific issues are beyond the scope of unit tests but can be effectively identified through end-to-end testing.
+
+To ensure both reliability and compatibility, it is essential for plugin developers to continuously run end-to-end tests across the range of Grafana versions they have committed to support. The `e2e-versions` GitHub Action is a tool designed for this purpose. It not only resolves supported versions of Grafana based on your plugin's grafanaDependency, but it also includes the main development branch of Grafana. By incorporating this Action into your CI workflows, you can verify that your plugin is both backward and forward compatible with Grafana, providing confidence in its stability across versions.
 
 ## The e2e-versions Action
 
