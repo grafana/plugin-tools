@@ -11,7 +11,7 @@ keywords:
 
 # Manage backwards compatibility with runtime checks
 
-Most Grafana NPM dependencies used in plugins are shared with the Grafana application at runtime, as detailed in the Manage NPM Dependencies article. To take advantage of new Grafana features in plugins while maintaining compatibility with older versions, plugin authors need to implement conditional logic that checks for feature availability during runtime. Failing to account for backward compatibility can result in plugin crashes and a poor user experience.
+Most Grafana NPM dependencies used in plugins are shared with the Grafana application at runtime, as detailed in the [Manage NPM Dependencies](../key-concepts/manage-npm-dependencies.md) article. To take advantage of new Grafana features in plugins while maintaining compatibility with older versions, plugin authors need to implement conditional logic that checks for feature availability during runtime. Failing to account for backward compatibility can result in plugin crashes and a poor user experience.
 
 The method for performing these runtime checks varies depending on the feature and how it is made available to plugin developers. The following examples demonstrate best practices for handling these scenarios effectively.
 
