@@ -3,19 +3,38 @@ import { test, expect } from '../../../../src';
 
 const skipMsg = 'Alerting rule test API are only compatible with Grafana 9.5.0 and later';
 
-test.use({ featureToggles: { alertingQueryAndExpressionsStepMode: false, alertingNotificationsStepMode: false } });
+test.describe('Test alert rule APIs', () => {
+  test('advanced mode should be enabled', async ({ grafanaVersion, alertRuleEditPage }) => {
+    test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    expect(await alertRuleEditPage.isAdvancedModeSupported()).toBe(true);
+  });
+
+  test('should be possible to enable advanced mode', async ({ grafanaVersion, alertRuleEditPage }) => {
+    test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    await expect(alertRuleEditPage.advancedModeSwitch).not.toBeChecked();
+    await alertRuleEditPage.enableAdvancedQueryMode();
+    await expect(alertRuleEditPage.advancedModeSwitch).toBeChecked();
+  });
+
+  test('should be possible to disable advanced mode', async ({ grafanaVersion, alertRuleEditPage }) => {
+    test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    await alertRuleEditPage.enableAdvancedQueryMode();
+    await expect(alertRuleEditPage.advancedModeSwitch).toBeChecked();
+    await alertRuleEditPage.disableAdvancedQueryMode();
+    await expect(alertRuleEditPage.advancedModeSwitch).not.toBeChecked();
+  });
+});
 
 test.describe('Test new alert rules', () => {
   test('should evaluate to true if query is valid', async ({
     grafanaVersion,
     page,
     alertRuleEditPage,
-    selectors,
     readProvisionedDataSource,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
-    const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
+    const queryA = await alertRuleEditPage.getQueryRow('A');
     await queryA.datasource.set(ds.name);
     await page.getByRole('textbox', { name: 'Query Text' }).fill('some query');
     await expect(alertRuleEditPage.evaluate()).toBeOK();
@@ -29,7 +48,7 @@ test.describe('Test new alert rules', () => {
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
-    const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
+    const queryA = await alertRuleEditPage.getQueryRow('A');
     await queryA.datasource.set(ds.name);
     await page.getByRole('textbox', { name: 'Query Text' }).fill('error');
     await expect(alertRuleEditPage.evaluate()).not.toBeOK();
@@ -45,7 +64,8 @@ test.describe('Test new alert rules', () => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const { rows } = selectors.components.QueryEditorRows;
     const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
-    const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
+    await alertRuleEditPage.enableAdvancedQueryMode();
+    const queryA = await alertRuleEditPage.getQueryRow();
     await queryA.datasource.set(ds.name);
     const rowCount = await alertRuleEditPage.getByGrafanaSelector(rows).count();
     await alertRuleEditPage.clickAddQueryRow();
