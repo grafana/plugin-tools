@@ -27,7 +27,7 @@ The following example uses the `alertRulePage` fixture. With this fixture, the t
 
 ```ts
 test('should evaluate to true if query is valid', async ({ page, alertRuleEditPage, selectors }) => {
-  const queryA = alertRuleEditPage.getAlertRuleQueryRow('A');
+  const queryA = alertRuleEditPage.getQueryRow();
   await queryA.datasource.set('gdev-prometheus');
   await queryA.locator.getByLabel('Code').click();
   await page.waitForFunction(() => window.monaco);
