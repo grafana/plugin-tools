@@ -94,7 +94,7 @@ Grafana plugins are a rather unusual piece of software in the sense that many np
 To ensure robust and reliable plugins, follow these best practices:
 
 - **Adopt the latest plugin APIs:** Using the latest plugin API versions allows developers to leverage new Grafana features and ensures alignment with the platform's evolving capabilities. It also encourages regular maintenance and updates of plugins and its dependencies.
-- **Maintain a single development branch:** Aim to maintain a single branch for the entire range of Grafana versions supported by the plugin (as specified in the `grafanaDependency`). This approach reduces the maintenance burden and aligns with practices used in the plugin Catalog.
+- **Maintain a single development branch:** Aim to maintain a single branch for the entire range of Grafana versions supported by the plugin (as specified in the `grafanaDependency`). This approach reduces the maintenance burden and aligns with practices used in the Grafana plugin catalog.
 - **Manage backward compatibility with runtime checks:** To utilize new Grafana features while maintaining compatibility with older versions, implement conditional logic that verifies feature availability at runtime. For guidance, see the article on [Runtime Checks](../how-to-guides/runtime-checks.md).
   <!-- Uncomment when this article is written - **Manage backward compatibility by using the compatibility packge:** -->
   <!-- Uncomment when this article is written - **Manage backward compatibility by bundling `grafana/ui`:** -->
