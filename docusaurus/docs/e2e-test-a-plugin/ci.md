@@ -21,7 +21,7 @@ import FEPluginPNPM from '@snippets/plugin-e2e-fe-plugin-workflow.pnpm.md';
 
 This article walks through the process of running end-to-end tests against a matrix of Grafana versions.
 
-## Why you should run end-to-end tests against a matrix of Grafana versions
+## Why run end-to-end tests against a matrix of Grafana versions
 
 Due to Grafana’s [dependency sharing mechanism](../key-concepts/manage-npm-dependencies.md), many plugin-related issues only emerge at runtime. For example, if a plugin invokes a function, component or class that is unavailable in the Grafana runtime environment, any page loading that part of the plugin will crash. These runtime-specific issues are beyond the scope of unit tests but can be effectively identified through end-to-end testing.
 
