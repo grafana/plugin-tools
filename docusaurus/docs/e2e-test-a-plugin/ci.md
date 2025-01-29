@@ -25,7 +25,7 @@ This article walks through the process of running end-to-end tests against a mat
 
 Due to Grafana’s [dependency sharing mechanism](../key-concepts/manage-npm-dependencies.md), many plugin-related issues only emerge at runtime. For example, if a plugin invokes a function, component or class that is unavailable in the Grafana runtime environment, any page loading that part of the plugin will crash. These runtime-specific issues are beyond the scope of unit tests but can be effectively identified through end-to-end testing.
 
-To ensure both reliability and compatibility, it is essential for plugin developers to continuously run end-to-end tests across the range of Grafana versions they have committed to support. The `e2e-versions` GitHub Action is a tool designed for this purpose. It not only resolves supported versions of Grafana based on your plugin's grafanaDependency, but it also includes the main development branch of Grafana. By incorporating this Action into your CI workflows, you can verify that your plugin is both backward and forward compatible with Grafana, providing confidence in its stability across versions.
+To maintain reliability and compatibility, plugin developers must regularly perform end-to-end tests across all supported Grafana versions. The `e2e-versions` GitHub Action simplifies this process by automatically resolving supported Grafana versions based on your plugin's `grafanaDependency`, while also including Grafana's main development branch. Integrating this Action into your CI workflows ensures your plugin remains stable and compatible with both older and newer versions of Grafana, giving you confidence in its functionality across versions."
 
 ## The e2e-versions Action
 
