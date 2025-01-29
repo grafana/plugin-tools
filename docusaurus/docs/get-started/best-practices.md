@@ -87,7 +87,7 @@ In the Grafana plugin ecosystem, plugin compatibility with specific Grafana vers
 
 ### Unique challenges in plugin development
 
-Grafana plugins are a rather unusual piece of software in the sense that many npm dependencies used during compilation are replaced with different versions at runtime. For more details, refer to [Managing Frontend NPM Dependencies in Grafana Plugins](../key-concepts/manage-npm-dependencies.md). This runtime substitution can cause crashes if a plugin relies on APIs that are unavailable in the active Grafana environment. As a result, managing compatibility is a critical and complex aspect of plugin development.
+Grafana plugins are a rather unusual piece of software in the sense that many npm dependencies used during compilation are replaced with different versions at runtime. For more details, refer to [Frontend NPM dependencies in a Grafana plugin](../key-concepts/manage-npm-dependencies.md). This runtime substitution can cause crashes if a plugin relies on APIs that are unavailable in the active Grafana environment. As a result, managing compatibility is a critical and complex aspect of plugin development.
 
 ### Best practices for managing plugin compatibility
 
