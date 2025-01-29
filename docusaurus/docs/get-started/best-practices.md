@@ -46,7 +46,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Practice good front-end design** - When building frontend components, make sure to use [Grafana components](https://developers.grafana.com/ui/latest/index.html?path=/docs/docs-overview-intro--page) as the base and follow the [Saga Design System](https://grafana.com/developers/saga/about/overview).
 - **Add query editor help** - Query editors can be complex and it's useful to provide help to users. For more information, refer to [Add query editor help](../how-to-guides/data-source-plugins/add-query-editor-help).
 - **Skip hidden or empty queries** - This avoids executing unnecessary or wrong queries. Data sources implementing [`DataSourceWithBackend`](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b23645251997088ac7a1707a72d3fd9248/examples/datasource-basic/src/datasource.ts#L5) only need to implement the method `filterQuery`. Refer to this [example](https://github.com/grafana/grafana/blob/fd5f66083c91b9759ae7772f99b80c9342b93290/public/app/plugins/datasource/loki/datasource.ts#L1085).
-- **Specify a default query** - Default queries can help users to discover how queries are written for the plugin. Refer to this [example](https://github.com/grafana/grafana-plugin-examples/blob/0532f8b/examples/datasource-streaming-backend-websocket/streaming-backend-websocket-plugin/src/datasource.ts#L39-L41).
+- **Specify a default query** - Default queries can help users to discover how queries are written for the plugin.
 
 ### Frontend (only) plugins
 
