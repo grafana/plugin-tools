@@ -1,3 +1,15 @@
+# v5.14.0 (Tue Jan 28 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Extend the docker-compose file [#1485](https://github.com/grafana/plugin-tools/pull/1485) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v5.13.0 (Mon Jan 13 2025)
 
 #### 🚀 Enhancement
