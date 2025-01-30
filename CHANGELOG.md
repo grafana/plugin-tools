@@ -1,3 +1,22 @@
+# (Tue Jan 28 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.14.0`
+  - Create Plugin: Extend the docker-compose file [#1485](https://github.com/grafana/plugin-tools/pull/1485) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.17.0`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-220285 [#1486](https://github.com/grafana/plugin-tools/pull/1486) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # (Mon Jan 27 2025)
 
 #### 🐛 Bug Fix

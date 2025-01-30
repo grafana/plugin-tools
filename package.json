@@ -28,7 +28,7 @@
     "@auto-it/omit-commits": "11.3.0",
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^8.0.0",
-    "@swc/core": "^1.10.11",
+    "@swc/core": "^1.10.12",
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/recommended": "^1.0.8",
     "@types/node": "22.12.0",
