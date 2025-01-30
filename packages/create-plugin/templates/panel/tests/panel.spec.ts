@@ -23,6 +23,7 @@ test('should display circle when data is passed to the panel', async ({
 test('should display series counter when "Show series counter" option is enabled', async ({
   gotoPanelEditPage,
   readProvisionedDashboard,
+  page,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
