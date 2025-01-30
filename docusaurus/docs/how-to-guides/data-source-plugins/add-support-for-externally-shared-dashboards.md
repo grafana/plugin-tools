@@ -38,19 +38,23 @@ To make your data source plugin work in an externally shared dashboard scope, fo
 
 2.  Implement the `query` method with your customized code, if necessary. Don't transform the request body if this will change the backend query response (targets property). This body won't be passed as argument when calling the shared externally dashboard endpoint.
 
-3.  In the `query` method, call `super.query(request)`.
+    Then, call `super.query(request)`.
     This is where the externally shared dashboard endpoint is called.
 
           ```ts
         export class MyDataSourceClass extends DataSourceWithBackend<TQuery, TOptions> {
 
            query(request: DataQueryRequest<TQuery>): Observable<DataQueryResponse> {
-            // your logic
-             return super.query(request);
+             // your logic
+             return super.query(request).pipe(
+                map((response) => {
+                    // your logic
+                })
+             );
            }
         }
 
-4.  Add `"backend": true` to your `plugin.json`
+3.  Add `"backend": true` to your `plugin.json`
 
     ```json title="src/plugin.json"
     "backend": true
