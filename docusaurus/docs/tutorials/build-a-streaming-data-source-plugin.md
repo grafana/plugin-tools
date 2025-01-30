@@ -26,7 +26,7 @@ The following image shows a panel using this data source:
 
 ![Grafana streaming data source.](/img/streaming-data-source.gif)
 
-The code we will build together is a simplified version of the [Streaming Data Source with WebSockets](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-backend-websocket/streaming-backend-websocket-plugin) example. Note that we aren't using WebSockets, but otherwise you can reference this code when following along with this tutorial.
+The code we will build together is a simplified version of the [Streaming Data Source with WebSockets](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-websocket/streaming-websocket-plugin) example. Note that we aren't using WebSockets, but otherwise you can reference this code when following along with this tutorial.
 
 ## Step 1: Scaffold the plugin
 
