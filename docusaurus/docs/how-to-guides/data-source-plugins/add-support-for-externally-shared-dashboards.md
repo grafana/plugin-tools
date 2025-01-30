@@ -36,10 +36,10 @@ To make your data source plugin work in an externally shared dashboard scope, fo
     }
     ```
 
-2.  Implement the `query` method with your customized code, if necessary. Don't transform the request body if this will change the backend query response (targets property). This body won't be passed as argument when calling shared externally dashboard endpoint.
+2.  Implement the `query` method with your customized code, if necessary. Don't transform the request body if this will change the backend query response (targets property). This body won't be passed as argument when calling the shared externally dashboard endpoint.
 
 3.  In the `query` method, call `super.query(request)`.
-    This is where externally shared dashboard endpoint is called.
+    This is where the externally shared dashboard endpoint is called.
 
           ```ts
         export class MyDataSourceClass extends DataSourceWithBackend<TQuery, TOptions> {
