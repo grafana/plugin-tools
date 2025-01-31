@@ -6,8 +6,9 @@ on:
     - cron: '0 11 * * *' #Run e2e tests once a day at 11 UTC
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
 
 jobs:
   resolve-versions:
@@ -61,13 +62,22 @@ jobs:
         id: run-tests
         run: yarn playwright test
 
-      # Uncomment this step to upload the Playwright report to Github artifacts.
-      # If your repository is public, the report will be public on the Internet so beware not to expose sensitive information.
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v4
-      #   if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
-      #   with:
-      #     name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
-      #     path: playwright-report/
-      #     retention-days: 30
+      - name: Upload e2e test summary
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@gh-pages
+        if: ${{ (always() && !cancelled()) }}
+        with:
+          upload-report: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-outcome: ${{ steps.run-tests.outcome }}
+
+  publish-report:
+    if: ${{ (always() && !cancelled()) }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@gh-pages
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
