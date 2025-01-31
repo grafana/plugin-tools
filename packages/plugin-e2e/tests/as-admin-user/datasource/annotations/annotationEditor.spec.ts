@@ -14,7 +14,6 @@ test('should be able to add a new annotation when annotations already exist', as
   request,
   readProvisionedDashboard,
 }, testInfo) => {
-  test.fail(semver.gte(grafanaVersion, '11.3.0'));
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource-annotations.json' });
   const annotationPage = new AnnotationPage({ page, selectors, grafanaVersion, request, testInfo }, dashboard);
   await annotationPage.goto();
