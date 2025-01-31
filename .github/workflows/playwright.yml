@@ -82,9 +82,22 @@ jobs:
         id: run-tests
         run: npm run playwright:test --w @grafana/plugin-e2e
 
-      - name: Publish report to GCS
-        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-tests.outcome == 'failure') }}
-        uses: grafana/plugin-actions/publish-report@main
+      - name: Upload e2e test summary
+        ## todo: change to main branch once the pr is merged
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@gh-pages
+        if: ${{ (always() && !cancelled()) }}
         with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-          path: packages/plugin-e2e/playwright-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-outcome: ${{ steps.run-tests.outcome }}
+
+  publish-report:
+    if: ${{ (always() && !cancelled()) }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        ## todo: change to main branch once the pr is merged
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@gh-pages
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
