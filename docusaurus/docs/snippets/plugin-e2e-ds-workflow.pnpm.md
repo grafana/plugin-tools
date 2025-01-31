@@ -6,9 +6,8 @@ on:
     - cron: '0 11 * * *' #Run e2e tests once a day at 11 UTC
 
 permissions:
-  contents: write
+  contents: read
   id-token: write
-  pull-requests: write
 
 jobs:
   resolve-versions:
