@@ -1,3 +1,32 @@
+# (Fri Jan 31 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.17.1`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-221187 [#1505](https://github.com/grafana/plugin-tools/pull/1505) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Jan 31 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.14.1`
+  - CreatePlugin: Update that panel plugin template uses new panel edit options [#1502](https://github.com/grafana/plugin-tools/pull/1502) ([@mckn](https://github.com/mckn))
+  - chore(deps): update dependency @grafana/e2e-selectors to v11.5.0 [#1492](https://github.com/grafana/plugin-tools/pull/1492) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Jan 28 2025)
 
 #### 🚀 Enhancement
