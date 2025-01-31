@@ -80,6 +80,15 @@ The example workflow above demonstrates how to deploy the HTML reports to GitHub
 
 To enable this feature, you must first set the `upload-report` input in the `upload-report-artifacts` Action to `true`, based on the example workflow provided earlier in this document. This will publish the report to your repository's GitHub Pages site, making it easily accessible for review.
 
+In addition, you need to change the permissions of your workflow to include the following:
+
+```yml
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+```
+
 ### Important considerations
 
 - **GitHub Pages Branch Configuration**: If you haven't already enabled GitHub Pages for your repository, you need to configure a source branch for deployment. Follow the detailed instructions [here](https://github.com/grafana/plugin-actions/tree/main/playwright-gh-pages#github-pages-branch-configuration) to set it up.
@@ -91,3 +100,7 @@ To enable this feature, you must first set the `upload-report` input in the `upl
 The `publish-report` job adds a PR comment summarizing all the tests executed as part of the matrix. For tests that failed, the comment includes links to the GitHub Pages website, where the detailed reports can be browsed.
 
 ![](/img/e2e-report-summary.png)
+
+```
+
+```
