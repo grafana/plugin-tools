@@ -51,7 +51,7 @@ export class AlertRuleEditPage extends GrafanaPage {
 
   /*
    * Enables the advanced mode for the query and expression step.
-   * Only available in Grafana 11.5.0 and later. If advanced mode is not supported, this method will do nothing.
+   * Only available in Grafana 11.6.0 and later. If advanced mode is not supported, this method will do nothing.
    */
   async enableAdvancedQueryMode() {
     const advancedModeSupported = await this.isAdvancedModeSupported();
@@ -67,7 +67,7 @@ export class AlertRuleEditPage extends GrafanaPage {
 
   /*
    * Disabled the advanced mode for the query and expression step.
-   * Advanced mode is enabled by default in Grafana 11.5.0 and later.
+   * Advanced mode is enabled by default in Grafana 11.6.0 and later.
    */
   async disableAdvancedQueryMode() {
     const advancedModeSupported = await this.isAdvancedModeSupported();
@@ -101,8 +101,8 @@ export class AlertRuleEditPage extends GrafanaPage {
    * @deprecated Use getQueryRow instead
    * Returns an instance of the {@link AlertRuleQuery} class for a query in the query and expression step (step 2)
    *
-   * @param refId is optional. If not provided, it will return query row with refId 'A' in Grafana versions <11.5.
-   * In Grafana versions >=11.5 where advanced mode is supported, it will return the default query if advanced mode
+   * @param refId is optional. If not provided, it will return query row with refId 'A' in Grafana versions <11.6.
+   * In Grafana versions >=11.6 where advanced mode is supported, it will return the default query if advanced mode
    * is not enabled. If advanced mode is enabled, it will return the a query by refId.
    */
   getAlertRuleQueryRow(refId = 'A'): AlertRuleQuery {
@@ -116,13 +116,13 @@ export class AlertRuleEditPage extends GrafanaPage {
   /**
    * Clicks the "Add query" button and returns an instance of the {@link AlertRuleQuery} class for the new query row.
    *
-   * Since Grafana 11.5, this method is only available if advanced mode is enabled. Use enableQueryAdvancedMode() method to enable it.
+   * Since Grafana 11.6, this method is only available if advanced mode is enabled. Use enableQueryAdvancedMode() method to enable it.
    */
   async clickAddQueryRow(): Promise<AlertRuleQuery> {
     const advancedModeSupported = await this.isAdvancedModeSupported();
     if (advancedModeSupported && !(await this.advancedModeSwitch.isChecked())) {
       throw new Error(
-        'Since Grafana 11.5, you need to enable advanced mode to add queries. Use enableQueryAdvancedMode() method to enable it.'
+        'Since Grafana 11.6, you need to enable advanced mode to add queries. Use enableQueryAdvancedMode() method to enable it.'
       );
     }
 

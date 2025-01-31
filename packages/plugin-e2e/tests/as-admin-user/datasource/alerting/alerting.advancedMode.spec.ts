@@ -5,19 +5,19 @@ const skipMsg = 'Alerting rule test API are only compatible with Grafana 9.5.0 a
 
 test.describe('Test alert rule APIs', () => {
   test('advanced mode should be enabled', async ({ grafanaVersion, alertRuleEditPage }) => {
-    test.skip(semver.lt(grafanaVersion, '11.5.0'), 'Advanced mode is not supported in Grafana versions < 11.5.0');
+    test.skip(semver.lt(grafanaVersion, '11.6.0'), 'Advanced mode is not supported in Grafana versions < 11.6.0');
     expect(await alertRuleEditPage.isAdvancedModeSupported()).toBe(true);
   });
 
   test('should be possible to enable advanced mode', async ({ grafanaVersion, alertRuleEditPage }) => {
-    test.skip(semver.lt(grafanaVersion, '11.5.0'), 'Advanced mode is not supported in Grafana versions < 11.5.0');
+    test.skip(semver.lt(grafanaVersion, '11.6.0'), 'Advanced mode is not supported in Grafana versions < 11.6.0');
     await expect(alertRuleEditPage.advancedModeSwitch).not.toBeChecked();
     await alertRuleEditPage.enableAdvancedQueryMode();
     await expect(alertRuleEditPage.advancedModeSwitch).toBeChecked();
   });
 
   test('should be possible to disable advanced mode', async ({ grafanaVersion, alertRuleEditPage }) => {
-    test.skip(semver.lt(grafanaVersion, '11.5.0'), 'Advanced mode is not supported in Grafana versions < 11.5.0');
+    test.skip(semver.lt(grafanaVersion, '11.6.0'), 'Advanced mode is not supported in Grafana versions < 11.6.0');
     await alertRuleEditPage.enableAdvancedQueryMode();
     await expect(alertRuleEditPage.advancedModeSwitch).toBeChecked();
     await alertRuleEditPage.disableAdvancedQueryMode();
