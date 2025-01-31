@@ -1,6 +1,3 @@
-// ONLY FOR DRAFT - DELETE BEFORE MERGE
-// -------------------------------------
-
 import migrate from './example-migration.js';
 import { createDefaultContext } from '../test-utils.js';
 
