@@ -71,7 +71,7 @@ jobs:
         run: npx playwright test
 
       - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@gh-pages
+        uses: grafana/plugin-actions/playwright-main/upload-report-artifacts@main
         if: ${{ (always() && !cancelled()) }}
         with:
           upload-report: false
@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@gh-pages
+        uses: grafana/plugin-actions/playwright-main/deploy-report-pages@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
