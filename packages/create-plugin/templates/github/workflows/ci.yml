@@ -207,7 +207,7 @@ jobs:
 
       - name: Upload e2e test summary
         uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
-        if: ${{ (always() && !cancelled()) }}
+        if: $\{{ always() && !cancelled() }}
         with:
           upload-report: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -231,7 +231,7 @@ jobs:
       #     retention-days: 5
 
   publish-report:
-    if: ${{ (always() && !cancelled()) }}
+    if: $\{{ always() && !cancelled() }}
     needs: [playwright-tests]
     runs-on: ubuntu-latest
     steps:
