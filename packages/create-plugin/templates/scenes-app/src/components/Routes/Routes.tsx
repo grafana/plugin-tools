@@ -1,6 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { prefixRoute } from '../../utils/utils.routing';
+import { Route, Routes as RoutesOriginal } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 const HomePage = React.lazy(() => import('../../pages/Home/Home'));
 const PageWithTabs = React.lazy(() => import('../../pages/WithTabs/WithTabs'));
@@ -9,12 +8,12 @@ const HelloWorld = React.lazy(() => import('../../pages/HelloWorld/HelloWorld'))
 
 export const Routes = () => {
   return (
-    <Switch>
-      <Route path={prefixRoute(`${ROUTES.WithTabs}`)} component={PageWithTabs} />
-      <Route path={prefixRoute(`${ROUTES.WithDrilldown}`)} component={WithDrilldown} />
-      <Route path={prefixRoute(`${ROUTES.Home}`)} component={HomePage} />
-      <Route path={prefixRoute(`${ROUTES.HelloWorld}`)} component={HelloWorld} />
-      <Redirect to={prefixRoute(ROUTES.Home)} />
-    </Switch>
+    <RoutesOriginal>
+      <Route path={ROUTES.WithTabs} element={<PageWithTabs />} />
+      <Route path={ROUTES.WithDrilldown} element={<WithDrilldown />} />
+      <Route path={ROUTES.Home} element={<HomePage />} />
+      <Route path={ROUTES.HelloWorld} element={<HelloWorld />} />
+      <Route path="/" element={<HomePage />} />
+    </RoutesOriginal>
   );
 };
