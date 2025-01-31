@@ -24,7 +24,7 @@ To write end-to-end tests similar to the ones in this guide, you'll need the `Te
 
 ## Test panel options
 
-To test your panel’s behavior, we recommend provisioning a dashboard with multiple panels that demonstrate different states of your panel. This approach allows you to verify that the panel behaves as expected across various configurations. The key benefit is that your tests won’t rely on the Grafana panel edit options UI, which minimizes the risk of failures due to Grafana UI changes, making your tests more stable and robust.
+To test your panel’s behavior, we recommend [provisioning a dashboard](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/setup-resources) with multiple panels that demonstrate different states of your panel. This approach allows you to verify that the panel behaves as expected across various configurations. The key benefit is that your tests won’t rely on the Grafana panel edit options UI, which minimizes the risk of failures due to Grafana UI changes, making your tests more stable and robust.
 
 In cases where interacting with the panel edit options is necessary, we provide a set of APIs to simplify writing tests. These APIs ensure your tests will run consistently across different versions of Grafana without requiring changes.
 
