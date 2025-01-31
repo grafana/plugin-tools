@@ -89,6 +89,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-outcome: ${{ steps.run-tests.outcome }}
+          report-dir: packages/plugin-e2e/playwright-report
 
   publish-report:
     if: ${{ (always() && !cancelled()) }}
