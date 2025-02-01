@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 
 import { SceneApp, SceneAppPage } from '@grafana/scenes';
 import { getBasicScene } from './scenes';
-import { prefixRoute } from '../../utils/utils.routing';
-import { DATASOURCE_REF, ROUTES } from '../../constants';
+import { DATASOURCE_REF, URLS } from '../../constants';
 import { config } from '@grafana/runtime';
 import { Alert } from '@grafana/ui';
 
@@ -14,7 +13,8 @@ const getScene = () => {
         title: 'Home page',
         subTitle:
           'This scene showcases a basic scene functionality, including query runner, variable and a custom scene object.',
-        url: prefixRoute(ROUTES.Home),
+        url: URLS.Home,
+        routePath: '*',
         getScene: () => {
           return getBasicScene();
         },

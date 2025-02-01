@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { prefixRoute } from '../../utils/utils.routing';
-import { DATASOURCE_REF, ROUTES } from '../../constants';
+import { DATASOURCE_REF, URLS } from '../../constants';
 import {
   EmbeddedScene,
   SceneApp,
@@ -55,17 +54,19 @@ const getDrilldownsAppScene = () => {
         title: 'Page with drilldown',
         subTitle: 'This scene showcases a basic drilldown functionality. Interact with room to see room details scene.',
         controls: [new SceneTimePicker({ isOnCanvas: true })],
-        url: prefixRoute(`${ROUTES.WithDrilldown}`),
+        url: URLS.WithDrilldown,
+        routePath: '*',
         hideFromBreadcrumbs: true,
         getScene,
         drilldowns: [
           {
-            routePath: prefixRoute(`${ROUTES.WithDrilldown}`) + '/room/:roomName',
+            routePath: 'room/:roomName/*',
             getPage(routeMatch, parent) {
               const roomName = routeMatch.params.roomName;
 
               return new SceneAppPage({
-                url: prefixRoute(`${ROUTES.WithDrilldown}`) + `/room/${roomName}/temperature`,
+                url: `${URLS.WithDrilldown}/room/${roomName}/temperature`,
+                routePath: `room/:roomName/*`,
                 title: `${roomName} overview`,
                 subTitle: 'This scene is a particular room drilldown. It implements two tabs to organise the data.',
                 getParentPage: () => parent,
@@ -75,12 +76,14 @@ const getDrilldownsAppScene = () => {
                 tabs: [
                   new SceneAppPage({
                     title: 'Temperature',
-                    url: prefixRoute(`${ROUTES.WithDrilldown}`) + `/room/${roomName}/temperature`,
+                    url: `${URLS.WithDrilldown}/room/${roomName}/temperature`,
+                    routePath: `temperature`,
                     getScene: () => getTemperatureOverviewScene(roomName),
                   }),
                   new SceneAppPage({
                     title: 'Humidity',
-                    url: prefixRoute(`${ROUTES.WithDrilldown}`) + `/room/${roomName}/humidity`,
+                    url: `${URLS.WithDrilldown}/room/${roomName}/humidity`,
+                    routePath: `humidity`,
                     getScene: () => getHumidityOverviewScene(roomName),
                   }),
                 ],
