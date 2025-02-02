@@ -210,8 +210,8 @@ jobs:
         if: $\{{ always() && !cancelled() }}
         with:
           upload-report: false
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-outcome: ${{ steps.run-tests.outcome }}
+          github-token: $\{{ secrets.GITHUB_TOKEN }}
+          test-outcome: $\{{ steps.run-tests.outcome }}
 
       - name: Docker logs
         if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
@@ -239,5 +239,5 @@ jobs:
       - name: Publish report
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: $\{{ secrets.GITHUB_TOKEN }}
 
