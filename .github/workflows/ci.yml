@@ -265,11 +265,13 @@ jobs:
         run: exit 1
 
   publish-report:
-    if: ${{ always() }}
+    if: ${{ always() && !cancelled() }}
     needs: [generate-plugins]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: echo
+        run: 'github.event.number: ${{ github.event.number }}'
       - name: Publish report
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
