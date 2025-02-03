@@ -48,7 +48,7 @@
     "node": ">=18.8.0"
   },
   "dependencies": {
-    "@grafana/levitate": "^0.15.0",
+    "@grafana/levitate": "^0.16.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "22.10.10",
     "debug": "^4.3.4",
