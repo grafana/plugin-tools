@@ -172,7 +172,7 @@ jobs:
 
       - name: Upload e2e test summary (latest)
         uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
-        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests.outcome == 'failure') }}
+        if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           report-dir: ./${{ matrix.workingDir }}/playwright-report
           grafana-version: latest
@@ -214,7 +214,7 @@ jobs:
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
         uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
-        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests-min-version.outcome == 'failure') }}
+        if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           report-dir: ./${{ matrix.workingDir }}/playwright-report
           grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
