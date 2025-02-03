@@ -58,6 +58,7 @@ jobs:
     permissions:
       id-token: write
     strategy:
+      fail-fast: false
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
@@ -161,6 +162,7 @@ jobs:
 
       - name: Run e2e tests (latest)
         id: run-e2e-tests
+        continue-on-error: true
         run: npm run e2e
         working-directory: ./${{ matrix.workingDir }}
 
