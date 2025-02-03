@@ -32,8 +32,8 @@
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/recommended": "^1.0.8",
     "@types/node": "22.13.0",
-    "@typescript-eslint/eslint-plugin": "^8.22.0",
-    "@typescript-eslint/parser": "^8.22.0",
+    "@typescript-eslint/eslint-plugin": "^8.23.0",
+    "@typescript-eslint/parser": "^8.23.0",
     "auto": "11.3.0",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
@@ -46,7 +46,7 @@
     "nodemon": "^3.1.9",
     "prettier": "3.4.2",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.4"
+    "vitest": "^3.0.5"
   },
   "engines": {
     "node": ">=20"
