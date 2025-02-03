@@ -1,3 +1,30 @@
+# v5.14.1 (Fri Jan 31 2025)
+
+#### 🐛 Bug Fix
+
+- CreatePlugin: Update that panel plugin template uses new panel edit options [#1502](https://github.com/grafana/plugin-tools/pull/1502) ([@mckn](https://github.com/mckn))
+- chore(deps): update dependency @grafana/e2e-selectors to v11.5.0 [#1492](https://github.com/grafana/plugin-tools/pull/1492) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v5.14.0 (Tue Jan 28 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Extend the docker-compose file [#1485](https://github.com/grafana/plugin-tools/pull/1485) ([@oshirohugo](https://github.com/oshirohugo))
+
+#### Authors: 1
+
+- Hugo Kiyodi Oshiro ([@oshirohugo](https://github.com/oshirohugo))
+
+---
+
 # v5.13.0 (Mon Jan 13 2025)
 
 #### 🚀 Enhancement

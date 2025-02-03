@@ -52,7 +52,46 @@ After you push the tag, you can create the same tag again.
 
 ## Download the release zip file
 
-Access the final release zip file directly from the GitHub repository release path (e.g. https://github.com/org/plugin-id/releases).
+Access the final release zip file directly from the GitHub repository release path (for example, `https://github.com/org/plugin-id/releases`).
+
+## Provenance attestation for plugin builds
+
+Provenance attestation, that is, _a feature that generating verifiable records of the build's origin and process_, enhances the security of your plugin builds. This feature allows users to confirm that the plugin they are installing was created through your official build pipeline.
+
+Currently, this feature is available only with GitHub Actions in public repositories. While we recommend using GitHub Actions with provenance attestation for improved security, you can still build and distribute plugins using other CI/CD platforms or manual methods.
+
+### Enable provenance attestation
+
+To enable provenance attestation in your existing GitHub Actions workflow:
+
+1. Add required permissions to your workflow job:
+
+```yaml
+permissions:
+  id-token: write
+  contents: write
+  attestations: write
+```
+
+2. Enable attestation in the `build-plugin` action:
+
+```yaml
+- uses: grafana/plugin-actions/build-plugin@main
+  with:
+    policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+    attestation: true
+```
+
+The workflow will generate attestations automatically when building your plugin zip file.
+
+### Troubleshoot provenance attestation
+
+If you encounter errors in the plugin validator or your plugin submission like these:
+
+- "No provenance attestation. This plugin was built without build verification."
+- "Cannot verify plugin build."
+
+Follow the steps above to enable provenance attestation in your GitHub Actions workflow.
 
 ## Next steps
 
