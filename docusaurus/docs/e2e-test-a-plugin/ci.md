@@ -74,7 +74,7 @@ queryString="current-package-manager"
 
 ## Publish Playwright reports to GitHub Pages
 
-The Playwright [HTML report](https://playwright.dev/docs/test-reporters#html-reporter), along with the [Trace Viewer](https://playwright.dev/docs/trace-viewer), provides powerful tools for troubleshooting issues found during the execution of end-to-end test. Ths section explains how to deploy these reports to GitHub's static site hosting service GitHub Pages, making them immediately accessible for review after tests complete.
+The Playwright [HTML report](https://playwright.dev/docs/test-reporters#html-reporter), along with the [Trace Viewer](https://playwright.dev/docs/trace-viewer), provides powerful tools for troubleshooting issues found during the execution of end-to-end test. This section explains how to deploy these reports to GitHub's static site hosting service GitHub Pages, making them immediately accessible for review after tests complete.
 
 This guide is based on the example workflow provided earlier in this document.
 

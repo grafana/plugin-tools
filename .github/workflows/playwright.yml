@@ -84,22 +84,20 @@ jobs:
         run: npm run playwright:test --w @grafana/plugin-e2e
 
       - name: Upload e2e test summary
-        ## todo: change to main branch once the pr is merged
         uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
-        if: ${{ (always() && !cancelled()) }}
+        if: ${{ always() && !cancelled() }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-outcome: ${{ steps.run-tests.outcome }}
           report-dir: packages/plugin-e2e/playwright-report
 
   publish-report:
-    if: ${{ (always() && !cancelled()) }}
+    if: ${{ always() && !cancelled() }}
     needs: [playwright-tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Publish report
-        ## todo: change to main branch once the pr is merged
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
