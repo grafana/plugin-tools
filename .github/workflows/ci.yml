@@ -176,7 +176,7 @@ jobs:
         with:
           plugin-name: ${{ matrix.workingDir }}
           report-dir: ./${{ matrix.workingDir }}/playwright-report
-          grafana-version: ${{matrix.workingDir}}-latest
+          grafana-version: latest
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests.outcome }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
