@@ -175,7 +175,7 @@ jobs:
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           report-dir: ./${{ matrix.workingDir }}/playwright-report
-          grafana-version: latest
+          grafana-version: ${{matrix.workingDir}}-latest
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests.outcome }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -217,7 +217,7 @@ jobs:
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           report-dir: ./${{ matrix.workingDir }}/playwright-report
-          grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
+          grafana-version: ${{matrix.workingDir}}-${{ steps.min-version.outputs.MIN_VERSION }}
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
