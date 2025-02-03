@@ -2,8 +2,9 @@ name: Node CI
 on: [push]
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
 
 jobs:
   test:
@@ -167,12 +168,15 @@ jobs:
         run: docker stop ${{ matrix.workingDir }} && docker rm ${{ matrix.workingDir }} docker compose rm -f
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Publish report to GCS (latest)
+      - name: Upload e2e test summary (latest)
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
         if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests.outcome == 'failure') }}
-        uses: grafana/plugin-actions/publish-report@main
         with:
-          grafana-version: latest-${{ matrix.workingDir }}
-          path: ./${{ matrix.workingDir }}/playwright-report
+          report-dir: ./${{ matrix.workingDir }}/playwright-report
+          grafana-version: latest
+          grafana-image: grafana-enterprise
+          test-outcome: ${{ steps.run-e2e-tests.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get plugin min version
         id: min-version
@@ -206,12 +210,16 @@ jobs:
         run: docker stop ${{ matrix.workingDir }} && docker rm ${{ matrix.workingDir }} docker compose rm -f
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Publish report to GCS (${{ steps.min-version.outputs.MIN_VERSION }})
+      - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
         if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-e2e-tests-min-version.outcome == 'failure') }}
-        uses: grafana/plugin-actions/publish-report@main
         with:
-          grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}-${{ matrix.workingDir }}
-          path: ./${{ matrix.workingDir }}/playwright-report
+          report-dir: ./${{ matrix.workingDir }}/playwright-report
+          grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
+          grafana-image: grafana-enterprise
+          test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check plugin.json
         run: |
           cp -r dist/ ${{ matrix.workingDir }}
@@ -247,6 +255,17 @@ jobs:
           sed -i '/^work\/$/d' .gitignore
           npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
         working-directory: ./${{ matrix.workingDir }}
+
+  publish-report:
+    if: ${{ always() }}
+    needs: [generate-plugins]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     runs-on: ubuntu-latest
