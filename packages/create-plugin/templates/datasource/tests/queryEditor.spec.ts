@@ -1,9 +1,7 @@
-import * as semver from 'semver';
 import { test, expect } from '@grafana/plugin-e2e';
 
 
-test('smoke: should render query editor', async ({ panelEditPage, readProvisionedDataSource,grafanaVersion }) => {
-  test.fail(semver.gte(grafanaVersion, '11.3.0'));
+test('smoke: should render query editor', async ({ panelEditPage, readProvisionedDataSource }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   await panelEditPage.datasource.set(ds.name);
   await expect(panelEditPage.getQueryEditorRow('A').getByRole('textbox', { name: 'Query Text' })).toBeVisible();
