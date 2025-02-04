@@ -40,7 +40,7 @@
    # Spins up a Grafana instance first that we tests against
    {{ packageManagerName }} run server
 
-   # If you wish to start a certain Grafana version
+   # If you wish to start a certain Grafana version. If not specified will use latest by default
    GRAFANA_VERSION=11.3.0 {{ packageManagerName }} run server
 
    # Starts the tests
