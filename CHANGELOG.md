@@ -1,5 +1,18 @@
 # (Tue Feb 04 2025)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.15.1`, `@grafana/plugin-types-bundler@0.2.4`
+  - fix(deps): update grafana dependencies [#1508](https://github.com/grafana/plugin-tools/pull/1508) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Tue Feb 04 2025)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@1.18.0`

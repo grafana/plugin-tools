@@ -1,3 +1,15 @@
+# v0.2.4 (Tue Feb 04 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update grafana dependencies [#1508](https://github.com/grafana/plugin-tools/pull/1508) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v0.1.0 (Tue Nov 26 2024)
 
 #### 🐛 Bug Fix
