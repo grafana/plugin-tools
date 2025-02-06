@@ -18,37 +18,113 @@ keywords:
 We recommend setting up your plugin to use the supplied [Github workflows](../get-started/set-up-development-environment.mdx#set-up-github-workflows) from [create-plugin](../get-started/get-started.mdx)
 to ensure that your plugin will be built and packaged in the correct format.
 
-To do so, refer to [these docs](https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md).
-
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
 If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission.
 
 By creating a release tag, the whole process becomes automated, resulting in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins)
 
-The zip file can be downloaded from the summary page of the CI workflow.
+You can use the links to the archive and zip files from the release page to make your plugin submission.
 
-## Create a release tag
+## Setup the release workflow
 
-A tag with the format `vX.X.X` is used to trigger the release workflow. Typically all of your changes will be merged into `main`, and the tag is applied to `main`
+Make sure you have a file named `.github/workflows/release.yml` in your repository with the following contents:
+
+```yaml title=".github/workflows/release.yml"
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
+
+jobs:
+  release:
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: grafana/plugin-actions/build-plugin@main
+        with:
+          # see https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token to generate it
+          # save the value in your repository secrets
+          policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+          # creates a signed build provenance attestation to verify the authenticity of the plugin build
+          attestation: true
+```
+
+:::note
+It is likely this file already exists in your repository. Verify its content and make any necessary changes to match the example.
+:::
+
+## How to trigger the release workflow
+
+To trigger the release workflow you need to push a tag with the format `vX.X.X` to the repository. Typically all of your changes will be merged into `main`, and the tag is applied to `main`
+
+### Create a `vX.X.X` tag with your package manager (Recommended)
+
+The easiest way to create a version tag is using your package manager.
+
+In the following examples a patch version (following [Semantic Versioning](https://semver.org/)) is created:
+
+with [npm](https://docs.npmjs.com/cli/v7/commands/npm-init):
+
+```
+npm version patch
+```
+
+with [yarn](https://yarnpkg.com/lang/en/docs/cli/version/):
+
+```
+yarn version patch
+```
+
+with [pnpm](https://pnpm.io/):
+
+```
+pnpm version patch
+```
+
+This will make sure to update your version in the `package.json` file and create a new git tag with the format `vX.X.X`. You can change the word `patch` to `minor` or `major` if you want to create a new minor or major version.
+
+Once you have created the tag, you can push it to the repository:
+
+```bash
+git push origin main --tags
+```
+
+### Create a `vX.X.X` tag manually
+
+If you prefer, you can also create the tag manually using the following commands:
 
 ```BASH
 git checkout main
 git pull origin main
-git tag v2.0.1
-git push origin v2.0.1
+git tag v2.0.1 # adjust the version accordingly
+git push origin main --tags
 ```
 
 If you need to re-tag the release, the current tag can be removed with these commands:
 
 ```BASH
-git tag -d v2.0.1
+git tag -d v2.0.1 # adjust the version accordingly
 git push --delete origin v2.0.1
 git checkout main
 git pull origin main
 ```
 
 After you push the tag, you can create the same tag again.
+
+Once you have created the tag, you can push it to the repository:
+
+```bash
+# assuming your default branch is `main`
+git push origin main --tags
+```
 
 ## Download the release zip file
 
