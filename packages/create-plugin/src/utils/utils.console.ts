@@ -3,7 +3,10 @@ import chalk, { type ForegroundColorName } from 'chalk';
 import boxen from 'boxen';
 import { markedTerminal } from 'marked-terminal';
 import Enquirer from 'enquirer';
+import { Output } from '@libs/output';
+import { getVersion } from './utils.version.js';
 
+export const output = new Output('create plugin', getVersion());
 const { prompt } = Enquirer;
 
 // They're compatible but this type assertion is required because @types/marked-terminal needs changes.
