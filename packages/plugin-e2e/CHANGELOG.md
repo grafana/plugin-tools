@@ -1,3 +1,20 @@
+# v1.18.0 (Tue Feb 04 2025)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Support advanced query mode in alert rules [#1490](https://github.com/grafana/plugin-tools/pull/1490) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-221763 [#1513](https://github.com/grafana/plugin-tools/pull/1513) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v1.17.1 (Fri Jan 31 2025)
 
 #### 🐛 Bug Fix

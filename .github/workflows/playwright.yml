@@ -6,8 +6,9 @@ on:
       - '.github/workflows/playwright.yml'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
 
 jobs:
   resolve-versions:
@@ -82,9 +83,21 @@ jobs:
         id: run-tests
         run: npm run playwright:test --w @grafana/plugin-e2e
 
-      - name: Publish report to GCS
-        if: ${{ github.repository_owner == 'grafana' && (failure() && steps.run-tests.outcome == 'failure') }}
-        uses: grafana/plugin-actions/publish-report@main
+      - name: Upload e2e test summary
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        if: ${{ always() && !cancelled() }}
         with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-          path: packages/plugin-e2e/playwright-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-outcome: ${{ steps.run-tests.outcome }}
+          report-dir: packages/plugin-e2e/playwright-report
+
+  publish-report:
+    if: ${{ always() && !cancelled() }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

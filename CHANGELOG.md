@@ -1,3 +1,37 @@
+# (Tue Feb 04 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.15.1`, `@grafana/plugin-types-bundler@0.2.4`
+  - fix(deps): update grafana dependencies [#1508](https://github.com/grafana/plugin-tools/pull/1508) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Tue Feb 04 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.18.0`
+  - Plugin E2E: Support advanced query mode in alert rules [#1490](https://github.com/grafana/plugin-tools/pull/1490) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.18.0`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-221763 [#1513](https://github.com/grafana/plugin-tools/pull/1513) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.15.0`
+  - chore(deps): update dependency @grafana/plugin-e2e to v1.17.1 [#1507](https://github.com/grafana/plugin-tools/pull/1507) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Jan 31 2025)
 
 #### 🐛 Bug Fix
