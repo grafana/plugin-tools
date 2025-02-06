@@ -1,6 +1,6 @@
 import semver from 'semver';
 import fs from 'fs';
-import type { RuleContext } from '@typescript-eslint/utils/ts-eslint';
+import type { TSESLint } from '@typescript-eslint/utils';
 import type { Options } from './types';
 
 export function getMinSupportedVersionFromPackageJson(): string {
@@ -19,7 +19,7 @@ export function getMinSupportedVersionFromPackageJson(): string {
   return minVersion.toString();
 }
 
-export function getMinSupportedGrafanaVersion(context: Readonly<RuleContext<'issue:import', Options>>) {
+export function getMinSupportedGrafanaVersion(context: Readonly<TSESLint.RuleContext<'issue:import', Options>>) {
   if (context.options.length && context.options[0].minGrafanaVersion !== undefined) {
     return context.options[0].minGrafanaVersion;
   }

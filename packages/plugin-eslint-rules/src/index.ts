@@ -1,11 +1,11 @@
-import { RuleModule } from '@typescript-eslint/utils/ts-eslint';
+import { ESLintUtils } from '@typescript-eslint/utils';
 import { ESLint } from 'eslint';
 import { rules } from './rules';
 
 type RuleKey = keyof typeof rules;
 
 interface Plugin extends Omit<ESLint.Plugin, 'rules'> {
-  rules: Record<RuleKey, RuleModule<any, any, any>>;
+  rules: Record<RuleKey, ESLintUtils.RuleModule<any, any, any>>;
 }
 
 const { name, version } = require('../package.json') as {

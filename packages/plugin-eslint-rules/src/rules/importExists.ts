@@ -1,11 +1,10 @@
-import { RuleCreator } from '@typescript-eslint/utils/eslint-utils';
+import { ESLintUtils, AST_NODE_TYPES } from '@typescript-eslint/utils';
 import { getRuntimeExports } from './tscUtils';
 import { getMinSupportedGrafanaVersion } from './minGrafanaVersion';
 import { getPackageExports } from './getPackageExports';
 import type { ExportInfo, MessageIds, Options } from './types';
-import { AST_NODE_TYPES } from '@typescript-eslint/utils';
 
-const createRule = RuleCreator((name) => `https://my-website.io/eslint/${name}`);
+const createRule = ESLintUtils.RuleCreator((name) => `https://my-website.io/eslint/${name}`);
 
 let packageExports: Record<string, ExportInfo>;
 
