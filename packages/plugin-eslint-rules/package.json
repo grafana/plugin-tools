@@ -63,7 +63,7 @@
   "tsup": {
     "entry": [
       "./src",
-      "!src/**/*.spec.ts"
+      "!src/**/*.test.ts"
     ],
     "format": [
       "cjs"
