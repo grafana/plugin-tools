@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-eslint-rules",
-  "version": "0.0.4",
+  "version": "0.0.0",
   "description": "An ESlint plugin with Grafana plugin specific rules",
   "main": "./dist/index.js",
   "files": [
@@ -8,7 +8,8 @@
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "type": "commonjs",
   "exports": {
@@ -24,7 +25,7 @@
   ],
   "homepage": "https://www.npmjs.com/package/@grafana/plugin-eslint-rules",
   "repository": {
-    "type": "git",
+    "directory": "packages/plugin-eslint-rules",
     "url": "https://github.com/grafana/plugin-tools"
   },
   "bugs": "https://github.com/grafana/plugin-tools/issues",
