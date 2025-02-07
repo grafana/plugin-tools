@@ -17,7 +17,6 @@ ruleTester.run('import-is-compatible', importIsCompatible, {
   valid: [
     {
       code: `import { LoadingPlaceholder } from '@grafana/ui';`,
-      // code: `import { getBackendSrv, isFetchError } from '@grafana/runtime';`,
     },
   ],
   invalid: [

@@ -17,16 +17,6 @@ cd plugin-tools
 npm install
 ```
 
-## Overview
-
-### Technologies
-
-TBD
-
-### Folder structure
-
-_Work in progress._
-
 ## Development
 
 There are a collection of [commands](#commmands) to assist with developing `eslint-plugin-plugins`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
@@ -42,7 +32,3 @@ npm build # used to build @grafana/eslint-plugin-plugins
 ```shell
 npm dev # watches for changes to files and rebuilds @grafana/eslint-plugin-plugins automatically
 ```
-
-### Conventions
-
-_Work in progress._
