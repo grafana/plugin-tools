@@ -1,6 +1,6 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import tsEslintParser from '@typescript-eslint/parser';
-import { importExists } from './importExists';
+import { importIsCompatible } from './importIsCompatible';
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -13,7 +13,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-ruleTester.run('import-exists', importExists, {
+ruleTester.run('import-is-compatible', importIsCompatible, {
   valid: [
     {
       code: `import { LoadingPlaceholder } from '@grafana/ui';`,

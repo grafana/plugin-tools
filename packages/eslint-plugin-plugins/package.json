@@ -1,5 +1,5 @@
 {
-  "name": "@grafana/plugin-eslint-rules",
+  "name": "@grafana/eslint-plugin-plugins",
   "version": "0.0.0",
   "description": "An ESlint plugin with Grafana plugin specific rules",
   "main": "./dist/index.js",
@@ -23,9 +23,9 @@
     "eslintplugin",
     "grafana"
   ],
-  "homepage": "https://www.npmjs.com/package/@grafana/plugin-eslint-rules",
+  "homepage": "https://www.npmjs.com/package/@grafana/eslint-plugin-plugins",
   "repository": {
-    "directory": "packages/plugin-eslint-rules",
+    "directory": "packages/eslint-plugin-plugins",
     "url": "https://github.com/grafana/plugin-tools"
   },
   "bugs": "https://github.com/grafana/plugin-tools/issues",

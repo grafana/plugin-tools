@@ -8,8 +8,8 @@ const createRule = ESLintUtils.RuleCreator((name) => `https://my-website.io/esli
 
 let packageExports: Record<string, ExportInfo>;
 
-export const importExists = createRule<Options, MessageIds>({
-  name: 'import-exists',
+export const importIsCompatible = createRule<Options, MessageIds>({
+  name: 'import-is-compatible',
   meta: {
     docs: {
       description:
