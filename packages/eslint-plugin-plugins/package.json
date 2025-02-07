@@ -26,7 +26,7 @@
   "homepage": "https://www.npmjs.com/package/@grafana/eslint-plugin-plugins",
   "repository": {
     "directory": "packages/eslint-plugin-plugins",
-    "url": "https://github.com/grafana/plugin-tools"
+    "url": "git+https://github.com/grafana/plugin-tools.git"
   },
   "bugs": "https://github.com/grafana/plugin-tools/issues",
   "scripts": {
