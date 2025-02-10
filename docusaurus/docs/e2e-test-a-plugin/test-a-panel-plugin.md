@@ -109,7 +109,7 @@ test('should count down time when option is selected', async ({ panelEditPage, p
 });
 ```
 
-This test verifies that the background color of a panel changes when a new color is selected from the color picker in the panels options.
+This test verifies that the background color of a panel changes when a new color is selected from the color picker in the panel's options.
 
 ```ts
 test('should update background color based on selected option', async ({ panelEditPage, page }) => {
