@@ -28,7 +28,7 @@ To test your panel’s behavior, we recommend [provisioning a dashboard](https:/
 
 In cases where interacting with the panel edit options is necessary, we provide a set of APIs to simplify writing tests. These APIs ensure your tests will run consistently across different versions of Grafana without requiring changes.
 
-To interact with any of the Grafana provided option groups you should use any of the following functions.
+To interact with any of the Grafana-provided option groups, use any of the following functions:
 
 | Function Name              | Returned Option Group |
 | -------------------------- | --------------------- |
