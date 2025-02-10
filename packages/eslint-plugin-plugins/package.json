@@ -1,0 +1,75 @@
+{
+  "name": "@grafana/eslint-plugin-plugins",
+  "version": "0.1.0",
+  "description": "An ESlint plugin with Grafana plugin specific rules",
+  "main": "./dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "grafana"
+  ],
+  "homepage": "https://www.npmjs.com/package/@grafana/eslint-plugin-plugins",
+  "repository": {
+    "directory": "packages/eslint-plugin-plugins",
+    "url": "git+https://github.com/grafana/plugin-tools.git"
+  },
+  "bugs": "https://github.com/grafana/plugin-tools/issues",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "dev": "concurrently --names TSC,TSUP -c cyan,magenta \"npm run typecheck:watch\" \"npm run build:watch\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --watch --noEmit",
+    "test": "vitest --testTimeout 32000",
+    "test:ci": "vitest --run --testTimeout 32000"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@grafana/levitate": "^0.16.0",
+    "@typescript-eslint/utils": "^8.23.0",
+    "semver": "^7.7.0",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/eslint": "^9.6.0",
+    "@types/semver": "^7.5.8",
+    "@typescript-eslint/parser": "^8.23.0",
+    "@typescript-eslint/rule-tester": "^8.23.0",
+    "concurrently": "^9.1.2",
+    "tsup": "^8.3.6"
+  },
+  "peerDependencies": {
+    "@types/eslint": "^8.56.10 || ^9.0.0",
+    "eslint": "^8.56.0 || ^9.0.0"
+  },
+  "tsup": {
+    "entry": [
+      "./src",
+      "!src/**/*.test.ts"
+    ],
+    "format": [
+      "cjs"
+    ],
+    "clean": true,
+    "bundle": false,
+    "shims": true
+  }
+}
