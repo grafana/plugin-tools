@@ -40,7 +40,7 @@ To interact with any of the Grafana provided option groups you should use any of
 
 To interact with a custom option group added by your panel, use the `getCustomOptions('name of option group')` API.
 
-Calling any of these APIs will return an options group object that contains the following APIs to interact with options located within that group.
+Calling any of these APIs returns an options group object, which provides APIs for interacting with the options within that group.
 
 | Function Name           | Return Option Type |
 | ----------------------- | ------------------ |
