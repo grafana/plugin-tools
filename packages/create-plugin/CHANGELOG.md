@@ -1,3 +1,45 @@
+# v5.16.0 (Mon Feb 10 2025)
+
+#### 🚀 Enhancement
+
+- Playwright: Use new GH Pages actions [#1504](https://github.com/grafana/plugin-tools/pull/1504) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/scenes to v5.41.3 [#1519](https://github.com/grafana/plugin-tools/pull/1519) ([@renovate[bot]](https://github.com/renovate[bot]))
+- chore(deps): update dependency @grafana/scenes to v5.41.2 [#1517](https://github.com/grafana/plugin-tools/pull/1517) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v5.15.1 (Tue Feb 04 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update grafana dependencies [#1508](https://github.com/grafana/plugin-tools/pull/1508) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.15.0 (Tue Feb 04 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v1.17.1 [#1507](https://github.com/grafana/plugin-tools/pull/1507) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.14.1 (Fri Jan 31 2025)
 
 #### 🐛 Bug Fix

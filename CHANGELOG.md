@@ -1,3 +1,64 @@
+# (Mon Feb 10 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/eslint-plugin-plugins@0.1.0`
+  - Adds @grafana/eslint-plugin-plugins package [#1520](https://github.com/grafana/plugin-tools/pull/1520) ([@hugohaggmark](https://github.com/hugohaggmark))
+- `website@3.6.0`, `@grafana/create-plugin@5.16.0`
+  - Playwright: Use new GH Pages actions [#1504](https://github.com/grafana/plugin-tools/pull/1504) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.16.0`
+  - chore(deps): update dependency @grafana/scenes to v5.41.3 [#1519](https://github.com/grafana/plugin-tools/pull/1519) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - chore(deps): update dependency @grafana/scenes to v5.41.2 [#1517](https://github.com/grafana/plugin-tools/pull/1517) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Tue Feb 04 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.15.1`, `@grafana/plugin-types-bundler@0.2.4`
+  - fix(deps): update grafana dependencies [#1508](https://github.com/grafana/plugin-tools/pull/1508) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Tue Feb 04 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@1.18.0`
+  - Plugin E2E: Support advanced query mode in alert rules [#1490](https://github.com/grafana/plugin-tools/pull/1490) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.18.0`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-221763 [#1513](https://github.com/grafana/plugin-tools/pull/1513) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.15.0`
+  - chore(deps): update dependency @grafana/plugin-e2e to v1.17.1 [#1507](https://github.com/grafana/plugin-tools/pull/1507) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Jan 31 2025)
 
 #### 🐛 Bug Fix
