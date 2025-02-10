@@ -96,7 +96,7 @@ test('should change the font family when enabling monospace', async ({ panelEdit
 });
 ```
 
-This test ensures that when the "Countdown" mode is selected in the clock panel's options, the clock is running in count down mode.
+This test ensures that when the "Countdown" mode is selected in the clock panel's options, the clock is running in countdown mode.
 
 ```ts
 test('should count down time when option is selected', async ({ panelEditPage, page }) => {
