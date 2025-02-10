@@ -1,6 +1,6 @@
 {
   "name": "@grafana/eslint-plugin-plugins",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "An ESlint plugin with Grafana plugin specific rules",
   "main": "./dist/index.js",
   "files": [
