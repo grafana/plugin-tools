@@ -142,6 +142,42 @@ Once the release is published, you can use the release assets to submit your plu
 
 Access the final release zip file directly from the GitHub repository release path (for example, `https://github.com/org/plugin-id/releases`).
 
+## Signing your plugin automatically
+
+You can sign your releases using the Github Action. First you will have to [Generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+
+We advice you to save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
+
+Make sure your workflow release (see [Setup the release workflow](#setup-the-release-workflow)) has the `policy_token` line uncommented and it is using the correct secret name. e.g.:
+
+```yaml title=".github/workflows/release.yml"
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
+
+jobs:
+  release:
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: grafana/plugin-actions/build-plugin@main
+        with:
+          # see https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token to generate it
+          # save the value in your repository secrets
+          policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+          attestation: true
+```
+
+Then you can follow the regular process to [trigger](#how-to-trigger-the-release-workflow) the release workflow. Your plugin will be signed automatically and you can use the release assets for your plugin submission.
+
 ## Provenance attestation for plugin builds
 
 Provenance attestation, that is, _a feature that generating verifiable records of the build's origin and process_, enhances the security of your plugin builds. This feature allows users to confirm that the plugin they are installing was created through your official build pipeline.
