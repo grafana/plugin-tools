@@ -108,6 +108,8 @@ git tag v2.0.1 # adjust the version accordingly
 git push origin main --tags
 ```
 
+### Retag a release
+
 If you need to re-tag the release, the current tag can be removed with these commands:
 
 ```BASH
@@ -125,6 +127,16 @@ Once you have created the tag, you can push it to the repository:
 # assuming your default branch is `main`
 git push origin main --tags
 ```
+
+## Publish your release in Github
+
+Once you have [created the tag and pushed it](#how-to-trigger-the-release-workflow) the release workflow will run and create a release for you with all the artifacts you need to submit your plugin to the [Grafana plugin catalog](https://grafana.com/plugins).
+
+The workflow creates draft releases, you can edit the release in Github, edit the description as needed and then publish the release. You can see the [github documentation](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) on how to manage your repository releases for more information.
+
+## Use your release assets for your plugin submission
+
+Once the release is published, you can use the release assets to submit your plugin to the [Grafana plugin catalog](https://grafana.com/plugins). Simply copy the links to the archive (zip) file and sha1 sum. Use these in the plugin submission form.
 
 ## Download the release zip file
 
