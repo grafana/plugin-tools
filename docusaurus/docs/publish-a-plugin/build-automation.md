@@ -97,6 +97,9 @@ Once you have created the tag, you can push it to the repository:
 git push origin main --tags
 ```
 
+<details>
+  <summary>Alternatively, create a `vX.X.X` tag manually</summary>
+
 ### Create a `vX.X.X` tag manually
 
 If you prefer, you can also create the tag manually using the following commands:
@@ -127,6 +130,8 @@ Once you have created the tag, you can push it to the repository:
 # assuming your default branch is `main`
 git push origin main --tags
 ```
+
+</details>
 
 ## Publish your release in Github
 
