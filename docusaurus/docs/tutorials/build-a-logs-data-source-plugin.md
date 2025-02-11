@@ -338,7 +338,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 :::note
 
-Implement this feature through the `DataSourceWithXXXSupport` interface.
+Implement this feature through the `DataSourceWithLogsContextSupport` interface.
 
 :::
 
@@ -366,6 +366,7 @@ export class ExampleDatasource
     query?: ExampleQuery
   ): Promise<DataQueryResponse> {
     // Be sure to adjust this example implementation of createRequestFromQuery based on your data source logic.
+    // Remember to replace variables with `getTemplateSrv` and the passed `options.scopedVars` before returning your `request` object.
     const request = createRequestFromQuery(row, query, options);
     return lastValueFrom(
       // Be sure to adjust this example of this.query based on your data source logic.
