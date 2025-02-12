@@ -181,7 +181,7 @@ jobs:
           attestation: true
 ```
 
-Then you can follow the regular process to [trigger](#how-to-trigger-the-release-workflow) the release workflow. Your plugin will be signed automatically and you can use the release assets for your plugin submission.
+Then, follow the regular process to [trigger](#how-to-trigger-the-release-workflow) the release workflow. Your plugin will be signed automatically, and you can use the release assets for your plugin submission.
 
 ## Provenance attestation for plugin builds
 
