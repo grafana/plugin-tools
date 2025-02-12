@@ -91,7 +91,7 @@ pnpm version patch
 
 This updates your version in the `package.json` file and creates a new Git tag with the format `vX.X.X`. You can change `patch` to `minor` or `major` if you want to create a new minor or major version.
 
-Once you have created the tag, you can push it to the repository:
+After creating the tag, push it to the repository:
 
 ```bash
 git push origin main --tags
