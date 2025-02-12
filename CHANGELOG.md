@@ -1,3 +1,19 @@
+# (Wed Feb 12 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/faro-web-sdk to v1.13.3 [#1531](https://github.com/grafana/plugin-tools/pull/1531) ([@renovate[bot]](https://github.com/renovate[bot]))
+- fix(deps): update dependency @grafana/faro-web-sdk to v1.13.2 [#1529](https://github.com/grafana/plugin-tools/pull/1529) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/plugin-e2e@1.18.1`
+  - E2E: Fix so color picker works properly in 11.6.0 [#1540](https://github.com/grafana/plugin-tools/pull/1540) ([@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Mon Feb 10 2025)
 
 :tada: This release contains work from a new contributor! :tada:
