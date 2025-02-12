@@ -89,7 +89,7 @@ with [pnpm](https://pnpm.io/):
 pnpm version patch
 ```
 
-This will make sure to update your version in the `package.json` file and create a new git tag with the format `vX.X.X`. You can change the word `patch` to `minor` or `major` if you want to create a new minor or major version.
+This updates your version in the `package.json` file and creates a new Git tag with the format `vX.X.X`. You can change `patch` to `minor` or `major` if you want to create a new minor or major version.
 
 Once you have created the tag, you can push it to the repository:
 
