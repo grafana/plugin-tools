@@ -1,3 +1,15 @@
+# v1.18.1 (Wed Feb 12 2025)
+
+#### 🐛 Bug Fix
+
+- E2E: Fix so color picker works properly in 11.6.0 [#1540](https://github.com/grafana/plugin-tools/pull/1540) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v1.18.0 (Tue Feb 04 2025)
 
 #### 🚀 Enhancement
