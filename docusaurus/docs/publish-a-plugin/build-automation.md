@@ -28,7 +28,7 @@ You can use the links to the archive and zip files from the release page to make
 
 ## Setup the release workflow
 
-Make sure you have a file named `.github/workflows/release.yml` in your repository with the following contents:
+Ensure your repository contains a `.github/workflows/release.yml` file with the following contents: 
 
 ```yaml title=".github/workflows/release.yml"
 name: Release
