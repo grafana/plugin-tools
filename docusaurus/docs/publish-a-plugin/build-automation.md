@@ -153,7 +153,7 @@ You can sign your releases using the Github Action. First you will have to [Gene
 
 We advice you to save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
 
-Make sure your workflow release (see [Setup the release workflow](#setup-the-release-workflow)) has the `policy_token` line uncommented and it is using the correct secret name. e.g.:
+Ensure your workflow release (refer to [Set up the release workflow](#setup-the-release-workflow)) has the `policy_token` line uncommented and is using the correct secret name. For example:
 
 ```yaml title=".github/workflows/release.yml"
 name: Release
