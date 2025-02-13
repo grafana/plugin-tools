@@ -56,7 +56,7 @@ import { FeatureContextV2 } from '@grafana/plugin-types/my-plugin-id';
 - Ensures type safety when working with different extension versions.
 - Avoids breaking existing consumers when introducing changes.
 
-## 4. **Clearly Communicate Deprecations**
+## 4. **Clearly communicate deprecations**
 
 Deprecation should be clearly communicated to consumers to ensure a smooth transition.
 
