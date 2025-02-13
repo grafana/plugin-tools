@@ -73,7 +73,7 @@ Deprecation should be clearly communicated to consumers to ensure a smooth trans
   };
   ```
 
-- **Document changes** in a **changelog** or migration guide.
+- Document changes in a changelog or migration guide.
 - **Provide a timeline** for deprecating older versions.
 - **Notify consumers** of upcoming changes to prevent unexpected breakages.
 
