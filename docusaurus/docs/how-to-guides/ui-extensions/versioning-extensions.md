@@ -23,7 +23,7 @@ Each extension point ID should include a suffix indicating the major version of 
 
 ```typescript
 // Initial version
-export const EXTENSION_POINT_OR_COMPONENT_ID = 'my-plugin-id/feature/v1';
+export const EXTENSION_POINT_OR_COMPONENT_ID_V1 = 'my-plugin-id/feature/v1';
 
 // Breaking change introduced
 export const EXTENSION_POINT_OR_COMPONENT_ID_V2 = 'my-plugin-id/feature/v2';
@@ -40,7 +40,7 @@ When introducing a new major version, the application should serve both the old 
 
 - `my-plugin-id/feature/v1` continues to function while `my-plugin-id/feature/v2` is introduced.
 - Consumers gradually migrate to `v2`.
-- After a deprecation period, `v1` you can safely remove it. 
+- After a deprecation period, `v1` you can safely remove it.
 
 ## 3. **Publish Types with Version Suffixes**
 
