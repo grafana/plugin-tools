@@ -12,11 +12,18 @@ export class ColorPicker extends ComponentBase {
 
   async selectOption(rgbOrHex: string, options?: SelectOptionsType): Promise<void> {
     await this.element.getByRole('button').click(options);
-    await this.getContainer().getByRole('button', { name: 'Custom', exact: true }).click(options);
+    await this.getCustomTab().click(options);
 
     const colorInput = this.getContainer().getByTestId('input-wrapper').getByRole('textbox');
     await colorInput.hover(options);
     await colorInput.fill(rgbOrHex, options);
+  }
+
+  private getCustomTab(): Locator {
+    if (gte(this.ctx.grafanaVersion, '11.6.0')) {
+      return this.getContainer().getByRole('tab', { name: 'Custom', exact: true });
+    }
+    return this.getContainer().getByRole('button', { name: 'Custom', exact: true });
   }
 
   private getContainer(): Locator {
