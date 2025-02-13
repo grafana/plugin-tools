@@ -29,7 +29,7 @@ export const EXTENSION_POINT_OR_COMPONENT_ID = 'my-plugin-id/feature/v1';
 export const EXTENSION_POINT_OR_COMPONENT_ID_V2 = 'my-plugin-id/feature/v2';
 ```
 
-- Non-breaking changes (e.g., adding optional properties) **do not** require a new version suffix.
+- Non-breaking changes (for example, adding optional properties) _do not_ require a new version suffix.
 - Breaking changes (e.g., modifying behaviors or removing properties) **must** introduce a new version suffix.
 
 ## 2. **Support Multiple Versions During Transition**
