@@ -40,7 +40,7 @@ When introducing a new major version, the application should serve both the old 
 
 - `my-plugin-id/feature/v1` continues to function while `my-plugin-id/feature/v2` is introduced.
 - Consumers gradually migrate to `v2`.
-- After a deprecation period, `v1` can be safely removed.
+- After a deprecation period, `v1` you can safely remove it. 
 
 ## 3. **Publish Types with Version Suffixes**
 
