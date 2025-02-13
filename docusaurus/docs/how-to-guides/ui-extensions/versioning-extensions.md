@@ -44,7 +44,7 @@ When introducing a new major version, the application should serve both the old 
 
 ## 3. **Publish Types with Version Suffixes**
 
-To support consuming multiple versions simultaneously, **publish types to `@grafana/plugin-types` using the same version suffix**. This allows developers to import types from different versions without conflicts.
+To support consuming multiple versions simultaneously, publish types to `@grafana/plugin-types` using the same version suffix. This allows developers to import types from different versions without conflicts.
 
 **Example:**
 
