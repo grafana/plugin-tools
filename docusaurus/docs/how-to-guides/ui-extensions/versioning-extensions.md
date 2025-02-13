@@ -60,7 +60,7 @@ import { FeatureContextV2 } from '@grafana/plugin-types/my-plugin-id';
 
 Deprecation should be clearly communicated to consumers to ensure a smooth transition.
 
-- **Use the `@deprecated` keyword** in published types and reference the changelog or migration guide.
+- Use the `@deprecated` keyword in published types and reference the changelog or migration guide.
 
   **Example:**
 
