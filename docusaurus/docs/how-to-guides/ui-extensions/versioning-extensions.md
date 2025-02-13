@@ -34,7 +34,7 @@ export const EXTENSION_POINT_OR_COMPONENT_ID_V2 = 'my-plugin-id/feature/v2';
 
 ## 2. **Support multiple versions during transition**
 
-When introducing a new major version, the application should serve **both** the old and new versions **for a transition period**. This allows consumers time to migrate without immediate disruptions.
+When introducing a new major version, the application should serve both the old and new versions for a transition period. This allows consumers time to migrate without immediate disruptions.
 
 **Example:**
 
