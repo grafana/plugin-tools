@@ -17,7 +17,7 @@ To ensure stability and smooth transitions when updating UI extensions, use a _v
 
 ## 1. **Use a Version Suffix in the Extension Point ID**
 
-Each **extension point ID** should include a suffix indicating the major version of the extension.
+Each extension point ID should include a suffix indicating the major version of the extension.
 
 **Example:**
 
