@@ -15,9 +15,9 @@ sidebar_position: 40
 
 To ensure stability and smooth transitions when updating UI extensions, use a _version suffix_ in the extension point (that is, the component ID). This approach helps maintain compatibility while allowing developers to introduce breaking changes in a controlled manner.
 
-## 1. **Use a Version Suffix in the Extension Point ID**
+## 1. **Use a Version Suffix in the ID**
 
-Each extension point ID should include a suffix indicating the major version of the extension.
+Each extension point ID/component ID should include a suffix indicating the major version of the extension.
 
 **Example:**
 
@@ -49,8 +49,13 @@ To support consuming multiple versions simultaneously, publish types to `@grafan
 **Example:**
 
 ```typescript
+// Extension point context
 import { FeatureContextV1 } from '@grafana/plugin-types/my-plugin-id';
 import { FeatureContextV2 } from '@grafana/plugin-types/my-plugin-id';
+
+// Exposed component props
+import { ComponentPropsV1 } from '@grafana/plugin-types/my-plugin-id';
+import { ComponentPropsV2 } from '@grafana/plugin-types/my-plugin-id';
 ```
 
 - Ensures type safety when working with different extension versions.
