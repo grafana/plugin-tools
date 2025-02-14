@@ -20,8 +20,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc --project tsconfig.json",
-    "dev": "nodemon --exec 'tsc'",
+    "build": "tsup --dts --format=cjs",
+    "dev": "tsup --dts --format=cjs --watch ./src",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "server": "docker compose up --build",

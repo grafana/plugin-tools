@@ -34,7 +34,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
 
   const actions = getTemplateActions({ templateData, exportPath });
   const failures = await generateFiles({ actions });
-  const changes = [
+  const changes = output.statusList('success', [
     `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin ${
       templateData.hasBackend ? '(with Go backend)' : ''
     }`,
@@ -42,15 +42,13 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     `${provisioningMsg[templateData.pluginType]}`,
     'Configured development environment (Docker)',
     'Added default GitHub actions for CI, releases and Grafana compatibility',
-  ];
-  console.log('');
-  changes.forEach((change) => {
-    console.log(`${chalk.green('✔︎')} ${change}`);
-  });
+  ]);
 
-  failures.forEach((failure) => {
-    printError(`${failure.error}`);
-  });
+  output.success({ title: 'Scaffolding plugin...', body: changes });
+
+  if (failures.length > 0) {
+    output.error({ title: 'Failed to scaffold the following files:', body: failures.map((f) => f.path) });
+  }
 
   if (templateData.packageManagerName === 'yarn') {
     await execPostScaffoldFunction(configureYarn, exportPath, templateData.packageManagerVersion);
@@ -61,7 +59,9 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   }
 
   await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
-  console.log('\n');
+
+  output.addHorizontalLine('gray');
+
   printGenerateSuccessMessage(templateData);
 };
 

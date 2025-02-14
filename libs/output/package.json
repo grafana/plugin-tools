@@ -1,7 +1,7 @@
 {
   "name": "@libs/output",
   "version": "1.0.0",
-  "description": "Write output to stdout like a boss.",
+  "description": "Write output to stdout.",
   "private": true,
   "type": "module",
   "exports": {

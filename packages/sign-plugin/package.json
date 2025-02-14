@@ -22,8 +22,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
-    "dev": "nodemon --exec 'tsc'",
+    "build": "tsup",
+    "dev": "tsup --watch ./src",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest",

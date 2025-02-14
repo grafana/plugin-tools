@@ -1,0 +1,20 @@
+{
+  "name": "@libs/version",
+  "version": "1.0.0",
+  "description": "Get a running node applications version.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./src/version.ts",
+      "default": "./src/version.ts"
+    }
+  },
+  "peerDependencies": {
+    "find-up": "^7.0.0"
+  },
+  "scripts": {},
+  "author": "Grafana",
+  "license": "Apache-2.0"
+}
