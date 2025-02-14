@@ -1,7 +1,20 @@
 import chalk from 'chalk';
 import { EOL } from 'os';
 
-type Colors = 'red' | 'cyan' | 'green' | 'yellow';
+type Colors = 'red' | 'cyan' | 'green' | 'yellow' | 'gray';
+
+type TaskStatus = 'success' | 'failure' | 'skipped';
+
+function isCI() {
+  return (
+    (process.env.CI && process.env.CI !== 'false') || // Drone CI plus others
+    process.env.GITHUB_ACTIONS === 'true' // GitHub Actions
+  );
+}
+
+if (isCI()) {
+  chalk.level = 0;
+}
 
 export class Output {
   private appName: string;
@@ -28,15 +41,29 @@ export class Output {
     const separator = chalk.dim[color](this.separator);
     this.addNewLine();
     this.write(`${separator}${EOL}`);
-    this.addNewLine();
   }
 
   addNewLine() {
     this.write(EOL);
   }
 
-  private writeTitle(color: Colors, title: string) {
-    this.write(`${this.addPrefix(color, title)}${EOL}`);
+  private writeTitle(color: Colors, title: string, withPrefix = true) {
+    if (withPrefix) {
+      this.write(`${this.addPrefix(color, title)}${EOL}`);
+    } else {
+      this.write(`${title}${EOL}`);
+    }
+  }
+
+  private getStatusIcon(taskStatus: TaskStatus) {
+    switch (taskStatus) {
+      case 'success':
+        return '✔️';
+      case 'failure':
+        return '';
+      case 'skipped':
+        return '';
+    }
   }
 
   private addPrefix(color: Colors, text: string) {
@@ -49,15 +76,25 @@ export class Output {
     if (!body) {
       return;
     }
+    this.addNewLine();
     body.forEach((line) => {
       this.write(`${line}${EOL}`);
     });
   }
 
-  error({ title, body, link }: { title: string; body?: string[]; link?: string }) {
+  error({
+    title,
+    body,
+    link,
+    withPrefix = true,
+  }: {
+    title: string;
+    body?: string[];
+    link?: string;
+    withPrefix?: boolean;
+  }) {
     this.addNewLine();
-    this.writeTitle('red', chalk.red.bold(title));
-    this.addNewLine();
+    this.writeTitle('red', chalk.red.bold(title), withPrefix);
     this.writeBody(body);
 
     if (link) {
@@ -65,28 +102,45 @@ export class Output {
       this.write(`${chalk.gray('For more information about this error: ')}
   ${link}${EOL}`);
     }
-
-    this.addNewLine();
   }
 
-  warning({ title, body }: { title: string; body?: string[] }) {
+  warning({ title, body, withPrefix = true }: { title: string; body?: string[]; withPrefix?: boolean }) {
     this.addNewLine();
-    this.writeTitle('yellow', chalk.yellow(title));
+    this.writeTitle('yellow', chalk.yellow.bold(title), withPrefix);
     this.writeBody(body);
-    this.addNewLine();
   }
 
-  success({ title, body }: { title: string; body?: string[] }) {
+  success({ title, body, withPrefix = true }: { title: string; body?: string[]; withPrefix?: boolean }) {
     this.addNewLine();
-    this.writeTitle('green', chalk.green(title));
+    this.writeTitle('green', chalk.green.bold(title), withPrefix);
     this.writeBody(body);
-    this.addNewLine();
   }
 
-  log({ title, body, color }: { title: string; body?: string[]; color?: Colors }) {
+  log({
+    title,
+    body,
+    color,
+    withPrefix = true,
+  }: {
+    title: string;
+    body?: string[];
+    color?: Colors;
+    withPrefix?: boolean;
+  }) {
     this.addNewLine();
-    this.writeTitle('cyan', color ? chalk[color](title) : title);
+    this.writeTitle('cyan', color ? chalk[color].bold(title) : title, withPrefix);
     this.writeBody(body);
-    this.addNewLine();
+  }
+
+  bulletList(list: string[]) {
+    return list.map((item) => {
+      return ` • ${item}`;
+    });
+  }
+
+  statusList(status: TaskStatus, list: string[]) {
+    return list.map((item) => {
+      return ` ${this.getStatusIcon(status)}  ${item}`;
+    });
   }
 }

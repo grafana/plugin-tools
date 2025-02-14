@@ -23,8 +23,8 @@
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
     "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/package-lock.json\" -maxdepth 1 -print0 | xargs -0  -I {} rm -rf {}",
-    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
-    "dev": "nodemon --exec 'tsc'",
+    "build": "tsup --config ../../tsup.config.ts",
+    "dev": "tsup --watch ./src --watch '../../libs'",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest --passWithNoTests",
@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@libs/output": "^1.0.0",
+    "@libs/version": "^1.0.0",
     "@types/glob": "^8.1.0",
     "@types/marked-terminal": "^6.1.1",
     "@types/minimist": "^1.2.5",
