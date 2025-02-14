@@ -31,7 +31,7 @@
     "@swc/core": "^1.10.16",
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/recommended": "^1.0.8",
-    "@types/node": "22.13.2",
+    "@types/node": "22.13.4",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "auto": "11.3.0",
