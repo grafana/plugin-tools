@@ -15,7 +15,7 @@ sidebar_position: 40
 
 To ensure stability and smooth transitions when updating UI extensions, use a _version suffix_ in the extension point (that is, the component ID). This approach helps maintain compatibility while allowing developers to introduce breaking changes in a controlled manner.
 
-## 1. **Use a Version Suffix in the ID**
+## 1. Use a version suffix in the ID
 
 Each extension point ID/component ID should include a suffix indicating the major version of the extension.
 
