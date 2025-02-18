@@ -42,7 +42,7 @@ When introducing a new major version, the application should serve both the old 
 - Consumers gradually migrate to `v2`.
 - After a deprecation period, `v1` you can safely remove it.
 
-## 3. **Publish Types with Version Suffixes**
+## 3. Publish types with version suffixes
 
 To support consuming multiple versions simultaneously, publish types to `@grafana/plugin-types` using the same version suffix. This allows developers to import types from different versions without conflicts.
 
