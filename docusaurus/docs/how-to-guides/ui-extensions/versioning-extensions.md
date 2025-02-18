@@ -82,4 +82,5 @@ Deprecation should be clearly communicated to consumers to ensure a smooth trans
 - Provide a timeline for deprecating older versions.
 - Notify consumers of upcoming changes to prevent unexpected breakages.
 
-By following this approach, UI extensions remain stable while allowing for iterative improvements, smooth migrations, and safer type management.
+## Summary
+By following this approach to version extensions and extension points, you can ensure they remain stable while allowing for iterative improvements, smooth migrations, and safer type management.
