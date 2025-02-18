@@ -1,3 +1,16 @@
+# (Fri Feb 14 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.17.0`
+  - Feature: Updates Scenes templates [#1538](https://github.com/grafana/plugin-tools/pull/1538) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Thu Feb 13 2025)
 
 #### 🐛 Bug Fix

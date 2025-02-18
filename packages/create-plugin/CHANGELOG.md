@@ -1,3 +1,15 @@
+# v5.17.0 (Fri Feb 14 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Updates Scenes templates [#1538](https://github.com/grafana/plugin-tools/pull/1538) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v5.16.0 (Mon Feb 10 2025)
 
 #### 🚀 Enhancement
