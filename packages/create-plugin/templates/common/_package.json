@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
 {{#if useCypress}}    "@grafana/e2e": "^11.0.7",
-    "@grafana/e2e-selectors": "^11.5.0",{{/if}}
+    "@grafana/e2e-selectors": "^11.5.2",{{/if}}
     "@grafana/eslint-config": "^8.0.0",{{#if usePlaywright}}
     "@grafana/plugin-e2e": "^1.17.1",{{/if}}
     "@grafana/tsconfig": "^2.0.0",{{#if usePlaywright}}
@@ -72,11 +72,11 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "^11.3.2",
-    "@grafana/runtime": "^11.3.2",
-    "@grafana/ui": "^11.3.2",
-    "@grafana/schema": "^11.3.2",{{#if_eq pluginType "scenesapp"}}
-    "@grafana/scenes": "^5.28.1",{{/if_eq}}
+    "@grafana/data": "^11.5.2",
+    "@grafana/runtime": "^11.5.2",
+    "@grafana/ui": "^11.5.2",
+    "@grafana/schema": "^11.5.2",{{#if_eq pluginType "scenesapp"}}
+    "@grafana/scenes": "^5.41.3",{{/if_eq}}
     "react": "18.2.0",
     "react-dom": "18.2.0"{{#if isAppType}},
     "react-router-dom": "^{{ reactRouterVersion }}",

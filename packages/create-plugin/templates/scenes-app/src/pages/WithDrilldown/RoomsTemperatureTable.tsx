@@ -1,15 +1,7 @@
-import { ReducerID } from '@grafana/data';
-import {
-  PanelBuilders,
-  SceneByFrameRepeater,
-  SceneDataNode,
-  SceneDataTransformer,
-  SceneFlexItem,
-  SceneFlexLayout,
-} from '@grafana/scenes';
+import { PanelBuilders, SceneDataTransformer } from '@grafana/scenes';
 import { TableCellBackgroundDisplayMode, TableCellDisplayMode, ThresholdsMode } from '@grafana/schema';
 
-export function getRoomsTemperatureTable() {
+export function RoomsTemperatureTable() {
   const data = new SceneDataTransformer({
     transformations: [
       {
@@ -74,58 +66,4 @@ export function getRoomsTemperatureTable() {
         ])
     )
     .build();
-}
-
-export function getRoomsTemperatureStats() {
-  const stat = PanelBuilders.stat()
-    .setUnit('celsius')
-    .setLinks([
-      {
-        title: 'Go to room temperature overview',
-        url: '${__url.path}/room/${__field.name}/temperature${__url.params}',
-      },
-      {
-        title: 'Go to room humidity overview',
-        url: '${__url.path}/room/${__field.name}/humidity${__url.params}',
-      },
-    ]);
-
-  return new SceneByFrameRepeater({
-    body: new SceneFlexLayout({
-      direction: 'row',
-      wrap: 'wrap',
-      children: [],
-    }),
-    getLayoutChild: (data, frame) => {
-      return new SceneFlexItem({
-        height: '50%',
-        minWidth: '20%',
-        body: stat
-          .setTitle(frame.name || '')
-          .setData(
-            new SceneDataNode({
-              data: {
-                ...data,
-                series: [frame],
-              },
-            })
-          )
-          .build(),
-      });
-    },
-  });
-}
-
-export function getRoomTemperatureStatPanel(reducers: ReducerID[]) {
-  const data = new SceneDataTransformer({
-    transformations: [
-      {
-        id: 'reduce',
-        options: {
-          reducers,
-        },
-      },
-    ],
-  });
-  return PanelBuilders.stat().setData(data).setUnit('celsius').build();
 }

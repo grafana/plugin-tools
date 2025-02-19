@@ -72,8 +72,68 @@ queryString="current-package-manager"
 />
 </details>
 
-## Playwright report
+## Publish Playwright reports to GitHub Pages
 
-The end-to-end tooling generates a Playwright HTML test report for every Grafana version that is being tested. In case any of the tests fail, a Playwright trace viewer is also generated along with the report. The `Upload artifacts` step in the example workflows uploads the report to GitHub as an artifact.
+The Playwright [HTML report](https://playwright.dev/docs/test-reporters#html-reporter), along with the [Trace Viewer](https://playwright.dev/docs/trace-viewer), provides powerful tools for troubleshooting issues found during the execution of end-to-end test. This section explains how to deploy these reports to GitHub's static site hosting service GitHub Pages, making them immediately accessible for review after tests complete.
 
-To find information on how to download and view the report, refer to the [Playwright documentation](https://playwright.dev/docs/ci-intro#html-report).
+This guide is based on the example workflow provided earlier in this document.
+
+### Steps to enable report publishing
+
+1. Immediately following the step that executes the tests, add a step that uses the `upload-report-artifacts` Action to upload the report and a test summary as an to GitHub artifacts.
+
+```yml
+- name: Run Playwright tests
+  id: run-tests
+  run: npx playwright test
+
+- name: Upload e2e test summary
+  uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+  if: ${{ (always() && !cancelled()) }}
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    test-outcome: ${{ steps.run-tests.outcome }}
+```
+
+2. After the `playwright-tests` job, add a new job to download the report artifacts, deploy them to GitHub Pages, and publish a PR comment summarizing the test results, including links to the reports.
+
+```yml
+publish-report:
+  if: ${{ (always() && !cancelled()) }}
+  needs: [playwright-tests]
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - name: Publish report
+      uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+3. Modify the workflow permissions to allow it to push changes, query the GitHub API and update PR comments.
+
+```yml
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+```
+
+4. If GitHub Pages is not yet enabled for your repository, configure a source branch for deployment. Follow the detailed instructions [here](https://github.com/grafana/plugin-actions/tree/main/playwright-gh-pages#github-pages-branch-configuration) to set it up.
+
+For additional configuration options and examples, refer to the `playwright-gh-pages` [documentation](https://github.com/grafana/plugin-actions/blob/main/playwright-gh-pages/README.md).
+
+### Important considerations
+
+- **Public visibility**: By default, GitHub Pages sites are publicly accessible on the Internet. If your end-to-end tests include sensitive data or secrets, be aware of potential exposure risks.
+- **Enterprise access control**: If you have a GitHub Enterprise account, you can configure access controls to restrict visibility. For details, refer to the [GitHub documentation](https://docs.github.com/en/enterprise-cloud@latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site).
+
+### Report summary
+
+The `publish-report` job adds a PR comment summarizing all the tests executed as part of the matrix. For tests that failed, the comment includes links to the GitHub Pages website, where the detailed reports can be browsed.
+
+![](/img/e2e-report-summary.png)
+
+```
+
+```

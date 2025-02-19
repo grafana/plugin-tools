@@ -15,7 +15,7 @@ import {
 import { DATASOURCE_REF } from '../../constants';
 import { CustomSceneObject } from './CustomSceneObject';
 
-export function getBasicScene(templatised = true, seriesToShow = '__server_names') {
+export function homeScene(templatised = true, seriesToShow = '__server_names') {
   const timeRange = new SceneTimeRange({
     from: 'now-6h',
     to: 'now',
