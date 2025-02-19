@@ -16,7 +16,7 @@ const ruleTester = new RuleTester({
 ruleTester.run('import-is-compatible', importIsCompatible, {
   valid: [
     {
-      code: `import { LoadingPlaceholder } from '@grafana/ui';`,
+      code: `import { LoadingState } from '@grafana/data';`,
     },
   ],
   invalid: [
