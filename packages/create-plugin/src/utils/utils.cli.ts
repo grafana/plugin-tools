@@ -1,4 +1,7 @@
 import minimist from 'minimist';
+import createDebug from 'debug';
+
+export const debug = createDebug('create-plugin');
 
 export const args = process.argv.slice(2);
 
@@ -10,6 +13,8 @@ export const argv = minimist(args, {
     hasBackend: 'backend',
     pluginName: 'plugin-name',
     orgName: 'org-name',
+    // temporary flag whilst we work on the migration updates
+    experimentalUpdates: 'experimental-updates',
   },
 });
 
