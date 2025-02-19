@@ -13,6 +13,13 @@ marked.use(
   }) as MarkedExtension
 );
 
+export function printHeader(message: string, status: 'success' | 'info' | 'error' = 'success') {
+  const color = status === 'success' ? 'green' : status === 'info' ? 'blue' : 'red';
+  let prefix = chalk.reset.inverse.bold[color](` CREATE PLUGIN `);
+  let txt = chalk[color](message);
+  console.log(`${prefix}  ${txt}`);
+}
+
 export function displayAsMarkdown(msg: string) {
   return marked(msg);
 }

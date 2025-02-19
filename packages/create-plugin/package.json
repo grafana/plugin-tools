@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "5.17.0",
+  "version": "5.18.0",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -37,7 +37,7 @@
     "generate-datasource-backend": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample datasource' --orgName='sample-org' --pluginType='datasource' --hasBackend",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -61,9 +61,11 @@
     "@types/marked-terminal": "^6.1.1",
     "@types/minimist": "^1.2.5",
     "@types/semver": "^7.5.8",
+    "@types/tmp": "^0.2.6",
     "@types/which": "^3.0.4",
     "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^5.1.0"
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "tmp": "^0.2.3"
   },
   "overrides": {
     "@types/marked-terminal": {

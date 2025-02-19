@@ -1,3 +1,21 @@
+# v5.18.0 (Wed Feb 19 2025)
+
+#### 🚀 Enhancement
+
+- Feat: Create Plugin updates as migrations [#1479](https://github.com/grafana/plugin-tools/pull/1479) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana patch dependencies to v11.5.2 [#1549](https://github.com/grafana/plugin-tools/pull/1549) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v5.17.0 (Fri Feb 14 2025)
 
 #### 🚀 Enhancement

@@ -29,4 +29,21 @@ module.exports = [
       'react-hooks/rules-of-hooks': 'off',
     },
   },
+  {
+    name: 'create-plugin/overrides',
+    files: ['packages/create-plugin/src/migrations/scripts/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['fs', 'fs:promises', 'node:fs', 'node:fs/promises'],
+              message: 'Use the Context passed to the migration script.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
