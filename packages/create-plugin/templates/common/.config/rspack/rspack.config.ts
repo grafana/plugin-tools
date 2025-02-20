@@ -7,16 +7,17 @@
 
 import rspack, { type Configuration } from '@rspack/core';
 import ESLintPlugin from 'eslint-webpack-plugin';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 import RspackLiveReloadPlugin from './liveReloadPlugin';
-
+import { BuildModeRspackPlugin } from './BuildModeRspackPlugin';
 import { DIST_DIR, SOURCE_DIR } from './constants';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
 
+const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 
@@ -57,12 +58,15 @@ const config = async (env): Promise<Configuration> => {
       'react-redux',
       'redux',
       'rxjs',
-      'react-router',
+      'react-router',{{#unless useReactRouterV6}}
+      'react-router-dom',{{/unless}}
       'd3',
-      'angular',
-      '@grafana/ui',
+      'angular',{{#unless bundleGrafanaUI}}
+      '@grafana/ui',{{/unless}}
       '@grafana/runtime',
-      '@grafana/data',
+      '@grafana/data',{{#if bundleGrafanaUI}}
+      'react-inlinesvg',
+      'i18next',{{/if}}
 
       // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
       //@ts-ignore - rspack types seem to be a bit broken here.
@@ -167,16 +171,22 @@ const config = async (env): Promise<Configuration> => {
     },
 
     output: {
+      clean: {
+        keep: new RegExp(`(.*?_(amd64|arm(64)?)(.exe)?|go_plugin_build_manifest)`),
+      },
       filename: '[name].js',
+      chunkFilename: env.production ? '[name].js?_cache=[contenthash]' : '[name].js',
       library: {
         type: 'amd',
       },
       path: path.resolve(process.cwd(), DIST_DIR),
-      publicPath: `./`,
+      publicPath: `public/plugins/${pluginJson.id}/`,
       uniqueName: pluginJson.id,
+      crossOriginLoading: 'anonymous',
     },
 
     plugins: [
+      new BuildModeRspackPlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new rspack.BannerPlugin({
@@ -223,10 +233,13 @@ const config = async (env): Promise<Configuration> => {
           ],
         },
       ]),
+      new SubresourceIntegrityPlugin({
+        hashFuncNames: ["sha256"],
+      }),
       ...(env.development
         ? [
             new RspackLiveReloadPlugin(),
-            new ForkTsCheckerWebpackPlugin({
+            new TsCheckerRspackPlugin({
               async: Boolean(env.development),
               issue: {
                 include: [{ file: '**/*.{ts,tsx}' }],
@@ -254,8 +267,6 @@ const config = async (env): Promise<Configuration> => {
       ignored: /node_modules/,
     };
   }
-
-
 
   return baseConfig;
 };
