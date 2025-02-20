@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-types-bundler@0.2.5`
+  - Plugin Types Bundler: Update the .tsconfig [#1561](https://github.com/grafana/plugin-tools/pull/1561) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/eslint-plugin-plugins@0.2.1`
   - ESLint: reduces false positives [#1555](https://github.com/grafana/plugin-tools/pull/1555) ([@hugohaggmark](https://github.com/hugohaggmark))
 - `@grafana/create-plugin@5.18.1`
