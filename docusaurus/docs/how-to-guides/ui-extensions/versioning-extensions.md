@@ -13,7 +13,7 @@ sidebar_position: 40
 
 # Best practices for versioning UI extensions
 
-To ensure stability and smooth transitions when updating UI extensions, use a _version suffix_ in the ID of the extension point or exposed component. This approach helps maintain compatibility while allowing developers to introduce breaking changes in a controlled manner.
+To maintain stability and ensure smooth transitions when updating UI extensions, include a _version suffix_ in the ID of the extension point or exposed component. This practice preserves compatibility while allowing developers to manage breaking changes in a controlled way.
 
 ## Use a version suffix in the ID
 
