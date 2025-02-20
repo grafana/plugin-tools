@@ -1,3 +1,20 @@
+# (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/eslint-plugin-plugins@0.2.1`
+  - ESLint: reduces false positives [#1555](https://github.com/grafana/plugin-tools/pull/1555) ([@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.18.1`
+  - chore(deps): update dependency @grafana/e2e-selectors to v11.5.2 [#1510](https://github.com/grafana/plugin-tools/pull/1510) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Wed Feb 19 2025)
 
 #### 🚀 Enhancement

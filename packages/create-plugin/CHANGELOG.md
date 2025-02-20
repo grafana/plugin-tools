@@ -1,3 +1,16 @@
+# v5.18.1 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/e2e-selectors to v11.5.2 [#1510](https://github.com/grafana/plugin-tools/pull/1510) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.18.0 (Wed Feb 19 2025)
 
 #### 🚀 Enhancement
