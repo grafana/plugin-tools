@@ -49,28 +49,52 @@ npm install
 
 There are a collection of [commands](#commmands) to assist with developing `create-plugin`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
 
+Development requires linking this application so you can run it in your terminal to see what effect your changes have.
+
+```shell
+npm run build -w @grafana/create-plugin
+npm link -w @grafana/create-plugin
+```
+
+Run the following commands to confirm the above worked successfully:
+
+```shell
+which create-plugin
+# /Users/jackwestbrook/.nvm/versions/node/v22.13.0/bin/create-plugin
+npx create-plugin version
+# 5.18.0
+```
+
+You should now be able to run `npx create-plugin` or `npx create-plugin update` to test out changes locally.
+
+If you see `create-plugin not found` try running `npm unlink -g @grafana/create-plugin` then run the build and link commands again.
+
 ### Commmands
 
-Below are the main commands used for developing `create-plugin`. They can be run by either `npx nx run @grafana/create-plugin:<name_of_command>`, `npm run <name_of_command> -w @grafana/create-plugin` or navigating to `packages/create-plugin` and running the command directly as detailed below.
+Below are the main commands used for developing `create-plugin`. They can be run using either `npx nx run`, `npm run` or navigating to `packages/create-plugin` and running the command directly.
+
+#### Build
+
+Creates a production build of @grafana/create-plugin.
 
 ```shell
-npm run build # used to build @grafana/create-plugin
+npm run build -w @grafana/create-plugin
+# or with nx caching
+npx nx run @grafana/create-plugin:build
+# or from with packages/create-plugin directory
+npm run build
 ```
 
-```shell
-npm run dev # watches for changes to files and rebuilds @grafana/create-plugin automatically
-```
+#### Develop
+
+Creates a development build of @grafana/create-plugin and watches for changes to files and rebuilds automatically.
 
 ```shell
-npm run dev-app # watches for changes and scaffolds an app plugin (in ./generated) for developing app configs
-```
-
-```shell
-npm run dev-panel # watches for changes and scaffolds an app plugin (in ./generated) for developing panel configs
-```
-
-```shell
-npm run dev-datasource # watches for changes and scaffolds an app plugin (in ./generated) for developing datasource configs
+npm run dev -w @grafana/create-plugin
+# or with nx
+npx nx run @grafana/create-plugin:dev
+# or from with packages/create-plugin directory
+npm run dev
 ```
 
 ### Conventions
