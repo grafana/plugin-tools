@@ -26,10 +26,10 @@ If your plugin supports and older (supported) release, locate the tag using sear
 ### Grafana OSS
 
 For v10.2+ OSS
-[v10.2+ OSS]<https://hub.docker.com/repository/docker/grafana/grafana-oss-dev/tags?name=10.2>
+[v10.2+ OSS](https://hub.docker.com/repository/docker/grafana/grafana-oss-dev/tags?name=10.2)
 
 For 11.5+ OSS
-[v11.5+ OSS]<https://hub.docker.com/repository/docker/grafana/grafana-oss-dev/tags?name=11.5>
+[v11.5+ OSS](https://hub.docker.com/repository/docker/grafana/grafana-oss-dev/tags?name=11.5)
 
 ```YAML
 services:
@@ -50,10 +50,10 @@ export GRAFANA_VERSION=11.5.0-221762
 Enterprise supports additional API calls, use this type of image when your plugin relies on Enterprise features.
 
 For v10.2+ Enterprise
-[v10.2+ Enterprise]<https://hub.docker.com/repository/docker/grafana/grafana-enterprise-dev/tags?name=10.2>
+[v10.2+ Enterprise](https://hub.docker.com/repository/docker/grafana/grafana-enterprise-dev/tags?name=10.2)
 
 For 11.5+ Enterprise
-[v11.5+ Enterprise]<https://hub.docker.com/repository/docker/grafana/grafana-enterprise-dev/tags?name=11.5>
+[v11.5+ Enterprise](https://hub.docker.com/repository/docker/grafana/grafana-enterprise-dev/tags?name=11.5)
 
 ```YAML
 services:
