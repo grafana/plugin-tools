@@ -1,3 +1,16 @@
+# (Fri Feb 21 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.3`
+  - Create Plugin: fix absolute path being interpreted by shell [#1560](https://github.com/grafana/plugin-tools/pull/1560) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
