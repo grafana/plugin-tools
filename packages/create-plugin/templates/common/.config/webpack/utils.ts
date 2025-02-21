@@ -25,8 +25,12 @@ export function getPackageJson() {
   return require(path.resolve(process.cwd(), 'package.json'));
 }
 
+export function getPluginJsonPath() {
+  return path.resolve(process.cwd(), `${SOURCE_DIR}/plugin.json`);
+}
+
 export function getPluginJson() {
-  return require(path.resolve(process.cwd(), `${SOURCE_DIR}/plugin.json`));
+  return require(getPluginJsonPath());
 }
 
 export function getCPConfigVersion() {
