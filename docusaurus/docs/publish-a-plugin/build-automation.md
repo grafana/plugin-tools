@@ -20,7 +20,7 @@ to ensure that your plugin will be built and packaged in the correct format.
 
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
-If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission.
+If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token/) documentation includes guidance on how to create this token.
 
 By creating a release tag, the whole process becomes automated, resulting in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins)
 
@@ -28,7 +28,7 @@ You can use the links to the archive and zip files from the release page to make
 
 ## Setup the release workflow
 
-Ensure your repository contains a `.github/workflows/release.yml` file with the following contents: 
+Ensure your repository contains a `.github/workflows/release.yml` file with the following contents:
 
 ```yaml title=".github/workflows/release.yml"
 name: Release
@@ -56,10 +56,6 @@ jobs:
           # creates a signed build provenance attestation to verify the authenticity of the plugin build
           attestation: true
 ```
-
-:::note
-It is likely this file already exists in your repository. Verify its content and make any necessary changes to match the example.
-:::
 
 ## How to trigger the release workflow
 
@@ -94,44 +90,8 @@ This updates your version in the `package.json` file and creates a new Git tag w
 After creating the tag, push it to the repository:
 
 ```bash
-git push origin main --tags
+git push origin main --follow-tags
 ```
-
-<details>
-  <summary>Alternatively, create a `vX.X.X` tag manually</summary>
-
-### Create a `vX.X.X` tag manually
-
-If you prefer, you can also create the tag manually using the following commands:
-
-```BASH
-git checkout main
-git pull origin main
-git tag v2.0.1 # adjust the version accordingly
-git push origin main --tags
-```
-
-### Retag a release
-
-If you need to re-tag the release, the current tag can be removed with these commands:
-
-```BASH
-git tag -d v2.0.1 # adjust the version accordingly
-git push --delete origin v2.0.1
-git checkout main
-git pull origin main
-```
-
-After you push the tag, you can create the same tag again.
-
-Once you have created the tag, you can push it to the repository:
-
-```bash
-# assuming your default branch is `main`
-git push origin main --tags
-```
-
-</details>
 
 ## Publish your release in Github
 
@@ -141,7 +101,7 @@ The workflow creates draft releases. You can edit the release in GitHub, update 
 
 ## Use your release assets for your plugin submission
 
-Once the release is published, you can use the release assets to submit your plugin to the [Grafana plugin catalog](https://grafana.com/plugins). Simply copy the links to the archive (zip) file and sha1 sum. Use these in the plugin submission form.
+Once the draft release is published, you can use the release assets to submit your plugin to the [Grafana plugin catalog](https://grafana.com/plugins). Simply copy the links to the archive (zip) file and sha1 sum. Use these in the plugin submission form.
 
 ## Download the release zip file
 
@@ -149,11 +109,11 @@ Access the final release zip file directly from the GitHub repository release pa
 
 ## Signing your plugin automatically
 
-You can sign your releases using the Github Action. First you will have to [Generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+You can sign your plugin releases using the Github Action. First you will have to [Generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
 
-We advice you to save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
+We advise you to save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
 
-Ensure your workflow release (refer to [Set up the release workflow](#setup-the-release-workflow)) has the `policy_token` line uncommented and is using the correct secret name. For example:
+By default, create-plugin will add the following `release.yml` to your scaffolded plugin with the following contents. If this is missing from your plugin repository, copy the following to add the workflow:
 
 ```yaml title=".github/workflows/release.yml"
 name: Release
