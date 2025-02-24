@@ -46,7 +46,7 @@
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-deprecation": "^2.0.0",
-    "eslint-webpack-plugin": "^4.0.1"{{#unless useExperimentalRspack}},
+    "eslint-webpack-plugin": "^4.0.1",{{#unless useExperimentalRspack}}
     "fork-ts-checker-webpack-plugin": "^8.0.0",{{/unless}}
     "glob": "^10.2.7",
     "identity-obj-proxy": "3.0.0",
