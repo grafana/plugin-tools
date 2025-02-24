@@ -16,8 +16,7 @@ class RspackLiveReloadPlugin {
   }
 
   apply(compiler) {
-    const isRspack = compiler.getInfrastructureLogger !== undefined;
-    console.log(compiler)
+    const isRspack = compiler.rspack !== undefined;
     if (!isRspack) {
       throw new Error('This plugin is designed to work with Rspack 1');
     }
