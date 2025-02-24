@@ -97,7 +97,7 @@ git push origin main --follow-tags
 
 After you [create and push the tag](#how-to-trigger-the-release-workflow), the release workflow will run, generating a release with all the artifacts needed to submit your plugin to the [Grafana plugin catalog](https://grafana.com/plugins).
 
-The workflow creates draft releases. You can edit the release in GitHub, update the description as needed, and then publish it. For more details on managing repository releases, refer to the [GitHub documentation](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
+The workflow creates a **draft release**. You can edit the release in GitHub, update the description as needed, and then publish it. For more details on managing repository releases, refer to the [GitHub documentation](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
 
 ## Use your release assets for your plugin submission
 
