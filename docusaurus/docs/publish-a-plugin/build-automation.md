@@ -105,7 +105,7 @@ Once the draft release is published, you can use the release assets to submit yo
 
 ## Download the release zip file
 
-Access the final release zip file directly from the GitHub repository release path (for example, `https://github.com/org/plugin-id/releases`).
+Access the release zip file directly from the GitHub repository release path (for example, `https://github.com/org/plugin-id/releases`).
 
 ## Signing your plugin automatically
 
