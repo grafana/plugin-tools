@@ -1,3 +1,58 @@
+# v5.18.3 (Fri Feb 21 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: fix absolute path being interpreted by shell [#1560](https://github.com/grafana/plugin-tools/pull/1560) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.1 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/e2e-selectors to v11.5.2 [#1510](https://github.com/grafana/plugin-tools/pull/1510) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v5.18.0 (Wed Feb 19 2025)
+
+#### 🚀 Enhancement
+
+- Feat: Create Plugin updates as migrations [#1479](https://github.com/grafana/plugin-tools/pull/1479) ([@jackw](https://github.com/jackw) [@leventebalogh](https://github.com/leventebalogh))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana patch dependencies to v11.5.2 [#1549](https://github.com/grafana/plugin-tools/pull/1549) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# v5.17.0 (Fri Feb 14 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Updates Scenes templates [#1538](https://github.com/grafana/plugin-tools/pull/1538) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v5.16.0 (Mon Feb 10 2025)
 
 #### 🚀 Enhancement

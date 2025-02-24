@@ -1,3 +1,15 @@
+# v0.2.5 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin Types Bundler: Update the .tsconfig [#1561](https://github.com/grafana/plugin-tools/pull/1561) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
 # v0.2.4 (Tue Feb 04 2025)
 
 #### 🐛 Bug Fix
