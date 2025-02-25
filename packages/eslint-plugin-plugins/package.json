@@ -54,7 +54,7 @@
     "@typescript-eslint/parser": "^8.25.0",
     "@typescript-eslint/rule-tester": "^8.25.0",
     "concurrently": "^9.1.2",
-    "tsup": "^8.3.6"
+    "tsup": "^8.4.0"
   },
   "peerDependencies": {
     "@types/eslint": "^8.56.10 || ^9.0.0",
