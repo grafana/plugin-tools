@@ -20,7 +20,7 @@ To ensure compatibility and maintain seamless performance, query migration handl
 
 Depending on the approach you take for performing [one of the steps](#step-5-use-migration-code-from-the-frontend-using-experimental-apis) in this guide, you may need to fulfill certain prerequisites. These prerequisites are:
 
-1. Grafana must be configured to run data sources as standalone API servers, a behavior which is behind the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/3457f219be1c8bce99f713d7a907ee339ef38229/pkg/services/featuremgmt/registry.go#L519).
+1. Grafana must be configured to run data sources as standalone API servers, a behavior which is behind the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/7773c658bb3280f0432fc9742109f8eb324c83a3/pkg/services/featuremgmt/registry.go#L474).
 1. The plugin must be run on a Grafana version 11.4 or later.
 
 More information about these prerequisites is found in [step 5](#step-5-use-migration-code-from-the-frontend-using-experimental-apis), but if your plugin can't adhere to these requirements, there is an [alternative approach](#step-5-alternative-run-migrations-using-legacy-apis) using existing APIs.
@@ -156,7 +156,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 
 :::note
 
-This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/build-go-fast/pkg/services/featuremgmt/registry.go#L528). It also requires the package **@grafana/runtime > 11.4** (still experimental functionality). If your plugin implements this feature, bump its **grafanaDepencency to ">=11.4.0"**. If your plugin can't adhere to these requirements, refer to [Run migrations using legacy APIs](#step-5-alternative-run-migrations-using-legacy-apis).
+This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/7773c658bb3280f0432fc9742109f8eb324c83a3/pkg/services/featuremgmt/registry.go#L474). It also requires the package **@grafana/runtime > 11.4** (still experimental functionality). If your plugin implements this feature, bump its **grafanaDepencency to ">=11.4.0"**. If your plugin can't adhere to these requirements, refer to [Run migrations using legacy APIs](#step-5-alternative-run-migrations-using-legacy-apis).
 
 :::
 
