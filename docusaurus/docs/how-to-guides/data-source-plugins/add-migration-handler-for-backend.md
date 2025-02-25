@@ -156,7 +156,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 
 :::note
 
-This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/build-go-fast/pkg/services/featuremgmt/registry.go#L528). It also requires the package **@grafana/runtime > 11.4** (still experimental functionality). If your plugin implements this feature, bump its **grafanaDepencency to ">=11.4.0"**. If your plugin can't adhere to these requirements, refer to [Run migrations using legacy APIs](#step-5-alternative-run-migrations-using-legacy-apis).
+This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](https://github.com/grafana/grafana/blob/7773c658bb3280f0432fc9742109f8eb324c83a3/pkg/services/featuremgmt/registry.go#L474). It also requires the package **@grafana/runtime > 11.4** (still experimental functionality). If your plugin implements this feature, bump its **grafanaDepencency to ">=11.4.0"**. If your plugin can't adhere to these requirements, refer to [Run migrations using legacy APIs](#step-5-alternative-run-migrations-using-legacy-apis).
 
 :::
 
