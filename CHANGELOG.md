@@ -1,3 +1,16 @@
+# (Tue Feb 25 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.18.3`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-226761 [#1573](https://github.com/grafana/plugin-tools/pull/1573) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Fri Feb 21 2025)
 
 #### 🐛 Bug Fix
