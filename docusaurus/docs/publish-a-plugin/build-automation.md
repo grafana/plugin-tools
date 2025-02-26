@@ -111,7 +111,7 @@ Access the release zip file directly from the GitHub repository release path (fo
 
 You can sign your plugin releases using the Github Action. First you will have to [Generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
 
-We advise you to save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
+Save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
 
 By default, create-plugin will add the following `release.yml` to your scaffolded plugin with the following contents. If this is missing from your plugin repository, copy the following to add the workflow:
 
