@@ -5,9 +5,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export const IS_DEV = process.env.CREATE_PLUGIN_DEV !== undefined;
 
-export const DEV_EXPORT_DIR = path.join(__dirname, '..', 'generated');
-
-export const EXPORT_PATH_PREFIX = IS_DEV ? DEV_EXPORT_DIR : process.cwd();
+export const EXPORT_PATH_PREFIX = process.cwd();
 
 export const DIST_DIR = path.join(__dirname, 'dist');
 
@@ -27,23 +25,21 @@ export const TEMPLATE_PATHS: Record<string, string> = {
   common: path.join(TEMPLATES_DIR, 'common'),
   datasource: path.join(TEMPLATES_DIR, 'datasource'),
   panel: path.join(TEMPLATES_DIR, 'panel'),
-  ciWorkflows: path.join(TEMPLATES_DIR, 'github', 'ci'),
-  isCompatibleWorkflow: path.join(TEMPLATES_DIR, 'github', 'is-compatible'),
+  ciWorkflows: path.join(TEMPLATES_DIR, 'github'),
 };
 
 export enum PLUGIN_TYPES {
   app = 'app',
   panel = 'panel',
   datasource = 'datasource',
-  secretsmanager = 'secretsmanager',
+  // TODO: Don't understand why this is here. Cannot create a secretsmanager or a renderer.
+  // secretsmanager = 'secretsmanager',
   scenes = 'scenesapp',
 }
 
 // This gets merged into variables coming from user prompts (when scaffolding) or any other dynamic variables,
 // and will be available to use in the templates.
-// Example: "@grafana/ui": "{{ grafanaVersion }}"
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaVersion: '10.3.3',
   grafanaImage: 'grafana-enterprise',
 };
 
@@ -87,7 +83,9 @@ export const MIGRATION_CONFIG = {
 
 export const UDPATE_CONFIG = {
   // Files that should be overriden between configuration version updates.
-  filesToOverride: ['.config/'],
+  filesToOverride: ['.config/', '.cprc.json'],
+  // Files that are no longer needed for the project and can be removed.
+  filesToRemove: ['.config/webpack/publicPath.ts'],
 };
 
 // prettier-ignore
@@ -131,7 +129,7 @@ export const TEXT = {
  * Run \`yarn build\` and observe the output for any errors.
  * Test your plugin in grafana and make sure everything works as expected.
 
-See instructions on how to customize your configuration here https://grafana.com/developers/plugin-tools/create-a-plugin/extend-a-plugin/extend-configurations
+See instructions on how to customize your configuration here https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#extend-configurations
   `,
 
   updateCommandWarning: '**⚠️  Warning!**\nThis is going to update files under the `.config/` folder.\nMake sure to commit your changes before running this script.',

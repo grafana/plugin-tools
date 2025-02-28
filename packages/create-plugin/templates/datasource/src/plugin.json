@@ -2,12 +2,12 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
   "name": "{{ titleCase pluginName }}",
-  "id": "{{ normalize_id pluginName orgName 'datasource' }}",
+  "id": "{{ pluginId }}",
   "metrics": true,{{#if hasBackend}}
   "backend": true,
   "executable": "gpx_{{ snakeCase pluginName }}",{{/if}}
   "info": {
-    "description": "{{ sentenceCase pluginDescription }}",
+    "description": "",
     "author": {
       "name": "{{ sentenceCase orgName }}"
     },
@@ -22,7 +22,7 @@
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">={{ grafanaVersion }}",
+    "grafanaDependency": ">=10.4.0",
     "plugins": []
   }
 }

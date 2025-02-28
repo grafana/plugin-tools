@@ -1,3 +1,63 @@
+# v3.0.8 (Thu Jan 09 2025)
+
+#### 🐛 Bug Fix
+
+- Sign Plugin: Remove console.log on failed version check [#1444](https://github.com/grafana/plugin-tools/pull/1444) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v3.0.5 (Wed Dec 11 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency proxy-agent to v6.5.0 [#1387](https://github.com/grafana/plugin-tools/pull/1387) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v3.0.4 (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v3.0.3 (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- Adjust license text [#994](https://github.com/grafana/plugin-tools/pull/994) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v3.0.2 (Tue May 14 2024)
+
+#### 🐛 Bug Fix
+
+- Chore(deps): Bump proxy-agent from 6.3.1 to 6.4.0 [#792](https://github.com/grafana/plugin-tools/pull/792) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v3.0.1 (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix

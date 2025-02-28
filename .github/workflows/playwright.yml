@@ -6,8 +6,9 @@ on:
       - '.github/workflows/playwright.yml'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
 
 jobs:
   resolve-versions:
@@ -23,7 +24,9 @@ jobs:
         id: resolve-versions
         uses: grafana/plugin-actions/e2e-version@main
         with:
-          version-resolver-type: version-support-policy
+          version-resolver-type: plugin-grafana-dependency
+          grafana-dependency: '>=8.5.0'
+          # limit: 0 # Uncomment to test all versions since 8.5.0. Useful when testing compatibility for new APIs.
 
   playwright-tests:
     needs: resolve-versions
@@ -39,6 +42,9 @@ jobs:
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
@@ -49,29 +55,49 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+
       - name: Start Grafana
         run: |
           cd packages/plugin-e2e
-          docker-compose pull
-          AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} GOOGLE_JWT_FILE=${{secrets.GOOGLE_JWT_FILE}} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker-compose up -d
+          docker compose pull
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
-      - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
         with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
+          url: http://localhost:3000/login
 
       - name: Run Playwright tests
         id: run-tests
         run: npm run playwright:test --w @grafana/plugin-e2e
-        env:
-          GOOGLE_JWT_FILE: ${{ secrets.GOOGLE_JWT_FILE }}
 
-      - name: Publish report to GCS
-        if: ${{ github.repository_owner == 'grafana' && (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
-        uses: grafana/plugin-actions/publish-report@main
+      - name: Upload e2e test summary
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        if: ${{ always() && !cancelled() }}
         with:
-          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
-          path: packages/plugin-e2e/playwright-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-outcome: ${{ steps.run-tests.outcome }}
+          report-dir: packages/plugin-e2e/playwright-report
+
+  publish-report:
+    if: ${{ always() && !cancelled() }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

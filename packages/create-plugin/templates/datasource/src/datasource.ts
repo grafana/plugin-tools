@@ -5,13 +5,12 @@ import {
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
-  MutableDataFrame,
+  createDataFrame,
   FieldType,
 } from '@grafana/data';
 
 import { MyQuery, MyDataSourceOptions, DEFAULT_QUERY, DataSourceResponse } from './types';
 import { lastValueFrom } from 'rxjs';
-import _ from 'lodash';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   baseUrl: string;
@@ -37,7 +36,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     // Return a constant for each query.
     const data = options.targets.map((target) => {
-      return new MutableDataFrame({
+      return createDataFrame({
         refId: target.refId,
         fields: [
           { name: 'Time', values: [from, to], type: FieldType.time },
@@ -77,7 +76,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       }
     } catch (err) {
       let message = '';
-      if (_.isString(err)) {
+      if (typeof err === 'string') {
         message = err;
       } else if (isFetchError(err)) {
         message = 'Fetch error: ' + (err.statusText ? err.statusText : defaultErrorMessage);

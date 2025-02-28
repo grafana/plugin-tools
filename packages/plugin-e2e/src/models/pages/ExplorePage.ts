@@ -1,6 +1,6 @@
 import * as semver from 'semver';
 import { Locator } from '@playwright/test';
-import { NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
+import { GrafanaPageArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from '../components/TimeRange';
@@ -17,8 +17,11 @@ export class ExplorePage extends GrafanaPage {
   timeSeriesPanel: Panel;
   tablePanel: Panel;
 
-  constructor(ctx: PluginTestCtx) {
-    super(ctx);
+  constructor(
+    ctx: PluginTestCtx,
+    readonly args?: GrafanaPageArgs
+  ) {
+    super(ctx, args);
     this.datasource = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
     this.timeSeriesPanel = new Panel(
@@ -75,7 +78,8 @@ export class ExplorePage extends GrafanaPage {
       });
     } catch (_) {
       // handle the case when the run button is hidden behind the "Show more items" button
-      await this.getByGrafanaSelector(components.PageToolbar.item(components.PageToolbar.shotMoreItems)).click();
+      const toolbarText = 'Show more items';
+      await this.getByGrafanaSelector(components.PageToolbar.item(toolbarText)).click();
       await this.getByGrafanaSelector(components.RefreshPicker.runButtonV2).last().click();
     }
     return responsePromise;

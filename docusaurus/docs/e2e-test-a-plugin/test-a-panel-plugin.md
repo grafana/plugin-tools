@@ -16,13 +16,112 @@ Panel plugins allow you to visualize data in different ways. This guide shows yo
 
 ## Test data
 
-To be able to test your panel plugin, you'll need to feed it with test data. Grafana ships with the [TestData](https://grafana.com/docs/grafana/latest/datasources/testdata/) data source, which can be used to simulate [data frames](../introduction/data-frames.md) formatted as time series, logs, traces, annotations, and more.
+To be able to test your panel plugin, you'll need to feed it with test data. Grafana ships with the [TestData](https://grafana.com/docs/grafana/latest/datasources/testdata/) data source, which can be used to simulate [data frames](../key-concepts/data-frames) formatted as time series, logs, traces, annotations, and more.
 
 ## Before you begin
 
 To write end-to-end tests similar to the ones in this guide, you'll need the `TestData` data source to be configured using provisioning. If you haven't already read our guide on how to [set up resources](./setup-resources.md), then do that first.
 
 ## Test panel options
+
+To test your panel’s behavior, we recommend [provisioning a dashboard](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/setup-resources) with multiple panels showcasing different states of your panel. This ensures your panel functions correctly across various configurations. By avoiding reliance on the Grafana panel edit UI, this approach reduces test failures caused by UI changes, making your tests more stable and reliable.
+
+In cases where interacting with the panel edit options is necessary, we provide a set of APIs to simplify writing tests. These APIs ensure your tests will run consistently across different versions of Grafana without requiring changes.
+
+To interact with any of the Grafana-provided option groups, use any of the following functions:
+
+| Function Name              | Returned Option Group |
+| -------------------------- | --------------------- |
+| `getPanelOptions()`        | Panel options         |
+| `getStandardOptions()`     | Standard options      |
+| `getValueMappingOptions()` | Value mappings        |
+| `getDataLinksOptions()`    | Data links            |
+| `getThresholdsOptions()`   | Thresholds            |
+
+To interact with a custom option group added by your panel, use the `getCustomOptions('name of option group')` API.
+
+Calling any of these APIs returns an options group object, which provides APIs for interacting with the options within that group.
+
+| Function Name           | Return Option Type |
+| ----------------------- | ------------------ |
+| `getRadioGroup(label)`  | `RadioGroup`       |
+| `getSwitch(label)`      | `Switch`           |
+| `getTextInput(label)`   | `Locator`          |
+| `getNumberInput(label)` | `Locator`          |
+| `getSliderInput(label)` | `Locator`          |
+| `getSelect(label)`      | `Select`           |
+| `getMultiSelect(label)` | `MultiSelect`      |
+| `getColorPicker(label)` | `ColorPicker`      |
+| `getUnitPicker(label)`  | `UnitPicker`       |
+
+### Examples
+
+This test ensures that when a user selects a different unit from the standard options, the displayed unit updates correctly in the UI.
+
+```ts
+test('should change the unit when standard option is changed', async ({ panelEditPage }) => {
+  const standardOptions = panelEditPage.getStandardOptions();
+  const unitPicker = standardOptions.getUnitPicker('Unit');
+  const unit = page.getByTestId('unit-container');
+
+  await unitPicker.selectOption('Misc > Pixels');
+
+  await expect(unit).toContainText('px');
+});
+```
+
+This test verifies that selecting a different time zone in the panel's settings updates the displayed time zone in the clock panel.
+
+```ts
+test('should change time zone when option is selected', async ({ panelEditPage, page }) => {
+  const timeFormatOptions = panelEditPage.getCustomOptions('Timezone');
+  const timeZoneSelect = timeFormatOptions.getSelect('Timezone');
+  const timeZone = page.getByTestId('clock-panel').getByTestId('time-zone');
+
+  await timeZoneSelect.selectOption('Europe/Stockholm');
+  await expect(timeZone).toContainText('Europe/Stockholm');
+});
+```
+
+This test verifies that enabling the monospace font option in the Clock panel correctly updates the panel's font family to "monospace".
+
+```ts
+test('should change the font family when enabling monospace', async ({ panelEditPage, page }) => {
+  const clockOptions = panelEditPage.getCustomOptions('Clock');
+  const monospaceFont = clockOptions.getSwitch('Font monospace');
+  const panel = page.getByTestId('clock-panel');
+
+  await monospaceFont.check();
+  await expect(panel).toHaveCSS('font-family', 'monospace');
+});
+```
+
+This test ensures that when the "Countdown" mode is selected in the clock panel's options, the clock is running in countdown mode.
+
+```ts
+test('should count down time when option is selected', async ({ panelEditPage, page }) => {
+  const clockOptions = panelEditPage.getCustomOptions('Clock');
+  const clockMode = clockOptions.getRadioGroup('Mode');
+  const panel = page.getByTestId('clock-panel-countdown');
+
+  await clockMode.check('Countdown');
+  await expect(panel).toBeVisible();
+});
+```
+
+This test verifies that the background color of a panel changes when a new color is selected from the color picker in the panel's options.
+
+```ts
+test('should update background color based on selected option', async ({ panelEditPage, page }) => {
+  const color = { hex: '#73bf69', rgb: 'rgb(115, 191, 105)' };
+  const clockOptions = panelEditPage.getCustomOptions('Clock');
+  const backgroundColor = clockOptions.getColorPicker('Background color');
+  const panel = page.getByTestId('clock-panel');
+
+  await backgroundColor.selectOption(color.hex);
+  await expect(panel).toHaveCSS('background-color', color.rgb);
+});
+```
 
 The Table panel defines a custom panel option called `Show table header` by default. If the switch is disabled, the Table panel should remove headers from the table.
 

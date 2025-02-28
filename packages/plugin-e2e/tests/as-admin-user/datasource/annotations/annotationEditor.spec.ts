@@ -1,17 +1,10 @@
 import * as semver from 'semver';
 import { test, expect, AnnotationPage } from '../../../../src';
-import { REDSHIFT_SCHEMAS } from '../mocks/resource';
 
-test('should load resources and display them as options when clicking on an input', async ({
-  annotationEditPage,
-  page,
-  readProvisionedDataSource,
-}) => {
-  await annotationEditPage.mockResourceResponse('schemas', REDSHIFT_SCHEMAS);
-  const ds = await readProvisionedDataSource({ fileName: 'redshift.yaml' });
+test('should render annotations editor', async ({ annotationEditPage, page, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
   await annotationEditPage.datasource.set(ds.name);
-  await page.getByLabel('Schema').click();
-  await expect(annotationEditPage.getByGrafanaSelector('Select option')).toContainText(REDSHIFT_SCHEMAS);
+  await expect(page.getByRole('textbox', { name: 'Query Text' })).toBeVisible();
 });
 
 test('should be able to add a new annotation when annotations already exist', async ({
@@ -21,7 +14,7 @@ test('should be able to add a new annotation when annotations already exist', as
   request,
   readProvisionedDashboard,
 }, testInfo) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'redshift.json' });
+  const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource-annotations.json' });
   const annotationPage = new AnnotationPage({ page, selectors, grafanaVersion, request, testInfo }, dashboard);
   await annotationPage.goto();
   await annotationPage.clickAddNew();

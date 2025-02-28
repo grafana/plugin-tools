@@ -17,6 +17,8 @@ body:
         - label: 'Create Plugin'
         - label: 'Sign Plugin'
         - label: 'Plugin E2E'
+        - label: 'Plugin Meta Extractor'
+        - label: 'Plugin ESLint Rules'
     validations:
       required: true
   - type: textarea

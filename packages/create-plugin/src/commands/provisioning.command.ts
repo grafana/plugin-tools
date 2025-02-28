@@ -13,9 +13,9 @@ export const provisioning = async () => {
     if (await confirmPrompt(TEXT.addProvisioning)) {
       if (!fs.existsSync(provisioningFolder)) {
         const provisioningSpecificFiles = glob.sync(`${TEMPLATE_PATHS[type]}/provisioning/**`, { dot: true });
-
+        const templateData = getTemplateData();
         provisioningSpecificFiles.forEach((file) => {
-          compileProvisioningTemplateFile(type, file, getTemplateData());
+          compileProvisioningTemplateFile(type, file, templateData);
         });
         printSuccessMessage(TEXT.addProvisioningSuccess);
       } else {

@@ -13,14 +13,10 @@ keywords:
 sidebar_position: 90
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import ScaffoldPluginE2InstallNPM from '@snippets/plugin-e2e-install.npm.md';
-import ScaffoldPluginE2EInstallPNPM from '@snippets/plugin-e2e-install.pnpm.md';
-import ScaffoldPluginE2EInstallYarn from '@snippets/plugin-e2e-install.yarn.md';
+import ScaffoldPluginE2InstallNPM from '@shared/plugin-e2e-install.md';
 
 :::danger
-When Grafana 11.0.0 is released the [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) will be deprecated and support will be dropped. We recommend all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
+With the release of Grafana 11.0.0 the [`@grafana/e2e`](https://www.npmjs.com/package/@grafana/e2e) package has been deprecated and support has been dropped. We recommend all plugin authors to migrate their end-to-end tests to use Playwright and `@grafana/plugin-e2e` instead of Cypress and `@grafana/e2e`.
 :::
 
 In this guide you'll learn:
@@ -42,15 +38,7 @@ The `@grafana/plugin-e2e` tool extends Playwright APIs, so you need to have `@pl
 
 Open the terminal and run the following command in your plugin's project directory:
 
-<CodeSnippets
-snippets={[
-{ component: ScaffoldPluginE2InstallNPM, label: 'npm' },
-{ component: ScaffoldPluginE2EInstallYarn, label: 'yarn' },
-{ component: ScaffoldPluginE2EInstallPNPM, label: 'pnpm' }
-]}
-groupId="package-manager"
-queryString="current-package-manager"
-/>
+<ScaffoldPluginE2InstallNPM />
 
 ### Step 3: Configure Playwright
 

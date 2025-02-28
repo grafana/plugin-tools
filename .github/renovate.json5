@@ -1,0 +1,104 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
+  "ignoreDeps": ["react", "react-dom", "@stylistic/eslint-plugin-ts", "lerna"],
+  "separateMajorMinor": false,
+  "reviewers": ["team:grafana/plugins-platform-frontend"],
+  "enabledManagers": ["regex", "npm", "github-actions"],
+  "postUpdateOptions": ["npmDedupe"],
+  "labels": ["dependencies", "javascript"],
+  // These custom managers are used to bump dependencies in create-plugin template files
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["_package.json"],
+      "matchStrings": ["\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","],
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)(?:docker-)?compose[^/]*\\.ya?ml$"],
+      "matchStrings": ["grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"],
+      "depNameTemplate": "grafana/grafana-enterprise",
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "automerge": true,
+      "groupName": "grafana patch dependencies",
+      "groupSlug": "all-grafana-patch",
+      "labels": ["dependencies", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
+      "excludePackageNames": ["@grafana/e2e-selectors"],
+      "matchUpdateTypes": ["patch"]
+    },
+    {
+      "automerge": true,
+      "groupName": "e2e-selector dependencies",
+      "groupSlug": "plugin-e2e-selectors",
+      "labels": ["dependencies", "patch", "release"],
+      "matchPackageNames": ["@grafana/e2e-selectors"],
+      "followTag": "modified",
+      "rangeStrategy": "bump",
+      "matchFileNames": ["packages/plugin-e2e/package.json", "package-lock.json"]
+    },
+    {
+      "groupName": "grafana dependencies",
+      "groupSlug": "all-grafana",
+      "labels": ["dependencies", "release", "patch"],
+      "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
+      "excludePackageNames": ["@grafana/e2e-selectors", "@grafana/eslint-config"],
+      "matchUpdateTypes": ["minor", "major"]
+    },
+    // Docusaurus dependencies have to be grouped together otherwise error out when building website.
+    {
+      "groupName": "docusaurus dependencies",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchPackagePatterns": ["@?docusaurus"],
+      "rangeStrategy": "bump"
+    },
+    // Auto dependencies should be grouped together to avoid issues
+    {
+      "groupName": "auto dependencies",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchPackagePatterns": ["^@auto-it", "^auto"]
+    },
+    {
+      "automerge": true,
+      "excludePackagePatterns": ["^@?docusaurus", "^@auto-it", "^auto", "@grafana/*"],
+      "groupName": "auto-merged devDependencies",
+      "groupSlug": "dev-dependencies-automerge",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchCurrentVersion": "!/^0/",
+      "matchDepTypes": ["devDependencies"],
+      "excludePackageNames": ["@grafana/e2e-selectors"],
+      "rangeStrategy": "bump"
+    },
+    // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
+    // which would be misleading to consumers.
+    {
+      "automerge": true,
+      "excludePackagePatterns": ["^@?docusaurus", "@grafana/*"],
+      "groupName": "auto-merged patch dependencies",
+      "groupSlug": "prod-dependencies-automerge",
+      "labels": ["dependencies", "javascript", "no-changelog"],
+      "matchCurrentVersion": "!/^0/",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch"]
+    },
+    {
+      "automerge": true,
+      "groupName": "auto-merged gitHub actions",
+      "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
+      "matchManagers": ["github-actions"]
+    }
+  ],
+  "prConcurrentLimit": 10,
+  "rebaseWhen": "conflicted",
+  "vulnerabilityAlerts": {
+    "addLabels": ["security"]
+  }
+}

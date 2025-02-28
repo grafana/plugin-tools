@@ -1,6 +1,5 @@
 import * as ts from 'typescript';
 import createDebug from 'debug';
-import * as tsquery from '@phenomnomnominal/tsquery';
 import { PluginExtensionTypes } from './types';
 
 const _debug = createDebug('plugin-meta-extractor');
@@ -19,7 +18,7 @@ export function getComponentExtensionConfigs(ast: ts.Node, checker: ts.TypeCheck
 }
 
 export function getExtensionConfigs(functionName: string, ast: ts.Node, checker: ts.TypeChecker) {
-  const identifiers = tsquery.query(ast, `Identifier[name=${functionName}]`) as ts.Identifier[];
+  const identifiers = query(ast, createIdentifierMatcher(functionName));
   const extensionConfigs = [];
 
   for (const identifier of identifiers) {
@@ -37,6 +36,48 @@ export function getExtensionConfigs(functionName: string, ast: ts.Node, checker:
   }
 
   return extensionConfigs;
+}
+
+function createIdentifierMatcher(functionName: string): (node: ts.Node) => boolean {
+  return (node) => {
+    if (!ts.isIdentifier(node)) {
+      return false;
+    }
+    return node.escapedText === functionName;
+  };
+}
+
+function query(node: ts.Node, findMatches: (node: ts.Node, ancestry: ts.Node[]) => boolean) {
+  const results: ts.Node[] = [];
+
+  traverse(node, (childNode: ts.Node, ancestry: ts.Node[]) => {
+    if (findMatches(childNode, ancestry)) {
+      results.push(childNode);
+    }
+  });
+
+  return results;
+}
+
+function traverse(
+  node: ts.Node,
+  iterator: (node: ts.Node, ancestors: ts.Node[]) => void,
+  ancestors: ts.Node[] = []
+): void {
+  if (node.parent != null) {
+    ancestors.unshift(node.parent);
+  }
+  iterator(node, ancestors);
+  let children: readonly ts.Node[] = [];
+  try {
+    // We need to use `getChildren()` to traverse JSDoc nodes
+    children = node.getChildren();
+  } catch {
+    // but it will fail for synthetic nodes, in which case we fall back:
+    node.forEachChild((child) => traverse(child, iterator, ancestors));
+  }
+  children.forEach((child) => traverse(child, iterator, ancestors));
+  ancestors.shift();
 }
 
 export function parseString(node: ts.Expression): string {

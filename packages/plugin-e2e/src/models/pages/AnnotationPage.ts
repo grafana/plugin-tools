@@ -4,8 +4,11 @@ import { AnnotationEditPage } from './AnnotationEditPage';
 import { GrafanaPage } from './GrafanaPage';
 
 export class AnnotationPage extends GrafanaPage {
-  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
-    super(ctx);
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly dashboard?: DashboardPageArgs
+  ) {
+    super(ctx, dashboard);
   }
 
   /**
@@ -24,15 +27,10 @@ export class AnnotationPage extends GrafanaPage {
    * Clicks the add new annotation button and returns the annotation edit page
    */
   async clickAddNew() {
-    const { addAnnotationCTAV2, addAnnotationCTA } = this.ctx.selectors.pages.Dashboard.Settings.Annotations.List;
+    const { addAnnotationCTAV2 } = this.ctx.selectors.pages.Dashboard.Settings.Annotations.List;
 
     if (!this.dashboard?.uid) {
-      //the dashboard doesn't have any annotations yet (except for the built-in one)
-      if (semver.gte(this.ctx.grafanaVersion, '8.3.0')) {
-        await this.getByGrafanaSelector(addAnnotationCTAV2).click();
-      } else {
-        await this.getByGrafanaSelector(addAnnotationCTA).click();
-      }
+      await this.getByGrafanaSelector(addAnnotationCTAV2).click();
     } else {
       //the dashboard already has annotations
       const newQueryButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')

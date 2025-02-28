@@ -1,5 +1,6 @@
 import { Locator, Request, Response } from '@playwright/test';
-import { getByGrafanaSelectorOptions, NavigateOptions, PluginTestCtx } from '../../types';
+import { getByGrafanaSelectorOptions, GrafanaPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
+import { resolveGrafanaSelector } from '../utils';
 
 /**
  * Base class for all Grafana pages.
@@ -7,14 +8,19 @@ import { getByGrafanaSelectorOptions, NavigateOptions, PluginTestCtx } from '../
  * Exposes methods for locating Grafana specific elements on the page
  */
 export abstract class GrafanaPage {
-  constructor(public readonly ctx: PluginTestCtx) {}
+  constructor(
+    public readonly ctx: PluginTestCtx,
+    public readonly pageArgs: GrafanaPageArgs = {}
+  ) {}
 
   protected async navigate(url: string, options?: NavigateOptions) {
-    if (options?.queryParams) {
-      url += `?${options.queryParams.toString()}`;
+    let queryParams = options?.queryParams ? options.queryParams : this.pageArgs.queryParams;
+    if (queryParams) {
+      url += `?${queryParams.toString()}`;
     }
     await this.ctx.page.goto(url, {
       waitUntil: 'networkidle',
+      ...this.pageArgs,
       ...options,
     });
   }
@@ -24,12 +30,7 @@ export abstract class GrafanaPage {
    * An E2E selector is a string that identifies a specific element in the Grafana UI. The element referencing the E2E selector use the data-testid or aria-label attribute.
    */
   getByGrafanaSelector(selector: string, options?: getByGrafanaSelectorOptions): Locator {
-    const startsWith = options?.startsWith ? '^' : '';
-    if (selector.startsWith('data-testid')) {
-      return (options?.root || this.ctx.page).locator(`[data-testid${startsWith}="${selector}"]`);
-    }
-
-    return (options?.root || this.ctx.page).locator(`[aria-label${startsWith}="${selector}"]`);
+    return (options?.root ?? this.ctx.page).locator(resolveGrafanaSelector(selector, options));
   }
 
   /**
@@ -45,7 +46,7 @@ export abstract class GrafanaPage {
 
   /**
    * Mocks the response of the datasource resource request.
-   * https://grafana.com/developers/plugin-tools/introduction/backend-plugins#resources
+   * https://grafana.com/developers/plugin-tools/key-concepts/backend-plugins#resources
    *
    * @param path the path of the resource to mock
    * @param json the json response to return

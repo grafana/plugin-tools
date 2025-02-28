@@ -2,6 +2,8 @@
 name: E2E tests
 on:
   pull_request:
+  schedule:
+    - cron: '0 11 * * *' #Run e2e tests once a day at 11 UTC
 
 permissions:
   contents: read
@@ -49,26 +51,13 @@ jobs:
 
       - name: Start Grafana
         run: |
-          docker-compose pull
-          GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker-compose up -d
+          docker compose pull
+          GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
 
-      - name: Wait for Grafana to start
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@main
 
       - name: Run Playwright tests
         id: run-tests
         run: yarn playwright test
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ (always() && steps.run-tests.outcome == 'success') || (failure() && steps.run-tests.outcome == 'failure') }}
-        with:
-          name: playwright-report-${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}
-          path: playwright-report/
-          retention-days: 30
 ```

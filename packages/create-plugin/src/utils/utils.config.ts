@@ -1,8 +1,11 @@
 import fs from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
-import { commandName } from './utils.cli.js';
+import { argv, commandName } from './utils.cli.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
+import { printBox } from './utils.console.js';
+import { partitionArr } from './utils.helpers.js';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
@@ -20,6 +23,9 @@ export type CreatePluginConfig = UserConfig & {
 export type UserConfig = {
   features: FeatureFlags;
 };
+
+// TODO: Create a config manager of sorts so we don't call getConfig multiple times rendering multiple warnings.
+let hasShownConfigWarnings = false;
 
 export function getConfig(workDir = process.cwd()): CreatePluginConfig {
   const rootConfig = getRootConfig(workDir);
@@ -83,11 +89,42 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
   }
 }
 
+// This function creates feature flags based on the defaults for generate command else flags read from config.
+// In all cases it will override the flags with the featureFlag cli arg values.
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
-  // Default values for new scaffoldings
-  if (commandName === 'generate') {
-    return DEFAULT_FEATURE_FLAGS;
+  const featureFlags = commandName === 'generate' ? DEFAULT_FEATURE_FLAGS : (flags ?? {});
+  const cliArgFlags = parseFeatureFlagsFromCliArgs();
+  return { ...featureFlags, ...cliArgFlags };
+}
+
+function parseFeatureFlagsFromCliArgs() {
+  const flagsfromCliArgs: string[] = argv['feature-flags'] ? argv['feature-flags'].split(',') : [];
+  const availableFeatureFlags = Object.keys(DEFAULT_FEATURE_FLAGS);
+  const [knownFlags, unknownFlags] = partitionArr(flagsfromCliArgs, (item) => availableFeatureFlags.includes(item));
+
+  if (unknownFlags.length > 0 && !hasShownConfigWarnings) {
+    printBox({
+      title: 'Warning! Unknown feature flags detected.',
+      subtitle: ``,
+      content: `The following feature-flags are unknown: ${unknownFlags.join(
+        ', '
+      )}.\n\nAvailable feature-flags are: ${availableFeatureFlags.join(', ')}`,
+      color: 'yellow',
+    });
+    hasShownConfigWarnings = true;
   }
 
-  return flags ?? {};
+  return knownFlags.reduce((acc, flag) => {
+    return { ...acc, [flag]: true };
+  }, {} as FeatureFlags);
+}
+
+export async function setRootConfig(configOverride: Partial<CreatePluginConfig> = {}): Promise<CreatePluginConfig> {
+  const rootConfig = getRootConfig();
+  const rootConfigPath = path.resolve(process.cwd(), '.config/.cprc.json');
+  const updatedConfig = { ...rootConfig, ...configOverride };
+
+  await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2));
+
+  return updatedConfig;
 }

@@ -48,7 +48,7 @@ In your plugin directory, run the following to create a MANIFEST.txt file in the
 npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
 ```
 
-Alterntives:
+Alternatives:
 
 #### [`npx`](https://github.com/npm/npx)
 

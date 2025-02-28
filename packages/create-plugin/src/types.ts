@@ -1,17 +1,20 @@
 import { PLUGIN_TYPES } from './constants.js';
 
-export type CliArgs = {
+// The arguments that are passed to the CLI when generating a new plugin.
+// (Either via user prompts or CLI arguments)
+export type GenerateCliArgs = {
   pluginName: string;
-  pluginDescription: string;
   orgName: string;
   pluginType: PLUGIN_TYPES;
   hasBackend: boolean;
-  hasGithubWorkflows: boolean;
-  hasGithubLevitateWorkflow: boolean;
 };
 
 export type TemplateData = {
   pluginId: string;
+  pluginName: string;
+  hasBackend: boolean;
+  orgName: string;
+  pluginType: PLUGIN_TYPES;
   packageManagerName: string;
   packageManagerInstallCmd: string;
   packageManagerVersion: string;
@@ -22,5 +25,6 @@ export type TemplateData = {
   useReactRouterV6: boolean;
   reactRouterVersion: string;
   usePlaywright: boolean;
-  e2eTestCmd: string;
+  useCypress: boolean;
+  pluginExecutable?: string;
 };

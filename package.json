@@ -20,29 +20,34 @@
     "test": "nx run-many --target=test --parallel",
     "test:ci": "nx run-many --target=test --run",
     "typecheck": "nx run-many --target=typecheck --parallel",
-    "prepare": "husky install",
-    "postinstall": "patch-package"
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@auto-it/all-contributors": "11.0.7",
-    "@auto-it/first-time-contributor": "11.0.7",
-    "@auto-it/omit-commits": "11.0.7",
-    "@auto-it/slack": "11.0.7",
-    "@grafana/eslint-config": "^6.0.1",
-    "@grafana/tsconfig": "^1.2.0-rc1",
-    "@swc/core": "^1.2.162",
-    "@tsconfig/node20": "^20.1.2",
-    "@tsconfig/recommended": "^1.0.1",
-    "@types/node": "20.10.1",
-    "auto": "11.0.7",
-    "husky": "^8.0.3",
-    "lerna": "^8.0.0",
-    "lint-staged": "^15.2.0",
-    "nodemon": "^3.0.1",
-    "patch-package": "^8.0.0",
-    "prettier": "2.5.1",
-    "typescript": "^5.2.2",
-    "vitest": "^1.1.3"
+    "@auto-it/all-contributors": "11.3.0",
+    "@auto-it/first-time-contributor": "11.3.0",
+    "@auto-it/omit-commits": "11.3.0",
+    "@auto-it/slack": "11.3.0",
+    "@grafana/eslint-config": "^8.0.0",
+    "@stylistic/eslint-plugin-ts": "^3.1.0",
+    "@swc/core": "^1.11.4",
+    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/recommended": "^1.0.8",
+    "@types/node": "22.13.5",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "auto": "11.3.0",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.2",
+    "eslint-plugin-jsdoc": "^50.6.3",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "husky": "^9.1.7",
+    "lerna": "^8.1.9",
+    "lint-staged": "^15.4.3",
+    "nodemon": "^3.1.9",
+    "prettier": "3.5.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
   },
   "engines": {
     "node": ">=20"
@@ -52,13 +57,23 @@
     "packages/sign-plugin",
     "docusaurus/website",
     "packages/plugin-e2e",
-    "packages/plugin-meta-extractor"
+    "packages/plugin-meta-extractor",
+    "packages/plugin-types-bundler",
+    "packages/eslint-plugin-plugins"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
-      "eslint --ext .js,.tsx,.ts --cache --fix",
+      "eslint --cache --fix",
       "prettier --write"
     ],
     "*.{css,md,json}": "prettier --write"
+  },
+  "overrides": {
+    "serve-handler": {
+      "path-to-regexp": "3.3.0"
+    },
+    "express": {
+      "cookie": "^0.7.0"
+    }
   }
 }

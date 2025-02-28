@@ -1,11 +1,11 @@
+import { lt as semverLt } from 'semver';
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
-import { mkdirp } from 'mkdirp';
-import createDebug from 'debug';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
-import { renderHandlebarsTemplate } from './utils.handlebars.js';
+import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
 import { getPluginJson } from './utils.plugin.js';
+import { debug } from './utils.cli.js';
 import {
   TEMPLATE_PATHS,
   EXPORT_PATH_PREFIX,
@@ -13,13 +13,17 @@ import {
   PLUGIN_TYPES,
   DEFAULT_FEATURE_FLAGS,
 } from '../constants.js';
-import { TemplateData } from '../types.js';
-import { getPackageManagerInstallCmd, getPackageManagerWithFallback } from './utils.packageManager.js';
+import { GenerateCliArgs, TemplateData } from '../types.js';
+import {
+  getPackageManagerInstallCmd,
+  getPackageManagerWithFallback,
+  getPackageManagerFromUserAgent,
+} from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
-import { getVersion } from './utils.version.js';
+import { getGrafanaRuntimeVersion, getVersion } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
-const debug = createDebug('templates');
+const templatesDebugger = debug.extend('templates');
 
 /**
  *
@@ -67,7 +71,7 @@ export function compileSingleTemplateFile(pluginType: string, templateFile: stri
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '');
   const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
-  mkdirp.sync(path.dirname(exportPath));
+  fs.mkdirSync(path.dirname(exportPath), { recursive: true });
   fs.writeFileSync(exportPath, rendered);
 }
 
@@ -80,7 +84,7 @@ export function compileProvisioningTemplateFile(pluginType: string, templateFile
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS[pluginType], '.');
   const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
-  mkdirp.sync(path.dirname(exportPath));
+  fs.mkdirSync(path.dirname(exportPath), { recursive: true });
   fs.writeFileSync(exportPath, rendered);
 }
 
@@ -88,40 +92,76 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData(): TemplateData {
-  const pluginJson = getPluginJson();
+export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = getVersion();
-  const useReactRouterV6 = features.useReactRouterV6 === true && pluginJson.type === PLUGIN_TYPES.app;
-  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
-  const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
+  const grafanaVersion = getGrafanaRuntimeVersion();
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
-  const e2eTestCmd = usePlaywright
-    ? 'playwright test'
-    : `${packageManagerName} exec cypress install && ${packageManagerName} exec grafana-e2e run`;
+  //@grafana/e2e was deprecated in Grafana 11
+  const useCypress =
+    !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
+  const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
+  const shouldUseReactRouterV6 = (pluginType: string) =>
+    features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
+  const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
+  const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+  const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
 
-  const templateData = {
-    ...EXTRA_TEMPLATE_VARIABLES,
-    pluginId: pluginJson.id,
-    pluginName: pluginJson.name,
-    pluginDescription: pluginJson.info?.description,
-    hasBackend: Boolean(pluginJson.backend),
-    orgName: pluginJson.info?.author?.name,
-    pluginType: pluginJson.type,
-    isAppType: pluginJson.type === PLUGIN_TYPES.app || pluginJson.type === PLUGIN_TYPES.scenes,
-    isNPM: packageManagerName === 'npm',
-    packageManagerName,
-    packageManagerVersion,
-    packageManagerInstallCmd,
-    version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-    useReactRouterV6: useReactRouterV6,
-    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-    usePlaywright,
-    e2eTestCmd,
-  };
+  let templateData: TemplateData;
 
-  debug('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
+  // `cliArgs` is only passed in when scaffolding a new plugin via the CLI (generate command)
+  if (cliArgs) {
+    const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
+
+    templateData = {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      pluginId: normalizeId(cliArgs.pluginName, cliArgs.orgName, cliArgs.pluginType),
+      pluginName: cliArgs.pluginName,
+      // check plugintype and hasBackend as they can both be passed via user input (cli args).
+      hasBackend: cliArgs.pluginType !== PLUGIN_TYPES.panel && cliArgs.hasBackend,
+      orgName: cliArgs.orgName,
+      pluginType: cliArgs.pluginType,
+      packageManagerName,
+      packageManagerVersion,
+      packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
+      isAppType: isAppType(cliArgs.pluginType),
+      isNPM: isNPM(packageManagerName),
+      version: currentVersion,
+      bundleGrafanaUI,
+      useReactRouterV6: shouldUseReactRouterV6(cliArgs.pluginType),
+      reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
+      usePlaywright,
+      useCypress,
+    };
+    // Updating or migrating a plugin
+    // (plugin.json and package.json files are only present if it's an existing plugin)
+  } else {
+    const pluginJson = getPluginJson();
+    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+
+    templateData = {
+      ...EXTRA_TEMPLATE_VARIABLES,
+      pluginId: pluginJson.id,
+      pluginName: pluginJson.name,
+      hasBackend: pluginJson.backend,
+      orgName: pluginJson.info.author.name,
+      pluginType: pluginJson.type,
+      packageManagerName: packageManagerName,
+      packageManagerVersion: packageManagerVersion,
+      packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
+      isAppType: isAppType(pluginJson.type),
+      isNPM: isNPM(packageManagerName),
+      version: currentVersion,
+      bundleGrafanaUI,
+      useReactRouterV6: shouldUseReactRouterV6(pluginJson.type),
+      reactRouterVersion: getReactRouterVersion(pluginJson.type),
+      usePlaywright,
+      useCypress,
+      pluginExecutable: pluginJson.executable,
+    };
+  }
+
+  templatesDebugger('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));
 
   return templateData;
 }

@@ -19,6 +19,24 @@ async function run() {
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
+    const userName = pull_request.user.login;
+
+    if (userName === 'renovate[bot]') {
+      if (isMissingSemverLabel) {
+        const files = await getPullRequestFiles({ octokit });
+
+        const isOnlyLockFileChanged = files.every((file) => file.filename.endsWith('package-lock.json'));
+        if (isOnlyLockFileChanged) {
+          console.log('Detected renovate PR with only lock file changes. Applying `no-changelog` label.');
+          await updateLabels({ octokit, labels: [...labelNames, 'no-changelog'] });
+        } else {
+          console.log('Detected renovate PR with file changes. Applying `patch` label.');
+          await updateLabels({ octokit, labels: [...labelNames, 'patch'] });
+        }
+      }
+      core.setOutput('canMerge', 'Renovate PR');
+      return;
+    }
 
     if (isMissingSemverLabel) {
       let errorMsg = [
@@ -86,6 +104,38 @@ async function run() {
         core.setOutput('canMerge', warning);
       }
     }
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+async function getPullRequestFiles({ octokit }) {
+  const {
+    payload: { pull_request },
+    repo,
+  } = context;
+  const prNumber = pull_request.number;
+  const { data } = await octokit.rest.pulls.listFiles({
+    ...repo,
+    pull_number: prNumber,
+  });
+
+  return data;
+}
+
+async function updateLabels({ octokit, labels }) {
+  try {
+    const {
+      payload: { pull_request },
+      repo,
+    } = context;
+    const prNumber = pull_request.number;
+
+    await octokit.rest.issues.setLabels({
+      ...repo,
+      issue_number: prNumber,
+      labels,
+    });
   } catch (error) {
     core.setFailed(error.message);
   }

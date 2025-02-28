@@ -3,7 +3,7 @@ import { GrafanaPage } from './GrafanaPage';
 
 export class PluginConfigPage extends GrafanaPage {
   constructor(readonly ctx: PluginTestCtx, readonly args: PluginPageArgs) {
-    super(ctx);
+    super(ctx, args);
   }
 
   /**

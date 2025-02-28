@@ -1,0 +1,58 @@
+{
+  "name": "@grafana/plugin-types-bundler",
+  "version": "0.2.6",
+  "description": "Bundle grafana plugin typescript types for sharing with other plugins",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/bundleTypes.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "tsconfig",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "vitest --passWithNoTests",
+    "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
+    "dev": "tsc --project tsconfig.json --watch",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "directory": "packages/plugin-types-bundler",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "typescript",
+    "types",
+    "bundle"
+  ],
+  "author": "Grafana labs",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "engines": {
+    "node": ">=18.8.0"
+  },
+  "dependencies": {
+    "@grafana/levitate": "^0.16.0",
+    "@types/minimist": "^1.2.2",
+    "@types/node": "22.13.5",
+    "debug": "^4.3.4",
+    "jackw-dts-bundle-gen-test": "^9.5.1",
+    "minimist": "^1.2.8"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "position": 10,
+  "label": "Data source plugins",
+  "customProps": {
+    "description": "Guides for optimizing and adding capabilities to data source plugins."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

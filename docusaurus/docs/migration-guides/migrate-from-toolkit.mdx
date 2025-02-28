@@ -12,9 +12,7 @@ keywords:
   - migrating
 ---
 
-import MigrateNPM from '@snippets/createplugin-migrate.npm.md';
-import MigratePNPM from '@snippets/createplugin-migrate.pnpm.md';
-import MigrateYarn from '@snippets/createplugin-migrate.yarn.md';
+import MigrateNPM from '@shared/createplugin-migrate.md';
 
 The `@grafana/toolkit` tool is now [deprecated](https://grafana.com/docs/grafana/next/breaking-changes/breaking-changes-v10-0/#grafanatoolkit-cli-commands-have-been-removed-and-migrated-to-the-create-plugin-package). If you are still using `@grafana/toolkit` to scaffold and develop plugins, follow this guide to make the jump to our newest plugin tools.
 
@@ -36,15 +34,7 @@ Our plugin tools use ReactJS. We [do not support](https://grafana.com/docs/grafa
 
 1. In the root directory of the existing plugin (where the `package.json` file is), run the following command.
 
-<CodeSnippets
-  snippets={[
-    { component: MigrateNPM, label: 'npm' },
-    { component: MigratePNPM, label: 'pnpm' },
-    { component: MigrateYarn, label: 'yarn' },
-  ]}
-  groupId="package-manager"
-  queryString="current-package-manager"
-/>
+<MigrateNPM />
 
 1. Follow the prompts that appear. Refer to the list below for details about each potential prompt.
 
@@ -115,8 +105,8 @@ When the migration command finishes running, follow these following steps:
 
 1. Run each npm script inside `package.json` to confirm that the plugin can be built, tested, and signed.
 
-If the plugin had customizations to the toolkit configs (for example, webpack), then refer to [Extend configurations](/create-a-plugin/extend-a-plugin/extend-configurations) to learn how to update them.
+If the plugin had customizations to the toolkit configs (for example, webpack), then refer to [Extend configurations](../get-started/set-up-development-environment.mdx#extend-configurations) to learn how to update them.
 
-If the plugin can be built, but there are problems with Jest tests, then see the [Jest advanced configuration](/create-a-plugin/extend-a-plugin/extend-configurations#esm-errors-with-jest) issue regarding es modules.
+If the plugin can be built, but there are problems with Jest tests, then see the [Jest advanced configuration](../get-started/set-up-development-environment.mdx#esm-errors-with-jest) issue regarding es modules.
 
 For help with other issues, reach out on [Slack](https://grafana.slack.com/) or the [Community forum](https://community.grafana.com/c/plugin-development/30).

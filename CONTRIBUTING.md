@@ -14,6 +14,7 @@
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
   - [Create a Release](#create-a-release)
+    - [Release Version Calculation](#release-version-calculation)
 
 ## Introduction
 
@@ -127,7 +128,7 @@ Once you've filed the PR:
 
 Redirects:
 
-- In case you have to add a redirect - you can add a new entry to the config section of the following plugin `@docusaurus/plugin-client-redirects` in [docusaurus configuration file](./docusaurus/website/docusaurus.config.base.js).
+- In case you have to add a redirect - you can add a new entry to the config section of the following plugin `@docusaurus/plugin-client-redirects` in [docusaurus configuration file](./docusaurus/website/docusaurus.config.base.ts).
 
 ## Contribute Code
 
@@ -159,7 +160,8 @@ Once you've filed the PR:
 
 Releases are managed by [Auto](https://intuit.github.io/auto/index) and PR labels.
 
-_NOTE: When merging a PR with the `release` label please avoid merging another PR. For further information [see here](https://intuit.github.io/auto/docs/welcome/quick-merge#with-skip-release)._
+> [!WARNING]
+> When merging a PR with the `release` label please avoid merging another PR. For further information [see here](https://intuit.github.io/auto/docs/welcome/quick-merge#with-skip-release).
 
 When opening a PR please attach the necessary label for the change so releases are dealt with appropriately:
 
@@ -175,9 +177,24 @@ Bear in mind not every PR needs to make a version bump to a package. Please be m
 When a merge to the `main` branch occurs a github workflow will run `npm run release` which in turn calls `auto shipit`. The `auto shipit` command does the following things:
 
 1. **Check for 'release' Label**: 🔍 The command only triggers version bumps if the merged PR has a 'release' label.
-1. **Version Calculation**: 🧮 Determines the appropriate version bump per package by analyzing the labels of merged PRs since the last GH release.
-1. **Changelog Updates**: 📝 The command updates the CHANGELOG.md for affected packages and possibly the root CHANGELOG.md.
-1. **Commit and Tag**: 🏷️ It commits these changes and tags the repository.
-1. **GitHub Release Creation**: 📄 Creates a GitHub release for the new version.
-1. **NPM Publishing**: 🚀 If the conditions are met (e.g., 'release' label present), it publishes the packages to NPM.
-1. **Push Changes and Tags**: ⬆️ Finally, it pushes these changes and tags back to the repository.
+2. **Version Calculation**: 🧮 Determines the appropriate version bump per package by analyzing the labels of merged PRs since the last GH release.
+3. **Changelog Updates**: 📝 The command updates the CHANGELOG.md for affected packages and possibly the root CHANGELOG.md.
+4. **Commit and Tag**: 🏷️ It commits these changes and tags the repository.
+5. **GitHub Release Creation**: 📄 Creates a GitHub release for the new version.
+6. **NPM Publishing**: 🚀 If the conditions are met (e.g., 'release' label present), it publishes the packages to NPM.
+7. **Push Changes and Tags**: ⬆️ Finally, it pushes the version number, changelog updates, and tags to the repository.
+
+### Release Version Calculation
+
+Below is a bulleted list of what occurs under the hood when Auto is asked to release packages.
+
+1. Get latest release info from Github
+2. Get info for all merged PRs after the publish date of latest release
+3. Use the semver labels assigned to each of the merged PRs (`Major`, `Minor`, and `Patch`) to understand how to bump changed packages
+4. Pass the latest release tag and the calculated version bump to Lerna
+5. Lerna diffs each package workspace (since the latest release tag) to find which have changed and need to be published
+6. Lerna bumps each changed package using the calculated version bump in step 3
+7. Lerna publishes each package
+
+> [!TIP]
+> We enable verbose logging in the release packages CI step to give plenty of information related to what Auto and Lerna are doing. This can prove most useful should issues occur with releasing packages.

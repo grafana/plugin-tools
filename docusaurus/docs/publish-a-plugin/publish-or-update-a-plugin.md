@@ -21,6 +21,7 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 ## Before you begin
 
 - [Review our guidelines](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) - Learn about the Grafana Labs criteria for publishing and signing plugins.
+- [Review our publishing best practices](../publish-a-plugin/publishing-best-practices.md) - Ensure your plugin is in the best state it can be before submitting it for review.
 - [Package a plugin](./package-a-plugin.md) - Build the plugin and get it ready to share in the form of a ZIP archive.
 - Refer to [plugin-examples](https://github.com/grafana/grafana-plugin-examples) to review best practices for building your plugin.
 
@@ -33,7 +34,7 @@ In this guide you learn how to manage the lifecycle of a plugin in the catalog, 
 
 Follow these steps to publish your plugin for the first time.
 
-1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account.
+1. [Sign in](https://grafana.com/auth/sign-in) to your Grafana Cloud account. Note that you need to be an administrator for the Grafana Cloud organization being used to publish the plugin.
 1. In the left menu, under Org Settings, click **My Plugins**.
 1. Click **Submit New Plugin**. The Create Plugin Submission dialog box appears.
 

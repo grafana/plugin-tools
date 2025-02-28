@@ -82,7 +82,8 @@
       "contributions": [
         "doc",
         "test",
-        "code"
+        "code",
+        "infra"
       ]
     },
     {
@@ -204,7 +205,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/15019026?v=4",
       "profile": "https://github.com/aangelisc",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -252,7 +254,8 @@
       "profile": "https://grafana.com/",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "infra"
       ]
     },
     {
@@ -282,6 +285,65 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/19530599?v=4",
       "profile": "https://github.com/kevinwcyu",
       "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ashharrison90",
+      "name": "Ashley Harrison",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20999846?v=4",
+      "profile": "https://github.com/ashharrison90",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ivanortegaalba",
+      "name": "Ivan Ortega Alba",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5699976?v=4",
+      "profile": "https://github.com/ivanortegaalba",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "s4kh",
+      "name": "Syerikjan Kh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15072209?v=4",
+      "profile": "https://github.com/s4kh",
+      "contributions": [
+        "infra",
+        "doc"
+      ]
+    },
+    {
+      "login": "jalevin",
+      "name": "Jeff Levin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1669620?v=4",
+      "profile": "https://github.com/jalevin",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "matyax",
+      "name": "Matias Chomicki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1069378?v=4",
+      "profile": "http://matyax.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "hugohaggmark",
+      "name": "Hugo Häggmark",
+      "avatar_url": "https://avatars.githubusercontent.com/u/562238?v=4",
+      "profile": "http://www.hugohaggmark.com/",
+      "contributions": [
+        "doc",
+        "infra",
+        "test",
         "code"
       ]
     }

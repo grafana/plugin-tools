@@ -1,3 +1,571 @@
+# v1.18.3 (Tue Feb 25 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-226761 [#1573](https://github.com/grafana/plugin-tools/pull/1573) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.18.2 (Thu Feb 13 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-223459 [#1536](https://github.com/grafana/plugin-tools/pull/1536) ([@renovate[bot]](https://github.com/renovate[bot]) [@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.18.1 (Wed Feb 12 2025)
+
+#### 🐛 Bug Fix
+
+- E2E: Fix so color picker works properly in 11.6.0 [#1540](https://github.com/grafana/plugin-tools/pull/1540) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.18.0 (Tue Feb 04 2025)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Support advanced query mode in alert rules [#1490](https://github.com/grafana/plugin-tools/pull/1490) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-221763 [#1513](https://github.com/grafana/plugin-tools/pull/1513) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.17.1 (Fri Jan 31 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-221187 [#1505](https://github.com/grafana/plugin-tools/pull/1505) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.17.0 (Tue Jan 28 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-220285 [#1486](https://github.com/grafana/plugin-tools/pull/1486) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.16.3 (Mon Jan 27 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix datasource picker root locator [#1483](https://github.com/grafana/plugin-tools/pull/1483) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.16.2 (Fri Jan 24 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-219238 [#1477](https://github.com/grafana/plugin-tools/pull/1477) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.16.1 (Fri Jan 24 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-218582 [#1469](https://github.com/grafana/plugin-tools/pull/1469) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.16.0 (Wed Jan 22 2025)
+
+#### 🚀 Enhancement
+
+- E2E: Added missing APIs while writing tests for panel editor [#1462](https://github.com/grafana/plugin-tools/pull/1462) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.15.0 (Wed Jan 15 2025)
+
+#### 🚀 Enhancement
+
+- E2E: Improve support to interact with panel edit options [#1272](https://github.com/grafana/plugin-tools/pull/1272) ([@mckn](https://github.com/mckn) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.14.7 (Tue Jan 14 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-216908 [#1455](https://github.com/grafana/plugin-tools/pull/1455) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.6 (Fri Jan 10 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-216287 [#1448](https://github.com/grafana/plugin-tools/pull/1448) ([@renovate[bot]](https://github.com/renovate[bot]) [@mckn](https://github.com/mckn))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v1.14.5 (Fri Jan 10 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-216167 [#1446](https://github.com/grafana/plugin-tools/pull/1446) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.4 (Thu Jan 09 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-215942 [#1443](https://github.com/grafana/plugin-tools/pull/1443) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.3 (Mon Jan 06 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-215208 [#1433](https://github.com/grafana/plugin-tools/pull/1433) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.1 (Thu Dec 19 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.5.0-214310 [#1415](https://github.com/grafana/plugin-tools/pull/1415) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.14.0 (Wed Dec 18 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-213998 [#1396](https://github.com/grafana/plugin-tools/pull/1396) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.13.1 (Wed Dec 11 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix some APIs that were broken in older versions of Grafana [#1391](https://github.com/grafana/plugin-tools/pull/1391) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.13.0 (Mon Dec 09 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.5.0-211617 [#1385](https://github.com/grafana/plugin-tools/pull/1385) ([@renovate[bot]](https://github.com/renovate[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.12.4 (Tue Dec 03 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-210985 [#1372](https://github.com/grafana/plugin-tools/pull/1372) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.12.3 (Mon Nov 25 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-209710 [#1348](https://github.com/grafana/plugin-tools/pull/1348) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.12.2 (Thu Nov 21 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-209206 [#1324](https://github.com/grafana/plugin-tools/pull/1324) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.12.1 (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.4.0-207766 - autoclosed [#1324](https://github.com/grafana/plugin-tools/pull/1324) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.12.0 (Mon Nov 11 2024)
+
+#### 🚀 Enhancement
+
+- Support node 22 [#1298](https://github.com/grafana/plugin-tools/pull/1298) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.11.3 (Mon Nov 04 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205692 [#1301](https://github.com/grafana/plugin-tools/pull/1301) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.11.2 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205558 [#1294](https://github.com/grafana/plugin-tools/pull/1294) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/e2e-selectors to ^11.4.0-205544 [#1292](https://github.com/grafana/plugin-tools/pull/1292) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency uuid to v11 [#1263](https://github.com/grafana/plugin-tools/pull/1263) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.11.1 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Use api client when creating new datasources [#1201](https://github.com/grafana/plugin-tools/pull/1201) ([@sunker](https://github.com/sunker))
+- Update dependency @grafana/e2e-selectors to v11.4.0-205417 [#1270](https://github.com/grafana/plugin-tools/pull/1270) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.11.0 (Mon Oct 28 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Use selectors from grafana/e2e-selectors package [#1123](https://github.com/grafana/plugin-tools/pull/1123) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.10.0 (Thu Oct 24 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Jeff Levin ([@jalevin](https://github.com/jalevin)), for all your work!
+
+#### 🚀 Enhancement
+
+- Config: check environment for Grafana admin URL, username, and password [#1244](https://github.com/grafana/plugin-tools/pull/1244) ([@jalevin](https://github.com/jalevin))
+
+#### Authors: 1
+
+- Jeff Levin ([@jalevin](https://github.com/jalevin))
+
+---
+
+# v1.8.3 (Wed Oct 02 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2e: Support scenes powered dashboard UI [#1155](https://github.com/grafana/plugin-tools/pull/1155) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.8.2 (Mon Sep 30 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update dashboard variables settings URL [#1144](https://github.com/grafana/plugin-tools/pull/1144) ([@ivanortegaalba](https://github.com/ivanortegaalba))
+
+#### Authors: 1
+
+- Ivan Ortega Alba ([@ivanortegaalba](https://github.com/ivanortegaalba))
+
+---
+
+# v1.8.1 (Wed Sep 25 2024)
+
+#### 🐛 Bug Fix
+
+- Feat: Adding provenance publish config [#1127](https://github.com/grafana/plugin-tools/pull/1127) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v1.8.0 (Wed Sep 11 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Allow overriding `waitUntil` in goto page fixtures [#1111](https://github.com/grafana/plugin-tools/pull/1111) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.7.2 (Fri Sep 06 2024)
+
+#### 🐛 Bug Fix
+
+- Chore: Bump uuid [#1098](https://github.com/grafana/plugin-tools/pull/1098) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.7.1 (Wed Aug 21 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix typings for the toHaveAlert matcher [#1070](https://github.com/grafana/plugin-tools/pull/1070) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.7.0 (Wed Aug 21 2024)
+
+#### 🚀 Enhancement
+
+- Chore: replace docker-compose with docker compose commands [#1064](https://github.com/grafana/plugin-tools/pull/1064) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v1.6.1 (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- Adjust license text [#994](https://github.com/grafana/plugin-tools/pull/994) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v1.6.0 (Mon Jun 24 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Interact with Grafana http api on behalf of logged in user [#965](https://github.com/grafana/plugin-tools/pull/965) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.5.0 (Tue Jun 11 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Expose variable list page as fixture [#942](https://github.com/grafana/plugin-tools/pull/942) ([@aangelisc](https://github.com/aangelisc) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Andreas Christou ([@aangelisc](https://github.com/aangelisc))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.4.0 (Fri Jun 07 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add support for testing alert query [#779](https://github.com/grafana/plugin-tools/pull/779) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.3.2 (Wed Jun 05 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix menuitemclick in Grafana <=9.1.0 [#944](https://github.com/grafana/plugin-tools/pull/944) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.3.1 (Tue Jun 04 2024)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix - skip creating user if it's the default server admin [#941](https://github.com/grafana/plugin-tools/pull/941) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.3.0 (Thu May 30 2024)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Allow overriding grafanaAPICredentials [#930](https://github.com/grafana/plugin-tools/pull/930) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v1.2.2 (Tue May 28 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update select option selector to use `data-testid` [#912](https://github.com/grafana/plugin-tools/pull/912) ([@ashharrison90](https://github.com/ashharrison90))
+
+#### Authors: 1
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+
+---
+
 # v1.2.0 (Wed Apr 24 2024)
 
 :tada: This release contains work from a new contributor! :tada:

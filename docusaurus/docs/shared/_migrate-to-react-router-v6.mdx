@@ -1,6 +1,4 @@
-import UpdateNPM from '@snippets/createplugin-update.npm.md';
-import UpdatePNPM from '@snippets/createplugin-update.pnpm.md';
-import UpdateYarn from '@snippets/createplugin-update.yarn.md';
+import UpdateNPM from '@shared/createplugin-update.md';
 
 ## Update to React Router v6
 
@@ -28,15 +26,7 @@ Enable using `react-router@v6` by setting the following feature flag in `<projec
 
 Now update the build configuration using the create-plugin tool:
 
-<CodeSnippets
-snippets={[
-{ component: UpdateNPM, label: 'npm' },
-{ component: UpdatePNPM, label: 'pnpm' },
-{ component: UpdateYarn, label: 'yarn' },
-]}
-groupId="package-manager"
-queryString="current-package-manager"
-/>
+<UpdateNPM />
 
 After updating the build configuration, it is likely that you will need to make additional updates to your plugin. To do so, follow the steps below:
 

@@ -16,9 +16,23 @@ sidebar_position: 10
 
 Most data source plugins need authentication to communicate with third-party services. The appropriate place to configure the connection details is the data source configuration page, and the details there must be valid so that the health check endpoint used to test the configuration works as expected.
 
+### Test that the configuration editor loads
+
+The following example is a simple smoke test that verifies that the data source configuration editor loads:
+
+```ts title="configurationEditor.spec.ts"
+import { test, expect } from '@grafana/plugin-e2e';
+
+test('should render config editor', async ({ createDataSourceConfigPage, readProvisionedDataSource, page }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await createDataSourceConfigPage({ type: ds.type });
+  await expect(page.getByLabel('Path')).toBeVisible();
+});
+```
+
 ### Testing the configuration in a backend data source plugin
 
-Backend data sources implement a [health check](../../introduction/backend.md#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
+Backend data sources implement a [health check](../../key-concepts/backend-plugins/#health-checks) endpoint that is used to test whether the configuration is valid or not. In the following example, the configuration editor form is populated with valid values then the `Save & test` button is clicked. Clicking `Save & test` calls the Grafana backend to save the configuration, then passes configuration to the plugin's backend health check endpoint. The test will be successful only if both calls yields a successful status code.
 
 ```ts title="configurationEditor.spec.ts"
 import { test, expect } from '@grafana/plugin-e2e';
@@ -58,7 +72,6 @@ test('"Save & test" should fail when configuration is invalid', async ({
 ### Testing the configuration in a frontend data source plugin
 
 Unlike backend data source plugins that always calls its own backend to perform a health check, frontend data source plugins may need make a call to a third-party API to test whether the provided configuration is valid. The `DataSourceConfigPage.saveAndTest` method allows you to provide a custom path for the endpoint that is being used to test the data source configuration.
-You can use Playwright's [`waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) method and specify the url of the endpoint that is being called.
 
 ```ts title="configurationEditor.spec.ts"
 test('"Save & test" should be successful when configuration is valid', async ({
@@ -70,10 +83,11 @@ test('"Save & test" should be successful when configuration is valid', async ({
   const configPage = await createDataSourceConfigPage({ type: ds.type });
   const healthCheckPath = `${selectors.apis.DataSource.proxy(configPage.datasource.uid)}/test`;
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' })
+  // construct a custom health check url using the Grafana data source proxy
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
-  )}/test`;);
+  )}/third-party-service-path`;
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
 });
 ```
@@ -88,10 +102,11 @@ test('"Save & test" should display success alert box when config is valid', asyn
 }) => {
   const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
   const configPage = await createDataSourceConfigPage({ type: ds.type });
+  // construct a custom health check url using the Grafana data source proxy
   const healthCheckPath = `${selectors.apis.DataSource.proxy(
     configPage.datasource.uid,
     configPage.datasource.id.toString()
-  )}/test`;
+  )}/third-party-service-path`;
   await page.route(healthCheckPath, async (route) => await route.fulfill({ status: 200, body: 'OK' }));
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success');

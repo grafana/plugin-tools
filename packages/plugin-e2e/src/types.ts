@@ -8,7 +8,6 @@ import {
   TestInfo,
 } from '@playwright/test';
 
-import { E2ESelectors } from './e2e-selectors/types';
 import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
 import { AppConfigPage } from './models/pages/AppConfigPage';
 import { AppPage } from './models/pages/AppPage';
@@ -17,6 +16,12 @@ import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
 import { ExplorePage } from './models/pages/ExplorePage';
 import { PanelEditPage } from './models/pages/PanelEditPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
+import { VariablePage } from './models/pages/VariablePage';
+import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
+import { GrafanaAPIClient } from './models/GrafanaAPIClient';
+import { versionedPages, versionedComponents, SelectorsOf } from '@grafana/e2e-selectors';
+import { VersionedAPIs } from './selectors/versionedAPIs';
+import { VersionedConstants } from './selectors/versionedConstants';
 
 export type PluginOptions = {
   /**
@@ -62,7 +67,13 @@ export type PluginOptions = {
    * You can use different users for different projects. See the fixture createUser for more information on how to create a user,
    * and the fixture login for more information on how to authenticate. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/use-authentication
    */
-  user?: CreateUserArgs;
+  user?: User;
+
+  /**
+   * The credentials to use when making requests to the Grafana API. For example when creating users, fetching data sources etc.
+   * If no credentials are provided, the server default admin:admin credentials will be used.
+   */
+  grafanaAPICredentials: Credentials;
 };
 
 export type PluginFixture = {
@@ -78,7 +89,7 @@ export type PluginFixture = {
    * The E2E selectors to use for the current version of Grafana.
    * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/selecting-elements#grafana-end-to-end-selectors for more information.
    */
-  selectors: E2ESelectors;
+  selectors: E2ESelectorGroups;
 
   /**
    * Fixture command that creates a data source via the Grafana API.
@@ -163,6 +174,17 @@ export type PluginFixture = {
   readProvisionedDataSource<T = {}, S = {}>(args: ReadProvisionedDataSourceArgs): Promise<DataSourceSettings<T, S>>;
 
   /**
+   * Fixture command that reads a yaml file in the provisioning/alerting directory.
+   *
+   * The file name should be the name of the file with the .yaml|.yml extension.
+   * If a group name is provided, the first group that matches the name will be returned.
+   * If no group name is provided, the first group in the list of groups will be returned.
+   * If a rule title is provided, the first rule that matches the title will be returned.
+   * If no rule title is provided, the first rule in the group will be returned.
+   */
+  readProvisionedAlertRule(args: ReadProvisionedAlertRuleArgs): Promise<AlertRule>;
+
+  /**
    * Fixture command that reads a dashboard json file in the provisioning/dashboards directory.
    *
    * Can be useful when navigating to a provisioned dashboard and you don't want to hard code the dashboard UID.
@@ -173,6 +195,19 @@ export type PluginFixture = {
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Client that allows you to use certain endpoints in the Grafana http API.
+   *
+   The GrafanaAPIClient doesn't call the Grafana HTTP API on behalf of the logged in user -
+   * it uses the {@link types.grafanaAPICredentials} credentials. grafanaAPICredentials defaults to admin:admin, but you may override this
+   * by specifying grafanaAPICredentials in the playwright config options.
+   *
+   * Note that storage state for the admin client is not persisted throughout the test suite. For every test where the grafanaAPICredentials fixtures is used,
+   * new storage state is created.
+   */
+
+  grafanaAPIClient: GrafanaAPIClient;
 
   /**
    * Isolated {@link DashboardPage} instance for each test.
@@ -201,12 +236,28 @@ export type PluginFixture = {
   variableEditPage: VariableEditPage;
 
   /**
+   * Isolated {@link VariablePage} instance for each test.
+   *
+   * When using this fixture in a test, you will get a new dashboard page with a new empty variable edit page
+   * To load an existing dashboard with an existing variable, use the {@link gotoVariableEditPage} fixture.
+   */
+  variablePage: VariablePage;
+
+  /**
    * Isolated {@link AnnotationEditPage} instance for each test.
    *
    * When using this fixture in a test, you will get a new dashboard page with a new empty annotation edit page
    * To load an existing dashboard with an existing annotation, use the {@link gotoAnnotationEditPage} fixture.
    */
   annotationEditPage: AnnotationEditPage;
+
+  /**
+   * Isolated {@link AlertRuleEditPage} instance for each test.
+   *
+   * When using this fixture in a test, you will get an empty alert rule page form
+   * To load an existing alert rule, use the {@link gotoAlertRulePage} fixture.
+   */
+  alertRuleEditPage: AlertRuleEditPage;
 
   /**
    * Isolated {@link ExplorePage} instance for each test.
@@ -237,9 +288,19 @@ export type PluginFixture = {
   gotoVariableEditPage: (args: DashboardEditViewArgs<string>) => Promise<VariableEditPage>;
 
   /**
+   * Fixture command that navigates a variable edit page for an already existing variable query in a dashboard.
+   */
+  gotoVariablePage: (args: DashboardPageArgs) => Promise<VariablePage>;
+
+  /**
    * Fixture command that navigates an annotation edit page for an already existing annotation query in a dashboard.
    */
   gotoAnnotationEditPage: (args: DashboardEditViewArgs<string>) => Promise<AnnotationEditPage>;
+
+  /**
+   * Fixture command that navigates to an alert rule edit page for an already existing alert query.
+   */
+  gotoAlertRuleEditPage: (args: AlertRuleArgs) => Promise<AlertRuleEditPage>;
 
   /**
    * Fixture command that navigates a configuration page for an already existing data source instance.
@@ -260,7 +321,7 @@ export type PluginFixture = {
 /**
  * The context object passed to page object models
  */
-export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectors; testInfo: TestInfo } & Pick<
+export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectorGroups; testInfo: TestInfo } & Pick<
   PlaywrightTestArgs,
   'page' | 'request'
 >;
@@ -293,6 +354,12 @@ export interface DataSourceSettings<T = {}, S = {}> {
   secureJsonData?: S;
 }
 
+export interface AlertRule {
+  uid: string;
+  title: string;
+  data: Array<{ refId: string; datasourceUid: string; model: any }>;
+}
+
 /**
  * The dashboard object
  */
@@ -301,19 +368,21 @@ export interface Dashboard {
   title?: string;
 }
 
-export type CreateUserArgs = {
+export type User = {
   /**
-   * The username of the user to create. Needs to be unique
+   * The username of the user
    */
   user: string;
-  /**
-   * The password of the user to create
-   */
   password: string;
-  /**
-   * The role of the user to create
-   */
   role?: OrgRole;
+};
+
+export type Credentials = {
+  /**
+   * The username of the user
+   */
+  user: string;
+  password: string;
 };
 
 export type CreateDataSourceArgs<T = any> = {
@@ -371,7 +440,9 @@ export interface TimeRangeArgs {
   zone?: string;
 }
 
-export type DashboardPageArgs = {
+export type GrafanaPageArgs = NavigateOptions;
+
+export type DashboardPageArgs = GrafanaPageArgs & {
   /**
    * The uid of the dashboard to go to
    */
@@ -393,9 +464,13 @@ export type DashboardPageArgs = {
  * If dashboard is not specified, it's assumed that it's a new dashboard. Otherwise, the dashboard uid is used to
  * navigate to an already existing dashboard.
  */
-export type DashboardEditViewArgs<T> = {
+export type DashboardEditViewArgs<T> = GrafanaPageArgs & {
   dashboard?: DashboardPageArgs;
   id: T;
+};
+
+export type AlertRuleArgs = GrafanaPageArgs & {
+  uid: string;
 };
 
 export type ReadProvisionedDashboardArgs = {
@@ -405,19 +480,36 @@ export type ReadProvisionedDashboardArgs = {
   fileName: string;
 };
 
-export type ReadProvisionedDataSourceArgs = {
+export type ReadProvisionedAlertRuleArgs = {
   /**
-   * The path, relative to the provisioning folder, to the dashboard json file
+   * The name of the yaml file in the provisioning/alerting folder
    */
   fileName: string;
 
   /**
-   * The name of the data source in the datasources list
+   * The name of the alert group in the groups list. Will use the first group if not provided
+   */
+  groupName?: string;
+
+  /**
+   * The name of the alert rule in the rules list. Will use the first rule in the group if not provided
+   */
+  ruleTitle?: string;
+};
+
+export type ReadProvisionedDataSourceArgs = {
+  /**
+   * The name of the yaml file in the provisioning/datasources folder
+   */
+  fileName: string;
+
+  /**
+   * The name of the data source in the datasources list. Will use the first data source if not provided
    */
   name?: string;
 };
 
-export type PluginPageArgs = {
+export type PluginPageArgs = GrafanaPageArgs & {
   pluginId: string;
 };
 
@@ -574,3 +666,10 @@ export type Visualization =
   | 'Worldmap Panel';
 
 export type AlertVariant = 'success' | 'warning' | 'error' | 'info';
+
+export type E2ESelectorGroups = {
+  constants: SelectorsOf<VersionedConstants>;
+  apis: SelectorsOf<VersionedAPIs>;
+  pages: SelectorsOf<typeof versionedPages>;
+  components: SelectorsOf<typeof versionedComponents>;
+};

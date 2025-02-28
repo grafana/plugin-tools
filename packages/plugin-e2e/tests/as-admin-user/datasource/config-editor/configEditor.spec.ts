@@ -1,18 +1,34 @@
 import { expect, test } from '../../../../src';
 import { clickRadioButton } from '../../../utils';
 
-test('invalid credentials should return an error', async ({ createDataSourceConfigPage, page }) => {
-  const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
-  await clickRadioButton(page, 'API Key', { exact: true });
-  await page.getByPlaceholder('Enter API key').fill('xyz');
-  await expect(configPage.saveAndTest()).not.toBeOK();
+test('should render config editor', async ({ createDataSourceConfigPage, readProvisionedDataSource, page }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
+  await createDataSourceConfigPage({ type: ds.type });
+  await expect(page.getByLabel('Path')).toBeVisible();
 });
 
-test('valid credentials should return a 200 status code', async ({ createDataSourceConfigPage, page }) => {
-  const configPage = await createDataSourceConfigPage({ type: 'grafana-googlesheets-datasource' });
-  await page.getByTestId('Paste JWT button').click();
-  await page.getByTestId('Configuration text area').fill(process.env.GOOGLE_JWT_FILE!.replace(/'/g, ''));
-  await expect(configPage.saveAndTest()).toBeOK();
+test('should be successful if config is valid', async ({
+  createDataSourceConfigPage,
+  readProvisionedDataSource,
+  page,
+}) => {
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
+  const datasourceConfigPage = await createDataSourceConfigPage({ type: ds.type });
+  await page.getByLabel('Path').fill('example.com');
+  await expect(datasourceConfigPage.saveAndTest()).toBeOK();
+  await expect(datasourceConfigPage).toHaveAlert('success');
+});
+
+test('should return error if API key is missing', async ({
+  createDataSourceConfigPage,
+  readProvisionedDataSource,
+  page,
+}) => {
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
+  const datasourceConfigPage = await createDataSourceConfigPage({ type: ds.type });
+  await page.getByLabel('Path').fill('');
+  await expect(datasourceConfigPage.saveAndTest()).not.toBeOK();
+  await expect(datasourceConfigPage).toHaveAlert('error', { hasText: 'API key is missing' });
 });
 
 test('should call a custom health endpoint when healthCheckPath is provided', async ({
@@ -31,13 +47,4 @@ test('should call a custom health endpoint when healthCheckPath is provided', as
   await page.getByPlaceholder('http://localhost:8080').fill('http://localhost:8080');
   await expect(configPage.saveAndTest({ path: healthCheckPath })).toBeOK();
   await expect(configPage).toHaveAlert('success', { hasNotText: 'Datasource updated' });
-});
-
-test('existing ds instance - valid credentials should return a 200 status code', async ({
-  readProvisionedDataSource,
-  gotoDataSourceConfigPage,
-}) => {
-  const datasource = await readProvisionedDataSource({ fileName: 'google-sheets-datasource-jwt.yaml' });
-  const configPage = await gotoDataSourceConfigPage(datasource.uid);
-  await expect(configPage.saveAndTest()).toBeOK();
 });

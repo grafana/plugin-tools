@@ -1,0 +1,9 @@
+{
+  "position": 40,
+  "label": "UI extensions",
+  "customProps": {
+    "description": "Guides for creating UI extensions and extension points."
+  },
+  "collapsible": true,
+  "collapsed": true
+}

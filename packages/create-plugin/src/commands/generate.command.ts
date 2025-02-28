@@ -1,27 +1,24 @@
+import chalk from 'chalk';
 import { glob } from 'glob';
 import minimist from 'minimist';
-import chalk from 'chalk';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
-import { getConfig } from '../utils/utils.config.js';
-import { printError } from '../utils/utils.console.js';
+import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
+import { TemplateData } from '../types.js';
+import { printError, printWarning } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
-import { normalizeId } from '../utils/utils.handlebars.js';
-import { getPackageManagerFromUserAgent, getPackageManagerInstallCmd } from '../utils/utils.packageManager.js';
+import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
+import { configureYarn } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
-import { renderTemplateFromFile } from '../utils/utils.templates.js';
-import { getVersion } from '../utils/utils.version.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
+import { getTemplateData, renderTemplateFromFile } from '../utils/utils.templates.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
-import { updateGoSdkAndModules } from './generate/update-go-sdk-and-packages.js';
-import { CliArgs, TemplateData } from '../types.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
-  const exportPath = getExportPath(answers.pluginName, answers.orgName, answers.pluginType);
+  const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
 
@@ -30,57 +27,43 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     printError(`**Aborting plugin scaffold. '${exportPath}' exists and contains files.**`);
     process.exit(1);
   }
+  // This is only possible when a user passes both flags via the command line.
+  if (answers.hasBackend && answers.pluginType === PLUGIN_TYPES.panel) {
+    printWarning(`Backend ignored as incompatible with plugin type: ${PLUGIN_TYPES.panel}.`);
+  }
 
   const actions = getTemplateActions({ templateData, exportPath });
-  const { changes, failures } = await generateFiles({ actions });
-
+  const failures = await generateFiles({ actions });
+  const changes = [
+    `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin ${
+      templateData.hasBackend ? '(with Go backend)' : ''
+    }`,
+    'Added basic E2E test (Playwright)',
+    `${provisioningMsg[templateData.pluginType]}`,
+    'Configured development environment (Docker)',
+    'Added default GitHub actions for CI, releases and Grafana compatibility',
+  ];
+  console.log('');
   changes.forEach((change) => {
-    console.log(`${chalk.green('✔︎ ++')} ${change.path}`);
+    console.log(`${chalk.green('✔︎')} ${change}`);
   });
 
   failures.forEach((failure) => {
     printError(`${failure.error}`);
   });
 
-  if (answers.hasBackend) {
+  if (templateData.packageManagerName === 'yarn') {
+    await execPostScaffoldFunction(configureYarn, exportPath, templateData.packageManagerVersion);
+  }
+
+  if (templateData.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, exportPath);
   }
+
   await execPostScaffoldFunction(prettifyFiles, { targetPath: exportPath });
-
-  printGenerateSuccessMessage(answers);
+  console.log('\n');
+  printGenerateSuccessMessage(templateData);
 };
-
-function getTemplateData(answers: CliArgs) {
-  const { pluginName, orgName, pluginType } = answers;
-  const { features } = getConfig();
-  const currentVersion = getVersion();
-  const pluginId = normalizeId(pluginName, orgName, pluginType);
-  // Support the users package manager of choice.
-  const { packageManagerName, packageManagerVersion } = getPackageManagerFromUserAgent();
-  const packageManagerInstallCmd = getPackageManagerInstallCmd(packageManagerName);
-  const isAppType = pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
-  // We don't enable this by default yet for new scenes plugins.
-  const useReactRouterV6 = features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
-  const usePlaywright = features.usePlaywright === true;
-
-  const templateData: TemplateData = {
-    ...answers,
-    pluginId,
-    packageManagerName,
-    packageManagerInstallCmd,
-    packageManagerVersion,
-    isAppType,
-    isNPM: packageManagerName === 'npm',
-    version: currentVersion,
-    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
-    useReactRouterV6,
-    reactRouterVersion: useReactRouterV6 ? '6.22.0' : '5.2.0',
-    usePlaywright,
-    e2eTestCmd: 'playwright test',
-  };
-
-  return templateData;
-}
 
 type TemplateAction = {
   templateFile: string;
@@ -124,24 +107,14 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
     []
   );
 
-  // Copy over Github workflow files (if selected)
-  const ciWorkflowActions = templateData.hasGithubWorkflows
-    ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.ciWorkflows,
-        exportPath,
-        templateData,
-      })
-    : [];
+  // Copy over Github workflow files
+  const ciWorkflowActions = getActionsForTemplateFolder({
+    folderPath: TEMPLATE_PATHS.ciWorkflows,
+    exportPath: path.join(exportPath, '.github'),
+    templateData,
+  });
 
-  const isCompatibleWorkflowActions = templateData.hasGithubLevitateWorkflow
-    ? getActionsForTemplateFolder({
-        folderPath: TEMPLATE_PATHS.isCompatibleWorkflow,
-        exportPath,
-        templateData,
-      })
-    : [];
-
-  return [...pluginActions, ...ciWorkflowActions, ...isCompatibleWorkflowActions];
+  return [...pluginActions, ...ciWorkflowActions];
 }
 
 function getActionsForTemplateFolder({
@@ -177,7 +150,6 @@ function getActionsForTemplateFolder({
 
 async function generateFiles({ actions }: { actions: any[] }) {
   const failures = [];
-  const changes = [];
   for (const action of actions) {
     try {
       const rootDir = path.dirname(action.path);
@@ -188,9 +160,6 @@ async function generateFiles({ actions }: { actions: any[] }) {
 
       const rendered = renderTemplateFromFile(action.templateFile, action.data);
       await writeFile(action.path, rendered);
-      changes.push({
-        path: action.path,
-      });
     } catch (error) {
       let message;
       if (error instanceof Error) {
@@ -204,7 +173,7 @@ async function generateFiles({ actions }: { actions: any[] }) {
       });
     }
   }
-  return { failures, changes };
+  return failures;
 }
 
 type AsyncFunction<T> = (...args: any[]) => Promise<T>;
@@ -219,3 +188,10 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
     printError(`${error}`);
   }
 }
+
+const provisioningMsg = {
+  [PLUGIN_TYPES.app]: 'Set up provisioning for app',
+  [PLUGIN_TYPES.datasource]: 'Set up provisioning for data source instance',
+  [PLUGIN_TYPES.panel]: 'Set up provisioning for basic dashboard and TestData data source instance',
+  [PLUGIN_TYPES.scenes]: 'Set up provisioning for app and TestData data source instance',
+};

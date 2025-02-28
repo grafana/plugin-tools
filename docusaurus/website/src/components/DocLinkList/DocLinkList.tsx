@@ -1,6 +1,10 @@
 import React from 'react';
-import { useCurrentSidebarCategory, filterDocCardListItems } from '@docusaurus/theme-common';
-import { useDocById, findFirstSidebarItemLink } from '@docusaurus/theme-common/internal';
+import {
+  useCurrentSidebarCategory,
+  filterDocCardListItems,
+  useDocById,
+  findFirstSidebarItemLink,
+} from '@docusaurus/plugin-content-docs/client';
 import Link from '@docusaurus/Link';
 import type { Props } from '@theme/DocCardList';
 import styles from './styles.module.css';

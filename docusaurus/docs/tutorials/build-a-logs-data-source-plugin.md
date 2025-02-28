@@ -338,7 +338,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 :::note
 
-Implement this feature through the `DataSourceWithXXXSupport` interface.
+Implement this feature through the `DataSourceWithLogsContextSupport` interface.
 
 :::
 
@@ -366,6 +366,7 @@ export class ExampleDatasource
     query?: ExampleQuery
   ): Promise<DataQueryResponse> {
     // Be sure to adjust this example implementation of createRequestFromQuery based on your data source logic.
+    // Remember to replace variables with `getTemplateSrv` and the passed `options.scopedVars` before returning your `request` object.
     const request = createRequestFromQuery(row, query, options);
     return lastValueFrom(
       // Be sure to adjust this example of this.query based on your data source logic.
@@ -403,7 +404,7 @@ These APIs can be used in data sources within the [`grafana/grafana`](https://gi
 
 :::note
 
-This feature is not currently not supported for external plugins outside of Grafana repo. It is implemented in data source by implementing `DataSourceWithXXXSupport` interface.
+It is implemented in data source by implementing `DataSourceWithXXXSupport` interface.
 
 :::
 
@@ -418,7 +419,6 @@ This API must be implemented in data source in typescript code.
 :::
 
 ```ts
-import { queryLogsVolume } from '../features/logs/logsModel'; // This is currently not available for use outside of the Grafana repo
 import {
   DataSourceWithSupplementaryQueriesSupport,
   LogLevel,
@@ -451,19 +451,22 @@ export class ExampleDatasource
     }
   }
 
-  // Returns an observable that will be used to fetch supplementary data based on the provided
-  // supplementary query type and original request.
-  getDataProvider(
+  // It generates a DataQueryRequest for a specific supplementary query type.
+  // @returns A DataQueryRequest for the supplementary queries or undefined if not supported.
+  getSupplementaryRequest(
     type: SupplementaryQueryType,
-    request: DataQueryRequest<ExampleQuery>
-  ): Observable<DataQueryResponse> | undefined {
+    request: DataQueryRequest<ExampleQuery>,
+    options?: SupplementaryQueryOptions
+  ): DataQueryRequest<ExampleQuery> | undefined {
     if (!this.getSupportedSupplementaryQueryTypes().includes(type)) {
       return undefined;
     }
 
     switch (type) {
       case SupplementaryQueryType.LogsVolume:
-        return this.getLogsVolumeDataProvider(request);
+        const logsVolumeOption: LogsVolumeOption =
+          options?.type === SupplementaryQueryType.LogsVolume ? options : { type };
+        return this.getLogsVolumeDataProvider(request, logsVolumeOption);
       default:
         return undefined;
     }
@@ -471,29 +474,19 @@ export class ExampleDatasource
 
   // Be sure to adjust this example based your data source logic.
   private getLogsVolumeDataProvider(
-    request: DataQueryRequest<ExampleQuery>
-  ): Observable<DataQueryResponse> | undefined {
+    request: DataQueryRequest<ExampleQuery>,
+    options: LogsVolumeOption
+  ): DataQueryRequest<ExampleQuery> | undefined {
     const logsVolumeRequest = cloneDeep(request);
     const targets = logsVolumeRequest.targets
-      .map((query) => this.getSupplementaryQuery({ type: SupplementaryQueryType.LogsVolume }, query))
+      .map((query) => this.getSupplementaryQuery(options, query))
       .filter((query): query is ExampleQuery => !!query);
 
     if (!targets.length) {
       return undefined;
     }
 
-    // Use imported queryLogsVolume.
-    return queryLogsVolume(
-      this,
-      { ...logsVolumeRequest, targets },
-      {
-        // Implement extract level to produce color-coded graph.
-        extractLevel: (dataFrame: DataFrame) => LogLevel.unknown,
-        range: request.range,
-        targets: request.targets,
-      }
-    );
-  }
+    return { ...logsVolumeRequest, targets };
 }
 ```
 
@@ -501,7 +494,7 @@ export class ExampleDatasource
 
 :::note
 
-This feature is currently not supported for external plugins outside of the Grafana repo. Implement this API in a data source by implementing the `DataSourceWithXXXSupport` interface.
+Implement this API in a data source by implementing the `DataSourceWithXXXSupport` interface.
 
 :::
 
@@ -510,7 +503,6 @@ The [logs sample](https://grafana.com/docs/grafana/latest/explore/logs-integrati
 To implement the logs sample support in your data source plugin, you can use the `DataSourceWithSupplementaryQueriesSupport` API.
 
 ```ts
-import { queryLogsSample } from '../features/logs/logsModel'; // This is currently not possible to use outside of Grafana repo
 import {
   DataSourceWithSupplementaryQueriesSupport,
   SupplementaryQueryOptions,
@@ -542,37 +534,40 @@ export class ExampleDatasource
     }
   }
 
-  // Returns an observable that will be used to fetch supplementary data based on the provided supplementary query type and original request.
-  getDataProvider(
+  // It generates a DataQueryRequest for a specific supplementary query type.
+  // @returns A DataQueryRequest for the supplementary queries or undefined if not supported.
+  getSupplementaryRequest(
     type: SupplementaryQueryType,
-    request: DataQueryRequest<ExampleQuery>
-  ): Observable<DataQueryResponse> | undefined {
+    request: DataQueryRequest<ExampleQuery>,
+    options?: SupplementaryQueryOptions
+  ): DataQueryRequest<ExampleQuery> | undefined {
     if (!this.getSupportedSupplementaryQueryTypes().includes(type)) {
       return undefined;
     }
 
     switch (type) {
       case SupplementaryQueryType.LogsSample:
-        return this.getLogsSampleDataProvider(request);
+        const logsSampleOption: LogsSampleOptions =
+          options?.type === SupplementaryQueryType.LogsSample ? options : { type };
+        return this.getLogsSampleDataProvider(request, logsSampleOption);
       default:
         return undefined;
     }
   }
-
+  
   private getLogsSampleDataProvider(
-    request: DataQueryRequest<ExampleQuery>
-  ): Observable<DataQueryResponse> | undefined {
+    request: DataQueryRequest<ExampleQuery>,
+    options?: LogsSampleOptions
+  ): DataQueryRequest<ExampleQuery> | undefined {
     const logsSampleRequest = cloneDeep(request);
-    const targets = logsVolumeRequest.targets
-      .map((query) => this.getSupplementaryQuery({ type: SupplementaryQueryType.LogsVolume }, query))
+    const targets = logsSampleRequest.targets
+      .map((query) => this.getSupplementaryQuery({ type: SupplementaryQueryType.LogsSample, limit: 100 }, query))
       .filter((query): query is ExampleQuery => !!query);
 
     if (!targets.length) {
       return undefined;
     }
-
-    // Use imported queryLogsSample
-    return queryLogsSample(this, { ...logsVolumeRequest, targets });
+    return { ...logsSampleRequest, targets };
   }
 }
 ```

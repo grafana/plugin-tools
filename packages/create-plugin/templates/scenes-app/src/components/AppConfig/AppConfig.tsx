@@ -6,7 +6,7 @@ import { css } from '@emotion/css';
 import { testIds } from '../testIds';
 import { lastValueFrom } from 'rxjs';
 
-export type JsonData = {
+type JsonData = {
   apiUrl?: string;
   isApiKeySet?: boolean;
 };
@@ -22,9 +22,9 @@ type State = {
   apiKey: string;
 };
 
-interface Props extends PluginConfigPageProps<AppPluginMeta<JsonData>> {}
+export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<JsonData>> {}
 
-export const AppConfig = ({ plugin }: Props) => {
+const AppConfig = ({ plugin }: AppConfigProps) => {
   const s = useStyles2(getStyles);
   const { enabled, pinned, jsonData } = plugin.meta;
   const [state, setState] = useState<State>({
@@ -32,6 +32,8 @@ export const AppConfig = ({ plugin }: Props) => {
     apiKey: '',
     isApiKeySet: Boolean(jsonData?.isApiKeySet),
   });
+
+  const isSubmitDisabled = Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey));
 
   const onResetApiKey = () =>
     setState({
@@ -54,51 +56,26 @@ export const AppConfig = ({ plugin }: Props) => {
     });
   };
 
+  const onSubmit = () => {
+    updatePluginAndReload(plugin.meta.id, {
+      enabled,
+      pinned,
+      jsonData: {
+        apiUrl: state.apiUrl,
+        isApiKeySet: true,
+      },
+      // This cannot be queried later by the frontend.
+      // We don't want to override it in case it was set previously and left untouched now.
+      secureJsonData: state.isApiKeySet
+        ? undefined
+        : {
+            apiKey: state.apiKey,
+          },
+    });
+  };
+
   return (
-    <div data-testid={testIds.appConfig.container}>
-      {/* ENABLE / DISABLE PLUGIN */}
-      <FieldSet label="Enable / Disable">
-        {!enabled && (
-          <>
-            <div className={s.colorWeak}>The plugin is currently not enabled.</div>
-            <Button
-              className={s.marginTop}
-              variant="primary"
-              onClick={() =>
-                updatePluginAndReload(plugin.meta.id, {
-                  enabled: true,
-                  pinned: true,
-                  jsonData,
-                })
-              }
-            >
-              Enable plugin
-            </Button>
-          </>
-        )}
-
-        {/* Disable the plugin */}
-        {enabled && (
-          <>
-            <div className={s.colorWeak}>The plugin is currently enabled.</div>
-            <Button
-              className={s.marginTop}
-              variant="destructive"
-              onClick={() =>
-                updatePluginAndReload(plugin.meta.id, {
-                  enabled: false,
-                  pinned: false,
-                  jsonData,
-                })
-              }
-            >
-              Disable plugin
-            </Button>
-          </>
-        )}
-      </FieldSet>
-
-      {/* CUSTOM SETTINGS */}
+    <form onSubmit={onSubmit}>
       <FieldSet label="API Settings" className={s.marginTopXl}>
         {/* API Key */}
         <Field label="API Key" description="A secret key for authenticating to our custom API">
@@ -128,35 +105,16 @@ export const AppConfig = ({ plugin }: Props) => {
         </Field>
 
         <div className={s.marginTop}>
-          <Button
-            type="submit"
-            data-testid={testIds.appConfig.submit}
-            onClick={() =>
-              updatePluginAndReload(plugin.meta.id, {
-                enabled,
-                pinned,
-                jsonData: {
-                  apiUrl: state.apiUrl,
-                  isApiKeySet: true,
-                },
-                // This cannot be queried later by the frontend.
-                // We don't want to override it in case it was set previously and left untouched now.
-                secureJsonData: state.isApiKeySet
-                  ? undefined
-                  : {
-                      apiKey: state.apiKey,
-                    },
-              })
-            }
-            disabled={Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey))}
-          >
+          <Button type="submit" data-testid={testIds.appConfig.submit} disabled={isSubmitDisabled}>
             Save API settings
           </Button>
         </div>
       </FieldSet>
-    </div>
+    </form>
   );
 };
+
+export default AppConfig;
 
 const getStyles = (theme: GrafanaTheme2) => ({
   colorWeak: css`
@@ -182,7 +140,7 @@ const updatePluginAndReload = async (pluginId: string, data: Partial<PluginMeta<
   }
 };
 
-export const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
+const updatePlugin = async (pluginId: string, data: Partial<PluginMeta>) => {
   const response = getBackendSrv().fetch({
     url: `/api/plugins/${pluginId}/settings`,
     method: 'POST',

@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "1.2.0",
+  "version": "1.18.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -15,35 +15,35 @@
   "license": "Apache-2.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "tsc --project tsconfig.json",
     "dev": "nodemon --exec 'tsc'",
-    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
-    "server": "docker-compose up --build",
+    "server": "docker compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
-    "test": "vitest",
-    "playwright:test": "npx playwright test",
-    "playwright:test:ui": "npx playwright test --ui",
-    "playwright:showreport": "npx playwright show-report"
+    "test": "vitest --passWithNoTests",
+    "playwright:test": "npx playwright test"
   },
   "engines": {
-    "node": ">=18 <=20"
+    "node": ">=18 <=22"
   },
   "peerDependencies": {
     "@playwright/test": "^1.41.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.2",
-    "@types/uuid": "^9.0.7",
-    "dotenv": "^16.3.1"
+    "@playwright/test": "^1.50.1",
+    "@types/uuid": "^10.0.0",
+    "dotenv": "^16.4.7"
   },
   "dependencies": {
+    "@grafana/e2e-selectors": "^11.6.0-226761",
     "semver": "^7.5.4",
-    "uuid": "^9.0.1",
+    "uuid": "^11.0.2",
     "yaml": "^2.3.4"
   },
   "nodemonConfig": {

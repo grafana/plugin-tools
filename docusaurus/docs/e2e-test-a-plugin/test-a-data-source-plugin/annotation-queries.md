@@ -21,11 +21,23 @@ In many cases, the execution of annotation queries requires different handling t
 
 ### Test the annotation editor
 
-If your data source plugin implements a custom annotation editor, you can write tests that verify that the editor works as expected. If you haven't implemented a custom editor, then the plugin will use the built-in in editor. In that case, you don't need to write tests.
+If your data source plugin implements a custom annotation editor, you can write tests that verify that the editor works as expected. If you haven't implemented a custom editor, then the plugin uses the built-in editor. In that case, it's not necessary to write tests.
+
+The following example is a simple smoke test that verifies that a custom annotation editor loads:
+
+```ts title="annotations.spec.ts"
+import { expect, test } from '@grafana/plugin-e2e';
+
+test('should render annotations editor', async ({ annotationEditPage, page, readProvisionedDataSource }) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await annotationEditPage.datasource.set(ds.name);
+  await expect(page.getByRole('textbox', { name: 'Query Text' })).toBeVisible();
+});
+```
 
 ### Test the entire annotation query execution flow
 
-In the next example, we perform an integration test where we test a plugin's entire annotation query data flow.
+In the following example, an integration test covers a plugin's entire annotation query data flow:
 
 :::note
 Note that the annotation query result is rendered in an Alert component starting from Grafana 11.0.0, so using the `toHaveAlert` matcher won't work in earlier versions.

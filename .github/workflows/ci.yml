@@ -1,5 +1,16 @@
 name: Node CI
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
 
 jobs:
   test:
@@ -19,7 +30,7 @@ jobs:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -37,6 +48,7 @@ jobs:
         run: |
           mkdir ./packed-artifacts
           npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
+          cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@v4
         with:
@@ -49,32 +61,35 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     strategy:
+      fail-fast: false
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='app' --no-backend
             hasBackend: false
           - workingDir: 'myorg-backend-app'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --plugin-name='backend' --org-name='myorg' --plugin-type='app' --backend
             hasBackend: true
           - workingDir: 'myorg-nobackend-panel'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
             hasBackend: false
           - workingDir: 'myorg-nobackend-datasource'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --plugin-name='no-backend' --org-name='myorg' --plugin-type='datasource' --no-backend
             hasBackend: false
           - workingDir: 'myorg-backend-datasource'
-            cmd: create-plugin --pluginName='backend' --orgName='myorg' --pluginDescription='This is a sample backend datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+            cmdArgs: --plugin-name='backend' --org-name='myorg' --plugin-type='datasource' --backend
             hasBackend: true
-          - workingDir: 'myorg-nobackend-scenesapp'
-            cmd: create-plugin --pluginName='no-backend' --orgName='myorg' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow
+          - workingDir: 'myorg-nobackendscenes-app'
+            cmdArgs: --plugin-name='no-backend-scenes' --org-name='myorg' --plugin-type='scenesapp' --no-backend
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
@@ -88,7 +103,7 @@ jobs:
         working-directory: ./packed-artifacts
 
       - name: Generate plugin
-        run: ${{ matrix.cmd }}
+        run: npx create-plugin ${{ matrix.cmdArgs }}
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
@@ -106,43 +121,126 @@ jobs:
         run: npm run build
         working-directory: ./${{ matrix.workingDir }}
 
+      - name: Test plugin frontend
+        run: npm run test:ci
+        working-directory: ./${{ matrix.workingDir }}
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '~1.22'
+          check-latest: true
+          cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
+        if: ${{ matrix.hasBackend == true }}
+
+      - name: Build plugin backend
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: -v build:linux
+          workdir: ./${{ matrix.workingDir }}
+        if: ${{ matrix.hasBackend == true }}
+
       - name: Install playwright dependencies
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
         run: npm exec playwright install chromium
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Start grafana server for e2e tests
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        run: docker compose up -d
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+
+      - name: Start grafana server for e2e tests (latest)
+        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=latest docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Wait for grafana server for e2e tests
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        uses: nev7n/wait_for_response@v1
+      - name: Wait for grafana server (latest)
+        uses: grafana/plugin-actions/wait-for-grafana@main
         with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 60000
-          interval: 500
+          url: http://localhost:3000/login
 
-      - name: Run e2e tests
+      - name: Run e2e tests (latest)
         id: run-e2e-tests
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
+        continue-on-error: true
         run: npm run e2e
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Stop grafana docker
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' }}
-        run: docker-compose down
+      - name: Stop grafana docker (latest)
+        run: docker stop ${{ matrix.workingDir }} && docker rm ${{ matrix.workingDir }} docker compose rm -f
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Archive E2E output
-        uses: actions/upload-artifact@v4
-        if: ${{ matrix.workingDir != 'myorg-nobackend-scenesapp' && steps.run-e2e-tests.outcome != 'success' }}
+      - name: Upload e2e test summary (latest)
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
-          name: ${{ matrix.workingDir }}-playwright-report
-          path: ./${{ matrix.workingDir }}/playwright-report/
-          retention-days: 5
+          plugin-name: ${{ matrix.workingDir }}
+          report-dir: ./${{ matrix.workingDir }}/playwright-report
+          grafana-version: latest
+          grafana-image: grafana-enterprise
+          test-outcome: ${{ steps.run-e2e-tests.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get plugin min version
+        id: min-version
+        run: |
+          sudo apt-get install -y jq
+          npm install semver
+          range=$(jq -r .dependencies.grafanaDependency < ${{ matrix.workingDir }}/src/plugin.json)
+          # Use node-semver to get the min version of the range
+          min_version=$(node -e "console.log(require('semver').minVersion('${range}')?.toString())")
+          echo "::set-output name=MIN_VERSION::$min_version"
+          export MIN_VERSION=$min_version
+
+      - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
+        run: |
+          docker compose pull 
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
+          docker compose up -d
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
+        uses: grafana/plugin-actions/wait-for-grafana@main
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
+        id: run-e2e-tests-min-version
+        run: npm run e2e
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Stop grafana docker (${{ steps.min-version.outputs.MIN_VERSION }})
+        run: docker stop ${{ matrix.workingDir }} && docker rm ${{ matrix.workingDir }} docker compose rm -f
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
+        with:
+          plugin-name: ${{ matrix.workingDir }}
+          report-dir: ./${{ matrix.workingDir }}/playwright-report
+          grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
+          grafana-image: grafana-enterprise
+          test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check plugin.json
+        run: |
+          cp -r dist/ ${{ matrix.workingDir }}
+          zip ${{ matrix.workingDir }}.zip ${{ matrix.workingDir }} -r
+          rm -r ${{ matrix.workingDir }}
+
+          docker run --pull=always \
+            -v $PWD/${{ matrix.workingDir }}.zip:/archive.zip \
+            grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
+
+        working-directory: ./${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
@@ -158,20 +256,30 @@ jobs:
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '~1.21'
-          check-latest: true
-          cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
-        if: ${{ matrix.hasBackend == true }}
+      - name: Frontend Knip Report
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        # Knip uses the scaffolded plugin .gitignore file for ignore paths.
+        # github workflows use paths like home/runner/work/plugin-tools/plugin-tools
+        # so we need to remove /work otherwise knip returns false positives
+        run: |
+          sed -i '/^work\/$/d' .gitignore
+          npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
+        working-directory: ./${{ matrix.workingDir }}
 
-      - name: Build plugin backend
-        uses: magefile/mage-action@v3
+      - name: Failing build due to test failures (canary versions)
+        if: steps.run-e2e-tests.outcome != 'success' || steps.run-e2e-tests-min-version.outcome != 'success'
+        run: exit 1
+
+  publish-report:
+    if: ${{ always() && !cancelled() }}
+    needs: [generate-plugins]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
-          version: latest
-          args: -v build:linux
-          workdir: ./${{ matrix.workingDir }}
-        if: ${{ matrix.hasBackend == true }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     runs-on: ubuntu-latest
@@ -182,6 +290,9 @@ jobs:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Generate token
         id: generate_token
@@ -189,6 +300,13 @@ jobs:
         with:
           app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
           private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
+
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
 
       - uses: actions/checkout@v4
         with:
@@ -200,7 +318,7 @@ jobs:
       - name: Setup environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -214,5 +332,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # comes from the get-secrets step (shared get-vault-secrets workflow)
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         run: npm run release

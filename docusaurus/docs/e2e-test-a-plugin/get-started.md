@@ -13,12 +13,8 @@ keywords:
 sidebar_position: 2
 ---
 
-import ScaffoldPluginE2EStartGrafanaNPM from '@snippets/plugin-e2e-start-grafana.npm.md';
-import ScaffoldPluginE2EStartGrafanaPNPM from '@snippets/plugin-e2e-start-grafana.pnpm.md';
-import ScaffoldPluginE2EStartGrafanaYarn from '@snippets/plugin-e2e-start-grafana.yarn.md';
-import ScaffoldPluginE2ERunTestsNPM from '@snippets/plugin-e2e-run-tests.npm.md';
-import ScaffoldPluginE2ERunTestsPNPM from '@snippets/plugin-e2e-run-tests.pnpm.md';
-import ScaffoldPluginE2ERunTestsYarn from '@snippets/plugin-e2e-run-tests.yarn.md';
+import ScaffoldPluginE2EStartGrafanaNPM from '@shared/plugin-e2e-start-grafana.md';
+import ScaffoldPluginE2ERunTestsNPM from '@shared/plugin-e2e-run-tests.md';
 
 The [create-plugin](https://www.npmjs.com/package/@grafana/create-plugin?activeTab=readme) tool automatically scaffolds the basic setup for `@grafana/plugin-e2e` to help you easily get started with end-to-end testing in your plugin. This guide walks you through the basic usage of running Playwright tests with `@grafana/plugin-e2e`.
 
@@ -30,7 +26,7 @@ If you scaffolded a plugin with a version of create-plugin prior to 4.6.0, follo
 
 You need to have the following:
 
-- Grafana [plugin development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment).
+- Grafana [plugin development environment](/get-started/set-up-development-environment).
 - Node.js version 18 or later.
 - Basic knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
 
@@ -38,15 +34,7 @@ You need to have the following:
 
 Start up the latest version of Grafana on your local machine like this:
 
-<CodeSnippets
-snippets={[
-{ component: ScaffoldPluginE2EStartGrafanaNPM, label: 'npm' },
-{ component: ScaffoldPluginE2EStartGrafanaYarn, label: 'yarn' },
-{ component: ScaffoldPluginE2EStartGrafanaPNPM, label: 'pnpm' }
-]}
-groupId="package-manager"
-queryString="current-package-manager"
-/>
+<ScaffoldPluginE2EStartGrafanaNPM />
 
 If you want to start a specific version of Grafana, you can do that by specifying the `GRAFANA_VERSION` environment variable. For example:
 
@@ -58,15 +46,7 @@ GRAFANA_VERSION=10.4.1 npm run server
 
 Open a new terminal and run the test script from within your local plugin development directory.
 
-<CodeSnippets
-snippets={[
-{ component: ScaffoldPluginE2ERunTestsNPM, label: 'npm' },
-{ component: ScaffoldPluginE2ERunTestsYarn, label: 'yarn' },
-{ component: ScaffoldPluginE2ERunTestsPNPM, label: 'pnpm' }
-]}
-groupId="package-manager"
-queryString="current-package-manager"
-/>
+<ScaffoldPluginE2ERunTestsNPM />
 
 ### Step 3: Run tests in CI
 

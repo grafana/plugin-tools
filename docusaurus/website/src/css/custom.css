@@ -61,7 +61,6 @@
   --ifm-heading-font-weight: var(--ifm-font-weight-semibold);
   --ifm-line-height-base: var(--body-lineHeight);
   --ifm-avatar-intro-margin: 0.5rem;
-  --ifm-button-border-radius: 0;
 }
 
 /* theme colors */
@@ -90,6 +89,22 @@ html[data-theme='dark'] {
   --ifm-table-border-color: var(--background-primary);
   --ifm-table-stripe-background: var(--background-secondary);
   --ifm-tabs-color-active-border: var(--warning-main);
+}
+
+.gap {
+  gap: var(--ifm-spacing-horizontal);
+}
+
+.justify--between {
+  justify-content: space-between;
+}
+
+.margin-left--auto {
+  margin-left: auto;
+}
+
+.scale-rotate {
+  transform: scaleX(-1) rotate(180deg);
 }
 
 /* admonitions */
@@ -136,11 +151,48 @@ html[data-theme='dark'] {
   --ifm-footer-background-color: rgba(0, 0, 0, 0.45);
 }
 
+/* docs footer */
+.theme-doc-footer {
+  border-top: 1px solid var(--ifm-toc-border-color);
+  margin-top: 2rem;
+}
+
 /* buttons */
+
+.button.disabled,
+.button:disabled,
+.button[disabled] {
+  opacity: 1;
+}
 
 .button--outline {
   --ifm-button-color: white;
   --ifm-button-border-color: white;
+}
+
+.button--primary {
+  --ifm-button-background-color: var(--ifm-color-secondary);
+  --ifm-button-border-color: var(--background-secondary);
+}
+
+.button--primary.button--active {
+  --ifm-button-color: white;
+  --ifm-button-background-color: var(--info-main);
+  --ifm-button-border-color: var(--info-main);
+}
+
+:where(.button--primary):not(.button--outline):hover {
+  --ifm-button-color: white;
+  --ifm-button-background-color: var(--info-main);
+  --ifm-button-border-color: var(--info-main);
+}
+
+.pointer-events--none {
+  pointer-events: none;
+}
+
+.cursor--not-allowed {
+  cursor: not-allowed;
 }
 
 /* sidenav */
@@ -172,6 +224,11 @@ html[data-theme='dark'] {
   color: var(--ifm-blockquote-color);
   font-size: 0.9rem;
   margin-bottom: var(--ifm-global-spacing);
+}
+
+/* npm2yarn plugin renders Yarn which looks weird */
+.theme-doc-markdown .tabs__item {
+  text-transform: lowercase;
 }
 
 .code-block-addition-highlighted-line {

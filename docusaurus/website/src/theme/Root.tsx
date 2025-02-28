@@ -3,7 +3,7 @@ import { useLocation } from '@docusaurus/router';
 
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { CookieConsent } from '../components/CookieConsent/CookieConsent';
-import { RudderStackTrackingConfig, startTracking, trackPage } from './tracking';
+import { FaroConfig, RudderStackTrackingConfig, startTracking, trackPage } from './tracking';
 import { analyticsVersion, cookieName, getCookie, setCookie } from './tracking/cookie';
 
 export default function Root({ children }) {
@@ -13,7 +13,8 @@ export default function Root({ children }) {
   } = useDocusaurusContext();
 
   const rudderStackConfig = customFields.rudderStackTracking as RudderStackTrackingConfig;
-  const shouldTrack = customFields.node_env === 'production';
+  const faroConfig = customFields.faroConfig as FaroConfig;
+  const shouldTrack = customFields.nodeEnv === 'production';
 
   const setCookieAndStartTracking = useCallback(() => {
     setCookie(cookieName, {
@@ -21,8 +22,8 @@ export default function Root({ children }) {
     });
 
     setShouldShow(false);
-    startTracking(rudderStackConfig, shouldTrack);
-  }, [rudderStackConfig, shouldTrack]);
+    startTracking(rudderStackConfig, faroConfig, shouldTrack);
+  }, [rudderStackConfig, faroConfig, shouldTrack]);
 
   const [shouldShow, setShouldShow] = useState(false);
 

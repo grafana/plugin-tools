@@ -21,7 +21,7 @@ To be able to interact with the Grafana UI, you need to be logged in to Grafana.
 
 If your plugin doesn't use RBAC, you can use the default server administrator credentials to login.
 
-In the following example, there's a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) called `auth`. This project invokes a function in the `@grafana/plugin-e2e` package that logins to Grafana using `admin:admin`. The authenticated state is stored on disk with this file name pattern: `<plugin-root>/playwright/.auth/<username>.json`.
+In the following example, there's a [setup project](https://playwright.dev/docs/test-global-setup-teardown#setup-example) called `auth`. This project invokes a function in the `@grafana/plugin-e2e` package that logs in to Grafana using `admin:admin`. The authenticated state is stored on disk with this file name pattern: `<plugin-root>/playwright/.auth/<username>.json`.
 
 The second project, `run-tests`, runs all tests in the `./tests` directory. This project reuses the authentication state from the `auth` project. As a consequence, login only happens once, and all tests in the `run-tests` project start already authenticated.
 
@@ -91,6 +91,31 @@ export default defineConfig<PluginOptions>({
         },
         dependencies: ['createViewerUserAndAuthenticate'],
       },
+  ]
+})
+```
+
+## Managing users
+
+When a `user` is defined in a setup project (like in the RBAC example above) `plugin-e2e` will use the Grafana HTTP API to create the user account. This action requires elevated permissions, so by default the server administrator credentials `admin:admin` will be used. If the end-to-end tests are targeting the [development environment](../get-started/set-up-development-environment.mdx) scaffolded with `create-plugin`, this will work fine. However for other test environments the server administrator password may be different. In that case, we search for GRAFANA_ADMIN_USER and GRAFANA_ADMIN_PASSWORD environment variables. Additionally you can provide the correct credentials by setting `grafanaAPICredentials` in the global options.
+
+```ts title="playwright.config.ts"
+import { dirname } from 'path';
+import { defineConfig, devices } from '@playwright/test';
+
+const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
+
+export default defineConfig<PluginOptions>({
+  testDir: './tests',
+  use: {
+    baseURL: process.env.GRAFANA_URL || 'http://localhost:3000',
+    grafanaAPICredentials: {
+      user: process.env.GRAFANA_ADMIN_USER || 'admin',
+      password: process.env.GRAFANA_ADMIN_PASSWORD || 'admin',
+    },
+  },
+  projects: [
+    ...
   ]
 })
 ```

@@ -5,13 +5,17 @@ import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
+import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
 
-  constructor(readonly ctx: PluginTestCtx, readonly dashboard?: DashboardPageArgs) {
-    super(ctx);
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly dashboard?: DashboardPageArgs
+  ) {
+    super(ctx, dashboard);
     this.dataSourcePicker = new DataSourcePicker(ctx);
     this.timeRange = new TimeRange(ctx);
   }
@@ -70,20 +74,42 @@ export class DashboardPage extends GrafanaPage {
    * await expect(panel.fieldNames()).toContainText(['time', 'temperature']);
    */
   getPanelById(panelId: string): Panel {
-    return new Panel(this.ctx, this.ctx.page.locator(`[data-panelid="${panelId}"]`));
+    if (semver.lt(this.ctx.grafanaVersion, '11.3.0')) {
+      return new Panel(this.ctx, this.ctx.page.locator(`[data-panelid="${panelId}"]`));
+    }
+
+    return new Panel(this.ctx, this.ctx.page.locator(`[data-viz-panel-key="panel-${panelId}"]`));
   }
 
   /**
    * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
    */
   async addPanel(): Promise<PanelEditPage> {
-    const { components, pages } = this.ctx.selectors;
-    if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      await this.getByGrafanaSelector(
-        components.PageToolbar.itemButton(components.PageToolbar.itemButtonTitle)
-      ).click();
+    const { components, pages, constants } = this.ctx.selectors;
+
+    const scenesEnabled = await isFeatureEnabled(this.ctx.page, 'dashboardScene');
+
+    // In scenes powered dashboards, one needs to click the edit button before adding a new panel in already existing dashboards
+    if (scenesEnabled && this.dashboard?.uid) {
+      await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
+    }
+    // on small screens, the toolbar buttons are hidden behind a "Show more items" button
+    const toolbarButtonsHidden = !scenesEnabled && !!(await this.ctx.page.getByLabel('Show more items').count());
+    if (toolbarButtonsHidden) {
+      await this.ctx.page.getByLabel('Show more items').click();
+    }
+
+    if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
+      let addButton = this.getByGrafanaSelector(
+        components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
+      );
+      toolbarButtonsHidden ? await addButton.last().click() : await addButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
+      if (this.dashboard?.uid) {
+        const addPanelButton = this.getByGrafanaSelector(components.PageToolbar.item('Add panel'));
+        toolbarButtonsHidden ? await addPanelButton.last().click() : await addPanelButton.click();
+      }
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
 

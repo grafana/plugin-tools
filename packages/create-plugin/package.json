@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "4.9.1",
+  "version": "5.18.3",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -17,58 +17,49 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
     "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/package-lock.json\" -maxdepth 1 -print0 | xargs -0  -I {} rm -rf {}",
     "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
     "dev": "nodemon --exec 'tsc'",
-    "dev-app": "nodemon --exec 'npm run generate-app'",
-    "dev-scenes-app": "nodemon --exec 'npm run generate-scenes-app'",
-    "dev-panel": "nodemon --exec 'npm run generate-panel'",
-    "dev-datasource": "nodemon --exec 'npm run generate-datasource'",
-    "generate-app": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample app.' --pluginType='app' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow",
-    "generate-scenes-app": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample scenesapp' --orgName='sample-org' --pluginDescription='This is a sample scenes app.' --pluginType='scenesapp' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow",
-    "generate-app-backend": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample app' --orgName='sample-org' --pluginDescription='This is a sample backend app.' --pluginType='app' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow",
-    "generate-panel": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample panel' --orgName='sample-org' --pluginDescription='This is a sample panel.' --pluginType='panel' --hasGithubWorkflows --hasGithubLevitateWorkflow",
-    "generate-datasource": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --no-hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow",
-    "generate-datasource-backend": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample datasource' --orgName='sample-org' --pluginDescription='This is a sample datasource.' --pluginType='datasource' --hasBackend --hasGithubWorkflows --hasGithubLevitateWorkflow",
-    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@types/marked-terminal": "^6.0.1",
-    "@types/minimist": "^1.2.2",
-    "@types/mkdirp": "^1.0.2",
-    "@types/semver": "^7.3.9",
-    "@types/which": "^2.0.2",
-    "boxen": "^7.1.1",
+    "boxen": "^8.0.0",
     "chalk": "^5.3.0",
     "change-case": "^5.4.0",
     "debug": "^4.3.4",
     "enquirer": "^2.4.1",
     "find-up": "^7.0.0",
-    "glob": "^10.3.10",
+    "glob": "^11.0.0",
     "handlebars": "^4.7.8",
-    "marked": "^10.0.0",
-    "marked-terminal": "^6.2.0",
+    "marked": "^15.0.0",
+    "marked-terminal": "^7.2.0",
     "minimist": "^1.2.8",
-    "mkdirp": "^3.0.1",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
-    "which": "^3.0.0"
+    "which": "^5.0.0"
   },
   "devDependencies": {
-    "@types/glob": "^7.0.0",
-    "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "@types/glob": "^8.1.0",
+    "@types/marked-terminal": "^6.1.1",
+    "@types/minimist": "^1.2.5",
+    "@types/semver": "^7.5.8",
+    "@types/tmp": "^0.2.6",
+    "@types/which": "^3.0.4",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "tmp": "^0.2.3"
   },
   "overrides": {
     "@types/marked-terminal": {
-      "marked": "^10.0.0"
+      "marked": "^15.0.0"
     }
   },
   "nodemonConfig": {
