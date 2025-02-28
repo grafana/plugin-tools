@@ -173,10 +173,13 @@ Build information
 
 #### Properties
 
-| Property | Type   | Required | Description |
-| -------- | ------ | -------- | ----------- |
-| `name`   | string | No       |             |
-| `url`    | string | No       |             |
+| Property        | Type   | Required | Description                                            |
+| --------------- | ------ | -------- | ------------------------------------------------------ |
+| `name`          | string | No       |                                                        |
+| `url`           | string | No       | used to determine and link to repository of the plugin |
+| `documentation` | string | No       | adds Documentation link to plugins detail page         |
+| `license`       | string | No       | adds License link to plugins detail page               |
+| `raise issue`   | string | No       | adds "Raise an Issue" link to plugins detail page      |
 
 ### logos
 
