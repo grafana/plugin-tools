@@ -12,6 +12,7 @@ description: Set up your development environment with Docker for Grafana plugin 
   - continuous integration
   - automation
   - configuration
+  - dependency
 sidebar_position: 20
 ---
 
@@ -431,3 +432,36 @@ Update the `scripts` in the `package.json` to use the extended Webpack configura
 -"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
 +"dev": "webpack -w -c ./webpack.config.ts --env development",
 ```
+## Add a dependency for local development
+
+Grafana’s plugin development environment is designed to allow for plugins to be dependent upon other plugins if necessary. Here’s how it operates:
+
+Plugin distribution path:
+
+Refer to [Grafana documentation](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#plugins) for the plugin's location, which can vary depending on your system and development environment.
+
+Plugin initialization:
+
+When the Grafana server starts, its plugin loader runs a [Load](https://github.com/grafana/grafana/blob/b53f14ca83eeec6b0f624c2dbbaa417d08bbadbf/pkg/plugins/manager/loader/loader.go#L55-L56) function. This scans the defined [plugins directory](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#plugins) for plugins, validates `plugin.json` files, checks signatures and manifests, and initializes valid plugins.
+
+Plugin dependency management:
+
+Although some validations occur on the server side, the plugin path itself doesn't include validation of other plugins your plugin may be dependent upon. You are responsible for ensuring that your plugin's dependencies are correctly managed.
+
+To manage dependencies during local plugin development, you can use one of the following methods:
+
+### Use the `GF_INSTALL_PLUGINS` environment variable
+
+* Add dependencies explicitly to your Grafana instance with `GF_INSTALL_PLUGINS=dependency`.
+
+For example:
+
+`GF_INSTALL_PLUGINS=grafana-clock-panel`
+
+tells Grafana to install that the clock panel plugin.
+
+### Build and install the plugin
+
+* Use `GF_INSTALL_PLUGINS=your-plugin-zip-via-url` for installation.
+
+While effective, this approach can be cumbersome during rapid plugin development.
