@@ -71,9 +71,12 @@ const config = async (env): Promise<Configuration> => {
       'react-router-dom',{{/unless}}
       'd3',
       'angular',{{#unless bundleGrafanaUI}}
-      '@grafana/ui',{{/unless}}
+      '@grafana/ui',
+      '@grafana/ui/unstable',{{/unless}}
       '@grafana/runtime',
-      '@grafana/data',{{#if bundleGrafanaUI}}
+      '@grafana/runtime/unstable',
+      '@grafana/data',
+      '@grafana/data/unstable',{{#if bundleGrafanaUI}}
       'react-inlinesvg',
       'i18next',{{/if}}
 
