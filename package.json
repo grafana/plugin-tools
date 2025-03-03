@@ -50,6 +50,16 @@
     "vitest": "^3.0.7"
   },
   "optionalDependencies": {
+    "lightningcss-darwin-arm64": "1.29.1",
+    "lightningcss-darwin-x64": "1.29.1",
+    "lightningcss-freebsd-x64": "1.29.1",
+    "lightningcss-linux-arm-gnueabihf": "1.29.1",
+    "lightningcss-linux-arm64-gnu": "1.29.1",
+    "lightningcss-linux-arm64-musl": "1.29.1",
+    "lightningcss-linux-x64-gnu": "1.29.1",
+    "lightningcss-linux-x64-musl": "1.29.1",
+    "lightningcss-win32-arm64-msvc": "1.29.1",
+    "lightningcss-win32-x64-msvc": "1.29.1",
     "@rollup/rollup-android-arm-eabi": "4.34.8",
     "@rollup/rollup-android-arm64": "4.34.8",
     "@rollup/rollup-darwin-arm64": "4.34.8",
