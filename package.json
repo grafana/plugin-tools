@@ -87,7 +87,27 @@
     "@rspack/binding-linux-x64-musl": "1.2.0-alpha.0",
     "@rspack/binding-win32-arm64-msvc": "1.2.0-alpha.0",
     "@rspack/binding-win32-ia32-msvc": "1.2.0-alpha.0",
-    "@rspack/binding-win32-x64-msvc": "1.2.0-alpha.0"
+    "@rspack/binding-win32-x64-msvc": "1.2.0-alpha.0",
+    "@swc/core-darwin-arm64": "^1.11.5",
+    "@swc/core-darwin-x64": "^1.11.5",
+    "@swc/core-linux-arm-gnueabihf": "^1.11.5",
+    "@swc/core-linux-arm64-gnu": "^1.11.5",
+    "@swc/core-linux-arm64-musl": "^1.11.5",
+    "@swc/core-linux-x64-gnu": "^1.11.5",
+    "@swc/core-linux-x64-musl": "^1.11.5",
+    "@swc/core-win32-arm64-msvc": "^1.11.5",
+    "@swc/core-win32-ia32-msvc": "^1.11.5",
+    "@swc/core-win32-x64-msvc": "^1.11.5",
+    "@swc/html-darwin-arm64": "1.10.14",
+    "@swc/html-darwin-x64": "1.10.14",
+    "@swc/html-linux-arm-gnueabihf": "1.10.14",
+    "@swc/html-linux-arm64-gnu": "1.10.14",
+    "@swc/html-linux-arm64-musl": "1.10.14",
+    "@swc/html-linux-x64-gnu": "1.10.14",
+    "@swc/html-linux-x64-musl": "1.10.14",
+    "@swc/html-win32-arm64-msvc": "1.10.14",
+    "@swc/html-win32-ia32-msvc": "1.10.14",
+    "@swc/html-win32-x64-msvc": "1.10.14"
   },
   "engines": {
     "node": ">=20"
