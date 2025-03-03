@@ -68,7 +68,16 @@
     "@rollup/rollup-linux-x64-musl": "4.34.8",
     "@rollup/rollup-win32-arm64-msvc": "4.34.8",
     "@rollup/rollup-win32-ia32-msvc": "4.34.8",
-    "@rollup/rollup-win32-x64-msvc": "4.34.8"
+    "@rollup/rollup-win32-x64-msvc": "4.34.8",
+    "@rspack/binding-darwin-arm64": "1.2.0-alpha.0",
+    "@rspack/binding-darwin-x64": "1.2.0-alpha.0",
+    "@rspack/binding-linux-arm64-gnu": "1.2.0-alpha.0",
+    "@rspack/binding-linux-arm64-musl": "1.2.0-alpha.0",
+    "@rspack/binding-linux-x64-gnu": "1.2.0-alpha.0",
+    "@rspack/binding-linux-x64-musl": "1.2.0-alpha.0",
+    "@rspack/binding-win32-arm64-msvc": "1.2.0-alpha.0",
+    "@rspack/binding-win32-ia32-msvc": "1.2.0-alpha.0",
+    "@rspack/binding-win32-x64-msvc": "1.2.0-alpha.0"
   },
   "engines": {
     "node": ">=20"
