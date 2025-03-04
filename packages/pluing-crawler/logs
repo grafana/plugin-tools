@@ -1,0 +1,2775 @@
+{
+  "count": 173,
+  "items": [
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/debug/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/debug/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/debug/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/panel-triggers/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-zabbix/blob/d3af16200cd8b70964b0acddf241d95e66761ead/src/panel-triggers/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/35092819/contents/src/panel-triggers/plugin.json?ref=d3af16200cd8b70964b0acddf241d95e66761ead",
+      "repoName": "grafana-zabbix",
+      "repoNameFull": "grafana/grafana-zabbix",
+      "repoUrl": "https://github.com/grafana/grafana-zabbix",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "examples/panel-datalinks/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-plugin-examples/blob/c96c99f3339bd081cbf0cfcad603bda43de1a089/examples/panel-datalinks/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/264939182/contents/examples/panel-datalinks/src/plugin.json?ref=c96c99f3339bd081cbf0cfcad603bda43de1a089",
+      "repoName": "grafana-plugin-examples",
+      "repoNameFull": "grafana/grafana-plugin-examples",
+      "repoUrl": "https://github.com/grafana/grafana-plugin-examples",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "datasource-plugin.json",
+      "filePath": "taewookim/datasource-plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-ops-dashboards/blob/1027c95c427b2045e376a764aa22a89ad32bd3b1/taewookim/datasource-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/938341915/contents/taewookim/datasource-plugin.json?ref=1027c95c427b2045e376a764aa22a89ad32bd3b1",
+      "repoName": "hg-ops-dashboards",
+      "repoNameFull": "grafana/hg-ops-dashboards",
+      "repoUrl": "https://github.com/grafana/hg-ops-dashboards",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json.md",
+      "filePath": "content/docs/grafana/v6.6/plugins/developing/plugin.json.md",
+      "fileUrl": "https://github.com/grafana/website/blob/ae4609d2f9d2761434022741fe8eea468eb136a2/content/docs/grafana/v6.6/plugins/developing/plugin.json.md",
+      "fileUrlRaw": "https://api.github.com/repositories/18489736/contents/content/docs/grafana/v6.6/plugins/developing/plugin.json.md?ref=ae4609d2f9d2761434022741fe8eea468eb136a2",
+      "repoName": "website",
+      "repoNameFull": "grafana/website",
+      "repoUrl": "https://github.com/grafana/website",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "untimely_plugin.json",
+      "filePath": "plugins/factry-untimely-panel/provisioning/dashboards/dashboards/untimely_plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-catalog-review/blob/dc4d4bf0342ed90d1adfca49f4737528280280fa/plugins/factry-untimely-panel/provisioning/dashboards/dashboards/untimely_plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/374968142/contents/plugins/factry-untimely-panel/provisioning/dashboards/dashboards/untimely_plugin.json?ref=dc4d4bf0342ed90d1adfca49f4737528280280fa",
+      "repoName": "plugin-catalog-review",
+      "repoNameFull": "grafana/plugin-catalog-review",
+      "repoUrl": "https://github.com/grafana/plugin-catalog-review",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/annolist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/annolist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/annolist/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/nodeGraph/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/logs-drilldown/blob/b9d654146da733eca82f3d5f6bf4e2f0d82f472a/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/777708181/contents/src/plugin.json?ref=b9d654146da733eca82f3d5f6bf4e2f0d82f472a",
+      "repoName": "logs-drilldown",
+      "repoNameFull": "grafana/logs-drilldown",
+      "repoUrl": "https://github.com/grafana/logs-drilldown",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "jay-self-serve-plugin.json",
+      "filePath": "jay-self-serve-plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-ops-dashboards/blob/1027c95c427b2045e376a764aa22a89ad32bd3b1/jay-self-serve-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/938341915/contents/jay-self-serve-plugin.json?ref=1027c95c427b2045e376a764aa22a89ad32bd3b1",
+      "repoName": "hg-ops-dashboards",
+      "repoNameFull": "grafana/hg-ops-dashboards",
+      "repoUrl": "https://github.com/grafana/hg-ops-dashboards",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "insights-plugin.json",
+      "filePath": "ops/cloud-onboarding-mixin/dashboards/insights-plugin.json",
+      "fileUrl": "https://github.com/grafana/cloud-onboarding/blob/03ce2910addb1a9fc95dd933bf3afa9e3cbad5aa/ops/cloud-onboarding-mixin/dashboards/insights-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/357836481/contents/ops/cloud-onboarding-mixin/dashboards/insights-plugin.json?ref=03ce2910addb1a9fc95dd933bf3afa9e3cbad5aa",
+      "repoName": "cloud-onboarding",
+      "repoNameFull": "grafana/cloud-onboarding",
+      "repoUrl": "https://github.com/grafana/cloud-onboarding",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/canvas/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/canvas/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/canvas/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "insights-onboarding-plugin.json",
+      "filePath": "cristian/insights-onboarding-plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-ops-dashboards/blob/1027c95c427b2045e376a764aa22a89ad32bd3b1/cristian/insights-onboarding-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/938341915/contents/cristian/insights-onboarding-plugin.json?ref=1027c95c427b2045e376a764aa22a89ad32bd3b1",
+      "repoName": "hg-ops-dashboards",
+      "repoNameFull": "grafana/hg-ops-dashboards",
+      "repoUrl": "https://github.com/grafana/hg-ops-dashboards",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/grafana-oracle-datasource/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-private/blob/37b92549c5f8c4e9218801b088a469f583a731ad/plugins/grafana-oracle-datasource/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/669123692/contents/plugins/grafana-oracle-datasource/src/plugin.json?ref=37b92549c5f8c4e9218801b088a469f583a731ad",
+      "repoName": "plugins-private",
+      "repoNameFull": "grafana/plugins-private",
+      "repoUrl": "https://github.com/grafana/plugins-private",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/mock-datasource/blob/9f36d258d4e07fffe7681c35c6d56f8ba6b6d294/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/488856815/contents/src/plugin.json?ref=9f36d258d4e07fffe7681c35c6d56f8ba6b6d294",
+      "repoName": "mock-datasource",
+      "repoNameFull": "grafana/mock-datasource",
+      "repoUrl": "https://github.com/grafana/mock-datasource",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "prometheus-plugin.json",
+      "filePath": "plugin-monitoring/prometheus-plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-ops-dashboards/blob/1027c95c427b2045e376a764aa22a89ad32bd3b1/plugin-monitoring/prometheus-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/938341915/contents/plugin-monitoring/prometheus-plugin.json?ref=1027c95c427b2045e376a764aa22a89ad32bd3b1",
+      "repoName": "hg-ops-dashboards",
+      "repoNameFull": "grafana/hg-ops-dashboards",
+      "repoUrl": "https://github.com/grafana/hg-ops-dashboards",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "ui-plugins/grafana-ml-app/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/machine-learning/blob/daeda83aba11a046be201f507fd303f998a66ee6/ui-plugins/grafana-ml-app/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/315995393/contents/ui-plugins/grafana-ml-app/src/plugin.json?ref=daeda83aba11a046be201f507fd303f998a66ee6",
+      "repoName": "machine-learning",
+      "repoNameFull": "grafana/machine-learning",
+      "repoUrl": "https://github.com/grafana/machine-learning",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "insights-onboarding-plugin.json",
+      "filePath": "keckhart/insights-onboarding-plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-ops-dashboards/blob/1027c95c427b2045e376a764aa22a89ad32bd3b1/keckhart/insights-onboarding-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/938341915/contents/keckhart/insights-onboarding-plugin.json?ref=1027c95c427b2045e376a764aa22a89ad32bd3b1",
+      "repoName": "hg-ops-dashboards",
+      "repoNameFull": "grafana/hg-ops-dashboards",
+      "repoUrl": "https://github.com/grafana/hg-ops-dashboards",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-zabbix/blob/d3af16200cd8b70964b0acddf241d95e66761ead/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/35092819/contents/src/plugin.json?ref=d3af16200cd8b70964b0acddf241d95e66761ead",
+      "repoName": "grafana-zabbix",
+      "repoNameFull": "grafana/grafana-zabbix",
+      "repoUrl": "https://github.com/grafana/grafana-zabbix",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/xychart/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/datasource/dashboard/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/datasource/dashboard/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/datasource/dashboard/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/histogram/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/histogram/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/histogram/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/candlestick/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/state-timeline/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "packages/create-plugin/templates/panel/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-tools/blob/1b5d9ae0933eb65585d8557ab01772d7df929394/packages/create-plugin/templates/panel/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/408755814/contents/packages/create-plugin/templates/panel/src/plugin.json?ref=1b5d9ae0933eb65585d8557ab01772d7df929394",
+      "repoName": "plugin-tools",
+      "repoNameFull": "grafana/plugin-tools",
+      "repoUrl": "https://github.com/grafana/plugin-tools",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/graph/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/graph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/graph/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/trend/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/trend/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/trend/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/xychart/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/candlestick/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-cloud-home-admin/blob/f1736a647d4822c370dd03d6b1316214d6d00571/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/397925093/contents/src/plugin.json?ref=f1736a647d4822c370dd03d6b1316214d6d00571",
+      "repoName": "hg-cloud-home-admin",
+      "repoNameFull": "grafana/hg-cloud-home-admin",
+      "repoUrl": "https://github.com/grafana/hg-cloud-home-admin",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/cloud-home-links/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-cloud-home/blob/11147154081800ea69abf0572fb79947af89a976/plugins/cloud-home-links/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/366067138/contents/plugins/cloud-home-links/src/plugin.json?ref=11147154081800ea69abf0572fb79947af89a976",
+      "repoName": "hg-cloud-home",
+      "repoNameFull": "grafana/hg-cloud-home",
+      "repoUrl": "https://github.com/grafana/hg-cloud-home",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "ui-plugins/grafana-ml-app/src/sift-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/machine-learning/blob/daeda83aba11a046be201f507fd303f998a66ee6/ui-plugins/grafana-ml-app/src/sift-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/315995393/contents/ui-plugins/grafana-ml-app/src/sift-panel/plugin.json?ref=daeda83aba11a046be201f507fd303f998a66ee6",
+      "repoName": "machine-learning",
+      "repoNameFull": "grafana/machine-learning",
+      "repoUrl": "https://github.com/grafana/machine-learning",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/sidecar-examples-app/blob/fb7d592f57ebf5f19aa132b8c982cbe2d012ec81/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/878397539/contents/src/plugin.json?ref=fb7d592f57ebf5f19aa132b8c982cbe2d012ec81",
+      "repoName": "sidecar-examples-app",
+      "repoNameFull": "grafana/sidecar-examples-app",
+      "repoUrl": "https://github.com/grafana/sidecar-examples-app",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-llmexamples-app/blob/08c05636cbac266222b8b86c0f7eccfb20a0585d/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/650260810/contents/src/plugin.json?ref=08c05636cbac266222b8b86c0f7eccfb20a0585d",
+      "repoName": "grafana-llmexamples-app",
+      "repoNameFull": "grafana/grafana-llmexamples-app",
+      "repoUrl": "https://github.com/grafana/grafana-llmexamples-app",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/histogram/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/histogram/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/histogram/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/panels/scene-viewer/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-iot-twinmaker-app/blob/69f5dfaa719c63dfaab73e8b8fc9bbcde698658b/src/panels/scene-viewer/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/433201820/contents/src/panels/scene-viewer/plugin.json?ref=69f5dfaa719c63dfaab73e8b8fc9bbcde698658b",
+      "repoName": "grafana-iot-twinmaker-app",
+      "repoNameFull": "grafana/grafana-iot-twinmaker-app",
+      "repoUrl": "https://github.com/grafana/grafana-iot-twinmaker-app",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/cloud-home-welcome/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-cloud-home/blob/11147154081800ea69abf0572fb79947af89a976/plugins/cloud-home-welcome/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/366067138/contents/plugins/cloud-home-welcome/src/plugin.json?ref=11147154081800ea69abf0572fb79947af89a976",
+      "repoName": "hg-cloud-home",
+      "repoNameFull": "grafana/hg-cloud-home",
+      "repoUrl": "https://github.com/grafana/hg-cloud-home",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/geomap/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/geomap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/geomap/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/traces/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/traces/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/traces/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/scenes-migration-handler-panel-test-delete-me/blob/79496ad58db8c5a479ca6d5743622dfcb3a0b7de/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/881407532/contents/src/plugin.json?ref=79496ad58db8c5a479ca6d5743622dfcb3a0b7de",
+      "repoName": "scenes-migration-handler-panel-test-delete-me",
+      "repoNameFull": "grafana/scenes-migration-handler-panel-test-delete-me",
+      "repoUrl": "https://github.com/grafana/scenes-migration-handler-panel-test-delete-me",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/xychart/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/flamegraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/flamegraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/flamegraph/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "examples/app-with-extensions/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-plugin-examples/blob/c96c99f3339bd081cbf0cfcad603bda43de1a089/examples/app-with-extensions/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/264939182/contents/examples/app-with-extensions/src/plugin.json?ref=c96c99f3339bd081cbf0cfcad603bda43de1a089",
+      "repoName": "grafana-plugin-examples",
+      "repoNameFull": "grafana/grafana-plugin-examples",
+      "repoUrl": "https://github.com/grafana/grafana-plugin-examples",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-test-panel/blob/6c786d4955027b994e88538e15fa764b446bae94/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/878306914/contents/src/plugin.json?ref=6c786d4955027b994e88538e15fa764b446bae94",
+      "repoName": "grafana-test-panel",
+      "repoNameFull": "grafana/grafana-test-panel",
+      "repoUrl": "https://github.com/grafana/grafana-test-panel",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/cloud-home-discover/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-cloud-home/blob/11147154081800ea69abf0572fb79947af89a976/plugins/cloud-home-discover/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/366067138/contents/plugins/cloud-home-discover/src/plugin.json?ref=11147154081800ea69abf0572fb79947af89a976",
+      "repoName": "hg-cloud-home",
+      "repoNameFull": "grafana/hg-cloud-home",
+      "repoUrl": "https://github.com/grafana/hg-cloud-home",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "packages/@plugins/grafana-incident-app/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/irm/blob/f6d19929e9f040810a7dd1a769d64a25574be5af/packages/@plugins/grafana-incident-app/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/343868195/contents/packages/@plugins/grafana-incident-app/src/plugin.json?ref=f6d19929e9f040810a7dd1a769d64a25574be5af",
+      "repoName": "irm",
+      "repoNameFull": "grafana/irm",
+      "repoUrl": "https://github.com/grafana/irm",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/provenance-test-plugin/blob/e40c69e47b64f6d67ee9bf93c4a9f7d3e1b3f7b6/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/920673677/contents/src/plugin.json?ref=e40c69e47b64f6d67ee9bf93c4a9f7d3e1b3f7b6",
+      "repoName": "provenance-test-plugin",
+      "repoNameFull": "grafana/provenance-test-plugin",
+      "repoUrl": "https://github.com/grafana/provenance-test-plugin",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-reviews-ibm-aql-plugin/blob/51396813bb3fd67003cd20558b408d7195200d40/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/852107701/contents/src/plugin.json?ref=51396813bb3fd67003cd20558b408d7195200d40",
+      "repoName": "plugin-reviews-ibm-aql-plugin",
+      "repoNameFull": "grafana/plugin-reviews-ibm-aql-plugin",
+      "repoUrl": "https://github.com/grafana/plugin-reviews-ibm-aql-plugin",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/table/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/table/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/clock-panel/blob/947ba6fe1074b30bfe2383409cdf09d654c5e217/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/54678793/contents/src/plugin.json?ref=947ba6fe1074b30bfe2383409cdf09d654c5e217",
+      "repoName": "clock-panel",
+      "repoNameFull": "grafana/clock-panel",
+      "repoUrl": "https://github.com/grafana/clock-panel",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-polystat-panel/blob/3888d39f72c492fab425bf05e50140884b0afffd/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/137762435/contents/src/plugin.json?ref=3888d39f72c492fab425bf05e50140884b0afffd",
+      "repoName": "grafana-polystat-panel",
+      "repoNameFull": "grafana/grafana-polystat-panel",
+      "repoUrl": "https://github.com/grafana/grafana-polystat-panel",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/xychart/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/heatmap/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/barchart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/barchart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/barchart/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/gex-apps/src/plugins/grafana-metrics-enterprise-app/plugin.json",
+      "fileUrl": "https://github.com/grafana/gex-plugins/blob/fb74b0f3eb777b2ab5e013c4e2cbed0f48fe1779/plugins/gex-apps/src/plugins/grafana-metrics-enterprise-app/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/290714649/contents/plugins/gex-apps/src/plugins/grafana-metrics-enterprise-app/plugin.json?ref=fb74b0f3eb777b2ab5e013c4e2cbed0f48fe1779",
+      "repoName": "gex-plugins",
+      "repoNameFull": "grafana/gex-plugins",
+      "repoUrl": "https://github.com/grafana/gex-plugins",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "examples/panel-frame-select/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-plugin-examples/blob/c96c99f3339bd081cbf0cfcad603bda43de1a089/examples/panel-frame-select/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/264939182/contents/examples/panel-frame-select/src/plugin.json?ref=c96c99f3339bd081cbf0cfcad603bda43de1a089",
+      "repoName": "grafana-plugin-examples",
+      "repoNameFull": "grafana/grafana-plugin-examples",
+      "repoUrl": "https://github.com/grafana/grafana-plugin-examples",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/piechart-panel/blob/4eff3329acac076f56b19375ac52fa8228ddbbba/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/48181489/contents/src/plugin.json?ref=4eff3329acac076f56b19375ac52fa8228ddbbba",
+      "repoName": "piechart-panel",
+      "repoNameFull": "grafana/piechart-panel",
+      "repoUrl": "https://github.com/grafana/piechart-panel",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/logs-new/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/logs-new/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/logs-new/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/xyz-chart/blob/0eea3fb3c97f41c315ee507d81723006488eb2df/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/466149950/contents/src/plugin.json?ref=0eea3fb3c97f41c315ee507d81723006488eb2df",
+      "repoName": "xyz-chart",
+      "repoNameFull": "grafana/xyz-chart",
+      "repoUrl": "https://github.com/grafana/xyz-chart",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/panels/video-player/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-iot-twinmaker-app/blob/69f5dfaa719c63dfaab73e8b8fc9bbcde698658b/src/panels/video-player/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/433201820/contents/src/panels/video-player/plugin.json?ref=69f5dfaa719c63dfaab73e8b8fc9bbcde698658b",
+      "repoName": "grafana-iot-twinmaker-app",
+      "repoNameFull": "grafana/grafana-iot-twinmaker-app",
+      "repoUrl": "https://github.com/grafana/grafana-iot-twinmaker-app",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2024-12-explore-the-sequel/blob/9008c7830777bb1e214d654a4806e4ac5cba0d08/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/895260844/contents/src/plugin.json?ref=9008c7830777bb1e214d654a4806e4ac5cba0d08",
+      "repoName": "hackathon-2024-12-explore-the-sequel",
+      "repoNameFull": "grafana/hackathon-2024-12-explore-the-sequel",
+      "repoUrl": "https://github.com/grafana/hackathon-2024-12-explore-the-sequel",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-iot-twinmaker-app/blob/69f5dfaa719c63dfaab73e8b8fc9bbcde698658b/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/433201820/contents/src/plugin.json?ref=69f5dfaa719c63dfaab73e8b8fc9bbcde698658b",
+      "repoName": "grafana-iot-twinmaker-app",
+      "repoNameFull": "grafana/grafana-iot-twinmaker-app",
+      "repoUrl": "https://github.com/grafana/grafana-iot-twinmaker-app",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/canvas/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/canvas/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/canvas/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/datagrid/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/datagrid/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/datagrid/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-k8s-plugin/blob/e94768e3270c2da02764601d239e84118f2f25cb/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/394307670/contents/src/plugin.json?ref=e94768e3270c2da02764601d239e84118f2f25cb",
+      "repoName": "grafana-k8s-plugin",
+      "repoNameFull": "grafana/grafana-k8s-plugin",
+      "repoUrl": "https://github.com/grafana/grafana-k8s-plugin",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/demo-mytest-panel/blob/9333b7554c8b322742a98f3b0d40bf4c65193bc3/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/932677994/contents/src/plugin.json?ref=9333b7554c8b322742a98f3b0d40bf4c65193bc3",
+      "repoName": "demo-mytest-panel",
+      "repoNameFull": "grafana/demo-mytest-panel",
+      "repoUrl": "https://github.com/grafana/demo-mytest-panel",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/panels/query-editor/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-iot-twinmaker-app/blob/69f5dfaa719c63dfaab73e8b8fc9bbcde698658b/src/panels/query-editor/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/433201820/contents/src/panels/query-editor/plugin.json?ref=69f5dfaa719c63dfaab73e8b8fc9bbcde698658b",
+      "repoName": "grafana-iot-twinmaker-app",
+      "repoNameFull": "grafana/grafana-iot-twinmaker-app",
+      "repoUrl": "https://github.com/grafana/grafana-iot-twinmaker-app",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/datasource/mixed/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/datasource/mixed/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/datasource/mixed/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/status-history/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/status-history/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/status-history/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/cloud-home-integrations/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/hg-cloud-home/blob/11147154081800ea69abf0572fb79947af89a976/plugins/cloud-home-integrations/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/366067138/contents/plugins/cloud-home-integrations/src/plugin.json?ref=11147154081800ea69abf0572fb79947af89a976",
+      "repoName": "hg-cloud-home",
+      "repoNameFull": "grafana/hg-cloud-home",
+      "repoUrl": "https://github.com/grafana/hg-cloud-home",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "examples/panel-basic/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-plugin-examples/blob/c96c99f3339bd081cbf0cfcad603bda43de1a089/examples/panel-basic/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/264939182/contents/examples/panel-basic/src/plugin.json?ref=c96c99f3339bd081cbf0cfcad603bda43de1a089",
+      "repoName": "grafana-plugin-examples",
+      "repoNameFull": "grafana/grafana-plugin-examples",
+      "repoUrl": "https://github.com/grafana/grafana-plugin-examples",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "packages/@plugins/grafana-irm-app/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/irm/blob/f6d19929e9f040810a7dd1a769d64a25574be5af/packages/@plugins/grafana-irm-app/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/343868195/contents/packages/@plugins/grafana-irm-app/src/plugin.json?ref=f6d19929e9f040810a7dd1a769d64a25574be5af",
+      "repoName": "irm",
+      "repoNameFull": "grafana/irm",
+      "repoUrl": "https://github.com/grafana/irm",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-treemap-panel/blob/cdb41048d2b5934cea400b744773728ad211e3ce/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/272698801/contents/src/plugin.json?ref=cdb41048d2b5934cea400b744773728ad211e3ce",
+      "repoName": "grafana-treemap-panel",
+      "repoNameFull": "grafana/grafana-treemap-panel",
+      "repoUrl": "https://github.com/grafana/grafana-treemap-panel",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/panels/alarm-configuration/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-iot-twinmaker-app/blob/69f5dfaa719c63dfaab73e8b8fc9bbcde698658b/src/panels/alarm-configuration/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/433201820/contents/src/panels/alarm-configuration/plugin.json?ref=69f5dfaa719c63dfaab73e8b8fc9bbcde698658b",
+      "repoName": "grafana-iot-twinmaker-app",
+      "repoNameFull": "grafana/grafana-iot-twinmaker-app",
+      "repoUrl": "https://github.com/grafana/grafana-iot-twinmaker-app",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-guidedtour-panel/blob/2daf684e3e384c0f434de618617f93a1d60a9180/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/381699642/contents/src/plugin.json?ref=2daf684e3e384c0f434de618617f93a1d60a9180",
+      "repoName": "grafana-guidedtour-panel",
+      "repoNameFull": "grafana/grafana-guidedtour-panel",
+      "repoUrl": "https://github.com/grafana/grafana-guidedtour-panel",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-folderview-panel/blob/ca861dfbd5198ef5d465ac56f6693075f7c8abdc/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/765630178/contents/src/plugin.json?ref=ca861dfbd5198ef5d465ac56f6693075f7c8abdc",
+      "repoName": "grafana-folderview-panel",
+      "repoNameFull": "grafana/grafana-folderview-panel",
+      "repoUrl": "https://github.com/grafana/grafana-folderview-panel",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-k6-app/blob/aad74a4ecc30f823e311f8c5f8a0a17846696451/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/406117064/contents/src/plugin.json?ref=aad74a4ecc30f823e311f8c5f8a0a17846696451",
+      "repoName": "grafana-k6-app",
+      "repoNameFull": "grafana/grafana-k6-app",
+      "repoUrl": "https://github.com/grafana/grafana-k6-app",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "src/plugin.json",
+      "fileUrl": "https://github.com/grafana/cardinality-management/blob/edd0f6d3f21628d3806b77d0166b81e5ebeae08f/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/876924589/contents/src/plugin.json?ref=edd0f6d3f21628d3806b77d0166b81e5ebeae08f",
+      "repoName": "cardinality-management",
+      "repoNameFull": "grafana/cardinality-management",
+      "repoUrl": "https://github.com/grafana/cardinality-management",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/piechart/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/piechart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/piechart/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/alertlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/alertlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/alertlist/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/gettingstarted/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/gettingstarted/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/gettingstarted/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/heatmap/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/bargauge/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/bargauge/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/bargauge/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/logs/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/logs/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/logs/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/debug/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/debug/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/debug/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table-old/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/table-old/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/table-old/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/candlestick/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/news/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/news/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/news/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/table/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/table/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/geomap/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/geomap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/geomap/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/welcome/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/welcome/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/welcome/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/nodeGraph/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/timeseries/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/timeseries/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/timeseries/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/stat/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/stat/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/stat/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/gauge/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/gauge/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/gauge/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/dashlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/dashlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/dashlist/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/annolist/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/annolist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/annolist/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/histogram/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/histogram/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/histogram/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/alertGroups/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/alertGroups/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/alertGroups/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/status-history/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/status-history/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/status-history/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/debug/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/debug/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/debug/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/debug/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/debug/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/debug/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/debug/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/debug/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/debug/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/annolist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/annolist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/annolist/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/annolist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/annolist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/annolist/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/annolist/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/annolist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/annolist/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/nodeGraph/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/nodeGraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/nodeGraph/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/datasource/dashboard/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/datasource/dashboard/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/datasource/dashboard/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/datasource/dashboard/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/datasource/dashboard/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/datasource/dashboard/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/candlestick/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/public/app/plugins/panel/candlestick/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/candlestick/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/candlestick/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/state-timeline/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/state-timeline/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/graph/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/graph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/graph/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/graph/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/graph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/graph/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/trend/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/trend/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/trend/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/trend/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/trend/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/trend/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/v2/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/xychart/v2/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/xychart/v2/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/histogram/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/histogram/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/histogram/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/histogram/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/public/app/plugins/panel/histogram/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/public/app/plugins/panel/histogram/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/histogram/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/histogram/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/histogram/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/geomap/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/geomap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/geomap/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/geomap/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/geomap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/geomap/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/traces/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/traces/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/traces/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/traces/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/traces/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/traces/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/public/app/plugins/panel/xychart/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/public/app/plugins/panel/xychart/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/xychart/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/xychart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/xychart/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/flamegraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/flamegraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/flamegraph/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/flamegraph/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/flamegraph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/flamegraph/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/table/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/table/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/table/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/table/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/heatmap/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/heatmap/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/heatmap/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/barchart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/barchart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/barchart/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/barchart/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/barchart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/barchart/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/logs-new/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/public/app/plugins/panel/logs-new/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/public/app/plugins/panel/logs-new/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/logs-new/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/public/app/plugins/panel/logs-new/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/public/app/plugins/panel/logs-new/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/canvas/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/canvas/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/canvas/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/canvas/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/canvas/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/canvas/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/datagrid/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/datagrid/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/datagrid/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/datagrid/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/datagrid/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/datagrid/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/datasource/mixed/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/datasource/mixed/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/datasource/mixed/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/datasource/mixed/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/datasource/mixed/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/datasource/mixed/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/status-history/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/status-history/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/status-history/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/status-history/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/public/app/plugins/panel/status-history/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/public/app/plugins/panel/status-history/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/piechart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/piechart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/piechart/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/piechart/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/piechart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/piechart/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/alertlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/alertlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/alertlist/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/alertlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/alertlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/alertlist/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/gettingstarted/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/gettingstarted/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/gettingstarted/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/gettingstarted/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/gettingstarted/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/gettingstarted/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/bargauge/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/bargauge/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/bargauge/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/bargauge/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/bargauge/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/bargauge/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/logs/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/logs/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/logs/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/logs/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/logs/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/logs/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table-old/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/table-old/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/table-old/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/table-old/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/table-old/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/table-old/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/news/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/news/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/news/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/news/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/news/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/news/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/welcome/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/welcome/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/welcome/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/welcome/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/welcome/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/welcome/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/timeseries/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/timeseries/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/timeseries/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/timeseries/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/timeseries/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/timeseries/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/stat/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/stat/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/stat/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/stat/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/stat/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/stat/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/gauge/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/gauge/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/gauge/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/gauge/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/gauge/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/gauge/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/dashlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/dashlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/dashlist/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/dashlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/dashlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/dashlist/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/alertGroups/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/alertGroups/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/alertGroups/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/live/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/live/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/live/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/icon/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/icon/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/icon/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/barchart/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/barchart/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/barchart/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/e2e/test-plugins/grafana-extensionstest-app/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "plugins/grafana-oracle-datasource/test/docker/plugins/oracle-datasource/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-private/blob/37b92549c5f8c4e9218801b088a469f583a731ad/plugins/grafana-oracle-datasource/test/docker/plugins/oracle-datasource/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/669123692/contents/plugins/grafana-oracle-datasource/test/docker/plugins/oracle-datasource/plugin.json?ref=37b92549c5f8c4e9218801b088a469f583a731ad",
+      "repoName": "plugins-private",
+      "repoNameFull": "grafana/plugins-private",
+      "repoUrl": "https://github.com/grafana/plugins-private",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "oracle-plugin.json",
+      "filePath": "integration-bot/testdata/oracle-plugin.json",
+      "fileUrl": "https://github.com/grafana/integration-automation/blob/4f61b9b8f250eb2ca280c2fd58c9c326b3da562a/integration-bot/testdata/oracle-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/264827601/contents/integration-bot/testdata/oracle-plugin.json?ref=4f61b9b8f250eb2ca280c2fd58c9c326b3da562a",
+      "repoName": "integration-automation",
+      "repoNameFull": "grafana/integration-automation",
+      "repoUrl": "https://github.com/grafana/integration-automation",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/circulardependencies/testdata/nested/grafana-clock-panel/grafana-nested-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/circulardependencies/testdata/nested/grafana-clock-panel/grafana-nested-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/circulardependencies/testdata/nested/grafana-clock-panel/grafana-nested-panel/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-deep/child-one/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-deep/child-one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-deep/child-one/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/metadatavalid/testdata/invalid/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/metadatavalid/testdata/invalid/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/metadatavalid/testdata/invalid/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/subcmd/plugin/testdata/testplugin4/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/build-pipeline/blob/6c9a36e1b5686bee44e2b26f63a93eab63e599d8/pkg/subcmd/plugin/testdata/testplugin4/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/218241917/contents/pkg/subcmd/plugin/testdata/testplugin4/src/plugin.json?ref=6c9a36e1b5686bee44e2b26f63a93eab63e599d8",
+      "repoName": "build-pipeline",
+      "repoNameFull": "grafana/build-pipeline",
+      "repoUrl": "https://github.com/grafana/build-pipeline",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-not-directly/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-not-directly/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-not-directly/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/circulardependencies/testdata/external-without-version/grafana-clock-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/circulardependencies/testdata/external-without-version/grafana-clock-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/circulardependencies/testdata/external-without-version/grafana-clock-panel/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/circulardependencies/testdata/external-with-version/grafana-clock-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/circulardependencies/testdata/external-with-version/grafana-clock-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/circulardependencies/testdata/external-with-version/grafana-clock-panel/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/jssourcemap/testdata/source-map-correct-yarn-v3/src/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/jssourcemap/testdata/source-map-correct-yarn-v3/src/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/jssourcemap/testdata/source-map-correct-yarn-v3/src/src/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/subcmd/plugin/testdata/testplugin5/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/build-pipeline/blob/6c9a36e1b5686bee44e2b26f63a93eab63e599d8/pkg/subcmd/plugin/testdata/testplugin5/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/218241917/contents/pkg/subcmd/plugin/testdata/testplugin5/src/plugin.json?ref=6c9a36e1b5686bee44e2b26f63a93eab63e599d8",
+      "repoName": "build-pipeline",
+      "repoNameFull": "grafana/build-pipeline",
+      "repoUrl": "https://github.com/grafana/build-pipeline",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/manifest/testdata/with-all-files/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/manifest/testdata/with-all-files/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/manifest/testdata/with-all-files/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/metadatavalid/testdata/valid/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/metadatavalid/testdata/valid/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/metadatavalid/testdata/valid/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/live/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/live/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/live/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/live/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/live/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/live/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/live/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/live/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/live/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/live/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/public/app/plugins/panel/live/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/public/app/plugins/panel/live/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/e2e/test-plugins/grafana-extensionstest-app/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/e2e/test-plugins/grafana-extensionstest-app/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackaton-wasm-grafana/blob/5c2cda7abbae4ee5c7da6b33be080f987f92bcf6/e2e/test-plugins/grafana-extensionstest-app/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/899559190/contents/e2e/test-plugins/grafana-extensionstest-app/plugin.json?ref=5c2cda7abbae4ee5c7da6b33be080f987f92bcf6",
+      "repoName": "hackaton-wasm-grafana",
+      "repoNameFull": "grafana/hackaton-wasm-grafana",
+      "repoUrl": "https://github.com/grafana/hackaton-wasm-grafana",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "oracle-plugin.json",
+      "filePath": "grafana-publisher/testdata/oracle-plugin.json",
+      "fileUrl": "https://github.com/grafana/integration-automation/blob/4f61b9b8f250eb2ca280c2fd58c9c326b3da562a/grafana-publisher/testdata/oracle-plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/264827601/contents/grafana-publisher/testdata/oracle-plugin.json?ref=4f61b9b8f250eb2ca280c2fd58c9c326b3da562a",
+      "repoName": "integration-automation",
+      "repoNameFull": "grafana/integration-automation",
+      "repoUrl": "https://github.com/grafana/integration-automation",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/plugins/manager/testdata/panel-does-not-follow-slot-joinschema/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/unsigned-panel/plugin/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-not-directly-deep/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-not-directly-deep/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-not-directly-deep/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/nested-plugins/parent/nested/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/plugins/manager/testdata/panel-conflicting-joinschema/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/jssourcemap/testdata/source-map-incorrect-yarn-v3/src/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/jssourcemap/testdata/source-map-incorrect-yarn-v3/src/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/jssourcemap/testdata/source-map-incorrect-yarn-v3/src/src/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/subcmd/plugin/testdata/testplugin6/src/plugin.json",
+      "fileUrl": "https://github.com/grafana/build-pipeline/blob/6c9a36e1b5686bee44e2b26f63a93eab63e599d8/pkg/subcmd/plugin/testdata/testplugin6/src/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/218241917/contents/pkg/subcmd/plugin/testdata/testplugin6/src/plugin.json?ref=6c9a36e1b5686bee44e2b26f63a93eab63e599d8",
+      "repoName": "build-pipeline",
+      "repoNameFull": "grafana/build-pipeline",
+      "repoUrl": "https://github.com/grafana/build-pipeline",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/plugins/manager/testdata/name-mismatch-panel/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-deeply-nested/datasource/panels/one/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-deeply-nested/datasource/panels/one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-deeply-nested/datasource/panels/one/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-deeply-nested/datasource/panels/one/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-deeply-nested/datasource/panels/one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-deeply-nested/datasource/panels/one/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/services/pluginsintegration/pluginassets/testdata/module-hash-valid-nested/panels/one/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/plugins/manager/testdata/disallowed-cue-import/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/manifest/testdata/with-wrong-sha-sum/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/manifest/testdata/with-wrong-sha-sum/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/manifest/testdata/with-wrong-sha-sum/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/manifest/testdata/manifest-extra-files/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/manifest/testdata/manifest-extra-files/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/manifest/testdata/manifest-extra-files/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/manifest/testdata/manifest-missing-files/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/manifest/testdata/manifest-missing-files/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/manifest/testdata/manifest-missing-files/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/manifest/testdata/with-wrong-permissions/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/manifest/testdata/with-wrong-permissions/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/manifest/testdata/with-wrong-permissions/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/text/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/public/app/plugins/panel/text/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/public/app/plugins/panel/text/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/graph/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/graph/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/graph/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/state-timeline/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/state-timeline/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/pluginlist/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/pluginlist/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/pluginlist/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/e2e/test-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/e2e/test-plugins/frontend-sandbox-panel-test/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/circulardependencies/testdata/nested/grafana-clock-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/circulardependencies/testdata/nested/grafana-clock-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/circulardependencies/testdata/nested/grafana-clock-panel/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-no-include/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-no-include/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-no-include/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/subcmd/plugin/testdata/plugin.json",
+      "fileUrl": "https://github.com/grafana/build-pipeline/blob/6c9a36e1b5686bee44e2b26f63a93eab63e599d8/pkg/subcmd/plugin/testdata/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/218241917/contents/pkg/subcmd/plugin/testdata/plugin.json?ref=6c9a36e1b5686bee44e2b26f63a93eab63e599d8",
+      "repoName": "build-pipeline",
+      "repoNameFull": "grafana/build-pipeline",
+      "repoUrl": "https://github.com/grafana/build-pipeline",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/analysis/passes/circulardependencies/testdata/itself/grafana-clock-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugin-validator/blob/2fde56f3404743343486e75b1b6e2d7e54697180/pkg/analysis/passes/circulardependencies/testdata/itself/grafana-clock-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/287891432/contents/pkg/analysis/passes/circulardependencies/testdata/itself/grafana-clock-panel/plugin.json?ref=2fde56f3404743343486e75b1b6e2d7e54697180",
+      "repoName": "plugin-validator",
+      "repoNameFull": "grafana/plugin-validator",
+      "repoUrl": "https://github.com/grafana/plugin-validator",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/cdn/plugin/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-not-directly-deep/panels/child-one/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-not-directly-deep/panels/child-one/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-not-directly-deep/panels/child-one/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/valid-model-panel/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/schema/load/testdata/plugins/panel/with-lineage/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/pkg/schema/load/testdata/plugins/panel/with-lineage/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/pkg/schema/load/testdata/plugins/panel/with-lineage/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-deep/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-deep/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-deep/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana/blob/60827fe4995054e1f4f1cc274a54cb9ca452cc6b/pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/15111821/contents/pkg/plugins/manager/testdata/includes-symlinks/plugin.json?ref=60827fe4995054e1f4f1cc274a54cb9ca452cc6b",
+      "repoName": "grafana",
+      "repoNameFull": "grafana/grafana",
+      "repoUrl": "https://github.com/grafana/grafana",
+      "repoPrivate": false
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/index/testdata/nested-multiple/plugin.json",
+      "fileUrl": "https://github.com/grafana/plugins-cdn-tools/blob/8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205/pkg/index/testdata/nested-multiple/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/588162507/contents/pkg/index/testdata/nested-multiple/plugin.json?ref=8636d6bfa202ac3ddc0ff3b75a9f7dae0928c205",
+      "repoName": "plugins-cdn-tools",
+      "repoNameFull": "grafana/plugins-cdn-tools",
+      "repoUrl": "https://github.com/grafana/plugins-cdn-tools",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/text/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/public/app/plugins/panel/text/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/public/app/plugins/panel/text/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/text/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/public/app/plugins/panel/text/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/public/app/plugins/panel/text/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/text/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/public/app/plugins/panel/text/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/public/app/plugins/panel/text/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "public/app/plugins/panel/text/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/public/app/plugins/panel/text/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/public/app/plugins/panel/text/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/custom-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/e2e/custom-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/e2e/custom-plugins/frontend-sandbox-panel-test/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/custom-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/e2e/custom-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/e2e/custom-plugins/frontend-sandbox-panel-test/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/e2e/test-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/e2e/test-plugins/frontend-sandbox-panel-test/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "e2e/test-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/e2e/test-plugins/frontend-sandbox-panel-test/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/e2e/test-plugins/frontend-sandbox-panel-test/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/cdn/plugin/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/cdn/plugin/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/cdn/plugin/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/plugins/manager/testdata/cdn/plugin/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/plugins/manager/testdata/cdn/plugin/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/valid-model-panel/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/valid-model-panel/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/valid-model-panel/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-dash/blob/aa6f3b1b51ff35ea77b865f8c7137d180f44b885/pkg/plugins/manager/testdata/valid-model-panel/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/940533990/contents/pkg/plugins/manager/testdata/valid-model-panel/plugin.json?ref=aa6f3b1b51ff35ea77b865f8c7137d180f44b885",
+      "repoName": "hackathon-dash",
+      "repoNameFull": "grafana/hackathon-dash",
+      "repoUrl": "https://github.com/grafana/hackathon-dash",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrl": "https://github.com/grafana/hackathon-2012-12-omniteam/blob/e127691685f113ec2ddef01c9e4b37c779ad41a7/pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/434680045/contents/pkg/plugins/manager/testdata/includes-symlinks/plugin.json?ref=e127691685f113ec2ddef01c9e4b37c779ad41a7",
+      "repoName": "hackathon-2012-12-omniteam",
+      "repoNameFull": "grafana/hackathon-2012-12-omniteam",
+      "repoUrl": "https://github.com/grafana/hackathon-2012-12-omniteam",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-crowdin-test/blob/88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa/pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/512701186/contents/pkg/plugins/manager/testdata/includes-symlinks/plugin.json?ref=88c75cacc95b4481fe3525c6f22cf1bf71b4c8fa",
+      "repoName": "grafana-crowdin-test",
+      "repoNameFull": "grafana/grafana-crowdin-test",
+      "repoUrl": "https://github.com/grafana/grafana-crowdin-test",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-ci-sandbox/blob/f7c406754b78495153c0eb4fd76a893834bfd503/pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/550218449/contents/pkg/plugins/manager/testdata/includes-symlinks/plugin.json?ref=f7c406754b78495153c0eb4fd76a893834bfd503",
+      "repoName": "grafana-ci-sandbox",
+      "repoNameFull": "grafana/grafana-ci-sandbox",
+      "repoUrl": "https://github.com/grafana/grafana-ci-sandbox",
+      "repoPrivate": true
+    },
+    {
+      "fileName": "plugin.json",
+      "filePath": "pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrl": "https://github.com/grafana/grafana-security-mirror/blob/042a5e515a203dbcb6094a915de8dbd90ee3f86c/pkg/plugins/manager/testdata/includes-symlinks/plugin.json",
+      "fileUrlRaw": "https://api.github.com/repositories/658826911/contents/pkg/plugins/manager/testdata/includes-symlinks/plugin.json?ref=042a5e515a203dbcb6094a915de8dbd90ee3f86c",
+      "repoName": "grafana-security-mirror",
+      "repoNameFull": "grafana/grafana-security-mirror",
+      "repoUrl": "https://github.com/grafana/grafana-security-mirror",
+      "repoPrivate": true
+    }
+  ]
+}
