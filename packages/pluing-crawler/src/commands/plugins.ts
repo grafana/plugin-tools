@@ -1,12 +1,14 @@
 import terminalLink from 'terminal-link';
 import {
+  getPluginById,
   getReposWithInternalAppPlugins,
   getReposWithInternalDatasourcePlugins,
   getReposWithInternalPanelPlugins,
 } from '../api.js';
-import { SearchResult } from '../types.js';
 import { filterAndSortSearchItems, mapCodeSearchItem } from '../utils.js';
 import chalk from 'chalk';
+import { setConfig } from '../config.js';
+import { SearchResultItem } from '../types.js';
 
 export type PluginsCommandOptions = {
   panel: boolean;
@@ -15,7 +17,7 @@ export type PluginsCommandOptions = {
   pluginJsonFieldExists: string;
   pluginJsonFieldNotEmpty: boolean;
   pluginId: string;
-  noCache: boolean;
+  cache: boolean;
   json: boolean;
 };
 
@@ -26,54 +28,63 @@ export type PluginsMeta = {
 };
 
 export const pluginsCommand = async ({
-  panel: showPanels,
-  datasource: showDatasources,
-  app: showApps,
+  panel,
+  datasource,
+  app,
   //   pluginJsonFieldExists,
   //   pluginJsonFieldNotEmpty,
-  //   pluginId,
-  noCache,
+  pluginId,
+  cache,
   json,
 }: PluginsCommandOptions) => {
-  const showAll = !showPanels && !showDatasources && !showApps;
-  const searchResult: SearchResult = {
-    count: 0,
-    items: [],
-  };
+  const showAll = !panel && !datasource && !app;
+  const fetchDatasources = !pluginId && (showAll || datasource);
+  const fetchPanels = !pluginId && (showAll || panel);
+  const fetchApps = !pluginId && (showAll || app);
+  let items: SearchResultItem[] = [];
 
-  if (noCache) {
-    process.env.CLEAR_CACHE = 'true';
+  if (!cache) {
+    console.log('NO CACHE');
+    setConfig({ clearCache: true });
   }
 
-  if (showAll || showPanels) {
+  if (pluginId) {
+    const plugin = await getPluginById(pluginId);
+    items.push(...plugin.items.map((item) => mapCodeSearchItem(item)));
+  }
+
+  if (fetchPanels) {
     const panels = await getReposWithInternalPanelPlugins();
-    searchResult.count += panels.total_count;
-    searchResult.items.push(...panels.items.map((item) => mapCodeSearchItem(item, 'panel')));
+    items.push(...panels.items.map((item) => mapCodeSearchItem(item, 'panel')));
   }
 
-  if (showAll || showDatasources) {
+  if (fetchDatasources) {
     const datasources = await getReposWithInternalDatasourcePlugins();
-    searchResult.count += datasources.total_count;
-    searchResult.items.push(...datasources.items.map((item) => mapCodeSearchItem(item, 'datasource')));
+    items.push(...datasources.items.map((item) => mapCodeSearchItem(item, 'datasource')));
   }
 
-  if (showAll || showApps) {
+  if (fetchApps) {
     const apps = await getReposWithInternalAppPlugins();
-    searchResult.count += apps.total_count;
-    searchResult.items.push(...apps.items.map((item) => mapCodeSearchItem(item, 'app')));
+    items.push(...apps.items.map((item) => mapCodeSearchItem(item, 'app')));
   }
 
-  searchResult.items = filterAndSortSearchItems(searchResult.items);
+  items = filterAndSortSearchItems(items);
 
   if (json) {
-    console.log(JSON.stringify(searchResult, null, 2));
+    console.log(JSON.stringify(items, null, 2));
     return;
   }
 
   // Non JSON
-  for (const item of searchResult.items) {
-    console.log(
-      `- ${chalk.bold(item.name)} | ${chalk.italic(item.pluginType.toUpperCase())} | ${terminalLink('plugin.json →', item.fileUrl)}`
-    );
+  console.log(chalk.bold(`Number of results: ${items.length}\n`));
+
+  for (const item of items) {
+    const columns = [
+      chalk.bold(item.name),
+      item.pluginType !== 'unknown' ? chalk.italic(item.pluginType.toUpperCase()) : '',
+      terminalLink('plugin.json →', item.fileUrl),
+    ];
+
+    console.log('- ' + columns.filter((x) => x).join(' | '));
   }
 };

@@ -34,6 +34,15 @@ export async function getAllReposForOrg() {
   }
 }
 
+export const getPluginById = (pluginName: string) => {
+  const queryFn = generateCodeSearchApi({
+    id: `internal_plugin_repos_plugin_by_name_${pluginName}`,
+    query: `"id": "${pluginName}" in:file filename:plugin.json`,
+  });
+
+  return queryFn();
+};
+
 export const getReposWithInternalAppPlugins = generateCodeSearchApi({
   id: 'internal_plugin_repos_app',
   query: `"type": app in:file filename:plugin.json`,
@@ -66,6 +75,7 @@ export function generateCodeSearchApi({ id, query }: { id: string; query: string
     });
 
     if (clearCache) {
+      debug(`[CACHE] - Caching is disabled.`);
       await cacheDel(cacheKey);
     }
 
@@ -76,8 +86,10 @@ export function generateCodeSearchApi({ id, query }: { id: string; query: string
         debug(`[CACHE] - returning data for "${cacheKey}" from cache`);
         data = cached;
       } else {
+        const q = `${query}${!query.match(/\borg:[a-zA-Z0-9_-]+\b/) ? ` org:${org}` : ''}`;
+        debug(`[OCTOKIT] - fetching data for query "${q}", page ${page}`);
         const response = await octokit.rest.search.code({
-          q: `${query}${!query.match(/\borg:[a-zA-Z0-9_-]+\b/) ? ` org:${org}` : ''}`,
+          q,
           per_page: 100,
           page,
         });

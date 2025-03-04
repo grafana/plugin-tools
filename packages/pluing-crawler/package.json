@@ -49,7 +49,7 @@
     "@types/node": "22.13.8",
     "cache-manager": "^6.1.3",
     "chalk": "^5.4.1",
-    "commander": "^12.1.0",
+    "commander": "^13.1.0",
     "debug": "^4.3.4",
     "jackw-dts-bundle-gen-test": "^9.5.1",
     "keyv": "^5.2.1",

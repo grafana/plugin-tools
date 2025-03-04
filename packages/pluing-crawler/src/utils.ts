@@ -342,9 +342,19 @@ export function isNotHackathon(item: SearchResultItem) {
   return !item.repoNameFull.includes('hackathon') && !item.repoNameFull.includes('hackaton');
 }
 
-export function isNotFiltered(item: SearchResultItem) {
-  const { filteredRepos } = getConfig();
-  return !filteredRepos.includes(item.repoNameFull);
+export function isNotIgnored(item: SearchResultItem) {
+  const { ignoredRepos } = getConfig();
+  return !ignoredRepos.includes(item.repoNameFull);
+}
+
+export function isNotTest(item: SearchResultItem) {
+  return (
+    !item.filePath.includes('test') ||
+    !item.filePath.includes('spec') ||
+    !item.filePath.includes('mock') ||
+    !item.filePath.includes('e2e') ||
+    !item.filePath.includes('fixture')
+  );
 }
 
 export function sortReposByName(data: CodeSearchResponse) {
@@ -358,7 +368,7 @@ export function filterAndSortSearchItems(items: SearchResultItem[]) {
   return items
     .filter(isNotHackathon)
     .filter(isNotFork)
-    .filter(isNotFiltered)
+    .filter(isNotIgnored)
     .sort((a, b) => a.repoNameFull.localeCompare(b.repoNameFull));
 }
 
@@ -380,7 +390,7 @@ export function guessPluginName(filePath: string) {
   return parts[parts.length - 2] ?? '';
 }
 
-export function mapCodeSearchItem(item: CodeSearchItem, pluginType: PluginType): SearchResultItem {
+export function mapCodeSearchItem(item: CodeSearchItem, pluginType?: PluginType): SearchResultItem {
   const guessedPluginName = guessPluginName(item.path);
 
   return {
@@ -396,6 +406,6 @@ export function mapCodeSearchItem(item: CodeSearchItem, pluginType: PluginType):
     repoUrl: item.repository.html_url,
     repoPrivate: item.repository.private,
     isFork: item.repository.fork,
-    pluginType,
+    pluginType: pluginType ?? 'unknown',
   };
 }

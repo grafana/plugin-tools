@@ -8,7 +8,7 @@ let config = {
   org: 'grafana',
   clearCache: false,
   // These repos don't contain "actual" plugins and produce noise
-  filteredRepos: [
+  ignoredRepos: [
     'grafana/grafana-crowdin-test',
     'grafana/grafana-ci-sandbox',
     'grafana/grafana-security-mirror',

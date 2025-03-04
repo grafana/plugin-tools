@@ -1,8 +1,3 @@
-export type SearchResult = {
-  count: number;
-  items: SearchResultItem[];
-};
-
 export type SearchResultItem = {
   name: string;
   fileName: string;
@@ -17,7 +12,7 @@ export type SearchResultItem = {
   pluginType: PluginType;
 };
 
-export type PluginType = 'app' | 'datasource' | 'panel';
+export type PluginType = 'app' | 'datasource' | 'panel' | 'unknown';
 
 // Github API: Rate limit
 // ------------------------------------
