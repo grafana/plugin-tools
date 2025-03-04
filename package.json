@@ -60,8 +60,7 @@
     "packages/plugin-e2e",
     "packages/plugin-meta-extractor",
     "packages/plugin-types-bundler",
-    "packages/eslint-plugin-plugins",
-    "libs/**"
+    "packages/eslint-plugin-plugins"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
