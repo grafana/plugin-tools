@@ -4,9 +4,9 @@ import boxen from 'boxen';
 import { markedTerminal } from 'marked-terminal';
 import Enquirer from 'enquirer';
 import { Output } from '@libs/output';
-import { getVersion } from './utils.version.js';
+import { CURRENT_APP_VERSION } from './utils.version.js';
 
-export const output = new Output('create plugin', getVersion());
+export const output = new Output('create plugin', CURRENT_APP_VERSION);
 const { prompt } = Enquirer;
 
 // They're compatible but this type assertion is required because @types/marked-terminal needs changes.

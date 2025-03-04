@@ -20,7 +20,7 @@ import {
   getPackageManagerFromUserAgent,
 } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
-import { getGrafanaRuntimeVersion, getVersion } from './utils.version.js';
+import { getGrafanaRuntimeVersion, CURRENT_APP_VERSION } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
 const templatesDebugger = debug.extend('templates');
@@ -94,7 +94,7 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
-  const currentVersion = getVersion();
+  const currentVersion = CURRENT_APP_VERSION;
   const grafanaVersion = getGrafanaRuntimeVersion();
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
   //@grafana/e2e was deprecated in Grafana 11
