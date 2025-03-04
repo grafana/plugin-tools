@@ -13,14 +13,15 @@ function isCI() {
 }
 
 if (isCI()) {
+  // Disable coloring when running in CI environments.
   chalk.level = 0;
 }
 
 export class Output {
   private appName: string;
-  private appVersion: string;
+  private appVersion?: string;
 
-  constructor(name: string, version: string) {
+  constructor(name: string, version?: string) {
     this.appName = name;
     this.appVersion = version;
   }
@@ -68,6 +69,10 @@ export class Output {
 
   private addPrefix(color: Colors, text: string) {
     const namePrefix = chalk.reset.inverse.bold[color](` ${this.appName} `);
+    if (!this.appVersion) {
+      return `${namePrefix} ${text}`;
+    }
+
     const versionPrefix = chalk.reset[color](`v${this.appVersion}`);
     return `${namePrefix} ${versionPrefix} ${text}`;
   }

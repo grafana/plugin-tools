@@ -47,8 +47,6 @@
     "which": "^5.0.0"
   },
   "devDependencies": {
-    "@libs/output": "^1.0.0",
-    "@libs/version": "^1.0.0",
     "@types/glob": "^8.1.0",
     "@types/marked-terminal": "^6.1.1",
     "@types/minimist": "^1.2.5",
