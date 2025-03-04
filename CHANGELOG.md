@@ -1,3 +1,16 @@
+# (Mon Mar 03 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.4`
+  - Create Plugin: Externalise unstable entrypoints [#1580](https://github.com/grafana/plugin-tools/pull/1580) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Feb 25 2025)
 
 #### 🐛 Bug Fix
