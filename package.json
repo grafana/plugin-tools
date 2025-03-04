@@ -29,7 +29,7 @@
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^8.0.0",
     "@stylistic/eslint-plugin-ts": "^3.1.0",
-    "@swc/core": "^1.11.6",
+    "@swc/core": "^1.11.7",
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/recommended": "^1.0.8",
     "@types/node": "22.13.9",
