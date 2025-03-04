@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { getVersion } from './utils.version.js';
+import { CURRENT_APP_VERSION } from './utils.version.js';
 import { argv, commandName } from './utils.cli.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
 import { printBox } from './utils.console.js';
@@ -48,7 +48,7 @@ function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
     const rootConfig = readRCFileSync(rootPath);
 
     return {
-      version: getVersion(),
+      version: CURRENT_APP_VERSION,
       ...rootConfig,
       features: rootConfig!.features ?? {},
     };
@@ -56,7 +56,7 @@ function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
     // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
     return {
-      version: getVersion(),
+      version: CURRENT_APP_VERSION,
       features: {},
     };
   }
