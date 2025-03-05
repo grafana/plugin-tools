@@ -185,10 +185,10 @@ Build information
 
 #### Properties
 
-| Property | Type   | Required | Description |
-| -------- | ------ | -------- | ----------- |
-| `name`   | string | No       |             |
-| `url`    | string | No       |             |
+| Property | Type   | Required | Description                                                                                                                                                                                                                                                                                                                                              |
+| -------- | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`   | string | No       | Display name of the link. Special names with predefined behavior: <br/>• `documentation` - adds Documentation link to plugins detail page<br/>• `repository` - used to determine and link to repository of the plugin<br/>• `license` - adds License link to plugins detail page<br/>• `raise issue` - adds "Raise an Issue" link to plugins detail page |
+| `url`    | string | No       | URL for the link                                                                                                                                                                                                                                                                                                                                         |
 
 ### logos
 
