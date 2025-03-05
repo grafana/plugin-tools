@@ -24,18 +24,11 @@ program
 // Plugins
 program
   .command('plugins')
-  .option('-p, --pluginId <type>', 'A plugin ID to filter by, e.g. "grafana-piechart-panel" or "*slo*"')
+  .option('--id <type>', 'A plugin ID to filter by, e.g. "grafana-piechart-panel" or "*slo*"')
+  .option('--pluginJsonFieldDefined <type>', 'E.g. "extensions.dependencies"')
   .option('--panel', 'List panel plugins')
   .option('--datasource', 'List datasource plugins')
   .option('--app', 'List app plugins')
-  .option(
-    '--pluginJsonFieldExists',
-    "Checks for a certain key to exist in the plugin.json, e.g. 'extensions.dependencies'"
-  )
-  .option(
-    '--pluginJsonFieldNotEmpty',
-    "Checks for a certain field in the plugin.json not being empty, e.g. 'extensions.dependencies'"
-  )
   .option('--no-cache', 'Disables cachcing and re-fetches all data')
   .option('--json', 'Prints out data as JSON')
   .description('Get information about plugins')

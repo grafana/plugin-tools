@@ -6,6 +6,7 @@ import {
   isNotHackathon,
   isNotIgnored,
   isPluginIdMatch,
+  isPluginJsonFieldDefined,
   isPluginType,
   mapCodeSearchItem,
   parseHrtimeToSeconds,
@@ -14,15 +15,14 @@ import {
 import chalk from 'chalk';
 import { setConfig } from '../config.js';
 import { SearchResultItem } from '../types.js';
-import { printBlueBox, printGreenBox } from '../utils.console.js';
+import { printGreenBox } from '../utils.console.js';
 
 export type PluginsCommandOptions = {
+  id: string;
+  pluginJsonFieldDefined: string;
   panel: boolean;
   datasource: boolean;
   app: boolean;
-  pluginJsonFieldExists: string;
-  pluginJsonFieldNotEmpty: boolean;
-  pluginId: string;
   cache: boolean;
   json: boolean;
 };
@@ -34,12 +34,11 @@ export type PluginsMeta = {
 };
 
 export const pluginsCommand = async ({
+  id,
+  pluginJsonFieldDefined,
   panel,
   datasource,
   app,
-  //   pluginJsonFieldExists,
-  //   pluginJsonFieldNotEmpty,
-  pluginId,
   cache,
   json,
 }: PluginsCommandOptions) => {
@@ -75,8 +74,9 @@ export const pluginsCommand = async ({
 
   // Post filtering and sorting
   items = items
-    .filter(isPluginIdMatch(pluginId))
+    .filter(isPluginIdMatch(id))
     .filter(isPluginType(panel, datasource, app))
+    .filter(isPluginJsonFieldDefined(pluginJsonFieldDefined))
     .sort(sortItemsByPluginId);
 
   // JSON output
@@ -86,11 +86,7 @@ export const pluginsCommand = async ({
   }
 
   // Pretty print
-  printGreenBox({
-    title: `Grafana plugin search - ${items.length} result${items.length > 1 ? 's' : ''} (${parseHrtimeToSeconds(process.hrtime(startTime))} sec)`,
-    content: formatRateLimitInfo(rateLimitInfo),
-  });
-
+  const rows = [];
   for (const item of items) {
     // Skip items that don't have a plugin.json
     if (!item.pluginJson || !item.pluginJson.id) {
@@ -106,6 +102,18 @@ export const pluginsCommand = async ({
       `| ${terminalLink('repository', item.repoUrl)}, ${terminalLink('plugin.json', item.fileUrl)}`,
     ].filter(Boolean);
 
-    console.log('- ' + columns.join(' '));
+    rows.push('- ' + columns.join(' '));
   }
+
+  printGreenBox({
+    title: `Grafana plugin search - ${items.length} result${items.length > 1 ? 's' : ''} (${parseHrtimeToSeconds(process.hrtime(startTime))} sec)`,
+    content: formatRateLimitInfo(rateLimitInfo),
+  });
+
+  if (rows.length === 0) {
+    console.log('No results found.');
+    return;
+  }
+
+  console.log(rows.join('\n'));
 };

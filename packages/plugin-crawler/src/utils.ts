@@ -40,6 +40,20 @@ export const isPluginIdMatch = (pluginId: string) => (item: SearchResultItem) =>
   return Boolean(item.pluginJson.id.match(pluginId));
 };
 
+export const isPluginJsonFieldDefined = (field: string) => (item: SearchResultItem) => {
+  if (!field) {
+    return true;
+  }
+
+  if (field && !item.pluginJson) {
+    return false;
+  }
+
+  const found = field.split('.').reduce((o, i) => (o ? o[i] : o), item.pluginJson);
+
+  return Boolean(found);
+};
+
 export const isPluginType = (panel: boolean, datasource: boolean, app: boolean) => (item: SearchResultItem) => {
   const showAll = !panel && !datasource && !app;
   const filters = [panel ? 'panel' : null, datasource ? 'datasource' : null, app ? 'app' : null].filter(Boolean);
