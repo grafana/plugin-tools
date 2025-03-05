@@ -30,6 +30,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
+    "find-up": "^7.0.0",
     "minimist": "^1.2.2",
     "proxy-agent": "6.5.0"
   },

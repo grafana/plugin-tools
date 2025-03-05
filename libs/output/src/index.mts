@@ -58,11 +58,11 @@ export class Output {
   private getStatusIcon(taskStatus: TaskStatus) {
     switch (taskStatus) {
       case 'success':
-        return '✓';
+        return chalk.green('✓');
       case 'failure':
-        return '⨯';
+        return chalk.red('⨯');
       case 'skipped':
-        return '−';
+        return chalk.yellow('−');
     }
   }
 
@@ -71,9 +71,8 @@ export class Output {
     if (!this.appVersion) {
       return `${namePrefix} ${text}`;
     }
-
-    const versionPrefix = chalk.reset[color](`v${this.appVersion}`);
-    return `${namePrefix} ${versionPrefix} ${text}`;
+    const nameAndVersionPrefix = chalk.reset.inverse.bold[color](` ${this.appName}@${this.appVersion} `);
+    return `${nameAndVersionPrefix} ${text}`;
   }
 
   private writeBody(body?: string[]) {
@@ -104,7 +103,7 @@ export class Output {
     if (link) {
       this.addNewLine();
       this.write(`${chalk.gray('For more information about this error: ')}
-  ${link}`);
+  ${chalk.cyan(link)}`);
     }
     this.addNewLine();
   }
@@ -123,19 +122,9 @@ export class Output {
     this.addNewLine();
   }
 
-  log({
-    title,
-    body,
-    color,
-    withPrefix = true,
-  }: {
-    title: string;
-    body?: string[];
-    color?: Colors;
-    withPrefix?: boolean;
-  }) {
+  log({ title, body, withPrefix = true }: { title: string; body?: string[]; withPrefix?: boolean }) {
     this.addNewLine();
-    this.writeTitle('cyan', color ? chalk[color].bold(title) : title, withPrefix);
+    this.writeTitle('cyan', chalk.cyan.bold(title), withPrefix);
     this.writeBody(body);
     this.addNewLine();
   }

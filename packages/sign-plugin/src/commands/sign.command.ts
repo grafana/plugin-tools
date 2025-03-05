@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import minimist from 'minimist';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -16,7 +17,10 @@ export const sign = async (argv: minimist.ParsedArgs) => {
   if (!existsSync(pluginDistDir)) {
     output.error({
       title: 'Plugin directory not found.',
-      body: ['Did you build the plugin before attempting to sign it?', `Plugin directory: ${pluginDistDir}`],
+      body: [
+        `Directory ${chalk.bold(pluginDistDir)} not found.`,
+        'Make sure to build the plugin before attempting to sign it.',
+      ],
     });
     process.exitCode = 1;
     return;
