@@ -2,7 +2,7 @@ import path from 'node:path';
 
 // Default configuration
 let config = {
-  cacheTtl: 1800000, //in ms (30 minutes)
+  cacheTtl: 3600000, //in ms (1 hour)
   cachePath: process.env.CACHE_PATH || path.resolve('../cache.sqlite'),
   githubPat: process.env.GITHUB_PAT,
   org: 'grafana',

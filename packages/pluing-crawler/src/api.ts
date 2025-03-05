@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { getConfig } from './config.js';
 import { cacheGet, cacheSet, cacheDel } from './cache.js';
-import { CodeSearchResponse } from './types.js';
+import { CodeSearchResponse, SearchResultItem } from './types.js';
 import { debug } from './utils.js';
 
 export async function getAllReposForOrg() {
@@ -111,4 +111,63 @@ export function generateCodeSearchApi({ id, query }: { id: string; query: string
       throw error;
     }
   };
+}
+
+export async function fetchPluginJson(item: SearchResultItem) {
+  let data;
+  const { org, clearCache, githubPat } = getConfig();
+  const cacheKey = `file_${item.fileUrlRaw}`;
+  const octokit = new Octokit({
+    auth: githubPat,
+  });
+
+  if (clearCache) {
+    debug(`[CACHE] - Caching is disabled.`);
+    await cacheDel(cacheKey);
+  }
+
+  try {
+    const cached = await cacheGet(cacheKey);
+
+    if (cached) {
+      debug(`[CACHE] - returning data for "${cacheKey}" from cache`);
+      data = cached;
+    } else {
+      debug(`[OCTOKIT] - fetching file contents for "${item.fileUrlRaw}"`);
+      const response = await octokit.repos.getContent({
+        owner: org,
+        repo: item.repoName,
+        path: item.filePath,
+      });
+
+      // @ts-ignore
+      data = JSON.parse(Buffer.from(response.data.content, 'base64').toString());
+
+      await cacheSet(cacheKey, data);
+    }
+
+    return data;
+  } catch (error) {
+    // TODO: add more fine-grained error handling
+    console.error(`Error fetching & parsing plugin.json from ${item.fileUrlRaw}`, error);
+    await cacheSet(cacheKey, {});
+    return {};
+  }
+}
+
+export async function getRateLimitInfo() {
+  const { githubPat } = getConfig();
+  const octokit = new Octokit({
+    auth: githubPat,
+  });
+
+  try {
+    const response = await octokit.rest.rateLimit.get();
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+
+    return null;
+  }
 }

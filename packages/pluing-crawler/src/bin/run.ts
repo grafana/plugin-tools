@@ -2,13 +2,14 @@
 import { Command } from 'commander';
 import { pluginsCommand } from '../commands/plugins.js';
 import { extensionsCommand } from '../commands/extensions.js';
+import { infoCommand } from '../commands/info.js';
 
 const program = new Command();
 
 program.name('grafana-plugins').description('A CLI for getting info about internal grafana plugins').version('0.0.1');
 
+// Extensions
 program
-  // .option('-n, --name <type>', 'Add your name')
   .command('extensions')
   .option('-p, --pluginId <type>', 'A plugin ID to filter by, e.g. "grafana-piechart-panel" or "*slo*"')
   .option('--addedLinks', 'List added links')
@@ -20,6 +21,7 @@ program
   .description('Get information about usages of the extensions framework in internal app plugins.')
   .action(extensionsCommand);
 
+// Plugins
 program
   .command('plugins')
   .option('-p, --pluginId <type>', 'A plugin ID to filter by, e.g. "grafana-piechart-panel" or "*slo*"')
@@ -38,5 +40,7 @@ program
   .option('--json', 'Prints out data as JSON')
   .description('Get information about plugins')
   .action(pluginsCommand);
+
+program.command('info').action(infoCommand);
 
 program.parse();

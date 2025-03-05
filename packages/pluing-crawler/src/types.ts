@@ -10,6 +10,7 @@ export type SearchResultItem = {
   repoPrivate: boolean;
   isFork: boolean;
   pluginType: PluginType;
+  pluginJson?: any;
 };
 
 export type PluginType = 'app' | 'datasource' | 'panel' | 'unknown';

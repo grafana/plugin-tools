@@ -1,5 +1,6 @@
 import terminalLink from 'terminal-link';
 import {
+  fetchPluginJson,
   getPluginById,
   getReposWithInternalAppPlugins,
   getReposWithInternalDatasourcePlugins,
@@ -70,18 +71,47 @@ export const pluginsCommand = async ({
 
   items = filterAndSortSearchItems(items);
 
+  // Fetching plugin.json files
+  items = await Promise.all(
+    items.map(async (item) => {
+      const pluginJson = await fetchPluginJson(item);
+      return {
+        ...item,
+        pluginJson,
+      };
+    })
+  );
+
+  // Fetching package.json files
+
   if (json) {
     console.log(JSON.stringify(items, null, 2));
     return;
   }
 
+  // Filtering again
+  items = items.filter((item) => {
+    const allowedTypes = [panel ? 'panel' : null, datasource ? 'datasource' : null, app ? 'app' : null];
+
+    if (showAll) {
+      return true;
+    }
+
+    return allowedTypes.includes(item.pluginJson.type);
+  });
+
   // Non JSON
   console.log(chalk.bold(`Number of results: ${items.length}\n`));
 
   for (const item of items) {
+    // Skip items that don't have a plugin.json
+    if (!item.pluginJson || !item.pluginJson.id) {
+      continue;
+    }
+
     const columns = [
-      chalk.bold(item.name),
-      item.pluginType !== 'unknown' ? chalk.italic(item.pluginType.toUpperCase()) : '',
+      chalk.bold(item.pluginJson.id),
+      item.pluginJson.type ? item.pluginJson.type.toUpperCase() : 'unknown',
       terminalLink('plugin.json →', item.fileUrl),
     ];
 

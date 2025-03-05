@@ -5,6 +5,7 @@ import { cacheGet, cacheSet, cacheDel } from './cache.js';
 import { getConfig } from './config.js';
 import { CodeSearchItem, CodeSearchResponse, PluginType, SearchResultItem } from './types.js';
 import chalk from 'chalk';
+import { formatDistance } from 'date-fns';
 
 const octokit = new Octokit({
   auth: GITHUB_PAT,
@@ -408,4 +409,10 @@ export function mapCodeSearchItem(item: CodeSearchItem, pluginType?: PluginType)
     isFork: item.repository.fork,
     pluginType: pluginType ?? 'unknown',
   };
+}
+
+export function getRateLimitResetsText(resets: number) {
+  const resetsDate = new Date(resets * 1000);
+
+  return formatDistance(resetsDate, new Date(), { addSuffix: true });
 }
