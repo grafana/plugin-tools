@@ -1,10 +1,11 @@
 import minimist from 'minimist';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { getVersion } from '../utils/getVersion.js';
+import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 import { buildManifest, saveManifest, signManifest } from '../utils/manifest.js';
 import { assertRootUrlIsValid } from '../utils/pluginValidation.js';
 import { getCreatePluginVersion } from '../utils/getCreatePluginVersion.js';
+import { output } from '../utils/utils.output.js';
 
 export const sign = async (argv: minimist.ParsedArgs) => {
   const distDir = argv.distDir ?? 'dist';
@@ -13,11 +14,19 @@ export const sign = async (argv: minimist.ParsedArgs) => {
   const rootUrls: string[] = argv.rootUrls?.split(',') ?? [];
 
   if (!existsSync(pluginDistDir)) {
-    throw new Error(`Plugin \`${distDir}\` directory is missing. Did you build the plugin before attempting to sign?`);
+    output.error({
+      title: 'Plugin directory not found.',
+      body: ['Did you build the plugin before attempting to sign it?', `Plugin directory: ${pluginDistDir}`],
+    });
+    process.exitCode = 1;
+    return;
   }
 
   try {
-    console.log('Building manifest...');
+    output.log({
+      title: 'Signing plugin.',
+      body: [`Plugin directory: ${pluginDistDir}`],
+    });
     const manifest = await buildManifest(pluginDistDir);
 
     console.log('Signing manifest...');
@@ -29,7 +38,7 @@ export const sign = async (argv: minimist.ParsedArgs) => {
       manifest.rootUrls = rootUrls;
     }
 
-    manifest.signPlugin = { version: getVersion() };
+    manifest.signPlugin = { version: CURRENT_APP_VERSION };
     const createPluginVersion = getCreatePluginVersion();
     if (createPluginVersion) {
       manifest.createPlugin = { version: createPluginVersion };
@@ -40,9 +49,17 @@ export const sign = async (argv: minimist.ParsedArgs) => {
     console.log('Saving signed manifest...');
     saveManifest(pluginDistDir, signedManifest);
 
-    console.log('Signed successfully');
+    output.success({
+      title: 'Plugin signed successfully.',
+    });
   } catch (err) {
-    console.warn(err);
+    if (err instanceof Error) {
+      output.error({
+        title: 'Failed to sign plugin.',
+        body: [err.message],
+      });
+    }
+    console.error(err);
     process.exitCode = 1;
   }
 };
