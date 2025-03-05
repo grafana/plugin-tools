@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { postData } from './request.js';
+import { output } from './utils.output.js';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
 
@@ -87,10 +88,13 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
     );
   }
   if (GRAFANA_API_KEY) {
-    console.warn(
-      `\x1b[33m%s\x1b[0m`,
-      'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead. For more info visit https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin'
-    );
+    output.warning({
+      title: 'Usage of GRAFANA_API_KEY is deprecated',
+      body: [
+        'The usage of GRAFANA_API_KEY is deprecated, please consider using GRAFANA_ACCESS_POLICY_TOKEN instead.',
+        'For more info visit https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin',
+      ],
+    });
   }
 
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
@@ -102,16 +106,17 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
       Authorization: 'Bearer ' + token,
     });
     if (info.status !== 200) {
-      console.error('Error: ', info);
+      output.error({ title: 'Error signing manifest', body: [info.data] });
       throw new Error('Error signing manifest');
     }
 
     return info.data;
   } catch (err: any) {
     if (err.response?.data?.message) {
+      output.error({ title: 'Error signing manifest', body: [err.response.data.message] });
       throw new Error('Error signing manifest: ' + err.response.data.message);
     }
-
+    output.error({ title: 'Error signing manifest', body: [err.message] });
     throw new Error('Error signing manifest: ' + err.message);
   }
 }
