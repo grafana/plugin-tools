@@ -1,5 +1,4 @@
 export type SearchResultItem = {
-  name: string;
   fileName: string;
   filePath: string;
   fileUrl: string;

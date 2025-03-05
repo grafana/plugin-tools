@@ -4,68 +4,39 @@ import { cacheGet, cacheSet, cacheDel } from './cache.js';
 import { CodeSearchResponse, SearchResultItem } from './types.js';
 import { debug } from './utils.js';
 
-export async function getAllReposForOrg() {
-  const { org, clearCache, githubPat } = getConfig();
-  const cacheKey = `repos_${org}`;
-  const octokit = new Octokit({
-    auth: githubPat,
-  });
-
-  if (clearCache) {
-    await cacheDel(cacheKey);
-  }
-
-  try {
-    if (await cacheGet(cacheKey)) {
-      console.log(`[CACHE] Returning org repos from cache for ${org}`);
-      return cacheGet(cacheKey);
-    }
-
-    const response = await octokit.rest.repos.listForOrg({
-      org: org,
-      type: 'all',
-    });
-
-    cacheSet(cacheKey, response.data);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export const getPluginById = (pluginName: string) => {
-  const queryFn = generateCodeSearchApi({
-    id: `internal_plugin_repos_plugin_by_name_${pluginName}`,
-    query: `"id": "${pluginName}" in:file filename:plugin.json`,
-  });
-
-  return queryFn();
-};
-
 export const getInternalPlugins = generateCodeSearchApi({
   id: 'internal_plugins',
   query: `"type": in:file filename:plugin.json`,
 });
 
-export const getReposWithInternalAppPlugins = generateCodeSearchApi({
-  id: 'internal_plugin_repos_app',
-  query: `"type": app in:file filename:plugin.json`,
-});
-
-export const getReposWithInternalDatasourcePlugins = generateCodeSearchApi({
-  id: 'internal_plugin_repos_datasource',
-  query: `"type": datasource in:file filename:plugin.json`,
-});
-
-export const getReposWithInternalPanelPlugins = generateCodeSearchApi({
-  id: 'internal_plugin_repos_panel',
-  query: `"type": panel in:file filename:plugin.json`,
-});
-
 export const getAddedComponents = generateCodeSearchApi({
   id: 'added_components_internal_plugins',
   query: `".addComponent(" extension:tsx OR extension:ts`,
+});
+
+export const getAddedLinks = generateCodeSearchApi({
+  id: 'added_links_internal_plugins',
+  query: `".addLink(" extension:tsx OR extension:ts`,
+});
+
+export const getExposedComponents = generateCodeSearchApi({
+  id: 'exposed_components_internal_plugins',
+  query: `".exposeComponent(" extension:tsx OR extension:ts`,
+});
+
+export const getComponentExtensionPoints = generateCodeSearchApi({
+  id: 'component_extension_points_internal_plugins',
+  query: `".usePluginComponents(" extension:tsx OR extension:ts`,
+});
+
+export const getLinkExtensionPoints = generateCodeSearchApi({
+  id: 'link_extension_points_internal_plugins',
+  query: `".usePluginLinks(" extension:tsx OR extension:ts`,
+});
+
+export const getExposedComponentUsages = generateCodeSearchApi({
+  id: 'exposed_component_usages_internal_plugins',
+  query: `".usePluginComponent(" extension:tsx OR extension:ts`,
 });
 
 // The `org` parameter is assigned automatically to the queries and the cache keys
