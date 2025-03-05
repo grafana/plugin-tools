@@ -17,7 +17,7 @@ To convert the frontend data source, we recommend scaffolding a new backend data
 
 ## Why
 
-There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
+There are multiple features available only in backend plugins, such as Grafana Alerting, Recorded queries, or externally shared dashboards (previously called Public dashboards). Refer to the use cases for implementing a backend plugin in the [backend plugins introduction](../../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
 
 ## Before you begin
 
