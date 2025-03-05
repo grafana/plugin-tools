@@ -1,5 +1,8 @@
 import { findUpSync } from 'find-up';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export function getVersion(): string {
   const packageJsonPath = findUpSync('package.json', { cwd: __dirname });
