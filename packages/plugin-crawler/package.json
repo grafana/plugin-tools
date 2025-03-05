@@ -1,7 +1,7 @@
 {
-  "name": "@grafana/plugin-types-bundler",
-  "version": "0.2.6",
-  "description": "Bundle grafana plugin typescript types for sharing with other plugins",
+  "name": "@grafana/plugin-crawler",
+  "version": "0.0.1",
+  "description": "...",
   "bin": "./dist/bin/run.js",
   "type": "module",
   "files": [

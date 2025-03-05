@@ -1,17 +1,20 @@
 import terminalLink from 'terminal-link';
-import { fetchPluginJson, getInternalPlugins } from '../api.js';
+import { fetchPluginJson, getInternalPlugins, getRateLimitInfo } from '../api.js';
 import {
+  formatRateLimitInfo,
   isNotFork,
   isNotHackathon,
   isNotIgnored,
   isPluginIdMatch,
   isPluginType,
   mapCodeSearchItem,
+  parseHrtimeToSeconds,
   sortItemsByPluginId,
 } from '../utils.js';
 import chalk from 'chalk';
 import { setConfig } from '../config.js';
 import { SearchResultItem } from '../types.js';
+import { printBlueBox, printGreenBox } from '../utils.console.js';
 
 export type PluginsCommandOptions = {
   panel: boolean;
@@ -40,6 +43,8 @@ export const pluginsCommand = async ({
   cache,
   json,
 }: PluginsCommandOptions) => {
+  const startTime = process.hrtime();
+  const rateLimitInfo = await getRateLimitInfo();
   let items: SearchResultItem[] = [];
 
   if (!cache) {
@@ -74,13 +79,17 @@ export const pluginsCommand = async ({
     .filter(isPluginType(panel, datasource, app))
     .sort(sortItemsByPluginId);
 
+  // JSON output
   if (json) {
     console.log(JSON.stringify(items, null, 2));
     return;
   }
 
-  // Non JSON
-  console.log(chalk.bold(`Number of results: ${items.length}\n`));
+  // Pretty print
+  printGreenBox({
+    title: `Grafana plugin search - ${items.length} result${items.length > 1 ? 's' : ''} (${parseHrtimeToSeconds(process.hrtime(startTime))} sec)`,
+    content: formatRateLimitInfo(rateLimitInfo),
+  });
 
   for (const item of items) {
     // Skip items that don't have a plugin.json
@@ -89,11 +98,14 @@ export const pluginsCommand = async ({
     }
 
     const columns = [
+      // ID
       chalk.bold(item.pluginJson.id),
-      item.pluginJson.type ? item.pluginJson.type.toUpperCase() : 'unknown',
-      terminalLink('plugin.json →', item.fileUrl),
-    ];
+      // Type
+      item.pluginJson.type ? chalk.bgWhite.black(` ${item.pluginJson.type} `) : '',
+      // Links
+      `| ${terminalLink('repository', item.repoUrl)}, ${terminalLink('plugin.json', item.fileUrl)}`,
+    ].filter(Boolean);
 
-    console.log('- ' + columns.filter((x) => x).join(' | '));
+    console.log('- ' + columns.join(' '));
   }
 };

@@ -59,7 +59,8 @@
     "packages/plugin-e2e",
     "packages/plugin-meta-extractor",
     "packages/plugin-types-bundler",
-    "packages/eslint-plugin-plugins"
+    "packages/eslint-plugin-plugins",
+    "packages/plugin-crawler"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
@@ -75,5 +76,11 @@
     "express": {
       "cookie": "^0.7.0"
     }
+  },
+  "dependencies": {
+    "boxen": "^8.0.1",
+    "enquirer": "^2.4.1",
+    "marked": "^15.0.7",
+    "marked-terminal": "^7.3.0"
   }
 }

@@ -78,3 +78,16 @@ export function sortItemsByPluginId(a: SearchResultItem, b: SearchResultItem) {
 
   return a.pluginJson?.id.localeCompare(b.pluginJson?.id);
 }
+
+// @ts-ignore - TODO: type `rateLimitInfo`
+export function formatRateLimitInfo(r: any) {
+  return [
+    `Github rate limit: ${r.rate.used}/${r.rate.limit} - Resetting ${getRateLimitResetsText(r.rate.reset)}`,
+    `Github core API limit: ${r.resources.core.used}/${r.resources.core.limit} - Resetting ${getRateLimitResetsText(r.resources.core.reset)}`,
+    `Github code-search API limit: ${r.resources.search.used}/${r.resources.search.limit} - Resetting ${getRateLimitResetsText(r.resources.search.reset)}`,
+  ].map((t) => `- ${t}`).join('\n');
+}
+
+export function parseHrtimeToSeconds(hrtime: [number, number]) {
+  return (hrtime[0] + (hrtime[1] / 1e9)).toFixed(3);
+}
