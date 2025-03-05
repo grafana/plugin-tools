@@ -5,7 +5,7 @@ import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { TemplateData } from '../types.js';
-import { output, printError } from '../utils/utils.console.js';
+import { output } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
 import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
 import { configureYarn } from '../utils/utils.packageManager.js';
@@ -24,7 +24,10 @@ export const generate = async (argv: minimist.ParsedArgs) => {
 
   // Prevent generation from writing to an existing, populated directory unless in DEV mode.
   if (exportPathIsPopulated && !IS_DEV) {
-    output.error({ title: `Aborting plugin scaffold. '${exportPath}' exists and contains files.` });
+    output.error({
+      title: 'Aborting plugin scaffold.',
+      body: [`Directory ${chalk.bold(exportPath)} exists and contains files.`],
+    });
     process.exit(1);
   }
   // This is only possible when a user passes both flags via the command line.
@@ -47,7 +50,11 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   output.success({ title: 'Scaffolding plugin...', body: changes });
 
   if (failures.length > 0) {
-    output.error({ title: 'Failed to scaffold the following files:', body: failures.map((f) => f.path) });
+    output.error({
+      withPrefix: false,
+      title: 'Failed to scaffold the following files:',
+      body: failures.map((f) => f.path),
+    });
   }
 
   if (templateData.packageManagerName === 'yarn') {
@@ -185,7 +192,12 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
       console.log(`${chalk.green('✔︎')} ${resultMsg}`);
     }
   } catch (error) {
-    printError(`${error}`);
+    if (error instanceof Error) {
+      output.error({
+        title: 'An error occurred while executing a post-scaffold function.',
+        body: [error.message],
+      });
+    }
   }
 }
 
