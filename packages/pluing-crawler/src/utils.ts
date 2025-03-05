@@ -3,7 +3,7 @@ import createDebug from 'debug';
 import { CLEAR_CACHE, GITHUB_PAT, ORG } from './constants.js';
 import { cacheGet, cacheSet, cacheDel } from './cache.js';
 import { getConfig } from './config.js';
-import { CodeSearchItem, CodeSearchResponse, PluginType, SearchResultItem } from './types.js';
+import { CodeSearchItem, CodeSearchResponse, SearchResultItem } from './types.js';
 import chalk from 'chalk';
 import { formatDistance } from 'date-fns';
 
@@ -358,6 +358,29 @@ export function isNotTest(item: SearchResultItem) {
   );
 }
 
+export const isPluginIdMatch = (pluginId: string) => (item: SearchResultItem) => {
+  if (!pluginId) {
+    return true;
+  }
+
+  if (pluginId && !item.pluginJson?.id) {
+    return false;
+  }
+
+  return Boolean(item.pluginJson.id.match(pluginId));
+};
+
+export const isPluginType = (panel: boolean, datasource: boolean, app: boolean) => (item: SearchResultItem) => {
+  const showAll = !panel && !datasource && !app;
+  const filters = [panel ? 'panel' : null, datasource ? 'datasource' : null, app ? 'app' : null].filter(Boolean);
+
+  if (showAll) {
+    return true;
+  }
+
+  return filters.includes(item.pluginJson.type);
+};
+
 export function sortReposByName(data: CodeSearchResponse) {
   return {
     ...data,
@@ -391,7 +414,7 @@ export function guessPluginName(filePath: string) {
   return parts[parts.length - 2] ?? '';
 }
 
-export function mapCodeSearchItem(item: CodeSearchItem, pluginType?: PluginType): SearchResultItem {
+export function mapCodeSearchItem(item: CodeSearchItem): SearchResultItem {
   const guessedPluginName = guessPluginName(item.path);
 
   return {
@@ -407,7 +430,6 @@ export function mapCodeSearchItem(item: CodeSearchItem, pluginType?: PluginType)
     repoUrl: item.repository.html_url,
     repoPrivate: item.repository.private,
     isFork: item.repository.fork,
-    pluginType: pluginType ?? 'unknown',
   };
 }
 
@@ -415,4 +437,12 @@ export function getRateLimitResetsText(resets: number) {
   const resetsDate = new Date(resets * 1000);
 
   return formatDistance(resetsDate, new Date(), { addSuffix: true });
+}
+
+export function sortItemsByPluginId(a: SearchResultItem, b: SearchResultItem) {
+  if (!a.pluginJson?.id || !b.pluginJson?.id) {
+    return a.repoNameFull.localeCompare(b.repoNameFull);
+  }
+
+  return a.pluginJson?.id.localeCompare(b.pluginJson?.id);
 }

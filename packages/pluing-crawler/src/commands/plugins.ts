@@ -1,12 +1,14 @@
 import terminalLink from 'terminal-link';
+import { fetchPluginJson, getInternalPlugins } from '../api.js';
 import {
-  fetchPluginJson,
-  getPluginById,
-  getReposWithInternalAppPlugins,
-  getReposWithInternalDatasourcePlugins,
-  getReposWithInternalPanelPlugins,
-} from '../api.js';
-import { filterAndSortSearchItems, mapCodeSearchItem } from '../utils.js';
+  isNotFork,
+  isNotHackathon,
+  isNotIgnored,
+  isPluginIdMatch,
+  isPluginType,
+  mapCodeSearchItem,
+  sortItemsByPluginId,
+} from '../utils.js';
 import chalk from 'chalk';
 import { setConfig } from '../config.js';
 import { SearchResultItem } from '../types.js';
@@ -38,38 +40,22 @@ export const pluginsCommand = async ({
   cache,
   json,
 }: PluginsCommandOptions) => {
-  const showAll = !panel && !datasource && !app;
-  const fetchDatasources = !pluginId && (showAll || datasource);
-  const fetchPanels = !pluginId && (showAll || panel);
-  const fetchApps = !pluginId && (showAll || app);
   let items: SearchResultItem[] = [];
 
   if (!cache) {
-    console.log('NO CACHE');
     setConfig({ clearCache: true });
   }
 
-  if (pluginId) {
-    const plugin = await getPluginById(pluginId);
-    items.push(...plugin.items.map((item) => mapCodeSearchItem(item)));
-  }
+  // Fetching plugins from Githuub
+  const plugins = await getInternalPlugins();
 
-  if (fetchPanels) {
-    const panels = await getReposWithInternalPanelPlugins();
-    items.push(...panels.items.map((item) => mapCodeSearchItem(item, 'panel')));
-  }
-
-  if (fetchDatasources) {
-    const datasources = await getReposWithInternalDatasourcePlugins();
-    items.push(...datasources.items.map((item) => mapCodeSearchItem(item, 'datasource')));
-  }
-
-  if (fetchApps) {
-    const apps = await getReposWithInternalAppPlugins();
-    items.push(...apps.items.map((item) => mapCodeSearchItem(item, 'app')));
-  }
-
-  items = filterAndSortSearchItems(items);
+  // Prefiltering results
+  // (we are doing it here to avoid fetching plugin.json files for items that will be filtered out)
+  items = plugins.items
+    .map((item) => mapCodeSearchItem(item))
+    .filter(isNotHackathon)
+    .filter(isNotFork)
+    .filter(isNotIgnored);
 
   // Fetching plugin.json files
   items = await Promise.all(
@@ -82,23 +68,16 @@ export const pluginsCommand = async ({
     })
   );
 
-  // Fetching package.json files
+  // Post filtering and sorting
+  items = items
+    .filter(isPluginIdMatch(pluginId))
+    .filter(isPluginType(panel, datasource, app))
+    .sort(sortItemsByPluginId);
 
   if (json) {
     console.log(JSON.stringify(items, null, 2));
     return;
   }
-
-  // Filtering again
-  items = items.filter((item) => {
-    const allowedTypes = [panel ? 'panel' : null, datasource ? 'datasource' : null, app ? 'app' : null];
-
-    if (showAll) {
-      return true;
-    }
-
-    return allowedTypes.includes(item.pluginJson.type);
-  });
 
   // Non JSON
   console.log(chalk.bold(`Number of results: ${items.length}\n`));

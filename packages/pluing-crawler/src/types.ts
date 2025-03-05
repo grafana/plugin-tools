@@ -9,8 +9,8 @@ export type SearchResultItem = {
   repoUrl: string;
   repoPrivate: boolean;
   isFork: boolean;
-  pluginType: PluginType;
   pluginJson?: any;
+  packageJson?: any;
 };
 
 export type PluginType = 'app' | 'datasource' | 'panel' | 'unknown';

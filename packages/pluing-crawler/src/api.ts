@@ -43,6 +43,11 @@ export const getPluginById = (pluginName: string) => {
   return queryFn();
 };
 
+export const getInternalPlugins = generateCodeSearchApi({
+  id: 'internal_plugins',
+  query: `"type": in:file filename:plugin.json`,
+});
+
 export const getReposWithInternalAppPlugins = generateCodeSearchApi({
   id: 'internal_plugin_repos_app',
   query: `"type": app in:file filename:plugin.json`,
