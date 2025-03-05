@@ -4,7 +4,7 @@ import path from 'node:path';
 import { CURRENT_APP_VERSION } from './utils.version.js';
 import { argv, commandName } from './utils.cli.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
-import { printBox } from './utils.console.js';
+import { output } from './utils.console.js';
 import { partitionArr } from './utils.helpers.js';
 
 export type FeatureFlags = {
@@ -103,13 +103,14 @@ function parseFeatureFlagsFromCliArgs() {
   const [knownFlags, unknownFlags] = partitionArr(flagsfromCliArgs, (item) => availableFeatureFlags.includes(item));
 
   if (unknownFlags.length > 0 && !hasShownConfigWarnings) {
-    printBox({
+    output.warning({
+      withPrefix: false,
       title: 'Warning! Unknown feature flags detected.',
-      subtitle: ``,
-      content: `The following feature-flags are unknown: ${unknownFlags.join(
-        ', '
-      )}.\n\nAvailable feature-flags are: ${availableFeatureFlags.join(', ')}`,
-      color: 'yellow',
+      body: [
+        'The following feature-flags are unknown:',
+        unknownFlags.join(', '),
+        `Available feature-flags are: ${availableFeatureFlags.join(', ')}`,
+      ],
     });
     hasShownConfigWarnings = true;
   }

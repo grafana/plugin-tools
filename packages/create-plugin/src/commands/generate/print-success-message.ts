@@ -1,4 +1,4 @@
-import { EOL, machine } from 'node:os';
+import { machine } from 'node:os';
 import chalk from 'chalk';
 import { TemplateData } from '../../types.js';
 import { output } from '../../utils/utils.console.js';
@@ -20,7 +20,7 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
         ]
       : []),
     `docker compose up ${chalk.dim('to start a grafana development server')}`,
-    'Open http://localhost:3000 in your browser to create a dashboard and begin developing your plugin',
+    `Open http://localhost:3000 in your browser ${chalk.dim('to create a dashboard and begin developing your plugin')}`,
   ]);
 
   output.log({
@@ -36,11 +36,8 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
       ),
       '',
       `   Learn more about Grafana Plugin Development at https://grafana.com/developers/plugin-tools`,
-      '',
     ],
   });
-
-  // console.log(displayAsMarkdown(msg));
 }
 
 function getBackendCmd() {
