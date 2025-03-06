@@ -3,16 +3,8 @@ import Enquirer from 'enquirer';
 import { Output } from '@libs/output';
 import { CURRENT_APP_VERSION } from './utils.version.js';
 
-export const output = new Output('create plugin', CURRENT_APP_VERSION);
+export const output = new Output('CREATE PLUGIN', CURRENT_APP_VERSION);
 const { prompt } = Enquirer;
-
-//TODO: refactor this to use the Output class
-export function printHeader(message: string, status: 'success' | 'info' | 'error' = 'success') {
-  const color = status === 'success' ? 'green' : status === 'info' ? 'blue' : 'red';
-  let prefix = chalk.reset.inverse.bold[color](` CREATE PLUGIN `);
-  let txt = chalk[color](message);
-  console.log(`${prefix}  ${txt}`);
-}
 
 export function displayArrayAsList(files: string[]) {
   return ` - ${files.map((t) => `\`${t}\``).join('\n - ')}`;
