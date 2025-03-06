@@ -23,7 +23,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "tsup",
-    "dev": "tsup --watch ./src",
+    "dev": "tsup --watch ./src --watch '../../libs'",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest",

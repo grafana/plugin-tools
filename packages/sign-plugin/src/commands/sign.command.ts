@@ -22,18 +22,16 @@ export const sign = async (argv: minimist.ParsedArgs) => {
         'Make sure to build the plugin before attempting to sign it.',
       ],
     });
-    process.exitCode = 1;
-    return;
+    process.exit(1);
   }
 
   try {
     output.log({
       title: 'Signing plugin.',
-      body: [`Plugin directory: ${pluginDistDir}`],
+      body: [`Plugin found in ${pluginDistDir}`],
     });
     const manifest = await buildManifest(pluginDistDir);
 
-    console.log('Signing manifest...');
     if (signatureType) {
       manifest.signatureType = signatureType;
     }
@@ -50,11 +48,10 @@ export const sign = async (argv: minimist.ParsedArgs) => {
 
     const signedManifest = await signManifest(manifest);
 
-    console.log('Saving signed manifest...');
     saveManifest(pluginDistDir, signedManifest);
-
     output.success({
-      title: 'Plugin signed successfully.',
+      title: `Plugin signed successsfully.`,
+      body: [`Signed manifest saved to ${pluginDistDir}.`],
     });
   } catch (err) {
     if (err instanceof Error) {
@@ -63,7 +60,6 @@ export const sign = async (argv: minimist.ParsedArgs) => {
         body: [err.message],
       });
     }
-    console.error(err);
-    process.exitCode = 1;
+    process.exit(1);
   }
 };
