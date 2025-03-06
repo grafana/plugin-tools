@@ -47,7 +47,7 @@
     "nodemon": "^3.1.9",
     "prettier": "3.5.3",
     "typescript": "^5.8.2",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.8"
   },
   "engines": {
     "node": ">=20"
