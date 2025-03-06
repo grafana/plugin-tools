@@ -1,5 +1,0 @@
-GRAFANA_IMAGE=grafana-enterprise
-GRAFANA_VERSION=myorg-nobackend-datasource-latest
-OUTPUT=failure
-PLUGIN_NAME=
-UPLOAD_REPORT_ENABLED=true
