@@ -3,7 +3,7 @@ import Enquirer from 'enquirer';
 import { Output } from '@libs/output';
 import { CURRENT_APP_VERSION } from './utils.version.js';
 
-export const output = new Output('CREATE PLUGIN', CURRENT_APP_VERSION);
+export const output = new Output('create-plugin', CURRENT_APP_VERSION);
 const { prompt } = Enquirer;
 
 export function displayArrayAsList(files: string[]) {
