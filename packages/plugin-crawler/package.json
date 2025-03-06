@@ -1,0 +1,65 @@
+{
+  "name": "@grafana/plugin-crawler",
+  "version": "0.0.1",
+  "description": "...",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
+    "dev": "tsc --project tsconfig.json --watch",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "directory": "packages/plugin-crawler",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "typescript",
+    "types",
+    "bundle"
+  ],
+  "author": "Grafana labs",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "engines": {
+    "node": ">=18.8.0"
+  },
+  "dependencies": {
+    "@grafana/levitate": "^0.16.0",
+    "@keyv/sqlite": "^4.0.1",
+    "@octokit/rest": "^21.0.2",
+    "@types/cli-table": "^0.3.4",
+    "@types/minimist": "^1.2.2",
+    "@types/node": "22.13.8",
+    "boxen": "^8.0.1",
+    "cache-manager": "^6.1.3",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "date-fns": "^4.1.0",
+    "debug": "^4.3.4",
+    "jackw-dts-bundle-gen-test": "^9.5.1",
+    "keyv": "^5.2.1",
+    "minimist": "^1.2.8",
+    "ora": "^8.2.0",
+    "semver": "^7.7.1",
+    "terminal-link": "^3.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
