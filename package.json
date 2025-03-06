@@ -75,5 +75,11 @@
     "express": {
       "cookie": "^0.7.0"
     }
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.34.9",
+    "@rspack/binding-linux-x64-gnu": "^1.2.7",
+    "@swc/html-linux-x64-gnu": "^1.11.7",
+    "lightningcss-linux-x64-gnu": "^1.29.2"
   }
 }
