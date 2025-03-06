@@ -108,10 +108,26 @@ export class Output {
     this.addNewLine();
   }
 
-  warning({ title, body, withPrefix = true }: { title: string; body?: string[]; withPrefix?: boolean }) {
+  warning({
+    title,
+    body,
+    link,
+    withPrefix = true,
+  }: {
+    title: string;
+    body?: string[];
+    link?: string;
+    withPrefix?: boolean;
+  }) {
     this.addNewLine();
     this.writeTitle('yellow', chalk.yellow.bold(title), withPrefix);
     this.writeBody(body);
+
+    if (link) {
+      this.addNewLine();
+      this.write(`${chalk.gray('For more information about this warning: ')}
+  ${chalk.cyan(link)}`);
+    }
     this.addNewLine();
   }
 
