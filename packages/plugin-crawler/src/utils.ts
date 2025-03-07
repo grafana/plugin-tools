@@ -267,10 +267,7 @@ export function prettyPrintSearchResults({
   for (const item of items) {
     const columns = [
       // Type
-      item.pluginJson.type
-        ? chalk.bgWhite.black(` ${item.pluginJson.type.slice(0, 10)} `) +
-          ' '.repeat(10 - Math.min(item.pluginJson.type.length, 10))
-        : '',
+      item.pluginJson.type ? chalk.bgWhite.black(` ${item.pluginJson.type} `) : '',
       // ID
       chalk.bold(item.pluginJson.id),
       // Vesion
