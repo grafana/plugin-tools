@@ -1,5 +1,5 @@
-import { TEXT, MIGRATION_CONFIG } from '../constants.js';
-import { displayArrayAsList, printMessage, printSuccessMessage, confirmPrompt } from '../utils/utils.console.js';
+import { MIGRATION_CONFIG } from '../constants.js';
+import { displayArrayAsList, confirmPrompt, output } from '../utils/utils.console.js';
 import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
 import {
   getExportTemplateName,
@@ -18,21 +18,34 @@ import {
   writePackageManagerInPackageJson,
 } from '../utils/utils.npm.js';
 import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
+import chalk from 'chalk';
 
 export const migrate = async () => {
   try {
     // 0. Warning
     // -----------
-    printMessage(TEXT.migrationCommandWarning);
+    output.warning({
+      title: 'Please make sure that you have backed up your changes before continuing.',
+    });
 
     // 1. Add / update configuration files
     // --------------------------
-    if (await confirmPrompt(TEXT.overrideFilesPrompt + '\n' + displayArrayAsList(MIGRATION_CONFIG.filesToOverride))) {
+    if (
+      await confirmPrompt(
+        'The following files will be overriden, would you like to continue?' +
+          '\n' +
+          displayArrayAsList(MIGRATION_CONFIG.filesToOverride)
+      )
+    ) {
       const templateData = getTemplateData();
       compileTemplateFiles(MIGRATION_CONFIG.filesToOverride.map(getExportTemplateName), templateData);
-      printSuccessMessage(TEXT.overrideFilesSuccess);
+      output.log({
+        title: 'Configuration files updated successfully.',
+      });
     } else {
-      printMessage(TEXT.overrideFilesAborted);
+      output.log({
+        title: 'Migration aborted.',
+      });
       process.exit(0);
     }
 
@@ -41,11 +54,21 @@ export const migrate = async () => {
     // --------------------------------------------
     const filesToExist = getOnlyNotExistingInCwd(MIGRATION_CONFIG.filesToExist);
     if (filesToExist.length) {
-      if (await confirmPrompt(TEXT.filesToExistPrompt + '\n' + displayArrayAsList(filesToExist))) {
+      if (
+        await confirmPrompt(
+          'The following files are necessary for the project to work, can we scaffold them for you?' +
+            '\n' +
+            displayArrayAsList(filesToExist)
+        )
+      ) {
         compileTemplateFiles(filesToExist, getTemplateData());
-        printSuccessMessage(TEXT.filesToExistSuccess);
+        output.log({
+          title: 'Extra necessaryily files created successfully.',
+        });
       } else {
-        printMessage(TEXT.filesToExistAborted);
+        output.log({
+          title: 'No extra necessary files were scaffolded.',
+        });
       }
     }
 
@@ -54,11 +77,21 @@ export const migrate = async () => {
     // --------------------------------------------
     const filesToRemove = getOnlyExistingInCwd(MIGRATION_CONFIG.filesToRemove);
     if (filesToRemove.length) {
-      if (await confirmPrompt(TEXT.removeFilesPrompt + '\n' + displayArrayAsList(filesToRemove))) {
+      if (
+        await confirmPrompt(
+          'The following files are possibly not needed for the project anymore, are you ok with us removing them?' +
+            '\n' +
+            displayArrayAsList(filesToRemove)
+        )
+      ) {
         removeFilesInCwd(filesToRemove);
-        printSuccessMessage(TEXT.removeFilesSuccess);
+        output.log({
+          title: 'Unnecessary files have been removed successfully.',
+        });
       } else {
-        printMessage(TEXT.removeFilesAborted);
+        output.log({
+          title: 'No unnecessary files were deleted.',
+        });
       }
     }
 
@@ -68,13 +101,18 @@ export const migrate = async () => {
     if (hasNpmDependenciesToUpdate()) {
       if (
         await confirmPrompt(
-          TEXT.updateNpmDependenciesPrompt + getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true })
+          'Would you like to update the following dependencies in the `package.json?`' +
+            getPackageJsonUpdatesAsText({ ignoreGrafanaDependencies: true })
         )
       ) {
         updatePackageJson({ ignoreGrafanaDependencies: true });
-        printSuccessMessage(TEXT.updateNpmDependenciesSuccess);
+        output.log({
+          title: 'Successfully updated the NPM dependencies.',
+        });
       } else {
-        printMessage(TEXT.updateNpmDependenciesAborted);
+        output.log({
+          title: 'No NPM dependencies have been updated.',
+        });
       }
     }
 
@@ -84,23 +122,41 @@ export const migrate = async () => {
     const dependenciesToRemove = getRemovableNpmDependencies(MIGRATION_CONFIG.npmDependenciesToRemove);
     const devDependenciesToRemove = getRemovableNpmDependencies(MIGRATION_CONFIG.devNpmDependenciesToRemove);
     if (dependenciesToRemove.length) {
-      if (await confirmPrompt(TEXT.removeNpmDependenciesPrompt + '\n' + displayArrayAsList(dependenciesToRemove))) {
+      if (
+        await confirmPrompt(
+          'Do you want to remove the following possibly unnecessary NPM dependencies?' +
+            '\n' +
+            displayArrayAsList(dependenciesToRemove)
+        )
+      ) {
         removeNpmDependencies(dependenciesToRemove);
         removeNpmDependencies(devDependenciesToRemove, { devOnly: true });
-        printSuccessMessage(TEXT.removeNpmDependenciesSuccess);
+        output.log({
+          title: 'Unnecessary NPM dependencies removed successfully.',
+        });
       } else {
-        printMessage(TEXT.removeNpmDependenciesAborted);
+        output.log({
+          title: 'No NPM dependencies have been removed.',
+        });
       }
     }
 
     // 6. Add / update NPM scripts
     // (skipped automatically if there is nothing to update)
     // ------------------------------------------------
-    if (await confirmPrompt(TEXT.updateNpmScriptsPrompt)) {
+    if (
+      await confirmPrompt(
+        'Would you like to update the `{ scripts }` in your `package.json`? All scripts using grafana-toolkit will be replaced.'
+      )
+    ) {
       updateNpmScripts();
-      printSuccessMessage(TEXT.updateNpmScriptsSuccess);
+      output.log({
+        title: 'NPM scripts updated successfully.',
+      });
     } else {
-      printMessage(TEXT.updateNpmScriptsAborted);
+      output.log({
+        title: 'No NPM scripts have been added or updated.',
+      });
     }
 
     // Guarantee that the package manager property is set in the package.json file if it is missing
@@ -113,8 +169,31 @@ export const migrate = async () => {
 
     // 7. Summary
     // -------------
-    printSuccessMessage(TEXT.migrationCommandSuccess);
+
+    const nextSteps = output.bulletList([
+      'Run \`yarn install\` to install the latest dependencies.',
+      'Check your tsconfig.json. You might need to update if you had a custom configuration.',
+      'If you have a custom webpack configuration you might need to update it too.',
+      'Run \`yarn build\` and observe the output for any errors.',
+      'Test your plugin in grafana and make sure everything works as expected.',
+    ]);
+
+    output.success({
+      title: 'Migration completed successfully.',
+      body: [
+        chalk.bold("What's next?"),
+        ...nextSteps,
+        'See instructions on how to customize your configuration here: https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#extend-configurations',
+      ],
+    });
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      output.error({
+        title: 'An error occurred while migrating the project.',
+        body: [error.message],
+      });
+    } else {
+      console.error(error);
+    }
   }
 };
