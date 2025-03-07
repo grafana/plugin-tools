@@ -1,3 +1,15 @@
+# v5.18.5 (Fri Mar 07 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix timeouts with canary e2e tests [#1606](https://github.com/grafana/plugin-tools/pull/1606) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.18.4 (Mon Mar 03 2025)
 
 #### 🐛 Bug Fix
