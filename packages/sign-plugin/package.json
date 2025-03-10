@@ -38,15 +38,6 @@
   "devDependencies": {
     "@types/minimist": "^1.2.5"
   },
-  "nodemonConfig": {
-    "watch": [
-      "src/**/*"
-    ],
-    "ext": "*",
-    "events": {
-      "start": "cls || clear"
-    }
-  },
   "engines": {
     "node": ">=20"
   }

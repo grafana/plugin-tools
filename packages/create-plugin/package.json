@@ -58,19 +58,6 @@
       "marked": "^15.0.0"
     }
   },
-  "nodemonConfig": {
-    "watch": [
-      "src/**/*",
-      "templates/**/*"
-    ],
-    "ext": "*",
-    "events": {
-      "start": "cls || clear"
-    },
-    "env": {
-      "CREATE_PLUGIN_DEV": true
-    }
-  },
   "engines": {
     "node": ">=20"
   }
