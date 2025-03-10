@@ -1,6 +1,6 @@
 {
   "name": "@grafana/eslint-plugin-plugins",
-  "version": "0.2.0",
+  "version": "0.2.4",
   "description": "An ESlint plugin with Grafana plugin specific rules",
   "main": "./dist/index.js",
   "files": [
@@ -51,10 +51,10 @@
   "devDependencies": {
     "@types/eslint": "^9.6.1",
     "@types/semver": "^7.5.8",
-    "@typescript-eslint/parser": "^8.24.1",
-    "@typescript-eslint/rule-tester": "^8.24.1",
+    "@typescript-eslint/parser": "^8.26.0",
+    "@typescript-eslint/rule-tester": "^8.26.0",
     "concurrently": "^9.1.2",
-    "tsup": "^8.3.6"
+    "tsup": "^8.4.0"
   },
   "peerDependencies": {
     "@types/eslint": "^8.56.10 || ^9.0.0",

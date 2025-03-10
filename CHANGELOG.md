@@ -1,3 +1,85 @@
+# (Fri Mar 07 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.5`
+  - Create Plugin: Fix timeouts with canary e2e tests [#1606](https://github.com/grafana/plugin-tools/pull/1606) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Mar 03 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.4`
+  - Create Plugin: Externalise unstable entrypoints [#1580](https://github.com/grafana/plugin-tools/pull/1580) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Feb 25 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.18.3`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-226761 [#1573](https://github.com/grafana/plugin-tools/pull/1573) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Feb 21 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.3`
+  - Create Plugin: fix absolute path being interpreted by shell [#1560](https://github.com/grafana/plugin-tools/pull/1560) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-types-bundler@0.2.5`
+  - Plugin Types Bundler: Update the .tsconfig [#1561](https://github.com/grafana/plugin-tools/pull/1561) ([@leventebalogh](https://github.com/leventebalogh))
+
+#### Authors: 1
+
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+
+---
+
+# (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/eslint-plugin-plugins@0.2.1`
+  - ESLint: reduces false positives [#1555](https://github.com/grafana/plugin-tools/pull/1555) ([@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.18.1`
+  - chore(deps): update dependency @grafana/e2e-selectors to v11.5.2 [#1510](https://github.com/grafana/plugin-tools/pull/1510) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Wed Feb 19 2025)
 
 #### 🚀 Enhancement
