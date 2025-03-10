@@ -141,7 +141,7 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Install playwright dependencies
-        run: npm exec playwright install chromium
+        run: npm exec playwright install chromium --with-deps
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Get secrets for DockerHub login
