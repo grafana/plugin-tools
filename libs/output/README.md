@@ -1,10 +1,8 @@
 # Libs/Output
 
-This library consists of a single class "Output".
+A utility library providing consistent terminal output formatting with support for colors, status icons, and branded prefixes.
 
 ## Usage
-
-The `Output` class provides consistent terminal output formatting with support for colors, status icons, and branded prefixes.
 
 Instantiate the Output class with the cli name and optionally a version.
 
@@ -22,7 +20,7 @@ const output = new Output('MyApp', '1.0.0');
 
 - `success({ title: string, body?: string[], withPrefix?: boolean })` - Displays a success message in green
 - `error({ title: string, body?: string[], link?: string, withPrefix?: boolean })` - Displays an error message in red with optional help link
-- `warning({ title: string, body?: string[], withPrefix?: boolean })` - Displays a warning message in yellow
+- `warning({ title: string, body?: string[],link?: string, withPrefix?: boolean })` - Displays a warning message in yellow
 - `log({ title: string, body?: string[], color?: Colors, withPrefix?: boolean })` - Displays a message with optional color
 
 #### Formatting
