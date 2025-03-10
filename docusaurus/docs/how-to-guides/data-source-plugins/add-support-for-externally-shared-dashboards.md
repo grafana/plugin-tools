@@ -12,7 +12,7 @@ keywords:
   - datasource
 ---
 
-Externally shared dashboards (previously called Public dashboards) retrieve the query from the backend, instead of receiving it from the frontend. This is to avoid exposing sensitive data and performing unauthorized queries.
+[Externally shared dashboards](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/shared-dashboards/#externally-shared-dashboards) (previously called Public dashboards) allow Grafana users to share access to their dashboards with anyone, without needing to add them to their Grafana organization as a user. When a dashboard is accessed in this way, it retrieves the query from the backend, instead of receiving it from the frontend. This is to avoid exposing sensitive data and performing unauthorized queries.
 
 Because of this, it's necessary to not pass any frontend-transformed body to the request, as it won't be used in the externally shared dashboard panel request.
 
