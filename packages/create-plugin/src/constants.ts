@@ -5,9 +5,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export const IS_DEV = process.env.CREATE_PLUGIN_DEV !== undefined;
 
-export const DEV_EXPORT_DIR = path.join(__dirname, '..', 'generated');
-
-export const EXPORT_PATH_PREFIX = IS_DEV ? DEV_EXPORT_DIR : process.cwd();
+export const EXPORT_PATH_PREFIX = process.cwd();
 
 export const DIST_DIR = path.join(__dirname, 'dist');
 

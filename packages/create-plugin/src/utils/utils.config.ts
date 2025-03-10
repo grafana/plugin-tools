@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { getVersion } from './utils.version.js';
 import { argv, commandName } from './utils.cli.js';
@@ -91,7 +92,7 @@ function readRCFileSync(path: string): CreatePluginConfig | undefined {
 // This function creates feature flags based on the defaults for generate command else flags read from config.
 // In all cases it will override the flags with the featureFlag cli arg values.
 function createFeatureFlags(flags?: FeatureFlags): FeatureFlags {
-  const featureFlags = commandName === 'generate' ? DEFAULT_FEATURE_FLAGS : flags ?? {};
+  const featureFlags = commandName === 'generate' ? DEFAULT_FEATURE_FLAGS : (flags ?? {});
   const cliArgFlags = parseFeatureFlagsFromCliArgs();
   return { ...featureFlags, ...cliArgFlags };
 }
@@ -116,4 +117,14 @@ function parseFeatureFlagsFromCliArgs() {
   return knownFlags.reduce((acc, flag) => {
     return { ...acc, [flag]: true };
   }, {} as FeatureFlags);
+}
+
+export async function setRootConfig(configOverride: Partial<CreatePluginConfig> = {}): Promise<CreatePluginConfig> {
+  const rootConfig = getRootConfig();
+  const rootConfigPath = path.resolve(process.cwd(), '.config/.cprc.json');
+  const updatedConfig = { ...rootConfig, ...configOverride };
+
+  await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2));
+
+  return updatedConfig;
 }

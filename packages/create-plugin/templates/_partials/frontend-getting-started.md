@@ -34,11 +34,14 @@
    {{ packageManagerName }} run server
    ```
 
-6. Run the E2E tests (using Cypress)
+6. Run the E2E tests (using Playwright)
 
    ```bash
    # Spins up a Grafana instance first that we tests against
    {{ packageManagerName }} run server
+
+   # If you wish to start a certain Grafana version. If not specified will use latest by default
+   GRAFANA_VERSION=11.3.0 {{ packageManagerName }} run server
 
    # Starts the tests
    {{ packageManagerName }} run e2e

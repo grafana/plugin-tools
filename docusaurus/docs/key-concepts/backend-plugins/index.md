@@ -91,7 +91,7 @@ A backend plugin can collect and return runtime, process, and custom metrics usi
 
 ### Streaming
 
-The streaming capability allows a backend plugin to handle data source queries that are streaming. For more information, refer to an example for a [streaming data source plugin](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-streaming-backend-websocket).
+The streaming capability allows a backend plugin to handle data source queries that are streaming. For more information, refer to the tutorial for a [streaming data source plugin](../../tutorials/build-a-streaming-data-source-plugin.md).
 
 ## Data communication model
 

@@ -1,4 +1,3 @@
-import * as semver from 'semver';
 import { test, expect } from '@grafana/plugin-e2e';
 
 test('should display "No data" in case panel data is empty', async ({
@@ -22,23 +21,15 @@ test('should display circle when data is passed to the panel', async ({
 });
 
 test('should display series counter when "Show series counter" option is enabled', async ({
-  panelEditPage,
-  readProvisionedDataSource,
+  gotoPanelEditPage,
+  readProvisionedDashboard,
   page,
-  selectors,
-  grafanaVersion
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
-  await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization('{{titleCase pluginName }}');
-  await panelEditPage.collapseSection('{{titleCase pluginName }}');
-  await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
-  const seriesCounterLabel = panelEditPage.getByGrafanaSelector(
-    selectors.components.PanelEditor.OptionsPane.fieldLabel('{{titleCase pluginName }} Show series counter')
-  );
-  const switchField = semver.gte(grafanaVersion, '11.4.0')
-    ? seriesCounterLabel.getByRole('switch')
-    : seriesCounterLabel.getByLabel('Toggle switch');
-  await switchField.click({ force: true });
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
+  const options = panelEditPage.getCustomOptions('{{titleCase pluginName }}');
+  const showSeriesCounter = options.getSwitch('Show series counter');
+
+  await showSeriesCounter.check();
   await expect(page.getByTestId('simple-panel-series-counter')).toBeVisible();
 });

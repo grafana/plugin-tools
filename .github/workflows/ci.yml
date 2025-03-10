@@ -1,9 +1,16 @@
 name: Node CI
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
 
 jobs:
   test:
@@ -57,6 +64,7 @@ jobs:
     permissions:
       id-token: write
     strategy:
+      fail-fast: false
       matrix:
         include:
           - workingDir: 'myorg-nobackend-app'
@@ -149,23 +157,78 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
-      - name: Start grafana server for e2e tests
-        run: ANONYMOUS_AUTH_ENABLED=false docker compose up -d
+      - name: Start grafana server for e2e tests (latest)
+        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=latest docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Wait for grafana server
+      - name: Wait for grafana server (latest)
         uses: grafana/plugin-actions/wait-for-grafana@main
         with:
           url: http://localhost:3000/login
 
-      - name: Run e2e tests
+      - name: Run e2e tests (latest)
         id: run-e2e-tests
+        continue-on-error: true
         run: npm run e2e
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Stop grafana docker
-        run: docker compose down
+      - name: Stop grafana docker (latest)
+        run: docker stop ${{ matrix.workingDir }} && docker rm ${{ matrix.workingDir }} docker compose rm -f
         working-directory: ./${{ matrix.workingDir }}
+
+      - name: Upload e2e test summary (latest)
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
+        with:
+          plugin-name: ${{ matrix.workingDir }}
+          report-dir: ./${{ matrix.workingDir }}/playwright-report
+          grafana-version: latest
+          grafana-image: grafana-enterprise
+          test-outcome: ${{ steps.run-e2e-tests.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get plugin min version
+        id: min-version
+        run: |
+          sudo apt-get install -y jq
+          npm install semver
+          range=$(jq -r .dependencies.grafanaDependency < ${{ matrix.workingDir }}/src/plugin.json)
+          # Use node-semver to get the min version of the range
+          min_version=$(node -e "console.log(require('semver').minVersion('${range}')?.toString())")
+          export MIN_VERSION=$min_version
+          echo "MIN_VERSION=${MIN_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
+        run: |
+          docker compose pull
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
+          docker compose up -d
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
+        uses: grafana/plugin-actions/wait-for-grafana@main
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
+        id: run-e2e-tests-min-version
+        run: npm run e2e
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Stop grafana docker (${{ steps.min-version.outputs.MIN_VERSION }})
+        run: docker stop ${{ matrix.workingDir }} && docker rm ${{ matrix.workingDir }} docker compose rm -f
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
+        with:
+          plugin-name: ${{ matrix.workingDir }}
+          report-dir: ./${{ matrix.workingDir }}/playwright-report
+          grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
+          grafana-image: grafana-enterprise
+          test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check plugin.json
         run: |
@@ -178,14 +241,6 @@ jobs:
             grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
 
         working-directory: ./${{ matrix.workingDir }}
-
-      - name: Archive E2E output
-        uses: actions/upload-artifact@v4
-        if: ${{ steps.run-e2e-tests.outcome != 'success' }}
-        with:
-          name: ${{ matrix.workingDir }}-playwright-report
-          path: ./${{ matrix.workingDir }}/playwright-report/
-          retention-days: 5
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
@@ -210,6 +265,21 @@ jobs:
           sed -i '/^work\/$/d' .gitignore
           npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
         working-directory: ./${{ matrix.workingDir }}
+
+      - name: Failing build due to test failures (canary versions)
+        if: steps.run-e2e-tests.outcome != 'success' || steps.run-e2e-tests-min-version.outcome != 'success'
+        run: exit 1
+
+  publish-report:
+    if: ${{ always() && !cancelled() }}
+    needs: [generate-plugins]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     runs-on: ubuntu-latest
