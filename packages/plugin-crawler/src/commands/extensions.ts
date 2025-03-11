@@ -17,6 +17,7 @@ export type ExtensionsCommandOptions = {
   exposedComponents: boolean;
   exposedComponentUsages: boolean;
   cache: boolean;
+  filter: boolean;
   json: string;
   verbose: boolean;
 };
@@ -29,6 +30,7 @@ export const extensionsCommand = async ({
   exposedComponents,
   exposedComponentUsages,
   cache,
+  filter,
   json,
   verbose,
 }: ExtensionsCommandOptions) => {
@@ -44,6 +46,7 @@ export const extensionsCommand = async ({
 
     // For extensions we are only interested in app plugins (for now at least)
     isApp: true,
+    filter,
   });
 
   items = items.filter(

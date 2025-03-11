@@ -8,6 +8,7 @@ import createDebug from 'debug';
 import { getConfig } from './config.js';
 import { CodeSearchItem, SearchResultItem } from './types.js';
 
+let isSpinnerEnabled = true;
 const spinner = ora('Loading').start();
 export const debug = createDebug('plugin-crawler');
 
@@ -57,8 +58,36 @@ export function hasPackageJson(item: SearchResultItem) {
 }
 
 export function isNotTest(item: SearchResultItem) {
+  const { ignoredWords } = getConfig();
   const path = `${item.repoNameFull}/${item.filePath}`;
-  if (path.match('test') || path.match('spec') || path.match('mock') || path.match('e2e') || path.match('fixture')) {
+
+  if (ignoredWords.some((word) => path.match(word))) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isNotTestPluginId(item: SearchResultItem) {
+  const { ignoredWords } = getConfig();
+  const pluginId = item.pluginJson?.id;
+
+  if (!pluginId) {
+    return false;
+  }
+
+  if (ignoredWords.some((word) => pluginId.match(word))) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isNotTestByPluginId(item: SearchResultItem) {
+  const path = `${item.repoNameFull}/${item.filePath}`;
+  const filterWords = ['test', 'spec', 'mock', 'e2e', 'fixture', 'example', 'tutorial', 'dummy', 'training'];
+
+  if (filterWords.some((word) => path.match(word))) {
     return false;
   }
 
@@ -361,16 +390,31 @@ export function createAsciiTree(nodes: TreeNode[], prefix = '') {
   return rows;
 }
 
-export function startSpinner() {
-  spinner.start();
-}
-
-export function endSpinner() {
+export function disableSpinner() {
+  isSpinnerEnabled = false;
   spinner.stop();
 }
 
+export function enableSpinner() {
+  isSpinnerEnabled = true;
+}
+
+export function startSpinner() {
+  if (isSpinnerEnabled) {
+    spinner.start();
+  }
+}
+
+export function endSpinner() {
+  if (isSpinnerEnabled) {
+    spinner.stop();
+  }
+}
+
 export function setSpinnerText(text: string) {
-  spinner.text = text;
+  if (isSpinnerEnabled) {
+    spinner.text = text;
+  }
 }
 
 export function printBox({

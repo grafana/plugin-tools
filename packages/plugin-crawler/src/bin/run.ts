@@ -20,6 +20,10 @@ program
   .option('--datasource', 'List datasource plugins')
   .option('--app', 'List app plugins')
   .option('--no-cache', 'Disables cachcing and re-fetches all data')
+  .option(
+    '--no-filter',
+    'Disables filtering out plugins that are not meant to be for production (e.g. tests, templates, fixtures, etc)'
+  )
   .option('--json', 'Prints out data as JSON')
   .option('-v, --verbose', 'Prints out a more detailed output')
   .description('Get information about plugins')
@@ -35,6 +39,10 @@ program
   .option('--exposedComponents', 'List plugins that are exposing components')
   .option('--exposedComponentUsages', 'List plugins that are consuming exposed components')
   .option('--no-cache', 'Disables cachcing and re-fetches all data')
+  .option(
+    '--no-filter',
+    'Disables filtering out plugins that are not meant to be for production (e.g. tests, templates, fixtures, etc)'
+  )
   .option('--json', 'Prints out data as JSON')
   .option('-v, --verbose', 'Prints out a more detailed output')
   .description('Get information about usages of the extensions framework in internal app plugins.')
