@@ -47,3 +47,6 @@ playwright/.auth
 # Used in CI to pass built packages to the next job
 packed-artifacts/
 .mise.toml
+
+# Used locally when testing via npm pack
+packages/**/grafana-*.tgz
