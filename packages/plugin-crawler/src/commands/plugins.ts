@@ -1,5 +1,12 @@
 import { getPlugins, getRateLimitInfo } from '../api.js';
-import { prettyPrintSearchResults, getCommandStartTime, startSpinner, endSpinner, setSpinnerText } from '../utils.js';
+import {
+  prettyPrintSearchResults,
+  getCommandStartTime,
+  startSpinner,
+  endSpinner,
+  setSpinnerText,
+  disableSpinner,
+} from '../utils.js';
 import { setConfig } from '../config.js';
 
 export type PluginsCommandOptions = {
@@ -10,6 +17,7 @@ export type PluginsCommandOptions = {
   datasource: boolean;
   app: boolean;
   cache: boolean;
+  filter: boolean;
   json: boolean;
   verbose: boolean;
 };
@@ -22,9 +30,13 @@ export const pluginsCommand = async ({
   datasource,
   app,
   cache,
+  filter,
   json,
   verbose,
 }: PluginsCommandOptions) => {
+  if (json) {
+    disableSpinner();
+  }
   startSpinner();
   const startTime = getCommandStartTime();
 
@@ -39,6 +51,7 @@ export const pluginsCommand = async ({
     isApp: app,
     pluginJsonFieldDefined,
     dependency,
+    filter,
   });
 
   endSpinner();

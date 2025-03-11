@@ -12,6 +12,7 @@ import {
   isNotNestedPlugin,
   isNotTemplate,
   isNotTest,
+  isNotTestPluginId,
   isPluginIdMatch,
   isPluginJsonFieldDefined,
   isPluginType,
@@ -29,6 +30,7 @@ export const getPlugins = async ({
   isApp,
   pluginJsonFieldDefined,
   dependency,
+  filter,
 }: {
   id: string;
   isPanel?: boolean;
@@ -36,6 +38,7 @@ export const getPlugins = async ({
   isApp?: boolean;
   pluginJsonFieldDefined?: string;
   dependency?: string[];
+  filter: boolean;
 }) => {
   let items: SearchResultItem[] = [];
   setSpinnerText('Fetching plugins from GitHub');
@@ -43,14 +46,17 @@ export const getPlugins = async ({
 
   // Prefiltering
   // (Doing it here to avoid extra requests - we don't have all info yet for proper filtering)
-  items = plugins.items
-    .map((item) => mapCodeSearchItem(item))
-    .filter(isNotHackathon)
-    .filter(isNotFork)
-    .filter(isNotTest)
-    .filter(isNotTemplate)
-    .filter(isNotNestedPlugin) // we currently don't support nested plugins (due to them missing a package.json)
-    .filter(isRepoNotIgnored);
+  items = plugins.items.map((item) => mapCodeSearchItem(item));
+
+  if (filter) {
+    items = items
+      .filter(isNotHackathon)
+      .filter(isNotFork)
+      .filter(isNotTest)
+      .filter(isNotTemplate)
+      .filter(isNotNestedPlugin) // we currently don't support nested plugins (due to them missing a package.json)
+      .filter(isRepoNotIgnored);
+  }
 
   // Fetching plugin.json files
   setSpinnerText('Fetching plugin.json files');
@@ -77,6 +83,10 @@ export const getPlugins = async ({
   );
 
   // Post filtering and sorting
+  if (filter) {
+    items = items.filter(isNotTestPluginId);
+  }
+
   return items
     .filter(isPluginIdMatch(id))
     .filter(isPluginType(isPanel, isDatasource, isApp))
