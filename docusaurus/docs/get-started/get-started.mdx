@@ -196,7 +196,7 @@ To build for production, run:
 
 ### Build the backend
 
-If your plugin includes a [backend](../key-concepts/backend-plugins/index.md) component, you can build using mage:
+If your plugin includes a [backend](../key-concepts/backend-plugins/index.md) component, you can build using Mage:
 
 ```shell
 mage -v build:linux
@@ -207,12 +207,19 @@ mage -v build:linux
 | Option         | Description                                  | Example               |
 | -------------- | -------------------------------------------- | --------------------- |
 | `build:[arch]` | Builds a binary for a specific architecture. | `mage -v build:Linux` |
+| `build:backend` | Builds a production build for the current platform. | `mage -v build:backend` |
 
 List all available Mage targets for additional commands:
 
 ```bash
 mage -l
 ```
+
+:::note
+
+There is a mismatch between AMD, ARM64, and the Docker container which may cause the backend Delve debugger dev env to fail to run on Apple silicon.
+
+:::
 
 ### Run the Grafana server
 
