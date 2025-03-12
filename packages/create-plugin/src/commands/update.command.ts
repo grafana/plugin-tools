@@ -3,7 +3,6 @@ import { standardUpdate } from './update.standard.command.js';
 import { migrationUpdate } from './update.migrate.command.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { output } from '../utils/utils.console.js';
-import chalk from 'chalk';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
