@@ -1,5 +1,5 @@
 import { test, expect } from '../../../src';
-import { lte } from 'semver';
+import { lt, lte } from 'semver';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -139,18 +139,20 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
   await expect(timeZonePicker).toHaveSelected('Europe/Stockholm');
 });
 
-test('collapse expanded options group', async ({ gotoPanelEditPage }) => {
+test('collapse expanded options group', async ({ gotoPanelEditPage, grafanaVersion }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
-  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+  const datalinksLabel = lt(grafanaVersion, '11.6.0') ? 'Data links' : 'Data links and actions';
+  const dataLinksOptions = panelEdit.getCustomOptions(datalinksLabel);
 
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
   await dataLinksOptions.collapse();
   expect(await dataLinksOptions.isExpanded()).toBeFalsy();
 });
 
-test('expand collapsed options group', async ({ gotoPanelEditPage }) => {
+test('expand collapsed options group', async ({ gotoPanelEditPage, grafanaVersion }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
-  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+  const datalinksLabel = lt(grafanaVersion, '11.6.0') ? 'Data links' : 'Data links and actions';
+  const dataLinksOptions = panelEdit.getCustomOptions(datalinksLabel);
 
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
   await dataLinksOptions.collapse();
