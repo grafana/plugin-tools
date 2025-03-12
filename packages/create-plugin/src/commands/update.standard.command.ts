@@ -30,7 +30,7 @@ export const standardUpdate = async () => {
     output.success({
       title: 'Update successful',
       body: output.bulletList([
-        `@grafana/* package version updated to: ${getGrafanaRuntimeVersion()}`,
+        `@grafana packages version updated to: ${getGrafanaRuntimeVersion()}`,
         `@grafana/create-plugin version updated to: ${CURRENT_APP_VERSION}`,
       ]),
     });
@@ -38,7 +38,7 @@ export const standardUpdate = async () => {
     output.addHorizontalLine('gray');
 
     const nextStepsList = output.bulletList([
-      `Run ${chalk.bold(`${packageManagerName} install`)} to install the package updates`,
+      `Run ${output.formatCode(`${packageManagerName} install`)} to install dependency updates`,
       `If you encounter breaking changes, refer to our migration guide: ${chalk.cyan('https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions')}`,
     ]);
     const haveQuestionsList = output.bulletList([

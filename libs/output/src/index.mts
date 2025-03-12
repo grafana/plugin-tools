@@ -102,7 +102,7 @@ export class Output {
 
     if (link) {
       this.addNewLine();
-      this.write(`${chalk.gray('For more information about this error: ')}
+      this.write(`${chalk.gray('Learn more about this error: ')}
   ${chalk.cyan(link)}`);
     }
     this.addNewLine();
@@ -125,7 +125,7 @@ export class Output {
 
     if (link) {
       this.addNewLine();
-      this.write(`${chalk.gray('For more information about this warning: ')}
+      this.write(`${chalk.gray('Learn more about this warning: ')}
   ${chalk.cyan(link)}`);
     }
     this.addNewLine();
@@ -149,6 +149,10 @@ export class Output {
     return list.map((item) => {
       return ` • ${item}`;
     });
+  }
+
+  formatCode(code: string) {
+    return chalk.reset.italic.yellow(code);
   }
 
   statusList(status: TaskStatus, list: string[]) {

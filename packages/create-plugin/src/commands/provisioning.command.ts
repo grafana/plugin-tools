@@ -32,7 +32,7 @@ export const provisioning = async () => {
       output.log({
         title: 'No provisioning has been added.',
       });
-      process.exit(1);
+      process.exit(0);
     }
   } catch (error) {
     let message;

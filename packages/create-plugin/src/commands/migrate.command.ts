@@ -63,11 +63,7 @@ export const migrate = async () => {
       ) {
         compileTemplateFiles(filesToExist, getTemplateData());
         output.log({
-          title: 'Extra necessaryily files created successfully.',
-        });
-      } else {
-        output.log({
-          title: 'No extra necessary files were scaffolded.',
+          title: 'Extra files created successfully.',
         });
       }
     }
@@ -88,10 +84,6 @@ export const migrate = async () => {
         output.log({
           title: 'Unnecessary files have been removed successfully.',
         });
-      } else {
-        output.log({
-          title: 'No unnecessary files were deleted.',
-        });
       }
     }
 
@@ -108,10 +100,6 @@ export const migrate = async () => {
         updatePackageJson({ ignoreGrafanaDependencies: true });
         output.log({
           title: 'Successfully updated the NPM dependencies.',
-        });
-      } else {
-        output.log({
-          title: 'No NPM dependencies have been updated.',
         });
       }
     }
@@ -134,10 +122,6 @@ export const migrate = async () => {
         output.log({
           title: 'Unnecessary NPM dependencies removed successfully.',
         });
-      } else {
-        output.log({
-          title: 'No NPM dependencies have been removed.',
-        });
       }
     }
 
@@ -153,10 +137,6 @@ export const migrate = async () => {
       output.log({
         title: 'NPM scripts updated successfully.',
       });
-    } else {
-      output.log({
-        title: 'No NPM scripts have been added or updated.',
-      });
     }
 
     // Guarantee that the package manager property is set in the package.json file if it is missing
@@ -171,10 +151,10 @@ export const migrate = async () => {
     // -------------
 
     const nextSteps = output.bulletList([
-      'Run \`yarn install\` to install the latest dependencies.',
+      `Run ${output.formatCode('yarn install')} to install the latest dependencies.`,
       'Check your tsconfig.json. You might need to update if you had a custom configuration.',
       'If you have a custom webpack configuration you might need to update it too.',
-      'Run \`yarn build\` and observe the output for any errors.',
+      `Run ${output.formatCode('yarn build')} and observe the output for any errors.`,
       'Test your plugin in grafana and make sure everything works as expected.',
     ]);
 
