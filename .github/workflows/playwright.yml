@@ -69,9 +69,8 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Start Grafana
+        working-directory: ./packages/plugin-e2e
         run: |
-          cd packages/plugin-e2e
-          docker compose pull
           ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
       - name: Wait for grafana server
