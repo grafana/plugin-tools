@@ -100,3 +100,4 @@ jobs:
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          retention-days: 7
