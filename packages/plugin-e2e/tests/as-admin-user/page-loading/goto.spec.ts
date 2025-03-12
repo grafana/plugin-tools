@@ -1,4 +1,3 @@
-import * as semver from 'semver';
 import { test, expect } from '../../../src';
 
 test.describe('gotoDashboardPage', () => {

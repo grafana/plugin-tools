@@ -1,4 +1,4 @@
-import { test, expect, PanelEditPage } from '../../../../src';
+import { test, expect } from '../../../../src';
 
 test('variable interpolation', async ({ readProvisionedDashboard, gotoDashboardPage }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });

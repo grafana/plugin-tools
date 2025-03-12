@@ -1,6 +1,5 @@
-import { Locator } from '@playwright/test';
-import { test, expect, PanelEditPage, E2ESelectorGroups } from '../../../src';
-import { gte, lte } from 'semver';
+import { test, expect } from '../../../src';
+import { lte } from 'semver';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -106,7 +105,7 @@ test('enter value in number input', async ({ gotoPanelEditPage }) => {
   await expect(lineWith).toHaveValue('10');
 });
 
-test('select color in color picker', async ({ gotoPanelEditPage, grafanaVersion, page, selectors }) => {
+test('select color in color picker', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '3' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const backgroundColor = clockOptions.getColorPicker('Background color');
