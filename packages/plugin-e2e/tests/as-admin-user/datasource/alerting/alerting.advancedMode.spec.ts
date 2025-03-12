@@ -59,7 +59,6 @@ test.describe('Test new alert rules', () => {
     alertRuleEditPage,
     selectors,
     readProvisionedDataSource,
-    page,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const { rows } = selectors.components.QueryEditorRows;

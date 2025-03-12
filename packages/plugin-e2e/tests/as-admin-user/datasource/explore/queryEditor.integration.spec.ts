@@ -1,4 +1,4 @@
-const semver = require('semver');
+import { lt } from 'semver';
 import { expect, test } from '../../../../src';
 
 test('should return data and not display panel error when a valid query is provided', async ({
@@ -26,7 +26,7 @@ test('explore page should display table and time series panel only for certain q
   explorePage,
   grafanaVersion,
 }) => {
-  const params = semver.lt(grafanaVersion, '10.0.0')
+  const params = lt(grafanaVersion, '10.0.0')
     ? 'left=%7B"datasource":"grafana","queries":%5B%7B"queryType":"randomWalk","refId":"A","datasource":%7B"type":"datasource","uid":"grafana"%7D%7D%5D,"range":%7B"from":"1547161200000","to":"1576364400000"%7D%7D&orgId=1'
     : `panes=%7B"_t4":%7B"datasource":"grafana","queries":%5B%7B"queryType":"randomWalk","refId":"A","datasource":%7B"type":"datasource","uid":"grafana"%7D%7D%5D,"range":%7B"from":"now-6h","to":"now"%7D%7D%7D&orgId=1&left=%7B"datasource":"grafana","queries":%5B%7B"refId":"A","datasource":%7B"type":"datasource","uid":"grafana"%7D,"queryType":"randomWalk"%7D%5D,"range":%7B"from":"now-1h","to":"now"%7D%7D`;
 
