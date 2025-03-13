@@ -17,8 +17,8 @@
   ],
   "scripts": {
     "test": "vitest --passWithNoTests",
-    "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
-    "dev": "tsc --project tsconfig.json --watch",
+    "build": "tsup",
+    "dev": "tsup --watch ./src",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit"

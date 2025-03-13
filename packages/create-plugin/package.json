@@ -23,15 +23,14 @@
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
     "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/package-lock.json\" -maxdepth 1 -print0 | xargs -0  -I {} rm -rf {}",
-    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
-    "dev": "nodemon --exec 'tsc'",
+    "build": "tsup --config ../../tsup.config.ts",
+    "dev": "tsup --watch ./src --watch '../../libs'",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "boxen": "^8.0.0",
     "chalk": "^5.3.0",
     "change-case": "^5.4.0",
     "debug": "^4.3.4",
@@ -39,8 +38,6 @@
     "find-up": "^7.0.0",
     "glob": "^11.0.0",
     "handlebars": "^4.7.8",
-    "marked": "^15.0.0",
-    "marked-terminal": "^7.2.0",
     "minimist": "^1.2.8",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
@@ -48,7 +45,6 @@
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
-    "@types/marked-terminal": "^6.1.1",
     "@types/minimist": "^1.2.5",
     "@types/semver": "^7.5.8",
     "@types/tmp": "^0.2.6",
@@ -60,19 +56,6 @@
   "overrides": {
     "@types/marked-terminal": {
       "marked": "^15.0.0"
-    }
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src/**/*",
-      "templates/**/*"
-    ],
-    "ext": "*",
-    "events": {
-      "start": "cls || clear"
-    },
-    "env": {
-      "CREATE_PLUGIN_DEV": true
     }
   },
   "engines": {
