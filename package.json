@@ -45,7 +45,7 @@
     "lerna": "^8.1.9",
     "lint-staged": "^15.5.0",
     "prettier": "3.5.3",
-    "tsup": "^8.3.6",
+    "tsup": "^8.4.0",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
   },
