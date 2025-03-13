@@ -20,7 +20,7 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
         ]
       : []),
     `${output.formatCode('docker compose up')} ${chalk.dim('to start a grafana development server')}`,
-    `Open ${chalk.cyan('http://localhost:3000')} in your browser ${chalk.dim('to begin developing your plugin')}`,
+    `Open ${output.formatUrl('http://localhost:3000')} ${chalk.dim('in your browser to begin developing your plugin')}`,
   ]);
 
   output.log({
@@ -33,7 +33,7 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
         `Note: We strongly recommend creating a new Git repository by running ${output.formatCode('git init')} in ./${directory} before continuing.`
       ),
       '',
-      `   Learn more about Grafana Plugin Development at ${chalk.cyan('https://grafana.com/developers/plugin-tools')}`,
+      `   Learn more about Grafana Plugin Development at ${output.formatUrl('https://grafana.com/developers/plugin-tools')}`,
     ],
   });
 }

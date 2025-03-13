@@ -126,7 +126,7 @@ export class Output {
     if (link) {
       this.addNewLine();
       this.write(`${chalk.gray('Learn more about this warning: ')}
-  ${chalk.cyan(link)}`);
+  ${this.formatUrl(link)}`);
     }
     this.addNewLine();
   }
@@ -152,7 +152,11 @@ export class Output {
   }
 
   formatCode(code: string) {
-    return chalk.reset.italic.yellow(code);
+    return chalk.italic.cyan(code);
+  }
+
+  formatUrl(url: string) {
+    return chalk.reset.blue.underline(url);
   }
 
   statusList(status: TaskStatus, list: string[]) {

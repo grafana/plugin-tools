@@ -39,12 +39,12 @@ export const standardUpdate = async () => {
 
     const nextStepsList = output.bulletList([
       `Run ${output.formatCode(`${packageManagerName} install`)} to install dependency updates`,
-      `If you encounter breaking changes, refer to our migration guide: ${chalk.cyan('https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions')}`,
+      `If you encounter breaking changes, refer to our migration guide: ${output.formatUrl('https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions')}`,
     ]);
     const haveQuestionsList = output.bulletList([
-      `Open an issue in ${chalk.cyan('https://github.com/grafana/plugin-tools')}`,
-      `Ask a question in the community forum at ${chalk.cyan('https://community.grafana.com/c/plugin-development/30')}`,
-      `Join our community slack channel at ${chalk.cyan('https://slack.grafana.com')}`,
+      `Open an issue in ${output.formatUrl('https://github.com/grafana/plugin-tools')}`,
+      `Ask a question in the community forum at ${output.formatUrl('https://community.grafana.com/c/plugin-development/30')}`,
+      `Join our community slack channel at ${output.formatUrl('https://slack.grafana.com')}`,
     ]);
 
     output.log({
