@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "1.18.3",
+  "version": "1.19.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
