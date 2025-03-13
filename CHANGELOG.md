@@ -1,3 +1,22 @@
+# (Thu Mar 13 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Juan Cabanas ([@juanicabanas](https://github.com/juanicabanas)), for all your work!
+
+#### 🚀 Enhancement
+
+- Docs: Externally shared dashboard datasource plugin support [#1496](https://github.com/grafana/plugin-tools/pull/1496) ([@juanicabanas](https://github.com/juanicabanas))
+- `@grafana/create-plugin@5.19.0`, `@grafana/plugin-e2e@1.19.0`, `@grafana/plugin-types-bundler@0.3.0`, `@grafana/sign-plugin@3.1.0`
+  - Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Juan Cabanas ([@juanicabanas](https://github.com/juanicabanas))
+
+---
+
 # (Fri Mar 07 2025)
 
 #### 🐛 Bug Fix
