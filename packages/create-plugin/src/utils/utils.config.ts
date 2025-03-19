@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { getVersion } from './utils.version.js';
+import { CURRENT_APP_VERSION } from './utils.version.js';
 import { argv, commandName } from './utils.cli.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
-import { printBox } from './utils.console.js';
+import { output } from './utils.console.js';
 import { partitionArr } from './utils.helpers.js';
 
 export type FeatureFlags = {
@@ -48,7 +48,7 @@ function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
     const rootConfig = readRCFileSync(rootPath);
 
     return {
-      version: getVersion(),
+      version: CURRENT_APP_VERSION,
       ...rootConfig,
       features: rootConfig!.features ?? {},
     };
@@ -56,7 +56,7 @@ function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
     // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
   } catch (error) {
     return {
-      version: getVersion(),
+      version: CURRENT_APP_VERSION,
       features: {},
     };
   }
@@ -103,13 +103,14 @@ function parseFeatureFlagsFromCliArgs() {
   const [knownFlags, unknownFlags] = partitionArr(flagsfromCliArgs, (item) => availableFeatureFlags.includes(item));
 
   if (unknownFlags.length > 0 && !hasShownConfigWarnings) {
-    printBox({
+    output.warning({
+      withPrefix: false,
       title: 'Warning! Unknown feature flags detected.',
-      subtitle: ``,
-      content: `The following feature-flags are unknown: ${unknownFlags.join(
-        ', '
-      )}.\n\nAvailable feature-flags are: ${availableFeatureFlags.join(', ')}`,
-      color: 'yellow',
+      body: [
+        'The following feature-flags are unknown:',
+        unknownFlags.join(', '),
+        `Available feature-flags are: ${availableFeatureFlags.join(', ')}`,
+      ],
     });
     hasShownConfigWarnings = true;
   }

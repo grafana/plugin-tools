@@ -1,3 +1,61 @@
+# (Mon Mar 17 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@1.19.1`
+  - Update dependency @grafana/e2e-selectors to ^11.6.0-229231 [#1594](https://github.com/grafana/plugin-tools/pull/1594) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Thu Mar 13 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Juan Cabanas ([@juanicabanas](https://github.com/juanicabanas)), for all your work!
+
+#### 🚀 Enhancement
+
+- Docs: Externally shared dashboard datasource plugin support [#1496](https://github.com/grafana/plugin-tools/pull/1496) ([@juanicabanas](https://github.com/juanicabanas))
+- `@grafana/create-plugin@5.19.0`, `@grafana/plugin-e2e@1.19.0`, `@grafana/plugin-types-bundler@0.3.0`, `@grafana/sign-plugin@3.1.0`
+  - Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Juan Cabanas ([@juanicabanas](https://github.com/juanicabanas))
+
+---
+
+# (Fri Mar 07 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.5`
+  - Create Plugin: Fix timeouts with canary e2e tests [#1606](https://github.com/grafana/plugin-tools/pull/1606) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Mar 03 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.18.4`
+  - Create Plugin: Externalise unstable entrypoints [#1580](https://github.com/grafana/plugin-tools/pull/1580) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Feb 25 2025)
 
 #### 🐛 Bug Fix

@@ -195,12 +195,12 @@ jobs:
           range=$(jq -r .dependencies.grafanaDependency < ${{ matrix.workingDir }}/src/plugin.json)
           # Use node-semver to get the min version of the range
           min_version=$(node -e "console.log(require('semver').minVersion('${range}')?.toString())")
-          echo "::set-output name=MIN_VERSION::$min_version"
           export MIN_VERSION=$min_version
+          echo "MIN_VERSION=${MIN_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
         run: |
-          docker compose pull 
+          docker compose pull
           ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
           docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
@@ -280,6 +280,7 @@ jobs:
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          retention-days: 7
 
   release:
     runs-on: ubuntu-latest

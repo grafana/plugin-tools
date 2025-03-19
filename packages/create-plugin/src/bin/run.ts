@@ -4,12 +4,16 @@ import minimist from 'minimist';
 import { generate, update, migrate, version, provisioning } from '../commands/index.js';
 import { isUnsupportedPlatform } from '../utils/utils.os.js';
 import { argv, commandName } from '../utils/utils.cli.js';
+import { output } from '../utils/utils.console.js';
 
 // Exit early if operating system isn't supported.
 if (isUnsupportedPlatform()) {
-  console.error(
-    "Unsupported operating system 'Windows' detected. Please use WSL with create-plugin. For more info visit: https://grafana.com/developers/plugin-tools/troubleshooting#i-am-getting-unsupported-operating-system-windows-detected-please-use-wsl-with-create-plugin"
-  );
+  output.error({
+    title: 'Unsupported operating system detected',
+    body: ['Create plugin does not support Windows. Please use WSL.'],
+    link: 'https://grafana.com/developers/plugin-tools/troubleshooting',
+  });
+
   process.exit(1);
 }
 

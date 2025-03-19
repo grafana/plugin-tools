@@ -1,3 +1,15 @@
+# v0.3.0 (Thu Mar 13 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.2.5 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix

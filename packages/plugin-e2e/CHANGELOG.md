@@ -1,3 +1,27 @@
+# v1.19.1 (Mon Mar 17 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.6.0-229231 [#1594](https://github.com/grafana/plugin-tools/pull/1594) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.19.0 (Thu Mar 13 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v1.18.3 (Tue Feb 25 2025)
 
 #### 🐛 Bug Fix
