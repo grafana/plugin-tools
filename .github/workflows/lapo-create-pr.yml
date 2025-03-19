@@ -1,0 +1,28 @@
+name: Lapo Docs Create docs PR for merged PR
+
+on:
+  repository_dispatch:
+    types: [pr-merged]
+  workflow_dispatch:
+    inputs:
+      pr_url:
+        description: 'PR URL'
+        required: true
+
+jobs:
+  print-params:
+    runs-on: ubuntu-latest
+    steps:
+      # this allows to test both with manual trigger and repository_dispatch
+      - name: Set PR URL
+        id: set-pr-url
+        run: |
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            echo "url=${{ github.event.client_payload.pr_url }}" >> $GITHUB_OUTPUT
+          else
+            echo "url=${{ github.event.inputs.pr_url }}" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Print PR URL
+        run: |
+          echo "PR URL: ${{ steps.set-pr-url.outputs.url }}"

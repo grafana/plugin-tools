@@ -1,4 +1,4 @@
-name: Lapo Docs Embeddings
+name: Lapo Docs Generate Embeddings
 
 on:
   push:
