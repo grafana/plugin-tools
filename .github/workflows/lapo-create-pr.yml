@@ -12,6 +12,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   print-params:
@@ -34,6 +35,7 @@ jobs:
       - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@main
         id: generate-embeddings
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           docs-path: docusaurus/docs
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
