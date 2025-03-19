@@ -38,4 +38,5 @@ jobs:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           embeddings-action: lapo-generate-embeddings.yml
+          source-change-pr: ${{ steps.set-pr-url.outputs.url }}
 
