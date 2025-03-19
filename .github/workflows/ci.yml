@@ -290,7 +290,8 @@ jobs:
     env:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NPM_TOKEN: "__token__"
     permissions:
       contents: read
       id-token: write
@@ -320,14 +321,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
+          # registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci --no-audit
 
       - name: Debug NPM --config
-        run: npm config ls -l | grep legacy
+        run: npm config ls -l
 
       - name: Build
         run: npm run build
@@ -335,7 +336,7 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           # comes from the get-secrets step (shared get-vault-secrets workflow)
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         run: npm run release
