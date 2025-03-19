@@ -1,4 +1,4 @@
-name: Upload Files to GCS
+name: Lapo Docs Embeddings
 
 on:
   push:
