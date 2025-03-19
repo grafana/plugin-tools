@@ -9,6 +9,9 @@ on:
         description: 'PR URL'
         required: true
 
+permissions:
+  contents: write
+
 jobs:
   print-params:
     runs-on: ubuntu-latest
@@ -26,3 +29,11 @@ jobs:
       - name: Print PR URL
         run: |
           echo "PR URL: ${{ steps.set-pr-url.outputs.url }}"
+
+      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@main
+        id: generate-embeddings
+        with:
+          docs-path: docusaurus/docs
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          embeddings-action: lapo-generate-embeddings.yml
+

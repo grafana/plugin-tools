@@ -17,7 +17,6 @@ jobs:
       - uses: grafana/lapo-docs/github-actions/generate-embeddings@main
         id: generate-embeddings
         with:
-          gcs-bucket: lapo-embeddings
           docs-path: docusaurus/docs
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
 
