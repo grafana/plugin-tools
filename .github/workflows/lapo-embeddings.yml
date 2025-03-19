@@ -1,0 +1,22 @@
+name: Upload Files to GCS
+
+on:
+  push:
+    branches:
+      - academo/test-lapo
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  generate-docs-embeddings:
+    name: generate-docs-embeddings
+    runs-on: ubuntu-x64-small
+    steps:
+      - uses: grafana/lapo-docs/github-actions/generate-embeddings
+        id: generate-embeddings
+        with:
+          gcs-bucket: lapo-embeddings
+          docs-path: docusaurus/docs
+
