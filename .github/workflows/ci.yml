@@ -326,6 +326,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit
 
+      - name: Debug NPM --config
+        run: npm config ls -l | grep legacy
+
       - name: Build
         run: npm run build
 
