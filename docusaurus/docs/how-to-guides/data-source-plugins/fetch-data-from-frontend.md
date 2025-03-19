@@ -82,11 +82,11 @@ type TODO = {
 };
 
 export class DataSource extends DataSourceApi {
-  baseUrl: string;
+  proxyUrl: string;
   constructor(instanceSettings: DataSourceInstanceSettings) {
     super(instanceSettings);
     // notice we are storing the URL from the instanceSettings
-    this.baseUrl = instanceSettings.url!;
+    this.proxyUrl = instanceSettings.url!;
   }
 
   async query(options: DataQueryRequest): Promise<DataQueryResponse> {
