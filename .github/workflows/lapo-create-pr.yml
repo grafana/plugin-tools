@@ -8,10 +8,6 @@ on:
       pr_url:
         description: 'PR URL'
         required: true
-  push:
-    branches:
-      - academo/test-lapo
-
 
 jobs:
   print-params:
