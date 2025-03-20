@@ -12,10 +12,11 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
   issues: write
 
 jobs:
-  print-params:
+  run-lapo-docs:
     runs-on: ubuntu-latest
     steps:
       - id: get-secrets
