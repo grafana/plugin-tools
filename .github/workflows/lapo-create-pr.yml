@@ -26,9 +26,9 @@ jobs:
           repo_secrets: |
             GITHUB_APP_ID=plugins-platform-bot-app:app_id
             GITHUB_APP_PEM=plugins-platform-bot-app:app_pem
+            ANTHROPIC_API_KEY=anthropic_key:anthropic_key
+            OPENAI_API_KEY=open_ai_key:open_ai_key
             GEMINI_API_KEY=gemini_api_key:gemini_api_key
-            ANTHROPIC_API_KEY:anthropic_key:anthropic_key
-            OPENAI_API_KEY:open_ai_key:open_ai_key
 
       - name: Generate token
         id: generate_token
@@ -59,7 +59,7 @@ jobs:
           docs-path: docusaurus/docs
           gemini-api-key: ${{ env.GEMINI_API_KEY }}
           anthropic-api-key: ${{ env.ANTHROPIC_API_KEY }}
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          openai-api-key: ${{ env.OPENAI_API_KEY }}
           embeddings-action: lapo-generate-embeddings.yml
           source-change-pr: ${{ steps.set-pr-url.outputs.url }}
 
