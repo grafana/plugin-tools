@@ -3,7 +3,9 @@ name: Lapo Docs Generate Embeddings
 on:
   push:
     branches:
-      - academo/test-lapo
+      - master
+    paths:
+      - 'docusaurus/docs/**/*.md'
 
 permissions:
   contents: read
