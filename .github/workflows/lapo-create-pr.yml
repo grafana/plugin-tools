@@ -59,7 +59,7 @@ jobs:
           docs-path: docusaurus/docs
           gemini-api-key: ${{ env.GEMINI_API_KEY }}
           anthropic-api-key: ${{ env.ANTHROPIC_API_KEY }}
-          openai-api-key: ${{ env.OPENAI_API_KEY }}
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           embeddings-action: lapo-generate-embeddings.yml
           source-change-pr: ${{ steps.set-pr-url.outputs.url }}
 
