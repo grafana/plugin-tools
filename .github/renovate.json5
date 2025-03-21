@@ -73,7 +73,7 @@
       "groupSlug": "dev-dependencies-automerge",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["devDependencies"],
+      "matchDepTypes": ["devDependencies", "optionalDependencies"],
       "excludePackageNames": ["@grafana/e2e-selectors"],
       "rangeStrategy": "bump"
     },
