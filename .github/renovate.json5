@@ -4,6 +4,7 @@
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
   "ignoreDeps": ["react", "react-dom", "@stylistic/eslint-plugin-ts", "lerna"],
   "separateMajorMinor": false,
+  "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
   "postUpdateOptions": ["npmDedupe"],
@@ -73,7 +74,7 @@
       "groupSlug": "dev-dependencies-automerge",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["devDependencies"],
+      "matchDepTypes": ["devDependencies", "optionalDependencies"],
       "excludePackageNames": ["@grafana/e2e-selectors"],
       "rangeStrategy": "bump"
     },
