@@ -4,6 +4,7 @@
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
   "ignoreDeps": ["react", "react-dom", "@stylistic/eslint-plugin-ts", "lerna"],
   "separateMajorMinor": false,
+  "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
   "postUpdateOptions": ["npmDedupe"],
