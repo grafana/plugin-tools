@@ -6,7 +6,7 @@ test('should navigate to app config page for provided plugin id when created', a
 });
 
 test('should wait for plugin config settings API to respond', async ({ gotoAppConfigPage, page }) => {
-  const configPage = await gotoAppConfigPage({ pluginId: 'redis-app' });
+  const configPage = await gotoAppConfigPage({ pluginId: 'redis-app', waitUntil: 'networkidle' });
   await page.route(
     '/api/plugins/redis-app/settings',
     async (route) => {
