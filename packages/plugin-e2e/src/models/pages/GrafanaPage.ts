@@ -19,7 +19,8 @@ export abstract class GrafanaPage {
       url += `?${queryParams.toString()}`;
     }
     await this.ctx.page.goto(url, {
-      waitUntil: 'load',
+      waitUntil: 'networkidle',
+      timeout: 0,
       ...this.pageArgs,
       ...options,
     });
