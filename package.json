@@ -77,9 +77,9 @@
     }
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.34.9",
-    "@rspack/binding-linux-x64-gnu": "^1.2.7",
-    "@swc/html-linux-x64-gnu": "^1.11.7",
-    "lightningcss-linux-x64-gnu": "^1.29.2"
+    "@rollup/rollup-linux-x64-gnu": "^4.36.0",
+    "@rspack/binding-linux-x64-gnu": "^1.2.8",
+    "@swc/html-linux-x64-gnu": "^1.11.11",
+    "lightningcss-linux-x64-gnu": "^1.29.3"
   }
 }
