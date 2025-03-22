@@ -44,3 +44,4 @@ ci/
 .idea
 
 .eslintcache
+plugin.generated.ts
