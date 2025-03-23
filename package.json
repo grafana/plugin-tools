@@ -29,7 +29,7 @@
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^8.0.0",
     "@stylistic/eslint-plugin-ts": "^3.1.0",
-    "@swc/core": "^1.11.11",
+    "@swc/core": "^1.11.12",
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/recommended": "^1.0.8",
     "@types/node": "22.13.11",
@@ -38,7 +38,7 @@
     "auto": "11.3.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-jsdoc": "^50.6.8",
+    "eslint-plugin-jsdoc": "^50.6.9",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "husky": "^9.1.7",
@@ -77,9 +77,9 @@
     }
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.36.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.37.0",
     "@rspack/binding-linux-x64-gnu": "^1.2.8",
-    "@swc/html-linux-x64-gnu": "^1.11.11",
+    "@swc/html-linux-x64-gnu": "^1.11.12",
     "lightningcss-linux-x64-gnu": "^1.29.3"
   }
 }
