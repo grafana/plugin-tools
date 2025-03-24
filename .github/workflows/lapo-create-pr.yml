@@ -1,0 +1,65 @@
+name: Lapo Docs Create docs PR for merged PR
+
+on:
+  repository_dispatch:
+    types: [pr-merged]
+  workflow_dispatch:
+    inputs:
+      pr_url:
+        description: 'PR URL'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+  issues: write
+
+jobs:
+  run-lapo-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets-v1.1.0
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools
+          repo_secrets: |
+            GITHUB_APP_ID=plugins-platform-bot-app:app_id
+            GITHUB_APP_PEM=plugins-platform-bot-app:app_pem
+            ANTHROPIC_API_KEY=anthropic_key:anthropic_key
+            OPENAI_API_KEY=open_ai_key:open_ai_key
+            GEMINI_API_KEY=gemini_api_key:gemini_api_key
+
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@3eb77c7243b85c65e84acfa93fdbac02fb6bd532
+        with:
+          app_id: ${{ env.GITHUB_APP_ID }}
+          private_key: ${{ env.GITHUB_APP_PEM }}
+
+
+      # this allows to test both with manual trigger and repository_dispatch
+      - name: Set PR URL
+        id: set-pr-url
+        run: |
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            echo "url=${{ github.event.client_payload.pr_url }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=${{ github.event.inputs.pr_url }}" >> "$GITHUB_OUTPUT"
+          fi
+      
+      - name: Print PR URL
+        run: |
+          echo "PR URL: ${{ steps.set-pr-url.outputs.url }}"
+
+      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@main
+        id: generate-embeddings
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          docs-path: docusaurus/docs
+          gemini-api-key: ${{ env.GEMINI_API_KEY }}
+          anthropic-api-key: ${{ env.ANTHROPIC_API_KEY }}
+          openai-api-key: ${{ env.OPENAI_API_KEY }}
+          embeddings-action: lapo-generate-embeddings.yml
+          source-change-pr: ${{ steps.set-pr-url.outputs.url }}
+
