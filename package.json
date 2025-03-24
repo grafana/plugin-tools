@@ -29,10 +29,10 @@
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^8.0.0",
     "@stylistic/eslint-plugin-ts": "^3.1.0",
-    "@swc/core": "^1.11.12",
-    "@tsconfig/node20": "^20.1.4",
+    "@swc/core": "^1.11.13",
+    "@tsconfig/node20": "^20.1.5",
     "@tsconfig/recommended": "^1.0.8",
-    "@types/node": "22.13.11",
+    "@types/node": "22.13.13",
     "@typescript-eslint/eslint-plugin": "^8.27.0",
     "@typescript-eslint/parser": "^8.27.0",
     "auto": "11.3.0",
@@ -79,7 +79,7 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.37.0",
     "@rspack/binding-linux-x64-gnu": "^1.2.8",
-    "@swc/html-linux-x64-gnu": "^1.11.12",
+    "@swc/html-linux-x64-gnu": "^1.11.13",
     "lightningcss-linux-x64-gnu": "^1.29.3"
   }
 }
