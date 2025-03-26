@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@types/eslint": "^9.6.1",
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.0",
     "@typescript-eslint/parser": "^8.28.0",
     "@typescript-eslint/rule-tester": "^8.28.0",
     "concurrently": "^9.1.2",

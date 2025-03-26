@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/minimist": "^1.2.5",
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
     "@types/which": "^3.0.4",
     "eslint-plugin-react": "^7.37.4",
