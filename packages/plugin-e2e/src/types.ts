@@ -42,7 +42,7 @@ export type PluginOptions = {
    * The feature toggles you specify here will only work in the frontend. If you need a feature toggle to work across the entire stack, you
    * need to need to enable the feature in the Grafana config. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
    *
-   * To override feature toggles globally in the playwright.config.ts file: 
+   * To override feature toggles globally in the playwright.config.ts file:
    * export default defineConfig({
       use: {
         featureToggles: {
@@ -51,7 +51,7 @@ export type PluginOptions = {
         },
       },
     });
-   * 
+   *
    * To override feature toggles for tests in a certain file:
      test.use({
       featureToggles: {
@@ -109,9 +109,9 @@ export type PluginFixture = {
   /**
    * Fixture command that login to Grafana using the Grafana API and stores the cookie state on disk.
    * The file name for the storage state will be `playwright/.auth/<username>.json`, so it's important that the username is unique.
-   * 
-   * If you have not specified a user, the default admin/admin credentials will be used. 
-   * 
+   *
+   * If you have not specified a user, the default admin/admin credentials will be used.
+   *
    * e.g
    * projects: [
       {
@@ -130,7 +130,7 @@ export type PluginFixture = {
       }
     }
    *
-   * If your plugin supports RBAC, you may want to use different projects for different roles. 
+   * If your plugin supports RBAC, you may want to use different projects for different roles.
    * In the following example, a new user with the role `Viewer` gets created and authenticated in a `createUserAndAuthenticate` project.
    * In the `viewer` project, authentication state from the previous project is used in all tests in the ./tests/viewer folder.
    * projects: [
@@ -440,7 +440,13 @@ export interface TimeRangeArgs {
   zone?: string;
 }
 
-export type GrafanaPageArgs = NavigateOptions;
+export type GrafanaPageArgs = NavigateOptions & {
+  /**
+   * Optional hook function that will be called before navigation.
+   * The hook can modify the URL and options before they are used for navigation.
+   */
+  beforeNavigate?: (url: string, options: NavigateOptions) => { url: string; options: NavigateOptions };
+};
 
 export type DashboardPageArgs = GrafanaPageArgs & {
   /**

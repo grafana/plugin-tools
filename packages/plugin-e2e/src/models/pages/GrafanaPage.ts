@@ -18,6 +18,18 @@ export abstract class GrafanaPage {
     if (queryParams) {
       url += `?${queryParams.toString()}`;
     }
+
+    // Apply the beforeNavigate hook if it exists
+    if (this.pageArgs.beforeNavigate) {
+      const { url: modifiedUrl, options: modifiedOptions } = this.pageArgs.beforeNavigate(url, {
+        waitUntil: 'networkidle',
+        ...this.pageArgs,
+        ...options,
+      });
+      url = modifiedUrl;
+      options = modifiedOptions;
+    }
+
     await this.ctx.page.goto(url, {
       waitUntil: 'networkidle',
       ...this.pageArgs,
