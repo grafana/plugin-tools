@@ -14,17 +14,6 @@ export abstract class GrafanaPage {
   ) {}
 
   protected async navigate(url: string, options?: NavigateOptions) {
-    // Ensure the docked menu is closed
-    // useful for consistent screenshots
-    await this.ctx.page.addInitScript(
-      (keys) => {
-        keys.forEach((key) => {
-          window.localStorage.setItem(key, 'false');
-        });
-      },
-      [DOCKED_MENU_OPEN_LOCAL_STORAGE_KEY, DOCKED_MENU_DOCKED_LOCAL_STORAGE_KEY]
-    );
-
     let queryParams = options?.queryParams ? options.queryParams : this.pageArgs.queryParams;
     if (queryParams) {
       url += `?${queryParams.toString()}`;
@@ -101,7 +90,3 @@ export abstract class GrafanaPage {
     });
   }
 }
-// taken from Grafana
-// see https://github.com/grafana/grafana/blob/852d032e1ae1f7c989d8b2ec7d8e05bf2a54928e/public/app/core/components/AppChrome/AppChromeService.tsx#L32-L33
-export const DOCKED_MENU_OPEN_LOCAL_STORAGE_KEY = 'grafana.navigation.open';
-export const DOCKED_MENU_DOCKED_LOCAL_STORAGE_KEY = 'grafana.navigation.docked';
