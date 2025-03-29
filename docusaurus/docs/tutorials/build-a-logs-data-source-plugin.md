@@ -554,7 +554,7 @@ export class ExampleDatasource
         return undefined;
     }
   }
-  
+
   private getLogsSampleDataProvider(
     request: DataQueryRequest<ExampleQuery>,
     options?: LogsSampleOptions
