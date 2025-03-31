@@ -13,9 +13,11 @@ yarn-error.log*
 
 # Cache
 .eslintcache
+.nx
 
 # IDE
 .vscode
+.cursor
 
 # Misc
 .DS_Store
@@ -42,7 +44,6 @@ packages/plugin-e2e/playwright/.cache/
 packages/plugin-e2e/playwright/.auth
 playwright/.cache/
 playwright/.auth
-.nx
 
 # Used in CI to pass built packages to the next job
 packed-artifacts/
