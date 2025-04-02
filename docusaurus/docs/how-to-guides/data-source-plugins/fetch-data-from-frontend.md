@@ -86,7 +86,7 @@ export class DataSource extends DataSourceApi {
   constructor(instanceSettings: DataSourceInstanceSettings) {
     super(instanceSettings);
     // notice we are storing the URL from the instanceSettings
-    this.baseUrl = instanceSettings.url!;
+    this.proxyUrl = instanceSettings.url!;
   }
 
   async query(options: DataQueryRequest): Promise<DataQueryResponse> {
@@ -94,8 +94,8 @@ export class DataSource extends DataSourceApi {
       // You can see above that `this.baseUrl` is set in the constructor
       // in this example we assume the configured url is
       // https://jsonplaceholder.typicode.com
-      /// if you inspect `this.baseUrl` you'll see the Grafana data proxy url
-      url: `${this.baseUrl}/todos`,
+      /// if you inspect `this.proxyUrl` you'll see the Grafana data proxy url
+      url: `${this.proxyUrl}/todos`,
     });
     // backendSrv fetch returns an observable object
     // we should unwrap with rxjs
