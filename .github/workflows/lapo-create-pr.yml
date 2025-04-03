@@ -34,8 +34,8 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
         with:
-          app_id: ${{ env.GITHUB_APP_ID }}
-          private_key: ${{ env.GITHUB_APP_PEM }}
+          app-id: ${{ env.GITHUB_APP_ID }}
+          private-key: ${{ env.GITHUB_APP_PEM }}
 
 
       # this allows to test both with manual trigger and repository_dispatch
