@@ -34,7 +34,11 @@ __webpack_public_path__ =
 `,
 });
 
-const config = async (env): Promise<Configuration> => {
+export type Env = {
+  [key: string]: true | string | Env;
+};
+
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig: Configuration = {
     cache: {
       type: 'filesystem',
