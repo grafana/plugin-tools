@@ -35,7 +35,9 @@ __webpack_public_path__ =
 `,
 });
 
-export type Env = Record<string, true | string | Env>
+export type Env = {
+  [key: string]: true | string | Env;
+};
 
 const config = async (env: Env): Promise<Configuration> => {
   const baseConfig: Configuration = {
