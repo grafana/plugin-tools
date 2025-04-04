@@ -34,6 +34,7 @@
     "@types/node": "^20.8.7",{{#if isAppType}}{{#unless useReactRouterV6}}
     "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}{{/if}}
     "@types/testing-library__jest-dom": "5.14.8",
+    "@types/webpack-livereload-plugin": "^2.3.6",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
     "copy-webpack-plugin": "^11.0.0",
