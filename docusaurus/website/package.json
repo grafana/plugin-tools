@@ -35,7 +35,7 @@
     "@docusaurus/tsconfig": "^3.7.0",
     "dotenv": "^16.4.7",
     "raw-loader": "^4.0.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "browserslist": {
     "production": [
