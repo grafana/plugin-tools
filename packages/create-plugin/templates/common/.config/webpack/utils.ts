@@ -50,17 +50,14 @@ export async function getEntries() {
     })
   );
 
-  return plugins.reduce(
-    (result, modules) => {
-      return modules.reduce((innerResult, module) => {
-        const pluginPath = path.dirname(module);
-        const pluginName = path.relative(process.cwd(), pluginPath).replace(/src\/?/i, '');
-        const entryName = pluginName === '' ? 'module' : `${pluginName}/module`;
+  return plugins.reduce<Record<string, string>>((result, modules) => {
+    return modules.reduce((innerResult, module) => {
+      const pluginPath = path.dirname(module);
+      const pluginName = path.relative(process.cwd(), pluginPath).replace(/src\/?/i, '');
+      const entryName = pluginName === '' ? 'module' : `${pluginName}/module`;
 
-        innerResult[entryName] = module;
-        return innerResult;
-      }, result);
-    },
-    {} as Record<string, string>
-  );
+      innerResult[entryName] = module;
+      return innerResult;
+    }, result);
+  }, {});
 }
