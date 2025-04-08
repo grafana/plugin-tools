@@ -10,7 +10,6 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit --project ../../tsconfig.base.json",
-    "test": "vitest run",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src"
   }

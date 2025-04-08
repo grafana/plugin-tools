@@ -20,8 +20,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsup",
-    "dev": "tsup --watch ./src",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "server": "docker compose up --build",
@@ -45,17 +45,5 @@
     "semver": "^7.5.4",
     "uuid": "^11.0.2",
     "yaml": "^2.3.4"
-  },
-  "tsup": {
-    "entry": [
-      "./src"
-    ],
-    "format": [
-      "cjs"
-    ],
-    "clean": true,
-    "bundle": false,
-    "dts": true,
-    "shims": true
   }
 }
