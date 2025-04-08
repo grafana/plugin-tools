@@ -3,6 +3,7 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["default", "{workspaceRoot}/rollup.config.ts"],
       "outputs": ["{projectRoot}/dist"],
       "cache": true
     },
