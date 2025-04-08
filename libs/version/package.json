@@ -1,0 +1,17 @@
+{
+  "name": "@libs/version",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "peerDependencies": {
+    "find-up": "^6.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit --project ../../tsconfig.base.json",
+    "test": "vitest run",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src"
+  }
+}

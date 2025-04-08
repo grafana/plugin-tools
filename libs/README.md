@@ -1,14 +1,4 @@
-This directory contains internal libraries that share functionality across the packages. They are not npm workspaces, their inclusion in the published packages is due to:
+This directory contains internal libraries that share functionality across the packages. They are private npm workspaces and are not published to the npm registry. Any package that wishes to consume them should do the following:
 
-- TSconfig [paths](../tsconfig.base.json).
-- Vitest [aliases](../vitest.config.base.ts) - which are built from the TSconfig paths.
-- Using a bundler to bundle the internal library code into the consuming package.
-
-  ```json
-  {
-    "scripts": {
-      "build": "tsup --config ../../tsup.config.ts",
-      "dev": "tsup --watch ./src --watch '../../libs'"
-    }
-  }
-  ```
+1. Add the lib as a dev dependency to the workspaces package.json
+2.
