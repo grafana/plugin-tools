@@ -4,10 +4,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { inspect } from 'node:util';
-import { defineConfig, RollupOptions } from 'rollup';
+import { defineConfig, RollupOptions, Plugin } from 'rollup';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
+import { chmod } from 'node:fs/promises';
 
 const projectRoot = process.cwd();
 const tsconfigPath = join(projectRoot, 'tsconfig.json');
@@ -53,6 +54,7 @@ const defaultOptions: Array<Partial<RollupOptions>> = [
         target: 'es2020',
         tsconfig: tsconfigPath,
       }),
+      shebang(),
     ],
   },
 ];
@@ -81,4 +83,19 @@ export default defineConfig(defaultOptions);
 function getSourceFilePath(filePath: string) {
   const relativePath = filePath.replace('dist', '').replace(/\.js$/, '.ts');
   return join(preserveModulesRoot, relativePath);
+}
+
+// Make files with a shebang executable
+function shebang(): Plugin {
+  return {
+    name: 'shebang',
+    async writeBundle(options, bundle) {
+      for (const [fileName, chunk] of Object.entries(bundle)) {
+        if (chunk.type === 'chunk' && /\.(cjs|js|mjs)$/.test(fileName) && chunk.code.startsWith('#!')) {
+          const filePath = options.dir ? `${options.dir}/${fileName}` : fileName;
+          await chmod(filePath, 0o755);
+        }
+      }
+    },
+  };
 }
