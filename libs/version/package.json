@@ -9,7 +9,7 @@
     "find-up": "^6.0.0"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit --project ../../tsconfig.base.json",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src"
   }
