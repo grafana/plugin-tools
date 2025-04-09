@@ -25,6 +25,12 @@ if (pkg.bin) {
 if (pkg.main) {
   input.push(getSourceFilePath(pkg.main));
 }
+
+// TODO: Remove this once we have a better way to handle the auth.setup.ts file
+if (pkg.name === '@grafana/plugin-e2e') {
+  input.push(join(preserveModulesRoot, 'auth', 'auth.setup.ts'));
+}
+
 if (pkg.dependencies) {
   external.push(...Object.keys(pkg.dependencies));
 }
@@ -61,7 +67,7 @@ const defaultOptions: Array<Partial<RollupOptions>> = [
 
 if (pkg.types) {
   defaultOptions.push({
-    input,
+    input: getSourceFilePath(pkg.types),
     output: {
       file: pkg.types,
       format: pkg.type === 'module' ? 'esm' : 'cjs',
@@ -81,7 +87,13 @@ if (process.env.DEBUG_ROLLUP_CONFIG) {
 export default defineConfig(defaultOptions);
 
 function getSourceFilePath(filePath: string) {
-  const relativePath = filePath.replace('dist', '').replace(/\.js$/, '.ts');
+  let relativePath = filePath.replace('dist\/', '');
+  if (relativePath.endsWith('.d.ts')) {
+    relativePath = relativePath.replace(/\.d\.ts$/, '.ts');
+  } else if (relativePath.endsWith('.js')) {
+    relativePath = relativePath.replace(/\.js$/, '.ts');
+  }
+
   return join(preserveModulesRoot, relativePath);
 }
 
