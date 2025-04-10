@@ -4,6 +4,7 @@ import { flushChanges, printChanges } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
+import { output } from '../utils/utils.console.js';
 
 describe('utils', () => {
   const tmpObj = dirSync({ unsafeCleanup: true });
@@ -47,14 +48,22 @@ describe('utils', () => {
   });
 
   describe('printChanges', () => {
-    const originalConsoleLog = console.log;
+    const outputMock = {
+      log: vi.fn(),
+      addHorizontalLine: vi.fn(),
+      logSingleLine: vi.fn(),
+      bulletList: vi.fn().mockReturnValue(['']),
+    };
 
-    beforeEach(() => {
-      vitest.spyOn(console, 'log').mockImplementation(() => {});
+    beforeEach(async () => {
+      vi.spyOn(output, 'log').mockImplementation(outputMock.log);
+      vi.spyOn(output, 'addHorizontalLine').mockImplementation(outputMock.addHorizontalLine);
+      vi.spyOn(output, 'logSingleLine').mockImplementation(outputMock.logSingleLine);
+      vi.spyOn(output, 'bulletList').mockImplementation(outputMock.bulletList);
     });
 
     afterEach(() => {
-      console.log = originalConsoleLog;
+      vi.clearAllMocks();
     });
 
     it('should print changes', async () => {
@@ -65,9 +74,21 @@ describe('utils', () => {
 
       printChanges(context, 'key', { migrationScript: 'test', description: 'test', version: '1.0.0' });
 
-      expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/ADD.+file\.txt/));
-      expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/UPDATE.+baz\.ts/));
-      expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/DELETE.+bar\.ts/));
+      expect(outputMock.addHorizontalLine).toHaveBeenCalledWith('gray');
+      expect(outputMock.logSingleLine).toHaveBeenCalledWith('key (test)');
+      expect(outputMock.bulletList).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.stringMatching(/ADD.+file\.txt/),
+          expect.stringMatching(/UPDATE.+baz\.ts/),
+          expect.stringMatching(/DELETE.+bar\.ts/),
+        ])
+      );
+      expect(outputMock.log).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Changes:',
+          withPrefix: false,
+        })
+      );
     });
 
     it('should print no changes', async () => {
@@ -75,7 +96,7 @@ describe('utils', () => {
 
       printChanges(context, 'key', { migrationScript: 'test', description: 'test', version: '1.0.0' });
 
-      expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/No changes were made/));
+      expect(outputMock.logSingleLine).toHaveBeenCalledWith('No changes were made');
     });
   });
 });
