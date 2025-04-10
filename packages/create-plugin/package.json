@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "5.19.1",
+  "version": "5.19.2",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -43,8 +43,8 @@
     "which": "^5.0.0"
   },
   "devDependencies": {
-    "@libs/output": "1.0.0",
-    "@libs/version": "1.0.0",
+    "@libs/output": "^1.0.1",
+    "@libs/version": "^1.0.1",
     "@types/glob": "^8.1.0",
     "@types/minimist": "^1.2.5",
     "@types/semver": "^7.7.0",
