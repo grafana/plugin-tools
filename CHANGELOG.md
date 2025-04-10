@@ -1,3 +1,16 @@
+# (Thu Apr 10 2025)
+
+#### 🐛 Bug Fix
+
+- `@libs/output@1.0.1`, `@libs/version@1.0.1`, `@grafana/create-plugin@5.19.2`, `@grafana/eslint-plugin-plugins@0.3.3`, `@grafana/plugin-e2e@1.19.4`, `@grafana/plugin-types-bundler@0.3.1`, `@grafana/sign-plugin@3.1.1`
+  - Build: Migrate to rollup and private workspaces [#1688](https://github.com/grafana/plugin-tools/pull/1688) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Apr 03 2025)
 
 #### 🐛 Bug Fix
