@@ -6,4 +6,4 @@ This directory contains internal libraries that share common functionality acros
 2. Run `npm install` in the root of the repo.
 3. Now import the package like any other `import {exportedVal} from @libs/<name_of_lib>`
 
-> [!WARNING] It is important that the lib is declared as a devDependency. If it is added as any other dependency type it will break installation of the consuming package as none of these libs exist in the NPM repository.
+> [!WARNING] It is important that the lib is declared as a devDependency. If it is added as any other dependency type it will be externalised during the build process and break installation of the consuming package as none of these libs exist in the NPM repository.
