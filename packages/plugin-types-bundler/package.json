@@ -17,8 +17,8 @@
   ],
   "scripts": {
     "test": "vitest --passWithNoTests",
-    "build": "tsup",
-    "dev": "tsup --watch ./src",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit"

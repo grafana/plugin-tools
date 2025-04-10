@@ -10,9 +10,8 @@
     "noUnusedParameters": true,
     "removeComments": true,
     "types": ["vitest/globals"],
-    "paths": {
-      "@libs/output": ["./libs/output/src/index.mts"],
-      "@libs/version": ["./libs/version/src/index.mts"]
-    }
-  }
+    "outDir": "${configDir}/dist"
+  },
+  "include": ["${configDir}/src/**/*.ts"],
+  "exclude": ["node_modules", "${configDir}/dist"]
 }
