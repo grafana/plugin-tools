@@ -15,5 +15,5 @@ jobs:
     - name: Stale Branches
       uses: crs-k/stale-branches@c6e09a3de1046d68b21eccdca23321d0ec277964 # v7.0.0
       with:
-        dry-run: true
+        #dry-run: false
         pr-check: true
