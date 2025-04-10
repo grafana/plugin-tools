@@ -2,38 +2,51 @@ import { type Context } from '../context.js';
 import { parse, stringify } from 'yaml';
 
 export default async function migrate(context: Context) {
-  // Check if docker-compose.yaml exists
-  if (!context.doesFileExist('./docker-compose.yaml')) {
+  // Check if necessary files exist
+  if (!context.doesFileExist('./docker-compose.yaml') || !context.doesFileExist('./.config/docker-compose-base.yaml')) {
     return context;
   }
 
-  // Read and parse the docker-compose file
   const composeContent = context.getFile('./docker-compose.yaml');
-  if (!composeContent) {
+  const baseComposeContent = context.getFile('./.config/docker-compose-base.yaml');
+
+  if (!composeContent || !baseComposeContent) {
     return context;
   }
 
   const composeData = parse(composeContent);
 
-  // Check if grafana service exists with the specified build context
   if (composeData?.services?.grafana?.build?.context !== './.config') {
     return context;
   }
 
-  // Check if base compose file exists
-  if (!context.doesFileExist('./.config/docker-compose-base.yaml')) {
-    return context;
-  }
+  const baseComposeData = parse(baseComposeContent);
+  const baseEnv = baseComposeData?.services?.grafana?.environment || {};
 
   // Preserve build args if they exist
   const existingBuildArgs = composeData.services.grafana.build.args;
   const preservedArgs: Record<string, string> = {};
-  if (existingBuildArgs?.grafana_image || existingBuildArgs?.grafana_version) {
-    if (existingBuildArgs.grafana_image) {
-      preservedArgs['grafana_image'] = existingBuildArgs.grafana_image;
+  for (const arg of ['grafana_image', 'grafana_version']) {
+    if (existingBuildArgs?.[arg]) {
+      preservedArgs[arg] = existingBuildArgs[arg];
     }
-    if (existingBuildArgs.grafana_version) {
-      preservedArgs['grafana_version'] = existingBuildArgs.grafana_version;
+  }
+
+  // Preserve environment variables that don't exist in base
+  let existingEnv = composeData.services.grafana.environment || {};
+  if (Array.isArray(existingEnv)) {
+    existingEnv = existingEnv.reduce((acc, curr) => {
+      const [key, value] = curr.split('=');
+      acc[key] = value;
+      return acc;
+    }, {});
+  }
+
+  const preservedEnv: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(existingEnv)) {
+    const baseEnvHasKey = Object.keys(baseEnv).includes(key);
+    if (!baseEnvHasKey) {
+      preservedEnv[key] = value;
     }
   }
 
@@ -48,10 +61,13 @@ export default async function migrate(context: Context) {
         args: preservedArgs,
       },
     }),
+    ...(Object.keys(preservedEnv).length > 0 && {
+      environment: preservedEnv,
+    }),
   };
 
   // Write the updated compose file
-  context.updateFile('./docker-compose.yaml', stringify(composeData, { lineWidth: 0 }));
+  context.updateFile('./docker-compose.yaml', stringify(composeData, { lineWidth: 0, singleQuote: true }));
 
   return context;
 }
