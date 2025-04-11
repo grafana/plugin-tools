@@ -189,7 +189,7 @@ Maintaining a detailed changelog is essential for communicating updates to your 
 
 ### Using the GitHub Actions Workflow for Changelog Generation
 
-The build-plugin GitHub Action can automatically generate and maintain your plugin's changelog using the[github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator) tool. This feature:
+The build-plugin GitHub Action can automatically generate and maintain your plugin's changelog using the [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator) tool. This feature:
 
 1. Creates a comprehensive CHANGELOG.md file organized by release
 1. Groups changes by type (features, bug fixes, etc.)
@@ -218,10 +218,25 @@ permissions:
 
 The changelog generator requires write access to commit the updated CHANGELOG.md file to your repository.
 
+If your target branch is protected, the default github.token cannot push changes directly, even with write permissions. In this case, you need to:
+
+1. Create a Personal Access Token (PAT) with appropriate permissions
+1. Store it as a repository secret (e.g., CHANGELOG_PAT)
+1. Configure the action to use this token:
+
+```yaml
+- name: Build plugin
+  uses: grafana/plugin-actions/build-plugin@main
+  with:
+    use_changelog_generator: true
+    token: ${{ secrets.CHANGELOG_PAT }} # Replace default github.token
+```
+
 ### Generated Changelog Format
 
 The generated changelog follows a standardized format that clearly categorizes changes:
 
+```markdown
 ## [1.2.0](https://github.com/user/plugin-name/tree/1.2.0) (2025-03-15)
 
 **Implemented enhancements:**
@@ -241,6 +256,7 @@ The generated changelog follows a standardized format that clearly categorizes c
 **Merged pull requests:**
 
 - Update dependencies for security [\#140](https://github.com/user/plugin-name/pull/140) ([username](https://github.com/username))
+```
 
 ## Next steps
 

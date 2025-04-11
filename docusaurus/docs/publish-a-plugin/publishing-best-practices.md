@@ -97,7 +97,7 @@ You can take advantage of our automated changelog generation feature to simplify
 
 :::
 
-###Changelog Best Practices
+### Changelog Best Practices
 
 Use a dedicated CHANGELOG.md file in your repository root
 
@@ -109,6 +109,7 @@ Use a dedicated CHANGELOG.md file in your repository root
 
 ### Example Changelog:
 
+```markdown
 ### [1.10.0](https://github.com/user/plugin-name/tree/1.10.0) (2025-04-05)
 
 **Implemented enhancements:**
@@ -133,6 +134,7 @@ Use a dedicated CHANGELOG.md file in your repository root
 **Breaking changes:**
 
 - Migrate configuration storage format [\#115](https://github.com/user/plugin-name/pull/115) ([username](https://github.com/username))
+```
 
 By following this format, your changelog becomes a valuable resource that clearly communicates changes, acknowledges contributions, and provides links to more detailed information. This level of transparency helps users make informed decisions about updating your plugin and demonstrates your commitment to maintaining a high-quality Grafana plugin.
 
