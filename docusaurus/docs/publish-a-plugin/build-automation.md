@@ -185,7 +185,7 @@ Follow the steps above to enable provenance attestation in your GitHub Actions w
 
 ## Automatically Generate Changelogs
 
-Maintaining a detailed changelog is essential for communicating updates to your users and is displayed prominently in the Grafana plugin details page. To simplify this process, our plugin build workflow now supports automatic changelog generation.
+Maintaining a detailed changelog is essential for communicating updates to your users and is displayed prominently in the Grafana plugin details page. To simplify this process, our plugin build workflow supports automatic changelog generation.
 
 ### Using the GitHub Actions Workflow for Changelog Generation
 
