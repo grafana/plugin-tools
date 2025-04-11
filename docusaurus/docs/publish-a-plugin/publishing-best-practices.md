@@ -87,6 +87,55 @@ Beyond a basic overview of your plugin, its use cases, and requirements, there a
 
 This structure ensures that your README is both informative and engaging, providing users with everything they need to confidently use and contribute to your plugin.
 
+## Maintaining a Detailed Changelog
+
+A well-maintained changelog is essential for plugin transparency and helps users understand what's changed between versions. Grafana displays your changelog in the plugin details page, making it a key information source for users evaluating whether to update.
+
+:::info
+
+You can take advantage of our automated changelog generation feature to simplify the process of maintaining your changelog. Follow our guide for [Automatically Generate Changelogs](../publish-a-plugin/build-automation.md#automatically-generate-changelogs)
+
+:::
+
+###Changelog Best Practices
+
+Use a dedicated CHANGELOG.md file in your repository root
+
+1. Follow semantic versioning (MAJOR.MINOR.PATCH) and organize entries by version
+1. Date each release to provide chronological context
+1. Group changes by type such as "Features", "Bug Fixes", "Breaking Changes", etc.
+1. Reference pull requests with links to provide additional context
+1. Highlight breaking changes prominently to alert users of required actions
+
+### Example Changelog:
+
+### [1.10.0](https://github.com/user/plugin-name/tree/1.10.0) (2025-04-05)
+
+**Implemented enhancements:**
+
+- Add support for dark theme [\#138](https://github.com/user/plugin-name/pull/138) ([username](https://github.com/username))
+- Add ability to customize tooltip formats [\#135](https://github.com/user/plugin-name/pull/135) ([username](https://github.com/username))
+- Support for PostgreSQL data source [\#129](https://github.com/user/plugin-name/pull/129) ([username](https://github.com/username))
+
+**Fixed bugs:**
+
+- Fix panel crash when switching dashboards [\#139](https://github.com/user/plugin-name/pull/139) ([username](https://github.com/username))
+- Fix inconsistent time zone handling [\#134](https://github.com/user/plugin-name/pull/134) ([username](https://github.com/username))
+
+**Closed issues:**
+
+- Documentation needs examples for PostgreSQL queries [\#130](https://github.com/user/plugin-name/issues/130)
+
+**Merged pull requests:**
+
+- Update dependencies to address security vulnerabilities [\#140](https://github.com/user/plugin-name/pull/140) ([username](https://github.com/username))
+
+**Breaking changes:**
+
+- Migrate configuration storage format [\#115](https://github.com/user/plugin-name/pull/115) ([username](https://github.com/username))
+
+By following this format, your changelog becomes a valuable resource that clearly communicates changes, acknowledges contributions, and provides links to more detailed information. This level of transparency helps users make informed decisions about updating your plugin and demonstrates your commitment to maintaining a high-quality Grafana plugin.
+
 ## End-to-end testing
 
 End-to-end (E2E) testing ensures that your Grafana plugin works correctly across various environments and supported Grafana versions. It replicates real-world usage by testing the plugin in an environment similar to the end-user's setup. Implementing E2E tests helps catch issues before submission, saving time during the review process and ensuring a smoother user experience.
