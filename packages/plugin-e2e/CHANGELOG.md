@@ -1,3 +1,76 @@
+# v1.19.4 (Thu Apr 10 2025)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate to rollup and private workspaces [#1688](https://github.com/grafana/plugin-tools/pull/1688) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v1.19.3 (Thu Apr 03 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.0.0-235294 [#1675](https://github.com/grafana/plugin-tools/pull/1675) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.19.2 (Thu Mar 27 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.0.0-234029 [#1659](https://github.com/grafana/plugin-tools/pull/1659) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/e2e-selectors to v12 [#1645](https://github.com/grafana/plugin-tools/pull/1645) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.19.1 (Mon Mar 17 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^11.6.0-229231 [#1594](https://github.com/grafana/plugin-tools/pull/1594) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.19.0 (Thu Mar 13 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v1.18.3 (Tue Feb 25 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^11.6.0-226761 [#1573](https://github.com/grafana/plugin-tools/pull/1573) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v1.18.2 (Thu Feb 13 2025)
 
 #### 🐛 Bug Fix

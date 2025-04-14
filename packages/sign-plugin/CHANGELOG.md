@@ -1,3 +1,27 @@
+# v3.1.1 (Thu Apr 10 2025)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate to rollup and private workspaces [#1688](https://github.com/grafana/plugin-tools/pull/1688) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v3.1.0 (Thu Mar 13 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v3.0.8 (Thu Jan 09 2025)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,75 @@
+# v5.19.2 (Thu Apr 10 2025)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate to rollup and private workspaces [#1688](https://github.com/grafana/plugin-tools/pull/1688) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.1 (Thu Mar 27 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana patch dependencies to v11.5.3 [#1655](https://github.com/grafana/plugin-tools/pull/1655) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.19.0 (Thu Mar 13 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.5 (Fri Mar 07 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix timeouts with canary e2e tests [#1606](https://github.com/grafana/plugin-tools/pull/1606) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.4 (Mon Mar 03 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Externalise unstable entrypoints [#1580](https://github.com/grafana/plugin-tools/pull/1580) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.3 (Fri Feb 21 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: fix absolute path being interpreted by shell [#1560](https://github.com/grafana/plugin-tools/pull/1560) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.18.1 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix

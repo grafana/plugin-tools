@@ -1,6 +1,6 @@
 {
   "name": "@grafana/sign-plugin",
-  "version": "3.0.8",
+  "version": "3.1.1",
   "repository": {
     "directory": "packages/sign-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -22,28 +22,23 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
-    "dev": "nodemon --exec 'tsc'",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
+    "find-up": "^7.0.0",
     "minimist": "^1.2.2",
     "proxy-agent": "6.5.0"
   },
   "devDependencies": {
+    "@libs/output": "^1.0.1",
+    "@libs/version": "^1.0.1",
     "@types/minimist": "^1.2.5"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src/**/*"
-    ],
-    "ext": "*",
-    "events": {
-      "start": "cls || clear"
-    }
   },
   "engines": {
     "node": ">=20"

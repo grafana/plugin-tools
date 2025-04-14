@@ -22,13 +22,13 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v4
+      - uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4.3.0
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -50,7 +50,7 @@ jobs:
           npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -87,13 +87,13 @@ jobs:
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -125,7 +125,7 @@ jobs:
         run: npm run test:ci
         working-directory: ./${{ matrix.workingDir }}
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
         with:
           go-version: '~1.22'
           check-latest: true
@@ -133,7 +133,7 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
-        uses: magefile/mage-action@v3
+        uses: magefile/mage-action@6a5dcb5fe61f43d7c08a98bc3cf9bc63c308c08e # v3.0.0
         with:
           version: latest
           args: -v build:linux
@@ -152,7 +152,7 @@ jobs:
             DOCKERHUB_PASSWORD=dockerhub:password
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
@@ -195,12 +195,12 @@ jobs:
           range=$(jq -r .dependencies.grafanaDependency < ${{ matrix.workingDir }}/src/plugin.json)
           # Use node-semver to get the min version of the range
           min_version=$(node -e "console.log(require('semver').minVersion('${range}')?.toString())")
-          echo "::set-output name=MIN_VERSION::$min_version"
           export MIN_VERSION=$min_version
+          echo "MIN_VERSION=${MIN_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
         run: |
-          docker compose pull 
+          docker compose pull
           ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
           docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
@@ -275,11 +275,12 @@ jobs:
     needs: [generate-plugins]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Publish report
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          retention-days: 7
 
   release:
     runs-on: ubuntu-latest
@@ -308,7 +309,7 @@ jobs:
           repo_secrets: |
             SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           token: ${{ steps.generate_token.outputs.token }}
 
@@ -316,7 +317,7 @@ jobs:
         run: git fetch --unshallow --tags
 
       - name: Setup environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
