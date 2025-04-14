@@ -1,6 +1,6 @@
 {
   "name": "@grafana/eslint-plugin-plugins",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "An ESlint plugin with Grafana plugin specific rules",
   "main": "./dist/index.js",
   "files": [
@@ -31,8 +31,8 @@
   "bugs": "https://github.com/grafana/plugin-tools/issues",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsup",
-    "build:watch": "tsup --watch",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "build:watch": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "dev": "concurrently --names TSC,TSUP -c cyan,magenta \"npm run typecheck:watch\" \"npm run build:watch\"",
@@ -51,25 +51,12 @@
   "devDependencies": {
     "@types/eslint": "^9.6.1",
     "@types/semver": "^7.7.0",
-    "@typescript-eslint/parser": "^8.28.0",
-    "@typescript-eslint/rule-tester": "^8.28.0",
-    "concurrently": "^9.1.2",
-    "tsup": "^8.4.0"
+    "@typescript-eslint/parser": "^8.29.1",
+    "@typescript-eslint/rule-tester": "^8.29.1",
+    "concurrently": "^9.1.2"
   },
   "peerDependencies": {
     "@types/eslint": "^8.56.10 || ^9.0.0",
     "eslint": "^8.56.0 || ^9.0.0"
-  },
-  "tsup": {
-    "entry": [
-      "./src",
-      "!src/**/*.test.ts"
-    ],
-    "format": [
-      "cjs"
-    ],
-    "clean": true,
-    "bundle": false,
-    "shims": true
   }
 }

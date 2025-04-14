@@ -1,3 +1,15 @@
+# v5.19.2 (Thu Apr 10 2025)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate to rollup and private workspaces [#1688](https://github.com/grafana/plugin-tools/pull/1688) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.19.1 (Thu Mar 27 2025)
 
 #### 🐛 Bug Fix

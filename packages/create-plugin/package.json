@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "5.19.1",
+  "version": "5.19.2",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -22,9 +22,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
-    "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/package-lock.json\" -maxdepth 1 -print0 | xargs -0  -I {} rm -rf {}",
-    "build": "tsup --config ../../tsup.config.ts",
-    "dev": "tsup --watch ./src --watch '../../libs'",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest --passWithNoTests",
@@ -44,12 +43,14 @@
     "which": "^5.0.0"
   },
   "devDependencies": {
+    "@libs/output": "^1.0.1",
+    "@libs/version": "^1.0.1",
     "@types/glob": "^8.1.0",
     "@types/minimist": "^1.2.5",
     "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
     "@types/which": "^3.0.4",
-    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "tmp": "^0.2.3"
   },

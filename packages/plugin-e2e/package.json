@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "1.19.2",
+  "version": "1.19.4",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -20,8 +20,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsup",
-    "dev": "tsup --watch ./src",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "server": "docker compose up --build",
@@ -38,24 +38,12 @@
   "devDependencies": {
     "@playwright/test": "^1.51.1",
     "@types/uuid": "^10.0.0",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.5.0"
   },
   "dependencies": {
-    "@grafana/e2e-selectors": "^12.0.0-234029",
+    "@grafana/e2e-selectors": "^12.0.0-235294",
     "semver": "^7.5.4",
     "uuid": "^11.0.2",
     "yaml": "^2.3.4"
-  },
-  "tsup": {
-    "entry": [
-      "./src"
-    ],
-    "format": [
-      "cjs"
-    ],
-    "clean": true,
-    "bundle": false,
-    "dts": true,
-    "shims": true
   }
 }
