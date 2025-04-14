@@ -1,5 +1,6 @@
+import { resolve } from 'node:path';
 import { type Context } from '../context.js';
-import { parse, stringify } from 'yaml';
+import { parseDocument, stringify, visit } from 'yaml';
 
 export default async function migrate(context: Context) {
   // Check if necessary files exist
@@ -14,60 +15,113 @@ export default async function migrate(context: Context) {
     return context;
   }
 
-  const composeData = parse(composeContent);
+  const composeData = parseDocument(composeContent);
+  const baseComposeData = parseDocument(baseComposeContent);
 
-  if (composeData?.services?.grafana?.build?.context !== './.config') {
+  // Check if migration is needed
+  const buildContext = composeData.getIn(['services', 'grafana', 'build', 'context']);
+
+  if (buildContext?.toString() !== './.config') {
     return context;
   }
 
-  const baseComposeData = parse(baseComposeContent);
-  const baseEnv = baseComposeData?.services?.grafana?.environment || {};
+  const composeGrafanaService = composeData.getIn(['services', 'grafana']);
+  const baseGrafanaService = baseComposeData.getIn(['services', 'grafana']);
 
-  // Preserve build args if they exist
-  const existingBuildArgs = composeData.services.grafana.build.args;
-  const preservedArgs: Record<string, string> = {};
-  for (const arg of ['grafana_image', 'grafana_version']) {
-    if (existingBuildArgs?.[arg]) {
-      preservedArgs[arg] = existingBuildArgs[arg];
-    }
-  }
+  visit(composeData, {
+    Map(_key, node, path) {
+      const keyPath = [];
+      for (const p of path) {
+        if (p.key?.value) {
+          keyPath.push(p.key.value);
+        }
+      }
 
-  // Preserve environment variables that don't exist in base
-  let existingEnv = composeData.services.grafana.environment || {};
-  if (Array.isArray(existingEnv)) {
-    existingEnv = existingEnv.reduce((acc, curr) => {
-      const [key, value] = curr.split('=');
-      acc[key] = value;
-      return acc;
-    }, {});
-  }
+      // Only process grafana service paths
+      if (keyPath[0] === 'services' && keyPath[1] === 'grafana') {
+        const relativePath = keyPath.slice(2);
+        const baseValue = baseGrafanaService?.getIn(relativePath);
 
-  const preservedEnv: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(existingEnv)) {
-    const baseEnvHasKey = Object.keys(baseEnv).includes(key);
-    if (!baseEnvHasKey) {
-      preservedEnv[key] = value;
-    }
-  }
+        if (baseValue && node.items) {
+          // Filter out items that match the base configuration
+          node.items = node.items.filter((item) => {
+            const baseItemValue = baseValue.get(item.key.value);
+            return !baseItemValue || JSON.stringify(item.value) !== JSON.stringify(baseItemValue);
+          });
 
-  // Update the grafana service configuration
-  composeData.services.grafana = {
-    extends: {
-      file: '.config/docker-compose-base.yaml',
-      service: 'grafana',
+          // If all items were filtered out, remove this map
+          if (node.items.length === 0) {
+            composeData.deleteIn(keyPath);
+          }
+        }
+      }
     },
-    ...(Object.keys(preservedArgs).length > 0 && {
-      build: {
-        args: preservedArgs,
-      },
-    }),
-    ...(Object.keys(preservedEnv).length > 0 && {
-      environment: preservedEnv,
-    }),
-  };
+  });
+
+  visit(composeData, {
+    Scalar(_key, node, path) {
+      const keyPath = [];
+      for (const p of path) {
+        if (p.key?.value) {
+          keyPath.push(p.key.value);
+        }
+      }
+
+      if (keyPath[0] === 'services' && keyPath[1] === 'grafana' && keyPath[2] === 'volumes') {
+        const relativePath = keyPath.slice(2);
+
+        const baseVolumes = baseGrafanaService.getIn(relativePath);
+        if (baseVolumes?.items && node.value) {
+          const [hostDir, containerDir] = node.value.split(':');
+          const matchingBaseItem = baseVolumes.items.find((baseItem) => {
+            const [_, baseContainerDir] = baseItem.value.split(':');
+            return baseContainerDir === containerDir;
+          });
+
+          if (matchingBaseItem) {
+            const [baseHostDir, _] = matchingBaseItem.value.split(':');
+            const baseHostPath = resolve('./config', baseHostDir);
+            const currentHostPath = resolve('.', hostDir);
+            if (baseHostPath === currentHostPath) {
+              composeData.deleteIn(keyPath);
+            }
+          }
+        }
+      }
+    },
+  });
+
+  visit(composeData, {
+    Pair(_key, pair, path) {
+      const keyPath = [];
+      for (const p of path) {
+        if (p.key?.value) {
+          keyPath.push(p.key.value);
+        }
+      }
+      keyPath.push(pair.key.value);
+
+      // Only process grafana service paths
+      if (keyPath[0] === 'services' && keyPath[1] === 'grafana') {
+        const relativePath = keyPath.slice(2);
+        const baseValue = baseGrafanaService?.getIn(relativePath);
+
+        // If this pair's value matches the base value, remove it
+        if (baseValue && JSON.stringify(pair.value) === JSON.stringify(baseValue)) {
+          composeData.deleteIn(keyPath);
+        }
+      }
+    },
+  });
+
+  composeGrafanaService.deleteIn(['build', 'context']);
+  composeGrafanaService.addIn(['extends'], {
+    file: '.config/docker-compose-base.yaml',
+    service: 'grafana',
+  });
 
   // Write the updated compose file
-  context.updateFile('./docker-compose.yaml', stringify(composeData, { lineWidth: 0, singleQuote: true }));
+  context.updateFile('./docker-compose.yaml', stringify(composeData, { lineWidth: 120, singleQuote: true }));
 
   return context;
 }
