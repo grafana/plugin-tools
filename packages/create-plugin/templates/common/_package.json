@@ -76,7 +76,7 @@
     "@grafana/runtime": "^11.5.3",
     "@grafana/ui": "^11.5.3",
     "@grafana/schema": "^11.5.3",{{#if_eq pluginType "scenesapp"}}
-    "@grafana/scenes": "^5.41.3",{{/if_eq}}
+    "@grafana/scenes": "^6.8.1",{{/if_eq}}
     "react": "18.2.0",
     "react-dom": "18.2.0"{{#if isAppType}},
     "react-router-dom": "^{{ reactRouterVersion }}",
