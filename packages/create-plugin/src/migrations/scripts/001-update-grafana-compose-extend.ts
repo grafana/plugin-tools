@@ -81,6 +81,7 @@ export default async function migrate(context: Context) {
           }
         }
       }
+      return;
     }) as visitorFn<Scalar>,
   });
 
