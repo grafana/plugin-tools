@@ -109,6 +109,12 @@ jobs:
         run: npm install --no-audit
         working-directory: ./${{ matrix.workingDir }}
 
+      - name: Install plugin-e2e
+        run: |
+          PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE}
+        working-directory: ./${{ matrix.workingDir }}
+
       - name: Lint plugin frontend
         run: npm run lint
         working-directory: ./${{ matrix.workingDir }}
