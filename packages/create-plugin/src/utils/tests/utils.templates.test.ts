@@ -14,7 +14,7 @@ describe('Utils / Templates', () => {
       expect(templateFiles.length).toBeGreaterThan(0);
 
       // A file that should live in this sub-directory
-      expect(templateFiles.find((t) => t.includes('webpack-rules.d.ts'))).not.toBeUndefined();
+      expect(templateFiles.find((t) => t.includes('bundler-rules.d.ts'))).not.toBeUndefined();
 
       // Something that should not be found in this sub-directory
       expect(templateFiles.find((t) => t.includes('Dockerfile'))).toBeUndefined();
@@ -35,7 +35,7 @@ describe('Utils / Templates', () => {
     });
 
     test('should be possible to filter for a single file', () => {
-      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, '.config/types/webpack-rules.d.ts');
+      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, '.config/types/bundler-rules.d.ts');
 
       expect(Array.isArray(templateFiles)).toBe(true);
       expect(templateFiles.length).toBe(1);
