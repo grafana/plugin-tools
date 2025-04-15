@@ -51,7 +51,7 @@
       "groupSlug": "all-grafana",
       "labels": ["dependencies", "release", "patch"],
       "matchPackagePatterns": ["@grafana/*", "grafana/grafana-enterprise"],
-      "excludePackageNames": ["@grafana/e2e-selectors", "@grafana/eslint-config"],
+      "excludePackageNames": ["@grafana/e2e-selectors", "@grafana/eslint-config", "@grafana/scenes"],
       "matchUpdateTypes": ["minor", "major"]
     },
     // Docusaurus dependencies have to be grouped together otherwise error out when building website.
