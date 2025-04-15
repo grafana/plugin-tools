@@ -17,3 +17,4 @@ jobs:
       with:
         #dry-run: false
         pr-check: true
+        ignore-issue-interaction: true
