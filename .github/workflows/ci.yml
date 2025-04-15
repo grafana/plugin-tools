@@ -47,7 +47,7 @@ jobs:
       - name: Pack packages for testing
         run: |
           mkdir ./packed-artifacts
-          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
+          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -141,7 +141,7 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Install playwright dependencies
-        run: npm exec playwright install chromium
+        run: npm exec playwright install --with-deps chromium
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Get secrets for DockerHub login
