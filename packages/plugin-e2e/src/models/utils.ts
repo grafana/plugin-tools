@@ -1,5 +1,7 @@
 import { Page } from '@playwright/test';
-import { getByGrafanaSelectorOptions } from '../types';
+import { DashboardEditViewArgs, DashboardPageArgs, getByGrafanaSelectorOptions, PluginTestCtx } from '../types';
+import { PanelEditPage } from './pages/PanelEditPage';
+import { DashboardPage } from './pages/DashboardPage';
 
 export const radioButtonSetChecked = async (
   page: Page,
@@ -20,4 +22,12 @@ export function resolveGrafanaSelector(selector: string, options?: Omit<getByGra
     return `[data-testid${startsWith}="${selector}"]`;
   }
   return `[aria-label${startsWith}="${selector}"]`;
+}
+
+export function getPanelEditPage(ctx: PluginTestCtx, panelId?: string | null, dashboard?: DashboardPageArgs) {
+  return new PanelEditPage(ctx, { dashboard, id: panelId ?? '1' });
+}
+
+export function getDashboardPage(ctx: PluginTestCtx, args: DashboardEditViewArgs<string>) {
+  return new DashboardPage(ctx, args);
 }

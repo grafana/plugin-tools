@@ -2,10 +2,10 @@ import * as semver from 'semver';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
-import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
+import { getPanelEditPage } from '../utils';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -43,7 +43,7 @@ export class DashboardPage extends GrafanaPage {
    * If the panel id does not exist in the dashboard, Grafana will redirect to the dashboard page
    */
   async gotoPanelEditPage(panelId: string) {
-    const panelEditPage = new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId });
+    const panelEditPage = getPanelEditPage(this.ctx, panelId, this.dashboard);
     await panelEditPage.goto();
     return panelEditPage;
   }
@@ -84,7 +84,7 @@ export class DashboardPage extends GrafanaPage {
   /**
    * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
    */
-  async addPanel(): Promise<PanelEditPage> {
+  async addPanel(): Promise<ReturnType<typeof getPanelEditPage>> {
     const { components, pages, constants } = this.ctx.selectors;
 
     const scenesEnabled = await isFeatureEnabled(this.ctx.page, 'dashboardScene');
@@ -118,7 +118,7 @@ export class DashboardPage extends GrafanaPage {
       return urlParams.get('editPanel');
     });
 
-    return new PanelEditPage(this.ctx, { dashboard: this.dashboard, id: panelId ?? '1' });
+    return getPanelEditPage(this.ctx, panelId, this.dashboard);
   }
 
   /**

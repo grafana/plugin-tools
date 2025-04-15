@@ -5,8 +5,7 @@ import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
-import { radioButtonSetChecked } from '../utils';
-import { DashboardPage } from './DashboardPage';
+import { getDashboardPage, radioButtonSetChecked } from '../utils';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 export class PanelEditPage extends GrafanaPage {
@@ -135,7 +134,7 @@ export class PanelEditPage extends GrafanaPage {
       await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.applyButton).click();
     }
 
-    return new DashboardPage(this.ctx, this.args);
+    return getDashboardPage(this.ctx, this.args);
   }
 
   /**
