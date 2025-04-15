@@ -47,7 +47,7 @@ jobs:
       - name: Pack packages for testing
         run: |
           mkdir ./packed-artifacts
-          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
+          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -107,6 +107,12 @@ jobs:
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Install plugin-e2e
+        run: |
+          PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE}
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Lint plugin frontend
