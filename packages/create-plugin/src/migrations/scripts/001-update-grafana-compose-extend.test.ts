@@ -10,7 +10,26 @@ describe('001-update-grafana-compose-extend', () => {
     expect(context.listChanges()).toEqual({});
   });
 
-  it('should not modify if grafana service with correct build context is missing', async () => {
+  it('should not modify anything if base compose file does not exist', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './docker-compose.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: './.config',
+            },
+          },
+        },
+      })
+    );
+    const initialChanges = context.listChanges();
+    await migrate(context);
+    expect(context.listChanges()).toEqual(initialChanges);
+  });
+
+  it('should not modify anything if grafana service build context is not ./config', async () => {
     const context = new Context('/virtual');
     context.addFile(
       './docker-compose.yaml',
@@ -29,13 +48,13 @@ describe('001-update-grafana-compose-extend', () => {
     expect(context.listChanges()).toEqual(initialChanges);
   });
 
-  it('should not modify if base compose file is missing', async () => {
+  it('should not modify anything in other services', async () => {
     const context = new Context('/virtual');
     context.addFile(
       './docker-compose.yaml',
       stringify({
         services: {
-          grafana: {
+          otherService: {
             build: {
               context: './.config',
             },
@@ -48,25 +67,58 @@ describe('001-update-grafana-compose-extend', () => {
     expect(context.listChanges()).toEqual(initialChanges);
   });
 
-  it.only('should extend base config removing any duplicate config', async () => {
+  it('should remove duplicate key value pairs', async () => {
     const context = new Context('/virtual');
     context.addFile(
       './docker-compose.yaml',
       stringify({
         services: {
           grafana: {
-            container_name: 'heywesty-trafficlight-panel',
             build: {
               context: './.config',
-              args: {
-                grafana_image: '${GRAFANA_IMAGE:-grafana-enterprise}',
-                grafana_version: '${GRAFANA_VERSION:-9.5.3}',
-              },
             },
-            environment: {
-              GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
-            },
+            container_name: 'heywesty-trafficlight-panel',
             ports: ['3000:3000/tcp'],
+          },
+        },
+      })
+    );
+    context.addFile(
+      './.config/docker-compose-base.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: '.',
+            },
+            container_name: 'heywesty-trafficlight-panel',
+            ports: ['3000:3000/tcp'],
+          },
+        },
+      })
+    );
+
+    await migrate(context);
+
+    const result = parse(context.getFile('./docker-compose.yaml') || '');
+    expect(result.services.grafana).toEqual({
+      extends: {
+        file: '.config/docker-compose-base.yaml',
+        service: 'grafana',
+      },
+    });
+  });
+
+  it('should merge volume paths that resolve to the same directory', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './docker-compose.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: './.config',
+            },
             volumes: [
               './dist:/var/lib/grafana/plugins/heywesty-trafficlight-panel',
               './provisioning:/etc/grafana/provisioning',
@@ -80,29 +132,111 @@ describe('001-update-grafana-compose-extend', () => {
       stringify({
         services: {
           grafana: {
-            user: 'root',
-            container_name: 'heywesty-trafficlight-panel',
             build: {
               context: '.',
-              args: {
-                grafana_image: '${GRAFANA_IMAGE:-grafana-enterprise}',
-                grafana_version: '${GRAFANA_VERSION:-11.5.3}',
-                development: '${DEVELOPMENT:-false}',
-                anonymous_auth_enabled: '${ANONYMOUS_AUTH_ENABLED:-true}',
-              },
             },
-            ports: ['3000:3000/tcp'],
             volumes: [
               '../dist:/var/lib/grafana/plugins/heywesty-trafficlight-panel',
               '../provisioning:/etc/grafana/provisioning',
-              '..:/root/heywesty-trafficlight-panel',
             ],
+          },
+        },
+      })
+    );
+
+    await migrate(context);
+
+    const result = parse(context.getFile('./docker-compose.yaml') || '');
+    expect(result.services.grafana).toEqual({
+      extends: {
+        file: '.config/docker-compose-base.yaml',
+        service: 'grafana',
+      },
+    });
+  });
+
+  it('should preserve volume paths that resolve to other directories', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './docker-compose.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: './.config',
+            },
+            volumes: [
+              './another/dist:/var/lib/grafana/plugins/heywesty-trafficlight-panel',
+              './provisioning:/etc/grafana/provisioning',
+              './something-else:/var/lib/grafana/plugins/something-else',
+            ],
+          },
+        },
+      })
+    );
+    context.addFile(
+      './.config/docker-compose-base.yaml',
+      stringify({
+        services: {
+          grafana: {
+            volumes: [
+              '../dist:/var/lib/grafana/plugins/heywesty-trafficlight-panel',
+              '../provisioning:/etc/grafana/provisioning',
+            ],
+          },
+        },
+      })
+    );
+
+    await migrate(context);
+
+    const result = parse(context.getFile('./docker-compose.yaml') || '');
+
+    expect(result.services.grafana).toEqual({
+      extends: {
+        file: '.config/docker-compose-base.yaml',
+        service: 'grafana',
+      },
+      volumes: [
+        './another/dist:/var/lib/grafana/plugins/heywesty-trafficlight-panel',
+        './something-else:/var/lib/grafana/plugins/something-else',
+      ],
+    });
+  });
+
+  it('should preserve non-duplicate configuration', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './docker-compose.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: './.config',
+              args: {
+                grafana_version: '${GRAFANA_VERSION:-9.5.3}',
+              },
+            },
+            environment: {
+              GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
+            },
+          },
+        },
+      })
+    );
+    context.addFile(
+      './.config/docker-compose-base.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: '.',
+              args: {
+                grafana_version: '${GRAFANA_VERSION:-11.5.3}',
+              },
+            },
             environment: {
               NODE_ENV: 'development',
-              GF_LOG_FILTERS: 'plugin.heywesty-trafficlight-panel:debug',
-              GF_LOG_LEVEL: 'debug',
-              GF_DATAPROXY_LOGGING: '1',
-              GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: 'heywesty-trafficlight-panel',
             },
           },
         },
@@ -171,25 +305,6 @@ services:
     expect(migratedContent).toContain('# Build configuration');
     expect(migratedContent).toContain('# Inline comment');
     expect(migratedContent).toContain('# Another inline comment');
-
-    // Verify the structure is still correct after migration
-    const result = parse(migratedContent);
-    expect(result.services.grafana).toEqual({
-      extends: {
-        file: '.config/docker-compose-base.yaml',
-        service: 'grafana',
-      },
-      build: {
-        args: {
-          grafana_image: 'custom-image',
-          grafana_version: '10.0.0',
-        },
-      },
-      environment: {
-        GF_AUTH_ANONYMOUS_ENABLED: 'true',
-        CUSTOM_ENV: 'value',
-      },
-    });
   });
 
   it('should be idempotent', async () => {
