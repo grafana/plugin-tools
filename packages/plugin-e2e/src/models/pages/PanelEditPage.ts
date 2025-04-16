@@ -6,8 +6,8 @@ import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
-import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 import { DashboardPage } from './DashboardPage';
+import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
