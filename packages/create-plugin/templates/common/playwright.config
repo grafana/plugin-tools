@@ -43,7 +43,13 @@ export default defineConfig<PluginOptions>({
     // 2. Run tests in Google Chrome. Every test will start authenticated as admin user.
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/admin.json' },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+        launchOptions: {
+          args: ['--disable-features=PlzDedicatedWorker'], // because https://github.com/microsoft/playwright/pull/34400
+        },
+      },
       dependencies: ['auth'],
     },
   ],

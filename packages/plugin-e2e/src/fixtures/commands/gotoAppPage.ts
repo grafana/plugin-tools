@@ -1,6 +1,6 @@
 import { TestFixture } from '@playwright/test';
-import { PlaywrightArgs } from '../../types';
-import { AppPage, GotoAppPageArgs } from '../..';
+import { GotoAppPageArgs, PlaywrightArgs } from '../../types';
+import { AppPage } from '../../models/pages/AppPage';
 
 type GotoAppPageFixture = TestFixture<(args: GotoAppPageArgs) => Promise<AppPage>, PlaywrightArgs>;
 
