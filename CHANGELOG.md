@@ -1,3 +1,17 @@
+# (Wed Apr 16 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.19.4`, `@grafana/plugin-e2e@1.19.6`
+  - Chore: fixes e2e tests waiting until "networkidle" [#1728](https://github.com/grafana/plugin-tools/pull/1728) ([@hugohaggmark](https://github.com/hugohaggmark) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Apr 15 2025)
 
 :tada: This release contains work from a new contributor! :tada:
