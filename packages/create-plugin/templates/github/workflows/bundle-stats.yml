@@ -1,6 +1,7 @@
 name: Bundle Stats
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
