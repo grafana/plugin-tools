@@ -1,3 +1,16 @@
+# (Thu Apr 17 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.19.5`
+  - Create Plugin: Scaffold bundle-stats with workflow_dispatch [#1736](https://github.com/grafana/plugin-tools/pull/1736) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Apr 16 2025)
 
 #### 🐛 Bug Fix
