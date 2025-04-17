@@ -50,12 +50,7 @@ jobs:
       - name: Unit tests
         run: {{ packageManagerName }} run test:ci
       - name: Build frontend
-        run: |
-          if [ "$\{{ github.event_name }}" == "push" ] && [ "$\{{ github.ref }}" == "refs/heads/main" ]; then
-            {{ packageManagerName }} run build{{#if isNPM}} --{{/if}} --profile --json stats.json
-          else
-            {{ packageManagerName }} run build
-          fi
+        run: {{ packageManagerName }} run build
 
       - name: Check for backend
         id: check-for-backend
@@ -128,14 +123,6 @@ jobs:
           name: $\{{ steps.metadata.outputs.plugin-id }}-$\{{ steps.metadata.outputs.plugin-version }}
           path: $\{{ steps.metadata.outputs.plugin-id }}
           retention-days: 5
-
-      - name: Upload stats.json artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: main-branch-stats
-          path: stats.json
-          overwrite: true
 
   resolve-versions:
     name: Resolve e2e images
