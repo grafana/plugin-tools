@@ -64,7 +64,6 @@ return (
 
 Visit the [official react-router v5 to v6 migration guide](https://reactrouter.com/en/main/upgrading/v5) for more information.
 
-
 #### 5. Fix test failures with location service methods
 
 When using `locationService.replace()`, `locationService.push()`, or similar methods from `@grafana/runtime`, your tests might fail after migrating to React Router v6. Solve this by using the `<LocationServiceProvider />` component (introduced in Grafana 11.2.0) to create a provider for the location service in your tests.
