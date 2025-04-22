@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.19.7`, `@grafana/plugin-e2e@1.19.8`
+  - fix: fixes playwright upgrade [#1741](https://github.com/grafana/plugin-tools/pull/1741) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@1.19.7`
   - e2e: fixes TimeRange set function [#1735](https://github.com/grafana/plugin-tools/pull/1735) ([@hugohaggmark](https://github.com/hugohaggmark))
 

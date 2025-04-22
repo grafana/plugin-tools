@@ -1,3 +1,15 @@
+# v1.19.8 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- fix: fixes playwright upgrade [#1741](https://github.com/grafana/plugin-tools/pull/1741) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v1.19.7 (Tue Apr 22 2025)
 
 #### 🐛 Bug Fix
