@@ -94,9 +94,10 @@ export class DashboardPage extends GrafanaPage {
       await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
     }
     // on small screens, the toolbar buttons are hidden behind a "Show more items" button
-    const toolbarButtonsHidden = !scenesEnabled && !!(await this.ctx.page.getByLabel('Show more items').count());
+    const showMoreItems = await this.ctx.page.getByLabel('Show more items');
+    const toolbarButtonsHidden = !scenesEnabled && (await showMoreItems.count()) > 0;
     if (toolbarButtonsHidden) {
-      await this.ctx.page.getByLabel('Show more items').click();
+      await showMoreItems.click();
     }
 
     if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
