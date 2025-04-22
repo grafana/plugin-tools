@@ -19,7 +19,7 @@ import VirtualModulesPlugin from 'webpack-virtual-modules';
 import { BuildModeWebpackPlugin } from './BuildModeWebpackPlugin';
 import { DIST_DIR, SOURCE_DIR } from './constants';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
-import { PluginSchemaWebpackPlugin } from './PluginSchemaWebpackPlugin';
+import { CodeGenPlugin } from './codegen/CodeGenPlugin';
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 
@@ -190,7 +190,7 @@ const config = async (env): Promise<Configuration> => {
 
     plugins: [
       new BuildModeWebpackPlugin(),
-      new PluginSchemaWebpackPlugin(),
+      new CodeGenPlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new BannerPlugin({
