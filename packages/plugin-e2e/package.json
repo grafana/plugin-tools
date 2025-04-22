@@ -33,10 +33,10 @@
     "node": ">=18 <=22"
   },
   "peerDependencies": {
-    "@playwright/test": "^1.41.2"
+    "@playwright/test": "^1.52.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.51.1",
+    "@playwright/test": "^1.52.0",
     "@types/uuid": "^10.0.0",
     "dotenv": "^16.5.0"
   },
