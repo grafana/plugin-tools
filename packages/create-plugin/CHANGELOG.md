@@ -1,3 +1,44 @@
+# v5.19.5 (Thu Apr 17 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Scaffold bundle-stats with workflow_dispatch [#1736](https://github.com/grafana/plugin-tools/pull/1736) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.4 (Wed Apr 16 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: fixes e2e tests waiting until "networkidle" [#1728](https://github.com/grafana/plugin-tools/pull/1728) ([@hugohaggmark](https://github.com/hugohaggmark) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.3 (Tue Apr 15 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Fix: create-plugin common Webpack config types [#1680](https://github.com/grafana/plugin-tools/pull/1680) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
 # v5.19.2 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix

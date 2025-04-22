@@ -1,3 +1,16 @@
+# v1.19.6 (Wed Apr 16 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: fixes e2e tests waiting until "networkidle" [#1728](https://github.com/grafana/plugin-tools/pull/1728) ([@hugohaggmark](https://github.com/hugohaggmark) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v1.19.4 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix
