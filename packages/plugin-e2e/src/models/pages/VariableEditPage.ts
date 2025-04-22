@@ -30,7 +30,7 @@ export class VariableEditPage extends GrafanaPage {
     // In versions before 9.2.0, the variable index is not part of the URL so there's no way to navigate to it directly.
     // Instead, we have to click the nth row in the variable list to navigate to the edit page for a given variable index.
     if (semver.lt(this.ctx.grafanaVersion, '9.2.0') && this.args.id) {
-      const list = this.getByGrafanaSelector(this.ctx.selectors.pages.Dashboard.Settings.Variables.List.table).locator(
+      const list = await this.getByGrafanaSelector(this.ctx.selectors.pages.Dashboard.Settings.Variables.List.table).locator(
         'tbody tr'
       );
       const variables = await list.all();
