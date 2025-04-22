@@ -1,3 +1,15 @@
+# v1.19.7 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- e2e: fixes TimeRange set function [#1735](https://github.com/grafana/plugin-tools/pull/1735) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v1.19.6 (Wed Apr 16 2025)
 
 #### 🐛 Bug Fix
