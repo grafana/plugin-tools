@@ -72,7 +72,11 @@ export default defineConfig<PluginOptions>({
       testDir: './tests/as-admin-user',
       use: {
         ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: ['--disable-features=PlzDedicatedWorker'], // because https://github.com/microsoft/playwright/pull/34400
+        },
         storageState: 'playwright/.auth/admin.json',
+        channel: 'chrome',
       },
       dependencies: ['authenticate'],
     },
@@ -91,6 +95,7 @@ export default defineConfig<PluginOptions>({
           width: 1920,
           height: 1080,
         },
+        channel: 'chrome',
       },
       dependencies: ['authenticate'],
     },
@@ -104,6 +109,7 @@ export default defineConfig<PluginOptions>({
           args: ['--disable-features=PlzDedicatedWorker'], // because https://github.com/microsoft/playwright/pull/34400
         },
         storageState: 'playwright/.auth/viewer.json',
+        channel: 'chrome',
       },
       dependencies: ['createUserAndAuthenticate'],
     },
