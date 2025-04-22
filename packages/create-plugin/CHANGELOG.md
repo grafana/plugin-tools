@@ -1,3 +1,15 @@
+# v5.19.6 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- chore: pins playwright/test because of version errors [#1740](https://github.com/grafana/plugin-tools/pull/1740) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v5.19.5 (Thu Apr 17 2025)
 
 #### 🐛 Bug Fix
