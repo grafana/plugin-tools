@@ -1,5 +1,5 @@
 import * as semver from 'semver';
-import { Locator } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
 
@@ -15,16 +15,17 @@ export class DataSourcePicker extends GrafanaPage {
    * Sets the data source picker to the provided name
    */
   async set(name: string) {
-    let datasourcePicker = await (this.root || this.ctx.page).getByTestId(
+    let datasourcePicker = (this.root || this.ctx.page).getByTestId(
       this.ctx.selectors.components.DataSourcePicker.inputV2
     );
 
     if (semver.lt(this.ctx.grafanaVersion, '10.1.0')) {
-      datasourcePicker = await this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
+      datasourcePicker = this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
         root: this.root,
       }).locator('input');
     }
 
+    await expect(datasourcePicker).toBeVisible();
     await datasourcePicker.fill(name);
 
     // this is a hack to get the selection to work in 10.ish versions of Grafana.
