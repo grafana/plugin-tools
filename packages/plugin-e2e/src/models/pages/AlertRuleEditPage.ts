@@ -2,7 +2,8 @@ import * as semver from 'semver';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
-
+import { expect } from '@playwright/test';
+import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 
 export class AlertRuleEditPage extends GrafanaPage {
@@ -41,7 +42,26 @@ export class AlertRuleEditPage extends GrafanaPage {
   }
 
   async isAdvancedModeSupported() {
+    const alertingQueryAndExpressionsStepMode = await isFeatureEnabled(
+      this.ctx.page,
+      'alertingQueryAndExpressionsStepMode'
+    );
+
     // why not check if alertingQueryAndExpressionsStepMode feature is enabled? then we'd have to update the code when the toggle is removed.
+    if (alertingQueryAndExpressionsStepMode) {
+      await expect(
+        this.getByGrafanaSelector(
+          this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
+        )
+      ).toBeVisible();
+    } else {
+      await expect(
+        this.getByGrafanaSelector(
+          this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
+        )
+      ).not.toBeVisible();
+    }
+
     const count = await this.getByGrafanaSelector(
       this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
     ).count();
