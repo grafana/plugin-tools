@@ -94,10 +94,15 @@ export class DashboardPage extends GrafanaPage {
       await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
     }
     // on small screens, the toolbar buttons are hidden behind a "Show more items" button
-    const showMoreItems = await this.ctx.page.getByLabel('Show more items');
-    const toolbarButtonsHidden = !scenesEnabled && (await showMoreItems.count()) > 0;
-    if (toolbarButtonsHidden) {
-      await showMoreItems.click();
+    const viewportDimensions = await this.ctx.page.viewportSize();
+    let toolbarButtonsHidden = false;
+
+    if (viewportDimensions && viewportDimensions.width <= 620) {
+      const showMoreItems = await this.ctx.page.getByLabel('Show more items');
+      toolbarButtonsHidden = !scenesEnabled && (await showMoreItems.count()) > 0;
+      if (toolbarButtonsHidden) {
+        await showMoreItems.click();
+      }
     }
 
     if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
@@ -105,11 +110,13 @@ export class DashboardPage extends GrafanaPage {
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
       );
       toolbarButtonsHidden ? await addButton.last().click() : await addButton.click();
+      await addButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       if (this.dashboard?.uid) {
         const addPanelButton = this.getByGrafanaSelector(components.PageToolbar.item('Add panel'));
         toolbarButtonsHidden ? await addPanelButton.last().click() : await addPanelButton.click();
+        await addPanelButton.click();
       }
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
