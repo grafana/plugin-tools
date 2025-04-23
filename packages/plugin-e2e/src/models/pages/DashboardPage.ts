@@ -110,13 +110,11 @@ export class DashboardPage extends GrafanaPage {
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
       );
       toolbarButtonsHidden ? await addButton.last().click() : await addButton.click();
-      await addButton.click();
       await this.getByGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz)).click();
     } else {
       if (this.dashboard?.uid) {
         const addPanelButton = this.getByGrafanaSelector(components.PageToolbar.item('Add panel'));
         toolbarButtonsHidden ? await addPanelButton.last().click() : await addPanelButton.click();
-        await addPanelButton.click();
       }
       await this.getByGrafanaSelector(pages.AddDashboard.addNewPanel).click();
     }
