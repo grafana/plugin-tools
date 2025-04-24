@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRootProps, PluginType } from '@grafana/data';
-import { render, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import App from './App';
+import { testIds } from '../testIds';
 
 describe('Components/App', () => {
   let props: AppRootProps;
@@ -26,12 +27,13 @@ describe('Components/App', () => {
   });
 
   test('renders without an error"', async () => {
-    render(
+    const { queryByTestId, findByText } = render(
       <BrowserRouter>
         <App {...props} />
       </BrowserRouter>
     );
 
-    expect(await screen.findByText(/this is page one./i)).toBeInTheDocument();
+    await waitFor(() => expect(queryByTestId(testIds.pageOne.container)).toBeInTheDocument(), { timeout: 10000 });
+    expect(await findByText(/this is page one./i)).toBeInTheDocument();
   });
 });
