@@ -33,5 +33,3 @@ test('should be possible to load and execute an existing valid query', async ({
   await expect(panelEditPage.refreshPanel()).toBeOK();
   await expect(panelEditPage.panel.getErrorIcon()).not.toBeVisible();
 });
-
-// DEBUG=pw:browser
