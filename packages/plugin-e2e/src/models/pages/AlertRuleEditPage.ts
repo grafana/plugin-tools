@@ -47,24 +47,13 @@ export class AlertRuleEditPage extends GrafanaPage {
       'alertingQueryAndExpressionsStepMode'
     );
 
-    // why not check if alertingQueryAndExpressionsStepMode feature is enabled? then we'd have to update the code when the toggle is removed.
     if (alertingQueryAndExpressionsStepMode) {
-      await expect(
-        this.getByGrafanaSelector(
-          this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
-        )
-      ).toBeVisible();
+      await expect(this.advancedModeSwitch).toBeVisible();
     } else {
-      await expect(
-        this.getByGrafanaSelector(
-          this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
-        )
-      ).not.toBeVisible();
+      await expect(this.advancedModeSwitch).not.toBeVisible();
     }
 
-    const count = await this.getByGrafanaSelector(
-      this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
-    ).count();
+    const count = await this.advancedModeSwitch.count();
 
     return count > 0;
   }
