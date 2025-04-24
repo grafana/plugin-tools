@@ -1,3 +1,16 @@
+# (Thu Apr 24 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.19.8`
+  - chore: fixes unexpected flaky component tests (#1749) [#1749](https://github.com/grafana/plugin-tools/pull/1749) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Tue Apr 22 2025)
 
 #### 🐛 Bug Fix
