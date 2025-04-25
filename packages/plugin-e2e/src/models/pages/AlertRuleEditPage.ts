@@ -49,13 +49,13 @@ export class AlertRuleEditPage extends GrafanaPage {
 
     if (alertingQueryAndExpressionsStepMode) {
       await expect(this.advancedModeSwitch).toBeVisible();
-    } else {
-      await expect(this.advancedModeSwitch).not.toBeVisible();
+      await expect(this.advancedModeSwitch).toHaveCount(1);
+      return true;
     }
 
-    const count = await this.advancedModeSwitch.count();
-
-    return count > 0;
+    await expect(this.advancedModeSwitch).not.toBeVisible();
+    await expect(this.advancedModeSwitch).toHaveCount(0);
+    return false;
   }
 
   /*
