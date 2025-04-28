@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools
           repo_secrets: |
@@ -47,7 +47,7 @@ jobs:
           else
             echo "url=${{ github.event.inputs.pr_url }}" >> "$GITHUB_OUTPUT"
           fi
-      
+
       - name: Print PR URL
         run: |
           echo "PR URL: ${{ steps.set-pr-url.outputs.url }}"

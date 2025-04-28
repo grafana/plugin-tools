@@ -26,6 +26,8 @@ jobs:
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
+          persist-credentials: false
+
       - uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4.3.0
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
@@ -151,7 +153,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
@@ -282,6 +284,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Publish report
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
         with:
@@ -309,7 +314,7 @@ jobs:
           private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
 
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -318,6 +323,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           token: ${{ steps.generate_token.outputs.token }}
+          persist-credentials: false
 
       - name: Prepare repository
         run: git fetch --unshallow --tags
