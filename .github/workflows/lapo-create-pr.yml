@@ -52,7 +52,7 @@ jobs:
         run: |
           echo "PR URL: ${{ steps.set-pr-url.outputs.url }}"
 
-      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@main
+      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@710e22da8e42c37a44782ca0697f8d9e86f60821
         id: generate-embeddings
         with:
           token: ${{ steps.generate_token.outputs.token }}

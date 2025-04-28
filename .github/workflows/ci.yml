@@ -170,7 +170,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@main
+        uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
         with:
           url: http://localhost:3000/login
 
@@ -185,7 +185,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@0c99dfc6d788e1136eaad89f39f8dbbebbc91991
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -214,7 +214,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@main
+        uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
         with:
           url: http://localhost:3000/login
 
@@ -228,7 +228,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@0c99dfc6d788e1136eaad89f39f8dbbebbc91991
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -288,7 +288,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@0c99dfc6d788e1136eaad89f39f8dbbebbc91991
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
