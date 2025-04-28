@@ -8,9 +8,7 @@ on:
       - main
 
 permissions:
-  contents: write
-  id-token: write
-  pull-requests: write
+  contents: read
 
 jobs:
   test:
@@ -209,8 +207,10 @@ jobs:
       - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
         run: |
           docker compose pull
-          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
+          ANONYMOUS_AUTH_ENABLED=false docker compose build --no-cache
           docker compose up -d
+        env:
+          GRAFANA_VERSION: ${{ steps.min-version.outputs.MIN_VERSION }}
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
