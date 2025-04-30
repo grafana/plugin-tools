@@ -282,6 +282,9 @@ jobs:
     if: ${{ always() && !cancelled() }}
     needs: [generate-plugins]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -324,7 +327,7 @@ jobs:
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.generate-token.outputs.token }}
           persist-credentials: false
 
       - name: Prepare repository
@@ -345,7 +348,7 @@ jobs:
 
       - name: Create Release
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           # comes from the get-secrets step (shared get-vault-secrets workflow)
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
