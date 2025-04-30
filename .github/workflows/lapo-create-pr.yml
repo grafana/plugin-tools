@@ -55,7 +55,7 @@ jobs:
 
       - name: Print PR URL
         run: |
-          echo "PR URL: $PR_URL"
+          echo "PR URL: ${PR_URL}"
         env:
           PR_URL: ${{ steps.set-pr-url.outputs.url }}
 
