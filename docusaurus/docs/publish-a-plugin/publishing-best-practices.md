@@ -67,6 +67,28 @@ Ensure your screenshots are a suitable resolution and file type (e.g. png, jpeg,
 
 :::
 
+**[Sponsorship link](../reference/plugin-json#links)**
+
+`info.links`
+
+Adding a sponsorship link to your plugin's metadata provides a way for users to support your work. This link appears in the "Links" section of your plugin's detail page, making it easy for users who find your plugin valuable to contribute to its development.
+Sponsorship links support various funding platforms, such as GitHub Sponsors, Patreon etc
+
+Example:
+
+```
+{
+  info: {
+    links: [
+      {
+        name: "sponsorship",
+        url: "https://github.com/sponsors/pluginDeveloper"
+      }
+    ]
+  }
+}
+```
+
 **[Grafana version compatibility](../reference/plugin-json#dependencies)**
 
 `dependencies.grafanaDependency`
