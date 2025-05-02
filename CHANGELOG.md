@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@1.19.9`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-240060 [#1750](https://github.com/grafana/plugin-tools/pull/1750) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Thu Apr 24 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.19.8`
   - chore: fixes unexpected flaky component tests (#1749) [#1749](https://github.com/grafana/plugin-tools/pull/1749) ([@hugohaggmark](https://github.com/hugohaggmark))
 
