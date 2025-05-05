@@ -45,7 +45,7 @@
     "eslint-plugin-jsdoc": "^50.6.11",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "glob": "^11.0.0",
+    "glob": "^11.0.2",
     "husky": "^9.1.7",
     "lerna": "8.1.9",
     "lint-staged": "^15.5.1",
