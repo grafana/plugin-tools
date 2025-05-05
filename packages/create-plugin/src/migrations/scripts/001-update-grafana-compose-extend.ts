@@ -19,16 +19,20 @@ export default async function migrate(context: Context) {
 
   const buildContext = composeData.getIn(['services', 'grafana', 'build', 'context']);
 
+  // If the build context is not the base config, exit as we assume this is not using the old config
+  // for the grafana service.
   if (buildContext?.toString() !== './.config') {
     return context;
   }
 
+  // Remove items that match the base configuration
   visit(composeData, {
     Pair: ((
       _key: unknown,
       pair: Pair<unknown, unknown>,
       path: ReadonlyArray<Node | Document | Pair<unknown, unknown>>
     ) => {
+      // Build up the key path to the current pair
       const keyPath: string[] = [];
       for (const p of path) {
         if (p instanceof Pair && p.key instanceof Scalar) {
@@ -40,6 +44,7 @@ export default async function migrate(context: Context) {
         keyPath.push(pair.key.value as string);
       }
 
+      // If the current pair is in the base configuration, remove it
       if (keyPath[0] === 'services' && keyPath[1] === 'grafana') {
         const baseValue = baseComposeData.getIn(keyPath);
 
@@ -85,6 +90,7 @@ export default async function migrate(context: Context) {
     }) as visitorFn<Scalar>,
   });
 
+  // Remove items that match the base configuration
   visit(composeData, {
     Map: ((_key: unknown, node: YAMLMap, path: ReadonlyArray<Node | Document | Pair<unknown, unknown>>) => {
       const keyPath: string[] = [];
@@ -115,17 +121,22 @@ export default async function migrate(context: Context) {
     }) as visitorFn<YAMLMap>,
   });
 
+  // Remove the build context
   composeData.deleteIn(['services', 'grafana', 'build', 'context']);
+
+  // Remove the build if it has no items
   const build = composeData.getIn(['services', 'grafana', 'build']);
   if (build instanceof YAMLMap && build.items?.length === 0) {
     composeData.deleteIn(['services', 'grafana', 'build']);
   }
 
+  // Remove the volumes if they have no items
   const volumes = composeData.getIn(['services', 'grafana', 'volumes']);
   if (volumes instanceof YAMLSeq && volumes.items.length === 0) {
     composeData.deleteIn(['services', 'grafana', 'volumes']);
   }
 
+  // Add the extends configuration
   composeData.addIn(['services', 'grafana', 'extends'], {
     file: '.config/docker-compose-base.yaml',
     service: 'grafana',
