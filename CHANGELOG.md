@@ -1,5 +1,19 @@
 # (Mon May 05 2025)
 
+#### 💥 Breaking Change
+
+- `@grafana/plugin-e2e@2.0.0`
+  - PluginE2E: Move away from networkIdle [#1746](https://github.com/grafana/plugin-tools/pull/1746) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon May 05 2025)
+
 #### 🐛 Bug Fix
 
 - `@libs/output@1.0.2`, `@grafana/create-plugin@5.19.9`
