@@ -40,7 +40,8 @@
     "minimist": "^1.2.8",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
-    "which": "^5.0.0"
+    "which": "^5.0.0",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "@libs/output": "^1.0.1",

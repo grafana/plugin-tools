@@ -4,6 +4,7 @@ import defaultMigrations, { MigrationMeta } from './migrations.js';
 import { flushChanges, printChanges, migrationsDebug } from './utils.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
 import { setRootConfig } from '../utils/utils.config.js';
+import { output } from '../utils/utils.console.js';
 
 export type MigrationFn = (context: Context) => Context | Promise<Context>;
 
@@ -34,11 +35,11 @@ type RunMigrationsOptions = {
 
 export async function runMigrations(migrations: Record<string, MigrationMeta>, options: RunMigrationsOptions = {}) {
   const basePath = process.cwd();
+  const migrationList = Object.entries(migrations).map(
+    ([key, migrationMeta]) => `${key} (${migrationMeta.description})`
+  );
 
-  console.log('');
-  console.log('Running the following migrations:');
-  Object.entries(migrations).map(([key, migrationMeta]) => console.log(`- ${key} (${migrationMeta.description})`));
-  console.log('');
+  output.log({ title: 'Running the following migrations:', body: output.bulletList(migrationList) });
 
   for (const [key, migration] of Object.entries(migrations)) {
     try {

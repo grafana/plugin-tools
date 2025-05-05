@@ -4,6 +4,7 @@ import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { debug } from '../utils/utils.cli.js';
 import chalk from 'chalk';
 import { MigrationMeta } from './migrations.js';
+import { output } from '../utils/utils.console.js';
 
 export function printChanges(context: Context, key: string, migration: MigrationMeta) {
   const changes = context.listChanges();
@@ -19,15 +20,14 @@ export function printChanges(context: Context, key: string, migration: Migration
     }
   }
 
-  console.log('--------------------------------');
-  console.log('Running migration:', key, chalk.bold(migration.migrationScript));
+  output.addHorizontalLine('gray');
+  output.logSingleLine(`${key} (${migration.migrationScript})`);
 
   if (lines.length === 0) {
-    console.log('No changes were made');
+    output.logSingleLine('No changes were made');
   } else {
-    console.log(`${chalk.bold('Changes:')}\n  ${lines.join('\n  ')}`);
+    output.log({ title: 'Changes:', withPrefix: false, body: output.bulletList(lines) });
   }
-  console.log('');
 }
 
 export function flushChanges(context: Context) {

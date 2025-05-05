@@ -145,6 +145,12 @@ export class Output {
     this.addNewLine();
   }
 
+  logSingleLine(message: string) {
+    this.addNewLine();
+    this.write(message);
+    this.addNewLine();
+  }
+
   bulletList(list: string[]) {
     return list.map((item) => {
       return ` • ${item}`;
