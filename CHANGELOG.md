@@ -1,5 +1,18 @@
 # (Mon May 05 2025)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.20.0`
+  - Create-Plugin: Update plugin-e2e to support latest playwright [#1761](https://github.com/grafana/plugin-tools/pull/1761) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon May 05 2025)
+
 #### 💥 Breaking Change
 
 - `@grafana/plugin-e2e@2.0.0`
