@@ -1,3 +1,15 @@
+# v5.19.9 (Mon May 05 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add docker-compose migration for extending from .config [#1621](https://github.com/grafana/plugin-tools/pull/1621) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.19.8 (Thu Apr 24 2025)
 
 #### 🐛 Bug Fix
