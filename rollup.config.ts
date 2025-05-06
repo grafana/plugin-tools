@@ -1,14 +1,15 @@
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { glob, GlobOptions } from 'glob';
 import { readFileSync } from 'node:fs';
+import { chmod } from 'node:fs/promises';
 import { join } from 'node:path';
 import { inspect } from 'node:util';
-import { defineConfig, RollupOptions, Plugin } from 'rollup';
+import { defineConfig, Plugin, RollupOptions } from 'rollup';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
-import { chmod } from 'node:fs/promises';
 
 const projectRoot = process.cwd();
 const tsconfigPath = join(projectRoot, 'tsconfig.json');
@@ -26,9 +27,20 @@ if (pkg.main) {
   input.push(getSourceFilePath(pkg.main));
 }
 
-// TODO: Remove this once we have a better way to handle the auth.setup.ts file
+// TODO: Remove this once we have a better way to extend this config
 if (pkg.name === '@grafana/plugin-e2e') {
   input.push(join(preserveModulesRoot, 'auth', 'auth.setup.ts'));
+}
+
+// TODO: Remove this once we have a better way to extend this config
+if (pkg.name === '@grafana/create-plugin') {
+  const globOptions: GlobOptions = {
+    cwd: join(preserveModulesRoot, 'migrations', 'scripts'),
+    ignore: ['**/*.test.ts'],
+    absolute: true,
+  };
+  const migrations = glob.sync('**/*.ts', globOptions).map((m) => m.toString());
+  input.push(...migrations);
 }
 
 if (pkg.dependencies) {

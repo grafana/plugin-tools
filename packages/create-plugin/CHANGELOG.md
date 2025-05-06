@@ -1,3 +1,27 @@
+# v5.20.0 (Mon May 05 2025)
+
+#### 🚀 Enhancement
+
+- Create-Plugin: Update plugin-e2e to support latest playwright [#1761](https://github.com/grafana/plugin-tools/pull/1761) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.9 (Mon May 05 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add docker-compose migration for extending from .config [#1621](https://github.com/grafana/plugin-tools/pull/1621) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.19.8 (Thu Apr 24 2025)
 
 #### 🐛 Bug Fix

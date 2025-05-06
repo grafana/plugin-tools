@@ -1,3 +1,43 @@
+# (Mon May 05 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.20.0`
+  - Create-Plugin: Update plugin-e2e to support latest playwright [#1761](https://github.com/grafana/plugin-tools/pull/1761) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon May 05 2025)
+
+#### 💥 Breaking Change
+
+- `@grafana/plugin-e2e@2.0.0`
+  - PluginE2E: Move away from networkIdle [#1746](https://github.com/grafana/plugin-tools/pull/1746) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon May 05 2025)
+
+#### 🐛 Bug Fix
+
+- `@libs/output@1.0.2`, `@grafana/create-plugin@5.19.9`
+  - Create Plugin: Add docker-compose migration for extending from .config [#1621](https://github.com/grafana/plugin-tools/pull/1621) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Apr 24 2025)
 
 #### 🐛 Bug Fix
