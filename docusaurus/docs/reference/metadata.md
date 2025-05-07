@@ -226,7 +226,7 @@ For data source plugins. There is a query options section in the plugin's query 
 
 List of RBAC roles defined by the plugin and their default assignments to basic roles (`Viewer`, `Editor`, `Admin`, `Grafana Admin`).
 
-Requires Grafana version 9.4.0 or later. Currently, this is behind the `accessControlOnCall` feature toggle.
+Requires Grafana version 11.6.0 or later.
 
 ### Properties
 
