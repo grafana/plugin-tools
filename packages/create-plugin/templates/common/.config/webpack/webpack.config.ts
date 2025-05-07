@@ -12,7 +12,7 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { SubresourceIntegrityPlugin } from "webpack-subresource-integrity";
-import { type Configuration, BannerPlugin } from 'webpack';
+import webpack, { type Configuration } from 'webpack';
 import LiveReloadPlugin from 'webpack-livereload-plugin';
 import VirtualModulesPlugin from 'webpack-virtual-modules';
 
@@ -196,7 +196,7 @@ const config = async (env: Env): Promise<Configuration> => {
       new BuildModeWebpackPlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
-      new BannerPlugin({
+      new webpack.BannerPlugin({
         banner: "/* [create-plugin] version: " + cpVersion + " */",
         raw: true,
         entryOnly: true,
