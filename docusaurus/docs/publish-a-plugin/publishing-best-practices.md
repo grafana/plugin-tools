@@ -25,7 +25,7 @@ Metadata plays a crucial role in making your Grafana plugin discoverable and use
 
 Here’s a breakdown of the key components to focus on:
 
-**[Plugin name](../reference/plugin-json#properties)**
+**[Plugin name](../reference/plugin-json)**
 
 `name`
 
@@ -67,7 +67,7 @@ Ensure your screenshots are a suitable resolution and file type (e.g. png, jpeg,
 
 :::
 
-**[Sponsorship link](../reference/plugin-json#links)**
+**[Sponsorship link](../reference/plugin-json#infolinks)**
 
 `info.links`
 
