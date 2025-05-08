@@ -1,3 +1,20 @@
+# v5.20.1 (Wed May 07 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v2.0.1 [#1767](https://github.com/grafana/plugin-tools/pull/1767) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:grafana/plugin-tools ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.20.0 (Mon May 05 2025)
 
 #### 🚀 Enhancement
