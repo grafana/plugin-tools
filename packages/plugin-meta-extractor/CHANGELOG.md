@@ -1,3 +1,15 @@
+# v0.5.5 (Wed May 07 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:grafana/plugin-tools ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v0.0.7 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix

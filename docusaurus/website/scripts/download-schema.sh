@@ -27,16 +27,5 @@ if [ ! -s "$OUTPUT_FILE" ]; then
     exit 1
 fi
 
-# Detect OS and set sed options accordingly
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    SED_OPTS="-i ''"
-else
-    SED_OPTS="-i"
-fi
-
-# Replace patterns with backticks
-sed $SED_OPTS 's/'\''{PLUGIN_ID}\/name-of-component\/v1'\''/`{PLUGIN_ID}\/name-of-component\/v1`/g' "$OUTPUT_FILE"
-sed $SED_OPTS 's/'\''{PLUGIN_ID}\/name-of-my-extension-point\/v1'\''/`{PLUGIN_ID}\/name-of-my-extension-point\/v1`/g' "$OUTPUT_FILE"
-
 
 echo "Schema download complete!"

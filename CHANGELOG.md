@@ -1,3 +1,25 @@
+# (Wed May 07 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.0.2`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-242212 [#1775](https://github.com/grafana/plugin-tools/pull/1775) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.20.1`
+  - chore(deps): update dependency @grafana/plugin-e2e to v2.0.1 [#1767](https://github.com/grafana/plugin-tools/pull/1767) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### ⚠️ Pushed to `main`
+
+- trigger prod deployment ([@tolzhabayev](https://github.com/tolzhabayev))
+- `@grafana/create-plugin@5.20.1`, `@grafana/plugin-meta-extractor@0.5.5`
+  - Merge branch 'main' of github.com:grafana/plugin-tools ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue May 06 2025)
 
 #### 🐛 Bug Fix
