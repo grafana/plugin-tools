@@ -25,8 +25,24 @@ else
     SED_OPTS="-i"
 fi
 
-# Replace the string # plugin\.json with the desired content in the OUTPUT_FILE
-sed $SED_OPTS 's|# plugin\\.json|---\nid: plugin-json\ntitle: Metadata (plugin.json)\ndescription: Reference for the Grafana plugin.json metadata file.\nkeywords:\n  - grafana\n  - plugins\n  - documentation\n  - plugin.json\n  - API reference\n  - API\nsidebar_position: 10\n---\n\n# Plugin metadata (plugin.json)|' "$OUTPUT_FILE"
+# Add docusaurus header to the top of the file
+sed $SED_OPTS "1i\\
+---\\
+id: plugin-json\\
+title: Metadata (plugin.json)\\
+description: Reference for the Grafana plugin.json metadata file.\\
+keywords:\\
+  - grafana\\
+  - plugins\\
+  - documentation\\
+  - plugin.json\\
+  - API reference\\
+  - API\\
+sidebar_position: 10\\
+---\\
+\\
+# Plugin metadata (plugin.json)
+" "$OUTPUT_FILE"
 
 rm -f "$INPUT_FILE"
 
