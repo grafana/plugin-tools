@@ -1,5 +1,4 @@
 import { expect, test } from '../../../../src';
-import { clickRadioButton } from '../../../utils';
 
 test('should render config editor', async ({ createDataSourceConfigPage, readProvisionedDataSource, page }) => {
   const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });

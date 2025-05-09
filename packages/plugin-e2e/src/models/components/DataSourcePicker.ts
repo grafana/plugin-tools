@@ -1,5 +1,5 @@
 import * as semver from 'semver';
-import { Locator } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
 
@@ -25,6 +25,7 @@ export class DataSourcePicker extends GrafanaPage {
       }).locator('input');
     }
 
+    await expect(datasourcePicker).toBeVisible();
     await datasourcePicker.fill(name);
 
     // this is a hack to get the selection to work in 10.ish versions of Grafana.

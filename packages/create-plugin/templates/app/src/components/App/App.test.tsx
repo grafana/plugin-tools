@@ -1,7 +1,7 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { AppRootProps, PluginType } from '@grafana/data';
-import { render, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import App from './App';
 
 describe('Components/App', () => {
@@ -26,12 +26,13 @@ describe('Components/App', () => {
   });
 
   test('renders without an error"', async () => {
-    render(
-      <BrowserRouter>
+    const { queryByText } = render(
+      <MemoryRouter>
         <App {...props} />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
-    expect(await screen.findByText(/this is page one./i)).toBeInTheDocument();
+    // Application is lazy loaded, so we need to wait for the component and routes to be rendered
+    await waitFor(() => expect(queryByText(/this is page one./i)).toBeInTheDocument(), { timeout: 2000 });
   });
 });

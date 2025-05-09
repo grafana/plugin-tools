@@ -25,7 +25,7 @@ Metadata plays a crucial role in making your Grafana plugin discoverable and use
 
 Here’s a breakdown of the key components to focus on:
 
-**[Plugin name](../reference/plugin-json#properties)**
+**[Plugin name](../reference/plugin-json)**
 
 `name`
 
@@ -67,6 +67,28 @@ Ensure your screenshots are a suitable resolution and file type (e.g. png, jpeg,
 
 :::
 
+**[Sponsorship link](../reference/plugin-json#infolinks)**
+
+`info.links`
+
+Adding a sponsorship link to your plugin's metadata provides a way for users to support your work. This link appears in the "Links" section of your plugin's detail page, making it easy for users who find your plugin valuable to contribute to its development.
+Sponsorship links support various funding platforms, such as GitHub Sponsors, Patreon etc
+
+Example:
+
+```
+{
+  info: {
+    links: [
+      {
+        name: "sponsorship",
+        url: "https://github.com/sponsors/pluginDeveloper"
+      }
+    ]
+  }
+}
+```
+
 **[Grafana version compatibility](../reference/plugin-json#dependencies)**
 
 `dependencies.grafanaDependency`
@@ -86,6 +108,57 @@ Beyond a basic overview of your plugin, its use cases, and requirements, there a
 - **Contribution guidance:** Maintaining a plugin can be demanding, especially for individual developers. Clearly outlining how users can provide feedback, report bugs, and directing potential code contributors to your `contributing.md` are all ways to help foster community involvement, making it easier to maintain and improve your plugin over time.
 
 This structure ensures that your README is both informative and engaging, providing users with everything they need to confidently use and contribute to your plugin.
+
+## Maintaining a Detailed Changelog
+
+A well-maintained changelog is essential for plugin transparency and helps users understand what's changed between versions. Grafana displays your changelog in the plugin details page, making it a key information source for users evaluating whether to update.
+
+:::info
+
+You can take advantage of our automated changelog generation feature to simplify the process of maintaining your changelog. Follow our guide for [Automatically Generate Changelogs](../publish-a-plugin/build-automation.md#automatically-generate-changelogs)
+
+:::
+
+### Changelog Best Practices
+
+Use a dedicated CHANGELOG.md file in your repository root
+
+1. Follow semantic versioning (MAJOR.MINOR.PATCH) and organize entries by version
+1. Date each release to provide chronological context
+1. Group changes by type such as "Features", "Bug Fixes", "Breaking Changes", etc.
+1. Reference pull requests with links to provide additional context
+1. Highlight breaking changes prominently to alert users of required actions
+
+### Example Changelog:
+
+```markdown
+### [1.10.0](https://github.com/user/plugin-name/tree/1.10.0) (2025-04-05)
+
+**Implemented enhancements:**
+
+- Add support for dark theme [\#138](https://github.com/user/plugin-name/pull/138) ([username](https://github.com/username))
+- Add ability to customize tooltip formats [\#135](https://github.com/user/plugin-name/pull/135) ([username](https://github.com/username))
+- Support for PostgreSQL data source [\#129](https://github.com/user/plugin-name/pull/129) ([username](https://github.com/username))
+
+**Fixed bugs:**
+
+- Fix panel crash when switching dashboards [\#139](https://github.com/user/plugin-name/pull/139) ([username](https://github.com/username))
+- Fix inconsistent time zone handling [\#134](https://github.com/user/plugin-name/pull/134) ([username](https://github.com/username))
+
+**Closed issues:**
+
+- Documentation needs examples for PostgreSQL queries [\#130](https://github.com/user/plugin-name/issues/130)
+
+**Merged pull requests:**
+
+- Update dependencies to address security vulnerabilities [\#140](https://github.com/user/plugin-name/pull/140) ([username](https://github.com/username))
+
+**Breaking changes:**
+
+- Migrate configuration storage format [\#115](https://github.com/user/plugin-name/pull/115) ([username](https://github.com/username))
+```
+
+By following this format, your changelog becomes a valuable resource that clearly communicates changes, acknowledges contributions, and provides links to more detailed information. This level of transparency helps users make informed decisions about updating your plugin and demonstrates your commitment to maintaining a high-quality Grafana plugin.
 
 ## End-to-end testing
 

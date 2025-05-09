@@ -1,0 +1,24 @@
+name: Lapo Docs Generate Embeddings
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'docusaurus/docs/**/*.md'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  generate-docs-embeddings:
+    name: generate-docs-embeddings
+    runs-on: ubuntu-latest
+    steps:
+      - uses: grafana/lapo-docs/github-actions/generate-embeddings@41bcdcda32541126c29c9c3bd20f675700151b56
+        id: generate-embeddings
+        with:
+          docs-path: docusaurus/docs
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+

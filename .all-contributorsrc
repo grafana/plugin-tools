@@ -346,6 +346,24 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "juanicabanas",
+      "name": "Juan Cabanas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11707172?v=4",
+      "profile": "https://github.com/juanicabanas",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "MattIPv4",
+      "name": "Matt Cowley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12371363?v=4",
+      "profile": "https://mattcowley.co.uk/",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

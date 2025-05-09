@@ -1,5 +1,9 @@
 name: Deploy to Developer Portal PROD Bucket
 
+permissions:
+  contents: read
+  id-token: write
+
 on:
   push:
     branches:
@@ -7,6 +11,10 @@ on:
     paths:
       - '.github/workflows/deploy-to-developer-portal-prod.yml'
       - 'docusaurus/**'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy docs to Developer Portal Bucket
@@ -16,9 +24,12 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -30,13 +41,14 @@ jobs:
       - name: Build documentation website
         run: npm run docs:build
 
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v2'
+      - uses: grafana/shared-workflows/actions/login-to-gcs@64c35f1dffd024130947f485ed6a150edfe83d22 # v0.2.0
+        id: login-to-gcs
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          service_account: 'github-developer-portal@grafanalabs-workload-identity.iam.gserviceaccount.com'
+          bucket: 'grafana-developer-portal'
 
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+        uses: google-github-actions/setup-gcloud@77e7a554d41e2ee56fc945c52dfd3f33d12def9a # v2.1.4
 
       - name: 'Deploy to Developer Portal Bucket'
         run: |

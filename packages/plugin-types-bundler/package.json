@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-types-bundler",
-  "version": "0.2.7",
+  "version": "0.3.4",
   "description": "Bundle grafana plugin typescript types for sharing with other plugins",
   "bin": "./dist/bin/run.js",
   "type": "module",
@@ -17,8 +17,8 @@
   ],
   "scripts": {
     "test": "vitest --passWithNoTests",
-    "build": "tsc --project tsconfig.json && chmod +x ./dist/bin/run.js",
-    "dev": "tsc --project tsconfig.json --watch",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit"
@@ -50,7 +50,7 @@
   "dependencies": {
     "@grafana/levitate": "^0.16.0",
     "@types/minimist": "^1.2.2",
-    "@types/node": "22.13.10",
+    "@types/node": "22.15.12",
     "debug": "^4.3.4",
     "jackw-dts-bundle-gen-test": "^9.5.1",
     "minimist": "^1.2.8"
