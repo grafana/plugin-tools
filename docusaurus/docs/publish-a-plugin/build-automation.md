@@ -20,7 +20,7 @@ to ensure that your plugin will be built and packaged in the correct format.
 
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
-If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token/) documentation includes guidance on how to create this token.
+If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token) documentation includes guidance on how to create this token.
 
 By creating a release tag, the whole process becomes automated, resulting in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins)
 

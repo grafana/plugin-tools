@@ -31,6 +31,7 @@ const config: Config = {
   baseUrl: 'developers/plugin-tools/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'throw',
   favicon: 'img/favicon.png',
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
