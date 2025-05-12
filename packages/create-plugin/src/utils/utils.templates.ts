@@ -101,8 +101,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const useCypress =
     !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
-  const shouldUseReactRouterV6 = () => features.useReactRouterV6 === true;
-  const getReactRouterVersion = () => (shouldUseReactRouterV6() ? '6.22.0' : '5.2.0');
+  const getReactRouterVersion = () => (features.useReactRouterV6 ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
 
@@ -127,7 +126,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: shouldUseReactRouterV6(),
+      useReactRouterV6: features.useReactRouterV6 || false,
       reactRouterVersion: getReactRouterVersion(),
       usePlaywright,
       useCypress,
@@ -152,7 +151,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: shouldUseReactRouterV6(),
+      useReactRouterV6: features.useReactRouterV6 || false,
       reactRouterVersion: getReactRouterVersion(),
       usePlaywright,
       useCypress,
