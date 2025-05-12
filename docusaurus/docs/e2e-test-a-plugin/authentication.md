@@ -26,14 +26,13 @@ In the following example, there's a [setup project](https://playwright.dev/docs/
 The second project, `run-tests`, runs all tests in the `./tests` directory. This project reuses the authentication state from the `auth` project. As a consequence, login only happens once, and all tests in the `run-tests` project start already authenticated.
 
 ```ts title="playwright.config.ts"
-import { dirname } from 'path';
-import { defineConfig, devices } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+import { defineConfig } from '@playwright/test';
+import baseConfig from './.config/playwright.config';
 
-const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
-
-export default defineConfig({
-    ...
-    projects: [
+export default defineConfig<PluginOptions>(baseConfig, {
+  projects: [
+    ...baseConfig.projects!,
     {
       name: 'auth',
       testDir: pluginE2eAuth,
@@ -48,7 +47,7 @@ export default defineConfig({
         storageState: 'playwright/.auth/admin.json',
       },
       dependencies: ['auth'],
-    }
+    },
   ],
 });
 ```
@@ -60,14 +59,14 @@ If your plugin uses RBAC, you may want to write tests that verify that certain p
 The `@grafana/plugin-e2e` tool lets you define users with roles in the Playwright config file. In the following example, a new user with the role `Viewer` is created in the `createViewerUserAndAuthenticate` setup project. In the next project, authentication state for the user with the viewer role is reused when running the tests. Note that tests that are specific for the `Viewer` role have been added to a dedicated `testDir`.
 
 ```ts title="playwright.config.ts"
-import { dirname } from 'path';
-import { defineConfig, devices } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+import { defineConfig } from '@playwright/test';
+import baseConfig from './.config/playwright.config';
 
-const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
-
-export default defineConfig<PluginOptions>({
+export default defineConfig<PluginOptions>(baseConfig, {
   ...
   projects: [
+      ...baseConfig.projects!,
       {
         name: 'createViewerUserAndAuthenticate',
         testDir: pluginE2eAuth,
@@ -100,12 +99,11 @@ export default defineConfig<PluginOptions>({
 When a `user` is defined in a setup project (like in the RBAC example above) `plugin-e2e` will use the Grafana HTTP API to create the user account. This action requires elevated permissions, so by default the server administrator credentials `admin:admin` will be used. If the end-to-end tests are targeting the [development environment](../get-started/set-up-development-environment.mdx) scaffolded with `create-plugin`, this will work fine. However for other test environments the server administrator password may be different. In that case, we search for GRAFANA_ADMIN_USER and GRAFANA_ADMIN_PASSWORD environment variables. Additionally you can provide the correct credentials by setting `grafanaAPICredentials` in the global options.
 
 ```ts title="playwright.config.ts"
-import { dirname } from 'path';
-import { defineConfig, devices } from '@playwright/test';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+import { defineConfig } from '@playwright/test';
+import baseConfig from './.config/playwright.config';
 
-const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
-
-export default defineConfig<PluginOptions>({
+export default defineConfig<PluginOptions>(baseConfig, {
   testDir: './tests',
   use: {
     baseURL: process.env.GRAFANA_URL || 'http://localhost:3000',
@@ -115,6 +113,7 @@ export default defineConfig<PluginOptions>({
     },
   },
   projects: [
+    ...baseConfig.projects!,
     ...
   ]
 })

@@ -27,10 +27,11 @@ The `@grafana/plugin-e2e` tool allows you to override the frontend feature toggl
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
-import { PluginOptions } from '@grafana/plugin-e2e';
+import type { PluginOptions } from '@grafana/plugin-e2e';
+import { defineConfig } from '@playwright/test';
+import baseConfig from './.config/playwright.config';
 
-export default defineConfig<PluginOptions>({
+export default defineConfig<PluginOptions>(baseConfig, {
   testDir: './tests',
   reporter: 'html',
   use: {

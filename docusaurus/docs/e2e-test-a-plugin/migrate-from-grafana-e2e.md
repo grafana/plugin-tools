@@ -58,15 +58,16 @@ Open the Playwright config file that was generated when Playwright was installed
    Your Playwright config should have the following project configuration:
 
 ```ts title="playwright.config.ts"
-import { dirname } from 'path';
-import { defineConfig, devices } from '@playwright/test';
 import type { PluginOptions } from '@grafana/plugin-e2e';
+import { defineConfig } from '@playwright/test';
+import baseConfig from './.config/playwright.config';
 
 const pluginE2eAuth = `${dirname(require.resolve('@grafana/plugin-e2e'))}/auth`;
 
-export default defineConfig<PluginOptions>({
+export default defineConfig<PluginOptions>(baseConfig, {
     ...
     projects: [
+    ...baseConfig.projects!,
     {
       name: 'auth',
       testDir: pluginE2eAuth,
