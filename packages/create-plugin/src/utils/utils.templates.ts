@@ -101,9 +101,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const useCypress =
     !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
-  const shouldUseReactRouterV6 = (pluginType: string) =>
-    features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
-  const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
+  const getReactRouterVersion = () => (features.useReactRouterV6 ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
 
@@ -128,8 +126,9 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: shouldUseReactRouterV6(cliArgs.pluginType),
-      reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
+      useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
+      reactRouterVersion: getReactRouterVersion(),
+      scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
       useCypress,
     };
@@ -153,8 +152,9 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: shouldUseReactRouterV6(pluginJson.type),
-      reactRouterVersion: getReactRouterVersion(pluginJson.type),
+      useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
+      reactRouterVersion: getReactRouterVersion(),
+      scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
       useCypress,
       pluginExecutable: pluginJson.executable,
