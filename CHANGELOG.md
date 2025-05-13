@@ -1,3 +1,22 @@
+# (Tue May 13 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.20.2`
+  - Create Plugin: Fix update cli flags from running generate [#1787](https://github.com/grafana/plugin-tools/pull/1787) ([@jackw](https://github.com/jackw))
+  - chore(deps): update dependency @grafana/plugin-e2e to v2.0.2 [#1776](https://github.com/grafana/plugin-tools/pull/1776) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### ⚠️ Pushed to `main`
+
+- chore(dependencies): bump vite to latest ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed May 07 2025)
 
 #### 🐛 Bug Fix
