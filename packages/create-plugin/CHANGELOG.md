@@ -1,3 +1,15 @@
+# v5.21.0 (Tue May 13 2025)
+
+#### 🚀 Enhancement
+
+- Template: Update scenes app to use scenes 6 and react router 6 [#1783](https://github.com/grafana/plugin-tools/pull/1783) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v5.20.2 (Tue May 13 2025)
 
 #### 🐛 Bug Fix
