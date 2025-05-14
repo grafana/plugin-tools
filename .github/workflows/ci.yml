@@ -56,6 +56,98 @@ jobs:
           path: ./packed-artifacts
           retention-days: 1
 
+  test-node-versions:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    name: Test node versions
+    needs: [test]
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 20
+          - 22
+          - 24
+    env:
+      WORKING_DIR: 'myorg-nobackend-panel'
+    steps:
+      - name: Setup .npmrc file for NPM registry
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download packed artifacts
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        with:
+          name: packed-artifacts
+          path: ./packed-artifacts
+
+      - name: Install npm packages globally
+        run: for file in *.tgz; do npm install -g "$file"; done
+        working-directory: ./packed-artifacts
+
+      - name: Generate plugin
+        run: npx create-plugin --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+
+      - name: Install generated plugin dependencies
+        run: npm install --no-audit
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Lint plugin frontend
+        run: npm run lint
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Typecheck plugin frontend
+        run: npm run typecheck
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Build plugin frontend
+        run: npm run build
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Test plugin frontend
+        run: npm run test:ci
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Install playwright dependencies
+        run: npm exec playwright install --with-deps chromium
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Start grafana server for e2e tests (10.4.0)
+        run: |
+          ANONYMOUS_AUTH_ENABLED=false docker compose build --no-cache
+          docker compose up -d
+        env:
+          GRAFANA_VERSION: '10.4.0'
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Wait for grafana server (10.4.0)
+        uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run e2e tests (10.4.0)
+        id: run-e2e-tests-min-version
+        run: npm run e2e
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Stop grafana docker (10.4.0)
+        run: docker compose down
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
+        env:
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ./${{ env.WORKING_DIR }}
+
   generate-plugins:
     name: Test plugin scaffolding
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"

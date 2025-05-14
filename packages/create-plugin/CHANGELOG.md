@@ -1,3 +1,41 @@
+# v5.22.0 (Wed May 14 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support Node 24 [#1772](https://github.com/grafana/plugin-tools/pull/1772) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.21.0 (Tue May 13 2025)
+
+#### 🚀 Enhancement
+
+- Template: Update scenes app to use scenes 6 and react router 6 [#1783](https://github.com/grafana/plugin-tools/pull/1783) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v5.20.2 (Tue May 13 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix update cli flags from running generate [#1787](https://github.com/grafana/plugin-tools/pull/1787) ([@jackw](https://github.com/jackw))
+- chore(deps): update dependency @grafana/plugin-e2e to v2.0.2 [#1776](https://github.com/grafana/plugin-tools/pull/1776) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.20.1 (Wed May 07 2025)
 
 #### 🐛 Bug Fix

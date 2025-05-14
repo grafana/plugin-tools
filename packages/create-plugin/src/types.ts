@@ -23,6 +23,7 @@ export type TemplateData = {
   version: string;
   bundleGrafanaUI: boolean;
   useReactRouterV6: boolean;
+  scenesVersion: string;
   reactRouterVersion: string;
   usePlaywright: boolean;
   useCypress: boolean;
