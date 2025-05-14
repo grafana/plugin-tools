@@ -66,9 +66,7 @@ jobs:
       matrix:
         node-version:
           - 20
-          - 21
           - 22
-          - 23
           - 24
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
