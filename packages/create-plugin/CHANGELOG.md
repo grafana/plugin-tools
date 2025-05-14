@@ -1,3 +1,15 @@
+# v5.22.0 (Wed May 14 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support Node 24 [#1772](https://github.com/grafana/plugin-tools/pull/1772) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.21.0 (Tue May 13 2025)
 
 #### 🚀 Enhancement
