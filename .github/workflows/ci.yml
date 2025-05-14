@@ -164,7 +164,7 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Start grafana server for e2e tests (latest)
-        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=latest docker compose up
+        run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=latest docker compose up -d
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)

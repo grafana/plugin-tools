@@ -76,7 +76,7 @@ jobs:
       - name: Start Grafana
         working-directory: ./packages/plugin-e2e
         run: |
-          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
