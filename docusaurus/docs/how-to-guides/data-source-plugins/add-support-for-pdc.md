@@ -1,5 +1,5 @@
 ---
-id: add-support-for-prd
+id: add-support-for-pdc
 title: Add support for Private Datasource Connect (PDC)
 description: Add support for private datasource connect (PDC) functionality Grafana plugin development.
 keywords:
