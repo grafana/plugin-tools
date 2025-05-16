@@ -217,4 +217,4 @@ Steps to run this method:
 
 1. Create a new instance of the data source that you want to test. You should see the "Secure SOCKS Proxy" configuration section, with a toggle to Enable it.
 1. Once enabled, click "Save & Test" and Grafana shows a message saying that the connection was successful.
-1. In the microsocks logs you should see something similar to client[5] 127.0.0.1: connected to localhost:3306, meaning that the connection was established via the server.
+1. In the microsocks logs you should see something similar to `client[5] 127.0.0.1: connected to <target>`, meaning that the connection was established via the server.
