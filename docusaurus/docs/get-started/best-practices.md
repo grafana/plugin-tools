@@ -95,7 +95,7 @@ If you want to target the next release (or the current `main`) and being able to
 /*  Example you can run in your chrome DevTools console on this page */
 
 const { satisfies } = await import("https://esm.sh/semver");
-console.log(satisfies("12.1.0-3212123", ">=12.1.0", {includePrerelease:true}));
+console.log(satisfies("12.1.0-3212123", ">=12.1.0", { includePrerelease: true }));
 > false
 ```
 
