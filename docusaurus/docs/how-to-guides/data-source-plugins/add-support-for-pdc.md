@@ -1,7 +1,7 @@
 ---
 id: add-support-for-pdc
 title: Add support for Private Datasource Connect (PDC)
-description: Add support for private datasource connect (PDC) functionality Grafana plugin development.
+description: Add support for private datasource connect (PDC) functionality to your Grafana plugin.
 keywords:
   - grafana
   - plugins
