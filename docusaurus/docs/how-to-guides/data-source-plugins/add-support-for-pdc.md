@@ -20,7 +20,7 @@ Read more about it [here](https://grafana.com/docs/grafana-cloud/connect-externa
 
 ### When NOT to support PDC
 
-PDC is a Grafana Cloud - only solution, so if your datasource is not available in Grafana Cloud, there is not much benefit from implementing PDC support.
+PDC is a Grafana Cloud - only solution, so if your datasource is not available in Grafana Cloud, there is not much benefit to implementing PDC support.
 
 # Adding PDC to a data source
 
