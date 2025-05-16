@@ -43,7 +43,7 @@ Note: It is not possible to add PDC support to frontend data sources because the
 Here’s the brief overview of the steps you need to take to add PDC to the data source plugin:
 
 - Update the plugin frontend configuration section to include a toggle for enabling SOCKS proxying
-- Update the data source plugin’s backend to use a SOCKS proxy transport when configured to do so
+- Update the plugin backend to use a SOCKS proxy transport when configured to do so
 - Test and release the data source
 - Enable PDC for the data source in Grafana Cloud
 - Update public documentation
