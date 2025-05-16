@@ -35,7 +35,7 @@ grafana-plugin-sdk provides an `httpClientProvider` that automatically uses the 
 Note: It is not possible to add PDC support to frontend data sources because the connection to the proxy is established from the backend.
 :::
 
-- [`grafana-plugin-sdk`](https://github.com/grafana/grafana-plugin-sdk-go) version > [`0.229.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.229.0) is needed to get the latest changes compatible with the remote plugins. Always a good practice to keep this as up to date as possible.
+- [`grafana-plugin-sdk`](https://github.com/grafana/grafana-plugin-sdk-go) version > [`0.229.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.229.0) is needed to get the latest changes compatible with the remote plugins. It is good practice to keep this as up to date as possible.
 - Grafana version > `10.0.0`
 
 ## Overview
