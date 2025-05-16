@@ -16,30 +16,13 @@ if [ ! -s "$INPUT_FILE" ]; then
     exit 1
 fi
 
+# Generate markdown file
 npx --yes jsonschema2mk --partials "$PARTIALS" --schema "$INPUT_FILE" > "$OUTPUT_FILE"
 
-# Detect OS and set sed options accordingly
+# Prettify the markdown file
+npx prettier --write "$OUTPUT_FILE"
 
-
-# Add docusaurus header to the top of the file
-sed -i.bak "1i\\
----\\
-id: plugin-json\\
-title: Metadata (plugin.json)\\
-description: Reference for the Grafana plugin.json metadata file.\\
-keywords:\\
-  - grafana\\
-  - plugins\\
-  - documentation\\
-  - plugin.json\\
-  - API reference\\
-  - API\\
-sidebar_position: 10\\
----\\
-\\
-# Plugin metadata (plugin.json)
-" "$OUTPUT_FILE"
-
+# Remove files
 rm -f "$INPUT_FILE"
 rm -f "$OUTPUT_FILE.bak"
 
