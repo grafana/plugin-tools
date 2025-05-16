@@ -87,7 +87,7 @@ In the Grafana plugin ecosystem, plugin compatibility with specific Grafana vers
 
 :::note
 
-We strongly recommend to verify that the range you have defined in `grafanaDependency` is set correctly. The best way to verify this is using [`semver.satisfies`](https://www.npmjs.com/package/semver) function to check a specific version against the range you have defined.
+We strongly recommend to verify that the range you have defined in `grafanaDependency` is set correctly. The best way to verify this is using [`semver.satisfies`](https://www.npmjs.com/package/semver) function with `includePrerelease` option set to `true` to check a specific version against the range you have defined.
 
 If you want to target the next release (or the current `main`) and being able to install the plugin in Grafana Cloud, remember to add a prerelease to your `grafanaDependency`. For example set it to `>=12.1.0-0` if `12.1.0` is what you want to target since Grafana Cloud versions look like `12.1.0-123123`
 
@@ -95,7 +95,7 @@ If you want to target the next release (or the current `main`) and being able to
 /*  Example you can run in your chrome DevTools console on this page */
 
 const { satisfies } = await import("https://esm.sh/semver");
-console.log(semver.satisfies("12.1.0-3212123", ">=12.1.0"));
+console.log(satisfies("12.1.0-3212123", ">=12.1.0", {includePrerelease:true}));
 > false
 ```
 
