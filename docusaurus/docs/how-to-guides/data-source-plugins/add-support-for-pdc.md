@@ -26,7 +26,7 @@ PDC is a Grafana Cloud - only solution, so if your datasource is not available i
 
 PDC support must be integrated in each data source because each plugin in Grafana is responsible for establishing its own connection to the target data source. While Grafana stores the proxy configuration details (such as `proxy_address`, `server_address`, and certificates) in its config, each plugin consumes this configuration in a different way.
 
-grafana-plugin-sdk provides an `httpClientProvider` that automatically uses the proxy configuration, making it easier for plugins that use the HTTP client from the plugin SDK to implement PDC support. However, plugins that use other types of clients require more manual adjustments to use the proxy configuration.
+[`grafana-plugin-sdk-go`](https://github.com/grafana/grafana-plugin-sdk-go) provides an `httpClientProvider` that automatically uses the proxy configuration, making it easier for plugins that use the HTTP client from the plugin SDK to implement PDC support. However, plugins that use other types of clients require more manual adjustments to use the proxy configuration.
 
 ## Prerequisites
 
@@ -162,16 +162,16 @@ For example, our PostgreSQL client allows replacing the default dialer with one 
 
 ```go
 if proxyClient.SecureSocksProxyEnabled() {
-socksDialer, err := proxyClient.NewSecureSocksProxyContextDialer()
-if err != nil {
-logger.Error("postgres proxy creation failed", "error", err)
-return nil, nil, fmt.Errorf("postgres proxy creation failed")
-}
+    socksDialer, err := proxyClient.NewSecureSocksProxyContextDialer()
+    if err != nil {
+        logger.Error("postgres proxy creation failed", "error", err)
+        return nil, nil, fmt.Errorf("postgres proxy creation failed")
+    }
 
-d := newPostgresProxyDialer(socksDialer)
+    d := newPostgresProxyDialer(socksDialer)
 
-// update the postgres dialer with the proxy dialer
-connector.Dialer(d)
+    // update the postgres dialer with the proxy dialer
+    connector.Dialer(d)
 }
 ```
 
