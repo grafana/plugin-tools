@@ -24,7 +24,7 @@ PDC is a Grafana Cloud - only solution, so if your datasource is not available i
 
 # Adding PDC to a data source
 
-PDC support must be integrated in each data source because each plugin in Grafana is responsible for establishing its own connection to the target data source. While Grafana stores the proxy configuration details (such as proxy_address, server_address, and certificates) in its config, each plugin consumes this configuration in a different way.
+PDC support must be integrated in each data source because each plugin in Grafana is responsible for establishing its own connection to the target data source. While Grafana stores the proxy configuration details (such as `proxy_address`, `server_address`, and certificates) in its config, each plugin consumes this configuration in a different way.
 
 grafana-plugin-sdk provides an `httpClientProvider` that automatically uses the proxy configuration, making it easier for plugins that use the HTTP client from the plugin SDK to implement PDC support. However, plugins that use other types of clients require more manual adjustments to use the proxy configuration.
 
