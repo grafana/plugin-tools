@@ -154,7 +154,7 @@ We have a couple of options here, depending on what is available in the data sou
 
 #### Override the Dialer
 
-Some packages expose means to set the [Dialer](https://pkg.go.dev/golang.org/x/net/proxy#Dialer) for the client transport. Set the `dialer` in a client with the one returned by `NewSecureSocksProxyContextDialer`.
+Some packages expose a way to set the [Dialer](https://pkg.go.dev/golang.org/x/net/proxy#Dialer) for the client transport. Set the `dialer` in a client with the one returned by `NewSecureSocksProxyContextDialer`.
 
 Overriding the dialer is less risky than overriding the whole Transport, as we’re changing fewer things.
 
