@@ -126,7 +126,7 @@ This example involves plugins that use the [`http.Client`](https://github.com/gr
 - `GetTransport() uses ConfigureSecureSocksHTTPProxy()` to wrap the `Transport` object into socks5 proxy with TLS
 - `ConfigureSecureSocksHTTPProxy()` calls `NewSecureSocksProxyContextDialer()` which creates a socks proxy dialer.
 
-This will make every request go first through the proxy (and therefore, the PDC agent), and then reach the data source.
+This will proxy every request from the client through the proxy (and therefore through PDC), and then reach the data source.
 
 ```go
 func NewDatasource(ctx context.Context, s backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
