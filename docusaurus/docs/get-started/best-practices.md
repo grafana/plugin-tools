@@ -85,6 +85,24 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 In the Grafana plugin ecosystem, plugin compatibility with specific Grafana versions is determined by the semantic versioning range defined in the `grafanaDependency` property of the plugin's `plugin.json` file. Plugin authors must carefully select a version range that balances broad compatibility with the need for manageable maintenance efforts.
 
+:::note
+
+We strongly recommend to verify that the range you have defined in `grafanaDependency` is set correctly. The best way to verify this is using [`semver.satisfies`](https://www.npmjs.com/package/semver) function with `includePrerelease` option set to `true` to check a specific version against the range you have defined.
+
+If you want to target the next release (or the current `main`) and being able to install the plugin in Grafana Cloud, remember to add a prerelease to your `grafanaDependency`. For example set it to `>=12.1.0-0` if `12.1.0` is what you want to target since Grafana Cloud versions look like `12.1.0-123123`.
+
+```
+/*  Example you can run in your chrome DevTools console on this page */
+
+const { satisfies } = await import("https://esm.sh/semver");
+console.log(satisfies("12.1.0-3212123", ">=12.1.0", { includePrerelease: true }));
+> false
+```
+
+Read more on semver specifications on [semver.org](https://semver.org)
+
+:::
+
 ### Unique challenges in plugin development
 
 Grafana plugins are a rather unusual piece of software in the sense that many npm dependencies used during compilation are replaced with different versions at runtime. For more details, refer to [Frontend NPM dependencies in a Grafana plugin](../key-concepts/manage-npm-dependencies.md). This runtime substitution can cause crashes if a plugin relies on APIs that are unavailable in the active Grafana environment. As a result, managing compatibility is a critical and complex aspect of plugin development.
