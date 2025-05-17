@@ -64,7 +64,7 @@ Apps can define health checks to ensure that the plugin is properly configured a
 
 ### Call resource
 
-Apps can have backends to handle server-side functionality, such as making external API calls or processing more advanced authentication methods. The `CallResourceHandler` method is commonly used for this purpose. See our [app with backend example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) for implementation details.
+Apps can have backends to handle server-side functionality, such as making external API calls or processing more advanced authentication methods. The `CallResourceHandler` method is commonly used for this purpose. See our [app with backend example](https://github.com/grafana/grafana-plugin-examples/blob/7d761244d370ad91715c68e24e6d83852d8e5b11/examples/app-with-backend) for implementation details.
 
 ### Nested plugins
 
@@ -102,13 +102,13 @@ The `QueryData` method processes multiple queries and returns corresponding resp
 
 This approach allows for efficient handling of multiple queries, with built-in logging and error management to ensure smooth operation.
 
-Take a look at the [QueryData implementation in our data source example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go#L99).
+Take a look at the [QueryData implementation in our data source example](https://github.com/grafana/grafana-plugin-examples/blob/7d761244d370ad91715c68e24e6d83852d8e5b11/examples/datasource-http-backend/pkg/plugin/datasource.go#L99).
 
 ### Call resource
 
 Custom endpoints allow a data source plugin to expose custom HTTP API routes for server-side functionality. This is particularly useful when dealing with authentication, advanced queries, or processing large datasets. You can create custom endpoints in the backend by using the `CallResourceHandler` method to handle requests and respond with data or status information.
 
-For an example of how to implement custom endpoints, refer to the [app with backend example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/pkg/plugin/resources.go).
+For an example of how to implement custom endpoints, refer to the [app with backend example](https://github.com/grafana/grafana-plugin-examples/blob/7d761244d370ad91715c68e24e6d83852d8e5b11/examples/app-with-backend/pkg/plugin/resources.go).
 
 ## Panel plugins
 
