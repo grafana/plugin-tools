@@ -106,61 +106,21 @@ Create a `webpack.config.ts` file in the project root. This file extends the Web
 
 #### 2. Merge the Grafana config with your custom config
 
-Use the following [webpack-merge](https://github.com/survivejs/webpack-merge) command:
+Use the [webpack-merge](https://github.com/survivejs/webpack-merge) package to extend the `create-plugin` configuration:
 
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
 import grafanaConfig from './.config/webpack/webpack.config';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-const config = async (env): Promise<Configuration> => {
+const config = async (env: Record<string, unknown>): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
 
   return merge(baseConfig, {
-    // Add custom config here...
-    output: {
-      asyncChunks: true,
-    },
+    // Adds a webpack plugin to the configuration
+    plugins: [new BundleAnalyzerPlugin()],
   });
-};
-
-export default config;
-```
-
-The following alternative customization excludes "libs" via rules in addition to "node_modules". It also provides fallbacks that are no longer present in Webpack v5.
-
-```ts title="webpack.config.ts"
-import type { Configuration } from 'webpack';
-import { mergeWithRules } from 'webpack-merge';
-import grafanaConfig from './.config/webpack/webpack.config';
-
-const config = async (env: any): Promise<Configuration> => {
-  const baseConfig = await grafanaConfig(env);
-  const customConfig = {
-    module: {
-      rules: [
-        {
-          exclude: /(node_modules|libs)/,
-        },
-      ],
-    },
-    resolve: {
-      fallback: {
-        crypto: require.resolve('crypto-browserify'),
-        fs: false,
-        path: require.resolve('path-browserify'),
-        stream: require.resolve('stream-browserify'),
-        util: require.resolve('util'),
-      },
-    },
-  };
-  return mergeWithRules({
-    module: {
-      rules: {
-        exclude: 'replace',
-      },
-    },
-  })(baseConfig, customConfig);
 };
 
 export default config;
@@ -175,4 +135,63 @@ Update the `scripts` in the `package.json` to use the extended Webpack configura
 +"build": "webpack -c ./webpack.config.ts --env production",
 -"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
 +"dev": "webpack -w -c ./webpack.config.ts --env development",
+```
+
+#### Custom Webpack config examples
+
+The following example excludes a "libs" directory from typescript/javascript compilation preventing build or runtime failures when importing bundled libraries directly in source code.
+
+```ts title="webpack.config.ts"
+import type { Configuration } from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
+
+const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+  const customConfig = {
+    module: {
+      rules: [
+        {
+          exclude: /(node_modules|libs)/,
+          test: /\.[tj]sx?$/,
+        },
+      ],
+    },
+  };
+  return mergeWithRules({
+    module: {
+      rules: {
+        exclude: 'replace',
+      },
+    },
+  })(baseConfig, customConfig);
+};
+
+export default config;
+```
+
+Webpack 5 does not polyfill [Node.js core modules](https://webpack.js.org/configuration/resolve/#resolvefallback) automatically. The following example shows how to add Node.js polyfills should your plugin make use of them.
+
+```ts title="webpack.config.ts"
+import type { Configuration } from 'webpack';
+import { merge } from 'webpack-merge';
+import grafanaConfig from './.config/webpack/webpack.config';
+
+const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+
+  return merge(baseConfig, {
+    resolve: {
+      fallback: {
+        crypto: require.resolve('crypto-browserify'),
+        fs: false,
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'),
+        util: require.resolve('util'),
+      },
+    },
+  });
+};
+
+export default config;
 ```
