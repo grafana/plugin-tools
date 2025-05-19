@@ -16,6 +16,6 @@ test('should wait for plugin config settings API to respond', async ({ gotoAppCo
   );
 
   const response = configPage.waitForSettingsResponse();
-  page.getByRole('button', { name: 'Disable' }).first().click();
+  await page.getByRole('button', { name: /Disable|Enable/i }).first().click();
   await expect(response).toBeOK();
 });

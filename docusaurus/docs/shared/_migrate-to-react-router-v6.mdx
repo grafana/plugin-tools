@@ -16,7 +16,7 @@ Follow the steps below to start using `react-router` v6 in your plugin:
 
 Enable using `react-router@v6` by setting the following feature flag in `<project-root>/.cprc.json`:
 
-```json
+```json title="<project-root>/.cprc.json"
 {
   "features": {
     "useReactRouterV6": true
@@ -32,7 +32,7 @@ After updating the build configuration, it is likely that you will need to make 
 
 #### 2. Use `<Routes>` instead of `<Switch>`
 
-```typescript
+```typescript title="src/Routes.tsx"
 // Using <Routes> instead of <Switch> in `react-router` v6
 import { Routes } from 'react-router-dom';
 
@@ -47,7 +47,7 @@ return (
 
 #### 3. Remove the `exact` prop from `<Route>` components
 
-```typescript
+```typescript title="src/Routes.tsx"
 return (
   <Routes>
     {/* BAD (Until v5) */}
@@ -60,6 +60,34 @@ return (
 );
 ```
 
-#### 4. Follow the original `react-router` migration guide for more in-depth changes
+#### 4. Fix test failures with location service methods
+
+When using `locationService.replace()`, `locationService.push()`, or similar methods from `@grafana/runtime`, your tests might fail after migrating to React Router v6. Solve this by using the `<LocationServiceProvider />` component (introduced in Grafana 11.2.0) to create a provider for the location service in your tests.
+
+```typescript title="test/test-utils.tsx"
+import { locationService, LocationServiceProvider } from '@grafana/runtime';
+import React, { useEffect, useState } from 'react';
+import { Router } from 'react-router-dom';
+
+const history = locationService.getHistory();
+
+export function TestRoutesProvider({ children }: { children: React.ReactNode }) {
+  const [location, setLocation] = useState(history.location);
+
+  useEffect(() => {
+    history.listen(setLocation);
+  }, []);
+
+  return (
+    <LocationServiceProvider service={locationService}>
+      <Router navigator={history} location={location}>
+        {children}
+      </Router>
+    </LocationServiceProvider>
+  );
+}
+```
+
+#### 5. Follow the original `react-router` migration guide for more in-depth changes
 
 Visit the [official react-router v5 to v6 migration guide](https://reactrouter.com/en/main/upgrading/v5) for more information.

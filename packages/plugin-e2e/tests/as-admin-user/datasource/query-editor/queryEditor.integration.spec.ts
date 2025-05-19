@@ -2,7 +2,6 @@ import { expect, test } from '../../../../src';
 
 test('should return data and not display panel error when a valid query is provided', async ({
   panelEditPage,
-  page,
   readProvisionedDataSource,
 }) => {
   const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });

@@ -8,7 +8,7 @@ test('click on menu item', async ({ readProvisionedDashboard, gotoDashboardPage,
   await expect(page).toHaveURL(/.*editPanel=.*/);
 });
 
-test('click on sub menu item', async ({ readProvisionedDashboard, gotoDashboardPage, page, selectors }) => {
+test('click on sub menu item', async ({ readProvisionedDashboard, gotoDashboardPage, selectors }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
   const panel = await dashboardPage.getPanelByTitle('Table data');

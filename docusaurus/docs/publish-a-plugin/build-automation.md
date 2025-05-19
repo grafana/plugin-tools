@@ -20,7 +20,7 @@ to ensure that your plugin will be built and packaged in the correct format.
 
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
-If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token/) documentation includes guidance on how to create this token.
+If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token) documentation includes guidance on how to create this token.
 
 By creating a release tag, the whole process becomes automated, resulting in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins)
 
@@ -139,6 +139,7 @@ jobs:
           # save the value in your repository secrets
           policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
           attestation: true
+          use_changelog_generator: true # Enable automatic changelog generation
 ```
 
 Then, follow the regular process to [trigger](#how-to-trigger-the-release-workflow) the release workflow. Your plugin will be signed automatically, and you can use the release assets for your plugin submission.
@@ -181,6 +182,81 @@ If you encounter errors in the plugin validator or your plugin submission like t
 - "Cannot verify plugin build."
 
 Follow the steps above to enable provenance attestation in your GitHub Actions workflow.
+
+## Automatically Generate Changelogs
+
+Maintaining a detailed changelog is essential for communicating updates to your users and is displayed prominently in the Grafana plugin details page. To simplify this process, our plugin build workflow supports automatic changelog generation.
+
+### Using the GitHub Actions Workflow for Changelog Generation
+
+The build-plugin GitHub Action can automatically generate and maintain your plugin's changelog using the [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator) tool. This feature:
+
+1. Creates a comprehensive CHANGELOG.md file organized by release
+1. Groups changes by type (features, bug fixes, etc.)
+1. Includes links to pull requests and issues
+1. Acknowledges contributors
+1. Commits the updated changelog to your repository
+
+To enable automatic changelog generation in your workflow, add the `use_changelog_generator: true` parameter to your build-plugin action:
+
+```yaml
+- uses: grafana/plugin-actions/build-plugin@main
+  with:
+    policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+    attestation: true
+    use_changelog_generator: true # Enable automatic changelog generation
+```
+
+### Requirements
+
+To use this feature, ensure your workflow has the necessary permissions:
+
+```yaml
+permissions:
+  contents: write
+```
+
+The changelog generator requires write access to commit the updated CHANGELOG.md file to your repository.
+
+If your target branch is protected, the default github.token cannot push changes directly, even with write permissions. In this case, you need to:
+
+1. Create a Personal Access Token (PAT) with appropriate permissions
+1. Store it as a repository secret (e.g., CHANGELOG_PAT)
+1. Configure the action to use this token:
+
+```yaml
+- name: Build plugin
+  uses: grafana/plugin-actions/build-plugin@main
+  with:
+    use_changelog_generator: true
+    token: ${{ secrets.CHANGELOG_PAT }} # Replace default github.token
+```
+
+### Generated Changelog Format
+
+The generated changelog follows a standardized format that clearly categorizes changes:
+
+```markdown
+## [1.2.0](https://github.com/user/plugin-name/tree/1.2.0) (2025-03-15)
+
+**Implemented enhancements:**
+
+- Add dark theme support [\#138](https://github.com/user/plugin-name/pull/138) ([username](https://github.com/username))
+- Add tooltip customization options [\#135](https://github.com/user/plugin-name/pull/135) ([username](https://github.com/username))
+
+**Fixed bugs:**
+
+- Fix panel crash when switching dashboards [\#139](https://github.com/user/plugin-name/pull/139) ([username](https://github.com/username))
+- Fix time zone handling inconsistencies [\#134](https://github.com/user/plugin-name/pull/134) ([username](https://github.com/username))
+
+**Closed issues:**
+
+- Documentation needs more examples [\#130](https://github.com/user/plugin-name/issues/130)
+
+**Merged pull requests:**
+
+- Update dependencies for security [\#140](https://github.com/user/plugin-name/pull/140) ([username](https://github.com/username))
+```
 
 ## Next steps
 

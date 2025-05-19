@@ -13,9 +13,11 @@ yarn-error.log*
 
 # Cache
 .eslintcache
+.nx
 
 # IDE
 .vscode
+.cursor
 
 # Misc
 .DS_Store
@@ -28,6 +30,8 @@ yarn-error.log*
 # Generated files
 .docusaurus
 .cache-loader
+docusaurus/website/scripts/plugin.schema.json
+*.bak
 
 # Allow vscode config inside templates
 !packages/create-plugin/templates/*/.vscode
@@ -42,8 +46,8 @@ packages/plugin-e2e/playwright/.cache/
 packages/plugin-e2e/playwright/.auth
 playwright/.cache/
 playwright/.auth
-.nx
 
 # Used in CI to pass built packages to the next job
 packed-artifacts/
 .mise.toml
+.cursor/
