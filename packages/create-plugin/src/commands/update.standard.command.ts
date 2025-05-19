@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { UDPATE_CONFIG } from '../constants.js';
 import { output } from '../utils/utils.console.js';
+import { getConfig } from '../utils/utils.config.js';
 import { getOnlyExistingInCwd, removeFilesInCwd } from '../utils/utils.files.js';
 import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
 import { updateNpmScripts, updatePackageJson } from '../utils/utils.npm.js';
@@ -23,6 +24,10 @@ export const standardUpdate = async () => {
     await updateGoSdkAndModules(process.cwd());
 
     const filesToRemove = getOnlyExistingInCwd(UDPATE_CONFIG.filesToRemove);
+
+    if (Boolean(getConfig().features.useExperimentalRspack)) {
+      filesToRemove.push('./config/webpack');
+    }
     if (filesToRemove.length) {
       removeFilesInCwd(filesToRemove);
     }
