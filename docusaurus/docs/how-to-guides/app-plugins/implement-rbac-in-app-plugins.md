@@ -109,7 +109,7 @@ To safeguard your proxied routes with action checks, include the `reqAction` par
 
 If your backend exposes resources, you can secure them with action-based checks.
 
-To enable this protection, activate the `externalServiceAccounts` feature to allow the use of managed service accounts to access Grafana user permissions.
+To enable this protection, activate the `externalServiceAccounts` feature. This allows the use of managed service accounts to access Grafana user permissions.
 
 :::note
 
