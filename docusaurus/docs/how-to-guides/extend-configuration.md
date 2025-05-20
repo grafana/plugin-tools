@@ -1,7 +1,7 @@
 ---
 id: extend-configurations
 title: Extend default configurations
-description: Extend your development environment tooling configuration
+description: Extend your development environment tooling configuration (webpack, eslint, prettier, jest)
 keywords:
   - grafana
   - plugins
@@ -9,6 +9,7 @@ keywords:
   - frontend
   - tooling
   - configuration
+  - webpack
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
