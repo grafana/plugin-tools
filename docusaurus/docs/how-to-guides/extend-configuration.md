@@ -1,6 +1,6 @@
 ---
 id: extend-configurations
-title: Extend Configurations
+title: Extend default configurations
 description: Extend your development environment tooling configuration
 keywords:
   - grafana
