@@ -75,5 +75,5 @@ const namespaces = await props.datasource.getNamespaces();
 
 Some other examples of using resource handlers and the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package:
 
-- The [datasource-basic](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-basic) example:
+- The [datasource-basic](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-basic) example.
 - Grafana's built-in TestData datasource, [create resource handler](https://github.com/grafana/grafana/blob/5687243d0b3bad06c4da809f925cfdf3d32c5a16/pkg/tsdb/grafana-testdata-datasource/testdata.go#L45) and [register routes](https://github.com/grafana/grafana/blob/5687243d0b3bad06c4da809f925cfdf3d32c5a16/pkg/tsdb/grafana-testdata-datasource/resource_handler.go#L17-L28).
