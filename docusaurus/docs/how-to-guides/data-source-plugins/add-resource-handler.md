@@ -70,12 +70,3 @@ For example, in your query editor component, you can access the data source inst
 ```typescript
 const namespaces = await props.datasource.getNamespaces();
 ```
-
-## Additional examples
-
-Some other examples of using resource handlers and the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package:
-
-- The [datasource-basic](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-basic) example:
-  - [create resource handler](https://github.com/grafana/grafana-plugin-examples/blob/309228fffb09c092c08dbd3d17f45a656b2ec3c6/examples/datasource-basic/pkg/plugin/datasource.go#L39) and [register routes](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-basic/pkg/plugin/resource_handler.go) in the backend.
-  - [fetch](https://github.com/grafana/grafana-plugin-examples/blob/309228fffb09c092c08dbd3d17f45a656b2ec3c6/examples/datasource-basic/src/components/QueryEditor/QueryEditor.tsx#L15) and [populate query types in a drop-down](https://github.com/grafana/grafana-plugin-examples/blob/309228fffb09c092c08dbd3d17f45a656b2ec3c6/examples/datasource-basic/src/components/QueryEditor/QueryEditor.tsx#L42) in the query editor component in the frontend. Fetching is done in a [separate function](https://github.com/grafana/grafana-plugin-examples/blob/309228fffb09c092c08dbd3d17f45a656b2ec3c6/examples/datasource-basic/src/components/QueryEditor/useQueryTypes.tsx#L13) which calls the [getAvailableQueryTypes function of the datasource](https://github.com/grafana/grafana-plugin-examples/blob/309228fffb09c092c08dbd3d17f45a656b2ec3c6/examples/datasource-basic/src/datasource.ts#L21-L23).
-- Grafana's built-in TestData datasource, [create resource handler](https://github.com/grafana/grafana/blob/5687243d0b3bad06c4da809f925cfdf3d32c5a16/pkg/tsdb/grafana-testdata-datasource/testdata.go#L45) and [register routes](https://github.com/grafana/grafana/blob/5687243d0b3bad06c4da809f925cfdf3d32c5a16/pkg/tsdb/grafana-testdata-datasource/resource_handler.go#L17-L28).

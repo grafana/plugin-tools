@@ -156,7 +156,3 @@ function getMyCustomEndpoint() {
 ## Troubleshooting
 
 <TroubleshootPluginLoad />
-
-## Example
-
-Refer to our [example app plugin with backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) for a complete example.
