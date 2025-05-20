@@ -33,11 +33,6 @@ Data source plugins implement a new `DataSourcePlugin`. This class takes as a pa
 
 Data source plugins require two components: a query editor and a config editor.
 
-**Examples:**
-
-- [Frontend data source](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http/src/DataSource.ts#L14).
-- [Backend data source](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/src/datasource.ts#L6).
-
 ### Query and config editor
 
 These two frontend components do not need to be changed when converting a frontend data source to a backend data source. However, if you add a backend component to a data source you can request `resources` from it. Resources are additional endpoints that the plugin exposes and can be used to populate or validate the query or config editor. Learn about this in the [resource requests section](#other-resource-requests).
@@ -161,7 +156,7 @@ res, err := d.httpClient.Get("https://api.example.com/v1/users")
 
 The same principle applies to any other authentication mechanism. For example, SQL-based data sources should use the `Datasource` constructor to create a connection to the database and store it in the `Datasource` instance.
 
-You can refer to [this example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go) and get more information about [plugin authentication](./add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
+You can refer to [our documentation](/how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins) to get more information about plugin authentication.
 
 ### Health check
 

@@ -16,8 +16,6 @@ keywords:
 
 Role-based access control (RBAC) in Grafana app plugins is essential for creating secure and tailored user experiences. By implementing RBAC, you ensure that sensitive functionalities and data are only accessible to users with appropriate permissions, enhancing both security and usability. Proper configuration is crucial as misconfigurations can lead to security vulnerabilities.
 
-You can find an example app plugin that makes use of RBAC in our [grafana-plugin-examples GitHub repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-rbac).
-
 ## Before you begin
 
 Ensure your development environment meets the following prerequisites:

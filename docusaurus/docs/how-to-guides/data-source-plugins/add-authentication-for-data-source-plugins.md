@@ -376,8 +376,6 @@ func (ds *dataSource) QueryData(ctx context.Context, req *backend.QueryDataReque
 }
 ```
 
-You can see a full working plugin example here: [datasource-http-backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http-backend).
-
 ### Extract a header from an HTTP request
 
 If you need to access the HTTP header information directly, you can also extract that information from the request:
