@@ -1,3 +1,15 @@
+# v5.22.1 (Tue May 20 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: fix cspell "doesn't" spelling in create-plugin Webpack config [#1809](https://github.com/grafana/plugin-tools/pull/1809) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
 # v5.22.0 (Wed May 14 2025)
 
 #### 🚀 Enhancement
