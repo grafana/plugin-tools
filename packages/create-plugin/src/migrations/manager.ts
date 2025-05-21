@@ -1,7 +1,7 @@
 import { satisfies, gte } from 'semver';
 import { Context } from './context.js';
 import defaultMigrations, { MigrationMeta } from './migrations.js';
-import { flushChanges, printChanges, migrationsDebug } from './utils.js';
+import { flushChanges, printChanges, migrationsDebug, formatFiles } from './utils.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
 import { setRootConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
@@ -49,6 +49,7 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
       migrationsDebug(`context for "${key} (${migration.migrationScript})":`);
       migrationsDebug('%O', context.listChanges());
 
+      await formatFiles(context);
       flushChanges(context);
       printChanges(context, key, migration);
 
