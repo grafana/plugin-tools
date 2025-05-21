@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate token
         id: generate_token
-        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         with:
           app-id: ${{ env.GITHUB_APP_ID }}
           private-key: ${{ env.GITHUB_APP_PEM }}
@@ -59,7 +59,7 @@ jobs:
         env:
           PR_URL: ${{ steps.set-pr-url.outputs.url }}
 
-      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@710e22da8e42c37a44782ca0697f8d9e86f60821
+      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@32d0985df853e8634e7c167f4812edd4a66addc2
         id: generate-embeddings
         with:
           token: ${{ steps.generate_token.outputs.token }}
