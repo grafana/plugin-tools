@@ -445,3 +445,16 @@ jobs:
           # comes from the get-secrets step (shared get-vault-secrets workflow)
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         run: npm run release
+
+      - name: Trigger examples update
+        run: |
+          # give it a bit of time for the release to settle
+          sleep 5
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${TOKEN}" \
+            https://api.github.com/repos/grafana/grafana-plugin-examples/dispatches \
+            -d '{"event_type": "update-examples"}'
+        env:
+          TOKEN: ${{ steps.generate-token.outputs.token }}
+
