@@ -448,8 +448,6 @@ jobs:
 
       - name: Trigger examples update
         run: |
-          # give it a bit of time for the release to settle
-          sleep 5
           curl -X POST \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${TOKEN}" \
