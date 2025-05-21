@@ -19,7 +19,7 @@ async function run() {
     const hasMultipleSemverLabels = attachedSemverLabels.length > 1;
     const hasOneSemverLabel = attachedSemverLabels.length === 1;
     const hasReleaseLabel = labelNames.includes('release');
-    const userName = pull_request.user.login;
+    const userName = pull_request?.user.login;
 
     if (userName === 'renovate[bot]') {
       if (isMissingSemverLabel) {
@@ -114,7 +114,7 @@ async function getPullRequestFiles({ octokit }) {
     payload: { pull_request },
     repo,
   } = context;
-  const prNumber = pull_request.number;
+  const prNumber = pull_request?.number;
   const { data } = await octokit.rest.pulls.listFiles({
     ...repo,
     pull_number: prNumber,
@@ -129,7 +129,7 @@ async function updateLabels({ octokit, labels }) {
       payload: { pull_request },
       repo,
     } = context;
-    const prNumber = pull_request.number;
+    const prNumber = pull_request?.number;
 
     await octokit.rest.issues.setLabels({
       ...repo,
