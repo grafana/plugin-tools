@@ -118,7 +118,8 @@ const config = async (env: Env): Promise<Configuration> => {
           ],
         },
         {
-          exclude: /(node_modules)/,
+          // Exclude node_modules, except for typescript files (.ts, .tsx) possibly shared by git dependencies
+          exclude: /(node_modules)(?:(?!.*tsx?$))/,
           test: /\.[tj]sx?$/,
           use: {
             loader: 'swc-loader',
