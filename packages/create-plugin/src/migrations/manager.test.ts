@@ -3,7 +3,7 @@ import { getMigrationsToRun, runMigration, runMigrations } from './manager.js';
 import migrationFixtures from './fixtures/migrations.js';
 import { Context } from './context.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
-import { flushChanges, printChanges } from './utils.js';
+import { flushChanges, printChanges, formatFiles } from './utils.js';
 import { setRootConfig } from '../utils/utils.config.js';
 import { MigrationMeta } from './migrations.js';
 
@@ -11,6 +11,7 @@ vi.mock('./utils.js', () => ({
   flushChanges: vi.fn(),
   printChanges: vi.fn(),
   migrationsDebug: vi.fn(),
+  formatFiles: vi.fn(),
 }));
 
 vi.mock('../utils/utils.config.js', () => ({
@@ -170,6 +171,12 @@ describe('Migrations', () => {
       await runMigrations(migrations);
 
       expect(printChanges).toHaveBeenCalledTimes(2);
+    });
+
+    it('should format the files for each migration', async () => {
+      await runMigrations(migrations);
+
+      expect(formatFiles).toHaveBeenCalledTimes(2);
     });
 
     it('should not commit the changes for each migration by default', async () => {
