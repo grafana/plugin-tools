@@ -197,7 +197,7 @@ Once you have added PDC support and before you wish to publish your plugin into 
 
 ### Simulating / Testing locally with microsocks
 
-In this case, we will use [microsocks](https://github.com/rofl0r/microsocks), which is an open sourde SOCKS server. This will not be the same as how Grafana runs in our cloud, but it shows a lightweight way to do this without any internal dependency.
+In this case, we will use [microsocks](https://github.com/rofl0r/microsocks), which is an open source SOCKS server. This will not be the same as how Grafana runs in our cloud, but it shows a lightweight way to do this without any internal dependency.
 
 Steps to run this method:
 
