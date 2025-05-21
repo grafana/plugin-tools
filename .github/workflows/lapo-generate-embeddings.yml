@@ -16,7 +16,7 @@ jobs:
     name: generate-docs-embeddings
     runs-on: ubuntu-latest
     steps:
-      - uses: grafana/lapo-docs/github-actions/generate-embeddings@41bcdcda32541126c29c9c3bd20f675700151b56
+      - uses: grafana/lapo-docs/github-actions/generate-embeddings@32d0985df853e8634e7c167f4812edd4a66addc2
         id: generate-embeddings
         with:
           docs-path: docusaurus/docs
