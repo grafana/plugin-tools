@@ -48,3 +48,43 @@ export function flushChanges(context: Context) {
 }
 
 export const migrationsDebug = debug.extend('migrations');
+
+/**
+ * Formats the files in the migration context using prettier.
+ * If prettier isn't installed or the file is ignored or has no parser, it will not be formatted.
+ *
+ * @param context - The context to format.
+ */
+export async function formatFiles(context: Context) {
+  let prettier;
+
+  try {
+    prettier = await import('prettier');
+  } catch (error) {
+    // don't do anything if prettier is not installed
+  }
+
+  if (!prettier) {
+    return;
+  }
+
+  const files = context.listChanges();
+  for (const [filePath, { content, changeType }] of Object.entries(files)) {
+    if (changeType !== 'delete' && content) {
+      const prettierOptions = await prettier.resolveConfig(filePath);
+      const supported = await prettier.getFileInfo(filePath);
+
+      if (supported.ignored || !supported.inferredParser) {
+        continue;
+      }
+
+      files[filePath] = {
+        ...files[filePath],
+        content: await prettier.format(content, {
+          ...prettierOptions,
+          parser: supported.inferredParser,
+        }),
+      };
+    }
+  }
+}
