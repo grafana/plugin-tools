@@ -28,7 +28,7 @@ jobs:
 
       - uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4.3.0
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -72,13 +72,13 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -123,7 +123,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
+        uses: grafana/plugin-actions/wait-for-grafana@add9e787c01b3e84b3e651a1da125f27a99e7960
         with:
           url: http://localhost:3000/login
 
@@ -179,13 +179,13 @@ jobs:
             hasBackend: false
     steps:
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -223,15 +223,15 @@ jobs:
         run: npm run test:ci
         working-directory: ./${{ matrix.workingDir }}
 
-      - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
         with:
-          go-version: '~1.22'
+          go-version: '~1.24.0'
           check-latest: true
           cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
-        uses: magefile/mage-action@6a5dcb5fe61f43d7c08a98bc3cf9bc63c308c08e # v3.0.0
+        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
         with:
           version: latest
           args: -v build:linux
@@ -260,7 +260,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
+        uses: grafana/plugin-actions/wait-for-grafana@add9e787c01b3e84b3e651a1da125f27a99e7960
         with:
           url: http://localhost:3000/login
 
@@ -275,7 +275,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@0c99dfc6d788e1136eaad89f39f8dbbebbc91991
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@add9e787c01b3e84b3e651a1da125f27a99e7960
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -306,7 +306,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@7954f7aa08f1450c1ca49e20be401e4c3f8865f8
+        uses: grafana/plugin-actions/wait-for-grafana@add9e787c01b3e84b3e651a1da125f27a99e7960
         with:
           url: http://localhost:3000/login
 
@@ -320,7 +320,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@0c99dfc6d788e1136eaad89f39f8dbbebbc91991
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@add9e787c01b3e84b3e651a1da125f27a99e7960
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -383,7 +383,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@0c99dfc6d788e1136eaad89f39f8dbbebbc91991
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@add9e787c01b3e84b3e651a1da125f27a99e7960
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
@@ -412,7 +412,7 @@ jobs:
 
       - name: Generate token
         id: generate-token
-        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         with:
           app-id: ${{ env.GITHUB_APP_ID }}
           private-key: ${{ env.GITHUB_APP_PRIVATE_KEY }}
@@ -426,7 +426,7 @@ jobs:
         run: git fetch --unshallow --tags
 
       - name: Setup environment
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
