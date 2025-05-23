@@ -163,7 +163,7 @@ export const migrate = async () => {
       body: [
         chalk.bold("What's next?"),
         ...nextSteps,
-        'See instructions on how to customize your configuration here: https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#extend-configurations',
+        'See instructions on how to customize your configuration here: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations',
       ],
     });
   } catch (error) {
