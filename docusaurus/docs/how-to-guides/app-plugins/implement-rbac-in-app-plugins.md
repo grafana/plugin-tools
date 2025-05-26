@@ -14,7 +14,27 @@ keywords:
   - access control
 ---
 
+
+
+
 Role-based access control (RBAC) in Grafana app plugins is essential for creating secure and tailored user experiences. By implementing RBAC, you ensure that sensitive functionalities and data are only accessible to users with appropriate permissions, enhancing both security and usability. Proper configuration is crucial as misconfigurations can lead to security vulnerabilities.
+
+## Table of Contents
+
+- [Before you begin](#before-you-begin)
+- [Defining roles](#defining-roles)
+- [Actionsets, extend actions with permissions](#actionsets-extend-actions-with-permissions)
+  - [Grafana Action Sets](#grafana-action-sets)
+  - [Limitations](#limitations)
+  - [Codepaths](#codepaths)
+  - [Plugin Action Sets Definition](#plugin-action-sets-definition)
+  - [Practical Example](#practical-example)
+- [Secure frontend includes](#secure-frontend-includes)
+- [Secure proxied routes](#secure-proxied-routes)
+- [Secure backend resources](#secure-backend-resources)
+- [Implementation](#implementation)
+- [Implement frontend access control checks](#implement-frontend-access-control-checks)
+- [Assigning roles](#assigning-roles)
 
 ## Before you begin
 
@@ -64,6 +84,116 @@ In the `roles` array, each role object specifies `name` and `description` for cl
 For example, in the above example, users with the `Viewer` role will automatically be granted the `Research Papers Reader` role.
 
 When defining roles, ensure each role is clearly differentiated with unique permissions to avoid conflicts and unintended access. It's best to follow the principle of least privilege, assigning the minimum permissions necessary for the tasks.
+
+## Actionsets, extend actions with permissions
+
+The action set system provides a clean way for plugins to extend Grafana's existing permission model without requiring users to understand or manually configure individual plugin actions. 
+Action Sets are a powerful feature that allows you to define **named collections of actions** that can be referenced as a single unit and used to extend existing roles. 
+
+### Grafana Action Sets
+
+Grafana has several action sets for core resources that can be extended:
+
+**Folder Action Sets:**
+- `folders:view` → `["folders:read", "dashboards:read"]`
+- `folders:edit` → `["folders:read", "folders:write", "dashboards:read", "dashboards:write", "folders:create"]`
+- `folders:admin` → `["folders:read", "folders:write", "folders:delete", "folders.permissions:read", "folders.permissions:write", ...]`
+
+**Dashboard Action Sets:**
+- `dashboards:view` → `["dashboards:read"]`
+- `dashboards:edit` → `["dashboards:read", "dashboards:write"]`
+- `dashboards:admin` → `["dashboards:read", "dashboards:write", "dashboards:delete", "dashboards.permissions:read", ...]`
+
+### Limitations
+
+- **Folder/Dashboard Only**: Currently restricted to `folders:view/edit/admin`, and `dashboards:view/edit/admin` action sets
+- **No Scope Restriction**: Plugin permissions in action sets can't have scopes  
+- **Append Only**: Action sets can only be extended, not modified or restricted
+
+### Codepaths
+[RegistrationsOfActionSets](https://github.com/grafana/grafana/blob/main/pkg/services/accesscontrol/resourcepermissions/service.go#L574
+)
+
+### Plugin Action Sets Definition
+
+Plugins can define action sets in their `plugin.json`:
+
+```json
+{
+  "id": "my-plugin",
+  "type": "app", 
+  "actionSets": [
+    {
+      "action": "folders:edit",
+      "actions": [
+        "my-plugin.documents:create",
+        "my-plugin.documents:update", 
+        "my-plugin.templates:write"
+      ]
+    },
+    {
+      "action": "folders:admin", 
+      "actions": [
+        "my-plugin.settings:write",
+        "my-plugin.users:manage",
+        "my-plugin.permissions:write"
+      ]
+    }
+  ]
+}
+```
+
+### Practical Example
+
+**Before Action Sets (individual permissions):**
+```json
+{
+  "roles": [
+    {
+      "role": {
+        "name": "Document Manager",
+        "permissions": [
+          {"action": "folders:read"},
+          {"action": "folders:write"}, 
+          {"action": "dashboards:read"},
+          {"action": "dashboards:write"},
+          {"action": "my-plugin.docs:create"},
+          {"action": "my-plugin.docs:edit"}
+        ]
+      }
+    }
+  ]
+}
+```
+
+**With Action Sets (extending existing sets):**
+```json
+{
+  "actionSets": [
+    {
+      "action": "folders:edit",
+      "actions": [
+        "my-plugin.docs:create",
+        "my-plugin.docs:edit"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "role": {
+        "name": "Document Manager", 
+        "permissions": [
+          {"action": "folders:edit"}
+        ]
+      }
+    }
+  ]
+}
+```
+
+**Result:** When a user has `folders:edit` permission, they get:
+- All original `folders:edit` actions (folders:read, folders:write, dashboards:read, dashboards:write, folders:create)
+- Plus the plugin's additional actions (my-plugin.docs:create, my-plugin.docs:edit)
 
 ## Secure frontend includes
 
@@ -144,6 +274,8 @@ In your `plugin.json`, add the `iam` section to get a service account token with
   ]
 }
 ```
+
+## Implementation
 
 Next, integrate the `authlib/authz` library into your plugin's backend code to manage authorization effectively:
 
