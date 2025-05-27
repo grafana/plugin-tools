@@ -22,7 +22,7 @@ jobs:
           repo_secrets: |
             GEMINI_API_KEY=gemini_api_key:gemini_api_key
 
-      - uses: grafana/lapo-docs/github-actions/generate-embeddings@main # zizmor: ignore[unpinned-uses] provided by us
+      - uses: grafana/lapo-docs/github-actions/generate-embeddings@32d0985df853e8634e7c167f4812edd4a66addc2
         id: generate-embeddings
         with:
           docs-path: docusaurus/docs
