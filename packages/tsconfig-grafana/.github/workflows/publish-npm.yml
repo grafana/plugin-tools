@@ -24,7 +24,6 @@ jobs:
         with:
           ref: master
           persist-credentials: false
-
       # limit releases to version changes - https://github.com/EndBug/version-check
       - name: Check version changes
         uses: EndBug/version-check@36ff30f37c7deabe56a30caa043d127be658c425 # 2.1.5
@@ -61,9 +60,3 @@ jobs:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
           scope: "@grafana"
-
-      - name: Publish package to Github Packages
-        if: steps.version_check.outputs.changed == 'true'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGE_TOKEN }}
