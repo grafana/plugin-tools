@@ -1,30 +1,30 @@
 ---
 id: add-support-for-pdc
-title: Add support for Private Datasource Connect (PDC)
-description: Add support for private datasource connect (PDC) functionality to your Grafana plugin.
+title: Add support for Private Data Source Connect (PDC)
+description: Add support for Private Data Source Connect (PDC) functionality to your Grafana plugin.
 keywords:
   - grafana
   - plugins
   - plugin
   - pdc
-  - private datasource connect
+  - private data source connect
 ---
 
-# Add support for private datasource connect (PDC)
+# Add support for Private Data Source Connect (PDC)
 
 ## What is Private Data Source Connect?
 
-Private data source connect, or PDC, is a way for you to establish a private, secured connection between a Grafana Cloud instance, or stack, and data sources secured within a private network.
+Private Data Source connect (PDC) is a way for you to establish a private, secured connection between a Grafana Cloud instance, or stack, and data sources secured within a private network.
 
-Read more about it [here](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/).
+Read more about [Private Data Source Connect](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/).
 
 ### When NOT to support PDC
 
-PDC is a Grafana Cloud - only solution, so if your datasource is not available in Grafana Cloud, there is not much benefit to implementing PDC support.
+PDC is a Grafana Cloud-only solution, so if your data source is not available in Grafana Cloud, there is not much benefit to implementing PDC support.
 
 # Adding PDC to a data source
 
-PDC support must be integrated in each data source because each plugin in Grafana is responsible for establishing its own connection to the target data source. While Grafana stores the proxy configuration details (such as `proxy_address`, `server_address`, and certificates) in its config, each plugin consumes this configuration in a different way.
+PDC support must be integrated in each data source because each Grafana plugin is responsible for establishing its own connection to the target data source. While Grafana stores the proxy configuration details (such as `proxy_address`, `server_address`, and certificates) in its config, each plugin consumes this configuration in a different way.
 
 [`grafana-plugin-sdk-go`](https://github.com/grafana/grafana-plugin-sdk-go) provides an `httpClientProvider` that automatically uses the proxy configuration, making it easier for plugins that use the HTTP client from the plugin SDK to implement PDC support. However, plugins that use other types of clients require more manual adjustments to use the proxy configuration.
 
@@ -35,7 +35,7 @@ PDC support must be integrated in each data source because each plugin in Grafan
 Note: It is not possible to add PDC support to frontend data sources because the connection to the proxy is established from the backend.
 :::
 
-- [`grafana-plugin-sdk`](https://github.com/grafana/grafana-plugin-sdk-go) version > [`0.229.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.229.0) is needed to get the latest changes compatible with the remote plugins. It is good practice to keep this as up to date as possible.
+- [`grafana-plugin-sdk`](https://github.com/grafana/grafana-plugin-sdk-go) version > [`0.229.0`](https://github.com/grafana/grafana-plugin-sdk-go/releases/tag/v0.229.0) is needed to get the latest changes compatible with the remote plugins. Keep this SDK up to date for the latest compatible changes.
 - Grafana version > `10.0.0`
 
 ## Overview
@@ -76,10 +76,10 @@ import { gte } from 'semver';
         gte(config.buildInfo.version, '10.0.0') && (
           <>
             <InlineField
-              label="Secure Socks Proxy"
+              label="Secure SOCKS Proxy"
               tooltip={
                 <>
-                  Enable proxying the data source connection through the secure socks proxy to a
+                  Enable proxying the data source connection through the secure SOCKS proxy to a
                   different network.
                   See{' '}
                   <a
@@ -111,7 +111,7 @@ import { gte } from 'semver';
         )}
 ```
 
-![That's pretty much it for the frontend changes](./images/pdc-image-editor.png)
+![PDC toggle option in data source configuration screen](./images/pdc-image-editor.png)
 
 ## Backend changes
 
@@ -123,8 +123,8 @@ This example involves plugins that use the [`http.Client`](https://github.com/gr
 
 - `HTTPClientOptions(ctx)` reads and creates an HTTP client configuration based on the context passed from the Grafana process.
 - `httpclient.New(opts)` calls `GetTransport()`. [Transport](https://github.com/grafana/grafana-plugin-sdk-go/blob/main/backend/httpclient/http_client.go#L90-L94) object is the one responsible for handling TLS, proxies, and other configurations within [the standard package](https://pkg.go.dev/net/http#hdr-Clients_and_Transports).
-- `GetTransport() uses ConfigureSecureSocksHTTPProxy()` to wrap the `Transport` object into socks5 proxy with TLS
-- `ConfigureSecureSocksHTTPProxy()` calls `NewSecureSocksProxyContextDialer()` which creates a socks proxy dialer.
+- `GetTransport() uses ConfigureSecureSocksHTTPProxy()` to wrap the `Transport` object into SOCKS5 proxy with TLS
+- `ConfigureSecureSocksHTTPProxy()` calls `NewSecureSocksProxyContextDialer()` which creates a SOCKS proxy dialer.
 
 This will proxy every request from the client through the proxy (and therefore through PDC), and then reach the data source.
 
@@ -145,8 +145,8 @@ func NewDatasource(ctx context.Context, s backend.DataSourceInstanceSettings) (i
 
 Here are a few examples of how it was done for some data sources:
 
-- [BigQuery](https://github.com/grafana/google-bigquery-datasource/pull/193/) \- an external library was used to connect to datasource in those cases, but it allowed swapping the default HTTP client. So all we had to do to configure the PDC proxy was to pass a client from the SDK.
-- [VictoriaMetrics Metrics Datasource](https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/tag/v0.15.1)
+- [BigQuery](https://github.com/grafana/google-bigquery-datasource/pull/193/) \- an external library was used to connect to data source in those cases, but it allowed swapping the default HTTP client. So all we had to do to configure the PDC proxy was to pass a client from the SDK.
+- [VictoriaMetrics Metrics Data Source](https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/tag/v0.15.1)
 
 ### Non-HTTP client
 
@@ -186,23 +186,23 @@ Check if we can set the `Transport` object (usually an `http.RoundTripper`). The
 
 ### Testing with Grafana Cloud instance
 
-**Pre-requisites:** If you do not have a grafana cloud instance to test on yet, [sign up](https://grafana.com/docs/grafana-cloud/get-started/#sign-up-for-a-grafana-cloud-account) for a free grafana cloud account instance first.
+**Pre-requisites:** If you do not have a Grafana Cloud instance to test on yet, [sign up](https://grafana.com/docs/grafana-cloud/get-started/#sign-up-for-a-grafana-cloud-account) for a free Grafana Cloud account instance first.
 
 Once you have added PDC support and before you wish to publish your plugin into our catalog, we require you to verify that it is working as intended in Grafana Cloud to make sure our and your customers have the best experience.
 
-1. Build a ready to use version of your datasource plugin that has PDC support
+1. Build a ready to use version of your data source plugin that has PDC support
 1. Reach out to us via `integrations+pdc@grafana.com` sending us your plugin version and which grafana cloud instance and organisation you want to have this plugin running on for testing.
 1. We provision your instance with this plugin version and let you know that you can test
 1. Once tested and confirmed you can go on with making this a regular release and submitting it for review
 
 ### Simulating / Testing locally with microsocks
 
-In this case, we will use [microsocks](https://github.com/rofl0r/microsocks), which is an open sourde SOCKS server. This will not be the same as how Grafana runs in our cloud, but it shows a simpler way to do this without any internal dependency.
+In this case, we will use [microsocks](https://github.com/rofl0r/microsocks), which is an open source SOCKS server. This will not be the same as how Grafana runs in our cloud, but it shows a lightweight way to do this without any internal dependency.
 
 Steps to run this method:
 
-1. Install [microsocks](https://github.com/rofl0r/microsocks) . It can be done with \`brew install microsocks\`
-1. Run microsocks \-i 127.0.0.1 \-p 5555\. This will start up the socks server and await for connections.
+1. Install [microsocks](https://github.com/rofl0r/microsocks) . For macOS, this can be done with \`brew install microsocks\`
+1. Run microsocks \-i 127.0.0.1 \-p 5555\. This will start up the SOCKS server and await for connections.
 1. Run Grafana with this configuration.
 
    ```shell

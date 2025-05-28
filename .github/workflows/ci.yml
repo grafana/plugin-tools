@@ -15,10 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests
+    permissions:
+      contents: read
+      id-token: write
     env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -60,6 +69,9 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Test node versions
+    permissions:
+      contents: read
+      id-token: write
     needs: [test]
     strategy:
       fail-fast: false
@@ -71,6 +83,13 @@ jobs:
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
+
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -138,13 +157,7 @@ jobs:
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
-        working-directory: ./${{ env.WORKING_DIR }}
-
-      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        env:
-          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ env.WORKING_DIR }}
 
@@ -155,6 +168,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -178,6 +192,20 @@ jobs:
             cmdArgs: --plugin-name='no-backend-scenes' --org-name='myorg' --plugin-type='scenesapp' --no-backend
             hasBackend: false
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
+
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -242,12 +270,6 @@ jobs:
         run: npm exec playwright install --with-deps chromium
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
-        with:
-          common_secrets: |
-            DOCKERHUB_USERNAME=dockerhub:username
-            DOCKERHUB_PASSWORD=dockerhub:password
 
       - name: Log in to Docker Hub
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
@@ -345,14 +367,7 @@ jobs:
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
-        working-directory: ./${{ matrix.workingDir }}
-
-      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
-        env:
-          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
@@ -394,9 +409,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && github.actor != 'dependabot[bot]'"
     name: Release packages
     env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     permissions:
       contents: read
       id-token: write
@@ -409,6 +422,8 @@ jobs:
             GITHUB_APP_ID=plugins-platform-bot-app:app_id
             GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
             SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
+            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+            NPM_TOKEN=npm_token:npm_token
 
       - name: Generate token
         id: generate-token
@@ -441,7 +456,6 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # comes from the get-secrets step (shared get-vault-secrets workflow)
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         run: npm run release
