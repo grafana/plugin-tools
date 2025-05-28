@@ -57,11 +57,3 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
-
-      - name: Setup .npmrc file for GitHub Packages
-        if: steps.version_check.outputs.changed == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@grafana"
