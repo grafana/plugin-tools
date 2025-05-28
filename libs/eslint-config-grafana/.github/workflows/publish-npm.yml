@@ -8,14 +8,26 @@ jobs:
   publish:
     name: Publish to NPM & GitHub Package Registry
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        with:
+          repo_secrets: |
+            NPM_TOKEN=npm_token:npm_token
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: master
+          persist-credentials: false
+
       # limit releases to version changes - https://github.com/EndBug/version-check
       - name: Check version changes
-        uses: EndBug/version-check@v2
+        uses: EndBug/version-check@36ff30f37c7deabe56a30caa043d127be658c425 # 2.1.5
         id: version_check
         with:
           # diff the commits rather than commit message for version changes
@@ -23,7 +35,11 @@ jobs:
 
       - name: Version update detected
         if: steps.version_check.outputs.changed == 'true'
-        run: 'echo "Version change found! New version: ${{ steps.version_check.outputs.version }} (${{ steps.version_check.outputs.type }})"'
+        run: |
+          echo "Version change found! New version: ${NEW_VERSION} (${TYPE})"
+        env:
+          NEW_VERSION: ${{ steps.version_check.outputs.version }}
+          TYPE: ${{ steps.version_check.outputs.type }}
 
       - name: Setup .npmrc file for NPM registry
         if: steps.version_check.outputs.changed == 'true'
@@ -40,7 +56,7 @@ jobs:
         if: steps.version_check.outputs.changed == 'true'
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
 
       - name: Setup .npmrc file for GitHub Packages
         if: steps.version_check.outputs.changed == 'true'
