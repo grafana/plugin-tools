@@ -1,7 +1,7 @@
 {
   "author": {
-    "name": "grafanabot",
-    "email": "bot@grafana.com"
+    "name": "grafana-plugins-platform-bot[bot]",
+    "email": "144369747+grafana-plugins-platform-bot[bot]@users.noreply.github.com"
   },
   "onlyPublishWithReleaseLabel": true,
   "plugins": [
