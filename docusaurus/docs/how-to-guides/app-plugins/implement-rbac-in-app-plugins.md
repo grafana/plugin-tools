@@ -20,17 +20,7 @@ For more on how RBAC works and each role visit the [official docs](https://grafa
 
 ## Before you begin
 
-Ensure your development environment meets the following prerequisites:
-
-- **Grafana version:** Use Grafana version 11.2.0 or later to access the most up-to-date RBAC features.
-- **Feature toggle:** Activate the `accessControlOnCall` feature toggle to enable RBAC features in Grafana, which are essential for managing access controls within your plugin.
-
-You can ensure the correct feature toggle is enabled by adding the following to your `docker-compose.yaml` file:
-
-```yaml
-environment:
-  - GF_FEATURE_TOGGLES_ENABLE=accessControlOnCall
-```
+Requires Grafana version 11.6.0 or later.
 
 ## Defining roles
 
@@ -119,18 +109,16 @@ To safeguard your proxied routes with action checks, include the `reqAction` par
 
 If your backend exposes resources, you can secure them with action-based checks.
 
-To enable this protection, activate the following features:
-
-- `externalServiceAccounts`: Allows the use of managed service accounts to access Grafana user permissions.
-- `idForwarding`: Required to provide an ID token to identify the requester, whether it's a user or a service account.
+To enable this protection, activate the `externalServiceAccounts` feature. This allows the use of managed service accounts to access Grafana user permissions.
 
 :::note
 
-These features can be enabled in your Grafana instance by modifying the `docker-compose.yaml` file as follows:
+The `externalServiceAccounts` feature only supports single organization setups.
+It can be enabled in your Grafana instance by modifying the `docker-compose.yaml` file as follows:
 
 ```yaml
 environment:
-  - GF_FEATURE_TOGGLES_ENABLE=accessControlOnCall,idForwarding,externalServiceAccounts
+  - GF_FEATURE_TOGGLES_ENABLE=externalServiceAccounts
 ```
 
 :::
