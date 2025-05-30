@@ -147,6 +147,99 @@ In your `plugin.json`, add the `iam` section to get a service account token with
 }
 ```
 
+## Action sets, folder access levels with permissions
+
+The action set system provides a way for plugins to extend Grafana's View, Edit or Admin access to a folder.
+
+### Grafana Action Sets
+
+Grafana has several action sets for folders that can be extended:
+
+**Folder Action Sets:**
+- `folders:view` → `["folders:read", "dashboards:read"]`
+- `folders:edit` → `["folders:read", "folders:write", "dashboards:read", "dashboards:write", "folders:create"]`
+- `folders:admin` → `["folders:read", "folders:write", "folders:delete", "folders.permissions:read", "folders.permissions:write", ...]`
+
+### Limitations
+
+- **Folder Only**: Currently restricted to `folders:view/edit/admin` action sets
+- **Already Scoped**: The permission will be scoped to a particular folder once a user gets View/Edit/Admin access to the folder.
+- **Append Only**: Action sets can only be extended, not modified or restricted
+
+### Codepaths
+[RegistrationsOfActionSets](https://github.com/grafana/grafana/blob/main/pkg/services/accesscontrol/resourcepermissions/service.go#L574
+)
+
+### Plugin Action Sets Definition
+
+Plugins can define action sets in their `plugin.json`:
+
+```json
+{
+  "id": "my-plugin",
+  "type": "app", 
+  "actionSets": [
+    {
+      "action": "folders:edit",
+      "actions": [
+        "my-plugin.documents:create",
+        "my-plugin.documents:update", 
+        "my-plugin.templates:write"
+      ]
+    },
+    {
+      "action": "folders:admin", 
+      "actions": [
+        "my-plugin.settings:write",
+        "my-plugin.users:manage",
+        "my-plugin.permissions:write"
+      ]
+    }
+  ]
+}
+```
+
+### Practical Example
+
+**Before Action Sets (individual permissions):**
+```json
+{
+  "roles": [
+    {
+      "role": {
+        "name": "Document Manager inside folder",
+        "permissions": [
+          {"action": "my-plugin.docs:create"},
+          {"action": "my-plugin.docs:edit"}
+        ]
+      }
+    }
+  ]
+}
+```
+
+**With Action Sets (extending existing sets):**
+```json
+{
+  "actionSets": [
+    {
+      "action": "folders:edit",
+      "actions": [
+        "my-plugin.docs:create",
+        "my-plugin.docs:edit"
+      ]
+    }
+  ],
+  ...
+}
+```
+
+**Result:** When a user is granted Edit access to a folder, they get:
+- All original `folders:edit` actions (folders:read, folders:write, folders:create)
+- Plus the plugin's additional actions (my-plugin.docs:create, my-plugin.docs:edit)
+
+## Implementation
+
 Next, integrate the `authlib/authz` library into your plugin's backend code to manage authorization effectively:
 
 ```go
