@@ -23,7 +23,7 @@ jobs:
 
       - name: Resolve Grafana E2E versions
         id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@89d0ab7e5f031fb784ae023c13da8abb1740c0f5
+        uses: grafana/plugin-actions/e2e-version@ff169fa386880e34ca85a49414e5a0ff84c3f7ad
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
@@ -79,7 +79,7 @@ jobs:
           ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
       - name: Wait for grafana server
-        uses: grafana/plugin-actions/wait-for-grafana@89d0ab7e5f031fb784ae023c13da8abb1740c0f5
+        uses: grafana/plugin-actions/wait-for-grafana@ff169fa386880e34ca85a49414e5a0ff84c3f7ad
         with:
           url: http://localhost:3000/login
 
@@ -88,7 +88,7 @@ jobs:
         run: npm run playwright:test --w @grafana/plugin-e2e
 
       - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@89d0ab7e5f031fb784ae023c13da8abb1740c0f5
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@ff169fa386880e34ca85a49414e5a0ff84c3f7ad
         if: ${{ always() && !cancelled() }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -108,7 +108,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@89d0ab7e5f031fb784ae023c13da8abb1740c0f5
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@ff169fa386880e34ca85a49414e5a0ff84c3f7ad
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
