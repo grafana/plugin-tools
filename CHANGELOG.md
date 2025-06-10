@@ -1,3 +1,20 @@
+# (Tue Jun 10 2025)
+
+#### 🐛 Bug Fix
+
+- Update auto-merged gitHub actions [#1821](https://github.com/grafana/plugin-tools/pull/1821) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/plugin-e2e@2.0.3`
+  - Update dependency @grafana/e2e-selectors to ^12.1.0-246483 [#1789](https://github.com/grafana/plugin-tools/pull/1789) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.22.2`
+  - Chore: Fix zizmor issues in template workflows [#1823](https://github.com/grafana/plugin-tools/pull/1823) ([@academo](https://github.com/academo))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Tue May 20 2025)
 
 #### 🐛 Bug Fix

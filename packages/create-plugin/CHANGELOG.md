@@ -1,3 +1,15 @@
+# v5.22.2 (Tue Jun 10 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: Fix zizmor issues in template workflows [#1823](https://github.com/grafana/plugin-tools/pull/1823) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v5.22.1 (Tue May 20 2025)
 
 #### 🐛 Bug Fix
