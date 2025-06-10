@@ -24,6 +24,7 @@
     "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
     "server": "docker compose up --build",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "vitest --passWithNoTests",

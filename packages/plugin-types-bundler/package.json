@@ -21,6 +21,7 @@
     "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
     "typecheck": "tsc --noEmit"
   },
   "publishConfig": {

@@ -35,6 +35,7 @@
     "build:watch": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
     "dev": "concurrently --names TSC,TSUP -c cyan,magenta \"npm run typecheck:watch\" \"npm run build:watch\"",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --watch --noEmit",
