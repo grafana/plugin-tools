@@ -53,9 +53,8 @@ jobs:
         run: npm exec nx affected -- --target test --run
       - name: Build all packages
         run: npm run build
-      # this relies on build being run first
       - name: Lint built packages
-        run: npm exec nx affected -- --target lint:packages --parallel
+        run: npm exec nx affected -- --target lint:package --parallel
       - name: Pack packages for testing
         run: |
           mkdir ./packed-artifacts
