@@ -9,12 +9,6 @@
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
   "type": "module",
-  "exports": {
-    "node": {
-      "import": "./index.js"
-    },
-    "default": "./index.js"
-  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public",
