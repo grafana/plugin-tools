@@ -18,6 +18,9 @@
     "test": {
       "inputs": ["default", "{projectRoot}/vitest.config.ts", "{workspaceRoot}/vitest.config.base.ts"],
       "cache": true
+    },
+    "lint:packages": {
+      "dependsOn": ["build"]
     }
   },
   "namedInputs": {
