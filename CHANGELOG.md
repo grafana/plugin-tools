@@ -1,3 +1,18 @@
+# (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.22.3`, `@grafana/plugin-meta-extractor@0.6.3`
+  - Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.22.3`
+  - Update dependency @grafana/plugin-e2e to v2.0.3 [#1872](https://github.com/grafana/plugin-tools/pull/1872) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Tue Jun 10 2025)
 
 #### 🐛 Bug Fix

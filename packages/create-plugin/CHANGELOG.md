@@ -1,3 +1,16 @@
+# v5.22.3 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.0.3 [#1872](https://github.com/grafana/plugin-tools/pull/1872) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.22.2 (Tue Jun 10 2025)
 
 #### 🐛 Bug Fix
