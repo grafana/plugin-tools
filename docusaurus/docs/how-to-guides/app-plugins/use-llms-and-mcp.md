@@ -82,13 +82,12 @@ stream.pipe(llm.accumulateContent()).subscribe(console.log);
 
 ## Use the Grafana MCP server in app plugins
 
-The [`@grafana/llm`][npm] package also provides a simple interface to make requests to the Grafana MCP server. The tools in the MCP server can be passed to the LLM, and the LLM can choose to call the tools as part of an ongoing, agent-like conversation.
+Since version 0.22, the [`@grafana/llm`][npm] package also provides a simple interface to make requests to the Grafana MCP server. The tools in the MCP server can be passed to the LLM, and the LLM can choose to call the tools as part of an ongoing, agent-like conversation. This also requires the Grafana LLM app plugin >= 0.22 to be installed and enabled on the Grafana instance.
 
-Here's an example of how to use the package alongside the `@modelcontextprotocol/sdk` package:
+Here's an example of how to use the package:
 
 ```typescript
 import { llm, mcp } from '@grafana/llm';
-import { Client } from '@modelcontextprotocol/sdk/client/index';
 
 // Check whether the LLM plugin is installed, enabled and configured.
 const enabled = await llm.enabled();
@@ -102,12 +101,14 @@ if (!mcpEnabled) {
   throw new Error('MCP plugin is not enabled');
 }
 
-// Connect to the MCP server over Grafana Live.
-const mcpClient = new Client({
+// Connect to the MCP server over streamable HTTP.
+// `mcp.Client` is a re-export of the client from `@modelcontextprotocol/sdk`.
+const mcpClient = new mcp.Client({
   name: 'my app',
   version: '1.0.0',
 });
-const transport = new mcp.GrafanaLiveTransport();
+// `mcp.StreamableHTTPTransport` is a re-export of the transport from `@modelcontextprotocol/sdk`.
+const transport = new mcp.StreamableHTTPTransport(mcp.streamableHTTPUrl());
 await mcpClient.connect(transport);
 
 // Construct your messages to send to the LLM.
@@ -139,6 +140,7 @@ and to connect and initialize the MCP client:
 ```tsx
 import React, { Suspense } from 'react';
 import { mcp } from '@grafana/llm';
+import { ErrorBoundary } from '@grafana/ui';
 import { useAsync } from 'react-use';
 
 function Component() {
@@ -168,12 +170,21 @@ function App() {
   // MCP client is being initialized.
   return (
     <Suspense fallback={<Spinner />}>
-      <mcp.MCPClientProvider
-        appName="my-app"
-        appVersion="1.0.0"
-      >
-        <Component />
-      </mcp.MCPClientProvider>
+      <ErrorBoundary>
+        {({ error }) => {
+          if (error) {
+            return <div>Error with MCP: {error.message}</div>;
+          }
+          return (
+            <mcp.MCPClientProvider
+              appName="my-app"
+              appVersion="1.0.0"
+            >
+              <Component />
+            </mcp.MCPClientProvider>
+          )
+        }}
+      </ErrorBoundary>
     </Suspense>
   )
 }
