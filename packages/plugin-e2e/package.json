@@ -36,7 +36,7 @@
     "@playwright/test": "^1.52.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
+    "@playwright/test": "^1.53.0",
     "@types/uuid": "^10.0.0",
     "dotenv": "^16.5.0"
   },
