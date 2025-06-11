@@ -36,6 +36,11 @@ jobs:
         with:
           app-id: ${{ env.GITHUB_APP_ID }}
           private-key: ${{ env.GITHUB_APP_PEM }}
+          # Permissions necessary for grafana/lapo-docs/github-actions/create-docs-update-pr
+          permission-actions: read
+          permission-contents: write
+          permission-pull-requests: write
+          permission-issues: write
 
 
       # this allows to test both with manual trigger and repository_dispatch
