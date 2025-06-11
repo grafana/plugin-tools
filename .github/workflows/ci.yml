@@ -53,6 +53,8 @@ jobs:
         run: npm exec nx affected -- --target test --run
       - name: Build all packages
         run: npm run build
+      - name: Lint built packages
+        run: npm exec nx affected -- --target lint:package --parallel
       - name: Pack packages for testing
         run: |
           mkdir ./packed-artifacts
@@ -269,7 +271,6 @@ jobs:
       - name: Install playwright dependencies
         run: npm exec playwright install --with-deps chromium
         working-directory: ./${{ matrix.workingDir }}
-
 
       - name: Log in to Docker Hub
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
