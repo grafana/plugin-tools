@@ -37,7 +37,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@grafana/data": "^11.3.0-199826",
+    "@grafana/data": "^12.0.0",
     "@types/node": "^22.15.31",
     "react": "^18.2.0"
   }
