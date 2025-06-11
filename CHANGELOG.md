@@ -2,6 +2,21 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@2.0.5`
+  - Update dependency @grafana/e2e-selectors to ^12.1.0-247577 [#1877](https://github.com/grafana/plugin-tools/pull/1877) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.22.4`
+  - Update dependency @grafana/plugin-e2e to v2.0.4 [#1878](https://github.com/grafana/plugin-tools/pull/1878) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@5.22.3`, `@grafana/plugin-meta-extractor@0.6.3`
   - Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
 - `@grafana/create-plugin@5.22.3`
