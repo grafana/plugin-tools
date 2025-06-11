@@ -36,8 +36,8 @@
     "@types/node": "^20.8.7",{{#if isAppType}}{{#unless useReactRouterV6}}
     "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}{{/if}}
     "@types/testing-library__jest-dom": "5.14.8",
-    "@typescript-eslint/eslint-plugin": "^6.18.0",
-    "@typescript-eslint/parser": "^6.18.0",{{#unless useExperimentalRspack}}
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",{{#unless useExperimentalRspack}}
     "copy-webpack-plugin": "^11.0.0",{{/unless}}
     "css-loader": "^6.7.3",
     "eslint": "^8.0.0",
@@ -45,7 +45,6 @@
     "eslint-plugin-jsdoc": "^46.8.0",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-deprecation": "^2.0.0",
     "eslint-webpack-plugin": "^4.0.1",{{#unless useExperimentalRspack}}
     "fork-ts-checker-webpack-plugin": "^8.0.0",{{/unless}}
     "glob": "^10.2.7",
