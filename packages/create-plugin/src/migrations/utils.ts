@@ -5,6 +5,8 @@ import { debug } from '../utils/utils.cli.js';
 import chalk from 'chalk';
 import { MigrationMeta } from './migrations.js';
 import { output } from '../utils/utils.console.js';
+import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
+import { execSync } from 'node:child_process';
 
 export function printChanges(context: Context, key: string, migration: MigrationMeta) {
   const changes = context.listChanges();
@@ -86,5 +88,35 @@ export async function formatFiles(context: Context) {
         }),
       };
     }
+  }
+}
+
+// Cache the package.json contents to avoid re-installing dependencies if the package.json hasn't changed
+let packageJsonInstallCache: string;
+
+export function installNPMDependencies(context: Context) {
+  const hasPackageJsonChanges = Object.entries(context.listChanges()).some(
+    ([filePath, { changeType }]) => filePath === 'package.json' && changeType === 'update'
+  );
+
+  if (!hasPackageJsonChanges) {
+    return;
+  }
+
+  const packageJsonContents = context.getFile('package.json');
+
+  if (!packageJsonContents) {
+    return;
+  }
+
+  if (packageJsonContents !== packageJsonInstallCache) {
+    packageJsonInstallCache = packageJsonContents;
+    output.logSingleLine('Installing NPM dependencies...');
+    const packageManager = getPackageManagerWithFallback();
+    const installCmd = getPackageManagerSilentInstallCmd(
+      packageManager.packageManagerName,
+      packageManager.packageManagerVersion
+    );
+    execSync(installCmd, { cwd: context.basePath, stdio: 'inherit' });
   }
 }
