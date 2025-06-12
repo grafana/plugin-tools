@@ -32,7 +32,8 @@ import { llm } from '@grafana/llm';
 // Check whether the LLM plugin is installed, enabled and configured.
 const enabled = await llm.enabled();
 if (!enabled) {
-  throw new Error('LLM plugin is not enabled');
+  console.log('LLM plugin is not enabled');
+  return;
 }
 
 // Construct your messages to send to the LLM.
@@ -59,7 +60,8 @@ import { llm } from '@grafana/llm';
 // Check whether the LLM plugin is installed, enabled and configured.
 const enabled = await llm.enabled();
 if (!enabled) {
-  throw new Error('LLM plugin is not enabled');
+  console.log('LLM plugin is not enabled');
+  return;
 }
 
 // Construct your messages to send to the LLM.
@@ -92,13 +94,15 @@ import { llm, mcp } from '@grafana/llm';
 // Check whether the LLM plugin is installed, enabled and configured.
 const enabled = await llm.enabled();
 if (!enabled) {
-  throw new Error('LLM plugin is not enabled');
+  console.log('LLM plugin is not enabled');
+  return;
 }
 
 // Check whether the MCP plugin is installed, enabled and configured.
 const mcpEnabled = await mcp.enabled();
 if (!mcpEnabled) {
-  throw new Error('MCP plugin is not enabled');
+  console.log('LLM plugin is not enabled');
+  return;
 }
 
 // Connect to the MCP server over streamable HTTP.
