@@ -12,6 +12,7 @@ vi.mock('./utils.js', () => ({
   printChanges: vi.fn(),
   migrationsDebug: vi.fn(),
   formatFiles: vi.fn(),
+  installNPMDependencies: vi.fn(),
 }));
 
 vi.mock('../utils/utils.config.js', () => ({
