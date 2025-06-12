@@ -6,7 +6,7 @@ describe('003-update-eslint-deprecation-rule', () => {
   it('should update ESLint config and package.json', () => {
     const context = new Context('/virtual');
     context.addFile(
-      '.eslintrc',
+      '.config/.eslintrc',
       JSON.stringify({
         overrides: [
           {
@@ -33,7 +33,7 @@ describe('003-update-eslint-deprecation-rule', () => {
     const result = migrate(context);
 
     // Check ESLint config changes
-    const eslintConfig = JSON.parse(result.getFile('.eslintrc') || '{}');
+    const eslintConfig = JSON.parse(result.getFile('.config/.eslintrc') || '{}');
     expect(eslintConfig.overrides[0].plugins).not.toContain('deprecation');
     expect(eslintConfig.overrides[0].rules['deprecation/deprecation']).toBeUndefined();
     expect(eslintConfig.overrides[0].rules['@typescript-eslint/no-deprecated']).toBe('warn');
@@ -48,7 +48,7 @@ describe('003-update-eslint-deprecation-rule', () => {
   it('should be idempotent', async () => {
     const context = new Context('/virtual');
     context.addFile(
-      '.eslintrc',
+      '.config/.eslintrc',
       JSON.stringify({
         overrides: [
           {
