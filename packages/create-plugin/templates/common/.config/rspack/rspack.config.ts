@@ -62,9 +62,9 @@ const config = async (env): Promise<Configuration> => {
       'react-router-dom',{{/unless}}
       'd3',
       'angular',{{#unless bundleGrafanaUI}}
-      '@grafana/ui',{{/unless}}
-      '@grafana/runtime',
-      '@grafana/data',{{#if bundleGrafanaUI}}
+      /^@grafana\/ui/i,{{/unless}}
+      /^@grafana\/runtime/i,
+      /^@grafana\/data/i,{{#if bundleGrafanaUI}}
       'react-inlinesvg',
       'i18next',{{/if}}
 
@@ -124,7 +124,7 @@ const config = async (env): Promise<Configuration> => {
                 },
               },
               env: {
-                target: 'es2020',
+                target: 'es2022',
               },
             },
           },
