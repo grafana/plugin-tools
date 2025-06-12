@@ -122,12 +122,11 @@ const config = async (env): Promise<Configuration> => {
                     refresh: false,
                   },
                 },
-              },
-              env: {
                 target: 'es2022',
               },
             },
           },
+          type: 'javascript/auto',
         },
         {
           test: /\.css$/,
