@@ -30,18 +30,6 @@ npx install-peerdeps --dev @grafana/eslint-config
 
 If using a different package manager, run `npm info "@grafana/eslint-config@latest" peerDependencies` to list the peer dependencies and versions. Then run `yarn add --dev <dependency1>@<version> <dependency2>@<version> <dependency3>@<version>` for the listed peer dependencies.
 
-## Configuration (legacy: .eslintrc\*)
-
-Extend our configuration to get reasonable defaults:
-
-```json
-{
-  "extends": ["@grafana/eslint-config"]
-}
-```
-
-It will automatically handle `*.(js|ts|tsx)` files.
-
 ## Configuration (new: eslint.config.js)
 
 From v8.21.0, Eslint introduced a new flat config system where `eslint.config.js` replaces `.eslintrc*` as the default config file name. Eslint@8.x supports both systems, while Eslint@9.x only supports the new flat config.
@@ -63,9 +51,8 @@ const grafanaConfig = require("@grafana/eslint-config/flat");
  * @type {Array<import('eslint').Linter.Config>}
  */
 module.exports = [
-  {
-    grafanaConfig,
-  },
+  ...grafanaConfig,
+  … /* rest of your config */
 ];
 ```
 
@@ -83,7 +70,7 @@ module.exports = [
   {
     ignores: [".github", ".yarn", "**/build/", "**/compiled/", "**/dist/"],
   },
-  grafanaConfig,
+  ...grafanaConfig,
   {
     name: "myproject/defaults",
     files: ["**/*.{ts,tsx,js,jsx}"],
@@ -93,3 +80,15 @@ module.exports = [
   },
 ];
 ```
+
+## Configuration (legacy: .eslintrc\*)
+
+Extend our configuration to get reasonable defaults:
+
+```json
+{
+  "extends": ["@grafana/eslint-config"]
+}
+```
+
+It will automatically handle `*.(js|ts|tsx)` files.
