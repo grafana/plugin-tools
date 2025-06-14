@@ -21,5 +21,10 @@ export default {
       description: 'Update ./docker-compose.yaml to extend from ./.config/docker-compose-base.yaml.',
       migrationScript: './scripts/001-update-grafana-compose-extend.js',
     },
+    '002-update-eslint-deprecation-rule': {
+      version: '5.22.2',
+      description: 'Replace deprecated eslint-plugin-deprecation with @typescript-eslint/no-deprecated rule.',
+      migrationScript: './scripts/002-update-eslint-deprecation-rule.js',
+    },
   },
 } as Migrations;
