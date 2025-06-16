@@ -1,3 +1,15 @@
+# v5.23.1 (Mon Jun 16 2025)
+
+#### 🐛 Bug Fix
+
+- fix: don't exit Webpack on ESLint error in development [#1890](https://github.com/grafana/plugin-tools/pull/1890) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
 # v5.23.0 (Mon Jun 16 2025)
 
 #### 🚀 Enhancement
