@@ -198,3 +198,15 @@ Below is a bulleted list of what occurs under the hood when Auto is asked to rel
 
 > [!TIP]
 > We enable verbose logging in the release packages CI step to give plenty of information related to what Auto and Lerna are doing. This can prove most useful should issues occur with releasing packages.
+
+### Help! The release failed but the packages were published to the NPM registry
+
+If a release fails but the packages were published to the NPM registry manual clean up will be required to sync the repo to the NPM registry before the next publish occurs otherwise further failures or potentially major releases containing duplicate version calculations could be pushed to the NPM registry.
+
+To sync the repo with the latest release(s) on the NPM registry we need to introduce commits, tags and gh releases that mimick what Auto _would_ have done had the publish command completed fully. Auto relies on the last GH release information taken from https://github.com/grafana/plugin-tools/releases to know which PRs it needs to collect to calculate the version. Once it has this Lerna receives both the latest release tag and the calculated version bump from Auto.
+
+- Check the logs from the release workflow step to understand what was published to NPM
+- Check the plugin-tools repo for tags associated with the versions that were published to NPM
+- Clicking the tags should lead to the commit
+- Clicking the parent of the tag commit will reveal the changelog changes
+- Checkout `main`
