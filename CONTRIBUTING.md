@@ -14,7 +14,7 @@
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
   - [Create a Release](#create-a-release)
-    - [Release Version Calculation](#release-version-calculation)- [How do I... ](#how-do-i-)
+    - [Release Version Calculation](#release-version-calculation)
     - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
 
 ## Introduction
