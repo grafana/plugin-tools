@@ -432,10 +432,10 @@ jobs:
         with:
           app-id: ${{ env.GITHUB_APP_ID }}
           private-key: ${{ env.GITHUB_APP_PRIVATE_KEY }}
-          permission-actions: read
-          permission-contents: write
-          permission-issues: write
-          permission-pull-requests: write
+          # permission-actions: read
+          # permission-contents: write
+          # permission-issues: write
+          # permission-pull-requests: write
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
