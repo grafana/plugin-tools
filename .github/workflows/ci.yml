@@ -432,7 +432,6 @@ jobs:
         with:
           app-id: ${{ env.GITHUB_APP_ID }}
           private-key: ${{ env.GITHUB_APP_PRIVATE_KEY }}
-          permission-actions: read
           permission-contents: write
           permission-issues: write
           permission-pull-requests: write
