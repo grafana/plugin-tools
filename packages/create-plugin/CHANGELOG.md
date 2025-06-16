@@ -1,3 +1,21 @@
+# v5.23.0 (Mon Jun 16 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Introduce experimental Rspack feature flag [#1564](https://github.com/grafana/plugin-tools/pull/1564) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12 [#1654](https://github.com/grafana/plugin-tools/pull/1654) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.0.5 [#1880](https://github.com/grafana/plugin-tools/pull/1880) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.22.4 (Wed Jun 11 2025)
 
 #### 🐛 Bug Fix
