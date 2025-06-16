@@ -14,7 +14,8 @@
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
   - [Create a Release](#create-a-release)
-    - [Release Version Calculation](#release-version-calculation)
+    - [Release Version Calculation](#release-version-calculation)- [How do I... ](#how-do-i-)
+    - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
 
 ## Introduction
 
@@ -208,7 +209,10 @@ To sync the repo with the latest release(s) on the NPM registry we need to intro
 - Locate the failed release workflow step from the `main` commit history.
 - Search the logs for `Commit  - @grafana/` to find the versions and `git tag` commands for each package that was published to the NPM registry.
 - Search the logs for `New Release Notes` to find the release notes markdown.
-- Checkout `main` (:scream:)
+- Checkout `main`.
 - For each published package update it's `changelog.md` file in the repo using the release notes markdown as a guide. It will not match each changelog file perfectly but the older entries can be used to match formatting. Now update the repos root `changelog.md` file, matching the formatting using older entries. Commit this to `main` with `git commit -m "Update CHANGELOG.md [skip ci]"`. ([example commit](https://github.com/grafana/plugin-tools/commit/e8b980e25e8752aaab9278cb43228f44733ca96f))
 - Update each published packages `package.json` file so the version matches the version published to the registry. Once done run `npm install`. Commit this to `main` with `git commit -m "Bump independent versions [skip ci]"`.
 - Now tag this version bump commit with the tag commands from the failed release workflow step. Tag the commit for each published package. The command should look like `git tag -a @grafana/create-plugin@<UPDATED_VERSION> -m "@grafana/create-plugin@<UPDATED_VERSION>"`. ([example commit](https://github.com/grafana/plugin-tools/commit/e8b980e25e8752aaab9278cb43228f44733ca96f))
+- Go to the [plugin-tools tags page](https://github.com/grafana/plugin-tools/tags) and delete any existing tags that match the versions of the packages that were released.
+- Once the tags are deleted push the commits and the tags from `main` to gh with `git push --follow-tags`.
+- Lastly create the GH releases for the packages from the [Github releases page](https://github.com/grafana/plugin-tools/releases).
