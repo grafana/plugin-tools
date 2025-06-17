@@ -30,7 +30,7 @@
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^8.0.0",
     "@playwright/test": "^1.53.0",
-    "@rollup/plugin-commonjs": "^28.0.5",
+    "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@stylistic/eslint-plugin-ts": "^3.1.0",
@@ -44,7 +44,7 @@
     "auto": "11.3.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-jsdoc": "^51.0.1",
+    "eslint-plugin-jsdoc": "^51.0.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "glob": "^11.0.3",
@@ -58,7 +58,7 @@
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.3"
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=20"
