@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Context } from '../context.js';
 import migrate from './002-update-is-compatible-workflow.js';
-import { parse } from 'yaml';
+import { parse, stringify } from 'yaml';
 
 describe('002-update-is-compatible-workflow', () => {
   it('should not modify anything if workflow file does not exist', async () => {
@@ -162,5 +162,48 @@ jobs:
     expect(steps[2].name).toBe('Install dependencies');
     expect(steps[steps.length - 1].name).toBe('Post build summary');
     expect(steps[0].uses).toBe('actions/checkout@v4');
+  });
+
+  it('should be idempotent', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './.github/workflows/is-compatible.yml',
+      `name: Latest Grafana API compatibility check
+on:
+  - pull_request
+jobs:
+  compatibilitycheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node.js environment
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build plugin
+        run: npm run build
+      - name: Find module.ts or module.tsx
+        id: find-module-ts
+        run: >-
+          MODULETS="$(find ./src -type f ( -name "module.ts" -o -name
+          "module.tsx" ))"
+
+          echo "modulets=$\{MODULETS}" >> $GITHUB_OUTPUT
+      - name: Compatibility check
+        uses: grafana/plugin-actions/is-compatible@main
+        with:
+          module: $\{{ steps.find-module-ts.outputs.modulets }}
+          comment-pr: no
+          fail-if-incompatible: yes
+`
+    );
+    await expect(migrate).toBeIdempotent(context);
   });
 });

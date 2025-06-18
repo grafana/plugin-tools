@@ -36,6 +36,16 @@ export default async function migrate(context: Context) {
 
   // If we found the step, replace it with the two new steps
   if (compatibilityStepIndex !== -1) {
+    // check if find module.ts step already exists
+    // meaning the migration has already been applied
+    const findModuleStepIndex = steps.items.findIndex((step) => {
+      const nameValue = step?.get('name')?.toString().toLowerCase();
+      return nameValue && nameValue.includes('find module.ts');
+    });
+    if (findModuleStepIndex !== -1) {
+      return context;
+    }
+
     // Create the two new steps
     const findModuleStep = {
       name: 'Find module.ts or module.tsx',
