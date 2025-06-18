@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Context } from '../context.js';
 import migrate from './002-update-is-compatible-workflow.js';
-import { parse, stringify } from 'yaml';
+import { parse } from 'yaml';
 
 describe('002-update-is-compatible-workflow', () => {
   it('should not modify anything if workflow file does not exist', async () => {
