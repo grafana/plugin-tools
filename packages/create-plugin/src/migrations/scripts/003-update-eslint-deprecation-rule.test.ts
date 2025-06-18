@@ -3,6 +3,25 @@ import migrate from './003-update-eslint-deprecation-rule.js';
 import { Context } from '../context.js';
 
 describe('003-update-eslint-deprecation-rule', () => {
+  it('should not update ESLint config if no deprecation rule is present', () => {
+    const context = new Context('/virtual');
+
+    context.addFile(
+      '.config/.eslintrc',
+      JSON.stringify({
+        overrides: [
+          {
+            files: ['src/**/*.{ts,tsx}'],
+          },
+        ],
+      })
+    );
+
+    const initialChanges = context.listChanges();
+    migrate(context);
+    expect(context.listChanges()).toEqual(initialChanges);
+  });
+
   it('should update ESLint config and package.json', () => {
     const context = new Context('/virtual');
     context.addFile(
@@ -45,6 +64,36 @@ describe('003-update-eslint-deprecation-rule', () => {
     expect(packageJson.devDependencies['@typescript-eslint/parser']).toBe('^8.3.0');
   });
 
+  it('should preserve comments', async () => {
+    const context = new Context('/virtual');
+    const eslintConfigRaw = JSON.stringify({
+      overrides: [
+        {
+          plugins: ['deprecation'],
+          files: ['src/**/*.{ts,tsx}'],
+          rules: {
+            'deprecation/deprecation': 'warn',
+          },
+        },
+      ],
+    });
+    const comments = `/*
+ * Some comments to test with
+*/`;
+
+    context.addFile('.config/.eslintrc', comments + '\n' + eslintConfigRaw);
+    const result = migrate(context);
+    const migrated = result.getFile('.config/.eslintrc');
+
+    expect(migrated).toContain(comments);
+  });
+
+  it('should handle missing files gracefully', () => {
+    const context = new Context('/virtual');
+    const result = migrate(context);
+    expect(result.hasChanges()).toBe(false);
+  });
+
   it('should be idempotent', async () => {
     const context = new Context('/virtual');
     context.addFile(
@@ -60,6 +109,7 @@ describe('003-update-eslint-deprecation-rule', () => {
         ],
       })
     );
+
     context.addFile(
       'package.json',
       JSON.stringify({
@@ -71,11 +121,5 @@ describe('003-update-eslint-deprecation-rule', () => {
     );
 
     await expect(migrate).toBeIdempotent(context);
-  });
-
-  it('should handle missing files gracefully', () => {
-    const context = new Context('/virtual');
-    const result = migrate(context);
-    expect(result.hasChanges()).toBe(false);
   });
 });
