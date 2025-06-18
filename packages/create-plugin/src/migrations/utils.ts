@@ -74,8 +74,11 @@ export async function formatFiles(context: Context) {
   for (const [filePath, { content, changeType }] of Object.entries(files)) {
     if (changeType !== 'delete' && content) {
       const prettierOptions = await prettier.resolveConfig(filePath);
-      const supported = await prettier.getFileInfo(filePath);
+      const supported = await prettier.getFileInfo(filePath, prettierOptions as any);
 
+      if (filePath.endsWith('.eslintrc')) {
+        supported.inferredParser = 'json';
+      }
       if (supported.ignored || !supported.inferredParser) {
         continue;
       }
