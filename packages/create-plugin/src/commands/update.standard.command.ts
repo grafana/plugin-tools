@@ -25,9 +25,14 @@ export const standardUpdate = async () => {
 
     const filesToRemove = getOnlyExistingInCwd(UDPATE_CONFIG.filesToRemove);
 
+    // Standard update command rewrites the entire .config directory, so depending on the user's
+    // choice of bundler we need to remove one of the directories.
     if (Boolean(getConfig().features.useExperimentalRspack)) {
-      filesToRemove.push('./config/webpack');
+      filesToRemove.push('./.config/webpack');
+    } else {
+      filesToRemove.push('./.config/rspack');
     }
+
     if (filesToRemove.length) {
       removeFilesInCwd(filesToRemove);
     }
