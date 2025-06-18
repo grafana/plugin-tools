@@ -2,6 +2,22 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@5.23.2`
+  - Update dependency @grafana/e2e-selectors to v12.0.2 [#1905](https://github.com/grafana/plugin-tools/pull/1905) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update grafana patch dependencies [#1906](https://github.com/grafana/plugin-tools/pull/1906) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Fix: remove unused bundler configs on update [#1907](https://github.com/grafana/plugin-tools/pull/1907) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jun 18 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@2.0.6`
   - Update dependency @grafana/e2e-selectors to ^12.1.0-248760 [#1904](https://github.com/grafana/plugin-tools/pull/1904) ([@renovate[bot]](https://github.com/renovate[bot]))
 
