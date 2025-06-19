@@ -1,4 +1,5 @@
 import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { debug } from '../utils/utils.cli.js';
@@ -52,22 +53,29 @@ export function flushChanges(context: Context) {
 export const migrationsDebug = debug.extend('migrations');
 
 /**
- * Formats the files in the migration context using prettier.
+ * Formats the files in the migration context using the version of prettier found in the local node_modules.
  * If prettier isn't installed or the file is ignored or has no parser, it will not be formatted.
  *
  * @param context - The context to format.
  */
 export async function formatFiles(context: Context) {
   let prettier;
+  const require = createRequire(import.meta.url);
+  // import.meta.resolve parent arg doesn't change base path for bare specifiers so need to use require.resolve
+  const localPrettierPath = require.resolve('prettier', { paths: [process.cwd()] });
 
   try {
-    prettier = await import('prettier');
+    prettier = await import(localPrettierPath);
   } catch (error) {
     // don't do anything if prettier is not installed
   }
 
   if (!prettier) {
     return;
+  }
+
+  if (prettier.default) {
+    prettier = prettier.default;
   }
 
   const files = context.listChanges();
