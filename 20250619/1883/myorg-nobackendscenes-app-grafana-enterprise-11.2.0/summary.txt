@@ -1,0 +1,5 @@
+GRAFANA_IMAGE=grafana-enterprise
+GRAFANA_VERSION=11.2.0
+OUTPUT=failure
+PLUGIN_NAME=myorg-nobackendscenes-app
+UPLOAD_REPORT_ENABLED=true
