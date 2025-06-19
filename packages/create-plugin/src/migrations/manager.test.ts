@@ -15,6 +15,16 @@ vi.mock('./utils.js', () => ({
   installNPMDependencies: vi.fn(),
 }));
 
+// Silence terminal output during tests.
+vi.mock('../utils/utils.console.js', () => ({
+  output: {
+    log: vi.fn(),
+    addHorizontalLine: vi.fn(),
+    logSingleLine: vi.fn(),
+    bulletList: vi.fn().mockReturnValue(['']),
+  },
+}));
+
 vi.mock('../utils/utils.config.js', () => ({
   setRootConfig: vi.fn(),
 }));
