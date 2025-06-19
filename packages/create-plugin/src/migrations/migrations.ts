@@ -22,7 +22,7 @@ export default {
       migrationScript: './scripts/001-update-grafana-compose-extend.js',
     },
     '002-update-is-compatible-workflow': {
-      version: '5.23.2',
+      version: '5.24.0',
       description:
         'Update ./.github/workflows/is-compatible.yml to use is-compatible github action instead of calling levitate directly',
       migrationScript: './scripts/002-update-is-compatible-workflow.js',
