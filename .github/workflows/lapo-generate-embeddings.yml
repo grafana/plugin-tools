@@ -16,15 +16,16 @@ jobs:
       id-token: write
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
             GEMINI_API_KEY=gemini_api_key:gemini_api_key
+          export_env: false
 
       - uses: grafana/lapo-docs/github-actions/generate-embeddings@32d0985df853e8634e7c167f4812edd4a66addc2
         id: generate-embeddings
         with:
           docs-path: docusaurus/docs
-          gemini-api-key: ${{ env.GEMINI_API_KEY }}
+          gemini-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GEMINI_API_KEY }}
 
