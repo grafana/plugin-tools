@@ -53,7 +53,7 @@ describe('003-update-eslint-deprecation-rule', () => {
 
     // Check ESLint config changes
     const eslintConfig = JSON.parse(result.getFile('.config/.eslintrc') || '{}');
-    expect(eslintConfig.overrides[0].plugins).not.toContain('deprecation');
+    expect(eslintConfig.overrides[0].plugins).toBeUndefined();
     expect(eslintConfig.overrides[0].rules['deprecation/deprecation']).toBeUndefined();
     expect(eslintConfig.overrides[0].rules['@typescript-eslint/no-deprecated']).toBe('warn');
 
