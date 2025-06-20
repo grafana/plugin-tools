@@ -41,6 +41,7 @@ if (pkg.name === '@grafana/create-plugin') {
   };
   const migrations = glob.sync('**/*.ts', globOptions).map((m) => m.toString());
   input.push(...migrations);
+  external.push('prettier');
 }
 
 if (pkg.dependencies) {

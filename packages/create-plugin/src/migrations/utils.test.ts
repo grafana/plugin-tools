@@ -1,6 +1,6 @@
 import { dirSync } from 'tmp';
 import { Context } from './context.js';
-import { flushChanges, printChanges } from './utils.js';
+import { flushChanges, formatFiles, printChanges } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
@@ -97,6 +97,18 @@ describe('utils', () => {
       printChanges(context, 'key', { migrationScript: 'test', description: 'test', version: '1.0.0' });
 
       expect(outputMock.logSingleLine).toHaveBeenCalledWith('No changes were made');
+    });
+  });
+
+  describe('formatFiles', () => {
+    it('should format files', async () => {
+      const context = new Context(tmpDir);
+      await context.addFile('file.json', '[{"foo":"bar", "baz": "qux"}]');
+      await context.addFile('file.txt', "file which isn't supported");
+      await formatFiles(context);
+      flushChanges(context);
+      expect(readFileSync(join(tmpDir, 'file.json'), 'utf-8')).toBe('[{ "foo": "bar", "baz": "qux" }]\n');
+      expect(readFileSync(join(tmpDir, 'file.txt'), 'utf-8')).toBe("file which isn't supported");
     });
   });
 });
