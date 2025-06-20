@@ -69,7 +69,7 @@ jobs:
     expect(context.listChanges()).toEqual(initialChanges);
   });
 
-  it.only('should update the compatibility check step with the new pattern', async () => {
+  it('should update the compatibility check step with the new pattern', async () => {
     const context = new Context('/virtual');
     context.addFile(
       './.github/workflows/is-compatible.yml',
