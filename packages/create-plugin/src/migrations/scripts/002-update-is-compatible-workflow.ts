@@ -50,7 +50,7 @@ export default async function migrate(context: Context) {
     const findModuleStep = {
       name: 'Find module.ts or module.tsx',
       id: 'find-module-ts',
-      run: 'MODULETS="$(find ./src -type f \( -name "module.ts" -o -name "module.tsx" \))"\necho "modulets=${MODULETS}" >> $GITHUB_OUTPUT',
+      run: 'MODULETS="$(find ./src -type f \\( -name "module.ts" -o -name "module.tsx" \\))"\necho "modulets=${MODULETS}" >> $GITHUB_OUTPUT',
     };
 
     const compatibilityStep = {

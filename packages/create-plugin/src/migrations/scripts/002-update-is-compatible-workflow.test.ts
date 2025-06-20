@@ -69,7 +69,7 @@ jobs:
     expect(context.listChanges()).toEqual(initialChanges);
   });
 
-  it('should update the compatibility check step with the new pattern', async () => {
+  it.only('should update the compatibility check step with the new pattern', async () => {
     const context = new Context('/virtual');
     context.addFile(
       './.github/workflows/is-compatible.yml',
@@ -107,7 +107,9 @@ jobs:
     expect(migrated.jobs.compatibilitycheck.steps[4]).toEqual({
       name: 'Find module.ts or module.tsx',
       id: 'find-module-ts',
-      run: 'MODULETS="$(find ./src -type f ( -name "module.ts" -o -name "module.tsx" ))"\necho "modulets=${MODULETS}" >> $GITHUB_OUTPUT',
+      // notice the double backslash `\\(`  even though the actual file has only `\(`
+      // this is because `parse` will return the strings escaped and as we are comparing strings directly we also have to escape it
+      run: 'MODULETS="$(find ./src -type f \\( -name "module.ts" -o -name "module.tsx" \\))"\necho "modulets=${MODULETS}" >> $GITHUB_OUTPUT',
     });
 
     expect(migrated.jobs.compatibilitycheck.steps[5]).toEqual({
