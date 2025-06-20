@@ -228,4 +228,4 @@ To test a migration locally you'll need a plugin to test on.
 
 - Change the create-plugin package.json to a newer version (same as your migration works fine)
 - Verify the `.config/.cprc.json` of the plugin you are testing on is less than the create-plugin version
-- Run `npx create-plugin update --experimentalUpdates` (see instructions on how to link your create-plugin dev version)
+- Run `npx create-plugin update --experimentalUpdates` in your plugin (see instructions on how to link your create-plugin dev version)
