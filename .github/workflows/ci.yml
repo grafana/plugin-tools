@@ -22,7 +22,7 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -86,11 +86,12 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
             GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
+          export_env: false
 
       - name: Setup .npmrc file for NPM registry
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
@@ -159,7 +160,7 @@ jobs:
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN }}
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ env.WORKING_DIR }}
 
@@ -195,14 +196,15 @@ jobs:
             hasBackend: false
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
             GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
+          export_env: false
 
       - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
@@ -368,7 +370,7 @@ jobs:
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN }}
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
@@ -416,7 +418,7 @@ jobs:
       id-token: write
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -425,13 +427,20 @@ jobs:
             SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
             NPM_TOKEN=npm_token:npm_token
+          export_env: false
+
+        # As recommended on NX docs the NX Cloud token should be set as an environment variable:
+        # https://nx.dev/ci/recipes/security/access-tokens#setting-ci-access-tokens
+      - id: add-nx-cloud-access-token-to-env
+        run: |
+          echo "NX_CLOUD_ACCESS_TOKEN=${{ fromJSON(steps.get-secrets.outputs.secrets).NX_CLOUD_ACCESS_TOKEN }}" >> $GITHUB_ENV
 
       - name: Generate token
         id: generate-token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         with:
-          app-id: ${{ env.GITHUB_APP_ID }}
-          private-key: ${{ env.GITHUB_APP_PRIVATE_KEY }}
+          app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
+          private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PRIVATE_KEY }}
           # permission-actions: read
           # permission-contents: write
           # permission-issues: write
@@ -461,6 +470,6 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+          NODE_AUTH_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NPM_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.get-secrets.outputs.secrets).SLACK_WEBHOOK_URL }}
         run: npm run release

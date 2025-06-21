@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools
           repo_secrets: |
@@ -29,13 +29,14 @@ jobs:
             ANTHROPIC_API_KEY=anthropic_key:anthropic_key
             OPENAI_API_KEY=open_ai_key:open_ai_key
             GEMINI_API_KEY=gemini_api_key:gemini_api_key
+          export_env: false
 
       - name: Generate token
         id: generate_token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         with:
-          app-id: ${{ env.GITHUB_APP_ID }}
-          private-key: ${{ env.GITHUB_APP_PEM }}
+          app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
+          private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PEM }}
           # Permissions necessary for grafana/lapo-docs/github-actions/create-docs-update-pr
           permission-actions: read
           permission-contents: write
@@ -69,9 +70,9 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
           docs-path: docusaurus/docs
-          gemini-api-key: ${{ env.GEMINI_API_KEY }}
-          anthropic-api-key: ${{ env.ANTHROPIC_API_KEY }}
-          openai-api-key: ${{ env.OPENAI_API_KEY }}
+          gemini-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GEMINI_API_KEY }}
+          anthropic-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).ANTHROPIC_API_KEY }}
+          openai-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).OPENAI_API_KEY }}
           embeddings-action: lapo-generate-embeddings.yml
           source-change-pr: ${{ steps.set-pr-url.outputs.url }}
 
