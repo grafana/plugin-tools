@@ -54,7 +54,7 @@
     "@types/semver": "^7.7.0",
     "@typescript-eslint/parser": "^8.34.1",
     "@typescript-eslint/rule-tester": "^8.34.1",
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.2.0"
   },
   "peerDependencies": {
     "@types/eslint": "^8.56.10 || ^9.0.0",
