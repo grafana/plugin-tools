@@ -1,3 +1,15 @@
+# v5.24.0 (Fri Jun 20 2025)
+
+#### 🚀 Enhancement
+
+- Replace direct call to levitate with usage of is-compatible github workflow [#1909](https://github.com/grafana/plugin-tools/pull/1909) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v5.23.2 (Wed Jun 18 2025)
 
 #### 🐛 Bug Fix

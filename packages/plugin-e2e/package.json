@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "2.0.6",
+  "version": "2.1.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -37,12 +37,12 @@
     "@playwright/test": "^1.52.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.53.0",
+    "@playwright/test": "^1.53.1",
     "@types/uuid": "^10.0.0",
     "dotenv": "^16.5.0"
   },
   "dependencies": {
-    "@grafana/e2e-selectors": "^12.1.0-248760",
+    "@grafana/e2e-selectors": "^12.1.0-249587",
     "semver": "^7.5.4",
     "uuid": "^11.0.2",
     "yaml": "^2.3.4"

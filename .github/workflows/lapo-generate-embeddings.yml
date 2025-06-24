@@ -23,7 +23,7 @@ jobs:
             GEMINI_API_KEY=gemini_api_key:gemini_api_key
           export_env: false
 
-      - uses: grafana/lapo-docs/github-actions/generate-embeddings@32d0985df853e8634e7c167f4812edd4a66addc2
+      - uses: grafana/lapo-docs/github-actions/generate-embeddings@93b3cfc2f8c642027b123996d2fa789f58768652
         id: generate-embeddings
         with:
           docs-path: docusaurus/docs
