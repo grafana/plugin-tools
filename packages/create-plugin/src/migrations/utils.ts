@@ -103,6 +103,7 @@ export async function formatFiles(context: Context) {
 }
 
 // Cache the package.json contents to avoid re-installing dependencies if the package.json hasn't changed
+// (This runs for each migration used in an update)
 let packageJsonInstallCache: string;
 
 export function installNPMDependencies(context: Context) {
