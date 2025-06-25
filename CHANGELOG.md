@@ -1,3 +1,16 @@
+# (Wed Jun 25 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.25.0`
+  - Create Plugin: Replace deprecated eslint deprecation plugin [#1883](https://github.com/grafana/plugin-tools/pull/1883) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Sat Jun 21 2025)
 
 #### 🐛 Bug Fix
