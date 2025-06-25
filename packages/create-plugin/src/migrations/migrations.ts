@@ -27,5 +27,10 @@ export default {
         'Update ./.github/workflows/is-compatible.yml to use is-compatible github action instead of calling levitate directly',
       migrationScript: './scripts/002-update-is-compatible-workflow.js',
     },
+    '003-update-eslint-deprecation-rule': {
+      version: '5.24.1',
+      description: 'Replace deprecated eslint-plugin-deprecation with @typescript-eslint/no-deprecated rule.',
+      migrationScript: './scripts/003-update-eslint-deprecation-rule.js',
+    },
   },
 } as Migrations;
