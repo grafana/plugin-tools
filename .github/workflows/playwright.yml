@@ -61,17 +61,19 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@28361cdb22223e5f1e34358c86c20908e7248760 # get-vault-secrets-v1.1.0
+        id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
             DOCKERHUB_PASSWORD=dockerhub:password
+          export_env: false
 
       - name: Log in to Docker Hub
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ env.DOCKERHUB_PASSWORD }}
+          username: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_USERNAME }}
+          password: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_PASSWORD }}
 
       - name: Start Grafana
         working-directory: ./packages/plugin-e2e
