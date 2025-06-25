@@ -53,15 +53,26 @@ describe('003-update-eslint-deprecation-rule', () => {
 
     // Check ESLint config changes
     const eslintConfig = JSON.parse(result.getFile('.config/.eslintrc') || '{}');
-    expect(eslintConfig.overrides[0].plugins).toBeUndefined();
-    expect(eslintConfig.overrides[0].rules['deprecation/deprecation']).toBeUndefined();
-    expect(eslintConfig.overrides[0].rules['@typescript-eslint/no-deprecated']).toBe('warn');
+
+    expect(eslintConfig).toEqual({
+      overrides: [
+        {
+          files: ['src/**/*.{ts,tsx}'],
+          rules: {
+            '@typescript-eslint/no-deprecated': 'warn',
+          },
+        },
+      ],
+    });
 
     // Check package.json changes
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
-    expect(packageJson.devDependencies['eslint-plugin-deprecation']).toBeUndefined();
-    expect(packageJson.devDependencies['@typescript-eslint/eslint-plugin']).toBe('^8.3.0');
-    expect(packageJson.devDependencies['@typescript-eslint/parser']).toBe('^8.3.0');
+    expect(packageJson).toEqual({
+      devDependencies: {
+        '@typescript-eslint/eslint-plugin': '^8.3.0',
+        '@typescript-eslint/parser': '^8.3.0',
+      },
+    });
   });
 
   it('should preserve comments', async () => {
