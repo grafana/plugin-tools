@@ -24,7 +24,7 @@ This guide shows you how to integrate Large Language Models (LLMs) and the Grafa
 Before you begin, ensure you have:
 
 - The [Grafana LLM app] plugin installed and enabled (version 0.22 or later for MCP features)
-- A Grafana app plugin development environment set up
+- A [Grafana app plugin development environment][app-plugin-dev] set up
 - Basic knowledge of TypeScript and React
 - An LLM provider configured in your Grafana instance
 - Node.js and npm installed for package management
@@ -642,3 +642,4 @@ To extend your integration further:
 [mcp]: https://modelcontextprotocol.io/
 [Grafana LLM app]: https://grafana.com/grafana/plugins/grafana-llm-app/
 [npm]: https://www.npmjs.com/package/@grafana/llm
+[app-plugin-dev]: https://grafana.com/developers/plugin-tools/tutorials/build-an-app-plugin
