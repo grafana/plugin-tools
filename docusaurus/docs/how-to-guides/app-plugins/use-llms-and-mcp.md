@@ -128,7 +128,7 @@ async function getStreamingLLMResponse(): Promise<Observable<string>> {
     ];
 
     // Create a streaming connection - returns an Observable of response chunks
-    const stream = await llm.streamChatCompletions({
+    const stream = llm.streamChatCompletions({
       model: llm.Model.BASE,
       messages,
     });
@@ -174,7 +174,7 @@ This example creates a reusable MCP client that your plugin can use throughout i
 ```typescript
 import { llm, mcp } from '@grafana/llm';
 
-async function setupMCPClient(): Promise<mcp.Client> {
+async function setupMCPClient(): Promise<InstanceType<typeof mcp.Client>> {
   try {
     // Verify both services are available - MCP requires the base LLM service
     const enabled = await llm.enabled();
@@ -195,8 +195,8 @@ async function setupMCPClient(): Promise<mcp.Client> {
     });
 
     // Establish HTTP connection to Grafana's MCP server
-    // The streamableHTTPUrl() provides the correct endpoint automatically
-    const transport = new mcp.StreamableHTTPTransport(mcp.streamableHTTPUrl());
+    // The streamableHTTPURL() provides the correct endpoint automatically
+    const transport = new mcp.StreamableHTTPClientTransport(mcp.streamableHTTPURL());
     await mcpClient.connect(transport);
 
     // Verify connection by listing available tools
@@ -236,7 +236,7 @@ async function useMCPWithLLM(): Promise<string> {
 
     // Retrieve and convert available tools for the LLM
     const toolsResponse = await mcpClient.listTools();
-    const tools = mcp.convertToolsToOpenAI(toolsResponse);
+    const tools = mcp.convertToolsToOpenAI(toolsResponse.tools);
 
     console.log(`Available tools: ${tools.map(t => t.function.name).join(', ')}`);
 
@@ -346,23 +346,25 @@ This component demonstrates how to safely access MCP functionality within React.
 ```tsx
 import React from 'react';
 import { mcp } from '@grafana/llm';
-import { Spinner, Alert } from '@grafana/ui';
+import { Alert, LoadingPlaceholder } from '@grafana/ui';
 import { useAsync } from 'react-use';
 
 function MyComponent() {
   // The useMCPClient hook provides a ready-to-use MCP client
   // It handles all initialization and error states automatically
-  const mcpClient = mcp.useMCPClient();
+  const { client, enabled } = mcp.useMCPClient();
 
   // Fetch available tools asynchronously with proper dependency tracking
   const { loading, error, value: toolsResponse } = useAsync(async () => {
-    if (!mcpClient) return null;
-    return await mcpClient.listTools();
-  }, [mcpClient]);
+    if (!enabled || !client) {
+      return null;
+    }
+    return await client.listTools();
+  }, [client]);
 
   // Show loading state while tools are being fetched
   if (loading) {
-    return <Spinner size="lg" label="Loading MCP tools..." />;
+    return <LoadingPlaceholder label="Loading MCP tools..." />;
   }
 
   // Display error state with actionable information
