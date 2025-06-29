@@ -52,7 +52,7 @@
   },
   "overrides": {
     "@types/marked-terminal": {
-      "marked": "^15.0.0"
+      "marked": "^16.0.0"
     }
   },
   "engines": {
