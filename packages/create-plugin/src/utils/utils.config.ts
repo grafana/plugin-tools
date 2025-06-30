@@ -15,6 +15,7 @@ export type FeatureFlags = {
   useReactRouterV6?: boolean;
   usePlaywright?: boolean;
   useExperimentalRspack?: boolean;
+  useExperimentalUpdates?: boolean;
 };
 
 export type CreatePluginConfig = UserConfig & {
