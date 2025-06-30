@@ -283,6 +283,7 @@ async function useMCPWithLLM(): Promise<string> {
       const followUpResponse = await llm.chatCompletions({
         model: llm.Model.BASE,
         messages,
+        tools,
       });
 
       return followUpResponse.choices[0].message.content || 'No response received';
