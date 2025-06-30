@@ -1,3 +1,15 @@
+# v5.25.1 (Mon Jun 30 2025)
+
+#### 🐛 Bug Fix
+
+- Add useExperimentalUpdates to feature flags for migration adoption [#1935](https://github.com/grafana/plugin-tools/pull/1935) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.25.0 (Wed Jun 25 2025)
 
 #### 🚀 Enhancement
