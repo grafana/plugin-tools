@@ -1,5 +1,8 @@
-import { Context } from '../context.js';
 import minimist from 'minimist';
+import { inspect } from 'node:util';
+import { camelCase } from 'change-case';
+import { Context } from '../context.js';
+import { output } from '../../utils/utils.console.js';
 
 const knownImportsMap: Record<string, { name: string; path: string }> = {
   './.config/.eslintrc': {
@@ -26,7 +29,13 @@ export default async function migrate(context: Context) {
   // Convert each config file
   for (const configFile of configFiles) {
     if (!processedConfigs.has(configFile)) {
-      const conversionResult = convertLegacyConfig(context, configFile, processedConfigs, ignorePaths);
+      const conversionResult = convertLegacyConfig(
+        context,
+        configFile,
+        processedConfigs,
+        // only root config should have ignores as these are project specific.
+        configFile === '.eslintrc' ? ignorePaths : []
+      );
       if (conversionResult) {
         const content = generateFlatConfigContent(conversionResult.imports, conversionResult.flatConfig);
         const fileToWrite = context.normalisePath(configFile).replace('.eslintrc', 'eslint.config.mjs');
@@ -37,34 +46,6 @@ export default async function migrate(context: Context) {
   }
 
   return context;
-}
-
-function discoverConfigFiles(context: Context, rootConfigPath: string): string[] {
-  const discoveredConfigs = new Set<string>();
-
-  function discoverConfig(configPath: string) {
-    if (discoveredConfigs.has(configPath)) {
-      return;
-    }
-
-    if (!context.doesFileExist(configPath)) {
-      return;
-    }
-
-    discoveredConfigs.add(configPath);
-
-    const config = parseJsonConfig(context, configPath);
-    if (config.extends) {
-      const relativeExtends = getRelativeExtends(config.extends);
-      for (const relativeExtend of relativeExtends) {
-        const fullPath = resolveRelativePath(configPath, relativeExtend);
-        discoverConfig(fullPath);
-      }
-    }
-  }
-
-  discoverConfig(rootConfigPath);
-  return Array.from(discoveredConfigs);
 }
 
 function convertLegacyConfig(
@@ -86,12 +67,7 @@ function convertLegacyConfig(
   return { imports, flatConfig };
 }
 
-function parseJsonConfig(context: Context, legacyConfigPath: string) {
-  const legacyEslintConfigRaw = context.getFile(legacyConfigPath) ?? '';
-  return JSON.parse(legacyEslintConfigRaw);
-}
-
-function extractImports(legacyEslintConfig: any): Array<{ name: string; path: string }> {
+export function extractImports(legacyEslintConfig: any): Array<{ name: string; path: string }> {
   const imports: Array<{ name: string; path: string }> = [];
 
   if (legacyEslintConfig.extends && knownImportsMap[legacyEslintConfig.extends]) {
@@ -101,7 +77,7 @@ function extractImports(legacyEslintConfig: any): Array<{ name: string; path: st
   if (legacyEslintConfig.plugins) {
     legacyEslintConfig.plugins.forEach((plugin: string) => {
       const pluginImport = getPluginImport(plugin);
-      const importName = pluginImport.replace('eslint-plugin-', '').replace('-', '');
+      const importName = camelCase(pluginImport.replace('eslint-plugin-', ''));
       imports.push({ name: importName, path: pluginImport });
     });
   }
@@ -112,14 +88,30 @@ function extractImports(legacyEslintConfig: any): Array<{ name: string; path: st
 function buildFlatConfig(legacyEslintConfig: any, ignorePaths?: string[]): Array<Record<string, any>> {
   const flatConfig: Array<Record<string, any>> = [];
 
-  if (legacyEslintConfig.rules) {
-    Object.entries(legacyEslintConfig.rules).forEach(([rule, value]) => {
-      flatConfig.push({ [rule]: value });
-    });
-  }
-
   if (ignorePaths && ignorePaths.length > 0) {
     flatConfig.push({ ignores: ignorePaths });
+  }
+
+  if (legacyEslintConfig.rules) {
+    flatConfig.push({ rules: legacyEslintConfig.rules });
+  }
+
+  if (legacyEslintConfig.overrides) {
+    legacyEslintConfig.overrides.forEach((override: any) => {
+      const overrideConfig = {
+        files: override.files,
+        rules: override.rules,
+      };
+
+      if (override.parserOptions) {
+        // @ts-expect-error TODO: fix all the types in this file.
+        overrideConfig['languageOptions'] = {
+          parserOptions: override.parserOptions,
+        };
+      }
+
+      flatConfig.push(overrideConfig);
+    });
   }
 
   return flatConfig;
@@ -131,64 +123,75 @@ function generateFlatConfigContent(
 ): string {
   const importsString = imports.map(({ name, path }) => `import ${name} from '${path}';`).join('\n');
 
-  return imports.length === 1
-    ? `${importsString}
+  if (flatConfig.length === 0) {
+    return `${importsString}
 
 ${typeDocBlock}
 export default ${imports[0].name};
-`
-    : `${importsString}
+`;
+  }
+
+  const configItems = flatConfig.map((config) => inspect(config, { depth: null, colors: false })).join(',\n');
+
+  return `${importsString}
 
 ${typeDocBlock}
-const config = [${flatConfig.map((config) => JSON.stringify(config)).join(', ')}];
+const config = [\n...${imports[0].name},\n${configItems}\n];
 
 export default config;
 `;
 }
 
 export function getIgnorePaths(context: Context): string[] {
-  const result: string[] = [];
+  const result = new Set<string>();
 
   if (context.doesFileExist('.eslintignore')) {
     const eslintIgnore = context.getFile('.eslintignore');
     if (eslintIgnore) {
-      result.push(
-        ...eslintIgnore
-          .split('\n')
-          .filter((line) => line.length > 0 && !line.startsWith('#'))
-          .map((line) => line.trim())
-      );
+      const linesToAdd = addIgnoreLinesToSet(eslintIgnore);
+      linesToAdd.forEach((line) => result.add(line));
     }
   }
 
   const packageJsonRaw = context.getFile('package.json');
   if (packageJsonRaw) {
-    const packageJson = JSON.parse(packageJsonRaw);
-    for (const [_, script] of Object.entries<string>(packageJson.scripts)) {
-      if (script.includes('eslint')) {
-        const args = script.split(' ').slice(1);
-        const parsedArgs = minimist(args);
-        const ignorePath = parsedArgs['ignore-path'];
+    try {
+      const packageJson = JSON.parse(packageJsonRaw);
+      if (packageJson.scripts) {
+        for (const [_, script] of Object.entries<string>(packageJson.scripts)) {
+          if (script.includes('eslint')) {
+            const args = script.split(' ').slice(1);
+            const parsedArgs = minimist(args);
+            const ignorePath = parsedArgs['ignore-path'];
 
-        if (ignorePath && context.doesFileExist(ignorePath)) {
-          const ignorePathContent = context.getFile(ignorePath);
-          if (ignorePathContent) {
-            result.push(
-              ...ignorePathContent
-                .split('\n')
-                .filter((line) => line.length > 0 && !line.startsWith('#'))
-                .map((line) => line.trim())
-            );
+            if (ignorePath && context.doesFileExist(ignorePath)) {
+              const ignorePathContent = context.getFile(ignorePath);
+              if (ignorePathContent) {
+                const linesToAdd = addIgnoreLinesToSet(ignorePathContent);
+                linesToAdd.forEach((line) => result.add(line));
+              }
+            }
           }
         }
       }
+    } catch (error) {
+      output.warning({
+        title: 'Error parsing package.json',
+        body: [`${error}`],
+      });
     }
   }
 
-  return result;
+  return Array.from(result);
 }
 
-function getPluginImport(pluginName: string): string {
+const addIgnoreLinesToSet = (content: string) =>
+  content
+    .split('\n')
+    .filter((line) => line.length > 0 && !line.startsWith('#'))
+    .map((line) => line.trim());
+
+export function getPluginImport(pluginName: string): string {
   if (pluginName.includes('eslint-plugin-')) {
     return pluginName;
   }
@@ -199,6 +202,9 @@ function getPluginImport(pluginName: string): string {
     return `${pluginName}/eslint-plugin`;
   }
   const [scope, name] = pluginName.split('/');
+  if (name.includes('eslint-plugin')) {
+    return `${scope}/${name}`;
+  }
   return `${scope}/eslint-plugin-${name}`;
 }
 
@@ -210,9 +216,35 @@ function getRelativeExtends(extendsConfig: string | string[]): string[] {
   );
 }
 
-function resolveRelativePath(fromPath: string, relativePath: string): string {
-  // Simple path resolution - assumes we're working with relative paths
-  // For now, just append the relative path to the directory of fromPath
-  const fromDir = fromPath.substring(0, fromPath.lastIndexOf('/') + 1);
-  return fromDir + relativePath;
+function discoverConfigFiles(context: Context, rootConfigPath: string): string[] {
+  const discoveredConfigs = new Set<string>();
+
+  function discoverConfig(configPath: string) {
+    if (discoveredConfigs.has(configPath)) {
+      return;
+    }
+
+    if (!context.doesFileExist(configPath)) {
+      return;
+    }
+
+    discoveredConfigs.add(configPath);
+
+    const config = parseJsonConfig(context, configPath);
+
+    if (config.extends) {
+      const relativeExtends = getRelativeExtends(config.extends);
+      for (const relativeExtend of relativeExtends) {
+        discoverConfig(relativeExtend);
+      }
+    }
+  }
+
+  discoverConfig(rootConfigPath);
+  return Array.from(discoveredConfigs);
+}
+
+function parseJsonConfig(context: Context, legacyConfigPath: string) {
+  const legacyEslintConfigRaw = context.getFile(legacyConfigPath) ?? '';
+  return JSON.parse(legacyEslintConfigRaw);
 }
