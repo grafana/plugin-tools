@@ -241,14 +241,14 @@ async function useMCPWithLLM(): Promise<string> {
     console.log(`Available tools: ${tools.map(t => t.function.name).join(', ')}`);
 
     // Send initial request with tools available
-    const response = await llm.chatCompletions({
+    let response = await llm.chatCompletions({
       model: llm.Model.BASE,
       messages,
       tools,
     });
 
     // Process any tool calls the LLM wants to make
-    if (response.choices[0].message.tool_calls) {
+    while (response.choices[0].message.tool_calls) {
       // Add the LLM's response (with tool calls) to the conversation
       messages.push(response.choices[0].message);
 
@@ -279,16 +279,14 @@ async function useMCPWithLLM(): Promise<string> {
         }
       }
 
-      // Get the LLM's final response incorporating tool results
-      const followUpResponse = await llm.chatCompletions({
+      // Get the LLM's response incorporating tool call results
+      response = await llm.chatCompletions({
         model: llm.Model.BASE,
         messages,
+        tools,
       });
-
-      return followUpResponse.choices[0].message.content || 'No response received';
     }
 
-    // Return direct response if no tools were called
     return response.choices[0].message.content || 'No response received';
   } catch (error) {
     console.error('Failed to use MCP with LLM:', error);
