@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import migrate from './004-eslint-convert-flat-config.js';
+import migrate, { getIgnorePaths } from './004-eslint-convert-flat-config.js';
 import { Context } from '../context.js';
 
 describe('004-eslint-convert-flat-config', () => {
@@ -22,7 +22,6 @@ describe('004-eslint-convert-flat-config', () => {
       JSON.stringify(
         {
           extends: ['@grafana/eslint-config'],
-          root: true,
         },
         null,
         2
@@ -32,14 +31,34 @@ describe('004-eslint-convert-flat-config', () => {
     const result = await migrate(context);
     expect(result.listChanges()).not.toHaveProperty('.eslintrc');
 
-    const expected = `const defaultConfig = require('./.config/eslint.config.js');
+    const expected = `import defaultConfig from './.config/eslint.config.mjs';
 
 /**
  * @type {Array<import('eslint').Linter.Config>}
  */
-module.exports = defaultConfig;
+export default defaultConfig;
 `;
 
-    expect(result.getFile('eslint.config.js')).toEqual(expected);
+    expect(result.getFile('eslint.config.mjs')).toEqual(expected);
+  });
+});
+
+describe('getIgnorePaths', () => {
+  it('should get the ignore paths', () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      'package.json',
+      JSON.stringify({
+        scripts: {
+          lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .',
+        },
+      })
+    );
+
+    context.addFile('.gitignore', 'node_modules');
+    context.addFile('.eslintignore', 'dist/**');
+
+    const result = getIgnorePaths(context);
+    expect(result).toEqual(['dist/**', 'node_modules']);
   });
 });
