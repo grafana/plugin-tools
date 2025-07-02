@@ -145,7 +145,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@97f54730f8fb4b06c3a4a1826cd705d3ccb46008
+        uses: grafana/plugin-actions/wait-for-grafana@84faffc3d16ad60800b3c9a220eec16f0bc19705
         with:
           url: http://localhost:3000/login
 
@@ -285,7 +285,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@97f54730f8fb4b06c3a4a1826cd705d3ccb46008
+        uses: grafana/plugin-actions/wait-for-grafana@84faffc3d16ad60800b3c9a220eec16f0bc19705
         with:
           url: http://localhost:3000/login
 
@@ -300,7 +300,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@97f54730f8fb4b06c3a4a1826cd705d3ccb46008
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@84faffc3d16ad60800b3c9a220eec16f0bc19705
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -331,7 +331,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@97f54730f8fb4b06c3a4a1826cd705d3ccb46008
+        uses: grafana/plugin-actions/wait-for-grafana@84faffc3d16ad60800b3c9a220eec16f0bc19705
         with:
           url: http://localhost:3000/login
 
@@ -345,7 +345,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@97f54730f8fb4b06c3a4a1826cd705d3ccb46008
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@84faffc3d16ad60800b3c9a220eec16f0bc19705
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -401,7 +401,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@97f54730f8fb4b06c3a4a1826cd705d3ccb46008
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@84faffc3d16ad60800b3c9a220eec16f0bc19705
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
