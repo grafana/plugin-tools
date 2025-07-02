@@ -99,6 +99,19 @@ describe('003-update-eslint-deprecation-rule', () => {
 */`;
 
     context.addFile('.config/.eslintrc', comments + '\n' + eslintConfigRaw);
+    context.addFile(
+      'package.json',
+      JSON.stringify({
+        dependencies: {
+          react: '18.3.0',
+        },
+        devDependencies: {
+          'eslint-plugin-deprecation': '^2.0.0',
+          '@typescript-eslint/eslint-plugin': '^6.18.0',
+          '@typescript-eslint/parser': '^6.18.0',
+        },
+      })
+    );
     const result = migrate(context);
     const migrated = result.getFile('.config/.eslintrc');
 
