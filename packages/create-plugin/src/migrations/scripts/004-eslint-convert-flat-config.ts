@@ -3,6 +3,7 @@ import { inspect } from 'node:util';
 import { camelCase } from 'change-case';
 import { Context } from '../context.js';
 import { output } from '../../utils/utils.console.js';
+import type { Linter } from 'eslint';
 
 const knownImportsMap: Record<string, { name: string; path: string }> = {
   './.config/.eslintrc': {
@@ -37,9 +38,15 @@ export default async function migrate(context: Context) {
         configFile === '.eslintrc' ? ignorePaths : []
       );
       if (conversionResult) {
-        const content = generateFlatConfigContent(conversionResult.imports, conversionResult.flatConfig);
+        let content = generateFlatConfigContent(conversionResult.imports, conversionResult.flatConfig);
         const fileToWrite = context.normalisePath(configFile).replace('.eslintrc', 'eslint.config.mjs');
+        // remove quotes from any references to imports in the content
+        for (const importName of conversionResult.imports) {
+          content = content.replace(new RegExp(`'${importName.name}'`, 'g'), importName.name);
+        }
         context.addFile(fileToWrite, content);
+
+        // Delete the original config file
         context.deleteFile(configFile);
       }
     }
@@ -53,7 +60,7 @@ function convertLegacyConfig(
   legacyConfigPath: string,
   processedConfigs: Set<string>,
   ignorePaths?: string[]
-): { imports: Array<{ name: string; path: string }>; flatConfig: Array<Record<string, any>> } | null {
+): { imports: Array<{ name: string; path: string }>; flatConfig: Linter.Config[] } | null {
   // Prevent infinite loops
   if (processedConfigs.has(legacyConfigPath)) {
     return null;
@@ -67,11 +74,11 @@ function convertLegacyConfig(
   return { imports, flatConfig };
 }
 
-export function extractImports(legacyEslintConfig: any): Array<{ name: string; path: string }> {
+export function extractImports(legacyEslintConfig: Linter.LegacyConfig): Array<{ name: string; path: string }> {
   const imports: Array<{ name: string; path: string }> = [];
 
-  if (legacyEslintConfig.extends && knownImportsMap[legacyEslintConfig.extends]) {
-    imports.push(knownImportsMap[legacyEslintConfig.extends]);
+  if (legacyEslintConfig.extends && knownImportsMap[legacyEslintConfig.extends as keyof typeof knownImportsMap]) {
+    imports.push(knownImportsMap[legacyEslintConfig.extends as keyof typeof knownImportsMap]);
   }
 
   if (legacyEslintConfig.plugins) {
@@ -85,27 +92,39 @@ export function extractImports(legacyEslintConfig: any): Array<{ name: string; p
   return imports;
 }
 
-function buildFlatConfig(legacyEslintConfig: any, ignorePaths?: string[]): Array<Record<string, any>> {
-  const flatConfig: Array<Record<string, any>> = [];
+function buildFlatConfig(legacyEslintConfig: Linter.LegacyConfig, ignorePaths?: string[]): Linter.Config[] {
+  const flatConfig: Linter.Config[] = [];
 
   if (ignorePaths && ignorePaths.length > 0) {
     flatConfig.push({ ignores: ignorePaths });
   }
 
   if (legacyEslintConfig.rules) {
-    flatConfig.push({ rules: legacyEslintConfig.rules });
+    const config: Linter.Config = { rules: legacyEslintConfig.rules };
+
+    // Add plugins if they exist
+    if (legacyEslintConfig.plugins) {
+      const plugins: Record<string, any> = {};
+      legacyEslintConfig.plugins.forEach((plugin: string) => {
+        const pluginKey = plugin.replace('eslint-plugin-', '');
+        const importName = camelCase(plugin.replace('eslint-plugin-', ''));
+        plugins[pluginKey] = importName;
+      });
+      config.plugins = plugins;
+    }
+
+    flatConfig.push(config);
   }
 
   if (legacyEslintConfig.overrides) {
-    legacyEslintConfig.overrides.forEach((override: any) => {
-      const overrideConfig = {
-        files: override.files,
+    legacyEslintConfig.overrides.forEach((override) => {
+      const overrideConfig: Linter.Config = {
+        files: Array.isArray(override.files) ? override.files : [override.files],
         rules: override.rules,
       };
 
       if (override.parserOptions) {
-        // @ts-expect-error TODO: fix all the types in this file.
-        overrideConfig['languageOptions'] = {
+        overrideConfig.languageOptions = {
           parserOptions: override.parserOptions,
         };
       }
@@ -119,7 +138,7 @@ function buildFlatConfig(legacyEslintConfig: any, ignorePaths?: string[]): Array
 
 function generateFlatConfigContent(
   imports: Array<{ name: string; path: string }>,
-  flatConfig: Array<Record<string, any>>
+  flatConfig: Linter.Config[]
 ): string {
   const importsString = imports.map(({ name, path }) => `import ${name} from '${path}';`).join('\n');
 

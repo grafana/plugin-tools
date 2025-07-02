@@ -122,7 +122,10 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
  */
 const config = [
 ...defaultConfig,
-{ rules: { 'simple-import-sort/imports': 'error' } }
+{
+  rules: { 'simple-import-sort/imports': 'error' },
+  plugins: { 'simple-import-sort': simpleImportSort }
+}
 ];
 
 export default config;
@@ -294,7 +297,7 @@ export default config;
     it('should return empty array for config without extends or plugins', () => {
       const config = {
         rules: {
-          'no-console': 'warn',
+          'no-console': ['error'],
         },
       };
 
