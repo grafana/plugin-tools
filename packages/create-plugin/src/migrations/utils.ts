@@ -253,17 +253,14 @@ export function removeDependenciesFromPackageJson(
   context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
 }
 
+const UNIDENTIFIED_VERSION = 'UNIDENTIFIED_VERSION';
 // Handle special version strings like "latest", "next", etc.
 const DIST_TAGS = {
   '*': 2,
   UNIDENTIFIED_VERSION: 2,
   next: 1,
   latest: 0,
-  previous: -1,
-  legacy: -2,
 };
-
-const UNIDENTIFIED_VERSION = 'UNIDENTIFIED_VERSION';
 
 /**
  * Compares two version strings to determine if the incoming version is greater

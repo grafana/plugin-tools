@@ -32,9 +32,7 @@ export default function migrate(context: Context) {
 
       const result = eslintComments.join('\n') + '\n' + JSON.stringify(eslintConfig, null, 2);
       context.updateFile('.config/.eslintrc', result);
-    }
 
-    if (context.doesFileExist('package.json')) {
       addDependenciesToPackageJson(context, {
         '@typescript-eslint/eslint-plugin': '^8.3.0',
         '@typescript-eslint/parser': '^8.3.0',
