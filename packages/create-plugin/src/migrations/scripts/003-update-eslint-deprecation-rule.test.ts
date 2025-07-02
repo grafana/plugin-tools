@@ -41,6 +41,9 @@ describe('003-update-eslint-deprecation-rule', () => {
     context.addFile(
       'package.json',
       JSON.stringify({
+        dependencies: {
+          react: '18.3.0',
+        },
         devDependencies: {
           'eslint-plugin-deprecation': '^2.0.0',
           '@typescript-eslint/eslint-plugin': '^6.18.0',
@@ -68,6 +71,9 @@ describe('003-update-eslint-deprecation-rule', () => {
     // Check package.json changes
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
     expect(packageJson).toEqual({
+      dependencies: {
+        react: '18.3.0',
+      },
       devDependencies: {
         '@typescript-eslint/eslint-plugin': '^8.3.0',
         '@typescript-eslint/parser': '^8.3.0',
