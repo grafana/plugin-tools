@@ -211,6 +211,48 @@ export function addDependenciesToPackageJson(
   context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
 }
 
+export function removeDependenciesFromPackageJson(
+  context: Context,
+  dependencies: string[],
+  devDependencies: string[] = [],
+  packageJsonPath = 'package.json'
+) {
+  const currentPackageJson = readJsonFile(context, packageJsonPath);
+  const currentDeps = { ...(currentPackageJson.dependencies || {}) };
+  const currentDevDeps = { ...(currentPackageJson.devDependencies || {}) };
+
+  let hasChanges = false;
+
+  // Remove dependencies from dependencies section
+  for (const dep of dependencies) {
+    if (currentDeps[dep]) {
+      delete currentDeps[dep];
+      hasChanges = true;
+    }
+  }
+
+  // Remove dependencies from devDependencies section
+  for (const dep of devDependencies) {
+    if (currentDevDeps[dep]) {
+      delete currentDevDeps[dep];
+      hasChanges = true;
+    }
+  }
+
+  // Only update if there are actual changes
+  if (!hasChanges) {
+    return;
+  }
+
+  const updatedPackageJson = {
+    ...currentPackageJson,
+    dependencies: currentDeps,
+    devDependencies: currentDevDeps,
+  };
+
+  context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
+}
+
 // Handle special version strings like "latest", "next", etc.
 const DIST_TAGS = {
   '*': 2,

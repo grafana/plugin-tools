@@ -1,6 +1,13 @@
 import { dirSync } from 'tmp';
 import { Context } from './context.js';
-import { addDependenciesToPackageJson, flushChanges, formatFiles, printChanges, readJsonFile } from './utils.js';
+import {
+  addDependenciesToPackageJson,
+  removeDependenciesFromPackageJson,
+  flushChanges,
+  formatFiles,
+  printChanges,
+  readJsonFile,
+} from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
@@ -189,6 +196,68 @@ describe('utils', () => {
       expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
         dependencies: { react: '19.0.0' },
         devDependencies: { vitest: '3.0.0' },
+      });
+    });
+  });
+
+  describe('removeDependenciesFromPackageJson', () => {
+    let context: Context;
+    beforeEach(() => {
+      context = new Context(tmpDir);
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
+          devDependencies: { vitest: '2.1.5' },
+        })
+      );
+    });
+
+    it('should remove dependencies from package.json', () => {
+      removeDependenciesFromPackageJson(context, ['react', 'react-dom']);
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: {},
+        devDependencies: { vitest: '2.1.5' },
+      });
+    });
+
+    it('should remove devDependencies from package.json', () => {
+      removeDependenciesFromPackageJson(context, [], ['vitest']);
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
+        devDependencies: {},
+      });
+    });
+
+    it('should not remove dependencies if they are not in package.json', () => {
+      removeDependenciesFromPackageJson(context, ['non-existent-package']);
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
+        devDependencies: { vitest: '2.1.5' },
+      });
+    });
+
+    it('should not remove devDependencies if they are not in package.json', () => {
+      removeDependenciesFromPackageJson(context, [], ['non-existent-package']);
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
+        devDependencies: { vitest: '2.1.5' },
+      });
+    });
+
+    it('should remove mixed dependencies and devDependencies', () => {
+      removeDependenciesFromPackageJson(context, ['react'], ['vitest']);
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: { 'react-dom': '19.3.0' },
+        devDependencies: {},
+      });
+    });
+
+    it('should handle empty arrays gracefully', () => {
+      removeDependenciesFromPackageJson(context, [], []);
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
+        devDependencies: { vitest: '2.1.5' },
       });
     });
   });
