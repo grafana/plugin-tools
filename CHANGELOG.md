@@ -1,3 +1,20 @@
+# (Thu Jul 03 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @rspack/core to v1.4.2 [#1928](https://github.com/grafana/plugin-tools/pull/1928) ([@renovate[bot]](https://github.com/renovate[bot]) [@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.25.2`
+  - Create Plugin: ignore node_modules and dist when running jest in watch mode [#1943](https://github.com/grafana/plugin-tools/pull/1943) ([@jackw](https://github.com/jackw))
+  - chore(deps): update dependency marked to v16 [#1933](https://github.com/grafana/plugin-tools/pull/1933) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Mon Jun 30 2025)
 
 #### 🐛 Bug Fix
