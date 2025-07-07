@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { UDPATE_CONFIG } from '../constants.js';
 import { output } from '../utils/utils.console.js';
+import { getConfig } from '../utils/utils.config.js';
 import { getOnlyExistingInCwd, removeFilesInCwd } from '../utils/utils.files.js';
 import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
 import { updateNpmScripts, updatePackageJson } from '../utils/utils.npm.js';
@@ -23,6 +24,15 @@ export const standardUpdate = async () => {
     await updateGoSdkAndModules(process.cwd());
 
     const filesToRemove = getOnlyExistingInCwd(UDPATE_CONFIG.filesToRemove);
+
+    // Standard update command rewrites the entire .config directory, so depending on the user's
+    // choice of bundler we need to remove one of the directories.
+    if (Boolean(getConfig().features.useExperimentalRspack)) {
+      filesToRemove.push('./.config/webpack');
+    } else {
+      filesToRemove.push('./.config/rspack');
+    }
+
     if (filesToRemove.length) {
       removeFilesInCwd(filesToRemove);
     }

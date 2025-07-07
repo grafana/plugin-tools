@@ -23,6 +23,7 @@ Ensure your development environment meets the following prerequisites:
 
 - **Grafana version:** Use Grafana 10.3 or later
 - **Feature toggle:** Enable the `externalServiceAccounts` feature toggle. Refer to our documentation [on configuring Grafana feature toggles](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#feature_toggles)
+- **Config variable:** Enable the [auth.managed_service_accounts_enabled](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#managed_service_accounts_enabled) configuration variable. Refer to our documentation [on configuring Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#configure-grafana)
 - **Deployment type:** This feature currently **only supports single-organization deployments**
 
 ## Add service account configuration

@@ -167,7 +167,7 @@ The update command follows these steps:
    }
    ```
 
-#### How to test a migration?
+#### How to write tests for a migration?
 
 Migrations should be thoroughly tested using the provided testing utilities. Create a test file alongside your migration script (e.g., `add-webpack-profile.test.ts`).
 
@@ -221,3 +221,11 @@ describe('Migration - append profile to webpack', () => {
   });
 });
 ```
+
+#### How to test a migration locally
+
+To test a migration locally you'll need a plugin to test on.
+
+- Bump the version of create-plugin _(This can be necessary if your plugin was already updated using the latest create-plugin version.)_
+- Verify that the `.config/.cprc.json` in your plugin has a version that is lower than the bumped create-plugin version \_(The `.cprc.json` holds the version of create-plugin that was used to scaffold / last update the plugin)
+- Run `npx create-plugin update --experimentalUpdates` in your plugin (see instructions on how to link your create-plugin dev version)

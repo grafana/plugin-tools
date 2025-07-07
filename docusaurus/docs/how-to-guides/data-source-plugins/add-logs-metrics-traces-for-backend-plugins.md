@@ -485,10 +485,6 @@ When tracing is enabled, a `TracingMiddleware` is also added to the default midd
 
 Refer to [How to collect and visualize logs, metrics and traces](#collect-and-visualize-logs-metrics-and-traces).
 
-### Plugin example
-
-Refer to the [datasource-http-backend plugin example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http-backend) for a complete example of a plugin with full distributed tracing support.
-
 ## Collect and visualize logs, metrics and traces
 
 If you want to collect and visualize logs, metrics and traces using Loki, Prometheus, and Tempo when developing your plugin, refer to https://github.com/grafana/grafana/tree/main/devenv/docker/blocks/self-instrumentation which are being used by the Grafana maintainers.

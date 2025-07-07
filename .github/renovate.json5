@@ -1,8 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
-  "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github"],
-  "ignoreDeps": ["react", "react-dom", "@stylistic/eslint-plugin-ts", "lerna", "@grafana/scenes"],
+  "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github/**"],
+  "ignoreDeps": ["react", "react-dom", "@stylistic/eslint-plugin-ts", "lerna", "@grafana/scenes", "@libs/output", "@libs/version"],
   "separateMajorMinor": false,
   "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],

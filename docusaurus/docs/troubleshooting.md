@@ -62,7 +62,7 @@ If you're using mounts to access your files, it's likely that webpack isn't dete
 #### What you can do:
 
 - If you're editing your code from a native Windows app (such as VS Code), you need to manually rerun `yarn build` every time you want to see a change in your plugin.
-- Use [webpack `watchOption` with `poll`](https://webpack.js.org/configuration/watch/#watchoptionspoll) in your project. Find instructions on how to extend webpack configuration in our [documentation](./get-started/set-up-development-environment.mdx#extend-configurations).
+- Use [webpack `watchOption` with `poll`](https://webpack.js.org/configuration/watch/#watchoptionspoll) in your project. Trying running the [create-plugin update command](/reference/cli-commands#update) which includes polling.
 
 ### I get `SyntaxError: Cannot use import statement outside a module` when running Jest or `npm run test`.
 

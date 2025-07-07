@@ -3,22 +3,29 @@ name: Lapo Docs Generate Embeddings
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'docusaurus/docs/**/*.md'
-
-permissions:
-  contents: read
-  id-token: write
 
 jobs:
   generate-docs-embeddings:
     name: generate-docs-embeddings
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: grafana/lapo-docs/github-actions/generate-embeddings@41bcdcda32541126c29c9c3bd20f675700151b56
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            GEMINI_API_KEY=gemini_api_key:gemini_api_key
+          export_env: false
+
+      - uses: grafana/lapo-docs/github-actions/generate-embeddings@93b3cfc2f8c642027b123996d2fa789f58768652
         id: generate-embeddings
         with:
           docs-path: docusaurus/docs
-          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          gemini-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GEMINI_API_KEY }}
 

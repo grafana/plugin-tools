@@ -61,8 +61,6 @@ The `options` object contains the queries, or _targets_, that the user made, alo
 async testDatasource()
 ```
 
-For an example of a health check in a frontend data source, see our [datasource-http](https://github.com/grafana/grafana-plugin-examples/blob/edf9f0259d28bc14aaaac4204058f7caab99d6ab/examples/datasource-http/src/DataSource.ts#L84) plugin.
-
 ## Returning Data frames
 
 There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called [data frames](../key-concepts/data-frames).
@@ -306,7 +304,7 @@ In this tutorial you built a complete data source plugin for Grafana that uses a
 
 ### Get data from an external API
 
-The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service. To see how this can be achieved, use the [datasource-http](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http) sample.
+The majority of data sources in Grafana will return data from an external API. This tutorial tries to keep things simple and doesn't require an additional service.
 
 This sample shows the use of the [`getBackendSrv` function](https://github.com/grafana/grafana/blob/main/packages/grafana-runtime/src/services/backendSrv.ts) from the [`grafana-runtime` package](https://github.com/grafana/grafana/tree/main/packages/grafana-runtime).
 

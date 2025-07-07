@@ -1,3 +1,15 @@
+# v0.6.3 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v0.5.5 (Wed May 07 2025)
 
 #### ⚠️ Pushed to `main`

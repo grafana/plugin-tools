@@ -27,5 +27,7 @@ export type TemplateData = {
   reactRouterVersion: string;
   usePlaywright: boolean;
   useCypress: boolean;
+  useExperimentalRspack: boolean;
   pluginExecutable?: string;
+  frontendBundler: 'webpack' | 'rspack';
 };

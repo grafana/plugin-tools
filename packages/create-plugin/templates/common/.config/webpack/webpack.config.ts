@@ -43,7 +43,7 @@ const config = async (env: Env): Promise<Configuration> => {
     cache: {
       type: 'filesystem',
       buildDependencies: {
-        // __filename doesnt work in Node 24
+        // __filename doesn't work in Node 24
         config: [path.resolve(process.cwd(), '.config', 'webpack', 'webpack.config.ts')],
       },
     },
@@ -256,6 +256,7 @@ const config = async (env: Env): Promise<Configuration> => {
         new ESLintPlugin({
           extensions: ['.ts', '.tsx'],
           lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
+          failOnError: Boolean(env.production),
         }),
       ] : []),
     ],

@@ -81,6 +81,23 @@ export function getPackageManagerInstallCmd(packageManagerName: string, packageM
   }
 }
 
+export function getPackageManagerSilentInstallCmd(packageManagerName: string, packageManagerVersion: string) {
+  switch (packageManagerName) {
+    case 'yarn':
+      if (lt(packageManagerVersion, '2.0.0')) {
+        return 'yarn install --silent --ignore-scripts';
+      }
+
+      return 'yarn install --silent';
+
+    case 'pnpm':
+      return 'pnpm install --no-frozen-lockfile --silent --ignore-scripts';
+
+    default:
+      return 'npm install --silent --ignore-scripts';
+  }
+}
+
 function getPackageManagerFromLockFile(): PackageManager | undefined {
   const closestLockfilePath = findUpSync([YARN_LOCKFILE, PNPM_LOCKFILE, NPM_LOCKFILE]);
   if (!Boolean(closestLockfilePath)) {

@@ -15,6 +15,7 @@
 - Manage Something ✅🙆🏼💃👔
   - [Create a Release](#create-a-release)
     - [Release Version Calculation](#release-version-calculation)
+    - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
 
 ## Introduction
 
@@ -198,3 +199,20 @@ Below is a bulleted list of what occurs under the hood when Auto is asked to rel
 
 > [!TIP]
 > We enable verbose logging in the release packages CI step to give plenty of information related to what Auto and Lerna are doing. This can prove most useful should issues occur with releasing packages.
+
+### Help! The release failed after the packages were published to the NPM registry
+
+If the release step fails after the packages were published to the NPM registry manual clean up is required to sync the repo to the NPM registry before the next publish occurs otherwise further failures or potentially major releases containing duplicate version calculations could be pushed to the NPM registry.
+
+To sync the repo with the latest release(s) on the NPM registry we need to introduce the commits, tags and gh releases Auto _would_ have pushed had the publish command completed fully.
+
+- Locate the failed release workflow step from the `main` commit history.
+- Search the logs for `Commit  - @grafana/` to find the versions and `git tag` commands for each package that was published to the NPM registry.
+- Search the logs for `New Release Notes` to find the release notes markdown.
+- Checkout `main`.
+- For each published package update it's `changelog.md` file in the repo using the release notes markdown as a guide. It will not match each changelog file perfectly but the older entries can be used to match formatting. Now update the repos root `changelog.md` file, matching the formatting using older entries. Commit this to `main` with `git commit -m "Update CHANGELOG.md [skip ci]"`. ([example commit](https://github.com/grafana/plugin-tools/commit/e8b980e25e8752aaab9278cb43228f44733ca96f))
+- Update each published packages `package.json` file so the version matches the version published to the registry. Once done run `npm install`. Commit this to `main` with `git commit -m "Bump independent versions [skip ci]"`.
+- Now tag this version bump commit with the tag commands from the failed release workflow step. Tag the commit for each published package. The command should look like `git tag -a @grafana/create-plugin@<UPDATED_VERSION> -m "@grafana/create-plugin@<UPDATED_VERSION>"`. ([example commit](https://github.com/grafana/plugin-tools/commit/e8b980e25e8752aaab9278cb43228f44733ca96f))
+- Go to the [plugin-tools tags page](https://github.com/grafana/plugin-tools/tags) and delete any existing tags that match the versions of the packages that were released.
+- Once the tags are deleted push the commits and the tags from `main` to gh with `git push --follow-tags`.
+- Lastly create the GH releases for the packages from the [Github releases page](https://github.com/grafana/plugin-tools/releases).

@@ -1,3 +1,147 @@
+# v5.25.2 (Thu Jul 03 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: ignore node_modules and dist when running jest in watch mode [#1943](https://github.com/grafana/plugin-tools/pull/1943) ([@jackw](https://github.com/jackw))
+- chore(deps): update dependency marked to v16 [#1933](https://github.com/grafana/plugin-tools/pull/1933) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.1 (Mon Jun 30 2025)
+
+#### 🐛 Bug Fix
+
+- Add useExperimentalUpdates to feature flags for migration adoption [#1935](https://github.com/grafana/plugin-tools/pull/1935) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.0 (Wed Jun 25 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Replace deprecated eslint deprecation plugin [#1883](https://github.com/grafana/plugin-tools/pull/1883) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.24.0 (Fri Jun 20 2025)
+
+#### 🚀 Enhancement
+
+- Replace direct call to levitate with usage of is-compatible github workflow [#1909](https://github.com/grafana/plugin-tools/pull/1909) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v5.23.2 (Wed Jun 18 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12.0.2 [#1905](https://github.com/grafana/plugin-tools/pull/1905) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update grafana patch dependencies [#1906](https://github.com/grafana/plugin-tools/pull/1906) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Fix: remove unused bundler configs on update [#1907](https://github.com/grafana/plugin-tools/pull/1907) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.23.1 (Mon Jun 16 2025)
+
+#### 🐛 Bug Fix
+
+- fix: don't exit Webpack on ESLint error in development [#1890](https://github.com/grafana/plugin-tools/pull/1890) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v5.23.0 (Mon Jun 16 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Introduce experimental Rspack feature flag [#1564](https://github.com/grafana/plugin-tools/pull/1564) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12 [#1654](https://github.com/grafana/plugin-tools/pull/1654) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.0.5 [#1880](https://github.com/grafana/plugin-tools/pull/1880) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.22.4 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v2.0.4 [#1878](https://github.com/grafana/plugin-tools/pull/1878) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.22.3 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.0.3 [#1872](https://github.com/grafana/plugin-tools/pull/1872) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.22.2 (Tue Jun 10 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: Fix zizmor issues in template workflows [#1823](https://github.com/grafana/plugin-tools/pull/1823) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v5.22.1 (Tue May 20 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: fix cspell "doesn't" spelling in create-plugin Webpack config [#1809](https://github.com/grafana/plugin-tools/pull/1809) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
 # v5.22.0 (Wed May 14 2025)
 
 #### 🚀 Enhancement

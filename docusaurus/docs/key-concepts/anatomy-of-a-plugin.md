@@ -60,11 +60,11 @@ App plugins can register and expose UI extensions that hook into core Grafana fe
 
 ### Health check
 
-Apps can define health checks to ensure that the plugin is properly configured and operational. You can customize these checks based on the plugin’s backend logic. See our [example health check](https://github.com/grafana/grafana-plugin-examples/blob/7d761244d370ad91715c68e24e6d83852d8e5b11/examples/app-with-backend/pkg/plugin/app.go#L47) for implementation details.
+Apps can define health checks to ensure that the plugin is properly configured and operational. You can customize these checks based on the plugin’s backend logic. See our [documentation](/how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend#health-check) for implementation details.
 
 ### Call resource
 
-Apps can have backends to handle server-side functionality, such as making external API calls or processing more advanced authentication methods. The `CallResourceHandler` method is commonly used for this purpose. See our [app with backend example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) for implementation details.
+Apps can have backends to handle server-side functionality, such as making external API calls or processing more advanced authentication methods. The `CallResourceHandler` method is commonly used for this purpose. See our [documentation](/how-to-guides/app-plugins/add-backend-component#add-a-custom-endpoint-to-your-app-plugin) for implementation details.
 
 ### Nested plugins
 
@@ -78,7 +78,7 @@ Data source plugins allow Grafana to connect to external services, configure que
 
 ### Config editor
 
-The config editor is where users provide connection details (for example, API keys, URLs) for the external service when configuring a specific instance of the data source. To define the config editor, use `setConfigEditor()` and pass a custom configuration component. You can see [how to define a config editor in our basic data source plugin example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-basic/src/components/ConfigEditor/ConfigEditor.tsx).
+The config editor is where users provide connection details (for example, API keys, URLs) for the external service when configuring a specific instance of the data source. To define the config editor, use `setConfigEditor()` and pass a custom configuration component. You can see [how to define a config editor in our data source tutorial](/tutorials/build-a-data-source-plugin#enable-configuration-for-your-datasource).
 
 Ensure that your sensitive data is stored securely using `secureJson`. Read our guide on [adding authentication for data source plugins](/how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#store-configuration-in-securejsondata) for more details.
 
@@ -86,7 +86,7 @@ Ensure that your sensitive data is stored securely using `secureJson`. Read our 
 
 ### Query editor
 
-The query editor allows users to construct queries against the connected service. This editor is used when adding a panel in a dashboard, when using Explore, and when creating a new Alert Rule. Query editors can be customized to provide a [code editor](https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Monaco/CodeEditor.tsx) as well as a guided query builder. You can see [how to define a query editor in our data source plugin example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-basic/src/components/QueryEditor/QueryEditor.tsx).
+The query editor allows users to construct queries against the connected service. This editor is used when adding a panel in a dashboard, when using Explore, and when creating a new Alert Rule. Query editors can be customized to provide a [code editor](https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Monaco/CodeEditor.tsx) as well as a guided query builder. You can see [how to define a query editor in our data source plugin tutorial](/tutorials/build-a-data-source-plugin#define-a-query).
 
 ![An example data source query editor](./images/datasource-queryeditor.png)
 
@@ -102,13 +102,13 @@ The `QueryData` method processes multiple queries and returns corresponding resp
 
 This approach allows for efficient handling of multiple queries, with built-in logging and error management to ensure smooth operation.
 
-Take a look at the [QueryData implementation in our data source example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go#L99).
+Take a look at the [Backend data source tutorial](/tutorials/build-a-data-source-backend-plugin#run-multiple-queries-concurrently).
 
 ### Call resource
 
 Custom endpoints allow a data source plugin to expose custom HTTP API routes for server-side functionality. This is particularly useful when dealing with authentication, advanced queries, or processing large datasets. You can create custom endpoints in the backend by using the `CallResourceHandler` method to handle requests and respond with data or status information.
 
-For an example of how to implement custom endpoints, refer to the [app with backend example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/pkg/plugin/resources.go).
+For an example of how to implement custom endpoints, refer to the [documentation](/how-to-guides/app-plugins/add-backend-component#add-a-custom-endpoint-to-your-app-plugin).
 
 ## Panel plugins
 
@@ -120,7 +120,7 @@ Panel plugins enhance Grafana by offering custom components that provide unique 
 
 Panel plugins provide visual representations of data in Grafana dashboards. To create a custom visualization, developers use React components to define how data will be rendered on the dashboard. This visualization can be anything from a simple chart to a complex interactive widget. The panel’s `render()` function defines how the data is passed into the visualization and how updates are handled when data or options change.
 
-For more details on panel visualizations, refer to the [panel plugin example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/panel-basic).
+For more details on panel visualizations, refer to the [panel plugin tutorial](/tutorials/build-a-panel-plugin).
 
 ![An example panel visualization](./images/panel-visualization.png)
 
@@ -128,7 +128,7 @@ For more details on panel visualizations, refer to the [panel plugin example](ht
 
 Panel options allow users to customize the behavior and appearance of the panel plugin. You can define these options by implementing the `OptionsEditor` component, which can expose options relevant to the visualization. These options are passed into the panel’s `render()` function, allowing for dynamic updates based on user inputs.
 
-You can see an example of how to implement panel options in the [basic panel example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/panel-basic/src/types.ts#L5).
+You can see an example of how to implement panel options in the [basic panel tutorial](/tutorials/build-a-panel-plugin).
 
 ![An example of custom panel options on the right](./images/panel-options.png)
 

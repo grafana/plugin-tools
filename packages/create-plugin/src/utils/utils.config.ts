@@ -14,6 +14,8 @@ export type FeatureFlags = {
   // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
   useReactRouterV6?: boolean;
   usePlaywright?: boolean;
+  useExperimentalRspack?: boolean;
+  useExperimentalUpdates?: boolean;
 };
 
 export type CreatePluginConfig = UserConfig & {
