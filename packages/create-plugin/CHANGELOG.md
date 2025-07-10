@@ -1,3 +1,15 @@
+# v5.25.3 (Thu Jul 10 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Support latest grafana package dependencies in jest [#1949](https://github.com/grafana/plugin-tools/pull/1949) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.25.2 (Thu Jul 03 2025)
 
 #### 🐛 Bug Fix
