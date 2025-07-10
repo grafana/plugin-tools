@@ -34,7 +34,7 @@
     "@docusaurus/module-type-aliases": "^3.8.1",
     "@docusaurus/remark-plugin-npm2yarn": "^3.8.1",
     "@docusaurus/tsconfig": "^3.8.1",
-    "dotenv": "^16.6.0",
+    "dotenv": "^17.2.0",
     "raw-loader": "^4.0.2",
     "typescript": "^5.8.3"
   },
