@@ -101,7 +101,7 @@ const config: Config = {
               },
             ],
           ],
-          remarkPlugins: [[npm2yarn, { sync: true }]],
+          remarkPlugins: [[npm2yarn, { sync: true, converters: ['yarn', 'pnpm'] }]],
           routeBasePath: '/',
         },
         theme: {
