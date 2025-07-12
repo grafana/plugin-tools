@@ -53,7 +53,7 @@
     "lint-staged": "^16.1.2",
     "prettier": "3.6.2",
     "publint": "^0.3.12",
-    "rollup": "^4.44.2",
+    "rollup": "^4.45.0",
     "rollup-plugin-delete": "^3.0.1",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-esbuild": "^6.2.1",
@@ -91,7 +91,7 @@
     "webpack-dev-server": "^5.2.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.44.2",
+    "@rollup/rollup-linux-x64-gnu": "^4.45.0",
     "@rspack/binding-linux-x64-gnu": "1.4.6",
     "@swc/html-linux-x64-gnu": "^1.12.11",
     "lightningcss-linux-x64-gnu": "^1.30.1"
