@@ -158,13 +158,16 @@ export function addDependenciesToPackageJson(
   // Handle dependencies
   for (const [dep, newVersion] of Object.entries(dependencies)) {
     if (currentDeps[dep]) {
-      if (isIncomingVersionGreater(newVersion, currentDeps[dep])) {
+      if (isVersionGreater(newVersion, currentDeps[dep])) {
         currentDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade dependency %s to %s', dep, newVersion);
       }
     } else if (currentDevDeps[dep]) {
-      // Exists in devDependencies, only update there if new version is greater
-      if (isIncomingVersionGreater(newVersion, currentDevDeps[dep])) {
+      if (isVersionGreater(newVersion, currentDevDeps[dep])) {
         currentDevDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade devDependency %s to %s', dep, newVersion);
       }
     } else {
       // Not present, add to dependencies
@@ -175,13 +178,16 @@ export function addDependenciesToPackageJson(
   // Handle devDependencies
   for (const [dep, newVersion] of Object.entries(devDependencies)) {
     if (currentDeps[dep]) {
-      // Exists in dependencies, only update there if new version is greater
-      if (isIncomingVersionGreater(newVersion, currentDeps[dep])) {
+      if (isVersionGreater(newVersion, currentDeps[dep])) {
         currentDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade dependency %s to %s', dep, newVersion);
       }
     } else if (currentDevDeps[dep]) {
-      if (isIncomingVersionGreater(newVersion, currentDevDeps[dep])) {
+      if (isVersionGreater(newVersion, currentDevDeps[dep])) {
         currentDevDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade devDependency %s to %s', dep, newVersion);
       }
     } else {
       // Not present, add to devDependencies
@@ -189,24 +195,26 @@ export function addDependenciesToPackageJson(
     }
   }
 
-  // Sort dependencies alphabetically for consistency
-  const sortedDeps = sortObjectByKeys(currentDeps);
-  const sortedDevDeps = sortObjectByKeys(currentDevDeps);
-
   // Only update if there are actual changes
   const hasChanges =
-    JSON.stringify(sortedDeps) !== JSON.stringify(currentPackageJson.dependencies || {}) ||
-    JSON.stringify(sortedDevDeps) !== JSON.stringify(currentPackageJson.devDependencies || {});
+    JSON.stringify(currentDeps) !== JSON.stringify(currentPackageJson.dependencies || {}) ||
+    JSON.stringify(currentDevDeps) !== JSON.stringify(currentPackageJson.devDependencies || {});
 
   if (!hasChanges) {
     return;
   }
 
+  // Sort dependencies alphabetically for consistency
+  const sortedDeps = sortObjectByKeys(currentDeps);
+  const sortedDevDeps = sortObjectByKeys(currentDevDeps);
+
   const updatedPackageJson = {
     ...currentPackageJson,
-    dependencies: sortedDeps,
-    devDependencies: sortedDevDeps,
+    ...(Object.keys(sortedDeps).length > 0 && { dependencies: sortedDeps }),
+    ...(Object.keys(sortedDevDeps).length > 0 && { devDependencies: sortedDevDeps }),
   };
+
+  migrationsDebug('updated package.json', updatedPackageJson);
 
   context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
 }
@@ -218,46 +226,37 @@ export function removeDependenciesFromPackageJson(
   packageJsonPath = 'package.json'
 ) {
   const currentPackageJson = readJsonFile(context, packageJsonPath);
-  const currentDeps = { ...(currentPackageJson.dependencies || {}) };
-  const currentDevDeps = { ...(currentPackageJson.devDependencies || {}) };
 
   let hasChanges = false;
 
-  // Remove dependencies from dependencies section
   for (const dep of dependencies) {
-    if (currentDeps[dep]) {
-      delete currentDeps[dep];
+    if (currentPackageJson.dependencies?.[dep]) {
+      delete currentPackageJson.dependencies[dep];
+      migrationsDebug('removed dependency %s', dep);
       hasChanges = true;
     }
   }
 
-  // Remove dependencies from devDependencies section
   for (const dep of devDependencies) {
-    if (currentDevDeps[dep]) {
-      delete currentDevDeps[dep];
+    if (currentPackageJson.devDependencies?.[dep]) {
+      delete currentPackageJson.devDependencies[dep];
+      migrationsDebug('removed devDependency %s', dep);
       hasChanges = true;
     }
   }
 
-  // Only update if there are actual changes
   if (!hasChanges) {
     return;
   }
 
-  const updatedPackageJson = {
-    ...currentPackageJson,
-    dependencies: currentDeps,
-    devDependencies: currentDevDeps,
-  };
+  migrationsDebug('updated package.json', currentPackageJson);
 
-  context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
+  context.updateFile(packageJsonPath, JSON.stringify(currentPackageJson, null, 2));
 }
 
-const UNIDENTIFIED_VERSION = 'UNIDENTIFIED_VERSION';
 // Handle special version strings like "latest", "next", etc.
 const DIST_TAGS = {
   '*': 2,
-  UNIDENTIFIED_VERSION: 2,
   next: 1,
   latest: 0,
 };
@@ -265,28 +264,31 @@ const DIST_TAGS = {
 /**
  * Compares two version strings to determine if the incoming version is greater
  */
-function isIncomingVersionGreater(incomingVersion: string, existingVersion: string): boolean {
-  // if version is in the format of "latest", "next" or similar - keep it, otherwise try to parse it
-  const incomingVersionCompareBy =
-    incomingVersion in DIST_TAGS ? incomingVersion : (cleanSemver(incomingVersion)?.toString() ?? UNIDENTIFIED_VERSION);
-  const existingVersionCompareBy =
-    existingVersion in DIST_TAGS ? existingVersion : (cleanSemver(existingVersion)?.toString() ?? UNIDENTIFIED_VERSION);
+export function isVersionGreater(incomingVersion: string, existingVersion: string): boolean {
+  const incomingIsDistTag = incomingVersion in DIST_TAGS;
+  const existingIsDistTag = existingVersion in DIST_TAGS;
 
-  if (incomingVersionCompareBy in DIST_TAGS && existingVersionCompareBy in DIST_TAGS) {
-    return (
-      DIST_TAGS[incomingVersionCompareBy as keyof typeof DIST_TAGS] >
-      DIST_TAGS[existingVersionCompareBy as keyof typeof DIST_TAGS]
-    );
+  if (incomingIsDistTag && existingIsDistTag) {
+    return DIST_TAGS[incomingVersion as keyof typeof DIST_TAGS] > DIST_TAGS[existingVersion as keyof typeof DIST_TAGS];
   }
 
-  if (incomingVersionCompareBy in DIST_TAGS || existingVersionCompareBy in DIST_TAGS) {
+  // We can't determine the exact version the dist tag pointed to so we force an update so the migration changes and expected
+  // dependency version are aligned. This should mean the codebase is more likely to continue working post-migration, even if
+  // it potentially downgrades from a newer version to the specific version the migration expects.
+  if (incomingIsDistTag || existingIsDistTag) {
     return true;
   }
 
-  return gt(
-    cleanSemver(incomingVersion)?.toString() ?? UNIDENTIFIED_VERSION,
-    cleanSemver(existingVersion)?.toString() ?? UNIDENTIFIED_VERSION
-  );
+  // Both are semver versions, use standard semver comparison
+  const incomingSemver = cleanSemver(incomingVersion);
+  const existingSemver = cleanSemver(existingVersion);
+
+  // If either version can't be parsed as semver, default to treating the incoming version as greater.
+  if (!incomingSemver || !existingSemver) {
+    return true;
+  }
+
+  return gt(incomingSemver, existingSemver);
 }
 
 /**

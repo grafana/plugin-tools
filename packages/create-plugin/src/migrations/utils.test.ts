@@ -7,6 +7,7 @@ import {
   formatFiles,
   printChanges,
   readJsonFile,
+  isVersionGreater,
 } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
@@ -198,6 +199,14 @@ describe('utils', () => {
         devDependencies: { vitest: '3.0.0' },
       });
     });
+
+    it('should sort dependencies alphabetically', () => {
+      addDependenciesToPackageJson(context, { 'react-dom': '19.3.0', react: '18.3.0' });
+      expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
+        dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
+        devDependencies: { vitest: '2.1.5' },
+      });
+    });
   });
 
   describe('removeDependenciesFromPackageJson', () => {
@@ -258,6 +267,111 @@ describe('utils', () => {
       expect(JSON.parse(context.getFile('package.json') || '{}')).toEqual({
         dependencies: { react: '18.3.0', 'react-dom': '19.3.0' },
         devDependencies: { vitest: '2.1.5' },
+      });
+    });
+  });
+
+  describe('isIncomingVersionGreater', () => {
+    describe('dist tag comparison', () => {
+      it('should return false when incoming is "latest" and existing is "next"', () => {
+        expect(isVersionGreater('latest', 'next')).toBe(false);
+      });
+
+      it('should return true when incoming is "next" and existing is "latest"', () => {
+        expect(isVersionGreater('next', 'latest')).toBe(true);
+      });
+
+      it('should return true when incoming is "*" and existing is "latest"', () => {
+        expect(isVersionGreater('*', 'latest')).toBe(true);
+      });
+
+      it('should return true when incoming is "*" and existing is "next"', () => {
+        expect(isVersionGreater('*', 'next')).toBe(true);
+      });
+
+      it('should return false when incoming is "latest" and existing is "*"', () => {
+        expect(isVersionGreater('latest', '*')).toBe(false);
+      });
+
+      it('should return false when incoming is "next" and existing is "*"', () => {
+        expect(isVersionGreater('next', '*')).toBe(false);
+      });
+
+      it('should return false when both versions are the same DIST_TAG', () => {
+        expect(isVersionGreater('latest', 'latest')).toBe(false);
+        expect(isVersionGreater('next', 'next')).toBe(false);
+        expect(isVersionGreater('*', '*')).toBe(false);
+      });
+    });
+
+    describe('dist tag vs semver comparison', () => {
+      it('should return true when incoming is a DIST_TAG and existing is semver', () => {
+        expect(isVersionGreater('latest', '1.0.0')).toBe(true);
+        expect(isVersionGreater('next', '2.1.0')).toBe(true);
+        expect(isVersionGreater('*', '3.0.0')).toBe(true);
+      });
+
+      it('should return true when incoming is semver and existing is a DIST_TAG', () => {
+        expect(isVersionGreater('1.0.0', 'latest')).toBe(true);
+        expect(isVersionGreater('2.1.0', 'next')).toBe(true);
+        expect(isVersionGreater('3.0.0', '*')).toBe(true);
+      });
+    });
+
+    describe('incomparable versions', () => {
+      it('should return true when incoming version cannot be parsed as semver', () => {
+        expect(isVersionGreater('not-a-version', '1.0.0')).toBe(true);
+        expect(isVersionGreater('invalid-version-string', '2.1.0')).toBe(true);
+      });
+
+      it('should return true when existing version cannot be parsed as semver', () => {
+        expect(isVersionGreater('1.0.0', 'not-a-version')).toBe(true);
+        expect(isVersionGreater('2.1.0', 'invalid-version-string')).toBe(true);
+      });
+
+      it('should return true when both versions cannot be parsed as semver', () => {
+        expect(isVersionGreater('not-a-version', 'also-invalid')).toBe(true);
+      });
+    });
+
+    describe('semver comparison', () => {
+      it('should return true when incoming version is greater', () => {
+        expect(isVersionGreater('2.0.0', '1.0.0')).toBe(true);
+        expect(isVersionGreater('1.1.0', '1.0.0')).toBe(true);
+        expect(isVersionGreater('1.0.1', '1.0.0')).toBe(true);
+        expect(isVersionGreater('2.0.0', '1.9.9')).toBe(true);
+      });
+
+      it('should return false when incoming version is less', () => {
+        expect(isVersionGreater('1.0.0', '2.0.0')).toBe(false);
+        expect(isVersionGreater('1.0.0', '1.1.0')).toBe(false);
+        expect(isVersionGreater('1.0.0', '1.0.1')).toBe(false);
+        expect(isVersionGreater('1.9.9', '2.0.0')).toBe(false);
+      });
+
+      it('should return false when versions are equal', () => {
+        expect(isVersionGreater('1.0.0', '1.0.0')).toBe(false);
+        expect(isVersionGreater('2.1.3', '2.1.3')).toBe(false);
+      });
+
+      it('should handle pre-release versions correctly', () => {
+        expect(isVersionGreater('2.0.0', '2.0.0-beta.1')).toBe(true);
+        expect(isVersionGreater('2.0.0-alpha.2', '2.0.0-alpha.1')).toBe(true);
+        expect(isVersionGreater('2.0.0-beta.1', '2.0.0-alpha.1')).toBe(true);
+      });
+    });
+
+    describe('version coercion', () => {
+      it('should coerce version strings to valid semver', () => {
+        expect(isVersionGreater('1', '0.9.0')).toBe(true);
+        expect(isVersionGreater('1.2', '1.1.0')).toBe(true);
+        expect(isVersionGreater('v1.0.0', '0.9.0')).toBe(true);
+      });
+
+      it('should handle ranges and other npm version formats', () => {
+        expect(isVersionGreater('^1.0.0', '0.9.0')).toBe(true);
+        expect(isVersionGreater('~1.0.0', '0.9.0')).toBe(true);
+        expect(isVersionGreater('>=1.0.0', '0.9.0')).toBe(true);
       });
     });
   });
