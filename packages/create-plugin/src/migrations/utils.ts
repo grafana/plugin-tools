@@ -139,7 +139,7 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
     throw new Error(`Cannot find ${path}`);
   }
   try {
-    return JSON.parse(context.getFile(path) || '{}');
+    return JSON.parse(context.getFile(path) || '');
   } catch (e) {
     throw new Error(`Cannot parse ${path}: ${e}`);
   }
