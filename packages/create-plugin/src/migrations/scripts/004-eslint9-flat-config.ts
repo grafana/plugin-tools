@@ -3,14 +3,15 @@ import type { Context } from '../context.js';
 import { parse } from 'jsonc-parser';
 import * as recast from 'recast';
 import type { Linter } from 'eslint';
+import { camelCase } from 'change-case';
 
-const b = recast.types.builders;
+const builders = recast.types.builders;
 
 interface Migration {
   imports: Map<string, { name?: string; modules: string[] }>;
 }
 
-const legacyKeysToCopy: Array<keyof Linter.LegacyConfig> = ['rules'];
+const legacyKeysToCopy: Array<keyof Linter.ConfigOverride> = ['rules'];
 
 export default function migrate(context: Context): Context {
   const discoveredConfigs = discoverRelativeLegacyConfigs(context, '.eslintrc');
@@ -35,29 +36,57 @@ export function migrateLegacyConfig(config: Linter.LegacyConfig) {
   const flatConfigFileContents = [];
 
   migration.imports.set('eslint/config', { modules: ['defineConfig'] });
-  const imports = buildImports(migration);
+  const configs = addConfigsToMigration(migration, config as Linter.ConfigOverride);
+
+  if (config.overrides) {
+    config.overrides.forEach((override) => {
+      configs.push(...addConfigsToMigration(migration, override));
+    });
+  }
+
+  const imports = generateImports(migration);
   flatConfigFileContents.push(...imports);
-  const configs = addConfigsToMigration(migration, config);
+
   // Wrap the config in defineConfig
-  const defineConfigNode = b.callExpression(b.identifier('defineConfig'), [b.arrayExpression(configs)]);
+  const defineConfigNode = builders.callExpression(builders.identifier('defineConfig'), [
+    builders.arrayExpression(configs),
+  ]);
   // default export the defineConfig
-  flatConfigFileContents.push(b.exportDefaultDeclaration(defineConfigNode));
+  flatConfigFileContents.push(builders.exportDefaultDeclaration(defineConfigNode));
   // Print the AST to code.
-  return recast.print(b.program(flatConfigFileContents), {
+  return recast.print(builders.program(flatConfigFileContents), {
     tabWidth: 2,
     trailingComma: true,
     lineTerminator: '\n',
   }).code;
 }
 
-function addConfigsToMigration(migration: Migration, config: Linter.LegacyConfig) {
+function addConfigsToMigration(migration: Migration, config: Linter.ConfigOverride) {
   const configs: any[] = [];
   const properties: any[] = [];
 
+  if (config.files) {
+    const files = Array.isArray(config.files) ? config.files : [config.files];
+    const filesArrayAST = builders.arrayExpression(files.map((file) => builders.literal(file)));
+    properties.push(builders.property('init', builders.identifier('files'), filesArrayAST));
+  }
+
+  if (config.excludedFiles) {
+    const excludedFiles = Array.isArray(config.excludedFiles) ? config.excludedFiles : [config.excludedFiles];
+    const excludedFilesArrayAST = builders.arrayExpression(excludedFiles.map((file) => builders.literal(file)));
+    properties.push(builders.property('init', builders.identifier('ignores'), excludedFilesArrayAST));
+  }
+
+  if (config.plugins) {
+    properties.push(
+      builders.property('init', builders.identifier('plugins'), generatePlugins(config.plugins, migration))
+    );
+  }
+
   legacyKeysToCopy.forEach((key) => {
     if (config[key]) {
-      const value = typeof config[key] === 'object' ? generatePropValue(config[key]) : b.literal(config[key]);
-      properties.push(b.property('init', b.identifier(key), value));
+      const value = typeof config[key] === 'object' ? generatePropValue(config[key]) : builders.literal(config[key]);
+      properties.push(builders.property('init', builders.identifier(key), value));
     }
   });
 
@@ -70,7 +99,7 @@ function addConfigsToMigration(migration: Migration, config: Linter.LegacyConfig
   });
 
   if (hasObject) {
-    configs.push(b.objectExpression(properties));
+    configs.push(builders.objectExpression(properties));
   }
 
   return configs;
@@ -83,39 +112,86 @@ function generatePropValue(
   | recast.types.namedTypes.ArrayExpression
   | recast.types.namedTypes.Literal {
   if (Array.isArray(value)) {
-    return b.arrayExpression(value.map((i) => generatePropValue(i)));
+    return builders.arrayExpression(value.map((i) => generatePropValue(i)));
   }
   if (value && typeof value === 'object') {
     const props = Object.keys(value).map((key) => {
       const propValue = value[key as keyof typeof value];
-      const identifier = b.identifier(key);
-      return b.property('init', identifier, generatePropValue(propValue));
+      const identifier = builders.literal(key);
+      return builders.property('init', identifier, generatePropValue(propValue));
     });
-    return b.objectExpression(props);
+    return builders.objectExpression(props);
   }
-  return b.literal(value);
+  return builders.literal(value);
 }
 
-function buildImports(migration: { imports: Map<string, { name?: string; modules: string[] }> }) {
+function generateImports(migration: { imports: Map<string, { name?: string; modules: string[] }> }) {
   const imports: recast.types.namedTypes.ImportDeclaration[] = [];
   migration.imports.forEach(({ name, modules }, path) => {
     imports.push(
       name
-        ? b.importDeclaration([b.importDefaultSpecifier(b.identifier(name))], b.literal(path))
-        : b.importDeclaration(
-            modules.map((binding) => b.importSpecifier(b.identifier(binding))),
-            b.literal(path)
+        ? builders.importDeclaration(
+            [builders.importDefaultSpecifier(builders.identifier(name))],
+            builders.literal(path)
+          )
+        : builders.importDeclaration(
+            modules.map((binding) => builders.importSpecifier(builders.identifier(binding))),
+            builders.literal(path)
           )
     );
   });
   return imports;
 }
 
+function generatePlugins(plugins: string[], migration: Migration) {
+  const props: recast.types.namedTypes.Property[] = [];
+
+  plugins.forEach((plugin) => {
+    const varName = getPluginVarName(plugin);
+    const importName = getPluginImport(plugin);
+    props.push(builders.property('init', builders.identifier(varName), builders.literal(importName)));
+    migration.imports.set(importName, { name: varName, modules: [importName] });
+  });
+
+  return builders.objectExpression(props);
+}
+
+function getPluginVarName(pluginName: string) {
+  let name = pluginName.replace(/^eslint-plugin-/, '');
+
+  if (name === 'import' || name === 'export') {
+    return `${name}Plugin`;
+  }
+
+  if (name.startsWith('@')) {
+    name = name.substring(1);
+  }
+
+  return camelCase(name);
+}
+
+export function getPluginImport(pluginName: string): string {
+  if (pluginName.includes('eslint-plugin-')) {
+    return pluginName;
+  }
+  if (!pluginName.startsWith('@')) {
+    return `eslint-plugin-${pluginName}`;
+  }
+  if (!pluginName.includes('/')) {
+    return `${pluginName}/eslint-plugin`;
+  }
+  const [scope, name] = pluginName.split('/');
+  if (name.includes('eslint-plugin')) {
+    return `${scope}/${name}`;
+  }
+  return `${scope}/eslint-plugin-${name}`;
+}
+
 export function discoverRelativeLegacyConfigs(
   context: Context,
   configPath: string,
-  discoveredConfigs: Map<string, Linter.LegacyConfig> = new Map()
-): Map<string, Linter.LegacyConfig> {
+  discoveredConfigs: Map<string, Linter.ConfigOverride> = new Map()
+): Map<string, Linter.ConfigOverride> {
   if (discoveredConfigs.has(configPath)) {
     return discoveredConfigs;
   }
