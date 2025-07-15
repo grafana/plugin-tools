@@ -17,6 +17,15 @@ describe('004-eslint9-flat-config', () => {
               'react/prop-types': 'off',
               'no-console': 'error',
             },
+            overrides: [
+              {
+                files: ['src/**/*.{ts,tsx}'],
+                rules: {
+                  '@typescript-eslint/no-deprecated': 'warn',
+                },
+              },
+            ],
+            plugins: ['@typescript-eslint', 'eslint-plugin-react'],
           },
           null,
           2
@@ -24,17 +33,29 @@ describe('004-eslint9-flat-config', () => {
       );
 
       const result = await migrate(context);
+      expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
+        "import { defineConfig } from "eslint/config";
+        import typescriptEslint from "@typescript-eslint/eslint-plugin";
+        import react from "eslint-plugin-react";
 
-      const expectedConfig = `import { defineConfig } from "eslint/config";
+        export default defineConfig([{
+          plugins: {
+            typescriptEslint: "@typescript-eslint/eslint-plugin",
+            react: "eslint-plugin-react",
+          },
 
-export default defineConfig([{
-  rules: {
-    react/prop-types: "off",
-    no-console: "error",
-  },
-}]);`;
+          rules: {
+            "react/prop-types": "off",
+            "no-console": "error",
+          },
+        }, {
+          files: ["src/**/*.{ts,tsx}"],
 
-      expect(result.listChanges()['eslint.config.mjs'].content).toBe(expectedConfig);
+          rules: {
+            "@typescript-eslint/no-deprecated": "warn",
+          },
+        }]);"
+      `);
       expect(result.listChanges()).not.toHaveProperty('.eslintrc');
     });
 
