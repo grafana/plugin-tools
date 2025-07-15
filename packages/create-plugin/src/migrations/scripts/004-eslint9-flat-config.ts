@@ -1,8 +1,10 @@
+import { dirname, relative, resolve } from 'node:path';
 import type { Context } from '../context.js';
 import { parse } from 'jsonc-parser';
+import type { Linter } from 'eslint';
 
 export default function migrate(context: Context): Context {
-  const discoveredConfigs = discoverLegacyConfigs(context, '.eslintrc');
+  const discoveredConfigs = discoverRelativeLegacyConfigs(context, '.eslintrc');
 
   for (const [legacyFilePath, _] of discoveredConfigs.entries()) {
     // Write the flat config file.
@@ -15,11 +17,15 @@ export default function migrate(context: Context): Context {
   return context;
 }
 
-function discoverLegacyConfigs(
+export function migrateLegacyConfig(context: Context, config: Linter.LegacyConfig) {
+  console.log(config);
+}
+
+export function discoverRelativeLegacyConfigs(
   context: Context,
   configPath: string,
-  discoveredConfigs: Map<string, string> = new Map()
-) {
+  discoveredConfigs: Map<string, unknown> = new Map()
+): Map<string, unknown> {
   if (discoveredConfigs.has(configPath)) {
     return discoveredConfigs;
   }
@@ -32,10 +38,11 @@ function discoverLegacyConfigs(
   discoveredConfigs.set(configPath, config);
 
   if (config.extends) {
-    const relativeExtends = getRelativeExtends(config.extends);
-    for (const relativeExtend of relativeExtends) {
-      return discoverLegacyConfigs(context, relativeExtend, discoveredConfigs);
-    }
+    const relativeExtends = getRelativeExtends(config.extends, configPath);
+    return relativeExtends.reduce(
+      (acc, relativeExtend) => discoverRelativeLegacyConfigs(context, relativeExtend, acc),
+      discoveredConfigs
+    );
   }
 
   return discoveredConfigs;
@@ -46,10 +53,18 @@ function parseJsonConfig(context: Context, legacyConfigPath: string) {
   return parse(legacyEslintConfigRaw);
 }
 
-function getRelativeExtends(extendsConfig: string | string[]): string[] {
+function getRelativeExtends(extendsConfig: string | string[], currentFilePath: string): string[] {
   const extendsArray = Array.isArray(extendsConfig) ? extendsConfig : [extendsConfig];
-  return extendsArray.filter(
-    (extend) =>
-      extend.startsWith('./') || extend.startsWith('../') || (extend.startsWith('.') && !extend.startsWith('@'))
-  );
+  const localExtends = extendsArray.filter(isNotBareSpecifier);
+  return localExtends.map((extend) => {
+    const resolvedPath = resolve(dirname(currentFilePath), extend);
+    return relative('.', resolvedPath);
+  });
+}
+
+function isNotBareSpecifier(packageName: string) {
+  const isRelative = packageName.startsWith('./') || packageName.startsWith('../') || packageName.startsWith('/');
+  const isLocalFile = packageName.startsWith('.') && !packageName.startsWith('@');
+
+  return isRelative || isLocalFile;
 }
