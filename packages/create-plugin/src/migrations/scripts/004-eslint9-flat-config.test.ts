@@ -4,44 +4,37 @@ import { Context } from '../context.js';
 
 describe('004-eslint9-flat-config', () => {
   describe('migration', () => {
-    it('should discover legacy eslint configs', async () => {
+    it('should migrate legacy eslint config with rules', async () => {
       const context = new Context('/virtual');
 
-      context.addFile('.eslintrc', JSON.stringify({ extends: './.config/.eslintrc' }, null, 2));
       context.addFile(
-        '.config/.eslintrc',
+        '.eslintrc',
         JSON.stringify(
           {
             extends: ['@grafana/eslint-config'],
             root: true,
             rules: {
               'react/prop-types': 'off',
+              'no-console': 'error',
             },
-            overrides: [
-              {
-                files: ['src/**/*.{ts,tsx}'],
-                rules: {
-                  '@typescript-eslint/no-deprecated': 'warn',
-                },
-                parserOptions: {
-                  project: './tsconfig.json',
-                },
-              },
-              {
-                files: ['./tests/**/*'],
-                rules: {
-                  'react-hooks/rules-of-hooks': 'off',
-                },
-              },
-            ],
           },
           null,
           2
         )
       );
-      context.addFile('.eslintignore', 'dist/**');
 
       const result = await migrate(context);
+
+      const expectedConfig = `import { defineConfig } from "eslint/config";
+
+export default defineConfig([{
+  rules: {
+    react/prop-types: "off",
+    no-console: "error",
+  },
+}]);`;
+
+      expect(result.listChanges()['eslint.config.mjs'].content).toBe(expectedConfig);
       expect(result.listChanges()).not.toHaveProperty('.eslintrc');
     });
 
