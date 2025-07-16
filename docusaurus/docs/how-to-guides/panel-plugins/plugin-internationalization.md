@@ -82,7 +82,7 @@ Add the latest version of the `@grafana/i18n` translation package:
 ```shell npm2yarn
 yarn add @grafana/i18n@latest
 
-Next, include `i18next` as an external in your webpack configuration:
+Next, mark `i18next` as an external in your webpack configuration:
 
 ```ts
 const config = async (env: Record<string, unknown>): Promise<Configuration> => {
