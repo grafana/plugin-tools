@@ -100,10 +100,6 @@ To learn more about how to modify default configurations see [Extend default con
 Add plugin translation to `module.ts`: 
 
 ```ts
-import { PanelPlugin } from '@grafana/data';
-
-import { ClockPanel } from './ClockPanel';
-import { ClockOptions } from './types';
 import { initPluginTranslations } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 
