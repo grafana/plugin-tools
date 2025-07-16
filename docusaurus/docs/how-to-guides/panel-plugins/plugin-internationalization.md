@@ -23,7 +23,11 @@ Grafana uses the [i18next internationalization framework](https://www.i18next.co
 
 ## Before you begin
 
-The plugin translation feature requires Grafana version 10.2.0 or later for US English translations, and Grafana version 12.1.0 for the rest of translations.
+:::info
+Available in Grafana >=v11.0.0.
+:::
+
+The plugin translation feature requires Grafana version 11.0.0 or later for US English translations, and Grafana version 12.1.0 for the rest of languages.
 
 The following is recommended:
 
@@ -43,21 +47,7 @@ To do so, update `docker-compose.yaml` in your plugin:
 ```yaml title="docker-compose.yaml"
 services:
   grafana:
-    container_name: 'grafana-clock-panel'
-    platform: 'linux/amd64'
-    build:
-      context: ./.config
-      args:
-        grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}
-        grafana_version: ${GRAFANA_VERSION:-12.0.0}
-        development: ${DEVELOPMENT:-false}
-    ports:
-      - 3000:3000/tcp
-    volumes:
-      - ./dist:/var/lib/grafana/plugins/grafana-clock-panel
-      - ./provisioning:/etc/grafana/provisioning
     environment:
-      NODE_ENV: development
       GF_FEATURE_TOGGLES_ENABLE: localizationForPlugins
 ```
 
@@ -144,20 +134,12 @@ export function ColorEditor(props: any) {
 }  
 ```
 
-You can aslo modify `options.ts` and `RenderTime.tsx`.
-
 ### Extract marked up tags automatically
 
 Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) to sweep all input files, extract tagged `i18n` keys, and write them into the `<plugin id>.json` output file, located under `locales/en-US`: 
 
-```shell
+```shell npm2yarn
 yarn add @grafana/i18n@latest
-```
-
-Next, include `i18next` as an external in your webpack configuration:
-
-```shell
-yarn add -D i18next-parser
 ```
 
 ## Test the translated plugin 
