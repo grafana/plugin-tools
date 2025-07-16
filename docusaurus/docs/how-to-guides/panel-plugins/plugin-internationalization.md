@@ -71,9 +71,9 @@ Add the latest version of the `@grafana/i18n` translation package:
 yarn add @grafana/i18n@latest
 ```
 
-Next, mark `i18next` as an external in your webpack configuration:
+Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
 
-```ts
+```ts title="webpack.config.ts"
 const config = async (env: Record<string, unknown>): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
   const externals = baseConfig.externals as string[];
@@ -82,13 +82,11 @@ const config = async (env: Record<string, unknown>): Promise<Configuration> => {
 };
 ```
 
-To learn more about how to modify default configurations see [Extend default configurations](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
-
 #### Include translation in `module.ts` 
 
 Add plugin translation to `module.ts`: 
 
-```ts
+```ts title="module.ts"
 import { initPluginTranslations } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 
