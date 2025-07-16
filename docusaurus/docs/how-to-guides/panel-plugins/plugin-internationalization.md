@@ -38,7 +38,7 @@ The following is recommended:
 
 To translate your plugin you need to enable the feature toggle `localizationForPlugins` in the Clock Panel plugin in your Grafana instance.
 
-To do so, update `docker-compose.yaml` in your clock plugin:
+To do so, update `docker-compose.yaml` in your plugin:
 
 ```yaml title="docker-compose.yaml"
 services:
