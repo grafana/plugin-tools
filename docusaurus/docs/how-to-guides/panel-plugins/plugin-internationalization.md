@@ -1,6 +1,6 @@
 ---
 id: plugin-internationalization
-title: How to add translations to your Clock Panel plugin
+title: How to add translations to your plugin
 description: Translate your plugins
 keywords:
   - grafana
