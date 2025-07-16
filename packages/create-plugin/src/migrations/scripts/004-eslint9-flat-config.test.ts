@@ -4,6 +4,28 @@ import { Context } from '../context.js';
 
 describe('004-eslint9-flat-config', () => {
   describe('migration', () => {
+    it('should find locally extended configs and migrate them', async () => {
+      const context = new Context('/virtual');
+      context.addFile('.eslintrc', JSON.stringify({ extends: ['./.config/.eslintrc'] }));
+      context.addFile('.config/.eslintrc', JSON.stringify({ files: ['**/*.{ts,tsx}'] }));
+
+      const result = await migrate(context);
+      expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
+        "import { defineConfig } from "eslint/config";
+        import baseConfig from "./.config/eslint.config.mjs";
+        export default defineConfig([...baseConfig]);"
+      `);
+      expect(result.listChanges()['.config/eslint.config.mjs'].content).toMatchInlineSnapshot(`
+        "import { defineConfig } from "eslint/config";
+
+        export default defineConfig([{
+          files: ["**/*.{ts,tsx}"],
+        }]);"
+      `);
+      expect(result.listChanges()).not.toHaveProperty('.eslintrc');
+      expect(result.listChanges()).not.toHaveProperty('.config/.eslintrc');
+    });
+
     it('should migrate legacy eslint config with rules', async () => {
       const context = new Context('/virtual');
 
@@ -40,8 +62,8 @@ describe('004-eslint9-flat-config', () => {
 
         export default defineConfig([{
           plugins: {
-            typescriptEslint: "@typescript-eslint/eslint-plugin",
-            react: "eslint-plugin-react",
+            "@typescript-eslint": typescriptEslint,
+            "react": react,
           },
 
           rules: {
@@ -53,6 +75,41 @@ describe('004-eslint9-flat-config', () => {
 
           rules: {
             "@typescript-eslint/no-deprecated": "warn",
+          },
+        }]);"
+      `);
+      expect(result.listChanges()).not.toHaveProperty('.eslintrc');
+    });
+
+    it('should migrate legacy eslint config with rules', async () => {
+      const context = new Context('/virtual');
+
+      context.addFile(
+        '.eslintrc',
+        JSON.stringify(
+          {
+            plugins: ['simple-import-sort'],
+            rules: {
+              'simple-import-sort/imports': 'error',
+            },
+          },
+          null,
+          2
+        )
+      );
+
+      const result = await migrate(context);
+      expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
+        "import { defineConfig } from "eslint/config";
+        import simpleImportSort from "eslint-plugin-simple-import-sort";
+
+        export default defineConfig([{
+          plugins: {
+            "simple-import-sort": simpleImportSort,
+          },
+
+          rules: {
+            "simple-import-sort/imports": "error",
           },
         }]);"
       `);
