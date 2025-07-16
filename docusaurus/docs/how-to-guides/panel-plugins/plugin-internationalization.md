@@ -30,7 +30,7 @@ The following is recommended:
 * Basic knowledge of Grafana panel plugin development
 * Basic understanding of the [i18next internationalization framework](https://www.i18next.com/)
 
-## Example: Translate the clock plugin
+## Example: Translate the plugin
 
 ### Set up your plugin for translation
 
