@@ -79,9 +79,8 @@ To do so, insert a `languages` section into the `plugin.json` file of the plugin
 
 Add the latest version of the `i18next` translation module:
 
-```shell
+```shell npm2yarn
 yarn add @grafana/i18n@latest
-```
 
 Next, include `i18next` as an external in your webpack configuration:
 
