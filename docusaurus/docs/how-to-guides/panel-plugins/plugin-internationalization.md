@@ -77,7 +77,7 @@ To do so, insert a `languages` section into the `plugin.json` file of the plugin
 
 #### Extend your plugin configuration to include translation
 
-Add the latest version of the `i18next` translation module:
+Add the latest version of the `@grafana/i18n` translation package:
 
 ```shell npm2yarn
 yarn add @grafana/i18n@latest
