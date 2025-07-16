@@ -24,10 +24,8 @@ Grafana uses the [i18next internationalization framework](https://www.i18next.co
 ## Before you begin
 
 :::info
-Available in Grafana >=v11.0.0.
+Available in Grafana >=v11.0.0 (US English) and Grafana >=v12.1.0 for the rest of languages.
 :::
-
-The plugin translation feature requires Grafana version 11.0.0 or later for US English translations, and Grafana version 12.1.0 for the rest of languages.
 
 The following is recommended:
 
@@ -98,7 +96,7 @@ await initPluginTranslations(pluginJson.id);
 
 ### Determine the text to translate
 
-After you've configured your plugin for translation you can proceed to “mark” up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
+After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
 
 For example:
 
@@ -144,7 +142,7 @@ yarn add @grafana/i18n@latest
 
 ## Test the translated plugin 
 
+To test the plugin follow the steps in [Set up your development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#docker-development-environment).
 
-
-
+If you want to see queues or warnings in your development environment use [ESlint](https://github.com/eslint/eslint).
 
