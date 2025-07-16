@@ -15,7 +15,7 @@ keywords:
   - webpack
 ---
 
-# How to add translations to your Clock Panel plugin
+# How to add translations to your plugin
 
 The Grafana UI is available in [several languages](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language). By default, plugins are available in English only and are not translated when you change your language settings. 
 
