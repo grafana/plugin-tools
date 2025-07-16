@@ -69,7 +69,7 @@ To do so, insert a `languages` section into the `plugin.json` file of the plugin
 
 ```json title="plugin.json"
 "dependencies": {
-    "grafanaDependency": ">=10.2.0", // @grafana/i18n works from version 10.2.0 and higher for en-US translations 
+    "grafanaDependency": ">=11.0.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations 
     "plugins": []
   }
 "languages": ["en-US", "pt-BR"] // the languages that the plugin supports
