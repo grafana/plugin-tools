@@ -80,6 +80,9 @@ To do so, update `docker-compose.yaml` in your plugin:
 ```yaml title="docker-compose.yaml"
 services:
   grafana:
+    extends:
+      file: .config/docker-compose-base.yaml
+      service: grafana
     environment:
       GF_FEATURE_TOGGLES_ENABLE: localizationForPlugins
 ```
