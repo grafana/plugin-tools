@@ -68,7 +68,7 @@ To do so, insert a `languages` section into the `plugin.json` file of the plugin
 Add the latest version of the `@grafana/i18n` translation package:
 
 ```shell npm2yarn
-yarn add @grafana/i18n@latest
+npm install @grafana/i18n@latest
 ```
 
 Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
