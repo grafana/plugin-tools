@@ -34,33 +34,7 @@ The following is recommended:
 
 ## Overview of the files affected by translation
 
-If you create your plugin running the `create-plugin` scaffolding tool you'll get the following folder layout and key file:
-
-```
-myorg-myplugin-plugintype/
-├── pkg/
-│   ├── main.go
-│   └── plugin/
-├── src/
-│   ├── module.ts
-│   ├── plugin.json
-└── tests/
-├── CHANGELOG.md
-├── docker-compose.yaml
-├── go.mod
-├── package.json
-├── LICENSE
-├── Magefile.go
-├── README.md
-```
-
-:::note
-
-Since `create-plugin` is constantly being improved your folder structure could look slightly different.
-
-:::
-
-Enabling plugin translation involves updating the following files:
+If you create your plugin running the `create-plugin` scaffolding tool, enabling plugin translation involves updating the following files:
 
 - `docker-compose.yaml` 
 - `plugin.json`
@@ -68,9 +42,30 @@ Enabling plugin translation involves updating the following files:
 - `webpack.config.ts`
 - `package.json`
 
+By the end of the translation process you'll have a file structure like this:
+
+```
+myorg-myplugin-plugintype/
+├── pkg/
+│   ├── main.go
+│   └── plugin/
+├── src/
+│   ├── locales
+│      ├── en-US
+│         └──--.json 
+│      ├── en-US
+│         └──--.json 
+│   ├── module.ts
+│   ├── plugin.json
+└── tests/
+├── docker-compose.yaml
+├── webconfig.ts
+├── package.json
+```
+
 ## Set up your plugin for translation
 
-Follow these steps to update your plugin and set it up for translation:
+Follow these steps to update your plugin and set it up for translation. While this example is based on a panel plugin, the process is the same for data source and app plugins.
 
 ### Enable translation in your Grafana instance 
 
@@ -90,13 +85,13 @@ services:
 
 ### Define the languages and Grafana dependencies
 
-Set up the translation languages for your plugin. 
+Set up the translation languages for your plugin and the Grafana dependencies for translation. Remember that translation is available in Grafana >=v11.0.0 (US English) and Grafana >=v12.1.0 for the rest of languages.
 
-To do so, insert a `languages` section into the `plugin.json` file of the plugin. For example, if you want to add US English and Brazilian Portuguese:
+To do so, insert the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add US English and Brazilian Portuguese:
 
 ```json title="plugin.json"
 "dependencies": {
-    "grafanaDependency": ">=11.0.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations 
+    "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations 
     "plugins": []
   }
 "languages": ["en-US", "pt-BR"] // the languages that the plugin supports
@@ -141,7 +136,7 @@ await initPluginTranslations(pluginJson.id);
 
 After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
 
-For example:
+For example, if you have the following file to translate:
 
 ```diff
 import { SimpleOptions } from 'types';
@@ -172,11 +167,13 @@ import { SimpleOptions } from 'types';
    );
 ```
 
-## Extract translated text automatically
+## Obtain the translated text
 
-Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) to sweep all input files, extract tagged `i18n` keys, and save the translations. 
+Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and [exta] to sweep all input files, extract tagged `i18n` keys, and save the translations. 
 
-To do so, install the parser:
+### Parse for translations
+
+Install the `i18next` parser:
 
 ```shell npm2yarn
 npm install i18next-parser
@@ -200,12 +197,35 @@ module.exports = {
 };
 ```
 
-Finally, add `i18n-extract` to `package.json`:
+### Obtain your translation file
+
+Add the translation script `i18n-extract` to `package.json`:
 
 ```json title="package.json"
   "scripts": {
     "i18n-extract": "i18next --config src/locales/i18next-parser.config.js",
   },    
+```
+
+Run the script to translate the files:
+
+```shell npm2yarn
+npm run i18n-extract
+```
+
+The translation file will look similar to this:
+
+```
+{
+  "components": {
+    "simpePanel": {
+      "options": {
+        "showSeriesCount": "Number of series: {{numberOfSeries}}",
+        "textOptionValue": "Text option value: {{optionValue}}"
+      }
+    }
+  }
+}
 ```
 
 ## Test the translated plugin 
