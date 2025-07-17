@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-meta-extractor",
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "Extract meta information from a Grafana plugin source code.",
   "types": "./dist/index.d.ts",
   "bin": "./dist/bin/run.js",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@grafana/data": "^12.0.0",
-    "@types/node": "^22.16.3",
+    "@types/node": "^22.16.4",
     "react": "^18.2.0"
   }
 }
