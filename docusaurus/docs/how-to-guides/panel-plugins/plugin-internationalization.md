@@ -32,11 +32,46 @@ The following is recommended:
 * Basic knowledge of Grafana panel plugin development
 * Basic understanding of the [i18next internationalization framework](https://www.i18next.com/)
 
-## Example: Translate the plugin
+## Overview of the files affected by translation
 
-### Set up your plugin for translation
+If you create your plugin running the `create-plugin` scaffolding tool you'll get the following folder layout and key file:
 
-#### Enable translation in your Grafana instance 
+```
+myorg-myplugin-plugintype/
+├── pkg/
+│   ├── main.go
+│   └── plugin/
+├── src/
+│   ├── module.ts
+│   ├── plugin.json
+└── tests/
+├── CHANGELOG.md
+├── docker-compose.yaml
+├── go.mod
+├── package.json
+├── LICENSE
+├── Magefile.go
+├── README.md
+```
+
+:::note
+
+Since `create-plugin` is constantly being improved your folder structure could look slightly different.
+
+:::
+
+Enabling plugin translation involves updating the following files:
+
+- `docker-compose.yaml` 
+- `plugin.json`
+- `module.ts`
+- `webpack.config.ts`
+
+## Set up your plugin for translation
+
+Follow these steps to update your plugin and set it up for translation:
+
+### Enable translation in your Grafana instance 
 
 To translate your plugin you need to enable the feature toggle `localizationForPlugins` on your Grafana instance.
 
@@ -49,7 +84,7 @@ services:
       GF_FEATURE_TOGGLES_ENABLE: localizationForPlugins
 ```
 
-#### Define the languages and Grafana dependencies
+### Define the languages and Grafana dependencies
 
 Set up the translation languages for your plugin. 
 
@@ -63,7 +98,7 @@ To do so, insert a `languages` section into the `plugin.json` file of the plugin
 "languages": ["en-US", "pt-BR"] // the languages that the plugin supports
 ```
 
-#### Extend your plugin configuration to include translation
+### Extend your plugin configuration to include translation
 
 Add the latest version of the `@grafana/i18n` translation package:
 
@@ -82,7 +117,7 @@ const config = async (env: Record<string, unknown>): Promise<Configuration> => {
 };
 ```
 
-#### Include translation in `module.ts` 
+### Include translation in `module.ts` 
 
 Add plugin translation to `module.ts`: 
 
@@ -93,7 +128,7 @@ import pluginJson from 'plugin.json';
 await initPluginTranslations(pluginJson.id);
 ```
 
-### Determine the text to translate
+## Determine the text to translate
 
 After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
 
@@ -131,18 +166,58 @@ export function ColorEditor(props: any) {
 }  
 ```
 
-### Extract marked up tags automatically
+## Extract marked up tags automatically
 
-Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) to sweep all input files, extract tagged `i18n` keys, and write them into the `<plugin id>.json` output file, located under `locales/en-US`: 
+Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) to sweep all input files, extract tagged `i18n` keys, and save the translations. 
 
-```shell npm2yarn
+To do so, install the parser:
+
 ```shell npm2yarn
 npm install i18next-parser
+```
+
+Next, configure the parser to sweep your plugin and extract the translations into the `locales/[$LOCALE]/[your-plugin].json`:
+
+```cjs title="i18next-parser.config.csj"
+module.exports = {
+  locales: ['en-US'], // Only en-US  is updated - Crowdin will PR with other languages
+  sort: true,
+  createOldCatalogs: false,
+  failOnWarnings: true,
+  verbose: false,
+  resetDefaultValueLocale: 'en-US', // Updates extracted values when they change in code
+
+  defaultNamespace: 'grafana-clock-panel',
+  input: ['../**/*.{tsx,ts}'],
+  output: 'src/locales/$LOCALE/$NAMESPACE.json',
+};
 ```
 
 ## Test the translated plugin 
 
 To test the plugin follow the steps in [Set up your development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#docker-development-environment).
 
+## Monitor your plugin 
+
 If you want to see queues or warnings in your development environment use [ESlint](https://github.com/eslint/eslint).
 
+To do so, go to the `eslint.config.msj` file and make the following updates:
+
+- Import the ESlint plugin
+
+```msj
+import grafanaI18nPlugin from '@grafana/i18n/eslint-plugin';
+```
+
+- Add the error rules for translation
+
+```msj
+plugins: {
+  '@grafana/i18n': grafanaI18nPlugin,
+},
+files: ['src/**/*.{ts,tsx,js,jsx}'],
+rules: {
+  '@grafana/i18n/no-untranslated-strings': 'error',
+  '@grafana/i18n/no-translation-top-level': 'error',
+},
+```
