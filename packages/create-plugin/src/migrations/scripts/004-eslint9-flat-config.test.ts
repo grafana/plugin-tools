@@ -1,5 +1,4 @@
-import migrate, { discoverRelativeLegacyConfigs } from './004-eslint9-flat-config.js';
-import { createDefaultContext } from '../test-utils.js';
+import migrate from './004-eslint9-flat-config.js';
 import { Context } from '../context.js';
 
 describe('004-eslint9-flat-config', () => {
@@ -36,12 +35,12 @@ describe('004-eslint9-flat-config', () => {
       );
 
       const result = await migrate(context);
-      expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
+      expect(result.getFile('eslint.config.mjs')).toMatchInlineSnapshot(`
         "import { defineConfig } from "eslint/config";
         import baseConfig from "./.config/eslint.config.mjs";
         export default defineConfig([...baseConfig]);"
       `);
-      expect(result.listChanges()['.config/eslint.config.mjs'].content).toMatchInlineSnapshot(`
+      expect(result.getFile('.config/eslint.config.mjs')).toMatchInlineSnapshot(`
         "import { defineConfig } from "eslint/config";
         import grafanaConfig from "@grafana/eslint-config/flat.js";
 
@@ -73,6 +72,30 @@ describe('004-eslint9-flat-config', () => {
       expect(result.listChanges()).not.toHaveProperty('.config/.eslintrc');
     });
 
+    it('should migrate legacy eslint config with ignore patterns', async () => {
+      const context = new Context('/virtual');
+      context.addFile('.eslintrc', JSON.stringify({ rules: { 'no-console': 'error' } }));
+      context.addFile(
+        'package.json',
+        JSON.stringify({ scripts: { lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .' } })
+      );
+      context.addFile('.eslintignore', '*.test.ts');
+      context.addFile('.gitignore', ['.github', '.vscode', 'playwright-report', '**/dist'].join('\n'));
+
+      const result = await migrate(context);
+      expect(result.getFile('eslint.config.mjs')).toMatchInlineSnapshot(`
+        "import { defineConfig } from "eslint/config";
+
+        export default defineConfig([{
+          ignores: ["*.test.ts", ".github", ".vscode", "playwright-report", "**/dist"],
+        }, {
+          rules: {
+            "no-console": "error",
+          },
+        }]);"
+      `);
+    });
+
     it('should migrate eslint configs with additional plugins, rules, and overrides', async () => {
       const context = new Context('/virtual');
 
@@ -85,6 +108,11 @@ describe('004-eslint9-flat-config', () => {
             rules: {
               'simple-import-sort/imports': 'error',
             },
+            overrides: [
+              {
+                files: ['src/**/*.{ts,tsx}'],
+              },
+            ],
           },
           null,
           2
@@ -92,7 +120,7 @@ describe('004-eslint9-flat-config', () => {
       );
 
       const result = await migrate(context);
-      expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
+      expect(result.getFile('eslint.config.mjs')).toMatchInlineSnapshot(`
         "import { defineConfig } from "eslint/config";
         import baseConfig from "./.config/eslint.config.mjs";
         import simpleImportSort from "eslint-plugin-simple-import-sort";
@@ -105,22 +133,26 @@ describe('004-eslint9-flat-config', () => {
           rules: {
             "simple-import-sort/imports": "error",
           },
+        }, {
+          files: ["src/**/*.{ts,tsx}"],
         }]);"
       `);
       expect(result.listChanges()).not.toHaveProperty('.eslintrc');
     });
 
-    it('should migrate legacy eslint config with rules', async () => {
+    it('should update package.json scripts to remove legacy eslint args', async () => {
       const context = new Context('/virtual');
-
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          scripts: { lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .', build: 'webpack' },
+        })
+      );
       context.addFile(
         '.eslintrc',
         JSON.stringify(
           {
-            plugins: ['simple-import-sort'],
-            rules: {
-              'simple-import-sort/imports': 'error',
-            },
+            files: ['src/**/*.{ts,tsx}'],
           },
           null,
           2
@@ -128,98 +160,21 @@ describe('004-eslint9-flat-config', () => {
       );
 
       const result = await migrate(context);
-      expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
-        "import { defineConfig } from "eslint/config";
-        import simpleImportSort from "eslint-plugin-simple-import-sort";
+      const packageJson = JSON.parse(result.getFile('package.json') || '{}');
 
-        export default defineConfig([{
-          plugins: {
-            "simple-import-sort": simpleImportSort,
-          },
-
-          rules: {
-            "simple-import-sort/imports": "error",
-          },
-        }]);"
-      `);
-      expect(result.listChanges()).not.toHaveProperty('.eslintrc');
+      expect(packageJson.scripts.lint).toBe('eslint . --cache');
+      expect(packageJson.scripts.build).toBe('webpack');
     });
 
     it('should not make additional changes when run multiple times', async () => {
-      const context = await createDefaultContext();
+      const context = new Context('/virtual');
+      context.addFile('.eslintrc', JSON.stringify({ extends: ['./.config/.eslintrc'] }));
+      context.addFile(
+        '.config/.eslintrc',
+        JSON.stringify({ extends: ['@grafana/eslint-config'], root: true, rules: { 'react/prop-types': 'off' } })
+      );
 
       await expect(migrate).toBeIdempotent(context);
-    });
-  });
-
-  describe('discoverRelativeLegacyConfigs', () => {
-    it('should discover config files through extends', () => {
-      const context = new Context('/virtual');
-      context.addFile('.eslintrc', JSON.stringify({ extends: './.config/.eslintrc' }));
-      context.addFile('.config/.eslintrc', JSON.stringify({ extends: './base.eslintrc' }));
-      context.addFile('.config/base.eslintrc', JSON.stringify({ extends: '../root.eslintrc' }));
-      context.addFile('root.eslintrc', JSON.stringify({ rules: { 'root-rule': 'error' } }));
-
-      const result = discoverRelativeLegacyConfigs(context, '.eslintrc');
-
-      expect(result.size).toBe(4);
-      expect(result.has('.eslintrc')).toBe(true);
-      expect(result.has('.config/.eslintrc')).toBe(true);
-      expect(result.has('.config/base.eslintrc')).toBe(true);
-      expect(result.has('root.eslintrc')).toBe(true);
-    });
-
-    it('should handle circular references gracefully', () => {
-      const context = new Context('/virtual');
-      context.addFile('.eslintrc', JSON.stringify({ extends: './circular.eslintrc' }));
-      context.addFile('circular.eslintrc', JSON.stringify({ extends: './.eslintrc' }));
-
-      const result = discoverRelativeLegacyConfigs(context, '.eslintrc');
-
-      expect(result.size).toBe(2);
-      expect(result.has('.eslintrc')).toBe(true);
-      expect(result.has('circular.eslintrc')).toBe(true);
-    });
-
-    it('should filter out bare specifiers and non-relative extends', () => {
-      const context = new Context('/virtual');
-      context.addFile(
-        '.eslintrc',
-        JSON.stringify({
-          extends: ['@grafana/eslint-config', './local.eslintrc', 'eslint:recommended', '@grafana/eslint-config'],
-        })
-      );
-      context.addFile('local.eslintrc', JSON.stringify({ rules: { 'no-console': 'error' } }));
-
-      const result = discoverRelativeLegacyConfigs(context, '.eslintrc');
-
-      expect(result.size).toBe(2);
-      expect(result.has('.eslintrc')).toBe(true);
-      expect(result.has('local.eslintrc')).toBe(true);
-    });
-
-    it('should return empty map for non-existent config', () => {
-      const context = new Context('/virtual');
-
-      const result = discoverRelativeLegacyConfigs(context, 'nonexistent.eslintrc');
-
-      expect(result.size).toBe(0);
-    });
-
-    it('should handle array and string extends consistently', () => {
-      const context = new Context('/virtual');
-      context.addFile('.eslintrc', JSON.stringify({ extends: './config.eslintrc' }));
-      context.addFile('config.eslintrc', JSON.stringify({ extends: ['./subdir/base1.eslintrc', './base2.eslintrc'] }));
-      context.addFile('subdir/base1.eslintrc', JSON.stringify({ rules: { rule1: 'error' } }));
-      context.addFile('base2.eslintrc', JSON.stringify({ rules: { rule2: 'warn' } }));
-
-      const result = discoverRelativeLegacyConfigs(context, '.eslintrc');
-
-      expect(result.size).toBe(4);
-      expect(result.has('.eslintrc')).toBe(true);
-      expect(result.has('config.eslintrc')).toBe(true);
-      expect(result.has('subdir/base1.eslintrc')).toBe(true);
-      expect(result.has('base2.eslintrc')).toBe(true);
     });
   });
 });
