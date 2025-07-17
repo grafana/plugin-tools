@@ -112,12 +112,17 @@ npm install @grafana/i18n@latest
 Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
 
 ```ts title="webpack.config.ts"
-const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+import type { Configuration } from 'webpack';
+import { merge } from 'webpack-merge';
+import grafanaConfig, { Env } from './.config/webpack/webpack.config';
+
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
   const externals = baseConfig.externals as string[];
-
   return merge(baseConfig, { externals: [...externals, 'i18next'] });
 };
+
+export default config;
 ```
 
 ### Include translation in `module.ts` 
