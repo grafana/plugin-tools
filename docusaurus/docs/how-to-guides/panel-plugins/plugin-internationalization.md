@@ -66,6 +66,7 @@ Enabling plugin translation involves updating the following files:
 - `plugin.json`
 - `module.ts`
 - `webpack.config.ts`
+- `package.json`
 
 ## Set up your plugin for translation
 
@@ -142,39 +143,86 @@ After you've configured your plugin for translation you can proceed to mark up t
 
 For example:
 
-```tsx title="ColorEditor.tsx"
-import { t } from '@grafana/i18n';
+```tsx 
+import React from 'react';
+import { PanelProps } from '@grafana/data';
+import { SimpleOptions } from 'types';
+import { css, cx } from '@emotion/css';
+import { useStyles2, useTheme2 } from '@grafana/ui';
+import { PanelDataErrorView } from '@grafana/runtime';
+import { Trans } from '@grafana/i18n';
 
-export function ColorEditor(props: any) {
-  const styles = getStyles(config.theme);
-  const defaultValue = t('colorEditor.defaultValue', 'Pick Color');
-  let prefix: React.ReactNode = null;
-  let suffix: React.ReactNode = null;
-  if (props.value) {
-    suffix = <Icon className={styles.trashIcon} name="trash-alt" onClick={() => props.onChange(undefined)} />;
+interface Props extends PanelProps<SimpleOptions> {}
+
+const getStyles = () => {
+  return {
+    wrapper: css`
+      font-family: Open Sans;
+      position: relative;
+    `,
+    svg: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+    `,
+    textBox: css`
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+    `,
+  };
+};
+
+export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
+  const theme = useTheme2();
+  const styles = useStyles2(getStyles);
+
+  if (data.series.length === 0) {
+    return <PanelDataErrorView fieldConfig={fieldConfig} panelId={id} data={data} needsStringField />;
   }
 
-  prefix = (
-    <div className={styles.inputPrefix}>
-      <div className={styles.colorPicker}>
-        <ColorPicker
-          color={props.value || config.theme.colors.panelBg}
-          onChange={props.onChange}
-          enableNamedColors={true}
-        />
+  return (
+    <div
+      className={cx(
+        styles.wrapper,
+        css`
+          width: ${width}px;
+          height: ${height}px;
+        `
+      )}
+    >
+      <svg
+        className={styles.svg}
+        width={width}
+        height={height}
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
+      >
+        <g>
+          <circle data-testid="simple-panel-circle" style={{ fill: theme.colors.primary.main }} r={100} />
+        </g>
+      </svg>
+
+      <div className={styles.textBox}>
+        {options.showSeriesCount && (
+          <div data-testid="simple-panel-series-counter">
+            <Trans i18nKey="components.simpePanel.options.showSeriesCount">
+              Number of series: {{ numberOfSeries: data.series.length }}
+            </Trans>
+          </div>
+        )}
+        <Trans i18nKey="components.simpePanel.options.textOptionValue">
+          Text option value: {{ optionValue: options.text }}
+        </Trans>
       </div>
     </div>
   );
-
-  return (
-    <div>
-      <Input type="text" value={props.value || defaultValue} prefix={prefix} suffix={suffix} readOnly={true} />
-    </div>
-  );
-}  
+};
 ```
 
-## Extract marked up tags automatically
+## Extract translated text automatically
 
 Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) to sweep all input files, extract tagged `i18n` keys, and save the translations. 
 
@@ -184,7 +232,7 @@ To do so, install the parser:
 npm install i18next-parser
 ```
 
-Next, configure the parser to sweep your plugin and extract the translations into the `locales/[$LOCALE]/[your-plugin].json`:
+Next, create a configuration file (for example, `i18next-parser.config.js`) and configure it so the parser sweeps your plugin and extracts the translations into the `locales/[$LOCALE]/[your-plugin].json`:
 
 ```js title="i18next-parser.config.js"
 const pluginJson = require('../plugin.json');
@@ -202,31 +250,15 @@ module.exports = {
 };
 ```
 
+Finally, add `i18n-extract` to `package.json`:
+
+```json title="package.json"
+  "scripts": {
+    "i18n-extract": "i18next --config src/locales/i18next-parser.config.js",
+  },    
+```
+
 ## Test the translated plugin 
 
 To test the plugin follow the steps in [Set up your development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#docker-development-environment).
 
-## Monitor your plugin 
-
-If you want to see queues or warnings in your development environment use [ESlint](https://github.com/eslint/eslint).
-
-To do so, go to the `eslint.config.msj` file and make the following updates:
-
-- Import the ESlint plugin
-
-```msj
-import grafanaI18nPlugin from '@grafana/i18n/eslint-plugin';
-```
-
-- Add the error rules for translation
-
-```msj
-plugins: {
-  '@grafana/i18n': grafanaI18nPlugin,
-},
-files: ['src/**/*.{ts,tsx,js,jsx}'],
-rules: {
-  '@grafana/i18n/no-untranslated-strings': 'error',
-  '@grafana/i18n/no-translation-top-level': 'error',
-},
-```
