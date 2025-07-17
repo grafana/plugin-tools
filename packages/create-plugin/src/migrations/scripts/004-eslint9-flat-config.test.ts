@@ -4,10 +4,36 @@ import { Context } from '../context.js';
 
 describe('004-eslint9-flat-config', () => {
   describe('migration', () => {
-    it('should find locally extended configs and migrate them', async () => {
+    it('should migrate default create-plugin scaffolded configs', async () => {
       const context = new Context('/virtual');
       context.addFile('.eslintrc', JSON.stringify({ extends: ['./.config/.eslintrc'] }));
-      context.addFile('.config/.eslintrc', JSON.stringify({ files: ['**/*.{ts,tsx}'] }));
+      context.addFile(
+        '.config/.eslintrc',
+        JSON.stringify({
+          extends: ['@grafana/eslint-config'],
+          root: true,
+          rules: {
+            'react/prop-types': 'off',
+          },
+          overrides: [
+            {
+              files: ['src/**/*.{ts,tsx}'],
+              rules: {
+                '@typescript-eslint/no-deprecated': 'warn',
+              },
+              parserOptions: {
+                project: './tsconfig.json',
+              },
+            },
+            {
+              files: ['./tests/**/*'],
+              rules: {
+                'react-hooks/rules-of-hooks': 'off',
+              },
+            },
+          ],
+        })
+      );
 
       const result = await migrate(context);
       expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
@@ -17,37 +43,48 @@ describe('004-eslint9-flat-config', () => {
       `);
       expect(result.listChanges()['.config/eslint.config.mjs'].content).toMatchInlineSnapshot(`
         "import { defineConfig } from "eslint/config";
+        import grafanaConfig from "@grafana/eslint-config/flat.js";
 
-        export default defineConfig([{
-          files: ["**/*.{ts,tsx}"],
+        export default defineConfig([...grafanaConfig, {
+          rules: {
+            "react/prop-types": "off",
+          },
+        }, {
+          files: ["src/**/*.{ts,tsx}"],
+
+          languageOptions: {
+            parserOptions: {
+              "project": "./tsconfig.json",
+            },
+          },
+
+          rules: {
+            "@typescript-eslint/no-deprecated": "warn",
+          },
+        }, {
+          files: ["./tests/**/*"],
+
+          rules: {
+            "react-hooks/rules-of-hooks": "off",
+          },
         }]);"
       `);
       expect(result.listChanges()).not.toHaveProperty('.eslintrc');
       expect(result.listChanges()).not.toHaveProperty('.config/.eslintrc');
     });
 
-    it('should migrate legacy eslint config with rules', async () => {
+    it('should migrate eslint configs with additional plugins, rules, and overrides', async () => {
       const context = new Context('/virtual');
 
       context.addFile(
         '.eslintrc',
         JSON.stringify(
           {
-            extends: ['@grafana/eslint-config'],
-            root: true,
+            extends: './.config/.eslintrc',
+            plugins: ['simple-import-sort'],
             rules: {
-              'react/prop-types': 'off',
-              'no-console': 'error',
+              'simple-import-sort/imports': 'error',
             },
-            overrides: [
-              {
-                files: ['src/**/*.{ts,tsx}'],
-                rules: {
-                  '@typescript-eslint/no-deprecated': 'warn',
-                },
-              },
-            ],
-            plugins: ['@typescript-eslint', 'eslint-plugin-react'],
           },
           null,
           2
@@ -57,24 +94,16 @@ describe('004-eslint9-flat-config', () => {
       const result = await migrate(context);
       expect(result.listChanges()['eslint.config.mjs'].content).toMatchInlineSnapshot(`
         "import { defineConfig } from "eslint/config";
-        import typescriptEslint from "@typescript-eslint/eslint-plugin";
-        import react from "eslint-plugin-react";
+        import baseConfig from "./.config/eslint.config.mjs";
+        import simpleImportSort from "eslint-plugin-simple-import-sort";
 
-        export default defineConfig([{
+        export default defineConfig([...baseConfig, {
           plugins: {
-            "@typescript-eslint": typescriptEslint,
-            "react": react,
+            "simple-import-sort": simpleImportSort,
           },
 
           rules: {
-            "react/prop-types": "off",
-            "no-console": "error",
-          },
-        }, {
-          files: ["src/**/*.{ts,tsx}"],
-
-          rules: {
-            "@typescript-eslint/no-deprecated": "warn",
+            "simple-import-sort/imports": "error",
           },
         }]);"
       `);
