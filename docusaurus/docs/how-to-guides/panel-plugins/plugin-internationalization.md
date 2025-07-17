@@ -232,7 +232,7 @@ To do so, install the parser:
 npm install i18next-parser
 ```
 
-Next, create a configuration file (for example, `i18next-parser.config.js`) and configure it so the parser sweeps your plugin and extracts the translations into the `locales/[$LOCALE]/[your-plugin].json`:
+Next, create a configuration file `src/locales/i18next-parser.config.js` and configure it so the parser sweeps your plugin and extracts the translations into the `locales/[$LOCALE]/[your-plugin].json`:
 
 ```js title="i18next-parser.config.js"
 const pluginJson = require('../plugin.json');
