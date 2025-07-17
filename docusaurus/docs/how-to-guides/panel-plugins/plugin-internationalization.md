@@ -136,7 +136,8 @@ export function ColorEditor(props: any) {
 Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) to sweep all input files, extract tagged `i18n` keys, and write them into the `<plugin id>.json` output file, located under `locales/en-US`: 
 
 ```shell npm2yarn
-yarn add @grafana/i18n@latest
+```shell npm2yarn
+npm install i18next-parser
 ```
 
 ## Test the translated plugin 
