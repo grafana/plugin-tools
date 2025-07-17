@@ -187,6 +187,8 @@ npm install i18next-parser
 Next, configure the parser to sweep your plugin and extract the translations into the `locales/[$LOCALE]/[your-plugin].json`:
 
 ```cjs title="i18next-parser.config.csj"
+const pluginJson = require('../plugin.json');
+
 module.exports = {
   locales: ['en-US'], // Only en-US  is updated - Crowdin will PR with other languages
   sort: true,
@@ -194,8 +196,7 @@ module.exports = {
   failOnWarnings: true,
   verbose: false,
   resetDefaultValueLocale: 'en-US', // Updates extracted values when they change in code
-
-  defaultNamespace: 'grafana-clock-panel',
+  defaultNamespace: pluginJson.id,
   input: ['../**/*.{tsx,ts}'],
   output: 'src/locales/$LOCALE/$NAMESPACE.json',
 };
