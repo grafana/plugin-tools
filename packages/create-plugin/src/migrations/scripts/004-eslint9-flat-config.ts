@@ -4,14 +4,13 @@ import { parse } from 'jsonc-parser';
 import * as recast from 'recast';
 import type { Linter } from 'eslint';
 import { camelCase } from 'change-case';
+import { inspect } from 'node:util';
 
 const builders = recast.types.builders;
 
-interface Migration {
-  imports: Map<string, { name?: string; modules: string[] }>;
-}
+type Imports = Map<string, { name?: string; bindings: string[] }>;
 
-const legacyKeysToCopy: Array<keyof Linter.ConfigOverride> = ['rules'];
+const legacyKeysToCopy: Array<keyof Linter.ConfigOverride> = ['rules', 'settings'];
 
 export default function migrate(context: Context): Context {
   const discoveredConfigs = discoverRelativeLegacyConfigs(context, '.eslintrc');
@@ -29,24 +28,22 @@ export default function migrate(context: Context): Context {
 }
 
 export function migrateLegacyConfig(config: Linter.LegacyConfig) {
-  const migration: Migration = {
-    imports: new Map(),
-  };
+  const imports: Imports = new Map();
 
   const flatConfigFileContents = [];
 
-  migration.imports.set('eslint/config', { modules: ['defineConfig'] });
-  const configs = addConfigsToMigration(migration, config as Linter.ConfigOverride);
+  imports.set('eslint/config', { bindings: ['defineConfig'] });
+  const configs = addConfigsToMigration(imports, config as Linter.ConfigOverride);
 
   if (config.overrides) {
     config.overrides.forEach((override) => {
-      configs.push(...addConfigsToMigration(migration, override));
+      configs.push(...addConfigsToMigration(imports, override));
     });
   }
 
   // Once all configs are processed all required imports are available.
-  const imports = generateImports(migration);
-  flatConfigFileContents.push(...imports);
+  const allImports = generateImports(imports);
+  flatConfigFileContents.push(...allImports);
 
   // Wrap the config in defineConfig
   const defineConfigNode = builders.callExpression(builders.identifier('defineConfig'), [
@@ -62,7 +59,7 @@ export function migrateLegacyConfig(config: Linter.LegacyConfig) {
   }).code;
 }
 
-function addConfigsToMigration(migration: Migration, config: Linter.ConfigOverride) {
+function addConfigsToMigration(imports: Imports, config: Linter.ConfigOverride) {
   const configSections: recast.types.namedTypes.Property[] = [];
   const extendedSections: recast.types.namedTypes.SpreadElement[] = [];
 
@@ -79,12 +76,19 @@ function addConfigsToMigration(migration: Migration, config: Linter.ConfigOverri
   }
 
   if (config.extends) {
-    const extended = generateExtends(config.extends, migration);
+    const extended = generateExtends(config.extends, imports);
     extendedSections.push(...extended);
   }
 
+  if (config.parserOptions) {
+    const languageOptions = generateLanguageOptions(config);
+    if (languageOptions) {
+      configSections.push(builders.property('init', builders.identifier('languageOptions'), languageOptions));
+    }
+  }
+
   if (config.plugins) {
-    const plugins = generatePlugins(config.plugins, migration);
+    const plugins = generatePlugins(config.plugins, imports);
     configSections.push(builders.property('init', builders.identifier('plugins'), plugins));
   }
 
@@ -122,10 +126,7 @@ function generatePropValue(
   return builders.literal(value);
 }
 
-function generateExtends(
-  extendsConfig: string | string[],
-  migration: Migration
-): recast.types.namedTypes.SpreadElement[] {
+function generateExtends(extendsConfig: string | string[], imports: Imports): recast.types.namedTypes.SpreadElement[] {
   const extendsArray = Array.isArray(extendsConfig) ? extendsConfig : [extendsConfig];
   const extendsNodes: recast.types.namedTypes.SpreadElement[] = [];
 
@@ -136,32 +137,64 @@ function generateExtends(
 
       extendsNodes.push(builders.spreadElement(builders.identifier(importName)));
 
-      migration.imports.set(rewrittenPath, { name: importName, modules: [rewrittenPath] });
+      imports.set(rewrittenPath, { name: importName, bindings: [rewrittenPath] });
+    } else {
+      if (extend === '@grafana/eslint-config') {
+        const importName = 'grafanaConfig';
+        extendsNodes.push(builders.spreadElement(builders.identifier(importName)));
+
+        imports.set('@grafana/eslint-config/flat.js', {
+          name: importName,
+          bindings: ['@grafana/eslint-config'],
+        });
+      }
     }
   });
 
   return extendsNodes;
 }
 
-function generateImports(migration: { imports: Map<string, { name?: string; modules: string[] }> }) {
-  const imports: recast.types.namedTypes.ImportDeclaration[] = [];
-  migration.imports.forEach(({ name, modules }, path) => {
-    imports.push(
+function generateLanguageOptions(config: Linter.ConfigOverride) {
+  const props: recast.types.namedTypes.Property[] = [];
+
+  if (config.parserOptions) {
+    const { ecmaVersion, sourceType, ...rest } = config.parserOptions;
+
+    if (ecmaVersion) {
+      props.push(builders.property('init', builders.literal('ecmaVersion'), builders.literal(ecmaVersion)));
+    }
+
+    if (sourceType) {
+      props.push(builders.property('init', builders.literal('sourceType'), builders.literal(sourceType)));
+    }
+
+    if (Object.keys(rest).length > 0) {
+      props.push(builders.property('init', builders.identifier('parserOptions'), generatePropValue(rest)));
+    }
+  }
+
+  return props.length > 0 ? builders.objectExpression(props) : undefined;
+}
+
+function generateImports(imports: Imports) {
+  const importNodes: recast.types.namedTypes.ImportDeclaration[] = [];
+  imports.forEach(({ name, bindings }, path) => {
+    importNodes.push(
       name
         ? builders.importDeclaration(
             [builders.importDefaultSpecifier(builders.identifier(name))],
             builders.literal(path)
           )
         : builders.importDeclaration(
-            modules.map((binding) => builders.importSpecifier(builders.identifier(binding))),
+            bindings.map((binding) => builders.importSpecifier(builders.identifier(binding))),
             builders.literal(path)
           )
     );
   });
-  return imports;
+  return importNodes;
 }
 
-function generatePlugins(plugins: string[], migration: Migration) {
+function generatePlugins(plugins: string[], imports: Imports) {
   const props: recast.types.namedTypes.Property[] = [];
 
   plugins.forEach((plugin) => {
@@ -169,7 +202,7 @@ function generatePlugins(plugins: string[], migration: Migration) {
     const importName = getPluginImport(plugin);
     const shortPluginName = getPluginShortName(plugin);
     props.push(builders.property('init', builders.literal(shortPluginName), builders.identifier(varName)));
-    migration.imports.set(importName, { name: varName, modules: [importName] });
+    imports.set(importName, { name: varName, bindings: [importName] });
   });
 
   return builders.objectExpression(props);
