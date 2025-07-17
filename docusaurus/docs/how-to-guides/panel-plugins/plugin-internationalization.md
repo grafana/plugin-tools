@@ -126,7 +126,7 @@ const config = async (env: Env): Promise<Configuration> => {
 export default config;
 ```
 
-### Include translation in `module.ts` 
+### Initialize translations in `module.ts` 
 
 Add plugin translation to `module.ts`: 
 
