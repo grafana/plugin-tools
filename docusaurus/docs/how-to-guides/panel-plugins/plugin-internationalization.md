@@ -186,7 +186,7 @@ npm install i18next-parser
 
 Next, configure the parser to sweep your plugin and extract the translations into the `locales/[$LOCALE]/[your-plugin].json`:
 
-```cjs title="i18next-parser.config.csj"
+```js title="i18next-parser.config.js"
 const pluginJson = require('../plugin.json');
 
 module.exports = {
