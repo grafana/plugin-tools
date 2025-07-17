@@ -53,7 +53,7 @@ myorg-myplugin-plugintype/
 │   ├── locales
 │      ├── en-US
 │         └──--.json 
-│      ├── en-US
+│      ├── pt-BR
 │         └──--.json 
 │   ├── module.ts
 │   ├── plugin.json
@@ -87,7 +87,7 @@ services:
 
 Set up the translation languages for your plugin and the Grafana dependencies for translation. Remember that translation is available in Grafana >=v11.0.0 (US English) and Grafana >=v12.1.0 for the rest of languages.
 
-To do so, insert the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add US English and Brazilian Portuguese:
+To do so, add the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add US English and Brazilian Portuguese:
 
 ```json title="plugin.json"
 "dependencies": {
@@ -99,7 +99,7 @@ To do so, insert the relevant `grafanaDependency` and `languages` you want to tr
 
 ### Extend your plugin configuration to include translation
 
-Add the latest version of the `@grafana/i18n` translation package:
+Install the latest version of the `@grafana/i18n` translation package:
 
 ```shell npm2yarn
 npm install @grafana/i18n@latest
@@ -136,7 +136,7 @@ await initPluginTranslations(pluginJson.id);
 
 After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
 
-For example, if you have the following file to translate:
+For example:
 
 ```diff
 import { SimpleOptions } from 'types';
