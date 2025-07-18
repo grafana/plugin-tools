@@ -225,6 +225,26 @@ The translation file will look similar to this:
         "textOptionValue": "Text option value: {{optionValue}}"
       }
     }
+  },
+  "panel": {
+    "options": {
+      "seriesCountSize": {
+        "name": "Series counter size",
+        "options": {
+          "lg": "Large",
+          "md": "Medium",
+          "sm": "Small"
+        }
+      },
+      "showSeriesCount": {
+        "name": "Show series counter"
+      },
+      "text": {
+        "defaultValue": "Default value of text input option",
+        "description": "Description of panel option",
+        "name": "Simple text option"
+      }
+    }
   }
 }
 ```
