@@ -86,7 +86,7 @@ services:
 
 ### Define the languages and Grafana dependencies
 
-Set up the translation languages for your plugin and the Grafana dependencies for translation. Remember that translation is available in Grafana >=v11.0.0 (US English) and Grafana >=v12.1.0 for the rest of languages.
+Set up the translation languages for your plugin and the Grafana dependencies for translation.
 
 To do so, add the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add US English and Brazilian Portuguese:
 
