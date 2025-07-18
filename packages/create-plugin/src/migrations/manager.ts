@@ -65,6 +65,10 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
     }
   }
   setRootConfig({ version: Object.values(migrations).at(-1)!.version });
+
+  if (options.commitEachMigration) {
+    await gitCommitNoVerify(`chore: update .config/.cprc.json to latest version.`);
+  }
 }
 
 export async function runMigration(migration: MigrationMeta, context: Context): Promise<Context> {
