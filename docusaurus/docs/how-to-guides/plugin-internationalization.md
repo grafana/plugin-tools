@@ -187,7 +187,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
 
 ### Example using the `Trans` component:
 ```diff
-import { SimpleOptions } from 'types';
+ import { SimpleOptions } from 'types';
  import { css, cx } from '@emotion/css';
  import { useStyles2, useTheme2 } from '@grafana/ui';
  import { PanelDataErrorView } from '@grafana/runtime';
