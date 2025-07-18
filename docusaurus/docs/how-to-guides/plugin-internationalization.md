@@ -60,7 +60,7 @@ myorg-myplugin-plugintype/
 │   ├── plugin.json
 └── tests/
 ├── docker-compose.yaml
-├── webconfig.ts
+├── webpack.config.ts
 ├── package.json
 ```
 
