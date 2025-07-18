@@ -136,9 +136,49 @@ await initPluginTranslations(pluginJson.id);
 ## Determine the text to translate
 
 After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
-
-For example:
-
+Example using the `t` function:
+```diff
+export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
+   return builder
+     .addTextInput({
+       path: 'text',
+-      name: 'Simple text option',
+-      description: 'Description of panel option',
+-      defaultValue: 'Default value of text input option',
++      name: t('panel.options.text.name', 'Simple text option'),
++      description: t('panel.options.text.description', 'Description of panel option'),
++      defaultValue: t('panel.options.text.defaultValue', 'Default value of text input option'),
+     })
+     .addBooleanSwitch({
+       path: 'showSeriesCount',
+-      name: 'Show series counter',
++      name: t('panel.options.showSeriesCount.name', 'Show series counter'),
+       defaultValue: false,
+     })
+     .addRadio({
+       path: 'seriesCountSize',
+       defaultValue: 'sm',
+-      name: 'Series counter size',
++      name: t('panel.options.seriesCountSize.name', 'Series counter size'),
+       settings: {
+         options: [
+           {
+             value: 'sm',
+-            label: 'Small',
++            label: t('panel.options.seriesCountSize.options.sm', 'Small'),
+           },
+           {
+             value: 'md',
+-            label: 'Medium',
++            label: t('panel.options.seriesCountSize.options.md', 'Medium'),
+           },
+           {
+             value: 'lg',
+-            label: 'Large',
++            label: t('panel.options.seriesCountSize.options.lg', 'Large'),
+           },
+         ],
+       },
 ```diff
 import { SimpleOptions } from 'types';
  import { css, cx } from '@emotion/css';
