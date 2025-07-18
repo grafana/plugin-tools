@@ -230,7 +230,7 @@ npm install i18next-parser
 Next, create a configuration file `src/locales/i18next-parser.config.js` and configure it so the parser sweeps your plugin and extracts the translations into the `locales/[$LOCALE]/[your-plugin].json`:
 
 :::danger
-The path `locales/[$LOCALE]/[your-plugin].json` is mandatory. If you modify it translations won't work.
+The path `locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modify it translations won't work.
 :::
 
 ```js title="i18next-parser.config.js"
