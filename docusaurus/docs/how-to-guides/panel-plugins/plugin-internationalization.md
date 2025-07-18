@@ -30,7 +30,8 @@ Available in Grafana >=v11.0.0 (US English) and Grafana >=v12.1.0 for the rest o
 The following is recommended:
 
 * Basic knowledge of Grafana panel plugin development
-* Basic understanding of the [i18next internationalization framework](https://www.i18next.com/)
+* Basic understanding of the [`t` function](https://www.i18next.com/overview/api#t)
+* Basic understanding of the [`Trans` component](https://react.i18next.com/latest/trans-component)
 
 ## Overview of the files affected by translation
 
