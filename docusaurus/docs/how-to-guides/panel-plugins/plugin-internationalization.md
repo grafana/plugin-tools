@@ -94,7 +94,7 @@ To do so, add the relevant `grafanaDependency` and `languages` you want to trans
 "dependencies": {
     "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations 
     "plugins": []
-  }
+  },
 "languages": ["en-US", "pt-BR"] // the languages that the plugin supports
 ```
 
