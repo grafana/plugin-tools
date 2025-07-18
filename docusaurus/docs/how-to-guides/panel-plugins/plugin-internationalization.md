@@ -270,7 +270,7 @@ The translation file will look similar to this:
 ```
 {
   "components": {
-    "simpePanel": {
+    "simplePanel": {
       "options": {
         "showSeriesCount": "Number of series: {{numberOfSeries}}",
         "textOptionValue": "Text option value: {{optionValue}}"
