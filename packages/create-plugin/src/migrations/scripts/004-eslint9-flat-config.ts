@@ -7,7 +7,7 @@ import * as recast from 'recast';
 import type { Context } from '../context.js';
 import { migrationsDebug } from '../utils.js';
 
-type Imports = Map<string, { name?: string; bindings: string[] }>;
+type Imports = Map<string, { name?: string; bindings?: string[] }>;
 
 const { builders } = recast.types;
 const legacyKeysToCopy: Array<keyof Linter.ConfigOverride> = ['rules', 'settings'];
@@ -98,7 +98,7 @@ export function migrateLegacyConfig(config: Linter.LegacyConfig, ignorePatterns?
 
 function addConfigsToMigration(imports: Imports, config: Linter.ConfigOverride) {
   const inits: recast.types.namedTypes.Property[] = [];
-  const spreads: recast.types.namedTypes.SpreadElement[] = [];
+  const extendsNodes: Array<recast.types.namedTypes.SpreadElement | recast.types.namedTypes.Identifier> = [];
 
   if (config.files) {
     const files = Array.isArray(config.files) ? config.files : [config.files];
@@ -114,7 +114,7 @@ function addConfigsToMigration(imports: Imports, config: Linter.ConfigOverride) 
 
   if (config.extends) {
     const extendedAST = migrateExtends(config.extends, imports);
-    spreads.push(...extendedAST);
+    extendsNodes.push(...extendedAST);
   }
 
   if (config.parserOptions) {
@@ -136,7 +136,11 @@ function addConfigsToMigration(imports: Imports, config: Linter.ConfigOverride) 
     }
   });
 
-  const result: Array<recast.types.namedTypes.SpreadElement | recast.types.namedTypes.ObjectExpression> = [...spreads];
+  const result: Array<
+    | recast.types.namedTypes.SpreadElement
+    | recast.types.namedTypes.ObjectExpression
+    | recast.types.namedTypes.Identifier
+  > = [...extendsNodes];
 
   if (inits.length > 0) {
     result.push(builders.objectExpression(inits));
@@ -165,9 +169,9 @@ function generateAST(
   return builders.literal(value);
 }
 
-function migrateExtends(extendsConfig: string | string[], imports: Imports): recast.types.namedTypes.SpreadElement[] {
+function migrateExtends(extendsConfig: string | string[], imports: Imports) {
   const extendsArray = Array.isArray(extendsConfig) ? extendsConfig : [extendsConfig];
-  const extendsNodes: recast.types.namedTypes.SpreadElement[] = [];
+  const extendsNodes: Array<recast.types.namedTypes.SpreadElement | recast.types.namedTypes.Identifier> = [];
 
   extendsArray.forEach((extend, idx) => {
     if (extend.endsWith('.eslintrc')) {
@@ -177,7 +181,7 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports): rec
       extendsNodes.push(builders.spreadElement(builders.identifier(importName)));
 
       imports.set(rewrittenPath, { name: importName, bindings: [rewrittenPath] });
-    } else {
+    } else if (!extend.match(/^\.?(\.\/)/)) {
       if (extend === '@grafana/eslint-config') {
         const importName = 'grafanaConfig';
         extendsNodes.push(builders.spreadElement(builders.identifier(importName)));
@@ -186,8 +190,20 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports): rec
           name: importName,
           bindings: ['@grafana/eslint-config'],
         });
+      } else {
+        // TODO: In these cases we should probably warn the user that they need to manually update these deps.
+        if (extend.startsWith('eslint:')) {
+          const varName = extend.slice(7);
+          extendsNodes.push(builders.identifier(`js.configs.${varName}`));
+          imports.set('@eslint/js', { name: 'js' });
+        } else {
+          // We assume that the extend supports flat config format
+          const varName = getPluginVarName(extend);
+          const importName = extend;
+          extendsNodes.push(builders.identifier(varName));
+          imports.set(importName, { name: varName, bindings: [importName] });
+        }
       }
-      // TODO: Handle other extends
     }
   });
 
@@ -226,7 +242,7 @@ function migrateImports(imports: Imports) {
             builders.literal(path)
           )
         : builders.importDeclaration(
-            bindings.map((binding) => builders.importSpecifier(builders.identifier(binding))),
+            bindings?.map((binding) => builders.importSpecifier(builders.identifier(binding))),
             builders.literal(path)
           )
     );
