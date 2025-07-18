@@ -217,7 +217,7 @@ import { SimpleOptions } from 'types';
 
 ## Obtain the translated text
 
-Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and [exta] to sweep all input files, extract tagged `i18n` keys, and save the translations. 
+Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations. 
 
 ### Parse for translations
 
