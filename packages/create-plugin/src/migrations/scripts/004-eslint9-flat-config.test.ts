@@ -96,14 +96,14 @@ describe('004-eslint9-flat-config', () => {
       `);
     });
 
-    it('should migrate eslint configs with additional plugins, rules, and overrides', async () => {
+    it('should attempt to migrate eslint configs with extends, plugins, rules, and overrides', async () => {
       const context = new Context('/virtual');
 
       context.addFile(
         '.eslintrc',
         JSON.stringify(
           {
-            extends: './.config/.eslintrc',
+            extends: ['eslint:recommended', './.config/.eslintrc', '@custom/eslint-config'],
             plugins: ['simple-import-sort'],
             rules: {
               'simple-import-sort/imports': 'error',
@@ -122,10 +122,12 @@ describe('004-eslint9-flat-config', () => {
       const result = await migrate(context);
       expect(result.getFile('eslint.config.mjs')).toMatchInlineSnapshot(`
         "import { defineConfig } from "eslint/config";
-        import baseConfig from "./.config/eslint.config.mjs";
+        import js from "@eslint/js";
+        import baseConfig1 from "./.config/eslint.config.mjs";
+        import customEslintConfig from "@custom/eslint-config";
         import simpleImportSort from "eslint-plugin-simple-import-sort";
 
-        export default defineConfig([...baseConfig, {
+        export default defineConfig([js.configs.recommended, ...baseConfig1, customEslintConfig, {
           plugins: {
             "simple-import-sort": simpleImportSort,
           },
