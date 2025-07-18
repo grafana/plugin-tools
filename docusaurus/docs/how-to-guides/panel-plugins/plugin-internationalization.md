@@ -70,7 +70,7 @@ Follow these steps to update your plugin and set it up for translation. While th
 
 ### Enable translation in your Grafana instance 
 
-To translate your plugin you need to enable the feature toggle `localizationForPlugins` on your Grafana instance.
+To translate your plugin you need to enable the feature toggle `localizationForPlugins` in your Grafana instance.
 
 To do so, update `docker-compose.yaml` in your plugin with the feature toggle `localizationForPlugins`:
 
@@ -118,6 +118,10 @@ const config = async (env: Env): Promise<Configuration> => {
   const externals = baseConfig.externals as string[];
   return merge(baseConfig, { externals: [...externals, 'i18next'] });
 };
+
+:::caution
+Remember to change the path to `webpack.config.ts` in `package.json`.
+:::
 
 export default config;
 ```
@@ -221,6 +225,10 @@ npm install i18next-parser
 ```
 
 Next, create a configuration file `src/locales/i18next-parser.config.js` and configure it so the parser sweeps your plugin and extracts the translations into the `locales/[$LOCALE]/[your-plugin].json`:
+
+:::danger
+The path `locales/[$LOCALE]/[your-plugin].json` is mandatory. If you modify it translations won't work.
+:::
 
 ```js title="i18next-parser.config.js"
 const pluginJson = require('../plugin.json');
