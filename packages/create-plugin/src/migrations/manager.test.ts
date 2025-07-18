@@ -199,7 +199,7 @@ describe('Migrations', () => {
     it('should commit the changes for each migration if the CLI arg is present', async () => {
       await runMigrations(migrations, { commitEachMigration: true });
 
-      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(3);
     });
 
     it('should not create a commit for a migration that has no changes', async () => {
@@ -207,7 +207,7 @@ describe('Migrations', () => {
 
       await runMigrations(migrations, { commitEachMigration: true });
 
-      expect(gitCommitNoVerify).toHaveBeenCalledTimes(1);
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
     });
 
     it('should update version in ".config/.cprc.json" on a successful update', async () => {
