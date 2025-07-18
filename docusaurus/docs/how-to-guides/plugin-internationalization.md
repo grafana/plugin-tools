@@ -304,5 +304,5 @@ The translation file will look similar to this:
 
 To test the plugin follow the steps in [Set up your development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#docker-development-environment) to run your plugin locally. 
 
-You can then verify your plugin is displaying the appropriate text as you [change the language].(https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
+You can then verify your plugin is displaying the appropriate text as you [change the language](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
 
