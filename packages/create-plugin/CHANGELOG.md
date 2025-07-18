@@ -1,3 +1,15 @@
+# v5.25.5 (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix links in config files to dev docs [#1964](https://github.com/grafana/plugin-tools/pull/1964) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.25.3 (Thu Jul 10 2025)
 
 #### 🐛 Bug Fix
