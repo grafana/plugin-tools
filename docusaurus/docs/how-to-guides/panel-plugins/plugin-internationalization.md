@@ -71,7 +71,7 @@ Follow these steps to update your plugin and set it up for translation. While th
 
 To translate your plugin you need to enable the feature toggle `localizationForPlugins` on your Grafana instance.
 
-To do so, update `docker-compose.yaml` in your plugin:
+To do so, update `docker-compose.yaml` in your plugin with the feature toggle `localizationForPlugins`:
 
 ```yaml title="docker-compose.yaml"
 services:
