@@ -53,7 +53,7 @@ myorg-myplugin-plugintype/
 ├── src/
 │   ├── locales
 │      ├── en-US
-│         └──--.json 
+│         └──myorg-myplugin-plugintype.json 
 │      ├── pt-BR
 │         └──--.json 
 │   ├── module.ts
