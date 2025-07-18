@@ -140,12 +140,25 @@ describe('004-eslint9-flat-config', () => {
       expect(result.listChanges()).not.toHaveProperty('.eslintrc');
     });
 
-    it('should update package.json scripts to remove legacy eslint args', async () => {
+    it('should update package.json scripts and devDependencies', async () => {
       const context = new Context('/virtual');
       context.addFile(
         'package.json',
         JSON.stringify({
-          scripts: { lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .', build: 'webpack' },
+          scripts: {
+            lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx ./src',
+            'lint:fix': 'yarn lint --fix',
+            build: 'webpack -c ./webpack.config.ts',
+          },
+          devDependencies: {
+            '@grafana/eslint-config': '^8.0.0',
+            eslint: '^8.0.0',
+            'eslint-config-prettier': '^8.8.0',
+            'eslint-plugin-jsdoc': '^46.8.0',
+            'eslint-plugin-react': '^7.33.0',
+            'eslint-plugin-react-hooks': '^4.6.0',
+            'eslint-webpack-plugin': '^4.0.1',
+          },
         })
       );
       context.addFile(
@@ -161,9 +174,22 @@ describe('004-eslint9-flat-config', () => {
 
       const result = await migrate(context);
       const packageJson = JSON.parse(result.getFile('package.json') || '{}');
-
-      expect(packageJson.scripts.lint).toBe('eslint . --cache');
-      expect(packageJson.scripts.build).toBe('webpack');
+      expect(packageJson).toEqual({
+        scripts: {
+          lint: 'eslint --cache ./src',
+          'lint:fix': 'yarn lint --fix',
+          build: 'webpack -c ./webpack.config.ts',
+        },
+        devDependencies: {
+          '@grafana/eslint-config': '^8.1.0',
+          eslint: '^9.0.0',
+          'eslint-config-prettier': '^8.8.0',
+          'eslint-plugin-jsdoc': '^51.2.3',
+          'eslint-plugin-react': '^7.37.5',
+          'eslint-plugin-react-hooks': '^5.2.0',
+          'eslint-webpack-plugin': '^5.0.0',
+        },
+      });
     });
 
     it('should not make additional changes when run multiple times', async () => {
