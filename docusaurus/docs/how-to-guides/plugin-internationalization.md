@@ -19,7 +19,7 @@ keywords:
 
 The Grafana UI is available in [several languages](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language). By default, plugins are available in English only and are not translated when you change your language settings. 
 
-Grafana uses the [i18next internationalization framework](https://www.i18next.com/) for translation purposes. If you want your plugin to be translatable to other languages you need to perform the changes described in this document.  
+Grafana uses the [i18next internationalization framework](https://www.i18next.com/) for translation purposes. If you want your plugin to be translatable to other languages you need to perform the changes described in this document. While this example is based on a panel plugin, the process is the same for data source and app plugins. 
 
 ## Before you begin
 
@@ -66,7 +66,7 @@ myorg-myplugin-plugintype/
 
 ## Set up your plugin for translation
 
-Follow these steps to update your plugin and set it up for translation. While this example is based on a panel plugin, the process is the same for data source and app plugins.
+Follow these steps to update your plugin and set it up for translation. 
 
 ### Enable translation in your Grafana instance 
 
@@ -108,6 +108,10 @@ npm install @grafana/i18n@latest
 
 Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
 
+:::caution
+Remember to change the path to `webpack.config.ts` in `package.json`.
+:::
+
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
@@ -118,10 +122,6 @@ const config = async (env: Env): Promise<Configuration> => {
   const externals = baseConfig.externals as string[];
   return merge(baseConfig, { externals: [...externals, 'i18next'] });
 };
-
-:::caution
-Remember to change the path to `webpack.config.ts` in `package.json`.
-:::
 
 export default config;
 ```
@@ -237,7 +237,7 @@ The path `locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modify i
 const pluginJson = require('../plugin.json');
 
 module.exports = {
-  locales: ['en-US'], // Only en-US  is updated - Crowdin will PR with other languages
+  locales: ['en-US'], // Only en-US is updated
   sort: true,
   createOldCatalogs: false,
   failOnWarnings: true,
