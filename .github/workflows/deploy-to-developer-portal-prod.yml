@@ -23,7 +23,7 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -47,7 +47,7 @@ jobs:
       - name: Build documentation website
         run: npm run docs:build
 
-      - uses: grafana/shared-workflows/actions/login-to-gcs@64c35f1dffd024130947f485ed6a150edfe83d22 # v0.2.0
+      - uses: grafana/shared-workflows/actions/login-to-gcs@login-to-gcs/v0.2.1
         id: login-to-gcs
         with:
           service_account: 'github-developer-portal@grafanalabs-workload-identity.iam.gserviceaccount.com'
