@@ -106,7 +106,7 @@ Install the latest version of the `@grafana/i18n` translation package:
 npm install @grafana/i18n@latest
 ```
 
-Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
+Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](../extend-configurations).
 
 :::caution
 Remember to change the path to `webpack.config.ts` in `package.json`.
@@ -302,7 +302,7 @@ The translation file will look similar to this:
 
 ## Test the translated plugin 
 
-To test the plugin follow the steps in [Set up your development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#docker-development-environment) to run your plugin locally. 
+To test the plugin follow the steps in [Set up your development environment](../get-started/set-up-development-environment#docker-development-environment) to run your plugin locally. 
 
 You can then verify your plugin is displaying the appropriate text as you [change the language](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
 
