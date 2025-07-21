@@ -106,7 +106,7 @@ Install the latest version of the `@grafana/i18n` translation package:
 npm install @grafana/i18n@latest
 ```
 
-Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](../extend-configurations).
+Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](extend-configurations).
 
 :::caution
 Remember to change the path to `webpack.config.ts` in `package.json`.
