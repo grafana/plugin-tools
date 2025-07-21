@@ -1,6 +1,6 @@
 ---
 id: plugin-internationalization
-title: How to add translations to your plugin
+title: Translate your plugin
 description: Translate your plugins
 keywords:
   - grafana
@@ -14,8 +14,6 @@ keywords:
   - internationalization
   - webpack
 ---
-
-# How to add translations to your plugin
 
 The Grafana UI is available in [several languages](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language). By default, plugins are available in English only and are not translated when you change your language settings. 
 
