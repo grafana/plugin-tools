@@ -34,16 +34,16 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@stylistic/eslint-plugin-ts": "^3.1.0",
-    "@swc/core": "^1.12.14",
+    "@swc/core": "^1.13.1",
     "@tsconfig/node20": "^20.1.6",
     "@tsconfig/recommended": "^1.0.10",
     "@types/glob": "^9.0.0",
-    "@types/node": "22.16.4",
+    "@types/node": "22.16.5",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
     "auto": "11.3.0",
     "eslint": "^9.31.0",
-    "eslint-config-prettier": "^10.1.5",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^51.4.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -93,7 +93,7 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.45.1",
     "@rspack/binding-linux-x64-gnu": "1.4.8",
-    "@swc/html-linux-x64-gnu": "^1.12.14",
+    "@swc/html-linux-x64-gnu": "^1.13.1",
     "lightningcss-linux-x64-gnu": "^1.30.1"
   }
 }

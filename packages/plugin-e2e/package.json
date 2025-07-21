@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -42,7 +42,7 @@
     "dotenv": "^17.2.0"
   },
   "dependencies": {
-    "@grafana/e2e-selectors": "^12.1.0-253700",
+    "@grafana/e2e-selectors": "^12.1.0-254610",
     "semver": "^7.5.4",
     "uuid": "^11.0.2",
     "yaml": "^2.3.4"

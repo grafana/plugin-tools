@@ -1,3 +1,19 @@
+# (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.7`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-254610 [#1969](https://github.com/grafana/plugin-tools/pull/1969) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.25.5`
+  - Create Plugin: Fix links in config files to dev docs [#1964](https://github.com/grafana/plugin-tools/pull/1964) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jul 16 2025)
 
 #### 🐛 Bug Fix
