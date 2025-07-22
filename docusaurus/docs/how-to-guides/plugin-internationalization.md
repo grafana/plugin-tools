@@ -22,7 +22,7 @@ Grafana uses the [i18next internationalization framework](https://www.i18next.co
 ## Before you begin
 
 :::info
-Available in Grafana >=v11.0.0 (US English) and Grafana >=v12.1.0 for the rest of languages.
+Translation is available starting from Grafana 12.1.0 using the feature flag. If you're using Grafana 11.0.0 and later, the plugin will work but will only display in English (US). If you're using older versions of Grafana the plugin will not work.
 :::
 
 The following is recommended:
