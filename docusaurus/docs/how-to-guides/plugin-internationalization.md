@@ -235,7 +235,7 @@ The path `locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modify i
 const pluginJson = require('../plugin.json');
 
 module.exports = {
-  locales: ['en-US'], // Only en-US is updated
+  locales: ['en-US', 'pt-BR'], // An array of the locales your plugin supports
   sort: true,
   createOldCatalogs: false,
   failOnWarnings: true,
