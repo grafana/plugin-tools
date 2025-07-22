@@ -1,3 +1,16 @@
+# (Tue Jul 22 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.25.6`
+  - Create Plugin: fix migrations commit arg [#1971](https://github.com/grafana/plugin-tools/pull/1971) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Jul 18 2025)
 
 #### 🐛 Bug Fix

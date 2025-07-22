@@ -22,7 +22,7 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -86,7 +86,7 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -145,7 +145,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@767ad179196244ba9370748e2b6eeac91b2f1b6f
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -196,7 +196,7 @@ jobs:
             hasBackend: false
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -204,7 +204,7 @@ jobs:
           export_env: false
 
       - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
@@ -285,7 +285,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@767ad179196244ba9370748e2b6eeac91b2f1b6f
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -300,7 +300,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@767ad179196244ba9370748e2b6eeac91b2f1b6f
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -331,7 +331,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@767ad179196244ba9370748e2b6eeac91b2f1b6f
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -345,7 +345,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@767ad179196244ba9370748e2b6eeac91b2f1b6f
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -401,7 +401,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@767ad179196244ba9370748e2b6eeac91b2f1b6f
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
@@ -418,7 +418,7 @@ jobs:
       id-token: write
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
