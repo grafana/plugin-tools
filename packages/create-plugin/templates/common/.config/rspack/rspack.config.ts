@@ -54,6 +54,7 @@ const config = async (env): Promise<Configuration> => {
       'slate-plain-serializer',
       '@grafana/slate-react',
       'react',
+      'react/jsx-runtime',
       'react-dom',
       'react-redux',
       'redux',
@@ -120,6 +121,7 @@ const config = async (env): Promise<Configuration> => {
                   react: {
                     development: !env.production,
                     refresh: false,
+                    runtime: 'automatic',
                   },
                 },
                 target: 'es2022',

@@ -69,6 +69,7 @@ const config = async (env: Env): Promise<Configuration> => {
       'slate-plain-serializer',
       '@grafana/slate-react',
       'react',
+      'react/jsx-runtime',
       'react-dom',
       'react-redux',
       'redux',
@@ -133,6 +134,11 @@ const config = async (env: Env): Promise<Configuration> => {
                   tsx: true,
                   decorators: false,
                   dynamicImport: true,
+                },
+                transform: {
+                  react: {
+                    runtime: 'automatic',
+                  },
                 },
               },
             },

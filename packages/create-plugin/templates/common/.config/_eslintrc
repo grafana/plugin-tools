@@ -5,7 +5,7 @@
  * https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-eslint-config
  */
 {
-  "extends": ["@grafana/eslint-config"],
+  "extends": ["@grafana/eslint-config", "plugin:react/jsx-runtime"],
   "root": true,
   "rules": {
     "react/prop-types": "off"
