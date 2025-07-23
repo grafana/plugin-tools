@@ -145,7 +145,7 @@ Note:
 - **Already Scoped**: The permission will be scoped to a particular folder once a user gets View/Edit/Admin access to the folder.
 - **Append Only**: Action sets can only be extended, not modified or restricted
 
-trying to extend something other than the action sets, results in an error.
+Extending anything other than the action sets results in an error.
 ```bash
 logger=plugins.actionsets.registration pluginId=grafana-lokiexplore-app error="[accesscontrol.actionSetInvalid] 
 currently only folder and dashboard action sets are supported, provided action set grafana-lokiexplore-app:view is not a folder or dashboard action set"
