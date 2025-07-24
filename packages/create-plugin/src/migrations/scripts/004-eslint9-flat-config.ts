@@ -180,7 +180,7 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports) {
 
       extendsNodes.push(builders.spreadElement(builders.identifier(importName)));
 
-      imports.set(rewrittenPath, { name: importName, bindings: [rewrittenPath] });
+      imports.set(rewrittenPath, { name: importName });
     } else if (!extend.match(/^\.?(\.\/)/)) {
       if (extend === '@grafana/eslint-config') {
         const importName = 'grafanaConfig';
@@ -188,7 +188,6 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports) {
 
         imports.set('@grafana/eslint-config/flat.js', {
           name: importName,
-          bindings: ['@grafana/eslint-config'],
         });
       } else {
         // TODO: In these cases we should probably warn the user that they need to manually update these deps.
@@ -196,12 +195,19 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports) {
           const varName = extend.slice(7);
           extendsNodes.push(builders.identifier(`js.configs.${varName}`));
           imports.set('@eslint/js', { name: 'js' });
+        } else if (extend.startsWith('plugin:')) {
+          const extendWithoutPluginPrefix = extend.slice(7);
+          const extendParts = extendWithoutPluginPrefix.split('/');
+          const importName = getPluginImport(extendParts[0]);
+          const [pluginName, configName] = extendParts;
+          extendsNodes.push(builders.identifier(`${pluginName}.configs.flat.${configName}`));
+          imports.set(importName, { name: pluginName });
         } else {
           // We assume that the extend supports flat config format
           const varName = getPluginVarName(extend);
           const importName = extend;
           extendsNodes.push(builders.identifier(varName));
-          imports.set(importName, { name: varName, bindings: [importName] });
+          imports.set(importName, { name: varName });
         }
       }
     }
@@ -258,7 +264,7 @@ function migratePlugins(plugins: string[], imports: Imports) {
     const importName = getPluginImport(plugin);
     const shortPluginName = getPluginShortName(plugin);
     props.push(builders.property('init', builders.literal(shortPluginName), builders.identifier(varName)));
-    imports.set(importName, { name: varName, bindings: [importName] });
+    imports.set(importName, { name: varName });
   });
 
   return builders.objectExpression(props);
