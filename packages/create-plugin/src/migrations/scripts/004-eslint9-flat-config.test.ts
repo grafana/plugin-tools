@@ -103,7 +103,7 @@ describe('004-eslint9-flat-config', () => {
         '.eslintrc',
         JSON.stringify(
           {
-            extends: ['eslint:recommended', './.config/.eslintrc', '@custom/eslint-config'],
+            extends: ['eslint:recommended', './.config/.eslintrc', '@custom/eslint-config', 'plugin:react/recommended'],
             plugins: ['simple-import-sort'],
             rules: {
               'simple-import-sort/imports': 'error',
@@ -125,19 +125,27 @@ describe('004-eslint9-flat-config', () => {
         import js from "@eslint/js";
         import baseConfig1 from "./.config/eslint.config.mjs";
         import customEslintConfig from "@custom/eslint-config";
+        import react from "eslint-plugin-react";
         import simpleImportSort from "eslint-plugin-simple-import-sort";
 
-        export default defineConfig([js.configs.recommended, ...baseConfig1, customEslintConfig, {
-          plugins: {
-            "simple-import-sort": simpleImportSort,
-          },
+        export default defineConfig([
+          js.configs.recommended,
+          ...baseConfig1,
+          customEslintConfig,
+          react.configs.flat.recommended,
+          {
+            plugins: {
+              "simple-import-sort": simpleImportSort,
+            },
 
-          rules: {
-            "simple-import-sort/imports": "error",
+            rules: {
+              "simple-import-sort/imports": "error",
+            },
           },
-        }, {
-          files: ["src/**/*.{ts,tsx}"],
-        }]);"
+          {
+            files: ["src/**/*.{ts,tsx}"],
+          },
+        ]);"
       `);
       expect(result.listChanges()).not.toHaveProperty('.eslintrc');
     });
