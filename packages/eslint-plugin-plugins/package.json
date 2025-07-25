@@ -1,6 +1,6 @@
 {
   "name": "@grafana/eslint-plugin-plugins",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "An ESlint plugin with Grafana plugin specific rules",
   "main": "./dist/index.js",
   "files": [
@@ -44,7 +44,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@grafana/levitate": "^0.16.0",
+    "@grafana/levitate": "^0.17.0",
     "@typescript-eslint/utils": "^8.23.0",
     "semver": "^7.7.0",
     "typescript": "^5.7.0"

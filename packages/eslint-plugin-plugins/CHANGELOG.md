@@ -1,3 +1,16 @@
+# v0.4.3 (Fri Jul 25 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update grafana dependencies [#1903](https://github.com/grafana/plugin-tools/pull/1903) ([@renovate[bot]](https://github.com/renovate[bot]) [@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
 # v0.3.3 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix
