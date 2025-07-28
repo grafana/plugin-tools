@@ -72,7 +72,7 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 1. Next, sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin:
 
    ```shell npm2yarn
-   npm @grafana/sign-plugin@latest
+   npx @grafana/sign-plugin@latest
    ```
 
 ## Sign a private plugin
