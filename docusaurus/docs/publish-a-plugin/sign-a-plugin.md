@@ -77,14 +77,17 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
 ## Sign a private plugin
 
-1. In your plugin directory, sign the plugin with the Access Policy token you just created. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin.
+1. In your plugin directory, export the Access Policy token as an environment variable using the token you just created.
 
-   ```shell npm2yarn
+   ```bash
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
-   npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
    ```
 
-1. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin.
+1. Next, sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin:
+
+   ```shell npm2yarn
+   npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
+   ```
 
 ## Add a plugin manifest for verification
 
