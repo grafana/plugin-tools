@@ -91,7 +91,7 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
 ## Add a plugin manifest for verification
 
-For Grafana to verify the digital signature of a plugin, include a signed manifest file, `MANIFEST.txt`, with the following two sections:
+For Grafana to verify the digital signature of a plugin, include a signed manifest file, `MANIFEST.txt`. The signed manifest file contains two sections:
 
 - **Signed message -** Contains plugin metadata and plugin files with their respective checksums (SHA256).
 - **Digital signature -** Created by encrypting the signed message using a private key. Grafana has a public key built-in that can be used to verify that the digital signature has been encrypted using the expected private key.
