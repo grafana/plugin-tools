@@ -63,7 +63,7 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
 1. Submit your plugin for [review](./publish-or-update-a-plugin.md).
 1. If we approve your plugin, you're granted a plugin signature level. You need this signature level to proceed.
-1. In your plugin directory, update the Access Policy with the Access Policy token you just created.
+1. In your plugin directory, export the Access Policy token as an environment variable using the token you just created.
 
    ```bash
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
