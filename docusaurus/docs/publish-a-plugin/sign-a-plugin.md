@@ -81,7 +81,7 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
    ```shell npm2yarn
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
-   npm @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
+   npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
    ```
 
 1. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin.
