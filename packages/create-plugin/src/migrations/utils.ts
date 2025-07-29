@@ -273,7 +273,7 @@ export function isVersionGreater(incomingVersion: string, existingVersion: strin
   }
 
   // We can't determine the exact version the dist tag pointed to so we force an update so the migration changes and expected
-  // dependency version are aligned. This should mean the codebase is more likely to continue working post-migration, even if
+  // dependency versions are aligned. This should mean the codebase is more likely to continue working post-migration, even if
   // it potentially downgrades from a newer version to the specific version the migration expects.
   if (incomingIsDistTag || existingIsDistTag) {
     return true;
