@@ -7,7 +7,6 @@
   "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["regex", "npm", "github-actions"],
-  "postUpdateOptions": ["npmDedupe"],
   "labels": ["dependencies", "javascript"],
   // These custom managers are used to bump dependencies in create-plugin template files
   "customManagers": [
