@@ -73,8 +73,8 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Accessing plugin meta-data in the component](../how-to-guides/ui-extensions/register-an-extension.md#accessing-plugin-meta-in-a-component)
-- [Access your plugin's state inside the component](../how-to-guides/ui-extensions/register-an-extension.md#access-plugin-state-in-a-component)
+- [Accessing plugin meta-data in the component](../how-to-guides/ui-extensions/register-an-extension.md#access-the-plugins-meta-in-a-component)
+- [Access your plugin's state inside the component](../how-to-guides/ui-extensions/register-an-extension.md#access-the-plugins-state-in-a-component)
 - [Hide a component in certain conditions](../how-to-guides/ui-extensions/register-an-extension.md#hide-a-component-in-certain-conditions)
 
 #### See also
