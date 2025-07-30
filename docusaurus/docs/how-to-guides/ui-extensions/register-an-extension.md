@@ -23,7 +23,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 
 :::warning
 
-You must [update](#updating-pluginjson-metadata) your `plugin.json` metadata to list any registered extensions.
+You must [update](#update-the-pluginjson-metadata) your `plugin.json` metadata to list any registered extensions.
 
 :::
 
