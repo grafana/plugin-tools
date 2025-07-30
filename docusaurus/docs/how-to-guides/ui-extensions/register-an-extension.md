@@ -13,9 +13,9 @@ sidebar_position: 20
 
 import ExtensionPoints from '@shared/extension-points.md';
 
-An _extension_ is a plugin-defined link or a React component that is rendered in either the core Grafana UI or in another app plugin.
+A UI extension is either a plugin-defined link or a React component that you can render in the core Grafana UI or in another app plugin. 
 
-Compared to [exposing a component](./expose-a-component.md), they are explicitly registered against one or more extension point IDs. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
+Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
@@ -27,9 +27,9 @@ You must [update](#updating-pluginjson-metadata) your `plugin.json` metadata to 
 
 :::
 
-## Links
+## Work with link extensions
 
-### Register a link
+### Register a link extension
 
 You can add an extension for a link. For example:
 
@@ -138,7 +138,7 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
-## Components
+## Work with component extensions
 
 ### Best practices for adding components
 
@@ -146,7 +146,9 @@ export const plugin = new AppPlugin().addLink({
 - **Wrap your component with providers** - if you want to access any plugin specific state in your component make sure to wrap it with the necessary React context providers (e.g. for Redux).
 - **Use the enum for Grafana extension point IDs** - if you are registering a component to one of the available Grafana extension points, make sure that you use the [`PluginExtensionPoints` enum exposed by the `@grafana/data`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) package.
 
-### Register a component
+### Register a component extension
+
+You can register an extension for a component. For example:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';
@@ -159,7 +161,7 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
-### Accessing plugin meta in a component
+### Access the plugin's meta in a component
 
 You can use the `usePluginContext()` hook to access any plugin specific meta information inside your component. The hook returns a [`PluginMeta`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/plugin.ts#L62) object. This can be useful because the component that you register from your plugin won't be rendered under the React tree of your plugin, but somewhere else in the UI.
 
@@ -180,7 +182,9 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
-### Access plugin state in a component
+### Access the plugin's state in a component
+
+To access the plugin's state, do the following:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';
@@ -223,9 +227,9 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
-## Updating plugin.json metadata
+## Update the plugin.json metadata
 
-Once you have defined a link or component extension to be registered against an extension point, you must update your `plugin.json` metadata.
+After you have defined a link or component extension and registered it against an extension point, you must update your `plugin.json` metadata.
 
 For example:
 
@@ -244,18 +248,14 @@ For more information, see the `plugin.json` [reference](../../reference/metadata
 
 ## Troubleshooting
 
-### My link is not appearing
+If you cannot see your link or component extension check the following: 
 
-1. **Check the console logs** - there is a good chance that your link is not appearing due to some validation errors. In this case you should see some relevant logs in your browser's console.
-1. **Check the `targets`** - make sure that you are using the correct extension point ids (always use the `PluginExtensionPoints` enum for Grafana extension points)
-1. **Check the links `configure()` function** - in case your link has a `configure()` function it can happen that it is returning `undefined` under certain conditions, which hides the link.
-1. **Check if you register too many links** - certain extension points limit the number of links allowed per plugin, and in case your plugin registers more than one links for the same extension point there is a chance that some of them are filtered out.
-1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**, while `addLink()` is only supported in versions **>=`11.1.0`**.
+1. **Check the console logs** - your link or component may not be appearing due to validation errors. Look for the relevant logs in your browser's console.
+1. **Check the `targets`** - make sure that you are using the correct extension point IDs, and always use the `PluginExtensionPoints` enum for Grafana extension points.
+1. **Check the links `configure()` function** - if your link has a `configure()` function which is returning `undefined`, the link is hidden.
+1. **Check your component's implementation** - if your component returns `null` it won't be rendered at the extension point.
+1. **Check if you register too many links or components** - certain extension points limit the number of links or components allowed per plugin. If your plugin registers more links or components for the same extension point than the allowed amount, some of them may be filtered out.
+1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**. 
 
-### My component is not appearing
 
-1. **Check the console logs** - there is a good chance that your component is not appearing due to some validation errors. In this case you should see some relevant logs in your browser's console.
-1. **Check the `targets`** - make sure that you are using the correct extension point ids (always use the `PluginExtensionPoints` enum for Grafana extension points)
-1. **Check your components implementation** - in case your component returns `null` under certain conditions, then it won't be rendered at the extension point.
-1. **Check if you register too many components** - certain extension points limit the number of components allowed per plugin, and in case your plugin registers more than one component for the same extension point there is a chance that some of them are filtered out.
-1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**, while `addComponent()` is only supported in versions **>=`11.1.0`**.
+
