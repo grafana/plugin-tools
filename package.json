@@ -93,6 +93,7 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.45.1",
     "@rspack/binding-linux-x64-gnu": "1.4.8",
-    "@swc/html-linux-x64-gnu": "^1.13.1"
+    "@swc/html-linux-x64-gnu": "^1.13.1",
+    "lightningcss-linux-x64-gnu": "^1.30.1"
   }
 }
