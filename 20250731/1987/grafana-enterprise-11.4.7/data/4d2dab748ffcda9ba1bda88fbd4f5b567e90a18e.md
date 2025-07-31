@@ -25,7 +25,7 @@
           - /url: /dashboards
       - listitem:
         - link "E2E dashboards":
-          - /url: /dashboards/f/aetl8z032q328e/e2e-dashboards
+          - /url: /dashboards/f/cetltc0gpuxvkd/e2e-dashboards
       - listitem:
         - link "Clock Panel Test":
           - /url: /d/mxb-Jv4Vk/clock-panel-test?orgId=1&from=now-6h&to=now&timezone=browser
@@ -80,7 +80,7 @@
   - button "Auto refresh turned off. Choose refresh time interval"
   - region "Time with background and font size":
     - heading "Time with background and font size" [level=2]
-    - heading "12:10:18" [level=2]
+    - heading "15:59:03" [level=2]
   - separator "Pane resize widget"
   - button "Change Visualization": Clock
   - textbox "Search options"
