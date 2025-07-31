@@ -25,7 +25,7 @@ After you have added an extension point to your UI you can extend it multiple ti
 
 ## Where can I find extensions?
 
-In any panel select the [panel menu](https://grafana.com/docs/grafana-cloud/visualizations/panels-visualizations/panel-overview/#panel-menu) and select **Extensions**.  
+In any panel select the [panel menu](https://grafana.com/docs/grafana/latest/panels-visualizations/panel-overview/) and select **Extensions**.  
 
 ![Panel menu showing available extensions](/img/ui-extensions-menu.png)
 
