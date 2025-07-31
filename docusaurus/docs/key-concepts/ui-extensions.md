@@ -29,7 +29,7 @@ In any panel select the [panel menu](https://grafana.com/docs/grafana/latest/pan
 
 ![Panel menu showing available extensions](/img/ui-extensions-menu.png)
 
-In the example above, there is one extension point with three registered extensions: Machine learning, Outlier detection, and Create forcast. 
+In the example above, there is one extension point with three registered extensions: Machine learning, Outlier detection, and Create forecast. 
 
 ## Why should I add an extension point?
 
