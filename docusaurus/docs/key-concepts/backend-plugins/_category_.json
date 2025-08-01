@@ -1,9 +1,0 @@
-{
-  "position": 05,
-  "label": "Backend plugins",
-  "customProps": {
-    "description": "Learn about developing Grafana plugins with a backend component."
-  },
-  "collapsible": true,
-  "collapsed": false
-}
