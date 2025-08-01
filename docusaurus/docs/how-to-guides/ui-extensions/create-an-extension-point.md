@@ -17,7 +17,7 @@ keywords:
 
 import ExtensionPoints from '@shared/extension-points.md';
 
-An _extension point_ is a part of your plugin UI or Grafana UI where other plugins can add links or React components via hooks. You can use them to extend the user experience based on a context exposed by the extension point.
+An _extension point_ is a part of your plugin or Grafana UI where other plugins can add links or React components via hooks. You can use them to extend the user experience based on a context exposed by the extension point.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 

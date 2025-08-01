@@ -16,16 +16,15 @@ Use UI extensions to contribute new actions and functionality to the core Grafan
 
 ## Understand extensions
 
-The UI extensions framework is built around two concepts:
+The UI extensions framework is built around these concepts:
 
-1. `Extension point` - A place in the UI where plugins can contribute new functionality to the end user. Both the Grafana UI and app plugins can expose extension points.
-2. `Extension` - New functionality, registered by an app plugin, appearing at an extension point. For example, an extension could provide a navigational link to bring users to a particular view, it could open a modal menu allowing the user to configure an action to take from within their current context (for instance, to create a SLO), or it could trigger background tasks. There are two types of extensions: links and components.
+1. `Extension point` - A place in the UI where plugins can contribute new functionality to the end user. Both the Grafana UI and app plugins can expose extension points. 
+2. `Extension` - New functionality you register to an extension point. For example, an extension can provide a navigational link to bring users to a particular view, open a modal menu allowing the user to configure an action to take from within their current context (for instance, to create a SLO), or trigger background tasks. There are three types of extensions: links, components, and functions.
+3. `Exposed component` - A component from an app plugin you can expose to easily share functionality with other app plugins without having to register to an extension point.  
 
 After you have added an extension point to your UI you can extend it multiple times by multiple plugins.
 
 ## Where can I find extensions?
-
-In any panel select the [panel menu](https://grafana.com/docs/grafana/latest/panels-visualizations/panel-overview/) and select **Extensions**.  
 
 ![Panel menu showing available extensions](/img/ui-extensions-menu.png)
 
