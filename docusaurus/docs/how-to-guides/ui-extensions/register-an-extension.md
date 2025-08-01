@@ -15,7 +15,7 @@ import ExtensionPoints from '@shared/extension-points.md';
 
 Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values. 
 
-You can either register or an expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
+You can either register or expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
