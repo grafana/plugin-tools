@@ -148,7 +148,7 @@ export const plugin = new AppPlugin().addLink({
 
 ### Register a component extension
 
-You can register an extension for a component. For example:
+You can register a component extension. For example:
 
 ```tsx
 import { PluginExtensionPoints } from '@grafana/data';
