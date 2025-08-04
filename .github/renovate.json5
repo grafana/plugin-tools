@@ -49,7 +49,8 @@
         "/@grafana/*/",
         "/grafana/grafana-enterprise/",
         "!@grafana/e2e-selectors"
-      ]
+      ],
+      "minimumReleaseAge": null
     },
     {
       "automerge": true,
@@ -62,7 +63,8 @@
       "matchFileNames": [
         "packages/plugin-e2e/package.json",
         "package-lock.json"
-      ]
+      ],
+      "minimumReleaseAge": null
     },
     {
       "groupName": "grafana dependencies",
@@ -75,7 +77,8 @@
         "!@grafana/e2e-selectors",
         "!@grafana/eslint-config",
         "!@grafana/scenes"
-      ]
+      ],
+      "minimumReleaseAge": null
     },
     // Docusaurus dependencies have to be grouped together otherwise error out when building website.
     {
@@ -104,7 +107,7 @@
         "!/@grafana/*/",
         "!@grafana/e2e-selectors"
       ],
-      "minimumReleaseAge": "14 days",
+      
       "rangeStrategy": "bump"
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
@@ -117,17 +120,16 @@
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch"],
-      "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"],
-      "minimumReleaseAge": "14 days"
+      "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
       "automerge": true,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
-      "matchManagers": ["github-actions"],
-      "minimumReleaseAge": "14 days"
+      "matchManagers": ["github-actions"]
     }
   ],
+  "minimumReleaseAge": "14 days",
   "prConcurrentLimit": 10,
   "rebaseWhen": "conflicted",
   "vulnerabilityAlerts": {
