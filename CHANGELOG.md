@@ -1,3 +1,19 @@
+# (Tue Aug 05 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.25.8`
+  - Create Plugin: Add package.json utils for migrations [#1942](https://github.com/grafana/plugin-tools/pull/1942) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-types-bundler@0.4.4`
+  - Update dependency @types/node to v22.17.0 [#1995](https://github.com/grafana/plugin-tools/pull/1995) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix

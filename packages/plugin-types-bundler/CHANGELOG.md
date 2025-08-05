@@ -1,3 +1,16 @@
+# v0.4.4 (Tue Aug 05 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @types/node to v22.17.0 [#1995](https://github.com/grafana/plugin-tools/pull/1995) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.4.3 (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix

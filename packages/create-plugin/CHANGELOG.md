@@ -1,3 +1,15 @@
+# v5.25.8 (Tue Aug 05 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add package.json utils for migrations [#1942](https://github.com/grafana/plugin-tools/pull/1942) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.25.7 (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix
