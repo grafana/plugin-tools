@@ -8,6 +8,7 @@ import { MigrationMeta } from './migrations.js';
 import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
+import { clean, coerce, gt } from 'semver';
 
 export function printChanges(context: Context, key: string, migration: MigrationMeta) {
   const changes = context.listChanges();
@@ -131,4 +132,177 @@ export function installNPMDependencies(context: Context) {
     );
     execSync(installCmd, { cwd: context.basePath, stdio: 'inherit' });
   }
+}
+
+export function readJsonFile<T extends object = any>(context: Context, path: string): T {
+  if (!context.doesFileExist(path)) {
+    throw new Error(`Cannot find ${path}`);
+  }
+  try {
+    return JSON.parse(context.getFile(path) || '');
+  } catch (e) {
+    throw new Error(`Cannot parse ${path}: ${e}`);
+  }
+}
+
+export function addDependenciesToPackageJson(
+  context: Context,
+  dependencies: Record<string, string>,
+  devDependencies: Record<string, string> = {},
+  packageJsonPath = 'package.json'
+) {
+  const currentPackageJson = readJsonFile(context, packageJsonPath);
+  const currentDeps = { ...(currentPackageJson.dependencies || {}) };
+  const currentDevDeps = { ...(currentPackageJson.devDependencies || {}) };
+
+  // Handle dependencies
+  for (const [dep, newVersion] of Object.entries(dependencies)) {
+    if (currentDeps[dep]) {
+      if (isVersionGreater(newVersion, currentDeps[dep])) {
+        currentDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade dependency %s to %s', dep, newVersion);
+      }
+    } else if (currentDevDeps[dep]) {
+      if (isVersionGreater(newVersion, currentDevDeps[dep])) {
+        currentDevDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade devDependency %s to %s', dep, newVersion);
+      }
+    } else {
+      // Not present, add to dependencies
+      currentDeps[dep] = newVersion;
+    }
+  }
+
+  // Handle devDependencies
+  for (const [dep, newVersion] of Object.entries(devDependencies)) {
+    if (currentDeps[dep]) {
+      if (isVersionGreater(newVersion, currentDeps[dep])) {
+        currentDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade dependency %s to %s', dep, newVersion);
+      }
+    } else if (currentDevDeps[dep]) {
+      if (isVersionGreater(newVersion, currentDevDeps[dep])) {
+        currentDevDeps[dep] = newVersion;
+      } else {
+        migrationsDebug('would downgrade devDependency %s to %s', dep, newVersion);
+      }
+    } else {
+      // Not present, add to devDependencies
+      currentDevDeps[dep] = newVersion;
+    }
+  }
+
+  // Only update if there are actual changes
+  const hasChanges =
+    JSON.stringify(currentDeps) !== JSON.stringify(currentPackageJson.dependencies || {}) ||
+    JSON.stringify(currentDevDeps) !== JSON.stringify(currentPackageJson.devDependencies || {});
+
+  if (!hasChanges) {
+    return;
+  }
+
+  // Sort dependencies alphabetically for consistency
+  const sortedDeps = sortObjectByKeys(currentDeps);
+  const sortedDevDeps = sortObjectByKeys(currentDevDeps);
+
+  const updatedPackageJson = {
+    ...currentPackageJson,
+    ...(Object.keys(sortedDeps).length > 0 && { dependencies: sortedDeps }),
+    ...(Object.keys(sortedDevDeps).length > 0 && { devDependencies: sortedDevDeps }),
+  };
+
+  migrationsDebug('updated package.json', updatedPackageJson);
+
+  context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
+}
+
+export function removeDependenciesFromPackageJson(
+  context: Context,
+  dependencies: string[],
+  devDependencies: string[] = [],
+  packageJsonPath = 'package.json'
+) {
+  const currentPackageJson = readJsonFile(context, packageJsonPath);
+
+  let hasChanges = false;
+
+  for (const dep of dependencies) {
+    if (currentPackageJson.dependencies?.[dep]) {
+      delete currentPackageJson.dependencies[dep];
+      migrationsDebug('removed dependency %s', dep);
+      hasChanges = true;
+    }
+  }
+
+  for (const dep of devDependencies) {
+    if (currentPackageJson.devDependencies?.[dep]) {
+      delete currentPackageJson.devDependencies[dep];
+      migrationsDebug('removed devDependency %s', dep);
+      hasChanges = true;
+    }
+  }
+
+  if (!hasChanges) {
+    return;
+  }
+
+  migrationsDebug('updated package.json', currentPackageJson);
+
+  context.updateFile(packageJsonPath, JSON.stringify(currentPackageJson, null, 2));
+}
+
+// Handle special version strings like "latest", "next", etc.
+const DIST_TAGS = {
+  '*': 2,
+  next: 1,
+  latest: 0,
+};
+
+/**
+ * Compares two version strings to determine if the incoming version is greater
+ */
+export function isVersionGreater(incomingVersion: string, existingVersion: string): boolean {
+  const incomingIsDistTag = incomingVersion in DIST_TAGS;
+  const existingIsDistTag = existingVersion in DIST_TAGS;
+
+  if (incomingIsDistTag && existingIsDistTag) {
+    return DIST_TAGS[incomingVersion as keyof typeof DIST_TAGS] > DIST_TAGS[existingVersion as keyof typeof DIST_TAGS];
+  }
+
+  // We can't determine the exact version the dist tag pointed to so we force an update so the migration changes and expected
+  // dependency versions are aligned. This should mean the codebase is more likely to continue working post-migration, even if
+  // it potentially downgrades from a newer version to the specific version the migration expects.
+  if (incomingIsDistTag || existingIsDistTag) {
+    return true;
+  }
+
+  // Both are semver versions, use standard semver comparison
+  const incomingSemver = cleanSemver(incomingVersion);
+  const existingSemver = cleanSemver(existingVersion);
+
+  // If either version can't be parsed as semver, default to treating the incoming version as greater.
+  if (!incomingSemver || !existingSemver) {
+    return true;
+  }
+
+  return gt(incomingSemver, existingSemver);
+}
+
+/**
+ * Cleans and coerces a semver version string
+ */
+function cleanSemver(version: string) {
+  return clean(version) ?? coerce(version);
+}
+
+/**
+ * Sorts object keys alphabetically for consistent package.json formatting
+ */
+function sortObjectByKeys<T extends Record<string, any>>(obj: T): T {
+  return Object.keys(obj)
+    .sort()
+    .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {} as T);
 }

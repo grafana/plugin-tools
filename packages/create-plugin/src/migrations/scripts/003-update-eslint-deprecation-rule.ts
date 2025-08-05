@@ -1,7 +1,8 @@
 import type { Context } from '../context.js';
+import { addDependenciesToPackageJson, removeDependenciesFromPackageJson } from '../utils.js';
 
 export default function migrate(context: Context) {
-  if (context.doesFileExist('.config/.eslintrc')) {
+  if (context.doesFileExist('.config/.eslintrc') && context.doesFileExist('package.json')) {
     const eslintConfigRaw = context.getFile('.config/.eslintrc') || '';
     const [eslintComments, eslintConfigJSON] = splitEslintConfig(eslintConfigRaw);
 
@@ -31,19 +32,12 @@ export default function migrate(context: Context) {
 
       const result = eslintComments.join('\n') + '\n' + JSON.stringify(eslintConfig, null, 2);
       context.updateFile('.config/.eslintrc', result);
-    }
 
-    if (context.doesFileExist('package.json')) {
-      const packageJson = JSON.parse(context.getFile('package.json') || '{}');
-
-      if (packageJson.devDependencies) {
-        delete packageJson.devDependencies['eslint-plugin-deprecation'];
-
-        packageJson.devDependencies['@typescript-eslint/eslint-plugin'] = '^8.3.0';
-        packageJson.devDependencies['@typescript-eslint/parser'] = '^8.3.0';
-      }
-
-      context.updateFile('package.json', JSON.stringify(packageJson, null, 2));
+      addDependenciesToPackageJson(context, {
+        '@typescript-eslint/eslint-plugin': '^8.3.0',
+        '@typescript-eslint/parser': '^8.3.0',
+      });
+      removeDependenciesFromPackageJson(context, [], ['eslint-plugin-deprecation']);
     }
   }
 
