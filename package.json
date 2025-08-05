@@ -64,14 +64,9 @@
     "node": ">=20"
   },
   "workspaces": [
-    "packages/create-plugin",
-    "packages/sign-plugin",
-    "docusaurus/website",
-    "packages/plugin-e2e",
-    "packages/plugin-meta-extractor",
-    "packages/plugin-types-bundler",
-    "packages/eslint-plugin-plugins",
-    "libs/*"
+    "packages/*",
+    "libs/*",
+    "docusaurus/website"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
