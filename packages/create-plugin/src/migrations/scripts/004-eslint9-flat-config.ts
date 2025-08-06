@@ -5,7 +5,7 @@ import minimist from 'minimist';
 import { dirname, relative, resolve } from 'node:path';
 import * as recast from 'recast';
 import type { Context } from '../context.js';
-import { migrationsDebug } from '../utils.js';
+import { addDependenciesToPackageJson, migrationsDebug } from '../utils.js';
 
 type Imports = Map<string, { name?: string; bindings?: string[] }>;
 
@@ -41,15 +41,10 @@ export default function migrate(context: Context): Context {
     if (packageJsonRaw.scripts) {
       const fixedEslintScripts = migrateEslintScripts(packageJsonRaw.scripts);
       packageJsonRaw.scripts = fixedEslintScripts;
+      context.updateFile('package.json', JSON.stringify(packageJsonRaw, null, 2));
     }
-    if (packageJsonRaw.devDependencies) {
-      for (const [packageName, packageVersion] of Object.entries(devDependenciesToUpdate)) {
-        if (packageJsonRaw.devDependencies[packageName]) {
-          packageJsonRaw.devDependencies[packageName] = packageVersion;
-        }
-      }
-    }
-    context.updateFile('package.json', JSON.stringify(packageJsonRaw, null, 2));
+
+    addDependenciesToPackageJson(context, {}, devDependenciesToUpdate);
   }
 
   return context;
