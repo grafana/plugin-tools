@@ -44,12 +44,16 @@ Adding an extension point to your UI provides the following benefits:
 - Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed to the user. There is no need for either app to include custom logic to detect the presence of the other.
 - Extensions are fast. We pre-build the extensions registry at Grafana boot time which makes it fast to use while rendering the UI.
 
-### Use cases
+## Use cases
 
 You can use extensions for the following scenarios:
 
 - The user views a dashboard with historical data. By adding an extension point to this part of the UI, a machine learning app plugin can give the user the ability to create a forecast for that data directly from the panel.
 - The user views a firing alert. By adding an extension point to this part of the UI, an Incident app plugin can give the user the ability to create an incident directly from the alert view.
+
+## Debugging
+
+If you need to debug your extension see [Use logs to debug your extension](../how-to-guides/ui-extensions/debug-logs.md).
 
 ## Further instructions
 
