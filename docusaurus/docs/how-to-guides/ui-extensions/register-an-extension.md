@@ -1,7 +1,7 @@
 ---
 id: register-an-extension
 title: Register an extension
-description: Make part of the UI extendable with links or components defined by plugins
+description: Make part of the UI extendable with links or components defined by plugins.
 keywords:
   - grafana
   - plugins

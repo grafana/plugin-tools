@@ -1,7 +1,7 @@
 ---
 id: versioning-extensions
 title: Version extensions
-description: This document covers best practices for versioning UI extensions, ensuring stability, compatibility, and smooth transitions.
+description: See best practices for versioning UI extensions to ensure stability, compatibility, and smooth transitions.
 keywords:
   - grafana
   - plugins

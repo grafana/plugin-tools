@@ -1,7 +1,7 @@
 ---
 id: debug-logs
-title: Debug logs
-description: See logs to debug your extension
+title: Use logs to debug your extension
+description: Use logs to debug your extension during development.
 keywords:
   - grafana
   - plugins
