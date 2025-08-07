@@ -150,6 +150,7 @@ const sidebars: SidebarsConfig = {
             'how-to-guides/ui-extensions/expose-a-component',
             'how-to-guides/ui-extensions/use-an-exposed-component',
             'how-to-guides/ui-extensions/versioning-extensions',
+            'how-to-guides/ui-extensions/debug-logs',
           ],
         },
         'how-to-guides/add-anonymous-usage-reporting',
