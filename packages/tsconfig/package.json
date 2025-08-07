@@ -6,11 +6,12 @@
   "description": "Grafana's TypeScript config",
   "keywords": [
     "grafana",
-    "typescript"
+    "typescript",
+    "config"
   ],
   "repository": {
-    "type": "git",
-    "url": "http://github.com/grafana/tsconfig-grafana.git"
+    "directory": "packages/tsconfig",
+    "url": "https://github.com/grafana/plugin-tools"
   },
   "main": "tsconfig.json",
   "files": [
