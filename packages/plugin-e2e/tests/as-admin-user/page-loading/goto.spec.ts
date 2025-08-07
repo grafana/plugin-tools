@@ -16,7 +16,7 @@ test.describe('gotoPanelEditPage', () => {
     gotoPanelEditPage,
     readProvisionedDashboard,
   }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.jsonnpm' });
+    const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
     await expect(panelEditPage.panel.locator).toBeVisible();
   });
