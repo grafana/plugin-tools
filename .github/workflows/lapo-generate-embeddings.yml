@@ -10,7 +10,7 @@ on:
 jobs:
   generate-docs-embeddings:
     name: generate-docs-embeddings
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     permissions:
       contents: read
       id-token: write
