@@ -13,6 +13,7 @@ keywords:
   - panel
   - app
   - ui extensions
+  - debugging
 ---
 
 Learn how to extend Grafana plugins with additional functionality and capabilities with short guides.
