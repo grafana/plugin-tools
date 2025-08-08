@@ -1,3 +1,16 @@
+# (Thu Aug 07 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.8`
+  - Plugin e2e: fix color picker selector [#2017](https://github.com/grafana/plugin-tools/pull/2017) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Aug 05 2025)
 
 #### 🐛 Bug Fix
