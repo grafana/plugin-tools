@@ -46,7 +46,7 @@ The following Extension Points are available:
 Methods allow you to register or expose components or links to extension points.
 
 :::info
-To learn when to add and when to expose an element (component or link) to an extension point see [UI extensions reference guide](/developers/plugin-tools/extensions-add-expose).
+To learn when to add and when to expose an element (component or link) to an extension point see [UI extensions reference guide](/developers/plugin-tools/reference/extensions-add-expose).
 :::
 
 ### `addComponent`
