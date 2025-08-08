@@ -30,7 +30,6 @@ const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 
 The following Extension Points are available:
 
-
 | Extension Point ID                | Type      | Description                                                          |
 | --------------------------------- | --------- | -------------------------------------------------------------------- |
 | **`AlertingAlertingRuleAction`**  | Link      | Extend the alert rule menu with custom actions for alerting rules.   |
@@ -43,6 +42,12 @@ The following Extension Points are available:
 | **`UserProfileTab`**              | Component | Extend the user profile page with custom tabs.                       |
 
 ## Methods
+
+Methods allow you to register or expose components or links to extension points.
+
+:::info
+To learn when to add and when to expose an element (component or link) to an extension point see [UI extensions reference guide](/extensions-add-expose).
+:::
 
 ### `addComponent`
 
@@ -67,12 +72,12 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 The `addComponent()` method takes a single `config` object with the following properties:
 
-| Property          | Description                                                                                                                                                                                                   |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Property          | Description                         |
+| ----------------- | ------------------------------------ |
 | **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_. [See available extension points in Grafana &rarr;](#extension-points-in-grafana) |
-| **`title`**       | A human readable title for the component.                                                                                                                                                                     |
-| **`description`** | A human readable description for the component.                                                                                                                                                               |
-| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note: the props passed to the component are defined by each extension point.                |
+| **`title`**       | A human readable title for the component.           |
+| **`description`** | A human readable description for the component.                           |
+| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note that the props passed to the component are defined by each extension point.                |
 
 #### Return value
 
@@ -174,6 +179,8 @@ The method returns the `AppPlugin` instance to allow for chaining.
 - [Best practices for exposing components](../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
 ## Hooks
+
+Hooks fetch components or links that have been previously linked or exposed in extension points.
 
 ### `usePluginComponent`
 
@@ -351,11 +358,11 @@ const { extensions } = getPluginExtensions({
 
 The `getPluginExtensions()` function takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| Property       | Description          | Required |
+| ---------------------- | --------------------------- | -------- |
 | **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
-| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                                     | false    |
-| **`limitPerPlugin?`**  | - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                              | false    |
+| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                   | false    |
+| **`limitPerPlugin?`**  | - The maximum number of extensions to return per plugin. Default is no limit.       | false    |
 
 #### Return value
 
@@ -395,11 +402,11 @@ const { extensions, isLoading } = usePluginExtensions({
 
 The `.usePluginExtensions()` method takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| Property               | Description        | Required |
+| ---------------------- |----------------------------------------- | -------- |
 | **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
-| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                                     | false    |
-| **`limitPerPlugin?`**  | The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                                | false    |
+| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                     | false    |
+| **`limitPerPlugin?`**  | The maximum number of extensions to return per plugin. Default is no limit.         | false    |
 
 #### Return value
 

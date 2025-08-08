@@ -16,4 +16,6 @@ keywords:
 
 Guides for creating UI extensions and extension points.
 
+For details on the available extension points and the methods and hooks you can use to work with extensions, see [UI extensions reference guide](../reference/ui-extensions).
+
 <DocLinkList />
