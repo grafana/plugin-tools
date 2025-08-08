@@ -93,11 +93,14 @@ And you should be ready to go!
 
 Plugin-tools is a mono-repo consisting of multiple projects. Please refer to their contributing guides to understand how to develop each one.
 
-| Package Name  | Readme                                           |
-| ------------- | ------------------------------------------------ |
-| Create Plugin | [Link](./packages/create-plugin/CONTRIBUTING.md) |
-| Sign Plugin   | [Link](./packages/sign-plugin/CONTRIBUTING.md)   |
-| Website       | [Link](./docusaurus/website/CONTRIBUTING.md)     |
+| Package Name  | Readme                                                   |
+| ------------- | -------------------------------------------------------- |
+| Create Plugin | [Link](./packages/create-plugin/CONTRIBUTING.md)         |
+| ESlint Plugin | [Link](./packages/eslint-plugin-plugins/CONTRIBUTING.md) |
+| Plugin E2E    | [Link](./packages/plugin-e2e/CONTRIBUTING.md)            |
+| Sign Plugin   | [Link](./packages/sign-plugin/CONTRIBUTING.md)           |
+| TSconfig      | [Link](./packages/tsconfig/CONTRIBUTING.md)              |
+| Website       | [Link](./docusaurus/website/CONTRIBUTING.md)             |
 
 ## Contributor License Agreement (CLA)
 
