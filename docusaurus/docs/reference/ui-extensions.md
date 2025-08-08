@@ -1,7 +1,7 @@
 ---
 id: ui-extensions
-title: UI extensions
-description: Reference for UI extensions
+title: UI extensions reference guide
+description: Reference guide for UI extensions - available extension points, methods, and hooks.
 keywords:
   - grafana
   - plugins
@@ -12,17 +12,24 @@ keywords:
 sidebar_position: 50
 ---
 
-This page describes the UI extensions API in detail.
+This page describes the UI Extensions API in detail, including:
+
+- [Extension points in Grafana](#extension-points-in-grafana)
+- [Methods](#methods)
+- [Hooks](#hooks)
 
 ## Extension points in Grafana
 
-A list of available extension points within Grafana that can be extended by plugins. All these extension point IDs can be accessed using the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum exposed by the `@grafana/data` package.
+Use the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum exposed by the `@grafana/data` package to access the extension points within Grafana. 
 
 ```typescript
 import { PluginExtensionPoints } from '@grafana/data';
 
 const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 ```
+
+The following Extension Points are available:
+
 
 | Extension Point ID                | Type      | Description                                                          |
 | --------------------------------- | --------- | -------------------------------------------------------------------- |
@@ -43,7 +50,7 @@ const extensionPointId = PluginExtensionPoints.DashboardPanelMenu;
 Available in Grafana >=v11.1.0.
 :::
 
-This method can be used to register a [React component](https://react.dev/learn/your-first-component) to a certain extension point to contribute a new ui experience.
+This method registers a [React component](https://react.dev/learn/your-first-component) to a certain extension point to contribute a new UI experience.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addComponent({
@@ -87,7 +94,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 Available in Grafana >=v11.1.0.
 :::
 
-This method can be used to register a link extension to a certain extension point. Link extensions are used to navigate to different parts of the Grafana UI or other plugins, and can include modal elements declared via an onClick.
+This method registers a link extension to a certain extension point. Use link extensions to navigate to different parts of the Grafana UI or other plugins, and to include modal elements declared via an onClick.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addLink({
@@ -166,50 +173,6 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 - [Best practices for exposing components](../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
-### `getPluginExtensions` ⚠️
-
-This function can be used to fetch extensions (both links and components) that are registered to a certain extension point.
-
-:::warning
-**This function is deprecated** and will be removed in Grafana v12.
-Please use either the [`usePluginLinks()`](#usepluginlinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
-:::
-
-```typescript
-import { getPluginExtensions } from '@grafana/runtime';
-
-const { extensions } = getPluginExtensions({
-  extensionPointId: 'grafana/dashboard/panel/menu/v1',
-  limitPerPlugin: 2,
-  context: {
-    panelId: '...',
-  },
-});
-```
-
-#### Parameters
-
-The `getPluginExtensions()` function takes a single `options` object with the following properties:
-
-| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
-| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                                     | false    |
-| **`limitPerPlugin?`**  | - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                              | false    |
-
-#### Return value
-
-The hook returns the following object:
-
-```typescript
-const {
-  // An empty array if no plugins have registered extensions for this extension point yet
-  extensions: PluginExtension[];
-} = getPluginExtensions(options);
-```
-
-For more information, see [`PluginExtension`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L40).
-
 ## Hooks
 
 ### `usePluginComponent`
@@ -218,7 +181,7 @@ For more information, see [`PluginExtension`](https://github.com/grafana/grafana
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook can be used to **fetch a single react component** that was exposed by a plugin with a unique ID. Plugins can expose components using the [`AppPlugin.exposeComponent()`](#exposecomponent) method.
+This react hook **fetches a single react component** that's been exposed by a plugin with a unique ID. Plugins can expose components using the [`AppPlugin.exposeComponent()`](#exposecomponent) method.
 
 ```typescript
 import { usePluginComponent } from '@grafana/runtime';
@@ -255,7 +218,7 @@ const {
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook can be used to fetch _components_ that are registered to a certain extension point. Component extensions can be used to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addcomponent) method.
+This react hook **fetches components** that are registered to a certain extension point. Use component extensions to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addcomponent) method.
 
 ```typescript
 import { usePluginComponents } from '@grafana/runtime';
@@ -277,7 +240,7 @@ The `.usePluginComponents()` method takes a single `options` object with the fol
 
 #### Return value
 
-The hook returns the following object (for more info check [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35):
+The hook returns the following object: 
 
 ```typescript
 const {
@@ -289,6 +252,8 @@ const {
   isLoading: boolean;
 } = usePluginComponents(options);
 ```
+
+For more information refer to [`PluginExtensionComponent`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L35).
 
 #### Examples
 
@@ -305,7 +270,7 @@ const {
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook can be used to fetch links that are registered to a certain extension point. Plugins can register links using the [`AppPlugin.addLink()`](#addlink) method.
+This react hook **fetches links** that are registered to a certain extension point. Plugins can register links using the [`AppPlugin.addLink()`](#addlink) method.
 
 ```typescript
 import { usePluginLinks } from '@grafana/runtime';
@@ -331,7 +296,7 @@ The `.usePluginLinks()` method takes a single `options` object with the followin
 
 #### Return value
 
-The hook returns the following object (for more info check [`PluginExtensionLink`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L27)):
+The hook returns the following object:
 
 ```typescript
 const {
@@ -344,6 +309,8 @@ const {
 } = usePluginLinks(options);
 ```
 
+For more information refer to [`PluginExtensionLink`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L27).
+
 #### Examples
 
 - [Pass data to the links](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
@@ -354,14 +321,63 @@ const {
 
 - [Best practices for rendering links added by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
 
-### `usePluginExtensions` ⚠️
-
-This react hook can be used to fetch extensions (both links and components) that are registered to a certain extension point.
+## Deprecated elements
 
 :::warning
-**This hook is deprecated** and will be removed in Grafana v12.
-Please use either the [`usePluginLinks()`](#usepluginlinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
+These elements are deprecated and have been removed starting in Grafana v12.
 :::
+
+### `getPluginExtensions` 
+
+:::warning
+This function has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](#usepluginlinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
+:::
+
+This function fetches extensions (both links and components) that are registered to a certain extension point.
+
+```typescript
+import { getPluginExtensions } from '@grafana/runtime';
+
+const { extensions } = getPluginExtensions({
+  extensionPointId: 'grafana/dashboard/panel/menu/v1',
+  limitPerPlugin: 2,
+  context: {
+    panelId: '...',
+  },
+});
+```
+
+#### Parameters
+
+The `getPluginExtensions()` function takes a single `options` object with the following properties:
+
+| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
+| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                                     | false    |
+| **`limitPerPlugin?`**  | - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                              | false    |
+
+#### Return value
+
+The hook returns the following object:
+
+```typescript
+const {
+  // An empty array if no plugins have registered extensions for this extension point yet
+  extensions: PluginExtension[];
+} = getPluginExtensions(options);
+```
+
+For more information, see [`PluginExtension`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L40).
+
+
+### `usePluginExtensions` 
+
+:::warning
+This hook has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](#usepluginlinks) or [`usePluginComponents()`](#useplugincomponents) hooks instead.
+:::
+
+This react hook fetches extensions (both links and components) that are registered to a certain extension point.
 
 ```typescript
 import { usePluginExtensions } from '@grafana/runtime';
