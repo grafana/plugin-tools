@@ -1,7 +1,7 @@
 ---
 id: api
 title: Use the API
-description: How to use the grafana/plugin-e2e API
+description: How to use the grafana/plugin-e2e API.
 keywords:
   - grafana
   - plugins

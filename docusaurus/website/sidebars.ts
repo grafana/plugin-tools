@@ -169,7 +169,6 @@ const sidebars: SidebarsConfig = {
         id: 'e2e-test-a-plugin/e2e-test-a-plugin',
       },
       items: [
-        'e2e-test-a-plugin/introduction',
         'e2e-test-a-plugin/get-started',
         'e2e-test-a-plugin/api',
         'e2e-test-a-plugin/selecting-elements',

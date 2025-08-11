@@ -1,7 +1,7 @@
 ---
 id: test-a-panel-plugin
 title: Test a panel plugin
-description: How to test a panel plugin with @grafana/plugin-e2e
+description: How to test a panel plugin with @grafana/plugin-e2e.
 keywords:
   - grafana
   - plugins
