@@ -164,8 +164,11 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'E2E test a plugin',
       description: 'Test a Grafana plugin using the @grafana/plugin-e2e tool.',
+      link: {
+        type: 'doc',
+        id: 'e2e-test-a-plugin/e2e-test-a-plugin',
+      },
       items: [
-        'e2e-test-a-plugin/introduction',
         'e2e-test-a-plugin/get-started',
         'e2e-test-a-plugin/api',
         'e2e-test-a-plugin/selecting-elements',
