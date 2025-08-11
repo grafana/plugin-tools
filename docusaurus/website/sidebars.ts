@@ -212,6 +212,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Publish a plugin',
+      link: {
+        type: 'doc',
+        id: 'publish-a-plugin/publish-a-plugin',
+      },
       items: [
         'publish-a-plugin/publishing-best-practices',
         'publish-a-plugin/build-automation',
