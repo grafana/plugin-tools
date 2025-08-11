@@ -93,7 +93,7 @@ Example:
 
 `dependencies.grafanaDependency`
 
-Ensure your plugin specifies the minimum Grafana version it is compatible with. This guarantees that users running different versions of Grafana know whether your plugin will work for them. Be sure to [run end-to-end tests](../e2e-test-a-plugin/introduction.md) to confirm compatibility with releases you support.
+Ensure your plugin specifies the minimum Grafana version it is compatible with. This guarantees that users running different versions of Grafana know whether your plugin will work for them. Be sure to [run end-to-end tests](../e2e-test-a-plugin/index.md) to confirm compatibility with releases you support.
 
 ## Creating a comprehensive README
 
@@ -169,7 +169,7 @@ End-to-end (E2E) testing ensures that your Grafana plugin works correctly across
 - **Test compatibility across versions:** Ensure your plugin works seamlessly with various versions of Grafana by setting up E2E tests targeting multiple releases.
 - **Automate testing:** Integrate E2E testing into your continuous integration (CI) pipeline to catch issues early and frequently, reducing potential problems during review.
 
-For a comprehensive guide on setting up E2E tests, refer to our [E2E test a plugin](../e2e-test-a-plugin/introduction.md) documentation.
+For a comprehensive guide on setting up E2E tests, refer to our [E2E test a plugin](../e2e-test-a-plugin/index.md) documentation.
 
 ## Validate your plugin
 
