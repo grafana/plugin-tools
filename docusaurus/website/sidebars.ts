@@ -214,7 +214,7 @@ const sidebars: SidebarsConfig = {
       label: 'Publish a plugin',
       link: {
         type: 'doc',
-        id: 'publish-a-plugin/publish-a-plugin',
+        id: 'publish-a-plugin/publish-plugin-intro',
       },
       items: [
         'publish-a-plugin/publishing-best-practices',
