@@ -1,7 +1,7 @@
 ---
-id: migration-guides
-title: Grafana plugin migration guides
-description: How to upgrade or migrate a Grafana plugin.
+id: e2e-test-a-plugin
+title: End-to-end tests for plugins
+description: How to perform end-to-end tests for Grafana plugins.
 keywords:
   - grafana
   - plugins
