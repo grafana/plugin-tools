@@ -69,7 +69,7 @@ Use the `expose*` APIs when you want to make components or functions available f
 For example:
 
 - When sharing reusable components or functions, use `expose*` when you have a UI component or utility function that should be available for other plugins to use.
-- When consuming an exposed component or function, use `expose*` when you want to import and use a component or function from another plugin.
+- When consuming an exposed component or function, use `getExposed*` when you want to import and use a component or function from another plugin.
 
 ### Examples
 
