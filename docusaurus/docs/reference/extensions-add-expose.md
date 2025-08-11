@@ -31,7 +31,7 @@ Use the `add*` APIs when you want to enable multiple plugins to extend or contri
 
 For example:
 
-- When creating an extension point, use `add*` when you want to allow other plugins to hook into your UI by adding links, components, or other elements.
+- Use `add*` when you want to create an extension point and allow other plugins to hook into your UI by adding links, components, or other elements.
 - When contributing to an existing extension point, use `add*` when you want your plugin to add UI elements to an existing extension point in Grafana Core or another plugin.
 
 ### Examples
