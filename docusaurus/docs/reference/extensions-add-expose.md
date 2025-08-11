@@ -21,7 +21,7 @@ Follow these guidelines to create flexible and maintainable UI extensions in Gra
 | Scenario      | Use add* APIs          | Use expose* APIs |
 | -------------- | ------------------ | -------- |
 | Allow multiple plugins to contribute UI elements | ✅ |  ❌  |
-| Add to an existing extension point | ✅ |  ❌  |
+| Add elements to an existing extension point | ✅ |  ❌  |
 | Share a reusable component/function | ❌ |  ✅ |
 | Consume a component/function from another plugin | ❌ |  ✅ |
 
