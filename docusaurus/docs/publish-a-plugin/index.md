@@ -1,5 +1,5 @@
 ---
-id: publish-a-plugin
+id: publish-plugin-intro
 title: Publish your plugins 
 description: Learn how to publish your Grafana plugins.
 keywords:
