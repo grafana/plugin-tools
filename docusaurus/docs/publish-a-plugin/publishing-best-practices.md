@@ -116,7 +116,7 @@ A well-maintained changelog is essential for plugin transparency and helps users
 
 :::info
 
-Use Grafana's automated changelog generation feature to simplify the process of maintaining your changelog. Learn how in the [Automatically Generate Changelogs](../publish-a-plugin/build-automation.md#automatically-generate-changelogs) guide.
+Use Grafana's automated changelog generation feature to simplify the process of maintaining your changelog. Learn how in the [Automatically Generate Changelogs](../publish-a-plugin/build-automation.md#generate-changelogs-automatically) guide.
 
 :::
 
