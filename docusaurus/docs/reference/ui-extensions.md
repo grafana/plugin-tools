@@ -43,8 +43,6 @@ The following Extension Points are available:
 
 ## Methods
 
-Methods allow you to register or expose components or links to extension points.
-
 :::info
 To learn when to add and when to expose an element (component or link) to an extension point see [Understand when to add or expose elements in Extensions](/developers/plugin-tools/reference/extensions-add-expose).
 :::
@@ -179,8 +177,6 @@ The method returns the `AppPlugin` instance to allow for chaining.
 - [Best practices for exposing components](../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
 ## Hooks
-
-Hooks fetch components or links that have been previously linked or exposed in extension points.
 
 ### `usePluginComponent`
 

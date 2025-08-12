@@ -14,17 +14,6 @@ sidebar_position: 10
 
 Read on to understand when to use `add*` vs `expose*` APIs when developing Extensions in Grafana. This document explains their purpose and provides guidelines on when to use each approach.
 
-## When to use which API?
-
-Follow these guidelines to create flexible and maintainable UI extensions in Grafana that work seamlessly across plugins.
-
-| Scenario      | Use add* APIs          | Use expose* APIs |
-| -------------- | ------------------ | -------- |
-| Allow external plugins to inject UI elements | ✅ |  ❌  |
-| Add elements to an existing extension point | ✅ |  ❌  |
-| Share a reusable component/function | ❌ |  ✅ |
-| Consume a component/function from another plugin | ❌ |  ✅ |
-
 ## Using `add*` APIs
 
 Use the `add*` APIs when you want to enable multiple plugins to extend or contribute to a specific UI area. This allows for dynamic extensibility without direct dependencies between plugins. 
