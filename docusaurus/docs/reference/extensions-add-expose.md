@@ -14,7 +14,7 @@ sidebar_position: 10
 
 Read on to understand when to use `add*` vs `expose*` APIs when developing Extensions in Grafana. This document explains their purpose and provides guidelines on when to use each approach.
 
-## Overview: When to use which API?
+## When to use which API?
 
 Follow these guidelines to create flexible and maintainable UI extensions in Grafana that work seamlessly across plugins.
 
