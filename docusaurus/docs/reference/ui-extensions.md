@@ -1,7 +1,7 @@
 ---
 id: ui-extensions
 title: UI extensions API guide
-description: Reference guide for UI extensions - available extension points, exposing and fetching content APIs.
+description: Reference guide for UI extensions - available extension points, content APIs.
 keywords:
   - grafana
   - plugins
