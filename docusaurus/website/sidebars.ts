@@ -291,7 +291,7 @@ const sidebars: SidebarsConfig = {
       label: 'Reference guides',
       link: {
         type: 'doc',
-        id: 'reference/reference',
+        id: 'reference/plugin-reference',
       },
       items: [
         'reference/plugin-json', 
