@@ -288,8 +288,16 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Reference',
-      items: ['reference/plugin-json', 'reference/cli-commands', 'reference/ui-extensions'],
+      label: 'Reference guides',
+      link: {
+        type: 'doc',
+        id: 'reference/plugin-reference',
+      },
+      items: [
+        'reference/plugin-json', 
+        'reference/cli-commands', 
+        'reference/ui-extensions',
+      ],
     },
     {
       type: 'doc',
