@@ -14,9 +14,9 @@ keywords:
 
 # Publish or update a plugin
 
-You've just built your plugin; now you want to share it with the world. Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugins) makes it easily discoverable by millions of Grafana users.
+You've just built your plugin and now you want to share it with the world! 
 
-In this guide you learn how to manage the lifecycle of a plugin in the catalog, from publishing and updating to potentially deprecating.
+Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugins) makes it easily discoverable by millions of Grafana users. Read on to learn how to manage the lifecycle of a plugin in the catalog, from publishing and updating to potentially deprecating.
 
 ## Before you begin
 
