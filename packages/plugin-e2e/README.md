@@ -4,7 +4,7 @@ end-to-end test Grafana plugins with ease.
 
 **Links**
 
-- [`@grafana/plugin-e2e` docs](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/index.md)
+- [`@grafana/plugin-e2e` docs](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin)
 
 ## Overview
 
