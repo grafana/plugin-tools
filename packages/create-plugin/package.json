@@ -48,7 +48,7 @@
     "@types/which": "^3.0.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "tmp": "^0.2.3"
+    "tmp": "^0.2.4"
   },
   "overrides": {
     "@types/marked-terminal": {
