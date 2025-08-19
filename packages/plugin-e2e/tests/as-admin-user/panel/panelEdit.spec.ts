@@ -1,6 +1,5 @@
-import { Locator } from '@playwright/test';
-import { test, expect, PanelEditPage, E2ESelectorGroups } from '../../../src';
-import { gte, lte } from 'semver';
+import { test, expect } from '../../../src';
+import { lt, lte } from 'semver';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -106,7 +105,7 @@ test('enter value in number input', async ({ gotoPanelEditPage }) => {
   await expect(lineWith).toHaveValue('10');
 });
 
-test('select color in color picker', async ({ gotoPanelEditPage, grafanaVersion, page, selectors }) => {
+test('select color in color picker', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '3' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
   const backgroundColor = clockOptions.getColorPicker('Background color');
@@ -140,18 +139,20 @@ test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVe
   await expect(timeZonePicker).toHaveSelected('Europe/Stockholm');
 });
 
-test('collapse expanded options group', async ({ gotoPanelEditPage }) => {
+test('collapse expanded options group', async ({ gotoPanelEditPage, grafanaVersion }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
-  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+  const datalinksLabel = lt(grafanaVersion, '11.6.0') ? 'Data links' : 'Data links and actions';
+  const dataLinksOptions = panelEdit.getCustomOptions(datalinksLabel);
 
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
   await dataLinksOptions.collapse();
   expect(await dataLinksOptions.isExpanded()).toBeFalsy();
 });
 
-test('expand collapsed options group', async ({ gotoPanelEditPage }) => {
+test('expand collapsed options group', async ({ gotoPanelEditPage, grafanaVersion }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
-  const dataLinksOptions = panelEdit.getCustomOptions('Data links');
+  const datalinksLabel = lt(grafanaVersion, '11.6.0') ? 'Data links' : 'Data links and actions';
+  const dataLinksOptions = panelEdit.getCustomOptions(datalinksLabel);
 
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
   await dataLinksOptions.collapse();

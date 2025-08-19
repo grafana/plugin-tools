@@ -8,27 +8,36 @@ on:
       - main
 
 permissions:
-  contents: write
-  id-token: write
-  pull-requests: write
+  contents: read
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests
+    permissions:
+      contents: read
+      id-token: write
     env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v4
+          persist-credentials: false
+
+      - uses: nrwl/nx-set-shas@826660b82addbef3abff5fa871492ebad618c9e1 # v4.3.3
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -44,25 +53,125 @@ jobs:
         run: npm exec nx affected -- --target test --run
       - name: Build all packages
         run: npm run build
+      - name: Lint built packages
+        run: npm exec nx affected -- --target lint:package --parallel
       - name: Pack packages for testing
         run: |
           mkdir ./packed-artifacts
-          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --pack-destination="./packed-artifacts"
+          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: packed-artifacts
           path: ./packed-artifacts
           retention-days: 1
 
+  test-node-versions:
+    runs-on: ubuntu-x64
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    name: Test node versions
+    permissions:
+      contents: read
+      id-token: write
+    needs: [test]
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 20
+          - 22
+          - 24
+    env:
+      WORKING_DIR: 'myorg-nobackend-panel'
+    steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
+          export_env: false
+
+      - name: Setup .npmrc file for NPM registry
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download packed artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: packed-artifacts
+          path: ./packed-artifacts
+
+      - name: Install npm packages globally
+        run: for file in *.tgz; do npm install -g "$file"; done
+        working-directory: ./packed-artifacts
+
+      - name: Generate plugin
+        run: npx create-plugin --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+
+      - name: Install generated plugin dependencies
+        run: npm install --no-audit
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Lint plugin frontend
+        run: npm run lint
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Typecheck plugin frontend
+        run: npm run typecheck
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Build plugin frontend
+        run: npm run build
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Test plugin frontend
+        run: npm run test:ci
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Install playwright dependencies
+        run: npm exec playwright install --with-deps chromium
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Start grafana server for e2e tests (10.4.0)
+        run: |
+          ANONYMOUS_AUTH_ENABLED=false docker compose build --no-cache
+          docker compose up -d
+        env:
+          GRAFANA_VERSION: '10.4.0'
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Wait for grafana server (10.4.0)
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run e2e tests (10.4.0)
+        id: run-e2e-tests-min-version
+        run: npm run e2e
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Stop grafana docker (10.4.0)
+        run: docker compose down
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
+        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ./${{ env.WORKING_DIR }}
+
   generate-plugins:
     name: Test plugin scaffolding
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     permissions:
       id-token: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -86,14 +195,29 @@ jobs:
             cmdArgs: --plugin-name='no-backend-scenes' --org-name='myorg' --plugin-type='scenesapp' --no-backend
             hasBackend: false
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
+          export_env: false
+
+      - name: Get secrets for DockerHub login
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+
       - name: Setup .npmrc file for NPM registry
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -107,6 +231,12 @@ jobs:
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
+        working-directory: ./${{ matrix.workingDir }}
+
+      - name: Install plugin-e2e
+        run: |
+          PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE}
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Lint plugin frontend
@@ -125,15 +255,15 @@ jobs:
         run: npm run test:ci
         working-directory: ./${{ matrix.workingDir }}
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
         with:
-          go-version: '~1.22'
+          go-version: '~1.24.0'
           check-latest: true
           cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
         if: ${{ matrix.hasBackend == true }}
 
       - name: Build plugin backend
-        uses: magefile/mage-action@v3
+        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
         with:
           version: latest
           args: -v build:linux
@@ -141,18 +271,11 @@ jobs:
         if: ${{ matrix.hasBackend == true }}
 
       - name: Install playwright dependencies
-        run: npm exec playwright install chromium
+        run: npm exec playwright install --with-deps chromium
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@main
-        with:
-          common_secrets: |
-            DOCKERHUB_USERNAME=dockerhub:username
-            DOCKERHUB_PASSWORD=dockerhub:password
-
       - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
@@ -162,7 +285,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@main
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -177,7 +300,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -195,18 +318,20 @@ jobs:
           range=$(jq -r .dependencies.grafanaDependency < ${{ matrix.workingDir }}/src/plugin.json)
           # Use node-semver to get the min version of the range
           min_version=$(node -e "console.log(require('semver').minVersion('${range}')?.toString())")
-          echo "::set-output name=MIN_VERSION::$min_version"
           export MIN_VERSION=$min_version
+          echo "MIN_VERSION=${MIN_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Start grafana server for e2e tests (${{ steps.min-version.outputs.MIN_VERSION }})
         run: |
-          docker compose pull 
-          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=${{ steps.min-version.outputs.MIN_VERSION }} docker compose build --no-cache
+          docker compose pull
+          ANONYMOUS_AUTH_ENABLED=false docker compose build --no-cache
           docker compose up -d
+        env:
+          GRAFANA_VERSION: ${{ steps.min-version.outputs.MIN_VERSION }}
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@main
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -220,7 +345,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -245,14 +370,7 @@ jobs:
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
-        working-directory: ./${{ matrix.workingDir }}
-
-      - name: '@grafana/sign-plugin - use GRAFANA_API_KEY to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' }}
-        env:
-          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
@@ -273,50 +391,70 @@ jobs:
   publish-report:
     if: ${{ always() && !cancelled() }}
     needs: [generate-plugins]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@main
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          retention-days: 7
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     needs: [test, generate-plugins]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && github.actor != 'dependabot[bot]'"
     name: Release packages
     env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     permissions:
       contents: read
       id-token: write
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
-        with:
-          app_id: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_ID }}
-          private_key: ${{ secrets.PLUGINS_PLATFORM_BOT_APP_PEM }}
-
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@main
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
+            GITHUB_APP_ID=plugins-platform-bot-app:app_id
+            GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
             SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
+            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+            NPM_TOKEN=npm_token:npm_token
+          export_env: false
 
-      - uses: actions/checkout@v4
+        # As recommended on NX docs the NX Cloud token should be set as an environment variable:
+        # https://nx.dev/ci/recipes/security/access-tokens#setting-ci-access-tokens
+      - id: add-nx-cloud-access-token-to-env
+        run: |
+          echo "NX_CLOUD_ACCESS_TOKEN=${{ fromJSON(steps.get-secrets.outputs.secrets).NX_CLOUD_ACCESS_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
+          private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          persist-credentials: false
 
       - name: Prepare repository
         run: git fetch --unshallow --tags
 
       - name: Setup environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -330,8 +468,7 @@ jobs:
 
       - name: Create Release
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # comes from the get-secrets step (shared get-vault-secrets workflow)
-          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NPM_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.get-secrets.outputs.secrets).SLACK_WEBHOOK_URL }}
         run: npm run release

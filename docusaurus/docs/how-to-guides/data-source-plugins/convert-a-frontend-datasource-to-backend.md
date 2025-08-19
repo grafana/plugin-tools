@@ -17,7 +17,7 @@ To convert the frontend data source, we recommend scaffolding a new backend data
 
 ## Why
 
-There are multiple features available only in backend plugins, such as Grafana Alerting or Recorded queries. See the use cases for implementing a backend plugin in the [backend plugins introduction](../../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
+There are multiple features available only in backend plugins, such as Grafana Alerting, Recorded queries, or externally shared dashboards (previously called Public dashboards). Refer to the use cases for implementing a backend plugin in the [backend plugins introduction](../../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin).
 
 ## Before you begin
 
@@ -32,11 +32,6 @@ Before going into specific conversion advice, it's important to understand the m
 Data source plugins implement a new `DataSourcePlugin`. This class takes as a parameter a `DataSource` class, which for frontend data sources extends `DataSourceApi`, and for backend data sources extends `DataSourceWithBackend`. Because the `DatasourceWithBackend` class already implements most of the required methods, you can migrate to it to significantly simplify your code.
 
 Data source plugins require two components: a query editor and a config editor.
-
-**Examples:**
-
-- [Frontend data source](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http/src/DataSource.ts#L14).
-- [Backend data source](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/src/datasource.ts#L6).
 
 ### Query and config editor
 
@@ -161,7 +156,7 @@ res, err := d.httpClient.Get("https://api.example.com/v1/users")
 
 The same principle applies to any other authentication mechanism. For example, SQL-based data sources should use the `Datasource` constructor to create a connection to the database and store it in the `Datasource` instance.
 
-You can refer to [this example](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/datasource-http-backend/pkg/plugin/datasource.go) and get more information about [plugin authentication](./add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
+You can refer to [our documentation](/how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins) to get more information about plugin authentication.
 
 ### Health check
 

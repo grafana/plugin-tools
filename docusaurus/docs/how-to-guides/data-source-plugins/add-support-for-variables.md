@@ -203,7 +203,7 @@ That's it! You can now try out the plugin by adding a [query variable](https://g
 
 To interpolate template variables, you need to import the `getTemplateSrv()` function from the `@grafana/runtime` package:
 
-```
+```ts
 import { getTemplateSrv } from '@grafana/runtime';
 ```
 
@@ -211,7 +211,7 @@ The `getTemplateSrv()` function returns an instance of `TemplateSrv` which provi
 
 For example, if you have a variable called `instance`, the following code replaces the variable with its corresponding value:
 
-```
+```ts
 getTemplateSrv().replace("I'd like $instance, please!");
 
 // I'd like server-1, please!
@@ -234,7 +234,7 @@ In the previous example, the variables only had one value, `server-1`. However, 
 
 For example, which of these different formats would suit your use case?
 
-```
+```ts
 {server-1, server-2, server-3} (Graphite)
 ["server-1", "server-2", "server-3"] (JSON)
 ("server-1" OR "server-2" OR "server-3") (Lucene)
@@ -242,8 +242,8 @@ For example, which of these different formats would suit your use case?
 
 Fortunately, the `replace()` method lets you pass a third argument to allow you to choose from a set of predefined formats, such as the CSV format:
 
-```
-getTemplateSrv().replace("I'd like $instance, please!", {}, "csv");
+```ts
+getTemplateSrv().replace("I'd like $instance, please!", {}, 'csv');
 
 // I'd like server-1, server-2, server-3, please!
 ```
@@ -262,7 +262,7 @@ After reviewing the advanced variable format options, you may find that you want
 
 You can pass an interpolation function to `replace()` instead of a string as the third argument. The following example uses a custom formatter function to add an `and` before the last element:
 
-```
+```ts
 const formatter = (value: string | string[]): string => {
   if (typeof value == 'string') {
     return value;
@@ -289,7 +289,7 @@ There may be a case where you want to use a variable outside of a template. For 
 
 This helper function uses the `replace()` method to return the values as an array:
 
-```
+```ts
 function getValuesForVariable(name: string): string[] {
   const values: string[] = [];
 
@@ -307,7 +307,7 @@ function getValuesForVariable(name: string): string[] {
 
   return values;
 }
-const instances = getValuesForVariable("instance");
+const instances = getValuesForVariable('instance');
 
 for (var instance of instances) {
   console.log(instance);
@@ -320,7 +320,7 @@ for (var instance of instances) {
 
 You can even go a step further and create an object that neatly contains all variables and their values:
 
-```
+```ts
 function getAllVariables(): Record<string, string[]> {
   const entries = getTemplateSrv()
     .getVariables()

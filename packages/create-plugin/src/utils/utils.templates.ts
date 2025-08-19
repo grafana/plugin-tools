@@ -20,7 +20,7 @@ import {
   getPackageManagerFromUserAgent,
 } from './utils.packageManager.js';
 import { getExportFileName } from '../utils/utils.files.js';
-import { getGrafanaRuntimeVersion, getVersion } from './utils.version.js';
+import { getGrafanaRuntimeVersion, CURRENT_APP_VERSION } from './utils.version.js';
 import { getConfig } from './utils.config.js';
 
 const templatesDebugger = debug.extend('templates');
@@ -94,18 +94,17 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
-  const currentVersion = getVersion();
+  const currentVersion = CURRENT_APP_VERSION;
   const grafanaVersion = getGrafanaRuntimeVersion();
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
   //@grafana/e2e was deprecated in Grafana 11
   const useCypress =
     !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
-  const shouldUseReactRouterV6 = (pluginType: string) =>
-    features.useReactRouterV6 === true && pluginType === PLUGIN_TYPES.app;
-  const getReactRouterVersion = (pluginType: string) => (shouldUseReactRouterV6(pluginType) ? '6.22.0' : '5.2.0');
+  const getReactRouterVersion = () => (features.useReactRouterV6 ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
+  const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
 
   let templateData: TemplateData;
 
@@ -128,10 +127,13 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: shouldUseReactRouterV6(cliArgs.pluginType),
-      reactRouterVersion: getReactRouterVersion(cliArgs.pluginType),
+      useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
+      reactRouterVersion: getReactRouterVersion(),
+      scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
       useCypress,
+      useExperimentalRspack: Boolean(features.useExperimentalRspack),
+      frontendBundler,
     };
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
@@ -153,11 +155,14 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: shouldUseReactRouterV6(pluginJson.type),
-      reactRouterVersion: getReactRouterVersion(pluginJson.type),
+      useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
+      reactRouterVersion: getReactRouterVersion(),
+      scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
       useCypress,
       pluginExecutable: pluginJson.executable,
+      useExperimentalRspack: Boolean(features.useExperimentalRspack),
+      frontendBundler,
     };
   }
 

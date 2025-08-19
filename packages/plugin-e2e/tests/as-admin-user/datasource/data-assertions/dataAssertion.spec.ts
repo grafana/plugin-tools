@@ -2,7 +2,7 @@ import * as semver from 'semver';
 import { test, expect } from '../../../../src';
 
 test.describe('panel edit page', () => {
-  test('table panel data assertions', async ({ gotoPanelEditPage, readProvisionedDashboard }, testInfo) => {
+  test('table panel data assertions', async ({ gotoPanelEditPage, readProvisionedDashboard }) => {
     const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '2' });
     await expect(panelEditPage.panel.locator).toBeVisible();

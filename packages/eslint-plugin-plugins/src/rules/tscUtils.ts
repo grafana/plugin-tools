@@ -96,6 +96,17 @@ export function getRuntimeExports(exports: Exports) {
   return result;
 }
 
+export function getTypeAndInterfacesExports(exports: Exports) {
+  const result = [];
+  for (const [currentExportName, currentExportSymbol] of Object.entries(exports)) {
+    if (currentExportSymbol.flags & ts.SymbolFlags.Interface || currentExportSymbol.flags & ts.SymbolFlags.Type) {
+      result.push(currentExportName);
+    }
+  }
+
+  return result;
+}
+
 export function isSymbolPrivateDeclaration(symbol: ts.Symbol): boolean {
   try {
     if (!symbol.valueDeclaration) {

@@ -16,5 +16,21 @@ export default {
     //   description: 'Update build command to use webpack profile flag.',
     //   migrationScript: './scripts/example-migration.js',
     // },
+    '001-update-grafana-compose-extend': {
+      version: '5.19.2',
+      description: 'Update ./docker-compose.yaml to extend from ./.config/docker-compose-base.yaml.',
+      migrationScript: './scripts/001-update-grafana-compose-extend.js',
+    },
+    '002-update-is-compatible-workflow': {
+      version: '5.24.0',
+      description:
+        'Update ./.github/workflows/is-compatible.yml to use is-compatible github action instead of calling levitate directly',
+      migrationScript: './scripts/002-update-is-compatible-workflow.js',
+    },
+    '003-update-eslint-deprecation-rule': {
+      version: '5.24.1',
+      description: 'Replace deprecated eslint-plugin-deprecation with @typescript-eslint/no-deprecated rule.',
+      migrationScript: './scripts/003-update-eslint-deprecation-rule.js',
+    },
   },
 } as Migrations;

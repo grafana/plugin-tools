@@ -121,7 +121,7 @@ You don't need to register all your pages inside `includes` in your `plugin.json
 
 :::tip
 
-You can limit which users have access to pages in the navigation menu by using the [`role`](/reference/plugin-json#properties-7) property.
+You can limit which users have access to pages in the navigation menu by using the [`role`](/reference/plugin-json#includes) property.
 
 :::
 

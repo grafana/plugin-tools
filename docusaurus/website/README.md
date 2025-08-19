@@ -26,7 +26,7 @@ This command generates static content into the `build` directory and can be serv
 
 ### Search
 
-Search functionality is handled by a "local search" index built using (docusaurus-plugin-lunr)[https://github.com/daldridge/docusaurus-plugin-lunr]. Search is only available in a production build of the website. To view this locally run the following commands:
+Search functionality is handled by a "local search" index built using [docusaurus-plugin-lunr](https://github.com/daldridge/docusaurus-plugin-lunr). Search is only available in a production build of the website. To view this locally run the following commands:
 
 ```
 $ npm run build

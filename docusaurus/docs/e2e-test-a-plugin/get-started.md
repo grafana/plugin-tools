@@ -1,7 +1,7 @@
 ---
 id: get-started
-title: Get started
-description: Get started
+title: Get started 
+description: Get started with plugin end-to-end testing.
 keywords:
   - grafana
   - plugins
@@ -50,7 +50,7 @@ Open a new terminal and run the test script from within your local plugin develo
 
 ### Step 3: Run tests in CI
 
-The [`grafanaDependency`](../reference/metadata.md#properties-1) property in the `plugin.json` file specifies what versions of Grafana the plugin is compatible with. As a best practice, run your Playwright end-to-end tests targeting all the supported versions. The GitHub workflow that can be included when scaffolding plugins with `create-plugin` ensures this is the case.
+The [`grafanaDependency`](../reference/metadata.md#dependencies) property in the `plugin.json` file specifies what versions of Grafana the plugin is compatible with. As a best practice, run your Playwright end-to-end tests targeting all the supported versions. The GitHub workflow that can be included when scaffolding plugins with `create-plugin` ensures this is the case.
 
 If you chose to not add a GitHub workflow when you scaffolded the plugin, as a best practice follow the instructions in the [CI](./ci.md) guide to run Playwright end-to-end tests targeting all versions of Grafana that your plugin supports.
 

@@ -1,5 +1,5 @@
 import { ESLintUtils, AST_NODE_TYPES } from '@typescript-eslint/utils';
-import { getRuntimeExports } from './tscUtils';
+import { getRuntimeExports, getTypeAndInterfacesExports } from './tscUtils';
 import { getMinSupportedGrafanaVersion } from './minGrafanaVersion';
 import { getPackageExports } from './getPackageExports';
 import type { ExportInfo, MessageIds, Options } from './types';
@@ -44,26 +44,35 @@ export const importIsCompatible = createRule<Options, MessageIds>({
 
     return {
       ImportSpecifier: (node) => {
-        if (node?.imported?.type === AST_NODE_TYPES.Identifier) {
-          const identifier = node.parent.source?.value;
-          if (
-            identifier &&
-            identifier in packageExports &&
-            Object.keys(packageExports[identifier].exports).length > 0
-          ) {
-            const exportsExceptTypesAndInterfaces = getRuntimeExports(packageExports[identifier].exports);
-            if (!exportsExceptTypesAndInterfaces.includes(node.imported.name)) {
-              context.report({
-                node,
-                data: {
-                  member: node.imported.name,
-                  package: `${identifier}@${minSupportedVersion}`,
-                },
-                messageId: 'issue:import',
-              });
-            }
-          }
+        if (node?.imported?.type !== AST_NODE_TYPES.Identifier) {
+          return;
         }
+
+        const identifier = node.parent.source?.value;
+        if (!identifier || !(identifier in packageExports) || !Object.keys(packageExports[identifier].exports).length) {
+          return;
+        }
+
+        // If the import is a type or interface, we don't need to check if it's available in the runtime
+        const exportsTypesAndInterfaces = getTypeAndInterfacesExports(packageExports[identifier].exports);
+        if (exportsTypesAndInterfaces.includes(node.imported.name)) {
+          return;
+        }
+
+        // If the import is not a type or interface, we need to check if it's available in the runtime
+        const exportsExceptTypesAndInterfaces = getRuntimeExports(packageExports[identifier].exports);
+        if (exportsExceptTypesAndInterfaces.includes(node.imported.name)) {
+          return;
+        }
+
+        context.report({
+          node,
+          data: {
+            member: node.imported.name,
+            package: `${identifier}@${minSupportedVersion}`,
+          },
+          messageId: 'issue:import',
+        });
       },
     };
   },

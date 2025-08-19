@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "5.18.0",
+  "version": "5.25.8",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -9,12 +9,6 @@
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
   "type": "module",
-  "exports": {
-    "node": {
-      "import": "./index.js"
-    },
-    "default": "./index.js"
-  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public",
@@ -22,26 +16,15 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist ./generated",
-    "clean-generated": "find ./generated -not -path \"./generated/node_modules*\" -not -path \"./generated\" -not -path \"./generated/package-lock.json\" -maxdepth 1 -print0 | xargs -0  -I {} rm -rf {}",
-    "build": "npm run clean && tsc && chmod +x ./dist/bin/run.js",
-    "dev": "nodemon --exec 'tsc'",
-    "dev-app": "nodemon --exec 'npm run generate-app'",
-    "dev-scenes-app": "nodemon --exec 'npm run generate-scenes-app'",
-    "dev-panel": "nodemon --exec 'npm run generate-panel'",
-    "dev-datasource": "nodemon --exec 'npm run generate-datasource'",
-    "generate-app": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample app' --orgName='sample-org' --pluginType='app' --no-hasBackend",
-    "generate-scenes-app": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample scenesapp' --orgName='sample-org' --pluginType='scenesapp' --no-hasBackend",
-    "generate-app-backend": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample app' --orgName='sample-org' --pluginType='app' --hasBackend",
-    "generate-panel": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample panel' --orgName='sample-org' --pluginType='panel'",
-    "generate-datasource": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample datasource' --orgName='sample-org' --pluginType='datasource' --no-hasBackend",
-    "generate-datasource-backend": "tsc && npm run clean-generated && CREATE_PLUGIN_DEV=true node ./dist/bin/run.js --pluginName='Sample datasource' --orgName='sample-org' --pluginType='datasource' --hasBackend",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "boxen": "^8.0.0",
     "chalk": "^5.3.0",
     "change-case": "^5.4.0",
     "debug": "^4.3.4",
@@ -49,40 +32,27 @@
     "find-up": "^7.0.0",
     "glob": "^11.0.0",
     "handlebars": "^4.7.8",
-    "marked": "^15.0.0",
-    "marked-terminal": "^7.2.0",
     "minimist": "^1.2.8",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
-    "which": "^5.0.0"
+    "which": "^5.0.0",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/marked-terminal": "^6.1.1",
+    "@libs/output": "^1.0.2",
+    "@libs/version": "^1.0.2",
+    "@types/glob": "^9.0.0",
     "@types/minimist": "^1.2.5",
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
     "@types/which": "^3.0.4",
-    "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "tmp": "^0.2.3"
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "tmp": "^0.2.4"
   },
   "overrides": {
     "@types/marked-terminal": {
-      "marked": "^15.0.0"
-    }
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src/**/*",
-      "templates/**/*"
-    ],
-    "ext": "*",
-    "events": {
-      "start": "cls || clear"
-    },
-    "env": {
-      "CREATE_PLUGIN_DEV": true
+      "marked": "^16.0.0"
     }
   },
   "engines": {

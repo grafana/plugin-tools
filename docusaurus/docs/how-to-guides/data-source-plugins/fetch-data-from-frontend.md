@@ -196,7 +196,39 @@ export function ConfigEditor(props: Props) {
 
 In your data source plugin, you can now fetch data by using the proxy URL.
 
-Refer to the [previous example](#step-2-create-your-configuration-page), as the code is the same.
+Refer to the [previous example](#step-2-create-your-configuration-page), but change the `url` in the `query` function so that [previously declared](#step-1-declare-your-route-in-your-plugin-metadata) `path` is included in the `url`:
+
+```typescript title="src/dataSource.ts"
+async query(options: DataQueryRequest): Promise<DataQueryResponse> {
+  const response = getBackendSrv().fetch<TODO[]>({
+      // You can see above that `this.baseUrl` is set in the constructor
+      // in this example we assume the configured url is
+      // https://jsonplaceholder.typicode.com
+      // if you inspect `this.baseUrl` you'll see the Grafana data proxy url
+      // and you need to add the myRoutePath path (previously configured in plugin.json) to the url
+      url: `${this.baseUrl}/myRoutePath/todos`,
+  });
+  // backendSrv fetch returns an observable object
+  // we should unwrap with rxjs
+  const responseData = await lastValueFrom(response);
+  const todos = responseData.data;
+
+  // we'll return the same todos for all queries in this example
+  // in a real data source each target should fetch the data
+  // as necessary.
+  const data: PartialDataFrame[] = options.targets.map((target) => {
+    return {
+      refId: target.refId,
+      fields: [
+        { name: 'Id', type: FieldType.number, values: todos.map((todo) => todo.id) },
+        { name: 'Title', type: FieldType.string, values: todos.map((todo) => todo.title) },
+      ],
+    };
+  });
+
+  return { data };
+}
+```
 
 ## Use the data proxy within an app plugin
 

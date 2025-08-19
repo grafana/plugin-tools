@@ -6,7 +6,7 @@ test.use({ featureToggles: { alertingQueryAndExpressionsStepMode: false, alertin
 test.describe('Test alert rule APIs', () => {
   test('advanced mode should be disabled', async ({ grafanaVersion, alertRuleEditPage }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
-    expect(await alertRuleEditPage.isAdvancedModeSupported()).toBe(false);
+    await expect(alertRuleEditPage.advancedModeSwitch).toHaveCount(0);
   });
 });
 
@@ -44,7 +44,6 @@ test.describe('Test new alert rules', () => {
     alertRuleEditPage,
     selectors,
     readProvisionedDataSource,
-    page,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const { rows } = selectors.components.QueryEditorRows;

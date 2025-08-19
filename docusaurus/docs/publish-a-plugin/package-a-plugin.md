@@ -13,17 +13,18 @@ keywords:
   - packages
 ---
 
-import BuildNPM from '@shared/createplugin-build-ci.md';
-
 # Package a plugin
 
 Package a plugin to organize the plugin code and make it ready for use in your organization. Follow these steps to package the plugin in a ZIP file.
 
 1. Build the plugin
 
-   <BuildNPM />
+   ```shell npm2yarn
+    npm install
+    npm run build
+   ```
 
-1. Optional: If your data source plugin has a backend plugin, build it as well.
+2. Optional: If your plugin has a backend, build it as well.
 
    ```
    mage
@@ -31,16 +32,16 @@ Package a plugin to organize the plugin code and make it ready for use in your o
 
    Make sure that all the binaries are executable and have a `0755` (`-rwxr-xr-x`) permission.
 
-1. Sign the plugin. To learn more, refer to [Sign a plugin](./sign-a-plugin.md).
+3. Sign the plugin. To learn more, refer to [Sign a plugin](./sign-a-plugin.md).
 
-1. Rename the `dist` directory to match your plugin ID, and then create a ZIP archive.
+4. Rename the `dist` directory to match your plugin ID, and then create a ZIP archive.
 
    ```
    mv dist/ myorg-simple-panel
    zip myorg-simple-panel-1.0.0.zip myorg-simple-panel -r
    ```
 
-1. Optional: verify that your plugin is packaged correctly using [zipinfo](https://linux.die.net/man/1/zipinfo).
+5. Optional: verify that your plugin is packaged correctly using [zipinfo](https://linux.die.net/man/1/zipinfo).
    It should look like this:
 
    ```shell
