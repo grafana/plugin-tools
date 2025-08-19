@@ -73,6 +73,6 @@ export GRAFANA_VERSION=11.5.0-82747
 
 Once your docker environment has started up, navigate to the instance and select
 
-`View->Developer->Developer Tools`
+**View** > **Developer** > **Developer Tools**.
 
 You can now use the **Profiler** tab in the debugging tools, which provides Flamegraph, Ranked, and Timeline options.
