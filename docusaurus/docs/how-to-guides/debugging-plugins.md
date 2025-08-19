@@ -11,7 +11,7 @@ keywords:
 
 # How to set up Grafana for React Tools profiling and debugging
 
-Using the React Tools debugger in the browser is very useful when either creating a new plugin or troubleshooting an issue with an existing plugin.
+The React Tools debugger in the browser is invaluable for developing new Grafana plugins and troubleshooting existing ones.
 
 ## Setup for debugging
 
