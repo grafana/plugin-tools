@@ -15,7 +15,7 @@ The React Tools debugger in the browser is invaluable for developing new Grafana
 
 ## Setup for debugging
 
-By default Grafana docker images do not include a debug build for React.
+By default, Grafana Docker images do not contain a React debug build.
 
 By using a debug build of grafana you are able to easily step through code that has not been "uglified" and also use the "Profiler" in React Dev Tools.
 
