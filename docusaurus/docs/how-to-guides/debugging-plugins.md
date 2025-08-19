@@ -1,6 +1,6 @@
 ---
 id: debugging-plugins
-title: Add anonymous usage reporting
+title: How to set up Grafana for React Tools profiling and debugging
 description: How to add anonymous usage tracking to your Grafana plugin.
 keywords:
   - grafana
@@ -17,7 +17,7 @@ The React Tools debugger in the browser is invaluable for developing new Grafana
 
 By default, Grafana Docker images do not contain a React debug build.
 
-By using a debug build of grafana you are able to easily step through code that has not been "uglified" and also use the "Profiler" in React Dev Tools.
+By using a debug build of grafana you are able to easily step through code that has not been minimized and also use the `Profiler` in React Dev Tools.
 
 To use a debug build, update your `docker-compose.yml` with the corresponding version found on [hub.docker.com](https://hub.docker.com/).
 
@@ -38,7 +38,7 @@ services:
     ...
 ```
 
-Alternatively you can use an environment variable and not modify the existing docker-compose.yml file:
+Alternatively, you can use an environment variable and not modify the existing `docker-compose.yml` file:
 
 ```SHELL
 export GRAFANA_IMAGE=grafana-oss-dev
