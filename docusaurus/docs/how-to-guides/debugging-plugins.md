@@ -71,7 +71,7 @@ export GRAFANA_VERSION=11.5.0-82747
 
 ## Using React Tools
 
-Once your docker environment has started up, navigate to the instance and select
+After your Docker environment starts, go to the instance and select
 
 **View** > **Developer** > **Developer Tools**.
 
