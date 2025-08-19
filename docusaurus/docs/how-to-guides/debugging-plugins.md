@@ -19,7 +19,7 @@ By default Grafana docker images do not include a debug build for React.
 
 By using a debug build of grafana you are able to easily step through code that has not been "uglified" and also use the "Profiler" in React Dev Tools.
 
-To use a debug build, update your `docker-compose.yml` with the corresponding version found on hub.docker.com.
+To use a debug build, update your `docker-compose.yml` with the corresponding version found on [hub.docker.com](https://hub.docker.com/).
 
 If your plugin supports and older (supported) release, locate the tag using search option (this matches v10.2).
 
