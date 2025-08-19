@@ -62,7 +62,7 @@ services:
     ...
 ```
 
-Alternatively you can use an environment variable and not modify the existing docker-compose.yml file:
+Alternatively, you can use an environment variable without modifying the existing `docker-compose.yml` file:
 
 ```SHELL
 export GRAFANA_IMAGE=grafana-enterprise-dev
