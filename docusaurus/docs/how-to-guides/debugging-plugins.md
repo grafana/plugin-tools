@@ -21,7 +21,7 @@ By using a debug build of grafana you are able to easily step through code that 
 
 To use a debug build, update your `docker-compose.yml` with the corresponding version found on [hub.docker.com](https://hub.docker.com/).
 
-If your plugin supports and older (supported) release, locate the tag using search option (this matches v10.2).
+If your plugin supports an older but still supported release, use the search option to locate the corresponding tag (for example, v10.2).
 
 ### Grafana OSS
 
