@@ -15,9 +15,13 @@ keywords:
   - webpack
 ---
 
-The Grafana UI is available in [several languages](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language). By default, plugins are available in English only and are not translated when you change your language settings. 
+By default, plugins are available in English only and are not translated when you change your language settings in the [Grafana UI](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
 
-If you want your plugin to be translatable to other languages you need to perform the changes described in this document. While this example is based on a panel plugin, the process is the same for data source and app plugins. 
+If you want your plugin to be translatable to other languages you need to perform the changes described in this document. You can find the [list of available languages](https://github.com/grafana/grafana/blob/main/packages/grafana-i18n/src/constants.ts) in GitHub.
+
+:::note
+While this example is based on a panel plugin, the process is the same for data source and app plugins. 
+:::
 
 ## Before you begin
 
