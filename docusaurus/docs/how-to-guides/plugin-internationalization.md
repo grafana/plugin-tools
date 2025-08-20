@@ -17,7 +17,7 @@ keywords:
 
 The Grafana UI is available in [several languages](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language). By default, plugins are available in English only and are not translated when you change your language settings. 
 
-Grafana uses the [i18next internationalization framework](https://www.i18next.com/) for translation purposes. If you want your plugin to be translatable to other languages you need to perform the changes described in this document. While this example is based on a panel plugin, the process is the same for data source and app plugins. 
+If you want your plugin to be translatable to other languages you need to perform the changes described in this document. While this example is based on a panel plugin, the process is the same for data source and app plugins. 
 
 ## Before you begin
 
