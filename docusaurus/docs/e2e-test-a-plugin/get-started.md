@@ -1,7 +1,7 @@
 ---
 id: get-started
-title: Get started
-description: Get started
+title: Get started 
+description: Get started with plugin end-to-end testing.
 keywords:
   - grafana
   - plugins

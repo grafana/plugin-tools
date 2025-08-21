@@ -1,7 +1,7 @@
 ---
 id: introduction
 title: How to test an app plugin
-description: How to test an app plugin
+description: How to test an app plugin.
 keywords:
   - grafana
   - plugins

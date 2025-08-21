@@ -20,7 +20,7 @@ to ensure that your plugin will be built and packaged in the correct format.
 
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
 
-If a Grafana Access Policy Token is included in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, which you can use to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token) documentation includes guidance on how to create this token.
+If you include a Grafana Access Policy Token in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), a signed build is automatically created, and you can use it to test the plugin locally before submission. The [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token) documentation includes guidance on how to create this token.
 
 By creating a release tag, the whole process becomes automated, resulting in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins)
 
@@ -93,7 +93,7 @@ After creating the tag, push it to the repository:
 git push origin main --follow-tags
 ```
 
-## Publish your release in Github
+## Publish your release in GitHub
 
 After you [create and push the tag](#how-to-trigger-the-release-workflow), the release workflow will run, generating a release with all the artifacts needed to submit your plugin to the [Grafana plugin catalog](https://grafana.com/plugins).
 
@@ -107,13 +107,13 @@ Once the draft release is published, you can use the release assets to submit yo
 
 Access the release zip file directly from the GitHub repository release path (for example, `https://github.com/org/plugin-id/releases`).
 
-## Signing your plugin automatically
+## Sign your plugin automatically
 
-You can sign your plugin releases using the Github Action. First you will have to [Generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+You can sign your plugin releases using GitHub Action. 
 
-Save your Access Policy Token as `GRAFANA_ACCESS_POLICY_TOKEN`.
+First, [generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) as `GRAFANA_ACCESS_POLICY_TOKEN`.
 
-By default, create-plugin will add the following `release.yml` to your scaffolded plugin with the following contents. If this is missing from your plugin repository, copy the following to add the workflow:
+By default, create-plugin adds the following `release.yml` to your scaffolded plugin with the following contents. If this is missing from your plugin repository, copy the following to add the workflow:
 
 ```yaml title=".github/workflows/release.yml"
 name: Release
@@ -142,11 +142,11 @@ jobs:
           use_changelog_generator: true # Enable automatic changelog generation
 ```
 
-Then, follow the regular process to [trigger](#how-to-trigger-the-release-workflow) the release workflow. Your plugin will be signed automatically, and you can use the release assets for your plugin submission.
+Next, follow the regular process to [trigger](#how-to-trigger-the-release-workflow) the release workflow. Your plugin will be signed automatically, and you can use the release assets for your plugin submission.
 
-## Provenance attestation for plugin builds
+## Attest provenance for plugin builds
 
-Provenance attestation, that is, _a feature that generating verifiable records of the build's origin and process_, enhances the security of your plugin builds. This feature allows users to confirm that the plugin they are installing was created through your official build pipeline.
+Provenance attestation is a feature that generates verifiable records of the build's origin and process, enhancing the security of your plugin builds. With this feature users can confirm that the plugin they're installing was created through your official build pipeline.
 
 Currently, this feature is available only with GitHub Actions in public repositories. While we recommend using GitHub Actions with provenance attestation for improved security, you can still build and distribute plugins using other CI/CD platforms or manual methods.
 
@@ -172,7 +172,7 @@ permissions:
     attestation: true
 ```
 
-The workflow will generate attestations automatically when building your plugin zip file.
+The workflow generates attestations automatically when building your plugin zip file.
 
 ### Troubleshoot provenance attestation
 
@@ -183,11 +183,11 @@ If you encounter errors in the plugin validator or your plugin submission like t
 
 Follow the steps above to enable provenance attestation in your GitHub Actions workflow.
 
-## Automatically Generate Changelogs
+## Generate changelogs automatically 
 
 Maintaining a detailed changelog is essential for communicating updates to your users and is displayed prominently in the Grafana plugin details page. To simplify this process, our plugin build workflow supports automatic changelog generation.
 
-### Using the GitHub Actions Workflow for Changelog Generation
+### Use the GitHub Actions workflow to generate changelog
 
 The build-plugin GitHub Action can automatically generate and maintain your plugin's changelog using the [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator) tool. This feature:
 
@@ -216,7 +216,7 @@ permissions:
   contents: write
 ```
 
-The changelog generator requires write access to commit the updated CHANGELOG.md file to your repository.
+The changelog generator requires write access to commit the updated `CHANGELOG.md` file to your repository.
 
 If your target branch is protected, the default github.token cannot push changes directly, even with write permissions. In this case, you need to:
 
@@ -232,7 +232,7 @@ If your target branch is protected, the default github.token cannot push changes
     token: ${{ secrets.CHANGELOG_PAT }} # Replace default github.token
 ```
 
-### Generated Changelog Format
+### Generated changelog format
 
 The generated changelog follows a standardized format that clearly categorizes changes:
 
@@ -260,4 +260,4 @@ The generated changelog follows a standardized format that clearly categorizes c
 
 ## Next steps
 
-When you've packaged your plugin, proceed to [publishing a plugin](./publish-or-update-a-plugin.md) or [installing a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
+After you've packaged your plugin, proceed to [publish a plugin](./publish-or-update-a-plugin.md) or [install a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).

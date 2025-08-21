@@ -1,7 +1,7 @@
 ---
 id: migrate-from-grafana-e2e
 title: Migrate from @grafana/e2e
-description: How to migrate from @grafana/e2e to @grafana/plugin-e2e
+description: Migrate from @grafana/e2e to @grafana/plugin-e2e.
 keywords:
   - grafana
   - plugins
