@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',
         'key-concepts/ui-extensions',
+        'key-concepts/plugin-i18n-concept',
       ],
     },
     {
@@ -288,8 +289,16 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Reference',
-      items: ['reference/plugin-json', 'reference/cli-commands', 'reference/ui-extensions'],
+      label: 'Reference guides',
+      link: {
+        type: 'doc',
+        id: 'reference/plugin-reference',
+      },
+      items: [
+        'reference/plugin-json', 
+        'reference/cli-commands', 
+        'reference/ui-extensions',
+      ],
     },
     {
       type: 'doc',
