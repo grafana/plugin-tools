@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',
         'key-concepts/ui-extensions',
+        'key-concepts/plugin-i18n-concept',
       ],
     },
     {
