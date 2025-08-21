@@ -23,10 +23,11 @@ The UI extensions framework is built around these concepts:
 
 - **Extension point**: A place in Grafana Core or in a plugin where content can be rendered via hooks.
 
-- **Renderable/extension???? content**: Functionality (link or component) made available to render in an extension point. To make content available to an extension point it must be either exposed or registered.
+- **Renderable content**: Functionality (link or component) made available to render in an extension point. To make content available to an extension point it must be either exposed or registered.
 
-- **Exposed component**: Component made available with the expose* APIs. If exposed, content is free to use without restrictions.
-Registered content: Links or components made available with the add* APIs. If registered, content can be rendered in specific extension points..
+- **Exposed component**: Component made available with the `expose*` APIs. If exposed, content is free to use without restrictions.
+
+- **Registered content**: Links or components made available with `the add*` APIs. If registered, content can be rendered in specific extension points..
 
 - **Content provider**: The app plugin providing the content (link or component) to be rendered at the extension point. 
 
