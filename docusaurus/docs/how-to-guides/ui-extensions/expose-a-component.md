@@ -39,7 +39,7 @@ export const plugin = new AppPlugin()
 ```
 
 :::tip
-For more details [check the API reference guide](/developers/plugin-tools/how-to-guides/reference/ui-extensions.md).
+For more details [check the API reference guide](../../reference/ui-extensions.md).
 :::
 
 ## Access plugin meta information in an exposed component
@@ -68,5 +68,5 @@ export const plugin = new AppPlugin()
 ```
 
 :::tip
-For more details [check the API reference guide](/developers/plugin-tools/how-to-guides/reference/ui-extensions.md).
+For more details [check the API reference guide](../../reference/ui-extensions.md).
 :::
