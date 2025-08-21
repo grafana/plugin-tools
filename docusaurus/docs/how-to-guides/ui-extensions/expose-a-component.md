@@ -38,6 +38,10 @@ export const plugin = new AppPlugin()
   });
 ```
 
+:::tip
+For more details [check the API reference guide](/developers/plugin-tools/how-to-guides/reference/ui-extensions.md).
+:::
+
 ## Access plugin meta information in an exposed component
 
 You can access metadata for the extended component. For example:
@@ -62,3 +66,7 @@ export const plugin = new AppPlugin()
     }
   })
 ```
+
+:::tip
+For more details [check the API reference guide](/developers/plugin-tools/how-to-guides/reference/ui-extensions.md).
+:::
