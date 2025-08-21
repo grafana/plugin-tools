@@ -17,7 +17,7 @@ keywords:
 
 import ExtensionPoints from '@shared/extension-points.md';
 
-An _extension point_ is a part of your plugin or Grafana UI where other plugins can add links or React components via hooks. You can use them to extend the user experience based on a context exposed by the extension point.
+An extension point is a part of your plugin or Grafana UI where other plugins can add links or React components via hooks. You can use them to extend your users' experience based on a context exposed by the extension point.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
 
@@ -49,7 +49,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
       const { links, isLoading } = usePluginLinks({ extensionPointId, context });
     ```
 
-### Creating an extension point for links
+### Create an extension point for links
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -99,7 +99,7 @@ export const InstanceToolbar = ({ instanceId }) => {
 
 ### Limit the number of extensions by plugins
 
-You might have limited space on the UI and you would like the limit the number of extensions plugins can register to your extension point. By default there is _no limit_.
+If you have limited space on the UI, you can limit the number of extensions in your extension point. By default there is no limit.
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -140,7 +140,7 @@ export const InstanceToolbar = () => {
 - **Make sure your UI controls the behavior** <br /> Component extensions can render different layouts and can respond to various kind of user interactions. Make sure that your UI defines clear boundaries for rendering components defined by other plugins.
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as `props` to the components.
 
-### Creating an extension point for components
+### Create an extension point for components
 
 ```tsx
 import { usePluginComponents } from '@grafana/runtime';
