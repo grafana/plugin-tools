@@ -104,7 +104,7 @@ Install the latest version of the `@grafana/i18n` translation package:
 npm install @grafana/i18n@latest
 ```
 
-Next, make sure to update your create-plugin configs to latest using the following command:
+Next, make sure to update your `create-plugin` configs to the latest version using the following command:
 
 ```shell npm2yarn
 npx @grafana/create-plugin@latest update
