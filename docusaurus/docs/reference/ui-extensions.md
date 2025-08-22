@@ -18,6 +18,10 @@ This page describes the UI Extensions API in detail, including:
 - [Methods](#methods)
 - [Hooks](#hooks)
 
+:::note
+Read [Extensions key concepts](../key-concepts/ui-extensions) for an overview of the extension framework. 
+:::
+
 ## Extension points in Grafana
 
 Use the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum exposed by the `@grafana/data` package to access the extension points within Grafana. 
@@ -43,9 +47,10 @@ The following Extension Points are available:
 
 ## Methods
 
-:::info
-To learn when to add and when to expose an element (component or link) to an extension point see [Understand when to add or expose elements in Extensions](/developers/plugin-tools/reference/extensions-add-expose).
-:::
+If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin:
+
+- Use the `the add*` APIs to register content (links or components). See [Register an extension](../how-to-guides/ui-extensions/register-an-extension) for more information.
+- Use the `expose*` APIs to expose components. See [Expose a component](../how-to-guides/ui-extensions/expose-a-component) for more information.
 
 ### `addComponent`
 
@@ -53,7 +58,7 @@ To learn when to add and when to expose an element (component or link) to an ext
 Available in Grafana >=v11.1.0.
 :::
 
-This method registers a [React component](https://react.dev/learn/your-first-component) to a certain extension point to contribute a new UI experience.
+Use this method to register a [React component](https://react.dev/learn/your-first-component) in a certain extension point to contribute a new UI experience.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addComponent({
@@ -97,7 +102,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 Available in Grafana >=v11.1.0.
 :::
 
-This method registers a link extension to a certain extension point. Use link extensions to navigate to different parts of the Grafana UI or other plugins, and to include modal elements declared via an onClick.
+Use this method to register a link extension in an extension point. 
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addLink({
@@ -139,7 +144,9 @@ The method returns the `AppPlugin` instance to allow for chaining.
 Available in Grafana >=v11.1.0.
 :::
 
-This method exposes a React component and makes it available for other plugins to use. Other plugins can render the component within their app by calling [usePluginComponent()](#useplugincomponent) and referencing the `id` of the exposed component.
+Use this method to expose a React component and make it available for other plugins to use. 
+
+Other users will be able to render this component at their extension point by calling [usePluginComponent()](#use-exposed-component) and referencing the `id` of the exposed component.
 
 ```typescript
 export const plugin = new AppPlugin<{}>()
@@ -178,13 +185,17 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 ## Hooks
 
+If you want to render extension content in your extension point, use the following hooks:
+
+<a name="use-exposed-component"></a>
+
 ### `usePluginComponent`
 
 :::info
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook **fetches a single react component** that's been exposed by a plugin with a unique ID. Plugins can expose components using the [`AppPlugin.exposeComponent()`](#exposecomponent) method.
+Use this React hook to **fetch a single component** that's been previously exposed by a plugin using the [`AppPlugin.exposeComponent()`](#exposecomponent) method.
 
 ```typescript
 import { usePluginComponent } from '@grafana/runtime';
@@ -221,7 +232,7 @@ const {
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook **fetches components** that are registered to a certain extension point. Use component extensions to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addcomponent) method.
+Use this react hook to **fetch components** that are registered at a certain extension point. Use component extensions to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addcomponent) method.
 
 ```typescript
 import { usePluginComponents } from '@grafana/runtime';
