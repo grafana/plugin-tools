@@ -96,7 +96,7 @@ describe('004-eslint9-flat-config', () => {
       `);
     });
 
-    it.only('should attempt to migrate eslint configs with extends, plugins, rules, and overrides', async () => {
+    it('should attempt to migrate eslint configs with extends, plugins, rules, and overrides', async () => {
       const context = new Context('/virtual');
 
       context.addFile(
