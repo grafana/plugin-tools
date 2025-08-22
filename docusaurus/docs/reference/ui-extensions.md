@@ -146,7 +146,7 @@ Available in Grafana >=v11.1.0.
 
 Use this method to expose a React component and make it available for other plugins to use. 
 
-Other users will be able to render this component at their extension point by calling [usePluginComponent()](#use-exposed-component) and referencing the `id` of the exposed component.
+Other users will be able to render this component at their extension point by calling [usePluginComponent()](#`useplugincomponent`) and referencing the `id` of the exposed component.
 
 ```typescript
 export const plugin = new AppPlugin<{}>()
@@ -186,8 +186,6 @@ The method returns the `AppPlugin` instance to allow for chaining.
 ## Hooks
 
 If you want to render extension content in your extension point, use the following hooks:
-
-<a id="use-exposed-component"></a>
 
 ### `usePluginComponent`
 
