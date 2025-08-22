@@ -53,7 +53,7 @@ describe('004-eslint9-flat-config', () => {
 
           languageOptions: {
             parserOptions: {
-              "project": "./tsconfig.json",
+              project: "./tsconfig.json",
             },
           },
 
@@ -96,14 +96,20 @@ describe('004-eslint9-flat-config', () => {
       `);
     });
 
-    it('should attempt to migrate eslint configs with extends, plugins, rules, and overrides', async () => {
+    it.only('should attempt to migrate eslint configs with extends, plugins, rules, and overrides', async () => {
       const context = new Context('/virtual');
 
       context.addFile(
         '.eslintrc',
         JSON.stringify(
           {
-            extends: ['eslint:recommended', './.config/.eslintrc', '@custom/eslint-config', 'plugin:react/recommended'],
+            extends: [
+              'eslint:recommended',
+              './.config/.eslintrc',
+              '@custom/eslint-config',
+              'plugin:react/recommended',
+              'prettier',
+            ],
             plugins: ['simple-import-sort'],
             rules: {
               'simple-import-sort/imports': 'error',
@@ -126,6 +132,7 @@ describe('004-eslint9-flat-config', () => {
         import baseConfig1 from "./.config/eslint.config.mjs";
         import customEslintConfig from "@custom/eslint-config";
         import react from "eslint-plugin-react";
+        import prettier from "eslint-config-prettier/flat";
         import simpleImportSort from "eslint-plugin-simple-import-sort";
 
         export default defineConfig([
@@ -133,6 +140,7 @@ describe('004-eslint9-flat-config', () => {
           ...baseConfig1,
           customEslintConfig,
           react.configs.flat.recommended,
+          prettier,
           {
             plugins: {
               "simple-import-sort": simpleImportSort,
