@@ -144,9 +144,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 Available in Grafana >=v11.1.0.
 :::
 
-Use this method to expose a React component and make it available for other plugins to use. 
-
-Other users will be able to render this component at their extension point by calling [usePluginComponent()](#`useplugincomponent`) and referencing the `id` of the exposed component.
+Use this method to expose a React component and make it available for other plugins to use. Other users will be able to render this component at their extension point by calling `usePluginComponent()` and referencing the `id` of the exposed component.
 
 ```typescript
 export const plugin = new AppPlugin<{}>()
@@ -193,7 +191,7 @@ If you want to render extension content in your extension point, use the followi
 Available in Grafana >=v11.1.0.
 :::
 
-Use this React hook to **fetch a single component** that's been previously exposed by a plugin using the [`AppPlugin.exposeComponent()`](#exposecomponent) method.
+Use this React hook to fetch a single component that's been previously **exposed** by a plugin using the `AppPlugin.exposeComponent()` method.
 
 ```typescript
 import { usePluginComponent } from '@grafana/runtime';
@@ -230,7 +228,7 @@ const {
 Available in Grafana >=v11.1.0.
 :::
 
-Use this react hook to **fetch components** that are registered at a certain extension point. Use component extensions to render custom UI components. Plugins can register components using the [`AppPlugin.addComponent()`](#addcomponent) method.
+Use this react hook to fetch **components** that have been previously **registered** in an extension point using the `AppPlugin.addComponent()` method.
 
 ```typescript
 import { usePluginComponents } from '@grafana/runtime';
@@ -282,7 +280,7 @@ For more information refer to [`PluginExtensionComponent`](https://github.com/gr
 Available in Grafana >=v11.1.0.
 :::
 
-This react hook **fetches links** that are registered to a certain extension point. Plugins can register links using the [`AppPlugin.addLink()`](#addlink) method.
+Use this React hook to fetch **links** that have been previously **registered** in an extension point using the `AppPlugin.addLink()` method.
 
 ```typescript
 import { usePluginLinks } from '@grafana/runtime';
