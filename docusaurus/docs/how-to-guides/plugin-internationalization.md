@@ -52,9 +52,9 @@ myorg-myplugin-plugintype/
 ├── src/
 │   ├── locales
 │   │  ├── en-US
-│   │  │  └──myorg-myplugin-plugintype.json
+│   │  │  └── myorg-myplugin-plugintype.json
 │   │  └── pt-BR
-│   │     └──myorg-myplugin-plugintype.json
+│   │     └── myorg-myplugin-plugintype.json
 │   ├── module.ts
 │   └── plugin.json
 ├── tests/
