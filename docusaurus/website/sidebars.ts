@@ -146,7 +146,7 @@ const sidebars: SidebarsConfig = {
             id: 'how-to-guides/ui-extensions/ui-extensions',
           },
           items: [
-            'how-to-guides/ui-extensions/create-an-extension-point',
+            'how-to-guides/ui-extensions/create-an-extension-point',        
             'how-to-guides/ui-extensions/register-an-extension',
             'how-to-guides/ui-extensions/expose-a-component',
             'how-to-guides/ui-extensions/use-an-exposed-component',
@@ -289,7 +289,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Reference guides',
+      label: 'Reference',
       link: {
         type: 'doc',
         id: 'reference/plugin-reference',
@@ -297,7 +297,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'reference/plugin-json', 
         'reference/cli-commands', 
-        'reference/ui-extensions',
+        'reference/ui-extensions', 
       ],
     },
     {
