@@ -187,7 +187,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 If you want to render extension content in your extension point, use the following hooks:
 
-<a name="use-exposed-component"></a>
+<a id="use-exposed-component"></a>
 
 ### `usePluginComponent`
 
