@@ -72,6 +72,7 @@ const config = async (env: Env): Promise<Configuration> => {
       'react-redux',
       'redux',
       'rxjs',
+      'i18next',
       'react-router',{{#unless useReactRouterV6}}
       'react-router-dom',{{/unless}}
       'd3',
@@ -79,8 +80,7 @@ const config = async (env: Env): Promise<Configuration> => {
       /^@grafana\/ui/i,{{/unless}}
       /^@grafana\/runtime/i,
       /^@grafana\/data/i,{{#if bundleGrafanaUI}}
-      'react-inlinesvg',
-      'i18next',{{/if}}
+      'react-inlinesvg',{{/if}}
 
       // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
       ({ request }, callback) => {
