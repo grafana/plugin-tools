@@ -161,11 +161,14 @@ export class AlertRuleEditPage extends GrafanaPage {
       this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
+          console.log('response not ok for', this.ctx.selectors.apis.Alerting.eval);
           return route.fulfill({ response });
         }
 
         let body: { results: { [key: string]: { status: number } } } = await response.json();
         const statuses = Object.keys(body.results).map((key) => body.results[key].status);
+        console.log('response statuses for', this.ctx.selectors.apis.Alerting.eval);
+        console.log('statuses', statuses);
 
         route.fulfill({
           response,
