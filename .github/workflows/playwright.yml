@@ -27,6 +27,7 @@ jobs:
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
+          skip-grafana-dev-image: true # temporary skip dev images until npm publishing is working
           # limit: 0 # Uncomment to test all versions since 8.5.0. Useful when testing compatibility for new APIs.
 
   playwright-tests:
