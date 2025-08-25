@@ -11,7 +11,7 @@ keywords:
 sidebar_position: 30
 ---
 
-As a content provider, you can expose components from your app plugins to easily share functionality in an extension point.
+As a content provider, you can expose components from your app plugins to easily share functionality.
 
 Compared to [registering an extension](./register-an-extension), when you expose a component you do not demand any explicit action to the user rendering the component. Therefore the component can be [used by any extension point](./use-an-exposed-component.md) with no further action required.
 
