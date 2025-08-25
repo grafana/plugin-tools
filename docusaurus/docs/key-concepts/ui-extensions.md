@@ -25,7 +25,7 @@ The UI extensions framework is built around these concepts:
 
 - **Renderable content**: Functionality (link or component) made available to render in an extension point. To make content available to an extension point it must be either exposed or registered.
 
-- **Exposed component**: Component made available with the `expose*` APIs. If exposed, content is free to use without restrictions.
+- **Exposed component**: Component made available to other plugins with the `expose*` APIs. If exposed, a component is not tied to extension points.
 
 - **Registered content**: Links or components made available with `the add*` APIs. If registered, content can be rendered in specific extension points..
 
