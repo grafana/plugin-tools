@@ -158,24 +158,29 @@ export class AlertRuleEditPage extends GrafanaPage {
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
-        const response = await route.fetch();
-        if (!response.ok()) {
-          console.log('response not ok for', this.ctx.selectors.apis.Alerting.eval);
-          return route.fulfill({ response });
-        }
+      await this.ctx.page.route(
+        this.ctx.selectors.apis.Alerting.eval,
+        async (route) => {
+          const response = await route.fetch();
+          if (!response.ok()) {
+            console.log('response not ok for', this.ctx.selectors.apis.Alerting.eval);
+            return route.fulfill({ response });
+          }
 
-        let body: { results: { [key: string]: { status: number } } } = await response.json();
-        const statuses = Object.keys(body.results).map((key) => body.results[key].status);
-        console.log('response statuses for', this.ctx.selectors.apis.Alerting.eval);
-        console.log('statuses', statuses);
+          let body: { results: { [key: string]: { status: number } } } = await response.json();
+          const statuses = Object.keys(body.results).map((key) => body.results[key].status);
+          console.log('response statuses for', this.ctx.selectors.apis.Alerting.eval);
+          console.log('statuses', statuses);
 
-        route.fulfill({
-          response,
-          status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
-        });
-      });
+          route.fulfill({
+            response,
+            status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
+          });
+        },
+        { times: 1 }
+      );
     }
+
     const responsePromise = this.ctx.page.waitForResponse(
       (resp) => resp.url().includes(this.ctx.selectors.apis.Alerting.eval),
       options
