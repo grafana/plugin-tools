@@ -21,7 +21,7 @@ Use extensions to contribute new actions and functionality to the core Grafana U
 
 The UI extensions framework is built around these concepts:
 
-- **Extension point**: A place in Grafana Core or in a plugin where content can be rendered via hooks.
+- **Extension point**: A place in Grafana Core or in a plugin where content can be hooked into.
 
 - **Renderable content**: Functionality (link or component) made available to render in an extension point or to be exposed.
 
