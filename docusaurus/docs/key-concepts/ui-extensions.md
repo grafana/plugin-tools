@@ -23,7 +23,7 @@ The UI extensions framework is built around these concepts:
 
 - **Extension point**: A place in Grafana Core or in a plugin where content can be hooked into.
 
-- **Renderable content**: Functionality (link or component) made available to render in an extension point or to be exposed.
+- **Renderable content**: Functionality (link or component) made available either to render in an extension point or component exposed to be used.
 
 - **Exposed component**: Component made available to other plugins with the `expose*` APIs. If exposed, a component is not tied to extension points.
 
@@ -37,7 +37,7 @@ The UI extensions framework is built around these concepts:
 
 ## I want to render extension content 
 
-As a content user, you need to define an extension point in your plugin to be able to render content (links or components) made available by content providers.
+As a content user, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
 
 ### Why add an extension point?
 
@@ -47,7 +47,7 @@ Define extension points to add new capabilities:
 - Clean separation of concerns. Your application doesn't need to know anything about the plugin extending your UI.
 - Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed for your user. There is no need for either app to include custom logic to detect the presence of the other.
 
-### Where can I find the content rendered in my extension point?
+### Where can I find the my extension points?
 
 ![Panel menu showing available extensions](/img/ui-extensions-menu.png)
 
