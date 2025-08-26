@@ -1,6 +1,6 @@
 ---
 id: ui-extensions
-title: Extensions
+title: UI extensions
 description: Learn how to add links and trigger actions from the Grafana user interface by using UI Extensions in app plugins.
 keywords:
   - grafana
@@ -15,7 +15,7 @@ keywords:
 sidebar_position: 60
 ---
 
-Use extensions to contribute new actions and functionality to the core Grafana UI and other app plugins. 
+Use UI extensions to contribute new actions and functionality to the core Grafana UI and other app plugins. 
 
 ## Understand the extensions ecosystem
 
