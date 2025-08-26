@@ -1,7 +1,7 @@
 ---
 id: create-an-extension-point
 title: Render content in an extension point
-sidebar_label: Create an extension point to render content in
+sidebar_label: Render content in an extension point
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:
