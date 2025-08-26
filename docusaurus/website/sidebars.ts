@@ -147,9 +147,9 @@ const sidebars: SidebarsConfig = {
           },
           items: [
             'how-to-guides/ui-extensions/create-an-extension-point',        
+            'how-to-guides/ui-extensions/use-an-exposed-component',
             'how-to-guides/ui-extensions/register-an-extension',
             'how-to-guides/ui-extensions/expose-a-component',
-            'how-to-guides/ui-extensions/use-an-exposed-component',
             'how-to-guides/ui-extensions/versioning-extensions',
             'how-to-guides/ui-extensions/debug-logs',
           ],

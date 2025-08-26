@@ -1,7 +1,7 @@
 ---
 id: create-an-extension-point
-title: Create an extension point
-sidebar_label: Create an extension point
+title: Render content in an extension point
+sidebar_label: Create an extension point to render content in
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:
@@ -49,7 +49,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
       const { links, isLoading } = usePluginLinks({ extensionPointId, context });
     ```
 
-### Create an extension point for links
+### Create an extension point to render links
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -97,7 +97,7 @@ export const InstanceToolbar = ({ instanceId }) => {
 };
 ```
 
-### Limit the number of extensions by plugins
+### Limit the number of extensions in your extension point
 
 If you have limited space on the UI, you can limit the number of extensions in your extension point. By default there is no limit.
 
@@ -114,7 +114,7 @@ export const InstanceToolbar = () => {
 };
 ```
 
-### Limit which plugins can register links
+### Limit which plugins can register links in your extension point
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -140,7 +140,7 @@ export const InstanceToolbar = () => {
 - **Make sure your UI controls the behavior** <br /> Component extensions can render different layouts and can respond to various kind of user interactions. Make sure that your UI defines clear boundaries for rendering components defined by other plugins.
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as `props` to the components.
 
-### Create an extension point for components
+### Create an extension point to render components
 
 ```tsx
 import { usePluginComponents } from '@grafana/runtime';
@@ -198,7 +198,7 @@ export const InstanceToolbar = ({ instanceId }) => {
 };
 ```
 
-### Limit which plugins can register components
+### Limit which plugins can register components in your extension point
 
 ```tsx
 import { usePluginComponents } from '@grafana/runtime';
