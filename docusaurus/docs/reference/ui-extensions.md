@@ -268,7 +268,7 @@ For more information refer to [`PluginExtensionComponent`](https://github.com/gr
 #### Examples
 
 - [Pass data to the components using props](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
-- [Limit which plugins can register components to your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components)
+- [Limit which plugins can register components in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components-in-your-extension-point)
 
 #### See also
 
@@ -325,7 +325,7 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 
 - [Pass data to the links](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
 - [Limit the number of extensions in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-in-your-extension-point)
-- [Limit which plugins can register links to your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
+- [Limit which plugins can register links in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
 
 #### See also
 
