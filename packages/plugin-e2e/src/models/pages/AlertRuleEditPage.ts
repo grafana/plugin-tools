@@ -2,7 +2,7 @@ import * as semver from 'semver';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
-import { expect } from '@playwright/test';
+import { expect, type Locator } from '@playwright/test';
 import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 
@@ -178,10 +178,14 @@ export class AlertRuleEditPage extends GrafanaPage {
       options
     );
 
-    let evaluateButton = this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.previewButton);
+    let evaluateButton: Locator;
+
     if (semver.lt(this.ctx.grafanaVersion, '11.1.0')) {
-      evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
+      evaluateButton = await this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
+    } else {
+      evaluateButton = await this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.previewButton);
     }
+
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
         timeout: 5000,
