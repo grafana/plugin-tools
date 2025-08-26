@@ -324,8 +324,8 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 #### Examples
 
 - [Pass data to the links](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
-- [Limit the number of links by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-by-plugins)
-- [Limit which plugins can register links to your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links)
+- [Limit the number of extensions in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-in-your-extension-point)
+- [Limit which plugins can register links to your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
 
 #### See also
 
