@@ -152,13 +152,16 @@ export class AlertRuleEditPage extends GrafanaPage {
    */
   async evaluate(options?: RequestOptions) {
     // it seems like when clicking the evaluate button to quickly after filling in the alert query form, form values have not been propagated to the state, so we wait a bit before clicking
-    await this.ctx.page.waitForTimeout(5000);
+    await this.ctx.page.waitForTimeout(1000);
 
     // Starting from Grafana 10.0.0, the alerting evaluation endpoint started returning errors in a different way.
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
+      // Unroute any existing handlers for this pattern to prevent "Route is already handled!" errors
+      await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
+
+      await this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
           console.log('response not ok for', this.ctx.selectors.apis.Alerting.eval);
@@ -188,7 +191,7 @@ export class AlertRuleEditPage extends GrafanaPage {
     }
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
-        timeout: 10000,
+        timeout: 5000,
       })
       .catch(async () => {
         // intermittently, the first click doesn't trigger the request, so in that case we click again
@@ -198,6 +201,11 @@ export class AlertRuleEditPage extends GrafanaPage {
     await evaluateButton.click();
     await evalReq;
 
-    return responsePromise;
+    const response = await responsePromise;
+
+    // Clean up the route handler after the evaluation is complete
+    await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
+
+    return response;
   }
 }
