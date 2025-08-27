@@ -53,7 +53,7 @@ export class AlertRuleEditPage extends GrafanaPage {
       return true;
     }
 
-    await expect(this.advancedModeSwitch).not.toBeVisible();
+    await expect(this.advancedModeSwitch).toBeHidden();
     await expect(this.advancedModeSwitch).toHaveCount(0);
     return false;
   }
