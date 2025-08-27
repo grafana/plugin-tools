@@ -1,7 +1,7 @@
 ---
 id: convert-a-frontend-datasource-to-backend
-title: Convert a data source plugin frontend into a backend 
-description: Learn how to convert a data source plugin frontend into a backend.
+title: Convert a frontend-only data source plugin into a plugin with a backend 
+description: Learn how to convert a frontend-only data source plugin into a plugin with a backend.
 keywords:
   - grafana
   - plugins
