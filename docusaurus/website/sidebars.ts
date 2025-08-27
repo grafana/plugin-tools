@@ -24,10 +24,11 @@ const sidebars: SidebarsConfig = {
       },
       collapsed: true,
       items: [
+        'key-concepts/plugin-types-usage',
         'key-concepts/anatomy-of-a-plugin',
         {
           type: 'category',
-          label: 'Backend plugins',
+          label: 'Plugin backends',
           description: 'Learn about developing Grafana plugins with a backend component.',
           link: {
             type: 'doc',
@@ -38,7 +39,6 @@ const sidebars: SidebarsConfig = {
             'key-concepts/backend-plugins/plugin-protocol',
           ],
         },
-        'key-concepts/plugin-types-usage',
         'key-concepts/plugin-lifecycle',
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',

@@ -1,7 +1,7 @@
 ---
 id: backend-plugins
-title: Backend plugins
-description: Learn about the Grafana backend plugin system for extending the features of Grafana.
+title: Plugins backend system
+description: Learn about the Grafana plugin backend system for extending the features of Grafana.
 keywords:
   - grafana
   - plugins
@@ -11,21 +11,23 @@ keywords:
 sidebar_position: 1.5
 ---
 
-# Backend plugins
+# Plugins' backend system
 
-The Grafana plugin system for backend development allows you to integrate Grafana with virtually anything and offer custom visualizations. The system is based on HashiCorp's [Go Plugin System over RPC](https://github.com/hashicorp/go-plugin). Our implementation of the Grafana server launches each backend plugin as a subprocess and communicates with it over [gRPC](https://grpc.io/).
+Introduced in Grafana v7.0, plugins with backend components allow you to integrate Grafana with virtually anything and offer custom visualizations. The plugin backend system is based on HashiCorp's [Go Plugin System over RPC](https://github.com/hashicorp/go-plugin) and supports server-side plugin elements. The Grafana server launches each plugin backend as a subprocess and communicates with it over [gRPC](https://grpc.io/).
 
-This document explains the system's background, use cases, benefits, and key features.
+:::note
+A plugin with a backend usually requires a frontend component as well. For example, some backend data source plugins need query editor components on the frontend.
+:::
 
-## Background
+## Benefits for plugin development
 
-Grafana added support for _frontend plugins_ in version 3.0 so that the Grafana community could create custom panels and data sources. It was wildly successful and has made Grafana much more useful for our user community.
+This approach has the following benefits:
 
-However, one limitation of these plugins is that they run on the client side, in the browser. Therefore, they can't support use cases that require server-side features.
+- **Stability:** Plugins can't crash your Grafana process: a panic in a plugin doesn't panic the server.
+- **Ease of development:** Grafana provides an officially supported SDK for Go and tooling to help create plugins.
+- **Security:** Plugins only have access to the interfaces and arguments given to them, not to the entire memory space of the process.
 
-Since Grafana v7.0, we have supported server-side plugins that remove this limitation. We use the term _backend plugin_ to denote that a plugin has a backend component. A backend plugin usually requires frontend components as well. For example, some backend data source plugins need query editor components on the frontend.
-
-## Use cases for implementing a backend plugin
+## When to implement a plugin with a backend
 
 The following examples give some common use cases for backend plugins:
 
@@ -34,14 +36,6 @@ The following examples give some common use cases for backend plugins:
 - Keep state between users, for example, by implementing custom caching for data sources.
 - Use custom authentication methods and/or authorization checks that aren't supported in Grafana.
 - Use a custom data source request proxy (refer to [Resources](#resources) for more information).
-
-## Benefits for plugin development
-
-Grafana's approach has benefits for developers:
-
-- **Stability:** Plugins can't crash your Grafana process: a panic in a plugin doesn't panic the server.
-- **Ease of development:** Grafana provides an officially supported SDK for Go and tooling to help create plugins.
-- **Security:** Plugins only have access to the interfaces and arguments given to them, not to the entire memory space of the process.
 
 ## Capabilities of the backend plugin system
 
@@ -95,7 +89,7 @@ The streaming capability allows a backend plugin to handle data source queries t
 
 ## Data communication model
 
-Grafana uses a communication model where you can opt in to instance management to simplify the development process. If you do, then all necessary information (configuration) is provided in each request to a backend plugin, allowing the plugin to fulfill the request and return a response. This model simplifies for plugin authors not having to keep track of or request additional state to fulfill a request.
+Grafana uses a communication model where you can opt in to instance management to simplify the development process. If you do, then all necessary information (configuration) is provided in each request to a plugin backend, allowing the plugin to fulfill the request and return a response. This model simplifies for plugin authors not having to keep track of or request additional state to fulfill a request.
 
 ## Caching and connection pooling
 
