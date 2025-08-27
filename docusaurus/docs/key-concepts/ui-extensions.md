@@ -47,7 +47,7 @@ Define extension points to add new capabilities:
 - Clean separation of concerns. Your application doesn't need to know anything about the plugin extending your UI.
 - Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed for your user. There is no need for either app to include custom logic to detect the presence of the other.
 
-### Where can I find the my extension points?
+### Where can I find my extension points?
 
 ![Panel menu showing available extensions](/img/ui-extensions-menu.png)
 
