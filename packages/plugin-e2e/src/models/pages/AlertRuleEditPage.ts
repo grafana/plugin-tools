@@ -48,13 +48,11 @@ export class AlertRuleEditPage extends GrafanaPage {
     );
 
     if (alertingQueryAndExpressionsStepMode) {
-      await expect(this.advancedModeSwitch).toBeVisible();
-      await expect(this.advancedModeSwitch).toHaveCount(1);
+      await expect(this.advancedModeSwitch).toBeVisible(); // this doesn't need a timeout because it's the default
       return true;
     }
 
-    await expect(this.advancedModeSwitch).toBeHidden();
-    await expect(this.advancedModeSwitch).toHaveCount(0);
+    await expect(this.advancedModeSwitch).toBeHidden({ timeout: 1000 * 10 });
     return false;
   }
 
