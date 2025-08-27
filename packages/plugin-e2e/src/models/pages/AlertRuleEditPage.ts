@@ -192,6 +192,8 @@ export class AlertRuleEditPage extends GrafanaPage {
       evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
 
+    await expect(evaluateButton).toBeVisible();
+
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
         timeout: 5000,
@@ -201,7 +203,6 @@ export class AlertRuleEditPage extends GrafanaPage {
         await evaluateButton.click();
       });
 
-    await expect(evaluateButton).toBeVisible();
     await evaluateButton.click();
     await evalReq;
 
