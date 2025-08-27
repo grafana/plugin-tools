@@ -157,6 +157,7 @@ export class AlertRuleEditPage extends GrafanaPage {
 
     if (this.fullfilled) {
       await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
+      this.fullfilled = false;
     }
 
     // Starting from Grafana 10.0.0, the alerting evaluation endpoint started returning errors in a different way.
