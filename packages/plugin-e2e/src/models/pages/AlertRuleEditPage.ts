@@ -155,8 +155,9 @@ export class AlertRuleEditPage extends GrafanaPage {
     // it seems like when clicking the evaluate button to quickly after filling in the alert query form, form values have not been propagated to the state, so we wait a bit before clicking
     await this.ctx.page.waitForTimeout(1000);
 
+    console.log({ fulfilled: this.fulfilled });
     if (this.fulfilled) {
-      await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
+      // await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
       this.fulfilled = false;
     }
 
@@ -164,18 +165,19 @@ export class AlertRuleEditPage extends GrafanaPage {
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
+      await this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
           this.fulfilled = true;
-          return route.fulfill({ response });
+          await route.fulfill({ response });
+          return;
         }
 
         let body: { results: { [key: string]: { status: number } } } = await response.json();
         const statuses = Object.keys(body.results).map((key) => body.results[key].status);
 
         this.fulfilled = true;
-        route.fulfill({
+        await route.fulfill({
           response,
           status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
         });
