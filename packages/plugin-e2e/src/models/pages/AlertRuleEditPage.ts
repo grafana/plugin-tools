@@ -2,11 +2,12 @@ import * as semver from 'semver';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
-import { expect, type Locator } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 
 export class AlertRuleEditPage extends GrafanaPage {
+  private fullfilled = false;
   constructor(
     readonly ctx: PluginTestCtx,
     readonly args?: AlertRuleArgs
@@ -154,6 +155,10 @@ export class AlertRuleEditPage extends GrafanaPage {
     // it seems like when clicking the evaluate button to quickly after filling in the alert query form, form values have not been propagated to the state, so we wait a bit before clicking
     await this.ctx.page.waitForTimeout(1000);
 
+    if (this.fullfilled) {
+      await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
+    }
+
     // Starting from Grafana 10.0.0, the alerting evaluation endpoint started returning errors in a different way.
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
@@ -161,12 +166,14 @@ export class AlertRuleEditPage extends GrafanaPage {
       this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
+          this.fullfilled = true;
           return route.fulfill({ response });
         }
 
         let body: { results: { [key: string]: { status: number } } } = await response.json();
         const statuses = Object.keys(body.results).map((key) => body.results[key].status);
 
+        this.fullfilled = true;
         route.fulfill({
           response,
           status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
@@ -178,12 +185,10 @@ export class AlertRuleEditPage extends GrafanaPage {
       options
     );
 
-    let evaluateButton: Locator;
+    let evaluateButton = this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.previewButton);
 
     if (semver.lt(this.ctx.grafanaVersion, '11.1.0')) {
-      evaluateButton = await this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
-    } else {
-      evaluateButton = await this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.previewButton);
+      evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
 
     const evalReq = this.ctx.page
@@ -195,6 +200,7 @@ export class AlertRuleEditPage extends GrafanaPage {
         await evaluateButton.click();
       });
 
+    await expect(evaluateButton).toBeVisible();
     await evaluateButton.click();
     await evalReq;
 
