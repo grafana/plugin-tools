@@ -117,7 +117,7 @@ await initPluginTranslations(pluginJson.id);
 
 ## Determine the text to translate
 
-After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`.
+After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned a unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`.
 Example using the `t` function:
 
 ```diff
