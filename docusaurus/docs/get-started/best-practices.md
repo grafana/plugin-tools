@@ -50,7 +50,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 ### Frontend (only) plugins
 
-- **Data sources running only on the frontend typically use the [Grafana proxy](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service** - This is a simple way of adding support for queries in your plugin, and it doesn't require Golang knowledge. However, there are use cases for which writing a backend plugin is necessary. Refer to [Backend plugins](../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin) for more information about those.
+- **Data sources running only on the frontend typically use the [Grafana proxy](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service** - This is a simple way of adding support for queries in your plugin, and it doesn't require Golang knowledge. However, there are use cases for which writing a backend plugin is necessary. Refer to [Backend plugins](../key-concepts/backend-plugins/#when-to-implement-a-plugin-with-a-backend) for more information about those.
 
 ### Backend plugins
 
