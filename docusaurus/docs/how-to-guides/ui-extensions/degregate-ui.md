@@ -18,7 +18,7 @@ When developing features using UI extensions in Grafana, consider scenarios wher
 
 If you've created an extension point but you're not rendering any content yet, make sure that:
 
-- The UI doesn't display this section if it doesn’t make sense without rendered content, or
+- The UI doesn't display this section if it doesn’t make sense without rendered content.
 - You provide a fallback UI or placeholder message if the feature is still useful without the rendered content.
 
 For example:
@@ -56,7 +56,7 @@ For example, you can use a container with controlled layout:
 If you're using external plugins to extend your UI, consider the following:
 
 - Security and validation: Ensure extensions do not introduce vulnerabilities, for example by sanitizing user-generated content.
-- Shared data restriction: Only share with the extensions the minimum necessary data they need. (It is easier to extend later, than removing.)
+- Shared data restriction: Only share the minimum amount of data required with external elements. You can always extend later, which is easier than removing.
 - Restrict plugins: You can decide to only allow certain plugins to provide content for your extension point.
 
 For example, you can restrict extensions by plugin ID:
