@@ -96,15 +96,9 @@ To do so, add the relevant `grafanaDependency` and `languages` you want to trans
 "languages": ["en-US", "pt-BR"] // the languages that the plugin supports
 ```
 
-### Extend your plugin configuration to include translation
+### Update to the latest version of `create-plugin`
 
-Install the latest version of the `@grafana/i18n` translation package:
-
-```shell npm2yarn
-npm install @grafana/i18n@latest
-```
-
-Next, make sure to update your `create-plugin` configs to the latest version using the following command:
+Update your `create-plugin` configs to the latest version using the following command:
 
 ```shell npm2yarn
 npx @grafana/create-plugin@latest update
