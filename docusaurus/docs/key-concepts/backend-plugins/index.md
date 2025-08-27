@@ -29,7 +29,7 @@ This approach has the following benefits:
 
 ## When to implement a plugin with a backend
 
-The following examples give some common use cases for backend plugins:
+The following examples give some common use cases for plugins with a backend component:
 
 - Support [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/) and [Query and resource caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching) for data sources.
 - Connect to SQL database servers and other non-HTTP services that normally can't be connected to from a browser.
@@ -37,9 +37,9 @@ The following examples give some common use cases for backend plugins:
 - Use custom authentication methods and/or authorization checks that aren't supported in Grafana.
 - Use a custom data source request proxy (refer to [Resources](#resources) for more information).
 
-## Capabilities of the backend plugin system
+## Capabilities of the plugin backend system
 
-Grafana's backend plugin system exposes several key capabilities, or building blocks, that your backend plugin can implement:
+Grafana's plugin backend system exposes several key capabilities, or building blocks, that your backend component can implement:
 
 - Query data
 - Resources
@@ -49,7 +49,7 @@ Grafana's backend plugin system exposes several key capabilities, or building bl
 
 ### Query data
 
-The query data capability allows a backend plugin to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](../data-frames), which are used to visualize metrics, logs, and traces.
+The query data capability allows a plugin's backend to handle data source queries that are submitted from a [dashboard](https://grafana.com/docs/grafana/latest/dashboards), [Explore](https://grafana.com/docs/grafana/latest/explore) or [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting). The response contains [data frames](../data-frames), which are used to visualize metrics, logs, and traces.
 
 :::note
 
@@ -59,7 +59,7 @@ Backend data source plugins are required to implement the query data capability.
 
 ### Resources
 
-The resources capability allows a backend plugin to handle custom HTTP requests sent to the Grafana HTTP API and respond with custom HTTP responses. Here, the request and response formats can vary. For example, you can use JSON, plain text, HTML, or static resources such as images and files, and so on.
+The resources capability allows a plugin's backend to handle custom HTTP requests sent to the Grafana HTTP API and respond with custom HTTP responses. Here, the request and response formats can vary. For example, you can use JSON, plain text, HTML, or static resources such as images and files, and so on.
 
 Compared to the query data capability, where the response contains data frames, the resources capability gives the plugin developer more flexibility for extending and opening up Grafana for new and interesting use cases.
 
@@ -75,17 +75,19 @@ Compared to the query data capability, where the response contains data frames, 
 
 ### Health checks
 
-The health checks capability allows a backend plugin to return the status of the plugin. For data source backend plugins, the health check is automatically called when a user edits a data source and selects _Save & Test_ in the UI.
+The health checks capability allows a plugin's backend to return the status of the plugin. For data source plugins' backends, the health check is automatically called when a user edits a data source and selects _Save & Test_ in the UI.
 
 A plugin's health check endpoint is exposed in the Grafana HTTP API and allows external systems to continuously poll the plugin's health to make sure that it's running and working as expected.
 
 ### Collect metrics
 
-A backend plugin can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go) to implement your backend plugin, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. To add custom metrics to instrument your backend plugin, refer to [Implement metrics in your plugin](../../how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins.md#implement-metrics-in-your-plugin).
+A plugin's backend can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go) to implement your plugin's backend, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. 
+
+To add custom metrics to instrument your plugin's backend, refer to [Implement metrics in your plugin](../../how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins.md#implement-metrics-in-your-plugin).
 
 ### Streaming
 
-The streaming capability allows a backend plugin to handle data source queries that are streaming. For more information, refer to the tutorial for a [streaming data source plugin](../../tutorials/build-a-streaming-data-source-plugin.md).
+The streaming capability allows a plugin's backend to handle data source queries that are streaming. For more information, refer to the tutorial for a [streaming data source plugin](../../tutorials/build-a-streaming-data-source-plugin.md).
 
 ## Data communication model
 
@@ -93,6 +95,6 @@ Grafana uses a communication model where you can opt in to instance management t
 
 ## Caching and connection pooling
 
-Grafana provides instance management in the backend plugin SDK to ease working with multiple configured Grafana data sources or apps, referred to as instances. This allows a plugin to simply keep state cleanly separated between instances. The SDK makes sure to optimize plugin resources by caching said instances in memory until their configuration changes in Grafana. Refer to the [Backend data source tutorial](/tutorials/build-a-data-source-backend-plugin) or the [App with backend documentation](/how-to-guides/app-plugins/add-backend-component), which shows how to use the instance management for data source and app plugins.
+Grafana provides instance management in the plugin's backend SDK to ease working with multiple configured Grafana data sources or apps, referred to as instances. This allows a plugin to simply keep state cleanly separated between instances. The SDK makes sure to optimize plugin resources by caching said instances in memory until their configuration changes in Grafana. Refer to the [Data source plugin backend tutorial](/tutorials/build-a-data-source-backend-plugin) or the [App with backend documentation](/how-to-guides/app-plugins/add-backend-component), which shows how to use the instance management for data source and app plugins.
 
 Mentioned instance state is especially useful for holding client connections to downstream servers, such as HTTP, gRPC, TCP, UDP, and so on, to enable usage of connection pooling that optimizes usage and connection reuse to a downstream server. By using connection pooling, the plugin avoids using all of the machine's available TCP connections.

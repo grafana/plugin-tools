@@ -1,7 +1,7 @@
 ---
 id: convert-a-frontend-datasource-to-backend
-title: Convert a frontend data source plugin into a backend plugin
-description: Learn how to convert a frontend data source plugin into a backend plugin
+title: Convert a data source plugin frontend into a backend 
+description: Learn how to convert a data source plugin frontend into a backend.
 keywords:
   - grafana
   - plugins
@@ -11,21 +11,21 @@ keywords:
   - datasource
 ---
 
-This guide shows you how to convert an existing frontend-only data source plugin into a [backend plugin](../../key-concepts/backend-plugins).
+This guide shows you how to convert an existing frontend-only data source plugin into a [plugin backend](../../key-concepts/backend-plugins).
 
 To convert the frontend data source, we recommend scaffolding a new backend data source plugin using `npx @grafana/create-plugin@latest`. Use the following instructions to extend this foundation to copy functionality from your original plugin.
 
 ## Why
 
-There are multiple features available only in backend plugins, such as Grafana Alerting, Recorded queries, or externally shared dashboards (previously called Public dashboards). Refer to the use cases for implementing a backend plugin in the [backend plugins introduction](../../key-concepts/backend-plugins/#when-to-implement-a-plugin-with-a-backend).
+There are multiple features available only in plugin backends, such as Grafana Alerting, Recorded queries, or externally shared dashboards (previously called Public dashboards). Refer to the use cases for implementing a plugin backend in the [plugin backend introduction](../../key-concepts/backend-plugins/#when-to-implement-a-plugin-with-a-backend).
 
 ## Before you begin
 
-Before you dive into the details, you should familiarize yourself with the process of creating a backend data source plugin. If you haven't done this before, you can follow our tutorial for [building a backend plugin](../../tutorials/build-a-data-source-backend-plugin.md).
+Before you dive into the details, you should familiarize yourself with the process of creating a backend data source plugin. If you haven't done this before, you can follow our tutorial for [building a plugin backend](../../tutorials/build-a-data-source-backend-plugin.md).
 
 ## Key concepts
 
-Before going into specific conversion advice, it's important to understand the main components of a data source and how these differ between frontend and backend plugins.
+Before going into specific conversion advice, it's important to understand the main components of a data source and how these differ between frontend and backend components.
 
 ### Frontend `DataSource` class
 

@@ -36,7 +36,7 @@ Plugins are loaded either when Grafana starts up or when a plugin has been insta
 
 Understanding the different phases involved when Grafana is loading a plugin may help you better understand plugin usage and [troubleshoot](#troubleshooting) any unexpected behavior. For example, why a certain plugin is not marked as installed in the plugins catalog or for use within Grafana even though you've installed it.
 
-For [backend](./backend-plugins) plugins, there is an additional initialization process (see [Phase 3](#phase-3-backend-plugin-initialization)).
+For plugins with a [backend](./backend-plugins) component, Grafana carries out the additional initialization process described in [Phase 3](#phase-3-plugin-backend-initialization).
 
 :::note
 
@@ -55,7 +55,7 @@ All plugins that were discovered in the discovery phase are checked to make sure
 - Plugins must have a valid [signature](https://grafana.com/docs/grafana/latest/administration/plugin-management/#plugin-signatures). Valid plugins are referred to as _verified plugins_.
 - Angular detection: Given that [Angular is deprecated](https://grafana.com/docs/grafana/latest/developers/angular_deprecation/), if Angular support is disabled and Angular is detected in the plugin, then we record an error and don't allow the plugin to be loaded.
 
-### Phase 3. Backend plugin initialization
+### Phase 3. Plugin backend initialization
 
 For any verified plugin that has a backend, Grafana configures the backend client to use HashiCorp’s Go Plugin System over RPC.
 
@@ -65,15 +65,15 @@ All verified plugins are registered in an in-memory registry. From now on, the p
 
 Registered plugins show as installed in the catalog and appear in views for selecting a panel or data source in a dashboard.
 
-### Phase 5. Start backend plugin
+### Phase 5. Start the plugin backend
 
 For registered plugins that have a backend, Grafana starts to run the backend binary as a separate process using HashiCorp’s Go Plugin System over RPC. The supported plugin protocol and version is negotiated between Grafana (client) and the plugin (server) to give Grafana an understanding of the plugin's capabilities.
 
-A Grafana backend plugin has its own separate life cycle. So long as the backend plugin is running, Grafana will make sure to restart the backend plugin in case it crashes or is terminated. When Grafana is shut down, the backend processes is then terminated.
+A Grafana plugin backend component has its own separate life cycle. So long as the plugin backend is running, Grafana will make sure to restart the backend in case it crashes or is terminated. When Grafana is shut down, the backend processes is then terminated.
 
 ### Phase 6. Client-side loading
 
-After Grafana has started and the [HTTP API](https://grafana.com/docs/grafana/latest/developers/http_api/) is running, Grafana users receive the server-side rendered index page containing so-called bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin.
+After Grafana has started and the [HTTP API](https://grafana.com/docs/grafana/latest/developers/http_api/) is running, Grafana users receive the server-side rendered index page containing bootstrap data. This data includes the list of available plugins and a URI to a `module.js` file that Grafana uses to instantiate the plugin.
 
 When the user interacts with a UI that requires a plugin, Grafana will _lazy load_ the plugin's `module.js` file:
 
@@ -85,7 +85,7 @@ When the user interacts with a UI that requires a plugin, Grafana will _lazy loa
 
 :::note
 
-Each plugin is loaded only once but its objects are initialized multiple times. For example, a dashboard with 10 different panel plugins will load 10 plugins with an instance of each. A dashboard with 10 panels of the same plugin will load the plugin once and have 10 instances.
+While each plugin is loaded once only, its objects are initialized multiple times. For example, a dashboard with 10 different panel plugins will load 10 plugin instances, one for each plugin. A dashboard with 10 panels of the same plugin will load same plugin once, which will have 10 instances.
 
 :::
 

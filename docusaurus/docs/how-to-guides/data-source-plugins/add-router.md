@@ -12,7 +12,7 @@ keywords:
 
 # Add a query router or multiplexer to your data source backend
 
-Normally you implement the `QueryData` method in your backend plugin for data queries. But what if you need to support different kinds of queries: metrics, logs, and traces, for instance? That’s where the usage of a query _router_ (also known as a _multiplexer_) comes handy.
+Normally you implement the `QueryData` method in your plugin's backend for data queries. But what if you need to support different kinds of queries: metrics, logs, and traces, for instance? That’s where the usage of a query _router_ (also known as a _multiplexer_) comes handy.
 
 The plugin development requirement is that you need to populate the `queryType` property of your query model client-side, see the [`DataQuery`](https://github.com/grafana/grafana/blob/a728e9b4ddb6532b9fa2f916df106e792229e3e0/packages/grafana-data/src/types/query.ts#L47) interface.
 
