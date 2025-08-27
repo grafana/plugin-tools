@@ -48,11 +48,13 @@ export class AlertRuleEditPage extends GrafanaPage {
     );
 
     if (alertingQueryAndExpressionsStepMode) {
-      await expect(this.advancedModeSwitch).toBeVisible(); // this doesn't need a timeout because it's the default
+      await expect(this.advancedModeSwitch, 'expect(this.advancedModeSwitch).toBeVisible()').toBeVisible(); // this doesn't need a timeout because it's the default
       return true;
     }
 
-    await expect(this.advancedModeSwitch).toBeHidden({ timeout: 1000 * 10 });
+    await expect(this.advancedModeSwitch, 'expect(this.advancedModeSwitch).toBeVisible()').toBeHidden({
+      timeout: 1000 * 10,
+    });
     return false;
   }
 
@@ -183,7 +185,7 @@ export class AlertRuleEditPage extends GrafanaPage {
       evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
 
-    await expect(evaluateButton).toBeVisible();
+    await expect(evaluateButton, 'expect(evaluateButton).toBeVisible()').toBeVisible();
 
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
