@@ -56,7 +56,7 @@ For example, you can use a container with controlled layout:
 If you're using external plugins to extend your UI, consider the following:
 
 - Security and validation: Ensure extensions do not introduce vulnerabilities, for example by sanitizing user-generated content.
-- Feature restriction: If necessary, define access rules for content providers.
+- Shared data restriction: Only share with the extensions the minimum necessary data they need. (It is easier to extend later, than removing.)
 - Restrict plugins: You can decide to only allow certain plugins to provide content for your extension point.
 
 For example, you can restrict extensions by plugin ID:
