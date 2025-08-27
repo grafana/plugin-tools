@@ -7,7 +7,7 @@ import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 
 export class AlertRuleEditPage extends GrafanaPage {
-  private fullfilled = false;
+  private fulfilled = false;
   constructor(
     readonly ctx: PluginTestCtx,
     readonly args?: AlertRuleArgs
@@ -155,9 +155,9 @@ export class AlertRuleEditPage extends GrafanaPage {
     // it seems like when clicking the evaluate button to quickly after filling in the alert query form, form values have not been propagated to the state, so we wait a bit before clicking
     await this.ctx.page.waitForTimeout(1000);
 
-    if (this.fullfilled) {
+    if (this.fulfilled) {
       await this.ctx.page.unroute(this.ctx.selectors.apis.Alerting.eval);
-      this.fullfilled = false;
+      this.fulfilled = false;
     }
 
     // Starting from Grafana 10.0.0, the alerting evaluation endpoint started returning errors in a different way.
@@ -167,14 +167,14 @@ export class AlertRuleEditPage extends GrafanaPage {
       this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
-          this.fullfilled = true;
+          this.fulfilled = true;
           return route.fulfill({ response });
         }
 
         let body: { results: { [key: string]: { status: number } } } = await response.json();
         const statuses = Object.keys(body.results).map((key) => body.results[key].status);
 
-        this.fullfilled = true;
+        this.fulfilled = true;
         route.fulfill({
           response,
           status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
