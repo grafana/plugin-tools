@@ -57,6 +57,7 @@ In the example above, the Grafana Core extension point renders two links from th
 
 - [Learn how to create an extension point](../how-to-guides/ui-extensions/create-an-extension-point.md)
 - [Learn how to use exposed components](../how-to-guides/ui-extensions/use-an-exposed-component.md)
+- [Avoid UI issues when working with extension points](../how-to-guides/ui-extensions/degregate-ui.md)
 
 ## I want to share content from my app plugin
 

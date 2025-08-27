@@ -1,6 +1,6 @@
 ---
 id: register-an-extension
-title: Register an extension
+title: Register content in an extension point
 description: Make part of the UI extendable with links or components defined by plugins.
 keywords:
   - grafana
