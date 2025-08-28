@@ -134,9 +134,9 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Hide a link in certain conditions](../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
-- [Update the path based on the context](../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
-- [Open a modal from the `onClick()`](../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
+- [Hide a link in certain conditions](../../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
+- [Update the path based on the context](../../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
+- [Open a modal from the `onClick()`](../../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
 
 ### `exposeComponent`
 
@@ -175,7 +175,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Access plugin meta information in an exposed component](../how-to-guides/ui-extensions/expose-a-component.md#access-plugin-meta-information-in-an-exposed-component)
+- [Access plugin meta information in an exposed component](../../how-to-guides/ui-extensions/expose-a-component.md#access-plugin-meta-information-in-an-exposed-component)
 
 #### See also
 
