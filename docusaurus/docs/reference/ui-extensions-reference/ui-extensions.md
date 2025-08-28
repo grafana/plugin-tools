@@ -243,12 +243,12 @@ For more information refer to [`PluginExtensionComponent`](https://github.com/gr
 
 #### Examples
 
-- [Pass data to the components using props](../../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
-- [Limit which plugins can register components in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components-in-your-extension-point)
+- [Pass data to the components using props](../../how-to-guides/ui-extensions/extension-user-render-component.md#passing-data-to-the-components)
+- [Limit which plugins can register components in your extension point](../../how-to-guides/ui-extensions/extension-user-render-component.md#limit-which-plugins-can-register-components-in-your-extension-point)
 
 #### See also
 
-- [Best practices for rendering components added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)
+- [Best practices for rendering components added by plugins](../../how-to-guides/ui-extensions/extension-user-render-component.md#best-practices-for-rendering-components)
 
 ### `usePluginLinks`
 
