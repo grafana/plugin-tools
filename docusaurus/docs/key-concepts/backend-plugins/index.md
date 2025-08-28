@@ -19,7 +19,7 @@ Introduced in Grafana v7.0, plugins with backend components allow you to integra
 A plugin with a backend usually requires a frontend component as well. For example, some backend data source plugins need query editor components on the frontend.
 :::
 
-## Benefits for plugin development
+## Benefits for plugin backend development
 
 This approach has the following benefits:
 
