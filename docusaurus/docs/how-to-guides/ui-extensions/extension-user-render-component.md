@@ -19,7 +19,7 @@ An extension point is a part of your plugin or Grafana UI where other plugins ca
 
 :::note 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). 
-For reference documentation, including the APIs, see [UI extensions reference guide](./../reference/ui-extensions-reference).
+For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
 
 ## Best practices for rendering components
