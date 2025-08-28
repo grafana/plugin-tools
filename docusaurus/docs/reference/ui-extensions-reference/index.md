@@ -16,4 +16,8 @@ keywords:
 
 Reference guides for using and sharing content through UI extensions and extension points.
 
+:::note
+Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework. 
+:::
+
 <DocLinkList />
