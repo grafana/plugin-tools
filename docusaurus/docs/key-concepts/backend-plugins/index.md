@@ -16,7 +16,7 @@ sidebar_position: 1.5
 Introduced in Grafana v7.0, plugins with backend components allow you to integrate Grafana with virtually anything and offer custom visualizations. The plugin backend system is based on HashiCorp's [Go Plugin System over RPC](https://github.com/hashicorp/go-plugin) and supports server-side plugin elements. The Grafana server launches each plugin backend as a subprocess and communicates with it over [gRPC](https://grpc.io/).
 
 :::note
-A plugin with a backend usually requires a frontend component as well. For example, some backend data source plugins need query editor components on the frontend.
+A plugin with a backend requires a frontend component as well. For example, all data source plugins need a query editor component on the frontend.
 :::
 
 ## Benefits for plugin backend development
