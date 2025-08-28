@@ -47,7 +47,7 @@ The following examples are generic and based any kind of plugin. Depending on th
 :::
 
 <details>
-  <summary> <h3>Backend component workflow</h3> </summary>
+  <summary> <h3>Plugins with backend workflow</h3> </summary>
   <CodeSnippets
 snippets={[
 { component: BEPluginWorkflowNPM, label: 'npm' },
