@@ -179,7 +179,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### See also
 
-- [Best practices for exposing components](../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
+- [Best practices for exposing components](../../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
 ## Hooks
 
