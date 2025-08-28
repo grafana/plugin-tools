@@ -13,7 +13,7 @@ keywords:
 
 The React Tools debugger in the browser is invaluable for developing new Grafana plugins and troubleshooting existing ones.
 
-## Setup for debugging
+## Set up for debugging
 
 By default, Grafana Docker images do not contain a React debug build.
 
