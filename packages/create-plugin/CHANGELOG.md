@@ -1,3 +1,17 @@
+# v5.25.9 (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency tmp to ^0.2.4 [SECURITY] [#2020](https://github.com/grafana/plugin-tools/pull/2020) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update grafana/grafana-enterprise Docker tag to v12.1.1 [#2034](https://github.com/grafana/plugin-tools/pull/2034) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.1.8 [#2021](https://github.com/grafana/plugin-tools/pull/2021) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.25.8 (Tue Aug 05 2025)
 
 #### 🐛 Bug Fix

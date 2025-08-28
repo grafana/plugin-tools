@@ -1,3 +1,22 @@
+# (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.9`
+  - Plugin e2e: Fix AlertRuleEditPage evaluate flakiness [#2053](https://github.com/grafana/plugin-tools/pull/2053) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.25.9`
+  - Update dependency tmp to ^0.2.4 [SECURITY] [#2020](https://github.com/grafana/plugin-tools/pull/2020) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update grafana/grafana-enterprise Docker tag to v12.1.1 [#2034](https://github.com/grafana/plugin-tools/pull/2034) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v2.1.8 [#2021](https://github.com/grafana/plugin-tools/pull/2021) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Aug 07 2025)
 
 #### 🐛 Bug Fix
