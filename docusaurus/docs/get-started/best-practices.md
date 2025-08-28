@@ -50,11 +50,11 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 
 ### Frontend (only) plugins
 
-- **Data sources running only on the frontend typically use the [Grafana proxy](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service** - This is a simple way of adding support for queries in your plugin, and it doesn't require Golang knowledge. However, there are use cases for which writing a backend plugin is necessary. Refer to [Backend plugins](../key-concepts/backend-plugins/#use-cases-for-implementing-a-backend-plugin) for more information about those.
+- **Data sources running only on the frontend typically use the [Grafana proxy](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#add-a-proxy-route-to-your-plugin) to access an external service** - This is a simple way of adding support for queries in your plugin, and it doesn't require Golang knowledge. However, there are use cases for which writing a plugin's backend is necessary. Refer to [Plugin backends](../key-concepts/backend-plugins/#when-to-implement-a-plugin-with-a-backend) for more information about those.
 
-### Backend plugins
+### Plugin with a backend
 
-- **Add support for alerting** - Backend plugins have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/) but this support needs to be enabled. Simply add `"alerting": true` to your `plugin.json` file.
+- **Add support for alerting** - Plugins with a backend component have inherent support for [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/), but this support needs to be enabled. Simply add `"alerting": true` to your `plugin.json` file.
 - **Use the `CallResourceHandler` interface to serve custom HTTP requests**. For more information, refer to [Resource handlers](../key-concepts/backend-plugins/#resources). This is useful, for example, when providing query builders.
 - **Add logs, metrics and traces to your data source.** Make it easier to diagnose and resolve issues for both plugin developers and Grafana operators. Find more information in our [documentation](../how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins).
 - **Keep cached connections** - This is an important optimization. To learn more, refer to our [documentation](../key-concepts/backend-plugins/#caching-and-connection-pooling).

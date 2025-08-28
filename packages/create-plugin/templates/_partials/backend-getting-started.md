@@ -7,7 +7,7 @@
    go mod tidy
    ```
 
-2. Build backend plugin binaries for Linux, Windows and Darwin:
+2. Build plugin backend binaries for Linux, Windows and Darwin:
 
    ```bash
    mage -v

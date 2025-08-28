@@ -11,7 +11,7 @@ keywords:
   - datasource
 ---
 
-Grafana plugins can perform authenticated requests against a third-party API by using the _data source proxy_ or through a custom a _backend plugin_.
+Grafana plugins can perform authenticated requests against a third-party API by using the data source proxy or through a custom a plugin backend.
 
 ## Choose an authentication method
 
@@ -24,9 +24,9 @@ Configure your data source plugin to authenticate against a third-party API in o
 | ----------------------------------------------------------------------------------------------- | -------------------------- |
 | Do you need to authenticate your plugin using Basic Auth or API keys?                           | Use the data source proxy. |
 | Does your API support OAuth 2.0 using client credentials?                                       | Use the data source proxy. |
-| Does your API use a custom authentication method that isn't supported by the data source proxy? | Use a backend plugin.      |
-| Does your API communicate over a protocol other than HTTP?                                      | Use a backend plugin.      |
-| Does your plugin require alerting support?                                                      | Use a backend plugin.      |
+| Does your API use a custom authentication method that isn't supported by the data source proxy? | Use a plugin backend.      |
+| Does your API communicate over a protocol other than HTTP?                                      | Use a plugin backend.      |
+| Does your plugin require alerting support?                                                      | Use a plugin backend.      |
 
 ## Encrypt data source configuration
 

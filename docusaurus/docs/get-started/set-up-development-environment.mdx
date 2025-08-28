@@ -77,7 +77,7 @@ services:
 
 This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker compose` commands.
 
-### Debugging Backend plugin
+### Debugging a plugin's backend
 
 If you're developing a plugin with a backend part, run `npm run server` with `DEVELOPMENT=true`. The docker compose file exposes the port `2345` for debugging, from a headless delve instance that will run inside the docker environment.
 You can attach a debugger client to this port to debug your backend code.

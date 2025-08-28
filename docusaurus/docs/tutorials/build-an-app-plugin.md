@@ -30,7 +30,7 @@ App plugins can be displayed in the [navigation menu](#add-a-page-in-the-navigat
 
 :::note
 
-If you choose to have a backend for your app plugin, you must build the backend plugin binary by running `mage -v` before starting Grafana with Docker.
+If you choose to have a backend for your app plugin, run `mage -v` to build the binary before starting Grafana with Docker.
 
 :::
 
