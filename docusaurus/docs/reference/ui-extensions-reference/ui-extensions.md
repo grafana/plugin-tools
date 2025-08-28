@@ -53,7 +53,7 @@ The `addComponent()` method takes a single `config` object with the following pr
 
 | Property          | Description                         |
 | ----------------- | ------------------------------------ |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_. [See available extension points in Grafana &rarr;](#extension-points-in-grafana) |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_. [See available extension points in Grafana &rarr;](./extension-points) |
 | **`title`**       | A human readable title for the component.           |
 | **`description`** | A human readable description for the component.                           |
 | **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note that the props passed to the component are defined by each extension point.                |
@@ -95,7 +95,7 @@ The `addLink()` method takes a single `config` object with the following propert
 
 | Property          | Description                                                                                                                                                                                                                        | Required |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](#extension-points-in-grafana)_                      | true     |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_                      | true     |
 | **`title`**       | A human readable title for the link.                                                                                                                                                                                               | true     |
 | **`description`** | A human readable description for the link.                                                                                                                                                                                         | true     |
 | **`path?`**       | A path within your app plugin where you would like to send users when they click the link. (Use either `path` or `onClick`.) <br /> _Example: `"/a/myorg-incidents-app/incidents"`_                                                | true     |
