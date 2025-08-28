@@ -42,7 +42,7 @@ All Grafana plugins created with `grafana/create-plugin` version 4.7.0 or later 
 
 :::note
 
-The following examples are generic and based on plugins with frontend and backend components. Depending on the specifics of your plugin, you may need to modify or remove certain steps in the `playwright-tests` job before integrating them into your plugin’s workflow.
+The following examples are generic and based any kind of plugin. Depending on the specifics of your plugin, you may need to modify or remove certain steps in the `playwright-tests` job before integrating them into your plugin’s workflow.
 
 :::
 
