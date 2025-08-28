@@ -298,7 +298,18 @@ const sidebars: SidebarsConfig = {
       items: [
         'reference/plugin-json', 
         'reference/cli-commands', 
-        'reference/ui-extensions', 
+        {
+          type: 'category',
+          label: 'UI extensions reference',
+          description: 'Reeference guides for UI extensions.',
+          link: {
+            type: 'doc',
+            id: 'reference/ui-extensions-referece/ui-extensions-reference',
+          },
+          items: [
+            'reference/ui-extensions',   
+          ],
+        },
       ],
     },
     {
