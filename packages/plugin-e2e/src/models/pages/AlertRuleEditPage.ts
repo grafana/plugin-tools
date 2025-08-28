@@ -48,13 +48,13 @@ export class AlertRuleEditPage extends GrafanaPage {
     );
 
     if (alertingQueryAndExpressionsStepMode) {
-      await expect(this.advancedModeSwitch, 'expect(this.advancedModeSwitch).toBeVisible()').toBeVisible(); // this doesn't need a timeout because it's the default
+      await expect(this.advancedModeSwitch).toBeVisible();
+      await expect(this.advancedModeSwitch).toHaveCount(1);
       return true;
     }
 
-    await expect(this.advancedModeSwitch, 'expect(this.advancedModeSwitch).toBeHidden()').toBeHidden({
-      timeout: 1000 * 10,
-    });
+    await expect(this.advancedModeSwitch).not.toBeVisible();
+    await expect(this.advancedModeSwitch).toHaveCount(0);
     return false;
   }
 
@@ -159,14 +159,6 @@ export class AlertRuleEditPage extends GrafanaPage {
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
       await this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
-        if (this.ctx.page.isClosed()) {
-          return;
-        }
-
-        if (!this.ctx.page.context()?.browser()?.isConnected()) {
-          return;
-        }
-
         const response = await route.fetch();
         if (!response.ok()) {
           await route.fulfill({ response });
@@ -193,7 +185,7 @@ export class AlertRuleEditPage extends GrafanaPage {
       evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
 
-    await expect(evaluateButton, 'expect(evaluateButton).toBeVisible()').toBeVisible();
+    await expect(evaluateButton).toBeVisible();
 
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
