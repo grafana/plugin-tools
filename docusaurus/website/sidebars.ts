@@ -307,7 +307,7 @@ const sidebars: SidebarsConfig = {
             id: 'reference/ui-extensions-reference/ui-extensions-reference',
           },
           items: [
-            'reference/ui-extensions',   
+            'reference/ui-extensions-reference/ui-extensions',   
           ],
         },
       ],
