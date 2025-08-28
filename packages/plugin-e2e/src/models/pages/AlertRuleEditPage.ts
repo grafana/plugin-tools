@@ -52,7 +52,7 @@ export class AlertRuleEditPage extends GrafanaPage {
       return true;
     }
 
-    await expect(this.advancedModeSwitch, 'expect(this.advancedModeSwitch).toBeVisible()').toBeHidden({
+    await expect(this.advancedModeSwitch, 'expect(this.advancedModeSwitch).toBeHidden()').toBeHidden({
       timeout: 1000 * 10,
     });
     return false;
@@ -159,6 +159,14 @@ export class AlertRuleEditPage extends GrafanaPage {
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
       await this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
+        if (this.ctx.page.isClosed()) {
+          return;
+        }
+
+        if (!this.ctx.page.context()?.browser()?.isConnected()) {
+          return;
+        }
+
         const response = await route.fetch();
         if (!response.ok()) {
           await route.fulfill({ response });
