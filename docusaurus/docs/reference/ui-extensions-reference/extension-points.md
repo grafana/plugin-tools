@@ -12,16 +12,6 @@ keywords:
 sidebar_position: 50
 ---
 
-This page describes the UI Extensions API in detail, including:
-
-- [Extension points in Grafana](#extension-points-in-grafana)
-- [Methods](#methods)
-- [Hooks](#hooks)
-
-
-
-## 
-
 Use the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum exposed by the `@grafana/data` package to access the extension points within Grafana. 
 
 ```typescript

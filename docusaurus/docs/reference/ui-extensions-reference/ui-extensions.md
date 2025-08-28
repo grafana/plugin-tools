@@ -14,14 +14,14 @@ sidebar_position: 50
 
 This page describes the UI Extensions APIs in detail, including:
 
-- [Methods to register or expose content](#methods)
-- [Hooks to render content](#hooks)
+- [Methods to register or expose content](#i-want-to-register-or-expose-content)
+- [Hooks to render content](#i-want-to-use-renderable-content)
 
 :::note
 Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework. 
 :::
 
-## I want to register or expose content (methods)
+## I want to register or expose content 
 
 If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin:
 
@@ -157,7 +157,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 - [Best practices for exposing components](../../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
-## I want to use renderable content (hooks)
+## I want to use renderable content 
 
 If you want to render extension content in your extension point, use the following hooks:
 
