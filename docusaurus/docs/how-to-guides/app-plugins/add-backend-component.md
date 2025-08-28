@@ -38,7 +38,7 @@ Install the following prerequisites before adding a backend component:
 
 <CreatePlugin pluginType="app" />
 
-## Anatomy of a backend plugin
+## Anatomy of a plugin's backend
 
 <BackendPluginAnatomy pluginType="app" />
 

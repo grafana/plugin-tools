@@ -47,7 +47,7 @@ The following examples are generic and based on plugins with frontend and backen
 :::
 
 <details>
-  <summary> <h3>Backend workflow</h3> </summary>
+  <summary> <h3>Backend component workflow</h3> </summary>
   <CodeSnippets
 snippets={[
 { component: BEPluginWorkflowNPM, label: 'npm' },
@@ -60,7 +60,7 @@ queryString="current-package-manager"
 </details>
 
 <details>
-  <summary> <h3>Frontend workflow</h3> </summary>
+  <summary> <h3>Frontend component workflow</h3> </summary>
   <CodeSnippets
 snippets={[
 { component: FEPluginNPM, label: 'npm' },

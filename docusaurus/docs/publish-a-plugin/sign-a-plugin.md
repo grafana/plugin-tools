@@ -13,7 +13,7 @@ keywords:
 
 # Sign a plugin
 
-All Grafana Labs-authored backend plugins, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
+All Grafana Labs-authored plugin backends, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
 
 :::info
 
