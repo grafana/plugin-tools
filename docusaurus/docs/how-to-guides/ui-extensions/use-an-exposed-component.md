@@ -33,5 +33,5 @@ export const MyComponent = () => {
 ```
 
 :::tip
-For more details [check the API reference guide](../../reference/ui-extensions.md).
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::

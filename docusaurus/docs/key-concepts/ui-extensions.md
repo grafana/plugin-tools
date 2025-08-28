@@ -79,5 +79,5 @@ You can make your content available to extension points in situations such as:
 ## Further reading
 
 - [Learn how to version exposed components and extension points](../how-to-guides/ui-extensions/versioning-extensions.md)
-- [Check the API reference guide](../reference/ui-extensions.md)
+- [Check the API reference guide](../reference/ui-extensions-reference/ui-extensions.md)
 - If you need to debug your extension see [Use logs to debug your extension](../how-to-guides/ui-extensions/debug-logs.md)

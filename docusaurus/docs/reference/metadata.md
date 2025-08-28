@@ -477,16 +477,16 @@ Plugin extensions are a way to extend either the UI of core Grafana or other plu
 
 | Name                                                  | Type       | Description                                                                                                                                                                                                                                                                                                                                                                  | Required |
 | ----------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------: |
-| [**addedComponents**](#extensionsaddedcomponents)     | `object[]` | This list must contain all component extensions that your plugin registers to other extension points using [`.addComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#addcomponent). **Components that are not listed here won't work.**<br/>                                                                                                   |          |
-| [**addedLinks**](#extensionsaddedlinks)               | `object[]` | This list must contain all link extensions that your plugin registers to other extension points using [`.addLink()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#addlink). **Links that are not listed here won't work.**<br/>                                                                                                                       |          |
-| [**exposedComponents**](#extensionsexposedcomponents) | `object[]` | This list must contain all components that your plugin exposes using [`.exposeComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#exposecomponent). **Components that are not listed here won't work.**<br/>                                                                                                                                   |          |
-| [**extensionPoints**](#extensionsextensionpoints)     | `object[]` | This list must contain all extension points that your plugin defines using [`usePluginLinks()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#usepluginlinks) or [`usePluginComponents()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#useplugincomponents). **Extension points that are not listed in here won't work.**<br/> |          |
+| [**addedComponents**](#extensionsaddedcomponents)     | `object[]` | This list must contain all component extensions that your plugin registers to other extension points using [`.addComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#addcomponent). **Components that are not listed here won't work.**<br/>                                                                                                   |          |
+| [**addedLinks**](#extensionsaddedlinks)               | `object[]` | This list must contain all link extensions that your plugin registers to other extension points using [`.addLink()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#addlink). **Links that are not listed here won't work.**<br/>                                                                                                                       |          |
+| [**exposedComponents**](#extensionsexposedcomponents) | `object[]` | This list must contain all components that your plugin exposes using [`.exposeComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#exposecomponent). **Components that are not listed here won't work.**<br/>                                                                                                                                   |          |
+| [**extensionPoints**](#extensionsextensionpoints)     | `object[]` | This list must contain all extension points that your plugin defines using [`usePluginLinks()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#usepluginlinks) or [`usePluginComponents()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#useplugincomponents). **Extension points that are not listed in here won't work.**<br/> |          |
 
 <a name="extensionsaddedcomponents"></a>
 
 ### extensions\.addedComponents\[\]
 
-This list must contain all component extensions that your plugin registers to other extension points using [`.addComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#addcomponent). **Components that are not listed here won't work.**
+This list must contain all component extensions that your plugin registers to other extension points using [`.addComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#addcomponent). **Components that are not listed here won't work.**
 
 **Items**
 
@@ -511,7 +511,7 @@ The extension point ids your plugin registers the extension to, e.g. `["grafana/
 
 ### extensions\.addedLinks\[\]
 
-This list must contain all link extensions that your plugin registers to other extension points using [`.addLink()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#addlink). **Links that are not listed here won't work.**
+This list must contain all link extensions that your plugin registers to other extension points using [`.addLink()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#addlink). **Links that are not listed here won't work.**
 
 **Items**
 
@@ -536,7 +536,7 @@ The extension point ids your plugin registers the extension to, e.g. `["grafana/
 
 ### extensions\.exposedComponents\[\]
 
-This list must contain all components that your plugin exposes using [`.exposeComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#exposecomponent). **Components that are not listed here won't work.**
+This list must contain all components that your plugin exposes using [`.exposeComponent()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#exposecomponent). **Components that are not listed here won't work.**
 
 **Items**
 
@@ -552,7 +552,7 @@ This list must contain all components that your plugin exposes using [`.exposeCo
 
 ### extensions\.extensionPoints\[\]
 
-This list must contain all extension points that your plugin defines using [`usePluginLinks()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#usepluginlinks) or [`usePluginComponents()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions#useplugincomponents). **Extension points that are not listed in here won't work.**
+This list must contain all extension points that your plugin defines using [`usePluginLinks()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#usepluginlinks) or [`usePluginComponents()`](https://grafana.com/developers/plugin-tools/reference/ui-extensions-reference/ui-extensions#useplugincomponents). **Extension points that are not listed in here won't work.**
 
 **Items**
 

@@ -304,7 +304,7 @@ const sidebars: SidebarsConfig = {
           description: 'Reeference guides for UI extensions.',
           link: {
             type: 'doc',
-            id: 'reference/ui-extensions-referece/ui-extensions-reference',
+            id: 'reference/ui-extensions-reference/ui-extensions-reference',
           },
           items: [
             'reference/ui-extensions',   
