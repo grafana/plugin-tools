@@ -60,7 +60,7 @@ queryString="current-package-manager"
 </details>
 
 <details>
-  <summary> <h3>Frontend component workflow</h3> </summary>
+  <summary> <h3>Frontend-only plugin workflow</h3> </summary>
   <CodeSnippets
 snippets={[
 { component: FEPluginNPM, label: 'npm' },
