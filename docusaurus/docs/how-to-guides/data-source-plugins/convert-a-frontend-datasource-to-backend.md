@@ -20,7 +20,7 @@ To convert the frontend data source plugin into a plugin with a backend:
 
 ## Why add a backend to your plugin?
 
-There are multiple features available only in backend components, such as Grafana Alerting, Recorded queries, or externally shared dashboards (previously called Public dashboards). Refer to the use cases for implementing a plugin backend in the [plugin backend introduction](../../key-concepts/backend-plugins/#when-to-implement-a-plugin-with-a-backend).
+There are multiple features available only if a plugin has a backend component, such as Grafana Alerting, Recorded queries, or externally shared dashboards (previously called Public dashboards). Refer to the use cases for implementing a plugin backend in the [plugin backend introduction](../../key-concepts/backend-plugins/#when-to-implement-a-plugin-with-a-backend).
 
 ## Before you begin
 
