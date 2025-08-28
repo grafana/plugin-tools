@@ -19,7 +19,7 @@ This page describes the UI Extensions API in detail, including:
 - [Hooks](#hooks)
 
 :::note
-Read [Extensions key concepts](../key-concepts/ui-extensions) for an overview of the extension framework. 
+Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework. 
 :::
 
 ## Extension points in Grafana
@@ -49,8 +49,8 @@ The following Extension Points are available:
 
 If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin:
 
-- Use the `the add*` APIs to register content (links or components). See [Register an extension](../how-to-guides/ui-extensions/register-an-extension) for more information.
-- Use the `expose*` APIs to expose components. See [Expose a component](../how-to-guides/ui-extensions/expose-a-component) for more information.
+- Use the `the add*` APIs to register content (links or components). See [Register an extension](../../how-to-guides/ui-extensions/register-an-extension) for more information.
+- Use the `expose*` APIs to expose components. See [Expose a component](../../how-to-guides/ui-extensions/expose-a-component) for more information.
 
 ### `addComponent`
 
@@ -88,13 +88,13 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 #### Examples
 
-- [Accessing plugin meta-data in the component](../how-to-guides/ui-extensions/register-an-extension.md#access-the-plugins-meta-in-a-component)
-- [Access your plugin's state inside the component](../how-to-guides/ui-extensions/register-an-extension.md#access-the-plugins-state-in-a-component)
-- [Hide a component in certain conditions](../how-to-guides/ui-extensions/register-an-extension.md#hide-a-component-in-certain-conditions)
+- [Accessing plugin meta-data in the component](../../how-to-guides/ui-extensions/register-an-extension.md#access-the-plugins-meta-in-a-component)
+- [Access your plugin's state inside the component](../../how-to-guides/ui-extensions/register-an-extension.md#access-the-plugins-state-in-a-component)
+- [Hide a component in certain conditions](../../how-to-guides/ui-extensions/register-an-extension.md#hide-a-component-in-certain-conditions)
 
 #### See also
 
-- [Best practices for adding components](../how-to-guides/ui-extensions/register-an-extension.md#best-practices-for-adding-components)
+- [Best practices for adding components](../../how-to-guides/ui-extensions/register-an-extension.md#best-practices-for-adding-components)
 
 ### `addLink`
 
@@ -220,7 +220,7 @@ const {
 
 #### Examples
 
-- [How to render a component exposed by another plugin](../how-to-guides/ui-extensions/use-an-exposed-component.md#use-an-exposed-component)
+- [How to render a component exposed by another plugin](../../how-to-guides/ui-extensions/use-an-exposed-component.md#use-an-exposed-component)
 
 ### `usePluginComponents`
 
@@ -267,12 +267,12 @@ For more information refer to [`PluginExtensionComponent`](https://github.com/gr
 
 #### Examples
 
-- [Pass data to the components using props](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
-- [Limit which plugins can register components in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components-in-your-extension-point)
+- [Pass data to the components using props](../../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-the-components)
+- [Limit which plugins can register components in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-components-in-your-extension-point)
 
 #### See also
 
-- [Best practices for rendering components added by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)
+- [Best practices for rendering components added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-components)
 
 ### `usePluginLinks`
 
@@ -323,13 +323,13 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 
 #### Examples
 
-- [Pass data to the links](../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
-- [Limit the number of extensions in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-in-your-extension-point)
-- [Limit which plugins can register links in your extension point](../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
+- [Pass data to the links](../../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
+- [Limit the number of extensions in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-in-your-extension-point)
+- [Limit which plugins can register links in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
 
 #### See also
 
-- [Best practices for rendering links added by plugins](../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
+- [Best practices for rendering links added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
 
 ## Deprecated elements
 
