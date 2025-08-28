@@ -426,6 +426,7 @@ jobs:
             GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
             SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+            NPM_TOKEN=npm_token:npm_token
           export_env: false
 
         # As recommended on NX docs the NX Cloud token should be set as an environment variable:
@@ -455,8 +456,7 @@ jobs:
       - name: Setup environment
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          # We need to use node 24 for OIDC publishing support (npm >= 11.5.1).
-          node-version: '24'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -469,5 +469,6 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NPM_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ fromJSON(steps.get-secrets.outputs.secrets).SLACK_WEBHOOK_URL }}
         run: npm run release
