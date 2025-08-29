@@ -1,7 +1,7 @@
 ---
 id: create-an-extension-point
 title: Render links in an extension point
-sidebar_label: Extension user - Render links 
+sidebar_label: Use extension points to render links 
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:

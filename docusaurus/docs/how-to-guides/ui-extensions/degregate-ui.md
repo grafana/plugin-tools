@@ -1,7 +1,7 @@
 ---
 id: degregate-ui
 title: Protect your UI when working with extension points
-sidebar_label: Extension user - Protect your UI
+sidebar_label: Protect your UI
 description: Protect your UI when working with extension points.
 keywords:
   - grafana

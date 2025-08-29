@@ -1,7 +1,7 @@
 ---
 id: expose-a-component
 title: Expose a component
-sidebar_label: Content provider - Expose a component 
+sidebar_label: Expose a component 
 description: Share functionality with other plugins by exposing a component.
 keywords:
   - grafana

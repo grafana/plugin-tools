@@ -1,7 +1,7 @@
 ---
 id: extension-user-render-component
 title: Render components in an extension point
-sidebar_label: Extension user - Render components
+sidebar_label: Use extension points to render components
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:

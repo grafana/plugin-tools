@@ -1,8 +1,8 @@
 ---
 id: register-an-extension
 title: Register content in an extension point
-sidebar_label: Content provider - Register content 
-description: Make part of the UI extendable with links or components defined by plugins.
+sidebar_label: Register content n an extension point
+description: Register your plugin's links or components in a Grafana OSS or plugin's extension point.
 keywords:
   - grafana
   - plugins
