@@ -1,6 +1,7 @@
 ---
 id: use-an-exposed-component
 title: Use an exposed component
+sidebar_label: Use exposed components 
 description: Reuse functionality from other plugins by using exposed components.
 keywords:
   - grafana
@@ -33,5 +34,5 @@ export const MyComponent = () => {
 ```
 
 :::tip
-For more details [check the API reference guide](../../reference/ui-extensions.md).
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::

@@ -27,7 +27,7 @@ The UI extensions framework is built around these concepts:
 
 - **Exposed component**: Component made available to other plugins with the `expose*` APIs. If exposed, a component is not tied to extension points.
 
-- **Registered content**: Links or components made available with the `add*` APIs. If registered, content can be rendered in specific extension points.
+- **Registered content**: Links, components or functions made available with the `add*` APIs. If registered, content can be rendered in specific extension points.
 
 - **Content provider**: The app plugin providing the content (link or component) to be rendered at the extension point. 
 
@@ -79,5 +79,5 @@ You can make your content available to extension points in situations such as:
 ## Further reading
 
 - [Learn how to version exposed components and extension points](../how-to-guides/ui-extensions/versioning-extensions.md)
-- [Check the API reference guide](../reference/ui-extensions.md)
+- [Check the API reference guide](../reference/ui-extensions-reference/ui-extensions.md)
 - If you need to debug your extension see [Use logs to debug your extension](../how-to-guides/ui-extensions/debug-logs.md)

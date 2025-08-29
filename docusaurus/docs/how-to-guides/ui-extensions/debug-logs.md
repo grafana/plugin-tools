@@ -1,6 +1,7 @@
 ---
 id: debug-logs
 title: Use logs to debug your extension point
+sidebar_label: Debug your extension point 
 description: Use logs to debug your extension point.
 keywords:
   - grafana

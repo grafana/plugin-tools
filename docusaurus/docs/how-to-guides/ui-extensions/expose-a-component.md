@@ -1,6 +1,7 @@
 ---
 id: expose-a-component
 title: Expose a component
+sidebar_label: Expose a component 
 description: Share functionality with other plugins by exposing a component.
 keywords:
   - grafana
@@ -39,7 +40,7 @@ export const plugin = new AppPlugin()
 ```
 
 :::tip
-For more details [check the API reference guide](../../reference/ui-extensions.md).
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
 
 ## Access plugin meta information in an exposed component
@@ -68,5 +69,5 @@ export const plugin = new AppPlugin()
 ```
 
 :::tip
-For more details [check the API reference guide](../../reference/ui-extensions.md).
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
