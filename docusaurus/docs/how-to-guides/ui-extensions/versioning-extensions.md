@@ -1,6 +1,7 @@
 ---
 id: versioning-extensions
 title: Version extensions
+sidebar_label: Extension user - Versioning 
 description: See best practices for versioning UI extensions to ensure stability, compatibility, and smooth transitions.
 keywords:
   - grafana
