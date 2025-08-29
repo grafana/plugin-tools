@@ -1,7 +1,7 @@
 ---
 id: extension-user-render-component
 title: Render components in an extension point
-sidebar_label: Render components in an extension point
+sidebar_label: Extension user - Render components
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:
@@ -15,10 +15,10 @@ keywords:
   - apps
 ---
 
-An extension point is a part of your plugin or Grafana UI where other plugins can add links, functions or React components. You can use them to extend your users' experience based on a context exposed by the extension point.
+An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
 :::note 
-Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). 
+Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). <br />
 For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
 

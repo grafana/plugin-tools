@@ -1,7 +1,7 @@
 ---
 id: extensions-api-deprecated
 title: UI extensions API guide (deprecated elements)
-description: Reference guide for UI extensions - deprecated elements 
+description: Reference guide for UI extensions - deprecated elements. 
 keywords:
   - grafana
   - plugins
