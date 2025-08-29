@@ -23,7 +23,7 @@ The UI extensions framework is built around these concepts:
 
 - **Extension point**: A place in Grafana Core or in a plugin where content can be hooked into.
 
-- **Renderable content**: Functionality (link, component or function) made available to render in an extension point, or a component exposed to be used by another plugin.
+- **Renderable content**: Functionality (link or component) made available to render in an extension point, or a component exposed to be used by another plugin.
 
 - **Exposed component**: Component made available to other plugins with the `expose*` APIs. If exposed, a component is not tied to extension points.
 
