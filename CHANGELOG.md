@@ -1,3 +1,22 @@
+# (Fri Aug 29 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.26.0`
+  - Create Plugin: Eslint 9 migration [#1970](https://github.com/grafana/plugin-tools/pull/1970) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.0`
+  - Update dependency @grafana/plugin-e2e to v2.1.9 [#2064](https://github.com/grafana/plugin-tools/pull/2064) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Aug 28 2025)
 
 #### 🐛 Bug Fix
