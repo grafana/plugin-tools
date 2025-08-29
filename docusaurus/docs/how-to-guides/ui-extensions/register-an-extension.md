@@ -1,7 +1,7 @@
 ---
 id: register-an-extension
 title: Register content in an extension point
-sidebar_label: Register content n an extension point
+sidebar_label: Register content in an extension point
 description: Register your plugin's links or components in a Grafana OSS or plugin's extension point.
 keywords:
   - grafana
