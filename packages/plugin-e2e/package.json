@@ -42,7 +42,7 @@
     "dotenv": "^17.2.1"
   },
   "dependencies": {
-    "@grafana/e2e-selectors": "^12.1.0-254610",
+    "@grafana/e2e-selectors": "^12.2.0-255920",
     "semver": "^7.5.4",
     "uuid": "^11.0.2",
     "yaml": "^2.3.4"
