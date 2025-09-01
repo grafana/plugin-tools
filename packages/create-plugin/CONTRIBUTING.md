@@ -38,7 +38,7 @@ npm install
 └── templates // Handlebars templates
     ├── _partials // Composable parts of a template
     ├── app // Templates specific to scaffolding an app plugin
-    ├── backend // Templates specific to scaffolding backend plugin code
+    ├── backend // Templates specific to scaffolding plugin backend code
     ├── common // Common templates used by all plugin types (e.g. tooling config files)
     ├── datasource // Templates specific to scaffolding a datasource plugin
     ├── github // Templates for github workflows

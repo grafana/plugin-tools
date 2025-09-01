@@ -28,7 +28,7 @@ const sidebars: SidebarsConfig = {
         'key-concepts/anatomy-of-a-plugin',
         {
           type: 'category',
-          label: 'Plugin backends',
+          label: 'Plugin backend system',
           description: 'Learn about developing Grafana plugins with a backend component.',
           link: {
             type: 'doc',

@@ -17,8 +17,8 @@ Grafana plugins can perform authenticated requests against a third-party API by 
 
 Configure your data source plugin to authenticate against a third-party API in one of either of two ways:
 
-- Use the [_data source proxy_](#authenticate-using-the-data-source-proxy) method, or
-- Build a [_backend plugin_](#authenticate-using-a-backend-plugin).
+- Use the [data source proxy](#authenticate-using-the-data-source-proxy) method, or
+- Build a [plugin backend component](#authenticate-using-a-backend-plugin).
 
 | Case                                                                                            | Use                        |
 | ----------------------------------------------------------------------------------------------- | -------------------------- |
@@ -311,14 +311,14 @@ Be aware that `tokenAuth` configuration is only supported in data source plugins
 
 :::
 
-## Authenticate using a backend plugin
+## Authenticate using a plugin backend component
 
 While the data source proxy supports the most common authentication methods for HTTP APIs, using proxy routes has a few limitations:
 
 - Proxy routes only support HTTP or HTTPS.
 - Proxy routes don't support custom token authentication.
 
-If any of these limitations apply to your plugin, you need to add a [backend plugin](../../key-concepts/backend-plugins/#caching-and-connection-pooling). Because backend plugins run on the server, they can access decrypted secrets, which makes it easier to implement custom authentication methods.
+If any of these limitations apply to your plugin, you need to add a [plugin backend component](../../key-concepts/backend-plugins/#caching-and-connection-pooling). Because plugin backend components run on the server, they can access decrypted secrets, which makes it easier to implement custom authentication methods.
 
 The decrypted secrets are available from the `DecryptedSecureJSONData` field in the instance settings.
 

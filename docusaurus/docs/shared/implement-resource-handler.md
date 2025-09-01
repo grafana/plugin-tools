@@ -1,6 +1,6 @@
 ## Implement the resource handler interface
 
-To add a resource handler to your backend plugin, you need to implement the `backend.CallResourceHandler` interface.
+To add a resource handler to your plugin backend component, you need to implement the `backend.CallResourceHandler` interface.
 
 There are two ways you can implement this in your plugin, [using the `httpadapter` package](#using-the-httpadapter-package) or [manually implementing it](#manually-implementing-backendcallresourcehandler) in your plugin.
 
@@ -65,7 +65,7 @@ func (p *MyPlugin) handleProjects(rw http.ResponseWriter, req *http.Request) {
 }
 ```
 
-#### Accessing the backend plugin context
+#### Accessing the plugin backend component context
 
 You can use the [backend.PluginConfigFromContext](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#PluginConfigFromContext) function to access [backend.PluginContext](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#PluginContext). This holds contextual information about a plugin request, such as the user performing the request:
 

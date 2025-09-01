@@ -2999,7 +2999,7 @@ Thank you, Kevin Yu ([@kevinwcyu](https://github.com/kevinwcyu)), for all your w
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@4.2.1`
-  - Create Plugin: Bump go version in backend plugin scaffolding [#786](https://github.com/grafana/plugin-tools/pull/786) ([@sunker](https://github.com/sunker))
+  - Create Plugin: Bump go version in plugin backend scaffolding [#786](https://github.com/grafana/plugin-tools/pull/786) ([@sunker](https://github.com/sunker))
   - Create Plugin: Bump Glob to 10.x.x [#764](https://github.com/grafana/plugin-tools/pull/764) ([@jackw](https://github.com/jackw))
   - Create Plugin: Bump find-up to 7.x.x [#765](https://github.com/grafana/plugin-tools/pull/765) ([@jackw](https://github.com/jackw))
 

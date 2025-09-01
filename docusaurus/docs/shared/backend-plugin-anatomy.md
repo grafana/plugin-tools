@@ -9,10 +9,10 @@ The folders and files used to build the backend for the {props.pluginType} are:
 
 #### The plugin.json file
 
-The [`plugin.json`](../reference/metadata.md) file is required for all plugins. When building a backend plugin, pay attention especially to these properties:
+The [`plugin.json`](../reference/metadata.md) file is required for all plugins. When building a plugin backend component, pay attention especially to these properties:
 
 | property     | description                                                                                                                               |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `backend`    | Set to `true` for backend plugins. This tells Grafana that it should start a binary when loading the plugin.                              |
+| `backend`    | Set to `true` for plugin backend components. This tells Grafana that it should start a binary when loading the plugin.                              |
 | `executable` | This is the name of the executable that Grafana expects to start. Refer to [plugin.json reference](../reference/metadata.md) for details. |
 | `alerting`   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                                     |

@@ -18,6 +18,6 @@ If you are running Grafana from a binary or inside a Docker container, you can s
 
 :::note
 
-By default, Grafana requires backend plugins to be signed. To load unsigned backend plugins, you need to configure Grafana to [allow unsigned plugins](https://grafana.com/docs/grafana/latest/administration/plugin-management/#allow-unsigned-plugins). For more information, refer to [Plugin signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management/#backend-plugins).
+By default, Grafana requires plugin backend components to be signed. To load unsigned backends, you need to configure Grafana to [allow unsigned plugins](https://grafana.com/docs/grafana/latest/administration/plugin-management/#allow-unsigned-plugins). For more information, refer to [Plugin signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management/#backend-plugins).
 
 :::
