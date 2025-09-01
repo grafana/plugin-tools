@@ -65,7 +65,7 @@ func (p *MyPlugin) handleProjects(rw http.ResponseWriter, req *http.Request) {
 }
 ```
 
-#### Accessing the plugin backend component context
+#### Accessing the plugin context
 
 You can use the [backend.PluginConfigFromContext](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#PluginConfigFromContext) function to access [backend.PluginContext](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend#PluginContext). This holds contextual information about a plugin request, such as the user performing the request:
 
