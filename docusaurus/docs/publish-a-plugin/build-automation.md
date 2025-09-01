@@ -15,7 +15,7 @@ keywords:
 
 # Automate packaging and signing with GitHub CI
 
-We recommend setting up your plugin to use the supplied [Github workflows](../set-up-development-environment.mdx#set-up-github-workflows) from [create-plugin](../get-started/get-started.mdx)
+We recommend setting up your plugin to use the supplied [Github workflows](../set-up-development-environment.md#set-up-github-workflows) from [create-plugin](../get-started.md)
 to ensure that your plugin will be built and packaged in the correct format.
 
 Additionally, we recommend using the zip file produced from this workflow to test the plugin.
