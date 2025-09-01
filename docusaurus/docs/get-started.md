@@ -105,7 +105,7 @@ Run the following command and answer the prompts:
 
 <ScaffoldNPM />
 
-For help with the prompts, refer to the [CLI commands](../reference/cli-commands.mdx).
+For help with the prompts, refer to the [CLI commands](./reference/cli-commands.mdx).
 
 ### Open the generated folder structure
 
@@ -196,7 +196,7 @@ To build for production, run:
 
 ### Build the backend
 
-If your plugin includes a [backend](../key-concepts/backend-plugins/index.md) component, you can build using mage:
+If your plugin includes a [backend](./key-concepts/backend-plugins/index.md) component, you can build using mage:
 
 ```shell
 mage -v build:linux
