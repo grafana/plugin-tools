@@ -11,7 +11,7 @@ keywords:
   - explore
 ---
 
-[Explore](https://grafana.com/docs/grafana/latest/explore/) allows you to make ad-hoc queries without having to use a dashboard. This is useful when you want to troubleshoot or learn more about the data. Your data source supports Explore by default and uses the existing query editor for the data source. 
+[Explore](https://grafana.com/docs/grafana/latest/explore/) allows you to make ad-hoc queries without having to use a dashboard. This is useful when you want to troubleshoot or learn more about the data. Your data source supports Explore by default and uses the existing query editor. 
 
 This guide explains how to extend functionality for Explore queries in a data source plugin.
 
