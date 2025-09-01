@@ -28,7 +28,7 @@ This guide walks you through the essential components of a Grafana plugin, and h
 
 ## Before you begin
 
-Before proceeding, we recommend reviewing the [plugin types and usage guide](/key-concepts/plugin-types-usage) to gain a basic understanding of the different types of plugins available.
+Before proceeding, review the [plugin types and usage guide](/key-concepts/plugin-types-usage) to gain a basic understanding of the different types of plugins available.
 
 Each Grafana plugin is composed of several essential components that extend Grafana’s functionality in different ways. First, we’ll explore the core parts of each of the three primary plugin types: apps, data sources, and panels.
 
