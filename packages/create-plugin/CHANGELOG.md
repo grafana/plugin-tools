@@ -1,3 +1,17 @@
+# v5.26.1 (Mon Sep 01 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: always externalize i18next [#2047](https://github.com/grafana/plugin-tools/pull/2047) ([@hugohaggmark](https://github.com/hugohaggmark))
+- Update dependency @grafana/plugin-e2e to v2.1.10 [#2073](https://github.com/grafana/plugin-tools/pull/2073) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v5.26.0 (Fri Aug 29 2025)
 
 #### 🚀 Enhancement
