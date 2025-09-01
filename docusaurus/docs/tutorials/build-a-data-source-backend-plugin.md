@@ -109,7 +109,7 @@ Open `/pkg/plugin/datasource.go`. In this file, you'll see that the `Datasource`
 
 ## Add authentication
 
-Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more, see [How to authenticate using a plugin backend component](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
+Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more, see [How to authenticate using a plugin backend component](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#authenticate-using-a-plugin-backend).
 
 ## Enable Grafana Alerting
 
