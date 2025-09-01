@@ -5,25 +5,20 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     {
-      type: 'category',
+      type: 'doc',
+      id: 'get-started',
       label: 'Get started',
-      collapsible: true,
-      collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'get-started/get-started',
-      },
-      items: ['get-started/set-up-development-environment', 'get-started/best-practices'],
     },
     {
       type: 'category',
-      label: 'Key concepts',
+      label: 'Key concepts and best practices',
       link: {
         type: 'doc',
         id: 'key-concepts/key-concepts',
       },
       collapsed: true,
       items: [
+        'key-concepts/best-practices'
         'key-concepts/plugin-types-usage',
         'key-concepts/anatomy-of-a-plugin',
         {
@@ -45,6 +40,11 @@ const sidebars: SidebarsConfig = {
         'key-concepts/ui-extensions',
         'key-concepts/plugin-i18n-concept',
       ],
+    },
+    {
+      type: 'doc',
+      id: 'set-up-development-environment',
+      label: 'Set up your environment',
     },
     {
       type: 'category',
