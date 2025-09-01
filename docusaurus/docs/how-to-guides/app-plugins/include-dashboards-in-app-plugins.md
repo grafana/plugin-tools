@@ -19,7 +19,7 @@ We'll walk you through the process of bundling dashboards into plugins. The proc
 
 ## Step 1: Create a dashboard
 
-Start by creating the dashboard you want to bundle with your plugin. The [development environment](/get-started/set-up-development-environment) provided by create-plugin can aid with creating and testing dashboards.
+Start by creating the dashboard you want to bundle with your plugin. The [development environment](/set-up-development-environment) provided by create-plugin can aid with creating and testing dashboards.
 
 ### Set up a data source variable
 

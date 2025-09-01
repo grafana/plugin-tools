@@ -109,7 +109,7 @@
   },
   {
     "from": ["/create-a-plugin/develop-a-plugin/set-up-github-workflows"],
-    "to": "/get-started/set-up-development-environment#set-up-github-workflows"
+    "to": "/set-up-development-environment#set-up-github-workflows"
   },
   {
     "from": ["/create-a-plugin/develop-a-plugin/subscribe-events"],
