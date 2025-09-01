@@ -18,7 +18,7 @@ const sidebars: SidebarsConfig = {
       },
       collapsed: true,
       items: [
-        'key-concepts/best-practices'
+        'key-concepts/best-practices',
         'key-concepts/plugin-types-usage',
         'key-concepts/anatomy-of-a-plugin',
         {
