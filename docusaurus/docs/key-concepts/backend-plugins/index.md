@@ -19,17 +19,17 @@ Introduced in Grafana v7.0, plugins with backend components allow you to integra
 A plugin with a backend requires a frontend component as well. For example, all data source plugins need a query editor component on the frontend.
 :::
 
-## Benefits for plugin backend development
+## Benefits of plugin backend development
 
-This approach has the following benefits:
+Adding a backend component to your plugin has the following benefits:
 
-- **Stability:** Plugins can't crash your Grafana process: a panic in a plugin doesn't panic the server.
-- **Ease of development:** Grafana provides an officially supported SDK for Go and tooling to help create plugins.
-- **Security:** Plugins only have access to the interfaces and arguments given to them, not to the entire memory space of the process.
+- **Stability**: Plugins can't crash your Grafana process. A panic in a plugin doesn't panic the server.
+- **Ease of development**: Grafana provides an officially supported SDK for Go and tooling to help create plugins.
+- **Security**: Plugins only have access to the interfaces and arguments given to them, not to the entire memory space of the process.
 
 ## When to implement a plugin with a backend
 
-The following examples give some common use cases for plugins with a backend component:
+Here's some common use cases for plugins with a backend component:
 
 - Support [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/), [Recorded Queries](https://grafana.com/docs/grafana/latest/administration/recorded-queries/) and [Query and resource caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching) for data sources.
 - Connect to SQL database servers and other non-HTTP services that normally can't be connected to from a browser.
@@ -37,15 +37,15 @@ The following examples give some common use cases for plugins with a backend com
 - Use custom authentication methods and/or authorization checks that aren't supported in Grafana.
 - Use a custom data source request proxy (refer to [Resources](#resources) for more information).
 
-## Capabilities of the plugin backend system
+## Capabilities of the Grafana plugin backend system
 
 Grafana's plugin backend system exposes several key capabilities, or building blocks, that your backend component can implement:
 
-- Query data
-- Resources
-- Health checks
-- Collect metrics
-- Streaming
+- [Query data](#query-data)
+- [Resources](#resources)
+- [Health checks](#health-checks)
+- [Collect metrics](#collect-metrics)
+- [Streaming](#streaming)
 
 ### Query data
 
@@ -53,7 +53,7 @@ The query data capability allows a plugin's backend to handle data source querie
 
 :::note
 
-Backend data source plugins are required to implement the query data capability.
+To implement the query data capability you need a data source plugin backend.
 
 :::
 

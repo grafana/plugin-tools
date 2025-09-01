@@ -14,7 +14,7 @@ sidebar_position: 50
 
 # Frontend NPM dependencies in a Grafana plugin
 
-Frontend plugins in Grafana have their own unique dependencies, as well as dependencies that are shared with the Grafana application during runtime. This document focuses on how these shared dependencies, particularly the `@grafana` npm packages, are handled.
+Plugin frontend components in Grafana have their own unique dependencies, as well as dependencies that are shared with the Grafana application during runtime. This document focuses on how these shared dependencies, particularly the `@grafana` npm packages, are handled.
 
 It's important to understand that while a plugin specifies the expected versions of these dependencies in its `package.json` file, they are dynamically linked to the Grafana version at runtime.
 
@@ -32,7 +32,7 @@ This dynamic dependency linking also applies to the [docker development environm
 
 ## Dependency sharing mechanism
 
-To facilitate this dynamic dependency linking, Grafana employs SystemJS for loading frontend plugin code and sharing some of the Grafana application's npm dependencies with plugins.
+To facilitate this dynamic dependency linking, Grafana employs SystemJS to load a plugin's frontend code and share some of the Grafana application's NPM dependencies with plugins.
 
 Grafana makes the decision to share dependencies for one of two reasons:
 
@@ -54,7 +54,7 @@ Customizing the build tool configuration to change the external dependencies is 
 
 ## Compilation and runtime
 
-As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend plugin code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
+As the Grafana application loads in the frontend, SystemJS registers all shared dependencies found in the import map. When the frontend code is compiled, Grafana ensures that the externalized dependencies exist in the scope of the plugin's runtime environment.
 
 When a user navigates to a Grafana page that requires a particular plugin, the following steps occur:
 

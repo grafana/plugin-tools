@@ -1,6 +1,6 @@
 ---
 id: build-a-data-source-backend-plugin
-title: Build a data source backend plugin
+title: Build a data source plugin backend component
 sidebar_position: 10
 description: Learn how to create a backend for your data source plugin.
 keywords:
@@ -20,7 +20,7 @@ import TroubleshootPluginLoad from '@shared/troubleshoot-plugin-doesnt-load.md';
 
 Grafana supports a wide range of [data sources](https://grafana.com/grafana/plugins/data-source-plugins/), including Prometheus, MySQL, and Datadog. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. This tutorial teaches you to build a new data source plugin to query data.
 
-A backend component provides a number of additional capabilities to your plugin, such as custom authentication methods. To learn more, refer to the documentation on [Backend plugins](../key-concepts/backend-plugins/).
+A backend component provides a number of additional capabilities to your plugin, such as custom authentication methods. Learn more in [key concepts of a plugin backend component](../key-concepts/backend-plugins/).
 
 In this tutorial, you'll:
 
@@ -59,7 +59,7 @@ To add the data source to the dashboard:
 
 <TroubleshootPluginLoad />
 
-## Anatomy of a backend plugin
+## Anatomy of a plugin backend component
 
 <BackendPluginAnatomy pluginType="data source" />
 
@@ -71,7 +71,7 @@ We begin by opening the file `/pkg/plugin/datasource.go`. In this file you will 
 
 Each request contains multiple queries to reduce traffic between Grafana and plugins. So you need to loop over the slice of queries, process each query, and then return the results of all queries.
 
-In the tutorial we have extracted a method named `query` to take care of each query model. Since each plugin has their own unique query model, Grafana sends it to the backend plugin as JSON. Therefore the plugin needs to `Unmarshal` the query model into something easier to work with.
+In the tutorial we have extracted a method named `query` to take care of each query model. Since each plugin has their own unique query model, Grafana sends it to the plugin backend as JSON. Therefore the plugin needs to `Unmarshal` the query model into something easier to work with.
 
 As you can see the sample only returns static numbers. Try to extend the plugin to return other types of data.
 
@@ -109,7 +109,7 @@ Open `/pkg/plugin/datasource.go`. In this file, you'll see that the `Datasource`
 
 ## Add authentication
 
-Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more about how to authenticate using a backend plugin, refer to [our documentation](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#authenticate-using-a-backend-plugin).
+Implementing authentication allows your plugin to access protected resources like databases or APIs. To learn more, see [How to authenticate using a plugin backend component](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#authenticate-using-a-plugin-backend).
 
 ## Enable Grafana Alerting
 
@@ -154,7 +154,7 @@ The following instructions are based on Grafana v10.1.1, consult the [documentat
 
 :::note
 
-This feature is only available for the Grafana backend plugin SDK version 0.232.0 and later.
+This feature is only available for the Grafana plugin backend SDK version 0.232.0 and later.
 
 :::
 

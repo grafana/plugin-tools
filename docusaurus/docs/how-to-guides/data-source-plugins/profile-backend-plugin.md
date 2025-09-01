@@ -13,8 +13,7 @@ keywords:
   - back-end
 ---
 
-This guide provides instructions for configuring a plugin with a backend to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information
-for investigating certain performance problems, such as high CPU or memory usage, or when you want to use [continuous profiling](https://grafana.com/oss/pyroscope/).
+This guide provides instructions for configuring a plugin with a backend to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information to investigate certain performance problems, such as high CPU or memory usage, or when you want to use [continuous profiling](https://grafana.com/oss/pyroscope/).
 
 ## Configure profiling data
 
