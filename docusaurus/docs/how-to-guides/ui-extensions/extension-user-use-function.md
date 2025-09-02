@@ -25,7 +25,7 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 
 ## Best practices for function extensions
 
-- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as paramateres to the function.
+- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as parameters to the function.
 - **Handle errors** <br /> Make sure to handle any errors that could be thrown by the function extensions.
 
 ## Create an extension point for functions
