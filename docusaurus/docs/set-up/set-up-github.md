@@ -1,7 +1,7 @@
 ---
 id: set-up-github
 title: Set up GitHub workflows for development environment
-description: Set up your development environment with Docker for Grafana plugin development.
+description: Set up your GitHub development environment for Grafana plugin development.
   - grafana
   - plugins
   - plugin

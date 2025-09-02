@@ -1,5 +1,5 @@
 ---
-id: set-up-development-environment
+id: set-up-docker
 title: Set up your Docker development environment
 description: Set up your Docker development environment with Docker for Grafana plugin development.
   - grafana
