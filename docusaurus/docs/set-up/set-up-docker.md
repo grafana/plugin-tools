@@ -2,7 +2,7 @@
 id: set-up-docker
 title: Set up your Docker development environment
 sidebar_label: Set up your Docker environment
-description: Set up your Docker development environment with Docker for Grafana plugin development.
+description: Set up Docker for Grafana plugin development.
 keywords:
   - grafana
   - plugins

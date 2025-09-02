@@ -81,7 +81,7 @@ Grafana plugin tools work with the following operating systems:
 
 We generally recommend that you build for a version of Grafana later than v10.0. For more information about requirements and dependencies when developing with Grafana, see the [Grafana developer's guide](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md).
 
-### Recommended tooling
+### Required tooling
 
 You'll need to have the following tools set up:
 
