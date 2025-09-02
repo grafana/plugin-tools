@@ -44,9 +44,11 @@ If this is your first time creating a plugin, we recommend that you familiarize 
 
 :::
 
-## Classifications of Grafana plugins
+## Signature classifications of Grafana plugins
 
-We recommend that you familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. Note that if you want to publish a plugin which is associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [our plugins policy](https://grafana.com/legal/plugins/).
+Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. 
+
+Note that if you want to publish a plugin associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [our plugins policy](https://grafana.com/legal/plugins/).
 
 ## Use plugin tools to develop your plugins faster
 
@@ -155,7 +157,7 @@ For more information about these files, refer to [Anatomy of a plugin](/key-conc
 
 ## Build and run your plugin in Docker
 
-With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](/set-up-development-environment/).
+With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](/set-up/set-up-development-environment/).
 
 Refer to the "Next steps" terminal output following the [scaffolding of a new plugin](#scaffold-a-plugin) to install dependencies, build and run your plugin.
 
@@ -186,7 +188,7 @@ Note: We strongly recommend creating a new Git repository by running git init in
 
 ### Build the frontend
 
-To build the plugin in watch mode for development, continually monitoring for changes, run:
+To build the plugin in watch mode for development and continually monitor for changes, run:
 
 <BuildFEDevNPM />
 

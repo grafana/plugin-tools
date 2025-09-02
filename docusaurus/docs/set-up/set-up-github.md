@@ -1,12 +1,12 @@
 ---
-id: set-up-development-environment
-title: Set up your development environment
+id: set-up-github
+title: Set up GitHub workflows for development environment
 description: Set up your development environment with Docker for Grafana plugin development.
   - grafana
   - plugins
   - plugin
   - create-plugin
-  - Docker
+  - GitHub
   - setup
   - CI
   - continuous integration
@@ -15,108 +15,13 @@ description: Set up your development environment with Docker for Grafana plugin 
 sidebar_position: 20
 ---
 
-import DockerNPM from '@shared/docker-grafana-version.md';
-
-This guide walks you through setting up your development environment for Grafana plugin development. Including:
-
-- Running a development Grafana server with your plugin installed using Docker
-- Setting up GitHub workflows to automate your development and release process
-- Extending configurations for ESLint, Prettier, Jest, TypeScript, and Webpack
-
-## Docker development environment
-
-The [`create-plugin` tool](/get-started.md#use-plugin-tools-to-develop-your-plugins-faster) includes a development environment featuring [Docker](https://docs.docker.com/get-docker/). It allows you to start an instance of the Grafana application for plugin developers against which you can code.
-
-:::info
-
-It's not necessary to [sign a plugin](/publish-a-plugin/sign-a-plugin.md) during development. The Docker development environment that is scaffolded with `@grafana/create-plugin` will load the plugin without a signature. This is because it is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development).
-
-:::
-
-### Why use the Docker environment
-
-We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
-
-With the `create-plugin` tool, the Docker container is configured with the necessary variables to allow easy access to Grafana and to load plugins without the need for them to be signed. The plugin tool also adds a live reload feature that allows you to make your frontend code changes to trigger refreshes in the browser, and changing the backend code will make the plugin binary to automatically reload.
-
-The docker environment also allows you to attach a debugger to the plugin backend code, making the development process easier.
-
-### Get started with Docker
-
-To start your plugin development project, run the following commands in the order listed:
-
-1. <SyncCommand cmd="install" />: Installs frontend dependencies.
-1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
-1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
-1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
-   [http://localhost:3000](http://localhost:3000).
-
-### Configure the Grafana version
-
-To test a plugin across different versions of Grafana, set an environment variable. Use `GRAFANA_VERSION` to set the Grafana version:
-
-<DockerNPM />
-
-### Configure the Grafana image
-
-The default Docker image in the plugin tool is `grafana-enterprise`. If you want to override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument like so:
-
-```yaml title="docker-compose.yaml"
-version: '3.7'
-
-services:
-  grafana:
-    extends:
-      file: .config/docker-compose-base.yaml
-      service: grafana
-    build:
-      args:
-        grafana_version: ${GRAFANA_VERSION:-9.1.2}
-        grafana_image: ${GRAFANA_IMAGE:-grafana}
-```
-
-This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker compose` commands.
-
-### Debugging a plugin's backend
-
-If you're developing a plugin with a backend part, run `npm run server` with `DEVELOPMENT=true`. The docker compose file exposes the port `2345` for debugging, from a headless delve instance that will run inside the docker environment.
-You can attach a debugger client to this port to debug your backend code.
-For example, in VSCode, you can add a `launch.json` configuration like this:
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Attach to plugin backend in docker",
-      "type": "go",
-      "request": "attach",
-      "mode": "remote",
-      "port": 2345,
-      "host": "127.0.0.1",
-      "showLog": true,
-      "trace": "log",
-      "logOutput": "rpc",
-      "substitutePath": [
-        {
-          "from": "${workspaceFolder}",
-          "to": "/root/<your-plugin-id>"
-        }
-      ]
-    }
-  ]
-}
-```
-
-## Set up GitHub workflows
-
 Automate your development process to minimize errors and make it faster and more cost-efficient. The `create-plugin` tool helps you to configure your GitHub actions workflows to help automate your development process.
 
-### The CI workflow
+## The CI workflow
 
 The CI (`ci.yml`) workflow is designed to lint, type check, and build the frontend and backend. It is also used to run tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps to catch any issues early in the development process, before they become bigger problems. For more information on end-to-end testing as part of the CI workflow, refer to our [documentation](./e2e-test-a-plugin/ci.md).
 
-### The release workflow
+## The release workflow
 
 To learn how to automate the release process and set up the release workflow, refer to our documentation on [Automate packaging and signing with GitHub CI](./publish-a-plugin/build-automation).
 
@@ -126,7 +31,7 @@ This workflow requires a Grafana Cloud API key. Before you begin, follow the ins
 
 :::
 
-#### Storing your Access Policy token as a repository secret in GitHub
+### Storing your Access Policy token as a repository secret in GitHub
 
 1. Access Repository Settings:
 
@@ -159,7 +64,7 @@ jobs:
 
 In this example, the `secrets.GRAFANA_ACCESS_POLICY_TOKEN` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
 
-#### Triggering the workflow
+### Triggering the workflow
 
 To trigger the release workflow, push a Git tag for the plugin version that you want to release:
 
@@ -168,7 +73,7 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-### The compatibility check workflow
+## The compatibility check workflow
 
 The compatibility check (`is-compatible.yml`) workflow is designed to check the Grafana API compatibility of your plugin every time you push changes to your repository. This helps to catch potential frontend runtime issues before they occur.
 
@@ -180,13 +85,13 @@ The workflow contains the following steps:
 1. Looking for usages of those changed APIs inside your plugin.
 1. Reporting any potential incompatibilities.
 
-### The create plugin update workflow
+## The create plugin update workflow
 
 The create plugin update (`cp-update.yml`) workflow is designed to automate keeping your plugins development environment and dependencies up to date. It periodically checks the latest version of create-plugin listed on the npm registry and compares it to the version used by your plugin. If there is a newer version available the workflow will run the `create-plugin update` command, update the frontend dependency lockfile, then create a PR with the changes for review.
 
 This workflow requires content and pull request write access to your plugins repo to be able to push changes and open PRs. Choose from the following two options:
 
-#### Use the default access token
+### Use the default access token
 
 To use this option you must allow [github actions to create and approve pull requests](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#preventing-github-actions-from-creating-or-approving-pull-requests) within your repository settings and use the `permissions` property in the workflow to elevate the default access token permissions like so:
 
@@ -209,7 +114,7 @@ jobs:
       - uses: grafana/plugin-actions/create-plugin-update@main
 ```
 
-#### Use a personal access token
+### Use a personal access token
 
 To use this option you must create a Github [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write both `contents` and `pull requests`. Once created add the token to the plugin repository action secrets and then pass it to the action like so:
 
@@ -230,7 +135,7 @@ jobs:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
 
-### The bundle stats workflow
+## The bundle stats workflow
 
 The bundle stats (`bundle-stats.yml`) workflow is intended to help developers keep an eye on the size of their plugins frontend assets. Changes in PRs trigger this workflow which will compare two webpack stats files; one from the default branch and the other from the PR. It then calculates differences between these assets sizes and posts a formatted comment to the PR giving an overview of any size differences.
 
@@ -262,8 +167,8 @@ jobs:
       - uses: grafana/plugin-actions/bundle-size@main
 ```
 
-#### Troubleshooting
+### Troubleshooting
 
-##### Main stats artifact could not be found
+#### Main stats artifact could not be found
 
 If you see this warning during bundle size workflow runs it means that the workflow failed to find the github artifact that contains the main branch stats file. The file can be generated by either merging a PR to main, pushing a commit to main, or manually running the workflow with workflow_dispatch.

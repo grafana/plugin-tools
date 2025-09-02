@@ -11,7 +11,20 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Key concepts and best practices',
+      label: 'Set up your environment',
+      link: {
+        type: 'doc',
+        id: 'set-up/set-up-development-environment',
+      },
+      collapsed: true,
+      items: [
+        'set-up/set-up-docker',
+        'set-up/set-up-github',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Key concepts',
       link: {
         type: 'doc',
         id: 'key-concepts/key-concepts',
@@ -40,11 +53,6 @@ const sidebars: SidebarsConfig = {
         'key-concepts/ui-extensions',
         'key-concepts/plugin-i18n-concept',
       ],
-    },
-    {
-      type: 'doc',
-      id: 'set-up-development-environment',
-      label: 'Set up your environment',
     },
     {
       type: 'category',
