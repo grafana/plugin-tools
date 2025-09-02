@@ -26,7 +26,7 @@ If you scaffolded a plugin with a version of create-plugin prior to 4.6.0, follo
 
 You need to have the following:
 
-- Grafana [plugin development environment](/set-up/index.md).
+- Grafana [plugin development environment](/set-up/).
 - Node.js version 18 or later.
 - Basic knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation.
 
