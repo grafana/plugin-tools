@@ -140,12 +140,8 @@
     "to": "/key-concepts/anatomy-of-a-plugin"
   },
   {
-    "from": ["/get-started/get-started"],
-    "to": "/get-started"
-  },
-  {
     "from": ["/get-started/set-up-development-environment"],
-    "to": "/set-up/set-up"
+    "to": "/set-up/"
   },
   {
     "from": ["/get-started/best-practices"],
