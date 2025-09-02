@@ -19,15 +19,15 @@ Automate your development process to minimize errors and make it faster and more
 
 ## The CI workflow
 
-The CI (`ci.yml`) workflow is designed to lint, type check, and build the frontend and backend. It is also used to run tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps to catch any issues early in the development process, before they become bigger problems. For more information on end-to-end testing as part of the CI workflow, refer to our [documentation](./e2e-test-a-plugin/ci.md).
+The CI (`ci.yml`) workflow is designed to lint, type check, and build the frontend and backend. It is also used to run tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps to catch any issues early in the development process, before they become bigger problems. For more information on end-to-end testing as part of the CI workflow, refer to our [documentation](/e2e-test-a-plugin/ci.md).
 
 ## The release workflow
 
-To learn how to automate the release process and set up the release workflow, refer to our documentation on [Automate packaging and signing with GitHub CI](./publish-a-plugin/build-automation).
+To learn how to automate the release process and set up the release workflow, refer to our documentation on [Automate packaging and signing with GitHub CI](/publish-a-plugin/build-automation).
 
 :::warning
 
-This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](./publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
+This workflow requires a Grafana Cloud API key. Before you begin, follow the instructions for [generating an Access Policy token](/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token).
 
 :::
 
