@@ -8,7 +8,6 @@ keywords:
   - plugin
   - create-plugin
   - getting started
-slug: /
 ---
 
 import ScaffoldNPM from '@shared/createplugin-scaffold.md';
