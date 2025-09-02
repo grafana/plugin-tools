@@ -1,6 +1,6 @@
 ---
 id: set-up-github
-title: Set up GitHub workflows for development environment
+title: Set up GitHub workflows for your development environment
 sidebar_label: Set up your GitHub workflows
 description: Set up GitHub for Grafana plugin development.
 keywords:
