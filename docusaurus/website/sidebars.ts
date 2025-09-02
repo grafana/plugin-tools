@@ -5,15 +5,22 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     {
-      type: 'category',
+      type: 'doc',
+      id: 'get-started',
       label: 'Get started',
-      collapsible: true,
-      collapsed: false,
+    },
+    {
+      type: 'category',
+      label: 'Set up your environment',
       link: {
         type: 'doc',
-        id: 'get-started/get-started',
+        id: 'set-up/set-up-development-environment',
       },
-      items: ['get-started/set-up-development-environment', 'get-started/best-practices'],
+      collapsed: true,
+      items: [
+        'set-up/set-up-docker',
+        'set-up/set-up-github',
+      ],
     },
     {
       type: 'category',
@@ -24,6 +31,7 @@ const sidebars: SidebarsConfig = {
       },
       collapsed: true,
       items: [
+        'key-concepts/best-practices',
         'key-concepts/plugin-types-usage',
         'key-concepts/anatomy-of-a-plugin',
         {

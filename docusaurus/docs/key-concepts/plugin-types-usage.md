@@ -30,7 +30,7 @@ Grafana plugin development allows for many options depending on the type of user
 - **Data-source plugin** - a connection to a new database or other source of data.
 - **App plugin** - an integrated out-of-the-box experience.
 
-Refer to [Get started](../get-started/get-started.mdx) for instructions on how to quickly scaffold [each type](../reference/cli-commands.mdx#select-a-plugin-type) of plugin.
+Refer to [Get started](../get-started.md) for instructions on how to quickly scaffold [each type](../reference/cli-commands.mdx#select-a-plugin-type) of plugin.
 
 :::note
 

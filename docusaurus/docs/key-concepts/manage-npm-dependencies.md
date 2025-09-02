@@ -26,7 +26,7 @@ However, when the plugin is installed and executed within a Grafana instance, it
 
 :::info
 
-This dynamic dependency linking also applies to the [docker development environment](/get-started/set-up-development-environment) provided by create-plugin. When the plugin is running inside Grafana it will inherit the version of the `@grafana` dependencies from the Grafana application.
+This dynamic dependency linking also applies to the [docker development environment](/set-up/) provided by create-plugin. When the plugin is running inside Grafana it will inherit the version of the `@grafana` dependencies from the Grafana application.
 
 :::
 
