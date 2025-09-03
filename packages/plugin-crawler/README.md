@@ -1,6 +1,25 @@
-### plugin-crawler
+# plugin-crawler
 
-#### Commands
+A CLI tool for fetching information about Grafana plugins that belong under the `grafana` org on Github. This is mostly used for debugging purposes and to generate stats.
+
+## Setup
+
+**Install and build**
+
+```bash
+npm run install
+npm run build
+```
+
+**Set a Github PAT**
+
+A PAT is necessary to read any private repositories and to increase rate limits.
+
+```bash
+export GITHUB_PAT=$(gh auth token 2>/dev/null)
+```
+
+## Available commands
 
 ```bash
 # List the places where extensions are used
