@@ -124,7 +124,8 @@
       "profile": "https://github.com/academo",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -362,7 +363,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/12371363?v=4",
       "profile": "https://mattcowley.co.uk/",
       "contributions": [
-        "test"
+        "test",
+        "code"
       ]
     }
   ],

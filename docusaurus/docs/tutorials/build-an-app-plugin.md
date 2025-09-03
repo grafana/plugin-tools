@@ -30,7 +30,7 @@ App plugins can be displayed in the [navigation menu](#add-a-page-in-the-navigat
 
 :::note
 
-If you choose to have a backend for your app plugin, you must build the backend plugin binary by running `mage -v` before starting Grafana with Docker.
+If you choose to have a backend for your app plugin, run `mage -v` to build the binary before starting Grafana with Docker.
 
 :::
 
@@ -121,7 +121,7 @@ You don't need to register all your pages inside `includes` in your `plugin.json
 
 :::tip
 
-You can limit which users have access to pages in the navigation menu by using the [`role`](/reference/plugin-json#properties-7) property.
+You can limit which users have access to pages in the navigation menu by using the [`role`](/reference/plugin-json#includes) property.
 
 :::
 
@@ -168,7 +168,7 @@ function MyComponent() {
 
 ## Fetch data from frontend code using the data proxy
 
-If you want to fetch data from your app frontend code (for example, from a thid party API) without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, then you can use the [data proxy](../how-to-guides/data-source-plugins/fetch-data-from-frontend).
+If you want to fetch data from your app frontend code (for example, from a third party API) without [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues or using authenticated requests, then you can use the [data proxy](../how-to-guides/data-source-plugins/fetch-data-from-frontend).
 
 ## Add nested plugins inside your app
 

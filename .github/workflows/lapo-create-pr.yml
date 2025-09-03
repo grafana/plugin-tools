@@ -17,10 +17,10 @@ permissions:
 
 jobs:
   run-lapo-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets-v1.1.0
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools
           repo_secrets: |
@@ -29,37 +29,50 @@ jobs:
             ANTHROPIC_API_KEY=anthropic_key:anthropic_key
             OPENAI_API_KEY=open_ai_key:open_ai_key
             GEMINI_API_KEY=gemini_api_key:gemini_api_key
+          export_env: false
 
       - name: Generate token
         id: generate_token
-        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
         with:
-          app-id: ${{ env.GITHUB_APP_ID }}
-          private-key: ${{ env.GITHUB_APP_PEM }}
+          app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
+          private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PEM }}
+          # Permissions necessary for grafana/lapo-docs/github-actions/create-docs-update-pr
+          permission-actions: read
+          permission-contents: write
+          permission-pull-requests: write
+          permission-issues: write
 
 
       # this allows to test both with manual trigger and repository_dispatch
       - name: Set PR URL
         id: set-pr-url
         run: |
-          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
-            echo "url=${{ github.event.client_payload.pr_url }}" >> "$GITHUB_OUTPUT"
+          if [[ "${EVENT_NAME}" == "repository_dispatch" ]]; then
+            echo "url=${CLIENT_PAYLOAD_PR_URL}" >> "$GITHUB_OUTPUT"
           else
-            echo "url=${{ github.event.inputs.pr_url }}" >> "$GITHUB_OUTPUT"
+            echo "url=${INPUTS_PR_URL}" >> "$GITHUB_OUTPUT"
           fi
-      
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          CLIENT_PAYLOAD_PR_URL: ${{ github.event.client_payload.pr_url }}
+          INPUTS_PR_URL: ${{ github.event.inputs.pr_url }}
+
+
       - name: Print PR URL
         run: |
-          echo "PR URL: ${{ steps.set-pr-url.outputs.url }}"
+          echo "PR URL: ${PR_URL}"
+        env:
+          PR_URL: ${{ steps.set-pr-url.outputs.url }}
 
-      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@main
+      - uses: grafana/lapo-docs/github-actions/create-docs-update-pr@93b3cfc2f8c642027b123996d2fa789f58768652
         id: generate-embeddings
         with:
           token: ${{ steps.generate_token.outputs.token }}
           docs-path: docusaurus/docs
-          gemini-api-key: ${{ env.GEMINI_API_KEY }}
-          anthropic-api-key: ${{ env.ANTHROPIC_API_KEY }}
-          openai-api-key: ${{ env.OPENAI_API_KEY }}
+          gemini-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GEMINI_API_KEY }}
+          anthropic-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).ANTHROPIC_API_KEY }}
+          openai-api-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).OPENAI_API_KEY }}
           embeddings-action: lapo-generate-embeddings.yml
           source-change-pr: ${{ steps.set-pr-url.outputs.url }}
 

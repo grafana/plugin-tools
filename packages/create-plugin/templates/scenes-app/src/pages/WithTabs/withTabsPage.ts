@@ -16,18 +16,21 @@ export const withTabsPage = new SceneAppPage({
   subTitle: 'This scene showcases a basic tabs functionality.',
   // Important: Mind the page route is ambiguous for the tabs to work properly
   url: prefixRoute(ROUTES.WithTabs),
+  routePath: `${ROUTES.WithTabs}/*`,
   hideFromBreadcrumbs: true,
   getScene: getTab1Scene,
   tabs: [
     new SceneAppPage({
       title: 'Server names',
       url: prefixRoute(ROUTES.WithTabs),
+      routePath: '/',
       getScene: getTab1Scene,
     }),
     new SceneAppPage({
       title: 'House locations',
       url: prefixRoute(`${ROUTES.WithTabs}/tab-two`),
       getScene: getTab2Scene,
+      routePath: '/tab-two',
     }),
   ],
 });

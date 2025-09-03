@@ -59,7 +59,7 @@ Once your plugin has its own schemas, start introducing model changes. Since que
 
 For example, let's assume that you want to change the query format of your plugin and the `Multiplier` property that you were using is changing to `Multiply` like so:
 
-```patch
+```diff
  type DataQuery struct {
         v0alpha1.CommonQueryProperties
 
@@ -74,7 +74,7 @@ For example, let's assume that you want to change the query format of your plugi
 
 In this example, you can regenerate the schema running the test in `query_test.go` so your new data type will become ready to be used.
 
-Note that there is not yet a breaking change because all the new parameters (in this case `Multiply`) are marked as optional. Also, none of the other business logic has been modified, so everything should work as before, using the deprecated property. In the next step, there is actually a breaking change. 
+Note that there is not yet a breaking change because all the new parameters (in this case `Multiply`) are marked as optional. Also, none of the other business logic has been modified, so everything should work as before, using the deprecated property. In the next step, there is actually a breaking change.
 
 ### Step 3: Use the new query format
 
@@ -84,7 +84,7 @@ Begin by replacing the use of `Multiplier` with `Multiply`.
 
 Here is a backend example:
 
-```patch
+```diff
 func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
                         return backend.DataResponse{}, fmt.Errorf("unmarshal: %w", err)
                 }
@@ -98,7 +98,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 
 Here is a frontend example:
 
-```patch
+```diff
  export class QueryEditor extends PureComponent<Props> {
            type="number"
            id="multiplier"
@@ -122,7 +122,7 @@ This function should just unmarshall the JSON from the original `DataQuery` and 
 
 Example:
 
-```patch
+```diff
 func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
                 return backend.DataResponse{}, fmt.Errorf("new request with context: %w", err)
         }
@@ -160,7 +160,44 @@ This feature depends on the feature flag [grafanaAPIServerWithExperimentalAPIs](
 
 :::
 
-You should be able to invoke your `convertQuery` function from the frontend as well as the backend, so our `QueryEditor` component should be able to convert the query to the new format. In order to expose this function to the frontend, the backend needs to implement the `QueryConversionHandler` interface. This is just a wrapper around the `convertQuery` function, but for multiple queries. Refer to how this is implemented in [this example](https://github.com/grafana/grafana-plugin-examples/pull/403/files#diff-a4ecf4de6bfd217cb4e941334f2b203adb8b400b9784c8fa94f17847f7570871).
+You should be able to invoke your `convertQuery` function from the frontend as well as the backend, so our `QueryEditor` component should be able to convert the query to the new format. In order to expose this function to the frontend, the backend needs to implement the `QueryConversionHandler` interface. This is just a wrapper around the `convertQuery` function, but for multiple queries.
+
+Here's an example of a `convertQuery` implementation:
+
+```go title="convert_query.go"
+// convertQuery parses a given DataQuery and migrates it if necessary.
+func convertQuery(orig backend.DataQuery) (*kinds.DataQuery, error) {
+	input := &kinds.DataQuery{}
+	err := json.Unmarshal(orig.JSON, input)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshal: %w", err)
+	}
+	if input.Multiplier != 0 && input.Multiply == 0 {
+		input.Multiply = input.Multiplier
+		input.Multiplier = 0
+	}
+	return input, nil
+}
+
+// convertQueryRequest migrates a given QueryDataRequest which can contain multiple queries.
+func convertQueryRequest(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryConversionResponse, error) {
+	queries := make([]any, 0, len(req.Queries))
+	for _, q := range req.Queries {
+		input, err := convertQuery(q)
+		if err != nil {
+			return nil, err
+		}
+		q.JSON, err = json.Marshal(input)
+		if err != nil {
+			return nil, fmt.Errorf("marshal: %w", err)
+		}
+		queries = append(queries, q)
+	}
+	return &backend.QueryConversionResponse{
+		Queries: queries,
+	}, nil
+}
+```
 
 Finally, adapt the frontend so `@grafana/runtime` knows if it should run the migration action. Do this in two steps:
 

@@ -46,9 +46,6 @@ export default defineConfig<PluginOptions>({
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/admin.json',
-        launchOptions: {
-          args: ['--disable-features=PlzDedicatedWorker'], // because https://github.com/microsoft/playwright/pull/34400
-        },
       },
       dependencies: ['auth'],
     },

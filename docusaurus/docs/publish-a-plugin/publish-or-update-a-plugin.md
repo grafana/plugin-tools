@@ -14,9 +14,9 @@ keywords:
 
 # Publish or update a plugin
 
-You've just built your plugin; now you want to share it with the world. Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugins) makes it easily discoverable by millions of Grafana users.
+You've just built your plugin and now you want to share it with the world!
 
-In this guide you learn how to manage the lifecycle of a plugin in the catalog, from publishing and updating to potentially deprecating.
+Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugins) makes it easily discoverable by millions of Grafana users. Read on to learn how to manage the lifecycle of a plugin in the catalog, from publishing and updating to potentially deprecating.
 
 ## Before you begin
 
@@ -56,7 +56,6 @@ Follow these steps to publish your plugin for the first time.
    Once your submission passes the validation, it's placed in a review queue.
    All submissions are manually inspected by a plugin reviewer.
    For every new plugin, we perform a manual review that includes the following checks:
-
    - **Code review:** For quality and security purposes, we review the source code for the plugin.
    - **Tests:** We install your plugin on one of our Grafana instances to test it for basic use.
      We may ask you to assist us in configuring a test environment for the plugin.

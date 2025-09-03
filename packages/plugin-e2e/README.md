@@ -4,7 +4,7 @@ end-to-end test Grafana plugins with ease.
 
 **Links**
 
-- [`@grafana/plugin-e2e` docs](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/introduction)
+- [`@grafana/plugin-e2e` docs](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin)
 
 ## Overview
 
@@ -24,7 +24,7 @@ Checkout our [`Get started`](https://grafana.com/developers/plugin-tools/e2e-tes
 
 ### Prerequisites
 
-- You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment)
+- You need to have a Grafana plugin [development environment](https://grafana.com/developers/plugin-tools/get-started/set-up/)
 - Node.js 18+
 - Basic Knowledge of Playwright. If you have not worked with Playwright before, we recommend following the [Getting started](https://playwright.dev/docs/intro) section in their documentation
 

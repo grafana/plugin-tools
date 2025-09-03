@@ -3,7 +3,7 @@ import process from 'process';
 import os from 'os';
 import path from 'path';
 import { glob } from 'glob';
-import { SOURCE_DIR } from './constants';
+import { SOURCE_DIR } from './constants.ts';
 
 export function isWSL() {
   if (process.platform !== 'linux') {
@@ -21,8 +21,13 @@ export function isWSL() {
   }
 }
 
+function loadJson(path: string) {
+  const rawJson = fs.readFileSync(path, 'utf8');
+  return JSON.parse(rawJson);
+}
+
 export function getPackageJson() {
-  return require(path.resolve(process.cwd(), 'package.json'));
+  return loadJson(path.resolve(process.cwd(), 'package.json'));
 }
 
 export function getPluginJsonPath() {
@@ -30,12 +35,12 @@ export function getPluginJsonPath() {
 }
 
 export function getPluginJson() {
-  return require(getPluginJsonPath());
+  return loadJson(getPluginJsonPath());
 }
 
 export function getCPConfigVersion() {
-  const cprcJson = path.resolve(__dirname, '../', '.cprc.json');
-  return fs.existsSync(cprcJson) ? require(cprcJson).version : { version: 'unknown' };
+  const cprcJson = path.resolve(process.cwd(), './.config', '.cprc.json');
+  return fs.existsSync(cprcJson) ? loadJson(cprcJson).version : { version: 'unknown' };
 }
 
 export function hasReadme() {

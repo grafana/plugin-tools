@@ -14,10 +14,11 @@ import { PARTIALS_DIR, PLUGIN_TYPES } from '../constants.js';
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
-// Why? The `{#if}` expression in Handlebars unfortunately only accepts a boolean, which makes it hard to compare values in templates.
-export const ifEq = (a: any, b: any, options: HelperOptions) => {
+// This function allows comparison of values in templates as the `{#if}` expression in Handlebars only accepts a boolean.
+// It must be a function expression for handlebars to bind helper function to template data.
+export function ifEq(this: unknown, a: any, b: any, options: HelperOptions) {
   return a === b ? options.fn(this) : options.inverse(this);
-};
+}
 
 export const normalizeId = (pluginName: string, orgName: string, type: PLUGIN_TYPES) => {
   const re = new RegExp(`-?${type}$`, 'i');

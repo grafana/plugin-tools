@@ -1,7 +1,7 @@
 ---
 id: migrate-from-grafana-e2e
 title: Migrate from @grafana/e2e
-description: How to migrate from @grafana/e2e to @grafana/plugin-e2e
+description: Migrate from @grafana/e2e to @grafana/plugin-e2e.
 keywords:
   - grafana
   - plugins
@@ -51,7 +51,6 @@ Open the Playwright config file that was generated when Playwright was installed
 ```
 
 2. Playwright uses [projects](https://playwright.dev/docs/test-projects) to logically group tests that have the same configuration. We're going to add two projects:
-
    1. `auth` is a setup project that will log in to Grafana and store the authenticated state on disk.
    2. `run-tests` runs all the tests in your browser of choice. By adding a dependency to the `auth` project we ensure that login only happens once, and all tests in the `run-tests` project will start as already authenticated.
 

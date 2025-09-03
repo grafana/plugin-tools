@@ -1,9 +1,10 @@
 import { satisfies, gte } from 'semver';
 import { Context } from './context.js';
 import defaultMigrations, { MigrationMeta } from './migrations.js';
-import { flushChanges, printChanges, migrationsDebug } from './utils.js';
+import { flushChanges, printChanges, migrationsDebug, formatFiles, installNPMDependencies } from './utils.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
 import { setRootConfig } from '../utils/utils.config.js';
+import { output } from '../utils/utils.console.js';
 
 export type MigrationFn = (context: Context) => Context | Promise<Context>;
 
@@ -34,11 +35,11 @@ type RunMigrationsOptions = {
 
 export async function runMigrations(migrations: Record<string, MigrationMeta>, options: RunMigrationsOptions = {}) {
   const basePath = process.cwd();
+  const migrationList = Object.entries(migrations).map(
+    ([key, migrationMeta]) => `${key} (${migrationMeta.description})`
+  );
 
-  console.log('');
-  console.log('Running the following migrations:');
-  Object.entries(migrations).map(([key, migrationMeta]) => console.log(`- ${key} (${migrationMeta.description})`));
-  console.log('');
+  output.log({ title: 'Running the following migrations:', body: output.bulletList(migrationList) });
 
   for (const [key, migration] of Object.entries(migrations)) {
     try {
@@ -48,8 +49,11 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
       migrationsDebug(`context for "${key} (${migration.migrationScript})":`);
       migrationsDebug('%O', context.listChanges());
 
+      await formatFiles(context);
       flushChanges(context);
       printChanges(context, key, migration);
+
+      installNPMDependencies(context);
 
       if (shouldCommit) {
         await gitCommitNoVerify(`chore: run create-plugin migration - ${key} (${migration.migrationScript})`);
@@ -60,7 +64,13 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
       }
     }
   }
-  setRootConfig({ version: Object.values(migrations).at(-1)!.version });
+
+  const latestVersion = Object.values(migrations).at(-1)!.version;
+  setRootConfig({ version: latestVersion });
+
+  if (options.commitEachMigration) {
+    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${latestVersion}.`);
+  }
 }
 
 export async function runMigration(migration: MigrationMeta, context: Context): Promise<Context> {

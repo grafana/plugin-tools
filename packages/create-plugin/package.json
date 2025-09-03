@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "5.19.5",
+  "version": "5.26.2",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -9,12 +9,6 @@
   "license": "Apache-2.0",
   "bin": "./dist/bin/run.js",
   "type": "module",
-  "exports": {
-    "node": {
-      "import": "./index.js"
-    },
-    "default": "./index.js"
-  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public",
@@ -26,6 +20,7 @@
     "dev": "npm run build -- -w",
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
@@ -37,26 +32,29 @@
     "find-up": "^7.0.0",
     "glob": "^11.0.0",
     "handlebars": "^4.7.8",
+    "jsonc-parser": "^3.3.1",
     "minimist": "^1.2.8",
+    "recast": "^0.23.11",
     "semver": "^7.3.5",
     "title-case": "^4.3.0",
-    "which": "^5.0.0"
+    "which": "^5.0.0",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
-    "@libs/output": "^1.0.1",
-    "@libs/version": "^1.0.1",
-    "@types/glob": "^8.1.0",
+    "@libs/output": "^1.0.2",
+    "@libs/version": "^1.0.2",
+    "@types/glob": "^9.0.0",
     "@types/minimist": "^1.2.5",
     "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
     "@types/which": "^3.0.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "tmp": "^0.2.3"
+    "tmp": "^0.2.4"
   },
   "overrides": {
     "@types/marked-terminal": {
-      "marked": "^15.0.0"
+      "marked": "^16.0.0"
     }
   },
   "engines": {

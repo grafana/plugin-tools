@@ -38,7 +38,7 @@ Install the following prerequisites before adding a backend component:
 
 <CreatePlugin pluginType="app" />
 
-## Anatomy of a backend plugin
+## Anatomy of a plugin with a backend component
 
 <BackendPluginAnatomy pluginType="app" />
 
@@ -156,7 +156,3 @@ function getMyCustomEndpoint() {
 ## Troubleshooting
 
 <TroubleshootPluginLoad />
-
-## Example
-
-Refer to our [example app plugin with backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) for a complete example.

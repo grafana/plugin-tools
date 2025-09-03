@@ -1,3 +1,221 @@
+# v2.1.10 (Sun Aug 31 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.2.0-255920 [#1987](https://github.com/grafana/plugin-tools/pull/1987) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.1.9 (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin e2e: Fix AlertRuleEditPage evaluate flakiness [#2053](https://github.com/grafana/plugin-tools/pull/2053) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.1.8 (Thu Aug 07 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin e2e: fix color picker selector [#2017](https://github.com/grafana/plugin-tools/pull/2017) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v2.1.7 (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-254610 [#1969](https://github.com/grafana/plugin-tools/pull/1969) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.1.6 (Wed Jul 16 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-253700 [#1962](https://github.com/grafana/plugin-tools/pull/1962) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.1.5 (Tue Jul 15 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-253305 [#1956](https://github.com/grafana/plugin-tools/pull/1956) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.1.4 (Mon Jul 14 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-252415 [#1947](https://github.com/grafana/plugin-tools/pull/1947) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.1.3 (Sat Jul 05 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-251764 [#1945](https://github.com/grafana/plugin-tools/pull/1945) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.1.1 (Sat Jun 21 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.1.0-249587 [#1916](https://github.com/grafana/plugin-tools/pull/1916) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.0.6 (Wed Jun 18 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.1.0-248760 [#1904](https://github.com/grafana/plugin-tools/pull/1904) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.0.5 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.1.0-247577 [#1877](https://github.com/grafana/plugin-tools/pull/1877) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.0.3 (Tue Jun 10 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to ^12.1.0-246483 [#1789](https://github.com/grafana/plugin-tools/pull/1789) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.0.2 (Wed May 07 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-242212 [#1775](https://github.com/grafana/plugin-tools/pull/1775) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.0.1 (Tue May 06 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-241536 [#1759](https://github.com/grafana/plugin-tools/pull/1759) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v2.0.0 (Mon May 05 2025)
+
+#### 💥 Breaking Change
+
+- PluginE2E: Move away from networkIdle [#1746](https://github.com/grafana/plugin-tools/pull/1746) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v1.19.9 (Thu Apr 24 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-240060 [#1750](https://github.com/grafana/plugin-tools/pull/1750) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v1.19.8 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- fix: fixes playwright upgrade [#1741](https://github.com/grafana/plugin-tools/pull/1741) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v1.19.7 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- e2e: fixes TimeRange set function [#1735](https://github.com/grafana/plugin-tools/pull/1735) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v1.19.6 (Wed Apr 16 2025)
 
 #### 🐛 Bug Fix

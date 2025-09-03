@@ -31,6 +31,7 @@ const config: Config = {
   baseUrl: 'developers/plugin-tools/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'throw',
   favicon: 'img/favicon.png',
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -46,6 +47,10 @@ const config: Config = {
   },
   future: {
     experimental_faster: true,
+    v4: {
+      removeLegacyPostBuildHeadAttribute: true,
+      useCssCascadeLayers: false,
+    },
   },
   plugins: [
     [
@@ -96,7 +101,7 @@ const config: Config = {
               },
             ],
           ],
-          remarkPlugins: [[npm2yarn, { sync: true }]],
+          remarkPlugins: [[npm2yarn, { sync: true, converters: ['yarn', 'pnpm'] }]],
           routeBasePath: '/',
         },
         theme: {

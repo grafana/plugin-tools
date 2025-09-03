@@ -16,6 +16,9 @@ export const argv = minimist(args, {
     // temporary flag whilst we work on the migration updates
     experimentalUpdates: 'experimental-updates',
   },
+  // tell minimist to parse boolean flags as true/false to prevent minimist from interpreting
+  // them as the command name if passed first. e.g. `create-plugin --force update`
+  boolean: ['force', 'experimental-updates'],
 });
 
 export const commandName = argv._[0] || 'generate';

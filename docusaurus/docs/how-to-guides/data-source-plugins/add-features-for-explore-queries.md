@@ -11,13 +11,13 @@ keywords:
   - explore
 ---
 
-[Explore](https://grafana.com/docs/grafana/latest/explore/) allows users can make ad-hoc queries without the use of a dashboard. This is useful when they want to troubleshoot or learn more about the data.
+[Explore](https://grafana.com/docs/grafana/latest/explore/) allows you to make ad-hoc queries without having to use a dashboard. This is useful when you want to troubleshoot or learn more about the data. Your data source supports Explore by default and uses the existing query editor.
 
-Your data source supports Explore by default and uses the existing query editor for the data source. This guide explains how to extend functionality for Explore queries in a data source plugin.
+This guide explains how to extend functionality for Explore queries in a data source plugin.
 
 ## Add an Explore-specific query editor
 
-To extend Explore functionality for your data source, define an Explore-specific query editor.
+To extend the Explore functionality for your data source, define an Explore-specific query editor.
 
 1. Create a file `ExploreQueryEditor.tsx` in the `src` directory of your plugin, with content similar to this:
 
@@ -59,7 +59,7 @@ To extend Explore functionality for your data source, define an Explore-specific
 
 ## Select a preferred visualization type
 
-By default, Explore should select an appropriate and useful visualization for your data. It can figure out whether the returned data is time series data or logs or something else, and creates the right type of visualization.
+By default, Explore identifies your returned data (time series, logs, or something else) and creates the right type of visualization.
 
 However, if you want a custom visualization, you can add a hint to your returned data frame by setting the `meta` attribute to `preferredVisualisationType`.
 
