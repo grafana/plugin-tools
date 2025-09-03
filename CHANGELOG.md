@@ -1,3 +1,16 @@
+# (Wed Sep 03 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.2`
+  - Create Plugin: Add plugin id and version comment to built module.js [#2089](https://github.com/grafana/plugin-tools/pull/2089) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Mon Sep 01 2025)
 
 #### 🐛 Bug Fix
