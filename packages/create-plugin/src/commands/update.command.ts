@@ -1,10 +1,8 @@
 import minimist from 'minimist';
-import { standardUpdate } from './update.standard.command.js';
 import { migrationUpdate } from './update.migrate.command.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { output } from '../utils/utils.console.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
-import { getConfig } from '../utils/utils.config.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   if (!(await isGitDirectory()) && !argv.force) {
@@ -47,9 +45,5 @@ export const update = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 
-  if (argv.experimentalUpdates || getConfig().features.useExperimentalUpdates) {
-    return await migrationUpdate(argv);
-  }
-
-  return await standardUpdate();
+  return await migrationUpdate(argv);
 };
