@@ -21,7 +21,7 @@ The recommendations in this document will help you avoid common pitfalls, stream
 Before you proceed make sure you've done the following: 
 
 - [Created your initial plugin](../) 
-- Reviewed the [best practices for plugin development guide](../get-started/best-practices) 
+- Reviewed the [best practices for plugin development guide](../key-concepts/best-practices) 
 - Familiarized yourself with the [plugin signature levels](../publish-a-plugin/sign-a-plugin#public-or-private-plugins)
 
 ## Populate your plugin's metadata
