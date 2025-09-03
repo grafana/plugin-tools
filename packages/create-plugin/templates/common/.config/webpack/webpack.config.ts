@@ -199,14 +199,8 @@ const config = async (env: Env): Promise<Configuration> => {
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new webpack.BannerPlugin({
-        banner:
-          '/* [create-plugin] version: ' +
-          cpVersion +
-          ' */\n /* [create-plugin] plugin: ' +
-          pluginJson.id +
-          '@' +
-          pluginVersion +
-          ' */',
+        banner: `/* [create-plugin] version: ${cpVersion} */
+          /* [create-plugin] plugin: ${pluginJson.id}@${pluginVersion} */`,
         raw: true,
         entryOnly: true,
       }),
