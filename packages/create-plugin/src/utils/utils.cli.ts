@@ -13,8 +13,6 @@ export const argv = minimist(args, {
     hasBackend: 'backend',
     pluginName: 'plugin-name',
     orgName: 'org-name',
-    // temporary flag whilst we work on the migration updates
-    experimentalUpdates: 'experimental-updates',
   },
   // tell minimist to parse boolean flags as true/false to prevent minimist from interpreting
   // them as the command name if passed first. e.g. `create-plugin --force update`
