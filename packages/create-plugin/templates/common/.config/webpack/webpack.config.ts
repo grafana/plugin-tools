@@ -22,6 +22,7 @@ import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadm
 
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
+const pluginVersion = getPackageJson().version;
 
 const virtualPublicPath = new VirtualModulesPlugin({
   'node_modules/grafana-public-path.js': `
@@ -198,7 +199,14 @@ const config = async (env: Env): Promise<Configuration> => {
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new webpack.BannerPlugin({
-        banner: "/* [create-plugin] version: " + cpVersion + " */",
+        banner:
+          '/* [create-plugin] version: ' +
+          cpVersion +
+          ' */\n /* [create-plugin] plugin: ' +
+          pluginJson.id +
+          '@' +
+          pluginVersion +
+          ' */',
         raw: true,
         entryOnly: true,
       }),
@@ -228,7 +236,7 @@ const config = async (env: Env): Promise<Configuration> => {
           rules: [
             {
               search: /\%VERSION\%/g,
-              replace: getPackageJson().version,
+              replace: pluginVersion,
             },
             {
               search: /\%TODAY\%/g,
