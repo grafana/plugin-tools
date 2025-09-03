@@ -11,17 +11,18 @@ export const migrationUpdate = async (argv: minimist.ParsedArgs) => {
     const packageCpVersion = CURRENT_APP_VERSION;
 
     if (gte(projectCpVersion, packageCpVersion)) {
-      console.warn('Nothing to update, exiting.');
+      output.log({
+        title: 'Nothing to update, exiting.',
+      });
+
       process.exit(0);
     }
-
-    console.log(`Running migrations from ${projectCpVersion} to ${packageCpVersion}.`);
 
     const commitEachMigration = argv.commit;
     const migrations = getMigrationsToRun(projectCpVersion, packageCpVersion);
     await runMigrations(migrations, { commitEachMigration });
     output.success({
-      title: 'Update successful',
+      title: `Successfully updated create-plugin from ${projectCpVersion} to ${packageCpVersion}.`,
     });
   } catch (error) {
     if (error instanceof Error) {
