@@ -18,10 +18,10 @@ This page describes the UI Extensions APIs in detail, including:
 - [Hooks to render content](#i-want-to-use-renderable-content)
 
 :::note
-Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework. 
+Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework.
 :::
 
-## I want to register or expose content 
+## I want to register or expose content
 
 If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin:
 
@@ -51,12 +51,12 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 The `addComponent()` method takes a single `config` object with the following properties:
 
-| Property          | Description                         |
-| ----------------- | ------------------------------------ |
+| Property          | Description                                                                                                                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_. [See available extension points in Grafana &rarr;](./extension-points) |
-| **`title`**       | A human readable title for the component.           |
-| **`description`** | A human readable description for the component.                           |
-| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note that the props passed to the component are defined by each extension point.                |
+| **`title`**       | A human readable title for the component.                                                                                                                                                           |
+| **`description`** | A human readable description for the component.                                                                                                                                                     |
+| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note that the props passed to the component are defined by each extension point.  |
 
 #### Return value
 
@@ -78,7 +78,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 Available in Grafana >=v11.1.0.
 :::
 
-Use this method to register a link extension in an extension point. 
+Use this method to register a link extension in an extension point.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addLink({
@@ -95,7 +95,7 @@ The `addLink()` method takes a single `config` object with the following propert
 
 | Property          | Description                                                                                                                                                                                                                        | Required |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_                      | true     |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_                                | true     |
 | **`title`**       | A human readable title for the link.                                                                                                                                                                                               | true     |
 | **`description`** | A human readable description for the link.                                                                                                                                                                                         | true     |
 | **`path?`**       | A path within your app plugin where you would like to send users when they click the link. (Use either `path` or `onClick`.) <br /> _Example: `"/a/myorg-incidents-app/incidents"`_                                                | true     |
@@ -113,6 +113,42 @@ The method returns the `AppPlugin` instance to allow for chaining.
 - [Hide a link in certain conditions](../../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
 - [Update the path based on the context](../../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
 - [Open a modal from the `onClick()`](../../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
+
+### `addFunction`
+
+:::info
+Available in Grafana >=v11.6.0.
+:::
+
+Use this method to register a function extension at an extension point.
+
+```typescript
+export const plugin = new AppPlugin<{}>().addFunction({
+  targets: ['grafana/search/dropzone/v1'],
+  title: 'Drag and drop data',
+  description: 'Support for content being drag and dropped on to dashboards',
+  fn: async (data: File) => {},
+});
+```
+
+#### Parameters
+
+The `addFunction()` method takes a single `config` object with the following properties:
+
+| Property          | Description                                                                                                                                                                                         | Required |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_ | true     |
+| **`title`**       | A human readable title for the function.                                                                                                                                                            | true     |
+| **`description`** | A human readable description for the function.                                                                                                                                                      | true     |
+| **`fn`**          | A function within your app plugin that should be triggered when the extension point action occur.                                                                                                   | true     |
+
+#### Return value
+
+The method returns the `AppPlugin` instance to allow for chaining.
+
+#### Examples
+
+- [REPLACE WITH GOOD EXAMPLE](../../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
 
 ### `exposeComponent`
 
@@ -157,7 +193,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 - [Best practices for exposing components](../../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
-## I want to use renderable content 
+## I want to use renderable content
 
 If you want to render extension content in your extension point, use the following hooks:
 
@@ -226,7 +262,7 @@ The `.usePluginComponents()` method takes a single `options` object with the fol
 
 #### Return value
 
-The hook returns the following object: 
+The hook returns the following object:
 
 ```typescript
 const {
@@ -303,7 +339,55 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 - [Limit the number of extensions in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-in-your-extension-point)
 - [Limit which plugins can register links in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
 
+### `usePluginFunctions`
+
+:::info
+Available in Grafana >=v11.6.0.
+:::
+
+Use this React hook to fetch **functions** that have been previously **registered** in an extension point using the `AppPlugin.addFunction()` method.
+
+```typescript
+import { usePluginFunctions } from '@grafana/runtime';
+
+type FunctionSignatureType = (data: string) => void;
+
+const { functions, isLoading } = usePluginFunctions<FunctionSignatureType>({
+  extensionPointId: 'grafana/dashboard/dropzone/v1',
+  limitPerPlugin: 2,
+});
+```
+
+#### Parameters
+
+The `.usePluginFunctions()` method takes a single `options` object with the following properties:
+
+| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
+| **`limitPerPlugin?`**  | The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                                | false    |
+
+#### Return value
+
+The hook returns the following object:
+
+```typescript
+const {
+  // An empty array if no plugins have registered extensions for this extension point yet
+  functions: PluginExtensionFunction[];
+
+  // `true` until any plugins extending this extension point
+  // are still loading
+  isLoading: boolean;
+} = usePluginLinks(options);
+```
+
+For more information refer to [`PluginExtensionFunction`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L46).
+
+#### Examples
+
+- [ADD GOOD EXAMPLE HERE](../../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
+
 #### See also
 
 - [Best practices for rendering links added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
-
