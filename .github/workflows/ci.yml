@@ -97,7 +97,6 @@ jobs:
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node-version }}
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -162,6 +161,77 @@ jobs:
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        working-directory: ./${{ env.WORKING_DIR }}
+
+  test-updates:
+    name: Test create-plugin update command
+    runs-on: ubuntu-x64
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    needs: [test]
+    env:
+      WORKING_DIR: 'myorg-nobackend-panel'
+    steps:
+      - name: Scaffold plugin using latest create-plugin
+        run: npx @grafana/create-plugin --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+
+      - name: Install generated plugin dependencies
+        run: npm install --no-audit
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Download packed artifacts
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: packed-artifacts
+          path: ./packed-artifacts
+
+      - name: Install npm packages globally
+        run: for file in *.tgz; do npm install -g "$file"; done
+        working-directory: ./packed-artifacts
+
+      - name: Test create-plugin update command
+        run: npx create-plugin update
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Lint plugin frontend
+        run: npm run lint
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Typecheck plugin frontend
+        run: npm run typecheck
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Build plugin frontend
+        run: npm run build
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Test plugin frontend
+        run: npm run test:ci
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Install playwright dependencies
+        run: npm exec playwright install --with-deps chromium
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Start grafana server for e2e tests (10.4.0)
+        run: |
+          ANONYMOUS_AUTH_ENABLED=false docker compose build --no-cache
+          docker compose up -d
+        env:
+          GRAFANA_VERSION: '10.4.0'
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Wait for grafana server (10.4.0)
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run e2e tests (10.4.0)
+        id: run-e2e-tests-min-version
+        run: npm run e2e
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: Stop grafana docker (10.4.0)
+        run: docker compose down
         working-directory: ./${{ env.WORKING_DIR }}
 
   generate-plugins:
