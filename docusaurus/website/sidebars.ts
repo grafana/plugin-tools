@@ -17,10 +17,7 @@ const sidebars: SidebarsConfig = {
         id: 'set-up/set-up-development-environment',
       },
       collapsed: true,
-      items: [
-        'set-up/set-up-docker',
-        'set-up/set-up-github',
-      ],
+      items: ['set-up/set-up-docker', 'set-up/set-up-github'],
     },
     {
       type: 'category',
