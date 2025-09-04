@@ -172,7 +172,10 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - name: Scaffold plugin using the earliest create-plugin version mentioned in migrations
-        run: npx -y @grafana/create-plugin@5.19.0 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+        run: |
+          npx -y @grafana/create-plugin@5.19.2 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+          npm pkg set devDependencies.@grafana/plugin-e2e=^2.1.10
+          npm pkg set devDependencies.@playwright/test=^1.52.0
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
