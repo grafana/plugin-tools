@@ -189,7 +189,7 @@ jobs:
         working-directory: ./packed-artifacts
 
       - name: Test create-plugin update command
-        run: npx create-plugin update
+        run: npx create-plugin update --force
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Lint plugin frontend
