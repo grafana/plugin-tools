@@ -25,7 +25,7 @@ export function printChanges(context: Context, key: string, migration: Migration
   }
 
   output.addHorizontalLine('gray');
-  output.logSingleLine(`${key} (${migration.migrationScript})`);
+  output.logSingleLine(`${key} (${migration.description})`);
 
   if (lines.length === 0) {
     output.logSingleLine('No changes were made');
