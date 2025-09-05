@@ -55,9 +55,11 @@ jobs:
         run: npm run build
       - name: Lint built packages
         run: npm exec nx affected -- --target lint:package --parallel
+        # Temporarily patch bump create-plugin so it can test update command.
       - name: Pack packages for testing
         run: |
           mkdir ./packed-artifacts
+          npm version patch --workspace="@grafana/create-plugin" --commit-hooks=false --git-tag-version=false
           npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
@@ -172,7 +174,7 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - name: Scaffold plugin using the earliest create-plugin version mentioned in migrations
-        run: npx -y @grafana/create-plugin@5.19.0 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+        run: npx -y @grafana/create-plugin@5.26.2 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
 
       - name: Install generated plugin dependencies
         run: |
