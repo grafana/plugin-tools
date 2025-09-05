@@ -81,6 +81,23 @@ export function getPackageManagerInstallCmd(packageManagerName: string, packageM
   }
 }
 
+export function getPackageManagerExecCmd(packageManagerName: string, packageManagerVersion: string) {
+  switch (packageManagerName) {
+    case 'yarn':
+      if (gte(packageManagerVersion, '2.0.0')) {
+        return 'yarn dlx @grafana/create-plugin';
+      }
+      // Yarn 1 doesn't have an exec command so we use npx as a fallback
+      return 'npx @grafana/create-plugin';
+
+    case 'pnpm':
+      return 'pnpm dlx @grafana/create-plugin';
+
+    default:
+      return 'npx @grafana/create-plugin';
+  }
+}
+
 export function getPackageManagerSilentInstallCmd(packageManagerName: string, packageManagerVersion: string) {
   switch (packageManagerName) {
     case 'yarn':
