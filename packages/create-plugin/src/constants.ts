@@ -37,6 +37,10 @@ export enum PLUGIN_TYPES {
   scenes = 'scenesapp',
 }
 
+// With the switch over to updates as migrations we need plugins to have a known set of configs.
+// This version of create-plugin was the last version that used the old update command.
+export const BASELINE_VERSION_FOR_MIGRATIONS = '5.26.2';
+
 // This gets merged into variables coming from user prompts (when scaffolding) or any other dynamic variables,
 // and will be available to use in the templates.
 export const EXTRA_TEMPLATE_VARIABLES = {
