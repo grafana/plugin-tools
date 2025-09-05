@@ -26,6 +26,7 @@ export class DataSourcePicker extends GrafanaPage {
     }
 
     await expect(datasourcePicker).toBeVisible();
+    await datasourcePicker.click();
     await datasourcePicker.fill(name);
 
     // this is a hack to get the selection to work in 10.ish versions of Grafana.
