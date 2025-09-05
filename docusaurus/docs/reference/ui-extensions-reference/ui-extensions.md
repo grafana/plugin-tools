@@ -124,10 +124,25 @@ Use this method to register a function extension at an extension point.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addFunction({
-  targets: ['grafana/search/dropzone/v1'],
+  targets: ['grafana/dashboard/dropzone/v1'],
   title: 'Drag and drop data',
   description: 'Support for content being drag and dropped on to dashboards',
-  fn: async (data: File) => {},
+  fn: async (data: File) => {
+    const text = await data.text();
+
+    return {
+      title: 'Text panel',
+      panel: {
+        type: 'text',
+        title: 'Dropped contents',
+        options: {
+          mode: 'markdown',
+          content: text,
+        },
+      },
+      component: PasteEditor(text),
+    };
+  },
 });
 ```
 
@@ -140,7 +155,7 @@ The `addFunction()` method takes a single `config` object with the following pro
 | **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_ | true     |
 | **`title`**       | A human readable title for the function.                                                                                                                                                            | true     |
 | **`description`** | A human readable description for the function.                                                                                                                                                      | true     |
-| **`fn`**          | A function within your app plugin that should be triggered when the extension point action occur.                                                                                                   | true     |
+| **`fn`**          | A function within your app plugin that should be triggered when the extension point action occurs.                                                                                                  | true     |
 
 #### Return value
 
