@@ -226,7 +226,7 @@ Grafana Enterprise specific features
 
 <a name="includes"></a>
 
-## includes\[\]
+## includes\[\] {#metadata-includes}
 
 Resources to include in plugin.
 
