@@ -1,12 +1,13 @@
 import minimist from 'minimist';
 import { lt } from 'semver';
 import { migrationUpdate } from './update.migrate.command.js';
-import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
+import { gitCommitNoVerify, isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { getConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
 import { getPackageManagerExecCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { BASELINE_VERSION_FOR_MIGRATIONS } from '../constants.js';
+import { exec } from 'node:child_process';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   if (!(await isGitDirectory()) && !argv.force) {
@@ -55,28 +56,35 @@ export const update = async (argv: minimist.ParsedArgs) => {
     const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
     const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
 
-    output.error({
-      title: 'Manual update required.',
-      body: [
-        `Please run the following commands before attempting to update your plugin to create-plugin v6+.`,
+    try {
+      output.warning({
+        title: `Update to create-plugin ${BASELINE_VERSION_FOR_MIGRATIONS} required.`,
+        body: [
+          `The following commands will be run before updating your plugin to create-plugin v6+.`,
 
-        `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
-        `${output.formatCode(`${packageManagerName} install`)}`,
-        `${output.formatCode(`git add .`)}`,
-        `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
-      ],
-    });
-    output.log({
-      withPrefix: false,
-      title: 'Why do I need to run these commands?',
-      body: [
-        'Create-plugin has made improvements to how it updates plugins.',
-        'To take advantage of these improvements we need to make sure that your plugins configuration files are aligned with the latest v5 release.',
-        'This is a one time operation and will not need to be repeated in the future.',
-      ],
-    });
+          `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
+          `${output.formatCode(`${packageManagerName} install`)}`,
+          `${output.formatCode(`git add -A`)}`,
+          `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
+        ],
+      });
 
-    process.exit(0);
+      await exec(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`);
+      await exec(`${packageManagerName} install`);
+      await gitCommitNoVerify(`chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update`);
+    } catch (error) {
+      output.error({
+        title: `Update to create-plugin ${BASELINE_VERSION_FOR_MIGRATIONS} failed.`,
+        body: [
+          'Please run the following commands manually and try again.',
+          `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
+          `${output.formatCode(`${packageManagerName} install`)}`,
+          `${output.formatCode(`git add -A`)}`,
+          `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
+        ],
+      });
+      process.exit(1);
+    }
   }
 
   return await migrationUpdate(argv);
