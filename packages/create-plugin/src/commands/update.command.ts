@@ -1,6 +1,5 @@
 import minimist from 'minimist';
-import { lt } from 'semver';
-import { migrationUpdate } from './update.migrate.command.js';
+import { gte, lt } from 'semver';
 import { gitCommitNoVerify, isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { getConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
@@ -8,6 +7,8 @@ import { isPluginDirectory } from '../utils/utils.plugin.js';
 import { getPackageManagerExecCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { BASELINE_VERSION_FOR_MIGRATIONS } from '../constants.js';
 import { exec } from 'node:child_process';
+import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   if (!(await isGitDirectory()) && !argv.force) {
@@ -88,4 +89,34 @@ export const update = async (argv: minimist.ParsedArgs) => {
   }
 
   return await migrationUpdate(argv);
+};
+
+const migrationUpdate = async (argv: minimist.ParsedArgs) => {
+  try {
+    const projectCpVersion = getConfig().version;
+    const packageCpVersion = CURRENT_APP_VERSION;
+
+    if (gte(projectCpVersion, packageCpVersion)) {
+      output.log({
+        title: 'Nothing to update, exiting.',
+      });
+
+      process.exit(0);
+    }
+
+    const commitEachMigration = argv.commit;
+    const migrations = getMigrationsToRun(projectCpVersion, packageCpVersion);
+    await runMigrations(migrations, { commitEachMigration });
+    output.success({
+      title: `Successfully updated create-plugin from ${projectCpVersion} to ${packageCpVersion}.`,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      output.error({
+        title: 'Update failed',
+        body: [error.message],
+      });
+    }
+    process.exit(1);
+  }
 };
