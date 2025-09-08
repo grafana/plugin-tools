@@ -88,13 +88,13 @@ export function getPackageManagerExecCmd(packageManagerName: string, packageMana
         return 'yarn dlx @grafana/create-plugin';
       }
       // Yarn 1 doesn't have an exec command so we use npx as a fallback
-      return 'npx @grafana/create-plugin';
+      return 'npx -y @grafana/create-plugin';
 
     case 'pnpm':
       return 'pnpm dlx @grafana/create-plugin';
 
     default:
-      return 'npx @grafana/create-plugin';
+      return 'npx -y @grafana/create-plugin';
   }
 }
 
