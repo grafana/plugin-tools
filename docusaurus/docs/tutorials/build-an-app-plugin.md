@@ -61,7 +61,7 @@ Now that you can view your app root page (page one in the example), try making a
 
 ## Add a page in the navigation menu
 
-To add pages to the navigation menu under your app menu item, modify the `plugin.json` file's [`includes` section](../reference/metadata.md#includes).
+To add pages to the navigation menu under your app menu item, modify the `plugin.json` file's [`includes` section](../reference/metadata.md#metadata-includes).
 
 When you scaffold your plugin, the `create-plugin` tool adds some example pages to the navigation menu. Each example page follows a path such as `/a/%PLUGIN_ID%/PAGE_NAME`. Any requests sent to /a/%PLUGIN_ID%, for example, `/a/myorgid-simple-app/`, are routed to the root page of the app plugin. The root page is a React component that returns the content for a given route.
 
