@@ -18,10 +18,10 @@ This page describes the UI Extensions APIs in detail, including:
 - [Hooks to render content](#i-want-to-use-renderable-content)
 
 :::note
-Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework. 
+Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework.
 :::
 
-## I want to register or expose content 
+## I want to register or expose content
 
 If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin:
 
@@ -51,12 +51,12 @@ export const plugin = new AppPlugin<{}>().addComponent({
 
 The `addComponent()` method takes a single `config` object with the following properties:
 
-| Property          | Description                         |
-| ----------------- | ------------------------------------ |
+| Property          | Description                                                                                                                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_. [See available extension points in Grafana &rarr;](./extension-points) |
-| **`title`**       | A human readable title for the component.           |
-| **`description`** | A human readable description for the component.                           |
-| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note that the props passed to the component are defined by each extension point.                |
+| **`title`**       | A human readable title for the component.                                                                                                                                                           |
+| **`description`** | A human readable description for the component.                                                                                                                                                     |
+| **`component`**   | The [React component](https://react.dev/learn/your-first-component) that will be rendered by the extension point. Note that the props passed to the component are defined by each extension point.  |
 
 #### Return value
 
@@ -78,7 +78,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 Available in Grafana >=v11.1.0.
 :::
 
-Use this method to register a link extension in an extension point. 
+Use this method to register a link extension in an extension point.
 
 ```typescript
 export const plugin = new AppPlugin<{}>().addLink({
@@ -95,7 +95,7 @@ The `addLink()` method takes a single `config` object with the following propert
 
 | Property          | Description                                                                                                                                                                                                                        | Required |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_                      | true     |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_                                | true     |
 | **`title`**       | A human readable title for the link.                                                                                                                                                                                               | true     |
 | **`description`** | A human readable description for the link.                                                                                                                                                                                         | true     |
 | **`path?`**       | A path within your app plugin where you would like to send users when they click the link. (Use either `path` or `onClick`.) <br /> _Example: `"/a/myorg-incidents-app/incidents"`_                                                | true     |
@@ -157,7 +157,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 
 - [Best practices for exposing components](../../how-to-guides/ui-extensions/expose-a-component.md#best-practices)
 
-## I want to use renderable content 
+## I want to use renderable content
 
 If you want to render extension content in your extension point, use the following hooks:
 
@@ -226,7 +226,7 @@ The `.usePluginComponents()` method takes a single `options` object with the fol
 
 #### Return value
 
-The hook returns the following object: 
+The hook returns the following object:
 
 ```typescript
 const {
@@ -306,4 +306,3 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 #### See also
 
 - [Best practices for rendering links added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
-
