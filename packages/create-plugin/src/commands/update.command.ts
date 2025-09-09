@@ -65,13 +65,14 @@ export const update = async (argv: minimist.ParsedArgs) => {
 
           `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
           `${output.formatCode(`${packageManagerName} install`)}`,
-          `${output.formatCode(`git add -A`)}`,
+          `${output.formatCode('git add -A')}`,
           `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
         ],
       });
 
       await exec(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`);
       await exec(`${packageManagerName} install`);
+      await exec('git add -A');
       await gitCommitNoVerify(`chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update`);
     } catch (error) {
       output.error({
@@ -82,6 +83,8 @@ export const update = async (argv: minimist.ParsedArgs) => {
           `${output.formatCode(`${packageManagerName} install`)}`,
           `${output.formatCode(`git add -A`)}`,
           `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
+          'error:',
+          error instanceof Error ? error.message : String(error),
         ],
       });
       process.exit(1);
