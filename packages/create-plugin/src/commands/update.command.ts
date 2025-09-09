@@ -6,9 +6,12 @@ import { output } from '../utils/utils.console.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
 import { getPackageManagerExecCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { BASELINE_VERSION_FOR_MIGRATIONS } from '../constants.js';
-import { exec } from 'node:child_process';
+import { exec as nodeExec } from 'node:child_process';
+import { promisify } from 'node:util';
 import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
+
+const exec = promisify(nodeExec);
 
 export const update = async (argv: minimist.ParsedArgs) => {
   if (!(await isGitDirectory()) && !argv.force) {
@@ -57,17 +60,17 @@ export const update = async (argv: minimist.ParsedArgs) => {
     const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
     const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
 
+    const cmdList = [
+      `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
+      `${output.formatCode(`${packageManagerName} install`)}`,
+      `${output.formatCode('git add -A')}`,
+      `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
+    ];
+
     try {
       output.warning({
         title: `Update to create-plugin ${BASELINE_VERSION_FOR_MIGRATIONS} required.`,
-        body: [
-          `The following commands will be run before updating your plugin to create-plugin v6+.`,
-
-          `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
-          `${output.formatCode(`${packageManagerName} install`)}`,
-          `${output.formatCode('git add -A')}`,
-          `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
-        ],
+        body: ['The following commands will be run before updating your plugin to create-plugin v6+.', ...cmdList],
       });
 
       await exec(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`);
@@ -79,10 +82,7 @@ export const update = async (argv: minimist.ParsedArgs) => {
         title: `Update to create-plugin ${BASELINE_VERSION_FOR_MIGRATIONS} failed.`,
         body: [
           'Please run the following commands manually and try again.',
-          `${output.formatCode(`${packageManagerExecCmd}@${BASELINE_VERSION_FOR_MIGRATIONS} update`)}`,
-          `${output.formatCode(`${packageManagerName} install`)}`,
-          `${output.formatCode(`git add -A`)}`,
-          `${output.formatCode(`git commit -m "chore: run create-plugin@${BASELINE_VERSION_FOR_MIGRATIONS} update"`)}`,
+          ...cmdList,
           'error:',
           error instanceof Error ? error.message : String(error),
         ],
