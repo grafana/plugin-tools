@@ -19,8 +19,8 @@ Because of this, it's necessary to not pass any frontend-transformed body to the
 :::note
 
 Frontend data sources are not compatible with externally shared dashboards.
-To convert a frontend data source plugin into a backend plugin, refer to
-[convert a frontend data source to backend](./convert-a-frontend-datasource-to-backend).
+To convert a data source plugin frontend component into a backend component, refer to
+[convert a data source frontend into a backend](./convert-a-frontend-datasource-to-backend).
 
 :::
 

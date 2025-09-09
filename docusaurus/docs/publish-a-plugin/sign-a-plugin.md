@@ -13,11 +13,11 @@ keywords:
 
 # Sign a plugin
 
-All Grafana Labs-authored backend plugins, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
+All Grafana Labs-authored plugins, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
 
 :::info
 
-You don't need to sign a plugin during development or when submitting a plugin for review for the first time. The [Docker development environment](../get-started/set-up-development-environment.mdx) that is scaffolded with `@grafana/create-plugin` is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development), which allows you to load the plugin without a signature.
+You don't need to sign a plugin during development or when submitting a plugin for review for the first time. The [Docker development environment](../set-up/) that is scaffolded with `@grafana/create-plugin` is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development), which allows you to load the plugin without a signature.
 
 :::
 

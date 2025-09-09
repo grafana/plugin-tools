@@ -18,7 +18,7 @@ This tutorial will teach you how to build a Grafana streaming data source plugin
 
 A streaming data source plugin refreshes the data in your plugin only when new data is available in your data source. This approach is different than the typical method in which a dashboard is set to automatically refresh at a specified interval. The main advantage of streaming is that it eliminates the overhead of running your queries all over again each time the data needs updating.
 
-This tutorial shows how to create a data source backend plugin with both a frontend and a backend. When you have completed the tutorial, you will have built a plugin that generates random numbers on the backend that are returned to the frontend as a visualization.
+This tutorial shows how to create a data source plugin with both a frontend and a backend. When you have completed the tutorial, you will have built a plugin that generates random numbers on the backend that are returned to the frontend as a visualization.
 
 ## Example screenshot and code
 
@@ -46,7 +46,7 @@ Create Plugin will prompt you with some questions about your plugin name and typ
 
 1. For this tutorial, enter `data source` for the type of the plugin, and specify that it has a backend part.
 
-The tool will create a skeleton with all the necessary code and dependencies to run a data source backend plugin. And, if you compile the code, you will have a very simple backend plugin. However, this generated code isn't a streaming plugin yet, and we need to make some modifications.
+The tool will create a skeleton with all the necessary code and dependencies to run a data source plugin backend component. And, if you compile the code, you will have a very simple plugin backend. However, this generated code isn't a streaming plugin yet, and we need to make some modifications.
 
 ## Step 2: Set up the frontend
 
@@ -267,7 +267,7 @@ npm install
 npm run build
 ```
 
-This should download all the dependencies and create the frontend plugin files in the `./dist` directory.
+This should download all the dependencies and create the plugin frontend files in the `./dist` directory.
 
 2. Compile the backend code and generate the plugin binaries. For that you should have `mage` installed and then you simply need to run:
 

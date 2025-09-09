@@ -20,7 +20,7 @@ By default, plugins are available in English only and are not translated when yo
 If you want your plugin to be translatable to other languages you need to perform the changes described in this document. You can find the [list of available languages](https://github.com/grafana/grafana/blob/main/packages/grafana-i18n/src/constants.ts) in GitHub.
 
 :::note
-While this example is based on a panel plugin, the process is the same for data source and app plugins. 
+While this example is based on a panel plugin, the process is the same for data source and app plugins.
 :::
 
 ## Before you begin
@@ -31,15 +31,15 @@ Translation is available starting from Grafana 12.1.0 using the feature flag. If
 
 The following is recommended:
 
-* Basic knowledge of Grafana plugin development
-* Basic understanding of the [`t` function](https://www.i18next.com/overview/api#t)
-* Basic understanding of the [`Trans` component](https://react.i18next.com/latest/trans-component)
+- Basic knowledge of Grafana plugin development
+- Basic understanding of the [`t` function](https://www.i18next.com/overview/api#t)
+- Basic understanding of the [`Trans` component](https://react.i18next.com/latest/trans-component)
 
 ## Overview of the files affected by translation
 
 If you create your plugin running the `create-plugin` scaffolding tool, enabling plugin translation involves updating the following files:
 
-- `docker-compose.yaml` 
+- `docker-compose.yaml`
 - `plugin.json`
 - `module.ts`
 - `webpack.config.ts`
@@ -49,28 +49,24 @@ By the end of the translation process you'll have a file structure like this:
 
 ```
 myorg-myplugin-plugintype/
-├── pkg/
-│   ├── main.go
-│   └── plugin/
 ├── src/
 │   ├── locales
-│      ├── en-US
-│         └──myorg-myplugin-plugintype.json 
-│      ├── pt-BR
-│         └──--.json 
+│   │  ├── en-US
+│   │  │  └── myorg-myplugin-plugintype.json
+│   │  └── pt-BR
+│   │     └── myorg-myplugin-plugintype.json
 │   ├── module.ts
-│   ├── plugin.json
-└── tests/
+│   └── plugin.json
+├── tests/
 ├── docker-compose.yaml
-├── webpack.config.ts
-├── package.json
+└── package.json
 ```
 
 ## Set up your plugin for translation
 
-Follow these steps to update your plugin and set it up for translation. 
+Follow these steps to update your plugin and set it up for translation.
 
-### Enable translation in your Grafana instance 
+### Enable translation in your Grafana instance
 
 To translate your plugin you need to [enable the feature toggle](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) `localizationForPlugins` in your Grafana instance.
 
@@ -94,43 +90,23 @@ To do so, add the relevant `grafanaDependency` and `languages` you want to trans
 
 ```json title="plugin.json"
 "dependencies": {
-    "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations 
+    "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations
     "plugins": []
   },
 "languages": ["en-US", "pt-BR"] // the languages that the plugin supports
 ```
 
-### Extend your plugin configuration to include translation
+### Update to the latest version of `create-plugin`
 
-Install the latest version of the `@grafana/i18n` translation package:
+Update your `create-plugin` configs to the latest version using the following command:
 
 ```shell npm2yarn
-npm install @grafana/i18n@latest
+npx @grafana/create-plugin@latest update
 ```
 
-Next, mark `i18next` as an external in your Webpack configuration. See how in [Extend default configurations](extend-configurations).
+### Initialize translations in `module.ts`
 
-:::caution
-Remember to change the path to `webpack.config.ts` in `package.json`.
-:::
-
-```ts title="webpack.config.ts"
-import type { Configuration } from 'webpack';
-import { merge } from 'webpack-merge';
-import grafanaConfig, { Env } from './.config/webpack/webpack.config';
-
-const config = async (env: Env): Promise<Configuration> => {
-  const baseConfig = await grafanaConfig(env);
-  const externals = baseConfig.externals as string[];
-  return merge(baseConfig, { externals: [...externals, 'i18next'] });
-};
-
-export default config;
-```
-
-### Initialize translations in `module.ts` 
-
-Add plugin translation to `module.ts`: 
+Add plugin translation to `module.ts`:
 
 ```ts title="module.ts"
 import { initPluginTranslations } from '@grafana/i18n';
@@ -141,8 +117,9 @@ await initPluginTranslations(pluginJson.id);
 
 ## Determine the text to translate
 
-After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned an unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`. 
+After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned a unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`.
 Example using the `t` function:
+
 ```diff
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
    return builder
@@ -188,17 +165,18 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
 ```
 
 ### Example using the `Trans` component:
+
 ```diff
  import { SimpleOptions } from 'types';
  import { css, cx } from '@emotion/css';
  import { useStyles2, useTheme2 } from '@grafana/ui';
  import { PanelDataErrorView } from '@grafana/runtime';
 +import { Trans } from '@grafana/i18n';
- 
+
  interface Props extends PanelProps<SimpleOptions> {}
- 
+
 @@ -60,9 +61,15 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
- 
+
        <div className={styles.textBox}>
          {options.showSeriesCount && (
 -          <div data-testid="simple-panel-series-counter">Number of series: {data.series.length}</div>
@@ -219,7 +197,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
 
 ## Obtain the translated text
 
-Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations. 
+Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations.
 
 ### Parse for translations
 
@@ -258,7 +236,7 @@ Add the translation script `i18n-extract` to `package.json`:
 ```json title="package.json"
   "scripts": {
     "i18n-extract": "i18next --config src/locales/i18next-parser.config.js",
-  },    
+  },
 ```
 
 Run the script to translate the files:
@@ -302,9 +280,8 @@ The translation file will look similar to this:
 }
 ```
 
-## Test the translated plugin 
+## Test the translated plugin
 
-To test the plugin follow the steps in [Set up your development environment](../get-started/set-up-development-environment#docker-development-environment) to run your plugin locally. 
+To test the plugin follow the steps in [Set up your development environment](../set-up/) to run your plugin locally.
 
 You can then verify your plugin is displaying the appropriate text as you [change the language](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
-

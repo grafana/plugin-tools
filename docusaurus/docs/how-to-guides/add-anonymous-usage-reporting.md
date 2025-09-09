@@ -12,7 +12,7 @@ keywords:
 
 # Add anonymous usage reporting
 
-Add anonymous usage tracking to your plugin to send [reporting events](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#reporting_enabled) that describe how your plugin is being used to a tracking system configured by your Grafana server administrator.
+Add anonymous usage tracking to your plugin to send [reporting events](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#reporting_enabled) that describe how your plugin is being used to a tracking system such as Microsoft Application Insights or RudderStack. To configure your tracking system, including where to send the usage reports, contact your Grafana server administrator.
 
 ## Event reporting
 

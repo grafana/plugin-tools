@@ -5,15 +5,22 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     {
-      type: 'category',
+      type: 'doc',
+      id: 'get-started',
       label: 'Get started',
-      collapsible: true,
-      collapsed: false,
+    },
+    {
+      type: 'category',
+      label: 'Set up your environment',
       link: {
         type: 'doc',
-        id: 'get-started/get-started',
+        id: 'set-up/set-up-development-environment',
       },
-      items: ['get-started/set-up-development-environment', 'get-started/best-practices'],
+      collapsed: true,
+      items: [
+        'set-up/set-up-docker',
+        'set-up/set-up-github',
+      ],
     },
     {
       type: 'category',
@@ -24,10 +31,12 @@ const sidebars: SidebarsConfig = {
       },
       collapsed: true,
       items: [
+        'key-concepts/best-practices',
+        'key-concepts/plugin-types-usage',
         'key-concepts/anatomy-of-a-plugin',
         {
           type: 'category',
-          label: 'Backend plugins',
+          label: 'Plugin backend system',
           description: 'Learn about developing Grafana plugins with a backend component.',
           link: {
             type: 'doc',
@@ -38,7 +47,6 @@ const sidebars: SidebarsConfig = {
             'key-concepts/backend-plugins/plugin-protocol',
           ],
         },
-        'key-concepts/plugin-types-usage',
         'key-concepts/plugin-lifecycle',
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',
@@ -146,11 +154,14 @@ const sidebars: SidebarsConfig = {
             id: 'how-to-guides/ui-extensions/ui-extensions',
           },
           items: [
-            'how-to-guides/ui-extensions/create-an-extension-point',        
+            'how-to-guides/ui-extensions/create-an-extension-point',
+            'how-to-guides/ui-extensions/extension-user-render-component',
+            'how-to-guides/ui-extensions/extension-user-use-function',
+            'how-to-guides/ui-extensions/use-an-exposed-component',
             'how-to-guides/ui-extensions/register-an-extension',
             'how-to-guides/ui-extensions/expose-a-component',
-            'how-to-guides/ui-extensions/use-an-exposed-component',
             'how-to-guides/ui-extensions/versioning-extensions',
+            'how-to-guides/ui-extensions/degregate-ui',
             'how-to-guides/ui-extensions/debug-logs',
           ],
         },
@@ -295,9 +306,22 @@ const sidebars: SidebarsConfig = {
         id: 'reference/plugin-reference',
       },
       items: [
-        'reference/plugin-json', 
-        'reference/cli-commands', 
-        'reference/ui-extensions', 
+        'reference/plugin-json',
+        'reference/cli-commands',
+        {
+          type: 'category',
+          label: 'UI extensions reference',
+          description: 'Reeference guides for UI extensions.',
+          link: {
+            type: 'doc',
+            id: 'reference/ui-extensions-reference/ui-extensions-reference',
+          },
+          items: [
+            'reference/ui-extensions-reference/extension-points',
+            'reference/ui-extensions-reference/ui-extensions',
+            'reference/ui-extensions-reference/extensions-api-deprecated',
+          ],
+        },
       ],
     },
     {

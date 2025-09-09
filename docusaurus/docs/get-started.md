@@ -8,7 +8,7 @@ keywords:
   - plugin
   - create-plugin
   - getting started
-slug: /
+slug: /  
 ---
 
 import ScaffoldNPM from '@shared/createplugin-scaffold.md';
@@ -40,13 +40,15 @@ Grafana plugin development allows you to create many different types of user exp
 
 :::tip
 
-If this is your first time creating a plugin, we recommend that you familiarize yourself with the fundamentals of plugin types, backend plugins, data frames, and other essentials. Learn more about the [key concepts of Grafana plugin development](/key-concepts/).
+If this is your first time creating a plugin, we recommend that you familiarize yourself with the fundamentals of plugin types, frontend and backend components, data frames, and other essentials. Learn more about the [key concepts of Grafana plugin development](/key-concepts/).
 
 :::
 
-## Classifications of Grafana plugins
+## Signature classifications of Grafana plugins
 
-We recommend that you familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. Note that if you want to publish a plugin which is associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [our plugins policy](https://grafana.com/legal/plugins/).
+Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. 
+
+Note that if you want to publish a plugin associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [Grafana's plugins policy](https://grafana.com/legal/plugins/).
 
 ## Use plugin tools to develop your plugins faster
 
@@ -79,7 +81,7 @@ Grafana plugin tools work with the following operating systems:
 
 We generally recommend that you build for a version of Grafana later than v10.0. For more information about requirements and dependencies when developing with Grafana, see the [Grafana developer's guide](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md).
 
-### Recommended tooling
+### Required tooling
 
 You'll need to have the following tools set up:
 
@@ -93,7 +95,7 @@ You'll need to have the following tools set up:
 
 When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
 
-::: note
+:::note
 The Yarn commands on this website are compatible with Yarn Berry (>=2.0.0). If you are using Yarn 1.x.x we suggest you upgrade to [Yarn Berry](https://yarnpkg.com/migration/guide). Alternatively you can use `yarn create @grafana/plugin` to run commands with Yarn 1.x.x.
 :::
 
@@ -105,7 +107,7 @@ Run the following command and answer the prompts:
 
 <ScaffoldNPM />
 
-For help with the prompts, refer to the [CLI commands](../reference/cli-commands.mdx).
+For help with the prompts, refer to the [CLI commands](./reference/cli-commands.mdx).
 
 ### Open the generated folder structure
 
@@ -155,7 +157,7 @@ For more information about these files, refer to [Anatomy of a plugin](/key-conc
 
 ## Build and run your plugin in Docker
 
-With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](/get-started/set-up-development-environment/).
+With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](/set-up/).
 
 Refer to the "Next steps" terminal output following the [scaffolding of a new plugin](#scaffold-a-plugin) to install dependencies, build and run your plugin.
 
@@ -186,7 +188,7 @@ Note: We strongly recommend creating a new Git repository by running git init in
 
 ### Build the frontend
 
-To build the plugin in watch mode for development, continually monitoring for changes, run:
+To build the plugin in watch mode for development and continually monitor for changes, run:
 
 <BuildFEDevNPM />
 
@@ -196,7 +198,7 @@ To build for production, run:
 
 ### Build the backend
 
-If your plugin includes a [backend](../key-concepts/backend-plugins/index.md) component, you can build using mage:
+If your plugin includes a [backend](./key-concepts/backend-plugins/index.md) component, you can build using mage:
 
 ```shell
 mage -v build:linux

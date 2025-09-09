@@ -1,3 +1,82 @@
+# (Wed Sep 03 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.2`
+  - Create Plugin: Add plugin id and version comment to built module.js [#2089](https://github.com/grafana/plugin-tools/pull/2089) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Sep 01 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.1`
+  - Create Plugin: always externalize i18next [#2047](https://github.com/grafana/plugin-tools/pull/2047) ([@hugohaggmark](https://github.com/hugohaggmark))
+  - Update dependency @grafana/plugin-e2e to v2.1.10 [#2073](https://github.com/grafana/plugin-tools/pull/2073) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Sun Aug 31 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.10`
+  - Update dependency @grafana/e2e-selectors to ^12.2.0-255920 [#1987](https://github.com/grafana/plugin-tools/pull/1987) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Aug 29 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.26.0`
+  - Create Plugin: Eslint 9 migration [#1970](https://github.com/grafana/plugin-tools/pull/1970) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.0`
+  - Update dependency @grafana/plugin-e2e to v2.1.9 [#2064](https://github.com/grafana/plugin-tools/pull/2064) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.9`
+  - Plugin e2e: Fix AlertRuleEditPage evaluate flakiness [#2053](https://github.com/grafana/plugin-tools/pull/2053) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.25.9`
+  - Update dependency tmp to ^0.2.4 [SECURITY] [#2020](https://github.com/grafana/plugin-tools/pull/2020) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update grafana/grafana-enterprise Docker tag to v12.1.1 [#2034](https://github.com/grafana/plugin-tools/pull/2034) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v2.1.8 [#2021](https://github.com/grafana/plugin-tools/pull/2021) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Aug 07 2025)
 
 #### 🐛 Bug Fix

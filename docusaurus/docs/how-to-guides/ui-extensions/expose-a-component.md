@@ -1,6 +1,7 @@
 ---
 id: expose-a-component
 title: Expose a component
+sidebar_label: Expose a component 
 description: Share functionality with other plugins by exposing a component.
 keywords:
   - grafana
@@ -11,9 +12,9 @@ keywords:
 sidebar_position: 30
 ---
 
-Expose components to allow app plugins to easily share functionality with other app plugins without extension points. 
+As a content provider, you can expose components from your app plugins to easily share functionality.
 
-Compared to [registering an extension](./register-an-extension), when you expose a component you do not require the other extension providers to explicitly register their extensions against any extension points. Therefore the component may be [used by any app plugin](./use-an-exposed-component.md) with no action required by the provider.
+Compared to [registering an extension](./register-an-extension), when you expose a component, other plugins can use it wherever they want, instead of you needing to define which extension point you hook it into. This also means that the component needs to be more generic, as it is not targeting a specific extension point.
 
 ## Best practices
 
@@ -37,6 +38,10 @@ export const plugin = new AppPlugin()
     component: ({ name }: { name: string }) => <div>Hello {name}!</div>,
   });
 ```
+
+:::tip
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
+:::
 
 ## Access plugin meta information in an exposed component
 
@@ -62,3 +67,7 @@ export const plugin = new AppPlugin()
     }
   })
 ```
+
+:::tip
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
+:::

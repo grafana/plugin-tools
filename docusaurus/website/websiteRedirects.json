@@ -109,7 +109,7 @@
   },
   {
     "from": ["/create-a-plugin/develop-a-plugin/set-up-github-workflows"],
-    "to": "/get-started/set-up-development-environment#set-up-github-workflows"
+    "to": "/set-up/set-up-github"
   },
   {
     "from": ["/create-a-plugin/develop-a-plugin/subscribe-events"],
@@ -138,5 +138,13 @@
   {
     "from": ["/get-started/folder-structure"],
     "to": "/key-concepts/anatomy-of-a-plugin"
-  }
+  },
+  {
+    "from": ["/get-started/set-up-development-environment"],
+    "to": "/set-up/"
+  },
+  {
+    "from": ["/get-started/best-practices"],
+    "to": "/key-concepts/best-practices"
+  }  
 ]

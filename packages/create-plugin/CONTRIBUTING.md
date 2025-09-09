@@ -38,7 +38,7 @@ npm install
 └── templates // Handlebars templates
     ├── _partials // Composable parts of a template
     ├── app // Templates specific to scaffolding an app plugin
-    ├── backend // Templates specific to scaffolding backend plugin code
+    ├── backend // Templates specific to scaffolding plugin backend code
     ├── common // Common templates used by all plugin types (e.g. tooling config files)
     ├── datasource // Templates specific to scaffolding a datasource plugin
     ├── github // Templates for github workflows
@@ -47,7 +47,7 @@ npm install
 
 ## Development
 
-There are a collection of [commands](#commmands) to assist with developing `create-plugin`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
+There are a collection of [commands](#commands) to assist with developing `create-plugin`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
 
 Development requires linking this application so you can run it in your terminal to see what effect your changes have.
 
@@ -69,7 +69,7 @@ You should now be able to run `npx create-plugin` or `npx create-plugin update` 
 
 If you see `create-plugin not found` try running `npm unlink -g @grafana/create-plugin` then run the build and link commands again.
 
-### Commmands
+### Commands
 
 Below are the main commands used for developing `create-plugin`. They can be run using either `npx nx run`, `npm run` or navigating to `packages/create-plugin` and running the command directly.
 
@@ -227,5 +227,5 @@ describe('Migration - append profile to webpack', () => {
 To test a migration locally you'll need a plugin to test on.
 
 - Bump the version of create-plugin _(This can be necessary if your plugin was already updated using the latest create-plugin version.)_
-- Verify that the `.config/.cprc.json` in your plugin has a version that is lower than the bumped create-plugin version _(The `.cprc.json` holds the version of create-plugin that was used to scaffold / last update the plugin)
+- Verify that the `.config/.cprc.json` in your plugin has a version that is lower than the bumped `create-plugin` version. `.cprc.json` holds the version of `create-plugin` that was used to scaffold or make the last update of the plugin.
 - Run `npx create-plugin update --experimentalUpdates` in your plugin (see instructions on how to link your create-plugin dev version)

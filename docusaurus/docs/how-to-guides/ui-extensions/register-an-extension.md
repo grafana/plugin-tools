@@ -1,7 +1,8 @@
 ---
 id: register-an-extension
-title: Register an extension
-description: Make part of the UI extendable with links or components defined by plugins.
+title: Register content in an extension point
+sidebar_label: Register content in an extension point
+description: Register your plugin's links or components in a Grafana OSS or plugin's extension point.
 keywords:
   - grafana
   - plugins
@@ -11,15 +12,11 @@ keywords:
 sidebar_position: 20
 ---
 
-import ExtensionPoints from '@shared/extension-points.md';
-
 Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values. 
 
 You can either register or expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
-
-<ExtensionPoints/>
 
 :::warning
 
