@@ -93,7 +93,7 @@ export const MyComponent = () => {
 };
 ```
 
-## Limit which plugins can register components in your extension point
+## Limit which plugins can register functions in your extension point
 
 ```tsx
 import { usePluginFunctions } from '@grafana/runtime';
@@ -101,7 +101,7 @@ import { usePluginFunctions } from '@grafana/runtime';
 export type Fn = (params: { activeProjectId: string }) => void;
 
 export const MyComponent = () => {
-  const extensionPointId = 'myorg-foo-app/mycomponent/v1';
+  const extensionPointId = 'myorg-foo-app/function/v1';
   const allowedPluginIds = ['myorg-a-app', 'myorg-b-app'];
   const { projectId } = useActiveProject();
   const { functions, isLoading } = usePluginFunctions<Fn>({ extensionPointId });

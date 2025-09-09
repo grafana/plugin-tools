@@ -404,3 +404,4 @@ For more information refer to [`PluginExtensionFunction`](https://github.com/gra
 #### Examples
 
 - [Create an extension point for functions](../../how-to-guides/ui-extensions/extension-user-use-function#create-an-extension-point-for-functions)
+- [Limit which plugins can register functions in your extension point](../../how-to-guides/ui-extensions/extension-user-use-function#limit-which-plugins-can-register-functions-in-your-extension-point)
