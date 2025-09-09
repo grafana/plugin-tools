@@ -9,6 +9,8 @@ const sidebars: SidebarsConfig = {
       id: 'get-started',
       label: 'Get started',
     },
+
+// Set up
     {
       type: 'category',
       label: 'Set up your environment',
@@ -22,6 +24,8 @@ const sidebars: SidebarsConfig = {
         'set-up/set-up-github',
       ],
     },
+
+// Concepts
     {
       type: 'category',
       label: 'Key concepts',
@@ -54,6 +58,8 @@ const sidebars: SidebarsConfig = {
         'key-concepts/plugin-i18n-concept',
       ],
     },
+
+// Tutorials
     {
       type: 'category',
       label: 'Tutorials',
@@ -70,6 +76,8 @@ const sidebars: SidebarsConfig = {
         'tutorials/build-a-panel-plugin',
       ],
     },
+
+// How to
     {
       type: 'category',
       label: 'How-to guides',
@@ -145,26 +153,6 @@ const sidebars: SidebarsConfig = {
             'how-to-guides/panel-plugins/subscribe-events',
           ],
         },
-        {
-          type: 'category',
-          label: 'UI extensions',
-          description: 'Guides for creating UI extensions and extension points.',
-          link: {
-            type: 'doc',
-            id: 'how-to-guides/ui-extensions/ui-extensions',
-          },
-          items: [
-            'how-to-guides/ui-extensions/create-an-extension-point',
-            'how-to-guides/ui-extensions/extension-user-render-component',
-            'how-to-guides/ui-extensions/extension-user-use-function',
-            'how-to-guides/ui-extensions/use-an-exposed-component',
-            'how-to-guides/ui-extensions/register-an-extension',
-            'how-to-guides/ui-extensions/expose-a-component',
-            'how-to-guides/ui-extensions/versioning-extensions',
-            'how-to-guides/ui-extensions/degregate-ui',
-            'how-to-guides/ui-extensions/debug-logs',
-          ],
-        },
         'how-to-guides/add-anonymous-usage-reporting',
         'how-to-guides/add-user-storage',
         'how-to-guides/extend-configurations',
@@ -172,6 +160,30 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/runtime-checks',
       ],
     },
+
+// Functions
+    {
+      type: 'category',
+      label: 'UI extensions',
+      description: 'Guides for creating UI extensions and extension points.',
+      link: {
+        type: 'doc',
+        id: 'how-to-guides/ui-extensions/ui-extensions',
+      },
+      items: [
+        'how-to-guides/ui-extensions/create-an-extension-point',
+        'how-to-guides/ui-extensions/extension-user-render-component',
+        'how-to-guides/ui-extensions/extension-user-use-function',
+        'how-to-guides/ui-extensions/use-an-exposed-component',
+        'how-to-guides/ui-extensions/register-an-extension',
+        'how-to-guides/ui-extensions/expose-a-component',
+        'how-to-guides/ui-extensions/versioning-extensions',
+        'how-to-guides/ui-extensions/degregate-ui',
+        'how-to-guides/ui-extensions/debug-logs',
+      ],
+    },
+
+// Test 
     {
       type: 'category',
       label: 'E2E test a plugin',
@@ -221,6 +233,8 @@ const sidebars: SidebarsConfig = {
         'e2e-test-a-plugin/migrate-from-grafana-e2e',
       ],
     },
+
+// Publish    
     {
       type: 'category',
       label: 'Publish a plugin',
@@ -237,6 +251,8 @@ const sidebars: SidebarsConfig = {
         'publish-a-plugin/provide-test-environment',
       ],
     },
+
+// Migration Guides
     {
       type: 'category',
       label: 'Migration guides',
@@ -293,11 +309,15 @@ const sidebars: SidebarsConfig = {
       id: 'plugin-examples/plugin-examples',
       label: 'Plugin examples',
     },
+
+// Troubleshooting
     {
       type: 'doc',
       id: 'troubleshooting',
       label: 'Troubleshooting',
     },
+
+// Reference & Resources    
     {
       type: 'category',
       label: 'Reference',
