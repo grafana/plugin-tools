@@ -161,6 +161,14 @@ The `addFunction()` method takes a single `config` object with the following pro
 
 The method returns the `AppPlugin` instance to allow for chaining.
 
+#### Examples
+
+- [Create an extension point for functions](../../how-to-guides/ui-extensions/extension-user-use-function#create-an-extension-point-for-functions)
+
+#### See also
+
+- [Best practices for function extensions](../../how-to-guides/ui-extensions/extension-user-use-function#best-practices-for-function-extensions)
+
 ### `exposeComponent`
 
 :::info
@@ -392,3 +400,7 @@ const {
 ```
 
 For more information refer to [`PluginExtensionFunction`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L46).
+
+#### Examples
+
+- [Create an extension point for functions](../../how-to-guides/ui-extensions/extension-user-use-function#create-an-extension-point-for-functions)
