@@ -161,10 +161,6 @@ The `addFunction()` method takes a single `config` object with the following pro
 
 The method returns the `AppPlugin` instance to allow for chaining.
 
-#### Examples
-
-- [REPLACE WITH GOOD EXAMPLE](../../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
-
 ### `exposeComponent`
 
 :::info
@@ -357,7 +353,7 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 ### `usePluginFunctions`
 
 :::info
-Available in Grafana >=v11.6.0.
+Available in Grafana >=v11.6.0 but should be considered a bit experimental since we don't have any production code using it yet.
 :::
 
 Use this React hook to fetch **functions** that have been previously **registered** in an extension point using the `AppPlugin.addFunction()` method.
@@ -365,9 +361,7 @@ Use this React hook to fetch **functions** that have been previously **registere
 ```typescript
 import { usePluginFunctions } from '@grafana/runtime';
 
-type FunctionSignatureType = (data: string) => void;
-
-const { functions, isLoading } = usePluginFunctions<FunctionSignatureType>({
+const { functions, isLoading } = usePluginFunctions<(data: string) => void>({
   extensionPointId: 'grafana/dashboard/dropzone/v1',
   limitPerPlugin: 2,
 });
@@ -398,11 +392,3 @@ const {
 ```
 
 For more information refer to [`PluginExtensionFunction`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L46).
-
-#### Examples
-
-- [ADD GOOD EXAMPLE HERE](../../how-to-guides/ui-extensions/create-an-extension-point.md#passing-data-to-links)
-
-#### See also
-
-- [Best practices for rendering links added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
