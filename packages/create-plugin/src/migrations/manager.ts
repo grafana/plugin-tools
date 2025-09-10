@@ -39,6 +39,11 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
     ([key, migrationMeta]) => `${key} (${migrationMeta.description})`
   );
 
+  if (migrationList.length === 0) {
+    output.log({ title: 'No updates required.' });
+    return;
+  }
+
   output.log({ title: 'Running the following migrations:', body: output.bulletList(migrationList) });
 
   for (const [key, migration] of Object.entries(migrations)) {
