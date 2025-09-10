@@ -445,7 +445,7 @@ export function convertIgnorePatternToMinimatch(pattern: string): string {
    * Minimatch pattern `src/\{a,b}.js` is equivalent to gitignore pattern `src/{a,b}.js`.
    */
   const escapedPatternWithoutLeadingSlash = patternWithoutLeadingSlash.replaceAll(
-    /(?=((?:\\.|[^{(])*))\1([{(])/guy,
+    /(?=((?:\\.|[^{(\\])*))\1([{(])/guy,
     '$1\\$2'
   );
 
