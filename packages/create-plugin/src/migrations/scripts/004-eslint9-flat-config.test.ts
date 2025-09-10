@@ -1,4 +1,4 @@
-import migrate from './004-eslint9-flat-config.js';
+import migrate, { convertIgnorePatternToMinimatch } from './004-eslint9-flat-config.js';
 import { Context } from '../context.js';
 
 describe('004-eslint9-flat-config', () => {
@@ -87,7 +87,13 @@ describe('004-eslint9-flat-config', () => {
         "import { defineConfig } from "eslint/config";
 
         export default defineConfig([{
-          ignores: ["*.test.ts", ".github", ".vscode", "playwright-report", "**/dist"],
+          ignores: [
+            "**/*.test.ts",
+            "**/.github",
+            "**/.vscode",
+            "**/playwright-report",
+            "**/dist",
+          ],
         }, {
           rules: {
             "no-console": "error",
@@ -219,6 +225,45 @@ describe('004-eslint9-flat-config', () => {
       );
 
       await expect(migrate).toBeIdempotent(context);
+    });
+  });
+
+  // Because of all the regex-foo in this function I think it's best to test it separately.
+  describe('convertIgnorePatternToMinimatch', () => {
+    describe('should convert ignore patterns to minimatch patterns', () => {
+      const tests = [
+        ['', ''],
+        ['**', '**'],
+        ['/**', '/**'],
+        ['**/', '**/'],
+        ['src/', '**/src/'],
+        ['src', '**/src'],
+        ['src/**', 'src/**/*'],
+        ['!src/', '!**/src/'],
+        ['!src', '!**/src'],
+        ['!src/**', '!src/**/*'],
+        ['*/foo.js', '*/foo.js'],
+        ['*/foo.js/', '*/foo.js/'],
+        ['src/{a,b}.js', 'src/\\{a,b}.js'],
+        ['src/?(a)b.js', 'src/?\\(a)b.js'],
+        ['{.js', '**/\\{.js'],
+        ['(.js', '**/\\(.js'],
+        ['(.js', '**/\\(.js'],
+        ['{(.js', '**/\\{\\(.js'],
+        ['{bar}/{baz}', '\\{bar}/\\{baz}'],
+        ['\\[foo]/{bar}/{baz}', '\\[foo]/\\{bar}/\\{baz}'],
+        ['src/\\{a}', 'src/\\{a}'],
+        ['src/\\(a)', 'src/\\(a)'],
+        ['src/\\{a}/{b}', 'src/\\{a}/\\{b}'],
+        ['src/\\(a)/(b)', 'src/\\(a)/\\(b)'],
+        ['a\\bc{de(f\\gh\\{i\\(j{(', '**/a\\bc\\{de\\(f\\gh\\{i\\(j\\{\\('],
+      ];
+
+      for (const [pattern, expected] of tests) {
+        it(`should convert "${pattern}" to "${expected}"`, () => {
+          expect(convertIgnorePatternToMinimatch(pattern)).toBe(expected);
+        });
+      }
     });
   });
 });
