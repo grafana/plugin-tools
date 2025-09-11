@@ -31,13 +31,13 @@ The UI extensions framework is built around these concepts:
 
 - **Content provider**: The app plugin providing the content (link or component) to be rendered at the extension point.
 
-- **Content user**: The extension point using the renderable content.
+- **Content consumer**: The extension point using the renderable content.
 
 - **Plugin developer**: A developer working with the Grafana plugins ecosystem.
 
 ## I want to render extension content
 
-As a content user, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
+As a content consumer, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
 
 ### Why add an extension point?
 
