@@ -35,11 +35,11 @@ import { usePluginFunctions } from '@grafana/runtime';
 
 export const MyComponent = () => {
   // This is unique ID for your extension point.
-  // This is also what other plugins (content providers) use when they call `AppPlugin.addComponent({...})`
+  // This is also what other plugins (content providers) use when they call `AppPlugin.addFunction({...})`
   // - postfix the ID with a version number (in this example "/v1")
   // - prefix the ID with your plugin id (in this example "myorg-foo-app/"),
   //   or with "grafana/" for core Grafana extension points
-  const extensionPointId = 'myorg-foo-app/mycomponent/v1';
+  const extensionPointId = 'myorg-foo-app/myfunction/v1';
   const { functions, isLoading } = usePluginFunctions({ extensionPointId });
   const onClick = useCallback(() => {
     functions.forEach((fn) => {
@@ -71,7 +71,7 @@ import { usePluginFunctions } from '@grafana/runtime';
 export type Fn = (params: { activeProjectId: string }) => void;
 
 export const MyComponent = () => {
-  const extensionPointId = 'myorg-foo-app/mycomponent/v1';
+  const extensionPointId = 'myorg-foo-app/myfunction/v1';
   const { projectId } = useActiveProject();
   // Using the `Fn` type as a generic
   const { functions, isLoading } = usePluginFunctions<Fn>({ extensionPointId });
@@ -83,7 +83,7 @@ export const MyComponent = () => {
         // Handle errors here
       }
     });
-  }, [functions]);
+  }, [functions, projectId]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -93,7 +93,7 @@ export const MyComponent = () => {
 };
 ```
 
-## Limit which plugins can register components in your extension point
+## Limit which plugins can register functions in your extension point
 
 ```tsx
 import { usePluginFunctions } from '@grafana/runtime';
@@ -101,7 +101,7 @@ import { usePluginFunctions } from '@grafana/runtime';
 export type Fn = (params: { activeProjectId: string }) => void;
 
 export const MyComponent = () => {
-  const extensionPointId = 'myorg-foo-app/mycomponent/v1';
+  const extensionPointId = 'myorg-foo-app/myfunction/v1';
   const allowedPluginIds = ['myorg-a-app', 'myorg-b-app'];
   const { projectId } = useActiveProject();
   const { functions, isLoading } = usePluginFunctions<Fn>({ extensionPointId });
@@ -115,7 +115,7 @@ export const MyComponent = () => {
           // Handle errors here
         }
       });
-  }, [functions]);
+  }, [functions, projectId]);
 
   if (isLoading) {
     return <div>Loading...</div>;
