@@ -361,7 +361,7 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 ### `usePluginFunctions`
 
 :::info
-Available in Grafana >=v11.6.0 but should be considered a bit experimental since we don't have any production code using it yet.
+Available in Grafana >=v11.6.0.
 :::
 
 Use this React hook to fetch **functions** that have been previously **registered** in an extension point using the `AppPlugin.addFunction()` method.
