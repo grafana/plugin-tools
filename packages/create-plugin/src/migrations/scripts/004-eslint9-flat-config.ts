@@ -1,4 +1,5 @@
 import { camelCase } from 'change-case';
+import { convertIgnorePatternToMinimatch } from '@ivanmaxlogiudice/gitignore';
 import type { Linter } from 'eslint';
 import { parse } from 'jsonc-parser';
 import minimist from 'minimist';
@@ -418,7 +419,7 @@ const addIgnoreLinesToSet = (content: string) =>
   content
     .split('\n')
     .filter((line) => line.length > 0 && !line.startsWith('#'))
-    .map((line) => line.trim());
+    .map((line) => convertIgnorePatternToMinimatch(line.trim()));
 
 function discoverRelativeLegacyConfigs(
   context: Context,
