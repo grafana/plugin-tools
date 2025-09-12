@@ -1,3 +1,18 @@
+# (Fri Sep 12 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.4`
+  - Create-plugin: fix migration manager error and eslint ignores patterns [#2112](https://github.com/grafana/plugin-tools/pull/2112) ([@jackw](https://github.com/jackw))
+  - Update dependency @grafana/plugin-e2e to v2.1.12 [#2115](https://github.com/grafana/plugin-tools/pull/2115) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Sep 11 2025)
 
 #### 🐛 Bug Fix
