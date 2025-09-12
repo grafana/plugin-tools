@@ -122,5 +122,5 @@ test('should render profile', async ({ page, grafanaVersion }) => {
 
 ### Further reading
 
-- **end-to-end testing for plugins**: For comprehensive guidance on writing and running E2E tests for Grafana plugins, refer to the [documentation](../e2e-test-a-plugin/introduction.md).
+- **end-to-end testing for plugins**: For comprehensive guidance on writing and running E2E tests for Grafana plugins, refer to the [documentation](../e2e-test-a-plugin/index.md).
 - **Running end-to-end tests across multiple Grafana versions**: To learn how to configure your workflows to test plugins against different Grafana versions, see the [example workflows](../e2e-test-a-plugin/ci.md).

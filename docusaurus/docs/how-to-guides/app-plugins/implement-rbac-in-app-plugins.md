@@ -16,21 +16,11 @@ keywords:
 
 Role-based access control (RBAC) in Grafana app plugins is essential for creating secure and tailored user experiences. By implementing RBAC, you ensure that sensitive functionalities and data are only accessible to users with appropriate permissions, enhancing both security and usability. Proper configuration is crucial as misconfigurations can lead to security vulnerabilities.
 
-You can find an example app plugin that makes use of RBAC in our [grafana-plugin-examples GitHub repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-rbac).
+For more on how RBAC works and each role visit the [official docs](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/rbac-for-app-plugins/).
 
 ## Before you begin
 
-Ensure your development environment meets the following prerequisites:
-
-- **Grafana version:** Use Grafana version 11.2.0 or later to access the most up-to-date RBAC features.
-- **Feature toggle:** Activate the `accessControlOnCall` feature toggle to enable RBAC features in Grafana, which are essential for managing access controls within your plugin.
-
-You can ensure the correct feature toggle is enabled by adding the following to your `docker-compose.yaml` file:
-
-```yaml
-environment:
-  - GF_FEATURE_TOGGLES_ENABLE=accessControlOnCall
-```
+Requires Grafana version 11.6.0 or later.
 
 ## Defining roles
 
@@ -119,18 +109,16 @@ To safeguard your proxied routes with action checks, include the `reqAction` par
 
 If your backend exposes resources, you can secure them with action-based checks.
 
-To enable this protection, activate the following features:
-
-- `externalServiceAccounts`: Allows the use of managed service accounts to access Grafana user permissions.
-- `idForwarding`: Required to provide an ID token to identify the requester, whether it's a user or a service account.
+To enable this protection, activate the `externalServiceAccounts` feature. This allows the use of managed service accounts to access Grafana user permissions.
 
 :::note
 
-These features can be enabled in your Grafana instance by modifying the `docker-compose.yaml` file as follows:
+The `externalServiceAccounts` feature only supports single organization setups.
+It can be enabled in your Grafana instance by modifying the `docker-compose.yaml` file as follows:
 
 ```yaml
 environment:
-  - GF_FEATURE_TOGGLES_ENABLE=accessControlOnCall,idForwarding,externalServiceAccounts
+  - GF_FEATURE_TOGGLES_ENABLE=externalServiceAccounts
 ```
 
 :::
@@ -146,6 +134,88 @@ In your `plugin.json`, add the `iam` section to get a service account token with
   ]
 }
 ```
+
+## Action sets, folder access levels with permissions
+
+The action set system provides a way for plugins to extend Grafana's View, Edit or Admin access to a folder.
+
+Note:
+
+- **Folder Only**: Restricted to `folders:view/edit/admin` action sets
+- **Already Scoped**: The permission will be scoped to a particular folder once a user gets View/Edit/Admin access to the folder.
+- **Append Only**: Action sets can only be extended, not modified or restricted
+
+Extending anything other than the action sets results in an error.
+```bash
+logger=plugins.actionsets.registration pluginId=grafana-lokiexplore-app error="[accesscontrol.actionSetInvalid] 
+currently only folder and dashboard action sets are supported, provided action set grafana-lokiexplore-app:view is not a folder or dashboard action set"
+```
+
+### Grafana Action Sets
+
+Grafana has several action sets for folders that can be extended:
+
+**Folder Action Sets:**
+- `folders:view` → `["folders:read", "dashboards:read"]`
+- `folders:edit` → `["folders:read", "folders:write", "dashboards:read", "dashboards:write", "folders:create"]`
+- `folders:admin` → `["folders:read", "folders:write", "folders:delete", "folders.permissions:read", "folders.permissions:write", ...]`
+
+### Codepaths
+[RegistrationsOfActionSets](https://github.com/grafana/grafana/blob/main/pkg/services/accesscontrol/resourcepermissions/service.go#L574
+)
+
+### Plugin Action Sets Definition
+
+Plugins can define action sets in their `plugin.json`:
+
+```json
+{
+  "id": "my-plugin",
+  "type": "app", 
+  "actionSets": [
+    {
+      "action": "folders:edit",
+      "actions": [
+        "my-plugin.documents:create",
+        "my-plugin.documents:update", 
+        "my-plugin.templates:write"
+      ]
+    },
+    {
+      "action": "folders:admin", 
+      "actions": [
+        "my-plugin.settings:write",
+        "my-plugin.users:manage",
+        "my-plugin.permissions:write"
+      ]
+    }
+  ]
+}
+```
+
+### Practical Example
+
+**With Action Sets (extending existing sets):**
+```json
+{
+  "actionSets": [
+    {
+      "action": "folders:edit",
+      "actions": [
+        "my-plugin.docs:create",
+        "my-plugin.docs:edit"
+      ]
+    }
+  ],
+  ...
+}
+```
+
+**Result:** When a user is granted Edit access to a folder, they get:
+- All original `folders:edit` actions (folders:read, folders:write, folders:create)
+- Plus the plugin's additional actions (my-plugin.docs:create, my-plugin.docs:edit)
+
+## Implementation
 
 Next, integrate the `authlib/authz` library into your plugin's backend code to manage authorization effectively:
 

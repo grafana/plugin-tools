@@ -1,7 +1,7 @@
 ---
 id: create-an-extension-point
-title: Create an extension point
-sidebar_label: Create an extension point
+title: Render links in an extension point
+sidebar_label: Use extension points to render links 
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:
@@ -15,19 +15,16 @@ keywords:
   - apps
 ---
 
-import ExtensionPoints from '@shared/extension-points.md';
+An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
-An _extension point_ is a part of your plugin UI or Grafana UI where other plugins can add links or React components via hooks. You can use them to extend the user experience based on a context exposed by the extension point.
+:::note 
+Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). <br />
+For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
+:::
 
-Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
+## Best practices for rendering links
 
-<ExtensionPoints/>
-
-## Links
-
-### Best practices for rendering links
-
-- **Make sure your UI handles multiple links** <br /> Multiple plugins may add links to your extension point. Make sure your extension point can handle this and still provide good user experience. See how you can [limit the number of extensions displayed by plugins](#limit-the-number-of-extensions-by-plugins).
+- **Make sure your UI handles multiple links** <br /> Multiple plugins may add links to your extension point. Make sure your extension point can handle this and still provide good user experience. See how you can [limit the number of extensions in your extension point](#limit-the-number-of-extensions-in-your-extension-point).
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note that the `context{}` object always gets frozen before being passed to the links, so it can't be mutated.
 - **Avoid unnecessary re-renders** <br />
 
@@ -49,7 +46,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
       const { links, isLoading } = usePluginLinks({ extensionPointId, context });
     ```
 
-### Creating an extension point for links
+## Create an extension point to render links
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -80,7 +77,7 @@ export const InstanceToolbar = () => {
 };
 ```
 
-### Passing data to links
+## Passing data to links
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -97,9 +94,9 @@ export const InstanceToolbar = ({ instanceId }) => {
 };
 ```
 
-### Limit the number of extensions by plugins
+## Limit the number of extensions in your extension point
 
-You might have limited space on the UI and you would like the limit the number of extensions plugins can register to your extension point. By default there is _no limit_.
+If you have limited space on the UI, you can limit the number of extensions in your extension point. By default there is no limit.
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -114,7 +111,7 @@ export const InstanceToolbar = () => {
 };
 ```
 
-### Limit which plugins can register links
+## Limit which plugins can register links in your extension point
 
 ```tsx
 import { usePluginLinks } from '@grafana/runtime';
@@ -133,87 +130,3 @@ export const InstanceToolbar = () => {
 };
 ```
 
-## Components
-
-### Best practices for rendering components
-
-- **Make sure your UI controls the behavior** <br /> Component extensions can render different layouts and can respond to various kind of user interactions. Make sure that your UI defines clear boundaries for rendering components defined by other plugins.
-- **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and pass this as `props` to the components.
-
-### Creating an extension point for components
-
-```tsx
-import { usePluginComponents } from '@grafana/runtime';
-
-export const InstanceToolbar = () => {
-  // The `extensionPointId` must be prefixed.
-  // - Core Grafana -> prefix with "grafana/"
-  // - Plugin       -> prefix with "{your-plugin-id}/"
-  //
-  // This is also what plugins use when they call `addComponent()`
-  const extensionPointId = 'myorg-foo-app/toolbar/v1';
-  const { components, isLoading } = usePluginComponents({ extensionPointId });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div>
-      {/* Loop through the components added by plugins */}
-      {components.map(({ id, component: Component }) => (
-        <Component key={id} />
-      ))}
-    </div>
-  );
-};
-```
-
-### Passing data to the components
-
-```tsx
-import { usePluginComponents } from '@grafana/runtime';
-
-// Types for the props (passed as a generic to the hook in the following code block)
-type ComponentProps = {
-  instanceId: string;
-};
-
-export const InstanceToolbar = ({ instanceId }) => {
-  const extensionPointId = 'myorg-foo-app/toolbar/v1';
-  const { components, isLoading } = usePluginComponents<ComponentProps>({ extensionPointId });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div>
-      {/* Sharing contextual information using component props */}
-      {components.map(({ id, component: Component }) => (
-        <Component key={id} instanceId={instanceId} />
-      ))}
-    </div>
-  );
-};
-```
-
-### Limit which plugins can register components
-
-```tsx
-import { usePluginComponents } from '@grafana/runtime';
-
-export const InstanceToolbar = () => {
-  const extensionPointId = 'myorg-foo-app/toolbar/v1';
-  const { components, isLoading } = usePluginComponents<ComponentProps>({ extensionPointId });
-
-  // You can rely on the `component.pluginId` prop to filter based on the plugin
-  // that has registered the extension.
-  const allowedComponents = useMemo(() => {
-    const allowedPluginIds = ['myorg-a-app', 'myorg-b-app'];
-    return components.filter(({ pluginId }) => allowedPluginIds.includes(pluginId));
-  }, [components]);
-
-  // ...
-};
-```

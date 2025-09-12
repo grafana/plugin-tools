@@ -1,3 +1,519 @@
+# v5.26.3 (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12.1.0 [#1985](https://github.com/grafana/plugin-tools/pull/1985) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.1.11 [#2092](https://github.com/grafana/plugin-tools/pull/2092) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.26.2 (Wed Sep 03 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add plugin id and version comment to built module.js [#2089](https://github.com/grafana/plugin-tools/pull/2089) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.26.1 (Mon Sep 01 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: always externalize i18next [#2047](https://github.com/grafana/plugin-tools/pull/2047) ([@hugohaggmark](https://github.com/hugohaggmark))
+- Update dependency @grafana/plugin-e2e to v2.1.10 [#2073](https://github.com/grafana/plugin-tools/pull/2073) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v5.26.0 (Fri Aug 29 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Eslint 9 migration [#1970](https://github.com/grafana/plugin-tools/pull/1970) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v2.1.9 [#2064](https://github.com/grafana/plugin-tools/pull/2064) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.9 (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency tmp to ^0.2.4 [SECURITY] [#2020](https://github.com/grafana/plugin-tools/pull/2020) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update grafana/grafana-enterprise Docker tag to v12.1.1 [#2034](https://github.com/grafana/plugin-tools/pull/2034) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.1.8 [#2021](https://github.com/grafana/plugin-tools/pull/2021) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.25.8 (Tue Aug 05 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add package.json utils for migrations [#1942](https://github.com/grafana/plugin-tools/pull/1942) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.7 (Fri Jul 25 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update grafana dependencies [#1903](https://github.com/grafana/plugin-tools/pull/1903) ([@renovate[bot]](https://github.com/renovate[bot]) [@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v5.25.6 (Tue Jul 22 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: fix migrations commit arg [#1971](https://github.com/grafana/plugin-tools/pull/1971) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.5 (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix links in config files to dev docs [#1964](https://github.com/grafana/plugin-tools/pull/1964) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.3 (Thu Jul 10 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Support latest grafana package dependencies in jest [#1949](https://github.com/grafana/plugin-tools/pull/1949) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.2 (Thu Jul 03 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: ignore node_modules and dist when running jest in watch mode [#1943](https://github.com/grafana/plugin-tools/pull/1943) ([@jackw](https://github.com/jackw))
+- chore(deps): update dependency marked to v16 [#1933](https://github.com/grafana/plugin-tools/pull/1933) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.1 (Mon Jun 30 2025)
+
+#### 🐛 Bug Fix
+
+- Add useExperimentalUpdates to feature flags for migration adoption [#1935](https://github.com/grafana/plugin-tools/pull/1935) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.25.0 (Wed Jun 25 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Replace deprecated eslint deprecation plugin [#1883](https://github.com/grafana/plugin-tools/pull/1883) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.24.0 (Fri Jun 20 2025)
+
+#### 🚀 Enhancement
+
+- Replace direct call to levitate with usage of is-compatible github workflow [#1909](https://github.com/grafana/plugin-tools/pull/1909) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v5.23.2 (Wed Jun 18 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12.0.2 [#1905](https://github.com/grafana/plugin-tools/pull/1905) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update grafana patch dependencies [#1906](https://github.com/grafana/plugin-tools/pull/1906) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Fix: remove unused bundler configs on update [#1907](https://github.com/grafana/plugin-tools/pull/1907) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.23.1 (Mon Jun 16 2025)
+
+#### 🐛 Bug Fix
+
+- fix: don't exit Webpack on ESLint error in development [#1890](https://github.com/grafana/plugin-tools/pull/1890) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v5.23.0 (Mon Jun 16 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Introduce experimental Rspack feature flag [#1564](https://github.com/grafana/plugin-tools/pull/1564) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12 [#1654](https://github.com/grafana/plugin-tools/pull/1654) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.0.5 [#1880](https://github.com/grafana/plugin-tools/pull/1880) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.22.4 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v2.0.4 [#1878](https://github.com/grafana/plugin-tools/pull/1878) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.22.3 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.0.3 [#1872](https://github.com/grafana/plugin-tools/pull/1872) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.22.2 (Tue Jun 10 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: Fix zizmor issues in template workflows [#1823](https://github.com/grafana/plugin-tools/pull/1823) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v5.22.1 (Tue May 20 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: fix cspell "doesn't" spelling in create-plugin Webpack config [#1809](https://github.com/grafana/plugin-tools/pull/1809) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v5.22.0 (Wed May 14 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support Node 24 [#1772](https://github.com/grafana/plugin-tools/pull/1772) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.21.0 (Tue May 13 2025)
+
+#### 🚀 Enhancement
+
+- Template: Update scenes app to use scenes 6 and react router 6 [#1783](https://github.com/grafana/plugin-tools/pull/1783) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
+# v5.20.2 (Tue May 13 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix update cli flags from running generate [#1787](https://github.com/grafana/plugin-tools/pull/1787) ([@jackw](https://github.com/jackw))
+- chore(deps): update dependency @grafana/plugin-e2e to v2.0.2 [#1776](https://github.com/grafana/plugin-tools/pull/1776) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.20.1 (Wed May 07 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v2.0.1 [#1767](https://github.com/grafana/plugin-tools/pull/1767) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:grafana/plugin-tools ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v5.20.0 (Mon May 05 2025)
+
+#### 🚀 Enhancement
+
+- Create-Plugin: Update plugin-e2e to support latest playwright [#1761](https://github.com/grafana/plugin-tools/pull/1761) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.9 (Mon May 05 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Add docker-compose migration for extending from .config [#1621](https://github.com/grafana/plugin-tools/pull/1621) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.8 (Thu Apr 24 2025)
+
+#### 🐛 Bug Fix
+
+- chore: fixes unexpected flaky component tests (#1749) [#1749](https://github.com/grafana/plugin-tools/pull/1749) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v5.19.7 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- fix: fixes playwright upgrade [#1741](https://github.com/grafana/plugin-tools/pull/1741) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v5.19.6 (Tue Apr 22 2025)
+
+#### 🐛 Bug Fix
+
+- chore: pins playwright/test because of version errors [#1740](https://github.com/grafana/plugin-tools/pull/1740) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v5.19.5 (Thu Apr 17 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Scaffold bundle-stats with workflow_dispatch [#1736](https://github.com/grafana/plugin-tools/pull/1736) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.4 (Wed Apr 16 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: fixes e2e tests waiting until "networkidle" [#1728](https://github.com/grafana/plugin-tools/pull/1728) ([@hugohaggmark](https://github.com/hugohaggmark) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.3 (Tue Apr 15 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Fix: create-plugin common Webpack config types [#1680](https://github.com/grafana/plugin-tools/pull/1680) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v5.19.2 (Thu Apr 10 2025)
+
+#### 🐛 Bug Fix
+
+- Build: Migrate to rollup and private workspaces [#1688](https://github.com/grafana/plugin-tools/pull/1688) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.19.1 (Thu Mar 27 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana patch dependencies to v11.5.3 [#1655](https://github.com/grafana/plugin-tools/pull/1655) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.19.0 (Thu Mar 13 2025)
+
+#### 🚀 Enhancement
+
+- Feature: Consistent CLI output [#1597](https://github.com/grafana/plugin-tools/pull/1597) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.5 (Fri Mar 07 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Fix timeouts with canary e2e tests [#1606](https://github.com/grafana/plugin-tools/pull/1606) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.4 (Mon Mar 03 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Externalise unstable entrypoints [#1580](https://github.com/grafana/plugin-tools/pull/1580) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.3 (Fri Feb 21 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: fix absolute path being interpreted by shell [#1560](https://github.com/grafana/plugin-tools/pull/1560) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.18.1 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/e2e-selectors to v11.5.2 [#1510](https://github.com/grafana/plugin-tools/pull/1510) ([@renovate[bot]](https://github.com/renovate[bot]) [@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v5.18.0 (Wed Feb 19 2025)
 
 #### 🚀 Enhancement
@@ -1320,7 +1836,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 #### 🐛 Bug Fix
 
-- Create Plugin: Bump go version in backend plugin scaffolding [#786](https://github.com/grafana/plugin-tools/pull/786) ([@sunker](https://github.com/sunker))
+- Create Plugin: Bump go version in plugin backend scaffolding [#786](https://github.com/grafana/plugin-tools/pull/786) ([@sunker](https://github.com/sunker))
 - Create Plugin: Bump Glob to 10.x.x [#764](https://github.com/grafana/plugin-tools/pull/764) ([@jackw](https://github.com/jackw))
 - Create Plugin: Bump find-up to 7.x.x [#765](https://github.com/grafana/plugin-tools/pull/765) ([@jackw](https://github.com/jackw))
 

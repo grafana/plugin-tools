@@ -19,8 +19,8 @@ Grafana app plugins allow you bundle panels and data sources. Apps also allow yo
 
 There are two ways to add authentication to an app plugin. Configure your app plugin to authenticate against a third-party API in one of either of two ways:
 
-- Use the [_data source proxy_](#authenticate-using-the-data-source-proxy) method, or
-- Build a [_backend plugin_](#authenticate-using-a-backend-component).
+- Use the [data source proxy](#authenticate-using-the-data-source-proxy) method.
+- Build a [plugin with a backend component](#authenticate-using-a-backend-component).
 
 | Case                                                                                            | Use                        |
 | ----------------------------------------------------------------------------------------------- | -------------------------- |

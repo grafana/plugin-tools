@@ -105,7 +105,7 @@ For more information see [here](https://grafana.com/developers/plugin-tools/migr
 
 ## Customizing or extending the basic configs
 
-You can read more about customizing or extending the basic configuration in our [documentation](https://grafana.com/developers/plugin-tools/get-started/set-up-development-environment#extend-configurations).
+You can read more about customizing or extending the basic configuration in our [documentation](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
 
 ## Add provisioning to your existing plugin
 

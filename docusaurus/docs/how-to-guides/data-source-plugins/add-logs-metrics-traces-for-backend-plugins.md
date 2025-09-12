@@ -1,7 +1,7 @@
 ---
 id: add-logs-metrics-traces-for-backend-plugins
-title: Add logs, metrics, and traces for backend plugins
-description: How to add logs, metrics and traces for backend plugins.
+title: Add logs, metrics, and traces to plugin backends
+description: How to add logs, metrics and traces to plugin backend components.
 keywords:
   - grafana
   - plugins
@@ -16,7 +16,7 @@ keywords:
   - back-end
 ---
 
-Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) for backend plugins makes it easier to diagnose and resolve issues for both plugin developers and Grafana operators. This document provides guidance, conventions and best practices to help you effectively instrument your plugins, as well as how to access this data when the plugin is installed.
+Adding [logs](#logs), [metrics](#metrics) and [traces](#traces) to plugin backend components makes it easier to diagnose and resolve issues for both plugin developers and Grafana operators. This document provides guidance, conventions and best practices to help you effectively instrument your plugins, as well as how to access this data when the plugin is installed.
 
 :::note
 
@@ -255,9 +255,9 @@ Incoming requests of high frequency are normally more common for the `QueryData`
 
 ### Inspect logs locally
 
-Logs from a backend plugin are consumed by the connected Grafana instance and included in the Grafana server log.
+Logs from a plugin's backend are consumed by the connected Grafana instance and included in the Grafana server log.
 
-Each log message for a backend plugin will include a logger name, `logger=plugin.<plugin id>`. Example:
+Each log message from a plugin backend component includes a logger name `logger=plugin.<plugin id>`. For example:
 
 ```shell
 DEBUG[11-14|15:26:26] Debug msg     logger=plugin.grafana-basic-datasource someID=1
@@ -379,13 +379,13 @@ If a value originating from user input are unbounded, that is when the value cou
 
 ### Collect and visualize metrics locally
 
-Please refer to [Pull metrics from Grafana backend plugin into Prometheus](https://grafana.com/docs/grafana/latest/setup-grafana/set-up-grafana-monitoring/#pull-metrics-from-grafana-backend-plugin-into-prometheus).
+Please refer to [Pull metrics from a Grafana plugin backend into Prometheus](https://grafana.com/docs/grafana/latest/setup-grafana/set-up-grafana-monitoring/#pull-metrics-from-grafana-backend-plugin-into-prometheus).
 
 Further, see [How to collect and visualize logs, metrics and traces](#collect-and-visualize-logs-metrics-and-traces).
 
 ## Traces
 
-Distributed tracing allows backend plugin developers to create custom spans in their plugins, and then send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
+Distributed tracing allows plugin backend developers to create custom spans in their plugins, and then send them to the same endpoint and with the same propagation format as the main Grafana instance. The tracing context is also propagated from the Grafana instance to the plugin, so the plugin's spans will be correlated to the correct trace.
 
 ### OpenTelemetry configuration in Grafana
 
@@ -484,10 +484,6 @@ When tracing is enabled, a `TracingMiddleware` is also added to the default midd
 ### Collect and visualize traces locally
 
 Refer to [How to collect and visualize logs, metrics and traces](#collect-and-visualize-logs-metrics-and-traces).
-
-### Plugin example
-
-Refer to the [datasource-http-backend plugin example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-http-backend) for a complete example of a plugin with full distributed tracing support.
 
 ## Collect and visualize logs, metrics and traces
 

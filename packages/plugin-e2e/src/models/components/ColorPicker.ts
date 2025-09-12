@@ -28,7 +28,7 @@ export class ColorPicker extends ComponentBase {
 
   private getContainer(): Locator {
     const { grafanaVersion, page, selectors } = this.ctx;
-    if (gte(grafanaVersion, '11.4.1')) {
+    if (gte(grafanaVersion, '11.5.0')) {
       return page.locator(resolveGrafanaSelector(selectors.components.Portal.container));
     }
     if (gte(grafanaVersion, '8.7.0')) {

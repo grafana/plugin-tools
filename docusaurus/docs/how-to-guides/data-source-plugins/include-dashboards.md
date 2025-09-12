@@ -16,7 +16,7 @@ We'll walk you through the process of bundling dashboards into plugins. The proc
 
 ## Step 1: Create a dashboard
 
-Start by creating the dashboard you want to bundle with your plugin. The [development environment](/get-started/set-up-development-environment) provided by create-plugin can aid with creating and testing dashboards.
+Start by creating the dashboard you want to bundle with your plugin. The [development environment](/set-up/) provided by create-plugin can aid with creating and testing dashboards.
 
 ### Export the dashboard
 
@@ -73,6 +73,18 @@ To test your newly created dashboard, import the dashboard:
 1. Create or edit an existing instance of your data source.
 1. Click **Dashboards** to list all included dashboards.
 1. Click **Import** next to the dashboard you want to import. The dashboard is imported into your plugin.
+
+## Keeping your dashboard up to date
+
+The Grafana dashboard schema evolves over time, and dashboards that aren't regularly updated can become outdated. Outdated dashboards may require time-consuming migrations during loading or may not work properly with newer Grafana features. Here's how to ensure your dashboard stays current:
+
+1. Import your dashboard following the steps in [Step 3](#step-3-import-the-dashboard-into-your-plugin) above. This process automatically runs any needed migrations to update the dashboard to the latest schema.
+1. Once loaded, click the **Export** button in the dashboard's top menu, then select **Export as JSON**.
+1. Make sure to check the option **Export the dashboard to use in another instance**.
+1. Save the updated dashboard by either:
+   - Clicking **Download file** and replacing your existing JSON file
+   - Using **Copy to clipboard** and pasting the content into your existing JSON file
+1. (Optional) To help users identify the latest dashboard version, increment the `version` number in the root level of the JSON file (e.g., from 1 to 2). This makes it clear when a dashboard has been updated with newer features or fixes.
 
 ## Conclusion
 

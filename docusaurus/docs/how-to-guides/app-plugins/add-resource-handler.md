@@ -49,11 +49,3 @@ import { getBackendSrv } from '@grafana/runtime';
 
 const namespaces = await getBackendSrv().get(`/api/plugins/<PLUGIN_ID>/resources/namespaces`);
 ```
-
-## Additional examples
-
-Some other examples of using resource handlers and the [`httpadapter`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/resource/httpadapter) package:
-
-- The [app-with-backend](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-with-backend) example:
-  - [create resource handler](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/pkg/plugin/app.go) and [register routes](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/pkg/plugin/resources.go) in the backend.
-  - use [backendSrv](https://github.com/grafana/grafana-plugin-examples/blob/main/examples/app-with-backend/src/pages/PageOne/PageOne.tsx) to call resources.

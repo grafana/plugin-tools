@@ -21,7 +21,7 @@ module.exports = [
     name: 'plugin-tools/defaults',
     files: ['**/*.{ts,tsx,js}'],
   },
-  grafanaConfig,
+  ...grafanaConfig,
   {
     name: 'plugin-e2e/overrides',
     rules: {

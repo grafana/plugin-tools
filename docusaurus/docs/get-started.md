@@ -1,0 +1,234 @@
+---
+id: get-started
+title: Get started
+description: Get started with Grafana plugin development with the create-plugin tool.
+keywords:
+  - grafana
+  - plugins
+  - plugin
+  - create-plugin
+  - getting started
+slug: /  
+---
+
+import ScaffoldNPM from '@shared/createplugin-scaffold.md';
+import InstallNPM from '@shared/createplugin-install.md';
+import BuildFEDevNPM from '@shared/createplugin-build-fe-dev.md';
+import BuildFEProdNPM from '@shared/createplugin-build-fe-prod.md';
+
+# Get started
+
+Welcome to the world of Grafana plugin creation, where you can enhance Grafana's foundational features. In this guide, you'll learn how to get started by scaffolding a plugin, running it in an efficient development environment, and using its basic features.
+
+<YouTubeEmbed videoId="AARrATeVEQY" title="Getting Started with Grafana Plugin Development" />
+
+**Watch our introductory video** to see a step-by-step guide on getting started with your first Grafana plugin. This visual tutorial complements the detailed instructions below and provides practical insights to help you along the way.
+
+## Quick start
+
+Scaffold a new plugin with a single command! Run the following and answer the prompts:
+
+<ScaffoldNPM />
+
+## Why create a Grafana plugin?
+
+Grafana plugin development allows you to create many different types of user experiences. For example, you can make:
+
+- **Panel plugins** - new ways of visualizing data
+- **Data source plugins** - connections to a new database or other source of data
+- **App plugins** - integrated out-of-the-box experiences
+
+:::tip
+
+If this is your first time creating a plugin, we recommend that you familiarize yourself with the fundamentals of plugin types, frontend and backend components, data frames, and other essentials. Learn more about the [key concepts of Grafana plugin development](/key-concepts/).
+
+:::
+
+## Signature classifications of Grafana plugins
+
+Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. 
+
+Note that if you want to publish a plugin associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [Grafana's plugins policy](https://grafana.com/legal/plugins/).
+
+## Use plugin tools to develop your plugins faster
+
+Grafana's plugin tools offer an officially supported way to extend Grafana's core functionality. We have designed these tools to help you to develop your plugins faster with a modern build setup and zero additional configuration required.
+
+The plugin tools consist of two packages:
+
+- `create-plugin`: A CLI to scaffold new plugins or migrate plugins created with `@grafana/toolkit`.
+- `sign-plugin`: A CLI to sign plugins for distribution.
+
+:::info
+
+If you have previously built a plugin with `@grafana/toolkit`, you can use our plugin tools to make the jump to our newest tools. For more information, refer to [Migrate from toolkit](/migration-guides/migrate-from-toolkit.mdx).
+
+:::
+
+## Before you begin
+
+Make sure you are using a supported OS, Grafana version, and tooling.
+
+### Supported operating systems
+
+Grafana plugin tools work with the following operating systems:
+
+- Linux
+- macOS
+- Windows 10+ with WSL (Windows Subsystem for Linux)
+
+### Supported Grafana version
+
+We generally recommend that you build for a version of Grafana later than v10.0. For more information about requirements and dependencies when developing with Grafana, see the [Grafana developer's guide](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md).
+
+### Required tooling
+
+You'll need to have the following tools set up:
+
+- Go ([Version](https://github.com/grafana/plugin-tools/blob/main/packages/create-plugin/templates/backend/go.mod#L3))
+- [Mage](https://magefile.org/)
+- [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
+- [Docker](https://docs.docker.com/get-docker/)
+- Optionally, [Yarn](https://yarnpkg.com/getting-started/install) or [PNPM](https://pnpm.io/installation)
+
+#### Supported package managers
+
+When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
+
+:::note
+The Yarn commands on this website are compatible with Yarn Berry (>=2.0.0). If you are using Yarn 1.x.x we suggest you upgrade to [Yarn Berry](https://yarnpkg.com/migration/guide). Alternatively you can use `yarn create @grafana/plugin` to run commands with Yarn 1.x.x.
+:::
+
+## Scaffold a plugin
+
+### Run the `create-plugin` tool
+
+Run the following command and answer the prompts:
+
+<ScaffoldNPM />
+
+For help with the prompts, refer to the [CLI commands](./reference/cli-commands.mdx).
+
+### Open the generated folder structure
+
+Open the plugin folder to browse the generated plugin:
+
+The directory name `<orgName>-<pluginName>-<pluginType>` is based on the answers you gave to the prompts. Use the name of the generated folder when prompted. This directory contains the initial project structure to kickstart your plugin development.
+
+The file structure should look like this:
+
+```
+<orgName>-<pluginName>-<pluginType>
+├── .config/
+├── .eslintrc
+├── .github
+│   └── workflows
+├── .gitignore
+├── .nvmrc
+├── .prettierrc.js
+├── CHANGELOG.md
+├── LICENSE
+├── Magefile.go
+├── README.md
+├── cypress
+│   └── integration
+├── docker-compose.yaml
+├── go.mod
+├── go.sum
+├── jest-setup.js
+├── jest.config.js
+├── node_modules
+├── package.json
+├── pkg
+│   ├── main.go
+│   └── plugin
+├── src
+│   ├── README.md
+│   ├── components
+│   ├── datasource.ts
+│   ├── img
+│   ├── module.ts
+│   ├── plugin.json
+│   └── types.ts
+└── tsconfig.json
+```
+
+For more information about these files, refer to [Anatomy of a plugin](/key-concepts/anatomy-of-a-plugin/).
+
+## Build and run your plugin in Docker
+
+With the `create-plugin` tool, you can use a Docker container to simplify the configuration, loading, and development processes. For more information, refer to [Set up development environment](/set-up/).
+
+Refer to the "Next steps" terminal output following the [scaffolding of a new plugin](#scaffold-a-plugin) to install dependencies, build and run your plugin.
+
+Example output:
+
+```
+## What's next?
+
+Run the following commands to get started:
+
+    * cd ./orgName-pluginName-app
+    * npm install to install frontend dependencies.
+    * npm exec playwright install chromium to install e2e test dependencies.
+    * npm run dev to build (and watch) the plugin frontend code.
+    * mage -v build:backend to build the plugin backend code. Rerun this command every time you edit your backend files.
+    * docker compose up to start a grafana development server.
+    * Open http://localhost:3000 in your browser to create a dashboard to begin developing your plugin.
+
+Note: We strongly recommend creating a new Git repository by running git init in ./org-pluginname-app before continuing.
+
+    * Learn more about Grafana Plugin Development at https://grafana.com/developers/plugin-tools
+
+```
+
+### Install dependencies
+
+<InstallNPM />
+
+### Build the frontend
+
+To build the plugin in watch mode for development and continually monitor for changes, run:
+
+<BuildFEDevNPM />
+
+To build for production, run:
+
+<BuildFEProdNPM />
+
+### Build the backend
+
+If your plugin includes a [backend](./key-concepts/backend-plugins/index.md) component, you can build using mage:
+
+```shell
+mage -v build:linux
+```
+
+#### Build targets
+
+| Option         | Description                                  | Example               |
+| -------------- | -------------------------------------------- | --------------------- |
+| `build:[arch]` | Builds a binary for a specific architecture. | `mage -v build:Linux` |
+
+List all available Mage targets for additional commands:
+
+```bash
+mage -l
+```
+
+### Run the Grafana server
+
+To launch the Grafana development server using Docker, run:
+
+```shell
+docker compose up --build
+```
+
+Congratulations! You've just scaffolded your first plugin which you can now access at [http://localhost:3000](http://localhost:3000).
+
+## Next steps
+
+- Start your plugin journey with one of our [plugin development tutorials](/tutorials/).
+- Learn how to [extend](/how-to-guides) its functionality.
+- Review the [plugin examples](https://github.com/grafana/grafana-plugin-examples) to learn about good practices.
+- Learn how to [package](/publish-a-plugin/package-a-plugin), [sign](/publish-a-plugin/sign-a-plugin), and [publish](/publish-a-plugin/publish-or-update-a-plugin.md) your plugin to the Grafana [plugin catalog](https://grafana.com/plugins).

@@ -6,7 +6,7 @@ const skipMsg = 'Alerting rule test API are only compatible with Grafana 9.5.0 a
 test.describe('Test alert rule APIs', () => {
   test('advanced mode should be enabled', async ({ grafanaVersion, alertRuleEditPage }) => {
     test.skip(semver.lt(grafanaVersion, '11.6.0'), 'Advanced mode is not supported in Grafana versions < 11.6.0');
-    expect(await alertRuleEditPage.isAdvancedModeSupported()).toBe(true);
+    await expect(alertRuleEditPage.advancedModeSwitch).toHaveCount(1);
   });
 
   test('should be possible to enable advanced mode', async ({ grafanaVersion, alertRuleEditPage }) => {
@@ -59,7 +59,6 @@ test.describe('Test new alert rules', () => {
     alertRuleEditPage,
     selectors,
     readProvisionedDataSource,
-    page,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
     const { rows } = selectors.components.QueryEditorRows;

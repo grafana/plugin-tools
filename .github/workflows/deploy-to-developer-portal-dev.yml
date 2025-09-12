@@ -1,26 +1,41 @@
 name: Deploy to Developer Portal DEV Bucket
 
+
 on:
   workflow_dispatch:
     inputs:
       branch:
         description: 'Which branch to use?'
         default: 'main'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy docs to Developer Portal Bucket
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
+    permissions:
+      contents: read
+      id-token: write
     env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
+      - id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0
+          persist-credentials: false
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -32,13 +47,14 @@ jobs:
       - name: Build documentation website
         run: DEV_PORTAL_ENV=dev npm run docs:build
 
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v2'
+      - uses: grafana/shared-workflows/actions/login-to-gcs@64c35f1dffd024130947f485ed6a150edfe83d22 # v0.2.0
+        id: login-to-gcs
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY_DEV }}
+          service_account: 'github-developer-portal-dev@grafanalabs-workload-identity.iam.gserviceaccount.com'
+          bucket: 'staging-developer-portal'
 
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
 
       - name: 'Deploy to Developer Portal Bucket'
         run: |

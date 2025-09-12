@@ -1,30 +1,38 @@
 import { glob } from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
-import { TEMPLATE_PATHS, TEXT } from '../constants.js';
+import { TEMPLATE_PATHS } from '../constants.js';
 import { getPluginJson } from '../utils/utils.plugin.js';
 import { compileProvisioningTemplateFile, getTemplateData } from '../utils/utils.templates.js';
-import { confirmPrompt, printMessage, printSuccessMessage, printError } from '../utils/utils.console.js';
+import { confirmPrompt, output } from '../utils/utils.console.js';
 
 export const provisioning = async () => {
   const { type } = getPluginJson();
   const provisioningFolder = path.join(process.cwd(), 'provisioning');
   try {
-    if (await confirmPrompt(TEXT.addProvisioning)) {
+    if (await confirmPrompt('Do you want to add provisioning files?')) {
       if (!fs.existsSync(provisioningFolder)) {
         const provisioningSpecificFiles = glob.sync(`${TEMPLATE_PATHS[type]}/provisioning/**`, { dot: true });
         const templateData = getTemplateData();
         provisioningSpecificFiles.forEach((file) => {
           compileProvisioningTemplateFile(type, file, templateData);
         });
-        printSuccessMessage(TEXT.addProvisioningSuccess);
+        output.success({
+          title: 'Successfully added provisioning.',
+          body: [`Provisioning files have been added to ${provisioningFolder}`],
+        });
       } else {
-        printMessage(`You plugin already has provisioning files located under ${provisioningFolder}, aborting.`);
+        output.warning({
+          title: 'No provisioning has been added.',
+          body: [`This plugin already has provisioning files located at ${provisioningFolder}`],
+        });
         process.exit(0);
       }
     } else {
-      printMessage(TEXT.addProvisioningAborted);
-      process.exit(1);
+      output.log({
+        title: 'No provisioning has been added.',
+      });
+      process.exit(0);
     }
   } catch (error) {
     let message;
@@ -33,6 +41,9 @@ export const provisioning = async () => {
     } else {
       message = String(error);
     }
-    printError(message);
+    output.error({
+      title: 'An error occurred whilst adding provisioning files.',
+      body: [message],
+    });
   }
 };

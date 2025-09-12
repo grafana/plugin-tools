@@ -109,7 +109,7 @@
   },
   {
     "from": ["/create-a-plugin/develop-a-plugin/set-up-github-workflows"],
-    "to": "/get-started/set-up-development-environment#set-up-github-workflows"
+    "to": "/set-up/set-up-github"
   },
   {
     "from": ["/create-a-plugin/develop-a-plugin/subscribe-events"],
@@ -125,7 +125,7 @@
   },
   {
     "from": ["/create-a-plugin/extend-a-plugin/extend-configurations"],
-    "to": "/get-started/set-up-development-environment#extend-configurations"
+    "to": "/how-to-guides/extend-configurations"
   },
   {
     "from": ["/migration-guides/update-create-plugin-versions"],
@@ -138,5 +138,13 @@
   {
     "from": ["/get-started/folder-structure"],
     "to": "/key-concepts/anatomy-of-a-plugin"
-  }
+  },
+  {
+    "from": ["/get-started/set-up-development-environment"],
+    "to": "/set-up/"
+  },
+  {
+    "from": ["/get-started/best-practices"],
+    "to": "/key-concepts/best-practices"
+  }  
 ]

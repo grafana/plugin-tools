@@ -11,7 +11,7 @@ export class TimeRange extends GrafanaPage {
    * Opens the time picker and sets the time range to the provided values
    */
   async set({ from, to, zone }: TimeRangeArgs) {
-    const { TimeZonePicker, TimePicker } = this.ctx.selectors.components;
+    const { TimeZonePicker, TimePicker, Select } = this.ctx.selectors.components;
     try {
       await this.getByGrafanaSelector(TimePicker.openButton).click();
     } catch (e) {
@@ -25,7 +25,8 @@ export class TimeRange extends GrafanaPage {
         : this.ctx.page.getByRole('button', { name: 'Change time settings' });
 
       await changeTimeSettingsButton.click();
-      await this.getByGrafanaSelector(TimeZonePicker.containerV2).fill(zone);
+      await this.getByGrafanaSelector(TimeZonePicker.containerV2).click();
+      await this.getByGrafanaSelector(Select.option).filter({ hasText: zone }).click();
     }
     await this.getByGrafanaSelector(TimePicker.absoluteTimeRangeTitle).click();
     const fromField = await this.getByGrafanaSelector(TimePicker.fromField);

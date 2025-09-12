@@ -31,7 +31,7 @@ export async function isGitDirectoryClean() {
 export async function gitCommitNoVerify(commitMsg: string) {
   try {
     let addAllCommand = 'git add -A';
-    let commitCommand = `git commit --no-verify -m ${commitMsg}`;
+    let commitCommand = `git commit --no-verify -m '${commitMsg}'`;
 
     await exec(addAllCommand);
     await exec(commitCommand);

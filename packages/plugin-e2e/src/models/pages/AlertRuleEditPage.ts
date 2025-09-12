@@ -2,7 +2,8 @@ import * as semver from 'semver';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
-
+import { expect } from '@playwright/test';
+import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 
 export class AlertRuleEditPage extends GrafanaPage {
@@ -41,12 +42,20 @@ export class AlertRuleEditPage extends GrafanaPage {
   }
 
   async isAdvancedModeSupported() {
-    // why not check if alertingQueryAndExpressionsStepMode feature is enabled? then we'd have to update the code when the toggle is removed.
-    const count = await this.getByGrafanaSelector(
-      this.ctx.selectors.components.AlertRules.stepAdvancedModeSwitch(QUERY_AND_EXPRESSION_STEP_ID)
-    ).count();
+    const alertingQueryAndExpressionsStepMode = await isFeatureEnabled(
+      this.ctx.page,
+      'alertingQueryAndExpressionsStepMode'
+    );
 
-    return count > 0;
+    if (alertingQueryAndExpressionsStepMode) {
+      await expect(this.advancedModeSwitch).toBeVisible();
+      await expect(this.advancedModeSwitch).toHaveCount(1);
+      return true;
+    }
+
+    await expect(this.advancedModeSwitch).not.toBeVisible();
+    await expect(this.advancedModeSwitch).toHaveCount(0);
+    return false;
   }
 
   /*
@@ -149,16 +158,17 @@ export class AlertRuleEditPage extends GrafanaPage {
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
     if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
-      this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
+      await this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
-          return route.fulfill({ response });
+          await route.fulfill({ response });
+          return;
         }
 
         let body: { results: { [key: string]: { status: number } } } = await response.json();
         const statuses = Object.keys(body.results).map((key) => body.results[key].status);
 
-        route.fulfill({
+        await route.fulfill({
           response,
           status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
         });
@@ -170,9 +180,13 @@ export class AlertRuleEditPage extends GrafanaPage {
     );
 
     let evaluateButton = this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.previewButton);
+
     if (semver.lt(this.ctx.grafanaVersion, '11.1.0')) {
       evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
+
+    await expect(evaluateButton).toBeVisible();
+
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
         timeout: 5000,

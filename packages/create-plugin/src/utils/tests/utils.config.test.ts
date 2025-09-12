@@ -1,8 +1,9 @@
+import { dirSync } from 'tmp';
 import fs from 'fs/promises';
 import path from 'path';
 import { vi } from 'vitest';
-import os from 'os';
-import { getVersion } from '../utils.version.js';
+
+import { CURRENT_APP_VERSION } from '../utils.version.js';
 import { getConfig, UserConfig, CreatePluginConfig } from '../utils.config.js';
 import { DEFAULT_FEATURE_FLAGS } from '../../constants.js';
 
@@ -15,12 +16,17 @@ const mocks = vi.hoisted(() => {
 
 vi.mock('../utils.cli.js', async () => mocks);
 
-const tmpDir = path.join(os.tmpdir(), 'cp-test-config');
+const tmpObj = dirSync({ unsafeCleanup: true });
+const tmpDir = path.join(tmpObj.name, 'cp-test-config');
 
 describe('getConfig', () => {
   beforeEach(async () => {
     await fs.rm(tmpDir, { recursive: true, force: true });
     await fs.mkdir(tmpDir, { recursive: true });
+  });
+
+  afterAll(() => {
+    tmpObj.removeCallback();
   });
 
   describe('Command: Generate', () => {
@@ -33,7 +39,7 @@ describe('getConfig', () => {
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
-        version: getVersion(),
+        version: CURRENT_APP_VERSION,
         features: DEFAULT_FEATURE_FLAGS,
       });
     });
@@ -45,7 +51,7 @@ describe('getConfig', () => {
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
-        version: getVersion(),
+        version: CURRENT_APP_VERSION,
         features: { ...DEFAULT_FEATURE_FLAGS, bundleGrafanaUI: true },
       });
     });
@@ -61,7 +67,7 @@ describe('getConfig', () => {
       const config = getConfig();
 
       expect(config).toEqual({
-        version: getVersion(),
+        version: CURRENT_APP_VERSION,
         features: {},
       });
     });
@@ -98,7 +104,7 @@ describe('getConfig', () => {
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
-        version: getVersion(),
+        version: CURRENT_APP_VERSION,
         features: userConfig.features,
       });
     });

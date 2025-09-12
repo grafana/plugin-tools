@@ -1,3 +1,27 @@
+# v0.6.3 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies [#1516](https://github.com/grafana/plugin-tools/pull/1516) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v0.5.5 (Wed May 07 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:grafana/plugin-tools ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v0.0.7 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix

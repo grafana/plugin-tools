@@ -1,0 +1,20 @@
+name: Stale Branches
+
+on:
+  schedule:
+    - cron: '0 11 * * 1-5'
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  stale_branches:
+    runs-on: ubuntu-x64
+    steps:
+    - name: Stale Branches
+      uses: crs-k/stale-branches@865501af01284d43aef267d4b9aab0f9f1734b12 # v8.2.2
+      with:
+        #dry-run: false
+        pr-check: true
+        ignore-issue-interaction: true
