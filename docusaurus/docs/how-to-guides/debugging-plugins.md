@@ -11,15 +11,15 @@ keywords:
 
 # How to set up Grafana for React Tools profiling and debugging
 
-Using the React Tools debugger in the browser is very useful when either creating a new plugin or troubleshooting an issue with an existing plugin.
+The React Tools debugger in the browser is invaluable for developing new Grafana plugins and troubleshooting existing ones.
 
-## Setup for debugging
+## Set up for debugging
 
-By default Grafana docker images do not include a debug build for React.
+By default, Grafana Docker images do not contain a React debug build.
 
-By using a debug build of grafana you are able to easily step through code that has not been "uglified" and also use the "Profiler" in React Dev Tools.
+By using a debug build of Grafana you are able to easily step through code that has not been minimized and use the `Profiler` in React Dev Tools.
 
-To use a debug build, update your `docker-compose.yml` with the corresponding version found on hub.docker.com.
+To use a debug build, update your `docker-compose.yml` with the corresponding version found on [hub.docker.com](https://hub.docker.com/).
 
 If your plugin supports an older (supported) release, locate the tag using search option (this matches v11.5).
 
@@ -38,7 +38,7 @@ services:
     ...
 ```
 
-Alternatively you can use an environment variable and not modify the existing docker-compose.yml file:
+Alternatively, you can use an environment variable and not modify the existing `docker-compose.yml` file:
 
 ```SHELL
 export GRAFANA_IMAGE=grafana-oss-dev
@@ -62,7 +62,7 @@ services:
     ...
 ```
 
-Alternatively you can use an environment variable and not modify the existing docker-compose.yml file:
+Alternatively, you can use an environment variable without modifying the existing `docker-compose.yml` file:
 
 ```SHELL
 export GRAFANA_IMAGE=grafana-enterprise-dev
@@ -73,9 +73,9 @@ export GRAFANA_VERSION=12.1.0-92854
 
 Once your docker environment has started up, using Chrome, navigate to the instance and select
 
-`View->Developer->Developer Tools`
+**View** > **Developer** > **Developer Tools**.
 
-You can now use the "Profiler" tab in the debugging tools, which provides Flamegraph, Ranked, and Timeline options.
+You can now use the **Profiler** tab in the debugging tools, which provides Flamegraph, Ranked, and Timeline options.
 
 This process will also work with Firefox with the React Developer Tools extension installed, and can be found by selecting within the browser:
 
