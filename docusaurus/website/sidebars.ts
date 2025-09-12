@@ -54,7 +54,6 @@ const sidebars: SidebarsConfig = {
         'key-concepts/plugin-lifecycle',
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',
-        'key-concepts/ui-extensions',
         'key-concepts/plugin-i18n-concept',
       ],
     },
@@ -150,6 +149,29 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+// Extensions
+    {
+      type: 'category',
+      label: 'UI extensions',
+      description: 'Guides for creating UI extensions and extension points.',
+      link: {
+        type: 'doc',
+        id: 'how-to-guides/ui-extensions/ui-extensions',
+      },
+      items: [
+        'key-concepts/ui-extensions',
+        'how-to-guides/ui-extensions/create-an-extension-point',
+        'how-to-guides/ui-extensions/extension-user-render-component',
+        'how-to-guides/ui-extensions/extension-user-use-function',
+        'how-to-guides/ui-extensions/use-an-exposed-component',
+        'how-to-guides/ui-extensions/register-an-extension',
+        'how-to-guides/ui-extensions/expose-a-component',
+        'how-to-guides/ui-extensions/versioning-extensions',
+        'how-to-guides/ui-extensions/degregate-ui',
+        'how-to-guides/ui-extensions/debug-logs',
+      ],
+    },
+
 // How to
     {
       type: 'category',
@@ -164,28 +186,6 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/extend-configurations',
         'how-to-guides/plugin-internationalization',
         'how-to-guides/runtime-checks',
-      ],
-    },
-
-// Extensions
-    {
-      type: 'category',
-      label: 'UI extensions',
-      description: 'Guides for creating UI extensions and extension points.',
-      link: {
-        type: 'doc',
-        id: 'how-to-guides/ui-extensions/ui-extensions',
-      },
-      items: [
-        'how-to-guides/ui-extensions/create-an-extension-point',
-        'how-to-guides/ui-extensions/extension-user-render-component',
-        'how-to-guides/ui-extensions/extension-user-use-function',
-        'how-to-guides/ui-extensions/use-an-exposed-component',
-        'how-to-guides/ui-extensions/register-an-extension',
-        'how-to-guides/ui-extensions/expose-a-component',
-        'how-to-guides/ui-extensions/versioning-extensions',
-        'how-to-guides/ui-extensions/degregate-ui',
-        'how-to-guides/ui-extensions/debug-logs',
       ],
     },
 
@@ -310,11 +310,6 @@ const sidebars: SidebarsConfig = {
         'migration-guides/migrate-from-toolkit',
       ],
     },
-    {
-      type: 'doc',
-      id: 'plugin-examples/plugin-examples',
-      label: 'Plugin examples',
-    },
 
 // Troubleshooting
     {
@@ -332,6 +327,7 @@ const sidebars: SidebarsConfig = {
         id: 'reference/plugin-reference',
       },
       items: [
+        'plugin-examples/plugin-examples',
         'reference/plugin-json',
         'reference/cli-commands',
         {
