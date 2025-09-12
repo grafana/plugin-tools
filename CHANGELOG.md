@@ -1,3 +1,21 @@
+# (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update google-github-actions/setup-gcloud action to v3 [#2104](https://github.com/grafana/plugin-tools/pull/2104) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/plugin-e2e@2.1.12`
+  - Chore: enable grafana dev image in Playwright workflow [#2105](https://github.com/grafana/plugin-tools/pull/2105) ([@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.26.3`
+  - Update dependency @grafana/e2e-selectors to v12.1.0 [#1985](https://github.com/grafana/plugin-tools/pull/1985) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v2.1.11 [#2092](https://github.com/grafana/plugin-tools/pull/2092) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Wed Sep 03 2025)
 
 #### 🐛 Bug Fix

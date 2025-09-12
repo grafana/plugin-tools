@@ -19,9 +19,9 @@
   "license": "Apache-2.0",
   "devDependencies": {
 {{#if useCypress}}    "@grafana/e2e": "^11.0.7",
-    "@grafana/e2e-selectors": "^12.0.2",{{/if}}
+    "@grafana/e2e-selectors": "^12.1.0",{{/if}}
     "@grafana/eslint-config": "^8.0.0",{{#if usePlaywright}}
-    "@grafana/plugin-e2e": "^2.1.11",{{/if}}
+    "@grafana/plugin-e2e": "^2.1.12",{{/if}}
     "@grafana/tsconfig": "^2.0.0",{{#if usePlaywright}}
     "@playwright/test": "^1.52.0",{{/if}}{{#if useExperimentalRspack}}
     "@rspack/core": "^1.3.0",
