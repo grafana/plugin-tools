@@ -22,6 +22,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/_package.json/"],
+      "labels": ["dependencies", "patch", "release"],
       "matchStrings": [
         "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
       ],
@@ -107,7 +108,7 @@
         "!/@grafana/*/",
         "!@grafana/e2e-selectors"
       ],
-      
+
       "rangeStrategy": "bump"
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
