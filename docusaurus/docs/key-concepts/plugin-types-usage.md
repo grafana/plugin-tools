@@ -30,7 +30,9 @@ Grafana plugin development allows for many options depending on the type of user
 - **Data-source plugin** - a connection to a new database or other source of data.
 - **App plugin** - an integrated out-of-the-box experience.
 
-Refer to [Get started](../get-started.md) for instructions on how to quickly scaffold [each type](../reference/cli-commands.mdx#select-a-plugin-type) of plugin.
+Refer to [Get started](../get-started.md) for instructions on how to quickly scaffold [each type](../reference/cli-commands.mdx#cli-commands-select-plugin) of plugin.
+
+HERE
 
 :::note
 
@@ -88,7 +90,7 @@ Note that a plugin of type `datasource` must be installed before it can be provi
 
 ### Bundling of dashboards
 
-Data-source plugins can [include dashboards](../reference/metadata.md#includes) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
+Data-source plugins can [include dashboards](../reference/metadata.md#metadata-includes) by referencing dashboard JSON files (including `property` and `type=dashboard`) within the `plugin.json` file. Grafana puts a dashboard in the `General` folder when it is imported.
 
 ## App plugins
 
@@ -122,7 +124,7 @@ Note that the plugin must be installed before provisioning can succeed with a `p
 
 ### Bundling of apps
 
-The app plugin type allows you to [nest other plugins inside it](../how-to-guides/app-plugins/work-with-nested-plugins); in other words, to bundle or [include](../reference/metadata.md#includes) multiple plugins in the same package.
+The app plugin type allows you to [nest other plugins inside it](../how-to-guides/app-plugins/work-with-nested-plugins); in other words, to bundle or [include](../reference/metadata.md#metadata-includes) multiple plugins in the same package.
 
 ### Bundling of dashboards
 
