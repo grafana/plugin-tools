@@ -109,7 +109,10 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs) {
       output.log({
         title: `Running ${output.formatCode(cmd)}`,
       });
-      spawnSync(cmd, { shell: true, stdio: 'inherit', cwd: process.cwd() });
+      const spawn = spawnSync(cmd, { shell: true, stdio: 'inherit', cwd: process.cwd() });
+      if (spawn.status !== 0) {
+        throw new Error(spawn.stderr.toString());
+      }
     }
 
     if (argv.commit) {
@@ -117,7 +120,10 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs) {
         output.log({
           title: `Running ${output.formatCode(cmd)}`,
         });
-        spawnSync(cmd, { shell: true, cwd: process.cwd() });
+        const spawn = spawnSync(cmd, { shell: true, cwd: process.cwd() });
+        if (spawn.status !== 0) {
+          throw new Error(spawn.stderr.toString());
+        }
       }
     }
   } catch (error) {
