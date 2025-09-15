@@ -19,10 +19,7 @@ const sidebars: SidebarsConfig = {
         id: 'set-up/set-up-development-environment',
       },
       collapsed: true,
-      items: [
-        'set-up/set-up-docker',
-        'set-up/set-up-github',
-      ],
+      items: ['set-up/set-up-docker', 'set-up/set-up-github'],
     },
 
 // Concepts
@@ -186,6 +183,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/extend-configurations',
         'how-to-guides/plugin-internationalization',
         'how-to-guides/runtime-checks',
+        'how-to-guides/debugging-plugins',
       ],
     },
 
