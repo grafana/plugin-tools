@@ -9,6 +9,8 @@ const sidebars: SidebarsConfig = {
       id: 'get-started',
       label: 'Get started',
     },
+
+// Set up
     {
       type: 'category',
       label: 'Set up your environment',
@@ -22,6 +24,8 @@ const sidebars: SidebarsConfig = {
         'set-up/set-up-github',
       ],
     },
+
+// Concepts
     {
       type: 'category',
       label: 'Key concepts',
@@ -50,10 +54,11 @@ const sidebars: SidebarsConfig = {
         'key-concepts/plugin-lifecycle',
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',
-        'key-concepts/ui-extensions',
         'key-concepts/plugin-i18n-concept',
       ],
     },
+
+// Tutorials
     {
       type: 'category',
       label: 'Tutorials',
@@ -65,11 +70,109 @@ const sidebars: SidebarsConfig = {
         'tutorials/build-a-data-source-plugin',
         'tutorials/build-a-streaming-data-source-plugin',
         'tutorials/build-a-data-source-backend-plugin',
-        'tutorials/build-an-app-plugin',
         'tutorials/build-a-logs-data-source-plugin',
+        'tutorials/build-an-app-plugin',
         'tutorials/build-a-panel-plugin',
       ],
     },
+
+// Data Source plugins  
+    {
+      type: 'category',
+      label: 'Data source plugins',
+      description: 'Guides for optimizing and adding capabilities to data source plugins.',
+      link: {
+        type: 'doc',
+        id: 'how-to-guides/data-source-plugins/data-source-plugins',
+        },
+      items: [
+        'how-to-guides/data-source-plugins/add-support-for-annotation-queries',
+        'how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins',
+        'how-to-guides/data-source-plugins/add-features-for-explore-queries',
+        'how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins',
+        'how-to-guides/data-source-plugins/add-migration-handler-for-backend-data-source',
+        'how-to-guides/data-source-plugins/add-query-editor-help',
+        'how-to-guides/data-source-plugins/add-resource-handler',
+        'how-to-guides/data-source-plugins/add-router',
+        'how-to-guides/data-source-plugins/add-support-for-externally-shared-dashboards',
+        'how-to-guides/data-source-plugins/add-support-for-pdc',
+        'how-to-guides/data-source-plugins/add-support-for-variables',
+        'how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend',
+        'how-to-guides/data-source-plugins/create-data-frames',
+        'how-to-guides/data-source-plugins/error-handling',
+        'how-to-guides/data-source-plugins/fetch-data-from-frontend',
+        'how-to-guides/data-source-plugins/include-dashboards',
+        'how-to-guides/data-source-plugins/profile-backend-plugin',
+        ],
+    },
+
+// App plugins  
+    {
+      type: 'category',
+      label: 'App plugins',
+      description: 'Guides for optimizing and adding capabilities to app plugins.',
+      link: {
+        type: 'doc',
+        id: 'how-to-guides/app-plugins/app-plugins',
+        },
+        items: [
+          'how-to-guides/app-plugins/add-authentication-for-app-plugins',
+          'how-to-guides/app-plugins/add-backend-component',
+          'how-to-guides/app-plugins/add-resource-handler',
+          'how-to-guides/app-plugins/add-return-to-previous-functionality',
+          'how-to-guides/app-plugins/error-handling-in-app-plugins',
+          'how-to-guides/app-plugins/implement-rbac-in-app-plugins',
+          'how-to-guides/app-plugins/include-dashboards-in-app-plugins',
+          'how-to-guides/app-plugins/use-llms-and-mcp',
+          'how-to-guides/app-plugins/use-a-service-account',
+          'how-to-guides/app-plugins/work-with-nested-plugins',
+        ],
+    },
+
+// Panel plugins      
+    {
+      type: 'category',
+      label: 'Panel plugins',
+      description: 'Guides for optimizing and adding capabilities to panel plugins.',
+      link: {
+          type: 'doc',
+          id: 'how-to-guides/panel-plugins/panel-plugins',
+      },
+      items: [
+        'how-to-guides/panel-plugins/add-datalinks-support',
+        'how-to-guides/panel-plugins/custom-panel-option-editors',
+        'how-to-guides/panel-plugins/error-handling-for-panel-plugins',
+        'how-to-guides/panel-plugins/interpolate-variables',
+        'how-to-guides/panel-plugins/migration-handler-for-panels',
+        'how-to-guides/panel-plugins/read-data-from-a-data-source',
+        'how-to-guides/panel-plugins/subscribe-events',
+      ],
+    },
+
+// Extensions
+    {
+      type: 'category',
+      label: 'UI extensions',
+      description: 'Guides for creating UI extensions and extension points.',
+      link: {
+        type: 'doc',
+        id: 'how-to-guides/ui-extensions/ui-extensions',
+      },
+      items: [
+        'key-concepts/ui-extensions',
+        'how-to-guides/ui-extensions/create-an-extension-point',
+        'how-to-guides/ui-extensions/extension-user-render-component',
+        'how-to-guides/ui-extensions/extension-user-use-function',
+        'how-to-guides/ui-extensions/use-an-exposed-component',
+        'how-to-guides/ui-extensions/register-an-extension',
+        'how-to-guides/ui-extensions/expose-a-component',
+        'how-to-guides/ui-extensions/versioning-extensions',
+        'how-to-guides/ui-extensions/degregate-ui',
+        'how-to-guides/ui-extensions/debug-logs',
+      ],
+    },
+
+// How to
     {
       type: 'category',
       label: 'How-to guides',
@@ -78,93 +181,6 @@ const sidebars: SidebarsConfig = {
         id: 'how-to-guides/how-to-guides',
       },
       items: [
-        {
-          type: 'category',
-          label: 'App plugins',
-          description: 'Guides for optimizing and adding capabilities to app plugins.',
-          link: {
-            type: 'doc',
-            id: 'how-to-guides/app-plugins/app-plugins',
-          },
-          items: [
-            'how-to-guides/app-plugins/add-authentication-for-app-plugins',
-            'how-to-guides/app-plugins/add-backend-component',
-            'how-to-guides/app-plugins/add-resource-handler',
-            'how-to-guides/app-plugins/add-return-to-previous-functionality',
-            'how-to-guides/app-plugins/error-handling-in-app-plugins',
-            'how-to-guides/app-plugins/implement-rbac-in-app-plugins',
-            'how-to-guides/app-plugins/include-dashboards-in-app-plugins',
-            'how-to-guides/app-plugins/use-llms-and-mcp',
-            'how-to-guides/app-plugins/use-a-service-account',
-            'how-to-guides/app-plugins/work-with-nested-plugins',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Data source plugins',
-          description: 'Guides for optimizing and adding capabilities to data source plugins.',
-          link: {
-            type: 'doc',
-            id: 'how-to-guides/data-source-plugins/data-source-plugins',
-          },
-          items: [
-            'how-to-guides/data-source-plugins/add-support-for-annotation-queries',
-            'how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins',
-            'how-to-guides/data-source-plugins/add-features-for-explore-queries',
-            'how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins',
-            'how-to-guides/data-source-plugins/add-migration-handler-for-backend-data-source',
-            'how-to-guides/data-source-plugins/add-query-editor-help',
-            'how-to-guides/data-source-plugins/add-resource-handler',
-            'how-to-guides/data-source-plugins/add-router',
-            'how-to-guides/data-source-plugins/add-support-for-externally-shared-dashboards',
-            'how-to-guides/data-source-plugins/add-support-for-pdc',
-            'how-to-guides/data-source-plugins/add-support-for-variables',
-            'how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend',
-            'how-to-guides/data-source-plugins/create-data-frames',
-            'how-to-guides/data-source-plugins/error-handling',
-            'how-to-guides/data-source-plugins/fetch-data-from-frontend',
-            'how-to-guides/data-source-plugins/include-dashboards',
-            'how-to-guides/data-source-plugins/profile-backend-plugin',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Panel plugins',
-          description: 'Guides for optimizing and adding capabilities to panel plugins.',
-          link: {
-            type: 'doc',
-            id: 'how-to-guides/panel-plugins/panel-plugins',
-          },
-          items: [
-            'how-to-guides/panel-plugins/add-datalinks-support',
-            'how-to-guides/panel-plugins/custom-panel-option-editors',
-            'how-to-guides/panel-plugins/error-handling-for-panel-plugins',
-            'how-to-guides/panel-plugins/interpolate-variables',
-            'how-to-guides/panel-plugins/migration-handler-for-panels',
-            'how-to-guides/panel-plugins/read-data-from-a-data-source',
-            'how-to-guides/panel-plugins/subscribe-events',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'UI extensions',
-          description: 'Guides for creating UI extensions and extension points.',
-          link: {
-            type: 'doc',
-            id: 'how-to-guides/ui-extensions/ui-extensions',
-          },
-          items: [
-            'how-to-guides/ui-extensions/create-an-extension-point',
-            'how-to-guides/ui-extensions/extension-user-render-component',
-            'how-to-guides/ui-extensions/extension-user-use-function',
-            'how-to-guides/ui-extensions/use-an-exposed-component',
-            'how-to-guides/ui-extensions/register-an-extension',
-            'how-to-guides/ui-extensions/expose-a-component',
-            'how-to-guides/ui-extensions/versioning-extensions',
-            'how-to-guides/ui-extensions/degregate-ui',
-            'how-to-guides/ui-extensions/debug-logs',
-          ],
-        },
         'how-to-guides/add-anonymous-usage-reporting',
         'how-to-guides/add-user-storage',
         'how-to-guides/extend-configurations',
@@ -172,6 +188,8 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/runtime-checks',
       ],
     },
+
+// Test 
     {
       type: 'category',
       label: 'E2E test a plugin',
@@ -221,6 +239,8 @@ const sidebars: SidebarsConfig = {
         'e2e-test-a-plugin/migrate-from-grafana-e2e',
       ],
     },
+
+// Publish    
     {
       type: 'category',
       label: 'Publish a plugin',
@@ -237,6 +257,8 @@ const sidebars: SidebarsConfig = {
         'publish-a-plugin/provide-test-environment',
       ],
     },
+
+// Migration Guides
     {
       type: 'category',
       label: 'Migration guides',
@@ -288,16 +310,15 @@ const sidebars: SidebarsConfig = {
         'migration-guides/migrate-from-toolkit',
       ],
     },
-    {
-      type: 'doc',
-      id: 'plugin-examples/plugin-examples',
-      label: 'Plugin examples',
-    },
+
+// Troubleshooting
     {
       type: 'doc',
       id: 'troubleshooting',
       label: 'Troubleshooting',
     },
+
+// Reference & Resources    
     {
       type: 'category',
       label: 'Reference',
@@ -306,6 +327,7 @@ const sidebars: SidebarsConfig = {
         id: 'reference/plugin-reference',
       },
       items: [
+        'plugin-examples/plugin-examples',
         'reference/plugin-json',
         'reference/cli-commands',
         {
