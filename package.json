@@ -50,7 +50,7 @@
     "glob": "^11.0.3",
     "husky": "^9.1.7",
     "lerna": "8.1.9",
-    "lint-staged": "^16.1.5",
+    "lint-staged": "^16.1.6",
     "prettier": "3.6.2",
     "publint": "^0.3.12",
     "rollup": "^4.50.0",
