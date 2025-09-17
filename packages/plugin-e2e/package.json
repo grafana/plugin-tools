@@ -39,7 +39,7 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/uuid": "^10.0.0",
-    "dotenv": "^17.2.1"
+    "dotenv": "^17.2.2"
   },
   "dependencies": {
     "@grafana/e2e-selectors": "^12.2.0-255920",
