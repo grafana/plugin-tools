@@ -1,3 +1,12 @@
+/*
+If you are editing this file, please consider the following:
+
+1. check config changes locally with `npx -y --package renovate -- renovate-config-validator`.
+2. use the branch name `renovate/reconfigure` so renovate can validate changes in PRs.
+
+See https://docs.renovatebot.com/configuration-options/ for more information.
+*/
+
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
@@ -18,6 +27,7 @@
   "postUpdateOptions": ["npmDedupe"],
   "labels": ["dependencies", "javascript"],
   // These custom managers are used to bump dependencies in create-plugin template files
+  // Any of the packageRules below that match these `matchStrings` properties will be applied by these managers.
   "customManagers": [
     {
       "customType": "regex",
@@ -38,20 +48,26 @@
     }
   ],
   "packageRules": [
+    // Keeps create-plugin templates up to date with patch releases of Grafana but does not publish.
+    // These are grouped and released with a future PR that includes the release label.
     {
       "automerge": true,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
-      "labels": ["dependencies", "patch", "release"],
+      "labels": ["dependencies", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
         "/@grafana/*/",
         "/grafana/grafana-enterprise/",
-        "!@grafana/e2e-selectors"
+        "!@grafana/e2e-selectors",
+        "!@grafana/plugin-e2e"
       ],
       "minimumReleaseAge": null
     },
+    // Publishes plugin-e2e when @grafana/e2e-selectors is updated (has release label).
+    // plugin-e2e relies on the e2e-selectors package to be up to date to support latest changes in grafana core.
+    // watches the `@grafana/e2e-selectors "modified" npm dist-tag for new releases.
     {
       "automerge": true,
       "groupName": "e2e-selector dependencies",
@@ -66,21 +82,35 @@
       ],
       "minimumReleaseAge": null
     },
+    // Publishes create-plugin when @grafana/plugin-e2e is updated (has release label).
+    // This triggers on any release of plugin-e2e allowing create-plugin scaffolds to get fixes asap.
+    {
+      "automerge": true,
+      "groupName": "plugin-e2e updates",
+      "groupSlug": "plugin-e2e",
+      "labels": ["dependencies", "patch", "release"],
+      "matchPackageNames": ["@grafana/plugin-e2e"],
+      "rangeStrategy": "bump",
+      "minimumReleaseAge": null
+    },
+    // Publishes create-plugin after publishing a new minor/major version of grafana (has release label).
+    // This triggers on any update to grafana allowing create-plugin scaffolds to get the new and shiny asap.
     {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
-      "labels": ["dependencies", "release", "patch"],
+      "labels": ["dependencies", "patch", "release"],
       "matchUpdateTypes": ["minor", "major"],
       "matchPackageNames": [
         "/@grafana/*/",
         "/grafana/grafana-enterprise/",
         "!@grafana/e2e-selectors",
         "!@grafana/eslint-config",
+        "!@grafana/plugin-e2e",
         "!@grafana/scenes"
       ],
       "minimumReleaseAge": null
     },
-    // Docusaurus dependencies have to be grouped together otherwise error out when building website.
+    // Docusaurus dependencies have to be grouped together otherwise it errors out when building website.
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
@@ -93,6 +123,7 @@
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchPackageNames": ["/^@auto-it/", "/^auto/"]
     },
+    // All other devDependencies are grouped to keep PR noise down.
     {
       "automerge": true,
       "groupName": "auto-merged devDependencies",
