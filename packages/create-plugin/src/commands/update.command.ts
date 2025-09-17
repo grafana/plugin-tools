@@ -11,7 +11,7 @@ import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
-  performPreUpdateChecks(argv);
+  await performPreUpdateChecks(argv);
   const { version } = getConfig();
 
   if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
