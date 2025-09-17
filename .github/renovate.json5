@@ -22,7 +22,6 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/_package.json/"],
-      "labels": ["dependencies", "patch", "release"],
       "matchStrings": [
         "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
       ],
@@ -43,7 +42,7 @@
       "automerge": true,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
-      "labels": ["dependencies", "patch"],
+      "labels": ["dependencies", "patch", "release"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
