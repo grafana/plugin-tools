@@ -42,7 +42,6 @@ If you create your plugin running the `create-plugin` scaffolding tool, enabling
 - `docker-compose.yaml`
 - `plugin.json`
 - `module.ts`
-- `webpack.config.ts`
 - `package.json`
 
 By the end of the translation process you'll have a file structure like this:
@@ -86,11 +85,11 @@ services:
 
 Set up the translation languages for your plugin and the Grafana dependencies for translation.
 
-To do so, add the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add US English and Spanish Spain:
+To do so, add the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add English (US) and Spanish (Spain):
 
 ```json title="plugin.json"
 "dependencies": {
-    "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher for en-US translations
+    "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher
     "plugins": []
   },
 "languages": ["en-US", "es-ES"] // the languages that the plugin supports

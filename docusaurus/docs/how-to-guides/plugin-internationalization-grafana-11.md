@@ -1,7 +1,7 @@
 ---
-id: plugin-internationalization
+id: plugin-internationalization-grafana-11
 title: Translate your plugin before Grafana 12.1.0
-description: Translate your plugin before Grafana 12.1.0
+description: TTranslate your plugin before Grafana 12.1.0
 keywords:
   - grafana
   - plugins
@@ -14,6 +14,14 @@ keywords:
   - internationalization
   - webpack
 ---
+
+By default, plugins are available in English only and are not translated when you change your language settings in the [Grafana UI](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
+
+If you want your plugin to be translatable to other languages you need to perform the changes described in this document. You can find the [list of available languages](https://github.com/grafana/grafana/blob/main/packages/grafana-i18n/src/constants.ts) in GitHub.
+
+:::note
+While this example is based on a panel plugin, the process is the same for data source and app plugins.
+:::
 
 ## Before you begin
 
@@ -28,7 +36,7 @@ If you create your plugin running the `create-plugin` scaffolding tool, enabling
 - `docker-compose.yaml`
 - `plugin.json`
 - `module.ts`
-- `webpack.config.ts`
+- `loadResources.ts`
 - `package.json`
 
 By the end of the translation process you'll have a file structure like this:
@@ -72,7 +80,7 @@ services:
 
 Set up the translation languages for your plugin and the Grafana dependencies for translation.
 
-To do so, add the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add US English and Spanish Spain:
+To do so, add the relevant `grafanaDependency` and `languages` you want to translate to in the `plugin.json` file. For example, if you want to add English (US) and Spanish (Spain):
 
 ```json title="plugin.json"
 "dependencies": {
@@ -90,19 +98,23 @@ Update your `create-plugin` configs to the latest version using the following co
 npx @grafana/create-plugin@latest update
 ```
 
-### Add `semver` as a regular dependency
+### Change `semver` to a regular dependency
 
-Add `semver` so we can toggle behavior depending on Grafana version during runtime:
+Change the `semver` package so we can toggle behavior depending on the runtime version of Grafana:
 
 ```shell npm2yarn
-npm uninstall --save-dev semver && npm install --save semver
+npm uninstall --save-dev semver
+```
+
+```shell npm2yarn
+npm install --save semver
 ```
 
 ### Add `loadResources` file
 
-Add `loadResources.ts` that will handle the loading of translations:
+To handle translation resource loading lets add `src/loadResources.ts`
 
-```ts title="loadResources.ts"
+```ts title="src/loadResources.ts"
 import { LANGUAGES, ResourceLoader, Resources } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 
@@ -125,7 +137,7 @@ export const loadResources: ResourceLoader = async (resolvedLanguage: string) =>
 
 ### Initialize translations in `module.ts`
 
-Add plugin translation and loaders to `module.ts`:
+Add plugin translation and loaders logic to `module.ts`:
 
 ```ts title="module.ts"
 import { initPluginTranslations } from '@grafana/i18n';
@@ -135,6 +147,7 @@ import semver from 'semver';
 import { loadResources } from 'loadResources';
 
 // Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
+// In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
 const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources] : [];
 
 await initPluginTranslations(pluginJson.id, loaders);
