@@ -91,7 +91,7 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs) {
   const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
 
   const updateCmdList = [
-    `${packageManagerExecCmd}@${LEGACY_UPDATE_CUTOFF_VERSION} update`,
+    `${packageManagerExecCmd}@${LEGACY_UPDATE_CUTOFF_VERSION} update${argv.force ? ' --force' : ''}`,
     `${packageManagerName} install`,
   ];
   const gitCmdList = [
