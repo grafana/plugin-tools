@@ -1,7 +1,7 @@
 ---
 id: plugin-internationalization-grafana-11
 title: Translate your plugin before Grafana 12.1.0
-description: TTranslate your plugin before Grafana 12.1.0
+description: Translate your plugin before Grafana 12.1.0
 keywords:
   - grafana
   - plugins
