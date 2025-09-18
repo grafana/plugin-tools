@@ -24,8 +24,8 @@ export default async function migrate(context: Context) {
   if (buildContext?.toString() !== './.config') {
     return context;
   }
-  // List of items to remove from the compose file
-  const itemsToRemove: string[][] = [];
+  // List of key value pairs to remove from the compose file
+  const keyValuePairsToRemove: string[][] = [];
 
   // Remove items that match the base configuration
   visit(composeData, {
@@ -52,17 +52,17 @@ export default async function migrate(context: Context) {
 
         // If the current pair matches the base value, add it to the list of items to remove
         if (baseValue && JSON.stringify(pair.value) === JSON.stringify(baseValue)) {
-          itemsToRemove.push(keyPath);
+          keyValuePairsToRemove.push(keyPath);
         }
       }
     }) as visitorFn<Pair<unknown, unknown>>,
   });
 
   // Sort the items to remove by length to remove children before parents
-  itemsToRemove.sort((a, b) => b.length - a.length);
+  keyValuePairsToRemove.sort((a, b) => b.length - a.length);
 
   // Remove the duplicate items from the compose file
-  for (const keyPath of itemsToRemove) {
+  for (const keyPath of keyValuePairsToRemove) {
     composeData.deleteIn(keyPath);
   }
 
