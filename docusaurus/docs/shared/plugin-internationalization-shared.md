@@ -190,4 +190,4 @@ export default defineConfig([
 ]);
 ```
 
-You can find more detailed [description of the rules](https://github.com/grafana/grafana/blob/main/packages/grafana-i18n/src/eslint/README.md).
+You can find more detailed description of the rules [here](https://github.com/grafana/grafana/blob/main/packages/grafana-i18n/src/eslint/README.md).
