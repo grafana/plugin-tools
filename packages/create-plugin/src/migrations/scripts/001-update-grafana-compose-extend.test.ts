@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { Context } from '../context.js';
 import migrate from './001-update-grafana-compose-extend.js';
 import { parse, stringify } from 'yaml';
-import { inspect } from 'node:util';
 
 describe('001-update-grafana-compose-extend', () => {
   it('should not modify anything if docker-compose.yaml does not exist', async () => {
