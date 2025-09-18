@@ -26,7 +26,7 @@ While this example is based on a panel plugin, the process is the same for data 
 ## Before you begin
 
 :::info
-This is for plugins that need to support Grafana versions >= 11.0.0 and use translations. If your plugin only cares about supporting Grafana 12.1.0 and above, then follow the steps in [Translate your plugin](plugin-internationalization) instead. If you're using older versions of Grafana, the plugin will not work.
+This is for plugins that need to support Grafana versions >= 11.0.0 and use translations. If your plugin only needs to support Grafana 12.1.0 and later, then follow the steps in [Translate your plugin](plugin-internationalization) instead. If you're using older versions of Grafana, the plugin will not work.
 :::
 
 ## Overview of the files affected by translation
