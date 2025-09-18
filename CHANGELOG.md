@@ -1,3 +1,19 @@
+# (Thu Sep 18 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.5`
+  - Create plugin: fix docker compose migration error [#2126](https://github.com/grafana/plugin-tools/pull/2126) ([@jackw](https://github.com/jackw))
+  - Update dependency @grafana/eslint-config to v8.2.0 [#1889](https://github.com/grafana/plugin-tools/pull/1889) ([@renovate[bot]](https://github.com/renovate[bot]) [@mckn](https://github.com/mckn))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Fri Sep 12 2025)
 
 #### 🐛 Bug Fix
