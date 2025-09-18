@@ -203,7 +203,7 @@ Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and
 Install the `i18next` parser:
 
 ```shell npm2yarn
-npm install i18next-parser
+npm install --save-dev i18next-parser
 ```
 
 Next, create a configuration file `src/locales/i18next-parser.config.js` and configure it so the parser sweeps your plugin and extracts the translations into the `locales/[$LOCALE]/[your-plugin].json`:
@@ -212,7 +212,7 @@ Next, create a configuration file `src/locales/i18next-parser.config.js` and con
 The path `locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modify it translations won't work.
 :::
 
-```js title="i18next-parser.config.js"
+```js title="src/locales/i18next-parser.config.js"
 const pluginJson = require('../plugin.json');
 
 module.exports = {
