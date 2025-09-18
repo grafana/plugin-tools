@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Context } from '../context.js';
 import migrate from './001-update-grafana-compose-extend.js';
 import { parse, stringify } from 'yaml';
+import { inspect } from 'node:util';
 
 describe('001-update-grafana-compose-extend', () => {
   it('should not modify anything if docker-compose.yaml does not exist', async () => {
@@ -258,6 +259,63 @@ describe('001-update-grafana-compose-extend', () => {
       },
       environment: {
         GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
+      },
+    });
+  });
+
+  it('should remove child key-value pairs before parents', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './docker-compose.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: './.config',
+              args: {
+                grafana_version: '${GRAFANA_VERSION:-9.5.3}',
+              },
+            },
+            environment: {
+              GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
+              NODE_ENV: 'development',
+            },
+          },
+        },
+      })
+    );
+    context.addFile(
+      './.config/docker-compose-base.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: '.',
+              args: {
+                grafana_version: '${GRAFANA_VERSION:-11.5.3}',
+              },
+            },
+            environment: {
+              GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
+              NODE_ENV: 'development',
+            },
+          },
+        },
+      })
+    );
+
+    await migrate(context);
+
+    const result = parse(context.getFile('./docker-compose.yaml') || '');
+    expect(result.services.grafana).toEqual({
+      extends: {
+        file: '.config/docker-compose-base.yaml',
+        service: 'grafana',
+      },
+      build: {
+        args: {
+          grafana_version: '${GRAFANA_VERSION:-9.5.3}',
+        },
       },
     });
   });
