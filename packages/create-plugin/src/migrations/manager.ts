@@ -5,6 +5,7 @@ import { flushChanges, printChanges, migrationsDebug, formatFiles, installNPMDep
 import { gitCommitNoVerify } from '../utils/utils.git.js';
 import { setRootConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
+import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 
 export type MigrationFn = (context: Context) => Context | Promise<Context>;
 
@@ -39,7 +40,9 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
     ([key, migrationMeta]) => `${key} (${migrationMeta.description})`
   );
 
-  output.log({ title: 'Running the following migrations:', body: output.bulletList(migrationList) });
+  const migrationListBody = migrationList.length > 0 ? output.bulletList(migrationList) : ['No migrations to run.'];
+
+  output.log({ title: 'Running the following migrations:', body: migrationListBody });
 
   for (const [key, migration] of Object.entries(migrations)) {
     try {
@@ -64,7 +67,14 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
       }
     }
   }
-  setRootConfig({ version: Object.values(migrations).at(-1)!.version });
+
+  // If there are no migrations to run, we should set the version to the current create-plugin version.
+  const latestVersion = migrationList.length > 0 ? Object.values(migrations).at(-1)?.version : CURRENT_APP_VERSION;
+  setRootConfig({ version: latestVersion });
+
+  if (options.commitEachMigration) {
+    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${latestVersion}.`);
+  }
 }
 
 export async function runMigration(migration: MigrationMeta, context: Context): Promise<Context> {

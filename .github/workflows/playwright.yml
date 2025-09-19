@@ -11,22 +11,23 @@ permissions:
 jobs:
   resolve-versions:
     name: Resolve Grafana images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     timeout-minutes: 3
     outputs:
       matrix: ${{ steps.resolve-versions.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
 
       - name: Resolve Grafana E2E versions
         id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@84faffc3d16ad60800b3c9a220eec16f0bc19705
+        uses: grafana/plugin-actions/e2e-version@e2e-version/v1.0.1
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
+          skip-grafana-dev-image: false
           # limit: 0 # Uncomment to test all versions since 8.5.0. Useful when testing compatibility for new APIs.
 
   playwright-tests:
@@ -39,17 +40,18 @@ jobs:
     permissions:
       id-token: write
     name: ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -70,7 +72,7 @@ jobs:
           export_env: false
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
         with:
           username: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_USERNAME }}
           password: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_PASSWORD }}
@@ -81,7 +83,7 @@ jobs:
           ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
       - name: Wait for grafana server
-        uses: grafana/plugin-actions/wait-for-grafana@84faffc3d16ad60800b3c9a220eec16f0bc19705
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -90,7 +92,7 @@ jobs:
         run: npm run playwright:test --w @grafana/plugin-e2e
 
       - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@84faffc3d16ad60800b3c9a220eec16f0bc19705
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
         if: ${{ always() && !cancelled() }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -100,17 +102,17 @@ jobs:
   publish-report:
     if: ${{ always() && !cancelled() }}
     needs: [playwright-tests]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@84faffc3d16ad60800b3c9a220eec16f0bc19705
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7

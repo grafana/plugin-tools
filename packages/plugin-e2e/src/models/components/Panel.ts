@@ -32,7 +32,11 @@ export class Panel extends GrafanaPage {
    */
   get data(): Locator {
     const panel = this.locator;
-    return panel.locator('[role="cell"]');
+    if (semver.lt(this.ctx.grafanaVersion, '12.2.0')) {
+      return panel.locator('[role="cell"]');
+    }
+
+    return panel.locator('[role="gridcell"]');
   }
 
   /**

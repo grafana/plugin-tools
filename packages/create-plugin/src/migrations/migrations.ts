@@ -32,5 +32,10 @@ export default {
       description: 'Replace deprecated eslint-plugin-deprecation with @typescript-eslint/no-deprecated rule.',
       migrationScript: './scripts/003-update-eslint-deprecation-rule.js',
     },
+    '004-eslint9-flat-config': {
+      version: '5.25.4',
+      description: 'Migrate eslint config to flat config format and update devDependencies to latest versions.',
+      migrationScript: './scripts/004-eslint9-flat-config.js',
+    },
   },
 } as Migrations;

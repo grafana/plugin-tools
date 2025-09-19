@@ -1,7 +1,7 @@
 ---
 id: profile-backend-plugin
-title: Profile a backend plugin
-description: How to profile a backend plugin.
+title: Profile a plugin's backend
+description: How to profile a plugin's backend.
 keywords:
   - grafana
   - plugins
@@ -13,14 +13,16 @@ keywords:
   - back-end
 ---
 
-This guide provides instructions for configuring a backend plugin to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information
-for investigating certain performance problems, such as high CPU or memory usage, or when you want to use [continuous profiling](https://grafana.com/oss/pyroscope/).
+This guide provides instructions for configuring a plugin with a backend to enable certain diagnostics when it starts, generating _profiling data_. Profiling data provides potentially useful information to investigate certain performance problems, such as high CPU or memory usage, or when you want to use [continuous profiling](https://grafana.com/oss/pyroscope/).
 
 ## Configure profiling data
 
 The [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) allows you to configure profiling under the `[plugin.<plugin ID>]`.
 
-In this section of the file, specify the `<plugin ID>`, a unique identifier, for the backend plugin you want to profile, for example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/), together with the profiling configuration options (detailed in sub-sections below).
+In this section of the file, specify: 
+
+- The `<plugin ID>`, a unique identifier, for the plugin you want to profile. For example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/). 
+- The profiling configuration options, as detailed in sub-sections below.
 
 **Example configuration:**
 
@@ -74,7 +76,7 @@ The higher the fraction (that is, the smaller this value) the more overhead it a
 
 ## A note about overhead
 
-Running a backend plugin with profiling enabled and without [block](#the-profiling_block_rate-option) and [mutex](#the-profiling_block_rate-option) profiles enabled should only add a fraction of overhead. These endpoints are therefore suitable for production or continuous profiling scenarios.
+Running a plugin with profiling enabled and without [block](#the-profiling_block_rate-option) and [mutex](#the-profiling_block_rate-option) profiles enabled should only add a fraction of overhead. These endpoints are therefore suitable for production or continuous profiling scenarios.
 
 Adding a small fraction of block and mutex profiles, such as 5 or 10 (that is, 10 to 20 percent) should in general be fine, but your experience might vary depending on the plugin.
 

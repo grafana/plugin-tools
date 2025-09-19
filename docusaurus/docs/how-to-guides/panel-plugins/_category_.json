@@ -1,9 +1,0 @@
-{
-  "position": 20,
-  "label": "Panel plugins",
-  "customProps": {
-    "description": "Guides for optimizing and adding capabilities to panel plugins."
-  },
-  "collapsible": true,
-  "collapsed": true
-}

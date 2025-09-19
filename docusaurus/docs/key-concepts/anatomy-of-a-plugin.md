@@ -28,7 +28,7 @@ This guide walks you through the essential components of a Grafana plugin, and h
 
 ## Before you begin
 
-Before proceeding, we recommend reviewing the [plugin types and usage guide](/key-concepts/plugin-types-usage) to gain a basic understanding of the different types of plugins available.
+Before proceeding, review the [plugin types and usage guide](/key-concepts/plugin-types-usage) to gain a basic understanding of the different types of plugins available.
 
 Each Grafana plugin is composed of several essential components that extend Grafana’s functionality in different ways. First, we’ll explore the core parts of each of the three primary plugin types: apps, data sources, and panels.
 
@@ -169,8 +169,8 @@ The following files are crucial for your plugin's development and functionality:
 - **Frontend code** (`src/`): Required. This directory contains all the frontend code for your plugin. The main files to be aware of here are `plugin.json` and `module.ts`.
   - `plugin.json`: Stores [metadata about your plugin](/reference/plugin-json), including information like its description, supported Grafana versions, and dependencies.
   - `module.ts`: The entry point for your plugin's frontend logic.
-- **Backend code** (`pkg/`): Required if your plugin has a backend component. If your plugin includes backend functionality, the code will reside in this directory, typically within `pkg/plugin/`. Backend plugins are written in Go, and `main.go` serves as the entry point for your backend logic.
-- **Test files** (`tests/`): Optional, but strongly recommended to ensure plugin quality. This folder contains your plugin’s test files, typically suffixed with `.spec.ts` for frontend tests. You can [learn more about testing your plugin](/e2e-test-a-plugin/introduction) in our E2E testing guide.
+- **Backend code** (`pkg/`): Required if your plugin has a backend component. If your plugin includes backend functionality, the code will reside in this directory, typically within `pkg/plugin/`. Plugin backend components are written in Go, and `main.go` serves as the entry point for your backend logic.
+- **Test files** (`tests/`): Optional, but strongly recommended to ensure plugin quality. This folder contains your plugin’s test files, typically suffixed with `.spec.ts` for frontend tests. You can [learn more about testing your plugin](/e2e-test-a-plugin/index.md) in our E2E testing guide.
 - **Other files**:
   - `docker-compose.yaml`: Required for Docker environment only. Contains the Docker configuration for running a local development instance of Grafana.
   - `CHANGELOG.md`: Required. Documents the history of changes and updates made to the plugin.

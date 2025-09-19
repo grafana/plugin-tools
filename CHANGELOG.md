@@ -1,3 +1,255 @@
+# (Thu Sep 18 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.5`
+  - Create plugin: fix docker compose migration error [#2126](https://github.com/grafana/plugin-tools/pull/2126) ([@jackw](https://github.com/jackw))
+  - Update dependency @grafana/eslint-config to v8.2.0 [#1889](https://github.com/grafana/plugin-tools/pull/1889) ([@renovate[bot]](https://github.com/renovate[bot]) [@mckn](https://github.com/mckn))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Fri Sep 12 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.4`
+  - Create-plugin: fix migration manager error and eslint ignores patterns [#2112](https://github.com/grafana/plugin-tools/pull/2112) ([@jackw](https://github.com/jackw))
+  - Update dependency @grafana/plugin-e2e to v2.1.12 [#2115](https://github.com/grafana/plugin-tools/pull/2115) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update google-github-actions/setup-gcloud action to v3 [#2104](https://github.com/grafana/plugin-tools/pull/2104) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/plugin-e2e@2.1.12`
+  - Chore: enable grafana dev image in Playwright workflow [#2105](https://github.com/grafana/plugin-tools/pull/2105) ([@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.26.3`
+  - Update dependency @grafana/e2e-selectors to v12.1.0 [#1985](https://github.com/grafana/plugin-tools/pull/1985) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v2.1.11 [#2092](https://github.com/grafana/plugin-tools/pull/2092) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Wed Sep 03 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.2`
+  - Create Plugin: Add plugin id and version comment to built module.js [#2089](https://github.com/grafana/plugin-tools/pull/2089) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Sep 01 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.1`
+  - Create Plugin: always externalize i18next [#2047](https://github.com/grafana/plugin-tools/pull/2047) ([@hugohaggmark](https://github.com/hugohaggmark))
+  - Update dependency @grafana/plugin-e2e to v2.1.10 [#2073](https://github.com/grafana/plugin-tools/pull/2073) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Sun Aug 31 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.10`
+  - Update dependency @grafana/e2e-selectors to ^12.2.0-255920 [#1987](https://github.com/grafana/plugin-tools/pull/1987) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Fri Aug 29 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@5.26.0`
+  - Create Plugin: Eslint 9 migration [#1970](https://github.com/grafana/plugin-tools/pull/1970) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.0`
+  - Update dependency @grafana/plugin-e2e to v2.1.9 [#2064](https://github.com/grafana/plugin-tools/pull/2064) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.9`
+  - Plugin e2e: Fix AlertRuleEditPage evaluate flakiness [#2053](https://github.com/grafana/plugin-tools/pull/2053) ([@jackw](https://github.com/jackw) [@hugohaggmark](https://github.com/hugohaggmark))
+- `@grafana/create-plugin@5.25.9`
+  - Update dependency tmp to ^0.2.4 [SECURITY] [#2020](https://github.com/grafana/plugin-tools/pull/2020) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update grafana/grafana-enterprise Docker tag to v12.1.1 [#2034](https://github.com/grafana/plugin-tools/pull/2034) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v2.1.8 [#2021](https://github.com/grafana/plugin-tools/pull/2021) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Aug 07 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.8`
+  - Plugin e2e: fix color picker selector [#2017](https://github.com/grafana/plugin-tools/pull/2017) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Aug 05 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.25.8`
+  - Create Plugin: Add package.json utils for migrations [#1942](https://github.com/grafana/plugin-tools/pull/1942) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-types-bundler@0.4.4`
+  - Update dependency @types/node to v22.17.0 [#1995](https://github.com/grafana/plugin-tools/pull/1995) ([@renovate[bot]](https://github.com/renovate[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Jul 25 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.25.7`, `@grafana/eslint-plugin-plugins@0.4.3`, `@grafana/plugin-types-bundler@0.4.3`
+  - fix(deps): update grafana dependencies [#1903](https://github.com/grafana/plugin-tools/pull/1903) ([@renovate[bot]](https://github.com/renovate[bot]) [@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# (Tue Jul 22 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.25.6`
+  - Create Plugin: fix migrations commit arg [#1971](https://github.com/grafana/plugin-tools/pull/1971) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.7`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-254610 [#1969](https://github.com/grafana/plugin-tools/pull/1969) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.25.5`
+  - Create Plugin: Fix links in config files to dev docs [#1964](https://github.com/grafana/plugin-tools/pull/1964) ([@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jul 16 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.6`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-253700 [#1962](https://github.com/grafana/plugin-tools/pull/1962) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Tue Jul 15 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.5`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-253305 [#1956](https://github.com/grafana/plugin-tools/pull/1956) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Mon Jul 14 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.1.4`
+  - fix(deps): update dependency @grafana/e2e-selectors to ^12.1.0-252415 [#1947](https://github.com/grafana/plugin-tools/pull/1947) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Thu Jul 10 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.25.3`
+  - Create Plugin: Support latest grafana package dependencies in jest [#1949](https://github.com/grafana/plugin-tools/pull/1949) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Sat Jul 05 2025)
 
 #### 🐛 Bug Fix

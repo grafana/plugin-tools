@@ -1,6 +1,7 @@
 ---
 id: ui-extensions
 title: UI extensions
+sidebar_label: UI extensions key concepts
 description: Learn how to add links and trigger actions from the Grafana user interface by using UI Extensions in app plugins.
 keywords:
   - grafana
@@ -9,46 +10,75 @@ keywords:
   - links
   - extensions
   - app plugins
+  - extension points
+  - components
+  - content
 sidebar_position: 60
 ---
 
 Use UI extensions to contribute new actions and functionality to the core Grafana UI and other app plugins.
 
-## Definition of terms
+## Understand the extensions ecosystem
 
-Before we go into details we need to cover the two major concepts in the UI extensions framework:
+The UI extensions framework is built around these concepts:
 
-1. `Extension point` - A place in the UI where plugins can contribute new functionality to the end user. The Grafana UI exposes extension points and app plugins can also define their own extension points.
-2. `Extension` - New functionality, registered by an app plugin, appearing at an extension point. For example, an extension could provide a navigational link to bring users to a particular view, it could open a modal menu allowing the user to configure an action to take from within their current context (for instance, to create a SLO), or it could trigger background tasks.
+- **Extension point**: A place in Grafana Core or in a plugin where content can be hooked into.
 
-![Panel menu showing available extensions](/img/ui-extensions-menu.png)
+- **Renderable content**: Functionality (link or component) made available to render in an extension point, or a component exposed to be used by another plugin.
 
-In the example above, there is one extension point with three registered extensions. This highlights one of the benefits of using UI extensions. Once you have added an extension point to your UI you can extend it multiple times by multiple plugins.
+- **Exposed component**: Component made available to other plugins with the `expose*` APIs. If exposed, a component is not tied to extension points.
 
-## Why should I add an extension point?
+- **Registered content**: Links, components or functions made available with the `add*` APIs. If registered, content can be rendered in specific extension points.
 
-App plugins can provide custom pages in the Grafana UI, often highly contextualized to a particular service or task to enable users to be productive. Grafana is a feature-rich observability platform and has an extensive ecosystem of plugins, allowing users to monitor and act upon a wide set of data.
+- **Content provider**: The app plugin providing the content (link or component) to be rendered at the extension point.
 
-Extension points facilitate the breaking down of silos between individual views, allowing users to quickly leverage data from their current context to take relevant actions. By providing extension points within your app, relevant extensions can easily offer new capabilities to your shared users.
+- **Content consumer**: The extension point using the renderable content.
 
-Add an extension point to your UI to give benefits such as these:
+- **Plugin developer**: A developer working with the Grafana plugins ecosystem.
 
-- Define the UI extension point once to enable multiple plugins to extend your UI with new functionality. You don't need any additional effort to provide functionality from more plugins in your UI.
+## I want to render extension content
+
+As a content consumer, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
+
+### Why add an extension point?
+
+Define extension points to add new capabilities:
+
+- An extension point allows other plugins to extend your UI with new functionality. You don't need any additional effort to provide functionality from other plugins in your UI.
 - Clean separation of concerns. Your application doesn't need to know anything about the plugin extending your UI.
-- Integration built for change. Since your application doesn't know anything about the internal workings of the plugin extending your UI, they are free to change their APIs without the risk of breaking the extension point UI.
-- Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed to the user. There is no need for either app to include custom logic to detect the presence of the other.
-- Extensions are fast. We pre-build the extensions registry at Grafana boot time which makes it fast to use while rendering the UI.
+- Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed for your user. There is no need for either app to include custom logic to detect the presence of the other.
 
-Examples where it would be useful:
+### Where can I find extension points?
 
-- The user views a dashboard with historical data. By adding an extension point to this part of the UI, a machine learning app plugin can give the user the ability to create a forecast for that data directly from the panel.
-- The user views a firing alert. By adding an extension point to this part of the UI, an Incident app plugin can give the user the ability to create an incident directly from the alert view.
+![Panel menu showing available extensions](/img/ui-extension-example.gif)
 
-## Further instructions
+In the example above, the Grafana Core extension point `"grafana/dashboard/panel/menu"` is rendering links registered by plugins. [Check out all available extension points in Grafana Core.](../reference/ui-extensions-reference/extension-points.md)
+
+### Next steps
 
 - [Learn how to create an extension point](../how-to-guides/ui-extensions/create-an-extension-point.md)
+- [Learn how to use exposed components](../how-to-guides/ui-extensions/use-an-exposed-component.md)
+- [Avoid UI issues when working with extension points](../how-to-guides/ui-extensions/degregate-ui.md)
+
+## I want to share content from my app plugin
+
+If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin, you need to either register or expose your content first.
+
+### Use cases
+
+You can make your content available to extension points in situations such as:
+
+- You want to show a link in a specific place in Grafana Core
+- You want another plugin to link to a specific page in your App
+- You want another plugin to show a widget from your app in their page
+
+### Next steps
+
 - [Learn how to register an extension to an extension point](../how-to-guides/ui-extensions/register-an-extension.md)
 - [Learn how to expose components from a plugin so other plugins can import them](../how-to-guides/ui-extensions/expose-a-component.md)
-- [Learn how to use exposed components](../how-to-guides/ui-extensions/use-an-exposed-component.md)
+
+## Further reading
+
 - [Learn how to version exposed components and extension points](../how-to-guides/ui-extensions/versioning-extensions.md)
-- [Check the API reference](../reference/ui-extensions.md)
+- [Check the API reference guide](../reference/ui-extensions-reference/ui-extensions.md)
+- If you need to debug your extension see [Use logs to debug your extension](../how-to-guides/ui-extensions/debug-logs.md)

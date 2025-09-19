@@ -96,7 +96,7 @@ export default defineConfig<PluginOptions>(baseConfig, {
 
 ## Managing users
 
-When a `user` is defined in a setup project (like in the RBAC example above) `plugin-e2e` will use the Grafana HTTP API to create the user account. This action requires elevated permissions, so by default the server administrator credentials `admin:admin` will be used. If the end-to-end tests are targeting the [development environment](../get-started/set-up-development-environment.mdx) scaffolded with `create-plugin`, this will work fine. However for other test environments the server administrator password may be different. In that case, we search for GRAFANA_ADMIN_USER and GRAFANA_ADMIN_PASSWORD environment variables. Additionally you can provide the correct credentials by setting `grafanaAPICredentials` in the global options.
+When a `user` is defined in a setup project (like in the RBAC example above) `plugin-e2e` will use the Grafana HTTP API to create the user account. This action requires elevated permissions, so by default the server administrator credentials `admin:admin` will be used. If the end-to-end tests are targeting the [development environment](../set-up/) scaffolded with `create-plugin`, this will work fine. However for other test environments the server administrator password may be different. In that case, we search for GRAFANA_ADMIN_USER and GRAFANA_ADMIN_PASSWORD environment variables. Additionally you can provide the correct credentials by setting `grafanaAPICredentials` in the global options.
 
 ```ts title="playwright.config.ts"
 import type { PluginOptions } from '@grafana/plugin-e2e';

@@ -112,10 +112,10 @@ Use the [webpack-merge](https://github.com/survivejs/webpack-merge) package to e
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import grafanaConfig from './.config/webpack/webpack.config';
+import grafanaConfig, { Env } from './.config/webpack/webpack.config';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
 
   return merge(baseConfig, {
@@ -145,9 +145,9 @@ The following example excludes a "libs" directory from typescript/javascript com
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { mergeWithRules } from 'webpack-merge';
-import grafanaConfig from './.config/webpack/webpack.config';
+import grafanaConfig, { Env } from './.config/webpack/webpack.config';
 
-const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
   const customConfig = {
     module: {
@@ -176,9 +176,9 @@ Webpack 5 does not polyfill [Node.js core modules](https://webpack.js.org/config
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import grafanaConfig from './.config/webpack/webpack.config';
+import grafanaConfig, { Env } from './.config/webpack/webpack.config';
 
-const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
 
   return merge(baseConfig, {
