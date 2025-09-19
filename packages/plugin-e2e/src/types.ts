@@ -66,6 +66,8 @@ export type PluginOptions = {
    * The user preferences you specify here will be applied to window.grafanaBootData.user.preferences object.
    * Since all tests receive a new, isolated browser context, the user preferences will be reset for each test.
    *
+   * This is only supported for Grafana 11 and later.
+   *
    * @example
    * ```typescript
    * export default defineConfig({

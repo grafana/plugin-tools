@@ -12,17 +12,19 @@ test.use({
   },
 });
 
-test.describe('override user preferences', () => {
-  test('should use Spanish language on profile page', async ({ page, grafanaVersion }) => {
+const skipMsg = '';
+
+test.describe('default user preferences', () => {
+  test('should use English language on profile page', async ({ grafanaVersion, page }) => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
     page.goto('/profile');
-    await expect(page.getByRole('heading', { name: 'Perfil' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible();
   });
 
-  test('should use light theme', async ({ page, grafanaVersion }) => {
+  test('should use dark theme', async ({ page, grafanaVersion }) => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
     page.goto('/');
     const header = page.getByRole('banner');
-    await expect(header).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(header).toHaveCSS('background-color', 'rgb(0, 0, 0)');
   });
 });
