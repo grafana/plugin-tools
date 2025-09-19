@@ -18,8 +18,8 @@ export function watchPluginJson() {
   // Generate initial values
   try {
     console.log(start);
-    console.log('');
     generateCode();
+    console.log('');
     console.log(end);
     console.log('');
   } catch (error) {
@@ -30,8 +30,8 @@ export function watchPluginJson() {
   watcher = watch(pluginJsonPath, async (eventType) => {
     if (eventType === 'change') {
       console.log(start);
-      console.log('');
       generateCode();
+      console.log('');
       console.log(end);
       console.log('');
     }

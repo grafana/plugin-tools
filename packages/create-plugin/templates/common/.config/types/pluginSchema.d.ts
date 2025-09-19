@@ -227,6 +227,10 @@ export interface PluginSchemaExtensions {
    */
   addedLinks?: AddedLink[];
   /**
+   * Any function extensions that your plugin registers to extension points.
+   */
+  addedFunctions?: AddedFunction[];  
+  /**
    * Any React component that your plugin exposes so it can be reused by other app plugins.
    */
   exposedComponents?: ExposedComponent[];
@@ -244,7 +248,7 @@ export interface AddedComponent {
   /**
    * The list of the targeted extension point ids that the component is added to.
    */
-  targets: string[];
+  targets: string | string[];
   /**
    * An informative title for your component extension.
    */
@@ -259,7 +263,22 @@ export interface AddedLink {
   /**
    * The list of the targeted extension point ids that the link is added to.
    */
-  targets: string[];
+  targets: string | string[];
+  /**
+   * An informative title for your link extension.
+   */
+  title: string;
+}
+
+export interface AddedFunction {
+  /**
+   * Additional information about your link extension.
+   */
+  description?: string;
+  /**
+   * The list of the targeted extension point ids that the link is added to.
+   */
+  targets: string | string[];
   /**
    * An informative title for your link extension.
    */

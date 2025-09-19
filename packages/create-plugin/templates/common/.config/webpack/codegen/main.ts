@@ -6,9 +6,12 @@ import { getPluginJsonPath } from '../utils';
 import { getCodegenDirPath, logError, logInfo, logWarning, prettifyFile } from './utils';
 import { CODEGEN_DIR, SOURCE_DIR } from '../constants';
 import { PluginSchema } from '../../types/pluginSchema';
-import { pluginIncludes } from './generators/pluginIncludes';
+import { includes } from './generators/includes';
+import { addedLinks } from './generators/addedLinks';
+import { addedComponents } from './generators/addedComponents';
+import { addedFunctions } from './generators/addedFunctions';
 
-const codeGenerators: CodeGenerator[] = [pluginIncludes];
+const codeGenerators: CodeGenerator[] = [includes, addedLinks, addedComponents, addedFunctions];
 
 const fileWriter: FileWriter = (file, content) => {
   const outputFile = path.join(process.cwd(), SOURCE_DIR, CODEGEN_DIR, file);
@@ -37,6 +40,7 @@ export function generateCode() {
 
   generators.forEach((generator) => {
     try {
+      console.log('');
       logInfo(`Generating code for`, generator.name);
       const code = generator.generate(pluginJson);
       fileWriter(generator.fileName, code);

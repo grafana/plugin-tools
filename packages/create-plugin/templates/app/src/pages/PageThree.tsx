@@ -3,10 +3,9 @@ import { css } from '@emotion/css';
 import { useParams, Link } from 'react-router-dom';
 import { GrafanaTheme2 } from '@grafana/data';
 import { useStyles2 } from '@grafana/ui';
-import { prefixRoute } from '../utils/utils.routing';
-import { ROUTES } from '../constants';
 import { testIds } from '../components/testIds';
 import { PluginPage } from '@grafana/runtime';
+import { PluginIncludePaths } from 'codegen/includes';
 
 function PageThree() {
   const s = useStyles2(getStyles);
@@ -29,8 +28,8 @@ function PageThree() {
           <>
             <strong>No id parameter is set in the URL.</strong> <br />
             Try the following link: <br />
-            <Link className={s.link} to={prefixRoute(`${ROUTES.Three}/123456789`)}>
-              {prefixRoute(`${ROUTES.Three}/123456789`)}
+            <Link className={s.link} to={`${PluginIncludePaths.PageThree}/123456789`}>
+              {`${PluginIncludePaths.PageThree}/123456789`}
             </Link>
           </>
         )}
