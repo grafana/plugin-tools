@@ -21,7 +21,7 @@ test.describe('override user preferences', () => {
 
   test('should use light theme', async ({ page, grafanaVersion }) => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
-    page.goto('/');
+    await page.goto('/');
     const header = page.getByRole('banner');
     await expect(header).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   });
