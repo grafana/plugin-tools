@@ -86,6 +86,10 @@ async function performPreUpdateChecks(argv: minimist.ParsedArgs) {
   }
 }
 
+/**
+ * Prepares a plugin for migrations by running the legacy update command and installing dependencies.
+ * This is a one time operation that ensures the plugin configs are "as expected" by the new migration system.
+ */
 function preparePluginForMigrations(argv: minimist.ParsedArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
   const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
