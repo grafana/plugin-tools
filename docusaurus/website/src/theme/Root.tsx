@@ -79,11 +79,11 @@ export default function Root({ children }) {
 
     if (shouldTrack) {
       if (isOneTrustEnabled && hasAnalyticsConsent) {
-        startTracking(rudderStackConfig);
+        startTracking(rudderStackConfig, faroConfig, shouldTrack);
       }
       trackPage();
     }
-  }, [location, hasAnalyticsConsent, isOneTrustEnabled, rudderStackConfig]);
+  }, [location, hasAnalyticsConsent, isOneTrustEnabled, rudderStackConfig, faroConfig, shouldTrack]);
 
   return (
     <>
