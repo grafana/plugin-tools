@@ -15,7 +15,7 @@ test.use({
 test.describe('override user preferences', () => {
   test('should use Spanish language on profile page', async ({ page, grafanaVersion }) => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
-    page.goto('/profile');
+    await page.goto('/profile');
     await expect(page.getByRole('heading', { name: 'Perfil' })).toBeVisible();
   });
 
