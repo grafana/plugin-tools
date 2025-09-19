@@ -6,10 +6,6 @@ test.use({
   featureToggles: {
     localizationForPlugins: true,
   },
-  userPreferences: {
-    language: 'es-ES',
-    theme: 'light',
-  },
 });
 
 const skipMsg = '';
@@ -25,6 +21,6 @@ test.describe('default user preferences', () => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
     page.goto('/');
     const header = page.getByRole('banner');
-    await expect(header).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+    await expect(header).toHaveCSS('background-color', 'rgb(24, 27, 31)');
   });
 });
