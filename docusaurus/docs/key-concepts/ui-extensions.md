@@ -1,6 +1,7 @@
 ---
 id: ui-extensions
 title: UI extensions
+sidebar_label: UI extensions key concepts
 description: Learn how to add links and trigger actions from the Grafana user interface by using UI Extensions in app plugins.
 keywords:
   - grafana
@@ -31,13 +32,13 @@ The UI extensions framework is built around these concepts:
 
 - **Content provider**: The app plugin providing the content (link or component) to be rendered at the extension point.
 
-- **Content user**: The extension point using the renderable content.
+- **Content consumer**: The extension point using the renderable content.
 
 - **Plugin developer**: A developer working with the Grafana plugins ecosystem.
 
 ## I want to render extension content
 
-As a content user, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
+As a content consumer, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
 
 ### Why add an extension point?
 

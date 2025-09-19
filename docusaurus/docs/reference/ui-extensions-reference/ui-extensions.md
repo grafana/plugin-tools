@@ -114,6 +114,61 @@ The method returns the `AppPlugin` instance to allow for chaining.
 - [Update the path based on the context](../../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
 - [Open a modal from the `onClick()`](../../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
 
+### `addFunction`
+
+:::info
+Available in Grafana >=v11.6.0.
+:::
+
+Use this method to register a function extension at an extension point.
+
+```typescript
+export const plugin = new AppPlugin<{}>().addFunction({
+  targets: ['grafana/dashboard/dropzone/v1'],
+  title: 'Drag and drop data',
+  description: 'Support for content being drag and dropped on to dashboards',
+  fn: async (data: File) => {
+    const text = await data.text();
+
+    return {
+      title: 'Text panel',
+      panel: {
+        type: 'text',
+        title: 'Dropped contents',
+        options: {
+          mode: 'markdown',
+          content: text,
+        },
+      },
+      component: PasteEditor(text),
+    };
+  },
+});
+```
+
+#### Parameters
+
+The `addFunction()` method takes a single `config` object with the following properties:
+
+| Property          | Description                                                                                                                                                                                         | Required |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **`targets`**     | A list of extension point IDs where the extension will be registered. <br /> _Example: `"grafana/dashboard/panel/menu/v1"`. [See available extension points in Grafana &rarr;](./extension-points)_ | true     |
+| **`title`**       | A human readable title for the function.                                                                                                                                                            | true     |
+| **`description`** | A human readable description for the function.                                                                                                                                                      | true     |
+| **`fn`**          | A function within your app plugin that should be triggered when the extension point action occurs.                                                                                                  | true     |
+
+#### Return value
+
+The method returns the `AppPlugin` instance to allow for chaining.
+
+#### Examples
+
+- [Create an extension point for functions](../../how-to-guides/ui-extensions/extension-user-use-function#create-an-extension-point-for-functions)
+
+#### See also
+
+- [Best practices for function extensions](../../how-to-guides/ui-extensions/extension-user-use-function#best-practices-for-function-extensions)
+
 ### `exposeComponent`
 
 :::info
@@ -303,6 +358,50 @@ For more information refer to [`PluginExtensionLink`](https://github.com/grafana
 - [Limit the number of extensions in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-the-number-of-extensions-in-your-extension-point)
 - [Limit which plugins can register links in your extension point](../../how-to-guides/ui-extensions/create-an-extension-point.md#limit-which-plugins-can-register-links-in-your-extension-point)
 
-#### See also
+### `usePluginFunctions`
 
-- [Best practices for rendering links added by plugins](../../how-to-guides/ui-extensions/create-an-extension-point.md#best-practices-for-rendering-links)
+:::info
+Available in Grafana >=v11.6.0.
+:::
+
+Use this React hook to fetch **functions** that have been previously **registered** in an extension point using the `AppPlugin.addFunction()` method.
+
+```typescript
+import { usePluginFunctions } from '@grafana/runtime';
+
+const { functions, isLoading } = usePluginFunctions<(data: string) => void>({
+  extensionPointId: 'grafana/dashboard/dropzone/v1',
+  limitPerPlugin: 2,
+});
+```
+
+#### Parameters
+
+The `.usePluginFunctions()` method takes a single `options` object with the following properties:
+
+| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
+| **`limitPerPlugin?`**  | The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                                | false    |
+
+#### Return value
+
+The hook returns the following object:
+
+```typescript
+const {
+  // An empty array if no plugins have registered extensions for this extension point yet
+  functions: PluginExtensionFunction[];
+
+  // `true` until any plugins extending this extension point
+  // are still loading
+  isLoading: boolean;
+} = usePluginLinks(options);
+```
+
+For more information refer to [`PluginExtensionFunction`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L46).
+
+#### Examples
+
+- [Create an extension point for functions](../../how-to-guides/ui-extensions/extension-user-use-function#create-an-extension-point-for-functions)
+- [Limit which plugins can register functions in your extension point](../../how-to-guides/ui-extensions/extension-user-use-function#limit-which-plugins-can-register-functions-in-your-extension-point)

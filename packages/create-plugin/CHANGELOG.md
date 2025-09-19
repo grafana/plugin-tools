@@ -1,3 +1,45 @@
+# v5.26.5 (Thu Sep 18 2025)
+
+#### 🐛 Bug Fix
+
+- Create plugin: fix docker compose migration error [#2126](https://github.com/grafana/plugin-tools/pull/2126) ([@jackw](https://github.com/jackw))
+- Update dependency @grafana/eslint-config to v8.2.0 [#1889](https://github.com/grafana/plugin-tools/pull/1889) ([@renovate[bot]](https://github.com/renovate[bot]) [@mckn](https://github.com/mckn))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v5.26.4 (Fri Sep 12 2025)
+
+#### 🐛 Bug Fix
+
+- Create-plugin: fix migration manager error and eslint ignores patterns [#2112](https://github.com/grafana/plugin-tools/pull/2112) ([@jackw](https://github.com/jackw))
+- Update dependency @grafana/plugin-e2e to v2.1.12 [#2115](https://github.com/grafana/plugin-tools/pull/2115) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v5.26.3 (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/e2e-selectors to v12.1.0 [#1985](https://github.com/grafana/plugin-tools/pull/1985) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.1.11 [#2092](https://github.com/grafana/plugin-tools/pull/2092) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.26.2 (Wed Sep 03 2025)
 
 #### 🐛 Bug Fix

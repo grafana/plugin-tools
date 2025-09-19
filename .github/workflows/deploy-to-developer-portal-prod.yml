@@ -35,7 +35,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -54,7 +54,7 @@ jobs:
           bucket: 'grafana-developer-portal'
 
       - name: 'Set up Cloud SDK'
-        uses: google-github-actions/setup-gcloud@cb1e50a9932213ecece00a606661ae9ca44f3397 # v2.2.0
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
 
       - name: 'Deploy to Developer Portal Bucket'
         run: |

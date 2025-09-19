@@ -1,3 +1,15 @@
+# v2.1.12 (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: enable grafana dev image in Playwright workflow [#2105](https://github.com/grafana/plugin-tools/pull/2105) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v2.1.10 (Sun Aug 31 2025)
 
 #### 🐛 Bug Fix

@@ -87,7 +87,13 @@ describe('004-eslint9-flat-config', () => {
         "import { defineConfig } from "eslint/config";
 
         export default defineConfig([{
-          ignores: ["*.test.ts", ".github", ".vscode", "playwright-report", "**/dist"],
+          ignores: [
+            "**/*.test.ts",
+            "**/.github",
+            "**/.vscode",
+            "**/playwright-report",
+            "**/dist",
+          ],
         }, {
           rules: {
             "no-console": "error",
