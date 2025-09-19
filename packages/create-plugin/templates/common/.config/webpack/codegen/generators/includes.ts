@@ -1,14 +1,33 @@
 import { CodeGenerator } from '../types';
-import { PluginSchema } from '../../../types/pluginSchema';
+import { Include, PluginSchema } from '../../../types/pluginSchema';
 import { FILE_HEADER_COMMENT } from '../utils';
 import { CONFIG_DIR } from '../../constants';
 
-function canGenerate(pluginJson: PluginSchema) {
-  return Boolean(pluginJson?.includes?.length);
+const ID_MACRO = '%PLUGIN_ID%';
+
+function canGenerate(json: PluginSchema) {
+  return Boolean(json?.includes?.length);
 }
 
-function generate(pluginJson: PluginSchema) {
-  if (!pluginJson?.includes?.length) {
+function removeStartingSlash(str: string): string {
+  return str.replace(/^\/+/, '');
+}
+
+function getRelativePath(include: Include): string {
+  const splits = include.path?.split(ID_MACRO) || [];
+  if (splits.length > 1) {
+    return removeStartingSlash(splits[1].trim());
+  }
+
+  if (splits.length) {
+    return removeStartingSlash(splits[0].trim());
+  }
+
+  return '';
+}
+
+function generate(json: PluginSchema) {
+  if (!json?.includes?.length || !canGenerate(json)) {
     return '';
   }
 
@@ -17,14 +36,19 @@ function generate(pluginJson: PluginSchema) {
 
   // Generate includes enum if includes exist
   const includesEnum = `export enum PluginIncludePaths {
-    ${pluginJson.includes
-      .map((inc) => `${inc.name?.replace(/\s+/g, '')} = "${inc.path?.replace(/%PLUGIN_ID%/, pluginJson.id)}"`)
+    ${json.includes
+      .map((inc) => `${inc.name?.replace(/\s+/g, '')} = "${inc.path?.replace(/%PLUGIN_ID%/, json.id)}"`)
       .join(',\n')}
+  }`;
+
+  // Generate relative includes enum if includes exist
+  const relativeIncludesEnum = `export enum PluginIncludeRelativePaths {
+    ${json.includes.map((inc) => `${inc.name?.replace(/\s+/g, '')} = "${getRelativePath(inc)}"`).join(',\n')}
   }`;
 
   // Generate includes map if includes exist
   const includesMap = `export const PluginIncludes: ReadonlyMap<PluginIncludePaths, Include> = new Map([
-    ${pluginJson.includes
+    ${json.includes
       .map((inc) => {
         const enumKey = inc.name?.replace(/\s+/g, '');
         // Create the include object without JSON.stringify to preserve the enum reference
@@ -47,15 +71,17 @@ import { ${imports} } from '../../${CONFIG_DIR}/types/pluginSchema';
 
 ${includesEnum}
 
+${relativeIncludesEnum}
+
 ${includesMap}
 `;
 
   return fileContent;
 }
 
-export const pluginIncludes: CodeGenerator = {
-  name: 'pluginIncludes',
-  fileName: 'pluginIncludes.ts',
+export const includes: CodeGenerator = {
+  name: 'includes',
+  fileName: 'includes.ts',
   canGenerate,
   generate,
 };

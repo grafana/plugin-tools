@@ -36,7 +36,6 @@ export class CodeGenPlugin {
       }
     });
 
-    // Prettify after file changes in watch mode
     compiler.hooks.afterCompile.tapAsync('CodeGenPlugin', async (_, callback) => {
       callback();
     });
