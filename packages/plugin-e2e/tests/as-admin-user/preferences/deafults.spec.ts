@@ -8,8 +8,6 @@ test.use({
   },
 });
 
-const skipMsg = '';
-
 test.describe('default user preferences', () => {
   test('should use English language on profile page', async ({ grafanaVersion, page }) => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
