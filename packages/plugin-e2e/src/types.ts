@@ -7,19 +7,19 @@ import {
   Response,
   TestInfo,
 } from '@playwright/test';
+import { SelectorsOf, versionedComponents, versionedPages } from '@grafana/e2e-selectors';
 
+import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
 import { AppConfigPage } from './models/pages/AppConfigPage';
 import { AppPage } from './models/pages/AppPage';
 import { DashboardPage } from './models/pages/DashboardPage';
 import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
 import { ExplorePage } from './models/pages/ExplorePage';
+import { GrafanaAPIClient } from './models/GrafanaAPIClient';
 import { PanelEditPage } from './models/pages/PanelEditPage';
 import { VariableEditPage } from './models/pages/VariableEditPage';
 import { VariablePage } from './models/pages/VariablePage';
-import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
-import { GrafanaAPIClient } from './models/GrafanaAPIClient';
-import { versionedPages, versionedComponents, SelectorsOf } from '@grafana/e2e-selectors';
 import { VersionedAPIs } from './selectors/versionedAPIs';
 import { VersionedConstants } from './selectors/versionedConstants';
 
@@ -60,6 +60,28 @@ export type PluginOptions = {
    * });
    */
   featureToggles: Record<string, boolean>;
+
+  /**
+   * Optionally, you can add or override user preferences for the Grafana user.
+   * The user preferences you specify here will be applied to window.grafanaBootData.user.preferences object.
+   * Since all tests receive a new, isolated browser context, the user preferences will be reset for each test.
+   *
+   * @example
+   * ```typescript
+   * export default defineConfig({
+   *   use: {
+   *     userPreferences: {
+   *       theme: 'dark',
+   *       timezone: 'browser',
+   *       weekStart: 'monday',
+   *       language: 'en-US',
+   *       regionalFormat: 'en',
+   *     },
+   *   },
+   * });
+   * ```
+   */
+  userPreferences: UserPreferences;
 
   /**
    * The Grafana user to use for the tests. If no user is provided, the default admin/admin user will be used.
@@ -642,6 +664,54 @@ export interface AlertPageOptions {
 }
 
 export type OrgRole = 'None' | 'Viewer' | 'Editor' | 'Admin';
+
+/**
+ * User preferences configuration for tests.
+ *
+ * These preferences control various aspects of the Grafana user's
+ * appearance and behavior during test execution.
+ */
+export interface UserPreferences {
+  /**
+   * The theme to use for the user.
+   *
+   * @default 'dark'
+   * @example 'dark' | 'light'
+   */
+  theme?: 'dark' | 'light';
+
+  /**
+   * The timezone setting for the organization.
+   *
+   * @default 'browser'
+   * @example 'browser' | 'utc' | 'America/New_York'
+   */
+  timezone?: string;
+
+  /**
+   * The first day of the week for date pickers and calendars.
+   *
+   * @default 'sunday'
+   * @example 'sunday' | 'monday'
+   */
+  weekStart?: 'sunday' | 'monday';
+
+  /**
+   * The language/locale for the organization's UI.
+   *
+   * @default 'en-US'
+   * @example 'en-US' | 'sv-SE' | 'de-DE'
+   */
+  language?: string;
+
+  /**
+   * The regional format for numbers, dates, and currencies.
+   *
+   * @default 'en'
+   * @example 'en' | 'sv' | 'de'
+   */
+  regionalFormat?: string;
+}
 
 /**
  * Panel visualization types
