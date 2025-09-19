@@ -146,8 +146,9 @@ Note:
 - **Append Only**: Action sets can only be extended, not modified or restricted
 
 Extending anything other than the action sets results in an error.
+
 ```bash
-logger=plugins.actionsets.registration pluginId=grafana-lokiexplore-app error="[accesscontrol.actionSetInvalid] 
+logger=plugins.actionsets.registration pluginId=grafana-lokiexplore-app error="[accesscontrol.actionSetInvalid]
 currently only folder and dashboard action sets are supported, provided action set grafana-lokiexplore-app:view is not a folder or dashboard action set"
 ```
 
@@ -156,13 +157,14 @@ currently only folder and dashboard action sets are supported, provided action s
 Grafana has several action sets for folders that can be extended:
 
 **Folder Action Sets:**
+
 - `folders:view` → `["folders:read", "dashboards:read"]`
 - `folders:edit` → `["folders:read", "folders:write", "dashboards:read", "dashboards:write", "folders:create"]`
 - `folders:admin` → `["folders:read", "folders:write", "folders:delete", "folders.permissions:read", "folders.permissions:write", ...]`
 
 ### Codepaths
-[RegistrationsOfActionSets](https://github.com/grafana/grafana/blob/main/pkg/services/accesscontrol/resourcepermissions/service.go#L574
-)
+
+[RegistrationsOfActionSets](https://github.com/grafana/grafana/blob/main/pkg/services/accesscontrol/resourcepermissions/service.go#L574)
 
 ### Plugin Action Sets Definition
 
@@ -171,23 +173,15 @@ Plugins can define action sets in their `plugin.json`:
 ```json
 {
   "id": "my-plugin",
-  "type": "app", 
+  "type": "app",
   "actionSets": [
     {
       "action": "folders:edit",
-      "actions": [
-        "my-plugin.documents:create",
-        "my-plugin.documents:update", 
-        "my-plugin.templates:write"
-      ]
+      "actions": ["my-plugin.documents:create", "my-plugin.documents:update", "my-plugin.templates:write"]
     },
     {
-      "action": "folders:admin", 
-      "actions": [
-        "my-plugin.settings:write",
-        "my-plugin.users:manage",
-        "my-plugin.permissions:write"
-      ]
+      "action": "folders:admin",
+      "actions": ["my-plugin.settings:write", "my-plugin.users:manage", "my-plugin.permissions:write"]
     }
   ]
 }
@@ -196,6 +190,7 @@ Plugins can define action sets in their `plugin.json`:
 ### Practical Example
 
 **With Action Sets (extending existing sets):**
+
 ```json
 {
   "actionSets": [
@@ -212,6 +207,7 @@ Plugins can define action sets in their `plugin.json`:
 ```
 
 **Result:** When a user is granted Edit access to a folder, they get:
+
 - All original `folders:edit` actions (folders:read, folders:write, folders:create)
 - Plus the plugin's additional actions (my-plugin.docs:create, my-plugin.docs:edit)
 
