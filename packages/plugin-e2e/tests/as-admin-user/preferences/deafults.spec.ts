@@ -11,7 +11,7 @@ test.use({
 test.describe('default user preferences', () => {
   test('should use English language on profile page', async ({ grafanaVersion, page }) => {
     test.skip(semver.lt(grafanaVersion, '11.0.0'), 'User preferences are only supported in Grafana 11 and later');
-    page.goto('/profile');
+    await page.goto('/profile');
     await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible();
   });
 
