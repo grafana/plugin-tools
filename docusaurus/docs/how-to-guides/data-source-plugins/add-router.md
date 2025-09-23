@@ -14,7 +14,7 @@ keywords:
 
 The `QueryData` method in your plugin's backend allows you to query one type of data only. To support different kinds of queries (metrics, logs, and traces) you need to implement query router (also known as a _multiplexer_).
 
-To do so:
+To do so: 
 
 1. Populate the `queryType` property of your query model client-side, as shown in the [`DataQuery`](https://github.com/grafana/grafana/blob/a728e9b4ddb6532b9fa2f916df106e792229e3e0/packages/grafana-data/src/types/query.ts#L47) interface.
 1. With `queryType` populated in queries and sent to your plugin backend component, use [`datasource.QueryTypeMux`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/datasource#QueryTypeMux) to multiplex or route different query types to separate query handlers.
@@ -81,4 +81,4 @@ func (d *MyDatasource) handleQueryFallback(ctx context.Context, req *backend.Que
 You can find an example of using [`QueryTypeMux`](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/backend/datasource#QueryTypeMux) in Grafana's built-in TestData data source code:
 
 - [Create a query type multiplexer](https://github.com/grafana/grafana/blob/623ee3a2be5c4cd84c61b6bbe82a32d18cc29828/pkg/tsdb/grafana-testdata-datasource/testdata.go#L22) and [call `registerScenarios`](https://github.com/grafana/grafana/blob/623ee3a2be5c4cd84c61b6bbe82a32d18cc29828/pkg/tsdb/grafana-testdata-datasource/testdata.go#L44).
-- The [`registerScenarios` method](https://github.com/grafana/grafana/blob/623ee3a2be5c4cd84c61b6bbe82a32d18cc29828/pkg/tsdb/grafana-testdata-datasource/scenarios.go#L33) uses a [helper method](https://github.com/grafana/grafana/blob/623ee3a2be5c4cd84c61b6bbe82a32d18cc29828/pkg/tsdb/grafana-testdata-datasource/scenarios.go#L204-L207) to register each query type handler. The latter also shows how you can wrap the actual handler in another handler to apply common functionality or middleware to all handlers, for example logging and traces.
+- The [`registerScenarios` method](https://github.com/grafana/grafana/blob/623ee3a2be5c4cd84c61b6bbe82a32d18cc29828/pkg/tsdb/grafana-testdata-datasource/scenarios.go#L33) uses a [helper method](https://github.com/grafana/grafana/blob/623ee3a2be5c4cd84c61b6bbe82a32d18cc29828/pkg/tsdb/grafana-testdata-datasource/scenarios.go#L204-L207) to register each query type handler. The latter also shows how you can wrap the actual handler in another handler to apply common functionality or middleware to all handlers, for example logging and traces. 

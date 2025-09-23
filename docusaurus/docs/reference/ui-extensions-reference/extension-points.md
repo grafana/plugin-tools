@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 50
 ---
 
-Use the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum exposed by the `@grafana/data` package to access the extension points within Grafana.
+Use the [`PluginExtensionPoints`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) enum exposed by the `@grafana/data` package to access the extension points within Grafana. 
 
 ```typescript
 import { PluginExtensionPoints } from '@grafana/data';
@@ -32,3 +32,4 @@ The following Extension Points are available:
 | **`DashboardPanelMenu`**          | Link      | Extend the panel menu with custom actions.                           |
 | **`ExploreToolbarAction`**        | Link      | Extend the "Add" button on the Explore page with custom actions.     |
 | **`UserProfileTab`**              | Component | Extend the user profile page with custom tabs.                       |
+

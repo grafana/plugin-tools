@@ -109,7 +109,7 @@ Access the release zip file directly from the GitHub repository release path (fo
 
 ## Sign your plugin automatically
 
-You can sign your plugin releases using GitHub Action.
+You can sign your plugin releases using GitHub Action. 
 
 First, [generate an Access Policy Token](./sign-a-plugin.md#generate-an-access-policy-token) and [save it in your repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) as `GRAFANA_ACCESS_POLICY_TOKEN`.
 
@@ -183,7 +183,7 @@ If you encounter errors in the plugin validator or your plugin submission like t
 
 Follow the steps above to enable provenance attestation in your GitHub Actions workflow.
 
-## Generate changelogs automatically
+## Generate changelogs automatically 
 
 Maintaining a detailed changelog is essential for communicating updates to your users and is displayed prominently in the Grafana plugin details page. To simplify this process, our plugin build workflow supports automatic changelog generation.
 

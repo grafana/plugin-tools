@@ -1,7 +1,7 @@
 ---
 id: extensions-api-deprecated
 title: UI extensions API guide (deprecated elements)
-description: Reference guide for UI extensions - deprecated elements.
+description: Reference guide for UI extensions - deprecated elements. 
 keywords:
   - grafana
   - plugins
@@ -16,7 +16,7 @@ sidebar_position: 50
 These elements are deprecated and have been removed starting in Grafana v12.
 :::
 
-## `getPluginExtensions`
+## `getPluginExtensions` 
 
 :::warning
 This function has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](./ui-extensions.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions.md#useplugincomponents) hooks instead.
@@ -40,11 +40,11 @@ const { extensions } = getPluginExtensions({
 
 The `getPluginExtensions()` function takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| Property       | Description          | Required |
+| ---------------------- | --------------------------- | -------- |
 | **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
-| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                                     | false    |
-| **`limitPerPlugin?`**  | - The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                              | false    |
+| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                   | false    |
+| **`limitPerPlugin?`**  | - The maximum number of extensions to return per plugin. Default is no limit.       | false    |
 
 ### Return value
 
@@ -59,7 +59,8 @@ const {
 
 For more information, see [`PluginExtension`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L40).
 
-## `usePluginExtensions`
+
+## `usePluginExtensions` 
 
 :::warning
 This hook has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](./ui-extensions.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions.md#useplugincomponents) hooks instead.
@@ -83,11 +84,11 @@ const { extensions, isLoading } = usePluginExtensions({
 
 The `.usePluginExtensions()` method takes a single `options` object with the following properties:
 
-| Property               | Description                                                                                                                                                                                                                                                                                                                                | Required |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| Property               | Description        | Required |
+| ---------------------- |----------------------------------------- | -------- |
 | **`extensionPointId`** | A unique id to fetch link extensions for. In case you are implementing a new extension point, this is what plugins reference when registering extensions. **Plugins must prefix this with their plugin id, while core Grafana extensions points have to use a `"grafana/"` prefix.** <br /> _Example: `"grafana/dashboard/panel/menu/v1"`_ | true     |
-| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                                                                                                                                                                                                                     | false    |
-| **`limitPerPlugin?`**  | The maximum number of extensions to return per plugin. Default is no limit.                                                                                                                                                                                                                                                                | false    |
+| **`context?`**         | An arbitrary object that you would like to share with the extensions. This can be used to pass data to the extensions.                     | false    |
+| **`limitPerPlugin?`**  | The maximum number of extensions to return per plugin. Default is no limit.         | false    |
 
 ### Return value
 

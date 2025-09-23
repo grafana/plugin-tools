@@ -311,7 +311,7 @@ Be aware that `tokenAuth` configuration is only supported in data source plugins
 
 :::
 
-## Authenticate using a plugin backend
+## Authenticate using a plugin backend 
 
 While the data source proxy supports the most common authentication methods for HTTP APIs, using proxy routes has a few limitations:
 

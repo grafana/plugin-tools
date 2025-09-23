@@ -8,7 +8,7 @@ keywords:
   - plugin
   - create-plugin
   - getting started
-slug: /
+slug: /  
 ---
 
 import ScaffoldNPM from '@shared/createplugin-scaffold.md';
@@ -46,7 +46,7 @@ If this is your first time creating a plugin, we recommend that you familiarize 
 
 ## Signature classifications of Grafana plugins
 
-Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins.
+Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. 
 
 Note that if you want to publish a plugin associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [Grafana's plugins policy](https://grafana.com/legal/plugins/).
 

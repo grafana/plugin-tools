@@ -25,7 +25,7 @@ You don't need to sign a plugin during development or when submitting a plugin f
 
 Plugins can have different [signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) depending on their author, related technology, and intended use.
 
-A plugin can be either _public_ or _private_:
+A plugin can be either _public_ or _private_: 
 
 - Public plugins are signed as Community or Commercial. They're distributed within the [Grafana plugin catalog](https://grafana.com/plugins) and are available for others to install.
 - Private plugins are only available for use within your organization.

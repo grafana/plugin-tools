@@ -19,9 +19,9 @@ This guide provides instructions for configuring a plugin with a backend to enab
 
 The [Grafana configuration file](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/) allows you to configure profiling under the `[plugin.<plugin ID>]`.
 
-In this section of the file, specify:
+In this section of the file, specify: 
 
-- The `<plugin ID>`, a unique identifier, for the plugin you want to profile. For example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/).
+- The `<plugin ID>`, a unique identifier, for the plugin you want to profile. For example, [grafana-github-datasource](https://grafana.com/grafana/plugins/grafana-github-datasource/). 
 - The profiling configuration options, as detailed in sub-sections below.
 
 **Example configuration:**

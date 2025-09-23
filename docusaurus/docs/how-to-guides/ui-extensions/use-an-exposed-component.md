@@ -1,7 +1,7 @@
 ---
 id: use-an-exposed-component
 title: Use an exposed component
-sidebar_label: Use exposed components
+sidebar_label: Use exposed components 
 description: Reuse functionality from other plugins by using exposed components.
 keywords:
   - grafana

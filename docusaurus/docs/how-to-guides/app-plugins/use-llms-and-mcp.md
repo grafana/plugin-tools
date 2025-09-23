@@ -73,11 +73,11 @@ async function getLLMResponse(): Promise<string> {
     const messages: llm.Message[] = [
       {
         role: 'system',
-        content: 'You are an experienced, competent SRE with knowledge of PromQL, LogQL and Grafana.',
+        content: 'You are an experienced, competent SRE with knowledge of PromQL, LogQL and Grafana.'
       },
       {
         role: 'user',
-        content: 'What metric should I use to monitor CPU usage of a container?',
+        content: 'What metric should I use to monitor CPU usage of a container?'
       },
     ];
 
@@ -119,11 +119,11 @@ async function getStreamingLLMResponse(): Promise<Observable<string>> {
     const messages: llm.Message[] = [
       {
         role: 'system',
-        content: 'You are an experienced, competent SRE with knowledge of PromQL, LogQL and Grafana.',
+        content: 'You are an experienced, competent SRE with knowledge of PromQL, LogQL and Grafana.'
       },
       {
         role: 'user',
-        content: 'What metric should I use to monitor CPU usage of a container?',
+        content: 'What metric should I use to monitor CPU usage of a container?'
       },
     ];
 
@@ -150,7 +150,7 @@ async function getStreamingLLMResponse(): Promise<Observable<string>> {
       complete: () => {
         console.log('Stream complete');
         // Mark the response as complete in your UI
-      },
+      }
     });
 
     return accumulatedStream;
@@ -191,7 +191,7 @@ async function setupMCPClient(): Promise<InstanceType<typeof mcp.Client>> {
     // Use your actual plugin name and version for better debugging
     const mcpClient = new mcp.Client({
       name: 'my-monitoring-plugin', // Replace with your plugin name
-      version: '1.0.0', // Replace with your plugin version
+      version: '1.0.0',              // Replace with your plugin version
     });
 
     // Establish HTTP connection to Grafana's MCP server
@@ -226,12 +226,11 @@ async function useMCPWithLLM(): Promise<string> {
     const messages: llm.Message[] = [
       {
         role: 'system',
-        content:
-          'You are an experienced, competent SRE with knowledge of PromQL, LogQL and Grafana. Use the available tools to gather real-time information about the system before providing recommendations.',
+        content: 'You are an experienced, competent SRE with knowledge of PromQL, LogQL and Grafana. Use the available tools to gather real-time information about the system before providing recommendations.'
       },
       {
         role: 'user',
-        content: 'What alerts are currently firing in my system?',
+        content: 'What alerts are currently firing in my system?'
       },
     ];
 
@@ -239,7 +238,7 @@ async function useMCPWithLLM(): Promise<string> {
     const toolsResponse = await mcpClient.listTools();
     const tools = mcp.convertToolsToOpenAI(toolsResponse.tools);
 
-    console.log(`Available tools: ${tools.map((t) => t.function.name).join(', ')}`);
+    console.log(`Available tools: ${tools.map(t => t.function.name).join(', ')}`);
 
     // Send initial request with tools available
     let response = await llm.chatCompletions({
@@ -322,7 +321,10 @@ function App() {
             return <div>Error with MCP: {error.message}</div>;
           }
           return (
-            <mcp.MCPClientProvider appName="my-app" appVersion="1.0.0">
+            <mcp.MCPClientProvider
+              appName="my-app"
+              appVersion="1.0.0"
+            >
               <MyComponent />
             </mcp.MCPClientProvider>
           );
@@ -351,11 +353,7 @@ function MyComponent() {
   const { client, enabled } = mcp.useMCPClient();
 
   // Fetch available tools asynchronously with proper dependency tracking
-  const {
-    loading,
-    error,
-    value: toolsResponse,
-  } = useAsync(async () => {
+  const { loading, error, value: toolsResponse } = useAsync(async () => {
     if (!enabled || !client) {
       return null;
     }
@@ -394,7 +392,9 @@ function MyComponent() {
             {tools.map((tool, index) => (
               <li key={tool.name || index}>
                 <strong>{tool.name}</strong>
-                {tool.description && <>: {tool.description}</>}
+                {tool.description && (
+                  <>: {tool.description}</>
+                )}
               </li>
             ))}
           </ul>
@@ -416,13 +416,11 @@ The following debugging strategies help you identify and resolve common problems
 **Problem**: `llm.enabled()` returns `false` or throws an error.
 
 **Debug steps**:
-
 1. **Check plugin installation**: Navigate to **Administration** > **Plugins** and verify the Grafana LLM app is installed and enabled
 2. **Verify LLM configuration**: In the LLM app settings, ensure at least one LLM provider is configured with valid credentials
 3. **Test the connection**: Use the LLM app's built-in connection test to verify your provider setup
 
 **Code debugging**:
-
 ```typescript
 // Add detailed logging to understand the failure
 try {
@@ -442,7 +440,6 @@ try {
 ```
 
 **Common solutions**:
-
 - Restart the Grafana server after installing the LLM plugin
 - Check browser network tab for failed API requests to `/api/plugins/grafana-llm-app/`
 - Verify your plugin has the necessary capabilities in its `plugin.json`
@@ -452,13 +449,11 @@ try {
 **Problem**: MCP client connection fails or `mcp.enabled()` returns `false`.
 
 **Debug steps**:
-
 1. **Version check**: Ensure you're using Grafana LLM app version 0.22 or later
 2. **Network debugging**: Open browser DevTools and check for failed WebSocket or HTTP connections
 3. **Service status**: Verify the MCP server is running by checking the LLM app status page
 
 **Code debugging**:
-
 ```typescript
 // Add connection debugging
 async function debugMCPConnection() {
@@ -486,18 +481,18 @@ async function debugMCPConnection() {
     // Test basic functionality
     const capabilities = await client.getServerCapabilities();
     console.log('Server capabilities:', capabilities);
+
   } catch (error) {
     console.error('MCP connection failed:', {
       error: error.message,
       stack: error.stack,
-      url: mcp.streamableHTTPUrl(),
+      url: mcp.streamableHTTPUrl()
     });
   }
 }
 ```
 
 **Common solutions**:
-
 - Update the Grafana LLM app to the latest version
 - Check if proxy or firewall settings block WebSocket connections
 - Verify the MCP server URL is accessible from your browser
@@ -507,54 +502,47 @@ async function debugMCPConnection() {
 **Problem**: LLM attempts to call tools but the calls fail.
 
 **Debug steps**:
-
 1. **Validate tool availability**: List available tools before making calls
 2. **Check argument format**: Ensure tool arguments match the expected schema
 3. **Monitor tool execution**: Add logging around tool calls to identify failure points
 
 **Code debugging**:
-
 ```typescript
 // Add comprehensive tool call debugging
 async function debugToolCalls(mcpClient: mcp.Client) {
   try {
     // First, list available tools
     const toolsResponse = await mcpClient.listTools();
-    console.log(
-      'Available tools:',
-      toolsResponse.tools.map((t) => ({
-        name: t.name,
-        description: t.description,
-        inputSchema: t.inputSchema,
-      }))
-    );
+    console.log('Available tools:', toolsResponse.tools.map(t => ({
+      name: t.name,
+      description: t.description,
+      inputSchema: t.inputSchema
+    })));
 
     // Test a specific tool call
     const toolName = 'your-tool-name';
-    const args = {
-      /* your arguments */
-    };
+    const args = { /* your arguments */ };
 
     console.log(`Calling tool: ${toolName}`, args);
     const result = await mcpClient.callTool({
       name: toolName,
-      arguments: args,
+      arguments: args
     });
 
     console.log('Tool call result:', result);
+
   } catch (error) {
     console.error('Tool call debugging failed:', {
       error: error.message,
       toolName: toolName,
       arguments: args,
-      stack: error.stack,
+      stack: error.stack
     });
   }
 }
 ```
 
 **Common solutions**:
-
 - Validate tool arguments against the tool's input schema before calling
 - Handle tool call timeouts with appropriate retry logic
 - Check Grafana logs for detailed MCP server error messages
@@ -564,13 +552,11 @@ async function debugToolCalls(mcpClient: mcp.Client) {
 **Problem**: React components using MCP hooks throw errors.
 
 **Debug steps**:
-
 1. **Check provider hierarchy**: Ensure `MCPClientProvider` wraps all components using MCP hooks
 2. **Verify hook usage**: Confirm you're using hooks inside functional components
 3. **Add error boundaries**: Implement proper error handling in your component tree
 
 **Code debugging**:
-
 ```typescript
 // Debug React component issues
 function DebugMCPComponent() {
@@ -631,7 +617,6 @@ class MCPErrorBoundary extends React.Component {
 ```
 
 **Common solutions**:
-
 - Always wrap MCP components with both `MCPClientProvider` and error boundaries
 - Use conditional rendering to handle loading and error states
 - Add proper TypeScript types for better debugging support
@@ -640,7 +625,6 @@ class MCPErrorBoundary extends React.Component {
 ## Next steps
 
 After implementing LLM and MCP integration in your plugin, you have built functionality that can:
-
 - Make intelligent recommendations using LLMs
 - Stream responses for better user experience
 - Execute real actions through MCP tools

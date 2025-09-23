@@ -13,7 +13,7 @@ keywords:
 sidebar_position: 90
 ---
 
-When developing features using UI extensions in Grafana, consider scenarios where rendered content may or may not be available. This allows you to build a resilient UI that remains functional regardless of the availability or number of extensions, and ensures a seamless user experience.
+When developing features using UI extensions in Grafana, consider scenarios where rendered content may or may not be available. This allows you to build a resilient UI that remains functional regardless of the availability or number of extensions, and ensures a seamless user experience.  
 
 ## Content is not available to be rendered in my extension point
 
@@ -65,3 +65,6 @@ For example, you can restrict extensions by plugin ID:
 ```
 const allowedExtensions = extensions.filter(ext => allowedPluginIds.includes(ext.pluginId));
 ```
+
+
+

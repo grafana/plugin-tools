@@ -13,9 +13,9 @@ keywords:
 
 This guide shows you how to convert an existing frontend-only data source plugin into a [plugin with a backend component](../../key-concepts/backend-plugins).
 
-To convert the frontend data source plugin into a plugin with a backend:
+To convert the frontend data source plugin into a plugin with a backend: 
 
-1. Scaffold a new data source plugin with a backend using `npx @grafana/create-plugin@latest`.
+1. Scaffold a new data source plugin with a backend using `npx @grafana/create-plugin@latest`. 
 1. Use the following instructions to copy functionality from your original plugin into the newly created backend component.
 
 ## Why add a backend to your plugin?
@@ -24,7 +24,7 @@ There are multiple features available only if a plugin has a backend component, 
 
 ## Before you begin
 
-Before you dive into the details:
+Before you dive into the details: 
 
 - Familiarize yourself with the process of creating a data source plugin with a backend component. If you haven't done this before, you can follow our tutorial for [building a plugin with a backend component](../../tutorials/build-a-data-source-backend-plugin.md).
 

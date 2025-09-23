@@ -13,6 +13,6 @@ The [`plugin.json`](../reference/metadata.md) file is required for all plugins. 
 
 | property     | description                                                                                                                               |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `backend`    | Set to `true` for plugins with a backend component. This tells Grafana that it should start a binary when loading the plugin.             |
+| `backend`    | Set to `true` for plugins with a backend component. This tells Grafana that it should start a binary when loading the plugin.                              |
 | `executable` | This is the name of the executable that Grafana expects to start. Refer to [plugin.json reference](../reference/metadata.md) for details. |
 | `alerting`   | If your backend data source supports alerting, set to `true`. Requires `backend` to be set to `true`.                                     |

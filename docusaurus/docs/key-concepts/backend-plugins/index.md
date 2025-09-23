@@ -81,7 +81,7 @@ A plugin's health check endpoint is exposed in the Grafana HTTP API and allows e
 
 ### Collect metrics
 
-A plugin's backend can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go) to implement your plugin's backend, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box.
+A plugin's backend can collect and return runtime, process, and custom metrics using the text-based Prometheus [exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/). If you're using the [Grafana Plugin SDK for Go](./grafana-plugin-sdk-for-go) to implement your plugin's backend, then the [Prometheus instrumentation library for Go applications](https://github.com/prometheus/client_golang) is built-in. This SDK gives you Go runtime metrics and process metrics out of the box. 
 
 To add custom metrics to instrument your plugin's backend, refer to [Implement metrics in your plugin](../../how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins.md#implement-metrics-in-your-plugin).
 

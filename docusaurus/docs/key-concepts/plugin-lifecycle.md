@@ -48,7 +48,7 @@ The life cycle of plugins is tracked in-memory and is not persisted in Grafana�
 
 Grafana discovers which plugins are installed by scanning directories on the file system for every `plugin.json`.
 
-### Phase 2. Plugin loading
+### Phase 2. Plugin loading 
 
 All plugins that were discovered in the discovery phase are checked to make sure they’re valid. Some of the automated checks include:
 
@@ -79,7 +79,7 @@ When you interact with a UI that requires a plugin, Grafana will _lazy load_ the
 
 - For **panel plugins**, when you open a dashboard with panels (or interact with any UI that requires a plugin), Grafana lazy-loads the necessary plugin’s code through a fetch request. Each plugin is loaded only once but its objects are initialized multiple times.
 
-- **Data-source plugins** have multiple ways to load. For instance, if you select the data source in the dropdown selector in the Explore page or if you load a dashboard using it.
+- **Data-source plugins** have multiple ways to load. For instance, if you select the data source in the dropdown selector in the Explore page or if you load a dashboard using it.  
 
 - **App plugins** have two different loading modes: _lazy_ and _pre-load_. Lazy app plugins load only when you accesses the App menu item directly. Pre-load app plugins load with the Grafana app and can execute code as soon as the page loads.
 
