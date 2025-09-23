@@ -10,7 +10,7 @@ const sidebars: SidebarsConfig = {
       label: 'Get started',
     },
 
-    // Set up
+// Set up
     {
       type: 'category',
       label: 'Set up your environment',
@@ -22,7 +22,7 @@ const sidebars: SidebarsConfig = {
       items: ['set-up/set-up-docker', 'set-up/set-up-github'],
     },
 
-    // Concepts
+// Concepts
     {
       type: 'category',
       label: 'Key concepts',
@@ -55,7 +55,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Tutorials
+// Tutorials
     {
       type: 'category',
       label: 'Tutorials',
@@ -73,7 +73,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Data Source plugins
+// Data Source plugins  
     {
       type: 'category',
       label: 'Data source plugins',
@@ -81,7 +81,7 @@ const sidebars: SidebarsConfig = {
       link: {
         type: 'doc',
         id: 'how-to-guides/data-source-plugins/data-source-plugins',
-      },
+        },
       items: [
         'how-to-guides/data-source-plugins/add-support-for-annotation-queries',
         'how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins',
@@ -100,10 +100,10 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/fetch-data-from-frontend',
         'how-to-guides/data-source-plugins/include-dashboards',
         'how-to-guides/data-source-plugins/profile-backend-plugin',
-      ],
+        ],
     },
 
-    // App plugins
+// App plugins  
     {
       type: 'category',
       label: 'App plugins',
@@ -111,29 +111,29 @@ const sidebars: SidebarsConfig = {
       link: {
         type: 'doc',
         id: 'how-to-guides/app-plugins/app-plugins',
-      },
-      items: [
-        'how-to-guides/app-plugins/add-authentication-for-app-plugins',
-        'how-to-guides/app-plugins/add-backend-component',
-        'how-to-guides/app-plugins/add-resource-handler',
-        'how-to-guides/app-plugins/add-return-to-previous-functionality',
-        'how-to-guides/app-plugins/error-handling-in-app-plugins',
-        'how-to-guides/app-plugins/implement-rbac-in-app-plugins',
-        'how-to-guides/app-plugins/include-dashboards-in-app-plugins',
-        'how-to-guides/app-plugins/use-llms-and-mcp',
-        'how-to-guides/app-plugins/use-a-service-account',
-        'how-to-guides/app-plugins/work-with-nested-plugins',
-      ],
+        },
+        items: [
+          'how-to-guides/app-plugins/add-authentication-for-app-plugins',
+          'how-to-guides/app-plugins/add-backend-component',
+          'how-to-guides/app-plugins/add-resource-handler',
+          'how-to-guides/app-plugins/add-return-to-previous-functionality',
+          'how-to-guides/app-plugins/error-handling-in-app-plugins',
+          'how-to-guides/app-plugins/implement-rbac-in-app-plugins',
+          'how-to-guides/app-plugins/include-dashboards-in-app-plugins',
+          'how-to-guides/app-plugins/use-llms-and-mcp',
+          'how-to-guides/app-plugins/use-a-service-account',
+          'how-to-guides/app-plugins/work-with-nested-plugins',
+        ],
     },
 
-    // Panel plugins
+// Panel plugins      
     {
       type: 'category',
       label: 'Panel plugins',
       description: 'Guides for optimizing and adding capabilities to panel plugins.',
       link: {
-        type: 'doc',
-        id: 'how-to-guides/panel-plugins/panel-plugins',
+          type: 'doc',
+          id: 'how-to-guides/panel-plugins/panel-plugins',
       },
       items: [
         'how-to-guides/panel-plugins/add-datalinks-support',
@@ -146,7 +146,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Extensions
+// Extensions
     {
       type: 'category',
       label: 'UI extensions',
@@ -169,7 +169,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // How to
+// How to
     {
       type: 'category',
       label: 'How-to guides',
@@ -187,7 +187,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Test
+// Test 
     {
       type: 'category',
       label: 'E2E test a plugin',
@@ -238,7 +238,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Publish
+// Publish    
     {
       type: 'category',
       label: 'Publish a plugin',
@@ -256,7 +256,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Migration Guides
+// Migration Guides
     {
       type: 'category',
       label: 'Migration guides',
@@ -309,14 +309,14 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
-    // Troubleshooting
+// Troubleshooting
     {
       type: 'doc',
       id: 'troubleshooting',
       label: 'Troubleshooting',
     },
 
-    // Reference & Resources
+// Reference & Resources    
     {
       type: 'category',
       label: 'Reference',
