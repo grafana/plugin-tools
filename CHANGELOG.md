@@ -1,3 +1,18 @@
+# (Tue Sep 23 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.6`
+  - Chore: externalize i18next in rspack config [#2140](https://github.com/grafana/plugin-tools/pull/2140) ([@hugohaggmark](https://github.com/hugohaggmark))
+  - Update dependency @grafana/plugin-e2e to v2.1.13 [#2127](https://github.com/grafana/plugin-tools/pull/2127) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Thu Sep 18 2025)
 
 #### 🐛 Bug Fix
