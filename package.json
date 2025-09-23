@@ -49,7 +49,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
-    "lerna": "8.1.9",
+    "lerna": "9.0.0",
     "lint-staged": "^16.1.6",
     "prettier": "3.6.2",
     "publint": "^0.3.12",
