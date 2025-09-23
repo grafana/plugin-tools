@@ -40,14 +40,13 @@ export function generateCode() {
 
   generators.forEach((generator) => {
     try {
-      console.log('');
-      logInfo(`Generating code for`, generator.name);
+      logInfo(`generating code for`, generator.name);
       const code = generator.generate(pluginJson);
       fileWriter(generator.fileName, code);
       prettifier(generator.fileName);
-      logInfo(`Code generated and prettified for`, generator.name);
+      logInfo(`code generated and prettified for`, generator.name);
     } catch (error) {
-      logError(`Error generating code for ${generator.name}: ${error}`);
+      logError(`error generating code for ${generator.name}: ${error}`);
     }
   });
 }

@@ -1,11 +1,8 @@
-import { watch, FSWatcher } from 'node:fs';
+import { watch, FSWatcher, WatchEventType } from 'node:fs';
 import { getPluginJsonPath } from '../{{frontendBundler}}/utils';
 import { generateCode } from './main';
-import { colors } from './utils';
 
 let watcher: FSWatcher | null = null;
-const start = `${colors.green}============================================ <CodeGenPlugin> ============================================${colors.reset}`;
-const end = `${colors.green}============================================ </CodeGenPlugin> ============================================${colors.reset}`;
 /**
  * Watches the plugin.json file and regenerates TypeScript types when it changes
  */
@@ -17,22 +14,17 @@ export function watchPluginJson() {
 
   // Generate initial values
   try {
-    console.log(start);
     generateCode();
-    console.log('');
-    console.log(end);
     console.log('');
   } catch (error) {
     console.error('Failed to generate plugin types:', error);
   }
 
   // Start watching for changes
-  watcher = watch(pluginJsonPath, async (eventType) => {
+  watcher = watch(pluginJsonPath, async (eventType: WatchEventType) => {
     if (eventType === 'change') {
-      console.log(start);
-      generateCode();
       console.log('');
-      console.log(end);
+      generateCode();
       console.log('');
     }
   });

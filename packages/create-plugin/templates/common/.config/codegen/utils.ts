@@ -34,15 +34,15 @@ export const colors = {
 };
 
 export function logInfo(message: string, args: string) {
-  console.log(`codegen --> ${message}${colors.green} ${args}${colors.reset}`);
+  console.log(`${colors.green}[codegen]${colors.reset} ${message}${colors.green} ${args}${colors.reset}`);
 }
 
 export function logWarning(message: string) {
-  console.log(`codegen --> ${colors.yellow}${message}${colors.reset}`);
+  console.log(`${colors.green}[codegen]${colors.reset} ${colors.yellow}${message}${colors.reset}`);
 }
 
 export function logError(message: string) {
-  console.log(`codegen --> ${colors.red}${message}${colors.reset}`);
+  console.log(`${colors.green}[codegen]${colors.reset} ${colors.red}${message}${colors.reset}`);
 }
 
 export function getCodegenDirPath() {

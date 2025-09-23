@@ -26,19 +26,14 @@ export class CodeGenPlugin {
       stopWatchingPluginJson();
     });
 
-    // Generate code on initial build
+    // Generate code on build
     compiler.hooks.beforeRun.tapAsync(PLUGIN_NAME, async (_, callback) => {
-      console.log('=========== compiler.hooks.beforeRun ============');
       try {
         watchPluginJson();
         callback();
       } catch (error) {
         callback(error as Error);
       }
-    });
-
-    compiler.hooks.afterCompile.tapAsync(PLUGIN_NAME, async (_, callback) => {
-      callback();
     });
   }
 }

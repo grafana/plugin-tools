@@ -17,7 +17,7 @@ test.describe('navigating app', () => {
     await expect(page.getByText('ID: 123456')).toBeVisible();
   });
 
-  test('page four should render sucessfully', async ({ gotoPage, page }) => {
+  test('page four should render successfully', async ({ gotoPage, page }) => {
     // wait for page to successfully render
     await gotoPage(`/${PluginIncludeRelativePaths.PageOne}`);
     await expect(page.getByText('This is page one.')).toBeVisible();
