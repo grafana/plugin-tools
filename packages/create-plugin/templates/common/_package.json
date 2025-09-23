@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "scripts": {
     "build": "{{frontendBundler}} -c ./.config/{{frontendBundler}}/{{frontendBundler}}.config.ts --env production",
+    "build:codegen": "{{frontendBundler}} -c .config/{{frontendBundler}}/codegen/{{frontendBundler}}.codegen.ts",
     "dev": "{{frontendBundler}} -w -c ./.config/{{frontendBundler}}/{{frontendBundler}}.config.ts --env development",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
-    "pretypecheck": "npm run build",
+    "pretypecheck": "npm run build:codegen",
+    "pretest": "npm run build:codegen",
+    "pretest:ci": "npm run build:codegen",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix && prettier --write --list-different .",{{#if usePlaywright}}
     "e2e": "playwright test",{{/if}}{{#if useCypress}}
