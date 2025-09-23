@@ -16,7 +16,7 @@ import RspackLiveReloadPlugin from './liveReloadPlugin';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin';
 import { DIST_DIR, SOURCE_DIR } from './constants';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
-import { rspackExternals } from '../bundler/externals';
+import { externals } from '../bundler/externals';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
@@ -41,7 +41,7 @@ const config = async (env): Promise<Configuration> => {
 
     entry: await getEntries(),
 
-    externals: rspackExternals,
+    externals,
 
     // Support WebAssembly according to latest spec - makes WebAssembly module async
     experiments: {

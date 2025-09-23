@@ -1,7 +1,7 @@
-import type { Configuration } from 'webpack';
-import type { RspackOptions } from '@rspack/core';
+{{#unless useExperimentalRspack}}import type { Configuration, ExternalItemFunctionData } from 'webpack';{{/unless}}{{#if useExperimentalRspack}}
+import type { RspackOptions, ExternalItemFunctionData } from '@rspack/core';{{/if}}
 
-const externals = [
+export const externals: {{#unless useExperimentalRspack}}Configuration['externals']{{/unless}}{{#if useExperimentalRspack}}RspackOptions['externals']{{/if}} = [
   // Required for dynamic publicPath resolution
   { 'amd-module': 'module' },
   'lodash',
@@ -30,7 +30,7 @@ const externals = [
   'react-inlinesvg', {{/if }}
   
   // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
-  ({ request }, callback) => {
+  ({ request }: ExternalItemFunctionData, callback: (error?: Error, result?: string) => void) => {
     const prefix = 'grafana/';
     const hasPrefix = (request: string) => request.indexOf(prefix) === 0;
     const stripPrefix = (request: string) => request.substr(prefix.length);
@@ -42,6 +42,3 @@ const externals = [
     callback();
   },
 ];
-
-export const webpackExternals = externals as Configuration['externals'];
-export const rspackExternals = externals as RspackOptions['externals'];

@@ -19,7 +19,7 @@ import VirtualModulesPlugin from 'webpack-virtual-modules';
 import { BuildModeWebpackPlugin } from './BuildModeWebpackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from './constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils.ts';
-import { webpackExternals } from '../bundler/externals.ts';
+import { externals } from '../bundler/externals.ts';
 
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
@@ -56,7 +56,7 @@ const config = async (env: Env): Promise<Configuration> => {
 
     entry: await getEntries(),
 
-    externals: webpackExternals,
+    externals,
 
     // Support WebAssembly according to latest spec - makes WebAssembly module async
     experiments: {
