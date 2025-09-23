@@ -219,7 +219,7 @@ const config: Config = {
     oneTrust: {
       enabled: true,
       scriptSrc: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
-      domainId: '019644f3-5dcf-741c-8b6d-42fb8feae57f',
+      domainId: process.env.DEV_PORTAL_ONETRUST_DOMAIN_ID,
       analyticsGroupId: 'C0002', // OneTrust group ID for analytics consent
     },
   },

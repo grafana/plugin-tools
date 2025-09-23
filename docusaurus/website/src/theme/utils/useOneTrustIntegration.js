@@ -10,8 +10,7 @@ import {
  * Hook that manages OneTrust cookie consent integration.
  * Loads OneTrust script, tracks consent state, and handles consent changes.
  */
-export const useOneTrustIntegration = (oneTrustConfig, rudderStackConfig) => {
-  const [isOneTrustEnabled, setIsOneTrustEnabled] = useState(false);
+export const useOneTrustIntegration = (oneTrustConfig) => {
   const [hasAnalyticsConsent, setHasAnalyticsConsent] = useState(false);
 
   const isRegistered = useRef(false);
@@ -22,8 +21,6 @@ export const useOneTrustIntegration = (oneTrustConfig, rudderStackConfig) => {
 
   useEffect(() => {
     if (!oneTrustConfig.enabled) {
-      setIsOneTrustEnabled(false);
-
       const localConsent = localStorage.getItem('localStorageConsent') === 'true';
       setHasAnalyticsConsent(localConsent);
       return;
@@ -33,7 +30,6 @@ export const useOneTrustIntegration = (oneTrustConfig, rudderStackConfig) => {
       return;
     }
 
-    setIsOneTrustEnabled(true);
     isRegistered.current = true;
 
     const existingConsent = hasConsent();
@@ -47,10 +43,9 @@ export const useOneTrustIntegration = (oneTrustConfig, rudderStackConfig) => {
       removeAnalyticsConsentChange(handleConsentChange);
       isRegistered.current = false;
     };
-  }, [oneTrustConfig.enabled, handleConsentChange, oneTrustConfig]);
+  }, [handleConsentChange, oneTrustConfig]);
 
   return {
-    isOneTrustEnabled,
     hasAnalyticsConsent,
   };
 };

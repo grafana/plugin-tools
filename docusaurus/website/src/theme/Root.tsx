@@ -13,7 +13,9 @@ export default function Root({ children }) {
     siteConfig: { customFields },
   } = useDocusaurusContext();
 
-  const { isOneTrustEnabled, hasAnalyticsConsent } = useOneTrustIntegration(customFields.oneTrust);
+  const isOneTrustEnabled = customFields.oneTrust.enabled;
+
+  const { hasAnalyticsConsent } = useOneTrustIntegration(customFields.oneTrust);
 
   const rudderStackConfig = customFields.rudderStackTracking as RudderStackTrackingConfig;
   const faroConfig = customFields.faroConfig as FaroConfig;
@@ -46,11 +48,8 @@ export default function Root({ children }) {
     return setCookieAndStartTracking();
   };
 
-  useEffect(() => {
-    if (isOneTrustEnabled) {
-      return;
-    }
-
+  // Handles cookie consent logic when OneTrust is disabled
+  const handleOriginalCookieConsent = useCallback(() => {
     // If the user has already given consent, start tracking.
     if (getCookie(cookieName, 'analytics') === analyticsVersion) {
       return setCookieAndStartTracking();
@@ -70,7 +69,15 @@ export default function Root({ children }) {
         console.error(error);
         setShouldShow(true);
       });
-  }, [isOneTrustEnabled, setCookieAndStartTracking, canSpam]);
+  }, [setCookieAndStartTracking, canSpam]);
+
+  useEffect(() => {
+    if (isOneTrustEnabled) {
+      return;
+    }
+
+    handleOriginalCookieConsent();
+  }, [isOneTrustEnabled, handleOriginalCookieConsent]);
 
   useEffect(() => {
     const shouldTrack = isOneTrustEnabled
