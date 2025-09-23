@@ -19,7 +19,7 @@ import VirtualModulesPlugin from 'webpack-virtual-modules';
 import { BuildModeWebpackPlugin } from './BuildModeWebpackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from './constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils.ts';
-import { CodeGenPlugin } from './codegen/CodeGenPlugin';
+import { CodeGenPlugin } from '../codegen/CodeGenPlugin';
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 const pluginVersion = getPackageJson().version;

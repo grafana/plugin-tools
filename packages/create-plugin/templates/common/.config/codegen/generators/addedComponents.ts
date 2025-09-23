@@ -1,5 +1,5 @@
 import { CodeGenerator } from '../types';
-import { PluginSchema } from '../../../types/pluginSchema';
+import { PluginSchema } from '../../types/pluginSchema';
 import { FILE_HEADER_COMMENT, getVariableName } from '../utils';
 
 const usedNames = new Set<string>();

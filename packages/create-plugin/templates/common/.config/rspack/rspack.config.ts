@@ -16,6 +16,7 @@ import RspackLiveReloadPlugin from './liveReloadPlugin';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin';
 import { DIST_DIR, SOURCE_DIR } from './constants';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
+import { CodeGenPlugin } from '../codegen/CodeGenPlugin';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
@@ -186,6 +187,7 @@ const config = async (env): Promise<Configuration> => {
 
     plugins: [
       new BuildModeRspackPlugin(),
+      new CodeGenPlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new rspack.BannerPlugin({

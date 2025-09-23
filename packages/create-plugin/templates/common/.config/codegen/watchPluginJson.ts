@@ -1,5 +1,5 @@
 import { watch, FSWatcher } from 'node:fs';
-import { getPluginJsonPath } from '../utils';
+import { getPluginJsonPath } from '../{{frontendBundler}}/utils';
 import { generateCode } from './main';
 import { colors } from './utils';
 

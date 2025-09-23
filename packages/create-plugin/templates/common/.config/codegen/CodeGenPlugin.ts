@@ -1,6 +1,7 @@
 import type { Compiler } from 'webpack';
 import { watchPluginJson, stopWatchingPluginJson } from './watchPluginJson';
 
+const PLUGIN_NAME = 'CodeGenPlugin';
 /**
  * Webpack plugin that watches plugin.json and regenerates TypeScript code
  * during development.
@@ -10,7 +11,7 @@ export class CodeGenPlugin {
 
   apply(compiler: Compiler) {
     // Start watching when webpack enters watch mode
-    compiler.hooks.watchRun.tap('CodeGenPlugin', () => {
+    compiler.hooks.watchRun.tap(PLUGIN_NAME, () => {
       if (this.watching) {
         return;
       }
@@ -20,13 +21,13 @@ export class CodeGenPlugin {
     });
 
     // Stop watching when webpack exits
-    compiler.hooks.shutdown.tap('CodeGenPlugin', () => {
+    compiler.hooks.shutdown.tap(PLUGIN_NAME, () => {
       this.watching = false;
       stopWatchingPluginJson();
     });
 
     // Generate code on initial build
-    compiler.hooks.beforeRun.tapAsync('CodeGenPlugin', async (_, callback) => {
+    compiler.hooks.beforeRun.tapAsync(PLUGIN_NAME, async (_, callback) => {
       console.log('=========== compiler.hooks.beforeRun ============');
       try {
         watchPluginJson();
@@ -36,7 +37,7 @@ export class CodeGenPlugin {
       }
     });
 
-    compiler.hooks.afterCompile.tapAsync('CodeGenPlugin', async (_, callback) => {
+    compiler.hooks.afterCompile.tapAsync(PLUGIN_NAME, async (_, callback) => {
       callback();
     });
   }

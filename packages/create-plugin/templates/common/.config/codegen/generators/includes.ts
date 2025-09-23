@@ -1,7 +1,7 @@
 import { CodeGenerator } from '../types';
-import { Include, PluginSchema } from '../../../types/pluginSchema';
+import { Include, PluginSchema } from '../../types/pluginSchema';
 import { FILE_HEADER_COMMENT } from '../utils';
-import { CONFIG_DIR } from '../../constants';
+import { CONFIG_DIR } from '../../{{frontendBundler}}/constants';
 
 const ID_MACRO = '%PLUGIN_ID%';
 

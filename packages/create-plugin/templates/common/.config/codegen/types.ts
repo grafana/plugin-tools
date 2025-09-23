@@ -1,4 +1,4 @@
-import { PluginSchema } from '../../types/pluginSchema';
+import { PluginSchema } from '../types/pluginSchema';
 
 export interface CodeGenerator {
   name: string;

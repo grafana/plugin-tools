@@ -2,7 +2,7 @@ import fs from 'fs';
 import { execFile as nodeExecFile } from 'node:child_process';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import { CODEGEN_DIR, SOURCE_DIR } from '../constants';
+import { CODEGEN_DIR, SOURCE_DIR } from '../{{frontendBundler}}/constants';
 
 const execFile = promisify(nodeExecFile);
 
