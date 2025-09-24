@@ -51,6 +51,7 @@ const sidebars: SidebarsConfig = {
         'key-concepts/plugin-lifecycle',
         'key-concepts/data-frames',
         'key-concepts/npm-dependencies',
+        'key-concepts/updating-a-plugin',
         'key-concepts/plugin-i18n-concept',
       ],
     },
