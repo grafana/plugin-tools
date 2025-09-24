@@ -1,3 +1,16 @@
+# (Wed Sep 24 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.7`
+  - Chore: shares the externals config between bundlers [#2141](https://github.com/grafana/plugin-tools/pull/2141) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Tue Sep 23 2025)
 
 #### 🐛 Bug Fix
