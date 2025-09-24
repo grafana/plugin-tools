@@ -18,6 +18,9 @@
     "type": "git",
     "url": "http://github.com/grafana/eslint-config-grafana.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "index.js",
     "flat.js",

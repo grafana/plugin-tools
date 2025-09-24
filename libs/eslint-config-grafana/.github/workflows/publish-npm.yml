@@ -11,15 +11,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-      packages: write
     steps:
-      - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1 # zizmor: ignore[unpinned-uses] provided by grafana
-        with:
-          repo_secrets: |
-            NPM_TOKEN=npm_token:npm_token
-          export_env: false
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -46,7 +38,7 @@ jobs:
         if: steps.version_check.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version-file: .nvmrc
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
@@ -55,6 +47,4 @@ jobs:
 
       - name: Publish package to NPM
         if: steps.version_check.outputs.changed == 'true'
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NPM_TOKEN }}
+        run: npm publish
