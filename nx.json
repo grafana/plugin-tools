@@ -24,5 +24,8 @@
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
   "defaultBase": "main",
-  "nxCloudAccessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ="
+  "nxCloudAccessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ=",
+  "tui": {
+    "enabled": false
+  }
 }
