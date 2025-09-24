@@ -7,15 +7,22 @@ import { CookieConsent } from '../components/CookieConsent/CookieConsent';
 import { FaroConfig, RudderStackTrackingConfig, startTracking, trackPage } from './tracking';
 import { analyticsVersion, cookieName, getCookie, setCookie } from './tracking/cookie';
 
+type OneTrustConfig = {
+  enabled: boolean;
+  scriptSrc: string;
+  domainId: string;
+  analyticsGroupId: string;
+};
+
 export default function Root({ children }) {
   const location = useLocation();
   const {
     siteConfig: { customFields },
   } = useDocusaurusContext();
 
-  const isOneTrustEnabled = customFields.oneTrust.enabled;
+  const isOneTrustEnabled = (customFields.oneTrust as OneTrustConfig).enabled;
 
-  const { hasAnalyticsConsent } = useOneTrustIntegration(customFields.oneTrust);
+  const { hasAnalyticsConsent } = useOneTrustIntegration(customFields.oneTrust as OneTrustConfig);
 
   const rudderStackConfig = customFields.rudderStackTracking as RudderStackTrackingConfig;
   const faroConfig = customFields.faroConfig as FaroConfig;
