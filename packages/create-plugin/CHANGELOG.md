@@ -1,3 +1,56 @@
+# v5.26.8 (Thu Sep 25 2025)
+
+#### 🐛 Bug Fix
+
+- Update grafana dependencies to v12.2.0 [#2148](https://github.com/grafana/plugin-tools/pull/2148) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# v5.26.7 (Wed Sep 24 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: shares the externals config between bundlers [#2141](https://github.com/grafana/plugin-tools/pull/2141) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v5.26.6 (Tue Sep 23 2025)
+
+#### 🐛 Bug Fix
+
+- Chore: externalize i18next in rspack config [#2140](https://github.com/grafana/plugin-tools/pull/2140) ([@hugohaggmark](https://github.com/hugohaggmark))
+- Update dependency @grafana/plugin-e2e to v2.1.13 [#2127](https://github.com/grafana/plugin-tools/pull/2127) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v5.26.5 (Thu Sep 18 2025)
+
+#### 🐛 Bug Fix
+
+- Create plugin: fix docker compose migration error [#2126](https://github.com/grafana/plugin-tools/pull/2126) ([@jackw](https://github.com/jackw))
+- Update dependency @grafana/eslint-config to v8.2.0 [#1889](https://github.com/grafana/plugin-tools/pull/1889) ([@renovate[bot]](https://github.com/renovate[bot]) [@mckn](https://github.com/mckn))
+
+#### Authors: 3
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v5.26.4 (Fri Sep 12 2025)
 
 #### 🐛 Bug Fix

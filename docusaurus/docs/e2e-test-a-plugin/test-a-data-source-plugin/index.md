@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: How to test a data dource plugin
+title: How to test a data source plugin
 description: How to test a data source plugin.
 keywords:
   - grafana

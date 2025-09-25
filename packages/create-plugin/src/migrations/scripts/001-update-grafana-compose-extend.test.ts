@@ -262,6 +262,63 @@ describe('001-update-grafana-compose-extend', () => {
     });
   });
 
+  it('should remove child key-value pairs before parents', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './docker-compose.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: './.config',
+              args: {
+                grafana_version: '${GRAFANA_VERSION:-9.5.3}',
+              },
+            },
+            environment: {
+              GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
+              NODE_ENV: 'development',
+            },
+          },
+        },
+      })
+    );
+    context.addFile(
+      './.config/docker-compose-base.yaml',
+      stringify({
+        services: {
+          grafana: {
+            build: {
+              context: '.',
+              args: {
+                grafana_version: '${GRAFANA_VERSION:-11.5.3}',
+              },
+            },
+            environment: {
+              GF_INSTALL_PLUGINS: 'snuids-trafficlights-panel',
+              NODE_ENV: 'development',
+            },
+          },
+        },
+      })
+    );
+
+    await migrate(context);
+
+    const result = parse(context.getFile('./docker-compose.yaml') || '');
+    expect(result.services.grafana).toEqual({
+      extends: {
+        file: '.config/docker-compose-base.yaml',
+        service: 'grafana',
+      },
+      build: {
+        args: {
+          grafana_version: '${GRAFANA_VERSION:-9.5.3}',
+        },
+      },
+    });
+  });
+
   it('should preserve comments in the docker-compose file', async () => {
     const context = new Context('/virtual');
     const originalContent = `

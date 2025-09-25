@@ -24,8 +24,10 @@ export default async function migrate(context: Context) {
   if (buildContext?.toString() !== './.config') {
     return context;
   }
+  // List of key value pairs to remove from the compose file
+  const keyValuePairsToRemove: string[][] = [];
 
-  // Remove items that match the base configuration
+  // Visit key value pairs to find those that match the base configuration
   visit(composeData, {
     Pair: ((
       _key: unknown,
@@ -44,16 +46,24 @@ export default async function migrate(context: Context) {
         keyPath.push(pair.key.value as string);
       }
 
-      // If the current pair is in the base configuration, remove it
+      // We only care about the grafana service
       if (keyPath[0] === 'services' && keyPath[1] === 'grafana') {
         const baseValue = baseComposeData.getIn(keyPath);
 
+        // If the current pair matches the base value, add it to the list of items to remove
         if (baseValue && JSON.stringify(pair.value) === JSON.stringify(baseValue)) {
-          composeData.deleteIn(keyPath);
+          keyValuePairsToRemove.push(keyPath);
         }
       }
     }) as visitorFn<Pair<unknown, unknown>>,
   });
+
+  // Sort the key paths by length to remove children before parents
+  keyValuePairsToRemove.sort((a, b) => b.length - a.length);
+
+  for (const keyPath of keyValuePairsToRemove) {
+    composeData.deleteIn(keyPath);
+  }
 
   visit(composeData, {
     Scalar: ((_key: unknown, node: Scalar, path: ReadonlyArray<Node | Document | Pair<unknown, unknown>>) => {
