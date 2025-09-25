@@ -118,7 +118,7 @@ Add the translation script `i18n-extract` to `package.json`:
 
 ```json title="package.json"
   "scripts": {
-    "i18n-extract": "i18next --config src/locales/i18next-parser.config.js",
+    "i18n-extract": "i18next --config src/locales/i18next-parser.config.js"
   },
 ```
 

@@ -106,10 +106,8 @@ Change the `semver` package so we can toggle behavior depending on the runtime v
 
 ```shell npm2yarn
 npm uninstall semver
-```
-
-```shell npm2yarn
 npm install --save semver
+npm install --save-dev @types/semver
 ```
 
 ### Add `loadResources` file
