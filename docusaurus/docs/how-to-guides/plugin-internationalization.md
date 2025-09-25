@@ -67,9 +67,9 @@ myorg-myplugin-plugintype/
 
 Follow these steps to update your plugin and set it up for translation.
 
-### Enable translation in your Grafana instance (v12.1.0 only)
+### Enable translation in your Grafana instance (12.1.0 only)
 
-To translate your plugin you need to [enable the feature toggle](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) `localizationForPlugins` in your Grafana instance.
+To translate your plugin, you need to [enable the feature toggle](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) `localizationForPlugins` in your Grafana instance.
 
 To do so, update `docker-compose.yaml` in your plugin with the feature toggle `localizationForPlugins`:
 
