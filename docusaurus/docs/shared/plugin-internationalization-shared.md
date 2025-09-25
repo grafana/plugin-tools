@@ -1,6 +1,6 @@
 ## Determine the text to translate
 
-After you've configured your plugin for translation you can proceed to mark up the language strings you want to translate. Each translatable string is assigned a unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`.
+After you've configured your plugin for translation, you can proceed to mark up the language strings you want to translate. Each translatable string is assigned a unique key that ends up in each translation file under `locales/<locale>/<plugin id>.json`.
 The following example uses the `t` function:
 
 ```diff
@@ -118,7 +118,7 @@ Add the translation script `i18n-extract` to `package.json`:
 
 ```json title="package.json"
   "scripts": {
-    "i18n-extract": "i18next --config src/locales/i18next-parser.config.js",
+    "i18n-extract": "i18next --config src/locales/i18next-parser.config.js"
   },
 ```
 

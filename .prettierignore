@@ -3,3 +3,4 @@
 /packages/create-plugin/templates/**/*.*
 
 /.nx/cache
+/.nx/workspace-data

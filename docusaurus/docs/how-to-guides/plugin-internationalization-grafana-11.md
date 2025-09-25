@@ -39,7 +39,6 @@ If you create your plugin running the `create-plugin` scaffolding tool, enabling
 - `plugin.json`
 - `module.ts`
 - `loadResources.ts`
-- `eslint.config.mjs`
 - `package.json`
 
 By the end of the translation process you'll have a file structure like this:
@@ -57,7 +56,6 @@ myorg-myplugin-plugintype/
 │   └── plugin.json
 ├── tests/
 ├── docker-compose.yaml
-├── eslint.config.mjs
 └── package.json
 ```
 
@@ -102,21 +100,19 @@ Update your `create-plugin` configs to the latest version using the following co
 npx @grafana/create-plugin@latest update
 ```
 
-### Change `semver` to a regular dependency
+### Update `semver` to a regular dependency
 
-Change the `semver` package so we can toggle behavior depending on the runtime version of Grafana:
+Update the semver package to enable version-based behavior toggling:
 
 ```shell npm2yarn
 npm uninstall semver
-```
-
-```shell npm2yarn
 npm install --save semver
+npm install --save-dev @types/semver
 ```
 
 ### Add `loadResources` file
 
-To handle translation resource loading lets add `src/loadResources.ts`
+To handle translation resource loading let's add `src/loadResources.ts`
 
 ```ts title="src/loadResources.ts"
 import { LANGUAGES, ResourceLoader, Resources } from '@grafana/i18n';
