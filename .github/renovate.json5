@@ -5,7 +5,6 @@
   "ignoreDeps": [
     "react",
     "react-dom",
-    "@stylistic/eslint-plugin-ts",
     "lerna",
     "@grafana/scenes",
     "@libs/output",
@@ -107,7 +106,7 @@
         "!/@grafana/*/",
         "!@grafana/e2e-selectors"
       ],
-      
+
       "rangeStrategy": "bump"
     },
     // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
