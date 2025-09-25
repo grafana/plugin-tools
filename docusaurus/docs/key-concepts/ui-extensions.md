@@ -36,6 +36,72 @@ The UI extensions framework is built around these concepts:
 
 - **Plugin developer**: A developer working with the Grafana plugins ecosystem.
 
+## Expose APIs vs Add APIs
+
+Grafana’s **UI extensions** allow plugins to share and consume UI components, links, or functionality in a flexible way.  
+As a content producer, you can either **expose** your content to all consumers or **add** your content to a specific extension point.
+
+- **Expose APIs**: Used when an app plugin or Grafana wants to **broadcast** a component, function, or link so that any app plugin can consume it.
+- **Add APIs**: Used when an app plugin wants to **contribute** a component, function, or link to a **specific extension point** provided by Grafana or another app plugin.
+
+### Expose APIs
+
+Use **expose APIs** when you want to make something available **broadly**, without knowing in advance who will consume it.
+
+- **Producer perspective:** App plugins or Grafana publish (expose) a component, function, or link so that **any app plugin** can discover and consume it.
+- **Consumer perspective:** Only app plugins can consume exposed content. They know exactly which producer it comes from.
+
+:::tip  
+ Think of this as **broadcasting** content.
+:::
+
+**Example use cases:**
+
+- Exposing a workflow that opens a modal to declar an incident directly from plugins.
+- Exposing a rich component that other plugins may embed on a tab.
+
+#### Expose APIs flow
+
+![Expose APIs flow](./images/ui-extensions-expose-flow.svg)  
+_Producers (Grafana or app plugins) broadcast components or functions that any app plugin can consume._
+
+### Add APIs
+
+Use **add APIs** when you want to contribute something to a **specific place or extension point**.
+
+- **Producer perspective:** App plugins add components, links, or functions into a well-defined extension point.
+- **Consumer perspective:** Grafana or app plugins act as consumers by providing extension points that gather multiple contributions.
+
+:::note  
+ Think of this as **plugging into a defined slot**.
+:::
+
+**Example use cases:**
+
+- Adding a menu item into Grafana’s panel menu.
+- Adding a tab with content to a page in Grafana.
+
+#### Add APIs flow
+
+![Add APIs flow](./images/ui-extensions-add-flow.svg)  
+_Producers (app plugins) contribute to extension points owned by Grafana or other plugins. Multiple producers can add content, and the consumer decides how it is used._
+
+### Control and Awareness
+
+In both **Expose APIs** and **Add APIs**, the **consumer always controls placement and usage**.  
+The difference lies in how much the consumer knows about the producer and the content it receives:
+
+- **Expose APIs**
+  - Consumers know **which producer** the component or function comes from.
+  - They receive a **single component/function** to consume.
+  - Acts like a **direct contract** between one producer and one consumer.
+
+- **Add APIs**
+  - Consumers do **not know ahead of time** who the producers are.
+  - They receive a **list of multiple components/functions/links** from different producers.
+  - Only after receiving the list do they know which producers contributed.
+  - Acts like a **collection point** where multiple producers contribute to a single consumer-owned extension point.
+
 ## I want to render extension content
 
 As a content consumer, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
