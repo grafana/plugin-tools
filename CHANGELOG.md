@@ -1,3 +1,16 @@
+# (Thu Sep 25 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.8`
+  - Update grafana dependencies to v12.2.0 [#2148](https://github.com/grafana/plugin-tools/pull/2148) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # (Wed Sep 24 2025)
 
 #### 🐛 Bug Fix
