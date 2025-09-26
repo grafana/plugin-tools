@@ -48,7 +48,7 @@ As a content producer, you can either **expose** your content to all consumers o
 
 Use **expose APIs** when you want to make something available **broadly**, without knowing in advance who will consume it.
 
-- **Producer perspective:** App plugins or Grafana publish (expose) a component, function, or link so that **any app plugin** can discover and consume it.
+- **Producer perspective:** App plugins or Grafana expose a component, function, or link so that **any app plugin** can discover and consume it.
 - **Consumer perspective:** Only app plugins can consume exposed content. They know exactly which producer it comes from.
 
 :::tip  
