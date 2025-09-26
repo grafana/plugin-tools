@@ -216,6 +216,12 @@ const config: Config = {
       version: gitHash,
       environment: process.env.DEV_PORTAL_FARO_CONFIG_ENVIRONMENT,
     },
+    oneTrust: {
+      enabled: true,
+      scriptSrc: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
+      domainId: process.env.DEV_PORTAL_ONETRUST_DOMAIN_ID,
+      analyticsGroupId: 'C0002', // OneTrust group ID for analytics consent
+    },
   },
   scripts: [
     // adobe target
