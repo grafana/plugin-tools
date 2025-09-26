@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
-  "type": "datasource",
+  "type": "theme",
   "name": "{{ titleCase pluginName }}",
   "id": "{{ pluginId }}",
   "metrics": true,
