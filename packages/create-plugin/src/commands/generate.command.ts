@@ -31,8 +31,11 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
   // This is only possible when a user passes both flags via the command line.
-  if (answers.hasBackend && answers.pluginType === PLUGIN_TYPES.panel) {
-    output.warning({ title: `Backend ignored as incompatible with plugin type: ${PLUGIN_TYPES.panel}.` });
+  if (
+    (answers.hasBackend && answers.pluginType === PLUGIN_TYPES.panel) ||
+    (answers.hasBackend && answers.pluginType === PLUGIN_TYPES.theme)
+  ) {
+    output.warning({ title: `Backend ignored as incompatible with plugin type: ${answers.pluginType}.` });
   }
 
   const actions = getTemplateActions({ templateData, exportPath });
@@ -217,4 +220,5 @@ const provisioningMsg = {
   [PLUGIN_TYPES.datasource]: 'Set up provisioning for data source instance',
   [PLUGIN_TYPES.panel]: 'Set up provisioning for basic dashboard and TestData data source instance',
   [PLUGIN_TYPES.scenes]: 'Set up provisioning for app and TestData data source instance',
+  [PLUGIN_TYPES.theme]: 'Set up provisioning for theme',
 };

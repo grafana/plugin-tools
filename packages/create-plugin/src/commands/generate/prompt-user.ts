@@ -66,6 +66,10 @@ const prompts: Array<(answers: Partial<GenerateCliArgs>) => Prompt> = [
         message: 'App with Scenes (create dynamic dashboards in app pages)',
         value: PLUGIN_TYPES.scenes,
       },
+      {
+        message: 'Theme (customize the look and feel of Grafana)',
+        value: PLUGIN_TYPES.theme,
+      },
     ],
     message: 'Select a plugin type',
   }),
@@ -80,7 +84,7 @@ const prompts: Array<(answers: Partial<GenerateCliArgs>) => Prompt> = [
       type: 'confirm',
       message: message,
       initial: false,
-      shouldPrompt: (answers) => answers.pluginType !== PLUGIN_TYPES.panel,
+      shouldPrompt: (answers) => answers.pluginType !== PLUGIN_TYPES.panel && answers.pluginType !== PLUGIN_TYPES.theme,
     };
   },
   () => ({
