@@ -39,6 +39,7 @@ If you create your plugin running the `create-plugin` scaffolding tool, enabling
 - `plugin.json`
 - `module.ts`
 - `loadResources.ts`
+- `eslint.config.mjs`
 - `package.json`
 
 By the end of the translation process you'll have a file structure like this:
@@ -56,6 +57,7 @@ myorg-myplugin-plugintype/
 │   └── plugin.json
 ├── tests/
 ├── docker-compose.yaml
+├── eslint.config.mjs
 └── package.json
 ```
 
