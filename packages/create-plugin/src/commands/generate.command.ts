@@ -81,7 +81,7 @@ type TemplateAction = {
   data: TemplateData;
 };
 
-function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: any }) {
+function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: TemplateData }) {
   const commonActions = getActionsForTemplateFolder({
     folderPath: TEMPLATE_PATHS.common,
     exportPath,
@@ -169,7 +169,7 @@ function getActionsForTemplateFolder({
   }));
 }
 
-async function generateFiles({ actions }: { actions: any[] }) {
+async function generateFiles({ actions }: { actions: TemplateAction[] }) {
   const failures = [];
   for (const action of actions) {
     try {
