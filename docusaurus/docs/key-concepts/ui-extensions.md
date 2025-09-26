@@ -57,7 +57,7 @@ Use **expose APIs** when you want to make something available **broadly**, witho
 
 **Example use cases:**
 
-- Exposing a workflow that opens a modal to declar an incident directly from plugins.
+- Exposing a workflow that opens a modal to declare an incident directly from any plugin.
 - Exposing a rich component that other plugins may embed on a tab.
 
 #### Expose APIs flow
