@@ -1,3 +1,15 @@
+# v5.26.9 (Mon Sep 29 2025)
+
+#### 🐛 Bug Fix
+
+- Fix: Init i18n in scenes app template [#2166](https://github.com/grafana/plugin-tools/pull/2166) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v5.26.8 (Thu Sep 25 2025)
 
 #### 🐛 Bug Fix

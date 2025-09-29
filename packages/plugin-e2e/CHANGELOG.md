@@ -1,3 +1,15 @@
+# v2.1.14 (Mon Sep 29 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency uuid to v13 [#2139](https://github.com/grafana/plugin-tools/pull/2139) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v2.1.12 (Thu Sep 11 2025)
 
 #### 🐛 Bug Fix
