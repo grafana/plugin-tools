@@ -62,6 +62,10 @@ As each migration runs, its name and description are output to the terminal alon
 
 To make it even easier to keep your plugin up to date, we provide a github workflow that runs the update command and automatically opens a PR if there are any changes. You can follow [these steps](/set-up/set-up-github#the-create-plugin-update-workflow) to enable it in your repository.
 
+## Automate dependency updates
+
+Create plugin will only update dependencies if they are required for other changes to function correctly. Along side running the update command regularly, we recommend you use [dependabot](https://docs.github.com/en/code-security/getting-started/dependabot-quickstart-guide) or [renovatebot](https://docs.renovatebot.com/) to keep all dependencies up to date.
+
 ## Getting help
 
 If you experience issues, please [open a bug report](https://github.com/grafana/plugin-tools/issues/new?template=bug_report.yml).
