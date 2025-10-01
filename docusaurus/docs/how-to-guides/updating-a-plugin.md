@@ -14,7 +14,7 @@ import UpdateNPMForce from '@shared/createplugin-update-force.md';
 
 # Automate updating your plugin
 
-It's important for the health of your Grafana plugin to keep its tooling up to date. Doing so, however, can be a laborious task. To help solve this, `create-plugin` provides the `update` command to help you automate tooling update:
+It's important for the health of your Grafana plugin to keep its tooling up to date. Doing so, however, can be a laborious task. To help solve this, `create-plugin` provides the `update` command to help you automate tooling updates, including:
 
 - **configuration file changes** to take advantage of updates in Grafana, development tooling, and create-plugin
 - **dependency updates** to navigate major version bumps in development tooling
@@ -30,13 +30,13 @@ To update your plugin, run:
 
 <UpdateNPM />
 
-After the update is finished, run the various development and build scripts to validate your plugin environment is still operating as expected.
+After the update is finished, run your development and build scripts to validate your plugin environment is still operating as expected.
 
 ## Options and flags
 
 ### `--commit`
 
-The commit flag will, on each successful migration, commit the changes to the current branch. This is useful for debugging and reviewing changes made by the update command.
+The commit flag will commit the changes to the current branch on each successful migration. This is useful for debugging and reviewing changes made by the update command.
 
 <UpdateNPMCommit />
 
