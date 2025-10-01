@@ -22,7 +22,7 @@ It's important for the health of your Grafana plugin to keep its tooling up to d
 
 :::info[Git branch status]
 
-We strongly recommend creating a git branch before proceeding. Make sure the current branch has no uncommitted changes. Either stash or commit them first otherwise the update command will exit early.
+Create a git branch before proceeding. If there are uncommitted changes, stash or commit them first otherwise the update command will exit early.
 
 :::
 
@@ -56,7 +56,7 @@ When run, it:
 - Determines which migrations need to run to bring your plugin up to date
 - Runs each migration sequentially
 
-As each migration runs, its name and description are output to the terminal, along with a list of any files the migration has changed. If a migration updates any dependencies, it will also install and update any lock files. 
+As each migration runs, its name and description are output to the terminal, along with a list of any files the migration has changed. If a migration updates any dependencies, it will also install and update any lock files.
 
 If you pass the `--commit` flag, after each migration finishes it adds a Git commit to the current branch with the name of the migration.
 
@@ -66,7 +66,7 @@ To make it even easier to keep your plugin up to date, we provide a GitHub workf
 
 ## Automate dependency updates
 
-`create-plugin` will only update dependencies if they are required for other changes to function correctly.  Besides running the update command regularly, use [dependabot](https://docs.github.com/en/code-security/getting-started/dependabot-quickstart-guide) or [renovatebot](https://docs.renovatebot.com/) to keep all dependencies up to date.
+`create-plugin` will only update dependencies if they are required for other changes to function correctly. Besides running the update command regularly, use [dependabot](https://docs.github.com/en/code-security/getting-started/dependabot-quickstart-guide) or [renovatebot](https://docs.renovatebot.com/) to keep all dependencies up to date.
 
 ## Getting help
 
