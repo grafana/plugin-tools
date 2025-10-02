@@ -167,7 +167,7 @@ class MigrationDashboard extends HTMLElement {
           <div class="plugin-info">
             <h1>Plugin Update</h1>
             <div class="version-info">
-              <span id="current-version">v5.26.9</span> → 
+              <span id="current-version">v5.26.9</span> →
               <span id="target-version">v6.0.0</span>
             </div>
           </div>

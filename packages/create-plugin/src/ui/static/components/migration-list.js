@@ -136,7 +136,7 @@ class MigrationList extends HTMLElement {
     return this.migrations
       .map(
         (migration) => `
-      <migration-card 
+      <migration-card
         migration='${JSON.stringify(migration)}'
         migration-id="${migration.id}"
       ></migration-card>
