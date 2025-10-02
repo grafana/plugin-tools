@@ -53,7 +53,6 @@ export const DEFAULT_FEATURE_FLAGS = {
   bundleGrafanaUI: false,
   usePlaywright: true,
   useExperimentalRspack: false,
-  useExperimentalUpdates: true,
 };
 
 export const GRAFANA_FE_PACKAGES = [

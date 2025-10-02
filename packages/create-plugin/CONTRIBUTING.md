@@ -109,8 +109,6 @@ Note that certain files are intentionally named differently (e.g. npmrc, package
 
 ### Migrations
 
-> **Note:** Migrations are currently behind the `--experimental-updates` flag and are not enabled by default.
-
 Migrations are scripts that update a particular aspect of a project created with create-plugin. When users run `@grafana/create-plugin@latest update`, the command compares their project's version against the running package version and executes any necessary migrations to bring their project up to date.
 
 ```js
