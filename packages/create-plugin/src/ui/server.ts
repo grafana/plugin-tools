@@ -30,10 +30,16 @@ export class UIServer {
   private setupMiddleware() {
     this.app.use(cors());
     this.app.use(express.json());
+    // Serve static files from the static directory
     this.app.use(express.static(join(__dirname, 'static')));
   }
 
   private setupRoutes() {
+    // Serve the main HTML file for the root path
+    this.app.get('/', (req, res) => {
+      res.sendFile(join(__dirname, 'static', 'index.html'));
+    });
+
     // Health check endpoint
     this.app.get('/api/health', (req, res) => {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
