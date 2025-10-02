@@ -6,17 +6,26 @@ import { output } from '../utils/utils.console.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
 import { getPackageManagerExecCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { LEGACY_UPDATE_CUTOFF_VERSION } from '../constants.js';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, exec } from 'node:child_process';
 import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
+import { UIServer } from '../ui/server.js';
+import { promisify } from 'node:util';
+
+const execAsync = promisify(exec);
 
 export const update = async (argv: minimist.ParsedArgs) => {
+  // Check if UI mode is requested
+  if (argv.ui) {
+    return launchUI(argv);
+  }
+
   await performPreUpdateChecks(argv);
   const { version } = getConfig();
 
-  if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
-    preparePluginForMigrations(argv);
-  }
+  // if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
+  //   preparePluginForMigrations(argv);
+  // }
 
   try {
     if (gte(version, CURRENT_APP_VERSION)) {
@@ -142,5 +151,86 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs) {
       ],
     });
     process.exit(1);
+  }
+}
+
+async function launchUI(argv: minimist.ParsedArgs) {
+  try {
+    // Perform basic checks before launching UI
+    if (!(await isGitDirectory()) && !argv.force) {
+      output.error({
+        title: 'You are not inside a git directory',
+        body: [
+          `In order to proceed please run ${output.formatCode('git init')} in the root of your project and commit your changes.`,
+          `(This check is necessary to make sure that the updates are easy to revert and don't interfere with any changes you currently have.`,
+          `In case you want to proceed as is please use the ${output.formatCode('--force')} flag.)`,
+        ],
+      });
+      process.exit(1);
+    }
+
+    if (!isPluginDirectory() && !argv.force) {
+      output.error({
+        title: 'Are you inside a plugin directory?',
+        body: [
+          `We couldn't find a "src/plugin.json" file under your current directory.`,
+          `(Please make sure to run this command from the root of your plugin folder. In case you want to proceed as is please use the ${output.formatCode(
+            '--force'
+          )} flag.)`,
+        ],
+      });
+      process.exit(1);
+    }
+
+    // Start the UI server
+    const server = new UIServer();
+    await server.start();
+
+    // Open browser
+    await openBrowser(`http://localhost:${server.port}`);
+
+    // Handle graceful shutdown
+    process.on('SIGINT', () => {
+      output.log({
+        title: 'Shutting down UI server...',
+      });
+      server.stop();
+      process.exit(0);
+    });
+
+    // Keep the process alive
+    await new Promise(() => {});
+  } catch (error) {
+    output.error({
+      title: 'Failed to launch UI',
+      body: [error instanceof Error ? error.message : String(error)],
+    });
+    process.exit(1);
+  }
+}
+
+async function openBrowser(url: string) {
+  try {
+    const { platform } = process;
+    let command: string;
+
+    switch (platform) {
+      case 'darwin':
+        command = `open "${url}"`;
+        break;
+      case 'win32':
+        command = `start "${url}"`;
+        break;
+      default:
+        command = `xdg-open "${url}"`;
+    }
+
+    await execAsync(command);
+  } catch (error) {
+    // If we can't open the browser automatically, just show the URL
+    output.log({
+      title: 'Please open your browser and navigate to:',
+      body: [url],
+    });
   }
 }
