@@ -37,7 +37,8 @@ class UpdateApp {
   private migrations: MigrationInfo[] = [];
   private selectedMigrations = new Set<string>();
   private isExecuting = false;
-
+  private currentVersion = '';
+  private targetVersion = '';
   constructor() {
     this.init();
   }
@@ -46,10 +47,25 @@ class UpdateApp {
     try {
       await this.connectWebSocket();
       await this.loadMigrations();
+      await this.loadVersion();
       this.setupEventListeners();
     } catch (error) {
       console.error('Failed to initialize app:', error);
       this.showError('Failed to initialize the update interface');
+    }
+  }
+
+  private async loadVersion(): Promise<void> {
+    const response = await fetch('/api/version');
+    const data = (await response.json()) as { current_version: string; target_version: string };
+    this.currentVersion = data.current_version;
+    this.targetVersion = data.target_version;
+    const migrationDashboard = document.querySelector('migration-dashboard');
+    if (migrationDashboard) {
+      migrationDashboard.setAttribute('current-version', this.currentVersion);
+      migrationDashboard.setAttribute('target-version', this.targetVersion);
+    } else {
+      console.error('Migration dashboard element not found!');
     }
   }
 
@@ -91,46 +107,21 @@ class UpdateApp {
 
   private async loadMigrations(): Promise<void> {
     try {
-      console.log('Loading migrations...');
       const response = await fetch('/api/migrations');
       const data = (await response.json()) as { migrations: MigrationInfo[] };
-      console.log('Migration data received:', data);
       this.migrations = data.migrations || [];
-      console.log('Migrations array:', this.migrations);
 
-      // Wait for the migration list component to be ready
-      await this.waitForMigrationList();
+      const migrationDashboard = document.querySelector('migration-dashboard');
 
-      // Update the migration list component
-      const migrationList = document.querySelector('migration-list');
-      console.log('Migration list element:', migrationList);
-      if (migrationList) {
-        console.log('Setting migrations attribute...');
-        migrationList.setAttribute('migrations', JSON.stringify(this.migrations));
-        console.log('Migrations attribute set successfully');
+      if (migrationDashboard) {
+        migrationDashboard.setAttribute('migrations', JSON.stringify(this.migrations));
       } else {
-        console.error('Migration list element not found!');
+        console.error('Migration dashboard element not found!');
       }
     } catch (error) {
       console.error('Failed to load migrations:', error);
       this.showError('Failed to load migration information');
     }
-  }
-
-  private async waitForMigrationList(): Promise<void> {
-    return new Promise((resolve) => {
-      const checkForElement = () => {
-        const migrationList = document.querySelector('migration-list');
-        if (migrationList) {
-          console.log('Migration list element found!');
-          resolve();
-        } else {
-          console.log('Migration list element not found, waiting...');
-          setTimeout(checkForElement, 100);
-        }
-      };
-      checkForElement();
-    });
   }
 
   private setupEventListeners(): void {

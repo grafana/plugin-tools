@@ -21,10 +21,7 @@ class MigrationList extends HTMLElement {
 
   attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
     if (name === 'migrations' && newValue) {
-      console.log('MigrationList: migrations attribute changed');
-      console.log('MigrationList: newValue:', newValue);
       this.migrations = JSON.parse(newValue);
-      console.log('MigrationList: parsed migrations:', this.migrations);
       this.render();
     }
   }
@@ -139,10 +136,7 @@ class MigrationList extends HTMLElement {
   }
 
   private renderMigrations(): string {
-    console.log('MigrationList: renderMigrations called with migrations:', this.migrations);
-    console.log('MigrationList: migrations.length:', this.migrations.length);
     if (this.migrations.length === 0) {
-      console.log('MigrationList: showing empty state');
       return `
         <div class="empty-state">
           <h3>No migrations available</h3>

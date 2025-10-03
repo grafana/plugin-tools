@@ -21,6 +21,7 @@ export class UIServer {
   private clients: Set<any> = new Set();
   public port!: number;
   private host: string;
+  private version: string;
 
   constructor(config: UIServerConfig = {}) {
     this.app = express();
@@ -28,6 +29,7 @@ export class UIServer {
     this.setupMiddleware();
     this.setupRoutes();
     this.setupWebSocket();
+    this.version = getConfig().version;
   }
 
   private setupMiddleware() {
@@ -48,11 +50,14 @@ export class UIServer {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
     });
 
+    this.app.get('/api/version', (_req, res) => {
+      res.json({ target_version: CURRENT_APP_VERSION, current_version: this.version });
+    });
+
     // Migration endpoint - returns available migrations for the current plugin
     this.app.get('/api/migrations', async (_req, res) => {
       try {
-        const { version } = getConfig();
-        const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
+        const migrations = getMigrationsToRun(this.version, CURRENT_APP_VERSION);
 
         // Convert migrations to UI-friendly format
         const migrationList = Object.entries(migrations).map(([key, meta]) => ({
@@ -78,8 +83,7 @@ export class UIServer {
     this.app.post('/api/migrations/execute', async (req, res) => {
       try {
         const { migrations: selectedMigrations } = req.body;
-        const { version } = getConfig();
-        const allMigrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
+        const allMigrations = getMigrationsToRun(this.version, CURRENT_APP_VERSION);
 
         // Filter to only selected migrations
         const migrationsToRun = Object.fromEntries(
