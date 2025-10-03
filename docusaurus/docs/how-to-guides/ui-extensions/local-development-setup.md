@@ -37,7 +37,7 @@ Once the plugin is installed, you need to configure it. The best way to do this 
 
 :::note
 
-If you scaffolded your plugin with the [create-plugin tool](../../../get-started.md), the provisioning setup is already included in your project.
+If you scaffolded your plugin with the [create-plugin tool](../../../plugin-tools), the provisioning setup is already included in your project.
 
 :::
 
