@@ -13,9 +13,10 @@
   interface Props {
     migrations: MigrationInfo[];
     selectedMigrations?: string[];
+    onPreview?: (migrationId: string) => void;
   }
 
-  let { migrations, selectedMigrations = $bindable([]) }: Props = $props();
+  let { migrations, selectedMigrations = $bindable([]), onPreview }: Props = $props();
 
   // Update all selected state when migrations change
   let allSelected = $state(false);
@@ -91,8 +92,8 @@
         <MigrationCard
           {migration}
           selected={selectedMigrations.includes(migration.id)}
-          {selectedMigrations}
           onToggle={handleMigrationToggle}
+          {onPreview}
         />
       {/each}
     {/if}
