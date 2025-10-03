@@ -13,11 +13,10 @@
     selected?: boolean;
     status?: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
     error?: string | null;
-    selectedMigrations?: string[];
     onToggle?: (migrationId: string, selected: boolean) => void;
   }
 
-  let { migration, selected = false, status = 'pending', error = null, selectedMigrations = [], onToggle }: Props = $props();
+  let { migration, selected = false, status = 'pending', error = null, onToggle }: Props = $props();
 
   function toggleSelection() {
     if (status === 'running' || status === 'completed') {
