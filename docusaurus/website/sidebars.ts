@@ -166,6 +166,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/ui-extensions/versioning-extensions',
         'how-to-guides/ui-extensions/degregate-ui',
         'how-to-guides/ui-extensions/debug-logs',
+        'how-to-guides/ui-extensions/local-development-setup',
       ],
     },
 
