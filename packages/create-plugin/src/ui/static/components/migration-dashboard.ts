@@ -1,17 +1,29 @@
+interface MigrationInfo {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  dependencies: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+}
+
+type StatusType = 'ready' | 'executing';
+
 class MigrationDashboard extends HTMLElement {
+  private migrations: MigrationInfo[] = [];
+  private selectedMigrations = new Set<string>();
+  private isExecuting = false;
+
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.migrations = [];
-    this.selectedMigrations = new Set();
-    this.isExecuting = false;
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ['migrations', 'selected', 'executing'];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
     if (name === 'migrations' && newValue) {
       this.migrations = JSON.parse(newValue);
       this.render();
@@ -22,13 +34,13 @@ class MigrationDashboard extends HTMLElement {
     }
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render();
     this.setupEventListeners();
   }
 
-  render() {
-    this.shadowRoot.innerHTML = `
+  private render(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         :host {
           display: block;
@@ -217,30 +229,30 @@ class MigrationDashboard extends HTMLElement {
     `;
   }
 
-  setupEventListeners() {
-    const startButton = this.shadowRoot.querySelector('#start-update');
+  private setupEventListeners(): void {
+    const startButton = this.shadowRoot!.querySelector('#start-update') as HTMLButtonElement;
     startButton.addEventListener('click', () => {
       this.startExecution();
     });
 
     // Listen for migration selection changes
-    document.addEventListener('migration-selected', (event) => {
-      this.selectedMigrations.add(event.detail.migrationId);
+    document.addEventListener('migration-selected', (event: Event) => {
+      this.selectedMigrations.add((event as CustomEvent).detail.migrationId);
       this.updateSummary();
     });
 
-    document.addEventListener('migration-deselected', (event) => {
-      this.selectedMigrations.delete(event.detail.migrationId);
+    document.addEventListener('migration-deselected', (event: Event) => {
+      this.selectedMigrations.delete((event as CustomEvent).detail.migrationId);
       this.updateSummary();
     });
 
     // Listen for migration status changes
-    document.addEventListener('migration-status-changed', (event) => {
+    document.addEventListener('migration-status-changed', () => {
       this.updateSummary();
     });
   }
 
-  startExecution() {
+  private startExecution(): void {
     if (this.selectedMigrations.size === 0) {
       alert('Please select at least one migration to execute.');
       return;
@@ -259,34 +271,50 @@ class MigrationDashboard extends HTMLElement {
     );
   }
 
-  updateExecutionButton() {
-    const startButton = this.shadowRoot.querySelector('#start-update');
+  private updateExecutionButton(): void {
+    const startButton = this.shadowRoot!.querySelector('#start-update') as HTMLButtonElement;
     const hasSelection = this.selectedMigrations.size > 0;
 
     startButton.disabled = !hasSelection || this.isExecuting;
     startButton.textContent = this.isExecuting ? 'Executing...' : 'Start Update';
   }
 
-  updateStatus(text, type = 'ready') {
-    const statusText = this.shadowRoot.querySelector('#status-text');
-    const statusDot = this.shadowRoot.querySelector('#status-dot');
+  private updateStatus(text: string, type: StatusType = 'ready'): void {
+    const statusText = this.shadowRoot!.querySelector('#status-text') as HTMLElement;
+    const statusDot = this.shadowRoot!.querySelector('#status-dot') as HTMLElement;
 
     statusText.textContent = text;
     statusDot.className = `status-dot ${type}`;
   }
 
-  updateSummary() {
+  private updateSummary(): void {
     const total = this.migrations.length;
     const selected = this.selectedMigrations.size;
-    const executing = this.shadowRoot.querySelectorAll('migration-card[status="running"]').length;
-    const completed = this.shadowRoot.querySelectorAll('migration-card[status="completed"]').length;
-    const failed = this.shadowRoot.querySelectorAll('migration-card[status="failed"]').length;
+    const executing = this.shadowRoot!.querySelectorAll('migration-card[status="running"]').length;
+    const completed = this.shadowRoot!.querySelectorAll('migration-card[status="completed"]').length;
+    const failed = this.shadowRoot!.querySelectorAll('migration-card[status="failed"]').length;
 
-    this.shadowRoot.querySelector('#total-migrations').textContent = total;
-    this.shadowRoot.querySelector('#selected-migrations').textContent = selected;
-    this.shadowRoot.querySelector('#executing-migrations').textContent = executing;
-    this.shadowRoot.querySelector('#completed-migrations').textContent = completed;
-    this.shadowRoot.querySelector('#failed-migrations').textContent = failed;
+    const totalElement = this.shadowRoot!.querySelector('#total-migrations') as HTMLElement;
+    const selectedElement = this.shadowRoot!.querySelector('#selected-migrations') as HTMLElement;
+    const executingElement = this.shadowRoot!.querySelector('#executing-migrations') as HTMLElement;
+    const completedElement = this.shadowRoot!.querySelector('#completed-migrations') as HTMLElement;
+    const failedElement = this.shadowRoot!.querySelector('#failed-migrations') as HTMLElement;
+
+    if (totalElement) {
+      totalElement.textContent = total.toString();
+    }
+    if (selectedElement) {
+      selectedElement.textContent = selected.toString();
+    }
+    if (executingElement) {
+      executingElement.textContent = executing.toString();
+    }
+    if (completedElement) {
+      completedElement.textContent = completed.toString();
+    }
+    if (failedElement) {
+      failedElement.textContent = failed.toString();
+    }
   }
 }
 
