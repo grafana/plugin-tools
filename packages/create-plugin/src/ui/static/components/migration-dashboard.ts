@@ -13,24 +13,35 @@ class MigrationDashboard extends HTMLElement {
   private migrations: MigrationInfo[] = [];
   private selectedMigrations = new Set<string>();
   private isExecuting = false;
-
+  private currentVersion = '';
+  private targetVersion = '';
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
   }
 
   static get observedAttributes(): string[] {
-    return ['migrations', 'selected', 'executing'];
+    return ['migrations', 'selected', 'executing', 'current-version', 'target-version'];
   }
 
   attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
     if (name === 'migrations' && newValue) {
       this.migrations = JSON.parse(newValue);
       this.render();
+      // Pass migrations to the migration-list component
+      this.updateMigrationList();
     }
     if (name === 'executing') {
       this.isExecuting = newValue === 'true';
       this.updateExecutionButton();
+    }
+    if (name === 'current-version' && newValue) {
+      this.currentVersion = newValue;
+      this.updateVersionInfo();
+    }
+    if (name === 'target-version' && newValue) {
+      this.targetVersion = newValue;
+      this.updateVersionInfo();
     }
   }
 
@@ -179,8 +190,8 @@ class MigrationDashboard extends HTMLElement {
           <div class="plugin-info">
             <h1>Plugin Update</h1>
             <div class="version-info">
-              <span id="current-version">v5.26.9</span> →
-              <span id="target-version">v6.0.0</span>
+              <span id="current-version"></span> →
+              <span id="target-version"></span>
             </div>
           </div>
           <div class="actions">
@@ -285,6 +296,26 @@ class MigrationDashboard extends HTMLElement {
 
     statusText.textContent = text;
     statusDot.className = `status-dot ${type}`;
+  }
+
+  private updateMigrationList(): void {
+    const migrationList = this.shadowRoot!.querySelector('migration-list');
+    if (migrationList) {
+      migrationList.setAttribute('migrations', JSON.stringify(this.migrations));
+    } else {
+      console.error('MigrationDashboard: migration-list not found in shadow root');
+    }
+  }
+
+  private updateVersionInfo(): void {
+    const currentVersion = this.shadowRoot!.querySelector('#current-version') as HTMLElement;
+    const targetVersion = this.shadowRoot!.querySelector('#target-version') as HTMLElement;
+    if (currentVersion) {
+      currentVersion.textContent = this.currentVersion;
+    }
+    if (targetVersion) {
+      targetVersion.textContent = this.targetVersion;
+    }
   }
 
   private updateSummary(): void {
