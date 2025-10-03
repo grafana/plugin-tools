@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
   interface MigrationInfo {
     id: string;
     name: string;
@@ -10,24 +8,31 @@
     riskLevel: 'low' | 'medium' | 'high';
   }
 
-  export let migration: MigrationInfo;
-  export let selected: boolean = false;
-  export let status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped' = 'pending';
-  export let error: string | null = null;
+  interface Props {
+    migration: MigrationInfo;
+    selected?: boolean;
+    status?: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+    error?: string | null;
+    selectedMigrations?: string[];
+    onToggle?: (migrationId: string, selected: boolean) => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let { migration, selected = false, status = 'pending', error = null, selectedMigrations = [], onToggle }: Props = $props();
 
   function toggleSelection() {
     if (status === 'running' || status === 'completed') {
       return;
     }
 
-    selected = !selected;
-    dispatch('toggle', { migrationId: migration.id, selected });
+    const newSelected = !selected;
+    if (onToggle) {
+      onToggle(migration.id, newSelected);
+    }
   }
 
   function requestPreview() {
-    dispatch('preview', { migrationId: migration.id });
+    // TODO: Implement preview functionality
+    console.log('Preview requested for migration:', migration.id);
   }
 
   function getStatusText(): string {
@@ -69,14 +74,14 @@
         class="toggle-switch"
         class:active={selected}
         class:disabled={status === 'running' || status === 'completed'}
-        on:click={toggleSelection}
-        on:keydown={(e) => e.key === 'Enter' && toggleSelection()}
+        onclick={toggleSelection}
+        onkeydown={(e) => e.key === 'Enter' && toggleSelection()}
         role="button"
         tabindex="0"
       ></div>
       <button
         class="preview-btn"
-        on:click={requestPreview}
+        onclick={requestPreview}
       >
         Preview Changes
       </button>

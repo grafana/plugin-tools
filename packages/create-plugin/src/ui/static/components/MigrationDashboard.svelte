@@ -12,38 +12,34 @@
     riskLevel: 'low' | 'medium' | 'high';
   }
 
-  export let migrations: MigrationInfo[];
-
-  let selectedMigrations = new Set<string>();
-  let isExecuting = false;
-  let currentVersion = '5.26.9';
-  let targetVersion = '6.0.0';
-
-  function handleMigrationSelection(event: CustomEvent<{ migrationId: string; selected: boolean }>) {
-    const { migrationId, selected } = event.detail;
-    if (selected) {
-      selectedMigrations.add(migrationId);
-    } else {
-      selectedMigrations.delete(migrationId);
-    }
+  interface Props {
+    migrations: MigrationInfo[];
+    currentVersion: string;
+    targetVersion: string;
   }
 
+  let { migrations, currentVersion, targetVersion }: Props = $props();
+
+  let selectedMigrations = $state<string[]>([]);
+  let isExecuting = $state(false);
+
+
   function startExecution() {
-    if (selectedMigrations.size === 0) {
+    if (selectedMigrations.length === 0) {
       alert('Please select at least one migration to execute.');
       return;
     }
 
     isExecuting = true;
     // TODO: Implement execution logic
-    console.log('Starting execution for migrations:', Array.from(selectedMigrations));
+    console.log('Starting execution for migrations:', selectedMigrations);
   }
 
-  $: totalMigrations = migrations.length;
-  $: selectedCount = selectedMigrations.size;
-  $: executingCount = 0; // TODO: Track executing migrations
-  $: completedCount = 0; // TODO: Track completed migrations
-  $: failedCount = 0; // TODO: Track failed migrations
+  let totalMigrations = $derived(migrations.length);
+  let selectedCount = $derived(selectedMigrations.length);
+  let executingCount = $derived(0); // TODO: Track executing migrations
+  let completedCount = $derived(0); // TODO: Track completed migrations
+  let failedCount = $derived(0); // TODO: Track failed migrations
 </script>
 
 <div class="dashboard">
@@ -63,7 +59,7 @@
       <button
         class="btn btn-primary"
         disabled={selectedCount === 0 || isExecuting}
-        on:click={startExecution}
+        onclick={startExecution}
       >
         {isExecuting ? 'Executing...' : 'Start Update'}
       </button>
@@ -75,8 +71,6 @@
       <MigrationList
         {migrations}
         bind:selectedMigrations
-        on:migration-selected={handleMigrationSelection}
-        on:migration-deselected={handleMigrationSelection}
       />
     </div>
 

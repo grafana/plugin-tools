@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import MigrationCard from './MigrationCard.svelte';
 
   interface MigrationInfo {
@@ -11,50 +10,56 @@
     riskLevel: 'low' | 'medium' | 'high';
   }
 
-  export let migrations: MigrationInfo[];
-  export let selectedMigrations: Set<string> = new Set();
+  interface Props {
+    migrations: MigrationInfo[];
+    selectedMigrations?: string[];
+  }
 
-  const dispatch = createEventDispatcher();
+  let { migrations, selectedMigrations = $bindable([]) }: Props = $props();
 
-  let allSelected = false;
+  // Update all selected state when migrations change
+  let allSelected = $state(false);
+
+  // Derived value to check if all are selected
+  let allSelectedComputed = $derived(migrations.length > 0 && selectedMigrations.length === migrations.length);
 
   function toggleAllMigrations() {
+    console.log('toggleAllMigrations called, current allSelected:', allSelected);
     allSelected = !allSelected;
+    console.log('new allSelected:', allSelected);
 
     if (allSelected) {
+      console.log('Selecting all migrations');
       selectAllMigrations();
     } else {
+      console.log('Deselecting all migrations');
       deselectAllMigrations();
     }
   }
 
   function selectAllMigrations() {
     migrations.forEach((migration) => {
-      selectedMigrations.add(migration.id);
-      dispatch('migration-selected', { migrationId: migration.id, selected: true });
+      if (!selectedMigrations.includes(migration.id)) {
+        selectedMigrations = [...selectedMigrations, migration.id];
+      }
     });
   }
 
   function deselectAllMigrations() {
     migrations.forEach((migration) => {
-      selectedMigrations.delete(migration.id);
-      dispatch('migration-deselected', { migrationId: migration.id, selected: false });
+      selectedMigrations = selectedMigrations.filter((id) => id !== migration.id);
     });
   }
 
-  function handleMigrationToggle(event: CustomEvent<{ migrationId: string; selected: boolean }>) {
-    const { migrationId, selected } = event.detail;
-
+  function handleMigrationToggle(migrationId: string, selected: boolean) {
     if (selected) {
-      selectedMigrations.add(migrationId);
+      if (!selectedMigrations.includes(migrationId)) {
+        selectedMigrations = [...selectedMigrations, migrationId];
+      }
     } else {
-      selectedMigrations.delete(migrationId);
+      selectedMigrations = selectedMigrations.filter(id => id !== migrationId);
     }
-
   }
-
-  // Update all selected state when migrations change
-  $: allSelected = migrations.length > 0 && selectedMigrations.size === migrations.length;
 </script>
 
 <div class="migration-list">
@@ -65,9 +70,9 @@
         <span class="toggle-label">Select All</span>
         <div
           class="toggle-switch"
-          class:active={allSelected}
-          on:click={toggleAllMigrations}
-          on:keydown={(e) => e.key === 'Enter' && toggleAllMigrations()}
+          class:active={allSelectedComputed}
+          onclick={toggleAllMigrations}
+          onkeydown={(e) => e.key === 'Enter' && toggleAllMigrations()}
           role="button"
           tabindex="0"
         ></div>
@@ -85,8 +90,9 @@
       {#each migrations as migration (migration.id)}
         <MigrationCard
           {migration}
-          selected={selectedMigrations.has(migration.id)}
-          on:toggle={handleMigrationToggle}
+          selected={selectedMigrations.includes(migration.id)}
+          {selectedMigrations}
+          onToggle={handleMigrationToggle}
         />
       {/each}
     {/if}
