@@ -1,15 +1,48 @@
 // Main application logic
-class UpdateApp {
-  constructor() {
-    this.ws = null;
-    this.migrations = [];
-    this.selectedMigrations = new Set();
-    this.isExecuting = false;
+interface MigrationInfo {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  dependencies: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+}
 
+interface WebSocketMessage {
+  type: string;
+  data: {
+    migrationId?: string;
+    progress?: number;
+    error?: string;
+    success?: boolean;
+  };
+}
+
+interface MigrationPreview {
+  migrationId: string;
+  changes: Array<{
+    path: string;
+    type: 'added' | 'modified' | 'deleted';
+    diff?: string;
+  }>;
+  summary: {
+    added: number;
+    modified: number;
+    deleted: number;
+  };
+}
+
+class UpdateApp {
+  private ws: WebSocket | null = null;
+  private migrations: MigrationInfo[] = [];
+  private selectedMigrations = new Set<string>();
+  private isExecuting = false;
+
+  constructor() {
     this.init();
   }
 
-  async init() {
+  private async init(): Promise<void> {
     try {
       await this.connectWebSocket();
       await this.loadMigrations();
@@ -20,48 +53,63 @@ class UpdateApp {
     }
   }
 
-  async connectWebSocket() {
+  private async connectWebSocket(): Promise<void> {
     return new Promise((resolve, reject) => {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${protocol}//${window.location.host}`;
 
       this.ws = new WebSocket(wsUrl);
 
-      this.ws.onopen = () => {
-        console.log('WebSocket connected');
-        resolve();
-      };
+      if (this.ws) {
+        this.ws.onopen = () => {
+          console.log('WebSocket connected');
+          resolve();
+        };
 
-      this.ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        this.handleWebSocketMessage(message);
-      };
+        this.ws.onmessage = (event: MessageEvent) => {
+          const message: WebSocketMessage = JSON.parse(event.data);
+          this.handleWebSocketMessage(message);
+        };
 
-      this.ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        reject(error);
-      };
+        this.ws.onerror = (error: ErrorEvent) => {
+          console.error('WebSocket error:', error);
+          reject(error);
+        };
 
-      this.ws.onclose = () => {
-        console.log('WebSocket disconnected');
-        // Attempt to reconnect after 3 seconds
-        setTimeout(() => {
-          this.connectWebSocket().catch(console.error);
-        }, 3000);
-      };
+        this.ws.onclose = () => {
+          console.log('WebSocket disconnected');
+          // Attempt to reconnect after 3 seconds
+          setTimeout(() => {
+            this.connectWebSocket().catch(console.error);
+          }, 3000);
+        };
+      } else {
+        reject(new Error('Failed to create WebSocket'));
+      }
     });
   }
 
-  async loadMigrations() {
+  private async loadMigrations(): Promise<void> {
     try {
+      console.log('Loading migrations...');
       const response = await fetch('/api/migrations');
-      const data = await response.json();
+      const data = (await response.json()) as { migrations: MigrationInfo[] };
+      console.log('Migration data received:', data);
       this.migrations = data.migrations || [];
+      console.log('Migrations array:', this.migrations);
+
+      // Wait for the migration list component to be ready
+      await this.waitForMigrationList();
 
       // Update the migration list component
       const migrationList = document.querySelector('migration-list');
+      console.log('Migration list element:', migrationList);
       if (migrationList) {
+        console.log('Setting migrations attribute...');
         migrationList.setAttribute('migrations', JSON.stringify(this.migrations));
+        console.log('Migrations attribute set successfully');
+      } else {
+        console.error('Migration list element not found!');
       }
     } catch (error) {
       console.error('Failed to load migrations:', error);
@@ -69,37 +117,53 @@ class UpdateApp {
     }
   }
 
-  setupEventListeners() {
-    // Listen for custom events from web components
-    document.addEventListener('migration-selected', (event) => {
-      this.handleMigrationSelection(event.detail);
-    });
-
-    document.addEventListener('migration-deselected', (event) => {
-      this.handleMigrationDeselection(event.detail);
-    });
-
-    document.addEventListener('preview-requested', (event) => {
-      this.handlePreviewRequest(event.detail);
-    });
-
-    document.addEventListener('execution-started', (event) => {
-      this.handleExecutionStart(event.detail);
+  private async waitForMigrationList(): Promise<void> {
+    return new Promise((resolve) => {
+      const checkForElement = () => {
+        const migrationList = document.querySelector('migration-list');
+        if (migrationList) {
+          console.log('Migration list element found!');
+          resolve();
+        } else {
+          console.log('Migration list element not found, waiting...');
+          setTimeout(checkForElement, 100);
+        }
+      };
+      checkForElement();
     });
   }
 
-  handleMigrationSelection(migrationId) {
+  private setupEventListeners(): void {
+    // Listen for custom events from web components
+    document.addEventListener('migration-selected', (event: Event) => {
+      this.handleMigrationSelection((event as CustomEvent).detail);
+    });
+
+    document.addEventListener('migration-deselected', (event: Event) => {
+      this.handleMigrationDeselection((event as CustomEvent).detail);
+    });
+
+    document.addEventListener('preview-requested', (event: Event) => {
+      this.handlePreviewRequest((event as CustomEvent).detail);
+    });
+
+    document.addEventListener('execution-started', (event: Event) => {
+      this.handleExecutionStart((event as CustomEvent).detail);
+    });
+  }
+
+  private handleMigrationSelection(migrationId: string): void {
     this.selectedMigrations.add(migrationId);
     this.updateExecutionButton();
   }
 
-  handleMigrationDeselection(migrationId) {
+  private handleMigrationDeselection(migrationId: string): void {
     this.selectedMigrations.delete(migrationId);
     this.updateExecutionButton();
   }
 
-  updateExecutionButton() {
-    const startButton = document.querySelector('#start-update');
+  private updateExecutionButton(): void {
+    const startButton = document.querySelector('#start-update') as HTMLButtonElement;
     if (startButton) {
       const hasSelection = this.selectedMigrations.size > 0;
       startButton.disabled = !hasSelection || this.isExecuting;
@@ -107,10 +171,10 @@ class UpdateApp {
     }
   }
 
-  async handlePreviewRequest(migrationId) {
+  private async handlePreviewRequest(migrationId: string): Promise<void> {
     try {
       const response = await fetch(`/api/migrations/${migrationId}/preview`);
-      const preview = await response.json();
+      const preview = (await response.json()) as MigrationPreview;
 
       // Show preview modal
       const modal = document.createElement('preview-modal');
@@ -122,7 +186,7 @@ class UpdateApp {
     }
   }
 
-  async handleExecutionStart(selectedMigrations) {
+  private async handleExecutionStart(selectedMigrations: string[]): Promise<void> {
     if (this.isExecuting) {
       return;
     }
@@ -154,7 +218,7 @@ class UpdateApp {
     }
   }
 
-  handleWebSocketMessage(message) {
+  private handleWebSocketMessage(message: WebSocketMessage): void {
     switch (message.type) {
       case 'migration_started':
         this.handleMigrationStarted(message.data);
@@ -176,36 +240,38 @@ class UpdateApp {
     }
   }
 
-  handleMigrationStarted(data) {
+  private handleMigrationStarted(data: WebSocketMessage['data']): void {
     const migrationCard = document.querySelector(`migration-card[migration-id="${data.migrationId}"]`);
     if (migrationCard) {
       migrationCard.setAttribute('status', 'running');
     }
   }
 
-  handleMigrationProgress(data) {
+  private handleMigrationProgress(data: WebSocketMessage['data']): void {
     const progressTracker = document.querySelector('progress-tracker');
-    if (progressTracker) {
+    if (progressTracker && data.progress !== undefined) {
       progressTracker.setAttribute('progress', data.progress.toString());
     }
   }
 
-  handleMigrationCompleted(data) {
+  private handleMigrationCompleted(data: WebSocketMessage['data']): void {
     const migrationCard = document.querySelector(`migration-card[migration-id="${data.migrationId}"]`);
     if (migrationCard) {
       migrationCard.setAttribute('status', 'completed');
     }
   }
 
-  handleMigrationFailed(data) {
+  private handleMigrationFailed(data: WebSocketMessage['data']): void {
     const migrationCard = document.querySelector(`migration-card[migration-id="${data.migrationId}"]`);
     if (migrationCard) {
       migrationCard.setAttribute('status', 'failed');
-      migrationCard.setAttribute('error', data.error);
+      if (data.error) {
+        migrationCard.setAttribute('error', data.error);
+      }
     }
   }
 
-  handleExecutionCompleted(data) {
+  private handleExecutionCompleted(data: WebSocketMessage['data']): void {
     this.isExecuting = false;
     this.updateExecutionButton();
 
@@ -216,7 +282,7 @@ class UpdateApp {
     }
   }
 
-  showError(message) {
+  private showError(message: string): void {
     // Simple error display - could be enhanced with a proper notification system
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-notification';
@@ -234,11 +300,13 @@ class UpdateApp {
     document.body.appendChild(errorDiv);
 
     setTimeout(() => {
-      document.body.removeChild(errorDiv);
+      if (document.body.contains(errorDiv)) {
+        document.body.removeChild(errorDiv);
+      }
     }, 5000);
   }
 
-  showSuccess(message) {
+  private showSuccess(message: string): void {
     // Simple success display - could be enhanced with a proper notification system
     const successDiv = document.createElement('div');
     successDiv.className = 'success-notification';
@@ -256,7 +324,9 @@ class UpdateApp {
     document.body.appendChild(successDiv);
 
     setTimeout(() => {
-      document.body.removeChild(successDiv);
+      if (document.body.contains(successDiv)) {
+        document.body.removeChild(successDiv);
+      }
     }, 5000);
   }
 }

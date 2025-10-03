@@ -1,27 +1,40 @@
+interface MigrationInfo {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  dependencies: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+}
+
 class MigrationList extends HTMLElement {
+  private migrations: MigrationInfo[] = [];
+
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.migrations = [];
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ['migrations'];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
     if (name === 'migrations' && newValue) {
+      console.log('MigrationList: migrations attribute changed');
+      console.log('MigrationList: newValue:', newValue);
       this.migrations = JSON.parse(newValue);
+      console.log('MigrationList: parsed migrations:', this.migrations);
       this.render();
     }
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render();
   }
 
-  render() {
-    this.shadowRoot.innerHTML = `
+  private render(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         :host {
           display: block;
@@ -121,10 +134,15 @@ class MigrationList extends HTMLElement {
         </div>
       </div>
     `;
+
+    this.setupEventListeners();
   }
 
-  renderMigrations() {
+  private renderMigrations(): string {
+    console.log('MigrationList: renderMigrations called with migrations:', this.migrations);
+    console.log('MigrationList: migrations.length:', this.migrations.length);
     if (this.migrations.length === 0) {
+      console.log('MigrationList: showing empty state');
       return `
         <div class="empty-state">
           <h3>No migrations available</h3>
@@ -145,9 +163,9 @@ class MigrationList extends HTMLElement {
       .join('');
   }
 
-  setupEventListeners() {
-    const selectAllBtn = this.shadowRoot.querySelector('#select-all');
-    const deselectAllBtn = this.shadowRoot.querySelector('#deselect-all');
+  private setupEventListeners(): void {
+    const selectAllBtn = this.shadowRoot!.querySelector('#select-all') as HTMLButtonElement;
+    const deselectAllBtn = this.shadowRoot!.querySelector('#deselect-all') as HTMLButtonElement;
 
     selectAllBtn.addEventListener('click', () => {
       this.selectAllMigrations();
@@ -158,18 +176,18 @@ class MigrationList extends HTMLElement {
     });
   }
 
-  selectAllMigrations() {
+  private selectAllMigrations(): void {
     this.migrations.forEach((migration) => {
-      const migrationCard = this.shadowRoot.querySelector(`migration-card[migration-id="${migration.id}"]`);
+      const migrationCard = this.shadowRoot!.querySelector(`migration-card[migration-id="${migration.id}"]`);
       if (migrationCard) {
         migrationCard.setAttribute('selected', 'true');
       }
     });
   }
 
-  deselectAllMigrations() {
+  private deselectAllMigrations(): void {
     this.migrations.forEach((migration) => {
-      const migrationCard = this.shadowRoot.querySelector(`migration-card[migration-id="${migration.id}"]`);
+      const migrationCard = this.shadowRoot!.querySelector(`migration-card[migration-id="${migration.id}"]`);
       if (migrationCard) {
         migrationCard.setAttribute('selected', 'false');
       }
