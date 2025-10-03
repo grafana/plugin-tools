@@ -1,7 +1,7 @@
 ---
-id: plugin-internationalization
-title: Translate your plugin
-description: Translate your plugins
+id: plugin-internationalization-grafana-11
+title: Translate your plugin before Grafana 12.1.0
+description: Translate your plugin before Grafana 12.1.0
 keywords:
   - grafana
   - plugins
@@ -28,14 +28,8 @@ While this example is based on a panel plugin, the process is the same for data 
 ## Before you begin
 
 :::info
-Translation is available starting from Grafana 12.1.0. If you're using Grafana 11.0.0 and later follow the steps in [Translate your plugin before Grafana 12.1.0](plugin-internationalization-grafana-11.md). If you're using older versions of Grafana the plugin will not work.
+This is for plugins that need to support Grafana versions >= 11.0.0 and use translations. If your plugin only needs to support Grafana 12.1.0 and later, then follow the steps in [Translate your plugin](plugin-internationalization) instead. If you're using older versions of Grafana, the plugin will not work.
 :::
-
-The following is recommended:
-
-- Basic knowledge of Grafana plugin development
-- Basic understanding of the [`t` function](https://www.i18next.com/overview/api#t)
-- Basic understanding of the [`Trans` component](https://react.i18next.com/latest/trans-component)
 
 ## Overview of the files affected by translation
 
@@ -44,6 +38,7 @@ If you create your plugin running the `create-plugin` scaffolding tool, enabling
 - `docker-compose.yaml`
 - `plugin.json`
 - `module.ts`
+- `loadResources.ts`
 - `package.json`
 
 By the end of the translation process you'll have a file structure like this:
@@ -57,6 +52,7 @@ myorg-myplugin-plugintype/
 │   │  └── es-ES
 │   │     └── myorg-myplugin-plugintype.json
 │   ├── module.ts
+│   ├── loadResources.ts
 │   └── plugin.json
 ├── tests/
 ├── docker-compose.yaml
@@ -67,11 +63,9 @@ myorg-myplugin-plugintype/
 
 Follow these steps to update your plugin and set it up for translation.
 
-### Enable translation in your Grafana instance (12.1.0 only)
+### Make Grafana 11.0.0 your default image version
 
-To translate your plugin, you need to [enable the feature toggle](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/) `localizationForPlugins` in your Grafana instance.
-
-To do so, update `docker-compose.yaml` in your plugin with the feature toggle `localizationForPlugins`:
+To do so, update `docker-compose.yaml` in your plugin with the correct `grafana_version`:
 
 ```yaml title="docker-compose.yaml"
 services:
@@ -79,8 +73,9 @@ services:
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
-    environment:
-      GF_FEATURE_TOGGLES_ENABLE: localizationForPlugins
+    build:
+      args:
+        grafana_version: ${GRAFANA_VERSION:-11.0.0}
 ```
 
 ### Define the languages and Grafana dependencies
@@ -91,7 +86,7 @@ To do so, add the relevant `grafanaDependency` and `languages` you want to trans
 
 ```json title="plugin.json"
 "dependencies": {
-    "grafanaDependency": ">=12.1.0", // @grafana/i18n works from version 11.0.0 and higher
+    "grafanaDependency": ">=11.0.0",
     "plugins": []
   },
 "languages": ["en-US", "es-ES"] // the languages that the plugin supports
@@ -105,15 +100,57 @@ Update your `create-plugin` configs to the latest version using the following co
 npx @grafana/create-plugin@latest update
 ```
 
+### Update `semver` to a regular dependency
+
+Update the semver package to enable version-based behavior toggling:
+
+```shell npm2yarn
+npm uninstall semver
+npm install --save semver
+npm install --save-dev @types/semver
+```
+
+### Add `loadResources` file
+
+To handle translation resource loading let's add `src/loadResources.ts`
+
+```ts title="src/loadResources.ts"
+import { LANGUAGES, ResourceLoader, Resources } from '@grafana/i18n';
+import pluginJson from 'plugin.json';
+
+const resources = LANGUAGES.reduce<Record<string, () => Promise<{ default: Resources }>>>((acc, lang) => {
+  acc[lang.code] = async () => await import(`./locales/${lang.code}/${pluginJson.id}.json`);
+  return acc;
+}, {});
+
+export const loadResources: ResourceLoader = async (resolvedLanguage: string) => {
+  try {
+    const translation = await resources[resolvedLanguage]();
+    return translation.default;
+  } catch (error) {
+    // This makes sure that the plugin doesn't crash when the resolved language in Grafana isn't supported by the plugin
+    console.error(`The plugin '${pluginJson.id}' doesn't support the language '${resolvedLanguage}'`, error);
+    return {};
+  }
+};
+```
+
 ### Initialize translations in `module.ts`
 
-Add plugin translation to `module.ts`:
+Add plugin translation and loaders logic to `module.ts`:
 
 ```ts title="module.ts"
 import { initPluginTranslations } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
+import { config } from '@grafana/runtime';
+import semver from 'semver';
+import { loadResources } from 'loadResources';
 
-await initPluginTranslations(pluginJson.id);
+// Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
+// In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
+const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources] : [];
+
+await initPluginTranslations(pluginJson.id, loaders);
 ```
 
 <PluginInternationalizationShared />
