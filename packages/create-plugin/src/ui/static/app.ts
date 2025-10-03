@@ -87,7 +87,7 @@ class UpdateApp {
           this.handleWebSocketMessage(message);
         };
 
-        this.ws.onerror = (error: ErrorEvent) => {
+        this.ws.onerror = (error: Event) => {
           console.error('WebSocket error:', error);
           reject(error);
         };
@@ -162,8 +162,9 @@ class UpdateApp {
     }
   }
 
-  private async handlePreviewRequest(migrationId: string): Promise<void> {
+  private async handlePreviewRequest(migrationId: { migrationId: string }): Promise<void> {
     try {
+      console.log('handlePreviewRequest', migrationId);
       const response = await fetch(`/api/migrations/${migrationId}/preview`);
       const preview = (await response.json()) as MigrationPreview;
 
