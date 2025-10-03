@@ -1,8 +1,8 @@
 ---
 id: ui-extensions
-title: UI extensions
-sidebar_label: UI extensions key concepts
-description: Learn how to add links and trigger actions from the Grafana user interface by using UI Extensions in app plugins.
+title: Understanding UI Extensions
+sidebar_label: Key Concepts
+description: Learn the core concepts behind UI extensions in Grafana and how they enable plugins to interact with each other.
 keywords:
   - grafana
   - plugins
@@ -12,139 +12,99 @@ keywords:
   - app plugins
   - extension points
   - components
-  - content
 sidebar_position: 60
 ---
 
-Use UI extensions to contribute new actions and functionality to the core Grafana UI and other app plugins.
+UI extensions are a powerful feature that allows your app plugin to integrate seamlessly with the Grafana UI and with other plugins. They provide a structured way to contribute content (like links and React components) to specific areas of the Grafana interface, or to share reusable components with other plugins.
 
-## Understand the extensions ecosystem
+This guide covers the fundamental concepts of the UI extensions ecosystem.
 
-The UI extensions framework is built around these concepts:
+## The Core Idea: A Marketplace of UI Components
 
-- **Extension point**: A place in Grafana Core or in a plugin where content can be hooked into.
+Imagine a marketplace where plugins can either offer UI components or pick up and use components offered by others.
 
-- **Renderable content**: Functionality (link or component) made available to render in an extension point, or a component exposed to be used by another plugin.
+- **Providers**: App plugins that offer content (links, components, or functions) are called **content providers**.
+- **Consumers**: The parts of Grafana or other plugins that use this content are called **content consumers**.
+- **Extension Points**: The specific locations in the UI where content can be placed are called **extension points**. Think of them as designated shelves in the marketplace.
 
-- **Exposed component**: Component made available to other plugins with the `expose*` APIs. If exposed, a component is not tied to extension points.
+As a plugin developer, you can act as both a provider and a consumer.
 
-- **Registered content**: Links, components or functions made available with the `add*` APIs. If registered, content can be rendered in specific extension points.
+## Two Ways to Share: `add` vs. `expose`
 
-- **Content provider**: The app plugin providing the content (link or component) to be rendered at the extension point.
+There are two distinct methods for sharing content from your plugin:
 
-- **Content consumer**: The extension point using the renderable content.
+1.  **`add` (Registering):** You decide exactly where your content appears.
+2.  **`expose` (Exposing):** You offer a component for other plugins to use however they see fit.
 
-- **Plugin developer**: A developer working with the Grafana plugins ecosystem.
+Let's break down the differences.
 
-## Expose APIs vs Add APIs
+### `add`: Contributing to Extension Points
 
-Grafana’s **UI extensions** allow plugins to share and consume UI components, links, or functionality in a flexible way.  
-As a content producer, you can either **expose** your content to all consumers or **add** your content to a specific extension point.
+Use the `add` method when you want to place your content in a specific, predefined location. This is like renting a specific spot in the marketplace to display your goods.
 
-- **Expose APIs**: Used when an app plugin or Grafana wants to **broadcast** a component, function, or link so that any app plugin can consume it.
-- **Add APIs**: Used when an app plugin wants to **contribute** a component, function, or link to a **specific extension point** provided by Grafana or another app plugin.
+- **Your Role (Producer):** You create a link or a component and register it to a specific extension point, such as a panel menu or a navigation bar.
+- **The Host's Role (Consumer):** The owner of the extension point (Grafana or another plugin) receives all the registered content and decides how to display it. The consumer doesn't know in advance who will contribute content.
 
-### Expose APIs
+![Add APIs flow](./images/ui-extensions-add-flow.svg)
 
-Use **expose APIs** when you want to make something available **broadly**, without knowing in advance who will consume it.
+**When to use `add`:**
 
-- **Producer perspective:** App plugins or Grafana expose a component, function, or link so that **any app plugin** can discover and consume it.
-- **Consumer perspective:** Only app plugins can consume exposed content. They know exactly which producer it comes from.
+- Adding a menu item to the Grafana panel menu.
+- Adding a new tab to a page in Grafana.
+- Contributing a button to a dashboard toolbar.
 
-:::tip  
- Think of this as **broadcasting** content.
-:::
+This approach is best when you want to tightly integrate your plugin's functionality into the existing Grafana UI.
 
-**Example use cases:**
+### `expose`: Offering Reusable Components
 
-- Exposing a workflow that opens a modal to declare an incident directly from any plugin.
-- Exposing a rich component that other plugins may embed on a tab.
+Use the `expose` method when you want to provide a generic, reusable component that other plugins can incorporate into their own UI. This is like selling a building material (like bricks or windows) that others can use to construct their own things.
 
-#### Expose APIs flow
+- **Your Role (Producer):** You expose a component, making it available by a unique ID. You don't know who will use it or where it will be displayed.
+- **The User's Role (Consumer):** Another plugin developer can find your exposed component and choose to render it anywhere within their own plugin's interface.
 
-![Expose APIs flow](./images/ui-extensions-expose-flow.svg)  
-_Producers (Grafana or app plugins) broadcast components or functions that any app plugin can consume._
+![Expose APIs flow](./images/ui-extensions-expose-flow.svg)
 
-### Add APIs
+**When to use `expose`:**
 
-Use **add APIs** when you want to contribute something to a **specific place or extension point**.
+- Creating a unique data visualization that other datasource plugins could use.
+- Building a custom form field or input control for other plugins to use in their configuration pages.
+- Offering a complex UI widget, like an incident declaration modal, that can be triggered from anywhere.
 
-- **Producer perspective:** App plugins add components, links, or functions into a well-defined extension point.
-- **Consumer perspective:** Grafana or app plugins act as consumers by providing extension points that gather multiple contributions.
+This approach is ideal for creating a library of shared components and promoting reusability across the plugin ecosystem.
 
-:::note  
- Think of this as **plugging into a defined slot**.
-:::
+### Summary of Differences
 
-**Example use cases:**
+| Feature          | `add` (Registering)                                       | `expose` (Exposing)                                         |
+| :--------------- | :-------------------------------------------------------- | :---------------------------------------------------------- |
+| **Analogy**      | Placing an item on a specific shelf                       | Selling a building material                                 |
+| **Control**      | You (the producer) choose the location (extension point). | The consumer chooses the location.                          |
+| **Awareness**    | The consumer discovers producers at runtime.              | The consumer knows which producer it's using.               |
+| **Relationship** | One-to-many (one extension point, many contributors).     | One-to-one (one exposed component, one consumer at a time). |
+| **Use Case**     | Integrating into specific UI locations.                   | Providing a library of reusable components.                 |
 
-- Adding a menu item into Grafana’s panel menu.
-- Adding a tab with content to a page in Grafana.
+---
 
-#### Add APIs flow
+## How to Get Started
 
-![Add APIs flow](./images/ui-extensions-add-flow.svg)  
-_Producers (app plugins) contribute to extension points owned by Grafana or other plugins. Multiple producers can add content, and the consumer decides how it is used._
+Now that you understand the core concepts, here's how you can start working with UI extensions:
 
-### Control and Awareness
+### As a Content Provider (Sharing from your plugin)
 
-In both **Expose APIs** and **Add APIs**, the **consumer always controls placement and usage**.  
-The difference lies in how much the consumer knows about the producer and the content it receives:
+If you want to share links or components from your app plugin, you have two paths:
 
-- **Expose APIs**
-  - Consumers know **which producer** the component or function comes from.
-  - They receive a **single component/function** to consume.
-  - Acts like a **direct contract** between one producer and one consumer.
+- [**Register an Extension**](../how-to-guides/ui-extensions/register-an-extension.md): Learn how to `add` your content to a specific extension point.
+- [**Expose a Component**](../how-to-guides/ui-extensions/expose-a-component.md): Learn how to `expose` a reusable component for other plugins to use.
 
-- **Add APIs**
-  - Consumers do **not know ahead of time** who the producers are.
-  - They receive a **list of multiple components/functions/links** from different producers.
-  - Only after receiving the list do they know which producers contributed.
-  - Acts like a **collection point** where multiple producers contribute to a single consumer-owned extension point.
+### As a Content Consumer (Using extensions in your plugin)
 
-## I want to render extension content
+If you want to use content from other plugins, you can:
 
-As a content consumer, you can either use exposed components or render content (links or components) made available by content providers in an extension point.
+- [**Create an Extension Point**](../how-to-guides/ui-extensions/create-an-extension-point.md): Allow other plugins to `add` content into your plugin's UI.
+- [**Use an Exposed Component**](../how-to-guides/ui-extensions/use-an-exposed-component.md): Learn how to find and render an `exposed` component from another plugin.
 
-### Why add an extension point?
+## Further Reading
 
-Define extension points to add new capabilities:
-
-- An extension point allows other plugins to extend your UI with new functionality. You don't need any additional effort to provide functionality from other plugins in your UI.
-- Clean separation of concerns. Your application doesn't need to know anything about the plugin extending your UI.
-- Easy to bootstrap. If both apps are installed and enabled, then the extensions are automatically configured and displayed for your user. There is no need for either app to include custom logic to detect the presence of the other.
-
-### Where can I find extension points?
-
-![Panel menu showing available extensions](/img/ui-extension-example.gif)
-
-In the example above, the Grafana Core extension point `"grafana/dashboard/panel/menu"` is rendering links registered by plugins. [Check out all available extension points in Grafana Core.](../reference/ui-extensions-reference/extension-points.md)
-
-### Next steps
-
-- [Learn how to create an extension point](../how-to-guides/ui-extensions/create-an-extension-point.md)
-- [Learn how to use exposed components](../how-to-guides/ui-extensions/use-an-exposed-component.md)
-- [Avoid UI issues when working with extension points](../how-to-guides/ui-extensions/degregate-ui.md)
-
-## I want to share content from my app plugin
-
-If you’re a plugin developer and want other plugins or Grafana Core to render links or components from your app plugin, you need to either register or expose your content first.
-
-### Use cases
-
-You can make your content available to extension points in situations such as:
-
-- You want to show a link in a specific place in Grafana Core
-- You want another plugin to link to a specific page in your App
-- You want another plugin to show a widget from your app in their page
-
-### Next steps
-
-- [Learn how to register an extension to an extension point](../how-to-guides/ui-extensions/register-an-extension.md)
-- [Learn how to expose components from a plugin so other plugins can import them](../how-to-guides/ui-extensions/expose-a-component.md)
-
-## Further reading
-
-- [Learn how to version exposed components and extension points](../how-to-guides/ui-extensions/versioning-extensions.md)
-- [Check the API reference guide](../reference/ui-extensions-reference/ui-extensions.md)
-- If you need to debug your extension see [Use logs to debug your extension](../how-to-guides/ui-extensions/debug-logs.md)
+- [**Available Extension Points**](../reference/ui-extensions-reference/extension-points.md): See a list of all the extension points available in Grafana Core.
+- [**Versioning Extensions**](../how-to-guides/ui-extensions/versioning-extensions.md): Best practices for versioning your exposed components and extension points.
+- [**Debugging Extensions**](../how-to-guides/ui-extensions/debug-logs.md): Learn how to use logs to troubleshoot your extensions.
+- [**API Reference**](../reference/ui-extensions-reference/ui-extensions.md): A detailed look at the UI extensions API.
