@@ -1,10 +1,20 @@
 <script lang="ts">
   interface Props {
-    progress?: number;
-    isVisible?: boolean;
+    totalMigrations?: number;
+    executingCount?: number;
+    completedCount?: number;
+    failedCount?: number;
   }
 
-  let { progress = 0, isVisible = false }: Props = $props();
+  let { 
+    totalMigrations = 0, 
+    executingCount = 0, 
+    completedCount = 0, 
+    failedCount = 0 
+  }: Props = $props();
+
+  let progress = $derived(totalMigrations > 0 ? ((completedCount + failedCount) / totalMigrations) * 100 : 0);
+  let isVisible = $derived(executingCount > 0 || completedCount > 0 || failedCount > 0);
 </script>
 
 {#if isVisible}
