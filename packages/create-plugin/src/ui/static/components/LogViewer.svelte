@@ -1,20 +1,21 @@
 <script lang="ts">
   interface Props {
-    logs?: string[];
-    isVisible?: boolean;
+    executionLogs?: string[];
   }
 
-  let { logs = [], isVisible = false }: Props = $props();
+  let { executionLogs = [] }: Props = $props();
+
+  let isVisible = $derived(executionLogs.length > 0);
 </script>
 
 {#if isVisible}
   <div class="log-viewer">
     <div class="log-header">
       <h3>Execution Log</h3>
-      <button class="clear-btn" onclick={() => logs = []}>Clear</button>
+      <button class="clear-btn" onclick={() => executionLogs = []}>Clear</button>
     </div>
     <div class="log-content">
-      {#each logs as log (log)}
+      {#each executionLogs as log (log)}
         <div class="log-entry">{log}</div>
       {/each}
     </div>

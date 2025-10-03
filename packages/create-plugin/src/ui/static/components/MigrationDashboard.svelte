@@ -26,16 +26,57 @@
   let isPreviewModalOpen = $state(false);
   let previewData = $state<any>(null);
   let currentMigrationName = $state('');
+  
+  // Migration execution tracking
+  let executingMigrations = $state<string[]>([]);
+  let completedMigrations = $state<string[]>([]);
+  let failedMigrations = $state<string[]>([]);
+  let executionLogs = $state<string[]>([]);
 
-  function startExecution() {
+  async function startExecution() {
     if (selectedMigrations.length === 0) {
       alert('Please select at least one migration to execute.');
       return;
     }
 
     isExecuting = true;
-    // TODO: Implement execution logic
-    console.log('Starting execution for migrations:', selectedMigrations);
+    executingMigrations = [...selectedMigrations];
+    completedMigrations = [];
+    failedMigrations = [];
+    executionLogs = [`Starting execution of ${selectedMigrations.length} migration(s)...`];
+
+    try {
+      const response = await fetch('/api/migrations/execute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          migrations: selectedMigrations
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Mark all as completed
+        completedMigrations = [...executingMigrations];
+        executingMigrations = [];
+        executionLogs = [...executionLogs, 'All migrations completed successfully!'];
+      } else {
+        // Mark as failed
+        failedMigrations = [...executingMigrations];
+        executingMigrations = [];
+        executionLogs = [...executionLogs, `Migration execution failed: ${result.error || 'Unknown error'}`];
+      }
+    } catch (error) {
+      // Mark as failed
+      failedMigrations = [...executingMigrations];
+      executingMigrations = [];
+      executionLogs = [...executionLogs, `Migration execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`];
+    } finally {
+      isExecuting = false;
+    }
   }
 
   async function handlePreview(migrationId: string) {
@@ -67,9 +108,9 @@
 
   let totalMigrations = $derived(migrations.length);
   let selectedCount = $derived(selectedMigrations.length);
-  let executingCount = $derived(0); // TODO: Track executing migrations
-  let completedCount = $derived(0); // TODO: Track completed migrations
-  let failedCount = $derived(0); // TODO: Track failed migrations
+  let executingCount = $derived(executingMigrations.length);
+  let completedCount = $derived(completedMigrations.length);
+  let failedCount = $derived(failedMigrations.length);
 </script>
 
 <div class="dashboard">
@@ -94,7 +135,14 @@
 
   <div class="content">
     <div class="main-content">
-      <MigrationList {migrations} bind:selectedMigrations onPreview={handlePreview} />
+      <MigrationList 
+        {migrations} 
+        bind:selectedMigrations 
+        onPreview={handlePreview}
+        {executingMigrations}
+        {completedMigrations}
+        {failedMigrations}
+      />
     </div>
 
     <div class="sidebar">
@@ -124,8 +172,13 @@
         </div>
       </div>
 
-      <ProgressTracker />
-      <LogViewer />
+      <ProgressTracker 
+        {totalMigrations}
+        {executingCount}
+        {completedCount}
+        {failedCount}
+      />
+      <LogViewer {executionLogs} />
     </div>
   </div>
 

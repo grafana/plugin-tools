@@ -14,9 +14,19 @@
     migrations: MigrationInfo[];
     selectedMigrations?: string[];
     onPreview?: (migrationId: string) => void;
+    executingMigrations?: string[];
+    completedMigrations?: string[];
+    failedMigrations?: string[];
   }
 
-  let { migrations, selectedMigrations = $bindable([]), onPreview }: Props = $props();
+  let { 
+    migrations, 
+    selectedMigrations = $bindable([]), 
+    onPreview,
+    executingMigrations = [],
+    completedMigrations = [],
+    failedMigrations = []
+  }: Props = $props();
 
   // Update all selected state when migrations change
   let allSelected = $state(false);
@@ -61,6 +71,18 @@
       selectedMigrations = selectedMigrations.filter(id => id !== migrationId);
     }
   }
+
+  function getMigrationStatus(migrationId: string): 'pending' | 'running' | 'completed' | 'failed' | 'skipped' {
+    if (executingMigrations.includes(migrationId)) {
+      return 'running';
+    } else if (completedMigrations.includes(migrationId)) {
+      return 'completed';
+    } else if (failedMigrations.includes(migrationId)) {
+      return 'failed';
+    } else {
+      return 'pending';
+    }
+  }
 </script>
 
 <div class="migration-list">
@@ -92,6 +114,7 @@
         <MigrationCard
           {migration}
           selected={selectedMigrations.includes(migration.id)}
+          status={getMigrationStatus(migration.id)}
           onToggle={handleMigrationToggle}
           {onPreview}
         />
