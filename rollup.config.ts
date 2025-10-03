@@ -11,6 +11,7 @@ import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
 import { rollupPluginHTML as html } from '@web/rollup-plugin-html';
+import css from 'rollup-plugin-import-css';
 
 const projectRoot = process.cwd();
 const tsconfigPath = join(projectRoot, 'tsconfig.json');
@@ -110,6 +111,9 @@ if (pkg.name === '@grafana/create-plugin') {
     },
     plugins: [
       html(),
+      css({
+        modules: true,
+      }),
       esbuild({
         target: 'es2020',
         tsconfig: tsconfigPath,
