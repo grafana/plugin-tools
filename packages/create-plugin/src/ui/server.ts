@@ -7,6 +7,9 @@ import { dirname, join } from 'path';
 import getPort from 'get-port';
 import { output } from '../utils/utils.console.js';
 import { UIServerConfig, WebSocketMessage } from './types.js';
+import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+import { getConfig } from '../utils/utils.config.js';
+import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,9 +17,9 @@ const __dirname = dirname(__filename);
 export class UIServer {
   private app: express.Application;
   private server: any;
-  private wss: WebSocketServer;
+  private wss!: WebSocketServer;
   private clients: Set<any> = new Set();
-  private port: number;
+  public port!: number;
   private host: string;
 
   constructor(config: UIServerConfig = {}) {
@@ -36,18 +39,68 @@ export class UIServer {
 
   private setupRoutes() {
     // Serve the main HTML file for the root path
-    this.app.get('/', (req, res) => {
+    this.app.get('/', (_req, res) => {
       res.sendFile(join(__dirname, 'static', 'index.html'));
     });
 
     // Health check endpoint
-    this.app.get('/api/health', (req, res) => {
+    this.app.get('/api/health', (_req, res) => {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
     });
 
-    // Basic migration endpoint (placeholder)
-    this.app.get('/api/migrations', (req, res) => {
-      res.json({ migrations: [] });
+    // Migration endpoint - returns available migrations for the current plugin
+    this.app.get('/api/migrations', async (_req, res) => {
+      try {
+        const { version } = getConfig();
+        const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
+
+        // Convert migrations to UI-friendly format
+        const migrationList = Object.entries(migrations).map(([key, meta]) => ({
+          id: key,
+          name: key,
+          version: meta.version,
+          description: meta.description,
+          dependencies: [],
+          riskLevel: 'medium' as const,
+        }));
+
+        res.json({ migrations: migrationList });
+      } catch (error) {
+        output.error({
+          title: 'Failed to load migrations',
+          body: [error instanceof Error ? error.message : String(error)],
+        });
+        res.status(500).json({ error: 'Failed to load migrations' });
+      }
+    });
+
+    // Migration execution endpoint
+    this.app.post('/api/migrations/execute', async (req, res) => {
+      try {
+        const { migrations: selectedMigrations } = req.body;
+        const { version } = getConfig();
+        const allMigrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
+
+        // Filter to only selected migrations
+        const migrationsToRun = Object.fromEntries(
+          Object.entries(allMigrations).filter(([key]) => selectedMigrations.includes(key))
+        );
+
+        if (Object.keys(migrationsToRun).length === 0) {
+          return res.status(400).json({ error: 'No valid migrations selected' });
+        }
+
+        // Execute migrations
+        await runMigrations(migrationsToRun, { commitEachMigration: false });
+
+        return res.json({ success: true, message: 'Migrations completed successfully' });
+      } catch (error) {
+        output.error({
+          title: 'Migration execution failed',
+          body: [error instanceof Error ? error.message : String(error)],
+        });
+        return res.status(500).json({ error: 'Migration execution failed' });
+      }
     });
   }
 
