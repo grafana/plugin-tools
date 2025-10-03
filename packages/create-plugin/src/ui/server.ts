@@ -12,6 +12,7 @@ import { getConfig } from '../utils/utils.config.js';
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 import { MigrationMeta } from '../migrations/migrations.js';
 import { Context } from '../migrations/context.js';
+import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -115,8 +116,25 @@ export class UIServer {
       const migration = this.migrations[migrationId];
       const basePath = process.cwd();
       const preview = await runMigration(migration, new Context(basePath));
+      const response = { ...preview, originalFiles: {} as Record<string, string> };
+      for (const file of Object.entries(preview.listChanges())) {
+        const [filePath, { changeType }] = file;
+        // TODO: get original file content and add to response
+        if (changeType === 'update') {
+          try {
+            const originalContent = readFileSync(join(basePath, filePath), 'utf-8');
 
-      return res.json(preview);
+            response.originalFiles[filePath] = originalContent;
+          } catch (error) {
+            output.error({
+              title: 'Failed to read original file content',
+              body: [error instanceof Error ? error.message : String(error)],
+            });
+          }
+        }
+      }
+
+      return res.json(response);
     });
   }
 
