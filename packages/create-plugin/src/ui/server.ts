@@ -8,11 +8,12 @@ import getPort from 'get-port';
 import { output } from '../utils/utils.console.js';
 import { UIServerConfig, WebSocketMessage } from './types.js';
 import { getMigrationsToRun, runMigration, runMigrations } from '../migrations/manager.js';
-import { getConfig } from '../utils/utils.config.js';
+import { getConfig, setRootConfig } from '../utils/utils.config.js';
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 import { MigrationMeta } from '../migrations/migrations.js';
 import { Context } from '../migrations/context.js';
 import { readFileSync } from 'fs';
+import { getPluginJson } from '../utils/utils.plugin.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,6 +27,7 @@ export class UIServer {
   private host: string;
   private version: string;
   private migrations: Record<string, MigrationMeta>;
+  private pluginMeta: unknown;
   constructor(config: UIServerConfig = {}) {
     this.app = express();
     this.host = config.host || 'localhost';
@@ -33,6 +35,7 @@ export class UIServer {
     this.setupRoutes();
     this.setupWebSocket();
     this.version = getConfig().version;
+    this.pluginMeta = getPluginJson();
     this.migrations = getMigrationsToRun(this.version, CURRENT_APP_VERSION);
   }
 
@@ -54,8 +57,12 @@ export class UIServer {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
     });
 
-    this.app.get('/api/version', (_req, res) => {
-      res.json({ target_version: CURRENT_APP_VERSION, current_version: this.version });
+    this.app.get('/api/pluginMeta', (_req, res) => {
+      res.json({
+        target_version: CURRENT_APP_VERSION,
+        current_version: this.version,
+        pluginId: (this.pluginMeta as unknown as { id: string }).id,
+      });
     });
 
     // Migration endpoint - returns available migrations for the current plugin
@@ -100,7 +107,7 @@ export class UIServer {
 
         // Execute migrations
         await runMigrations(migrationsToRun, { commitEachMigration: false });
-
+        setRootConfig({ version: CURRENT_APP_VERSION });
         return res.json({ success: true, message: 'Migrations completed successfully' });
       } catch (error) {
         output.error({
@@ -135,6 +142,25 @@ export class UIServer {
       }
 
       return res.json(response);
+    });
+
+    // Server shutdown endpoint
+    this.app.post('/api/shutdown', async (_req, res) => {
+      try {
+        res.json({ success: true, message: 'Server shutting down...' });
+
+        // Give the response time to send before shutting down
+        setTimeout(() => {
+          this.stop();
+          process.exit(0);
+        }, 100);
+      } catch (error) {
+        output.error({
+          title: 'Failed to shutdown server',
+          body: [error instanceof Error ? error.message : String(error)],
+        });
+        res.status(500).json({ error: 'Failed to shutdown server' });
+      }
     });
   }
 

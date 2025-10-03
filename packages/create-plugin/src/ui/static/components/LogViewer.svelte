@@ -26,10 +26,10 @@
   .log-viewer {
     background: white;
     border: 1px solid #e1e5e9;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-height: 300px;
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -39,12 +39,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .log-header h3 {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #2c3e50;
   }
