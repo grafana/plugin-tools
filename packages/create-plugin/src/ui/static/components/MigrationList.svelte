@@ -19,9 +19,9 @@
     failedMigrations?: string[];
   }
 
-  let { 
-    migrations, 
-    selectedMigrations = $bindable([]), 
+  let {
+    migrations,
+    selectedMigrations = $bindable([]),
     onPreview,
     executingMigrations = [],
     completedMigrations = [],
@@ -127,18 +127,18 @@
   .migration-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
   }
 
   .list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
   }
 
   .list-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: #2c3e50;
     margin: 0;
@@ -146,18 +146,18 @@
 
   .list-actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
   }
 
   .toggle-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 
   .toggle-label {
-    font-size: 14px;
+    font-size: 13px;
     color: #5a6c7d;
     font-weight: 500;
   }
