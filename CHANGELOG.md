@@ -1,3 +1,19 @@
+# (Mon Sep 29 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.26.9`
+  - Fix: Init i18n in scenes app template [#2166](https://github.com/grafana/plugin-tools/pull/2166) ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@2.1.14`
+  - Update dependency uuid to v13 [#2139](https://github.com/grafana/plugin-tools/pull/2139) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Sep 25 2025)
 
 #### 🐛 Bug Fix
