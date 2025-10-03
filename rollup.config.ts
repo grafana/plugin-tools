@@ -10,6 +10,7 @@ import { defineConfig, Plugin, RollupOptions } from 'rollup';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
+import { rollupPluginHTML as html } from '@web/rollup-plugin-html';
 
 const projectRoot = process.cwd();
 const tsconfigPath = join(projectRoot, 'tsconfig.json');
@@ -87,6 +88,30 @@ if (pkg.types) {
     },
     plugins: [
       dts({
+        tsconfig: tsconfigPath,
+      }),
+    ],
+  });
+}
+
+// Add the ui static build to options
+if (pkg.name === '@grafana/create-plugin') {
+  defaultOptions.push({
+    input: [
+      join(preserveModulesRoot, 'ui', 'static', 'index.html'),
+      join(preserveModulesRoot, 'ui', 'static', 'app.ts'),
+      join(preserveModulesRoot, 'ui', 'static', 'components', 'migration-dashboard.ts'),
+      join(preserveModulesRoot, 'ui', 'static', 'components', 'migration-list.ts'),
+      join(preserveModulesRoot, 'ui', 'static', 'components', 'migration-card.ts'),
+    ],
+    output: {
+      dir: join(projectRoot, 'dist', 'ui', 'static'),
+      format: 'esm',
+    },
+    plugins: [
+      html(),
+      esbuild({
+        target: 'es2020',
         tsconfig: tsconfigPath,
       }),
     ],
