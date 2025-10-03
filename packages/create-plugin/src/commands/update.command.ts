@@ -1,5 +1,5 @@
 import minimist from 'minimist';
-import { gte, lt } from 'semver';
+import { gte } from 'semver';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { getConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
