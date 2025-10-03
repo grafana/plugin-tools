@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let progress: number = 0;
-  export let isVisible: boolean = false;
+  interface Props {
+    progress?: number;
+    isVisible?: boolean;
+  }
+
+  let { progress = 0, isVisible = false }: Props = $props();
 </script>
 
 {#if isVisible}

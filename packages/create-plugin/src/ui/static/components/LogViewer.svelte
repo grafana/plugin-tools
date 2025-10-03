@@ -1,13 +1,17 @@
 <script lang="ts">
-  export let logs: string[] = [];
-  export let isVisible: boolean = false;
+  interface Props {
+    logs?: string[];
+    isVisible?: boolean;
+  }
+
+  let { logs = [], isVisible = false }: Props = $props();
 </script>
 
 {#if isVisible}
   <div class="log-viewer">
     <div class="log-header">
       <h3>Execution Log</h3>
-      <button class="clear-btn" on:click={() => logs = []}>Clear</button>
+      <button class="clear-btn" onclick={() => logs = []}>Clear</button>
     </div>
     <div class="log-content">
       {#each logs as log (log)}
