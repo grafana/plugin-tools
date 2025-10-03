@@ -2,6 +2,7 @@
   import MigrationList from './MigrationList.svelte';
   import ProgressTracker from './ProgressTracker.svelte';
   import LogViewer from './LogViewer.svelte';
+  import PreviewModal from './PreviewModal.svelte';
 
   interface MigrationInfo {
     id: string;
@@ -22,6 +23,9 @@
 
   let selectedMigrations = $state<string[]>([]);
   let isExecuting = $state(false);
+  let isPreviewModalOpen = $state(false);
+  let previewData = $state<any>(null);
+  let currentMigrationName = $state('');
 
   function startExecution() {
     if (selectedMigrations.length === 0) {
@@ -40,15 +44,25 @@
       const preview = await response.json();
 
       if (response.ok) {
-        console.log('Migration preview:', preview);
-        // TODO: Display preview in a modal or dedicated view
-        // You could set a state variable to show the preview data
+        // Find the migration name for display
+        const migration = migrations.find(m => m.id === migrationId);
+        currentMigrationName = migration?.name || migrationId;
+        previewData = preview;
+        isPreviewModalOpen = true;
       } else {
         console.error('Failed to fetch preview:', preview);
+        alert('Failed to load migration preview. Please try again.');
       }
     } catch (error) {
       console.error('Error fetching migration preview:', error);
+      alert('Error loading migration preview. Please try again.');
     }
+  }
+
+  function closePreviewModal() {
+    isPreviewModalOpen = false;
+    previewData = null;
+    currentMigrationName = '';
   }
 
   let totalMigrations = $derived(migrations.length);
@@ -114,6 +128,13 @@
       <LogViewer />
     </div>
   </div>
+
+  <PreviewModal
+    isOpen={isPreviewModalOpen}
+    previewData={previewData}
+    migrationName={currentMigrationName}
+    onClose={closePreviewModal}
+  />
 </div>
 
 <style>
