@@ -3,19 +3,49 @@ title: Local development setup for UI extensions
 description: Learn how to set up your local environment for UI extension development.
 ---
 
-# Local development setup
+# Local development setup for UI extensions
 
-This guide explains how to set up your local development environment for testing UI extensions between multiple plugins.
+When developing a plugin that interacts with UI extensions from another plugin, you need a way to have both plugins running in your local Grafana instance. This guide walks you through setting up a local development environment for testing UI extensions between multiple plugins.
 
-When developing a plugin that interacts with UI extensions from another plugin, you need a way to have both plugins running in your local Grafana instance. This guide outlines the recommended approach using provisioning and Docker Compose.
+The process involves two main steps:
 
-## Using provisioning to configure the target plugin
+1.  Installing the target plugin you want to test against.
+2.  Configuring the target plugin using Grafana's provisioning system.
 
-The recommended way to set up the plugin you want to test against is by using Grafana's provisioning system. This allows you to configure the plugin automatically when your local Grafana instance starts.
+## Step 1: Install the target plugin
 
-1.  **Create provisioning files**: In your plugin's root directory, create a `provisioning` folder. Inside this folder, you can add YAML files to configure data sources, dashboards, and other resources required by the plugin you want to test against.
+To test the interaction between your plugin and another, you first need to install the target plugin in your local development environment. You have two options to do this.
 
-2.  **Mount the provisioning folder**: In your `docker-compose.yml` file, mount the `provisioning` folder as a volume to `/etc/grafana/provisioning`:
+### Option 1: Install from a URL (Recommended)
+
+The recommended approach is to use the `GF_INSTALL_PLUGINS` environment variable in your `docker-compose.yml` file. This allows you to install a pre-built version of the plugin from a URL. This method is flexible and makes it easy to switch between different versions of the plugin by simply changing the URL.
+
+Here's an example of how to use `GF_INSTALL_PLUGINS` in your `docker-compose.yml`:
+
+```yaml
+environment:
+  - GF_INSTALL_PLUGINS=https://example.com/path/to/your-plugin.zip;your-plugin-id
+```
+
+### Option 2: Clone, build, and link the plugin
+
+Alternatively, you can clone the source code of the target plugin and link it to your local Grafana instance. However, this approach is more complex because it requires you to install all the dependencies and build the plugin before you can run it. Therefore, this approach is generally not recommended.
+
+## Step 2: Configure the target plugin with provisioning
+
+Once the plugin is installed, you need to configure it. The best way to do this is by using Grafana's provisioning system, which automates the configuration process when your local Grafana instance starts.
+
+:::note
+
+If you scaffolded your plugin with the [create-plugin tool](../../../get-started.md), the provisioning setup is already included in your project.
+
+:::
+
+To configure the plugin, follow these steps:
+
+1.  **Create provisioning files**: In your plugin's root directory, you should have a `provisioning` folder. Inside this folder, you can add YAML files to configure data sources, dashboards, and other resources required by the plugin you are testing against. For an example of provisioning files, see the [grafana-plugin-examples repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/provisioning/plugins).
+
+2.  **Mount the provisioning folder**: Ensure that your `docker-compose.yml` file mounts the `provisioning` folder as a volume to `/etc/grafana/provisioning`:
 
     ```yaml
     volumes:
@@ -24,25 +54,6 @@ The recommended way to set up the plugin you want to test against is by using Gr
 
 ### Handling backend dependencies
 
-If the plugin you are testing against has a backend component, you might need additional setup. We recommend reaching out to the authors of that plugin to see if they can provide a testing environment or test data that you can use in your provisioning files.
+If the plugin you are testing against has a backend component, it might require additional setup. In this case, we recommend reaching out to the plugin's authors. They may be able to provide a testing environment or test data that you can use in your provisioning files.
 
-## Installing the target plugin
-
-You have two main options for installing the plugin you want to test against in your local development environment.
-
-### Option 1: Cloning and linking the plugin (not recommended)
-
-You can clone the source code of the target plugin, build it, and then link it to your local Grafana instance. However, this approach can be complex and is not recommended.
-
-### Option 2: Installing from a URL (recommended)
-
-A simpler and more flexible approach is to use the `GF_INSTALL_PLUGIN` environment variable in your `docker-compose.yml` file. This allows you to install a pre-built version of the plugin from a URL. This method makes it easy to switch between different versions of the plugin by simply changing the URL.
-
-Here's an example of how to use `GF_INSTALL_PLUGIN` in your `docker-compose.yml`:
-
-```yaml
-environment:
-  - GF_INSTALL_PLUGIN=https://example.com/path/to/your-plugin.zip
-```
-
-By following these steps, you can create a robust local development environment for testing UI extensions that interact with other plugins.
+By following these steps, you can create a robust local development environment for developing and testing UI extensions that interact with other plugins.
