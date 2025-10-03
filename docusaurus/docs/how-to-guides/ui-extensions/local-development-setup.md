@@ -1,9 +1,9 @@
 ---
-title: Local development setup for UI extensions
+title: Testing UI extensions between multiple plugins
 description: Learn how to set up your local environment for UI extension development.
 ---
 
-# Local development setup for UI extensions
+# Testing UI extensions between multiple plugins
 
 When developing a plugin that interacts with UI extensions from another plugin, you need a way to have both plugins running in your local Grafana instance. This guide walks you through setting up a local development environment for testing UI extensions between multiple plugins.
 
