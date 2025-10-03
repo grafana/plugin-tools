@@ -1,6 +1,6 @@
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import { glob, GlobOptions } from 'glob';
 import { readFileSync } from 'node:fs';
 import { chmod } from 'node:fs/promises';
@@ -10,8 +10,10 @@ import { defineConfig, Plugin, RollupOptions } from 'rollup';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
-import { rollupPluginHTML as html } from '@web/rollup-plugin-html';
-import css from 'rollup-plugin-import-css';
+import html from '@rollup/plugin-html';
+import css from 'rollup-plugin-css-only';
+import svelte from 'rollup-plugin-svelte';
+import sveltePreprocess from 'svelte-preprocess';
 
 const projectRoot = process.cwd();
 const tsconfigPath = join(projectRoot, 'tsconfig.json');
@@ -67,7 +69,7 @@ const defaultOptions: Array<Partial<RollupOptions>> = [
     plugins: [
       del({ targets: join(projectRoot, 'dist/*') }),
       pkg.type !== 'module' && commonjs(),
-      nodeResolve({
+      resolve({
         preferBuiltins: true,
       }),
       json(),
@@ -98,25 +100,39 @@ if (pkg.types) {
 // Add the ui static build to options
 if (pkg.name === '@grafana/create-plugin') {
   defaultOptions.push({
-    input: [
-      join(preserveModulesRoot, 'ui', 'static', 'index.html'),
-      join(preserveModulesRoot, 'ui', 'static', 'app.ts'),
-      join(preserveModulesRoot, 'ui', 'static', 'components', 'migration-dashboard.ts'),
-      join(preserveModulesRoot, 'ui', 'static', 'components', 'migration-list.ts'),
-      join(preserveModulesRoot, 'ui', 'static', 'components', 'migration-card.ts'),
-    ],
+    input: [join(preserveModulesRoot, 'ui', 'static', 'main.ts')],
     output: {
       dir: join(projectRoot, 'dist', 'ui', 'static'),
       format: 'esm',
     },
     plugins: [
-      html(),
+      svelte({
+        include: 'src/ui/static/**/*.svelte',
+        preprocess: sveltePreprocess({
+          typescript: {
+            tsconfigFile: join(preserveModulesRoot, '..', 'tsconfig.ui.json'),
+          },
+        }),
+
+        compilerOptions: {
+          dev: true,
+        },
+      }),
       css({
-        modules: true,
+        output: 'main.css',
+      }),
+      html({
+        title: 'Create Plugin - Update',
+      }),
+      resolve({
+        browser: true,
+        exportConditions: ['svelte'],
+        extensions: ['.svelte'],
+        dedupe: ['svelte'],
       }),
       esbuild({
         target: 'es2020',
-        tsconfig: tsconfigPath,
+        tsconfig: join(preserveModulesRoot, '..', 'tsconfig.ui.json'),
       }),
     ],
   });
