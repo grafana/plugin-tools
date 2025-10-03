@@ -23,7 +23,6 @@
   let selectedMigrations = $state<string[]>([]);
   let isExecuting = $state(false);
 
-
   function startExecution() {
     if (selectedMigrations.length === 0) {
       alert('Please select at least one migration to execute.');
@@ -33,6 +32,23 @@
     isExecuting = true;
     // TODO: Implement execution logic
     console.log('Starting execution for migrations:', selectedMigrations);
+  }
+
+  async function handlePreview(migrationId: string) {
+    try {
+      const response = await fetch(`/api/migrations/${migrationId}/preview`);
+      const preview = await response.json();
+
+      if (response.ok) {
+        console.log('Migration preview:', preview);
+        // TODO: Display preview in a modal or dedicated view
+        // You could set a state variable to show the preview data
+      } else {
+        console.error('Failed to fetch preview:', preview);
+      }
+    } catch (error) {
+      console.error('Error fetching migration preview:', error);
+    }
   }
 
   let totalMigrations = $derived(migrations.length);
@@ -56,11 +72,7 @@
         <div class="status-dot" class:executing={isExecuting}></div>
         <span>{isExecuting ? 'Executing...' : 'Ready'}</span>
       </div>
-      <button
-        class="btn btn-primary"
-        disabled={selectedCount === 0 || isExecuting}
-        onclick={startExecution}
-      >
+      <button class="btn btn-primary" disabled={selectedCount === 0 || isExecuting} onclick={startExecution}>
         {isExecuting ? 'Executing...' : 'Start Update'}
       </button>
     </div>
@@ -68,10 +80,7 @@
 
   <div class="content">
     <div class="main-content">
-      <MigrationList
-        {migrations}
-        bind:selectedMigrations
-      />
+      <MigrationList {migrations} bind:selectedMigrations onPreview={handlePreview} />
     </div>
 
     <div class="sidebar">
@@ -166,8 +175,13 @@
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 
   .content {
