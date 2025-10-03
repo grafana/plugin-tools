@@ -11,20 +11,22 @@
     riskLevel: 'low' | 'medium' | 'high';
   }
 
-  let loading = true;
-  let migrations: MigrationInfo[] = [];
-  let error: string | null = null;
+  let loading = $state(true);
+  let migrations = $state<MigrationInfo[]>([]);
+  let error = $state<string | null>(null);
+  let currentVersion = $state<string>('');
+  let targetVersion = $state<string>('');
 
   onMount(async () => {
     try {
-      console.log('Loading migrations...');
-      const response = await fetch('/api/migrations');
-      const data = await response.json();
-      console.log('Migration data received:', data);
-      migrations = data.migrations || [];
-      console.log('Migrations array:', migrations);
+      const migrationsResponse = await fetch('/api/migrations');
+      const migrationsJson = await migrationsResponse.json();
+      migrations = migrationsJson.migrations || [];
+      const versionResponse = await fetch('/api/version');
+      const versionJson = await versionResponse.json();
+      currentVersion = versionJson.current_version;
+      targetVersion = versionJson.target_version;
     } catch (err) {
-      console.error('Failed to load migrations:', err);
       error = err instanceof Error ? err.message : 'Failed to load migration information';
     } finally {
       loading = false;
@@ -44,7 +46,7 @@
       <p>{error}</p>
     </div>
   {:else}
-    <MigrationDashboard {migrations} />
+    <MigrationDashboard {migrations} {currentVersion} {targetVersion} />
   {/if}
 </div>
 
