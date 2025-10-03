@@ -41,6 +41,7 @@
     "@types/node": "22.18.6",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
+    "@web/rollup-plugin-html": "^2.3.0",
     "auto": "11.3.0",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
