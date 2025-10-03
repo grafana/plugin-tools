@@ -6,11 +6,11 @@
     failedCount?: number;
   }
 
-  let { 
-    totalMigrations = 0, 
-    executingCount = 0, 
-    completedCount = 0, 
-    failedCount = 0 
+  let {
+    totalMigrations = 0,
+    executingCount = 0,
+    completedCount = 0,
+    failedCount = 0
   }: Props = $props();
 
   let progress = $derived(totalMigrations > 0 ? ((completedCount + failedCount) / totalMigrations) * 100 : 0);
@@ -33,27 +33,27 @@
   .progress-tracker {
     background: white;
     border: 1px solid #e1e5e9;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   .progress-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .progress-header h3 {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #2c3e50;
   }
 
   .progress-percentage {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #3498db;
   }

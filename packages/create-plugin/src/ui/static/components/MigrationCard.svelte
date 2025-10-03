@@ -46,15 +46,6 @@
     };
     return statusMap[status] || 'Unknown';
   }
-
-  function getRiskColor(): string {
-    const colorMap: Record<string, string> = {
-      low: '#27ae60',
-      medium: '#f39c12',
-      high: '#e74c3c',
-    };
-    return colorMap[migration.riskLevel] || '#f39c12';
-  }
 </script>
 
 <div class="card" class:selected class:status>
@@ -64,10 +55,6 @@
   </div>
 
   <p class="migration-description">{migration.description}</p>
-
-  <div class="risk-indicator" style="color: {getRiskColor()}">
-    <span>Risk: {migration.riskLevel.toUpperCase()}</span>
-  </div>
 
   <div class="card-actions">
     <div class="action-left">
@@ -80,12 +67,7 @@
         role="button"
         tabindex="0"
       ></div>
-      <button
-        class="preview-btn"
-        onclick={requestPreview}
-      >
-        Preview Changes
-      </button>
+      <button class="preview-btn" onclick={requestPreview}> Preview Changes </button>
     </div>
     <span class="status-badge status-{status}">
       {getStatusText()}
@@ -308,8 +290,14 @@
   }
 
   @keyframes progress {
-    0% { width: 0%; }
-    50% { width: 70%; }
-    100% { width: 100%; }
+    0% {
+      width: 0%;
+    }
+    50% {
+      width: 70%;
+    }
+    100% {
+      width: 100%;
+    }
   }
 </style>

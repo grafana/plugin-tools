@@ -56,7 +56,7 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
       flushChanges(context);
       printChanges(context, key, migration);
 
-      installNPMDependencies(context);
+      await installNPMDependencies(context);
 
       if (shouldCommit) {
         await gitCommitNoVerify(`chore: run create-plugin migration - ${key} (${migration.migrationScript})`);

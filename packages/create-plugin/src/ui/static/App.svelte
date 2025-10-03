@@ -16,16 +16,17 @@
   let error = $state<string | null>(null);
   let currentVersion = $state<string>('');
   let targetVersion = $state<string>('');
-
+  let pluginId = $state<string>('');
   onMount(async () => {
     try {
       const migrationsResponse = await fetch('/api/migrations');
       const migrationsJson = await migrationsResponse.json();
       migrations = migrationsJson.migrations || [];
-      const versionResponse = await fetch('/api/version');
-      const versionJson = await versionResponse.json();
-      currentVersion = versionJson.current_version;
-      targetVersion = versionJson.target_version;
+      const pluginMetaResponse = await fetch('/api/pluginMeta');
+      const pluginMetaJson = await pluginMetaResponse.json();
+      currentVersion = pluginMetaJson.current_version;
+      targetVersion = pluginMetaJson.target_version;
+      pluginId = pluginMetaJson.pluginId;
     } catch (err) {
       error = err instanceof Error ? err.message : 'Failed to load migration information';
     } finally {
@@ -46,7 +47,7 @@
       <p>{error}</p>
     </div>
   {:else}
-    <MigrationDashboard {migrations} {currentVersion} {targetVersion} />
+    <MigrationDashboard {migrations} {currentVersion} {targetVersion} {pluginId} />
   {/if}
 </div>
 

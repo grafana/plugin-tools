@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { diffLines as diffLinesLib, Change } from 'diff';
+  import { diffLines as diffLinesLib, type Change } from 'diff';
 
   interface DiffLine {
     type: 'added' | 'removed' | 'unchanged' | 'context';

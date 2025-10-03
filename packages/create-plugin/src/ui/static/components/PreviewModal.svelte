@@ -17,10 +17,11 @@
     isOpen: boolean;
     previewData: PreviewData | null;
     migrationName: string;
+    migrationDescription: string;
     onClose: () => void;
   }
 
-  let { isOpen, previewData, migrationName, onClose }: Props = $props();
+  let { isOpen, previewData, migrationName, migrationDescription, onClose }: Props = $props();
 
   function handleBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
@@ -74,7 +75,7 @@
           </svg>
         </button>
       </div>
-
+      <p class="migration-description">{migrationDescription}</p>
       <div class="modal-content">
         {#if previewData}
           <div class="preview-info">
@@ -91,29 +92,28 @@
             {#each Object.entries(previewData.files) as [filePath, fileData]}
               <div class="file-item">
                 {#if fileData.changeType !== 'update'}
-                <div class="file-header">
-                  <span class="file-path">{filePath}</span>
-                  <span
-                    class="change-type"
-                    style="background-color: {getChangeTypeColor(fileData.changeType)}"
-                  >
-                    {getChangeTypeLabel(fileData.changeType)}
-                  </span>
-                </div>
-                <div class="file-content">
-                  <pre><code>{fileData.content}</code></pre>
-                </div>
+                  <div class="file-header">
+                    <span class="file-path">{filePath}</span>
+                    <span class="change-type" style="background-color: {getChangeTypeColor(fileData.changeType)}">
+                      {getChangeTypeLabel(fileData.changeType)}
+                    </span>
+                  </div>
+                  {#if fileData.changeType !== 'delete'}
+                    <div class="file-content">
+                      <pre><code>{fileData.content}</code></pre>
+                    </div>
+                  {/if}
                 {/if}
                 {#if fileData.changeType === 'update'}
-                 <DiffViewer
-                   fileDiff={{
-                     fileName: filePath,
-                     oldContent: previewData.originalFiles?.[filePath] || '', // Fallback to empty string if no original content
-                     newContent: fileData.content,
-                     changeType: fileData.changeType,
-                   }}
-                 />
-                 {/if}
+                  <DiffViewer
+                    fileDiff={{
+                      fileName: filePath,
+                      oldContent: previewData.originalFiles?.[filePath] || '', // Fallback to empty string if no original content
+                      newContent: fileData.content,
+                      changeType: fileData.changeType,
+                    }}
+                  />
+                {/if}
               </div>
             {/each}
           </div>
@@ -172,6 +172,14 @@
     color: #2c3e50;
   }
 
+  .migration-description {
+    margin: 0;
+    font-size: 14px;
+    padding: 20px 24px 0 24px;
+    color: #5a6c7d;
+    line-height: 1.5;
+  }
+
   .close-button {
     background: none;
     border: none;
@@ -190,60 +198,60 @@
   .modal-content {
     flex: 1;
     overflow-y: auto;
-    padding: 24px;
+    padding: 16px;
   }
 
   .preview-info {
     background: #f8f9fa;
     border: 1px solid #e1e5e9;
     border-radius: 6px;
-    padding: 16px;
-    margin-bottom: 20px;
+    padding: 12px;
+    margin-bottom: 12px;
   }
 
   .base-path {
-    margin-bottom: 8px;
-    font-size: 14px;
+    margin-bottom: 4px;
+    font-size: 13px;
     color: #5a6c7d;
   }
 
   .file-count {
-    font-size: 14px;
+    font-size: 13px;
     color: #5a6c7d;
   }
 
   .files-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
   }
 
   .file-item {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   .file-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
+    padding: 8px 12px;
     background: #f8f9fa;
     border-bottom: 1px solid #e1e5e9;
     border: 1px solid #e1e5e9;
-    border-radius: 6px 6px 0 0;
+    border-radius: 4px 4px 0 0;
   }
 
   .file-path {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 14px;
+    font-size: 13px;
     color: #2c3e50;
     font-weight: 500;
   }
 
   .change-type {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 11px;
     font-weight: 500;
     color: white;
     text-transform: uppercase;
@@ -251,20 +259,20 @@
   }
 
   .file-content {
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
     border: 1px solid #e1e5e9;
     border-top: none;
-    border-radius: 0 0 6px 6px;
+    border-radius: 0 0 4px 4px;
   }
 
   .file-content pre {
     margin: 0;
-    padding: 16px;
+    padding: 12px;
     background: #f8f9fa;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.4;
     color: #2c3e50;
     white-space: pre-wrap;
     word-wrap: break-word;

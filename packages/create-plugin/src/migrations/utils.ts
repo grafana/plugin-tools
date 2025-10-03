@@ -7,7 +7,10 @@ import chalk from 'chalk';
 import { MigrationMeta } from './migrations.js';
 import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
-import { execSync } from 'node:child_process';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const execAsync = promisify(exec);
 import { clean, coerce, gt } from 'semver';
 
 export function printChanges(context: Context, key: string, migration: MigrationMeta) {
@@ -107,7 +110,7 @@ export async function formatFiles(context: Context) {
 // (This runs for each migration used in an update)
 let packageJsonInstallCache: string;
 
-export function installNPMDependencies(context: Context) {
+export async function installNPMDependencies(context: Context): Promise<void> {
   const hasPackageJsonChanges = Object.entries(context.listChanges()).some(
     ([filePath, { changeType }]) => filePath === 'package.json' && changeType === 'update'
   );
@@ -130,7 +133,19 @@ export function installNPMDependencies(context: Context) {
       packageManager.packageManagerName,
       packageManager.packageManagerVersion
     );
-    execSync(installCmd, { cwd: context.basePath, stdio: 'inherit' });
+
+    try {
+      await execAsync(installCmd, { cwd: context.basePath });
+      output.success({
+        title: 'NPM dependencies installed successfully',
+      });
+    } catch (error) {
+      output.error({
+        title: 'Failed to install NPM dependencies',
+        body: [error instanceof Error ? error.message : String(error)],
+      });
+      throw error;
+    }
   }
 }
 
