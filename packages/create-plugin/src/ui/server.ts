@@ -7,9 +7,11 @@ import { dirname, join } from 'path';
 import getPort from 'get-port';
 import { output } from '../utils/utils.console.js';
 import { UIServerConfig, WebSocketMessage } from './types.js';
-import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+import { getMigrationsToRun, runMigration, runMigrations } from '../migrations/manager.js';
 import { getConfig } from '../utils/utils.config.js';
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
+import { MigrationMeta } from '../migrations/migrations.js';
+import { Context } from '../migrations/context.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,7 +24,7 @@ export class UIServer {
   public port!: number;
   private host: string;
   private version: string;
-
+  private migrations: Record<string, MigrationMeta>;
   constructor(config: UIServerConfig = {}) {
     this.app = express();
     this.host = config.host || 'localhost';
@@ -30,6 +32,7 @@ export class UIServer {
     this.setupRoutes();
     this.setupWebSocket();
     this.version = getConfig().version;
+    this.migrations = getMigrationsToRun(this.version, CURRENT_APP_VERSION);
   }
 
   private setupMiddleware() {
@@ -57,7 +60,7 @@ export class UIServer {
     // Migration endpoint - returns available migrations for the current plugin
     this.app.get('/api/migrations', async (_req, res) => {
       try {
-        const migrations = getMigrationsToRun(this.version, CURRENT_APP_VERSION);
+        const migrations = this.migrations;
 
         // Convert migrations to UI-friendly format
         const migrationList = Object.entries(migrations).map(([key, meta]) => ({
@@ -83,7 +86,7 @@ export class UIServer {
     this.app.post('/api/migrations/execute', async (req, res) => {
       try {
         const { migrations: selectedMigrations } = req.body;
-        const allMigrations = getMigrationsToRun(this.version, CURRENT_APP_VERSION);
+        const allMigrations = this.migrations;
 
         // Filter to only selected migrations
         const migrationsToRun = Object.fromEntries(
@@ -105,6 +108,15 @@ export class UIServer {
         });
         return res.status(500).json({ error: 'Migration execution failed' });
       }
+    });
+
+    this.app.get('/api/migrations/:migrationId/preview', async (req, res) => {
+      const { migrationId } = req.params;
+      const migration = this.migrations[migrationId];
+      const basePath = process.cwd();
+      const preview = await runMigration(migration, new Context(basePath));
+
+      return res.json(preview);
     });
   }
 
