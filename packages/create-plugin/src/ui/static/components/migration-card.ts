@@ -1,18 +1,30 @@
+interface MigrationInfo {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  dependencies: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+}
+
+type MigrationStatus = 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+
 class MigrationCard extends HTMLElement {
+  private migration: MigrationInfo | null = null;
+  private selected = false;
+  private status: MigrationStatus = 'pending';
+  private error: string | null = null;
+
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.migration = null;
-    this.selected = false;
-    this.status = 'pending';
-    this.error = null;
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ['migration', 'selected', 'status', 'error'];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
     if (name === 'migration' && newValue) {
       this.migration = JSON.parse(newValue);
       this.render();
@@ -22,7 +34,7 @@ class MigrationCard extends HTMLElement {
       this.updateSelection();
     }
     if (name === 'status') {
-      this.status = newValue;
+      this.status = newValue as MigrationStatus;
       this.updateStatus();
     }
     if (name === 'error') {
@@ -31,17 +43,17 @@ class MigrationCard extends HTMLElement {
     }
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render();
     this.setupEventListeners();
   }
 
-  render() {
+  private render(): void {
     if (!this.migration) {
       return;
     }
 
-    this.shadowRoot.innerHTML = `
+    this.shadowRoot!.innerHTML = `
       <style>
         :host {
           display: block;
@@ -250,9 +262,9 @@ class MigrationCard extends HTMLElement {
     `;
   }
 
-  setupEventListeners() {
-    const toggle = this.shadowRoot.querySelector('#toggle');
-    const previewBtn = this.shadowRoot.querySelector('#preview');
+  private setupEventListeners(): void {
+    const toggle = this.shadowRoot!.querySelector('#toggle') as HTMLElement;
+    const previewBtn = this.shadowRoot!.querySelector('#preview') as HTMLButtonElement;
 
     toggle.addEventListener('click', () => {
       if (this.status === 'running' || this.status === 'completed') {
@@ -266,7 +278,7 @@ class MigrationCard extends HTMLElement {
     });
   }
 
-  toggleSelection() {
+  private toggleSelection(): void {
     this.selected = !this.selected;
     this.setAttribute('selected', this.selected.toString());
 
@@ -274,21 +286,21 @@ class MigrationCard extends HTMLElement {
     const eventType = this.selected ? 'migration-selected' : 'migration-deselected';
     document.dispatchEvent(
       new CustomEvent(eventType, {
-        detail: { migrationId: this.migration.id },
+        detail: { migrationId: this.migration!.id },
       })
     );
   }
 
-  updateSelection() {
-    const toggle = this.shadowRoot.querySelector('#toggle');
+  private updateSelection(): void {
+    const toggle = this.shadowRoot!.querySelector('#toggle') as HTMLElement;
     if (toggle) {
       toggle.classList.toggle('active', this.selected);
     }
   }
 
-  updateStatus() {
-    const card = this.shadowRoot.querySelector('.card');
-    const statusBadge = this.shadowRoot.querySelector('#status');
+  private updateStatus(): void {
+    const card = this.shadowRoot!.querySelector('.card') as HTMLElement;
+    const statusBadge = this.shadowRoot!.querySelector('#status') as HTMLElement;
 
     if (card) {
       card.className = `card ${this.status}`;
@@ -300,7 +312,7 @@ class MigrationCard extends HTMLElement {
     }
 
     // Update toggle state based on status
-    const toggle = this.shadowRoot.querySelector('#toggle');
+    const toggle = this.shadowRoot!.querySelector('#toggle') as HTMLElement;
     if (toggle) {
       toggle.classList.toggle('disabled', this.status === 'running' || this.status === 'completed');
     }
@@ -309,21 +321,21 @@ class MigrationCard extends HTMLElement {
     document.dispatchEvent(
       new CustomEvent('migration-status-changed', {
         detail: {
-          migrationId: this.migration.id,
+          migrationId: this.migration!.id,
           status: this.status,
         },
       })
     );
   }
 
-  updateError() {
+  private updateError(): void {
     if (this.error) {
       this.render(); // Re-render to show error message
     }
   }
 
-  getStatusText() {
-    const statusMap = {
+  private getStatusText(): string {
+    const statusMap: Record<MigrationStatus, string> = {
       pending: 'Pending',
       running: 'Running',
       completed: 'Completed',
@@ -333,10 +345,10 @@ class MigrationCard extends HTMLElement {
     return statusMap[this.status] || 'Unknown';
   }
 
-  requestPreview() {
+  private requestPreview(): void {
     document.dispatchEvent(
       new CustomEvent('preview-requested', {
-        detail: { migrationId: this.migration.id },
+        detail: { migrationId: this.migration!.id },
       })
     );
   }
