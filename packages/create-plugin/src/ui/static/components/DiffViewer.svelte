@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { diffLines as diffLinesLib, Change } from 'diff';
+
   interface DiffLine {
     type: 'added' | 'removed' | 'unchanged' | 'context';
     content: string;
@@ -18,90 +20,42 @@
 
   let { fileDiff }: Props = $props();
 
-  // Improved diff algorithm that provides better change detection
+  // Use the diff library for better change detection
   function generateDiff(oldContent: string, newContent: string): DiffLine[] {
-    const oldLines = oldContent.split('\n');
-    const newLines = newContent.split('\n');
+    const changes = diffLinesLib(oldContent, newContent);
     const diff: DiffLine[] = [];
+    let lineNumber = 1;
 
-    let oldIndex = 0;
-    let newIndex = 0;
+    changes.forEach((change: Change) => {
+      const lines = change.value.split('\n');
+      // Remove the last empty line if it exists
+      if (lines[lines.length - 1] === '') {
+        lines.pop();
+      }
 
-    while (oldIndex < oldLines.length || newIndex < newLines.length) {
-      const oldLine = oldLines[oldIndex];
-      const newLine = newLines[newIndex];
-
-      if (oldIndex >= oldLines.length) {
-        // Only new lines left
-        diff.push({
-          type: 'added',
-          content: newLine,
-          lineNumber: newIndex + 1,
-        });
-        newIndex++;
-      } else if (newIndex >= newLines.length) {
-        // Only old lines left
-        diff.push({
-          type: 'removed',
-          content: oldLine,
-          lineNumber: oldIndex + 1,
-        });
-        oldIndex++;
-      } else if (oldLine === newLine) {
-        // Lines are the same
-        diff.push({
-          type: 'unchanged',
-          content: oldLine,
-          lineNumber: oldIndex + 1,
-        });
-        oldIndex++;
-        newIndex++;
-      } else {
-        // Lines are different - look ahead to find better matches
-        let foundMatch = false;
-        const maxLookAhead = Math.min(5, Math.max(oldLines.length - oldIndex, newLines.length - newIndex));
-
-        for (let lookAhead = 1; lookAhead <= maxLookAhead; lookAhead++) {
-          if (
-            oldIndex + lookAhead < oldLines.length &&
-            newIndex + lookAhead < newLines.length &&
-            oldLines[oldIndex + lookAhead] === newLines[newIndex + lookAhead]
-          ) {
-            // Found a match ahead, mark current lines as changed
-            diff.push({
-              type: 'removed',
-              content: oldLine,
-              lineNumber: oldIndex + 1,
-            });
-            diff.push({
-              type: 'added',
-              content: newLine,
-              lineNumber: newIndex + 1,
-            });
-            oldIndex++;
-            newIndex++;
-            foundMatch = true;
-            break;
-          }
-        }
-
-        if (!foundMatch) {
-          // No match found, treat as separate add/remove
-          diff.push({
-            type: 'removed',
-            content: oldLine,
-            lineNumber: oldIndex + 1,
-          });
+      lines.forEach((line: string) => {
+        if (change.added) {
           diff.push({
             type: 'added',
-            content: newLine,
-            lineNumber: newIndex + 1,
+            content: line,
+            lineNumber: lineNumber
           });
-          oldIndex++;
-          newIndex++;
+        } else if (change.removed) {
+          diff.push({
+            type: 'removed',
+            content: line,
+            lineNumber: lineNumber
+          });
+        } else {
+          diff.push({
+            type: 'unchanged',
+            content: line,
+            lineNumber: lineNumber
+          });
         }
-      }
-    }
+        lineNumber++;
+      });
+    });
 
     return diff;
   }
@@ -111,16 +65,16 @@
     let result;
 
     if (fileDiff.changeType === 'create') {
-      result = fileDiff.newContent.split('\n').map((line, index) => ({
+      result = fileDiff.newContent.split('\n').map((line, lineIndex) => ({
         type: 'added' as const,
         content: line,
-        lineNumber: index + 1,
+        lineNumber: lineIndex + 1,
       }));
     } else if (fileDiff.changeType === 'delete') {
-      result = fileDiff.oldContent.split('\n').map((line, index) => ({
+      result = fileDiff.oldContent.split('\n').map((line, lineIndex) => ({
         type: 'removed' as const,
         content: line,
-        lineNumber: index + 1,
+        lineNumber: lineIndex + 1,
       }));
     } else {
       // For updates, generate a proper diff between old and new content
@@ -165,7 +119,7 @@
 
   <div class="diff-content">
     <div class="diff-lines">
-      {#each diffLines as line, index}
+      {#each diffLines as line}
         <div class="diff-line {getLineClass(line.type)}">
           <div class="line-number">
             {line.lineNumber}
