@@ -14,9 +14,10 @@
     status?: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
     error?: string | null;
     onToggle?: (migrationId: string, selected: boolean) => void;
+    onPreview?: (migrationId: string) => void;
   }
 
-  let { migration, selected = false, status = 'pending', error = null, onToggle }: Props = $props();
+  let { migration, selected = false, status = 'pending', error = null, onToggle, onPreview }: Props = $props();
 
   function toggleSelection() {
     if (status === 'running' || status === 'completed') {
@@ -30,8 +31,9 @@
   }
 
   function requestPreview() {
-    // TODO: Implement preview functionality
-    console.log('Preview requested for migration:', migration.id);
+    if (onPreview) {
+      onPreview(migration.id);
+    }
   }
 
   function getStatusText(): string {
