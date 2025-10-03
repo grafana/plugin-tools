@@ -9,6 +9,7 @@ interface MigrationInfo {
 
 class MigrationList extends HTMLElement {
   private migrations: MigrationInfo[] = [];
+  private allSelected = false;
 
   constructor() {
     super();
@@ -58,33 +59,42 @@ class MigrationList extends HTMLElement {
           gap: 12px;
           align-items: center;
         }
-        .select-all-btn {
-          background: none;
-          border: 1px solid #3498db;
-          color: #3498db;
-          padding: 8px 16px;
-          border-radius: 6px;
-          cursor: pointer;
+        .toggle-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .toggle-label {
           font-size: 14px;
-          transition: all 0.2s ease;
+          color: #5a6c7d;
+          font-weight: 500;
         }
-        .select-all-btn:hover {
-          background: #3498db;
-          color: white;
-        }
-        .deselect-all-btn {
-          background: none;
-          border: 1px solid #95a5a6;
-          color: #95a5a6;
-          padding: 8px 16px;
-          border-radius: 6px;
+        .toggle-switch {
+          position: relative;
+          width: 50px;
+          height: 24px;
+          background-color: #bdc3c7;
+          border-radius: 12px;
           cursor: pointer;
-          font-size: 14px;
-          transition: all 0.2s ease;
+          transition: background-color 0.3s ease;
         }
-        .deselect-all-btn:hover {
-          background: #95a5a6;
-          color: white;
+        .toggle-switch.active {
+          background-color: #3498db;
+        }
+        .toggle-switch::after {
+          content: '';
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 20px;
+          height: 20px;
+          background-color: white;
+          border-radius: 50%;
+          transition: transform 0.3s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .toggle-switch.active::after {
+          transform: translateX(26px);
         }
         .empty-state {
           text-align: center;
@@ -122,8 +132,10 @@ class MigrationList extends HTMLElement {
         <div class="list-header">
           <h2 class="list-title">Available Migrations</h2>
           <div class="list-actions">
-            <button class="select-all-btn" id="select-all">Select All</button>
-            <button class="deselect-all-btn" id="deselect-all">Deselect All</button>
+            <div class="toggle-container">
+              <span class="toggle-label">Select All</span>
+              <div class="toggle-switch" id="select-all-toggle"></div>
+            </div>
           </div>
         </div>
         <div id="migrations-container">
@@ -133,6 +145,7 @@ class MigrationList extends HTMLElement {
     `;
 
     this.setupEventListeners();
+    this.updateToggleState();
   }
 
   private renderMigrations(): string {
@@ -158,16 +171,31 @@ class MigrationList extends HTMLElement {
   }
 
   private setupEventListeners(): void {
-    const selectAllBtn = this.shadowRoot!.querySelector('#select-all') as HTMLButtonElement;
-    const deselectAllBtn = this.shadowRoot!.querySelector('#deselect-all') as HTMLButtonElement;
+    const toggleSwitch = this.shadowRoot!.querySelector('#select-all-toggle') as HTMLElement;
 
-    selectAllBtn.addEventListener('click', () => {
+    if (toggleSwitch) {
+      toggleSwitch.addEventListener('click', () => {
+        this.toggleAllMigrations();
+      });
+    }
+  }
+
+  private toggleAllMigrations(): void {
+    this.allSelected = !this.allSelected;
+    this.updateToggleState();
+
+    if (this.allSelected) {
       this.selectAllMigrations();
-    });
-
-    deselectAllBtn.addEventListener('click', () => {
+    } else {
       this.deselectAllMigrations();
-    });
+    }
+  }
+
+  private updateToggleState(): void {
+    const toggleSwitch = this.shadowRoot!.querySelector('#select-all-toggle') as HTMLElement;
+    if (toggleSwitch) {
+      toggleSwitch.classList.toggle('active', this.allSelected);
+    }
   }
 
   private selectAllMigrations(): void {
