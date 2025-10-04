@@ -1,12 +1,50 @@
 import minimist from 'minimist';
-import { standardUpdate } from './update.standard.command.js';
-import { migrationUpdate } from './update.migrate.command.js';
+import { gte, lt } from 'semver';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
+import { getConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
 import { isPluginDirectory } from '../utils/utils.plugin.js';
-import { getConfig } from '../utils/utils.config.js';
+import { getPackageManagerExecCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
+import { LEGACY_UPDATE_CUTOFF_VERSION } from '../constants.js';
+import { spawnSync } from 'node:child_process';
+import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
+  await performPreUpdateChecks(argv);
+  const { version } = getConfig();
+
+  if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
+    preparePluginForMigrations(argv);
+  }
+
+  try {
+    if (gte(version, CURRENT_APP_VERSION)) {
+      output.log({
+        title: 'Nothing to update, exiting.',
+      });
+
+      process.exit(0);
+    }
+
+    const commitEachMigration = argv.commit;
+    const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
+    await runMigrations(migrations, { commitEachMigration });
+    output.success({
+      title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      output.error({
+        title: 'Update failed',
+        body: [error.message],
+      });
+    }
+    process.exit(1);
+  }
+};
+
+async function performPreUpdateChecks(argv: minimist.ParsedArgs) {
   if (!(await isGitDirectory()) && !argv.force) {
     output.error({
       title: 'You are not inside a git directory',
@@ -46,10 +84,63 @@ export const update = async (argv: minimist.ParsedArgs) => {
 
     process.exit(1);
   }
+}
 
-  if (argv.experimentalUpdates || getConfig().features.useExperimentalUpdates) {
-    return await migrationUpdate(argv);
+/**
+ * Prepares a plugin for migrations by running the legacy update command and installing dependencies.
+ * This is a one time operation that ensures the plugin configs are "as expected" by the new migration system.
+ */
+function preparePluginForMigrations(argv: minimist.ParsedArgs) {
+  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+  const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
+
+  const updateCmdList = [
+    `${packageManagerExecCmd}@${LEGACY_UPDATE_CUTOFF_VERSION} update${argv.force ? ' --force' : ''}`,
+    `${packageManagerName} install`,
+  ];
+  const gitCmdList = [
+    'git add -A',
+    `git commit -m 'chore: run create-plugin@${LEGACY_UPDATE_CUTOFF_VERSION} update' --no-verify`,
+  ];
+
+  try {
+    output.warning({
+      title: `Update to create-plugin ${LEGACY_UPDATE_CUTOFF_VERSION} required.`,
+      body: ['Running additional commands before updating your plugin to create-plugin v6+.'],
+    });
+
+    for (const cmd of updateCmdList) {
+      output.log({
+        title: `Running ${output.formatCode(cmd)}`,
+      });
+      const spawn = spawnSync(cmd, { shell: true, stdio: 'inherit', cwd: process.cwd() });
+      if (spawn.status !== 0) {
+        throw new Error(spawn.stderr.toString());
+      }
+    }
+
+    if (argv.commit) {
+      for (const cmd of gitCmdList) {
+        output.log({
+          title: `Running ${output.formatCode(cmd)}`,
+        });
+        const spawn = spawnSync(cmd, { shell: true, cwd: process.cwd() });
+        if (spawn.status !== 0) {
+          throw new Error(spawn.stderr.toString());
+        }
+      }
+    }
+  } catch (error) {
+    output.error({
+      title: `Update to create-plugin ${LEGACY_UPDATE_CUTOFF_VERSION} failed.`,
+      body: [
+        'Please run the following commands manually and try again.',
+        ...updateCmdList,
+        ...(argv.commit ? gitCmdList : []),
+        'error:',
+        error instanceof Error ? error.message : String(error),
+      ],
+    });
+    process.exit(1);
   }
-
-  return await standardUpdate();
-};
+}
