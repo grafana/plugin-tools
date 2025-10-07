@@ -1,5 +1,18 @@
 # (Tue Oct 07 2025)
 
+#### 💥 Breaking Change
+
+- `website@4.0.0`, `@grafana/create-plugin@6.0.0`
+  - Create Plugin: Enable updates as migrations [#2093](https://github.com/grafana/plugin-tools/pull/2093) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Oct 07 2025)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@5.27.1`

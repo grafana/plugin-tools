@@ -1,3 +1,15 @@
+# v6.0.0 (Tue Oct 07 2025)
+
+#### 💥 Breaking Change
+
+- Create Plugin: Enable updates as migrations [#2093](https://github.com/grafana/plugin-tools/pull/2093) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.27.1 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
