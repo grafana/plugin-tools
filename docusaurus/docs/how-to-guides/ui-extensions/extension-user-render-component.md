@@ -17,7 +17,7 @@ keywords:
 
 An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
-:::note 
+:::note
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). <br />
 For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
@@ -104,3 +104,18 @@ export const InstanceToolbar = () => {
   // ...
 };
 ```
+
+## Declare the extension point in your plugin.json
+
+You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code when calling `usePluginComponents`.
+
+```json
+"extensionPoints": [
+    {
+      "id": "myorg-foo-app/toolbar/v1",
+      "description": "Add components to the toolbar in my app."
+    }
+ ]
+```
+
+For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionPoints).

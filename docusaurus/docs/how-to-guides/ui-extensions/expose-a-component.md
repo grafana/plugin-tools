@@ -74,7 +74,7 @@ For more details [check the API reference guide](../../reference/ui-extensions-r
 
 ## Declare the exposed component in your plugin.json
 
-You must declare the components your plugin is exposing in the `plugin.json` file. The `id`, `title`, and `description` must match exactly what you defined when calling `exposeComponent()` in your code.
+You must declare the components your plugin is exposing in the `plugin.json` file. The `id`, `title`, and `description` must match exactly what you defined when calling `exposeComponent` in your code.
 
 ```json
 "exposedComponents": [

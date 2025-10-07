@@ -131,14 +131,13 @@ export const InstanceToolbar = () => {
 
 ## Declare the extension point in your plugin.json
 
-You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code.
+You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code when callling `usePluginLinks`.
 
 ```json
 "extensionPoints": [
     {
       "id": "myorg-foo-app/toolbar/v1",
       "description": "Add links to the toolbar in my app.",
-      "type": "link"
     }
  ]
 ```

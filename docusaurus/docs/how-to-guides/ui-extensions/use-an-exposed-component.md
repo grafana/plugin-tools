@@ -1,7 +1,7 @@
 ---
 id: use-an-exposed-component
 title: Use an exposed component
-sidebar_label: Use exposed components 
+sidebar_label: Use exposed components
 description: Reuse functionality from other plugins by using exposed components.
 keywords:
   - grafana
@@ -36,3 +36,23 @@ export const MyComponent = () => {
 :::tip
 For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
+
+## Declare the component dependency in your plugin.json
+
+When using an exposed component from another plugin, you must declare this dependency in your own `plugin.json` file. Add the component ID to the `dependencies.extensions.exposedComponents` array:
+
+```json
+{
+  "dependencies": {
+    "extensions": {
+      "exposedComponents": ["myorg-basic-app/reusable-component/v1"]
+    }
+  }
+}
+```
+
+For more information, see the [`plugin.json` reference](../../reference/metadata.md#dependenciesextensionsexposedcomponents).
+
+## Prerequisites
+
+The plugin that exposes the component must also have declared it in their `plugin.json` file under the `extensions.exposedComponents` section. For more information about exposing components, see [Expose a component](./expose-a-component.md).
