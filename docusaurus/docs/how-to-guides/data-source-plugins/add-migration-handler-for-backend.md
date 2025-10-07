@@ -1,6 +1,7 @@
 ---
 id: add-migration-handler-for-backend-data-source
 title: Add query migrations for a backend data source plugin
+sidebar_label: Add query migrations
 description: How to add a query migration handler to your Grafana backend data source plugin for seamless updates.
 keywords:
   - grafana

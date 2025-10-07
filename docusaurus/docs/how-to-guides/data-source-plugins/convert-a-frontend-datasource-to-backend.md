@@ -1,6 +1,7 @@
 ---
 id: convert-a-frontend-datasource-to-backend
 title: Convert data source plugin frontend logic into a backend component
+sidebar_label: Convert frontend to backend component
 description: Learn how to migrate a data source plugin frontend-only code into a backend compenent.
 keywords:
   - grafana
