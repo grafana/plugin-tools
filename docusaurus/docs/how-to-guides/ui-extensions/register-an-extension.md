@@ -20,7 +20,7 @@ Read more about extensions under [key concepts](../../key-concepts/ui-extensions
 
 :::warning
 
-You must [update](#add-the-extension-to-your-pluginjson) your `plugin.json` metadata to list any registered extensions.
+You must [update](#update-the-pluginjson-metadata) your `plugin.json` metadata to list any registered extensions.
 
 :::
 
@@ -224,7 +224,7 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
-## Add the extension to your plugin.json
+## Update the plugin.json metadata
 
 After you have defined a link or component extension and registered it against an extension point, you must update your `plugin.json` metadata.
 
