@@ -1,5 +1,18 @@
 # (Tue Oct 07 2025)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@5.27.1`
+  - Update dependency @grafana/plugin-e2e to v2.2.0 [#2201](https://github.com/grafana/plugin-tools/pull/2201) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
+# (Tue Oct 07 2025)
+
 #### 🚀 Enhancement
 
 - `@grafana/plugin-e2e@2.2.0`
