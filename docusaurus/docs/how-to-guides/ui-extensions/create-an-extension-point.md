@@ -142,4 +142,4 @@ You must declare the extension points your plugin is exposing in the `plugin.jso
  ]
 ```
 
-For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionPoints).
+For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionsextensionpoints).

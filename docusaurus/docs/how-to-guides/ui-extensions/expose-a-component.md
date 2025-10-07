@@ -86,4 +86,4 @@ You must declare the components your plugin is exposing in the `plugin.json` fil
  ]
 ```
 
-For more information, see the [`plugin.json` reference](../../reference/metadata.md#exposedComponents).
+For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionsexposedcomponents).
