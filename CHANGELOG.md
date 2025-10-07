@@ -1,3 +1,28 @@
+# (Tue Oct 07 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@2.2.0`
+  - Plugin E2E: Add support for specifying user preferences [#2131](https://github.com/grafana/plugin-tools/pull/2131) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- Update dependency @esbuild/linux-x64 to v0.25.10 [#2177](https://github.com/grafana/plugin-tools/pull/2177) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.27.0`, `@grafana/sign-plugin@3.2.0`
+  - Update dependency find-up to v8 [#2170](https://github.com/grafana/plugin-tools/pull/2170) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/create-plugin@5.27.0`
+  - Update dependency @grafana/e2e-selectors to v12.1.1 [#2149](https://github.com/grafana/plugin-tools/pull/2149) ([@renovate[bot]](https://github.com/renovate[bot]))
+  - Update dependency @grafana/plugin-e2e to v2.1.14 [#2168](https://github.com/grafana/plugin-tools/pull/2168) ([@renovate[bot]](https://github.com/renovate[bot]))
+- `@grafana/eslint-plugin-plugins@0.5.0`, `@grafana/plugin-meta-extractor@0.10.0`
+  - Update auto-merged devDependencies [#2169](https://github.com/grafana/plugin-tools/pull/2169) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 2
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Mon Sep 29 2025)
 
 #### 🐛 Bug Fix

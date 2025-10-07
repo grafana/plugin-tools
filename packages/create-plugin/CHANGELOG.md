@@ -1,3 +1,17 @@
+# v5.27.0 (Tue Oct 07 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency find-up to v8 [#2170](https://github.com/grafana/plugin-tools/pull/2170) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/e2e-selectors to v12.1.1 [#2149](https://github.com/grafana/plugin-tools/pull/2149) ([@renovate[bot]](https://github.com/renovate[bot]))
+- Update dependency @grafana/plugin-e2e to v2.1.14 [#2168](https://github.com/grafana/plugin-tools/pull/2168) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v5.26.9 (Mon Sep 29 2025)
 
 #### 🐛 Bug Fix

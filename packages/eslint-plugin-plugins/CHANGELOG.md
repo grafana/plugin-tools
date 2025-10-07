@@ -1,3 +1,15 @@
+# v0.5.0 (Tue Oct 07 2025)
+
+#### 🐛 Bug Fix
+
+- Update auto-merged devDependencies [#2169](https://github.com/grafana/plugin-tools/pull/2169) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v0.4.3 (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix
