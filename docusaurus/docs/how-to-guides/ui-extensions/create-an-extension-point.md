@@ -1,7 +1,7 @@
 ---
 id: create-an-extension-point
 title: Render links in an extension point
-sidebar_label: Use extension points to render links 
+sidebar_label: Use extension points to render links
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:
@@ -17,7 +17,7 @@ keywords:
 
 An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
-:::note 
+:::note
 Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). <br />
 For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
@@ -27,7 +27,6 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 - **Make sure your UI handles multiple links** <br /> Multiple plugins may add links to your extension point. Make sure your extension point can handle this and still provide good user experience. See how you can [limit the number of extensions in your extension point](#limit-the-number-of-extensions-in-your-extension-point).
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note that the `context{}` object always gets frozen before being passed to the links, so it can't be mutated.
 - **Avoid unnecessary re-renders** <br />
-
   - **Static context**
 
     ```ts
@@ -130,3 +129,19 @@ export const InstanceToolbar = () => {
 };
 ```
 
+## Add the extension point to your plugin.json
+
+It's a good practice to declare the extension points your plugin is exposing in the `plugin.json` file.
+This helps to raise awareness of the extension points your plugin provides.
+
+```json
+"extensionPoints": [
+    {
+      "id": "myorg-foo-app/toolbar/v1",
+      "description": "Add links to the toolbar in my app.",
+      "type": "link"
+    }
+ ]
+```
+
+For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionPoints).

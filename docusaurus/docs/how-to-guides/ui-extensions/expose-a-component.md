@@ -1,7 +1,7 @@
 ---
 id: expose-a-component
 title: Expose a component
-sidebar_label: Expose a component 
+sidebar_label: Expose a component
 description: Share functionality with other plugins by exposing a component.
 keywords:
   - grafana
@@ -71,3 +71,20 @@ export const plugin = new AppPlugin()
 :::tip
 For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
+
+## Add the exposed component to your plugin.json
+
+It's a good practice to declare the components your plugin is exposing in the `plugin.json` file.
+This helps to raise awareness of the components your plugin provides.
+
+```json
+"exposedComponents": [
+    {
+      "id": "myorg-foo-app/reusable-component/v1",
+      "title": "Reusable component",
+      "description": "A component that can be reused by other app plugins."
+    }
+ ]
+```
+
+For more information, see the [`plugin.json` reference](../../reference/metadata.md#exposedComponents).
