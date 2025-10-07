@@ -129,10 +129,9 @@ export const InstanceToolbar = () => {
 };
 ```
 
-## Add the extension point to your plugin.json
+## Declare the extension point in your plugin.json
 
-It's a good practice to declare the extension points your plugin is exposing in the `plugin.json` file.
-This helps to raise awareness of the extension points your plugin provides.
+You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code.
 
 ```json
 "extensionPoints": [

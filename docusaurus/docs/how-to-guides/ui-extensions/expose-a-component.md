@@ -72,10 +72,9 @@ export const plugin = new AppPlugin()
 For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
 
-## Add the exposed component to your plugin.json
+## Declare the exposed component in your plugin.json
 
-It's a good practice to declare the components your plugin is exposing in the `plugin.json` file.
-This helps to raise awareness of the components your plugin provides.
+You must declare the components your plugin is exposing in the `plugin.json` file. The `id`, `title`, and `description` must match exactly what you defined when calling `exposeComponent()` in your code.
 
 ```json
 "exposedComponents": [
