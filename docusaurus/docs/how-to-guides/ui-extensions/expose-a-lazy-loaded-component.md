@@ -38,8 +38,10 @@ export const plugin = new AppPlugin().exposeComponent({
 
 When another plugin uses your lazy-loaded component with `usePluginComponent`, Grafana will automatically handle the loading of the component. The `isLoading` flag returned by the hook will be `true` until the component is loaded.
 
+It's a good practice to wrap the lazy-loaded component in a `React.Suspense` component to provide a fallback while the component is loading.
+
 ```tsx
-import React from 'react';
+import React, { Suspense } from 'react';
 import { usePluginComponent } from '@grafana/runtime';
 
 export const MyPluginPage = () => {
@@ -49,6 +51,12 @@ export const MyPluginPage = () => {
     return <div>Loading...</div>;
   }
 
-  return MyLazyComponent ? <MyLazyComponent /> : <div>Component not found</div>;
+  return MyLazyComponent ? (
+    <Suspense fallback={<div>Loading component...</div>}>
+      <MyLazyComponent />
+    </Suspense>
+  ) : (
+    <div>Component not found</div>
+  );
 };
 ```
