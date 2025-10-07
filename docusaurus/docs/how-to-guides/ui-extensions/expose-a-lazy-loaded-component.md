@@ -17,31 +17,39 @@ You can expose a lazy-loaded component from your app plugin to share functionali
 
 ## Expose a lazy-loaded component
 
-To expose a lazy-loaded component, you can use `React.lazy` to dynamically import the component and then pass it to the `exposeComponent` method.
+To expose a lazy-loaded component, you can use `React.lazy` to dynamically import the component and then wrap it in a `Suspense` component before passing it to the `exposeComponent` method.
 
 ```tsx
-import React from 'react';
+import React, { Suspense } from 'react';
 import { plugin } from './plugin';
 
 // Lazy load your component
 const MyLazyComponent = React.lazy(() => import('./MyLazyComponent'));
 
+const SuspendedComponent = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <MyLazyComponent />
+  </Suspense>
+);
+
 export const plugin = new AppPlugin().exposeComponent({
   id: `${plugin.meta.id}/my-lazy-component/v1`,
   title: 'My Lazy Component',
   description: 'A component that is loaded on demand.',
-  component: MyLazyComponent,
+  component: SuspendedComponent,
 });
 ```
+
+:::note
+You can use the same pattern for adding components using the `addComponent` method.
+:::
 
 ## Using the lazy-loaded component
 
 When another plugin uses your lazy-loaded component with `usePluginComponent`, Grafana will automatically handle the loading of the component. The `isLoading` flag returned by the hook will be `true` until the component is loaded.
 
-It's a good practice to wrap the lazy-loaded component in a `React.Suspense` component to provide a fallback while the component is loading.
-
 ```tsx
-import React, { Suspense } from 'react';
+import React from 'react';
 import { usePluginComponent } from '@grafana/runtime';
 
 export const MyPluginPage = () => {
@@ -51,12 +59,6 @@ export const MyPluginPage = () => {
     return <div>Loading...</div>;
   }
 
-  return MyLazyComponent ? (
-    <Suspense fallback={<div>Loading component...</div>}>
-      <MyLazyComponent />
-    </Suspense>
-  ) : (
-    <div>Component not found</div>
-  );
+  return MyLazyComponent ? <MyLazyComponent /> : <div>Component not found</div>;
 };
 ```
