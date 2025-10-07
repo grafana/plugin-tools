@@ -68,12 +68,10 @@ export async function runMigrations(migrations: Record<string, MigrationMeta>, o
     }
   }
 
-  // If there are no migrations to run, we should set the version to the current create-plugin version.
-  const latestVersion = migrationList.length > 0 ? Object.values(migrations).at(-1)?.version : CURRENT_APP_VERSION;
-  setRootConfig({ version: latestVersion });
+  setRootConfig({ version: CURRENT_APP_VERSION });
 
   if (options.commitEachMigration) {
-    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${latestVersion}.`);
+    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
   }
 }
 
