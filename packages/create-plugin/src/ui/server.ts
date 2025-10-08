@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import getPort from 'get-port';
@@ -47,17 +48,22 @@ export class UIServer {
   }
 
   private setupRoutes() {
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // Limit each IP to 100 requests per `windowMs`
+    });
+
     // Serve the main HTML file for the root path
-    this.app.get('/', (_req, res) => {
+    this.app.get('/', limiter, (_req, res) => {
       res.sendFile(join(__dirname, 'static', 'index.html'));
     });
 
     // Health check endpoint
-    this.app.get('/api/health', (_req, res) => {
+    this.app.get('/api/health', limiter, (_req, res) => {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
     });
 
-    this.app.get('/api/pluginMeta', (_req, res) => {
+    this.app.get('/api/pluginMeta', limiter, (_req, res) => {
       res.json({
         target_version: CURRENT_APP_VERSION,
         current_version: this.version,
@@ -66,7 +72,7 @@ export class UIServer {
     });
 
     // Migration endpoint - returns available migrations for the current plugin
-    this.app.get('/api/migrations', async (_req, res) => {
+    this.app.get('/api/migrations', limiter, async (_req, res) => {
       try {
         const migrations = this.migrations;
 
@@ -118,7 +124,15 @@ export class UIServer {
       }
     });
 
-    this.app.get('/api/migrations/:migrationId/preview', async (req, res) => {
+    const previewLimiter = rateLimit({
+      windowMs: 60 * 1000, // 1 minute
+      max: 10, // Limit each IP to 10 requests per windowMs
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { error: 'Too many preview requests, please try again later.' },
+    });
+
+    this.app.get('/api/migrations/:migrationId/preview', previewLimiter, async (req, res) => {
       const { migrationId } = req.params;
       const migration = this.migrations[migrationId];
       const basePath = process.cwd();
