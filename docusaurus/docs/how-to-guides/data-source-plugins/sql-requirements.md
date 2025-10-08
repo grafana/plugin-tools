@@ -75,7 +75,7 @@ func main() {
 }
 ```
 
-### What does the conversion look like?
+### What does conversion look like?
 
 This is how SQL expressions convert labeled data:
 
@@ -85,7 +85,7 @@ This is how SQL expressions convert labeled data:
 
 ### Test your plugin's SQL compatibility
 
-In a dashboard, and for each type for response:
+In a dashboard, and for each type for response, follow these steps:
 
 1. Add your data source query.
 1. Add `Expression -> Type SQL`.
