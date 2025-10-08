@@ -40,7 +40,7 @@ Let's break down the differences.
 
 ### `add`: Pushing content to extension points
 
-Use the `add` method when you want to place your content in a specific, predefined location. With this approach, you are actively "pushing" your content into a known slot in the Grafana ui.
+Use the `add` method when you want to place your content in a specific, predefined location. With this approach, you are actively "pushing" your content into a known slot in the Grafana UI.
 
 - **Your role (producer):** You create a link or a component and register it to a specific extension point, such as a panel menu or a navigation bar.
 - **The host's role (consumer):** The owner of the extension point (Grafana or another plugin) receives all the registered content and decides how to display it. The consumer doesn't know in advance who will contribute content.
