@@ -2,7 +2,7 @@
 id: sql-requirements
 title: Requirements to support SQL expressions
 sidebar_label: Support SQL expressions
-description: Data source requirements to support SQL expressions.
+description: Requirements for data source plugins to support SQL expressions.
 keywords:
   - grafana
   - plugin
@@ -10,28 +10,24 @@ keywords:
   - sql
 ---
 
-Follow this guide to understand the plugin requirements to support SQL expressions.
+Follow this guide to understand what your data source plugin requires to support SQL expressions.
 
 :::caution
 Only plugins with a backend can support SQL expressions.
 :::
 
-## Types of SQL responses
-
-Requirements depend on the type of response for your query. 
-
-SQL expressions support two types of responses:
+Requirements depend on the type of response for your query. SQL expressions support two types of responses:
 
 - [Tabular data response](#tabular-data-response) 
 - [Labeled metric time data response](#labeled-metric-time-data-response) 
 
-### Tabular data response
+## Requirements for tabular data responses
 
 A tabular data response is a single [data frame](../../key-concepts/data-frames) with no labels on any of the fields (columns). In short, a data frame that can be directly mapped to a SQL table.
 
 Tabular data responses work out-of-the-box.
 
-### Labeled metric time data response
+## Requirements for labeled metric time data responses
 
 A labeled metric time data response contains data that meets the [data plane specification](https://grafana.com/developers/dataplane) and has the `Frame.Meta.Type` property set with the data plane `type`. It can be a timeseries or numeric. 
 
@@ -79,13 +75,13 @@ func main() {
 }
 ```
 
-#### What does the conversion look like?
+### What does the conversion look like?
 
 This is how SQL expressions convert labeled data:
 
 ![SQL conversion](./images/sql-conversion.png)
 
-## Instrument and test
+## Instrument and test your plugin
 
 ### Test your plugin's SQL compatibility
 
@@ -102,6 +98,7 @@ Use the following metrics to check your data source's compatibility with SQL exp
 ```
 sum(rate(grafana_sse_sql_command_input_count[$__rate_interval])) by (status,attempted_conversion,datasource_type,input_frame_type)`
 ```
+
 ## Troubleshooting
 
 ### My data source sends labeled data without a frame type 
