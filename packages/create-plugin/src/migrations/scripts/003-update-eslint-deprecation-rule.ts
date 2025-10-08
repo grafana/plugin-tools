@@ -38,6 +38,9 @@ export default function migrate(context: Context) {
         '@typescript-eslint/parser': '^8.3.0',
       });
       removeDependenciesFromPackageJson(context, [], ['eslint-plugin-deprecation']);
+    } else {
+      // no overrides use this plugin so remove it to clean up package.json
+      removeDependenciesFromPackageJson(context, [], ['eslint-plugin-deprecation']);
     }
   }
 

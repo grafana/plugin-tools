@@ -1,3 +1,15 @@
+# v2.2.0 (Tue Oct 07 2025)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add support for specifying user preferences [#2131](https://github.com/grafana/plugin-tools/pull/2131) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v2.1.14 (Mon Sep 29 2025)
 
 #### 🐛 Bug Fix

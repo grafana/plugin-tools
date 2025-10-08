@@ -100,7 +100,7 @@ The path `src/locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modi
 const pluginJson = require('../plugin.json');
 
 module.exports = {
-  locales: ['en-US', 'es-ES'], // An array of the locales your plugin supports
+  locales: pluginJson.languages, // An array of the locales your plugin supports
   sort: true,
   createOldCatalogs: false,
   failOnWarnings: true,
@@ -168,3 +168,26 @@ The translation file will look similar to this:
 To test the plugin follow the steps in [Set up your development environment](../set-up/) to run your plugin locally.
 
 You can then verify your plugin is displaying the appropriate text as you [change the language](https://grafana.com/docs/grafana/latest/administration/organization-preferences/#change-grafana-language).
+
+## Configure ESLint rules for translations
+
+Add the `@grafana/i18n` rules in `eslint.config.mjs`:
+
+```js title="eslint.config.mjs"
+/* existing imports */
+import grafanaI18nPlugin from '@grafana/i18n/eslint-plugin';
+
+export default defineConfig([
+  /* existing config */
+  {
+    name: 'grafana/i18n-rules',
+    plugins: { '@grafana/i18n': grafanaI18nPlugin },
+    rules: {
+      '@grafana/i18n/no-untranslated-strings': ['error', { calleesToIgnore: ['^css$', 'use[A-Z].*'] }],
+      '@grafana/i18n/no-translation-top-level': 'error',
+    },
+  },
+]);
+```
+
+You can find more detailed description of the rules [here](https://github.com/grafana/grafana/blob/main/packages/grafana-i18n/src/eslint/README.md).
