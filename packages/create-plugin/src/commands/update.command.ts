@@ -1,5 +1,5 @@
 import minimist from 'minimist';
-import { gte } from 'semver';
+import { lt, gte } from 'semver';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 import { getConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
@@ -23,9 +23,9 @@ export const update = async (argv: minimist.ParsedArgs) => {
   await performPreUpdateChecks(argv);
   const { version } = getConfig();
 
-  // if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
-  //   preparePluginForMigrations(argv);
-  // }
+  if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
+    preparePluginForMigrations(argv);
+  }
 
   try {
     if (gte(version, CURRENT_APP_VERSION)) {
