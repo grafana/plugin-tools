@@ -1,7 +1,8 @@
 {
   "mcpServers": {
-    "nx-mcp": {
-      "url": "http://localhost:9529/sse"
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest", "--yes", "--headless=true", "--isolated=true"]
     }
   }
 }
