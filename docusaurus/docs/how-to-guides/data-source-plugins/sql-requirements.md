@@ -31,7 +31,7 @@ Tabular data responses work out-of-the-box.
 
 A labeled metric time data response contains data that meets the [data plane specification](https://grafana.com/developers/dataplane) and has the `Frame.Meta.Type` property set with the data plane type. It can be a timeseries or numeric. 
 
-SQL doesn't support labels, so when SQL expressions receive labeled metric data, they convert the data into the full-long format for the corresponding kind (timeseries or numeric). 
+SQL doesn't support labels, so when SQL expressions receive labeled metric data, it converts the data into the full-long format for the corresponding kind (timeseries or numeric). 
 
 The supported types are:
 
