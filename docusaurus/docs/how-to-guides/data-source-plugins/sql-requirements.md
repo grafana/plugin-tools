@@ -27,7 +27,7 @@ A tabular data response is a single [data frame](../../key-concepts/data-frames)
 
 Tabular data responses work out-of-the-box.
 
-## Requirements for labeled metric time data responses
+## Requirements for labeled metric data responses
 
 A labeled metric time data response contains data that meets the [data plane specification](https://grafana.com/developers/dataplane) and has the `Frame.Meta.Type` property set with the data plane `type`. It can be a timeseries or numeric. 
 
