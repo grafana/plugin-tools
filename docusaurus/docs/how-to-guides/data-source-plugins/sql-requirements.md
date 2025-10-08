@@ -117,7 +117,7 @@ If your data source returns multiple frames without a frame type, you'll get an 
 [sse.sql.input_conversion] failed to convert the results of query [A] (Datasource Type: [grafana-mock-datasource]) into a SQL/Tabular format for sql expression [B]: can not convert because the response is missing the data type (frame.meta.type) and has more than one dataframe that can not be automatically mapped to a single table
 ```
 
-### My data source returns multiple frames without different types
+### My data source returns multiple frames with different types
 
 This is not supported for the moment. 
 
