@@ -1,3 +1,16 @@
+# (Wed Oct 08 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.1.0`
+  - Create Plugin: Scaffold plugins with eslint 9 [#2204](https://github.com/grafana/plugin-tools/pull/2204) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Oct 07 2025)
 
 #### 💥 Breaking Change
