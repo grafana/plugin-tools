@@ -1,6 +1,7 @@
 ---
 id: include-dashboards
-title: Include dashboards
+title: Include dashboards in Grafana data source plugins
+sidebar_label: Add dashboards
 description: Include dashboards in Grafana data source plugins.
 keywords:
   - grafana
