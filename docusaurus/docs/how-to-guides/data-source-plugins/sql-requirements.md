@@ -29,11 +29,6 @@ SQL expressions support two types of responses:
 
 A tabular data response is a single [data frame](../../key-concepts/data-frames) with no labels on any of the fields (columns). In short, a data frame that can be directly mapped to a SQL table.
 
-The supported types are:
-
-- `timeseries-long`
-- `timeseries-multi`
-
 Tabular data responses work out-of-the-box.
 
 ### Labeled metric time data response
@@ -51,7 +46,7 @@ The supported types are:
 
 For example, the following response (with `Frame.Meta.Type` serialized into JSON as `schema.meta.type`) supports SQL expressions:
 
-```json
+```jsonc
 [
   {
     "schema": {
@@ -127,4 +122,6 @@ In this case, SQL expressions treat the first response as the type of all the fr
 
 ### What does the conversion look like?
 
-[IMAGE HERE]
+This is how converting SQL expressions looks like:
+
+![SQL conversion](./images/sql-conversion.png)
