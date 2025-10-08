@@ -41,7 +41,7 @@ export const plugin = new AppPlugin().exposeComponent({
 ```
 
 :::note
-You can use the same pattern for adding components using the `addComponent` method.
+You should use the same pattern for adding components using the `addComponent` method.
 :::
 
 ## Using the lazy-loaded component
