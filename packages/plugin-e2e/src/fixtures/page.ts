@@ -1,6 +1,7 @@
-import { TestFixture, Page } from '@playwright/test';
+import { Page, TestFixture } from '@playwright/test';
+
 import { PlaywrightArgs } from '../types';
-import { overrideFeatureToggles } from './scripts/overrideFeatureToggles';
+import { overrideGrafanaBootData } from './scripts/overrideGrafanaBootData';
 
 type PageFixture = TestFixture<Page, PlaywrightArgs>;
 
@@ -15,14 +16,15 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  *   newly attached frame.
  * The script is evaluated after the document was created but before any of its scripts were run.
  */
-export const page: PageFixture = async ({ page, featureToggles }, use) => {
-  if (Object.keys(featureToggles).length > 0) {
+export const page: PageFixture = async ({ page, featureToggles, userPreferences }, use) => {
+  if (Object.keys(featureToggles).length > 0 || Object.keys(userPreferences).length > 0) {
     try {
-      await page.addInitScript(overrideFeatureToggles, featureToggles);
+      await page.addInitScript(overrideGrafanaBootData, { featureToggles, userPreferences });
     } catch (error) {
       console.error('Failed to set feature toggles', error);
     }
   }
+
   await page.goto('/');
   await use(page);
 };
