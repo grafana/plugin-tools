@@ -1,6 +1,6 @@
 ---
 id: ui-extensions
-title: Understanding UI extensions
+title: Understand UI extensions
 sidebar_label: Key concepts
 description: Learn the core concepts behind UI extensions in Grafana and how they enable plugins to interact with each other.
 keywords:
