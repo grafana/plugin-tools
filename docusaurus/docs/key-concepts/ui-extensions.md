@@ -53,7 +53,7 @@ Use the `add` method when you want to place your content in a specific, predefin
 - Adding a new tab to a page in Grafana.
 - Contributing a button to a dashboard toolbar.
 
-This approach is best when you want to tightly integrate your plugin's functionality into the existing Grafana ui.
+This approach is best when you want to tightly integrate your plugin's functionality into the existing Grafana UI.
 
 ### `expose`: Letting others pull your content
 
