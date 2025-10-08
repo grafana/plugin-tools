@@ -193,6 +193,7 @@ const sidebars: SidebarsConfig = {
           items: ['how-to-guides/plugin-internationalization-grafana-11'],
         },
         'how-to-guides/runtime-checks',
+        'how-to-guides/updating-a-plugin',
         'how-to-guides/debugging-plugins',
       ],
     },

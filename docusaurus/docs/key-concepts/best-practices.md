@@ -28,6 +28,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Include a well-written README** - Give users a deeper understanding of how to configure and use your plugin, but don’t make it essential reading. You want users to be able to understand your plugin intuitively without referring to the documentation if possible.
 - **Allow incremental learning** - Hide advanced options using switches or categories, and let users learn about advanced features when they’re ready.
 - **Get beta testers** - Enlist users in your target audience to try out your plugin before you submit it. Get feedback to help improve your plugin before it's published.
+- **Keep tooling up to date** - Take advantage of the [create-plugin update](/how-to-guides/updating-a-plugin.md) command to keep your plugin up to date.
 
 ## Panel plugins
 
