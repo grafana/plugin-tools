@@ -32,6 +32,10 @@ vi.mock('../utils/utils.git.js', () => ({
   gitCommitNoVerify: vi.fn(),
 }));
 
+vi.mock('@libs/version', () => ({
+  getVersion: vi.fn().mockReturnValue('2.0.0'),
+}));
+
 describe('Migrations', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -217,7 +221,7 @@ describe('Migrations', () => {
 
       // The latest version in the migrations
       // (For `runMigrations()` this means the last key in the object according to `getMigrationsToRun()`)
-      expect(setRootConfig).toHaveBeenCalledWith({ version: '1.2.0' });
+      expect(setRootConfig).toHaveBeenCalledWith({ version: '2.0.0' });
     });
 
     it('should NOT update version in ".config/.cprc.json" if any of the migrations fail', async () => {

@@ -75,6 +75,38 @@ describe('003-update-eslint-deprecation-rule', () => {
     });
   });
 
+  it('should remove eslint-plugin-deprecation from package.json if no overrides use it', () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      '.config/.eslintrc',
+      JSON.stringify({
+        overrides: [
+          {
+            files: ['src/**/*.{ts,tsx}'],
+          },
+        ],
+      })
+    );
+    context.addFile(
+      'package.json',
+      JSON.stringify({
+        devDependencies: {
+          'eslint-plugin-deprecation': '^2.0.0',
+          '@typescript-eslint/eslint-plugin': '^8.3.0',
+          '@typescript-eslint/parser': '^8.3.0',
+        },
+      })
+    );
+    const result = migrate(context);
+    const packageJson = JSON.parse(result.getFile('package.json') || '{}');
+    expect(packageJson).toEqual({
+      devDependencies: {
+        '@typescript-eslint/eslint-plugin': '^8.3.0',
+        '@typescript-eslint/parser': '^8.3.0',
+      },
+    });
+  });
+
   it('should preserve comments', async () => {
     const context = new Context('/virtual');
     const eslintConfigRaw = JSON.stringify({

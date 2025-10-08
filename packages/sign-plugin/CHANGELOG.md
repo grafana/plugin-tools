@@ -1,3 +1,15 @@
+# v3.2.0 (Tue Oct 07 2025)
+
+#### 🐛 Bug Fix
+
+- Update dependency find-up to v8 [#2170](https://github.com/grafana/plugin-tools/pull/2170) ([@renovate[bot]](https://github.com/renovate[bot]))
+
+#### Authors: 1
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+
+---
+
 # v3.1.1 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix

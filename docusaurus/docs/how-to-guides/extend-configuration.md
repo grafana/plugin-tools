@@ -24,35 +24,28 @@ Instead of changing the files directly, follow the instructions on this page to 
 
 ### Extend the ESLint config
 
-Edit the `.eslintrc` file in the project root to extend the ESLint configuration:
+Edit the `eslint.config.mjs` file in the project root to extend the ESLint configuration. The following example disables deprecation notices for source files.
 
 **Example:**
 
-```json title=".eslintrc"
-{
-  // Eslint configuration provided by @grafana/create-plugin
-  "extends": "./.config/.eslintrc",
-  "rules": {
-    "react/prop-types": "off"
-  }
-}
-```
+```javascript title="eslint.config.mjs"
+import { defineConfig } from 'eslint/config';
+import baseConfig from './.config/eslint.config.mjs';
 
-The following example can be used to disable deprecation notices.
-
-```json title=".eslintrc"
-{
-  // Eslint configuration provided by @grafana/create-plugin
-  "extends": "./.config/.eslintrc",
-  "overrides": [
-    {
-      "files": ["src/**/*.{ts,tsx}"],
-      "rules": {
-        "deprecation/deprecation": "off"
-      }
-    }
-  ]
-}
+export default defineConfig([
+  {
+    ignores: [
+      //...
+    ],
+  },
+  ...baseConfig,
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-deprecated': 'off',
+    },
+  },
+]);
 ```
 
 ### Extend the Prettier config

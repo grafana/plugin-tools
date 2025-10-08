@@ -8,7 +8,7 @@ describe('Utils/Files', () => {
         filterOutCommonFiles(
           [
             // Common template files
-            `${TEMPLATE_PATHS.common}/.config/.eslintrc`,
+            `${TEMPLATE_PATHS.common}/.config/eslint.config.mjs`,
             `${TEMPLATE_PATHS.common}/.config/.gitignore`,
             `${TEMPLATE_PATHS.common}/.config/package.json`,
 
@@ -21,7 +21,7 @@ describe('Utils/Files', () => {
           PLUGIN_TYPES.app
         )
       ).toEqual([
-        `${TEMPLATE_PATHS.common}/.config/.eslintrc`,
+        `${TEMPLATE_PATHS.common}/.config/eslint.config.mjs`,
         `${TEMPLATE_PATHS.common}/.config/.gitignore`,
         `${TEMPLATE_PATHS.app}/.config/package.json`,
         `${TEMPLATE_PATHS.app}/.config/README.md`,
