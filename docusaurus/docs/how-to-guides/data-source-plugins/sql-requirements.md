@@ -79,6 +79,12 @@ func main() {
 }
 ```
 
+#### What does the conversion look like?
+
+This is how SQL expressions convert labeled data:
+
+![SQL conversion](./images/sql-conversion.png)
+
 ## Instrument and test
 
 ### Test your plugin's SQL compatibility
@@ -120,8 +126,3 @@ This is not supported for the moment.
 
 In this case, SQL expressions treat the first response as the type of all the frames. You'll likely get an odd error, or the results will be unreliable.
 
-### What does the conversion look like?
-
-This is how converting SQL expressions looks like:
-
-![SQL conversion](./images/sql-conversion.png)
