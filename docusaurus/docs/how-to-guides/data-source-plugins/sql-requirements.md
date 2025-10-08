@@ -19,7 +19,7 @@ Only plugins with a backend can support SQL expressions.
 Requirements depend on the type of response for your query. SQL expressions support two types of responses:
 
 - [Tabular data response](#requirements-for-tabular-data-responses) 
-- [Labeled metric time data response](#requirements-for-labeled-metric-time-data-responses) 
+- [Labeled metric time data response](#requirements-for-labeled-metric-data-responses) 
 
 ## Requirements for tabular data responses
 
