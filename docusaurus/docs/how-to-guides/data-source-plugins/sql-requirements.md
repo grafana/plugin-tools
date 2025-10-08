@@ -91,7 +91,7 @@ In a dashboard, and for each type for response:
 1. Add `Expression -> Type SQL`.
 1. The default query is `SELECT * from A LIMIT 10` (assuming `RefID` is `A`). If this works on a few variations of that query type, it's compatible with SQL expressions.
 
-### Instrument your data source to track SQL expression support
+### Check instrumentation for your data source to track SQL expression support
 
 Use the following metrics to check your data source's compatibility with SQL expressions:
 
