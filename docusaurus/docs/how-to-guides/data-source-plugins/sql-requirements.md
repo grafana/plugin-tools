@@ -81,7 +81,7 @@ This is how SQL expressions convert labeled data:
 
 ![SQL conversion](./images/sql-conversion.png)
 
-## Instrument and test your plugin
+## Test your plugin
 
 ### Test your plugin's SQL compatibility
 
