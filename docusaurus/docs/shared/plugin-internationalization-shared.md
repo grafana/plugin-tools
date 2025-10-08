@@ -100,7 +100,7 @@ The path `src/locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modi
 const pluginJson = require('../plugin.json');
 
 module.exports = {
-  locales: ['en-US', 'es-ES'], // An array of the locales your plugin supports
+  locales: pluginJson.languages, // An array of the locales your plugin supports
   sort: true,
   createOldCatalogs: false,
   failOnWarnings: true,
