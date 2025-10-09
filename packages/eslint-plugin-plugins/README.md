@@ -5,7 +5,7 @@
 ## How to install
 
 ```shell
-npm install eslint-plugin-plugins --save-dev
+npm install @grafana/eslint-plugin-plugins --save-dev
 ```
 
 ### Configure
