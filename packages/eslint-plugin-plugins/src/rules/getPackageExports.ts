@@ -71,7 +71,7 @@ function getPackageExportPaths(tempDir: string, minGrafanaVersion: string): Reco
   if (gte(minGrafanaVersion, '12.1.0')) {
     try {
       return packages.reduce<Record<string, string>>((acc, pkg) => {
-        const packagePath = require.resolve(pkg, { paths: [tempDir] });
+        const packagePath = join(tempDir, 'node_modules', pkg);
         const packageJson = JSON.parse(readFileSync(join(packagePath, 'package.json'), 'utf8'));
         const typesPath = packageJson.types;
         return {
