@@ -2,7 +2,7 @@ import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { execSync } from 'child_process';
-import { lt } from 'semver';
+import { lt, gt } from 'semver';
 import { getExportInfo } from './tscUtils';
 import { ExportInfo } from './types';
 
@@ -28,7 +28,7 @@ export function downloadPackages(tempDir: string, version: string) {
     );
   } else {
     packages.forEach((pkgName) => {
-      let typesFileUrl = `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/index.d.ts`;
+      let typesFileUrl = getPackageDownloadUrl(pkgName, version);
       let downloadPath = join(tempDir, 'node_modules', pkgName);
       mkdirSync(downloadPath, { recursive: true });
 
@@ -57,6 +57,17 @@ export function downloadPackages(tempDir: string, version: string) {
       }
     });
   }
+}
+
+function getPackageDownloadUrl(pkgName: string, version: string) {
+  if (gt(version, '12.1.0')) {
+    return `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/types/index.d.ts`;
+  }
+  if (gt(version, '11.0.0')) {
+    return `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/esm/index.d.mts`;
+  }
+
+  return `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/index.d.ts`;
 }
 
 function getPackageExportPaths(tempDir: string): Record<string, string> {
