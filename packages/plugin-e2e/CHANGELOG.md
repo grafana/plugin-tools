@@ -1,3 +1,15 @@
+# v2.2.1 (Thu Oct 09 2025)
+
+#### 🐛 Bug Fix
+
+- E2E: fix for flakiness in PanelEditPage.refreshPanel [#2207](https://github.com/grafana/plugin-tools/pull/2207) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v2.2.0 (Tue Oct 07 2025)
 
 #### 🚀 Enhancement
