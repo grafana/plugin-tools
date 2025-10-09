@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 20
 ---
 
-Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values. 
+Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values.
 
 You can either register or expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
@@ -234,7 +234,7 @@ For example:
 "extensions": [
     {
       "extensionPointId": "grafana/dashboard/panel/menu/v1",
-      "type": "link"
+      "type": "link",
       "title": "My app",
       "description": "Link to my app"
     }
@@ -245,14 +245,11 @@ For more information, see the `plugin.json` [reference](../../reference/metadata
 
 ## Troubleshooting
 
-If you cannot see your link or component extension check the following: 
+If you cannot see your link or component extension check the following:
 
 1. **Check the console logs** - your link or component may not be appearing due to validation errors. Look for the relevant logs in your browser's console.
 1. **Check the `targets`** - make sure that you are using the correct extension point IDs, and always use the `PluginExtensionPoints` enum for Grafana extension points.
 1. **Check the links `configure()` function** - if your link has a `configure()` function which is returning `undefined`, the link is hidden.
 1. **Check your component's implementation** - if your component returns `null` it won't be rendered at the extension point.
 1. **Check if you register too many links or components** - certain extension points limit the number of links or components allowed per plugin. If your plugin registers more links or components for the same extension point than the allowed amount, some of them may be filtered out.
-1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**. 
-
-
-
+1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**.
