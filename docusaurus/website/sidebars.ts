@@ -99,7 +99,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/error-handling',
         'how-to-guides/data-source-plugins/fetch-data-from-frontend',
         'how-to-guides/data-source-plugins/include-dashboards',
-        'how-to-guides/data-source-plugins/profile-backend-plugin',        
+        'how-to-guides/data-source-plugins/profile-backend-plugin',
         'how-to-guides/data-source-plugins/sql-requirements',
       ],
     },
