@@ -49,14 +49,15 @@ export const plugin = new AppPlugin().addLink({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "link",
-      "extensionPointId": "grafana/dashboard/panel/menu",
-      "title": "My link",
-      "description": "My links description"
-    }
-  ]
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
 }
 ```
 
@@ -96,14 +97,15 @@ export const plugin = new AppPlugin().addLink({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "link",
-      "extensionPointId": "grafana/dashboard/panel/menu",
-      "title": "My link",
-      "description": "My links description"
-    }
-  ]
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
 }
 ```
 
@@ -149,14 +151,15 @@ export const plugin = new AppPlugin().addLink({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "link",
-      "extensionPointId": "grafana/dashboard/panel/menu",
-      "title": "My link",
-      "description": "My links description"
-    }
-  ]
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
 }
 ```
 
@@ -206,14 +209,15 @@ export const plugin = new AppPlugin().addLink({
 ```json
 {
   ...
-  "extensions": [
-    {
-      "type": "link",
-      "extensionPointId": "grafana/dashboard/panel/menu",
-      "title": "My link",
-      "description": "My links description"
-    }
-  ]
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
 }
 ```
 
@@ -249,14 +253,15 @@ export const plugin = new AppPlugin().addComponent({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "component",
-      "extensionPointId": "grafana/user/profile/tab",
-      "title": "User profile tab",
-      "description": "User profile tab description"
-    }
-  ]
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
 }
 ```
 
@@ -290,14 +295,15 @@ export const plugin = new AppPlugin().addComponent({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "component",
-      "extensionPointId": "grafana/user/profile/tab",
-      "title": "User profile tab",
-      "description": "User profile tab description"
-    }
-  ]
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
 }
 ```
 
@@ -334,14 +340,15 @@ export const plugin = new AppPlugin().addComponent({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "component",
-      "extensionPointId": "grafana/user/profile/tab",
-      "title": "User profile tab",
-      "description": "User profile tab description"
-    }
-  ]
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
 }
 ```
 
@@ -381,14 +388,15 @@ export const plugin = new AppPlugin().addComponent({
 ```json title="src/plugin.json"
 {
   ...
-  "extensions": [
-    {
-      "type": "component",
-      "extensionPointId": "grafana/user/profile/tab",
-      "title": "User profile tab",
-      "description": "User profile tab description"
-    }
-  ]
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
 }
 ```
 
@@ -400,15 +408,23 @@ After you have defined a link or component extension and registered it against a
 
 For example:
 
-```json
-"extensions": [
+```json title="src/plugin.json"
+"extensions": {
+  "addedLinks": [
     {
-      "extensionPointId": "grafana/dashboard/panel/menu/v1",
-      "type": "link",
       "title": "My app",
-      "description": "Link to my app"
+      "description": "Link to my app",
+      "targets": ["grafana/dashboard/panel/menu"],
     }
- ]
+  ],
+  "addedComponents": [
+    {
+      "title": "User profile tab",
+      "description": "User profile tab description",
+      "targets": ["grafana/user/profile/tab"],
+    }
+  ]
+}
 ```
 
 For more information, see the `plugin.json` [reference](../../reference/metadata.md#extensions).
