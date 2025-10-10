@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 20
 ---
 
-Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values. 
+Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values.
 
 You can either register or expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
@@ -28,30 +28,51 @@ You must [update](#update-the-pluginjson-metadata) your `plugin.json` metadata t
 
 ### Register a link extension
 
-You can add an extension for a link. For example:
+The following example shows how to add a link to the panel menu in a dashboard:
 
-```tsx
+1. Register the link when initialising your plugin:
+
+```tsx title="src/module.tsx"
 import { PluginExtensionPoints } from '@grafana/data';
 import pluginJson from './plugin.json';
 
 export const plugin = new AppPlugin().addLink({
-  title: '...', // This appears as the label for the link
-  description: '...',
+  title: 'My link', // This appears as the label for the link
+  description: 'My links description',
   targets: [PluginExtensionPoints.DashboardPanelMenu], // Show it in the panel menu
   path: `/a/${pluginJson.id}/foo`, // Path can only point somewhere under the plugin
 });
 ```
 
+2. Update the `plugin.json` with necessary metadata:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
+}
+```
+
 ### Hide a link in certain conditions
 
-You can hide a link at the extension point. For example:
+You can hide a link in certain conditions using the `configure()` function.
 
-```tsx
+1. Add a `configure()` function:
+
+```tsx title="src/module.tsx"
 import { PluginExtensionPoints } from '@grafana/data';
 
 export const plugin = new AppPlugin().addLink({
-  title: '...',
-  description: '...',
+  title: 'My link',
+  description: 'My link description',
   targets: [PluginExtensionPoints.DashboardPanelMenu],
   path: `/a/${pluginJson.id}/foo`,
   // The `context` is coming from the extension point.
@@ -69,14 +90,37 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ### Update the path based on the context
 
-```tsx
+1. Add a `configure()` function with the logic:
+
+```tsx title="src/module.tsx"
 import { PluginExtensionPoints } from '@grafana/data';
 
 export const plugin = new AppPlugin().addLink({
-  title: '...',
-  description: '...',
+  title: 'My link',
+  description: 'My link description',
   targets: [PluginExtensionPoints.DashboardPanelMenu],
   path: `/a/${pluginJson.id}/foo`,
   configure: (context) => {
@@ -100,15 +144,38 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ### Open a modal from the `onClick()`
 
-```tsx
+1. Add an `onClick()` handler to your links config:
+
+```tsx title="src/module.tsx"
 import { PluginExtensionPoints } from '@grafana/data';
 import { Button, Modal } from '@grafana/ui';
 
 export const plugin = new AppPlugin().addLink({
-  title: '...',
-  description: '...',
+  title: 'My link',
+  description: 'My links description',
   targets: [PluginExtensionPoints.DashboardPanelMenu],
   // `event` - the `React.MouseEvent` from the click event
   // `context` - the `context` object shared with the extensions
@@ -135,6 +202,27 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json
+{
+  ...
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My link",
+        "description": "My links description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ## Work with component extensions
 
 ### Best practices for adding components
@@ -145,29 +233,50 @@ export const plugin = new AppPlugin().addLink({
 
 ### Register a component extension
 
-You can register a component extension. For example:
+In the following example we are registering a simple component extension.
 
-```tsx
+1. Register the component when initialising your plugin:
+
+```tsx title="src/module.tsx"
 import { PluginExtensionPoints } from '@grafana/data';
 
 export const plugin = new AppPlugin().addComponent({
   title: 'User profile tab',
-  description: '...',
+  description: 'User profile tab description',
   targets: [PluginExtensionPoints.UserProfileTab],
   component: () => <div>This is a new tab on the user profile page.</div>,
 });
+```
+
+2. Update the `plugin.json` with necessary metadata:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
+}
 ```
 
 ### Access the plugin's meta in a component
 
 You can use the `usePluginContext()` hook to access any plugin specific meta information inside your component. The hook returns a [`PluginMeta`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/plugin.ts#L62) object. This can be useful because the component that you register from your plugin won't be rendered under the React tree of your plugin, but somewhere else in the UI.
 
-```tsx
+1. Use the `usePluginContext()` hook in your component:
+
+```tsx title="src/module.tsx"
 import { usePluginContext, PluginExtensionPoints } from '@grafana/data';
 
 export const plugin = new AppPlugin().addComponent({
   title: 'User profile tab',
-  description: '...',
+  description: 'User profile tab description',
   targets: [PluginExtensionPoints.UserProfileTab],
   component: () => {
     const { meta } = usePluginContext();
@@ -179,31 +288,79 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
+2. Make sure your `plugin.json` is up to date
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ### Access the plugin's state in a component
 
-To access the plugin's state, do the following:
+1. Use the `usePluginContext()` hook to access meta info of the content-provider plugin
 
-```tsx
-import { PluginExtensionPoints } from '@grafana/data';
+```tsx title="src/module.tsx"
+import { usePluginContext, PluginExtensionPoints } from '@grafana/data';
 import { MyCustomDataProvider } from './MyCustomDataProvider';
 
 export const plugin = new AppPlugin().addComponent({
   title: 'User profile tab',
-  description: '...',
+  description: 'User profile tab description',
   targets: [PluginExtensionPoints.UserProfileTab],
-  component: () => (
-    <MyCustomDataProvider>
-      <div>Plugin specific setting: {meta.jsonData.foo}</div>
-    </MyCustomDataProvider>
-  ),
+  component: () => {
+    const { meta } = usePluginContext();
+
+    return (
+      <MyCustomDataProvider>
+        <div>Plugin specific setting: {meta.jsonData.foo}</div>
+      </MyCustomDataProvider>
+    );
+  },
 });
 ```
+
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
+}
+```
+
+</details>
 
 ### Hide a component in certain conditions
 
 Simply return `null` from your component in order to not render anything and thereby hide the component.
 
-```tsx
+1. Update the component to return `null` in certain scenarios:
+
+```tsx title="src/module.tsx"
 import { usePluginContext, PluginExtensionPoints } from '@grafana/data';
 
 export const plugin = new AppPlugin().addComponent({
@@ -224,35 +381,61 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ## Update the plugin.json metadata
 
 After you have defined a link or component extension and registered it against an extension point, you must update your `plugin.json` metadata.
 
 For example:
 
-```json
-"extensions": [
+```json title="src/plugin.json"
+"extensions": {
+  "addedLinks": [
     {
-      "extensionPointId": "grafana/dashboard/panel/menu/v1",
-      "type": "link"
       "title": "My app",
-      "description": "Link to my app"
+      "description": "Link to my app",
+      "targets": ["grafana/dashboard/panel/menu"],
     }
- ]
+  ],
+  "addedComponents": [
+    {
+      "title": "User profile tab",
+      "description": "User profile tab description",
+      "targets": ["grafana/user/profile/tab"],
+    }
+  ]
+}
 ```
 
 For more information, see the `plugin.json` [reference](../../reference/metadata.md#extensions).
 
 ## Troubleshooting
 
-If you cannot see your link or component extension check the following: 
+If you cannot see your link or component extension check the following:
 
 1. **Check the console logs** - your link or component may not be appearing due to validation errors. Look for the relevant logs in your browser's console.
 1. **Check the `targets`** - make sure that you are using the correct extension point IDs, and always use the `PluginExtensionPoints` enum for Grafana extension points.
 1. **Check the links `configure()` function** - if your link has a `configure()` function which is returning `undefined`, the link is hidden.
 1. **Check your component's implementation** - if your component returns `null` it won't be rendered at the extension point.
 1. **Check if you register too many links or components** - certain extension points limit the number of links or components allowed per plugin. If your plugin registers more links or components for the same extension point than the allowed amount, some of them may be filtered out.
-1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**. 
-
-
-
+1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**.

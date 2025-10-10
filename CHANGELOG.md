@@ -1,3 +1,29 @@
+# (Thu Oct 09 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@2.2.1`
+  - E2E: fix for flakiness in PanelEditPage.refreshPanel [#2207](https://github.com/grafana/plugin-tools/pull/2207) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Wed Oct 08 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.1.0`
+  - Create Plugin: Scaffold plugins with eslint 9 [#2204](https://github.com/grafana/plugin-tools/pull/2204) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Oct 07 2025)
 
 #### 💥 Breaking Change
