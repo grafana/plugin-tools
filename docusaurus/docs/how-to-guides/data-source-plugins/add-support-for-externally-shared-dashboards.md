@@ -1,6 +1,7 @@
 ---
 id: add-support-for-externally-shared-dashboards
 title: Add support for externally shared dashboards
+sidebar_label: Support external dashboards
 description: How to add support for externally share dashboards (previously called Public dashboards).
 keywords:
   - grafana

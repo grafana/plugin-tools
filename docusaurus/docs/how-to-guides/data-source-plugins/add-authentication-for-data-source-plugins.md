@@ -1,6 +1,7 @@
 ---
 id: add-authentication-for-data-source-plugins
 title: Add authentication for data source plugins
+sidebar_label: Add authentication
 description: How to add authentication for data source plugins.
 keywords:
   - grafana

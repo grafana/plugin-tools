@@ -1,6 +1,7 @@
 ---
 id: add-router
 title: Add a router or multiplexer to query different data types
+sidebar_label: Query different data with a router or multiplexer
 description: Add a router or multiplexer to your plugin backend to query different data types.
 keywords:
   - grafana
