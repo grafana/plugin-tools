@@ -43,7 +43,7 @@ If you scaffolded your plugin with the [create-plugin tool](../../../plugin-tool
 
 To configure the plugin, follow these steps:
 
-1.  **Create provisioning files**: In your plugin's root directory, you should have a `provisioning` folder. Inside this folder, you can add YAML files to configure data sources, dashboards, and other resources required by the plugin you are testing against. For an example of provisioning files, see the [grafana-plugin-examples repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/provisioning/plugins).
+1.  **Create provisioning files**: In your plugin's root directory, you should have a `provisioning` folder. Inside this folder, you can add YAML files to configure data sources, dashboards, and other resources required by the plugin you are testing against. For an example of provisioning files, see the [grafana-plugin-examples repository](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/app-basic/provisioning/plugins). For more information about provisioning, see the [Grafana provisioning documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/).
 
 2.  **Mount the provisioning folder**: Ensure that your `docker-compose.yml` file mounts the `provisioning` folder as a volume to `/etc/grafana/provisioning`:
 
@@ -57,3 +57,7 @@ To configure the plugin, follow these steps:
 If the plugin you are testing against has a backend component, it might require additional setup. In this case, we recommend reaching out to the plugin's authors. They may be able to provide a testing environment or test data that you can use in your provisioning files.
 
 By following these steps, you can create a robust local development environment for developing and testing UI extensions that interact with other plugins.
+
+## Testing your UI extensions
+
+Once you have your local development environment set up, consider writing end-to-end (e2e) tests to verify that your UI extensions work correctly. E2e tests help ensure that your extensions integrate properly with other plugins and provide a reliable way to catch regressions. For more information about e2e testing, see the [e2e testing documentation](../../e2e-test-a-plugin/).
