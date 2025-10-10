@@ -1,6 +1,7 @@
 ---
 id: fetch-data-from-frontend
 title: Fetch data from frontend code using the data proxy
+sidebar_label: Use data proxy to fetch frontend data
 description: Learn how to use the data proxy API to fetch data from frontend code in data source and app plugins in Grafana
 keywords:
   - grafana

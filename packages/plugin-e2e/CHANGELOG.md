@@ -1,3 +1,27 @@
+# v2.2.1 (Thu Oct 09 2025)
+
+#### 🐛 Bug Fix
+
+- E2E: fix for flakiness in PanelEditPage.refreshPanel [#2207](https://github.com/grafana/plugin-tools/pull/2207) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v2.2.0 (Tue Oct 07 2025)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add support for specifying user preferences [#2131](https://github.com/grafana/plugin-tools/pull/2131) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v2.1.14 (Mon Sep 29 2025)
 
 #### 🐛 Bug Fix

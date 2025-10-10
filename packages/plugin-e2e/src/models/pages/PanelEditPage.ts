@@ -181,6 +181,9 @@ export class PanelEditPage extends GrafanaPage {
     });
 
     try {
+      await expect(refreshPanelButton).toBeVisible();
+      // if the refreshPanelButton has the text 'Cancel', then wait until it says Refresh otherwise we'll cancel all the ongoing requests
+      await expect(refreshPanelButton).toHaveText(/refresh/i, { timeout: 2000 });
       await refreshPanelButton.click({ timeout: 2000 });
     } catch (error) {
       // refresh button may be hidden behind the visualization options

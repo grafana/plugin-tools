@@ -37,6 +37,11 @@ export enum PLUGIN_TYPES {
   scenes = 'scenesapp',
 }
 
+// Version cutoff for migration system transition.
+// Plugins with create-plugin version < 5.27.1 used the legacy update command.
+// Plugins >= 5.27.1 use the new migration-based update system.
+export const LEGACY_UPDATE_CUTOFF_VERSION = '5.27.1';
+
 // This gets merged into variables coming from user prompts (when scaffolding) or any other dynamic variables,
 // and will be available to use in the templates.
 export const EXTRA_TEMPLATE_VARIABLES = {
@@ -48,7 +53,7 @@ export const DEFAULT_FEATURE_FLAGS = {
   bundleGrafanaUI: false,
   usePlaywright: true,
   useExperimentalRspack: false,
-  useExperimentalUpdates: false,
+  useExperimentalUpdates: true,
 };
 
 export const GRAFANA_FE_PACKAGES = [

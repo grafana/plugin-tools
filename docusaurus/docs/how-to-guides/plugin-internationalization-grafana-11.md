@@ -39,6 +39,7 @@ If you create your plugin running the `create-plugin` scaffolding tool, enabling
 - `plugin.json`
 - `module.ts`
 - `loadResources.ts`
+- `eslint.config.mjs`
 - `package.json`
 
 By the end of the translation process you'll have a file structure like this:
@@ -56,6 +57,7 @@ myorg-myplugin-plugintype/
 │   └── plugin.json
 ├── tests/
 ├── docker-compose.yaml
+├── eslint.config.mjs
 └── package.json
 ```
 
@@ -144,7 +146,7 @@ import { initPluginTranslations } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 import { config } from '@grafana/runtime';
 import semver from 'semver';
-import { loadResources } from 'loadResources';
+import { loadResources } from './loadResources';
 
 // Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
 // In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
