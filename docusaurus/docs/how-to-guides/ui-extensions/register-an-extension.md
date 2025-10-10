@@ -315,13 +315,15 @@ export const plugin = new AppPlugin().addComponent({
   title: 'User profile tab',
   description: 'User profile tab description',
   targets: [PluginExtensionPoints.UserProfileTab],
-  component: () => (
+  component: () => {
     const { meta } = usePluginContext();
 
-    <MyCustomDataProvider>
-      <div>Plugin specific setting: {meta.jsonData.foo}</div>
-    </MyCustomDataProvider>
-  ),
+    return (
+      <MyCustomDataProvider>
+        <div>Plugin specific setting: {meta.jsonData.foo}</div>
+      </MyCustomDataProvider>
+    );
+  },
 });
 ```
 
