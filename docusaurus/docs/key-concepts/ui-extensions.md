@@ -77,7 +77,7 @@ This approach facilitates creating a library of shared components and promoting 
 | Feature          | `add` (Registering)                                       | `expose` (Exposing)                                         |
 | :--------------- | :-------------------------------------------------------- | :---------------------------------------------------------- |
 | **Intent**       | Push content to a specific location.                       | Let others pull content to use anywhere.                     |
-| **Control**      | You (the producer) choose the location (extension point) | The consumer chooses the location.                          |
+| **Control**      | You (the producer) choose the location (extension point). | The consumer chooses the location.                          |
 | **Awareness**    | The consumer discovers producers at runtime.              | The consumer knows which producer it's using.               |
 | **Relationship** | One-to-many (one extension point, many contributors).     | One-to-one (one exposed component, one consumer at a time). |
 | **Use case**     | Integrating into specific UI locations.                   | Providing a library of reusable components.                 |
