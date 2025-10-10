@@ -89,7 +89,7 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
-2. Make sure your `plugin.json` is up to date
+2. Make sure your `plugin.json` is up to date:
 <details>
 <summary>src/plugin.json</summary>
 
@@ -142,7 +142,7 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
-2. Make sure your `plugin.json` is up to date
+2. Make sure your `plugin.json` is up to date:
 <details>
 <summary>src/plugin.json</summary>
 
@@ -171,7 +171,7 @@ import { PluginExtensionPoints } from '@grafana/data';
 import { Button, Modal } from '@grafana/ui';
 
 export const plugin = new AppPlugin().addLink({
-  title: 'My links',
+  title: 'My link',
   description: 'My links description',
   targets: [PluginExtensionPoints.DashboardPanelMenu],
   // `event` - the `React.MouseEvent` from the click event
@@ -199,7 +199,7 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
-2. Make sure your `plugin.json` is up to date
+2. Make sure your `plugin.json` is up to date:
 <details>
 <summary>src/plugin.json</summary>
 
@@ -325,7 +325,7 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
-2. Make sure your `plugin.json` is up to date
+2. Make sure your `plugin.json` is up to date:
 <details>
 <summary>src/plugin.json</summary>
 
@@ -349,7 +349,7 @@ export const plugin = new AppPlugin().addComponent({
 
 Simply return `null` from your component in order to not render anything and thereby hide the component.
 
-1. Update the component to return `null` in certain scenarios
+1. Update the component to return `null` in certain scenarios:
 
 ```tsx title="src/module.tsx"
 import { usePluginContext, PluginExtensionPoints } from '@grafana/data';
@@ -372,7 +372,7 @@ export const plugin = new AppPlugin().addComponent({
 });
 ```
 
-2. Make sure your `plugin.json` is up to date
+2. Make sure your `plugin.json` is up to date:
 <details>
 <summary>src/plugin.json</summary>
 
