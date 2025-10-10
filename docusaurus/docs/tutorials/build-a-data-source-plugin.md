@@ -20,48 +20,29 @@ Grafana supports a wide range of [data sources](https://grafana.com/grafana/plug
 
 In this tutorial, you'll:
 
-- Build a data source to visualize a sine wave
-- Construct queries using the query editor
-- Configure your data source using the config editor
+1. [Build a data source plugin](#1-create-a-new-plugin) 
+1. [Set up your plugin to visualize a sine wave](#2-define-your-response-data-frame)
+1. [Construct queries using the query editor](#3-define-a-query)
+1. [Configure your data source using the config editor](#4-enable-configuration-for-your-data-source)
 
 ### Prerequisites
 
 - Grafana v10.0 or later
 - [LTS](https://nodejs.dev/en/about/releases/) version of Node.js
 
-## Create a new plugin
+Basic understanding of the following topics:
+
+- [Plugin anatomy](#anatomy-of-a-plugin)
+- [Data source plugins](#data-source-plugins)
+- [Data frames](../key-concepts/data-frames)
+
+## 1. Create a new plugin
 
 <CreatePlugin pluginType="datasource" />
 
 To learn how to create a backend data source plugin, see [Build a data source plugin backend component](./build-a-data-source-backend-plugin.md)
 
-## Anatomy of a plugin
-
-<PluginAnatomy />
-
-## Data source plugins
-
-A data source in Grafana must extend the `DataSourceApi` interface, which requires you to define two methods: `query` and `testDatasource`.
-
-### The `query` method
-
-The `query` method is the heart of any data source plugin. It accepts a query from the user, retrieves the data from an external database, and returns the data in a format that Grafana recognizes.
-
-```ts
-async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse>
-```
-
-The `options` object contains the queries, or _targets_, that the user made, along with context information, like the current time interval. Use this information to query an external database.
-
-### Test your data source
-
-`testDatasource` implements a health check for your data source. For example, Grafana calls this method whenever the user clicks the **Save & Test** button, after changing the connection settings.
-
-```ts
-async testDatasource()
-```
-
-## Returning Data frames
+## 2. Define your response data frame
 
 There are countless different databases, each with their own ways of querying data. To be able to support all the different data formats, Grafana consolidates the data into a unified data structure called [data frames](../key-concepts/data-frames).
 
@@ -151,7 +132,7 @@ Your data source is now sending data frames that Grafana can visualize. Next, we
 In this example, we're generating timestamps from the current time range. This means that you'll get the same graph no matter what time range you're using. In practice, you'd instead use the timestamps returned by your database.
 :::
 
-## Define a query
+## 3. Define a query
 
 Most data sources offer a way to query specific data. MySQL and PostgreSQL use SQL, while Prometheus has its own query language, called _PromQL_. No matter what query language your databases are using, Grafana lets you build support for it.
 
@@ -224,7 +205,7 @@ The new query model is now ready to use in our `query` method.
 
 1. Try it out by changing the frequency in the query for your panel.
 
-## Enable configuration for your datasource
+## 4. Enable configuration for your data source
 
 To access a specific data source, you often need to configure things like hostname, credentials, or authentication method. A _config editor_ lets your users configure your data source plugin to fit their needs.
 
@@ -298,9 +279,38 @@ Just like query editor, the form field in the config editor calls the registered
 
 ## Summary
 
-In this tutorial you built a complete data source plugin for Grafana that uses a query editor to control what data to visualize. You've added a data source option, commonly used to set connection options and more.
+In this tutorial: 
+
+- You built a complete data source plugin for Grafana that uses a query editor to control the data to visualize. 
+- You added a data source option, commonly used to set connection options and more.
 
 ## Learn more
+
+### Anatomy of a plugin
+
+<PluginAnatomy />
+
+### Data source plugins
+
+A data source in Grafana must extend the `DataSourceApi` interface, which requires you to define two methods: `query` and `testDatasource`.
+
+#### The `query` method
+
+The `query` method is the heart of any data source plugin. It accepts a query from the user, retrieves the data from an external database, and returns the data in a format that Grafana recognizes.
+
+```ts
+async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse>
+```
+
+The `options` object contains the queries, or _targets_, that the user made, along with context information, like the current time interval. Use this information to query an external database.
+
+#### Test your data source
+
+`testDatasource` implements a health check for your data source. For example, Grafana calls this method whenever the user clicks the **Save & Test** button, after changing the connection settings.
+
+```ts
+async testDatasource()
+```
 
 ### Get data from an external API
 
@@ -310,9 +320,9 @@ This sample shows the use of the [`getBackendSrv` function](https://github.com/g
 
 While you can use something like [axios](https://github.com/axios/axios) or the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make requests, we recommend using `getBackendSrv` as it proxies requests through the Grafana server rather making the request from the browser. We strongly recommend this when making authenticated requests to an external API. For more information on authenticating external requests, refer to [Add authentication for data source plugins](../how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins).
 
-### Improving your plugin's quality
+### Improve your plugin's quality
 
-To learn more about advanced plugin development topics, refer to the following:
+To learn more about advanced plugin development topics, refer to the following guides:
 
 - [Add support for variables](../how-to-guides/data-source-plugins/add-support-for-variables)
 - [Add support for annotations](../how-to-guides/data-source-plugins/add-support-for-annotation-queries)
