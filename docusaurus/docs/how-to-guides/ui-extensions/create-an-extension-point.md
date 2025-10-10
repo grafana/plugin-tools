@@ -31,7 +31,7 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 
     ```ts
     // Define the `context` object outside of the component if it only has static values
-    const context { foo: 'bar' };
+    const context = { foo: 'bar' };
 
     export const InstanceToolbar = () => {
       const { links, isLoading } = usePluginLinks({ extensionPointId, context });
@@ -131,7 +131,7 @@ export const InstanceToolbar = () => {
 
 ## Declare the extension point in your plugin.json
 
-You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code when callling `usePluginLinks`.
+You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code when calling `usePluginLinks`.
 
 ```json
 "extensionPoints": [

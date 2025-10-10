@@ -48,24 +48,25 @@ For more details [check the API reference guide](../../reference/ui-extensions-r
 You can access metadata for the extended component. For example:
 
 ```tsx
-import { usePluginContext } from "@grafana/runtime";
+import { usePluginContext } from '@grafana/runtime';
 import pluginJson from './plugin.json';
 
-export const plugin = new AppPlugin()
-  .exposeComponent({
-    id: `${pluginJson.id}/reusable-component/v1`,
-    title: 'Reusable component',
-    description: 'A component that can be reused by other app plugins.',
-    component: ({ name }: { name: string }) => {
-      // This is the meta information of the app plugin that is exposing the component
-      const { meta } = usePluginContext();
+export const plugin = new AppPlugin().exposeComponent({
+  id: `${pluginJson.id}/reusable-component/v1`,
+  title: 'Reusable component',
+  description: 'A component that can be reused by other app plugins.',
+  component: ({ name }: { name: string }) => {
+    // This is the meta information of the app plugin that is exposing the component
+    const { meta } = usePluginContext();
 
-      return (
+    return (
+      <div>
         <div>Hello {name}!</div>
         <div>Version {meta.info.version}</div>
-      );
-    }
-  })
+      </div>
+    );
+  },
+});
 ```
 
 :::tip
