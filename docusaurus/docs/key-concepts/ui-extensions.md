@@ -19,17 +19,17 @@ UI extensions are a powerful feature that allows your app plugin to integrate se
 
 This guide covers the fundamental concepts of the UI extensions ecosystem.
 
-## The core idea
+## The core idea 
 
 The UI extensions feature is built around a few key concepts:
 
 - **Content providers**: App plugins that offer content (links, components, or functions).
-- **Content consumers**: The parts of Grafana or other plugins that use this content.
+- **Content consumers**: The parts of Grafana or other plugins that use provided content.
 - **Extension points**: The specific locations in the UI where content can be placed.
 
-As a plugin developer, you can act as both a provider and a consumer.
+As a plugin developer, you can act both as a provider and/or a consumer of content.
 
-## Two ways to share: `add` vs. `expose`
+## Two ways to share content: `add` vs. `expose`
 
 There are two distinct methods for sharing content from your plugin, based on different developer intentions:
 
@@ -38,7 +38,7 @@ There are two distinct methods for sharing content from your plugin, based on di
 
 Let's break down the differences.
 
-### `add`: Pushing content to extension points
+### `add`: Push content to extension points
 
 Use the `add` method when you want to place your content in a specific, predefined location. With this approach, you are actively "pushing" your content into a known slot in the Grafana UI.
 
@@ -47,44 +47,42 @@ Use the `add` method when you want to place your content in a specific, predefin
 
 ![Add APIs flow](./images/ui-extensions-add-flow.svg)
 
-**Examples on when to use `add`:**
+#### Use cases 
+
+This approach allows you to tightly integrate your plugin's functionality into the existing Grafana UI. For example:
 
 - Adding a menu item to the Grafana panel menu.
 - Adding a new tab to a page in Grafana.
 - Contributing a button to a dashboard toolbar.
 
-This approach is best when you want to tightly integrate your plugin's functionality into the existing Grafana UI.
+### `expose`: Let others pull your content
 
-### `expose`: Letting others pull your content
-
-Use the `expose` method when you want to provide a generic, reusable component that other plugins can "pull" into their own ui. You make the component available, and then it's up to other developers to decide if and how to use it.
+Use the `expose` method when you want to provide a generic, reusable component that other plugins can "pull" into their own UI. You make the component available, and then it's up to other developers to decide if and how to use it.
 
 - **Your role (producer):** You expose a component, making it available by a unique ID. You don't know who will use it or where it will be displayed.
 - **The user's role (consumer):** Another plugin developer can find your exposed component and choose to render it anywhere within their own plugin's interface.
 
 ![Expose APIs flow](./images/ui-extensions-expose-flow.svg)
 
-**Examples on when to use `expose`:**
+#### Use cases 
+
+This approach facilitates creating a library of shared components and promoting reusability across the plugin ecosystem. For example:
 
 - Creating a unique data visualization that other datasource plugins could use.
 - Building a custom form field or input control for other plugins to use in their configuration pages.
 - Offering a complex UI widget, like an incident declaration modal, that can be triggered from anywhere.
 
-This approach is ideal for creating a library of shared components and promoting reusability across the plugin ecosystem.
-
 ### Summary of differences
 
 | Feature          | `add` (Registering)                                       | `expose` (Exposing)                                         |
 | :--------------- | :-------------------------------------------------------- | :---------------------------------------------------------- |
-| **Intent**       | Push content to a specific location                       | Let others pull content to use anywhere                     |
+| **Intent**       | Push content to a specific location.                       | Let others pull content to use anywhere.                     |
 | **Control**      | You (the producer) choose the location (extension point). | The consumer chooses the location.                          |
 | **Awareness**    | The consumer discovers producers at runtime.              | The consumer knows which producer it's using.               |
 | **Relationship** | One-to-many (one extension point, many contributors).     | One-to-one (one exposed component, one consumer at a time). |
 | **Use case**     | Integrating into specific UI locations.                   | Providing a library of reusable components.                 |
 
----
-
-## How to get started
+## Get started
 
 Now that you understand the core concepts, here's how you can start working with UI extensions:
 
@@ -99,8 +97,8 @@ If you want to share links or components from your app plugin, you have two path
 
 If you want to use content from other plugins, you can:
 
-- [**Create an extension point**](../how-to-guides/ui-extensions/create-an-extension-point.md): Allow other plugins to `add` content into your plugin's ui.
-- [**Use an exposed component**](../how-to-guides/ui-extensions/use-an-exposed-component.md): Learn how to find and render an `exposed` component from another plugin.
+- [**Create an extension point**](../how-to-guides/ui-extensions/create-an-extension-point.md): Learn how to allow other plugins to `add` content into your plugin's UI.
+- [**Use an exposed component**](../how-to-guides/ui-extensions/use-an-exposed-component.md): Learn how to find and render an `exposed` component from another plugin in your UI.
 
 ## Further reading
 
