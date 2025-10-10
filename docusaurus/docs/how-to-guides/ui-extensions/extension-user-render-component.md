@@ -29,7 +29,9 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 
 ## Create an extension point to render components
 
-```tsx
+1. Create the extension point component:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginComponents } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -56,9 +58,26 @@ export const InstanceToolbar = () => {
 };
 ```
 
+2. Declare the extension point in your `plugin.json`:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
 ## Passing data to the components
 
-```tsx
+1. Update the component to pass props to extensions:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginComponents } from '@grafana/runtime';
 
 // Types for the props (passed as a generic to the hook in the following code block)
@@ -85,9 +104,30 @@ export const InstanceToolbar = ({ instanceId }) => {
 };
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ## Limit which plugins can register components in your extension point
 
-```tsx
+1. Update the component to filter plugins:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginComponents } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -105,17 +145,21 @@ export const InstanceToolbar = () => {
 };
 ```
 
-## Declare the extension point in your plugin.json
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
 
-You must declare the extension points your plugin is exposing in the `plugin.json` file. The `id` must match exactly the `extensionPointId` used in your code when calling `usePluginComponents`.
-
-```json
-"extensionPoints": [
-    {
-      "id": "myorg-foo-app/toolbar/v1",
-      "description": "Add components to the toolbar in my app."
-    }
- ]
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
 ```
 
-For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionsextensionpoints).
+</details>

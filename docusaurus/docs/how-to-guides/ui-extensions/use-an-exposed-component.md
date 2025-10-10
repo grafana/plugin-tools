@@ -18,7 +18,9 @@ App plugins can [expose additional functionality through a React component](./ex
 
 The following example shows how you can render a component exposed by another plugin in your extension point:
 
-```tsx
+1. Use the exposed component in your code:
+
+```tsx title="src/components/MyComponent.tsx"
 import { usePluginComponent } from '@grafana/runtime';
 
 export const MyComponent = () => {
@@ -33,16 +35,11 @@ export const MyComponent = () => {
 };
 ```
 
-:::tip
-For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
-:::
+2. Declare the component dependency in your `plugin.json`:
 
-## Declare the component dependency in your plugin.json
-
-When using an exposed component from another plugin, you must declare this dependency in your own `plugin.json` file. Add the component ID to the `dependencies.extensions.exposedComponents` array:
-
-```json
+```json title="src/plugin.json"
 {
+  ...
   "dependencies": {
     "extensions": {
       "exposedComponents": ["myorg-basic-app/reusable-component/v1"]
@@ -51,7 +48,9 @@ When using an exposed component from another plugin, you must declare this depen
 }
 ```
 
-For more information, see the [`plugin.json` reference](../../reference/metadata.md#dependenciesextensionsexposedcomponents).
+:::tip
+For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
+:::
 
 ## Prerequisites
 

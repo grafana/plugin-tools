@@ -24,7 +24,9 @@ Compared to [registering an extension](./register-an-extension), when you expose
 
 You can expose one or multiple components from within the same app plugin. For example:
 
-```tsx
+1. Expose the component in your plugin:
+
+```tsx title="src/module.tsx"
 import pluginJson from './plugin.json';
 
 export const plugin = new AppPlugin()
@@ -39,6 +41,23 @@ export const plugin = new AppPlugin()
   });
 ```
 
+2. Declare the exposed component in your `plugin.json`:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "exposedComponents": [
+      {
+        "id": "myorg-foo-app/reusable-component/v1",
+        "title": "Reusable component",
+        "description": "A component that can be reused by other app plugins."
+      }
+    ]
+  }
+}
+```
+
 :::tip
 For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
@@ -47,7 +66,9 @@ For more details [check the API reference guide](../../reference/ui-extensions-r
 
 You can access metadata for the extended component. For example:
 
-```tsx
+1. Update the component to access plugin meta information:
+
+```tsx title="src/module.tsx"
 import { usePluginContext } from '@grafana/runtime';
 import pluginJson from './plugin.json';
 
@@ -69,22 +90,27 @@ export const plugin = new AppPlugin().exposeComponent({
 });
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "exposedComponents": [
+      {
+        "id": "myorg-foo-app/reusable-component/v1",
+        "title": "Reusable component",
+        "description": "A component that can be reused by other app plugins."
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 :::tip
 For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
-
-## Declare the exposed component in your plugin.json
-
-You must declare the components your plugin is exposing in the `plugin.json` file. The `id`, `title`, and `description` must match exactly what you defined when calling `exposeComponent` in your code.
-
-```json
-"exposedComponents": [
-    {
-      "id": "myorg-foo-app/reusable-component/v1",
-      "title": "Reusable component",
-      "description": "A component that can be reused by other app plugins."
-    }
- ]
-```
-
-For more information, see the [`plugin.json` reference](../../reference/metadata.md#extensionsexposedcomponents).
