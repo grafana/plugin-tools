@@ -10,10 +10,15 @@ keywords:
   - extensions
   - ui-extensions
   - lazy-loading
+  - performance
 sidebar_position: 31
 ---
 
 You can expose a lazy-loaded component from your app plugin to share functionality with other plugins without impacting the initial load time. This is useful when the component is large or not always needed.
+
+:::note
+For lazy loading to effectively reduce the module.js file size, ensure that your app plugin and its routes are already lazy loaded. If the app plugin isn't lazy loaded, the exposed component code may still be statically imported elsewhere, limiting the performance benefits.
+:::
 
 ## Expose a lazy-loaded component
 
@@ -21,7 +26,7 @@ To expose a lazy-loaded component, you can use `React.lazy` to dynamically impor
 
 ```tsx
 import React, { Suspense } from 'react';
-import { plugin } from './plugin';
+import { AppPlugin } from '@grafana/runtime';
 
 // Lazy load your component
 const MyLazyComponent = React.lazy(() => import('./MyLazyComponent'));
@@ -33,7 +38,7 @@ const SuspendedComponent = () => (
 );
 
 export const plugin = new AppPlugin().exposeComponent({
-  id: `${plugin.meta.id}/my-lazy-component/v1`,
+  id: 'my-plugin/my-lazy-component/v1',
   title: 'My Lazy Component',
   description: 'A component that is loaded on demand.',
   component: SuspendedComponent,
@@ -46,19 +51,4 @@ You should use the same pattern for adding components using the `addComponent` m
 
 ## Using the lazy-loaded component
 
-When another plugin uses your lazy-loaded component with `usePluginComponent`, Grafana will automatically handle the loading of the component. The `isLoading` flag returned by the hook will be `true` until the component is loaded.
-
-```tsx
-import React from 'react';
-import { usePluginComponent } from '@grafana/runtime';
-
-export const MyPluginPage = () => {
-  const { component: MyLazyComponent, isLoading } = usePluginComponent('my-plugin/my-lazy-component/v1');
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return MyLazyComponent ? <MyLazyComponent /> : <div>Component not found</div>;
-};
-```
+There are no differences in consuming lazy vs non-lazy components from the consumer's perspective. The `usePluginComponent` hook works the same way regardless of whether the component is lazy loaded or not. For more information about using plugin components, refer to the [UI extensions documentation](../key-concepts/ui-extensions).
