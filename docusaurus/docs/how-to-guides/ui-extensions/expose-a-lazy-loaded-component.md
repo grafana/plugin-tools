@@ -51,4 +51,4 @@ You should use the same pattern for adding components using the `addComponent` m
 
 ## Using the lazy-loaded component
 
-There are no differences in consuming lazy vs non-lazy components from the consumer's perspective. The `usePluginComponent` hook works the same way regardless of whether the component is lazy loaded or not. For more information about using plugin components, refer to the [UI extensions documentation](../key-concepts/ui-extensions).
+There are no differences in consuming lazy vs non-lazy components from the consumer's perspective. The `usePluginComponent` or `usePluginComponents` hook works the same way regardless of whether the component is lazy loaded or not. For more information about using plugin components, refer to the [Render components in an extension point](./extension-user-render-component) documentation.
