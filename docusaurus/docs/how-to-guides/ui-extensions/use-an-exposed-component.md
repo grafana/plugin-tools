@@ -1,7 +1,7 @@
 ---
 id: use-an-exposed-component
 title: Use an exposed component
-sidebar_label: Use exposed components 
+sidebar_label: Use exposed components
 description: Reuse functionality from other plugins by using exposed components.
 keywords:
   - grafana
@@ -18,7 +18,9 @@ App plugins can [expose additional functionality through a React component](./ex
 
 The following example shows how you can render a component exposed by another plugin in your extension point:
 
-```tsx
+1. Use the exposed component in your code:
+
+```tsx title="src/components/MyComponent.tsx"
 import { usePluginComponent } from '@grafana/runtime';
 
 export const MyComponent = () => {
@@ -33,6 +35,23 @@ export const MyComponent = () => {
 };
 ```
 
+2. Declare the component dependency in your `plugin.json`:
+
+```json title="src/plugin.json"
+{
+  ...
+  "dependencies": {
+    "extensions": {
+      "exposedComponents": ["myorg-basic-app/reusable-component/v1"]
+    }
+  }
+}
+```
+
 :::tip
 For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
+
+## Prerequisites
+
+The plugin that exposes the component must also have declared it in their `plugin.json` file under the `extensions.exposedComponents` section. For more information about exposing components, see [Expose a component](./expose-a-component.md).
