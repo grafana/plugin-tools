@@ -99,7 +99,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/error-handling',
         'how-to-guides/data-source-plugins/fetch-data-from-frontend',
         'how-to-guides/data-source-plugins/include-dashboards',
-        'how-to-guides/data-source-plugins/profile-backend-plugin',        
+        'how-to-guides/data-source-plugins/profile-backend-plugin',
         'how-to-guides/data-source-plugins/sql-requirements',
       ],
     },
@@ -158,7 +158,6 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'key-concepts/ui-extensions',
-        'how-to-guides/ui-extensions/best-practices',
         'how-to-guides/ui-extensions/create-an-extension-point',
         'how-to-guides/ui-extensions/extension-user-render-component',
         'how-to-guides/ui-extensions/extension-user-use-function',
