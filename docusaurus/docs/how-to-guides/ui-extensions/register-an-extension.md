@@ -28,7 +28,7 @@ You must [update](#update-the-pluginjson-metadata) your `plugin.json` metadata t
 
 ### Register a link extension
 
-In the following example we are adding a link to the panel menu on dashboards:
+The following example shows how to add a link to the panel menu in a dashboard:
 
 1. Register the link when initialising your plugin:
 
