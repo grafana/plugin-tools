@@ -1,3 +1,27 @@
+# v6.1.0 (Wed Oct 08 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Scaffold plugins with eslint 9 [#2204](https://github.com/grafana/plugin-tools/pull/2204) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.0.0 (Tue Oct 07 2025)
+
+#### 💥 Breaking Change
+
+- Create Plugin: Enable updates as migrations [#2093](https://github.com/grafana/plugin-tools/pull/2093) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v5.27.1 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix

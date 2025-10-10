@@ -100,6 +100,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/fetch-data-from-frontend',
         'how-to-guides/data-source-plugins/include-dashboards',
         'how-to-guides/data-source-plugins/profile-backend-plugin',
+        'how-to-guides/data-source-plugins/sql-requirements',
       ],
     },
 
@@ -163,9 +164,11 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/ui-extensions/use-an-exposed-component',
         'how-to-guides/ui-extensions/register-an-extension',
         'how-to-guides/ui-extensions/expose-a-component',
+        'how-to-guides/ui-extensions/expose-a-lazy-loaded-component',
         'how-to-guides/ui-extensions/versioning-extensions',
         'how-to-guides/ui-extensions/degregate-ui',
         'how-to-guides/ui-extensions/debug-logs',
+        'how-to-guides/ui-extensions/local-development-setup',
       ],
     },
 
@@ -192,6 +195,7 @@ const sidebars: SidebarsConfig = {
           items: ['how-to-guides/plugin-internationalization-grafana-11'],
         },
         'how-to-guides/runtime-checks',
+        'how-to-guides/updating-a-plugin',
         'how-to-guides/debugging-plugins',
       ],
     },
