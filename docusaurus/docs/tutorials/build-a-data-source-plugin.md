@@ -82,20 +82,6 @@ Let's see how to create and return a data frame from the `query` method. In this
    };
    ```
 
-1. Create a data frame with a time field and a number field:
-
-   ```ts title="src/datasource.ts"
-   const frame = createDataFrame({
-     refId: query.refId,
-     fields: [
-       { name: 'time', type: FieldType.time },
-       { name: 'value', type: FieldType.number },
-     ],
-   });
-   ```
-
-   `refId` needs to be set to tell Grafana which query that generated this date frame.
-
 Next, add the actual values to the data frame. Don't worry about the math used to calculate the values!
 
 1. Create a couple of helper variables:
@@ -118,19 +104,35 @@ Next, add the actual values to the data frame. Don't worry about the math used t
 
    The `frame.add()` accepts an object where the keys corresponds to the name of each field in the data frame.
 
+Finally, create the data frame:
+
+1. Create a data frame with a time field and a number field:
+
+   ```ts title="src/datasource.ts"
+   const frame = createDataFrame({
+     refId: query.refId,
+     fields: [
+       { name: 'time', type: FieldType.time },
+       { name: 'value', type: FieldType.number },
+     ],
+   });
+   ```
+
+   `refId` needs to be set to tell Grafana which query that generated this date frame.
+
 1. Return the data frame:
 
    ```ts title="src/datasource.ts"
    return frame;
    ```
 
-1. Try it out by creating a new data source instance and building a dashboard.
-
-Your data source is now sending data frames that Grafana can visualize. Next, see how you can control the frequency of the sine wave by defining a _query_.
+Your data source is now sending data frames that Grafana can visualize. Try it out by creating a new data source instance and building a dashboard!
 
 :::info
 In this example, you're generating timestamps from the current time range. This means that you'll get the same graph no matter what time range you're using. In practice, you'd instead use the timestamps returned by your database.
 :::
+
+Next, see how you can control the frequency of the sine wave by defining a _query_.
 
 ## 3. Implement your query editor 
 
