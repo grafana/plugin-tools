@@ -157,7 +157,7 @@ const sidebars: SidebarsConfig = {
         id: 'how-to-guides/ui-extensions/ui-extensions',
       },
       items: [
-        'how-to-guides/ui-extensions/ui-extensions',
+        'how-to-guides/ui-extensions/ui-extensions-concepts',
         'how-to-guides/ui-extensions/create-an-extension-point',
         'how-to-guides/ui-extensions/extension-user-render-component',
         'how-to-guides/ui-extensions/extension-user-use-function',

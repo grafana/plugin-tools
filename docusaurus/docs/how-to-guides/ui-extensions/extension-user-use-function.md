@@ -19,7 +19,7 @@ keywords:
 An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
 :::note
-Read more about extensions under [key concepts](../../how-to-guides/ui-extensions/ui-extensions.md). <br />
+Read more about extensions under [key concepts](../../how-to-guides/ui-extensions/ui-extensions-concepts.md). <br />
 For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
 
