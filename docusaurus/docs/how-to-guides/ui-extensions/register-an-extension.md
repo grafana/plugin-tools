@@ -16,7 +16,7 @@ As a developer, you may want to share content (links, components, or functions) 
 
 Compared to [just exposing your content](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your extensions. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
-Read more about extensions under [key concepts](./ui-extensions.md).
+Read more about extensions under [key concepts](./ui-extensions-concepts.md).
 
 :::warning
 

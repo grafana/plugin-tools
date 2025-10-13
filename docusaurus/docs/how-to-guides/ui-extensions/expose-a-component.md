@@ -16,7 +16,7 @@ As a plugin developer, you can expose content from your app plugins to easily sh
 
 Compared to [registering your content to an extension point](./register-an-extension), when you expose a component, other plugins can use it wherever they want, instead of you needing to define which extension point you hook it into. This also means that the component needs to be more generic, as it is not targeting a specific extension point.
 
-Read more about extensions under [key concepts](./ui-extensions.md).
+Read more about extensions under [key concepts](./ui-extensions-concepts.md).
 
 ## Best practices
 

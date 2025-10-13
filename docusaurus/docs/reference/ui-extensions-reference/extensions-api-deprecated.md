@@ -19,7 +19,7 @@ These elements are deprecated and have been removed starting in Grafana v12.
 ## `getPluginExtensions` 
 
 :::warning
-This function has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](./ui-extensions.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions.md#useplugincomponents) hooks instead.
+This function has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](./ui-extensions-concepts.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions-concepts.md#useplugincomponents) hooks instead.
 :::
 
 This function fetches extensions (both links and components) that are registered to a certain extension point.
@@ -63,7 +63,7 @@ For more information, see [`PluginExtension`](https://github.com/grafana/grafana
 ## `usePluginExtensions` 
 
 :::warning
-This hook has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](./ui-extensions.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions.md#useplugincomponents) hooks instead.
+This hook has been removed starting in Grafana version 12. Use either the [`usePluginLinks()`](./ui-extensions-concepts.md#usepluginlinks) or [`usePluginComponents()`](./ui-extensions-concepts.md#useplugincomponents) hooks instead.
 :::
 
 This react hook fetches extensions (both links and components) that are registered to a certain extension point.
