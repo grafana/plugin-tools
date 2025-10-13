@@ -102,7 +102,7 @@ If you want to use content from other plugins, you can:
 
 ## Further reading
 
-- [**Available extension points**](../reference/ui-extensions-reference/extension-points.md): See a list of all the extension points available in Grafana Core.
+- [**Available extension points**](../../reference/ui-extensions-reference/extension-points.md): See a list of all the extension points available in Grafana Core.
 - [**Versioning extensions**](./versioning-extensions.md): Best practices for versioning your exposed components and extension points.
 - [**Debugging extensions**](./debug-logs.md): Learn how to use logs to troubleshoot your extensions.
-- [**API reference**](../reference/ui-extensions-reference/ui-extensions.md): A detailed look at the UI extensions API.
+- [**API reference**](../../reference/ui-extensions-reference/ui-extensions.md): A detailed look at the UI extensions API.
