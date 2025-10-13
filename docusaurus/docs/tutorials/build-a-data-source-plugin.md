@@ -136,7 +136,7 @@ Next, see how you can control the frequency of the sine wave by defining a _quer
 
 ## 3. Implement your query editor 
 
-Most data sources offer a way to query specific data. MySQL and PostgreSQL use SQL, while Prometheus has its own query language, called _PromQL_. No matter what query language your databases are using, Grafana lets you build support for it.
+Most data sources offer a way to query specific data. MySQL and PostgreSQL use SQL, while Prometheus has its own query language, PromQL. No matter what query language your databases are using, Grafana lets you build support for it.
 
 Add support for custom queries to your data source by implementing your own _query editor_, a React component that enables you to build your own queries with a user-friendly graphical interface.
 
