@@ -17,7 +17,7 @@ sidebar_position: 31
 You can expose a lazy-loaded component from your app plugin to share functionality with other plugins without impacting the initial load time. This is useful when the component is large or not always needed.
 
 :::note
-For lazy loading to effectively reduce the module.js file size, ensure that your app plugin and its routes are already lazy loaded. If the app plugin isn't lazy loaded, the exposed component code may still be statically imported elsewhere, limiting the performance benefits.
+For lazy loading to effectively reduce the `module.js` file size, ensure that your app plugin and its routes are already lazy loaded. If the app plugin isn't lazy loaded, the exposed component code may still be statically imported elsewhere, limiting the performance benefits.
 :::
 
 ## Expose a lazy-loaded component
@@ -46,9 +46,11 @@ export const plugin = new AppPlugin().exposeComponent({
 ```
 
 :::note
-You should use the same pattern for adding components using the `addComponent` method.
+To add components, use the same pattern described in the `addComponent` method.
 :::
 
-## Using the lazy-loaded component
+## Consuming a lazy-loaded component
 
-There are no differences in consuming lazy vs non-lazy components from the consumer's perspective. The `usePluginComponent` or `usePluginComponents` hook works the same way regardless of whether the component is lazy loaded or not. For more information about using plugin components, refer to the [Render components in an extension point](./extension-user-render-component) documentation.
+There are no differences when consuming lazy or non-lazy components from the consumer's perspective. The `usePluginComponent` or `usePluginComponents` hook works the same way regardless of whether the component is lazy-loaded or not. 
+
+For more information about using plugin components, refer to the [Render components in an extension point](./extension-user-render-component) documentation.
