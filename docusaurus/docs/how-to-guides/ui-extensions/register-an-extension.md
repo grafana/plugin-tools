@@ -12,11 +12,14 @@ keywords:
 sidebar_position: 20
 ---
 
+As a content developer,, 
+
+
 Extensions are links, functions or React components defined in an app plugin. Each extension is associated with an extension point and can render either in the core Grafana UI or within another app plugin.
 
 You can either register or expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your extensions. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
-Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
+Read more about extensions under [key concepts](../../how-to-guides/ui-extensions/ui-extensions.md).
 
 :::warning
 
