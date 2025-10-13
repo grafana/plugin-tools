@@ -20,7 +20,7 @@ Grafana supports a wide range of [data sources](https://grafana.com/grafana/plug
 
 In this tutorial, you'll:
 
-1. [Create a data source plugin](#1-create-a-new-plugin) 
+1. [Create a data source plugin](#1-create-a-new-data-source-plugin) 
 1. [Define your response structure](#2-define-your-response-data-frame)
 1. [Implement your query editor](#3-implement-your-query-editor)
 1. [Configure your data source using the config editor](#4-enable-configuration-for-your-data-source)
