@@ -90,19 +90,19 @@ Now that you understand the core concepts, here's how you can start working with
 
 If you want to share links or components from your app plugin, you have two paths:
 
-- [**Register an extension**](../how-to-guides/ui-extensions/register-an-extension.md): Learn how to `add` your content to a specific extension point.
-- [**Expose a component**](../how-to-guides/ui-extensions/expose-a-component.md): Learn how to `expose` a reusable component for other plugins to use.
+- [**Register an extension**](./register-an-extension.md): Learn how to `add` your content to a specific extension point.
+- [**Expose a component**](./expose-a-component.md): Learn how to `expose` a reusable component for other plugins to use.
 
 ### As a content consumer (using extensions in your plugin)
 
 If you want to use content from other plugins, you can:
 
-- [**Create an extension point**](../how-to-guides/ui-extensions/create-an-extension-point.md): Learn how to allow other plugins to `add` content into your plugin's UI.
-- [**Use an exposed component**](../how-to-guides/ui-extensions/use-an-exposed-component.md): Learn how to find and render an `exposed` component from another plugin in your UI.
+- [**Create an extension point**](./create-an-extension-point.md): Learn how to allow other plugins to `add` content into your plugin's UI.
+- [**Use an exposed component**](./use-an-exposed-component.md): Learn how to find and render an `exposed` component from another plugin in your UI.
 
 ## Further reading
 
 - [**Available extension points**](../reference/ui-extensions-reference/extension-points.md): See a list of all the extension points available in Grafana Core.
-- [**Versioning extensions**](../how-to-guides/ui-extensions/versioning-extensions.md): Best practices for versioning your exposed components and extension points.
-- [**Debugging extensions**](../how-to-guides/ui-extensions/debug-logs.md): Learn how to use logs to troubleshoot your extensions.
+- [**Versioning extensions**](./versioning-extensions.md): Best practices for versioning your exposed components and extension points.
+- [**Debugging extensions**](./debug-logs.md): Learn how to use logs to troubleshoot your extensions.
 - [**API reference**](../reference/ui-extensions-reference/ui-extensions.md): A detailed look at the UI extensions API.
