@@ -12,7 +12,7 @@ keywords:
 sidebar_position: 20
 ---
 
-As a developer, you may want to share content (links, components, or functions) from your app plugins. You can either register or expose content to an extension point. 
+As a developer, you may want to share content (links, components, or functions) from your app plugins. You can either expose content, or register it to an extension point. 
 
 Compared to [just exposing your content](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your extensions. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
