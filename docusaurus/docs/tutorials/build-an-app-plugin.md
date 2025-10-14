@@ -17,7 +17,7 @@ import PluginAnatomy from '@shared/plugin-anatomy.md';
 
 In this tutorial you will learn how to create an _app plugin_. App plugins are Grafana plugins that allow you to bundle data sources and panel plugins within a single package. They also enable you to create custom pages within Grafana, providing a dedicated space for documentation, sign-up forms, integration with other services via HTTP. You can also use app plugins to create [Scenes apps](https://grafana.com/developers/scenes/).
 
-App plugins can be displayed in the [navigation menu](#add-a-page-in-the-navigation-menu) and offer the flexibility to define [UI extensions](../key-concepts/ui-extensions.md).
+App plugins can be displayed in the [navigation menu](#add-a-page-in-the-navigation-menu) and offer the flexibility to define [UI extensions](../how-to-guides/ui-extensions/ui-extensions-concepts.md).
 
 ### Prerequisites
 

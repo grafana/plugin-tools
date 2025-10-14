@@ -18,7 +18,7 @@ This page describes the UI Extensions APIs in detail, including:
 - [Hooks to render content](#i-want-to-use-renderable-content)
 
 :::note
-Read [Extensions key concepts](../../key-concepts/ui-extensions) for an overview of the extension framework.
+Read [Extensions key concepts](../../how-to-guides/ui-extensions/ui-extensions-concepts) for an overview of the extension framework.
 :::
 
 ## I want to register or expose content

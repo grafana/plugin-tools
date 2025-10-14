@@ -92,7 +92,7 @@ Data-source plugins can [include dashboards](../reference/metadata.md#includes) 
 
 ## App plugins
 
-Development of app plugins, also known as apps or applications, allows you to create out-of-the-box solutions such as in the [Redis](https://grafana.com/grafana/plugins/redis-app/) app. You can optionally bundle data sources and panels, as well as provide custom pages, [Scenes](https://grafana.com/developers/scenes), and [UI extensions](../key-concepts/ui-extensions.md).
+Development of app plugins, also known as apps or applications, allows you to create out-of-the-box solutions such as in the [Redis](https://grafana.com/grafana/plugins/redis-app/) app. You can optionally bundle data sources and panels, as well as provide custom pages, [Scenes](https://grafana.com/developers/scenes), and [UI extensions](../how-to-guides/ui-extensions/ui-extensions-concepts.md).
 
 ### Usage of app plugins
 
