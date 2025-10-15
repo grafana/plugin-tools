@@ -2,7 +2,14 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github/**"],
-  "ignoreDeps": ["react", "react-dom", "lerna", "@grafana/scenes", "@libs/output", "@libs/version"],
+  "ignoreDeps": [
+    "react",
+    "react-dom",
+    "lerna",
+    "@grafana/scenes",
+    "@libs/output",
+    "@libs/version"
+  ],
   "separateMajorMinor": false,
   "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
@@ -13,13 +20,17 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/_package.json/"],
-      "matchStrings": ["\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","],
+      "matchStrings": [
+        "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
+      ],
       "datasourceTemplate": "npm"
     },
     {
       "customType": "regex",
       "managerFilePatterns": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
-      "matchStrings": ["grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"],
+      "matchStrings": [
+        "grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"
+      ],
       "depNameTemplate": "grafana/grafana-enterprise",
       "datasourceTemplate": "docker"
     }
@@ -32,7 +43,11 @@
       "labels": ["dependencies", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
-      "matchPackageNames": ["/@grafana/*/", "/grafana/grafana-enterprise/", "!@grafana/e2e-selectors"],
+      "matchPackageNames": [
+        "/@grafana/*/",
+        "/grafana/grafana-enterprise/",
+        "!@grafana/e2e-selectors"
+      ],
       "minimumReleaseAge": null
     },
     {
@@ -43,7 +58,10 @@
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
-      "matchFileNames": ["packages/plugin-e2e/package.json", "package-lock.json"],
+      "matchFileNames": [
+        "packages/plugin-e2e/package.json",
+        "package-lock.json"
+      ],
       "minimumReleaseAge": null
     },
     {
@@ -59,13 +77,13 @@
         "!@grafana/scenes"
       ],
       "minimumReleaseAge": null
-    },
+    },    
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
-    },
+    },    
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
@@ -78,7 +96,13 @@
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies", "optionalDependencies"],
-      "matchPackageNames": ["!/^@?docusaurus/", "!/^@auto-it/", "!/^auto/", "!/@grafana/*/", "!@grafana/e2e-selectors"],
+      "matchPackageNames": [
+        "!/^@?docusaurus/",
+        "!/^@auto-it/",
+        "!/^auto/",
+        "!/@grafana/*/",
+        "!@grafana/e2e-selectors"
+      ],
 
       "rangeStrategy": "bump"
     },
