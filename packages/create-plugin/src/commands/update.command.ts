@@ -1,14 +1,19 @@
-import minimist from 'minimist';
+import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+import {
+  getPackageManagerExecCmd,
+  getPackageManagerSilentInstallCmd,
+  getPackageManagerWithFallback,
+} from '../utils/utils.packageManager.js';
 import { gte, lt } from 'semver';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
-import { getConfig } from '../utils/utils.config.js';
-import { output } from '../utils/utils.console.js';
-import { isPluginDirectory } from '../utils/utils.plugin.js';
-import { getPackageManagerExecCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
-import { LEGACY_UPDATE_CUTOFF_VERSION } from '../constants.js';
-import { spawnSync } from 'node:child_process';
-import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
+import { LEGACY_UPDATE_CUTOFF_VERSION } from '../constants.js';
+import { getConfig } from '../utils/utils.config.js';
+import { isPluginDirectory } from '../utils/utils.plugin.js';
+import minimist from 'minimist';
+import { output } from '../utils/utils.console.js';
+import { spawnSync } from 'node:child_process';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   await performPreUpdateChecks(argv);
@@ -93,10 +98,11 @@ async function performPreUpdateChecks(argv: minimist.ParsedArgs) {
 function preparePluginForMigrations(argv: minimist.ParsedArgs) {
   const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
   const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
+  const installCmd = getPackageManagerSilentInstallCmd(packageManagerName, packageManagerVersion);
 
   const updateCmdList = [
     `${packageManagerExecCmd}@${LEGACY_UPDATE_CUTOFF_VERSION} update${argv.force ? ' --force' : ''}`,
-    `${packageManagerName} install`,
+    installCmd,
   ];
   const gitCmdList = [
     'git add -A',
