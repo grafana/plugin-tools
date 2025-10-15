@@ -62,25 +62,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const defaultErrorMessage = 'Cannot connect to API';
 
     try {
-      // Uncomment this to use a real endpoint that will 
-      // verify the connection to the API.
-      // const response = await this.request('/health');
-      const response = {
-        status: 200,
-        statusText: 'Success',
-      };
-
-      if (response.status === 200) {
-        return {
-          status: 'success',
-          message: 'Success',
-        };
-      } else {
-        return {
-          status: 'error',
-          message: response.statusText ? response.statusText : defaultErrorMessage,
-        };
-      }
+      // Add code to verify that the connection to the 
+      // target datasource API works as expected.
+      throw new Error('Not implemented');
     } catch (err) {
       let message = '';
       if (typeof err === 'string') {
