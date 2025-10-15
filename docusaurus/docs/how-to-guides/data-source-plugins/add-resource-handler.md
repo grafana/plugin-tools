@@ -20,7 +20,7 @@ You can add a resource handler to your data source backend to extend the Grafana
 
 ## Uses of resource handlers
 
-The primary way for a data source to retrieve data from a backend is through the [query method](../../tutorials/build-a-data-source-plugin#define-a-query). But sometimes your data source needs to request data on demand; for example, to offer auto-completion automatically inside the data source’s query editor.
+The primary way for a data source to retrieve data from a backend is through the [query method](../../tutorials/build-a-data-source-plugin#3-implement-your-query-editor). But sometimes your data source needs to request data on demand; for example, to offer auto-completion automatically inside the data source’s query editor.
 
 Resource handlers are also useful for building control panels that allow the user to write back to the data source. For example, you could add a resource handler to update the state of an IoT device.
 

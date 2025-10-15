@@ -78,7 +78,7 @@ Data source plugins allow Grafana to connect to external services, configure que
 
 ### Config editor
 
-The config editor is where users provide connection details (for example, API keys, URLs) for the external service when configuring a specific instance of the data source. To define the config editor, use `setConfigEditor()` and pass a custom configuration component. You can see [how to define a config editor in our data source tutorial](/tutorials/build-a-data-source-plugin#enable-configuration-for-your-datasource).
+The config editor is where users provide connection details (for example, API keys, URLs) for the external service when configuring a specific instance of the data source. To define the config editor, use `setConfigEditor()` and pass a custom configuration component. You can see [how to define a config editor in our data source tutorial](/tutorials/build-a-data-source-plugin#4-enable-configuration-for-your-data-source).
 
 Ensure that your sensitive data is stored securely using `secureJson`. Read our guide on [adding authentication for data source plugins](/how-to-guides/data-source-plugins/add-authentication-for-data-source-plugins#store-configuration-in-securejsondata) for more details.
 
@@ -86,7 +86,7 @@ Ensure that your sensitive data is stored securely using `secureJson`. Read our 
 
 ### Query editor
 
-The query editor allows users to construct queries against the connected service. This editor is used when adding a panel in a dashboard, when using Explore, and when creating a new Alert Rule. Query editors can be customized to provide a [code editor](https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Monaco/CodeEditor.tsx) as well as a guided query builder. You can see [how to define a query editor in our data source plugin tutorial](/tutorials/build-a-data-source-plugin#define-a-query).
+The query editor allows users to construct queries against the connected service. This editor is used when adding a panel in a dashboard, when using Explore, and when creating a new Alert Rule. Query editors can be customized to provide a [code editor](https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Monaco/CodeEditor.tsx) as well as a guided query builder. You can see [how to define a query editor in our data source plugin tutorial](/tutorials/build-a-data-source-plugin#3-implement-your-query-editor).
 
 ![An example data source query editor](./images/datasource-queryeditor.png)
 
