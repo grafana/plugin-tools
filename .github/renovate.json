@@ -1,37 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github/**"],
-  "ignoreDeps": [
-    "react",
-    "react-dom",
-    "lerna",
-    "@grafana/scenes",
-    "@libs/output",
-    "@libs/version"
-  ],
+  "ignoreDeps": ["react", "react-dom", "lerna", "@grafana/scenes", "@libs/output", "@libs/version"],
   "separateMajorMinor": false,
   "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
   "postUpdateOptions": ["npmDedupe"],
   "labels": ["dependencies", "javascript"],
-  // These custom managers are used to bump dependencies in create-plugin template files
   "customManagers": [
     {
       "customType": "regex",
       "managerFilePatterns": ["/_package.json/"],
-      "matchStrings": [
-        "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
-      ],
+      "matchStrings": ["\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","],
       "datasourceTemplate": "npm"
     },
     {
       "customType": "regex",
       "managerFilePatterns": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
-      "matchStrings": [
-        "grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"
-      ],
+      "matchStrings": ["grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"],
       "depNameTemplate": "grafana/grafana-enterprise",
       "datasourceTemplate": "docker"
     }
@@ -44,11 +32,7 @@
       "labels": ["dependencies", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
-      "matchPackageNames": [
-        "/@grafana/*/",
-        "/grafana/grafana-enterprise/",
-        "!@grafana/e2e-selectors"
-      ],
+      "matchPackageNames": ["/@grafana/*/", "/grafana/grafana-enterprise/", "!@grafana/e2e-selectors"],
       "minimumReleaseAge": null
     },
     {
@@ -59,10 +43,7 @@
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
-      "matchFileNames": [
-        "packages/plugin-e2e/package.json",
-        "package-lock.json"
-      ],
+      "matchFileNames": ["packages/plugin-e2e/package.json", "package-lock.json"],
       "minimumReleaseAge": null
     },
     {
@@ -79,14 +60,12 @@
       ],
       "minimumReleaseAge": null
     },
-    // Docusaurus dependencies have to be grouped together otherwise error out when building website.
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
     },
-    // Auto dependencies should be grouped together to avoid issues
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
@@ -99,18 +78,10 @@
       "labels": ["dependencies", "javascript", "no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies", "optionalDependencies"],
-      "matchPackageNames": [
-        "!/^@?docusaurus/",
-        "!/^@auto-it/",
-        "!/^auto/",
-        "!/@grafana/*/",
-        "!@grafana/e2e-selectors"
-      ],
+      "matchPackageNames": ["!/^@?docusaurus/", "!/^@auto-it/", "!/^auto/", "!/@grafana/*/", "!@grafana/e2e-selectors"],
 
       "rangeStrategy": "bump"
     },
-    // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
-    // which would be misleading to consumers.
     {
       "automerge": true,
       "groupName": "auto-merged patch dependencies",
@@ -128,9 +99,6 @@
       "matchManagers": ["github-actions"]
     }
   ],
-  "minimumReleaseAge": "14 days",
-  "prConcurrentLimit": 10,
-  "rebaseWhen": "conflicted",
   "vulnerabilityAlerts": {
     "addLabels": ["security"]
   }
