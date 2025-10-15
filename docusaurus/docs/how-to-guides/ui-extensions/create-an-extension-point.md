@@ -1,7 +1,7 @@
 ---
 id: create-an-extension-point
 title: Render links in an extension point
-sidebar_label: Use extension points to render links 
+sidebar_label: Use extension points to render links
 sidebar_position: 10
 description: Learn how to provide an extension point so that other applications can contribute their extensions.
 keywords:
@@ -17,8 +17,8 @@ keywords:
 
 An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
-:::note 
-Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). <br />
+:::note
+Read more about extensions under [key concepts](../../how-to-guides/ui-extensions/ui-extensions-concepts.md). <br />
 For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
 
@@ -27,12 +27,11 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 - **Make sure your UI handles multiple links** <br /> Multiple plugins may add links to your extension point. Make sure your extension point can handle this and still provide good user experience. See how you can [limit the number of extensions in your extension point](#limit-the-number-of-extensions-in-your-extension-point).
 - **Share contextual information** <br /> Think about what contextual information could be useful for other plugins and add this to the `context` object. For example, the panel menu extension point shares the `panelId` and the `timeRange`. Note that the `context{}` object always gets frozen before being passed to the links, so it can't be mutated.
 - **Avoid unnecessary re-renders** <br />
-
   - **Static context**
 
     ```ts
     // Define the `context` object outside of the component if it only has static values
-    const context { foo: 'bar' };
+    const context = { foo: 'bar' };
 
     export const InstanceToolbar = () => {
       const { links, isLoading } = usePluginLinks({ extensionPointId, context });
@@ -48,7 +47,9 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 
 ## Create an extension point to render links
 
-```tsx
+1. Create the extension point component:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginLinks } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -77,9 +78,26 @@ export const InstanceToolbar = () => {
 };
 ```
 
+2. Declare the extension point in your `plugin.json`:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
 ## Passing data to links
 
-```tsx
+1. Update the component to pass context data:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginLinks } from '@grafana/runtime';
 
 export const InstanceToolbar = ({ instanceId }) => {
@@ -94,11 +112,32 @@ export const InstanceToolbar = ({ instanceId }) => {
 };
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ## Limit the number of extensions in your extension point
 
 If you have limited space on the UI, you can limit the number of extensions in your extension point. By default there is no limit.
 
-```tsx
+1. Update the component to limit extensions per plugin:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginLinks } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -111,9 +150,30 @@ export const InstanceToolbar = () => {
 };
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ## Limit which plugins can register links in your extension point
 
-```tsx
+1. Update the component to filter plugins:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginLinks } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -130,3 +190,21 @@ export const InstanceToolbar = () => {
 };
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
+</details>

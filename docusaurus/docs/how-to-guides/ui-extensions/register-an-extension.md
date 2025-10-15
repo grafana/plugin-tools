@@ -12,11 +12,11 @@ keywords:
 sidebar_position: 20
 ---
 
-Extensions are links or React components in an app plugin. Extensions are linked to an extension point and they either render in the core Grafana UI or in another app plugin. They can also work as functions returning values.
+As a developer, you may want to share content (links, components, or functions) from your app plugins. You can either expose content, or register it to an extension point. 
 
-You can either register or expose an extension. Compared to [just exposing a component](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your components. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
+Compared to [just exposing your content](./expose-a-component.md), when you register an extension against one or more extension point IDs you can control who has access to your extensions. This can be more appropriate when looking to extend Grafana's core UI, or for when you need more control over what should be allowed to use your plugin's extension.
 
-Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md).
+Read more about extensions under [key concepts](./ui-extensions-concepts.md).
 
 :::warning
 
@@ -44,7 +44,7 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
-2. Update the `plugin.json` with necessary metadata:
+2. Update the `plugin.json` with the necessary metadata:
 
 ```json title="src/plugin.json"
 {
@@ -113,7 +113,7 @@ export const plugin = new AppPlugin().addLink({
 
 ### Update the path based on the context
 
-1. Add a `configure()` function with the logic:
+1. Add a `configure()` function with the following logic:
 
 ```tsx title="src/module.tsx"
 import { PluginExtensionPoints } from '@grafana/data';
@@ -402,40 +402,97 @@ export const plugin = new AppPlugin().addComponent({
 
 </details>
 
+## Work with function extensions
+
+### Best practices for adding functions
+
+- **Handle errors** - Make sure to handle any errors that could be thrown by the function extensions.
+- **Share contextual information** - Think about what contextual information could be useful for other plugins and pass this as parameters to the function.
+- **Use the enum for Grafana extension point IDs** - If you are registering a function to one of the available Grafana extension points, make sure that you use the [`PluginExtensionPoints` enum exposed by the `@grafana/data`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/pluginExtensions.ts#L121) package.
+- **Keep functions simple** - Function extensions should be focused and perform a single, well-defined action.
+
+### Register a function extension
+
+The following example shows how to register a function extension:
+
+1. Register the function when initialising your plugin:
+
+```tsx title="src/module.tsx"
+import { PluginExtensionPoints } from '@grafana/data';
+
+export const plugin = new AppPlugin().addFunction({
+  title: 'My function',
+  description: 'My function description',
+  targets: [PluginExtensionPoints.DashboardPanelMenu],
+  fn: (context) => {
+    // Your function logic here
+    console.log('Function called with context:', context);
+  },
+});
+```
+
+2. Update the `plugin.json` with necessary metadata:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "addedFunctions": [
+      {
+        "title": "My function",
+        "description": "My function description",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ]
+  }
+}
+```
+
 ## Update the plugin.json metadata
 
-After you have defined a link or component extension and registered it against an extension point, you must update your `plugin.json` metadata.
+After you have defined a link, component, or function extension and registered it against an extension point, you must update your `plugin.json` metadata.
 
 For example:
 
 ```json title="src/plugin.json"
-"extensions": {
-  "addedLinks": [
-    {
-      "title": "My app",
-      "description": "Link to my app",
-      "targets": ["grafana/dashboard/panel/menu"],
-    }
-  ],
-  "addedComponents": [
-    {
-      "title": "User profile tab",
-      "description": "User profile tab description",
-      "targets": ["grafana/user/profile/tab"],
-    }
-  ]
+{
+  ...
+  "extensions": {
+    "addedLinks": [
+      {
+        "title": "My app",
+        "description": "Link to my app",
+        "targets": ["grafana/dashboard/panel/menu"],
+      }
+    ],
+    "addedComponents": [
+      {
+        "title": "User profile tab",
+        "description": "User profile tab description",
+        "targets": ["grafana/user/profile/tab"],
+      }
+    ],
+    "addedFunctions": [
+      {
+        "title": "My function",
+        "description": "My function description",
+        "targets": ["grafana/dashboard/dropzone/v1"],
+      }
+    ]
+  }
 }
 ```
 
-For more information, see the `plugin.json` [reference](../../reference/metadata.md#extensions).
+For more information, see the `plugin.json` [reference doc](../../reference/metadata.md#extensions).
 
 ## Troubleshooting
 
-If you cannot see your link or component extension check the following:
+If you cannot see your link, component, or function extension check the following:
 
-1. **Check the console logs** - your link or component may not be appearing due to validation errors. Look for the relevant logs in your browser's console.
+1. **Check the console logs** - your link, component, or function may not be appearing due to validation errors. Look for the relevant logs in your browser's console.
 1. **Check the `targets`** - make sure that you are using the correct extension point IDs, and always use the `PluginExtensionPoints` enum for Grafana extension points.
 1. **Check the links `configure()` function** - if your link has a `configure()` function which is returning `undefined`, the link is hidden.
 1. **Check your component's implementation** - if your component returns `null` it won't be rendered at the extension point.
-1. **Check if you register too many links or components** - certain extension points limit the number of links or components allowed per plugin. If your plugin registers more links or components for the same extension point than the allowed amount, some of them may be filtered out.
-1. **Check the Grafana version** - link and component extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**.
+1. **Check your function's implementation** - if your function throws an error, it may not be executed properly. Make sure to handle errors appropriately.
+1. **Check if you register too many links, components, or functions** - certain extension points limit the number of extensions allowed per plugin. If your plugin registers more extensions for the same extension point than the allowed amount, some of them may be filtered out.
+1. **Check the Grafana version** - link, component, and function extensions are only supported after Grafana version **`>=10.1.0`**. `addLink()` and `addComponent()` are only supported in versions **>=`11.1.0`**, while `addFunction()` is only supported in versions **>=`11.6.0`**.

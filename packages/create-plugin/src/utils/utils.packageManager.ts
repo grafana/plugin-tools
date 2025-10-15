@@ -1,8 +1,9 @@
+import { gte, lt } from 'semver';
+
 import { basename } from 'node:path';
-import { spawnSync } from 'node:child_process';
 import { findUpSync } from 'find-up';
 import { getPackageJson } from './utils.packagejson.js';
-import { gte, lt } from 'semver';
+import { spawnSync } from 'node:child_process';
 
 const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
@@ -104,8 +105,8 @@ export function getPackageManagerSilentInstallCmd(packageManagerName: string, pa
       if (lt(packageManagerVersion, '2.0.0')) {
         return 'yarn install --silent --ignore-scripts';
       }
-
-      return 'yarn install --silent';
+      // Yarn Berry: --mode update-lockfile allows lockfile updates in CI
+      return 'yarn install --mode update-lockfile --silent';
 
     case 'pnpm':
       return 'pnpm install --no-frozen-lockfile --silent --ignore-scripts';

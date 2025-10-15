@@ -37,7 +37,7 @@
   },
   {
     "from": ["/ui-extensions"],
-    "to": "/key-concepts/ui-extensions"
+    "to": "/how-to-guides/ui-extensions/ui-extensions-concepts"
   },
   {
     "from": ["/ui-extensions/register-an-extension"],
@@ -146,5 +146,9 @@
   {
     "from": ["/get-started/best-practices"],
     "to": "/key-concepts/best-practices"
-  }  
+  },  
+  {
+    "from": ["/key-concepts/ui-extensions"],
+    "to": "/how-to-guides/ui-extensions/ui-extensions-concepts"
+  }      
 ]

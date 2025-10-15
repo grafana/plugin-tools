@@ -75,7 +75,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
   - [SurviveJs code splitting overview](https://survivejs.com/books/webpack/building/code-splitting)
   - [Official React lazy documentation](https://react.dev/reference/react/lazy)
 - **To generate dynamic apps, consider using [Grafana Scenes](https://grafana.com/developers/scenes/).**
-- **Consider contributing a [UI extension](../key-concepts/ui-extensions)** - UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that can be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
+- **Consider contributing a [UI extension](../how-to-guides/ui-extensions/ui-extensions-concepts)** - UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that can be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
 
 ## UI extensions
 

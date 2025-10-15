@@ -17,8 +17,8 @@ keywords:
 
 An extension point is a part of your plugin or Grafana UI where you can render content (links, functions or React components) from other plugins. Use them to extend your users' experience based on a context exposed by the extension point.
 
-:::note 
-Read more about extensions under [key concepts](../../key-concepts/ui-extensions.md). <br />
+:::note
+Read more about extensions under [key concepts](../../how-to-guides/ui-extensions/ui-extensions-concepts.md). <br />
 For reference documentation, including the APIs, see [UI extensions reference guide](../../reference/ui-extensions-reference).
 :::
 
@@ -29,7 +29,9 @@ For reference documentation, including the APIs, see [UI extensions reference gu
 
 ## Create an extension point to render components
 
-```tsx
+1. Create the extension point component:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginComponents } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -56,9 +58,26 @@ export const InstanceToolbar = () => {
 };
 ```
 
+2. Declare the extension point in your `plugin.json`:
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
 ## Passing data to the components
 
-```tsx
+1. Update the component to pass props to extensions:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginComponents } from '@grafana/runtime';
 
 // Types for the props (passed as a generic to the hook in the following code block)
@@ -85,9 +104,30 @@ export const InstanceToolbar = ({ instanceId }) => {
 };
 ```
 
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 ## Limit which plugins can register components in your extension point
 
-```tsx
+1. Update the component to filter plugins:
+
+```tsx title="src/components/InstanceToolbar.tsx"
 import { usePluginComponents } from '@grafana/runtime';
 
 export const InstanceToolbar = () => {
@@ -104,3 +144,22 @@ export const InstanceToolbar = () => {
   // ...
 };
 ```
+
+2. Make sure your `plugin.json` is up to date:
+<details>
+<summary>src/plugin.json</summary>
+
+```json title="src/plugin.json"
+{
+  ...
+  "extensions": {
+    "extensionPoints": [
+      {
+        "id": "myorg-foo-app/toolbar/v1",
+      }
+    ]
+  }
+}
+```
+
+</details>
