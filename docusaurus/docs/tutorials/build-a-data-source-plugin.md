@@ -104,7 +104,7 @@ Next, add the actual values to the data frame. Don't worry about the math used t
 
    The `frame.add()` accepts an object where the keys corresponds to the name of each field in the data frame.
 
-Finally, create the data frame:
+Next, create the data frame:
 
 1. Create a data frame with a time field and a number field:
 
@@ -126,9 +126,11 @@ Finally, create the data frame:
    return frame;
    ```
 
-1. Implement health check function:
+Finally, implement the health check function:
 
-   Grafana needs to verify your data source settings before you can save them. Add a simple health check that always succeeds:
+1. Signal a successfull connection:
+
+   Grafana needs to verify your data source settings before you can save them. Add a simple health check that, in this case, always succeeds:
 
    ```ts title="src/datasource.ts"
    async testDatasource() {
