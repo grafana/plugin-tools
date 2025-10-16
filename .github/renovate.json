@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
   "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github/**"],
   "ignoreDeps": [
     "react",
@@ -16,11 +16,10 @@
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
   "postUpdateOptions": ["npmDedupe"],
   "labels": ["dependencies", "javascript"],
-  // These custom managers are used to bump dependencies in create-plugin template files
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/_package.json/"],
+      "fileMatch": ["/_package.json/"],
       "matchStrings": [
         "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
       ],
@@ -28,7 +27,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
+      "fileMatch": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
       "matchStrings": [
         "grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"
       ],
@@ -38,7 +37,7 @@
   ],
   "packageRules": [
     {
-      "automerge": true,
+      "automerge": false,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
       "labels": ["dependencies", "patch"],
@@ -78,15 +77,13 @@
         "!@grafana/scenes"
       ],
       "minimumReleaseAge": null
-    },
-    // Docusaurus dependencies have to be grouped together otherwise error out when building website.
+    },    
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
-    },
-    // Auto dependencies should be grouped together to avoid issues
+    },    
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
@@ -109,8 +106,6 @@
 
       "rangeStrategy": "bump"
     },
-    // patches will only touch the repo lock file so we apply no-changelog to prevent entries in the changelog
-    // which would be misleading to consumers.
     {
       "automerge": true,
       "groupName": "auto-merged patch dependencies",
@@ -128,9 +123,6 @@
       "matchManagers": ["github-actions"]
     }
   ],
-  "minimumReleaseAge": "14 days",
-  "prConcurrentLimit": 10,
-  "rebaseWhen": "conflicted",
   "vulnerabilityAlerts": {
     "addLabels": ["security"]
   }

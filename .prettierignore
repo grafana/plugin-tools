@@ -4,3 +4,6 @@
 
 /.nx/cache
 /.nx/workspace-data
+
+# Renovate config should not be formatted by prettier
+/.github/renovate.json
