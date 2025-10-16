@@ -136,7 +136,7 @@ Next, create the data frame:
 
 Finally, implement the health check function:
 
-1. Signal a successfull connection:
+1. Signal a successful connection:
 
    Grafana needs to verify your data source settings before you can save them. Add a simple health check that, in this case, always succeeds:
 
