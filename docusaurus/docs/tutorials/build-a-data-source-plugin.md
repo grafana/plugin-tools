@@ -48,6 +48,8 @@ There are countless different databases, each with their own ways of querying da
 
 Let's see how to create and return a data frame from the `query` method. In this step, you'll change the code in the starter plugin to return a [sine wave](https://en.wikipedia.org/wiki/Sine_wave).
 
+### Edit the query code
+
 1. In the current `query` method, remove the code inside the `map` function.
 
    The `query` method now look like this:
@@ -82,6 +84,8 @@ Let's see how to create and return a data frame from the `query` method. In this
    };
    ```
 
+### Update the values for your data frame
+
 Next, add the actual values to the data frame. Don't worry about the math used to calculate the values!
 
 1. Create a couple of helper variables:
@@ -104,6 +108,8 @@ Next, add the actual values to the data frame. Don't worry about the math used t
 
    The `frame.add()` accepts an object where the keys corresponds to the name of each field in the data frame.
 
+### Create the data frame
+
 Next, create the data frame:
 
 1. Create a data frame with a time field and a number field:
@@ -125,6 +131,8 @@ Next, create the data frame:
    ```ts title="src/datasource.ts"
    return frame;
    ```
+
+### Do a health check
 
 Finally, implement the health check function:
 
