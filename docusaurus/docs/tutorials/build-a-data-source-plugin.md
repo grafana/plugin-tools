@@ -20,7 +20,7 @@ Grafana supports a wide range of [data sources](https://grafana.com/grafana/plug
 
 In this tutorial, you'll:
 
-1. [Create a data source plugin](#1-create-a-new-data-source-plugin) 
+1. [Create a data source plugin](#1-create-a-new-data-source-plugin)
 1. [Define your response structure](#2-define-your-response-data-frame)
 1. [Implement your query editor](#3-implement-your-query-editor)
 1. [Configure your data source using the config editor](#4-enable-configuration-for-your-data-source)
@@ -104,7 +104,7 @@ Next, add the actual values to the data frame. Don't worry about the math used t
 
    The `frame.add()` accepts an object where the keys corresponds to the name of each field in the data frame.
 
-Finally, create the data frame:
+Next, create the data frame:
 
 1. Create a data frame with a time field and a number field:
 
@@ -126,6 +126,25 @@ Finally, create the data frame:
    return frame;
    ```
 
+Finally, implement the health check function:
+
+1. Signal a successfull connection:
+
+   Grafana needs to verify your data source settings before you can save them. Add a simple health check that, in this case, always succeeds:
+
+   ```ts title="src/datasource.ts"
+   async testDatasource() {
+     return {
+       status: 200,
+       statusText: 'Success',
+     };
+   }
+   ```
+
+   When connecting to external data sources, test the connection with the provided settings before returning success.
+
+1. Try it out by creating a new data source instance and building a dashboard.
+
 Your data source is now sending data frames that Grafana can visualize. Try it out by creating a new data source instance and building a dashboard!
 
 :::info
@@ -134,7 +153,7 @@ In this example, you're generating timestamps from the current time range. This 
 
 Next, see how you can control the frequency of the sine wave by defining a _query_.
 
-## 3. Implement your query editor 
+## 3. Implement your query editor
 
 Most data sources offer a way to query specific data. MySQL and PostgreSQL use SQL, while Prometheus has its own query language, PromQL. No matter what query language your databases are using, Grafana lets you build support for it.
 
@@ -142,7 +161,7 @@ Add support for custom queries to your data source by implementing your own _que
 
 The query editor can be:
 
-- As simple as a text field where you can edit the raw query text. 
+- As simple as a text field where you can edit the raw query text.
 - A user-friendly form with drop-down menus and switches, that later gets converted into the raw query text sent off to the database.
 
 ### Define the query model
@@ -280,9 +299,9 @@ Just like query editor, the form field in the config editor calls the registered
 
 ## Summary
 
-In this tutorial: 
+In this tutorial:
 
-- You built a complete data source plugin for Grafana that uses a query editor to control the data to visualize. 
+- You built a complete data source plugin for Grafana that uses a query editor to control the data to visualize.
 - You added a data source option, commonly used to set connection options and more.
 
 ## Learn more
