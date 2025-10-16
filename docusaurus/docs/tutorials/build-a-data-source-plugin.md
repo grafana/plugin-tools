@@ -48,6 +48,8 @@ There are countless different databases, each with their own ways of querying da
 
 Let's see how to create and return a data frame from the `query` method. In this step, you'll change the code in the starter plugin to return a [sine wave](https://en.wikipedia.org/wiki/Sine_wave).
 
+### Edit the query code
+
 1. In the current `query` method, remove the code inside the `map` function.
 
    The `query` method now look like this:
@@ -82,6 +84,8 @@ Let's see how to create and return a data frame from the `query` method. In this
    };
    ```
 
+### Update the values for your data frame
+
 Next, add the actual values to the data frame. Don't worry about the math used to calculate the values!
 
 1. Create a couple of helper variables:
@@ -103,6 +107,8 @@ Next, add the actual values to the data frame. Don't worry about the math used t
    ```
 
    The `frame.add()` accepts an object where the keys corresponds to the name of each field in the data frame.
+
+### Create the data frame
 
 Next, create the data frame:
 
@@ -126,9 +132,11 @@ Next, create the data frame:
    return frame;
    ```
 
+### Do a health check
+
 Finally, implement the health check function:
 
-1. Signal a successfull connection:
+1. Signal a successful connection:
 
    Grafana needs to verify your data source settings before you can save them. Add a simple health check that, in this case, always succeeds:
 
