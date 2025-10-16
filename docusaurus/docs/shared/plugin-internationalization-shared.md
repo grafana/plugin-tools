@@ -80,36 +80,36 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
 
 ## Obtain the translated text
 
-Use the `i18next` [parser](https://github.com/i18next/i18next-parser#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations.
+Use the [`i18next-cli`](https://github.com/i18next/i18next-cli#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations.
 
 ### Parse for translations
 
-Install the `i18next` parser:
+Install the `i18next-cli`:
 
 ```shell npm2yarn
-npm install --save-dev i18next-parser
+npm install --save-dev i18next-cli
 ```
 
-Next, create a configuration file `src/locales/i18next-parser.config.js` and configure it so the parser sweeps your plugin and extracts the translations into the `src/locales/[$LOCALE]/[your-plugin].json`:
+Next, create a configuration file `i18next.config.ts` and configure it so the CLI sweeps your plugin and extracts the translations into the `src/locales/[$LOCALE]/[your-plugin].json`:
 
 :::warning
 The path `src/locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modify it translations won't work.
 :::
 
-```js title="src/locales/i18next-parser.config.js"
-const pluginJson = require('../plugin.json');
+```ts title="i18next.config.ts"
+import { defineConfig } from 'i18next-cli';
+import pluginJson from './src/plugin.json';
 
-module.exports = {
-  locales: pluginJson.languages, // An array of the locales your plugin supports
-  sort: true,
-  createOldCatalogs: false,
-  failOnWarnings: true,
-  verbose: false,
-  resetDefaultValueLocale: 'en-US', // Updates extracted values when they change in code
-  defaultNamespace: pluginJson.id,
-  input: ['../**/*.{tsx,ts}'],
-  output: 'src/locales/$LOCALE/$NAMESPACE.json',
-};
+export default defineConfig({
+  locales: pluginJson.languages,
+  extract: {
+    input: ['src/**/*.{tsx,ts}'],
+    output: 'src/locales/{{language}}/{{namespace}}.json',
+    defaultNS: pluginJson.id,
+    functions: ['t', '*.t'],
+    transComponents: ['Trans'],
+  },
+});
 ```
 
 ### Obtain your translation file
@@ -118,7 +118,7 @@ Add the translation script `i18n-extract` to `package.json`:
 
 ```json title="package.json"
   "scripts": {
-    "i18n-extract": "i18next --config src/locales/i18next-parser.config.js"
+    "i18n-extract": "i18next-cli extract --sync-primary"
   },
 ```
 
