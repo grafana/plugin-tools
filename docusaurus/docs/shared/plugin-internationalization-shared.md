@@ -80,11 +80,11 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
 
 ## Obtain the translated text
 
-Use the `i18next`-[cli](https://github.com/i18next/i18next-cli#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations.
+Use the [`i18next-cli`](https://github.com/i18next/i18next-cli#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations.
 
 ### Parse for translations
 
-Install the `i18next`-cli:
+Install the `i18next-cli`:
 
 ```shell npm2yarn
 npm install --save-dev i18next-cli
@@ -96,7 +96,7 @@ Next, create a configuration file `i18next.config.ts` and configure it so the pa
 The path `src/locales/[$LOCALE]/[your-plugin-id].json` is mandatory. If you modify it translations won't work.
 :::
 
-```js title="i18next.config.ts"
+```ts title="i18next.config.ts"
 import { defineConfig } from 'i18next-cli';
 import pluginJson from './src/plugin.json';
 
