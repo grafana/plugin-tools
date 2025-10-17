@@ -1,11 +1,12 @@
-import fs from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { CURRENT_APP_VERSION } from './utils.version.js';
 import { argv, commandName } from './utils.cli.js';
+
+import { CURRENT_APP_VERSION } from './utils.version.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
+import fs from 'node:fs';
 import { output } from './utils.console.js';
 import { partitionArr } from './utils.helpers.js';
+import path from 'node:path';
+import { writeFile } from 'node:fs/promises';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
@@ -13,7 +14,6 @@ export type FeatureFlags = {
   // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
   // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
   useReactRouterV6?: boolean;
-  usePlaywright?: boolean;
   useExperimentalRspack?: boolean;
   useExperimentalUpdates?: boolean;
 };

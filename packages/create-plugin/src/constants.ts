@@ -1,5 +1,5 @@
-import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -51,19 +51,11 @@ export const EXTRA_TEMPLATE_VARIABLES = {
 export const DEFAULT_FEATURE_FLAGS = {
   useReactRouterV6: true,
   bundleGrafanaUI: false,
-  usePlaywright: true,
   useExperimentalRspack: false,
   useExperimentalUpdates: true,
 };
 
-export const GRAFANA_FE_PACKAGES = [
-  '@grafana/data',
-  '@grafana/e2e-selectors',
-  '@grafana/e2e',
-  '@grafana/runtime',
-  '@grafana/schema',
-  '@grafana/ui',
-];
+export const GRAFANA_FE_PACKAGES = ['@grafana/data', '@grafana/runtime', '@grafana/schema', '@grafana/ui'];
 
 export const MIGRATION_CONFIG = {
   // Files that should be overriden during a migration.
