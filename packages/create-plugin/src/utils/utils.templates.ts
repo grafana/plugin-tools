@@ -1,27 +1,27 @@
-import { lt as semverLt } from 'semver';
-import { glob } from 'glob';
-import path from 'node:path';
-import fs from 'node:fs';
-import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
-import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
-import { getPluginJson } from './utils.plugin.js';
-import { debug } from './utils.cli.js';
 import {
-  TEMPLATE_PATHS,
+  DEFAULT_FEATURE_FLAGS,
   EXPORT_PATH_PREFIX,
   EXTRA_TEMPLATE_VARIABLES,
   PLUGIN_TYPES,
-  DEFAULT_FEATURE_FLAGS,
+  TEMPLATE_PATHS,
 } from '../constants.js';
 import { GenerateCliArgs, TemplateData } from '../types.js';
+import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import {
+  getPackageManagerFromUserAgent,
   getPackageManagerInstallCmd,
   getPackageManagerWithFallback,
-  getPackageManagerFromUserAgent,
 } from './utils.packageManager.js';
-import { getExportFileName } from '../utils/utils.files.js';
-import { getGrafanaRuntimeVersion, CURRENT_APP_VERSION } from './utils.version.js';
+import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
+
+import { CURRENT_APP_VERSION } from './utils.version.js';
+import { debug } from './utils.cli.js';
+import fs from 'node:fs';
 import { getConfig } from './utils.config.js';
+import { getExportFileName } from '../utils/utils.files.js';
+import { getPluginJson } from './utils.plugin.js';
+import { glob } from 'glob';
+import path from 'node:path';
 
 const templatesDebugger = debug.extend('templates');
 
@@ -95,11 +95,7 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = CURRENT_APP_VERSION;
-  const grafanaVersion = getGrafanaRuntimeVersion();
   const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
-  //@grafana/e2e was deprecated in Grafana 11
-  const useCypress =
-    !usePlaywright && semverLt(grafanaVersion, '11.0.0') && fs.existsSync(path.join(process.cwd(), 'cypress'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const getReactRouterVersion = () => (features.useReactRouterV6 ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
@@ -131,7 +127,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(),
       scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
-      useCypress,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,
     };
@@ -159,7 +154,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       reactRouterVersion: getReactRouterVersion(),
       scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
       usePlaywright,
-      useCypress,
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,

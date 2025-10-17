@@ -9,17 +9,13 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache .",
     "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix && prettier --write --list-different .",{{#if usePlaywright}}
-    "e2e": "playwright test",{{/if}}{{#if useCypress}}
-    "e2e": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run",
-    "e2e:update": "{{ packageManagerName }} exec cypress install && {{ packageManagerName }} exec grafana-e2e run --update-screenshots",{{/if}}
+    "e2e": "playwright test",{{/if}}
     "server": "docker compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest"
   },
   "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
   "devDependencies": {
-{{#if useCypress}}    "@grafana/e2e": "^11.0.7",
-    "@grafana/e2e-selectors": "^12.2.0",{{/if}}
     "@grafana/eslint-config": "^8.2.0",{{#if usePlaywright}}
     "@grafana/plugin-e2e": "^2.2.0",{{/if}}
     "@grafana/tsconfig": "^2.0.0",{{#if usePlaywright}}
