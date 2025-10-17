@@ -24,7 +24,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["//_package.json//"],
+      "managerFilePatterns": ["/_package.json/"],
       "matchStrings": [
         "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
       ],
@@ -32,7 +32,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["//(^|/)(?:docker-)?compose[^/]*\\.ya?ml$//"],
+      "managerFilePatterns": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
       "matchStrings": [
         "grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"
       ],
