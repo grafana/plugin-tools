@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import minimist from 'minimist';
-import { generate, update, migrate, version, provisioning } from '../commands/index.js';
-import { isUnsupportedPlatform } from '../utils/utils.os.js';
+import { add, generate, migrate, provisioning, update, version } from '../commands/index.js';
 import { argv, commandName } from '../utils/utils.cli.js';
+
+import { isUnsupportedPlatform } from '../utils/utils.os.js';
+import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 
 // Exit early if operating system isn't supported.
@@ -23,6 +24,7 @@ const commands: Record<string, (argv: minimist.ParsedArgs) => void> = {
   update,
   version,
   provisioning,
+  add,
 };
 const command = commands[commandName] || 'generate';
 
