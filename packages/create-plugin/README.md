@@ -122,6 +122,45 @@ For more information see our [documentation](https://grafana.com/developers/plug
 
 ---
 
+## Add optional features to your existing plugin
+
+You can add optional features to your plugin using the `add` command. This allows you to enhance your plugin with additional capabilities without starting from scratch.
+
+### Add internationalization (i18n) support
+
+Add translation support to make your plugin available in multiple languages:
+
+```bash
+# Run this command from the root of your plugin
+cd ./my-plugin
+
+npx @grafana/create-plugin@latest add i18n
+```
+
+This will:
+
+- Update your `plugin.json` with the selected languages
+- Create locale folders and translation files
+- Add the necessary dependencies to `package.json`
+- Configure your docker-compose.yaml with the required feature toggle
+- Add i18n imports to your module file
+- Set up the i18n extraction script
+
+The command will prompt you to select which locales you want to support. You can choose from common locales like:
+
+- English (US) - `en-US`
+- Spanish (Spain) - `es-ES`
+- French (France) - `fr-FR`
+- German (Germany) - `de-DE`
+- Swedish (Sweden) - `sv-SE`
+- And more...
+
+You can also add custom locale codes during the interactive prompt.
+
+For more information about plugin internationalization, see our [documentation](https://grafana.com/developers/plugin-tools/how-to-guides/plugin-internationalization).
+
+---
+
 ## Contributing
 
 We are always grateful for contributions! See [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
