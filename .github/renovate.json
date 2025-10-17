@@ -1,7 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
-  "includePaths": ["package.json", "packages/**", "docusaurus/**", ".github/**"],
+  "includePaths": [
+    "package.json",
+    "packages/**",
+    "docusaurus/**",
+    ".github/**"
+  ],
   "ignoreDeps": [
     "react",
     "react-dom",
@@ -19,7 +24,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["/_package.json/"],
+      "managerFilePatterns": ["/_package.json/"],
       "matchStrings": [
         "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
       ],
@@ -27,7 +32,7 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
+      "managerFilePatterns": ["/(^|/)(?:docker-)?compose[^/]*\\.ya?ml$/"],
       "matchStrings": [
         "grafana_version:\\s\\$\\{GRAFANA_VERSION:-(?<currentValue>.*)\\}"
       ],
@@ -77,13 +82,13 @@
         "!@grafana/scenes"
       ],
       "minimumReleaseAge": null
-    },    
+    },
     {
       "groupName": "docusaurus dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
-    },    
+    },
     {
       "groupName": "auto dependencies",
       "labels": ["dependencies", "javascript", "no-changelog"],
@@ -103,7 +108,6 @@
         "!/@grafana/*/",
         "!@grafana/e2e-selectors"
       ],
-
       "rangeStrategy": "bump"
     },
     {
