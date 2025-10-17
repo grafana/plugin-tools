@@ -22,7 +22,7 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -88,7 +88,7 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -146,7 +146,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -223,7 +223,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -268,7 +268,7 @@ jobs:
             hasBackend: false
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -276,7 +276,7 @@ jobs:
           export_env: false
 
       - name: Get secrets for DockerHub login
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # get-vault-secrets/v1.2.1
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
@@ -347,7 +347,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
@@ -357,7 +357,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -372,7 +372,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -403,7 +403,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
         with:
           url: http://localhost:3000/login
 
@@ -417,7 +417,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -473,7 +473,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@376226a5245b6b8bbb95127241c430ef8d6aa643 # deploy-report-pages/v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
@@ -490,7 +490,7 @@ jobs:
       id-token: write
     steps:
       - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@get-vault-secrets/v1.2.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # get-vault-secrets/v1.2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
