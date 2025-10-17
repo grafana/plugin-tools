@@ -51,7 +51,6 @@ export const EXTRA_TEMPLATE_VARIABLES = {
 export const DEFAULT_FEATURE_FLAGS = {
   useReactRouterV6: true,
   bundleGrafanaUI: false,
-  usePlaywright: true,
   useExperimentalRspack: false,
   useExperimentalUpdates: true,
 };

@@ -95,7 +95,6 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = CURRENT_APP_VERSION;
-  const usePlaywright = features.usePlaywright === true || isFile(path.join(process.cwd(), 'playwright.config.ts'));
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const getReactRouterVersion = () => (features.useReactRouterV6 ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
@@ -126,7 +125,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
       reactRouterVersion: getReactRouterVersion(),
       scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
-      usePlaywright,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,
     };
@@ -153,7 +151,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
       reactRouterVersion: getReactRouterVersion(),
       scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
-      usePlaywright,
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,

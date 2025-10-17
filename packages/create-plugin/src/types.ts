@@ -25,7 +25,6 @@ export type TemplateData = {
   useReactRouterV6: boolean;
   scenesVersion: string;
   reactRouterVersion: string;
-  usePlaywright: boolean;
   useExperimentalRspack: boolean;
   pluginExecutable?: string;
   frontendBundler: 'webpack' | 'rspack';
