@@ -1,15 +1,16 @@
-import commonjs from '@rollup/plugin-commonjs';
-import json from '@rollup/plugin-json';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { glob, GlobOptions } from 'glob';
-import { readFileSync } from 'node:fs';
+import { GlobOptions, glob } from 'glob';
+import { Plugin, RollupOptions, defineConfig } from 'rollup';
+
 import { chmod } from 'node:fs/promises';
-import { join } from 'node:path';
-import { inspect } from 'node:util';
-import { defineConfig, Plugin, RollupOptions } from 'rollup';
+import commonjs from '@rollup/plugin-commonjs';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
+import { inspect } from 'node:util';
+import { join } from 'node:path';
+import json from '@rollup/plugin-json';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { readFileSync } from 'node:fs';
 
 const projectRoot = process.cwd();
 const tsconfigPath = join(projectRoot, 'tsconfig.json');

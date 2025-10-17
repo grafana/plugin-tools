@@ -23,28 +23,44 @@ export default function migrate(context: Context, options: I18nOptions = { local
     return context;
   }
 
-  // 1. Update docker-compose.yaml with feature toggle
-  updateDockerCompose(context);
+  // Determine if we need backward compatibility (Grafana < 12.1.0)
+  const needsBackwardCompatibility = checkNeedsBackwardCompatibility(context);
+  additionsDebug('Needs backward compatibility:', needsBackwardCompatibility);
+
+  // 1. Update docker-compose.yaml with feature toggle (only if >= 12.1.0)
+  if (!needsBackwardCompatibility) {
+    updateDockerCompose(context);
+  }
 
   // 2. Update plugin.json with languages and grafanaDependency
-  updatePluginJson(context, locales);
+  updatePluginJson(context, locales, needsBackwardCompatibility);
 
-  // 3. Create locale folders and files
+  // 3. Create locale folders and files with example translations
   createLocaleFiles(context, locales);
 
   // 4. Add @grafana/i18n dependency
   addI18nDependency(context);
 
-  // 5. Update eslint.config.mjs if needed
+  // 5. Add semver dependency for backward compatibility
+  if (needsBackwardCompatibility) {
+    addSemverDependency(context);
+  }
+
+  // 6. Update eslint.config.mjs if needed
   updateEslintConfig(context);
 
-  // 6. Add i18n initialization to module file
-  addI18nInitialization(context);
+  // 7. Add i18n initialization to module file
+  addI18nInitialization(context, needsBackwardCompatibility);
 
-  // 7. Add i18next-cli as dev dependency and add script
+  // 8. Create loadResources.ts for backward compatibility
+  if (needsBackwardCompatibility) {
+    createLoadResourcesFile(context);
+  }
+
+  // 9. Add i18next-cli as dev dependency and add script
   addI18nextCli(context);
 
-  // 8. Create i18next.config.ts
+  // 10. Create i18next.config.ts
   createI18nextConfig(context);
 
   return context;
@@ -72,6 +88,29 @@ function isI18nConfigured(context: Context): boolean {
   }
 
   return false;
+}
+
+function checkNeedsBackwardCompatibility(context: Context): boolean {
+  const pluginJsonRaw = context.getFile('src/plugin.json');
+  if (!pluginJsonRaw) {
+    return false;
+  }
+
+  try {
+    const pluginJson = JSON.parse(pluginJsonRaw);
+    const currentGrafanaDep = pluginJson.dependencies?.grafanaDependency || '>=11.0.0';
+    const minVersion = coerce('12.1.0');
+    const currentVersion = coerce(currentGrafanaDep.replace(/^[><=]+/, ''));
+
+    // If current version is less than 12.1.0, we need backward compatibility
+    if (currentVersion && minVersion && gte(currentVersion, minVersion)) {
+      return false; // Already >= 12.1.0, no backward compat needed
+    }
+    return true; // < 12.1.0, needs backward compat
+  } catch (error) {
+    additionsDebug('Error checking backward compatibility:', error);
+    return true; // Default to backward compat on error
+  }
 }
 
 function updateDockerCompose(context: Context): void {
@@ -123,7 +162,7 @@ function updateDockerCompose(context: Context): void {
   }
 }
 
-function updatePluginJson(context: Context, locales: string[]): void {
+function updatePluginJson(context: Context, locales: string[], needsBackwardCompatibility: boolean): void {
   if (!context.doesFileExist('src/plugin.json')) {
     additionsDebug('src/plugin.json not found, skipping');
     return;
@@ -140,18 +179,19 @@ function updatePluginJson(context: Context, locales: string[]): void {
     // Add languages array
     pluginJson.languages = locales;
 
-    // Ensure grafanaDependency is >= 12.1.0
+    // Update grafanaDependency based on backward compatibility needs
     if (!pluginJson.dependencies) {
       pluginJson.dependencies = {};
     }
 
     const currentGrafanaDep = pluginJson.dependencies.grafanaDependency || '>=11.0.0';
-    const minVersion = coerce('12.1.0');
+    const targetVersion = needsBackwardCompatibility ? '11.0.0' : '12.1.0';
+    const minVersion = coerce(targetVersion);
     const currentVersion = coerce(currentGrafanaDep.replace(/^[><=]+/, ''));
 
     if (!currentVersion || !minVersion || !gte(currentVersion, minVersion)) {
-      pluginJson.dependencies.grafanaDependency = '>=12.1.0';
-      additionsDebug('Updated grafanaDependency to >=12.1.0');
+      pluginJson.dependencies.grafanaDependency = `>=${targetVersion}`;
+      additionsDebug(`Updated grafanaDependency to >=${targetVersion}`);
     }
 
     context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
@@ -172,19 +212,37 @@ function createLocaleFiles(context: Context, locales: string[]): void {
   try {
     const pluginJson = JSON.parse(pluginJsonRaw);
     const pluginId = pluginJson.id;
+    const pluginName = pluginJson.name || pluginId;
 
     if (!pluginId) {
       additionsDebug('No plugin ID found in plugin.json');
       return;
     }
 
+    // Create example translation structure
+    const exampleTranslations = {
+      components: {
+        exampleComponent: {
+          title: `${pluginName} component title`,
+          description: 'Example description',
+        },
+      },
+      config: {
+        title: `${pluginName} configuration`,
+        apiUrl: {
+          label: 'API URL',
+          placeholder: 'Enter API URL',
+        },
+      },
+    };
+
     // Create locale files for each locale
     for (const locale of locales) {
       const localePath = `src/locales/${locale}/${pluginId}.json`;
 
       if (!context.doesFileExist(localePath)) {
-        context.addFile(localePath, JSON.stringify({}, null, 2));
-        additionsDebug(`Created ${localePath}`);
+        context.addFile(localePath, JSON.stringify(exampleTranslations, null, 2));
+        additionsDebug(`Created ${localePath} with example translations`);
       }
     }
   } catch (error) {
@@ -193,8 +251,14 @@ function createLocaleFiles(context: Context, locales: string[]): void {
 }
 
 function addI18nDependency(context: Context): void {
-  addDependenciesToPackageJson(context, { '@grafana/i18n': '^1.0.0' }, {});
-  additionsDebug('Added @grafana/i18n dependency');
+  addDependenciesToPackageJson(context, { '@grafana/i18n': '12.2.2' }, {});
+  additionsDebug('Added @grafana/i18n dependency version 12.2.2');
+}
+
+function addSemverDependency(context: Context): void {
+  // Add semver as regular dependency and @types/semver as dev dependency for backward compatibility
+  addDependenciesToPackageJson(context, { semver: '^7.6.0' }, { '@types/semver': '^7.5.0' });
+  additionsDebug('Added semver dependency for backward compatibility');
 }
 
 function addI18nextCli(context: Context): void {
@@ -355,7 +419,7 @@ export default defineConfig({
   }
 }
 
-function addI18nInitialization(context: Context): void {
+function addI18nInitialization(context: Context, needsBackwardCompatibility: boolean): void {
   // Find module.ts or module.tsx
   const moduleTsPath = context.doesFileExist('src/module.ts')
     ? 'src/module.ts'
@@ -374,7 +438,7 @@ function addI18nInitialization(context: Context): void {
   }
 
   // Check if i18n is already initialized
-  if (moduleContent.includes('@grafana/i18n')) {
+  if (moduleContent.includes('initPluginTranslations')) {
     additionsDebug('i18n already initialized in module file');
     return;
   }
@@ -384,18 +448,72 @@ function addI18nInitialization(context: Context): void {
       parser: require('recast/parsers/babel-ts'),
     });
 
-    // Add import for i18n
-    const i18nImport = builders.importDeclaration(
-      [builders.importSpecifier(builders.identifier('i18n'))],
-      builders.literal('@grafana/i18n')
+    const imports = [];
+
+    // Add necessary imports based on backward compatibility
+    imports.push(
+      builders.importDeclaration(
+        [builders.importSpecifier(builders.identifier('initPluginTranslations'))],
+        builders.literal('@grafana/i18n')
+      )
     );
 
-    // Add the import after the first import statement
+    imports.push(
+      builders.importDeclaration(
+        [builders.importDefaultSpecifier(builders.identifier('pluginJson'))],
+        builders.literal('plugin.json')
+      )
+    );
+
+    if (needsBackwardCompatibility) {
+      imports.push(
+        builders.importDeclaration(
+          [builders.importSpecifier(builders.identifier('config'))],
+          builders.literal('@grafana/runtime')
+        )
+      );
+      imports.push(
+        builders.importDeclaration(
+          [builders.importDefaultSpecifier(builders.identifier('semver'))],
+          builders.literal('semver')
+        )
+      );
+      imports.push(
+        builders.importDeclaration(
+          [builders.importSpecifier(builders.identifier('loadResources'))],
+          builders.literal('./loadResources')
+        )
+      );
+    }
+
+    // Add imports after the first import statement
     const firstImportIndex = ast.program.body.findIndex((node: any) => node.type === 'ImportDeclaration');
     if (firstImportIndex !== -1) {
-      ast.program.body.splice(firstImportIndex + 1, 0, i18nImport);
+      ast.program.body.splice(firstImportIndex + 1, 0, ...imports);
     } else {
-      ast.program.body.unshift(i18nImport);
+      ast.program.body.unshift(...imports);
+    }
+
+    // Add i18n initialization code
+    const i18nInitCode = needsBackwardCompatibility
+      ? `// Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
+// In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
+const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources] : [];
+
+await initPluginTranslations(pluginJson.id, loaders);`
+      : `await initPluginTranslations(pluginJson.id);`;
+
+    // Parse the initialization code and insert it at the top level (after imports)
+    const initAst = recast.parse(i18nInitCode, {
+      parser: require('recast/parsers/babel-ts'),
+    });
+
+    // Find the last import index
+    const lastImportIndex = ast.program.body.findLastIndex((node: any) => node.type === 'ImportDeclaration');
+    if (lastImportIndex !== -1) {
+      ast.program.body.splice(lastImportIndex + 1, 0, ...initAst.program.body);
+    } else {
+      ast.program.body.unshift(...initAst.program.body);
     }
 
     const output = recast.print(ast, {
@@ -405,8 +523,46 @@ function addI18nInitialization(context: Context): void {
     }).code;
 
     context.updateFile(moduleTsPath, output);
-    additionsDebug(`Updated ${moduleTsPath} with i18n import`);
+    additionsDebug(`Updated ${moduleTsPath} with i18n initialization`);
   } catch (error) {
     additionsDebug('Error updating module file:', error);
   }
+}
+
+function createLoadResourcesFile(context: Context): void {
+  const loadResourcesPath = 'src/loadResources.ts';
+
+  if (context.doesFileExist(loadResourcesPath)) {
+    additionsDebug('loadResources.ts already exists, skipping');
+    return;
+  }
+
+  const pluginJsonRaw = context.getFile('src/plugin.json');
+  if (!pluginJsonRaw) {
+    additionsDebug('Cannot create loadResources.ts without plugin.json');
+    return;
+  }
+
+  const loadResourcesContent = `import { LANGUAGES, ResourceLoader, Resources } from '@grafana/i18n';
+import pluginJson from 'plugin.json';
+
+const resources = LANGUAGES.reduce<Record<string, () => Promise<{ default: Resources }>>>((acc, lang) => {
+  acc[lang.code] = async () => await import(\`./locales/\${lang.code}/\${pluginJson.id}.json\`);
+  return acc;
+}, {});
+
+export const loadResources: ResourceLoader = async (resolvedLanguage: string) => {
+  try {
+    const translation = await resources[resolvedLanguage]();
+    return translation.default;
+  } catch (error) {
+    // This makes sure that the plugin doesn't crash when the resolved language in Grafana isn't supported by the plugin
+    console.error(\`The plugin '\${pluginJson.id}' doesn't support the language '\${resolvedLanguage}'\`, error);
+    return {};
+  }
+};
+`;
+
+  context.addFile(loadResourcesPath, loadResourcesContent);
+  additionsDebug('Created src/loadResources.ts for backward compatibility');
 }

@@ -34,10 +34,10 @@ describe('add-i18n', () => {
     await expect(migrateWithOptions).toBeIdempotent(context);
   });
 
-  it('should add i18n support with a single locale', () => {
+  it('should add i18n support with a single locale (backward compatibility for Grafana < 12.1.0)', () => {
     const context = new Context('/virtual');
 
-    // Set up a minimal plugin structure
+    // Set up a minimal plugin structure with Grafana 11.0.0 (needs backward compatibility)
     context.addFile(
       'src/plugin.json',
       JSON.stringify({
@@ -71,26 +71,38 @@ describe('add-i18n', () => {
     // Check plugin.json was updated
     const pluginJson = JSON.parse(result.getFile('src/plugin.json') || '{}');
     expect(pluginJson.languages).toEqual(['en-US']);
-    expect(pluginJson.dependencies.grafanaDependency).toBe('>=12.1.0');
+    // Should stay at 11.0.0 for backward compatibility
+    expect(pluginJson.dependencies.grafanaDependency).toBe('>=11.0.0');
 
-    // Check locale file was created
+    // Check locale file was created with example translations
     expect(result.doesFileExist('src/locales/en-US/test-plugin.json')).toBe(true);
     const localeContent = result.getFile('src/locales/en-US/test-plugin.json');
-    expect(JSON.parse(localeContent || '{}')).toEqual({});
+    const localeData = JSON.parse(localeContent || '{}');
+    expect(localeData).toHaveProperty('components');
+    expect(localeData).toHaveProperty('config');
 
     // Check package.json was updated with dependencies
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
-    expect(packageJson.dependencies['@grafana/i18n']).toBeDefined();
+    expect(packageJson.dependencies['@grafana/i18n']).toBe('12.2.2');
+    expect(packageJson.dependencies['semver']).toBe('^7.6.0');
+    expect(packageJson.devDependencies['@types/semver']).toBe('^7.5.0');
     expect(packageJson.devDependencies['i18next-cli']).toBeDefined();
     expect(packageJson.scripts['i18n-extract']).toBe('i18next-cli extract --sync-primary');
 
-    // Check docker-compose.yaml was updated
+    // Check docker-compose.yaml was NOT updated (backward compat doesn't add feature toggle)
     const dockerCompose = result.getFile('docker-compose.yaml');
-    expect(dockerCompose).toContain('localizationForPlugins');
+    expect(dockerCompose).not.toContain('localizationForPlugins');
 
-    // Check module.ts was updated
+    // Check module.ts was updated with backward compatibility code
     const moduleTs = result.getFile('src/module.ts');
-    expect(moduleTs).toContain('@grafana/i18n');
+    expect(moduleTs).toContain('initPluginTranslations');
+    expect(moduleTs).toContain('semver');
+    expect(moduleTs).toContain('loadResources');
+
+    // Check loadResources.ts was created for backward compatibility
+    expect(result.doesFileExist('src/loadResources.ts')).toBe(true);
+    const loadResources = result.getFile('src/loadResources.ts');
+    expect(loadResources).toContain('ResourceLoader');
 
     // Check i18next.config.ts was created
     expect(result.doesFileExist('i18next.config.ts')).toBe(true);
@@ -185,7 +197,7 @@ describe('add-i18n', () => {
     expect(finalChanges).toBe(initialChanges);
   });
 
-  it('should handle existing feature toggles in docker-compose.yaml', () => {
+  it('should handle existing feature toggles in docker-compose.yaml (Grafana >= 12.1.0)', () => {
     const context = new Context('/virtual');
 
     context.addFile(
@@ -195,7 +207,7 @@ describe('add-i18n', () => {
         type: 'panel',
         name: 'Test Plugin',
         dependencies: {
-          grafanaDependency: '>=11.0.0',
+          grafanaDependency: '>=12.1.0',
         },
       })
     );
