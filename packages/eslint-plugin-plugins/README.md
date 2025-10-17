@@ -1,6 +1,6 @@
 # eslint-plugin-plugins
 
-is-compatible is a simple ESLint plugin that checks whether imports from any of the Grafana packages (`@grafana/ui`, `@grafana/data` and `@grafana/runtime`) from within a Grafana plugin source code exist in all the Grafana runtimes that the plugin is supposed to support (as specified in the `grafanaDependency` in `plugin.json`).
+`eslint-plugin-plugins` contains an ESLint rule that checks whether imports from any of the Grafana packages (`@grafana/ui`, `@grafana/data` and `@grafana/runtime`) from within a Grafana plugin source code exist in all the Grafana runtimes that the plugin is supposed to support (as specified in the `grafanaDependency` in `plugin.json`).
 
 ## How to install
 
@@ -10,6 +10,31 @@ npm install @grafana/eslint-plugin-plugins --save-dev
 
 ### Configure
 
+To determine the plugin's minimum supported Grafana version, the linter checks the `grafanaDependency` property in the plugin's `plugin.json`. By default, it looks for `plugin.json` in the `<projectRoot>/src` folder. If the file is located elsewhere or if you're using a monorepo with multiple plugins that have different `grafanaDependency` values, you can specify `minGrafanaVersion` directly in the ESLint configuration.
+
+#### Flat config
+
+```js
+const grafanaPlugins = require('@grafana/eslint-plugin-plugins');
+
+module.exports = [
+  // ...other configs
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    plugins: { '@grafana/plugins': grafanaPlugins },
+    rules: {
+      '@grafana/plugins/import-is-compatible': [
+        'warn',
+        // optionally pass the minimum supported version
+        // { minGrafanaVersion: '10.3.0' },
+      ],
+    },
+  },
+];
+```
+
+#### Legacy config
+
 Add the following to your Grafana plugin's `.eslintrc`:
 
 ```js
@@ -17,19 +42,11 @@ Add the following to your Grafana plugin's `.eslintrc`:
   ...
   "plugins": ["@grafana/eslint-plugin-plugins"],
   "rules": {
-    "@grafana/plugins/import-is-compatible": ["warn"]
-  }
-}
-```
-
-To determine the plugin's minimum supported Grafana version, the linter checks the `grafanaDependency` property in the plugin's `plugin.json`. By default, it looks for `plugin.json` in the `<projectRoot>/src` folder. If the file is located elsewhere or if you're using a monorepo with multiple plugins that have different `grafanaDependency` values, you can specify `minGrafanaVersion` directly in the ESLint configuration.
-
-```js
-{
-  ...
-  "plugins": ["@grafana/eslint-plugin-plugins"],
-  "rules": {
-    "@grafana/plugins/import-is-compatible": ["warn", { "minGrafanaVersion": "10.3.0" }]
+    "@grafana/plugins/import-is-compatible": [
+      "warn"
+      // optionally pass the minimum supported version
+      // { minGrafanaVersion: '10.3.0' },
+    ]
   }
 }
 ```
