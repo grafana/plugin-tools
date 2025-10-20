@@ -27,7 +27,7 @@ _Work in progress._
 
 Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
 
-### Commmands
+### Commands
 
 This package has no build process. When making changes it's best to test it either by linking it:
 
