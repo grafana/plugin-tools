@@ -37,10 +37,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup node
+      - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: '22'
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
