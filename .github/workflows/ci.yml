@@ -98,7 +98,7 @@ jobs:
       - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '24.8'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -173,6 +173,11 @@ jobs:
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
+      - name: Setup nodejs
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version-file: '24.8'
+
       - name: Scaffold plugin using the earliest create-plugin version mentioned in migrations
         run: npx -y @grafana/create-plugin@5.27.1 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
 
@@ -285,7 +290,7 @@ jobs:
       - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '24.8'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Download packed artifacts
