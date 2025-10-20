@@ -13,6 +13,11 @@
     "directory": "packages/tsconfig",
     "url": "https://github.com/grafana/plugin-tools"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
   "main": "tsconfig.json",
   "files": [
     "base.json",
