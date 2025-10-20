@@ -71,6 +71,7 @@
     "packages/plugin-meta-extractor",
     "packages/plugin-types-bundler",
     "packages/eslint-plugin-plugins",
+    "packages/tsconfig",
     "libs/*"
   ],
   "lint-staged": {
