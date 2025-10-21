@@ -152,7 +152,7 @@
     "to": "/how-to-guides/ui-extensions/ui-extensions-concepts"
   },   
   {
-    "from": ["how-to-guides/ui-extensions/expose-a-lazy-loaded-component"],
-    "to": "/how-to-guides/ui-extensions/expose-a-component#expose-a-lazy-loaded-component"
+    "from": ["/how-to-guides/ui-extensions/expose-a-lazy-loaded-component"],
+    "to": "/how-to-guides/ui-extensions/expose-a-component"
   }         
 ]
