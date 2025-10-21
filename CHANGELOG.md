@@ -1,3 +1,16 @@
+# (Wed Oct 15 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.1`
+  - Fix: Use proper install command for legacy plugin migrations [#2221](https://github.com/grafana/plugin-tools/pull/2221) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Oct 09 2025)
 
 #### 🐛 Bug Fix
