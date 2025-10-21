@@ -85,7 +85,7 @@ With great power comes great responsibility. UI extensions are a powerful tool, 
 
 - **Exposing components from Grafana core** - If you want to expose a component from Grafana core, you can expose it using UI extensions, but only if it is publicly available and it doesn't make sense to expose it via `@grafana/ui`. If you want to expose it to a restricted number of plugins, you should consider using the "expose restricted APIs" functionality.
 
-- **Use lazy loading for UI extension components** - When exposing components through UI extensions, consider using lazy loading to improve initial load performance and reduce bundle size. This is especially beneficial for large components that aren't always needed. Refer to [Expose a lazy-loaded component](../how-to-guides/ui-extensions/expose-a-lazy-loaded-component) for implementation details.
+- **Use lazy loading for UI extension components** - When exposing components through UI extensions, consider using lazy loading to improve initial load performance and reduce bundle size. This is especially beneficial for large components that aren't always needed. Refer to [Expose a lazy-loaded component](../how-to-guides/ui-extensions/expose-a-component#expose-a-lazy-loaded-component) for implementation details.
 
 ## Publish a plugin
 
