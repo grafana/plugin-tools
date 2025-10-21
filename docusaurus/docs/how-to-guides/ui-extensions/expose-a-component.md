@@ -99,7 +99,7 @@ export const plugin = new AppPlugin().exposeComponent({
 ```
 
 :::note
-To add components, use the same pattern described in the `addComponent` method.
+To expose components, use the same pattern described in the `exposeComponent` method.
 :::
 
 ### Consume a lazy-loaded component
