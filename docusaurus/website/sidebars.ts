@@ -164,7 +164,6 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/ui-extensions/use-an-exposed-component',
         'how-to-guides/ui-extensions/register-an-extension',
         'how-to-guides/ui-extensions/expose-a-component',
-        'how-to-guides/ui-extensions/expose-a-lazy-loaded-component',
         'how-to-guides/ui-extensions/versioning-extensions',
         'how-to-guides/ui-extensions/degregate-ui',
         'how-to-guides/ui-extensions/debug-logs',
