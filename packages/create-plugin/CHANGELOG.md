@@ -1,3 +1,31 @@
+# v6.1.2 (Tue Oct 21 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Remove cypress support [#2232](https://github.com/grafana/plugin-tools/pull/2232) ([@sunker](https://github.com/sunker))
+- Update dependency @grafana/e2e-selectors to v12.2.0 [#2205](https://github.com/grafana/plugin-tools/pull/2205) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh) [@mckn](https://github.com/mckn))
+
+#### Authors: 4
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v6.1.1 (Wed Oct 15 2025)
+
+#### 🐛 Bug Fix
+
+- Fix: Use proper install command for legacy plugin migrations [#2221](https://github.com/grafana/plugin-tools/pull/2221) ([@sunker]https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v6.1.0 (Wed Oct 08 2025)
 
 #### 🚀 Enhancement

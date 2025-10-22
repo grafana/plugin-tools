@@ -1,3 +1,34 @@
+# (Tue Oct 21 2025)
+
+#### 🐛 Bug Fix
+
+- CreatePlugin: Adding step about health check functionality in ds tutorial. [#2222](https://github.com/grafana/plugin-tools/pull/2222) ([@mckn](https://github.com/mckn))
+- `@grafana/create-plugin@6.1.2`
+  - Create Plugin: Remove cypress support [#2232](https://github.com/grafana/plugin-tools/pull/2232) ([@sunker](https://github.com/sunker))
+  - Update dependency @grafana/e2e-selectors to v12.2.0 [#2205](https://github.com/grafana/plugin-tools/pull/2205) ([@renovate[bot]](https://github.com/renovate[bot]) [@leventebalogh](https://github.com/leventebalogh) [@mckn](https://github.com/mckn))
+
+#### Authors: 4
+
+- [@renovate[bot]](https://github.com/renovate[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Levente Balogh ([@leventebalogh](https://github.com/leventebalogh))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Wed Oct 15 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.1`
+  - Fix: Use proper install command for legacy plugin migrations [#2221](https://github.com/grafana/plugin-tools/pull/2221) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Oct 09 2025)
 
 #### 🐛 Bug Fix

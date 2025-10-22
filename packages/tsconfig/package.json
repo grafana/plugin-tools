@@ -2,7 +2,7 @@
   "author": "Grafana Labs",
   "license": "Apache-2.0",
   "name": "@grafana/tsconfig",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Grafana's TypeScript config",
   "keywords": [
     "grafana",
