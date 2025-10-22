@@ -1,8 +1,8 @@
 import { join } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { execSync } from 'child_process';
-import { lt } from 'semver';
+import { lt, gte } from 'semver';
 import { getExportInfo } from './tscUtils';
 import { ExportInfo } from './types';
 
@@ -17,7 +17,7 @@ export function downloadPackages(tempDir: string, version: string) {
   console.log(`Please wait... downloading Grafana types information for version ${version}.`);
   mkdirSync(tempDir, { recursive: true });
 
-  if (lt(version, '9.2.0')) {
+  if (lt(version, '9.2.0') || gte(version, '12.1.0')) {
     execSync(
       `npm install ${packages.join(
         `@${version} `
@@ -28,7 +28,7 @@ export function downloadPackages(tempDir: string, version: string) {
     );
   } else {
     packages.forEach((pkgName) => {
-      let typesFileUrl = `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/index.d.ts`;
+      let typesFileUrl = getPackageDownloadUrl(pkgName, version);
       let downloadPath = join(tempDir, 'node_modules', pkgName);
       mkdirSync(downloadPath, { recursive: true });
 
@@ -59,7 +59,33 @@ export function downloadPackages(tempDir: string, version: string) {
   }
 }
 
-function getPackageExportPaths(tempDir: string): Record<string, string> {
+function getPackageDownloadUrl(pkgName: string, version: string) {
+  if (gte(version, '11.0.0')) {
+    return `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/cjs/index.d.cts`;
+  }
+
+  return `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/index.d.ts`;
+}
+
+function getPackageExportPaths(tempDir: string, minGrafanaVersion: string): Record<string, string> {
+  if (gte(minGrafanaVersion, '12.1.0')) {
+    try {
+      return packages.reduce<Record<string, string>>((acc, pkg) => {
+        const packagePath = join(tempDir, 'node_modules', pkg);
+        const packageJson = JSON.parse(readFileSync(join(packagePath, 'package.json'), 'utf8'));
+        const typesPath = packageJson.types;
+        if (typeof typesPath !== 'string' || !typesPath) {
+          throw new Error(`Missing or invalid "types" field in ${pkg}'s package.json`);
+        }
+        return {
+          ...acc,
+          [pkg]: join(packagePath, typesPath),
+        };
+      }, {});
+    } catch (error) {
+      throw new Error(`Failed to get package export paths: ${error}`);
+    }
+  }
   return packages.reduce(
     (acc, pkg) => ({
       ...acc,
@@ -76,7 +102,7 @@ export function getPackageExports(minGrafanaVersion: string): Record<string, Exp
     downloadPackages(tempDir, minGrafanaVersion);
   }
 
-  const packagePaths = getPackageExportPaths(tempDir);
+  const packagePaths = getPackageExportPaths(tempDir, minGrafanaVersion);
 
   return Object.entries(packagePaths).reduce(
     (acc, [pkg, path]) => ({
