@@ -22,7 +22,9 @@ Read more about extensions under [key concepts](./ui-extensions-concepts.md).
 
 ## Best practices
 
-- **Wrap your component with providers** - if you want to access any plugin-specific state in your component, make sure to wrap it with the necessary React context providers (for example, a wrapping for Redux).
+- **Wrap your component with providers**. If you want to access any plugin-specific state in your component, make sure to wrap it with the necessary React context providers (for example, a wrapping for Redux).
+
+- **Use lazy loading for UI extension components**. When exposing components through UI extensions, consider using lazy loading to improve initial load performance and reduce bundle size. This is especially beneficial for large components that aren't always needed. Refer to [Expose a lazy-loaded component](#expose-a-lazy-loaded-component) for implementation details.
 
 ## Expose a component from an app plugin
 
@@ -63,9 +65,10 @@ export const plugin = new AppPlugin()
 ```
 
 :::tip
-For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
+For more details refer to [the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
 
+## Expose a lazy-loaded component
 
 You can expose a lazy-loaded component from your app plugin to share functionality with other plugins without impacting the initial load time. This is useful when the component is large or not always needed.
 
@@ -73,9 +76,13 @@ You can expose a lazy-loaded component from your app plugin to share functionali
 For lazy loading to effectively reduce the `module.js` file size, ensure that your app plugin and its routes are already lazy loaded. If the app plugin isn't lazy loaded, the exposed component code may still be statically imported elsewhere, limiting the performance benefits.
 :::
 
-## Expose a lazy-loaded component
+To expose a lazy-loaded component:
 
-To expose a lazy-loaded component, you can use `React.lazy` to dynamically import the component and then wrap it in a `Suspense` component before passing it to the `exposeComponent` method.
+1. Use `React.lazy` to dynamically import the component.
+1. Wrap it in a `Suspense` component.
+1. Finally, pass it to the `exposeComponent` method, using the same pattern described in the `exposeComponent` method.
+
+For example:
 
 ```tsx
 import React, { Suspense } from 'react';
@@ -97,10 +104,6 @@ export const plugin = new AppPlugin().exposeComponent({
   component: SuspendedComponent,
 });
 ```
-
-:::note
-To expose components, use the same pattern described in the `exposeComponent` method.
-:::
 
 ### Consume a lazy-loaded component
 
@@ -158,5 +161,5 @@ export const plugin = new AppPlugin().exposeComponent({
 </details>
 
 :::tip
-For more details [check the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
+For more details refer to [the API reference guide](../../reference/ui-extensions-reference/ui-extensions.md).
 :::
