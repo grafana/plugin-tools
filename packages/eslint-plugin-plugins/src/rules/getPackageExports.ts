@@ -74,6 +74,9 @@ function getPackageExportPaths(tempDir: string, minGrafanaVersion: string): Reco
         const packagePath = join(tempDir, 'node_modules', pkg);
         const packageJson = JSON.parse(readFileSync(join(packagePath, 'package.json'), 'utf8'));
         const typesPath = packageJson.types;
+        if (typeof typesPath !== 'string' || !typesPath) {
+          throw new Error(`Missing or invalid "types" field in ${pkg}'s package.json`);
+        }
         return {
           ...acc,
           [pkg]: join(packagePath, typesPath),
