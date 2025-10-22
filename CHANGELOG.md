@@ -1,3 +1,16 @@
+# (Wed Oct 22 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/eslint-plugin-plugins@0.5.1`
+  - Eslint Plugin: fix broken download paths [#2208](https://github.com/grafana/plugin-tools/pull/2208) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Oct 21 2025)
 
 #### 🐛 Bug Fix
