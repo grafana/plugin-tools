@@ -1,3 +1,16 @@
+# (Thu Oct 23 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/eslint-plugin-plugins@0.5.2`
+  - chore: fix download paths for package versions >=11.0.0 and <11.6.0 [#2239](https://github.com/grafana/plugin-tools/pull/2239) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Wed Oct 22 2025)
 
 #### 🐛 Bug Fix
