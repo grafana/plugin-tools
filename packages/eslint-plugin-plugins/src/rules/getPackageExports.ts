@@ -60,7 +60,7 @@ export function downloadPackages(tempDir: string, version: string) {
 }
 
 function getPackageDownloadUrl(pkgName: string, version: string) {
-  if (gte(version, '11.0.0')) {
+  if (gte(version, '11.6.0')) {
     return `https://cdn.jsdelivr.net/npm/${pkgName}@${version}/dist/cjs/index.d.cts`;
   }
 
