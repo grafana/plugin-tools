@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@6.1.3`
+  - Create Plugin: Scaffold workflows with versioned actions [#2234](https://github.com/grafana/plugin-tools/pull/2234) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Oct 23 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/eslint-plugin-plugins@0.5.2`
   - chore: fix download paths for package versions >=11.0.0 and <11.6.0 [#2239](https://github.com/grafana/plugin-tools/pull/2239) ([@hugohaggmark](https://github.com/hugohaggmark))
 

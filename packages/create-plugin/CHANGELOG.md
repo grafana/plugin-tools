@@ -1,3 +1,15 @@
+# v6.1.3 (Thu Oct 23 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Scaffold workflows with versioned actions [#2234](https://github.com/grafana/plugin-tools/pull/2234) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.1.2 (Tue Oct 21 2025)
 
 #### 🐛 Bug Fix
