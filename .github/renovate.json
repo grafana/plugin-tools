@@ -19,6 +19,11 @@
   "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
+  // Extends the github-actions manager to include create-plugin workflow templates
+  // See: https://docs.renovatebot.com/modules/manager/#extending-a-managers-default-managerfilepatterns
+  "github-actions": {
+    "managerFilePatterns": ["packages/create-plugin/templates/github/workflows/.*\\.ya?ml$"]
+  },
   "postUpdateOptions": ["npmDedupe"],
   "labels": ["dependencies", "javascript"],
   "customManagers": [
@@ -121,9 +126,11 @@
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
-      "automerge": true,
+      // disable automerge temporarily until we know the action can update create-plugin hbs templates.
+      "automerge": false,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
+      "reviewers": ["jackw"],
       "matchManagers": ["github-actions"]
     }
   ],
