@@ -11,7 +11,7 @@ keywords:
   - best practices
 ---
 
-import submissionReviewNote from '@snippets/plugin-publish-review.md';
+import submissionReviewNote from '@shared/plugin-publish-review.md';
 
 # Plugin publishing best practices
 

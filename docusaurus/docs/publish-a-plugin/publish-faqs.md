@@ -13,7 +13,7 @@ keywords:
   - faqs
 ---
 
-import submissionReviewNote from '@snippets/plugin-publish-review.md';
+import submissionReviewNote from '@shared/plugin-publish-review.md';
 
 <submissionReviewNote />
 
