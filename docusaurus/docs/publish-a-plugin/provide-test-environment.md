@@ -14,7 +14,7 @@ sidebar_position: 5
 
 :::note
 
-Provisioning is not required as part of the plugin submission process but will speed the review.
+Provisioning is not required as part of the plugin submission process but it will speed the reviewing process. Refer to [Plugin submission review](./publish-or-update-a-plugin.md#plugin-submission-review) for more details.
 
 :::
 

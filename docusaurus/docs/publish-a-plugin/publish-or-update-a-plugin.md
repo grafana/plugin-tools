@@ -62,8 +62,8 @@ After you submit your plugin:
 1. A plugin reviewer performs a manual inspection that consists of: 
   - **Code review**: For quality and security purposes, we review the source code for the plugin.
   - **Tests**: We install your plugin on one of our Grafana instances to test it for basic use. 
-    We may ask you to assist us in configuring a test environment for the plugin.
-    We use the test environment whenever you submit a plugin update.
+    * We may ask you to assist us in configuring a test environment for your plugin.
+    * We'll use this test environment whenever you submit a plugin update.
 
 :::note
 
