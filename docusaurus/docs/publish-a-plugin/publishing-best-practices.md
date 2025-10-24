@@ -11,13 +11,15 @@ keywords:
   - best practices
 ---
 
+import submissionReviewNote from '@snippets/plugin-publish-review.md';
+
 # Plugin publishing best practices
 
 When publishing a Grafana plugin, follow best practices to ensure a smooth submission, review process, and a higher quality experience for users. Whether you’re fine-tuning your plugin’s functionality or preparing your documentation, by following established guidelines you improve the plugin’s performance, security, and discoverability within the Grafana ecosystem.
 
 The recommendations in this document will help you avoid common pitfalls, streamline the review process, and create a plugin that integrates seamlessly into users' workflows. 
 
-import submissionReviewNote from '@snippets/plugin-publish-review.md';
+<submissionReviewNote />
 
 ## Before you begin
 

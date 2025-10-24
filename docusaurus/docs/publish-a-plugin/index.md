@@ -11,6 +11,8 @@ keywords:
 
 import submissionReviewNote from '@snippets/plugin-publish-review.md';
 
+<submissionReviewNote />
+
 See the following docs to learn how to publish your Grafana plugin:
 
 <DocLinkList />

@@ -15,6 +15,8 @@ keywords:
 
 import submissionReviewNote from '@snippets/plugin-publish-review.md';
 
+<submissionReviewNote />
+
 # Publish a plugin: Frequently asked questions
 
 ## Do I need to submit a private plugin?
