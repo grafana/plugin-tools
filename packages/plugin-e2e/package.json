@@ -31,7 +31,7 @@
     "playwright:test": "npx playwright test"
   },
   "engines": {
-    "node": ">=18 <=22"
+    "node": ">=20 <=24"
   },
   "peerDependencies": {
     "@playwright/test": "^1.52.0"
