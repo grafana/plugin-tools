@@ -30,6 +30,12 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Get beta testers** - Enlist users in your target audience to try out your plugin before you submit it. Get feedback to help improve your plugin before it's published.
 - **Keep tooling up to date** - Take advantage of the [create-plugin update](/how-to-guides/updating-a-plugin.md) command to keep your plugin up to date.
 
+## Frontend
+
+- **Use Grafana UI components** - Always use components from `@grafana/ui` when building your plugin's user interface. This ensures a consistent UI experience across Grafana and helps prevent UI breakages as Grafana evolves. These components are designed to work seamlessly with Grafana's theming system and follow the [Saga Design System](https://grafana.com/developers/saga/about/overview). For available components, refer to the [Grafana UI documentation](https://developers.grafana.com/ui/latest/index.html?path=/docs/docs-overview-intro--page).
+- **Use Emotion for styling** - When custom styling is needed, use [Emotion](https://emotion.sh/) with the `@emotion/css` package. Always use the `useStyles2` hook to access theme variables, which provides proper memoization and ensures your styles work with Grafana's theming system. Import styling utilities from `@emotion/css` (such as `css` and `cx`). Never use global styles as they can cause breakages as Grafana evolves. For detailed styling guidelines, refer to the [Grafana styling guide](https://github.com/grafana/grafana/blob/main/contribute/style-guides/styling.md).
+- **Use theme variables for colors, spacing, and typography** - Never hardcode visual properties like colors, spacing, padding, or font sizes. Use the `useTheme2()` hook from `@grafana/ui` to access design tokens (for example, `theme.spacing(2)`, `theme.colors.primary.main`). This ensures your plugin adapts to light/dark mode and maintains visual consistency. For theme implementation details, refer to the [Grafana themes guide](https://github.com/grafana/grafana/blob/main/contribute/style-guides/themes.md).
+
 ## Panel plugins
 
 - **Don't store or use credentials** - Panel plugins don't have a way to securely store credentials. If your plugin needs to use credentials, consider using a data source or app plugin instead and a panel plugin to display the information returned by the data source.
