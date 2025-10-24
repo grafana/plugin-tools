@@ -18,7 +18,7 @@ Provisioning is not required as part of the plugin submission process but will s
 
 :::
 
-Developers often ask us how long it takes for a plugin to be reviewed for publishing to the Grafana [plugin catalog](https://grafana.com/plugins). Although we [can't provide estimates](/publish-a-plugin/publish-a-plugin#how-long-does-it-take-to-review-a-submission), there's ways to reduce cycle times.
+Developers often ask us how long it takes for a plugin to be reviewed for publishing to the Grafana [plugin catalog](https://grafana.com/plugins). Although we [can't provide estimates](/publish-a-plugin/publish-faqs#how-long-does-it-take-to-review-a-submission), there's ways to reduce cycle times.
 
 By far the most time consuming aspect of a plugin's review is the creation of a suitable test environment so we can verify its behavior. This step often involves a number of back-and-forth conversations between the plugin developer and the review team.
 
