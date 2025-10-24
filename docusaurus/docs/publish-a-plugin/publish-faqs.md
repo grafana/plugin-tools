@@ -13,9 +13,9 @@ keywords:
   - faqs
 ---
 
-import submissionReviewNote from '@shared/plugin-publish-review.md';
+import publishReviewNote from '@shared/publish-review-note.md';
 
-<submissionReviewNote />
+<publishReviewNote />
 
 # Publish a plugin: Frequently asked questions
 

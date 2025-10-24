@@ -9,9 +9,9 @@ keywords:
   - publish
 ---
 
-import submissionReviewNote from '@shared/plugin-publish-review.md';
+import publishReviewNote from '@shared/publish-review-note.md';
 
-<submissionReviewNote />
+<publishReviewNote />
 
 See the following docs to learn how to publish your Grafana plugin:
 
