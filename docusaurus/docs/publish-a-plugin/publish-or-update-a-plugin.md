@@ -67,7 +67,7 @@ After you submit your plugin:
 
 :::note
 
-Following [best practices](./publishing-best-practices.md) or [providing a test environment](./provide-test-environment.md) do not guarantee the approval of a submitted plugin. The Grafana Plugins team studies each submission individually and decides on a case-by-case basis. 
+Following [best practices](./publishing-best-practices.md) or [providing a test environment](./provide-test-environment.md) does not guarantee the approval of a submitted plugin. The Grafana Plugins team studies each submission individually and decides on a case-by-case basis. 
 
 :::
 
