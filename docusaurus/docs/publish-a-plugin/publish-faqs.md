@@ -29,7 +29,7 @@ Refer to [Plugin submission review](./publish-or-update-a-plugin.md#plugin-submi
 
 ## How long does it take to review a submission?
 
-- We're not able to give an estimate at this time, though we're constantly working to improve the time it takes to review a plugin. Providing a [provisioned](./provide-test-environment.md) test environment can drastically speed up your review.
+- We're not able to give an estimate because each plugin submission is unique, though we're constantly working to improve the time it takes to review a plugin. Providing a [provisioned](./provide-test-environment.md) test environment can drastically speed up your review.
 
 ## Can I decide a date when my plugin will be published?
 
