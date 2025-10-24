@@ -1,3 +1,16 @@
+# (Fri Oct 24 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.4`
+  - Create Plugin: pin swc/core to 1.13.20 [#2243](https://github.com/grafana/plugin-tools/pull/2243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Oct 23 2025)
 
 #### 🐛 Bug Fix
