@@ -9,7 +9,7 @@ const stylisticTs = require("@stylistic/eslint-plugin-ts");
 const baseConfig = require("./base");
 
 module.exports = [
-  reactHooksPlugin.configs["recommended-latest"],
+  reactHooksPlugin.configs.flat["recommended-latest"],
   reactPlugin.configs.flat.recommended,
   prettierConfig,
   {
