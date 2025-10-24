@@ -265,6 +265,7 @@ const sidebars: SidebarsConfig = {
         'publish-a-plugin/sign-a-plugin',
         'publish-a-plugin/publish-a-plugin',
         'publish-a-plugin/provide-test-environment',
+        'publish-a-plugin/publish-faqs',
       ],
     },
 

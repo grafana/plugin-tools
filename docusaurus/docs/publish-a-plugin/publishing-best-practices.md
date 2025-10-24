@@ -16,6 +16,14 @@ keywords:
 When publishing a Grafana plugin, follow best practices to ensure a smooth submission, review process, and a higher quality experience for users. Whether you’re fine-tuning your plugin’s functionality or preparing your documentation, by following established guidelines you improve the plugin’s performance, security, and discoverability within the Grafana ecosystem.
 The recommendations in this document will help you avoid common pitfalls, streamline the review process, and create a plugin that integrates seamlessly into users' workflows. 
 
+:::caution
+
+Each submitted plugin is manually reviewed by the Grafana Plugins team. Following [best practices](./publishing-best-practices.md) or [providing a test environment](./provide-test-environment.md) does not guarantee the approval of a submitted plugin. The Grafana Plugins team studies each submission individually and decides on a case-by-case basis. 
+
+Refer to [Plugin submission review](./publish-or-update-a-plugin.md#plugin-submission-review) for more details.
+
+:::
+
 ## Before you begin
 
 Before you proceed make sure you've done the following: 
