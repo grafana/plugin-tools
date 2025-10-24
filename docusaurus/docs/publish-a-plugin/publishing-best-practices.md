@@ -11,7 +11,7 @@ keywords:
   - best practices
 ---
 
-import publishReviewNote from '@shared/publish-review-note.md';
+import PublishReviewNote from '@shared/publish-review-note.md';
 
 # Plugin publishing best practices
 
@@ -19,7 +19,7 @@ When publishing a Grafana plugin, follow best practices to ensure a smooth submi
 
 The recommendations in this document will help you avoid common pitfalls, streamline the review process, and create a plugin that integrates seamlessly into users' workflows. 
 
-<publishReviewNote />
+<PublishReviewNote />
 
 ## Before you begin
 
