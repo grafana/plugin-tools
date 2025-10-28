@@ -1,5 +1,18 @@
 # (Tue Oct 28 2025)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.5`
+  - Create Plugin: Include EOF newline when setting root config [#2246](https://github.com/grafana/plugin-tools/pull/2246) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# (Tue Oct 28 2025)
+
 #### 💥 Breaking Change
 
 - `@grafana/plugin-e2e@3.0.0`
