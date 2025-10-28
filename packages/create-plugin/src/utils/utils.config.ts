@@ -7,6 +7,7 @@ import { output } from './utils.console.js';
 import { partitionArr } from './utils.helpers.js';
 import path from 'node:path';
 import { writeFile } from 'node:fs/promises';
+import { EOL } from 'node:os';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
@@ -127,7 +128,7 @@ export async function setRootConfig(configOverride: Partial<CreatePluginConfig> 
   const rootConfigPath = path.resolve(process.cwd(), '.config/.cprc.json');
   const updatedConfig = { ...rootConfig, ...configOverride };
 
-  await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2) + '\n');
+  await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2) + EOL);
 
   return updatedConfig;
 }
