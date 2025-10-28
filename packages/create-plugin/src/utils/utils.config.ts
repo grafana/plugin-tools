@@ -127,7 +127,7 @@ export async function setRootConfig(configOverride: Partial<CreatePluginConfig> 
   const rootConfigPath = path.resolve(process.cwd(), '.config/.cprc.json');
   const updatedConfig = { ...rootConfig, ...configOverride };
 
-  await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2));
+  await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2) + '\n');
 
   return updatedConfig;
 }
