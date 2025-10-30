@@ -1,10 +1,10 @@
 import { additionsDebug, flushChanges, formatFiles, installNPMDependencies, printChanges } from './utils.js';
 import defaultAdditions, { AdditionMeta } from './additions.js';
+import { getConfig, setFeatureFlag } from '../utils/utils.config.js';
 
 import { Context } from '../migrations/context.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
 import { output } from '../utils/utils.console.js';
-import { setFeatureFlag } from '../utils/utils.config.js';
 
 export type AdditionFn = (context: Context, options?: AdditionOptions) => Context | Promise<Context>;
 
@@ -100,6 +100,17 @@ export async function runAddition(
   runOptions: RunAdditionOptions = {}
 ): Promise<void> {
   const basePath = process.cwd();
+
+  // Check if the feature is already enabled
+  const config = getConfig();
+  const featureName = addition.featureName as keyof typeof config.features;
+  if (config.features[featureName]) {
+    output.log({
+      title: `Addition '${addition.name}' is already enabled`,
+      body: [`The feature flag '${addition.featureName}' is already set to true in .cprc.json.`, 'No changes needed.'],
+    });
+    return;
+  }
 
   output.log({
     title: `Running addition: ${addition.name}`,
