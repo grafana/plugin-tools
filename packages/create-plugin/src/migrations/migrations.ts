@@ -45,5 +45,11 @@ export default {
       description: 'Fix webpack variable replacement in nested plugins files.',
       migrationScript: './scripts/006-webpack-nested-fix.js',
     },
+    '007-remove-testing-library-types': {
+      version: '6.1.12',
+      description:
+        'Add setupTests.d.ts for @testing-library/jest-dom types and remove @types/testing-library__jest-dom npm package.',
+      migrationScript: './scripts/007-remove-testing-library-types.js',
+    },
   },
 } as Migrations;
