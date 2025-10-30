@@ -47,6 +47,52 @@ export async function parseAdditionFlags(addition: AdditionMeta, argv: any): Pro
   }
 }
 
+async function validateAdditionOptions(addition: AdditionMeta, options: AdditionOptions): Promise<void> {
+  const flags = await getAdditionFlags(addition);
+
+  if (!flags || flags.length === 0) {
+    return;
+  }
+
+  const missingFlags: string[] = [];
+
+  for (const flag of flags) {
+    if (flag.required) {
+      const value = options[flag.name];
+      if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) {
+        missingFlags.push(flag.name);
+      }
+    }
+  }
+
+  if (missingFlags.length > 0) {
+    const flagDocs = flags.filter((f) => missingFlags.includes(f.name)).map((f) => `  --${f.name}: ${f.description}`);
+
+    throw new Error(
+      `Missing required flag${missingFlags.length > 1 ? 's' : ''}:\n\n` +
+        flagDocs.join('\n') +
+        `\n\nExample: npx @grafana/create-plugin add ${addition.name} --${missingFlags[0]}=value`
+    );
+  }
+}
+
+export async function runAdditionByName(
+  additionName: string,
+  argv: any,
+  runOptions: RunAdditionOptions = {}
+): Promise<void> {
+  const addition = getAdditionByName(additionName);
+  if (!addition) {
+    const availableAdditions = getAvailableAdditions();
+    const additionsList = Object.keys(availableAdditions);
+    throw new Error(`Unknown addition: ${additionName}\n\nAvailable additions: ${additionsList.join(', ')}`);
+  }
+
+  const options = await parseAdditionFlags(addition, argv);
+  await validateAdditionOptions(addition, options);
+  await runAddition(addition, options, runOptions);
+}
+
 export async function runAddition(
   addition: AdditionMeta,
   additionOptions: AdditionOptions = {},
