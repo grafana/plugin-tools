@@ -16,6 +16,7 @@ const additions = {
 
 export default { additions };
 
+// extract feature names for type-safe FeatureFlags in utils.config.ts
 type AdditionValues = (typeof additions)[keyof typeof additions];
 export type AdditionFeatureName = AdditionValues['featureName'];
 
