@@ -1,6 +1,6 @@
 import { additionsDebug, flushChanges, formatFiles, installNPMDependencies, printChanges } from './utils.js';
 import defaultAdditions, { AdditionMeta } from './additions.js';
-import { getConfig, setFeatureFlag } from '../utils/utils.config.js';
+import { getConfig, isFeatureEnabled, setFeatureFlag } from '../utils/utils.config.js';
 
 import { Context } from '../migrations/context.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
@@ -103,8 +103,7 @@ export async function runAddition(
 
   // Check if the feature is already enabled
   const config = getConfig();
-  const featureName = addition.featureName as keyof typeof config.features;
-  if (config.features[featureName]) {
+  if (isFeatureEnabled(config.features, addition.featureName)) {
     output.log({
       title: `Addition '${addition.name}' is already enabled`,
       body: [`The feature flag '${addition.featureName}' is already set to true in .cprc.json.`, 'No changes needed.'],
