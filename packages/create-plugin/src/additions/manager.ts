@@ -4,6 +4,7 @@ import defaultAdditions, { AdditionMeta } from './additions.js';
 import { Context } from '../migrations/context.js';
 import { gitCommitNoVerify } from '../utils/utils.git.js';
 import { output } from '../utils/utils.console.js';
+import { setFeatureFlag } from '../utils/utils.config.js';
 
 export type AdditionFn = (context: Context, options?: AdditionOptions) => Context | Promise<Context>;
 
@@ -118,6 +119,9 @@ export async function runAddition(
     printChanges(updatedContext, addition.name, addition);
 
     installNPMDependencies(updatedContext);
+
+    await setFeatureFlag(addition.featureName, true);
+    additionsDebug(`Set feature flag '${addition.featureName}' to true in .cprc.json`);
 
     if (shouldCommit) {
       await gitCommitNoVerify(`chore: add ${addition.name} support via create-plugin`);

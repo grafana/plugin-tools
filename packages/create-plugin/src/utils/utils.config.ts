@@ -2,12 +2,12 @@ import { argv, commandName } from './utils.cli.js';
 
 import { CURRENT_APP_VERSION } from './utils.version.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
+import { EOL } from 'node:os';
 import fs from 'node:fs';
 import { output } from './utils.console.js';
 import { partitionArr } from './utils.helpers.js';
 import path from 'node:path';
 import { writeFile } from 'node:fs/promises';
-import { EOL } from 'node:os';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
@@ -17,6 +17,7 @@ export type FeatureFlags = {
   useReactRouterV6?: boolean;
   useExperimentalRspack?: boolean;
   useExperimentalUpdates?: boolean;
+  i18nEnabled?: boolean;
 };
 
 export type CreatePluginConfig = UserConfig & {
@@ -131,4 +132,19 @@ export async function setRootConfig(configOverride: Partial<CreatePluginConfig> 
   await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2) + EOL);
 
   return updatedConfig;
+}
+
+export async function setFeatureFlag(featureName: string, enabled = true): Promise<void> {
+  const userConfig = getUserConfig() || { features: {} };
+  const userConfigPath = path.resolve(process.cwd(), '.cprc.json');
+
+  const updatedConfig = {
+    ...userConfig,
+    features: {
+      ...userConfig.features,
+      [featureName]: enabled,
+    },
+  };
+
+  await writeFile(userConfigPath, JSON.stringify(updatedConfig, null, 2) + EOL);
 }
