@@ -1,3 +1,15 @@
+# v3.0.0 (Tue Oct 28 2025)
+
+#### 💥 Breaking Change
+
+- Plugin e2e: support node 24 and drop support for node 18 [#2242](https://github.com/grafana/plugin-tools/pull/2242) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v2.2.1 (Thu Oct 09 2025)
 
 #### 🐛 Bug Fix

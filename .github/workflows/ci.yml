@@ -36,10 +36,10 @@ jobs:
           persist-credentials: false
 
       - uses: nrwl/nx-set-shas@826660b82addbef3abff5fa871492ebad618c9e1 # v4.3.3
-      - name: Setup .npmrc file for NPM registry
+      - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: '22'
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -95,10 +95,10 @@ jobs:
             GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
           export_env: false
 
-      - name: Setup .npmrc file for NPM registry
+      - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '24'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -173,6 +173,11 @@ jobs:
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
+      - name: Setup nodejs
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: '24'
+
       - name: Scaffold plugin using the earliest create-plugin version mentioned in migrations
         run: npx -y @grafana/create-plugin@5.27.1 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
 
@@ -282,11 +287,10 @@ jobs:
             DOCKERHUB_USERNAME=dockerhub:username
             DOCKERHUB_PASSWORD=dockerhub:password
 
-      - name: Setup .npmrc file for NPM registry
+      - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '24'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -524,11 +528,10 @@ jobs:
       - name: Prepare repository
         run: git fetch --unshallow --tags
 
-      - name: Setup environment
+      - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          # We need to use node 24 for OIDC publishing support (npm >= 11.5.1).
-          node-version: '24'
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 

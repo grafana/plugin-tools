@@ -1,12 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { registerAllTools } from './registerAllTools';
-import { initLogger, LOGFILEPATH, logger } from './logger';
-import { unknown } from 'zod/v4';
+import { initLogger, logger } from './logger';
 
 async function main() {
   const server = new McpServer({
-    name: 'Grafana plugins MCP',
+    name: 'Grafana Plugin MCP',
     version: '1.0.0',
     capabilities: {
       prompts: {},

@@ -1,3 +1,42 @@
+# (Tue Oct 28 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.5`
+  - Create Plugin: Include EOF newline when setting root config [#2246](https://github.com/grafana/plugin-tools/pull/2246) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# (Tue Oct 28 2025)
+
+#### 💥 Breaking Change
+
+- `@grafana/plugin-e2e@3.0.0`
+  - Plugin e2e: support node 24 and drop support for node 18 [#2242](https://github.com/grafana/plugin-tools/pull/2242) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Oct 24 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.4`
+  - Create Plugin: pin swc/core to 1.13.20 [#2243](https://github.com/grafana/plugin-tools/pull/2243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Oct 23 2025)
 
 #### 🐛 Bug Fix

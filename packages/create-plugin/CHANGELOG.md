@@ -1,3 +1,27 @@
+# v6.1.5 (Tue Oct 28 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Include EOF newline when setting root config [#2246](https://github.com/grafana/plugin-tools/pull/2246) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v6.1.4 (Fri Oct 24 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: pin swc/core to 1.13.20 [#2243](https://github.com/grafana/plugin-tools/pull/2243) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.1.3 (Thu Oct 23 2025)
 
 #### 🐛 Bug Fix
