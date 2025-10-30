@@ -1,23 +1,35 @@
 import { argv, commandName } from './utils.cli.js';
 
+import type { AdditionFeatureName } from '../additions/additions.js';
 import { CURRENT_APP_VERSION } from './utils.version.js';
 import { DEFAULT_FEATURE_FLAGS } from '../constants.js';
+import { EOL } from 'node:os';
 import fs from 'node:fs';
 import { output } from './utils.console.js';
 import { partitionArr } from './utils.helpers.js';
 import path from 'node:path';
 import { writeFile } from 'node:fs/promises';
-import { EOL } from 'node:os';
 
-export type FeatureFlags = {
+type CoreFeatureFlags = {
   bundleGrafanaUI?: boolean;
 
   // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
   // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
   useReactRouterV6?: boolean;
+  usePlaywright?: boolean;
   useExperimentalRspack?: boolean;
   useExperimentalUpdates?: boolean;
 };
+
+type AdditionFeatureFlags = {
+  [K in AdditionFeatureName]?: boolean;
+};
+
+export type FeatureFlags = CoreFeatureFlags & AdditionFeatureFlags;
+
+export function isFeatureEnabled(features: FeatureFlags, featureName: string): boolean {
+  return features[featureName as AdditionFeatureName] === true;
+}
 
 export type CreatePluginConfig = UserConfig & {
   version: string;
@@ -131,4 +143,19 @@ export async function setRootConfig(configOverride: Partial<CreatePluginConfig> 
   await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2) + EOL);
 
   return updatedConfig;
+}
+
+export async function setFeatureFlag(featureName: string, enabled = true): Promise<void> {
+  const userConfig = getUserConfig() || { features: {} };
+  const userConfigPath = path.resolve(process.cwd(), '.cprc.json');
+
+  const updatedConfig = {
+    ...userConfig,
+    features: {
+      ...userConfig.features,
+      [featureName]: enabled,
+    },
+  };
+
+  await writeFile(userConfigPath, JSON.stringify(updatedConfig, null, 2) + EOL);
 }
