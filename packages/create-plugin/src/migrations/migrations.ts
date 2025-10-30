@@ -10,6 +10,8 @@ type Migrations = {
   migrations: Record<string, MigrationMeta>;
 };
 
+// Do not use LEGACY_UPDATE_CUTOFF_VERSION for migrations. It was used to force the migrations
+// to run that were written before the switch to updates as migrations.
 export default {
   migrations: {
     '001-update-grafana-compose-extend': {
@@ -33,7 +35,11 @@ export default {
       description: 'Migrate eslint config to flat config format and update devDependencies to latest versions.',
       migrationScript: './scripts/004-eslint9-flat-config.js',
     },
-    // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
-    // for those written before the switch to updates as migrations.
+    '005-remove-testing-library-types': {
+      version: '6.1.5',
+      description:
+        'Add setupTests.d.ts for @testing-library/jest-dom types and remove @types/testing-library__jest-dom npm package.',
+      migrationScript: './scripts/005-remove-testing-library-types.js',
+    },
   },
 } as Migrations;
