@@ -12,6 +12,22 @@ export type I18nOptions = {
   locales: string[];
 };
 
+// Flag schema for CLI
+export const flags = [
+  {
+    name: 'locales',
+    description: 'Comma-separated list of locales (e.g., en-US,es-ES)',
+    required: true,
+  },
+];
+
+// Parse CLI flags to options
+export function parseFlags(argv: any): I18nOptions {
+  return {
+    locales: argv.locales ? argv.locales.split(',').map((l: string) => l.trim()) : [],
+  };
+}
+
 export default function migrate(context: Context, options: I18nOptions = { locales: ['en-US'] }): Context {
   const { locales } = options;
 

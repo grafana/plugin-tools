@@ -1,24 +1,41 @@
-import { getAdditionByName, getAvailableAdditions, runAddition } from '../additions/manager.js';
+import {
+  AdditionOptions,
+  getAdditionByName,
+  getAdditionFlags,
+  getAvailableAdditions,
+  parseAdditionFlags,
+  runAddition,
+} from '../additions/manager.js';
 import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
 
 import { isPluginDirectory } from '../utils/utils.plugin.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
-import { promptI18nOptions } from './add/prompts.js';
 
 export const add = async (argv: minimist.ParsedArgs) => {
   const subCommand = argv._[1];
 
   if (!subCommand) {
     const availableAdditions = getAvailableAdditions();
-    const additionsList = Object.values(availableAdditions).map(
-      (addition) => `${addition.name} - ${addition.description}`
+    const additionsList = await Promise.all(
+      Object.values(availableAdditions).map(async (addition) => {
+        let info = `${addition.name} - ${addition.description}`;
+        const flags = await getAdditionFlags(addition);
+        if (flags.length > 0) {
+          const flagDocs = flags.map((flag) => {
+            const req = flag.required ? ' (required)' : ' (optional)';
+            return `  --${flag.name}: ${flag.description}${req}`;
+          });
+          info += '\n' + flagDocs.join('\n');
+        }
+        return info;
+      })
     );
 
     output.error({
       title: 'No addition specified',
       body: [
-        'Usage: npx @grafana/create-plugin add <addition-name>',
+        'Usage: npx @grafana/create-plugin add <addition-name> [options]',
         '',
         'Available additions:',
         ...output.bulletList(additionsList),
@@ -43,16 +60,11 @@ export const add = async (argv: minimist.ParsedArgs) => {
   }
 
   try {
-    // Gather options based on the addition type
-    let options = {};
+    // Parse addition-specific options from argv flags using the addition's own parser
+    const options = await parseAdditionFlags(addition, argv);
 
-    switch (addition.name) {
-      case 'i18n':
-        options = await promptI18nOptions();
-        break;
-      default:
-        break;
-    }
+    // Validate required flags
+    await validateAdditionOptions(addition, options);
 
     const commitChanges = argv.commit;
     await runAddition(addition, options, { commitChanges });
@@ -66,6 +78,43 @@ export const add = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 };
+
+async function validateAdditionOptions(addition: any, options: AdditionOptions): Promise<void> {
+  const flags = await getAdditionFlags(addition);
+
+  if (!flags || flags.length === 0) {
+    return;
+  }
+
+  const missingFlags: string[] = [];
+
+  for (const flag of flags) {
+    if (flag.required) {
+      const value = options[flag.name];
+      if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) {
+        missingFlags.push(flag.name);
+      }
+    }
+  }
+
+  if (missingFlags.length > 0) {
+    const flagDocs = flags
+      .filter((f: any) => missingFlags.includes(f.name))
+      .map((f: any) => `  --${f.name}: ${f.description}`);
+
+    output.error({
+      title: `Missing required flag${missingFlags.length > 1 ? 's' : ''}`,
+      body: [
+        `The following required flag${missingFlags.length > 1 ? 's are' : ' is'} missing:`,
+        '',
+        ...flagDocs,
+        '',
+        `Example: npx @grafana/create-plugin add ${addition.name} --${missingFlags[0]}=value`,
+      ],
+    });
+    process.exit(1);
+  }
+}
 
 async function performPreAddChecks(argv: minimist.ParsedArgs) {
   if (!(await isGitDirectory()) && !argv.force) {

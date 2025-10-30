@@ -26,6 +26,27 @@ export function getAdditionByName(
   return additions[name];
 }
 
+export async function getAdditionFlags(addition: AdditionMeta): Promise<any[]> {
+  try {
+    const module = await import(addition.scriptPath);
+    return module.flags || [];
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function parseAdditionFlags(addition: AdditionMeta, argv: any): Promise<AdditionOptions> {
+  try {
+    const module = await import(addition.scriptPath);
+    if (module.parseFlags && typeof module.parseFlags === 'function') {
+      return module.parseFlags(argv);
+    }
+    return {};
+  } catch (error) {
+    return {};
+  }
+}
+
 export async function runAddition(
   addition: AdditionMeta,
   additionOptions: AdditionOptions = {},

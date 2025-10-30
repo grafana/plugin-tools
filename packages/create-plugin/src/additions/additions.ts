@@ -4,10 +4,6 @@ export type AdditionMeta = {
   scriptPath: string;
 };
 
-type Additions = {
-  additions: Record<string, AdditionMeta>;
-};
-
 export default {
   additions: {
     i18n: {
@@ -16,4 +12,4 @@ export default {
       scriptPath: './scripts/add-i18n.js',
     },
   },
-} as Additions;
+};
