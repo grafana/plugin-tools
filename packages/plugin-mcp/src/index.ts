@@ -1,7 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { registerAllTools } from './registerAllTools';
-import { initLogger, logger } from './logger';
+import { initLogger, LOGFILEPATH, logger } from './logger';
 
 async function main() {
   const server = new McpServer({
@@ -19,7 +19,6 @@ async function main() {
   const transport = new StdioServerTransport();
 
   transport.onmessage = (message: Record<string, any>) => {
-    console.error(message);
     if (!message) {
       return;
     }
@@ -41,13 +40,13 @@ async function main() {
     }
 
     if (message.method === 'notifications/initialized') {
-      logger.info({ msg: `Grafana Plugin MCP connected 🚀` });
+      logger.info({ msg: `Grafana Plugin MCP connected 🚀`, log: LOGFILEPATH });
     }
   };
   await server.connect(transport);
 }
 
 main().catch((error) => {
-  logger.error('Fatal error in main():', error);
+  logger.error({ msg: 'Fatal error in main():', error });
   process.exit(1);
 });

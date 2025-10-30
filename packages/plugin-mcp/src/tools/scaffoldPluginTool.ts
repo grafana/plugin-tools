@@ -9,7 +9,16 @@ export function scaffoldPluginTool(server: McpServer) {
     server,
     PluginMcpTools.scaffoldPlugin,
     {
-      description: 'Scaffolds or creates a Grafana Plugin',
+      description: `Scaffolds or creates a Grafana plugin
+Grafana plugin development allows you to create many different types of user experiences. For example, you can make:
+
+Panel plugins - new ways of visualizing data
+Data source plugins - connections to a new database or other source of data
+App plugins - integrated out-of-the-box experiences
+
+Tip
+If this is your first time creating a plugin, we recommend that you familiarize yourself with the fundamentals of plugin types, frontend and backend components, data frames, and other essentials. 
+Learn more about the key concepts of Grafana plugin development at https://grafana.com/developers/plugin-tools/key-concepts/`,
       inputSchema: {
         type: z
           .enum(['app', 'datasource', 'panel'])
