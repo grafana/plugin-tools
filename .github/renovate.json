@@ -138,7 +138,7 @@
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
       "reviewers": ["jackw"],
       "matchManagers": ["github-actions"]
-    }   
+    }
   ],
   "vulnerabilityAlerts": {
     "addLabels": ["security"]
