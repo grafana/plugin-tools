@@ -72,6 +72,7 @@
     "packages/plugin-types-bundler",
     "packages/eslint-plugin-plugins",
     "packages/tsconfig",
+    "packages/plugin-mcp",
     "libs/*"
   ],
   "lint-staged": {

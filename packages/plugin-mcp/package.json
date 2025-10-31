@@ -1,0 +1,57 @@
+{
+  "name": "@grafana/plugin-mcp",
+  "version": "0.0.1",
+  "description": "MCP server for all things Grafana plugins",
+  "main": "./dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "mcp",
+    "plugin",
+    "grafana"
+  ],
+  "homepage": "https://www.npmjs.com/package/@grafana/plugin-mcp",
+  "repository": {
+    "directory": "packages/plugin-mcp",
+    "url": "git+https://github.com/grafana/plugin-tools.git"
+  },
+  "bugs": "https://github.com/grafana/plugin-tools/issues",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "build:watch": "npm run build -- -w",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "dev": "concurrently --names TSC,TSUP -c cyan,magenta \"npm run typecheck:watch\" \"npm run build:watch\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --watch --noEmit",
+    "test": "",
+    "test:ci": "",
+    "inspect": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.2",
+    "pino": "^10.1.0",
+    "pino-pretty": "^13.1.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3"
+  }
+}
