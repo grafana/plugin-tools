@@ -21,7 +21,7 @@ Automate your development process to minimize errors and make it faster and more
 
 ## The CI workflow
 
-The CI (`ci.yml`) workflow is designed to lint, type check, and build the frontend and backend. It is also used to run tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps to catch any issues early in the development process, before they become bigger problems. For more information on end-to-end testing as part of the CI workflow, refer to our [documentation](/e2e-test-a-plugin/ci.md).
+The CI (`ci.yml`) workflow lints, type checks, and builds the frontend and backend. It also runs tests on your plugin every time you push changes to your repository. The `create-plugin` tool helps catch any issues early in the development process, before they become bigger problems. For more information on end-to-end testing as part of the CI workflow, refer to our [documentation](/e2e-test-a-plugin/ci.md).
 
 ## The release workflow
 
@@ -35,21 +35,19 @@ This workflow requires a Grafana Cloud API key. Before you begin, follow the ins
 
 ### Storing your Access Policy token as a repository secret in GitHub
 
-1. Access Repository Settings:
+1. **Access Repository Settings**:
+   - Go to your GitHub repository.
+   - Navigate to the **Settings** tab.
 
-- Go to your GitHub repository.
-- Navigate to the "Settings" tab.
+2. In the left sidebar, click on **Secrets and Variables** > **Actions**.
+3. Click on the **New repository secret** button.
+4. **Add Secret Information**:
+   - Enter name for your secret: `GRAFANA_ACCESS_POLICY_TOKEN`.
+   - Paste the Access Policy Token value into the **Secret** field.
 
-2. In the left sidebar, click on Secrets and Variables -> Actions
-3. Click on the "New repository secret" button.
-4. Add Secret Information:
+5. Click on the **Add secret** button to save the secret.
 
-- Enter name for your secret - GRAFANA_ACCESS_POLICY_TOKEN.
-- Paste the Access Policy Token value into the "Secret" field.
-
-5. Click on the "Add secret" button to save the secret.
-
-Once the secret is stored, you can access it in your GitHub Actions workflow:
+After you store the secret, you can access it in your GitHub Actions workflow:
 
 ```yaml title="release.yml"
 name: Release
@@ -64,34 +62,34 @@ jobs:
           grafana_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
 ```
 
-In this example, the `secrets.GRAFANA_ACCESS_POLICY_TOKEN` variable is used to access the stored token securely within your GitHub Actions workflow. Make sure to adjust the workflow according to your specific needs and the language/environment you are working with.
+In this example, the `secrets.GRAFANA_ACCESS_POLICY_TOKEN` variable accesses the stored token securely within your GitHub Actions workflow. Adjust the workflow according to your specific needs and the language or environment you're working with.
 
 ### Triggering the workflow
 
 To trigger the release workflow, push a Git tag for the plugin version that you want to release:
 
-```bash
+```sh
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
 ## The compatibility check workflow
 
-The compatibility check (`is-compatible.yml`) workflow is designed to check the Grafana API compatibility of your plugin every time you push changes to your repository. This helps to catch potential frontend runtime issues before they occur.
+The compatibility check (`is-compatible.yml`) workflow checks the Grafana API compatibility of your plugin every time you push changes to your repository. This helps catch potential frontend runtime issues before they occur.
 
 The workflow contains the following steps:
 
-1. Finding `@grafana` npm packages in your plugin.
-1. Extracting the exported types of the specified version.
-1. Comparing the differences between that version and the latest version.
-1. Looking for usages of those changed APIs inside your plugin.
-1. Reporting any potential incompatibilities.
+1. **Find packages**: Finds `@grafana` npm packages in your plugin.
+1. **Extract types**: Extracts the exported types of the specified version.
+1. **Compare versions**: Compares the differences between that version and the latest version.
+1. **Check usage**: Looks for usages of those changed APIs inside your plugin.
+1. **Report issues**: Reports any potential incompatibilities.
 
 ## The create plugin update workflow
 
-The create plugin update (`cp-update.yml`) workflow is designed to automate keeping your plugins development environment and dependencies up to date. It periodically checks the latest version of create-plugin listed on the npm registry and compares it to the version used by your plugin. If there is a newer version available the workflow will run the `create-plugin update` command, update the frontend dependency lockfile, then create a PR with the changes for review.
+The create plugin update (`cp-update.yml`) workflow automates keeping your plugin's development environment and dependencies up to date. It periodically checks the latest version of create-plugin listed on the npm registry and compares it to the version used by your plugin. If there's a newer version available, the workflow runs the `create-plugin update` command, updates the frontend dependency lockfile, then creates a PR with the changes for review.
 
-This workflow requires content and pull request write access to your plugins repo to be able to push changes and open PRs. Choose from the following two options:
+This workflow requires content and pull request write access to your plugin's repo to push changes and open PRs. Choose from the following two options:
 
 ### Use the default access token
 
@@ -118,7 +116,7 @@ jobs:
 
 ### Use a personal access token
 
-To use this option you must create a Github [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write both `contents` and `pull requests`. Once created add the token to the plugin repository action secrets and then pass it to the action like so:
+To use this option, you must create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write both `contents` and `pull requests`. After you create the token, add it to the plugin repository action secrets and then pass it to the action:
 
 ```yaml
 name: Create Plugin Update
@@ -139,7 +137,7 @@ jobs:
 
 ## The bundle stats workflow
 
-The bundle stats (`bundle-stats.yml`) workflow is intended to help developers keep an eye on the size of their plugins frontend assets. Changes in PRs trigger this workflow which will compare two webpack stats files; one from the default branch and the other from the PR. It then calculates differences between these assets sizes and posts a formatted comment to the PR giving an overview of any size differences.
+The bundle stats (`bundle-stats.yml`) workflow helps developers monitor the size of their plugin's frontend assets. Changes in PRs trigger this workflow, which compares two webpack stats files: one from the default branch and the other from the PR. It then calculates differences between these asset sizes and posts a formatted comment to the PR with an overview of any size differences.
 
 ```yaml title="bundle-stats.yml"
 name: Bundle Stats
@@ -173,4 +171,4 @@ jobs:
 
 #### Main stats artifact could not be found
 
-If you see this warning during bundle size workflow runs it means that the workflow failed to find the github artifact that contains the main branch stats file. The file can be generated by either merging a PR to main, pushing a commit to main, or manually running the workflow with workflow_dispatch.
+If you see this warning during bundle size workflow runs, it means that the workflow failed to find the GitHub artifact that contains the main branch stats file. You can generate the file by merging a PR to main, pushing a commit to main, or manually running the workflow with workflow_dispatch.
