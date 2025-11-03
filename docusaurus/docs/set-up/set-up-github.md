@@ -171,4 +171,4 @@ jobs:
 
 #### Main stats artifact could not be found
 
-If you see this warning during bundle size workflow runs, it means that the workflow failed to find the GitHub artifact that contains the main branch stats file. You can generate the file by merging a PR to main, pushing a commit to main, or manually running the workflow with workflow_dispatch.
+If you see this warning during bundle size workflow runs, it means that the workflow failed to find the GitHub artifact that contains the main branch stats file. You can generate the file by merging a PR to main, pushing a commit to main, or manually running the workflow with `workflow_dispatch`.
