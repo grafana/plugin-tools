@@ -1,5 +1,22 @@
 # (Mon Nov 03 2025)
 
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.7`
+  - Fix workflow references [#2261](https://github.com/grafana/plugin-tools/pull/2261) ([@StephenKing](https://github.com/StephenKing))
+
+#### Authors: 1
+
+- Steffen Gebert ([@StephenKing](https://github.com/StephenKing))
+
+---
+
+# (Mon Nov 03 2025)
+
 ### Release Notes
 
 #### chore(deps): update dependency @grafana/plugin-e2e to v3 ([#2259](https://github.com/grafana/plugin-tools/pull/2259))
