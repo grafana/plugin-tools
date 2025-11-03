@@ -1,3 +1,38 @@
+# v6.1.6 (Mon Nov 03 2025)
+
+### Release Notes
+
+#### chore(deps): update dependency @grafana/plugin-e2e to v3 ([#2259](https://github.com/grafana/plugin-tools/pull/2259))
+
+<details>
+<summary>grafana/plugin-tools (@&#8203;grafana/plugin-e2e)</summary>
+
+### [`v3.0.0`](https://redirect.github.com/grafana/plugin-tools/blob/HEAD/packages/plugin-e2e/CHANGELOG.md#v300-Tue-Oct-28-2025)
+
+[Compare Source](https://redirect.github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@2.2.3...@grafana/plugin-e2e@3.0.0)
+
+##### 💥 Breaking Change
+
+- Plugin e2e: support node 24 and drop support for node 18 [#&#8203;2242](https://redirect.github.com/grafana/plugin-tools/pull/2242) ([@&#8203;jackw](https://redirect.github.com/jackw))
+
+##### Authors: 1
+
+- Jack Westbrook ([@&#8203;jackw](https://redirect.github.com/jackw))
+
+***
+
+---
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3 [#2259](https://github.com/grafana/plugin-tools/pull/2259) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.1.5 (Tue Oct 28 2025)
 
 #### 🐛 Bug Fix
