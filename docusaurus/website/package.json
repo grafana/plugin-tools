@@ -1,6 +1,6 @@
 {
   "name": "website",
-  "version": "4.0.5",
+  "version": "5.0.1",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -34,9 +34,9 @@
     "@docusaurus/module-type-aliases": "^3.9.1",
     "@docusaurus/remark-plugin-npm2yarn": "^3.9.1",
     "@docusaurus/tsconfig": "^3.9.1",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "raw-loader": "^4.0.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "browserslist": {
     "production": [

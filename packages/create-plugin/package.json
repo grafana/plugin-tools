@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "6.1.4",
+  "version": "6.1.7",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -49,9 +49,7 @@
     "@types/semver": "^7.7.1",
     "@types/tmp": "^0.2.6",
     "@types/which": "^3.0.4",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "tmp": "^0.2.4"
+    "tmp": "^0.2.5"
   },
   "overrides": {
     "@types/marked-terminal": {
