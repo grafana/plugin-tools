@@ -42,7 +42,7 @@ This workflow requires a Grafana Cloud API key. Before you begin, follow the ins
 2. In the left sidebar, click on **Secrets and Variables** > **Actions**.
 3. Click on the **New repository secret** button.
 4. **Add Secret Information**:
-   - Enter name for your secret: `GRAFANA_ACCESS_POLICY_TOKEN`.
+   - Enter the name for your secret: `GRAFANA_ACCESS_POLICY_TOKEN`.
    - Paste the Access Policy Token value into the **Secret** field.
 
 5. Click on the **Add secret** button to save the secret.
