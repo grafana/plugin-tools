@@ -29,21 +29,20 @@ It's not necessary to [sign a plugin](/publish-a-plugin/sign-a-plugin.md) during
 
 ## Why use the Docker environment
 
-We have chosen to use Docker because it simplifies the process of creating, deploying, and running applications. It allows you to create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensure that the plugin runs the same way across different machines.
+Docker simplifies the process of creating, deploying, and running applications. It lets you create consistent and isolated environments for your plugin. This makes it easy to manage dependencies and ensures that your plugin runs the same way across different machines.
 
-With the `create-plugin` tool, the Docker container is configured with the necessary variables to allow easy access to Grafana and to load plugins without the need for them to be signed. The plugin tool also adds a live reload feature that allows you to make your frontend code changes to trigger refreshes in the browser, and changing the backend code will make the plugin binary to automatically reload.
+The `create-plugin` tool configures the Docker container with the necessary variables to allow easy access to Grafana and load plugins without signing them. The plugin tool also adds a live reload feature that triggers browser refreshes when you make frontend code changes, and automatically reloads the plugin binary when you change backend code.
 
-The docker environment also allows you to attach a debugger to the plugin backend code, making the development process easier.
+The Docker environment also lets you attach a debugger to the plugin backend code, making the development process easier.
 
 ## Get started with Docker
 
 To start your plugin development project, run the following commands in the order listed:
 
-1. <SyncCommand cmd="install" />: Installs frontend dependencies.
-1. <SyncCommand cmd="run dev" />: Builds and watches the plugin frontend code.
-1. `mage -v build:linux`: Builds the plugin backend code. Rerun this command every time that you edit your backend files.
-1. <SyncCommand cmd="run server" />: Starts a Grafana development server running on
-   [http://localhost:3000](http://localhost:3000).
+1. **Install dependencies**: <SyncCommand cmd="install" /> installs frontend dependencies.
+1. **Build frontend**: <SyncCommand cmd="run dev" /> builds and watches the plugin frontend code.
+1. **Build backend**: `mage -v build:linux` builds the plugin backend code. Rerun this command every time you edit your backend files.
+1. **Start server**: <SyncCommand cmd="run server" /> starts a Grafana development server running on [http://localhost:3000](http://localhost:3000).
 
 ## Configure the Grafana version
 
@@ -53,7 +52,7 @@ To test a plugin across different versions of Grafana, set an environment variab
 
 ## Configure the Grafana image
 
-The default Docker image in the plugin tool is `grafana-enterprise`. If you want to override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument like so:
+The default Docker image in the plugin tool is `grafana-enterprise`. To override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument:
 
 ```yaml title="docker-compose.yaml"
 version: '3.7'
@@ -73,11 +72,11 @@ This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `
 
 ## Debugging a plugin's backend
 
-If you're developing a plugin with a backend part, run `npm run server` with `DEVELOPMENT=true`. The docker compose file exposes the port `2345` for debugging, from a headless delve instance that will run inside the docker environment.
-You can attach a debugger client to this port to debug your backend code.
-For example, in VSCode, you can add a `launch.json` configuration like this:
+If you're developing a plugin with a backend part, run `npm run server` with `DEVELOPMENT=true`. The Docker Compose file exposes port `2345` for debugging, from a headless delve instance that runs inside the Docker environment.
 
-```json
+You can attach a debugger client to this port to debug your backend code. For example, in VS Code, add a `launch.json` configuration:
+
+```json title="launch.json"
 {
   "version": "0.2.0",
   "configurations": [
@@ -94,7 +93,7 @@ For example, in VSCode, you can add a `launch.json` configuration like this:
       "substitutePath": [
         {
           "from": "${workspaceFolder}",
-          "to": "/root/<your-plugin-id>"
+          "to": "/root/<YOUR_PLUGIN_ID>"
         }
       ]
     }
