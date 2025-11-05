@@ -95,7 +95,7 @@
       "minimumReleaseAge": null
     },
     {
-      "groupName": "docusaurus dependencies",      
+      "groupName": "docusaurus dependencies",
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
     },
