@@ -22,7 +22,7 @@ module.exports = [
     ],
   },
   // Focus the source code configs on source code so mdx codeblocks don't inherit all the eslint config
-  // which would make it very difficult to "incomplete" write snippets of code in the docs.
+  // which would make it very difficult to write "incomplete" snippets of code in the docs.
   ...grafanaConfig.map((config) => ({
     ...config,
     files: ['**/*.{ts,tsx,js,jsx}'],
