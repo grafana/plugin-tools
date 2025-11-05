@@ -31,7 +31,7 @@
     "managerFilePatterns": ["packages/create-plugin/templates/github/workflows/.*\\.ya?ml$"]
   },
   "postUpdateOptions": ["npmDedupe"],
-  "labels": ["dependencies", "javascript"],
+  "labels": ["dependencies", "javascript", "no-changelog"],
   "customManagers": [
     {
       "customType": "regex",
@@ -56,7 +56,7 @@
       "automerge": false,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
-      "addLabels": ["patch"],
+      "labels": ["dependencies", "javascript", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
@@ -70,7 +70,7 @@
       "automerge": true,
       "groupName": "e2e-selector dependencies",
       "groupSlug": "plugin-e2e-selectors",
-      "addLabels": ["patch", "release"],
+      "labels": ["dependencies", "javascript", "patch", "release"],
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
@@ -83,7 +83,7 @@
     {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
-      "addLabels": ["release", "patch"],
+      "labels": ["dependencies", "javascript", "release", "patch"],
       "matchUpdateTypes": ["minor", "major"],
       "matchPackageNames": [
         "/@grafana/*/",
@@ -96,7 +96,6 @@
     },
     {
       "groupName": "docusaurus dependencies",
-      "addLabels": ["no-changelog"],
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
     },
