@@ -47,7 +47,7 @@ jobs:
       - name: Build documentation website
         run: npm run docs:build
 
-      - uses: grafana/shared-workflows/actions/login-to-gcs@login-to-gcs/v0.2.1
+      - uses: grafana/shared-workflows/actions/login-to-gcs@login-to-gcs/v0.3.0
         id: login-to-gcs
         with:
           service_account: 'github-developer-portal@grafanalabs-workload-identity.iam.gserviceaccount.com'
