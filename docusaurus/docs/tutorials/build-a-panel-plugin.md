@@ -45,7 +45,7 @@ The [PanelProps](https://github.com/grafana/grafana/blob/57960148e47e4d82e899dbf
 
 You can access the panel properties through the `props` argument, as seen in your plugin.
 
-```js title="src/components/SimplePanel.tsx"
+```tsx title="src/components/SimplePanel.tsx"
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 ```
 
@@ -61,7 +61,6 @@ First, you need to add your panel to a dashboard:
    By default, Grafana is accessible at [http://localhost:3000](http://localhost:3000).
 
 1. Create a new dashboard.
-
    - From the menu, select **Dashboards**.
    - On the top right, select **New** -> **Dashboard**.
    - Select **Add Visualization** to start configuring your new panel.

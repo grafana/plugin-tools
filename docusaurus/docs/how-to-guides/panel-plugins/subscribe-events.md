@@ -30,7 +30,7 @@ The event bus for subscribing to Grafana events is located in the [`PanelProps`]
 
 You can access the event bus and other panel properties through the `props` argument of your plugin. For example:
 
-```js title="src/components/SimplePanel.tsx"
+```tsx title="src/components/SimplePanel.tsx"
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 ```
 
