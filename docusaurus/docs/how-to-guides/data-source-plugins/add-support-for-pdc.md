@@ -54,7 +54,7 @@ On the frontend, we need to add a feature toggle to enable or disable PDC.
 
 Add an attribute `enableSecureSocksProxy?: boolean;` to the configuration interface usually defined in `src/types.ts` like below:
 
-```javascript
+```ts
 export interface MyDataSourceOptions extends DataSourceJsonData {
   path?: string;
   // add this line
@@ -69,46 +69,46 @@ Then add an option to `components/ConfigEditor.tsx` to be able to control this v
 
 For example, here is how it’s done in Infinity data source:
 
-```javascript
+```tsx
 import { gte } from 'semver';
-...
-  {config.featureToggles['secureSocksDSProxyEnabled' as keyof FeatureToggles] &&
-        gte(config.buildInfo.version, '10.0.0') && (
-          <>
-            <InlineField
-              label="Secure SOCKS Proxy"
-              tooltip={
-                <>
-                  Enable proxying the data source connection through the secure SOCKS proxy to a
-                  different network.
-                  See{' '}
-                  <a
-                    href="https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/proxy/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Configure a data source connection proxy.
-                  </a>
-                </>
-              }
-            >
-              <div className={styles.toggle}>
-                <Switch
-                  value={options.jsonData.enableSecureSocksProxy}
-                  onChange={(e) => {
-                    onOptionsChange({
-                      ...options,
-                      jsonData: {
-                        ...options.jsonData,
-                        enableSecureSocksProxy: e.currentTarget.checked
-                      },
-                    });
-                  }}
-                />
-              </div>
-            </InlineField>
-          </>
-        )}
+
+{
+  config.featureToggles['secureSocksDSProxyEnabled' as keyof FeatureToggles] &&
+    gte(config.buildInfo.version, '10.0.0') && (
+      <>
+        <InlineField
+          label="Secure SOCKS Proxy"
+          tooltip={
+            <>
+              Enable proxying the data source connection through the secure SOCKS proxy to a different network. See{' '}
+              <a
+                href="https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/proxy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Configure a data source connection proxy.
+              </a>
+            </>
+          }
+        >
+          <div className={styles.toggle}>
+            <Switch
+              value={options.jsonData.enableSecureSocksProxy}
+              onChange={(e) => {
+                onOptionsChange({
+                  ...options,
+                  jsonData: {
+                    ...options.jsonData,
+                    enableSecureSocksProxy: e.currentTarget.checked,
+                  },
+                });
+              }}
+            />
+          </div>
+        </InlineField>
+      </>
+    );
+}
 ```
 
 ![PDC toggle option in data source configuration screen](./images/pdc-image-editor.png)
@@ -175,7 +175,7 @@ if proxyClient.SecureSocksProxyEnabled() {
 }
 ```
 
-Other example PRs:  
+Other example PRs:
 [MySQL](https://github.com/grafana/grafana/blame/da24ad06bd90b6caeaa7ad553e0063f62b0b6c5c/pkg/tsdb/mysql/mysql.go#L92)
 
 #### Override the Transport

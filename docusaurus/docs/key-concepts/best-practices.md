@@ -107,12 +107,12 @@ We strongly recommend to verify that the range you have defined in `grafanaDepen
 
 If you want to target the next release (or the current `main`) and being able to install the plugin in Grafana Cloud, remember to add a prerelease to your `grafanaDependency`. For example set it to `>=12.1.0-0` if `12.1.0` is what you want to target since Grafana Cloud versions look like `12.1.0-123123`.
 
-```
+```js
 /*  Example you can run in your chrome DevTools console on this page */
 
-const { satisfies } = await import("https://esm.sh/semver");
-console.log(satisfies("12.1.0-3212123", ">=12.1.0", { includePrerelease: true }));
-> false
+const { satisfies } = await import('https://esm.sh/semver');
+console.log(satisfies('12.1.0-3212123', '>=12.1.0', { includePrerelease: true }));
+// should print `false`
 ```
 
 Read more on semver specifications on [semver.org](https://semver.org)
@@ -130,6 +130,4 @@ To ensure robust and reliable plugins, follow these best practices:
 - **Adopt the latest plugin APIs:** Using the latest plugin API versions allows developers to leverage new Grafana features and ensures alignment with the platform's evolving capabilities. It also encourages regular maintenance and updates of plugins and its dependencies.
 - **Maintain a single development branch:** Aim to maintain a single branch for the entire range of Grafana versions supported by the plugin (as specified in the `grafanaDependency`). This approach reduces the maintenance burden and aligns with practices used in the Grafana plugin catalog.
 - **Manage backward compatibility with runtime checks:** To utilize new Grafana features while maintaining compatibility with older versions, implement conditional logic that verifies feature availability at runtime. For guidance, see [Manage backwards compatibility with runtime checks](../how-to-guides/runtime-checks.md).
-  <!-- Uncomment when this article is written - **Manage backward compatibility by using the compatibility packge:** -->
-  <!-- Uncomment when this article is written - **Manage backward compatibility by bundling `grafana/ui`:** -->
 - **Perform end-to-end testing using a Grafana version matrix:** Grafana's dependency-sharing mechanism can cause many plugin-related issues to appear only at runtime. These issues can be effectively identified by running end-to-end smoke tests across a matrix of Grafana versions defined in the plugin's `plugin.json` file. Regularly testing the plugin against both older supported versions and Grafana's main development branch ensures backward and forward compatibility. This approach allows plugin maintainers to verify functionality with current and upcoming Grafana releases, maintaining reliability and readiness for future updates.
