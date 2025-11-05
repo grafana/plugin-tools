@@ -81,10 +81,7 @@
     ],
     "*.{css,md,json}": "prettier --write"
   },
-  "overrides": {
-    "express": {
-      "cookie": "^0.7.0"
-    },
+  "overrides": {    
     "webpack-dev-server": "^5.2.1"
   },
   "optionalDependencies": {
