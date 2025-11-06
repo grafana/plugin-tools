@@ -32,6 +32,7 @@ export class Panel extends GrafanaPage {
    */
   get data(): Locator {
     const panel = this.locator;
+    console.log('Grafana version in panel data locator:', this.ctx.grafanaVersion);
     if (semver.lt(this.ctx.grafanaVersion, '12.2.0')) {
       return panel.locator('[role="cell"]');
     }
