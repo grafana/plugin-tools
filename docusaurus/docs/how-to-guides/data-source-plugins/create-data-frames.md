@@ -7,7 +7,7 @@ keywords:
   - plugins
   - plugin
   - data frames
-  - dataframes
+  - data frames
 ---
 
 The [data frame](../../key-concepts/data-frames) is a columnar data structure that allows for efficient querying of large amounts of data. Since data frames are a central concept when developing data source and other plugins for Grafana, in this guide we'll look at some ways you can use them.
