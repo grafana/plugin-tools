@@ -2,10 +2,14 @@ import * as semver from 'semver';
 import { test, expect } from '../../../../src';
 
 test.describe('panel edit page', () => {
-  test('table panel data assertions', async ({ gotoPanelEditPage, readProvisionedDashboard }) => {
+  test('table panel data assertions', async ({ gotoPanelEditPage, readProvisionedDashboard, grafanaVersion }) => {
     const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
     const panelEditPage = await gotoPanelEditPage({ dashboard, id: '2' });
     await expect(panelEditPage.panel.locator).toBeVisible();
+    if (semver.gt(grafanaVersion, '12.2.0')) {
+      // temp force test to fail
+      await expect(panelEditPage.panel.data).toContainText(['23', '70', 'Staging']);
+    }
     await expect(panelEditPage.panel.data).toContainText(['22.2', '70', 'Staging']);
     await expect(panelEditPage.panel.fieldNames).toContainText(['time', 'temperature', 'humidity', 'environment']);
   });

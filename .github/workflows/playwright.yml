@@ -49,7 +49,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -112,7 +112,8 @@ jobs:
           persist-credentials: false
 
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@pw-gh-pages/deploy-to-another-repo
         with:
+          external-repository: grafana/playwright-reports
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
