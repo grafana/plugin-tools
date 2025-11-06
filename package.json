@@ -51,7 +51,7 @@
     "glob": "^11.0.3",
     "husky": "^9.1.7",
     "lerna": "9.0.0",
-    "lint-staged": "^16.2.5",
+    "lint-staged": "^16.2.6",
     "prettier": "3.6.2",
     "publint": "^0.3.12",
     "rollup": "^4.52.5",
@@ -59,7 +59,7 @@
     "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.1"
   },
   "engines": {
     "node": ">=24"
