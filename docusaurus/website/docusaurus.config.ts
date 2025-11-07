@@ -30,7 +30,6 @@ const config: Config = {
   url: PORTAL_URL,
   baseUrl: 'developers/plugin-tools/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   onBrokenAnchors: 'throw',
   favicon: 'img/favicon.png',
   // GitHub pages deployment config.
@@ -50,6 +49,11 @@ const config: Config = {
     v4: {
       removeLegacyPostBuildHeadAttribute: true,
       useCssCascadeLayers: false,
+    },
+  },
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
     },
   },
   plugins: [

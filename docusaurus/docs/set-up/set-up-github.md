@@ -89,34 +89,11 @@ The workflow contains the following steps:
 
 The create plugin update (`cp-update.yml`) workflow automates keeping your plugin's development environment and dependencies up to date. It periodically checks the latest version of create-plugin listed on the npm registry and compares it to the version used by your plugin. If there's a newer version available, the workflow runs the `create-plugin update` command, updates the frontend dependency lockfile, then creates a PR with the changes for review.
 
-This workflow requires content and pull request write access to your plugin's repo to push changes and open PRs. Choose from the following two options:
+This workflow requires content, pull request and workflow write access to your plugin's repo to push changes and open PRs.
 
-### Use the default access token
+### Add a personal access token
 
-To use this option you must allow [github actions to create and approve pull requests](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#preventing-github-actions-from-creating-or-approving-pull-requests) within your repository settings and use the `permissions` property in the workflow to elevate the default access token permissions like so:
-
-```yaml
-name: Create Plugin Update
-
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 1 * *' # run once a month on the 1st day
-
-permissions:
-  contents: write
-  pull-requests: write
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: grafana/plugin-actions/create-plugin-update@main
-```
-
-### Use a personal access token
-
-To use this option, you must create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write both `contents` and `pull requests`. After you create the token, add it to the plugin repository action secrets and then pass it to the action:
+To use this workflow you must create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write `contents`, `pull requests` and `workflows`. After you create the token, add it to the plugin repository action secrets as `GH_PAT_TOKEN` then pass it to the action:
 
 ```yaml
 name: Create Plugin Update
@@ -130,7 +107,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: grafana/plugin-actions/create-plugin-update@main
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
         with:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
