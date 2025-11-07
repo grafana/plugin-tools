@@ -4,7 +4,7 @@ import { useLocation } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useOneTrustIntegration } from './utils/useOneTrustIntegration';
 import { CookieConsent } from '../components/CookieConsent/CookieConsent';
-import { FaroConfig, RudderStackTrackingConfig, startTracking, trackPage } from './tracking';
+import { FaroConfig, RudderStackTrackingConfig, startTracking, trackPage, initSearchTracking } from './tracking';
 import { analyticsVersion, cookieName, getCookie, setCookie } from './tracking/cookie';
 
 type OneTrustConfig = {
@@ -27,6 +27,7 @@ export default function Root({ children }) {
   const rudderStackConfig = customFields.rudderStackTracking as RudderStackTrackingConfig;
   const faroConfig = customFields.faroConfig as FaroConfig;
   const shouldTrack = customFields.nodeEnv === 'production';
+  const [shouldShow, setShouldShow] = useState(false);
 
   const setCookieAndStartTracking = useCallback(() => {
     setCookie(cookieName, {
@@ -36,8 +37,6 @@ export default function Root({ children }) {
     setShouldShow(false);
     startTracking(rudderStackConfig, faroConfig, shouldTrack);
   }, [rudderStackConfig, faroConfig, shouldTrack]);
-
-  const [shouldShow, setShouldShow] = useState(false);
 
   const canSpam = useCallback(async () => {
     try {
@@ -83,6 +82,7 @@ export default function Root({ children }) {
       return;
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     handleOriginalCookieConsent();
   }, [isOneTrustEnabled, handleOriginalCookieConsent]);
 

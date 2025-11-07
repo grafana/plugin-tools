@@ -1,4 +1,5 @@
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { debounce } from 'debounce';
 
 declare global {
   interface Window {
@@ -63,6 +64,7 @@ export function startTracking(
         }
         // clean up afterwards so trackPage
         rudderQueue = undefined;
+        initSearchTracking();
       };
 
       const el = document.createElement('script');
@@ -106,4 +108,29 @@ export function trackPage() {
     // @ts-ignore we don't have the types.
     rudderstack.page();
   }
+}
+
+function trackSearch(e: Event) {
+  const input = e.target as HTMLInputElement;
+  if (!input?.value) {
+    return;
+  }
+
+  const searchResults = document.getElementsByClassName('algolia-docsearch-suggestion');
+
+  console.log('plugin_tools_search', { searchTerm: input.value, searchResultCount: searchResults.length });
+  // @ts-expect-error we don't have the types.
+  rudderstack.track('plugin_tools_search', { searchTerm: input.value, searchResultCount: searchResults.length });
+}
+
+const debounced = debounce(trackSearch, 100, true);
+
+export function initSearchTracking() {
+  const searchInput = document.getElementById('search_input_react');
+  if (!searchInput) {
+    return;
+  }
+
+  searchInput.removeEventListener('input', debounced);
+  searchInput.addEventListener('input', debounced);
 }
