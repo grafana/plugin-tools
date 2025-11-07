@@ -1,3 +1,4 @@
+{{!-- /* 🚨 The `${{ }}` Github workflow expressions need to be escaped so they are not being interpreted by Handlebars. (this comment is going to be removed after scaffolding) 🚨 */ --}}
 name: Create Plugin Update
 
 on:
@@ -17,4 +18,4 @@ jobs:
       - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
         with:
           # Make sure to save the token in your repository secrets as `GH_PAT_TOKEN`
-          token: ${{ secrets.GH_PAT_TOKEN }}
+          token: $\{{ secrets.GH_PAT_TOKEN }}
