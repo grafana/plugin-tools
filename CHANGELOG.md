@@ -4,9 +4,6 @@
 
 #### chore(deps): update grafana patch dependencies ([#2217](https://github.com/grafana/plugin-tools/pull/2217))
 
-<details>
-<summary>grafana/grafana (@&#8203;grafana/data)</summary>
-
 ---
 
 #### 🐛 Bug Fix
