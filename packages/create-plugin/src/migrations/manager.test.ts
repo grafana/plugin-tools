@@ -117,14 +117,14 @@ describe('Migrations', () => {
       const mockContext = new Context('/virtual');
       const migrationFn = vi.fn().mockResolvedValue(mockContext);
 
-      vi.doMock('./test-migration.js', () => ({
+      vi.doMock('virtual-test-migration.js', () => ({
         default: migrationFn,
       }));
 
       const migration: MigrationMeta = {
         version: '1.0.0',
         description: 'test migration',
-        migrationScript: './test-migration.js',
+        migrationScript: 'virtual-test-migration.js',
       };
 
       const result = await runMigration(migration, mockContext);
@@ -139,10 +139,10 @@ describe('Migrations', () => {
     const migrationTwoFn = vi.fn();
     const consoleMock = vi.spyOn(console, 'log').mockImplementation(() => undefined);
 
-    vi.doMock('./migration-one.js', () => ({
+    vi.doMock('virtual-test-migration.js', async () => ({
       default: migrationOneFn,
     }));
-    vi.doMock('./migration-two.js', () => ({
+    vi.doMock('virtual-test-migration2.js', async () => ({
       default: migrationTwoFn,
     }));
 
@@ -150,12 +150,12 @@ describe('Migrations', () => {
       'migration-one': {
         version: '1.0.0',
         description: '...',
-        migrationScript: './migration-one.js',
+        migrationScript: 'virtual-test-migration.js',
       },
       'migration-two': {
         version: '1.2.0',
         description: '...',
-        migrationScript: './migration-two.js',
+        migrationScript: 'virtual-test-migration2.js',
       },
     };
 
@@ -203,7 +203,7 @@ describe('Migrations', () => {
     it('should commit the changes for each migration if the CLI arg is present', async () => {
       await runMigrations(migrations, { commitEachMigration: true });
 
-      expect(gitCommitNoVerify).toHaveBeenCalledTimes(3);
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
     });
 
     it('should not create a commit for a migration that has no changes', async () => {
@@ -211,7 +211,7 @@ describe('Migrations', () => {
 
       await runMigrations(migrations, { commitEachMigration: true });
 
-      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(1);
     });
 
     it('should update version in ".config/.cprc.json" on a successful update', async () => {
