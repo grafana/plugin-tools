@@ -1,3 +1,26 @@
+# v6.1.8 (Fri Nov 07 2025)
+
+### Release Notes
+
+#### chore(deps): update grafana patch dependencies ([#2217](https://github.com/grafana/plugin-tools/pull/2217))
+
+<details>
+<summary>grafana/grafana (@&#8203;grafana/data)</summary>
+
+---
+
+#### 🐛 Bug Fix
+
+- Create plugin: fix permissions issue in cp-update workflow [#2281](https://github.com/grafana/plugin-tools/pull/2281) ([@jackw](https://github.com/jackw))
+- chore(deps): update grafana patch dependencies [#2217](https://github.com/grafana/plugin-tools/pull/2217) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.1.7 (Mon Nov 03 2025)
 
 :tada: This release contains work from a new contributor! :tada:
