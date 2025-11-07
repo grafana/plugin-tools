@@ -91,7 +91,7 @@ The create plugin update (`cp-update.yml`) workflow automates keeping your plugi
 
 This workflow requires content, pull request and workflow write access to your plugin's repo to push changes and open PRs. Choose from the following two options:
 
-### Add the personal access token
+### Add a personal access token
 
 To use this workflow you must create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write `contents`, `pull requests` and `workflows`. After you create the token, add it to the plugin repository action secrets as GH_PAT_TOKEN then pass it to the action:
 
@@ -107,7 +107,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: grafana/plugin-actions/create-plugin-update@main
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
         with:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
