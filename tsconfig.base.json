@@ -9,7 +9,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "node"],
     "outDir": "${configDir}/dist"
   },
   "include": ["${configDir}/src/**/*.ts"],
