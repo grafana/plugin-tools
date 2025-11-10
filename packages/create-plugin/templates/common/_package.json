@@ -16,7 +16,7 @@
   "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@grafana/eslint-config": "^8.2.0",
+    "@grafana/eslint-config": "^9.0.0",
     "@grafana/plugin-e2e": "^3.0.1",
     "@grafana/tsconfig": "^2.0.1",
     "@playwright/test": "^1.52.0",{{#if useExperimentalRspack}}
