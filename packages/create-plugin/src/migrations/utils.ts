@@ -266,7 +266,7 @@ const DIST_TAGS = {
  *
  * @param incomingVersion - The incoming version to compare.
  * @param existingVersion - The existing version to compare.
- * @param orEqualTo - Whether to include the existing version in the comparison.
+ * @param orEqualTo - Whether to check for greater than or equal to (>=) instead of just greater than (>).
  *
  */
 export function isVersionGreater(incomingVersion: string, existingVersion: string, orEqualTo = false) {
