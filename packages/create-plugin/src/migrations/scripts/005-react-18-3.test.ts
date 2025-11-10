@@ -44,7 +44,46 @@ describe('005-react-18-3', () => {
     expect(context.getFile('./package.json')).toBe(initialPackageJson);
   });
 
-  it('should not downgrade React 19.0.0 to 18.3.1', async () => {
+  it('should update React 18.0.0 to ^18.3.0', async () => {
+    const context = new Context('/virtual');
+    context.addFile(
+      './package.json',
+      JSON.stringify({
+        dependencies: {
+          react: '^18.0.0',
+        },
+      })
+    );
+
+    await migrate(context);
+
+    const updatedPackageJson = JSON.parse(context.getFile('./package.json') || '{}');
+    expect(updatedPackageJson.dependencies.react).toBe('^18.3.0');
+    expect(updatedPackageJson.devDependencies?.['@types/react']).toBe('^18.3.0');
+  });
+
+  it('should not update React if version is already 18.3.0 or higher', async () => {
+    const context = new Context('/virtual');
+    const packageJson = {
+      dependencies: {
+        react: '^18.3.0',
+        'react-dom': '^18.3.0',
+      },
+      devDependencies: {
+        '@types/react': '^18.3.0',
+        '@types/react-dom': '^18.3.0',
+      },
+    };
+    context.addFile('./package.json', JSON.stringify(packageJson, null, 2));
+
+    await migrate(context);
+
+    const updatedPackageJson = JSON.parse(context.getFile('./package.json') || '{}');
+    expect(updatedPackageJson.dependencies.react).toBe('^18.3.0');
+    expect(updatedPackageJson.dependencies['react-dom']).toBe('^18.3.0');
+  });
+
+  it('should not downgrade React 19.0.0 to 18.3.0', async () => {
     const context = new Context('/virtual');
     const packageJson = {
       dependencies: {
@@ -67,47 +106,6 @@ describe('005-react-18-3', () => {
     expect(updatedPackageJson.devDependencies['@types/react-dom']).toBe('^19.0.0');
   });
 
-  it('should update React 18.0.0 to 18.3.1', async () => {
-    const context = new Context('/virtual');
-    context.addFile(
-      './package.json',
-      JSON.stringify({
-        dependencies: {
-          react: '^18.0.0',
-        },
-      })
-    );
-
-    await migrate(context);
-
-    const updatedPackageJson = JSON.parse(context.getFile('./package.json') || '{}');
-    expect(updatedPackageJson.dependencies.react).toBe('^18.3.1');
-    expect(updatedPackageJson.devDependencies?.['@types/react']).toBe('^18.3.1');
-  });
-
-  it('should not update React if version is already 18.3.1 or higher', async () => {
-    const context = new Context('/virtual');
-    const packageJson = {
-      dependencies: {
-        react: '^18.3.1',
-        'react-dom': '^18.3.1',
-      },
-      devDependencies: {
-        '@types/react': '^18.3.1',
-        '@types/react-dom': '^18.3.1',
-      },
-    };
-    context.addFile('./package.json', JSON.stringify(packageJson, null, 2));
-
-    await migrate(context);
-
-    // Since the versions are already 18.3.1, the migration should still run
-    // but the versions should remain 18.3.1
-    const updatedPackageJson = JSON.parse(context.getFile('./package.json') || '{}');
-    expect(updatedPackageJson.dependencies.react).toBe('^18.3.1');
-    expect(updatedPackageJson.dependencies['react-dom']).toBe('^18.3.1');
-  });
-
   it('should handle version ranges correctly', async () => {
     const context = new Context('/virtual');
     context.addFile(
@@ -123,8 +121,8 @@ describe('005-react-18-3', () => {
     await migrate(context);
 
     const updatedPackageJson = JSON.parse(context.getFile('./package.json') || '{}');
-    expect(updatedPackageJson.dependencies.react).toBe('^18.3.1');
-    expect(updatedPackageJson.dependencies['react-dom']).toBe('^18.3.1');
+    expect(updatedPackageJson.dependencies.react).toBe('^18.3.0');
+    expect(updatedPackageJson.dependencies['react-dom']).toBe('^18.3.0');
   });
 
   it('should be idempotent', async () => {
