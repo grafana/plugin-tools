@@ -37,7 +37,7 @@ export default {
     },
     '005-react-18-3': {
       version: '6.1.7-beta.1',
-      description: 'Update React 18.0.0 to 18.3.1.',
+      description: 'Update React and ReactDOM 18.x versions to ^18.3.0 to surface React 19 compatibility issues.',
       migrationScript: './scripts/005-react-18-3.js',
     },
   },
