@@ -47,7 +47,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/packages/create-plugin/templates/github/workflows/.*\\.ya?ml$/"],
+      "managerFilePatterns": ["/(^|/)templates/github/workflows/.*\\.ya?ml$/"],
       "matchStrings": [
         "uses:\\s+(?<depName>[^@]+)@(?<currentValue>\\S+)"
       ],
