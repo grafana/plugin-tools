@@ -16,6 +16,12 @@
       }
     ],
     [
+      "omit-release-notes",
+      {
+        "username": ["renovate-sh-app[bot]"]
+      }
+    ],
+    [
       "slack",
       {
         "atTarget": false
