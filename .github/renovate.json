@@ -143,7 +143,7 @@
     },
     {
       "automerge": false,
-      "groupName": "auto-merged gitHub actions",
+      "groupName": "auto-merged github actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
       "matchManagers": ["github-actions"],
       "matchFiles": [".github/workflows/**"]
