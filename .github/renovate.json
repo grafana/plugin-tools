@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
   "ignorePresets": [
-    "github>grafana/grafana-renovate-config//presets/github-actions",
     "github>grafana/grafana-renovate-config//presets/base",
     "github>grafana/grafana-renovate-config//presets/automerge",
     "github>grafana/grafana-renovate-config//presets/labels",
@@ -143,7 +142,7 @@
       "matchFiles": ["packages/create-plugin/templates/github/workflows/**"]
     },
     {
-      "automerge": true,
+      "automerge": false,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
       "matchManagers": ["github-actions"],
