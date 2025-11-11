@@ -27,6 +27,7 @@
     "@auto-it/all-contributors": "11.3.0",
     "@auto-it/first-time-contributor": "11.3.0",
     "@auto-it/omit-commits": "11.3.0",
+    "@auto-it/omit-release-notes": "11.3.0",
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^9.0.0",
     "@playwright/test": "^1.56.1",
@@ -82,7 +83,7 @@
     ],
     "*.{css,md,json}": "prettier --write"
   },
-  "overrides": {    
+  "overrides": {
     "webpack-dev-server": "^5.2.1"
   },
   "optionalDependencies": {
