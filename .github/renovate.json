@@ -49,7 +49,7 @@
       "customType": "regex",
       "managerFilePatterns": ["/packages/create-plugin/templates/github/workflows/.*\\.ya?ml$/"],
       "matchStrings": [
-        "uses:\\s+(?<depName>[^@\\s]+)@(?<currentValue>[^\\s#]+)"
+        "uses:\\s+(?<depName>[^@]+)@(?<currentValue>\\S+)"
       ],
       "datasourceTemplate": "github-actions"
     }
