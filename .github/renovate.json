@@ -137,7 +137,7 @@
     {
       "automerge": false,
       "groupName": "create-plugin template github actions",
-      "labels": ["ci", "github_actions", "dependencies", "create-plugin"],
+      "labels": ["release", "patch", "create-plugin"],
       "reviewers": ["sunker"],
       "matchDatasources": ["github-actions"],
       "matchFiles": ["packages/create-plugin/templates/github/workflows/**"]
