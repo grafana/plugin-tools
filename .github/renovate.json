@@ -28,7 +28,7 @@
   // Extends the github-actions manager to include create-plugin workflow templates
   // See: https://docs.renovatebot.com/modules/manager/#extending-a-managers-default-managerfilepatterns
   "github-actions": {
-    "managerFilePatterns": ["packages/create-plugin/templates/github/workflows/.*\\.ya?ml$"]
+    "managerFilePatterns": ["/(^|/)packages/create-plugin/templates/github/workflows/.+\\.ya?ml$/"]
   },
   "postUpdateOptions": ["npmDedupe"],
   "labels": ["dependencies", "javascript", "no-changelog"],
