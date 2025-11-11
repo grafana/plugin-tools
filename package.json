@@ -14,6 +14,8 @@
     "docs": "nx start website",
     "docs:clear": "nx clear website",
     "docs:build": "nx build website",
+    "docs:test": "nx test website",
+    "docs:test:ci": "nx test:ci website",
     "lint": "nx run-many --target=lint --parallel",
     "lint:fix": "nx run-many --target=lint:fix --parallel",
     "lint:packages": "nx run-many --target=lint:package --parallel",

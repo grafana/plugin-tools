@@ -14,9 +14,12 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "lint": "eslint --cache '../docs/**/*.{md,mdx}'",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "test": "vitest",
+    "test:ci": "vitest --run"
   },
   "dependencies": {
+    "@coffeeandfun/remove-pii": "^2.0.0",
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-client-redirects": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.2",
@@ -24,6 +27,7 @@
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "cookiejs": "^2.1.2",
+    "debounce": "^1.2.1",
     "docusaurus-lunr-search": "^3.6.0",
     "gridsome-remark-figure-caption": "1.2.2",
     "prism-react-renderer": "^2.1.0",
@@ -35,6 +39,7 @@
     "@docusaurus/module-type-aliases": "^3.9.2",
     "@docusaurus/remark-plugin-npm2yarn": "^3.9.2",
     "@docusaurus/tsconfig": "^3.9.2",
+    "@types/debounce": "^1.2.4",
     "dotenv": "^17.2.3",
     "raw-loader": "^4.0.2",
     "typescript": "^5.9.3"
