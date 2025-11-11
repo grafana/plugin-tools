@@ -146,7 +146,8 @@
       "automerge": true,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
-      "matchManagers": ["github-actions"]
+      "matchManagers": ["github-actions"],
+      "matchFiles": [".github/workflows/**"]
     }
   ],
   "vulnerabilityAlerts": {
