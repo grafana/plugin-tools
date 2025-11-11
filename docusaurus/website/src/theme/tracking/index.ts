@@ -1,8 +1,10 @@
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { getWebInstrumentations, initializeFaro, faro, LogLevel } from '@grafana/faro-web-sdk';
+import { RudderStack } from './types';
+import { initSearchTracking } from './search';
 
 declare global {
   interface Window {
-    rudderanalytics: any;
+    rudderanalytics: RudderStack;
   }
 }
 
@@ -19,7 +21,7 @@ export const isFaroSetup = (config: FaroConfig) =>
   config && config.url && config.appName && config.environment && config.version;
 
 // Enqueue all rudderstack requests until it is loaded and consent is granted
-let rudderstack = {};
+let rudderstack: Partial<RudderStack> = {};
 let rudderQueue = [];
 const rudderMethods = ['page', 'track', 'identify', 'reset'];
 for (const method of rudderMethods) {
@@ -47,41 +49,45 @@ export function startTracking(
   faroConfig: FaroConfig,
   shouldTrack: boolean
 ) {
-  if (shouldTrack) {
-    if (isRudderstackSetup(rudderStackConfig)) {
-      const { writeKey, url, configUrl } = rudderStackConfig;
+  if (!shouldTrack) {
+    return;
+  }
 
-      const initRudderstack = async () => {
-        rudderId = await window.rudderanalytics.getAnonymousId();
+  if (isRudderstackSetup(rudderStackConfig)) {
+    const { writeKey, url, configUrl } = rudderStackConfig;
 
-        window.rudderanalytics.load(writeKey, url, { configUrl });
-        rudderstack = window.rudderanalytics;
+    const initRudderstack = async () => {
+      rudderId = await window.rudderanalytics.getAnonymousId();
 
-        // send any queued requests
-        for (const [method, ...args] of rudderQueue) {
-          rudderstack[method](...args);
-        }
-        // clean up afterwards so trackPage
-        rudderQueue = undefined;
-      };
+      window.rudderanalytics.load(writeKey, url, { configUrl });
+      rudderstack = window.rudderanalytics;
 
-      const el = document.createElement('script');
-      el.async = true;
-      el.src = rudderStackConfig.sdkUrl;
-      el.onload = initRudderstack;
-      document.getElementsByTagName('head')[0].appendChild(el);
-    }
-    if (isFaroSetup(faroConfig)) {
-      initializeFaro({
-        url: faroConfig.url,
-        app: {
-          name: faroConfig.appName,
-          version: faroConfig.version,
-          environment: faroConfig.environment,
-        },
-        instrumentations: [...getWebInstrumentations()],
-      });
-    }
+      // send any queued requests
+      for (const [method, ...args] of rudderQueue) {
+        rudderstack[method](...args);
+      }
+      // clean up afterwards so trackPage
+      rudderQueue = undefined;
+      initSearchTracking(rudderstack);
+    };
+
+    const el = document.createElement('script');
+    el.async = true;
+    el.src = rudderStackConfig.sdkUrl;
+    el.onload = initRudderstack;
+    document.getElementsByTagName('head')[0].appendChild(el);
+  }
+
+  if (isFaroSetup(faroConfig)) {
+    initializeFaro({
+      url: faroConfig.url,
+      app: {
+        name: faroConfig.appName,
+        version: faroConfig.version,
+        environment: faroConfig.environment,
+      },
+      instrumentations: [...getWebInstrumentations()],
+    });
   }
 }
 
