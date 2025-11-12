@@ -20,7 +20,7 @@ beforeEach(() => {
 
 describe('processSearchTerm', () => {
   it('should truncate the input if its larger than threshold', () => {
-    const input = 'a'.repeat(SEARCH_TRACKING_MAX_LENGTH) + 10;
+    const input = 'a'.repeat(SEARCH_TRACKING_MAX_LENGTH + 10);
 
     const result = processSearchTerm(input);
 
@@ -31,7 +31,7 @@ describe('processSearchTerm', () => {
   });
 
   it('should log and remove PII if the input contains PII', () => {
-    const input = 'searching for somonee@test.org';
+    const input = 'searching for someone@test.org';
     vi.mocked(validatePIICompliance).mockReturnValue({ isCompliant: false, violationCount: 1 });
     vi.mocked(removePII).mockReturnValue('searching for [email removed]');
 

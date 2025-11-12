@@ -42,7 +42,8 @@
     "@types/debounce": "^1.2.4",
     "dotenv": "^17.2.3",
     "raw-loader": "^4.0.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.4"
   },
   "browserslist": {
     "production": [
