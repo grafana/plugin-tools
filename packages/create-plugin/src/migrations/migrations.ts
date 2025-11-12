@@ -36,7 +36,7 @@ export default {
       migrationScript: './scripts/004-eslint9-flat-config.js',
     },
     '005-react-18-3': {
-      version: '6.1.7-beta.1',
+      version: '6.1.9',
       description: 'Update React and ReactDOM 18.x versions to ^18.3.0 to surface React 19 compatibility issues.',
       migrationScript: './scripts/005-react-18-3.js',
     },
