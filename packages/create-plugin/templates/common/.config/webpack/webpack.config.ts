@@ -22,6 +22,7 @@ import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadm
 import { externals } from '../bundler/externals.ts';
 
 const pluginJson = getPluginJson();
+const pluginId = pluginJson.id;
 const cpVersion = getCPConfigVersion();
 const pluginVersion = getPackageJson().version;
 
@@ -32,7 +33,7 @@ import amdMetaModule from 'amd-module';
 __webpack_public_path__ =
   amdMetaModule && amdMetaModule.uri
     ? amdMetaModule.uri.slice(0, amdMetaModule.uri.lastIndexOf('/') + 1)
-    : 'public/plugins/${pluginJson.id}/';
+    : 'public/plugins/${pluginId}/';
 `,
 });
 
@@ -150,8 +151,8 @@ const config = async (env: Env): Promise<Configuration> => {
         type: 'amd',
       },
       path: path.resolve(process.cwd(), DIST_DIR),
-      publicPath: `public/plugins/${pluginJson.id}/`,
-      uniqueName: pluginJson.id,
+      publicPath: `public/plugins/${pluginId}/`,
+      uniqueName: pluginId,
       crossOriginLoading: 'anonymous',
     },
 
@@ -161,7 +162,7 @@ const config = async (env: Env): Promise<Configuration> => {
       // Insert create plugin version information into the bundle
       new webpack.BannerPlugin({
         banner: `/* [create-plugin] version: ${cpVersion} */
-          /* [create-plugin] plugin: ${pluginJson.id}@${pluginVersion} */`,
+          /* [create-plugin] plugin: ${pluginId}@${pluginVersion} */`,
         raw: true,
         entryOnly: true,
       }),
@@ -199,13 +200,17 @@ const config = async (env: Env): Promise<Configuration> => {
             },
             {
               search: /\%PLUGIN_ID\%/g,
-              replace: pluginJson.id,
+              replace: pluginId,
             },
           ],
         },
       ]),
       new SubresourceIntegrityPlugin({
         hashFuncNames: ["sha256"],
+      }),
+      new DefinePlugin({
+        WEBPACK_PLUGIN_ID: JSON.stringify(pluginId),
+        WEBPACK_PLUGIN_VERSION: JSON.stringify(pluginVersion),
       }),
       ...(env.development ? [
         new LiveReloadPlugin(),

@@ -35,3 +35,7 @@ declare module '*.woff2';
 declare module '*.eot';
 declare module '*.ttf';
 declare module '*.otf';
+
+// Plugin meta declarations
+declare const WEBPACK_PLUGIN_ID: string;
+declare const WEBPACK_PLUGIN_VERSION: string;
