@@ -1,3 +1,16 @@
+# (Wed Nov 12 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.9`
+  - Create plugin: use react 18.3.x [#2283](https://github.com/grafana/plugin-tools/pull/2283) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Nov 07 2025)
 
 ### Release Notes
