@@ -222,6 +222,9 @@ describe('Migration - append profile to webpack', () => {
 });
 ```
 
+> [!TIP]
+> A lot of the code used by migrations has debug messaging. You can output this in tests to help debugging by using `DEBUG="create-plugin:migrations" npm run test -w @grafana/create-plugin`
+
 #### How to test a migration locally
 
 To test a migration locally you'll need a plugin to test on.

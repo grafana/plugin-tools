@@ -10,6 +10,8 @@ type Migrations = {
   migrations: Record<string, MigrationMeta>;
 };
 
+// Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It was used to force migrations to run
+// for those written before the switch to updates as migrations.
 export default {
   migrations: {
     '001-update-grafana-compose-extend': {
@@ -33,7 +35,10 @@ export default {
       description: 'Migrate eslint config to flat config format and update devDependencies to latest versions.',
       migrationScript: './scripts/004-eslint9-flat-config.js',
     },
-    // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
-    // for those written before the switch to updates as migrations.
+    '005-react-18-3': {
+      version: '6.1.9',
+      description: 'Update React and ReactDOM 18.x versions to ^18.3.0 to surface React 19 compatibility issues.',
+      migrationScript: './scripts/005-react-18-3.js',
+    },
   },
 } as Migrations;
