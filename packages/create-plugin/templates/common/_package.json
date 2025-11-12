@@ -29,7 +29,9 @@
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",
     "@types/jest": "^29.5.0",
-    "@types/node": "^20.8.7",{{#if isAppType}}{{#unless useReactRouterV6}}
+    "@types/node": "^20.8.7",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",{{#if isAppType}}{{#unless useReactRouterV6}}
     "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}{{/if}}
     "@types/testing-library__jest-dom": "5.14.8",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
@@ -77,8 +79,8 @@
     "@grafana/ui": "^12.2.1",
     "@grafana/schema": "^12.2.1",{{#if_eq pluginType "scenesapp" }}
     "@grafana/scenes": "{{ scenesVersion }}",{{/if_eq}}
-    "react": "18.2.0",
-    "react-dom": "18.2.0"{{#if isAppType}},
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"{{#if isAppType}},
     "react-router-dom": "^{{ reactRouterVersion }}",
     "rxjs": "7.8.2"{{/if}}
   },

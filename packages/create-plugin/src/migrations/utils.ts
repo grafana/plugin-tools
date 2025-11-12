@@ -8,7 +8,7 @@ import { MigrationMeta } from './migrations.js';
 import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
-import { clean, coerce, gt } from 'semver';
+import { clean, coerce, gt, gte } from 'semver';
 
 export function printChanges(context: Context, key: string, migration: MigrationMeta) {
   const changes = context.listChanges();
@@ -263,8 +263,13 @@ const DIST_TAGS = {
 
 /**
  * Compares two version strings to determine if the incoming version is greater
+ *
+ * @param incomingVersion - The incoming version to compare.
+ * @param existingVersion - The existing version to compare.
+ * @param orEqualTo - Whether to check for greater than or equal to (>=) instead of just greater than (>).
+ *
  */
-export function isVersionGreater(incomingVersion: string, existingVersion: string): boolean {
+export function isVersionGreater(incomingVersion: string, existingVersion: string, orEqualTo = false) {
   const incomingIsDistTag = incomingVersion in DIST_TAGS;
   const existingIsDistTag = existingVersion in DIST_TAGS;
 
@@ -286,6 +291,10 @@ export function isVersionGreater(incomingVersion: string, existingVersion: strin
   // If either version can't be parsed as semver, default to treating the incoming version as greater.
   if (!incomingSemver || !existingSemver) {
     return true;
+  }
+
+  if (orEqualTo) {
+    return gte(incomingSemver, existingSemver);
   }
 
   return gt(incomingSemver, existingSemver);
