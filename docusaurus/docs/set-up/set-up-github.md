@@ -111,7 +111,7 @@ jobs:
   createplugin-update:
     runs-on: ubuntu-latest
     steps:
-      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.1
         with:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
@@ -147,7 +147,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
 
-      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.1
         with:
           token: ${{ steps.generate_token.outputs.token }}
 ```
