@@ -91,7 +91,7 @@ The create plugin update (`cp-update.yml`) workflow automates keeping your plugi
 
 This workflow requires `content`, `pull request` and `workflow` write access to your plugin's repo to push changes and open PRs. Choose from the following two options:
 
-### A personal access token
+### Personal access token
 
 Create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write `contents`, `pull requests` and `workflows`. Refer to the following screenshot for repository access and permissions.
 
@@ -116,16 +116,16 @@ jobs:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
 
-### A github app
+### GitHub app
 
-Alternatively, use a GitHub App, which offers better security and isn't tied to an individual user account. 
+Alternatively, use a GitHub App, which offers better security and isn't tied to an individual user account.
 
 Follow these steps:
 
 1. [Create a GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app).
-1. Give it access to your plugins repository with read and write permissions for `contents`, `pull requests` and `workflows`. 
+1. Give it access to your plugins repository with read and write permissions for `contents`, `pull requests` and `workflows`.
 1. Install the app in your plugins repo.
-1. Generate a private key. 
+1. Generate a private key.
 1. Add both the `APP_ID` and the `PRIVATE_KEY` to your repos secrets and use the app token in the workflow like so:
 
 ```yaml
