@@ -1,3 +1,15 @@
+# v6.1.10 (Thu Nov 13 2025)
+
+#### 🐛 Bug Fix
+
+- Feat: use latest create-plugin-update workflow [#2299](https://github.com/grafana/plugin-tools/pull/2299) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.1.9 (Wed Nov 12 2025)
 
 #### 🐛 Bug Fix
