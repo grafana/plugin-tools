@@ -131,12 +131,20 @@
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
-      // disable automerge temporarily until we know the action can update create-plugin hbs templates.
+      "automerge": false,
+      "groupName": "create-plugin template github actions",
+      "labels": ["release", "patch", "create-plugin"],
+      "matchDatasources": ["github-actions"],
+      "matchFiles": ["packages/create-plugin/templates/github/workflows/**"],
+      "pinDigests": false
+    },
+    {
       "automerge": false,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
-      "reviewers": ["jackw"],
-      "matchManagers": ["github-actions"]
+      "matchManagers": ["github-actions"],
+      "matchFiles": [".github/workflows/**"],
+      "pinDigests": true
     }
   ],
   "vulnerabilityAlerts": {
