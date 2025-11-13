@@ -40,7 +40,7 @@ describe('processSearchTerm', () => {
     expect(result).toEqual('searching for [email removed]');
     expect(validatePIICompliance).toHaveBeenCalledExactlyOnceWith(input);
     expect(removePII).toHaveBeenCalledExactlyOnceWith(input);
-    expect(log).toHaveBeenCalledExactlyOnceWith(`PII detected: 1 violations`, LogLevel.DEBUG);
+    expect(log).toHaveBeenCalledExactlyOnceWith(`PII detected: 1 violations`, LogLevel.WARN);
   });
 
   it('should sanitize string', () => {
@@ -96,7 +96,7 @@ describe('initSearchTracking', () => {
     {
       rudder: { track: vi.fn() },
       msg: 'Search tracking initialized successfully',
-      level: LogLevel.DEBUG,
+      level: LogLevel.INFO,
     },
   ])(`should log $msg with level $level when rudderstack object is $rudder`, ({ rudder, msg, level }) => {
     initSearchTracking(rudder as Partial<RudderStack>);
@@ -104,14 +104,14 @@ describe('initSearchTracking', () => {
     expect(log).toHaveBeenCalledExactlyOnceWith(msg, level);
   });
 
-  it('should log debug message if called twice', () => {
+  it('should log warning message if called twice', () => {
     const rudder = { track: vi.fn() } as Partial<RudderStack>;
 
     initSearchTracking(rudder);
     initSearchTracking(rudder);
 
     expect(log).toHaveBeenCalledTimes(2);
-    expect(log).toHaveBeenNthCalledWith(1, 'Search tracking initialized successfully', LogLevel.DEBUG);
-    expect(log).toHaveBeenNthCalledWith(2, 'Search tracking already initialized', LogLevel.DEBUG);
+    expect(log).toHaveBeenNthCalledWith(1, 'Search tracking initialized successfully', LogLevel.INFO);
+    expect(log).toHaveBeenNthCalledWith(2, 'Search tracking already initialized', LogLevel.WARN);
   });
 });
