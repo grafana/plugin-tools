@@ -89,11 +89,15 @@ The workflow contains the following steps:
 
 The create plugin update (`cp-update.yml`) workflow automates keeping your plugin's development environment and dependencies up to date. It periodically checks the latest version of create-plugin listed on the npm registry and compares it to the version used by your plugin. If there's a newer version available, the workflow runs the `create-plugin update` command, updates the frontend dependency lockfile, then creates a PR with the changes for review.
 
-This workflow requires content, pull request and workflow write access to your plugin's repo to push changes and open PRs.
+This workflow requires `content`, `pull request` and `workflow` write access to your plugin's repo to push changes and open PRs. Choose from the following two options:
 
-### Add a personal access token
+### Personal access token
 
-To use this workflow you must create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write `contents`, `pull requests` and `workflows`. After you create the token, add it to the plugin repository action secrets as `GH_PAT_TOKEN` then pass it to the action:
+Create a GitHub [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with access to the plugin repository and permission to read and write `contents`, `pull requests` and `workflows`. Refer to the following screenshot for repository access and permissions.
+
+![](/img/cp-update-pat-permissions.png)
+
+After you create the token, add it to the plugin repository action secrets as `GH_PAT_TOKEN` then pass it to the action:
 
 ```yaml
 name: Create Plugin Update
@@ -104,12 +108,48 @@ on:
     - cron: '0 0 1 * *' # run once a month on the 1st day
 
 jobs:
-  release:
+  createplugin-update:
     runs-on: ubuntu-latest
     steps:
       - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
         with:
           token: ${{ secrets.GH_PAT_TOKEN }}
+```
+
+### GitHub app
+
+Alternatively, use a GitHub App, which offers better security and isn't tied to an individual user account.
+
+Follow these steps:
+
+1. [Create a GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app).
+1. Give it access to your plugins repository with read and write permissions for `contents`, `pull requests` and `workflows`.
+1. Install the app in your plugins repo.
+1. Generate a private key.
+1. Add both the `APP_ID` and the `PRIVATE_KEY` to your repos secrets and use the app token in the workflow like so:
+
+```yaml
+name: Create Plugin Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *' # run once a month on the 1st day
+
+jobs:
+  createplugin-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
 ```
 
 ## The bundle stats workflow
