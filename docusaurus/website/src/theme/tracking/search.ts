@@ -21,7 +21,7 @@ export function processSearchTerm(str: string): string {
   const redacted = compliance.isCompliant ? truncated : removePII(truncated);
 
   if (!compliance.isCompliant) {
-    log(`PII detected: ${compliance.violationCount} violations`, LogLevel.DEBUG);
+    log(`PII detected: ${compliance.violationCount} violations`, LogLevel.WARN);
   }
 
   const sanitized = redacted
@@ -64,7 +64,7 @@ async function searchWithTracking(input: string) {
 
 export function initSearchTracking(rudder: Partial<RudderStack>) {
   if (trackFn) {
-    log('Search tracking already initialized', LogLevel.DEBUG);
+    log('Search tracking already initialized', LogLevel.WARN);
     return;
   }
 
@@ -75,7 +75,7 @@ export function initSearchTracking(rudder: Partial<RudderStack>) {
 
   trackFn = rudder.track.bind(rudder);
   lunarSearch.prototype.search = searchWithTracking;
-  log('Search tracking initialized successfully', LogLevel.DEBUG);
+  log('Search tracking initialized successfully', LogLevel.INFO);
 }
 
 export function setTrackFn(track: RudderStack['track'] | undefined = undefined) {
