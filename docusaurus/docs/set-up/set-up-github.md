@@ -108,7 +108,7 @@ on:
     - cron: '0 0 1 * *' # run once a month on the 1st day
 
 jobs:
-  release:
+  createplugin-update:
     runs-on: ubuntu-latest
     steps:
       - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v1.1.0
