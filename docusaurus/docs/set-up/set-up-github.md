@@ -137,7 +137,7 @@ on:
     - cron: '0 0 1 * *' # run once a month on the 1st day
 
 jobs:
-  cp-update:
+  createplugin-update:
     runs-on: ubuntu-latest
     steps:
       - name: Generate GitHub App Token
