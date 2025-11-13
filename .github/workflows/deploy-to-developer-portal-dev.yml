@@ -1,6 +1,5 @@
 name: Deploy to Developer Portal DEV Bucket
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -37,12 +36,15 @@ jobs:
       - name: Setup nodejs
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Run tests
+        run: npm run docs:test:ci
 
       - name: Build documentation website
         run: DEV_PORTAL_ENV=dev npm run docs:build
