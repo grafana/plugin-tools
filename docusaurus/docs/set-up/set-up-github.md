@@ -118,7 +118,15 @@ jobs:
 
 ### A github app
 
-Alternatively, [create a GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) which offers better security and isn't tied to an individual user account. Once created, give it access to your plugins repository with read and write permissions for `contents`, `pull requests` and `workflows`. Next install the app in your plugins repo, then generate a private key. Next add both the `APP_ID` and the `PRIVATE_KEY` to your repos secrets and use the app token in the workflow like so:
+Alternatively, use a GitHub App, which offers better security and isn't tied to an individual user account. 
+
+Follow these steps:
+
+1. [Create a GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app).
+1. Give it access to your plugins repository with read and write permissions for `contents`, `pull requests` and `workflows`. 
+1. Install the app in your plugins repo.
+1. Generate a private key. 
+1. Add both the `APP_ID` and the `PRIVATE_KEY` to your repos secrets and use the app token in the workflow like so:
 
 ```yaml
 name: Create Plugin Update
