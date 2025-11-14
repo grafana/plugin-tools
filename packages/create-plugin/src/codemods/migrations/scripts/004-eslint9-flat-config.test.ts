@@ -1,5 +1,5 @@
 import migrate from './004-eslint9-flat-config.js';
-import { Context } from '../context.js';
+import { Context } from '../../context.js';
 
 describe('004-eslint9-flat-config', () => {
   describe('migration', () => {

@@ -1,16 +1,15 @@
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import { debug } from '../utils/utils.cli.js';
 import chalk from 'chalk';
-import { MigrationMeta } from './migrations.js';
 import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
 import { clean, coerce, gt, gte } from 'semver';
+import { fileURLToPath } from 'node:url';
 
-export function printChanges(context: Context, key: string, migration: MigrationMeta) {
+export function printChanges(context: Context, key: string, description: string) {
   const changes = context.listChanges();
   const lines = [];
 
@@ -25,7 +24,7 @@ export function printChanges(context: Context, key: string, migration: Migration
   }
 
   output.addHorizontalLine('gray');
-  output.logSingleLine(`${key} (${migration.description})`);
+  output.logSingleLine(`${key} (${description})`);
 
   if (lines.length === 0) {
     output.logSingleLine('No changes were made');
@@ -51,10 +50,8 @@ export function flushChanges(context: Context) {
   }
 }
 
-export const migrationsDebug = debug.extend('migrations');
-
 /**
- * Formats the files in the migration context using the version of prettier found in the local node_modules.
+ * Formats the files in the context using the version of prettier found in the local node_modules.
  * If prettier isn't installed or the file is ignored or has no parser, it will not be formatted.
  *
  * @param context - The context to format.
@@ -104,7 +101,7 @@ export async function formatFiles(context: Context) {
 }
 
 // Cache the package.json contents to avoid re-installing dependencies if the package.json hasn't changed
-// (This runs for each migration used in an update)
+// (This runs for each codemod used in an update)
 let packageJsonInstallCache: string;
 
 export function installNPMDependencies(context: Context) {
@@ -160,14 +157,10 @@ export function addDependenciesToPackageJson(
     if (currentDeps[dep]) {
       if (isVersionGreater(newVersion, currentDeps[dep])) {
         currentDeps[dep] = newVersion;
-      } else {
-        migrationsDebug('would downgrade dependency %s to %s', dep, newVersion);
       }
     } else if (currentDevDeps[dep]) {
       if (isVersionGreater(newVersion, currentDevDeps[dep])) {
         currentDevDeps[dep] = newVersion;
-      } else {
-        migrationsDebug('would downgrade devDependency %s to %s', dep, newVersion);
       }
     } else {
       // Not present, add to dependencies
@@ -180,14 +173,10 @@ export function addDependenciesToPackageJson(
     if (currentDeps[dep]) {
       if (isVersionGreater(newVersion, currentDeps[dep])) {
         currentDeps[dep] = newVersion;
-      } else {
-        migrationsDebug('would downgrade dependency %s to %s', dep, newVersion);
       }
     } else if (currentDevDeps[dep]) {
       if (isVersionGreater(newVersion, currentDevDeps[dep])) {
         currentDevDeps[dep] = newVersion;
-      } else {
-        migrationsDebug('would downgrade devDependency %s to %s', dep, newVersion);
       }
     } else {
       // Not present, add to devDependencies
@@ -214,8 +203,6 @@ export function addDependenciesToPackageJson(
     ...(Object.keys(sortedDevDeps).length > 0 && { devDependencies: sortedDevDeps }),
   };
 
-  migrationsDebug('updated package.json', updatedPackageJson);
-
   context.updateFile(packageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
 }
 
@@ -232,7 +219,6 @@ export function removeDependenciesFromPackageJson(
   for (const dep of dependencies) {
     if (currentPackageJson.dependencies?.[dep]) {
       delete currentPackageJson.dependencies[dep];
-      migrationsDebug('removed dependency %s', dep);
       hasChanges = true;
     }
   }
@@ -240,7 +226,6 @@ export function removeDependenciesFromPackageJson(
   for (const dep of devDependencies) {
     if (currentPackageJson.devDependencies?.[dep]) {
       delete currentPackageJson.devDependencies[dep];
-      migrationsDebug('removed devDependency %s', dep);
       hasChanges = true;
     }
   }
@@ -248,8 +233,6 @@ export function removeDependenciesFromPackageJson(
   if (!hasChanges) {
     return;
   }
-
-  migrationsDebug('updated package.json', currentPackageJson);
 
   context.updateFile(packageJsonPath, JSON.stringify(currentPackageJson, null, 2));
 }
@@ -314,4 +297,17 @@ function sortObjectByKeys<T extends Record<string, any>>(obj: T): T {
   return Object.keys(obj)
     .sort()
     .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {} as T);
+}
+
+/**
+ * Resolves a script path relative to the caller's file location.
+ *
+ * @param callerUrl - The import.meta.url from the calling file
+ * @param relativePath - The relative path to resolve (e.g., './scripts/example.js')
+ * @returns The absolute resolved path
+ */
+export function resolveScriptPath(callerUrl: string, relativePath: string): string {
+  const __filename = fileURLToPath(callerUrl);
+  const __dirname = dirname(__filename);
+  return resolve(__dirname, relativePath);
 }

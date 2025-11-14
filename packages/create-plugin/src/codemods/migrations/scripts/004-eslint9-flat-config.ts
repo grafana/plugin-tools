@@ -5,8 +5,9 @@ import { parse } from 'jsonc-parser';
 import minimist from 'minimist';
 import { dirname, relative, resolve } from 'node:path';
 import * as recast from 'recast';
-import type { Context } from '../context.js';
-import { addDependenciesToPackageJson, migrationsDebug } from '../utils.js';
+import type { Context } from '../../context.js';
+import { addDependenciesToPackageJson } from '../../utils.js';
+// migrationsDebug removed - was from deleted migrations/utils.js
 
 type Imports = Map<string, { name?: string; bindings?: string[] }>;
 
@@ -406,7 +407,7 @@ function getIgnorePaths(context: Context): string[] {
         }
       }
     } catch (error) {
-      migrationsDebug('Error parsing package.json: %s', error);
+      console.log('Error parsing package.json: %s', error);
     }
   }
 

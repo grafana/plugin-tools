@@ -1,22 +1,21 @@
-import { getMigrationsToRun, runMigrations } from '../migrations/manager.js';
+import { getMigrationsToRun, runMigrations } from '../codemods/migrations/manager.js';
 import {
   getPackageManagerExecCmd,
   getPackageManagerSilentInstallCmd,
   getPackageManagerWithFallback,
 } from '../utils/utils.packageManager.js';
 import { gte, lt } from 'semver';
-import { isGitDirectory, isGitDirectoryClean } from '../utils/utils.git.js';
+import { performPreCodemodChecks } from '../utils/utils.checks.js';
 
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 import { LEGACY_UPDATE_CUTOFF_VERSION } from '../constants.js';
 import { getConfig } from '../utils/utils.config.js';
-import { isPluginDirectory } from '../utils/utils.plugin.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 import { spawnSync } from 'node:child_process';
 
 export const update = async (argv: minimist.ParsedArgs) => {
-  await performPreUpdateChecks(argv);
+  await performPreCodemodChecks(argv);
   const { version } = getConfig();
 
   if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
@@ -32,9 +31,13 @@ export const update = async (argv: minimist.ParsedArgs) => {
       process.exit(0);
     }
 
-    const commitEachMigration = argv.commit;
     const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
-    await runMigrations(migrations, { commitEachMigration });
+    // filter out minimist internal properties (_ and $0) before passing to codemod
+    const { _, $0, ...codemodOptions } = argv;
+    await runMigrations(migrations, {
+      commitEachMigration: !!argv.commit,
+      codemodOptions,
+    });
     output.success({
       title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
     });
@@ -48,48 +51,6 @@ export const update = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 };
-
-async function performPreUpdateChecks(argv: minimist.ParsedArgs) {
-  if (!(await isGitDirectory()) && !argv.force) {
-    output.error({
-      title: 'You are not inside a git directory',
-      body: [
-        `In order to proceed please run ${output.formatCode('git init')} in the root of your project and commit your changes.`,
-        `(This check is necessary to make sure that the updates are easy to revert and don't interfere with any changes you currently have.`,
-        `In case you want to proceed as is please use the ${output.formatCode('--force')} flag.)`,
-      ],
-    });
-
-    process.exit(1);
-  }
-
-  if (!(await isGitDirectoryClean()) && !argv.force) {
-    output.error({
-      title: 'Please clean your repository working tree before updating.',
-      body: [
-        'Commit your changes or stash them.',
-        `(This check is necessary to make sure that the updates are easy to revert and don't mess with any changes you currently have.`,
-        `In case you want to proceed as is please use the ${output.formatCode('--force')} flag.)`,
-      ],
-    });
-
-    process.exit(1);
-  }
-
-  if (!isPluginDirectory() && !argv.force) {
-    output.error({
-      title: 'Are you inside a plugin directory?',
-      body: [
-        `We couldn't find a "src/plugin.json" file under your current directory.`,
-        `(Please make sure to run this command from the root of your plugin folder. In case you want to proceed as is please use the ${output.formatCode(
-          '--force'
-        )} flag.)`,
-      ],
-    });
-
-    process.exit(1);
-  }
-}
 
 /**
  * Prepares a plugin for migrations by running the legacy update command and installing dependencies.

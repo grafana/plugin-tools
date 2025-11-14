@@ -5,14 +5,15 @@ import {
   removeDependenciesFromPackageJson,
   flushChanges,
   formatFiles,
-  printChanges,
   readJsonFile,
   isVersionGreater,
+  printChanges,
 } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import { output } from '../utils/utils.console.js';
+import { vi } from 'vitest';
 
 describe('utils', () => {
   const tmpObj = dirSync({ unsafeCleanup: true });
@@ -80,7 +81,7 @@ describe('utils', () => {
       context.updateFile('baz.ts', 'new content');
       context.deleteFile('bar.ts');
 
-      printChanges(context, 'key', { migrationScript: 'test', description: 'test', version: '1.0.0' });
+      printChanges(context, 'key', 'test');
 
       expect(outputMock.addHorizontalLine).toHaveBeenCalledWith('gray');
       expect(outputMock.logSingleLine).toHaveBeenCalledWith('key (test)');
@@ -102,7 +103,7 @@ describe('utils', () => {
     it('should print no changes', async () => {
       const context = new Context(tmpDir);
 
-      printChanges(context, 'key', { migrationScript: 'test', description: 'test', version: '1.0.0' });
+      printChanges(context, 'key', 'test');
 
       expect(outputMock.logSingleLine).toHaveBeenCalledWith('No changes were made');
     });
@@ -271,7 +272,7 @@ describe('utils', () => {
     });
   });
 
-  describe('isIncomingVersionGreater', () => {
+  describe('isVersionGreater', () => {
     describe('dist tag comparison', () => {
       it('should return false when incoming is "latest" and existing is "next"', () => {
         expect(isVersionGreater('latest', 'next')).toBe(false);

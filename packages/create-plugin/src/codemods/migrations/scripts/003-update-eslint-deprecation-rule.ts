@@ -1,5 +1,5 @@
-import type { Context } from '../context.js';
-import { addDependenciesToPackageJson, removeDependenciesFromPackageJson } from '../utils.js';
+import type { Context } from '../../context.js';
+import { addDependenciesToPackageJson, removeDependenciesFromPackageJson } from '../../utils.js';
 
 export default function migrate(context: Context) {
   if (context.doesFileExist('.config/.eslintrc') && context.doesFileExist('package.json')) {

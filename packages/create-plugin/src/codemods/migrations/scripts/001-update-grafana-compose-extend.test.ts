@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Context } from '../context.js';
+import { Context } from '../../context.js';
 import migrate from './001-update-grafana-compose-extend.js';
 import { parse, stringify } from 'yaml';
 

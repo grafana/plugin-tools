@@ -1,5 +1,5 @@
 import migrate from './example-migration.js';
-import { createDefaultContext } from '../test-utils.js';
+import { createDefaultContext } from '../../test-utils.js';
 
 describe('Migration - append profile to webpack', () => {
   test('should update the package.json', async () => {
@@ -14,7 +14,7 @@ describe('Migration - append profile to webpack', () => {
       })
     );
 
-    const updatedContext = await migrate(context);
+    const updatedContext = await migrate(context, { profile: true, skipBackup: false, verbose: false });
 
     expect(updatedContext.getFile('./package.json')).toMatch(
       'webpack -c ./.config/webpack/webpack.config.ts --profile --env production'

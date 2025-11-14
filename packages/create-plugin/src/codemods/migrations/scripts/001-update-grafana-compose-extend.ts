@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import { type Context } from '../context.js';
+import { type Context } from '../../context.js';
 import { Node, Pair, parseDocument, Scalar, stringify, visit, YAMLMap, Document, YAMLSeq, visitorFn } from 'yaml';
 
 export default async function migrate(context: Context) {

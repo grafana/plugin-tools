@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Context } from '../context.js';
+import { Context } from '../../context.js';
 import migrate from './005-react-18-3.js';
 
 describe('005-react-18-3', () => {

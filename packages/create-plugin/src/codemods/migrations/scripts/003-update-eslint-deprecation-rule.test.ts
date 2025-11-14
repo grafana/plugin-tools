@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import migrate from './003-update-eslint-deprecation-rule.js';
-import { Context } from '../context.js';
+import { Context } from '../../context.js';
 
 describe('003-update-eslint-deprecation-rule', () => {
   it('should not update ESLint config if no deprecation rule is present', () => {

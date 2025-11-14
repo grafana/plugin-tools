@@ -1,4 +1,4 @@
-import { type Context } from '../context.js';
+import { type Context } from '../../context.js';
 import { parseDocument, stringify, YAMLSeq } from 'yaml';
 
 export default async function migrate(context: Context) {

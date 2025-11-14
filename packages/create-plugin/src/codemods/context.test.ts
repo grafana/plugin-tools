@@ -3,7 +3,7 @@ import { Context } from './context.js';
 describe('Context', () => {
   describe('getFile', () => {
     it('should read a file from the file system', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       const content = context.getFile('foo/bar.ts');
       expect(content).toEqual("console.log('foo/bar.ts');\n");
     });
@@ -16,14 +16,14 @@ describe('Context', () => {
     });
 
     it('should get a file that was updated in the current context', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       context.updateFile('foo/bar.ts', 'content');
       const content = context.getFile('foo/bar.ts');
       expect(content).toEqual('content');
     });
 
     it('should not return a file that was marked for deletion', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       context.deleteFile('foo/bar.ts');
       const content = context.getFile('foo/bar.ts');
       expect(content).toEqual(undefined);
@@ -77,7 +77,7 @@ describe('Context', () => {
 
   describe('renameFile', () => {
     it('should rename a file', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       context.renameFile('foo/bar.ts', 'new-file.txt');
       expect(context.listChanges()).toEqual({
         'new-file.txt': { content: "console.log('foo/bar.ts');\n", changeType: 'add' },
@@ -102,20 +102,20 @@ describe('Context', () => {
 
   describe('readDir', () => {
     it('should read the directory', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       const files = context.readDir('foo');
       expect(files).toEqual(['foo/bar.ts', 'foo/baz.ts']);
     });
 
     it('should filter out deleted files', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       context.deleteFile('foo/bar.ts');
       const files = context.readDir('foo');
       expect(files).toEqual(['foo/baz.ts']);
     });
 
     it('should include files that are only added to the context', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       context.addFile('foo/foo.txt', '');
       const files = context.readDir('foo');
       expect(files).toEqual(['foo/bar.ts', 'foo/baz.ts', 'foo/foo.txt']);
@@ -124,7 +124,7 @@ describe('Context', () => {
 
   describe('normalisePath', () => {
     it('should normalise the path', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       expect(context.normalisePath('foo/bar.ts')).toEqual('foo/bar.ts');
       expect(context.normalisePath('./foo/bar.ts')).toEqual('foo/bar.ts');
       expect(context.normalisePath('/foo/bar.ts')).toEqual('foo/bar.ts');
@@ -133,12 +133,12 @@ describe('Context', () => {
 
   describe('hasChanges', () => {
     it('should return FALSE if the context has no changes', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
       expect(context.hasChanges()).toEqual(false);
     });
 
     it('should return TRUE if the context has changes', () => {
-      const context = new Context(`${__dirname}/fixtures`);
+      const context = new Context(`${__dirname}/migrations/fixtures`);
 
       context.addFile('foo.ts', '');
 
