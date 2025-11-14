@@ -8,10 +8,9 @@ describe('migrations json', () => {
   // This test now only asserts that the migration script source file exists.
   defaultMigrations.forEach((migration) => {
     it(`should have a valid migration script path for ${migration.name}`, () => {
-      // Ensure the migration script file exists (as .ts source file)
-      const migrationPathString = migration.scriptPath.replace('.js', '.ts');
-      const path = join(__dirname, migrationPathString);
-      expect(existsSync(path)).toBe(true);
+      // ensure migration script exists
+      const sourceFilePath = migration.scriptPath.replace('.js', '.ts');
+      expect(existsSync(sourceFilePath)).toBe(true);
     });
   });
 });

@@ -8,12 +8,16 @@ import migrationFixtures from './fixtures/migrations.js';
 import { setRootConfig } from '../../utils/utils.config.js';
 import { vi } from 'vitest';
 
-vi.mock('../utils.js', () => ({
-  flushChanges: vi.fn(),
-  formatFiles: vi.fn(),
-  installNPMDependencies: vi.fn(),
-  printChanges: vi.fn(),
-}));
+vi.mock('../utils.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    flushChanges: vi.fn(),
+    formatFiles: vi.fn(),
+    installNPMDependencies: vi.fn(),
+    printChanges: vi.fn(),
+  };
+});
 
 // Silence terminal output during tests.
 vi.mock('../../utils/utils.console.js', () => ({
@@ -142,13 +146,13 @@ describe('Migrations', () => {
         name: 'migration-one',
         version: '1.0.0',
         description: '...',
-        scriptPath: './migration-one.js',
+        scriptPath: 'virtual-test-migration.js',
       },
       {
         name: 'migration-two',
         version: '1.2.0',
         description: '...',
-        scriptPath: './migration-two.js',
+        scriptPath: 'virtual-test-migration2.js',
       },
     ];
 
@@ -196,7 +200,8 @@ describe('Migrations', () => {
     it('should commit the changes for each migration if the CLI arg is present', async () => {
       await runMigrations(migrations, { commitEachMigration: true });
 
-      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
+      // 2 migration commits + 1 version update commit = 3 total
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(3);
     });
 
     it('should not create a commit for a migration that has no changes', async () => {
@@ -204,7 +209,8 @@ describe('Migrations', () => {
 
       await runMigrations(migrations, { commitEachMigration: true });
 
-      expect(gitCommitNoVerify).toHaveBeenCalledTimes(1);
+      // 1 migration commit (only migration-one has changes) + 1 version update commit = 2 total
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
     });
 
     it('should update version in ".config/.cprc.json" on a successful update', async () => {

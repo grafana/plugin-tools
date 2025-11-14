@@ -26,33 +26,25 @@ describe('example-addition', () => {
     expect(packageJson.devDependencies['example-dev-dep']).toBe('^1.0.0');
   });
 
-  it('should create config file with feature settings', () => {
+  it('should create feature TypeScript file with options', () => {
     const context = new Context('/virtual');
 
     context.addFile('package.json', JSON.stringify({ scripts: {}, dependencies: {}, devDependencies: {} }));
 
-    const result = migrate(context, { featureName: 'coolFeature', enabled: true, frameworks: ['react'] });
-
-    expect(result.doesFileExist('src/config.json')).toBe(true);
-    const config = JSON.parse(result.getFile('src/config.json') || '{}');
-    expect(config.features.coolFeature).toEqual({
-      enabled: true,
-      description: 'Example feature configuration',
+    const result = migrate(context, {
+      featureName: 'myFeature',
+      enabled: false,
+      port: 4000,
+      frameworks: ['react', 'vue'],
     });
-  });
-
-  it('should create feature TypeScript file', () => {
-    const context = new Context('/virtual');
-
-    context.addFile('package.json', JSON.stringify({ scripts: {}, dependencies: {}, devDependencies: {} }));
-
-    const result = migrate(context, { featureName: 'myFeature', enabled: false, frameworks: ['react'] });
 
     expect(result.doesFileExist('src/features/myFeature.ts')).toBe(true);
     const featureCode = result.getFile('src/features/myFeature.ts');
     expect(featureCode).toContain('export const myFeature');
     expect(featureCode).toContain('enabled: false');
-    expect(featureCode).toContain('myFeature initialized');
+    expect(featureCode).toContain('port: 4000');
+    expect(featureCode).toContain('frameworks: ["react","vue"]');
+    expect(featureCode).toContain('myFeature initialized on port 4000');
   });
 
   it('should delete deprecated file if it exists', () => {
