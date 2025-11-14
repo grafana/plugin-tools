@@ -1,21 +1,18 @@
-import * as v from 'valibot';
 import type { Context } from '../../context.js';
 
 /**
- * Example migration with Valibot schema
- * Migrations can accept validated and typed options from CLI
+ * Example migration that demonstrates basic context operations
+ * This example shows how to modify package.json, add/delete files, and rename files
  */
-export const schema = v.object({
-  profile: v.optional(v.boolean(), false),
-  skipBackup: v.optional(v.boolean(), false),
-  verbose: v.optional(v.boolean(), false),
-});
 
-// Type is automatically inferred from the schema
-type MigrateOptions = v.InferOutput<typeof schema>;
+type MigrateOptions = {
+  profile?: boolean;
+  skipBackup?: boolean;
+  verbose?: boolean;
+};
 
-export default function migrate(context: Context, options: MigrateOptions): Context {
-  const { profile, skipBackup, verbose } = options;
+export default function migrate(context: Context, options: MigrateOptions = {}): Context {
+  const { profile = false, skipBackup = false, verbose = false } = options;
 
   if (verbose) {
     console.log('Running migration with options:', options);
