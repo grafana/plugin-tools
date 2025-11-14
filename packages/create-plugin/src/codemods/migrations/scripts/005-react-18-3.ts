@@ -1,5 +1,5 @@
-import { Context } from '../context.js';
-import { addDependenciesToPackageJson, isVersionGreater } from '../utils.js';
+import type { Context } from '../../context.js';
+import { addDependenciesToPackageJson, isVersionGreater } from '../../utils.js';
 
 export default function migrate(context: Context) {
   if (context.doesFileExist('package.json')) {

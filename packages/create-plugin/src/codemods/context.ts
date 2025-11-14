@@ -1,6 +1,8 @@
 import { constants, accessSync, readFileSync, readdirSync } from 'node:fs';
 import { relative, normalize, join, dirname } from 'node:path';
-import { migrationsDebug } from './utils.js';
+import { debug } from '../utils/utils.cli.js';
+
+const codemodsDebug = debug.extend('codemods');
 
 export type ContextFile = Record<
   string,
@@ -58,7 +60,7 @@ export class Context {
     if (originalContent !== content) {
       this.files[path] = { content, changeType: 'update' };
     } else {
-      migrationsDebug(`Context.updateFile() - no updates for ${filePath}`);
+      codemodsDebug(`Context.updateFile() - no updates for ${filePath}`);
     }
   }
 

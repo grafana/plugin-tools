@@ -1,22 +1,22 @@
-import { vi } from 'vitest';
-import { getMigrationsToRun, runMigration, runMigrations } from './manager.js';
-import migrationFixtures from './fixtures/migrations.js';
-import { Context } from './context.js';
-import { gitCommitNoVerify } from '../utils/utils.git.js';
-import { flushChanges, printChanges, formatFiles } from './utils.js';
-import { setRootConfig } from '../utils/utils.config.js';
-import { MigrationMeta } from './migrations.js';
+import { flushChanges, formatFiles, printChanges } from '../utils.js';
+import { getMigrationsToRun, runMigrations } from './manager.js';
 
-vi.mock('./utils.js', () => ({
+import { Context } from '../context.js';
+import { Migration } from './migrations.js';
+import { gitCommitNoVerify } from '../../utils/utils.git.js';
+import migrationFixtures from './fixtures/migrations.js';
+import { setRootConfig } from '../../utils/utils.config.js';
+import { vi } from 'vitest';
+
+vi.mock('../utils.js', () => ({
   flushChanges: vi.fn(),
-  printChanges: vi.fn(),
-  migrationsDebug: vi.fn(),
   formatFiles: vi.fn(),
   installNPMDependencies: vi.fn(),
+  printChanges: vi.fn(),
 }));
 
 // Silence terminal output during tests.
-vi.mock('../utils/utils.console.js', () => ({
+vi.mock('../../utils/utils.console.js', () => ({
   output: {
     log: vi.fn(),
     addHorizontalLine: vi.fn(),
@@ -25,10 +25,10 @@ vi.mock('../utils/utils.console.js', () => ({
   },
 }));
 
-vi.mock('../utils/utils.config.js', () => ({
+vi.mock('../../utils/utils.config.js', () => ({
   setRootConfig: vi.fn(),
 }));
-vi.mock('../utils/utils.git.js', () => ({
+vi.mock('../../utils/utils.git.js', () => ({
   gitCommitNoVerify: vi.fn(),
 }));
 
@@ -45,92 +45,83 @@ describe('Migrations', () => {
     it('should return the migrations that need to be run', () => {
       const fromVersion = '3.0.0';
       const toVersion = '5.0.0';
-      const migrations = getMigrationsToRun(fromVersion, toVersion, migrationFixtures.migrations);
-      expect(migrations).toEqual({
-        'migration-key1': {
+      const migrations = getMigrationsToRun(fromVersion, toVersion, migrationFixtures);
+      expect(migrations).toEqual([
+        {
+          name: 'migration-key1',
           version: '5.0.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './5-0-0-cache-directory.js',
+          scriptPath: './5-0-0-cache-directory.js',
         },
-      });
+      ]);
 
       const fromVersion2 = '5.0.0';
       const toVersion2 = '5.5.0';
-      const migrations2 = getMigrationsToRun(fromVersion2, toVersion2, migrationFixtures.migrations);
-      expect(migrations2).toEqual({
-        'migration-key1': {
+      const migrations2 = getMigrationsToRun(fromVersion2, toVersion2, migrationFixtures);
+      expect(migrations2).toEqual([
+        {
+          name: 'migration-key1',
           version: '5.0.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './5-0-0-cache-directory.js',
+          scriptPath: './5-0-0-cache-directory.js',
         },
-        'migration-key2': {
+        {
+          name: 'migration-key2',
           version: '5.4.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './5-4-0-cache-directory.js',
+          scriptPath: './5-4-0-cache-directory.js',
         },
-      });
+      ]);
 
       const fromVersion3 = '5.5.0';
       const toVersion3 = '6.0.0';
-      const migrations3 = getMigrationsToRun(fromVersion3, toVersion3, migrationFixtures.migrations);
-      expect(migrations3).toEqual({
-        'migration-key3': {
+      const migrations3 = getMigrationsToRun(fromVersion3, toVersion3, migrationFixtures);
+      expect(migrations3).toEqual([
+        {
+          name: 'migration-key3',
           version: '6.0.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './5-4-0-cache-directory.js',
+          scriptPath: './5-4-0-cache-directory.js',
         },
-      });
+      ]);
     });
 
     it('should sort migrations by version', () => {
       const fromVersion = '2.0.0';
       const toVersion = '6.0.0';
-      const migrations = getMigrationsToRun(fromVersion, toVersion, {
-        'migration-key1': {
+      const migrations = getMigrationsToRun(fromVersion, toVersion, [
+        {
+          name: 'migration-key1',
           version: '5.3.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './5.3.0-migration.js',
+          scriptPath: './5.3.0-migration.js',
         },
-        'migration-key2': {
+        {
+          name: 'migration-key2',
           version: '2.3.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './2.3.0-migration.js',
+          scriptPath: './2.3.0-migration.js',
         },
-        'migration-key3': {
+        {
+          name: 'migration-key3',
           version: '2.0.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './2.0.0-migration.js',
+          scriptPath: './2.0.0-migration.js',
         },
-        'migration-key4': {
+        {
+          name: 'migration-key4',
           version: '2.0.0',
           description: 'Update project to use new cache directory',
-          migrationScript: './2.0.0-migration.js',
+          scriptPath: './2.0.0-migration.js',
         },
-      });
+      ]);
 
-      expect(Object.keys(migrations)).toEqual(['migration-key3', 'migration-key4', 'migration-key2', 'migration-key1']);
-    });
-  });
-
-  describe('runMigration', () => {
-    it('should pass a context to the migration script', async () => {
-      const mockContext = new Context('/virtual');
-      const migrationFn = vi.fn().mockResolvedValue(mockContext);
-
-      vi.doMock('virtual-test-migration.js', () => ({
-        default: migrationFn,
-      }));
-
-      const migration: MigrationMeta = {
-        version: '1.0.0',
-        description: 'test migration',
-        migrationScript: 'virtual-test-migration.js',
-      };
-
-      const result = await runMigration(migration, mockContext);
-
-      expect(migrationFn).toHaveBeenCalledWith(mockContext);
-      expect(result).toBe(mockContext);
+      expect(migrations.map((m) => m.name)).toEqual([
+        'migration-key3',
+        'migration-key4',
+        'migration-key2',
+        'migration-key1',
+      ]);
     });
   });
 
@@ -146,18 +137,20 @@ describe('Migrations', () => {
       default: migrationTwoFn,
     }));
 
-    const migrations: Record<string, MigrationMeta> = {
-      'migration-one': {
+    const migrations: Migration[] = [
+      {
+        name: 'migration-one',
         version: '1.0.0',
         description: '...',
-        migrationScript: 'virtual-test-migration.js',
+        scriptPath: './migration-one.js',
       },
-      'migration-two': {
+      {
+        name: 'migration-two',
         version: '1.2.0',
         description: '...',
-        migrationScript: 'virtual-test-migration2.js',
+        scriptPath: './migration-two.js',
       },
-    };
+    ];
 
     beforeEach(() => {
       migrationOneFn.mockImplementation(async (context: Context) => {

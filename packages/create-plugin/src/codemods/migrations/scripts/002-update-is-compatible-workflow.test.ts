@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Context } from '../context.js';
+import { Context } from '../../context.js';
 import migrate from './002-update-is-compatible-workflow.js';
 import { parse } from 'yaml';
 
