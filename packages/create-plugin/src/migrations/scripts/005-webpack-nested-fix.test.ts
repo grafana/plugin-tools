@@ -1,35 +1,169 @@
 import migrate from './005-webpack-nested-fix.js';
 import { createDefaultContext } from '../test-utils.js';
 
-vi.mock('../../utils/utils.templates.js', async (importOriginal) => {
-  return {
-    ...(await importOriginal()),
-    getTemplateData: vi.fn().mockReturnValue({
-      pluginId: 'test-plugin',
-      pluginName: 'Test Plugin',
-      orgName: 'Test Org',
-      pluginType: 'panel',
-      packageManagerName: 'npm',
-      packageManagerVersion: '8.0.0',
-    }),
-  };
-});
-
 describe('Migration - webpack nested fix', () => {
-  test('should update the webpack config', async () => {
+  test('should transform files property to test property', () => {
     const context = createDefaultContext();
 
-    context.addFile('.config/webpack/webpack.config.ts', 'module.exports = { ...config, ...webpackConfig };');
+    const webpackConfigContent = `
+import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 
-    const updatedContext = await migrate(context);
+const config = {
+  plugins: [
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'dist',
+        files: ['plugin.json', 'README.md'],
+        rules: [
+          { search: /VERSION/g, replace: '1.0.0' }
+        ]
+      }
+    ])
+  ]
+};
+`;
+
+    context.addFile('.config/webpack/webpack.config.ts', webpackConfigContent);
+
+    const updatedContext = migrate(context);
     const webpackConfig = updatedContext.getFile('.config/webpack/webpack.config.ts');
-    expect(webpackConfig).toContain('test: [/(^|\\/)plugin\\.json$/, /(^|\\/)README\\.md$/],');
-    expect(webpackConfig).not.toContain('files: ["plugin.json", "README.md"]');
+
+    expect(webpackConfig).toContain('test: [/(^|\\/)plugin\\.json$/, /(^|\\/)README\\.md$/]');
+    expect(webpackConfig).not.toContain('files:');
+    expect(webpackConfig).toContain('dir:');
+    expect(webpackConfig).toContain('rules:');
   });
 
-  it('should not make additional changes when run multiple times', async () => {
-    const context = await createDefaultContext();
+  test('should not transform if files array has different values', () => {
+    const context = createDefaultContext();
 
-    await expect(migrate).toBeIdempotent(context);
+    const webpackConfigContent = `
+import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
+
+const config = {
+  plugins: [
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'dist',
+        files: ['custom.json', 'other.md'],
+        rules: []
+      }
+    ])
+  ]
+};
+`;
+
+    context.addFile('.config/webpack/webpack.config.ts', webpackConfigContent);
+
+    const updatedContext = migrate(context);
+    const webpackConfig = updatedContext.getFile('.config/webpack/webpack.config.ts');
+
+    expect(webpackConfig).toBe(webpackConfigContent);
+  });
+
+  test('should not transform if already using test property', () => {
+    const context = createDefaultContext();
+
+    const webpackConfigContent = `
+import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
+
+const config = {
+  plugins: [
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'dist',
+        test: [/(^|\\/)plugin\\.json$/, /(^|\\/)README\\.md$/],
+        rules: []
+      }
+    ])
+  ]
+};
+`;
+
+    context.addFile('.config/webpack/webpack.config.ts', webpackConfigContent);
+
+    const updatedContext = migrate(context);
+    const webpackConfig = updatedContext.getFile('.config/webpack/webpack.config.ts');
+
+    expect(webpackConfig).toBe(webpackConfigContent);
+  });
+
+  test('should handle multiple ReplaceInFileWebpackPlugin instances', () => {
+    const context = createDefaultContext();
+
+    const webpackConfigContent = `
+import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
+
+const config = {
+  plugins: [
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'dist',
+        files: ['plugin.json', 'README.md'],
+        rules: [],
+      }
+    ]),
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'other',
+        files: ['custom.json'],
+        rules: [],
+      }
+    ])
+  ]
+};
+`;
+
+    const expectedConfig = `
+import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
+
+const config = {
+  plugins: [
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'dist',
+        test: [/(^|\\/)plugin\\.json$/, /(^|\\/)README\\.md$/],
+        rules: [],
+      }
+    ]),
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'other',
+        files: ['custom.json'],
+        rules: [],
+      }
+    ])
+  ]
+};
+`;
+
+    context.addFile('.config/webpack/webpack.config.ts', webpackConfigContent);
+    const updatedContext = migrate(context);
+    const webpackConfig = updatedContext.getFile('.config/webpack/webpack.config.ts');
+    expect(webpackConfig).toBe(expectedConfig);
+  });
+
+  test('should be idempotent', () => {
+    const context = createDefaultContext();
+
+    const webpackConfigContent = `
+import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
+
+const config = {
+  plugins: [
+    new ReplaceInFileWebpackPlugin([
+      {
+        dir: 'dist',
+        files: ['plugin.json', 'README.md'],
+        rules: []
+      }
+    ])
+  ]
+};
+`;
+
+    context.addFile('.config/webpack/webpack.config.ts', webpackConfigContent);
+
+    expect(migrate).toBeIdempotent(context);
   });
 });
