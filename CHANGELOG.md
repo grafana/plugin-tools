@@ -1,3 +1,18 @@
+# (Fri Nov 14 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.1.11`
+  - chore(deps): update create-plugin template github actions [#2301](https://github.com/grafana/plugin-tools/pull/2301) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+  - chore(deps): update dependency @grafana/eslint-config to v9 [#2285](https://github.com/grafana/plugin-tools/pull/2285) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Nov 13 2025)
 
 #### 🐛 Bug Fix
