@@ -1,5 +1,4 @@
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import defaultMigrations from './migrations.js';
 
 describe('migrations json', () => {
