@@ -40,5 +40,11 @@ export default {
       description: 'Update React and ReactDOM 18.x versions to ^18.3.0 to surface React 19 compatibility issues.',
       migrationScript: './scripts/005-react-18-3.js',
     },
+    '006-remove-testing-library-types': {
+      version: '6.1.10',
+      description:
+        'Add setupTests.d.ts for @testing-library/jest-dom types and remove @types/testing-library__jest-dom npm package.',
+      migrationScript: './scripts/006-remove-testing-library-types.js',
+    },
   },
 } as Migrations;
