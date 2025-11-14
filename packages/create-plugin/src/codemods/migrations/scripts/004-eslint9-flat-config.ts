@@ -407,7 +407,7 @@ function getIgnorePaths(context: Context): string[] {
         }
       }
     } catch (error) {
-      console.debug('Error parsing package.json: %s', error);
+      console.log('Error parsing package.json: %s', error);
     }
   }
 
