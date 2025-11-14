@@ -16,9 +16,9 @@ keywords:
 
 # Angular to React: Convert from app/core/time_series2
 
-The `app/core/time_series2` package is commonly used by AngularJS plugins to retrieve data to be rendered by a panel. This package is no longer available, and all plugins need to use dataframes instead.
+The `app/core/time_series2` package is commonly used by AngularJS plugins to retrieve data to be rendered by a panel. This package is no longer available, and all plugins need to use data frames instead.
 
-This guide provides one method of converting from the old library to the new dataframe format.
+This guide provides one method of converting from the old library to the new data frame format.
 
 ## Convert data using the AngularJS method
 
@@ -35,9 +35,9 @@ seriesHandler(seriesData: any) {
   }
 ```
 
-## Convert data using dataframes
+## Convert data using data frames
 
-The following code example shows one way of converting data from panels using dataframes:
+The following code example shows one way of converting data from panels using data frames:
 
 ```ts
 import {

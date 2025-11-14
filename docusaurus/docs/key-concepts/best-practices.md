@@ -41,7 +41,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Don't store or use credentials** - Panel plugins don't have a way to securely store credentials. If your plugin needs to use credentials, consider using a data source or app plugin instead and a panel plugin to display the information returned by the data source.
 
 - **Consider creating custom options** - If the default panel options aren't a good fit for what you're trying to offer users, use [custom options](../how-to-guides/panel-plugins/custom-panel-option-editors).
-- **Document the dataframe schema** - Consider [documenting the plugin's schema](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-2-document-the-data-frame-schema-for-panel-plugins) (expected fields, field types, naming conventions for field names, etc.) in the README.
+- **Document the data frame schema** - Consider [documenting the plugin's schema](https://grafana.com/blog/2021/01/21/6-tips-for-improving-your-grafana-plugin-before-you-publish/#tip-2-document-the-data-frame-schema-for-panel-plugins) (expected fields, field types, naming conventions for field names, etc.) in the README.
 
 ## Data source plugins
 
