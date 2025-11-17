@@ -1,3 +1,15 @@
+# v6.1.12 (Mon Nov 17 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: fix replacing version and plugin id in nested plugins [#2287](https://github.com/grafana/plugin-tools/pull/2287) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.1.11 (Fri Nov 14 2025)
 
 #### 🐛 Bug Fix
