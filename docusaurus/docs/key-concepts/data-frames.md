@@ -13,17 +13,9 @@ sidebar_position: 40
 
 # Data frames
 
-Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_.
-
-The data frame structure is a concept that's borrowed from data analysis tools like the [R programming language](https://www.r-project.org) and [Pandas](https://pandas.pydata.org/).
+Grafana supports a variety of different data sources, each with its own data model. To simplify data management, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_.
 
 This document gives you an overview of the data frame structure and how Grafana handles data. You'll learn about field configurations, data transformations, and different data frame formats.
-
-:::note
-
-Data frames are available in Grafana 7.0+, and replaced the Time series and Table structures with a more generic data structure that can support a wider range of data types.
-
-:::
 
 ## Data frame fields
 
@@ -109,9 +101,7 @@ To learn more about data transformations in Grafana, refer to [Transform data](h
 
 ## Data frames as time series
 
-A data frame with at least one time field is considered a _time series_.
-
-For more information on time series, refer to our [Introduction to time series](https://grafana.com/docs/grafana/latest/fundamentals/timeseries/).
+A data frame with at least one time field is considered a _time series_. For more information, refer to [Introduction to time series](https://grafana.com/docs/grafana/latest/fundamentals/timeseries/).
 
 ### Wide format
 
@@ -219,25 +209,9 @@ Not all panels support the wide time series data frame format. To keep full back
 
 :::
 
-## Technical references
-
-The concept of a data frame in Grafana is borrowed from data analysis tools like the [R programming language](https://www.r-project.org) and [Pandas](https://pandas.pydata.org/).
-
-### Apache Arrow
-
-The data frame structure is inspired by and uses the [Apache Arrow Project](https://arrow.apache.org/). JavaScript data frames use Arrow Tables as the underlying structure, and the backend Go code serializes its Frames in Arrow Tables for transmission.
-
-### JavaScript
-
-The JavaScript implementation of data frames is in the [`/src/dataframe` folder](https://github.com/grafana/grafana/tree/main/packages/grafana-data/src/dataframe) and [`/src/types/dataframe.ts`](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/dataFrame.ts) of the [`@grafana/data` package](https://github.com/grafana/grafana/tree/main/packages/grafana-data).
-
-### Go
-
-For documentation on the Go implementation of data frames, refer to the [github.com/grafana/grafana-plugin-sdk-go/data package](https://pkg.go.dev/github.com/grafana/grafana-plugin-sdk-go/data?tab=doc).
-
 ## Learn more
 
 For a guide to plugin development with data frames, refer to [Create data frames](../how-to-guides/data-source-plugins/create-data-frames).
 
-To learn about the relationship between data frames and the data plane contract, refer to [Grafana data structure](https://grafana.com/developers/dataplane/dataplane-dataframes).
+To learn more about data frames and their relationship with the data plane contract refer to [Grafana data structure](https://grafana.com/developers/dataplane/dataplane-dataframes).
 
