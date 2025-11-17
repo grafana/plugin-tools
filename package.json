@@ -33,7 +33,7 @@
     "@auto-it/slack": "11.3.0",
     "@grafana/eslint-config": "^9.0.0",
     "@playwright/test": "^1.56.1",
-    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@stylistic/eslint-plugin-ts": "^4.4.1",
@@ -41,11 +41,11 @@
     "@tsconfig/node20": "^20.1.6",
     "@tsconfig/recommended": "^1.0.11",
     "@types/glob": "^9.0.0",
-    "@types/node": "^24.9.2",
+    "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "auto": "11.3.0",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^61.1.11",
     "eslint-plugin-mdx": "^3.6.2",
@@ -62,7 +62,7 @@
     "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.5"
+    "vitest": "^4.0.6"
   },
   "engines": {
     "node": ">=24"
