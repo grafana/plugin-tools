@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import defaultMigrations from './migrations.js';
 
 describe('migrations json', () => {
@@ -7,8 +8,9 @@ describe('migrations json', () => {
   // This test now only asserts that the migration script source file exists.
   defaultMigrations.forEach((migration) => {
     it(`should have a valid migration script path for ${migration.name}`, () => {
-      // ensure migration script exists
-      const sourceFilePath = migration.scriptPath.replace('.js', '.ts');
+      // import.meta.resolve() returns a file:// URL, convert to path
+      const filePath = fileURLToPath(migration.scriptPath);
+      const sourceFilePath = filePath.replace('.js', '.ts');
       expect(existsSync(sourceFilePath)).toBe(true);
     });
   });

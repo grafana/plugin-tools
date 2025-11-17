@@ -1,4 +1,4 @@
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
@@ -7,7 +7,6 @@ import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
 import { clean, coerce, gt, gte } from 'semver';
-import { fileURLToPath } from 'node:url';
 
 export function printChanges(context: Context, key: string, description: string) {
   const changes = context.listChanges();
@@ -297,17 +296,4 @@ function sortObjectByKeys<T extends Record<string, any>>(obj: T): T {
   return Object.keys(obj)
     .sort()
     .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {} as T);
-}
-
-/**
- * Resolves a script path relative to the caller's file location.
- *
- * @param callerUrl - The import.meta.url from the calling file
- * @param relativePath - The relative path to resolve (e.g., './scripts/example.js')
- * @returns The absolute resolved path
- */
-export function resolveScriptPath(callerUrl: string, relativePath: string): string {
-  const __filename = fileURLToPath(callerUrl);
-  const __dirname = dirname(__filename);
-  return resolve(__dirname, relativePath);
 }
