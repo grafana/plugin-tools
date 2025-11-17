@@ -239,5 +239,5 @@ For documentation on the Go implementation of data frames, refer to the [github.
 
 For a guide to plugin development with data frames, refer to [Create data frames](../how-to-guides/data-source-plugins/create-data-frames).
 
-To learn about the relationship between data frames and the data plane contract, refer to [Grafana data structure](https://grafana.com/developers/dataplane/dataplane-dataframes).
+To learn about the relationship between data frames and the data plane contract, refer to [Grafana data structure](https://grafana.com/developers/dataplane/).
 
