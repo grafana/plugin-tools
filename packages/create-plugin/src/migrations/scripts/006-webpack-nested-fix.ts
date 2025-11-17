@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 import * as recast from 'recast';
+import * as typeScriptParser from 'recast/parsers/typescript.js';
 import type { Context } from '../context.js';
 
 const { builders } = recast.types;
@@ -17,7 +18,7 @@ export default function migrate(context: Context): Context {
 
   let hasChanges = false;
   const ast = recast.parse(webpackConfigContent, {
-    parser: require('recast/parsers/babel'),
+    parser: typeScriptParser,
   });
 
   recast.visit(ast, {
