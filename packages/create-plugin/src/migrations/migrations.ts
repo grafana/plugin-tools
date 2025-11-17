@@ -41,7 +41,7 @@ export default {
       migrationScript: './scripts/005-react-18-3.js',
     },
     '006-webpack-nested-fix': {
-      version: '6.1.9',
+      version: '6.1.11',
       description: 'Fix webpack variable replacement in nested plugins files.',
       migrationScript: './scripts/006-webpack-nested-fix.js',
     },
