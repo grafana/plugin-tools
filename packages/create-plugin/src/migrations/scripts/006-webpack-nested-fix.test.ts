@@ -1,4 +1,4 @@
-import migrate from './005-webpack-nested-fix.js';
+import migrate from './006-webpack-nested-fix.js';
 import { createDefaultContext } from '../test-utils.js';
 
 describe('Migration - webpack nested fix', () => {

@@ -40,5 +40,10 @@ export default {
       description: 'Update React and ReactDOM 18.x versions to ^18.3.0 to surface React 19 compatibility issues.',
       migrationScript: './scripts/005-react-18-3.js',
     },
+    '006-webpack-nested-fix': {
+      version: '6.1.9',
+      description: 'Fix webpack variable replacement in nested plugins files.',
+      migrationScript: './scripts/006-webpack-nested-fix.js',
+    },
   },
 } as Migrations;
