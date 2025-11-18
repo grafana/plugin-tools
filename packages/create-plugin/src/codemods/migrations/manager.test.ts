@@ -9,7 +9,7 @@ import { setRootConfig } from '../../utils/utils.config.js';
 import { vi } from 'vitest';
 
 vi.mock('../utils.js', async (importOriginal) => {
-  const actual = (await importOriginal()) as any;
+  const actual: typeof import('../utils.js') = await importOriginal();
   return {
     ...actual,
     flushChanges: vi.fn(),
