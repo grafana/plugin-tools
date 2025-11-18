@@ -53,10 +53,10 @@ To learn more about data transformations in Grafana, refer to [Transform data](h
 
 The following data frame types are available:
 
-- [Time series](https://grafana.com/developers/dataplane/timeseries.md)
-- [Numeric](https://grafana.com/developers/dataplane/numeric.md)
-- [Heatmap](https://grafana.com/developers/dataplane/heatmap.md)
-- [Logs](https://grafana.com/developers/dataplane/logs.md)
+- [Time series](https://grafana.com/developers/dataplane/timeseries)
+- [Numeric](https://grafana.com/developers/dataplane/numeric)
+- [Heatmap](https://grafana.com/developers/dataplane/heatmap)
+- [Logs](https://grafana.com/developers/dataplane/logs)
 
 ## Example: The time series data frame
 
