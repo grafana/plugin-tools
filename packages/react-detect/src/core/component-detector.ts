@@ -114,7 +114,11 @@ export class ComponentDetector {
       if (pattern.test(sourceContent)) {
         // Verify it returns JSX
         if (/return\s*\(?\s*</.test(sourceContent)) {
-          return functionScore > 0; // Only if we also have some React indicators
+          return true; // JSX return is a strong indicator
+        }
+        // Also check for React.createElement
+        if (/React\.createElement\(/.test(sourceContent)) {
+          return true;
         }
       }
     }
