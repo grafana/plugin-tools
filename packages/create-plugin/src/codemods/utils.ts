@@ -7,6 +7,7 @@ import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
 import { clean, coerce, gt, gte } from 'semver';
+import { debug } from '../utils/utils.cli.js';
 
 export function printChanges(context: Context, key: string, description: string) {
   const changes = context.listChanges();
@@ -297,3 +298,6 @@ function sortObjectByKeys<T extends Record<string, any>>(obj: T): T {
     .sort()
     .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {} as T);
 }
+
+export const migrationsDebug = debug.extend('migrations');
+export const additionsDebug = debug.extend('additions');
