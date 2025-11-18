@@ -85,9 +85,13 @@ export class ConsoleReporter {
     for (const [patternName, patternIssues] of Object.entries(byPattern)) {
       const severity = patternIssues[0].pattern.severity;
       const description = patternIssues[0].pattern.description;
+      const link = patternIssues[0].pattern.link;
 
       console.log(`  ${this.getSeverityIcon(severity)} ${chalk.bold(patternName)} ${chalk.dim(`(${severity})`)}`);
       console.log(`     ${chalk.dim(description)}`);
+      if (link) {
+        console.log(`     ${chalk.dim('→')} ${chalk.green(link)}`);
+      }
       console.log();
 
       // Show first 5 occurrences
@@ -132,6 +136,7 @@ export class ConsoleReporter {
       for (const [patternName, patternIssues] of Object.entries(byPattern)) {
         const severity = patternIssues[0].pattern.severity;
         const count = patternIssues.length;
+        const link = patternIssues[0].pattern.link;
 
         console.log(
           `     ${this.getSeverityIcon(severity)} ${patternName}: ${chalk.yellow(count)} occurrence${
@@ -142,6 +147,10 @@ export class ConsoleReporter {
         // Show first occurrence location
         const firstOccurrence = patternIssues[0];
         console.log(`        ${chalk.dim(firstOccurrence.sourceMapFile)}:${firstOccurrence.originalLine}`);
+
+        if (link) {
+          console.log(`        ${chalk.dim('→')} ${chalk.green(link)}`);
+        }
       }
 
       console.log();
