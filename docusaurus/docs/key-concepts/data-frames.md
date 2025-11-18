@@ -13,61 +13,16 @@ sidebar_position: 40
 
 # Data frames
 
-Grafana supports a variety of different data sources, each with its own data model. To simplify data management, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_.
+A data frame is a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata, such as units, scaling, and so on. 
 
-This document gives you an overview of the data frame structure and how Grafana handles data. You'll learn about field configurations, data transformations, and different data frame formats.
+You can use data frame fields to automate configurations. For example, you could configure Grafana to automatically set the unit provided by the data source.
 
 ## Data frame fields
 
-A data frame is a collection of _fields_, where each field corresponds to a column. Each field, in turn, consists of a collection of values and metadata, such as the data type of those values.
+For a data frame to valid:
 
-```ts
-export interface Field<T = any, V = Vector<T>> {
-  /**
-   * Name of the field (column)
-   */
-  name: string;
-  /**
-   *  Field value type (string, number, and so on)
-   */
-  type: FieldType;
-  /**
-   *  Meta info about how field and how to display it
-   */
-  config: FieldConfig;
-
-  /**
-   * The raw field values
-   * In Grafana 10, this accepts both simple arrays and the Vector interface
-   * In Grafana 11, the Vector interface has been removed
-   */
-  values: V | T[];
-
-  /**
-   * When type === FieldType.Time, this can optionally store
-   * the nanosecond-precison fractions as integers between
-   * 0 and 999999.
-   */
-  nanos?: number[];
-
-  labels?: Labels;
-
-  /**
-   * Cached values with appropriate display and id values
-   */
-  state?: FieldState | null;
-
-  /**
-   * Convert a value for display
-   */
-  display?: DisplayProcessor;
-
-  /**
-   * Get value data links with variables interpolated
-   */
-  getLinks?: (config: ValueLinkConfig) => Array<LinkModel<Field>>;
-}
-```
+- All fields in the frame must be of the same length.
+- Each value from the same field must share the same type.
 
 Let's look at an example. The following table shows a data frame with two fields, _time_ and _temperature_:
 
@@ -77,37 +32,43 @@ Let's look at an example. The following table shows a data frame with two fields
 | 2020-01-02 03:05:00 | 47.0        |
 | 2020-01-02 03:06:00 | 48.0        |
 
-Each field has three values, and each value in a field must share the same type. In this case, all values in the `time` field are timestamps, and all values in the `temperature` field are numbers.
+In this case: 
 
-While time fields represent timestamps, the type of the values should be `Number` (TypeScript) or `time.Time` (Golang).
+- All values in the `time` field are timestamps, and the type of the values should be `Number` (TypeScript) or `time.Time` (Golang).
+- All values in the `temperature` field are numbers.
 
-Another restriction on time fields in date frames concerns converting numbers. In the plugin frontend code, you can convert other formats to `Number` using the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/3e24a500bf43b30360faf9f32465281cc0ff996d/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L245-L257) from the `@grafana/data` package. This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), JavaScript `DateTime`s and strings with relative times (for example, `now-10s`) to `Numbers`.
+### Convert other types to numbers
 
-One restriction on data frames is that all fields in the frame must be of the same length to be a valid data frame.
+In the plugin frontend code you can use the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/3e24a500bf43b30360faf9f32465281cc0ff996d/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L245-L257) from the `@grafana/data` package to convert other formats to `Number`. 
 
-## Field configurations
-
-Each field in a data frame contains optional information about the values in the field, such as units, scaling, and so on.
-
-By adding field configurations to a data frame, Grafana can configure visualizations automatically. For example, you can configure Grafana to automatically set the unit provided by the data source.
+This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), JavaScript's `DateTime` and strings with relative times (for example, `now-10s`) to `Numbers`.
 
 ## Data transformations
 
-Field configs contain type information; additionally, data frame fields enable _data transformations_ within Grafana.
-
-A data transformation is any function that accepts a data frame as input, and returns another data frame as output. By using data frames in your plugin, you get a range of transformations for free.
+Data frame fields enable _data transformations_ within Grafana. A data transformation is any function that accepts a data frame as input, and returns another data frame as output. By using data frames in your plugin, you get a range of transformations for free.
 
 To learn more about data transformations in Grafana, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data).
 
-## Data frames as time series
+## Available data frames
 
-A data frame with at least one time field is considered a _time series_. For more information, refer to [Introduction to time series](https://grafana.com/docs/grafana/latest/fundamentals/timeseries/).
+The following data frame types are available:
+
+- [Time series](https://grafana.com/developers/dataplane/timeseries.md)
+- [Numeric](https://grafana.com/developers/dataplane/numeric.md)
+- [Heatmap](https://grafana.com/developers/dataplane/heatmap.md)
+- [Logs](https://grafana.com/developers/dataplane/logs.md)
+
+## Example: The time series data frame
+
+A data frame with at least one time field is considered a _time series_.
+
+For more information on time series, refer to our [Introduction to time series](https://grafana.com/docs/grafana/latest/fundamentals/timeseries/).
 
 ### Wide format
 
-When a collection of time series shares the same _time index_, the time fields in each time series are identical, and you can store them together in a _wide_ format. By reusing the time field, less data is sent to the browser.
+When a collection of time series shares the same _time index_—the time fields in each time series are identical—they can be stored together, in a _wide_ format. By reusing the time field, less data is sent to the browser.
 
-In this example, the `cpu` usage from each host shares the time index, so you can store them in the same data frame:
+In this example, the `cpu` usage from each host shares the time index, so we can store them in the same data frame:
 
 ```text
 Name: Wide
@@ -122,7 +83,7 @@ Dimensions: 3 fields by 2 rows
 +---------------------+-----------------+-----------------+
 ```
 
-However, if the two time series don't share the same time values, they're represented as two distinct data frames:
+However, if the two time series don't share the same time values, they are represented as two distinct data frames:
 
 ```text
 Name: cpu
@@ -152,26 +113,24 @@ A typical use for the wide format is when multiple time series are collected by 
 
 ### Long format
 
-Some data sources return data in a _long_ format (also called _narrow_ format). SQL databases commonly return this format.
+Some data sources return data in a _long_ format (also called _narrow_ format). This is a common format returned by, for example, SQL databases. In the long format, string values are represented as separate fields rather than as labels. As a result, a data form in long form may have duplicated time values.
 
-In the long format, string values are represented as separate fields rather than as labels. As a result, a data frame in long form may have duplicated time values.
+#### Convert long into wide format
 
-With the Grafana plugin SDK for Go, a plugin can detect and convert data frames in long format into wide format.
-
-To detect and convert a data frame, refer to this example:
+With the Grafana plugin SDK for Go, a plugin can detect can detect and convert data frames in long format into wide format:
 
 ```go
-tsSchema := frame.TimeSeriesSchema()
-if tsSchema.Type == data.TimeSeriesTypeLong {
-	wideFrame, err := data.LongToWide(frame, nil)
-	if err != nil {
-		// handle error
-	}
-	// return wideFrame
-}
+		tsSchema := frame.TimeSeriesSchema()
+		if tsSchema.Type == data.TimeSeriesTypeLong {
+			wideFrame, err := data.LongToWide(frame, nil)
+			if err == nil {
+				// handle error
+			}
+			// return wideFrame
+		}
 ```
 
-Here's an additional example. The following data frame shows the long format:
+For example, if you have the following data frame in long format:
 
 ```text
 Name: Long
@@ -188,7 +147,7 @@ Dimensions: 4 fields by 4 rows
 +---------------------+-----------------+-----------------+----------------+
 ```
 
-You can convert the above table into a data frame in wide format:
+You can convert it into a data frame in wide format like this:
 
 ```text
 Name: Wide
@@ -205,13 +164,10 @@ Dimensions: 5 fields by 2 rows
 
 :::note
 
-Not all panels support the wide time series data frame format. To keep full backward compatibility, Grafana has introduced a transformation that you can use to convert from the wide to the long format. For usage information, refer to the [Prepare time series-transformation](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data#prepare-time-series).
+Not all panels support the wide time series data frame format. To keep full backward compatibility Grafana has introduced a transformation that you can use to convert from the wide to the long format. For usage information, refer to the [Prepare time series-transformation](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data#prepare-time-series).
 
 :::
 
-## Learn more
 
-For a guide to plugin development with data frames, refer to [Create data frames](../how-to-guides/data-source-plugins/create-data-frames).
 
-To learn more about data frames and their relationship with the data plane contract refer to [Grafana data structure](https://grafana.com/developers/dataplane/dataplane-dataframes).
 
