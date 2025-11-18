@@ -11,21 +11,19 @@ describe('006-remove-testing-library-types', () => {
       JSON.stringify({
         devDependencies: {
           '@types/testing-library__jest-dom': '^6.0.0',
+          '@testing-library/jest-dom': '6.0.0',
           '@testing-library/react': '14.0.0',
         },
       })
     );
 
     const result = migrate(context);
-
-    // Check that setupTests.d.ts was created
     const setupTestsContent = result.getFile('./.config/types/setupTests.d.ts');
     expect(setupTestsContent).toBe("import '@testing-library/jest-dom';\n");
 
-    // Check that the types package was removed
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
     expect(packageJson.devDependencies).toEqual({
-      '@testing-library/jest-dom': '^6.0.0',
+      '@testing-library/jest-dom': '6.0.0',
       '@testing-library/react': '14.0.0',
     });
   });
@@ -40,21 +38,19 @@ describe('006-remove-testing-library-types', () => {
       JSON.stringify({
         devDependencies: {
           '@types/testing-library__jest-dom': '^6.0.0',
+          '@testing-library/jest-dom': '6.1.4',
           '@testing-library/react': '14.0.0',
         },
       })
     );
 
     const result = migrate(context);
-
-    // Check that import was prepended
     const setupTestsContent = result.getFile('./.config/types/setupTests.d.ts');
     expect(setupTestsContent).toBe(`import '@testing-library/jest-dom';\n${existingContent}`);
 
-    // Check that the types package was removed
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
     expect(packageJson.devDependencies).toEqual({
-      '@testing-library/jest-dom': '^6.0.0',
+      '@testing-library/jest-dom': '6.1.4',
       '@testing-library/react': '14.0.0',
     });
   });
@@ -69,6 +65,7 @@ describe('006-remove-testing-library-types', () => {
       JSON.stringify({
         devDependencies: {
           '@types/testing-library__jest-dom': '^6.0.0',
+          '@testing-library/jest-dom': '6.1.4',
           '@testing-library/react': '14.0.0',
         },
       })
@@ -76,16 +73,25 @@ describe('006-remove-testing-library-types', () => {
 
     const result = migrate(context);
 
-    // Check that content was not modified
     const setupTestsContent = result.getFile('./.config/types/setupTests.d.ts');
     expect(setupTestsContent).toBe(existingContent);
 
-    // Check that the types package was still removed
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
     expect(packageJson.devDependencies).toEqual({
-      '@testing-library/jest-dom': '^6.0.0',
+      '@testing-library/jest-dom': '6.1.4',
       '@testing-library/react': '14.0.0',
     });
+  });
+
+  it('should not modify anything if @testing-library/jest-dom is not greater than 6.0.0', () => {
+    const context = new Context('/virtual');
+    const packageJsonContent = JSON.stringify({
+      devDependencies: { '@testing-library/jest-dom': '5.14.2' },
+    });
+    context.addFile('package.json', packageJsonContent);
+
+    const result = migrate(context);
+    expect(result.getFile('package.json')).toEqual(packageJsonContent);
   });
 
   it('should handle package.json without the types package', () => {
@@ -96,20 +102,18 @@ describe('006-remove-testing-library-types', () => {
       JSON.stringify({
         devDependencies: {
           '@testing-library/react': '14.0.0',
+          '@testing-library/jest-dom': '6.1.4',
         },
       })
     );
 
     const result = migrate(context);
-
-    // Check that setupTests.d.ts was created
     const setupTestsContent = result.getFile('./.config/types/setupTests.d.ts');
     expect(setupTestsContent).toBe("import '@testing-library/jest-dom';\n");
 
-    // Check that package.json was not modified (no types package to remove)
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
     expect(packageJson.devDependencies).toEqual({
-      '@testing-library/jest-dom': '^6.0.0',
+      '@testing-library/jest-dom': '6.1.4',
       '@testing-library/react': '14.0.0',
     });
   });
@@ -122,6 +126,8 @@ describe('006-remove-testing-library-types', () => {
       JSON.stringify({
         devDependencies: {
           '@types/testing-library__jest-dom': '^6.0.0',
+          '@testing-library/jest-dom': '6.1.4',
+          '@testing-library/react': '14.0.0',
         },
       })
     );
