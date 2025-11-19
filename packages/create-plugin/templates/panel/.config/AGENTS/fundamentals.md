@@ -1,66 +1,81 @@
-## Project overview
+# Project overview
+This repository contains a **Grafana panel plugin**, providing a custom visualization for Grafana dashboards.
+Panel plugins are used to:
 
-This repository contains a Grafana panel plugin, which adds a custom visualization that can be used in Grafana dashboards. Panel plugins are useful when you want to:
+* Display data from Grafana data sources in custom ways
+* Add interactive behavior (drill-downs, navigation, etc.)
+* Visualize or control external systems (IoT, integrations, custom controls)
 
-- Present data from Grafana data source queries in a new or specialized way
-- Add custom interactivity, such as navigation or drill-downs
-- Visualize or control external systems (for example, IoT devices or custom integrations)
+---
 
-### High-level anatomy of a Grafana panel plugin
+# Plugin anatomy
 
-A typical panel plugin has:
+A typical panel plugin includes:
 
-- A plugin **manifest** (`plugin.json`)
-  - Declares plugin ID, type (`panel`), name, version, and metadata
-  - Picked up by Grafana during boot time to register plugin.
+## **plugin.json**
+* Declares plugin ID, type (`panel`), name, version
+* Loaded by Grafana at startup
 
-- A **main module** (usually `src/module.ts` or `src/module.tsx`)
-  - Calls `new PanelPlugin(PanelComponent)` from `@grafana/data` and expose the instance from the module.
-  - Optionally wires in the options editor, panel migration handler, and panel defaults
+## **Main module (`src/module.ts`)**
+* Exports: `new PanelPlugin(PanelComponent)`
+* Registers panel options, migrations, defaults
 
-- A panel React component (e.g. `src/components/Panel.tsx`)
-  - Renders the visualization
-  - Receives props such as `data`, `timeRange`, `width`, `height`, and `options`
-  - Works with Grafana data frames and field configuration APIs to read query results and settings.
+## **Panel component (`src/components/Panel.tsx`)**
+* React component receiving: `data`, `timeRange`, `width`, `height`, `options`
+* Renders visualization using Grafana data frames and field configs
 
-## Goals for AI coding agents
+---
 
-When working on this project, AI agents should:
+# Agent goals
 
-- Maintain the existing options schema unless a proper migration handler is implemented
-- Follow idiomatic React and TypeScript practices consistent with Grafana’s official example plugins
-- Treat AGENTS.md as the authoritative source. If anything in .config/AGENTS conflicts with this file, follow the instructions in AGENTS.md
+Agents must:
 
-## Repository layout (typical)
+* Preserve the existing options schema unless adding a migration handler
+* Follow idiomatic React + TypeScript patterns used in official Grafana examples
+* Treat **`AGENTS.md` as the authoritative source** over `.config/AGENTS/*`
 
-- `plugin.json` – Grafana plugin manifest (type: `panel`)
-- `src/module.ts` – main plugin entry point (creates `PanelPlugin`)
-- `src/components` – React components for the panel
-- `src/types.ts` – TypeScript types for panel options and internal models
-- `tests/` – End-to-end tests (if configured)
-- `provisioning/` - Provisioning files used in the local development environment.
-- `README.md` – Human-facing project documentation
+---
 
-## Coding guidelines
+# Repository layout (Compact)
 
-- Use **TypeScript** for all plugin code.
-- Prefer **functional React components** and hooks.
-- Use **Grafana UI components** (`@grafana/ui`) and **Grafana data APIs** (`@grafana/data`) or **Grafana runtime APIs** (`@grafana/runtime`) instead of custom UI or data abstractions whenever possible.
-- Keep the panel responsive:
-  - Respect `width` and `height` props.
-  - Avoid fixed layout sizes that break in narrow panels or large screens.
-- Avoid introducing new dependencies unless:
-  - They’re necessary
-  - They’re compatible with Grafana’s frontend environment and plugin guidelines
-- If custom styling is needed, please using `Emotion`.
+* `plugin.json` — Panel plugin manifest
+* `src/module.ts` — Main plugin entry
+* `src/components/` — Panel React components
+* `src/types.ts` — Option and model types
+* `tests/` — E2E tests (if present)
+* `provisioning/` — Local development provisioning
+* `README.md` — Human documentation
 
-## Safety & constraints for agents
+---
 
-- Do **not** change `plugin.json` IDs or plugin type.
-- Do **not** change anything in the `.config` folder.
-- Do **not** add a backend to this plugin. A panel plugin is a frontend only plugin.
-- Do **not** remove or break existing option fields without:
-  - Adding a migration handler, or
-  - Updating all usages and tests accordingly.
-- Keep changes to public interfaces (options, field configs, panel props) backwards compatible where possible.
-- When in doubt, mirror patterns from Grafana’s official panel plugin examples and docs.
+# Coding guidelines
+
+* Use **TypeScript** and **functional React components**
+* Use **@grafana/ui**, **@grafana/data**, **@grafana/runtime**
+* Respect `width` and `height`; keep layout responsive
+* Avoid unnecessary dependencies; ensure Grafana compatibility
+* Use **Emotion** for custom styling
+* Follow existing file structure
+* Keep code typed and predictable
+
+---
+
+# Safety & constraints (Compact)
+
+Agents must **not**:
+
+* Change plugin IDs or plugin type in `plugin.json`
+* Modify anything under `.config/*`
+* Add a backend — panel plugins are **frontend only**
+* Remove or change existing options without a migration handler
+* Break public APIs (options, field configs, panel props)
+
+Agents **should**:
+
+* Keep the plugin backward compatible
+* Mirror patterns from Grafana’s official panel plugin examples
+
+---
+
+# How-to
+* [How-to add panel options](./howto/add-panel-options.md)
