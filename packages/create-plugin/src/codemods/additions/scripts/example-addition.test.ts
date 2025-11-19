@@ -23,7 +23,7 @@ describe('example-addition', () => {
     const result = migrate(context, { featureName: 'myFeature', enabled: false, frameworks: ['react'] });
 
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
-    expect(packageJson.devDependencies['example-dev-dep']).toBe('^1.0.0');
+    expect(packageJson.devDependencies['@types/node']).toBe('^20.0.0');
   });
 
   it('should create feature TypeScript file with options', () => {

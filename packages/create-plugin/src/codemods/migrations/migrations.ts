@@ -41,14 +41,14 @@ export default [
     name: '006-webpack-nested-fix',
     version: '6.1.11',
     description: 'Fix webpack variable replacement in nested plugins files.',
-    scriptPath: resolveScriptPath(import.meta.url, './scripts/006-webpack-nested-fix.js'),
+    scriptPath: import.meta.resolve('./scripts/006-webpack-nested-fix.js'),
   },
   {
     name: '007-remove-testing-library-types',
     version: '6.1.13',
     description:
       'Add setupTests.d.ts for @testing-library/jest-dom types and remove @types/testing-library__jest-dom npm package.',
-    scriptPath: resolveScriptPath(import.meta.url, './scripts/007-remove-testing-library-types.js'),
+    scriptPath: import.meta.resolve('./scripts/007-remove-testing-library-types.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
