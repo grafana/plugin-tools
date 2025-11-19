@@ -26,6 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@grafana/plugin-tools-output": "workspace:*",
     "chalk": "^5.3.0",
     "fast-glob": "^3.3.2",
     "minimist": "^1.2.8",

@@ -15,7 +15,7 @@ export const PATTERNS: Patterns = {
   __SECRET_INTERNALS: {
     pattern: '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED',
     severity: 'renamed',
-    description: 'React internals object renamed in React 19',
+    description: 'React internals renamed from _DO_NOT_USE_OR_YOU_WILL_BE_FIRED to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apis',
   },
 
@@ -88,20 +88,6 @@ export const PATTERNS: Patterns = {
     severity: 'removed',
     description: 'findDOMNode removed in React 19',
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-reactdom-finddomnode',
-  },
-
-  forwardRef: {
-    pattern: 'forwardRef',
-    severity: 'deprecated',
-    description: 'forwardRef deprecated in React 19 (ref now available as prop)',
-    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#ref-as-a-prop',
-  },
-
-  'Context.Provider': {
-    pattern: '\\.Provider',
-    severity: 'deprecated',
-    description: 'Context.Provider deprecated in React 19 (use Context directly)',
-    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#context-as-a-provider',
   },
 
   'refs[': {

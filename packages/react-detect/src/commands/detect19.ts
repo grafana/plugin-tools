@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import minimist from 'minimist';
-import chalk from 'chalk';
+import { Output } from '@grafana/plugin-tools-output';
 import { Analyzer } from '../core/analyzer.js';
 import { ConsoleReporter } from '../reporters/console-reporter.js';
 import { JsonReporter } from '../reporters/json-reporter.js';
@@ -14,7 +14,7 @@ import type { AnalysisConfig, OutputFormat, Confidence } from '../types.js';
 /**
  * Main detect command for finding React 19 breaking changes
  */
-export async function detect19(argv: minimist.ParsedArgs) {
+export async function detect19(argv: minimist.ParsedArgs, output: Output) {
   try {
     // Parse options
     const options = parseOptions(argv);
@@ -27,32 +27,41 @@ export async function detect19(argv: minimist.ParsedArgs) {
 
     // Run analysis
     if (!options.quiet) {
-      console.log(chalk.bold('@grafana/react-detect'));
-      console.log(chalk.dim('Detecting React 19 breaking changes...\n'));
+      output.log({
+        title: 'Detecting React 19 breaking changes...',
+        withPrefix: true,
+      });
     }
 
-    const analyzer = new Analyzer(config);
+    const analyzer = new Analyzer(config, output);
     const results = await analyzer.analyze();
 
     // Generate output
-    const output = generateOutput(results, options.format);
+    const reportOutput = generateOutput(results, options.format, output);
 
     // Write output
     if (options.output) {
-      fs.writeFileSync(options.output, output);
+      fs.writeFileSync(options.output, reportOutput);
       if (!options.quiet) {
-        console.log(`\n${chalk.green('✓')} Results written to ${chalk.cyan(options.output)}`);
+        output.success({
+          title: `Results written to ${options.output}`,
+          withPrefix: false,
+        });
       }
     } else if (options.format !== 'console') {
       // Non-console formats go to stdout
-      console.log(output);
+      output.logSingleLine(reportOutput);
     }
 
     // Exit with appropriate code
     const hasSourceIssues = results.sourceIssues.length > 0;
     process.exit(hasSourceIssues ? 1 : 0);
   } catch (error) {
-    console.error(chalk.red('\n✗ Error:'), (error as Error).message);
+    output.error({
+      title: 'Error',
+      body: [(error as Error).message],
+      withPrefix: false,
+    });
     process.exit(1);
   }
 }
@@ -148,13 +157,13 @@ function buildAnalysisConfig(options: ReturnType<typeof parseOptions>): Analysis
 /**
  * Generate output in the requested format
  */
-function generateOutput(results: any, format: OutputFormat): string {
+function generateOutput(results: any, format: OutputFormat, output: Output): string {
   // Filter results based on sourceOnly/depsOnly flags
   // (This would need to be passed through options if needed)
 
   switch (format) {
     case 'console':
-      ConsoleReporter.report(results);
+      ConsoleReporter.report(results, output);
       return '';
     case 'json':
       return JsonReporter.report(results, true);
