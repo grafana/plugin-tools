@@ -13,12 +13,10 @@ In Grafana, panel plugins are used when you want to:
 A typical panel plugin has:
 
 - A plugin **manifest** (`plugin.json`)
-
   - Declares plugin ID, type (`panel`), name, version, and metadata
-  - Registers the plugin with Grafana during boot.
+  - Picked up by Grafana during boot time to register plugin.
 
 - A **main module** (usually `src/module.ts` or `src/module.tsx`)
-
   - Calls `new PanelPlugin(PanelComponent)` from `@grafana/data` and expose the instance from the module.
   - Optionally wires in the options editor, panel migration handler, and panel defaults
 
