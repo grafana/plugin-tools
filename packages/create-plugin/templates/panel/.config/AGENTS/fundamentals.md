@@ -1,12 +1,10 @@
 ## Project overview
 
-This repository contains a **Grafana panel plugin**, which means it adds a custom visualization type that can be used in Grafana dashboards alongside built-in panels.
+This repository contains a Grafana panel plugin, which adds a custom visualization that can be used in Grafana dashboards. Panel plugins are useful when you want to:
 
-In Grafana, panel plugins are used when you want to:
-
-- Visualize data returned by Grafana data source queries in a new way.
-- Provide custom interactivity (navigation, drill-down, etc.).
-- Control or visualize the state of external systems (e.g. IoT, smart home, custom controls).
+- Present data from Grafana data source queries in a new or specialized way
+- Add custom interactivity, such as navigation or drill-downs
+- Visualize or control external systems (for example, IoT devices or custom integrations)
 
 ### High-level anatomy of a Grafana panel plugin
 
@@ -27,10 +25,11 @@ A typical panel plugin has:
 
 ## Goals for AI coding agents
 
-When modifying this project, AI agents should:
+When working on this project, AI agents should:
 
-- Preserve option schema unless a migration handler is added.
-- Prefer idiomatic React + TypeScript patterns used in Grafana’s example plugins
+- Maintain the existing options schema unless a proper migration handler is implemented
+- Follow idiomatic React and TypeScript practices consistent with Grafana’s official example plugins
+- Treat AGENTS.md as the authoritative source—if anything in .config/AGENTS conflicts with this file, follow the instructions in AGENTS.md
 
 ## Repository layout (typical)
 
