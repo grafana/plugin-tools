@@ -38,12 +38,11 @@ When modifying this project, AI agents should:
 
 - `plugin.json` – Grafana plugin manifest (type: `panel`)
 - `src/module.ts` – main plugin entry point (creates `PanelPlugin`)
-- `src/components` – core React components for the panel
+- `src/components` – React components for the panel
 - `src/types.ts` – TypeScript types for panel options and internal models
 - `tests/` – End-to-end tests (if configured)
 - `provisioning/` - Provisioning files used in the local development environment.
 - `README.md` – Human-facing project documentation
-- `AGENTS.md` – This file, for AI coding agents
 
 ## Coding guidelines
 
@@ -56,10 +55,12 @@ When modifying this project, AI agents should:
 - Avoid introducing new dependencies unless:
   - They’re necessary
   - They’re compatible with Grafana’s frontend environment and plugin guidelines
+- If custom styling is needed, please using `Emotion`.
 
 ## Safety & constraints for agents
 
 - Do **not** change `plugin.json` IDs or plugin type.
+- Do **not** change anything in the `.config` folder.
 - Do **not** add a backend to this plugin. A panel plugin is a frontend only plugin.
 - Do **not** remove or break existing option fields without:
   - Adding a migration handler, or
