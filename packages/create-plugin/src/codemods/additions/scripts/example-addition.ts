@@ -34,7 +34,7 @@ export default function exampleAddition(context: Context, options: ExampleOption
     context.updateFile('./package.json', JSON.stringify(packageJson, null, 2));
   }
 
-  addDependenciesToPackageJson(context, {}, { 'example-dev-dep': '^1.0.0' });
+  addDependenciesToPackageJson(context, {}, { '@types/node': '^20.0.0' });
 
   if (!context.doesFileExist(`./src/features/${featureName}.ts`)) {
     const featureCode = `export const ${featureName} = {
