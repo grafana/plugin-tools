@@ -1,7 +1,6 @@
 import { Context } from './context.js';
 import { formatFiles, flushChanges, installNPMDependencies, printChanges } from './utils.js';
 import { parseAndValidateOptions } from './schema-parser.js';
-import { output } from '../utils/utils.console.js';
 import { Codemod } from './types.js';
 
 /**
@@ -32,11 +31,6 @@ export async function runCodemod(codemod: Codemod, options?: Record<string, any>
   const context = new Context(basePath);
 
   try {
-    output.log({
-      title: `Running ${codemod.name}`,
-      body: [codemod.description],
-    });
-
     const updatedContext = await codemodModule.default(context, codemodOptions);
 
     // standard post-processing pipeline
