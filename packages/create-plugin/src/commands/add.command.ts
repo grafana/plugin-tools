@@ -22,11 +22,6 @@ export const add = async (argv: minimist.ParsedArgs) => {
       throw new Error(`Unknown addition: ${subCommand}\n\nAvailable additions: ${additionsList.join(', ')}`);
     }
 
-    output.log({
-      title: `Running addition: ${addition.name}`,
-      body: [addition.description],
-    });
-
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
     await runCodemod(addition, codemodOptions);
