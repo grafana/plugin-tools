@@ -7,7 +7,7 @@
 set -e
 
 # Define variables
-SCHEMA_URL="https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json"
+SCHEMA_URL="https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developer-resources/plugins/plugin.schema.json"
 OUTPUT_FILE="$(dirname "$0")/plugin.schema.json"
 
 echo "Downloading Grafana plugin schema..."
