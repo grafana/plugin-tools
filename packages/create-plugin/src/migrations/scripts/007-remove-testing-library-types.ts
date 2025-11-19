@@ -1,5 +1,5 @@
 import type { Context } from '../context.js';
-import { removeDependenciesFromPackageJson, addDependenciesToPackageJson, isVersionGreater } from '../utils.js';
+import { removeDependenciesFromPackageJson, isVersionGreater } from '../utils.js';
 
 export default function migrate(context: Context) {
   if (context.doesFileExist('package.json')) {
@@ -17,7 +17,6 @@ export default function migrate(context: Context) {
         context.addFile('./.config/types/setupTests.d.ts', "import '@testing-library/jest-dom';\n");
       }
 
-      addDependenciesToPackageJson(context, {}, { '@testing-library/jest-dom': '^6.0.0' });
       removeDependenciesFromPackageJson(context, [], ['@types/testing-library__jest-dom']);
     }
   }
