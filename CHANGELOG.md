@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@6.1.14`
+  - Create plugin: Update go templates [#2313](https://github.com/grafana/plugin-tools/pull/2313) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Nov 19 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@6.1.13`
   - Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
 

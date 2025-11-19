@@ -1,3 +1,15 @@
+# v6.1.14 (Wed Nov 19 2025)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Update go templates [#2313](https://github.com/grafana/plugin-tools/pull/2313) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.1.13 (Wed Nov 19 2025)
 
 #### 🐛 Bug Fix
