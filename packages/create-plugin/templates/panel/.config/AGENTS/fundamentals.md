@@ -29,7 +29,7 @@ When working on this project, AI agents should:
 
 - Maintain the existing options schema unless a proper migration handler is implemented
 - Follow idiomatic React and TypeScript practices consistent with Grafana’s official example plugins
-- Treat AGENTS.md as the authoritative source—if anything in .config/AGENTS conflicts with this file, follow the instructions in AGENTS.md
+- Treat AGENTS.md as the authoritative source. If anything in .config/AGENTS conflicts with this file, follow the instructions in AGENTS.md
 
 ## Repository layout (typical)
 
