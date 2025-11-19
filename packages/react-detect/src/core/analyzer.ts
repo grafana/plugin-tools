@@ -1,4 +1,5 @@
 import path from 'path';
+import { Output } from '@grafana/plugin-tools-output';
 import { SourceMapParser } from './source-map-parser.js';
 import { ConfidenceScorer } from './confidence-scorer.js';
 import { ComponentDetector } from './component-detector.js';
@@ -23,11 +24,13 @@ import type {
  */
 export class Analyzer {
   private config: AnalysisConfig;
+  private output: Output;
   private externalsDetector: ExternalsDetector;
   private dependencyResolver: DependencyResolver;
 
-  constructor(config: AnalysisConfig) {
+  constructor(config: AnalysisConfig, output: Output) {
     this.config = config;
+    this.output = output;
     this.externalsDetector = new ExternalsDetector(config.pluginRoot);
     this.dependencyResolver = new DependencyResolver(config.pluginRoot);
   }
@@ -41,20 +44,25 @@ export class Analyzer {
     const pluginMetadata = loadPluginMetadata(this.config.pluginRoot);
 
     if (this.config.showProgress) {
-      console.log(`\nAnalyzing plugin: ${pluginMetadata.name} (${pluginMetadata.type}) v${pluginMetadata.version}`);
-      console.log(`Scanning ${this.config.distDir}...`);
+      this.output.logSingleLine(
+        `Analyzing plugin: ${pluginMetadata.name} (${pluginMetadata.type}) v${pluginMetadata.version}`
+      );
+      this.output.logSingleLine(`Scanning ${this.config.distDir}...`);
     }
 
     // Find all JS files
     const jsFiles = await findJsFiles(this.config.distDir);
 
     if (jsFiles.length === 0) {
-      console.warn(`No JavaScript files found in ${this.config.distDir}`);
+      this.output.warning({
+        title: `No JavaScript files found in ${this.config.distDir}`,
+        withPrefix: false,
+      });
       return this.createEmptyResults(pluginMetadata);
     }
 
     if (this.config.showProgress) {
-      console.log(`Found ${jsFiles.length} JavaScript files to analyze\n`);
+      this.output.logSingleLine(`Found ${jsFiles.length} JavaScript files to analyze`);
     }
 
     // Determine which patterns to check
@@ -69,7 +77,7 @@ export class Analyzer {
       filesProcessed++;
 
       if (this.config.showProgress && filesProcessed % 10 === 0) {
-        console.log(`Processed ${filesProcessed}/${jsFiles.length} files...`);
+        this.output.logSingleLine(`Processed ${filesProcessed}/${jsFiles.length} files...`);
       }
 
       // Check each pattern
@@ -157,8 +165,8 @@ export class Analyzer {
     }
 
     if (this.config.showProgress && classComponentFilteredCount > 0) {
-      console.log(
-        `\nFiltered out ${classComponentFilteredCount} defaultProps on class components (not a breaking change)`
+      this.output.logSingleLine(
+        `Filtered out ${classComponentFilteredCount} defaultProps on class components (not a breaking change)`
       );
     }
 
