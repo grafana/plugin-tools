@@ -19,7 +19,7 @@ You can use data frame fields to automate configurations. For example, you could
 
 ## Data frame fields
 
-For a data frame to valid:
+For a data frame to be valid:
 
 - All fields in the frame must be of the same length.
 - Each value from the same field must share the same type.
