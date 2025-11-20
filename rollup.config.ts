@@ -34,13 +34,14 @@ if (pkg.name === '@grafana/plugin-e2e') {
 
 // TODO: Remove this once we have a better way to extend this config
 if (pkg.name === '@grafana/create-plugin') {
-  const globOptions: GlobOptions = {
-    cwd: join(preserveModulesRoot, 'migrations', 'scripts'),
+  const codeModsGlobOptions: GlobOptions = {
+    cwd: join(preserveModulesRoot, 'codemods'),
     ignore: ['**/*.test.ts'],
     absolute: true,
   };
-  const migrations = glob.sync('**/*.ts', globOptions).map((m) => m.toString());
-  input.push(...migrations);
+  const codeMods = glob.sync('{migrations,additions}/scripts/*.ts', codeModsGlobOptions).map((m) => m.toString());
+  input.push(...codeMods);
+
   external.push('prettier');
   external.push(/^recast\/parsers\//);
 }
