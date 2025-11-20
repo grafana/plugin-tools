@@ -1,5 +1,18 @@
 # (Thu Nov 20 2025)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.2.1`
+  - Create Plugin: use migration description for commit messages [#2315](https://github.com/grafana/plugin-tools/pull/2315) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Nov 20 2025)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@6.2.0`
