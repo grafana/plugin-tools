@@ -38,7 +38,7 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
     const shouldCommit = options.commitEachMigration && context.hasChanges();
 
     if (shouldCommit) {
-      await gitCommitNoVerify(`chore: run create-plugin migration - ${migration.name} (${migration.description})`);
+      await gitCommitNoVerify(`chore: run create-plugin migration - ${migration.name}\n\n${migration.description}`);
     }
   }
 
