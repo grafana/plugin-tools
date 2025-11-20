@@ -50,33 +50,33 @@ A typical panel plugin includes:
 
 ## Coding guidelines
 
-- Use **TypeScript** and **functional React components**
+- Use **TypeScript**, functional React components, and idiomatic patterns
 - Use **@grafana/ui**, **@grafana/data**, **@grafana/runtime**
-- Respect `width` and `height`; keep layout responsive
-- Avoid unnecessary dependencies; ensure Grafana compatibility
-- Use useTheme2() from @grafana/ui for visual tokens
-- Never hardcode colors, spacing, padding, or font sizes.
-- Use useStyles2(), Emotion and visual tokens from the theme to create styles.
-- Follow existing file structure
-- Keep code typed and predictable
+- Use **`useTheme2()`** for all colors, spacing, typography
+- **Never hardcode** colors, spacing, padding, or font sizes
+- Use **Emotion** + `useStyles2()` + theme tokens for styling
+- Keep layouts responsive (use `width`/`height`)
+- Avoid new dependencies unless necessary + Grafana-compatible
+- Maintain consistent file structure and predictable types
+- Use **`@grafana/plugin-e2e`** for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
 
 ## Boundaries
 
-You must **not**:
+You must **NOT**:
 
-- Change plugin IDs or plugin type in `plugin.json`
-- Modify anything under `.config/*`
-- Add a backend — panel plugins are **frontend only**
-- Remove or change existing options without a migration handler
+- Change plugin ID or plugin type in `plugin.json`
+- Modify anything inside `.config/*`
+- Add a backend (panel plugins = frontend only)
+- Remove/change existing options without a migration handler
 - Break public APIs (options, field configs, panel props)
-- Store or use credentials.
+- Store, read, or handle credentials
 
-You **should**:
+You **SHOULD**:
 
-- Keep the plugin backward compatible
-- Preserve the existing options schema unless adding a migration handler
-- Mirror patterns from Grafana’s official panel plugin examples
-- Follow idiomatic React + TypeScript patterns used in official Grafana examples
+- Maintain backward compatibility
+- Preserve option schema unless migration handler is added
+- Follow official Grafana panel plugin patterns
+- Use idiomatic React + TypeScript
 
 ## Instructions for specific tasks
 
