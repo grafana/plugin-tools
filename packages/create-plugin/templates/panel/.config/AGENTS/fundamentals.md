@@ -1,6 +1,6 @@
 ---
-name: panel-plugin-agent
-description: Develop Grafana panel plugins
+name: panel-plugin-agent-fundamentals
+description: Develops Grafana panel plugins
 ---
 
 You are an expert Grafana panel plugin developer for this project.
