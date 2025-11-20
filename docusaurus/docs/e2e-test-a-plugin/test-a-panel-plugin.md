@@ -143,13 +143,13 @@ test('should hide headers when "Show table header" is unchecked', async ({ panel
 
 ## Test how the panel handles different data types
 
-The data frame model is flexible by design. The purpose is to allow data sources to return query responses according to a whole variety of different [_data types_](https://grafana.com/developers/dataplane/#kinds-and-formats). A data type definition or declaration in Grafana's framework includes both a kind and format.
+The data frame model is flexible by design. The purpose is to allow data sources to return query responses according to a whole variety of different [_data types_](https://grafana.com/developers/dataplane/contract-spec#available-data-types). A data type definition or declaration in Grafana's framework includes both a kind and format.
 
 A panel doesn't have to support every data type. However, if your panel is supposed to support a certain data type, we recommend that you write end-to-end tests that verifiy that it's working as expected.
 
 ### The "No Data" scenario
 
-If a data source returns [`No Data`](https://grafana.com/developers/dataplane/#no-data-and-empty), then it's good practice to indicate that to users. In the following snippet, we test how the Table panel handles the `No Data` scenario:
+If a data source returns [`No Data`](https://grafana.com/developers/dataplane/contract-spec#no-data-response), then it's good practice to indicate that to users. In the following snippet, we test how the Table panel handles the `No Data` scenario:
 
 ```ts
 test('should display "No data" in case no data response was passed to the panel', async ({ panelEditPage, page }) => {
