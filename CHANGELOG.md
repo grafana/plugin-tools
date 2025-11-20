@@ -1,3 +1,16 @@
+# (Thu Nov 20 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.2.0`
+  - Create Plugin: Support new add cmd [#2233](https://github.com/grafana/plugin-tools/pull/2233) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Wed Nov 19 2025)
 
 #### 🐛 Bug Fix
