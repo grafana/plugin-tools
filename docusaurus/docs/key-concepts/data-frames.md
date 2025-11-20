@@ -41,7 +41,7 @@ In this case:
 
 In the plugin frontend code you can use the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/3e24a500bf43b30360faf9f32465281cc0ff996d/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L245-L257) from the `@grafana/data` package to convert other formats to `Number`. 
 
-This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), JavaScript's `DateTime` and strings with relative times (for example, `now-10s`) to `Numbers`.
+This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), JavaScript's `Date` objects, and strings with relative times (for example, `now-10s`) to `Numbers`.
 
 ## Data transformations
 
