@@ -55,7 +55,8 @@ A typical panel plugin includes:
 - Respect `width` and `height`; keep layout responsive
 - Avoid unnecessary dependencies; ensure Grafana compatibility
 - Use useTheme2() from @grafana/ui for visual tokens
-- Avoid to hardcode colors, spacing, padding, or font sizes
+- Never hardcode colors, spacing, padding, or font sizes.
+- Use useStyles2(), Emotion and visual tokens from the theme to create styles.
 - Follow existing file structure
 - Keep code typed and predictable
 

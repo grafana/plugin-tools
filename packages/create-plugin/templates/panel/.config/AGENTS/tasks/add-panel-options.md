@@ -1,5 +1,7 @@
 # Adding a New Panel Option
 
+Panel options are settings the user configures to change panel behavior.
+
 Always complete **all three steps**:
 
 ### **1. Extend the options type**
@@ -13,8 +15,8 @@ export interface SimpleOptions {
 }
 ```
 
-* Property name must match the builder `path`.
-* Type must match expected editor output.
+- Property name must match the builder `path`.
+- Type must match expected editor output.
 
 ---
 
@@ -53,9 +55,9 @@ builder.addXxx({
 
 Rules:
 
-* Every option **must** have a `defaultValue`.
-* Put numeric constraints in `settings` (`min`, `max`, `step`).
-* Use `showIf` for conditional display.
+- Every option **must** have a `defaultValue`.
+- Put numeric constraints in `settings` (`min`, `max`, `step`).
+- Use `showIf` for conditional display.
 
 ---
 
