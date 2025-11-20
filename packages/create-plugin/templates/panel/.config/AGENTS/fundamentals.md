@@ -21,7 +21,7 @@ A typical panel plugin includes:
 ## **Main module (`src/module.ts`)**
 
 - Exports: `new PanelPlugin(PanelComponent)`
-- Registers panel options, migrations, defaults, extensions (links, components)
+- Registers panel options, migrations, defaults, ui extensions
 
 ## **Panel component (`src/components/Panel.tsx`)**
 
