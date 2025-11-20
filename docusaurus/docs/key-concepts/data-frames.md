@@ -123,7 +123,7 @@ Some data sources return data in a _long_ format (also called _narrow_ format). 
 
 #### Convert long into wide format
 
-With the Grafana plugin SDK for Go, a plugin can detect can detect and convert data frames in long format into wide format:
+With the Grafana plugin SDK for Go, a plugin can detect and convert data frames in long format into wide format:
 
 ```go
 		tsSchema := frame.TimeSeriesSchema()
