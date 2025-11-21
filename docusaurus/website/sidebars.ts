@@ -124,6 +124,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/app-plugins/use-llms-and-mcp',
         'how-to-guides/app-plugins/use-a-service-account',
         'how-to-guides/app-plugins/work-with-nested-plugins',
+        'how-to-guides/app-plugins/include-page-behind-feature-toggle',
       ],
     },
 
