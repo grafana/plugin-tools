@@ -14,6 +14,12 @@ keywords:
 
 Control the visibility of included pages in app plugin using feature flags.
 
+:::note
+
+This feature is only available in Grafana 12.4 and later.
+
+:::
+
 ## How it works
 
 Grafana checks for feature flags when users access plugin pages. The flag key format is:
