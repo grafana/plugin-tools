@@ -1,3 +1,16 @@
+# (Fri Nov 21 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.2.2`
+  - fix(deps): update dependency glob to v11.1.0 [security] [#2308](https://github.com/grafana/plugin-tools/pull/2308) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # (Thu Nov 20 2025)
 
 #### 🐛 Bug Fix

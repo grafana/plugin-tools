@@ -1,3 +1,15 @@
+# v6.2.2 (Fri Nov 21 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency glob to v11.1.0 [security] [#2308](https://github.com/grafana/plugin-tools/pull/2308) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.2.1 (Thu Nov 20 2025)
 
 #### 🐛 Bug Fix
