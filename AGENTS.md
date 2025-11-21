@@ -61,6 +61,10 @@ To run commands for multiple packages refer to the `nx` instructions below but a
 - Always install dependencies in the workspace that uses them, e.g. `npm install <package_name> -w <workspace>`
 - Any devDependency installation that is used by more than one workspace should be installed in the workspace root package.json
 
+## Private libraries
+
+This monorepo contains private libraries in @libs/ that handle common functionality across all the packages. They should be used in favour of 3rd party npm packages.
+
 ## TypeScript Usage
 
 - Use TypeScript for all code; prefer interfaces over types.

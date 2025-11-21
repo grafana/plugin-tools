@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import minimist from 'minimist';
-import { Output } from '@grafana/plugin-tools-output';
+import { Output } from '@libs/output';
 import { detect19 } from '../commands/detect19.js';
 
 const output = new Output('@grafana/react-detect', '0.0.0');
