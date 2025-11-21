@@ -1,5 +1,5 @@
 import path from 'path';
-import { Output } from '@grafana/plugin-tools-output';
+import { Output } from '@libs/output';
 import { SourceMapParser } from './source-map-parser.js';
 import { ConfidenceScorer } from './confidence-scorer.js';
 import { ComponentDetector } from './component-detector.js';

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import minimist from 'minimist';
-import { Output } from '@grafana/plugin-tools-output';
+import { Output } from '@libs/output';
 import { Analyzer } from '../core/analyzer.js';
 import { ConsoleReporter } from '../reporters/console-reporter.js';
 import { JsonReporter } from '../reporters/json-reporter.js';
