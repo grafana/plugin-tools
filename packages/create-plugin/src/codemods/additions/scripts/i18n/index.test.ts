@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import * as v from 'valibot';
 
-import { Context } from '../../context.js';
-import i18nAddition, { schema } from './i18n.js';
+import { Context } from '../../../context.js';
+import i18nAddition, { schema } from './index.js';
 
 describe('i18n addition', () => {
   describe('schema validation', () => {
