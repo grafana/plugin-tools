@@ -26,12 +26,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@libs/output": "1.0.2",
     "@typescript-eslint/parser": "^8.46.2",
     "@typescript-eslint/typescript-estree": "^8.46.2",
-    "@libs/output": "1.0.2",
     "chalk": "^5.3.0",
     "fast-glob": "^3.3.2",
     "minimist": "^1.2.8",
+    "snyk-nodejs-lockfile-parser": "^2.4.2",
     "source-map": "^0.7.4"
   },
   "devDependencies": {
