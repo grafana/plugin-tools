@@ -100,7 +100,7 @@ describe('i18n addition', () => {
 
     // Check package.json was updated with dependencies
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
-    expect(packageJson.dependencies['@grafana/i18n']).toBe('12.2.2');
+    expect(packageJson.dependencies['@grafana/i18n']).toBe('^12.2.2');
     expect(packageJson.dependencies['semver']).toBe('^7.6.0');
     expect(packageJson.devDependencies['@types/semver']).toBe('^7.5.0');
     expect(packageJson.devDependencies['i18next-cli']).toBeDefined();
