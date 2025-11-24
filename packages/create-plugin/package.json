@@ -53,11 +53,6 @@
     "@types/which": "^3.0.4",
     "tmp": "^0.2.5"
   },
-  "overrides": {
-    "@types/marked-terminal": {
-      "marked": "^16.0.0"
-    }
-  },
   "engines": {
     "node": ">=20"
   }
