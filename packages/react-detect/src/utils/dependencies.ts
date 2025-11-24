@@ -38,7 +38,7 @@ export class DependencyContext {
           pluginRoot,
           'package.json',
           lockfile,
-          false // Don't include devDependencies in tree
+          true // Include devDependencies to trace their transitive deps
         );
       } catch (error) {
         console.warn('Could not build dependency tree:', error);
@@ -65,10 +65,13 @@ export class DependencyContext {
     }
 
     // Search dep tree for the package
-    if (this.depTree) {
-      const root = this.findInDepTree(this.depTree, packageName);
-      if (root) {
-        return root;
+    // Start from direct dependencies, not root
+    if (this.depTree && this.depTree.dependencies) {
+      for (const [depName, child] of Object.entries(this.depTree.dependencies)) {
+        const found = this.findInDepTree(child, packageName, depName);
+        if (found) {
+          return found;
+        }
       }
     }
 
@@ -90,7 +93,7 @@ export class DependencyContext {
 
     // Search children
     if (node.dependencies) {
-      for (const [name, child] of Object.entries(node.dependencies)) {
+      for (const child of Object.values(node.dependencies)) {
         const found = this.findInDepTree(child, packageName, currentRoot);
         if (found) {
           return found;
@@ -150,11 +153,4 @@ export function isExternal(packageName: string): boolean {
   }
 
   return GRAFANA_EXTERNALS.some((external) => packageName.startsWith(external + '/'));
-}
-
-/**
- * Get all external package names
- */
-export function getExternals(): string[] {
-  return [...GRAFANA_EXTERNALS];
 }

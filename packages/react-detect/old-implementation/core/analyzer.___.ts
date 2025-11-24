@@ -159,9 +159,7 @@ describe('Analyzer', () => {
       const sourceMap = {
         version: 3,
         sources: ['node_modules/react-select/dist/index.js'],
-        sourcesContent: [
-          `function MyComponent() { return <View />; }\nMyComponent.defaultProps={ value: 'test' };`,
-        ],
+        sourcesContent: [`function MyComponent() { return <View />; }\nMyComponent.defaultProps={ value: 'test' };`],
         names: [],
         mappings: 'AAAA',
       };
@@ -191,9 +189,7 @@ describe('Analyzer', () => {
       const sourceMap = {
         version: 3,
         sources: ['node_modules/react/index.js'],
-        sourcesContent: [
-          `function MyComponent() { return <View />; }\nMyComponent.defaultProps={ value: 'test' };`,
-        ],
+        sourcesContent: [`function MyComponent() { return <View />; }\nMyComponent.defaultProps={ value: 'test' };`],
         names: [],
         mappings: 'AAAA',
       };
@@ -253,10 +249,7 @@ describe('Analyzer', () => {
       const jsContent = `__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED`;
       const sourceMap = {
         version: 3,
-        sources: [
-          'node_modules/react/jsx-runtime.js',
-          'node_modules/@floating-ui/react/dist/index.js',
-        ],
+        sources: ['node_modules/react/jsx-runtime.js', 'node_modules/@floating-ui/react/dist/index.js'],
         sourcesContent: [
           `export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {};`,
           `import { jsx } from 'react/jsx-runtime';\nexport function Component() {}`,
