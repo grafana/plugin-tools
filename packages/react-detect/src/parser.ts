@@ -1,23 +1,28 @@
 import { parse, TSESTree } from '@typescript-eslint/typescript-estree';
 
-export class Parser {
-  parse(code: string, filePath: string): TSESTree.Program {
-    try {
-      return parse(code, {
-        filePath,
-        jsx: true,
-        loc: true,
-        range: true,
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      });
-    } catch (error) {
-      throw new Error(`Failed to parse ${filePath}: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+const PARSER_OPTIONS = {
+  jsx: true,
+  loc: true,
+  range: true,
+  comment: false,
+  tokens: false,
+  ecmaVersion: 'latest' as const,
+  sourceType: 'module' as const,
+};
 
-  canParse(filePath: string): boolean {
-    const extensions = ['.ts', '.tsx', '.js', '.jsx'];
-    return extensions.some((extension) => filePath.endsWith(extension));
+const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx'];
+
+export function parseFile(code: string, filePath: string): TSESTree.Program {
+  try {
+    return parse(code, {
+      ...PARSER_OPTIONS,
+      filePath,
+    });
+  } catch (error) {
+    throw new Error(`Failed to parse ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
+}
+
+export function canParse(filePath: string): boolean {
+  return SUPPORTED_EXTENSIONS.some((ext) => filePath.endsWith(ext));
 }
