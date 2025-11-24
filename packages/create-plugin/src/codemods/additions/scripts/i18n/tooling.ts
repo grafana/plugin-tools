@@ -7,8 +7,8 @@ import { addDependenciesToPackageJson, additionsDebug } from '../../../utils.js'
 const { builders } = recast.types;
 
 export function addI18nDependency(context: Context): void {
-  addDependenciesToPackageJson(context, { '@grafana/i18n': '12.2.2' }, {});
-  additionsDebug('Added @grafana/i18n dependency version 12.2.2');
+  addDependenciesToPackageJson(context, { '@grafana/i18n': '^12.2.2' }, {});
+  additionsDebug('Added @grafana/i18n dependency version ^12.2.2');
 }
 
 export function addSemverDependency(context: Context): void {
