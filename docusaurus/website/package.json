@@ -1,6 +1,6 @@
 {
   "name": "website",
-  "version": "5.0.4",
+  "version": "5.1.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -42,7 +42,7 @@
     "dotenv": "^17.2.3",
     "raw-loader": "^4.0.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.6"
+    "vitest": "^4.0.10"
   },
   "browserslist": {
     "production": [

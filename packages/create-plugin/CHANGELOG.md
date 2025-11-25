@@ -1,3 +1,39 @@
+# v6.3.1 (Tue Nov 25 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana dependencies to v12.3.0 [#2318](https://github.com/grafana/plugin-tools/pull/2318) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.3.0 (Tue Nov 25 2025)
+
+#### 🚀 Enhancement
+
+- Playwright: Bumping deploy-reports action [#2319](https://github.com/grafana/plugin-tools/pull/2319) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.2.2 (Fri Nov 21 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency glob to v11.1.0 [security] [#2308](https://github.com/grafana/plugin-tools/pull/2308) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.2.1 (Thu Nov 20 2025)
 
 #### 🐛 Bug Fix
