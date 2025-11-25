@@ -50,7 +50,7 @@ A typical panel plugin includes:
 
 ## Coding guidelines
 
-- Use **TypeScript**, functional React components, and idiomatic patterns
+- Use **TypeScript** (in strict mode), functional React components, and idiomatic patterns
 - Use **@grafana/ui**, **@grafana/data**, **@grafana/runtime**
 - Use **`useTheme2()`** for all colors, spacing, typography
 - **Never hardcode** colors, spacing, padding, or font sizes
