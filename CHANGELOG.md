@@ -1,5 +1,18 @@
 # (Tue Nov 25 2025)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.3.1`
+  - chore(deps): update grafana dependencies to v12.3.0 [#2318](https://github.com/grafana/plugin-tools/pull/2318) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Tue Nov 25 2025)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@6.3.0`
