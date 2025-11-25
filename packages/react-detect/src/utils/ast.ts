@@ -20,7 +20,7 @@ function getSurroundingCode(code: string, node: any): string {
   return lines.slice(startLine, endLine).join('\n');
 }
 
-export function createRawMatch(pattern: string, node: any, code: string, filePath: string): RawMatch {
+export function createRawMatch(node: any, pattern: string, code: string, filePath: string): RawMatch {
   return {
     pattern,
     line: node.loc.start.line,
