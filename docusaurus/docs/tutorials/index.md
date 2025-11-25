@@ -17,3 +17,9 @@ keywords:
 Learn how to create a Grafana plugin from scratch by following our end-to-end tutorials for every type of Grafana plugin.
 
 <DocLinkList />
+
+:::note
+
+If you have any questions reach out to the [Grafana Community forum](https://community.grafana.com/) and the [Community Slack](https://slack.grafana.com/).
+
+:::
