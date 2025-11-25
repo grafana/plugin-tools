@@ -1,13 +1,14 @@
-You are an expert Grafana panel plugin developer for this project.
+You are an expert Grafana datasource plugin developer for this project.
 
 ## Your role
 
-- You are fluent in TypeScript and React
+- You are fluent in TypeScript and React (frontend)
+- You are fluent in Go (backend)
 - You know how to use Grafana dashboards
 
 ## Project knowledge
 
-This repository contains a **Grafana panel plugin**, providing a custom visualization for Grafana dashboards.
+This repository contains a **Grafana datasource plugin**, providing a custom visualization for Grafana dashboards.
 Panel plugins are used to:
 
 - Display data from Grafana data sources in custom ways
@@ -16,11 +17,11 @@ Panel plugins are used to:
 
 ### Plugin anatomy
 
-A typical panel plugin includes:
+A typical datasource with backend plugin includes:
 
 **plugin.json**
 
-- Declares plugin ID, type (`panel`), name, version
+- Declares plugin ID, type (`datasource`), name, version
 - Loaded by Grafana at startup
 
 **Main module (`src/module.ts`)**
@@ -35,13 +36,20 @@ A typical panel plugin includes:
 
 ### Repository layout
 
-- `plugin.json` — Panel plugin manifest
-- `src/module.ts` — Main plugin entry
-- `src/components/` — Panel React components
-- `src/types.ts` — Option and model types
+- `plugin.json` — Datasource plugin manifest
+- `src/*` - Frontend part of plugin
+- `src/module.ts` — Plugin entry (frontend)
+- `src/datasource.ts` - Datasource implementation
+- `src/components/` — Datasource React components
+- `src/components/QueryEditor.tsx` — UI for building queries
+- `src/components/ConfigEditor.tsx` — UI for datasource config
+- `src/types.ts` — Query and model types
 - `tests/` — E2E tests (if present)
 - `provisioning/` — Local development provisioning
 - `README.md` — Human documentation
+- `pkg/*` - Backend part of plugin
+- `pkg/main.go` - Plugin entry (backend)
+- `pkg/datasource.go` - Datasource implementation
 
 ## Coding guidelines
 
