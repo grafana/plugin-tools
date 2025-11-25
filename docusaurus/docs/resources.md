@@ -16,7 +16,7 @@ sidebar_position: 70
 
 # Resources
 
-Here are some additional related to plugins that may make your plugin development journey easier.
+Here are some additional resources related to plugins that may make your plugin development journey easier.
 
 - [Grafana developer portal](https://grafana.com/developers/) - Home to plugin documentation, Scenes API, React components library, Data Plane contract, and more.
 - [Grafana API reference](https://grafana.com/docs/grafana/latest/developers/http_api/) - The backend HTTP API for Grafana. 
