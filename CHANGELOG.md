@@ -1,5 +1,18 @@
 # (Tue Nov 25 2025)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.4.0`
+  - Vibe: Adding agents.md when scaffolding panel plugin [#2314](https://github.com/grafana/plugin-tools/pull/2314) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# (Tue Nov 25 2025)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.3.1`
