@@ -12,7 +12,7 @@ export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: 
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'defaultProps'
     ) {
-      matches.push(createRawMatch(node, filePath, 'defaultProps', code));
+      matches.push(createRawMatch(node, 'defaultProps', code, filePath));
     }
   });
 
