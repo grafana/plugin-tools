@@ -1,3 +1,15 @@
+# v6.3.0 (Tue Nov 25 2025)
+
+#### 🚀 Enhancement
+
+- Playwright: Bumping deploy-reports action [#2319](https://github.com/grafana/plugin-tools/pull/2319) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v6.2.2 (Fri Nov 21 2025)
 
 #### 🐛 Bug Fix
