@@ -33,7 +33,7 @@ vi.mock('snyk-nodejs-lockfile-parser', () => ({
 
 describe('DependencyContext', () => {
   let context: DependencyContext;
-  const fixturesPath = join(__dirname, '../../test/fixtures');
+  const fixturesPath = join(__dirname, '../../test/fixtures/dependencies');
 
   beforeEach(() => {
     context = new DependencyContext();
