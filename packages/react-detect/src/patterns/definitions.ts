@@ -2,7 +2,6 @@ import { PatternDefinition } from '../types/patterns.js';
 
 export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   __SECRET_INTERNALS: {
-    pattern: '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED',
     severity: 'renamed',
     impactLevel: 'critical',
     description:
@@ -14,7 +13,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#libraries-depending-on-react-internals-may-block-upgrades',
   },
   defaultProps: {
-    pattern: 'defaultProps',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'defaultProps removed for function components in React 19',
@@ -27,7 +25,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     functionComponentOnly: true,
   },
   propTypes: {
-    pattern: 'propTypes',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'propTypes removed for function components in React 19',
@@ -37,7 +34,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     },
   },
   createFactory: {
-    pattern: 'createFactory',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'React.createFactory removed in React 19',
@@ -49,7 +45,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-createfactory',
   },
   contextTypes: {
-    pattern: 'contextTypes',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'Legacy Context contextTypes removed in React 19',
@@ -59,7 +54,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-removing-legacy-context',
   },
   getChildContext: {
-    pattern: 'getChildContext',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'Legacy Context getChildContext removed in React 19',
@@ -69,7 +63,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-removing-legacy-context',
   },
   findDOMNode: {
-    pattern: 'findDOMNode',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'findDOMNode removed from React and ReactDOM in React 19',
@@ -80,8 +73,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     },
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-reactdom-finddomnode',
   },
-  'refs[': {
-    pattern: 'refs\\[',
+  stringRefs: {
     severity: 'removed',
     impactLevel: 'critical',
     description: 'String refs removed in React 19',
@@ -94,7 +86,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   },
 
   'ReactDOM.render': {
-    pattern: '\\.render',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'ReactDOM.render removed in React 19 (use createRoot)',
@@ -107,7 +98,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   },
 
   'ReactDOM.unmountComponentAtNode': {
-    pattern: 'unmountComponentAtNode',
     severity: 'removed',
     impactLevel: 'critical',
     description: 'ReactDOM.unmountComponentAtNode removed in React 19',
