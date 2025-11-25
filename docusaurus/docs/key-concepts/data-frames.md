@@ -13,9 +13,13 @@ sidebar_position: 40
 
 # Data frames
 
-A data frame is a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata, such as units, scaling, and so on. 
+Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_. A data frame is a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata, such as units, scaling, and so on. 
+
+## Use data frames
 
 You can use data frame fields to automate configurations. For example, you could configure Grafana to automatically set the unit provided by the data source.
+
+Data frame fields also enable _data transformations_ within Grafana. A data transformation is any function that accepts a data frame as input, and returns another data frame as output. By using data frames in your plugin, you get a range of transformations for free. To learn more about data transformations in Grafana, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data).
 
 ## Data frame fields
 
@@ -42,12 +46,6 @@ In this case:
 In the plugin frontend code you can use the function [`ensureTimeField`](https://github.com/grafana/grafana/blob/3e24a500bf43b30360faf9f32465281cc0ff996d/packages/grafana-data/src/transformations/transformers/convertFieldType.ts#L245-L257) from the `@grafana/data` package to convert other formats to `Number`. 
 
 This function converts strings following the ISO 8601 format (for example, `2017-07-19 00:00:00.000`), JavaScript's `Date` objects, and strings with relative times (for example, `now-10s`) to `Numbers`.
-
-## Data transformations
-
-Data frame fields enable _data transformations_ within Grafana. A data transformation is any function that accepts a data frame as input, and returns another data frame as output. By using data frames in your plugin, you get a range of transformations for free.
-
-To learn more about data transformations in Grafana, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data).
 
 ## Available data frames
 
