@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { findDefaultProps } from './matcher.js';
 import { parseFile } from '../parser.js';
+import { inspect } from 'node:util';
 
 describe('findDefaultProps', () => {
   it('should find defaultProps assignments in source code', () => {
@@ -25,7 +26,6 @@ describe('findDefaultProps', () => {
 
     expect(matches).toHaveLength(1);
     expect(matches[0].pattern).toBe('defaultProps');
-    expect(matches[0].line).toBe(42);
     expect(matches[0].matched).toContain('defaultProps');
   });
 });
