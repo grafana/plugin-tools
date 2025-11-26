@@ -8,7 +8,8 @@ import { themes, type PrismTheme } from 'prism-react-renderer';
 import redirects from './websiteRedirects.json';
 
 const gitHash = process.env.GITHUB_SHA || 'local';
-const envFile = process.env.DEV_PORTAL_ENV === 'dev' ? '.env.development' : '.env.production';
+// const envFile = process.env.DEV_PORTAL_ENV === 'dev' ? '.env.development' : '.env.production';
+const envFile = '.env';
 
 dotenv.config({ path: `${__dirname}/${envFile}`, encoding: 'utf8' });
 
@@ -69,12 +70,6 @@ const config: Config = {
       },
     ],
     [
-      'docusaurus-lunr-search',
-      {
-        disableVersioning: true,
-      },
-    ],
-    [
       '@docusaurus/plugin-client-redirects',
       {
         // how to use https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-client-redirects#ex-config
@@ -117,6 +112,39 @@ const config: Config = {
   ],
 
   themeConfig: {
+    algolia: {
+      // The application ID provided by Algolia
+      appId: process.env.ALGOLIA_APP_ID,
+
+      // Public API key: it is safe to commit it
+      apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
+
+      indexName: process.env.ALGOLIA_SEARCH_INDEX,
+
+      // Optional: see doc section below
+      contextualSearch: true,
+
+      // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+      // externalUrlRegex: 'external\\.com|domain\\.com',
+
+      // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+      // replaceSearchResultPathname: {
+      //   from: '/docs/', // or as RegExp: /\/docs\//
+      //   to: '/',
+      // },
+
+      // Optional: Algolia search parameters
+      searchParameters: {},
+
+      // Optional: path for search page that enabled by default (`false` to disable it)
+      searchPagePath: 'search',
+
+      // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
+      insights: false,
+
+      // Optional: whether you want to use the new Ask AI feature (undefined by default)
+      // askAi: 'YOUR_ALGOLIA_ASK_AI_ASSISTANT_ID',
+    },
     announcementBar: {
       id: 'community_callout',
       content:

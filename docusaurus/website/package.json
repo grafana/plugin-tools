@@ -16,7 +16,8 @@
     "lint": "eslint --cache '../docs/**/*.{md,mdx}'",
     "typecheck": "tsc",
     "test": "vitest",
-    "test:ci": "vitest --run"
+    "test:ci": "vitest --run",
+    "generate-index": "node ./scripts/algolia/crawl.ts"
   },
   "dependencies": {
     "@coffeeandfun/remove-pii": "^2.0.0",
@@ -25,10 +26,10 @@
     "@docusaurus/preset-classic": "^3.9.2",
     "@grafana/faro-web-sdk": "^1.9.0",
     "@mdx-js/react": "^3.0.0",
+    "algoliasearch": "^5.45.0",
     "clsx": "^2.0.0",
     "cookiejs": "^2.1.2",
     "debounce": "^3.0.0",
-    "docusaurus-lunr-search": "^3.6.0",
     "gridsome-remark-figure-caption": "1.2.2",
     "prism-react-renderer": "^2.1.0",
     "react": "^18.2.0",
