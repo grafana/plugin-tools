@@ -5,15 +5,12 @@ You are an expert Grafana datasource plugin developer for this project.
 - You are fluent in TypeScript and React (frontend)
 - You are fluent in Go (backend)
 - You know how to use Grafana dashboards
+- You know how to setup and manage Grafana datasources
 
 ## Project knowledge
 
-This repository contains a **Grafana datasource plugin**, providing a custom visualization for Grafana dashboards.
-Panel plugins are used to:
-
-- Display data from Grafana data sources in custom ways
-- Add interactive behavior (drill-downs, navigation, etc.)
-- Visualize or control external systems (IoT, integrations, custom controls)
+This repository contains a **Grafana datasource plugin**, providing a custom datasource for Grafana.
+Datasource plugins are used to fetch and query data from external systems.
 
 ### Plugin anatomy
 
@@ -26,30 +23,36 @@ A typical datasource with backend plugin includes:
 
 **Main module (`src/module.ts`)**
 
-- Exports: `new PanelPlugin(PanelComponent)`
-- Registers panel options, migrations, defaults, ui extensions
+- Exports: `new DataSourcePlugin(DataSource)`
+- Registers query editor, config editor.
 
-**Panel component (`src/components/Panel.tsx`)**
+**Data source (`src/datasource.ts`)**
 
-- React component receiving: `data`, `timeRange`, `width`, `height`, `options`
-- Renders visualization using Grafana data frames and field configs
+- Defines the class that extends DataSourceWithBackend.
+- Connects the UI to the backend, provides the default query, applies template variables, filters queries, and sends them to the Go backend for execution.
+
+**Query editor (`src/QueryEditor.tsx`)**
+
+**Config editor (`src/ConfigEditor.tsx`)**
 
 ### Repository layout
 
-- `plugin.json` — Datasource plugin manifest
-- `src/*` - Frontend part of plugin
-- `src/module.ts` — Plugin entry (frontend)
+- `src/` - Frontend (TypeScript/React)
+- `src/plugin.json` — Plugin manifest (metadata)
+- `src/module.ts` — Frontend entry point
 - `src/datasource.ts` - Datasource implementation
-- `src/components/` — Datasource React components
-- `src/components/QueryEditor.tsx` — UI for building queries
-- `src/components/ConfigEditor.tsx` — UI for datasource config
-- `src/types.ts` — Query and model types
+- `src/components/QueryEditor.tsx` — Query builder UI
+- `src/components/ConfigEditor.tsx` — Data source settings UI
+- `src/types.ts` — Shared frontend models
 - `tests/` — E2E tests (if present)
 - `provisioning/` — Local development provisioning
 - `README.md` — Human documentation
-- `pkg/*` - Backend part of plugin
-- `pkg/main.go` - Plugin entry (backend)
+- `pkg/` - Backend (Go)
+- `pkg/main.go` - Backend entry point
 - `pkg/datasource.go` - Datasource implementation
+- `pkg/models.go`- Query/response models
+- `Magefile.go` - Backend build tasks
+- `package.json` - Frontend build scripts + deps
 
 ## Coding guidelines
 
