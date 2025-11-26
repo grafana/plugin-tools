@@ -20,6 +20,8 @@ export async function resolveMatch(match: RawMatch): Promise<ResolvedMatch> {
             type: 'dependency',
             packageName: packageName,
             sourceFile: position.source,
+            sourceLine: position.line,
+            sourceColumn: position.column,
           };
         }
         return {
@@ -28,12 +30,21 @@ export async function resolveMatch(match: RawMatch): Promise<ResolvedMatch> {
           reason: 'No package name found',
         };
       }
-      return { ...match, type: 'source', sourceFile: position.source };
+      return {
+        ...match,
+        type: 'source',
+        sourceFile: position.source,
+        sourceLine: position.line,
+        sourceColumn: position.column,
+      };
     }
     return { ...match, type: 'unknown', reason: 'No original source found' };
   } catch (error) {
-    console.error(`Failed to load source map ${match.file}:`, (error as Error).message);
-    return { ...match, type: 'unknown', reason: (error as Error).message };
+    return {
+      ...match,
+      type: 'unknown',
+      reason: `Failed to load source map ${match.file}: ${(error as Error).message}`,
+    };
   }
 }
 
