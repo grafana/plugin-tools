@@ -1,3 +1,16 @@
+# (Wed Nov 26 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.4.1`
+  - Create Plugin: bump swc/core to ^1.14.0 to fix segfault on Linux ARM [#2328](https://github.com/grafana/plugin-tools/pull/2328) ([@xnyo](https://github.com/xnyo))
+
+#### Authors: 1
+
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+
+---
+
 # (Tue Nov 25 2025)
 
 #### 🚀 Enhancement
