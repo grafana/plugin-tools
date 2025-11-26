@@ -134,7 +134,9 @@ const config: Config = {
       // },
 
       // Optional: Algolia search parameters
-      searchParameters: {},
+      // searchParameters: {
+      //   facetFilters: ['language:en', ['docusaurus_tag:default', 'docusaurus_tag:docs-default-current']],
+      // },
 
       // Optional: path for search page that enabled by default (`false` to disable it)
       searchPagePath: 'search',
