@@ -1,4 +1,5 @@
 /* eslint-disable */
+/* [create-plugin] plugin: heywesty-trafficlight-panel@1.0.0 */
 define(['react'], (e) =>
   (() => {
     'use strict';
