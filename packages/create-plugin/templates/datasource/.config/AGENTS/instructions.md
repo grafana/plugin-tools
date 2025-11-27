@@ -24,11 +24,11 @@ A typical datasource with backend plugin includes:
 **Main module (`src/module.ts`)**
 
 - Exports: `new DataSourcePlugin(DataSource)`
-- Registers query editor, config editor.
+- Registers query editor, config editor
 
 **Data source (`src/datasource.ts`)**
 
-- Defines the class that extends DataSourceWithBackend.
+- Frontend datasource that extends DataSourceWithBackend.
 - Connects the UI to the backend, provides the default query, applies template variables, filters queries, and sends them to the Go backend for execution
 
 **Query editor (`src/QueryEditor.tsx`)**
@@ -42,9 +42,14 @@ A typical datasource with backend plugin includes:
 
 **Main module (`pkg/main.go`)**
 
-- Register a factory function with `grafana-plugin-sdk-go` to create datasource backend instances.
+- Register a factory function with `grafana-plugin-sdk-go` to create datasource backend instances
 
 **Data source (`pkg/plugin/datasource.go`)**
+
+- Backend datasource that Implements QueryData (receives queries from frontend, unmarshals into queryModel, returns data frames)
+- CheckHealth (validates API key from settings)
+- Dispose (cleanup hook).
+- NewDatasource factory called when Grafana starts instance of plugin
 
 ### Repository layout
 
@@ -84,6 +89,9 @@ You must **NOT**:
 - Modify anything inside `.config/*`
 - Remove/change existing query model without a migration handler
 - Break public APIs (query model)
+- Use the local file system
+- Use environment variables
+- Execute arbitrary code in the backend
 
 You **SHOULD**:
 
@@ -91,5 +99,7 @@ You **SHOULD**:
 - Preserve query model schema unless migration handler is added
 - Follow official Grafana datasource plugin patterns
 - Use idiomatic React + TypeScript
+- Use secureJsonData instead of jsonData for credentials and sensitive data
+- Error happening should be logged with level `error`
 
 ## Instructions for specific tasks
