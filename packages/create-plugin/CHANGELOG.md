@@ -1,3 +1,15 @@
+# v6.4.2 (Thu Nov 27 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: update valibot to ^1.2.0 [#2331](https://github.com/grafana/plugin-tools/pull/2331) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.4.1 (Wed Nov 26 2025)
 
 #### 🐛 Bug Fix

@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@6.4.2`
+  - Create Plugin: update valibot to ^1.2.0 [#2331](https://github.com/grafana/plugin-tools/pull/2331) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Nov 27 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@3.0.2`
   - Plugin E2E: Bump e2e selectors [#2329](https://github.com/grafana/plugin-tools/pull/2329) ([@sunker](https://github.com/sunker))
 
