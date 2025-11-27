@@ -9,7 +9,7 @@ You are an expert Grafana datasource plugin developer for this project.
 
 ## Project knowledge
 
-This repository contains a **Grafana datasource plugin**, providing a custom datasource for Grafana.
+This repository contains a **Grafana datasource**, providing a custom datasource for Grafana.
 Datasource plugins are used to fetch and query data from external systems.
 
 ### Plugin anatomy
@@ -29,11 +29,16 @@ A typical datasource with backend plugin includes:
 **Data source (`src/datasource.ts`)**
 
 - Defines the class that extends DataSourceWithBackend.
-- Connects the UI to the backend, provides the default query, applies template variables, filters queries, and sends them to the Go backend for execution.
+- Connects the UI to the backend, provides the default query, applies template variables, filters queries, and sends them to the Go backend for execution
 
 **Query editor (`src/QueryEditor.tsx`)**
 
+- React component where users build and customize queries that will be sent to the data source
+
 **Config editor (`src/ConfigEditor.tsx`)**
+
+- React component where users manage and configure a data source instance
+- Configures instance specific settings (like URLs or credentials)
 
 ### Repository layout
 
@@ -72,18 +77,14 @@ You must **NOT**:
 
 - Change plugin ID or plugin type in `plugin.json`
 - Modify anything inside `.config/*`
-- Add a backend (panel plugins = frontend only)
-- Remove/change existing options without a migration handler
-- Break public APIs (options, field configs, panel props)
-- Store, read, or handle credentials
+- Remove/change existing query model without a migration handler
+- Break public APIs (query model)
 
 You **SHOULD**:
 
 - Maintain backward compatibility
-- Preserve option schema unless migration handler is added
-- Follow official Grafana panel plugin patterns
+- Preserve query model schema unless migration handler is added
+- Follow official Grafana datasource plugin patterns
 - Use idiomatic React + TypeScript
 
 ## Instructions for specific tasks
-
-- [Add panel options](./tasks/add-panel-options.md)
