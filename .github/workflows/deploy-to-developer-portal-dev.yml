@@ -52,10 +52,10 @@ jobs:
       - name: Serve built site
         run: npm run serve -w website -- --port 3000
 
-      - name: Wait for server to be ready
-        uses: grafana/plugin-actions/wait-for-server@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-server/v1.0.1
+      - name: Wait for server
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.2
         with:
-          url: http://localhost:3000/developers/plugin-tools
+          url: "http://localhost:3000/developers/plugin-tools"
 
       - name: Test http server is running
         run: curl -f http://localhost:3000/developers/plugin-tools || exit 0
