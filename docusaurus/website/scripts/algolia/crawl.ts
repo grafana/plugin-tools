@@ -1,27 +1,125 @@
-import { CheerioCrawler, log, LogLevel } from 'crawlee';
+import { type CheerioAPI, CheerioCrawler, type LoadedRequest, type Request, log, LogLevel, Sitemap } from 'crawlee';
 
-// Crawlers come with various utilities, e.g. for logging.
-// Here we use debug level of logging to improve the debugging experience.
-// This functionality is optional!
+import { inspect } from 'util';
+
 log.setLevel(LogLevel.DEBUG);
 
-// Create an instance of the CheerioCrawler class - a crawler
-// that automatically loads the URLs and parses their HTML using the cheerio library.
+function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) {
+  const version = $('meta[name="docsearch:version"]').attr('content') || 'current';
+  const lang = $('meta[name="docsearch:lang"]').attr('content') || 'en';
+  const docusaurus_tag = $('meta[name="docsearch:docusaurus_tag"]').attr('content') || 'default';
+
+  const lvl0 =
+    $(
+      '.menu__link.menu__link--active, menu__link.menu__link--sublist.menu__link--active, .navbar__item.navbar__link--active'
+    )
+      .last()
+      .text() || 'Documentation';
+
+  // Helper function to extract heading hierarchy records
+  function extractHeadingLevel(level: number) {
+    const selector = level === 1 ? 'header h1, article h1' : `article h${level}`;
+    let elements = $(selector);
+
+    // Special filter for h3 elements to exclude "Was this page helpful?"
+    if (level === 3) {
+      elements = elements.filter((_, el) => $(el).text() !== 'Was this page helpful?');
+    }
+
+    return elements
+      .map((_, el) => {
+        const hierarchy: Record<string, string | null> = { lvl0 };
+        if (level === 1) {
+          hierarchy.lvl1 = $(el).text();
+          for (let i = 2; i <= 6; i++) {
+            hierarchy[`lvl${i}`] = null;
+          }
+        } else {
+          hierarchy.lvl1 = $(el).closest('article').find('header h1, > h1').last().text();
+
+          // Use previous headings to populate lower hierarchy levels
+          for (let i = 2; i < level; i++) {
+            hierarchy[`lvl${i}`] = $(el).prevAll(`h${i}`).last().text();
+          }
+
+          // Set current level
+          hierarchy[`lvl${level}`] = $(el).text();
+
+          // Set remaining levels to null
+          for (let i = level + 1; i <= 6; i++) {
+            hierarchy[`lvl${i}`] = null;
+          }
+        }
+
+        const content =
+          level === 1
+            ? $(el).parent().nextUntil('h1,h2,h3,h4,h5,h6').text() || ''
+            : $(el).nextUntil('h1,h2,h3,h4,h5,h6').text() || '';
+
+        const url = `${request.url}${$(el).attr('id') ? `#${$(el).attr('id')}` : ''}`;
+        const anchor = $(el).attr('id') ?? '';
+
+        const objectID = generateObjectId(request);
+
+        return {
+          objectID,
+          hierarchy,
+          url,
+          anchor,
+          url_without_anchor: request.url,
+          content,
+          version,
+          lang,
+          docusaurus_tag,
+        };
+      })
+      .get();
+  }
+
+  const lvl1 = extractHeadingLevel(1);
+  const lvl2 = extractHeadingLevel(2);
+  const lvl3 = extractHeadingLevel(3);
+  const lvl4 = extractHeadingLevel(4);
+  const lvl5 = extractHeadingLevel(5);
+  const lvl6 = extractHeadingLevel(6);
+
+  const parsedUrl = new URL(request.url);
+  const basePath = '/developers/plugin-tools/';
+  let pathname = parsedUrl.pathname;
+
+  if (pathname.startsWith(basePath)) {
+    pathname = pathname.slice(basePath.length);
+  }
+
+  const hierarchy = [...lvl1, ...lvl2, ...lvl3, ...lvl4, ...lvl5, ...lvl6];
+  return hierarchy;
+}
+
+function generateObjectId(request: LoadedRequest<Request>) {
+  const parsedUrl = new URL(request.url);
+  const basePath = '/developers/plugin-tools/';
+  let pathname = parsedUrl.pathname;
+
+  if (pathname.startsWith(basePath)) {
+    pathname = pathname.slice(basePath.length);
+  }
+  const segments = pathname.split('/').filter(Boolean);
+  return segments.length > 0 ? `${segments.join('_')}` : `index`;
+}
+
 const crawler = new CheerioCrawler({
   // The crawler downloads and processes the web pages in parallel, with a concurrency
   // automatically managed based on the available system memory and CPU (see AutoscaledPool class).
   // Here we define some hard limits for the concurrency.
   minConcurrency: 10,
   maxConcurrency: 50,
-
   // On error, retry each page at most once.
   maxRequestRetries: 1,
 
   // Increase the timeout for processing of each page.
   requestHandlerTimeoutSecs: 30,
 
-  // Limit to 10 requests per one crawl
-  maxRequestsPerCrawl: 10,
+  // maxRequestsPerCrawl: 10,
 
   // This function will be called for each URL to crawl.
   // It accepts a single parameter, which is an object with options as:
@@ -31,23 +129,10 @@ const crawler = new CheerioCrawler({
   // - $: the cheerio object containing parsed HTML
   async requestHandler({ pushData, request, $ }) {
     log.debug(`Processing ${request.url}...`);
-
-    // Extract data from the page using cheerio.
-    const title = $('title').text();
-    const h1texts: Array<{ text: string }> = [];
-    $('h1').each((index, el) => {
-      h1texts.push({
-        text: $(el).text(),
-      });
-    });
-
-    // Store the results to the dataset. In local configuration,
-    // the data will be stored as JSON files in ./storage/datasets/default
-    await pushData({
-      url: request.url,
-      title,
-      h1texts,
-    });
+    const result = generateAlgoliaRecords(request, $);
+    // log.debug(inspect(result, { depth: null, colors: true }));
+    const objectID = generateObjectId(request);
+    await pushData(result, objectID);
   },
 
   // This function is called if the page processing failed more than maxRequestRetries + 1 times.
@@ -56,7 +141,14 @@ const crawler = new CheerioCrawler({
   },
 });
 
-// Run the crawler and wait for it to finish.
-await crawler.run(['https://crawlee.dev']);
+const { urls } = await Sitemap.load('http://localhost:3000/developers/plugin-tools/sitemap.xml');
+const localhostUrls = urls
+  .filter((url) => !url.endsWith('/search'))
+  .map((url) => url.replace('https://grafana-dev.com', 'http://localhost:3000'));
+
+// console.log(localhostUrls);
+
+// // Run the crawler and wait for it to finish.
+await crawler.run(localhostUrls);
 
 log.debug('Crawler finished.');
