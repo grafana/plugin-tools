@@ -50,7 +50,7 @@ jobs:
         run: DEV_PORTAL_ENV=dev npm run docs:build
 
       - name: Serve built site
-        run: npm run serve -w website -- --port 3000
+        run: npm run serve -w website -- --port 3000 &
 
       - name: Wait for server
         uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.2
