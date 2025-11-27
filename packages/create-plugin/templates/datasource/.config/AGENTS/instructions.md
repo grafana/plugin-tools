@@ -40,6 +40,12 @@ A typical datasource with backend plugin includes:
 - React component where users manage and configure a data source instance
 - Configures instance specific settings (like URLs or credentials)
 
+**Main module (`pkg/main.go`)**
+
+- Register a factory function with `grafana-plugin-sdk-go` to create datasource backend instances.
+
+**Data source (`pkg/plugin/datasource.go`)**
+
 ### Repository layout
 
 - `src/` - Frontend (TypeScript/React)
@@ -54,8 +60,7 @@ A typical datasource with backend plugin includes:
 - `README.md` — Human documentation
 - `pkg/` - Backend (Go)
 - `pkg/main.go` - Backend entry point
-- `pkg/datasource.go` - Datasource implementation
-- `pkg/models.go`- Query/response models
+- `pkg/plugin/datasource.go` - Datasource implementation
 - `Magefile.go` - Backend build tasks
 - `package.json` - Frontend build scripts + deps
 
