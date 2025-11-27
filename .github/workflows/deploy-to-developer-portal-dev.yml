@@ -55,7 +55,7 @@ jobs:
       - name: Wait for server
         uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.2
         with:
-          url: "http://localhost:3000/developers/plugin-tools"
+          url: "http://localhost:3000/developers/plugin-tools/"
 
       - name: Test http server is running
         run: curl -f http://localhost:3000/developers/plugin-tools || exit 0
