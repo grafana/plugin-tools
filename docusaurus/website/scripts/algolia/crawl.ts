@@ -2,7 +2,7 @@ import { type CheerioAPI, CheerioCrawler, type LoadedRequest, type Request, log,
 
 import { inspect } from 'util';
 
-log.setLevel(LogLevel.DEBUG);
+log.setLevel(LogLevel.INFO);
 
 function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) {
   const version = $('meta[name="docsearch:version"]').attr('content') || 'current';
@@ -13,7 +13,7 @@ function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) 
     $(
       '.menu__link.menu__link--active, menu__link.menu__link--sublist.menu__link--active, .navbar__item.navbar__link--active'
     )
-      .last()
+      .first()
       .text() || 'Documentation';
 
   // Helper function to extract heading hierarchy records
@@ -151,7 +151,7 @@ const localhostUrls = urls
   .map((url) => url.replace('https://grafana-dev.com', 'http://localhost:3000'));
 
 // Run the crawler and wait for it to finish.
-// const url = ['http://localhost:3000/developers/plugin-tools/how-to-guides/extend-configurations/'];
-await crawler.run(localhostUrls);
+const url = ['http://localhost:3000/developers/plugin-tools/how-to-guides/extend-configurations/'];
+await crawler.run(url);
 
 log.info('Crawler finished.');
