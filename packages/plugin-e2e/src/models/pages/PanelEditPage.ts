@@ -95,10 +95,21 @@ export class PanelEditPage extends GrafanaPage {
     }
     await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
-    await expect(
-      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
-      `Could not set visualization to ${visualization}. Ensure the panel is installed.`
-    ).toHaveText(visualization);
+
+    let selectors = [
+      this.ctx.selectors.components.PanelEditor.toggleVizPicker, // Grafana 12.3 and earlier
+    ];
+    // Grafana 12.4 and later
+    if (this.ctx.selectors.components.PanelEditor.OptionsPane.header) {
+      selectors.push(this.ctx.selectors.components.PanelEditor.OptionsPane.header);
+    }
+
+    const results = await Promise.allSettled(selectors.map(async selector => {
+      await expect(this.getByGrafanaSelector(selector)).toHaveText(visualization);
+    }));
+    if (results.every(result => result.status === 'rejected')) {
+      throw new Error(`Failed to set visualization to ${visualization}`);
+    }
   }
 
   /**
