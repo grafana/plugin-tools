@@ -1,18 +1,28 @@
 import { getSourceFilePath } from './analyzer.js';
-import { join } from 'path';
 
-describe('readSourceFile', () => {
-  it('should read a relative source file', () => {
-    const pluginRoot = join(__dirname, '../test/fixtures/patterns');
-    const content = getSourceFilePath('src/module.tsx', pluginRoot);
-    console.log(content);
-    expect(content).toContain('defaultProps');
+describe('getSourceFilePath', () => {
+  it('should resolve webpack path relative to pluginRoot', () => {
+    const pluginRoot = '/path/to/plugin';
+    const result = getSourceFilePath('webpack://my-plugin/src/Panel.tsx', pluginRoot);
+
+    console.log('Input:', 'webpack://my-plugin/src/Panel.tsx');
+    console.log('Plugin root:', pluginRoot);
+    console.log('Result:', result);
+
+    expect(result).toBe('src/Panel.tsx');
   });
 
-  it('should handle webpack:// paths', () => {
-    const pluginRoot = join(__dirname, '../test/fixtures/patterns');
-    const content = getSourceFilePath('webpack://my-plugin/src/module.tsx', pluginRoot);
-    console.log(content);
-    expect(content).toBe('src/module.tsx');
+  it('should resolve relative path', () => {
+    const pluginRoot = '/path/to/plugin';
+    const result = getSourceFilePath('src/Panel.tsx', pluginRoot);
+
+    expect(result).toBe('src/Panel.tsx');
+  });
+
+  it('should handle node_modules paths', () => {
+    const pluginRoot = '/path/to/plugin';
+    const result = getSourceFilePath('node_modules/react-select/dist/Select.js', pluginRoot);
+
+    expect(result).toBe('node_modules/react-select/dist/Select.js');
   });
 });

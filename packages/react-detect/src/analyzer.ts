@@ -18,5 +18,5 @@ export function getSourceFilePath(sourceFilePath: string, pluginRoot = process.c
     filePath = join(pluginRoot, filePath);
   }
 
-  return filePath;
+  return relative(pluginRoot, filePath);
 }
