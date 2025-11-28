@@ -35,11 +35,11 @@ function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) 
             hierarchy[`lvl${i}`] = null;
           }
         } else {
-          hierarchy.lvl1 = $(el).closest('article').find('header h1, > h1').last().text();
+          hierarchy.lvl1 = $(el).closest('article').find('header h1, > h1').first().text();
 
           // Use previous headings to populate lower hierarchy levels
           for (let i = 2; i < level; i++) {
-            hierarchy[`lvl${i}`] = $(el).prevAll(`h${i}`).last().text();
+            hierarchy[`lvl${i}`] = $(el).prevAll(`h${i}`).first().text();
           }
 
           // Set current level
@@ -56,17 +56,21 @@ function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) 
             ? $(el).parent().nextUntil('h1,h2,h3,h4,h5,h6').text() || ''
             : $(el).nextUntil('h1,h2,h3,h4,h5,h6').text() || '';
 
-        const url = `${request.url}${$(el).attr('id') ? `#${$(el).attr('id')}` : ''}`;
-        const anchor = $(el).attr('id') ?? '';
+        const prodUrl = new URL(request.url);
+        prodUrl.host = 'grafana.com';
+        prodUrl.protocol = 'https';
+        prodUrl.port = '';
 
+        const url = `${prodUrl.toString()}${$(el).attr('id') ? `#${$(el).attr('id')}` : ''}`;
+        const anchor = $(el).attr('id') ?? '';
         const objectID = generateObjectId(request);
 
         return {
-          objectID,
+          objectID: `${objectID}${anchor ? `-${anchor}` : ''}`,
           hierarchy,
           url,
           anchor,
-          url_without_anchor: request.url,
+          url_without_anchor: prodUrl.toString(),
           content,
           version,
           lang,
@@ -128,16 +132,16 @@ const crawler = new CheerioCrawler({
   // - request: an instance of the Request class with information such as the URL that is being crawled and HTTP method
   // - $: the cheerio object containing parsed HTML
   async requestHandler({ pushData, request, $ }) {
-    log.debug(`Processing ${request.url}...`);
+    log.info(`Processing ${request.url}...`);
     const result = generateAlgoliaRecords(request, $);
-    // log.debug(inspect(result, { depth: null, colors: true }));
+    log.debug(inspect(result, { depth: null, colors: true }));
     const objectID = generateObjectId(request);
     await pushData(result, objectID);
   },
 
   // This function is called if the page processing failed more than maxRequestRetries + 1 times.
   failedRequestHandler({ request }) {
-    log.debug(`Request ${request.url} failed twice.`);
+    log.warning(`Request ${request.url} failed twice.`);
   },
 });
 
@@ -146,9 +150,8 @@ const localhostUrls = urls
   .filter((url) => !url.endsWith('/search'))
   .map((url) => url.replace('https://grafana-dev.com', 'http://localhost:3000'));
 
-// console.log(localhostUrls);
-
-// // Run the crawler and wait for it to finish.
+// Run the crawler and wait for it to finish.
+// const url = ['http://localhost:3000/developers/plugin-tools/how-to-guides/extend-configurations/'];
 await crawler.run(localhostUrls);
 
-log.debug('Crawler finished.');
+log.info('Crawler finished.');
