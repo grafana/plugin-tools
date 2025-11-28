@@ -10,7 +10,19 @@ export async function resolveMatch(match: RawMatch): Promise<ResolvedMatch> {
       column: match.column,
     });
 
+    let sourceContent: string | undefined;
+    let sourceContext: string | undefined;
+    if (position.source) {
+      try {
+        sourceContent = sourceMap.sourceContentFor(position.source, true) ?? undefined;
+        sourceContext = extractSourceContext(sourceContent, position.line ?? undefined);
+      } catch {
+        console.error(`Failed to load source content for ${position.source}`);
+      }
+    }
+
     sourceMap.destroy();
+
     if (position.source) {
       if (isDependency(position.source)) {
         const packageName = getPackageName(position.source);
@@ -20,8 +32,10 @@ export async function resolveMatch(match: RawMatch): Promise<ResolvedMatch> {
             type: 'dependency',
             packageName: packageName,
             sourceFile: position.source,
-            sourceLine: position.line,
-            sourceColumn: position.column,
+            sourceLine: position.line ?? undefined,
+            sourceColumn: position.column ?? undefined,
+            sourceContent,
+            sourceContext,
           };
         }
         return {
@@ -34,8 +48,10 @@ export async function resolveMatch(match: RawMatch): Promise<ResolvedMatch> {
         ...match,
         type: 'source',
         sourceFile: position.source,
-        sourceLine: position.line,
-        sourceColumn: position.column,
+        sourceLine: position.line ?? undefined,
+        sourceColumn: position.column ?? undefined,
+        sourceContent,
+        sourceContext,
       };
     }
     return { ...match, type: 'unknown', reason: 'No original source found' };
@@ -72,4 +88,20 @@ function getPackageName(sourcePath: string): string | null {
   // for everything else, we can use the standard node_modules structure.
   const match = sourcePath.match(/node_modules\/((?:@[^/]+\/)?[^/]+)/);
   return match ? match[1] : null;
+}
+
+function extractSourceContext(sourceContent: string | undefined, line: number | undefined): string | undefined {
+  if (!line || !sourceContent) {
+    return undefined;
+  }
+
+  const lines = sourceContent.split('\n');
+  if (line < 1 || line > lines.length) {
+    return undefined;
+  }
+
+  return lines
+    .slice(Math.max(0, line - 2), line + 2)
+    .join('\n')
+    .trim();
 }

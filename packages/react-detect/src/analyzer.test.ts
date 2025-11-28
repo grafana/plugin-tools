@@ -1,28 +1,30 @@
-import { getSourceFilePath } from './analyzer.js';
+import { analyzeMatch } from './analyzer.js';
+import { ResolvedMatch } from './types/processors.js';
+import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
 
-describe('getSourceFilePath', () => {
-  it('should resolve webpack path relative to pluginRoot', () => {
-    const pluginRoot = '/path/to/plugin';
-    const result = getSourceFilePath('webpack://my-plugin/src/Panel.tsx', pluginRoot);
+describe('analyzeMatch', () => {
+  it('should analyze a source match with React code', async () => {
+    const fixturePath = join(__dirname, '..', 'test', 'fixtures', 'patterns', 'module.tsx');
+    const sourceContent = await readFile(fixturePath, 'utf8');
 
-    console.log('Input:', 'webpack://my-plugin/src/Panel.tsx');
-    console.log('Plugin root:', pluginRoot);
-    console.log('Result:', result);
+    const resolvedMatch: ResolvedMatch = {
+      pattern: 'defaultProps',
+      file: '/path/to/bundle.js',
+      line: 1,
+      column: 0,
+      matched: 'defaultProps',
+      context: '',
+      type: 'source',
+      sourceFile: 'test/fixtures/patterns/module.tsx',
+      sourceLine: 139,
+      sourceColumn: 12,
+      sourceContent,
+    };
 
-    expect(result).toBe('src/Panel.tsx');
-  });
+    const result = await analyzeMatch(resolvedMatch);
 
-  it('should resolve relative path', () => {
-    const pluginRoot = '/path/to/plugin';
-    const result = getSourceFilePath('src/Panel.tsx', pluginRoot);
-
-    expect(result).toBe('src/Panel.tsx');
-  });
-
-  it('should handle node_modules paths', () => {
-    const pluginRoot = '/path/to/plugin';
-    const result = getSourceFilePath('node_modules/react-select/dist/Select.js', pluginRoot);
-
-    expect(result).toBe('node_modules/react-select/dist/Select.js');
+    expect(result.confidence).toBe('high');
+    expect(result.componentType).toBe('function');
   });
 });

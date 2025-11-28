@@ -26,6 +26,7 @@ export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: 
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'AssignmentExpression' &&
       node.left.type === 'MemberExpression' &&
       node.left.property.type === 'Identifier' &&
@@ -43,6 +44,7 @@ export function findPropTypes(ast: TSESTree.Program, code: string, filePath: str
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'AssignmentExpression' &&
       node.left.type === 'MemberExpression' &&
       node.left.property.type === 'Identifier' &&
@@ -60,6 +62,7 @@ export function findContextTypes(ast: TSESTree.Program, code: string, filePath: 
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'AssignmentExpression' &&
       node.left.type === 'MemberExpression' &&
       node.left.property.type === 'Identifier' &&
@@ -77,6 +80,7 @@ export function findGetChildContext(ast: TSESTree.Program, code: string, filePat
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'AssignmentExpression' &&
       node.left.type === 'MemberExpression' &&
       node.left.property.type === 'Identifier' &&
@@ -94,6 +98,7 @@ export function findSecretInternals(ast: TSESTree.Program, code: string, filePat
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'MemberExpression' &&
       node.property.type === 'Identifier' &&
       node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED'
@@ -109,7 +114,12 @@ export function findStringRefs(ast: TSESTree.Program, code: string, filePath: st
   const matches: RawMatch[] = [];
 
   walk(ast, (node) => {
-    if (node.type === 'MemberExpression' && node.property.type === 'Identifier' && node.property.name === 'refs') {
+    if (
+      node &&
+      node.type === 'MemberExpression' &&
+      node.property.type === 'Identifier' &&
+      node.property.name === 'refs'
+    ) {
       matches.push(createRawMatch(node, 'stringRefs', code, filePath));
     }
   });
@@ -121,7 +131,7 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: s
   const matches: RawMatch[] = [];
 
   walk(ast, (node) => {
-    if (node.type === 'CallExpression') {
+    if (node && node.type === 'CallExpression') {
       // React.findDOMNode() or ReactDOM.findDOMNode()
       if (
         node.callee.type === 'MemberExpression' &&
@@ -145,6 +155,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'CallExpression' &&
       node.callee.type === 'MemberExpression' &&
       node.callee.property.type === 'Identifier' &&
@@ -163,6 +174,7 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'CallExpression' &&
       node.callee.type === 'MemberExpression' &&
       node.callee.property.type === 'Identifier' &&
@@ -181,6 +193,7 @@ export function findCreateFactory(ast: TSESTree.Program, code: string, filePath:
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'CallExpression' &&
       node.callee.type === 'MemberExpression' &&
       node.callee.property.type === 'Identifier' &&
