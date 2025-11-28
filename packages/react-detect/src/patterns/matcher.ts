@@ -103,7 +103,7 @@ export function findSecretInternals(ast: TSESTree.Program, code: string, filePat
       node.property.type === 'Identifier' &&
       node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED'
     ) {
-      matches.push(createRawMatch(node, '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED', code, filePath));
+      matches.push(createRawMatch(node, '__SECRET_INTERNALS', code, filePath));
     }
   });
 
@@ -117,6 +117,7 @@ export function findStringRefs(ast: TSESTree.Program, code: string, filePath: st
     if (
       node &&
       node.type === 'MemberExpression' &&
+      node.object.type === 'ThisExpression' &&
       node.property.type === 'Identifier' &&
       node.property.name === 'refs'
     ) {
@@ -135,6 +136,8 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: s
       // React.findDOMNode() or ReactDOM.findDOMNode()
       if (
         node.callee.type === 'MemberExpression' &&
+        node.callee.object.type === 'Identifier' &&
+        (node.callee.object.name === 'ReactDOM' || node.callee.object.name === 'React') &&
         node.callee.property.type === 'Identifier' &&
         node.callee.property.name === 'findDOMNode'
       ) {
@@ -154,15 +157,26 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
   const matches: RawMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'CallExpression' &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'render' &&
-      (node.arguments.length === 2 || node.arguments.length === 3)
-    ) {
-      matches.push(createRawMatch(node, 'ReactDOM.render', code, filePath));
+    if (node && node.type === 'CallExpression') {
+      // ReactDOM.render()
+      if (
+        node.callee.type === 'MemberExpression' &&
+        node.callee.object.type === 'Identifier' &&
+        node.callee.object.name === 'ReactDOM' &&
+        node.callee.property.type === 'Identifier' &&
+        node.callee.property.name === 'render' &&
+        (node.arguments.length === 2 || node.arguments.length === 3)
+      ) {
+        matches.push(createRawMatch(node, 'ReactDOM.render', code, filePath));
+      }
+      // render() (direct import from 'react-dom')
+      else if (
+        node.callee.type === 'Identifier' &&
+        node.callee.name === 'render' &&
+        (node.arguments.length === 2 || node.arguments.length === 3)
+      ) {
+        matches.push(createRawMatch(node, 'ReactDOM.render', code, filePath));
+      }
     }
   });
 
@@ -173,15 +187,26 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
   const matches: RawMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'CallExpression' &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'unmountComponentAtNode' &&
-      node.arguments.length === 1
-    ) {
-      matches.push(createRawMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+    if (node && node.type === 'CallExpression') {
+      // ReactDOM.unmountComponentAtNode()
+      if (
+        node.callee.type === 'MemberExpression' &&
+        node.callee.object.type === 'Identifier' &&
+        node.callee.object.name === 'ReactDOM' &&
+        node.callee.property.type === 'Identifier' &&
+        node.callee.property.name === 'unmountComponentAtNode' &&
+        node.arguments.length === 1
+      ) {
+        matches.push(createRawMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+      }
+      // unmountComponentAtNode() (direct import)
+      else if (
+        node.callee.type === 'Identifier' &&
+        node.callee.name === 'unmountComponentAtNode' &&
+        node.arguments.length === 1
+      ) {
+        matches.push(createRawMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+      }
     }
   });
 
@@ -192,15 +217,26 @@ export function findCreateFactory(ast: TSESTree.Program, code: string, filePath:
   const matches: RawMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'CallExpression' &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'createFactory' &&
-      node.arguments.length === 1
-    ) {
-      matches.push(createRawMatch(node, 'createFactory', code, filePath));
+    if (node && node.type === 'CallExpression') {
+      // React.createFactory()
+      if (
+        node.callee.type === 'MemberExpression' &&
+        node.callee.object.type === 'Identifier' &&
+        node.callee.object.name === 'React' &&
+        node.callee.property.type === 'Identifier' &&
+        node.callee.property.name === 'createFactory' &&
+        node.arguments.length === 1
+      ) {
+        matches.push(createRawMatch(node, 'createFactory', code, filePath));
+      }
+      // createFactory() (direct import)
+      else if (
+        node.callee.type === 'Identifier' &&
+        node.callee.name === 'createFactory' &&
+        node.arguments.length === 1
+      ) {
+        matches.push(createRawMatch(node, 'createFactory', code, filePath));
+      }
     }
   });
 
