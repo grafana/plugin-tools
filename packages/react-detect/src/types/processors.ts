@@ -12,13 +12,22 @@ export type RawMatch = {
 
 export type ResolvedMatch = RawMatch &
   (
-    | { type: 'source'; sourceFile: string; sourceLine: number | null; sourceColumn: number | null }
+    | {
+        type: 'source';
+        sourceFile: string;
+        sourceLine?: number;
+        sourceColumn?: number;
+        sourceContent?: string;
+        sourceContext?: string;
+      }
     | {
         type: 'dependency';
         packageName: string;
         sourceFile: string;
-        sourceLine: number | null;
-        sourceColumn: number | null;
+        sourceLine?: number;
+        sourceColumn?: number;
+        sourceContent?: string;
+        sourceContext?: string;
       }
     | { type: 'unknown'; reason: string }
   );
