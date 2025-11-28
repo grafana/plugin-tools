@@ -39,7 +39,7 @@ if (pkg.name === '@grafana/create-plugin') {
     ignore: ['**/*.test.ts'],
     absolute: true,
   };
-  const codeMods = glob.sync('{migrations,additions}/scripts/*.ts', codeModsGlobOptions).map((m) => m.toString());
+  const codeMods = glob.sync('{migrations,additions}/scripts/**/*.ts', codeModsGlobOptions).map((m) => m.toString());
   input.push(...codeMods);
 
   external.push('prettier');
