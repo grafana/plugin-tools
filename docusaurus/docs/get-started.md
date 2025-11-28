@@ -229,6 +229,7 @@ Congratulations! You've just scaffolded your first plugin which you can now acce
 ## Next steps
 
 - Start your plugin journey with one of our [plugin development tutorials](/tutorials/).
-- Learn how to [extend](/how-to-guides) its functionality.
+- Learn how to [extend](/how-to-guides) the plugin's functionality.
 - Review the [plugin examples](https://github.com/grafana/grafana-plugin-examples) to learn about good practices.
 - Learn how to [package](/publish-a-plugin/package-a-plugin), [sign](/publish-a-plugin/sign-a-plugin), and [publish](/publish-a-plugin/publish-or-update-a-plugin.md) your plugin to the Grafana [plugin catalog](https://grafana.com/plugins).
+- Use the [available resources](resources), including [Grafana Community](https://community.grafana.com/), the official Grafana Labs forums, and the [Community Slack](https://slack.grafana.com/).
