@@ -1,7 +1,7 @@
 import fg from 'fast-glob';
 import { join } from 'node:path';
 
-export async function findJSfiles(directory: string): Promise<string[]> {
+export async function findBundledJSfiles(directory: string): Promise<string[]> {
   const distDirectory = join(directory, 'dist');
 
   try {

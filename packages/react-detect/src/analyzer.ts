@@ -1,22 +1,30 @@
-import { join, isAbsolute, relative } from 'node:path';
-import { existsSync } from 'node:fs';
+import { AnalyzedMatch, ResolvedMatch } from './types/processors.js';
+import { parseFile } from './parser.js';
+import { analyzeConfidence, analyzeComponentType } from './utils/analyzer.js';
 
-/**
- * Source maps can have different path formats. This function normalises the path relative to the plugin root
- * and returns the absolute path to the source file.
- */
-export function getSourceFilePath(sourceFilePath: string, pluginRoot = process.cwd()) {
-  let filePath = sourceFilePath;
-
-  if (filePath.startsWith('webpack://')) {
-    // webpack://package-name/src/file.tsx -> src/file.tsx
-    // webpack://package-name/node_modules/... -> node_modules/...
-    filePath = filePath.replace(/^webpack:\/\/[^/]+\//, '');
+export async function analyzeMatch(match: ResolvedMatch): Promise<AnalyzedMatch> {
+  if (match.type === 'unknown' || !match.sourceContent) {
+    return {
+      ...match,
+      confidence: 'unknown',
+      componentType: 'unknown',
+    };
   }
 
-  if (!isAbsolute(filePath)) {
-    filePath = join(pluginRoot, filePath);
-  }
+  try {
+    const ast = parseFile(match.sourceContent, match.sourceFile);
 
-  return relative(pluginRoot, filePath);
+    return {
+      ...match,
+      confidence: analyzeConfidence(ast),
+      componentType: analyzeComponentType(ast),
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      ...match,
+      confidence: 'unknown',
+      componentType: 'unknown',
+    };
+  }
 }
