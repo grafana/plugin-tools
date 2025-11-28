@@ -49,16 +49,23 @@ Inside your `DataSource` implementation:
 import { DataQueryRequest, DataQueryResponse } from '@grafana/schema';
 
 export class DataSource extends DataSourceApi<MyQuery> {
+  constructor(
+    instanceSettings: DataSourceInstanceSettings<PyroscopeDataSourceOptions>,
+    private readonly templateSrv: TemplateSrv = getTemplateSrv()
+  ) {
+    super(instanceSettings);
+  }
+
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     const targets = options.targets.filter((t) => !t.hide);
 
     const interpolatedTargets = targets.map((target) => {
-      const rawQuery = getTemplateSrv().replace(
+      const rawQuery = this.templateSrv.replace(
         target.rawQuery ?? '',
         options.scopedVars // include scoped vars for panel/time range
       );
 
-      const namespace = getTemplateSrv().replace(target.namespace ?? '', options.scopedVars);
+      const namespace = this.templateSrv.replace(target.namespace ?? '', options.scopedVars);
 
       return {
         ...target,
@@ -149,18 +156,18 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { MyVariableQuery } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery> {
-  // existing query()…
+  // existing constructor, query()...
 
   async metricFindQuery(variableQuery: MyVariableQuery | string, options?: any): Promise<MetricFindValue[]> {
     if (typeof variableQuery === 'string') {
-      const interpolated = getTemplateSrv().replace(variableQuery);
+      const interpolated = this.templateSrv.replace(variableQuery);
       const response = await this.fetchVariableValues({ rawQuery: interpolated });
       return response.map((name) => ({ text: name }));
     }
 
     // If using MyVariableQuery model:
-    const namespace = getTemplateSrv().replace(variableQuery.namespace);
-    const rawQuery = getTemplateSrv().replace(variableQuery.rawQuery);
+    const namespace = this.templateSrv.replace(variableQuery.namespace);
+    const rawQuery = this.templateSrv.replace(variableQuery.rawQuery);
 
     const response = await this.fetchMetricNames(namespace, rawQuery);
 
@@ -198,6 +205,7 @@ File: `src/VariableQueryEditor.tsx`
 ```tsx
 import React, { useState } from 'react';
 import { MyVariableQuery } from './types';
+import { InlineField, InlineFieldRow, LoadingPlaceholder, Select } from '@grafana/ui';
 
 interface VariableQueryProps {
   query: MyVariableQuery;
@@ -226,46 +234,74 @@ export const VariableQueryEditor = ({ query, onChange }: VariableQueryProps) => 
 
   return (
     <>
-      <div className="gf-form">
-        <span className="gf-form-label width-10">Namespace</span>
-        <input
-          name="namespace"
-          className="gf-form-input"
-          value={state.namespace}
-          onChange={handleChange}
-          onBlur={saveQuery}
-        />
-      </div>
-
-      <div className="gf-form">
-        <span className="gf-form-label width-10">Query</span>
-        <input
-          name="rawQuery"
-          className="gf-form-input"
-          value={state.rawQuery}
-          onChange={handleChange}
-          onBlur={saveQuery}
-        />
-      </div>
+      <InlineFieldRow>
+        <InlineField label="Namespace" labelWidth={20}>
+          <Input
+            type="text"
+            aria-label="Namespace selector"
+            placeholder="Enter namespace"
+            value={state.namespace}
+            onChange={handleChange}
+            onBlur={saveQuery}
+          />
+        </InlineField>
+      </InlineFieldRow>
+      <InlineFieldRow>
+        <InlineField label="Query" labelWidth={20}>
+          <Input
+            type="text"
+            aria-label="Query selector"
+            placeholder="Enter query"
+            value={state.rawQuery}
+            onChange={handleChange}
+            onBlur={saveQuery}
+          />
+        </InlineField>
+      </InlineFieldRow>
     </>
   );
 };
 ```
 
-### 3.2 Register `VariableQueryEditor` in the plugin
+### 3.2 Create a `VariableSupport` file for the plugin
 
-File: `src/module.ts`
+File: `src/variableSupport.ts`
 
 ```ts
-import { DataSourcePlugin } from '@grafana/data';
-import { DataSource } from './datasource';
-import { QueryEditor } from './QueryEditor';
-import { VariableQueryEditor } from './VariableQueryEditor';
-import { MyQuery, MyDataSourceOptions, MyVariableQuery } from './types';
+export class MyVariableSupport extends CustomVariableSupport<Datasource, MyVariableQuery> {
+  editor = VariableQueryEditor;
 
-export const plugin = new DataSourcePlugin<DataSource, MyQuery, MyDataSourceOptions>(DataSource)
-  .setQueryEditor(QueryEditor)
-  .setVariableQueryEditor(VariableQueryEditor);
+  constructor(private datasource: Datasource) {
+    super();
+  }
+
+  query(request: DataQueryRequest<MyVariableQuery>): Observable<{ data: MetricFindValue[] }> {
+    const [query] = request.targets;
+    const { range, scopedVars } = request;
+
+    const result = this.datasource.metricFindQuery(query, { scopedVars, range });
+    return from(result).pipe(map((data) => ({ data })));
+  }
+}
 ```
 
-- `setVariableQueryEditor` wires your editor into Grafana’s variable UI.
+- `editor = VariableQueryEditor;` wires your editor into Grafana’s variable UI.
+
+### 3.3 Assign `VariableSupport` to `this.variables` in the datasource
+
+File: `src/datasource.ts`
+
+```ts
+export class DataSource extends DataSourceApi<MyQuery> {
+  constructor(
+    instanceSettings: DataSourceInstanceSettings<PyroscopeDataSourceOptions>,
+    private readonly templateSrv: TemplateSrv = getTemplateSrv()
+  ) {
+    super(instanceSettings);
+    // assign the variable property to the new VariableSupport
+    // to add variable support for this datasource
+    this.variables = new VariableSupport(this);
+  }
+  // existing functions()…
+}
+```
