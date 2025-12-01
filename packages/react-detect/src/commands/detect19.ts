@@ -6,7 +6,6 @@ import { findPatternMatches } from '../patterns/matcher.js';
 import { resolveMatch } from '../source-map-resolver.js';
 import { analyzeMatch } from '../analyzer.js';
 import { output } from '../utils/output.js';
-import { reportConsole } from '../bin/reporters/console.js';
 
 /**
  * Main detect command for finding React 19 breaking changes
@@ -20,7 +19,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
 
   const allMatches = await getAllMatches(pluginRoot);
   // Report results
-  reportConsole(allMatches);
+  console.log(allMatches);
 
   process.exit(allMatches.length > 0 ? 1 : 0);
 }
