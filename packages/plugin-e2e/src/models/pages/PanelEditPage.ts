@@ -96,7 +96,7 @@ export class PanelEditPage extends GrafanaPage {
     await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
 
-    let selectors = [
+    const selectors = [
       this.ctx.selectors.components.PanelEditor.toggleVizPicker, // Grafana 12.3 and earlier
     ];
     // Grafana 12.4 and later
