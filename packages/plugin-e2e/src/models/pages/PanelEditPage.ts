@@ -108,7 +108,7 @@ export class PanelEditPage extends GrafanaPage {
       await expect(this.getByGrafanaSelector(selector)).toHaveText(visualization);
     }));
     if (results.every(result => result.status === 'rejected')) {
-      throw new Error(`Failed to set visualization to ${visualization}`);
+      throw new Error(`Failed to set visualization to ${visualization}. Ensure the panel is installed.`);
     }
   }
 
