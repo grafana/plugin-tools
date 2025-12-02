@@ -3,9 +3,11 @@ import { findBundledJSfiles } from '../file-scanner.js';
 import { AnalyzedMatch } from '../types/processors.js';
 import { readFile } from 'fs/promises';
 import { findPatternMatches } from '../patterns/matcher.js';
-import { resolveMatch } from '../source-map-resolver.js';
+import { resolveMatch } from '../resolver.js';
 import { analyzeMatch } from '../analyzer.js';
 import { output } from '../utils/output.js';
+import { getResults } from '../results.js';
+import { DependencyContext } from '../utils/dependencies.js';
 
 /**
  * Main detect command for finding React 19 breaking changes
@@ -18,10 +20,11 @@ export async function detect19(argv: minimist.ParsedArgs) {
   });
 
   const allMatches = await getAllMatches(pluginRoot);
-  // Report results
-  console.log(allMatches);
+  const depContext = new DependencyContext();
+  await depContext.loadDependencies(pluginRoot);
+  const results = getResults(allMatches, pluginRoot, depContext);
 
-  process.exit(allMatches.length > 0 ? 1 : 0);
+  process.exit(results.summary.totalIssues > 0 ? 1 : 0);
 }
 
 async function getAllMatches(pluginRoot: string) {
