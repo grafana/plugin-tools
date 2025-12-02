@@ -5,7 +5,6 @@ import { readFile } from 'fs/promises';
 import { findPatternMatches } from '../patterns/matcher.js';
 import { resolveMatch } from '../resolver.js';
 import { analyzeMatch } from '../analyzer.js';
-import { output } from '../utils/output.js';
 import { getResults } from '../results.js';
 import { DependencyContext } from '../utils/dependencies.js';
 import { consoleReporter } from '../reporters/console.js';
@@ -15,10 +14,6 @@ import { consoleReporter } from '../reporters/console.js';
  */
 export async function detect19(argv: minimist.ParsedArgs) {
   const pluginRoot = argv.pluginRoot || process.cwd();
-
-  output.log({
-    title: `Detecting React 19 breaking changes for plugin at path:${pluginRoot}`,
-  });
 
   const allMatches = await getAllMatches(pluginRoot);
   const depContext = new DependencyContext();

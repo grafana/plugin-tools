@@ -3,7 +3,6 @@ import { parsePnpmProject, parseNpmLockV2Project, parseYarnLockV2Project } from 
 import type { DepGraph } from '@snyk/dep-graph';
 import { existsSync, readFileSync } from 'node:fs';
 import { readJsonFile } from './plugin.js';
-import { inspect } from 'node:util';
 
 export class DependencyContext {
   private dependencies: Map<string, string> = new Map();
