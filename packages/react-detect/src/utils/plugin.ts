@@ -17,7 +17,7 @@ export function getPluginJson(dir?: string) {
     return cachedPluginJson;
   }
 
-  const srcPath = dir || path.join(process.cwd(), 'dist');
+  const srcPath = dir ? path.join(dir, 'dist') : path.join(process.cwd(), 'dist');
   const pluginJsonPath = path.join(srcPath, 'plugin.json');
   cachedPluginJson = readJsonFile(pluginJsonPath);
   return cachedPluginJson;

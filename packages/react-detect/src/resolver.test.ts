@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { join } from 'path';
-import { resolveMatch } from './source-map-resolver.js';
+import { resolveMatch } from './resolver.js';
 import { RawMatch } from './types/processors.js';
 import { readFileSync } from 'fs';
 import { parseFile } from './parser.js';
