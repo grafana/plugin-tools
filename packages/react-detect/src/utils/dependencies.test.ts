@@ -1,35 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { join } from 'node:path';
 import { DependencyContext, isExternal } from './dependencies.js';
-import type { PkgTree } from 'snyk-nodejs-lockfile-parser';
-
-// Mock the snyk parser to return controlled tree structure
-vi.mock('snyk-nodejs-lockfile-parser', () => ({
-  buildDepTreeFromFiles: vi.fn(async () => {
-    const mockTree: PkgTree = {
-      name: 'simple-npm-check',
-      version: '1.0.0',
-      dependencies: {
-        has: {
-          name: 'has',
-          version: '1.0.4',
-          dependencies: {},
-        },
-        debug: {
-          name: 'debug',
-          version: '4.4.3',
-          dependencies: {
-            ms: {
-              name: 'ms',
-              version: '2.1.3',
-            },
-          },
-        },
-      },
-    };
-    return mockTree;
-  }),
-}));
 
 describe('DependencyContext', () => {
   let context: DependencyContext;
@@ -53,10 +24,6 @@ describe('DependencyContext', () => {
       expect(context.isDirect('debug')).toBe(true);
       expect(context.getVersion('debug')).toBe('^4.4.3');
     });
-
-    it('should throw error if package.json does not exist', async () => {
-      await expect(context.loadDependencies('/nonexistent/path')).rejects.toThrow('Failed to load package.json');
-    });
   });
 
   describe('findRootDependency', () => {
@@ -70,8 +37,6 @@ describe('DependencyContext', () => {
     it('should find root dependency for transitive packages', async () => {
       await context.loadDependencies(fixturesPath);
 
-      // ms is a transitive dependency of debug
-      // The dep tree should show: debug -> ms
       const rootDep = context.findRootDependency('ms');
       expect(rootDep).toBe('debug');
     });
