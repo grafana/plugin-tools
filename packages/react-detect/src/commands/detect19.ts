@@ -8,6 +8,7 @@ import { analyzeMatch } from '../analyzer.js';
 import { output } from '../utils/output.js';
 import { getResults } from '../results.js';
 import { DependencyContext } from '../utils/dependencies.js';
+import { consoleReporter } from '../reporters/console.js';
 
 /**
  * Main detect command for finding React 19 breaking changes
@@ -23,6 +24,8 @@ export async function detect19(argv: minimist.ParsedArgs) {
   const depContext = new DependencyContext();
   await depContext.loadDependencies(pluginRoot);
   const results = getResults(allMatches, pluginRoot, depContext);
+
+  consoleReporter(results);
 
   process.exit(results.summary.totalIssues > 0 ? 1 : 0);
 }
