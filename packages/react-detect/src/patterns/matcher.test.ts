@@ -97,7 +97,7 @@ describe('matcher', () => {
       const matches = findSecretInternals(ast, code, 'test.js');
 
       expect(matches).toHaveLength(1);
-      expect(matches[0].pattern).toBe('__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED');
+      expect(matches[0].pattern).toBe('__SECRET_INTERNALS');
       expect(matches[0].matched).toContain('__SECRET_INTERNALS');
     });
   });
