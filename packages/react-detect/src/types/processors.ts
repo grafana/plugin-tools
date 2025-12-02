@@ -35,4 +35,4 @@ export type ResolvedMatch = RawMatch &
 export type AnalyzedMatch = ResolvedMatch & {
   confidence: Confidence;
   componentType: ComponentType;
-};
+} & ({ type: 'source' } | { type: 'dependency'; rootDependency: string } | { type: 'unknown' });
