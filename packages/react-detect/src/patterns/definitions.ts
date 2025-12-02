@@ -15,7 +15,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   defaultProps: {
     severity: 'removed',
     impactLevel: 'critical',
-    description: 'defaultProps removed for function components in React 19',
+    description: 'removed in favour of function components.',
     fix: {
       description: 'Use ES6 default parameters',
       before: 'MyComponent.defaultProps = { value: "test" }',
@@ -26,11 +26,12 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   },
   propTypes: {
     severity: 'removed',
-    impactLevel: 'critical',
-    description: 'propTypes removed for function components in React 19',
+    impactLevel: 'warning',
+    description: 'removed in favour of typescript or other type-checking solution',
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apis',
     fix: {
-      description: 'Codemod proptypes to Typescript: `npx codemod@latest react/prop-types-typescript`',
+      description: 'Run the codemod to migrate to Typescript',
+      before: 'npx codemod@latest react/prop-types-typescript',
     },
   },
   createFactory: {
