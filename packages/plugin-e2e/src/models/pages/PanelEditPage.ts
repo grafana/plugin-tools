@@ -95,9 +95,15 @@ export class PanelEditPage extends GrafanaPage {
     }
     await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
+
+    const selector = semver.gte(this.ctx.grafanaVersion, '12.4.0')
+      ? // This will fail the typecheck until a PR in the grafana/grafana repo is merged that adds this selector
+        this.ctx.selectors.components.PanelEditor.OptionsPane.header
+      : this.ctx.selectors.components.PanelEditor.toggleVizPicker;
+
     await expect(
-      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
-      `Could not set visualization to ${visualization}. Ensure the panel is installed.`
+      this.getByGrafanaSelector(selector),
+      `Failed to set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
   }
 
