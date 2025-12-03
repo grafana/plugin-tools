@@ -10,8 +10,6 @@ const PARSER_OPTIONS = {
   sourceType: 'module' as const,
 };
 
-const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx'];
-
 export function parseFile(code: string, filePath: string): TSESTree.Program {
   try {
     return parse(code, {
@@ -21,8 +19,4 @@ export function parseFile(code: string, filePath: string): TSESTree.Program {
   } catch (error) {
     throw new Error(`Failed to parse ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
-}
-
-export function canParse(filePath: string): boolean {
-  return SUPPORTED_EXTENSIONS.some((ext) => filePath.endsWith(ext));
 }

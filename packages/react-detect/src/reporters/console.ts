@@ -1,4 +1,3 @@
-import { inspect } from 'node:util';
 import { AnalysisResult, PluginAnalysisResults } from '../types/reporters.js';
 import { output } from '../utils/output.js';
 

@@ -1,25 +1,25 @@
 import { TSESTree } from '@typescript-eslint/typescript-estree';
 import { PatternMatch } from '../types/processors.js';
-import { walk, createPatternMatch } from '../utils/ast.js';
+import { getSurroundingCode, walk } from '../utils/ast.js';
 
-export function findPatternMatches(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findPatternMatches(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
-  matches.push(...findDefaultProps(ast, code, filePath));
-  matches.push(...findPropTypes(ast, code, filePath));
-  matches.push(...findContextTypes(ast, code, filePath));
-  matches.push(...findGetChildContext(ast, code, filePath));
-  matches.push(...findSecretInternals(ast, code, filePath));
-  matches.push(...findStringRefs(ast, code, filePath));
-  matches.push(...findFindDOMNode(ast, code, filePath));
-  matches.push(...findReactDOMRender(ast, code, filePath));
-  matches.push(...findReactDOMUnmountComponentAtNode(ast, code, filePath));
-  matches.push(...findCreateFactory(ast, code, filePath));
+  matches.push(...findDefaultProps(ast, code));
+  matches.push(...findPropTypes(ast, code));
+  matches.push(...findContextTypes(ast, code));
+  matches.push(...findGetChildContext(ast, code));
+  matches.push(...findSecretInternals(ast, code));
+  matches.push(...findStringRefs(ast, code));
+  matches.push(...findFindDOMNode(ast, code));
+  matches.push(...findReactDOMRender(ast, code));
+  matches.push(...findReactDOMUnmountComponentAtNode(ast, code));
+  matches.push(...findCreateFactory(ast, code));
 
   return matches;
 }
 
-export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findDefaultProps(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -30,14 +30,14 @@ export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: 
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'defaultProps'
     ) {
-      matches.push(createPatternMatch(node, 'defaultProps', code, filePath));
+      matches.push(createPatternMatch(node, 'defaultProps', code));
     }
   });
 
   return matches;
 }
 
-export function findPropTypes(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findPropTypes(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -48,14 +48,14 @@ export function findPropTypes(ast: TSESTree.Program, code: string, filePath: str
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'propTypes'
     ) {
-      matches.push(createPatternMatch(node, 'propTypes', code, filePath));
+      matches.push(createPatternMatch(node, 'propTypes', code));
     }
   });
 
   return matches;
 }
 
-export function findContextTypes(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findContextTypes(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -66,14 +66,14 @@ export function findContextTypes(ast: TSESTree.Program, code: string, filePath: 
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'contextTypes'
     ) {
-      matches.push(createPatternMatch(node, 'contextTypes', code, filePath));
+      matches.push(createPatternMatch(node, 'contextTypes', code));
     }
   });
 
   return matches;
 }
 
-export function findGetChildContext(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findGetChildContext(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -84,14 +84,14 @@ export function findGetChildContext(ast: TSESTree.Program, code: string, filePat
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'getChildContext'
     ) {
-      matches.push(createPatternMatch(node, 'getChildContext', code, filePath));
+      matches.push(createPatternMatch(node, 'getChildContext', code));
     }
   });
 
   return matches;
 }
 
-export function findSecretInternals(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findSecretInternals(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -101,14 +101,14 @@ export function findSecretInternals(ast: TSESTree.Program, code: string, filePat
       node.property.type === 'Identifier' &&
       node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED'
     ) {
-      matches.push(createPatternMatch(node, '__SECRET_INTERNALS', code, filePath));
+      matches.push(createPatternMatch(node, '__SECRET_INTERNALS', code));
     }
   });
 
   return matches;
 }
 
-export function findStringRefs(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findStringRefs(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -119,14 +119,14 @@ export function findStringRefs(ast: TSESTree.Program, code: string, filePath: st
       node.property.type === 'Identifier' &&
       node.property.name === 'refs'
     ) {
-      matches.push(createPatternMatch(node, 'stringRefs', code, filePath));
+      matches.push(createPatternMatch(node, 'stringRefs', code));
     }
   });
 
   return matches;
 }
 
-export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findFindDOMNode(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -139,11 +139,11 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: s
         node.callee.property.type === 'Identifier' &&
         node.callee.property.name === 'findDOMNode'
       ) {
-        matches.push(createPatternMatch(node, 'findDOMNode', code, filePath));
+        matches.push(createPatternMatch(node, 'findDOMNode', code));
       }
       // findDOMNode() (direct import)
       else if (node.callee.type === 'Identifier' && node.callee.name === 'findDOMNode') {
-        matches.push(createPatternMatch(node, 'findDOMNode', code, filePath));
+        matches.push(createPatternMatch(node, 'findDOMNode', code));
       }
     }
   });
@@ -151,7 +151,7 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: s
   return matches;
 }
 
-export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findReactDOMRender(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -165,7 +165,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
         node.callee.property.name === 'render' &&
         (node.arguments.length === 2 || node.arguments.length === 3)
       ) {
-        matches.push(createPatternMatch(node, 'ReactDOM.render', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.render', code));
       }
       // render() (direct import from 'react-dom')
       else if (
@@ -173,7 +173,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
         node.callee.name === 'render' &&
         (node.arguments.length === 2 || node.arguments.length === 3)
       ) {
-        matches.push(createPatternMatch(node, 'ReactDOM.render', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.render', code));
       }
     }
   });
@@ -181,11 +181,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
   return matches;
 }
 
-export function findReactDOMUnmountComponentAtNode(
-  ast: TSESTree.Program,
-  code: string,
-  filePath: string
-): PatternMatch[] {
+export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -199,7 +195,7 @@ export function findReactDOMUnmountComponentAtNode(
         node.callee.property.name === 'unmountComponentAtNode' &&
         node.arguments.length === 1
       ) {
-        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
       }
       // unmountComponentAtNode() (direct import)
       else if (
@@ -207,7 +203,7 @@ export function findReactDOMUnmountComponentAtNode(
         node.callee.name === 'unmountComponentAtNode' &&
         node.arguments.length === 1
       ) {
-        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
       }
     }
   });
@@ -215,7 +211,7 @@ export function findReactDOMUnmountComponentAtNode(
   return matches;
 }
 
-export function findCreateFactory(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+export function findCreateFactory(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
@@ -229,7 +225,7 @@ export function findCreateFactory(ast: TSESTree.Program, code: string, filePath:
         node.callee.property.name === 'createFactory' &&
         node.arguments.length === 1
       ) {
-        matches.push(createPatternMatch(node, 'createFactory', code, filePath));
+        matches.push(createPatternMatch(node, 'createFactory', code));
       }
       // createFactory() (direct import)
       else if (
@@ -237,10 +233,20 @@ export function findCreateFactory(ast: TSESTree.Program, code: string, filePath:
         node.callee.name === 'createFactory' &&
         node.arguments.length === 1
       ) {
-        matches.push(createPatternMatch(node, 'createFactory', code, filePath));
+        matches.push(createPatternMatch(node, 'createFactory', code));
       }
     }
   });
 
   return matches;
+}
+
+export function createPatternMatch(node: any, pattern: string, code: string): PatternMatch {
+  return {
+    pattern,
+    line: node.loc.start.line,
+    column: node.loc.start.column,
+    matched: code.slice(node.range[0], node.range[1]),
+    context: getSurroundingCode(code, node),
+  };
 }

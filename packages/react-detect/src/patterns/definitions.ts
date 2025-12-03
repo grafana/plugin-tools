@@ -111,14 +111,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   },
 };
 
-export function getPatternNames(): string[] {
-  return Object.keys(PATTERN_DEFINITIONS);
-}
-
 export function getPattern(name: string): PatternDefinition | undefined {
   return PATTERN_DEFINITIONS[name];
-}
-
-export function isValidPatternName(name: string): boolean {
-  return name in PATTERN_DEFINITIONS;
 }
