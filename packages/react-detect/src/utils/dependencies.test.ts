@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { join } from 'node:path';
 import { DependencyContext, isExternal } from './dependencies.js';
 

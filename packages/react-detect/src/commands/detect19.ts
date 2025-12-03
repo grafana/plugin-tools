@@ -1,13 +1,10 @@
 import minimist from 'minimist';
-import { findBundledJSfiles } from '../file-scanner.js';
-import { AnalyzedMatch } from '../types/processors.js';
-import { readFile } from 'fs/promises';
-import { findPatternMatches } from '../patterns/matcher.js';
-import { resolveMatch } from '../resolver.js';
-import { analyzeMatch } from '../analyzer.js';
-import { getResults } from '../results.js';
+import { findSourceMapFiles } from '../file-scanner.js';
+import { generateAnalysisResults } from '../results.js';
 import { DependencyContext } from '../utils/dependencies.js';
 import { consoleReporter } from '../reporters/console.js';
+import { extractAllSources } from '../source-extractor.js';
+import { analyzeSourceFiles } from '../analyzer.js';
 
 /**
  * Main detect command for finding React 19 breaking changes
@@ -18,7 +15,15 @@ export async function detect19(argv: minimist.ParsedArgs) {
   const allMatches = await getAllMatches(pluginRoot);
   const depContext = new DependencyContext();
   await depContext.loadDependencies(pluginRoot);
-  const results = getResults(allMatches, pluginRoot, depContext);
+
+  const matchesWithRootDependency = allMatches.map((match) => {
+    if (match.type === 'dependency' && match.packageName) {
+      return { ...match, rootDependency: depContext.findRootDependency(match.packageName) };
+    }
+    return match;
+  });
+
+  const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext);
 
   consoleReporter(results);
 
@@ -26,19 +31,19 @@ export async function detect19(argv: minimist.ParsedArgs) {
 }
 
 async function getAllMatches(pluginRoot: string) {
-  const filePaths = await findBundledJSfiles(pluginRoot);
-  const allMatches: AnalyzedMatch[] = [];
+  const sourcemapPaths = await findSourceMapFiles(pluginRoot);
 
-  for (const filePath of filePaths) {
-    const code = await readFile(filePath, 'utf8');
-    const rawMatches = findPatternMatches(code, filePath);
-
-    for (const rawMatch of rawMatches) {
-      const resolvedMatch = await resolveMatch(rawMatch);
-      const analyzedMatch = await analyzeMatch(resolvedMatch);
-      allMatches.push(analyzedMatch);
-    }
+  if (sourcemapPaths.length === 0) {
+    throw new Error('No source map files found in dist directory. Make sure to build your plugin first.');
   }
 
-  return allMatches;
+  const sources = await extractAllSources(sourcemapPaths);
+
+  if (sources.length === 0) {
+    throw new Error('No sources found in source maps.');
+  }
+
+  const matches = await analyzeSourceFiles(sources);
+
+  return matches;
 }
