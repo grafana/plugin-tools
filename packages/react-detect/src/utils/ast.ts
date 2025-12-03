@@ -1,5 +1,3 @@
-import { PatternMatch } from '../types/processors.js';
-
 export function walk(node: any, callback: (node: any) => void): void {
   callback(node);
   for (const key in node) {
@@ -13,19 +11,9 @@ export function walk(node: any, callback: (node: any) => void): void {
   }
 }
 
-function getSurroundingCode(code: string, node: any): string {
+export function getSurroundingCode(code: string, node: any): string {
   const lines = code.split('\n');
   const startLine = Math.max(0, node.loc.start.line - 3);
   const endLine = Math.min(lines.length, node.loc.end.line + 2);
   return lines.slice(startLine, endLine).join('\n');
-}
-
-export function createPatternMatch(node: any, pattern: string, code: string, filePath: string): PatternMatch {
-  return {
-    pattern,
-    line: node.loc.start.line,
-    column: node.loc.start.column,
-    matched: code.slice(node.range[0], node.range[1]),
-    context: getSurroundingCode(code, node),
-  };
 }

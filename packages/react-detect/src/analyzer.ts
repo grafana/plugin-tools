@@ -13,7 +13,7 @@ export async function analyzeSourceFiles(sourceFiles: SourceFile[]): Promise<Ana
 
     try {
       const ast = parseFile(source.content, source.path);
-      const patternMatches = findPatternMatches(ast, source.content, source.path);
+      const patternMatches = findPatternMatches(ast, source.content);
 
       for (const match of patternMatches) {
         const analyzed = {

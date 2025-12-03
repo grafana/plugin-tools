@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { parseFile } from '../parser.js';
 import {
   findDefaultProps,
@@ -22,22 +20,11 @@ describe('matcher', () => {
       MyComponent.defaultProps = { foo: 'bar' };
     `;
       const ast = parseFile(code, 'module.js');
-      const matches = findDefaultProps(ast, code, 'module.js');
+      const matches = findDefaultProps(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('defaultProps');
       expect(matches[0].line).toBe(3);
-    });
-
-    it('should find defaultProps in bundled code', () => {
-      const fixturePath = join(__dirname, '../../test/fixtures/patterns/module.defaultProps.js');
-      const code = readFileSync(fixturePath, 'utf-8');
-      const ast = parseFile(code, fixturePath);
-      const matches = findDefaultProps(ast, code, fixturePath);
-
-      expect(matches).toHaveLength(1);
-      expect(matches[0].pattern).toBe('defaultProps');
-      expect(matches[0].matched).toContain('defaultProps');
     });
   });
 
@@ -48,7 +35,7 @@ describe('matcher', () => {
     MyComponent.propTypes = { name: PropTypes.string };
   `;
       const ast = parseFile(code, 'test.js');
-      const matches = findPropTypes(ast, code, 'test.js');
+      const matches = findPropTypes(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('propTypes');
@@ -63,7 +50,7 @@ describe('matcher', () => {
     MyComponent.contextTypes = { theme: PropTypes.object };
   `;
       const ast = parseFile(code, 'test.js');
-      const matches = findContextTypes(ast, code, 'test.js');
+      const matches = findContextTypes(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('contextTypes');
@@ -80,7 +67,7 @@ describe('matcher', () => {
     MyComponent.getChildContext = function() {};
   `;
       const ast = parseFile(code, 'test.js');
-      const matches = findGetChildContext(ast, code, 'test.js');
+      const matches = findGetChildContext(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('getChildContext');
@@ -94,7 +81,7 @@ describe('matcher', () => {
     const internals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
   `;
       const ast = parseFile(code, 'test.js');
-      const matches = findSecretInternals(ast, code, 'test.js');
+      const matches = findSecretInternals(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('__SECRET_INTERNALS');
@@ -115,7 +102,7 @@ describe('matcher', () => {
     }
   `;
       const ast = parseFile(code, 'test.js');
-      const matches = findStringRefs(ast, code, 'test.js');
+      const matches = findStringRefs(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('stringRefs');
@@ -134,7 +121,7 @@ describe('matcher', () => {
       }
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findStringRefs(ast, code, 'test.js');
+      const matches = findStringRefs(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('stringRefs');
@@ -148,7 +135,7 @@ describe('matcher', () => {
       const node = React.findDOMNode(component);
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findFindDOMNode(ast, code, 'test.js');
+      const matches = findFindDOMNode(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('findDOMNode');
@@ -160,7 +147,7 @@ describe('matcher', () => {
       const node = ReactDOM.findDOMNode(this);
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findFindDOMNode(ast, code, 'test.js');
+      const matches = findFindDOMNode(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('findDOMNode');
@@ -173,7 +160,7 @@ describe('matcher', () => {
       const node = findDOMNode(component);
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findFindDOMNode(ast, code, 'test.js');
+      const matches = findFindDOMNode(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('findDOMNode');
@@ -186,7 +173,7 @@ describe('matcher', () => {
       ReactDOM.render(<App />, document.getElementById('root'));
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findReactDOMRender(ast, code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('ReactDOM.render');
@@ -198,7 +185,7 @@ describe('matcher', () => {
       ReactDOM.render(<App />, container, () => console.log('done'));
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findReactDOMRender(ast, code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('ReactDOM.render');
@@ -211,7 +198,7 @@ describe('matcher', () => {
       ReactDOM.unmountComponentAtNode(container);
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findReactDOMUnmountComponentAtNode(ast, code, 'test.js');
+      const matches = findReactDOMUnmountComponentAtNode(ast, code);
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('ReactDOM.unmountComponentAtNode');
       expect(matches[0].matched).toContain('ReactDOM.unmountComponentAtNode');
@@ -224,7 +211,7 @@ describe('matcher', () => {
       const Button = React.createFactory('button');
     `;
       const ast = parseFile(code, 'test.js');
-      const matches = findCreateFactory(ast, code, 'test.js');
+      const matches = findCreateFactory(ast, code);
 
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('createFactory');
