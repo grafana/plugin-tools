@@ -1,11 +1,9 @@
 import { TSESTree } from '@typescript-eslint/typescript-estree';
-import { RawMatch } from '../types/processors.js';
-import { walk, createRawMatch } from '../utils/ast.js';
-import { parseFile } from '../parser.js';
+import { PatternMatch } from '../types/processors.js';
+import { walk, createPatternMatch } from '../utils/ast.js';
 
-export function findPatternMatches(code: string, filePath: string): RawMatch[] {
-  const ast = parseFile(code, filePath);
-  const matches: RawMatch[] = [];
+export function findPatternMatches(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   matches.push(...findDefaultProps(ast, code, filePath));
   matches.push(...findPropTypes(ast, code, filePath));
@@ -21,8 +19,8 @@ export function findPatternMatches(code: string, filePath: string): RawMatch[] {
   return matches;
 }
 
-export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (
@@ -32,15 +30,15 @@ export function findDefaultProps(ast: TSESTree.Program, code: string, filePath: 
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'defaultProps'
     ) {
-      matches.push(createRawMatch(node, 'defaultProps', code, filePath));
+      matches.push(createPatternMatch(node, 'defaultProps', code, filePath));
     }
   });
 
   return matches;
 }
 
-export function findPropTypes(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findPropTypes(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (
@@ -50,15 +48,15 @@ export function findPropTypes(ast: TSESTree.Program, code: string, filePath: str
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'propTypes'
     ) {
-      matches.push(createRawMatch(node, 'propTypes', code, filePath));
+      matches.push(createPatternMatch(node, 'propTypes', code, filePath));
     }
   });
 
   return matches;
 }
 
-export function findContextTypes(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findContextTypes(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (
@@ -68,15 +66,15 @@ export function findContextTypes(ast: TSESTree.Program, code: string, filePath: 
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'contextTypes'
     ) {
-      matches.push(createRawMatch(node, 'contextTypes', code, filePath));
+      matches.push(createPatternMatch(node, 'contextTypes', code, filePath));
     }
   });
 
   return matches;
 }
 
-export function findGetChildContext(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findGetChildContext(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (
@@ -86,15 +84,15 @@ export function findGetChildContext(ast: TSESTree.Program, code: string, filePat
       node.left.property.type === 'Identifier' &&
       node.left.property.name === 'getChildContext'
     ) {
-      matches.push(createRawMatch(node, 'getChildContext', code, filePath));
+      matches.push(createPatternMatch(node, 'getChildContext', code, filePath));
     }
   });
 
   return matches;
 }
 
-export function findSecretInternals(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findSecretInternals(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (
@@ -103,15 +101,15 @@ export function findSecretInternals(ast: TSESTree.Program, code: string, filePat
       node.property.type === 'Identifier' &&
       node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED'
     ) {
-      matches.push(createRawMatch(node, '__SECRET_INTERNALS', code, filePath));
+      matches.push(createPatternMatch(node, '__SECRET_INTERNALS', code, filePath));
     }
   });
 
   return matches;
 }
 
-export function findStringRefs(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findStringRefs(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (
@@ -121,15 +119,15 @@ export function findStringRefs(ast: TSESTree.Program, code: string, filePath: st
       node.property.type === 'Identifier' &&
       node.property.name === 'refs'
     ) {
-      matches.push(createRawMatch(node, 'stringRefs', code, filePath));
+      matches.push(createPatternMatch(node, 'stringRefs', code, filePath));
     }
   });
 
   return matches;
 }
 
-export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (node && node.type === 'CallExpression') {
@@ -141,11 +139,11 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: s
         node.callee.property.type === 'Identifier' &&
         node.callee.property.name === 'findDOMNode'
       ) {
-        matches.push(createRawMatch(node, 'findDOMNode', code, filePath));
+        matches.push(createPatternMatch(node, 'findDOMNode', code, filePath));
       }
       // findDOMNode() (direct import)
       else if (node.callee.type === 'Identifier' && node.callee.name === 'findDOMNode') {
-        matches.push(createRawMatch(node, 'findDOMNode', code, filePath));
+        matches.push(createPatternMatch(node, 'findDOMNode', code, filePath));
       }
     }
   });
@@ -153,8 +151,8 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string, filePath: s
   return matches;
 }
 
-export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (node && node.type === 'CallExpression') {
@@ -167,7 +165,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
         node.callee.property.name === 'render' &&
         (node.arguments.length === 2 || node.arguments.length === 3)
       ) {
-        matches.push(createRawMatch(node, 'ReactDOM.render', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.render', code, filePath));
       }
       // render() (direct import from 'react-dom')
       else if (
@@ -175,7 +173,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
         node.callee.name === 'render' &&
         (node.arguments.length === 2 || node.arguments.length === 3)
       ) {
-        matches.push(createRawMatch(node, 'ReactDOM.render', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.render', code, filePath));
       }
     }
   });
@@ -183,8 +181,12 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string, filePath
   return matches;
 }
 
-export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findReactDOMUnmountComponentAtNode(
+  ast: TSESTree.Program,
+  code: string,
+  filePath: string
+): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (node && node.type === 'CallExpression') {
@@ -197,7 +199,7 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
         node.callee.property.name === 'unmountComponentAtNode' &&
         node.arguments.length === 1
       ) {
-        matches.push(createRawMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
       }
       // unmountComponentAtNode() (direct import)
       else if (
@@ -205,7 +207,7 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
         node.callee.name === 'unmountComponentAtNode' &&
         node.arguments.length === 1
       ) {
-        matches.push(createRawMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
+        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code, filePath));
       }
     }
   });
@@ -213,8 +215,8 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
   return matches;
 }
 
-export function findCreateFactory(ast: TSESTree.Program, code: string, filePath: string): RawMatch[] {
-  const matches: RawMatch[] = [];
+export function findCreateFactory(ast: TSESTree.Program, code: string, filePath: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
     if (node && node.type === 'CallExpression') {
@@ -227,7 +229,7 @@ export function findCreateFactory(ast: TSESTree.Program, code: string, filePath:
         node.callee.property.name === 'createFactory' &&
         node.arguments.length === 1
       ) {
-        matches.push(createRawMatch(node, 'createFactory', code, filePath));
+        matches.push(createPatternMatch(node, 'createFactory', code, filePath));
       }
       // createFactory() (direct import)
       else if (
@@ -235,7 +237,7 @@ export function findCreateFactory(ast: TSESTree.Program, code: string, filePath:
         node.callee.name === 'createFactory' &&
         node.arguments.length === 1
       ) {
-        matches.push(createRawMatch(node, 'createFactory', code, filePath));
+        matches.push(createPatternMatch(node, 'createFactory', code, filePath));
       }
     }
   });
