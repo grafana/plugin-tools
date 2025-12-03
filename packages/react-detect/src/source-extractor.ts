@@ -1,7 +1,6 @@
 import { SourceMapConsumer } from 'source-map';
 import { SourceFile, SourceFileType } from './types/processors.js';
 import { readFile } from 'node:fs/promises';
-import { GRAFANA_EXTERNALS } from './utils/dependencies.js';
 
 export async function extractSourcesFromMap(sourcemapFilePath: string): Promise<SourceFile[]> {
   const mapContent = await readFile(sourcemapFilePath, 'utf8');
@@ -57,17 +56,24 @@ export async function extractAllSources(sourcemapFilePaths: string[]): Promise<S
 }
 
 function classifySource(sourcePath: string): { type: SourceFileType; packageName?: string } {
-  if (GRAFANA_EXTERNALS.some((ext) => sourcePath.includes(ext))) {
-    return { type: 'external' };
-  }
-
   if (sourcePath.includes('node_modules')) {
-    const match = sourcePath.match(/node_modules\/(@?[^/]+(?:\/[^/]+)?)/);
-    const packageName = match ? match[1] : undefined;
+    const packageName = getPackageName(sourcePath);
+    console.log('packageName', packageName);
     return { type: 'dependency', packageName };
   }
 
   return { type: 'source' };
+}
+
+function getPackageName(sourcePath: string) {
+  // PNPM has its own ideas of how to resolve dependencies, so we need to handle it differently.
+  const pnpmMatch = sourcePath.match(/\.pnpm\/[^/]+\/node_modules\/((?:@[^/]+\/)?[^/]+)/);
+  if (pnpmMatch) {
+    return pnpmMatch[1];
+  }
+  // for everything else, we can use the standard node_modules structure.
+  const match = sourcePath.match(/node_modules\/(@[^/]+\/[^/]+|[^/]+)/);
+  return match ? match[1] : undefined;
 }
 
 function shouldSkipSource(sourcePath: string): boolean {
@@ -78,6 +84,11 @@ function shouldSkipSource(sourcePath: string): boolean {
 
   // Skip webpack entry points without actual paths
   if (sourcePath.match(/^webpack:\/\/[^/]+\/?$/)) {
+    return true;
+  }
+
+  // Skip packages externalised by webpack
+  if (sourcePath.includes('/external%20amd')) {
     return true;
   }
 

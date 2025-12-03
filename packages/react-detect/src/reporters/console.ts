@@ -1,3 +1,4 @@
+import { inspect } from 'node:util';
 import { AnalysisResult, PluginAnalysisResults } from '../types/reporters.js';
 import { output } from '../utils/output.js';
 
@@ -25,7 +26,6 @@ export function consoleReporter(results: PluginAnalysisResults) {
   const warningSourceIssues = results.issues.warnings.filter((issue) => issue.location.type === 'source');
   const sourceCodeIssues = [...criticalSourceIssues, ...warningSourceIssues];
   if (sourceCodeIssues.length > 0) {
-    console.log(sourceCodeIssues);
     const groupedByPattern = groupByPattern(sourceCodeIssues);
     for (const [pattern, issues] of Object.entries(groupedByPattern)) {
       const fileLocationList = output.bulletList(issues.map((issue) => issue.location.file));
