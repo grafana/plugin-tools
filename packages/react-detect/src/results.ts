@@ -4,7 +4,7 @@ import { getPattern } from './patterns/definitions.js';
 import { getPluginJson } from './utils/plugin.js';
 import { DependencyContext } from './utils/dependencies.js';
 
-export function getResults(
+export function generateAnalysisResults(
   matches: AnalyzedMatch[],
   pluginRoot: string,
   depContext: DependencyContext
@@ -29,7 +29,9 @@ export function getResults(
   const dependencies = buildDependencyIssues(dependencyMatches, depContext);
 
   const totalIssues = filtered.length;
-  const affectedDeps = new Set(dependencyMatches.filter((m) => m.type === 'dependency').map((m) => m.packageName));
+  const affectedDeps = new Set(
+    dependencyMatches.map((m) => m.packageName).filter((name): name is string => name !== undefined)
+  );
 
   return {
     plugin: {
@@ -57,10 +59,6 @@ export function getResults(
 
 function filterMatches(matches: AnalyzedMatch[]): AnalyzedMatch[] {
   const filtered = matches.filter((match) => {
-    if (match.type === 'unknown') {
-      return false;
-    }
-
     // TODO: add mode for strict / loose filtering
     if (match.type === 'source' && (match.confidence === 'none' || match.confidence === 'unknown')) {
       return false;
@@ -92,10 +90,10 @@ function generateResult(match: AnalyzedMatch): AnalysisResult {
     severity: pattern.severity,
     impactLevel: pattern.impactLevel,
     location: {
-      type: match.type === 'source' ? 'source' : 'dependency',
-      file: match.type !== 'unknown' ? match.sourceFile : match.file,
-      line: match.type !== 'unknown' ? match.sourceLine || 0 : match.line,
-      column: match.type !== 'unknown' ? match.sourceColumn || 0 : match.column,
+      type: match.type,
+      file: match.sourceFile,
+      line: match.sourceLine,
+      column: match.sourceColumn,
     },
     problem: pattern.description,
     fix: {
@@ -122,7 +120,7 @@ function buildDependencyIssues(dependencyMatches: AnalyzedMatch[], depContext: D
   // Group by package
   const byPackage = new Map<string, AnalyzedMatch[]>();
   for (const match of dependencyMatches) {
-    if (match.type === 'dependency') {
+    if (match.type === 'dependency' && match.packageName) {
       const existing = byPackage.get(match.packageName) || [];
       existing.push(match);
       byPackage.set(match.packageName, existing);
@@ -132,7 +130,7 @@ function buildDependencyIssues(dependencyMatches: AnalyzedMatch[], depContext: D
   // Build DependencyIssue for each package
   const issues: DependencyIssue[] = [];
   for (const [packageName, matches] of byPackage) {
-    const rootDep = matches[0].type === 'dependency' ? matches[0].rootDependency : packageName;
+    const rootDep = matches[0].rootDependency || packageName;
     const version = getDependencyVersion(packageName, depContext);
 
     issues.push({
