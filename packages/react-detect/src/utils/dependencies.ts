@@ -102,7 +102,7 @@ export class DependencyContext {
   }
 }
 
-const GRAFANA_EXTERNALS = [
+export const GRAFANA_EXTERNALS = [
   '@emotion/css',
   '@emotion/react',
   '@grafana/data',
