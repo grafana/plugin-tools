@@ -1,38 +1,40 @@
 export type Confidence = 'high' | 'medium' | 'low' | 'none' | 'unknown';
 export type ComponentType = 'class' | 'function' | 'unknown';
 
-export type RawMatch = {
+export type PatternMatch = {
   pattern: string;
   line: number;
   column: number;
   matched: string;
   context: string;
-  file: string;
 };
 
-export type ResolvedMatch = RawMatch &
-  (
-    | {
-        type: 'source';
-        sourceFile: string;
-        sourceLine?: number;
-        sourceColumn?: number;
-        sourceContent?: string;
-        sourceContext?: string;
-      }
-    | {
-        type: 'dependency';
-        packageName: string;
-        sourceFile: string;
-        sourceLine?: number;
-        sourceColumn?: number;
-        sourceContent?: string;
-        sourceContext?: string;
-      }
-    | { type: 'unknown'; reason: string }
-  );
+export type SourceFileType = 'source' | 'dependency' | 'external';
+export interface SourceFile {
+  path: string;
+  content: string;
+  type: SourceFileType;
+  packageName?: string;
+  bundledFilePath: string;
+}
 
-export type AnalyzedMatch = ResolvedMatch & {
+export type SourceMatch = {
+  pattern: string;
+  matched: string;
+  context: string;
+
+  sourceFile: string;
+  sourceLine: number;
+  sourceColumn: number;
+
+  type: 'source' | 'dependency';
+  packageName?: string;
+
+  bundledFilePath: string;
+};
+
+export type AnalyzedMatch = SourceMatch & {
   confidence: Confidence;
   componentType: ComponentType;
-} & ({ type: 'source' } | { type: 'dependency'; rootDependency: string } | { type: 'unknown' });
+  rootDependency?: string;
+};

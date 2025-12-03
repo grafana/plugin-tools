@@ -1,4 +1,4 @@
-import { RawMatch } from '../types/processors.js';
+import { PatternMatch } from '../types/processors.js';
 
 export function walk(node: any, callback: (node: any) => void): void {
   callback(node);
@@ -20,13 +20,12 @@ function getSurroundingCode(code: string, node: any): string {
   return lines.slice(startLine, endLine).join('\n');
 }
 
-export function createRawMatch(node: any, pattern: string, code: string, filePath: string): RawMatch {
+export function createPatternMatch(node: any, pattern: string, code: string, filePath: string): PatternMatch {
   return {
     pattern,
     line: node.loc.start.line,
     column: node.loc.start.column,
     matched: code.slice(node.range[0], node.range[1]),
     context: getSurroundingCode(code, node),
-    file: filePath,
   };
 }
