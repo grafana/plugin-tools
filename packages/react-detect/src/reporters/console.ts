@@ -69,25 +69,48 @@ export function consoleReporter(results: PluginAnalysisResults) {
   if (dependencyIssues.length > 0) {
     output.error({
       title: 'Dependency issues',
-      body: ['The following issues were found in bundled dependencies.'],
+      body: [
+        'The following issues were found in bundled dependencies.',
+        'We recommend checking for dependency updates which are compatible with React 19.',
+      ],
       withPrefix: false,
     });
-    console.log(dependencyIssues);
+
     const groupedByPackage = groupByPackage(dependencyIssues);
     for (const [pkgName, issues] of Object.entries(groupedByPackage)) {
+      const uniquePatterns = new Set(
+        issues.map(
+          (issue) =>
+            `${issue.problem} (${issue.pattern}). ${issue.fix.description}. Further information: ${output.formatUrl(issue.link)}`
+        )
+      );
       const uniqueFileLocations = new Set(issues.map((issue) => issue.location.file));
       const fileLocationList = output.bulletList(Array.from(uniqueFileLocations));
-      const uniquePatterns = new Set(issues.map((issue) => issue.pattern));
       const patternInfoList = output.bulletList(Array.from(uniquePatterns));
-
       output.error({
-        title: pkgName,
-        body: [`package: ${pkgName}`, 'found in:', ...fileLocationList, 'patterns:', ...patternInfoList],
+        title: `📦 ${pkgName}`,
+        body: ['issues found:', ...patternInfoList, '', 'found in:', ...fileLocationList],
         withPrefix: false,
       });
       output.addHorizontalLine('red');
     }
   }
+
+  output.error({
+    title: 'Next steps',
+    body: [
+      'We recommend testing your plugin using the following steps to ensure it is compatible with React 19:',
+      ...output.bulletList([
+        `1. Use the React 19 Grafana docker image: ${output.formatCode('grafana/grafana-enterprise-dev:10.0.0-255911')}`,
+        '2. Start the server and manually test your plugin.',
+      ]),
+      '',
+      `For more information, please refer to the React 19 blog post: ${output.formatUrl('https://react.dev/blog/2024/04/25/react-19-upgrade-guide')}.`,
+      '',
+      'Thank you for using Grafana!',
+    ],
+    withPrefix: false,
+  });
 }
 
 function groupByPattern(issues: AnalysisResult[]): Record<string, AnalysisResult[]> {
@@ -106,10 +129,10 @@ function groupByPattern(issues: AnalysisResult[]): Record<string, AnalysisResult
 function groupByPackage(issues: AnalysisResult[]): Record<string, AnalysisResult[]> {
   return issues.reduce(
     (groups, issue) => {
-      if (!groups[issue.packageName]) {
-        groups[issue.packageName] = [];
+      if (!groups[issue.packageName!]) {
+        groups[issue.packageName!] = [];
       }
-      groups[issue.packageName].push(issue);
+      groups[issue.packageName!].push(issue);
       return groups;
     },
     {} as Record<string, AnalysisResult[]>
