@@ -95,16 +95,12 @@ export class PanelEditPage extends GrafanaPage {
     }
     await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
-    if (semver.lte(this.ctx.grafanaVersion, '12.3.0')) {
-      await expect(
-        this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker),
-        `Could not set visualization to ${visualization}. Ensure the panel is installed.`
-      ).toHaveText(visualization);
-      return;
-    }
 
+    const vizSelector = semver.lte(this.ctx.grafanaVersion, '12.3.0')
+      ? this.ctx.selectors.components.PanelEditor.toggleVizPicker
+      : this.ctx.selectors.components.PanelEditor.OptionsPane.header;
     await expect(
-      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.OptionsPane.header),
+      this.getByGrafanaSelector(vizSelector),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
   }
@@ -127,10 +123,10 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the name of the visualization currently selected in the panel editor
    */
   getVisualizationName(): Locator {
-    if (semver.lte(this.ctx.grafanaVersion, '12.3.0')) {
-      return this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
-    }
-    return this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.OptionsPane.header);
+    const vizSelector = semver.lte(this.ctx.grafanaVersion, '12.3.0')
+      ? this.ctx.selectors.components.PanelEditor.toggleVizPicker
+      : this.ctx.selectors.components.PanelEditor.OptionsPane.header;
+    return this.getByGrafanaSelector(vizSelector);
   }
 
   /**
