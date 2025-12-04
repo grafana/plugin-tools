@@ -73,6 +73,17 @@ function filterMatches(matches: AnalyzedMatch[]): AnalyzedMatch[] {
       }
     }
 
+    // Don't report react internals from React's JSX transform. We only care about other dependencies
+    // relying on React internals.
+    if (
+      match.type === 'dependency' &&
+      match.pattern === '__SECRET_INTERNALS' &&
+      match.packageName === 'react' &&
+      (match.sourceFile.includes('jsx-runtime') || match.sourceFile.includes('jsx-dev-runtime'))
+    ) {
+      return false;
+    }
+
     return true;
   });
 
