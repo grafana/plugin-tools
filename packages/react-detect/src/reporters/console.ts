@@ -6,8 +6,18 @@ export function consoleReporter(results: PluginAnalysisResults) {
     output.success({
       title: 'No React 19 breaking changes detected!',
       body: [
-        `Plugin: ${results.plugin.name} v${results.plugin.version}`,
-        'Your plugin appears to be compatible with React 19.',
+        `Plugin: ${results.plugin.name} version: ${results.plugin.version}`,
+        'Good news! Your plugin appears to be compatible with React 19.',
+        '',
+        'Even so we recommend testing your plugin using the following steps:',
+        ...output.bulletList([
+          `1. Use the React 19 Grafana docker image: ${output.formatCode('grafana/grafana-enterprise-dev:10.0.0-255911')}`,
+          '2. Start the server and manually test your plugin.',
+        ]),
+        '',
+        `For more information, please refer to the React 19 blog post: ${output.formatUrl('https://react.dev/blog/2024/04/25/react-19-upgrade-guide')}.`,
+        '',
+        'Thank you for using Grafana!',
       ],
     });
     return;
@@ -16,8 +26,8 @@ export function consoleReporter(results: PluginAnalysisResults) {
   output.error({
     title: 'React 19 breaking changes detected!',
     body: [
-      `Plugin: ${results.plugin.name} v${results.plugin.version}`,
-      'Your plugin appears to be incompatible with React 19. Please refer to the following suggestions to help resolve issues.',
+      `Plugin: ${results.plugin.name} version: ${results.plugin.version}`,
+      'Your plugin appears to be incompatible with React 19. Note that this tool can give false positives, please review the issues carefully.',
     ],
   });
 
@@ -25,16 +35,23 @@ export function consoleReporter(results: PluginAnalysisResults) {
   const warningSourceIssues = results.issues.warnings.filter((issue) => issue.location.type === 'source');
   const sourceCodeIssues = [...criticalSourceIssues, ...warningSourceIssues];
   if (sourceCodeIssues.length > 0) {
+    output.error({
+      title: 'Source code issues',
+      body: ['The following source code issues were found. Please refer to the suggestions to help resolve them.'],
+      withPrefix: false,
+    });
     const groupedByPattern = groupByPattern(sourceCodeIssues);
     for (const [pattern, issues] of Object.entries(groupedByPattern)) {
-      const fileLocationList = output.bulletList(issues.map((issue) => issue.location.file));
+      // dedupe file locations
+      const uniqueFileLocations = new Set(issues.map((issue) => issue.location.file));
+      const fileLocationList = output.bulletList(Array.from(uniqueFileLocations));
       const patternInfo = issues[0];
       output.error({
         title: `${pattern} (${patternInfo.problem})`,
         body: [
-          `fix: ${patternInfo.fix.description}. e.g.`,
-          `before: ${output.formatCode(patternInfo.fix.before)}`,
-          `after: ${output.formatCode(patternInfo.fix.after)}`,
+          `fix: ${patternInfo.fix.description}.`,
+          ...(patternInfo.fix.before ? [`before: ${output.formatCode(patternInfo.fix.before)}`] : []),
+          ...(patternInfo.fix.after ? [`after: ${output.formatCode(patternInfo.fix.after)}`] : []),
           `link: ${output.formatUrl(patternInfo.link)}`,
           '',
           'found in:',
@@ -50,11 +67,23 @@ export function consoleReporter(results: PluginAnalysisResults) {
   const warningDependencyIssues = results.issues.warnings.filter((issue) => issue.location.type === 'dependency');
   const dependencyIssues = [...criticalDependencyIssues, ...warningDependencyIssues];
   if (dependencyIssues.length > 0) {
-    const groupedByPackage = groupByPattern(dependencyIssues);
+    output.error({
+      title: 'Dependency issues',
+      body: ['The following issues were found in bundled dependencies.'],
+      withPrefix: false,
+    });
+    console.log(dependencyIssues);
+    const groupedByPackage = groupByPackage(dependencyIssues);
     for (const [pkgName, issues] of Object.entries(groupedByPackage)) {
+      const uniqueFileLocations = new Set(issues.map((issue) => issue.location.file));
+      const fileLocationList = output.bulletList(Array.from(uniqueFileLocations));
+      const uniquePatterns = new Set(issues.map((issue) => issue.pattern));
+      const patternInfoList = output.bulletList(Array.from(uniquePatterns));
+
       output.error({
         title: pkgName,
-        body: issues.map((issue) => issue.location.file),
+        body: [`package: ${pkgName}`, 'found in:', ...fileLocationList, 'patterns:', ...patternInfoList],
+        withPrefix: false,
       });
       output.addHorizontalLine('red');
     }
@@ -68,6 +97,19 @@ function groupByPattern(issues: AnalysisResult[]): Record<string, AnalysisResult
         groups[issue.pattern] = [];
       }
       groups[issue.pattern].push(issue);
+      return groups;
+    },
+    {} as Record<string, AnalysisResult[]>
+  );
+}
+
+function groupByPackage(issues: AnalysisResult[]): Record<string, AnalysisResult[]> {
+  return issues.reduce(
+    (groups, issue) => {
+      if (!groups[issue.packageName]) {
+        groups[issue.packageName] = [];
+      }
+      groups[issue.packageName].push(issue);
       return groups;
     },
     {} as Record<string, AnalysisResult[]>

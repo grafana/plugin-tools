@@ -24,7 +24,6 @@ export async function detect19(argv: minimist.ParsedArgs) {
   });
 
   const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext);
-
   consoleReporter(results);
 
   process.exit(results.summary.totalIssues > 0 ? 1 : 0);
