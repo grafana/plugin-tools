@@ -1,3 +1,16 @@
+# (Thu Dec 04 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.0.3`
+  - plugins-e2e: fix visualization lookup flow [#2339](https://github.com/grafana/plugin-tools/pull/2339) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Thu Nov 27 2025)
 
 #### 🐛 Bug Fix
