@@ -104,7 +104,7 @@ export class PanelEditPage extends GrafanaPage {
     }
 
     await expect(
-      this.getByGrafanaSelector('data-testid Panel editor OptionsPane header'),
+      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.OptionsPane.header),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`
     ).toHaveText(visualization);
   }
@@ -130,7 +130,7 @@ export class PanelEditPage extends GrafanaPage {
     if (semver.lte(this.ctx.grafanaVersion, '12.3.0')) {
       return this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker);
     }
-    return this.getByGrafanaSelector('data-testid Panel editor OptionsPane header');
+    return this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.OptionsPane.header);
   }
 
   /**
