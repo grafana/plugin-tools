@@ -4,18 +4,28 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   __SECRET_INTERNALS: {
     severity: 'renamed',
     impactLevel: 'critical',
-    description:
-      'React internals renamed from _DO_NOT_USE_OR_YOU_WILL_BE_FIRED to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
+    description: 'React internals renamed to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
     fix: {
       description:
-        'Check the list of libraries depending on React internals. Either update them or remove them from your dependencies. Alternatively externalise jsx-transform making your plugin compatible with Grafana >=12.3',
+        'Check the list of libraries depending on React internals. Alternatively externalise react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
     },
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#libraries-depending-on-react-internals-may-block-upgrades',
+  },
+  jsxRuntimeImport: {
+    severity: 'renamed',
+    impactLevel: 'critical',
+    description:
+      'Dependency bundles react/jsx-runtime which will break with React 19 due to `__SECRET_INTERNALS` being renamed',
+    fix: {
+      description:
+        'Externalize react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
+    },
+    link: 'https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config',
   },
   defaultProps: {
     severity: 'removed',
     impactLevel: 'critical',
-    description: 'removed in favour of function components.',
+    description: 'removed in favour of function components',
     fix: {
       description: 'Use ES6 default parameters',
       before: 'MyComponent.defaultProps = { value: "test" }',
@@ -33,17 +43,6 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
       description: 'Run the codemod to migrate to Typescript',
       before: 'npx codemod@latest react/prop-types-typescript',
     },
-  },
-  createFactory: {
-    severity: 'removed',
-    impactLevel: 'critical',
-    description: 'React.createFactory removed in React 19',
-    fix: {
-      description: 'Use JSX instead',
-      before: "const button = createFactory('button');",
-      after: 'const button = <button />;',
-    },
-    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-createfactory',
   },
   contextTypes: {
     severity: 'removed',
@@ -63,27 +62,37 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     },
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-removing-legacy-context',
   },
-  findDOMNode: {
-    severity: 'removed',
-    impactLevel: 'critical',
-    description: 'findDOMNode removed from React and ReactDOM in React 19',
-    fix: {
-      description: 'Use the ref API instead. Use a ref to get the DOM node, or use a forwardRef to get the DOM node.',
-      before: 'const node = findDOMNode(this);',
-      after: 'const node = useRef(null);',
-    },
-    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-reactdom-finddomnode',
-  },
   stringRefs: {
     severity: 'removed',
     impactLevel: 'critical',
     description: 'String refs removed in React 19',
     fix: {
-      description: 'Use the ref API instead. Use a ref to get the DOM node, or use a forwardRef to get the DOM node.',
-      before: 'const node = this.refs.node;',
-      after: 'const node = useRef(null);',
+      description: 'Run the codemod to migrate to ref callbacks.',
+      before: 'npx codemod@latest react/19/replace-string-ref',
     },
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-string-refs',
+  },
+  findDOMNode: {
+    severity: 'removed',
+    impactLevel: 'critical',
+    description: 'findDOMNode removed from React and ReactDOM in React 19',
+    fix: {
+      description: 'You can replace ReactDOM.findDOMNode with DOM refs.',
+      before: 'const node = findDOMNode(this);',
+      after: 'const node = useRef(null);',
+    },
+    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-reactdom-finddomnode',
+  },
+  createFactory: {
+    severity: 'removed',
+    impactLevel: 'critical',
+    description: 'React.createFactory removed in React 19',
+    fix: {
+      description: 'Use JSX instead',
+      before: "const button = createFactory('button');",
+      after: 'const button = <button />;',
+    },
+    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-createfactory',
   },
 
   'ReactDOM.render': {
