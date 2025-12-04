@@ -80,8 +80,7 @@ export function consoleReporter(results: PluginAnalysisResults) {
     for (const [pkgName, issues] of Object.entries(groupedByPackage)) {
       const uniquePatterns = new Set(
         issues.map(
-          (issue) =>
-            `${issue.problem} (${issue.pattern}). ${issue.fix.description}. Further information: ${output.formatUrl(issue.link)}`
+          (issue) => `${issue.problem}. ${issue.fix.description}. Further information: ${output.formatUrl(issue.link)}`
         )
       );
       const uniqueFileLocations = new Set(issues.map((issue) => issue.location.file));

@@ -4,7 +4,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   __SECRET_INTERNALS: {
     severity: 'renamed',
     impactLevel: 'critical',
-    description: 'React internals renamed to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
+    description: 'React internals __SECRET_INTERNALS renamed to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
     fix: {
       description:
         'Check the list of libraries depending on React internals. Alternatively externalise react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
@@ -25,7 +25,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   defaultProps: {
     severity: 'removed',
     impactLevel: 'critical',
-    description: 'removed in favour of function components',
+    description: 'Default props removed in favour of function components',
     fix: {
       description: 'Use ES6 default parameters',
       before: 'MyComponent.defaultProps = { value: "test" }',
@@ -37,7 +37,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   propTypes: {
     severity: 'removed',
     impactLevel: 'warning',
-    description: 'removed in favour of typescript or other type-checking solution',
+    description: 'Prop types removed in favour of typescript or other type-checking solution',
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apis',
     fix: {
       description: 'Run the codemod to migrate to Typescript',
@@ -77,7 +77,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     impactLevel: 'critical',
     description: 'findDOMNode removed from React and ReactDOM in React 19',
     fix: {
-      description: 'You can replace ReactDOM.findDOMNode with DOM refs.',
+      description: 'Replace ReactDOM.findDOMNode with DOM refs',
       before: 'const node = findDOMNode(this);',
       after: 'const node = useRef(null);',
     },
