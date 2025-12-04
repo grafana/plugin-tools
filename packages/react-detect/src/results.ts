@@ -3,6 +3,7 @@ import { PluginAnalysisResults, AnalysisResult, DependencyIssue } from './types/
 import { getPattern } from './patterns/definitions.js';
 import { getPluginJson } from './utils/plugin.js';
 import { DependencyContext } from './utils/dependencies.js';
+import path from 'node:path';
 
 export function generateAnalysisResults(
   matches: AnalyzedMatch[],
@@ -85,13 +86,15 @@ function generateResult(match: AnalyzedMatch): AnalysisResult {
     throw new Error(`Pattern not found: ${match.pattern}`);
   }
 
+  const cleanFilePath = cleanSourceFilePath(match.sourceFile);
+
   const result: AnalysisResult = {
     pattern: match.pattern,
     severity: pattern.severity,
     impactLevel: pattern.impactLevel,
     location: {
       type: match.type,
-      file: match.sourceFile,
+      file: path.join(process.cwd(), cleanFilePath),
       line: match.sourceLine,
       column: match.sourceColumn,
     },
@@ -131,7 +134,7 @@ function buildDependencyIssues(dependencyMatches: AnalyzedMatch[], depContext: D
   const issues: DependencyIssue[] = [];
   for (const [packageName, matches] of byPackage) {
     const rootDep = matches[0].rootDependency || packageName;
-    const version = getDependencyVersion(packageName, depContext);
+    const version = depContext.getVersion(packageName) || null;
 
     issues.push({
       packageName,
@@ -144,9 +147,13 @@ function buildDependencyIssues(dependencyMatches: AnalyzedMatch[], depContext: D
   return issues;
 }
 
-/**
- * Get dependency version from package.json
- */
-function getDependencyVersion(packageName: string, depContext: DependencyContext): string | null {
-  return depContext.getVersion(packageName) || null;
+function cleanSourceFilePath(filePath: string): string {
+  let cleanPath = filePath;
+  if (filePath.includes('node_modules')) {
+    cleanPath = filePath.replace(/webpack:\/\/[^/]+\/node_modules\//, './node_modules/');
+  } else {
+    cleanPath = filePath.replace(/webpack:\/\/[^/]+/, './src/');
+  }
+
+  return cleanPath;
 }
