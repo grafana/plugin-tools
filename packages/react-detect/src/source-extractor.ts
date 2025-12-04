@@ -33,6 +33,7 @@ export async function extractSourcesFromMap(sourcemapFilePath: string): Promise<
   consumer.destroy();
   return sourceFiles;
 }
+
 export async function extractAllSources(sourcemapFilePaths: string[]): Promise<SourceFile[]> {
   const allSources: SourceFile[] = [];
   // we need to dedupe paths
@@ -58,7 +59,6 @@ export async function extractAllSources(sourcemapFilePaths: string[]): Promise<S
 function classifySource(sourcePath: string): { type: SourceFileType; packageName?: string } {
   if (sourcePath.includes('node_modules')) {
     const packageName = getPackageName(sourcePath);
-    console.log('packageName', packageName);
     return { type: 'dependency', packageName };
   }
 
