@@ -10,6 +10,7 @@ export function findPatternMatches(ast: TSESTree.Program, code: string): Pattern
   matches.push(...findContextTypes(ast, code));
   matches.push(...findGetChildContext(ast, code));
   matches.push(...findSecretInternals(ast, code));
+  matches.push(...findJsxRuntimeImports(ast, code));
   matches.push(...findStringRefs(ast, code));
   matches.push(...findFindDOMNode(ast, code));
   matches.push(...findReactDOMRender(ast, code));
@@ -102,6 +103,21 @@ export function findSecretInternals(ast: TSESTree.Program, code: string): Patter
       node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED'
     ) {
       matches.push(createPatternMatch(node, '__SECRET_INTERNALS', code));
+    }
+  });
+
+  return matches;
+}
+
+export function findJsxRuntimeImports(ast: TSESTree.Program, code: string): PatternMatch[] {
+  const matches: PatternMatch[] = [];
+
+  walk(ast, (node) => {
+    if (node && node.type === 'ImportDeclaration') {
+      const source = node.source.value;
+      if (source === 'react/jsx-runtime' || source === 'react/jsx-dev-runtime') {
+        matches.push(createPatternMatch(node, 'jsxRuntimeImport', code));
+      }
     }
   });
 
