@@ -240,34 +240,34 @@ html[data-theme='dark'] {
 }
 
 /* Search (the chained `.algolia-autocomplete` are for specificity)  */
-.navbar__search-input {
+/* .navbar__search-input {
   outline-color: var(--primary-border);
-}
+} */
 
 /* Put little triangle infront of suggestions */
-.algolia-autocomplete .ds-dropdown-menu [class^='ds-dataset-'] {
+/* .algolia-autocomplete .ds-dropdown-menu [class^='ds-dataset-'] {
   z-index: 1;
-}
+} */
 
 /* hide dropdown footer */
-.algolia-autocomplete .algolia-docsearch-footer {
+/* .algolia-autocomplete .algolia-docsearch-footer {
   display: none;
-}
+} */
 
 /* dropdown triangle */
-.algolia-autocomplete.algolia-autocomplete .ds-dropdown-menu:before {
+/* .algolia-autocomplete.algolia-autocomplete .ds-dropdown-menu:before {
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
   top: -14px;
   transform: none;
-}
+} */
 
 /* Set background for suggestions */
-html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before {
+/* html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before {
   background: var(--ifm-background-color);
-}
+} */
 
 /* Matched words in results */
-.algolia-autocomplete .ds-dropdown-menu .ds-suggestions {
+/* .algolia-autocomplete .ds-dropdown-menu .ds-suggestions {
   border: 1px solid var(--background-secondary);
 }
 
@@ -301,4 +301,28 @@ html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before
 .algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column:before,
 .algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--content:before {
   background: var(--ifm-toc-border-color);
+} */
+
+[data-theme='dark'] .DocSearch {
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: color-mix(in srgb, var(--background-primary), transparent 50%);
+  /* Modal */
+  --docsearch-modal-background: var(--ifm-background-color);
+  /* Search box */
+  --docsearch-searchbox-background: var(--ifm-background-color);
+  --docsearch-searchbox-focus-background: var(--ifm-color-black);
+  /* Hit */
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-card-background-color);
+  --docsearch-hit-background: var(--ifm-color-emphasis-100);
+  /* Highlight */
+  --docsearch-highlight-color: var(--ifm-link-color);
+  /* Footer */
+  --docsearch-footer-background: var(--ifm-background-surface-color);
+  --docsearch-key-gradient: linear-gradient(
+    -26.5deg,
+    var(--ifm-color-emphasis-200) 0%,
+    var(--ifm-color-emphasis-100) 100%
+  );
 }
