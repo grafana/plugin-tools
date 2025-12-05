@@ -1,3 +1,18 @@
+# (Fri Dec 05 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.4.3`
+  - fix: only migrate eslint if plugin depends on eslint < 9.0.0 [#2338](https://github.com/grafana/plugin-tools/pull/2338) ([@jackw](https://github.com/jackw))
+  - Update dependency @grafana/plugin-e2e to v3.0.3 [#2335](https://github.com/grafana/plugin-tools/pull/2335) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Dec 04 2025)
 
 #### 🐛 Bug Fix
