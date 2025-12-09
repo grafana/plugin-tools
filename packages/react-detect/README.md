@@ -16,3 +16,8 @@ Then run from your plugin root directory (where `package.json` exists):
 npx @grafana/react-detect
 
 ```
+
+### Options
+
+- `--pluginRoot`: Pass the root directory of the plugin. Defaults to the current working directory.
+- `--json`: Output the results as json.
