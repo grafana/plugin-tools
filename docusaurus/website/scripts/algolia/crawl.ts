@@ -1,5 +1,5 @@
 import { type CheerioAPI, CheerioCrawler, type LoadedRequest, type Request, log, LogLevel, Sitemap } from 'crawlee';
-
+import { createHash } from 'node:crypto';
 import { inspect } from 'util';
 
 log.setLevel(LogLevel.INFO);
@@ -63,10 +63,15 @@ function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) 
 
         const url = `${prodUrl.toString()}${$(el).attr('id') ? `#${$(el).attr('id')}` : ''}`;
         const anchor = $(el).attr('id') ?? '';
-        const objectID = generateObjectId(request);
+        // use the hierarachy to generate unique IDs
+        const objectID = Object.values(hierarchy)
+          .filter(Boolean)
+          .map((v) => v.replace(/[^0-9a-z]/gi, '').toLowerCase())
+          .join('-');
+        const hashedObjectID = createHash('sha256').update(objectID).digest('hex');
 
         return {
-          objectID: `${objectID}${anchor ? `-${anchor}` : ''}`,
+          objectID: hashedObjectID,
           hierarchy,
           url,
           anchor,
