@@ -2,10 +2,10 @@ import minimist from 'minimist';
 import { findSourceMapFiles } from '../file-scanner.js';
 import { generateAnalysisResults } from '../results.js';
 import { DependencyContext } from '../utils/dependencies.js';
+import { jsonReporter } from '../reporters/json.js';
 import { consoleReporter } from '../reporters/console.js';
 import { extractAllSources } from '../source-extractor.js';
 import { analyzeSourceFiles } from '../analyzer.js';
-
 /**
  * Main detect command for finding React 19 breaking changes
  */
@@ -24,7 +24,12 @@ export async function detect19(argv: minimist.ParsedArgs) {
   });
 
   const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext);
-  consoleReporter(results);
+
+  if (argv.json) {
+    jsonReporter(results);
+  } else {
+    consoleReporter(results);
+  }
 
   process.exit(results.summary.totalIssues > 0 ? 1 : 0);
 }
