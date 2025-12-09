@@ -147,11 +147,12 @@ const crawler = new CheerioCrawler({
 
 const { urls } = await Sitemap.load('http://localhost:3000/developers/plugin-tools/sitemap.xml');
 const localhostUrls = urls
-  .filter((url) => !url.endsWith('/search'))
-  .map((url) => url.replace('https://grafana-dev.com', 'http://localhost:3000'));
+  .filter((url: string) => !url.endsWith('/search'))
+  .map((url: string) => url.replace(/https:\/\/grafana(-dev)?\.com/, 'http://localhost:3000'));
 
 // Run the crawler and wait for it to finish.
-const url = ['http://localhost:3000/developers/plugin-tools/how-to-guides/extend-configurations/'];
-await crawler.run(url);
+// Can pass individual urls for testing purposes.
+// const url = ['http://localhost:3000/developers/plugin-tools/how-to-guides/extend-configurations/'];
+await crawler.run(localhostUrls);
 
 log.info('Crawler finished.');
