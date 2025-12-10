@@ -49,26 +49,27 @@ jobs:
       - name: Build documentation website
         run: DEV_PORTAL_ENV=dev npm run docs:build
 
-      - name: Serve built site
-        run: npm run serve -w website -- --port 3000 &
-
-      - name: Wait for server
-        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.2
+      - uses: grafana/shared-workflows/actions/login-to-gcs@6a97ef28077dbb66da3582aad604aef980cd1787 # login-to-gcs/v0.3.0
+        id: login-to-gcs
         with:
-          url: "http://localhost:3000/developers/plugin-tools/"
+          service_account: 'github-developer-portal-dev@grafanalabs-workload-identity.iam.gserviceaccount.com'
+          bucket: 'staging-developer-portal'
 
-      - name: Test http server is running
-        run: curl -f http://localhost:3000/developers/plugin-tools || exit 0
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
 
-      # - uses: grafana/shared-workflows/actions/login-to-gcs@6a97ef28077dbb66da3582aad604aef980cd1787 # login-to-gcs/v0.3.0
-      #   id: login-to-gcs
+      - name: 'Deploy to Developer Portal Bucket'
+        run: |
+          gsutil -m rsync -r -d -c ./docusaurus/website/build/ gs://staging-developer-portal/plugin-tools
+
+      # TODO: Wire all the algolia stuff up here.
+      # - name: Serve built site
+      #   run: npm run serve -w website -- --port 3000 &
+
+      # - name: Wait for server
+      #   uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.2
       #   with:
-      #     service_account: 'github-developer-portal-dev@grafanalabs-workload-identity.iam.gserviceaccount.com'
-      #     bucket: 'staging-developer-portal'
+      #     url: "http://localhost:3000/developers/plugin-tools/"
 
-      # - name: 'Set up Cloud SDK'
-      #   uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
-
-      # - name: 'Deploy to Developer Portal Bucket'
-      #   run: |
-      #     gsutil -m rsync -r -d -c ./docusaurus/website/build/ gs://staging-developer-portal/plugin-tools
+      # - name: Test http server is running
+      #   run: curl -f http://localhost:3000/developers/plugin-tools || exit 0
