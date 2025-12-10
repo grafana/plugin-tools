@@ -8,8 +8,7 @@ import { themes, type PrismTheme } from 'prism-react-renderer';
 import redirects from './websiteRedirects.json';
 
 const gitHash = process.env.GITHUB_SHA || 'local';
-// const envFile = process.env.DEV_PORTAL_ENV === 'dev' ? '.env.development' : '.env.production';
-const envFile = '.env';
+const envFile = process.env.DEV_PORTAL_ENV === 'dev' ? '.env.development' : '.env.production';
 
 dotenv.config({ path: `${__dirname}/${envFile}`, encoding: 'utf8' });
 
