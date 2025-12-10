@@ -1,5 +1,7 @@
 import { algoliasearch } from 'algoliasearch';
+import { glob } from 'glob';
 import dotenv from 'dotenv';
+import { readFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -13,30 +15,42 @@ const appID = process.env.ALGOLIA_APP_ID;
 const apiKey = process.env.ALGOLIA_WRITE_API_KEY;
 const indexName = process.env.ALGOLIA_SEARCH_INDEX;
 
-const client = algoliasearch(appID, apiKey);
+async function getRecords() {
+  const files = await glob(`${__dirname}/../../storage/datasets/**/*.json`);
 
-const record = { objectID: 'object-1', name: 'test record' };
+  const records: Array<Record<string, unknown>> = [];
+  for (const file of files) {
+    const data = await readFile(file, 'utf8');
+    const record = JSON.parse(data);
+    records.push(record);
+  }
 
-// Add record to an index
-const { taskID } = await client.saveObject({
-  indexName,
-  body: record,
-});
+  return records;
+}
 
-// // Wait until indexing is done
-// await client.waitForTask({
-//   indexName,
-//   taskID,
-// });
+async function uploadToAlgolia() {
+  try {
+    if (!appID || !apiKey || !indexName) {
+      throw new Error(
+        'Missing required environment variables: ALGOLIA_APP_ID, ALGOLIA_WRITE_API_KEY, and ALGOLIA_SEARCH_INDEX.'
+      );
+    }
 
-// // Search for "test"
-// const { results } = await client.search({
-//   requests: [
-//     {
-//       indexName,
-//       query: 'test',
-//     },
-//   ],
-// });
+    console.log(`Beginning upload to Algolia '${indexName}'...`);
+    const client = algoliasearch(appID, apiKey);
+    const records = await getRecords();
+    console.log('Uploading records to Algolia...');
+    await client.saveObjects({
+      indexName,
+      objects: records,
+    });
+    console.log(`Successfully uploaded ${records.length} records to Algolia!`);
+  } catch (error) {
+    console.error('Error uploading to Algolia:', error);
+    throw error;
+  }
+}
 
-// console.log(JSON.stringify(results));
+await uploadToAlgolia();
+
+console.log('Done!');
