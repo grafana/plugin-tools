@@ -1,6 +1,7 @@
 import { type CheerioAPI, CheerioCrawler, type LoadedRequest, type Request, log, LogLevel, Sitemap } from 'crawlee';
 import { createHash } from 'node:crypto';
 import { inspect } from 'util';
+import { type DocSearchRecord } from './types.ts';
 
 log.setLevel(LogLevel.INFO);
 
@@ -8,16 +9,16 @@ function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) 
   const version = $('meta[name="docsearch:version"]').attr('content') || 'current';
   const lang = $('meta[name="docsearch:lang"]').attr('content') || 'en';
   const docusaurus_tag = $('meta[name="docsearch:docusaurus_tag"]').attr('content') || 'default';
-
+  let position = 0;
   const lvl0 =
     $(
       '.menu__link.menu__link--active, menu__link.menu__link--sublist.menu__link--active, .navbar__item.navbar__link--active'
     )
-      .first()
+      .last()
       .text() || 'Documentation';
 
   // Helper function to extract heading hierarchy records
-  function extractHeadingLevel(level: number) {
+  function extractHeadingLevel(level: number, positionRef: { current: number }) {
     const selector = level === 1 ? 'header h1, article h1' : `article h${level}`;
     let elements = $(selector);
 
@@ -26,71 +27,118 @@ function generateAlgoliaRecords(request: LoadedRequest<Request>, $: CheerioAPI) 
       elements = elements.filter((_, el) => $(el).text() !== 'Was this page helpful?');
     }
 
-    return elements
-      .map((_, el) => {
-        const hierarchy: Record<string, string | null> = { lvl0 };
-        if (level === 1) {
-          hierarchy.lvl1 = $(el).text();
-          for (let i = 2; i <= 6; i++) {
-            hierarchy[`lvl${i}`] = null;
-          }
-        } else {
-          hierarchy.lvl1 = $(el).closest('article').find('header h1, > h1').first().text();
+    const records: DocSearchRecord[] = [];
 
-          // Use previous headings to populate lower hierarchy levels
-          for (let i = 2; i < level; i++) {
-            hierarchy[`lvl${i}`] = $(el).prevAll(`h${i}`).first().text();
-          }
-
-          // Set current level
-          hierarchy[`lvl${level}`] = $(el).text();
-
-          // Set remaining levels to null
-          for (let i = level + 1; i <= 6; i++) {
-            hierarchy[`lvl${i}`] = null;
-          }
+    elements.each((_, el) => {
+      // Build hierarchy (same logic as before)
+      const hierarchy: DocSearchRecord['hierarchy'] = {
+        lvl0,
+        lvl1: null,
+        lvl2: null,
+        lvl3: null,
+        lvl4: null,
+        lvl5: null,
+        lvl6: null,
+      };
+      if (level === 1) {
+        hierarchy.lvl1 = $(el).text();
+        for (let i = 2; i <= 6; i++) {
+          hierarchy[`lvl${i}`] = null;
         }
+      } else {
+        hierarchy.lvl1 = $(el).closest('article').find('header h1, > h1').first().text();
+        for (let i = 2; i < level; i++) {
+          hierarchy[`lvl${i}`] = $(el).prevAll(`h${i}`).first().text() || null;
+        }
+        hierarchy[`lvl${level}`] = $(el).text();
+      }
 
-        const content =
-          level === 1
-            ? $(el).parent().nextUntil('h1,h2,h3,h4,h5,h6').text() || ''
-            : $(el).nextUntil('h1,h2,h3,h4,h5,h6').text() || '';
+      // Calculate URL (same as before)
+      const prodUrl = new URL(request.url);
+      prodUrl.host = 'grafana.com';
+      prodUrl.protocol = 'https';
+      prodUrl.port = '';
 
-        const prodUrl = new URL(request.url);
-        prodUrl.host = 'grafana.com';
-        prodUrl.protocol = 'https';
-        prodUrl.port = '';
+      const anchor = $(el).attr('id') ?? null; // Changed: null instead of ''
+      const url = `${prodUrl.toString()}${anchor ? `#${anchor}` : ''}`;
 
-        const url = `${prodUrl.toString()}${$(el).attr('id') ? `#${$(el).attr('id')}` : ''}`;
-        const anchor = $(el).attr('id') ?? '';
-        // use the hierarachy to generate unique IDs
-        const objectID = Object.values(hierarchy)
+      // Generate objectID
+      const objectID = createHash('sha256')
+        .update(Object.values(hierarchy).filter(Boolean).join('-') + `-lvl${level}-${positionRef.current}`)
+        .digest('hex');
+
+      // Create heading record
+      const headingRecord: DocSearchRecord = {
+        objectID,
+        type: `lvl${level}` as DocSearchRecord['type'],
+        hierarchy,
+        content: null, // Headings have no content
+        url,
+        url_without_anchor: prodUrl.toString(),
+        anchor,
+        weight: {
+          ...calculateWeight({ url, type: `lvl${level}` as DocSearchRecord['type'] }),
+          position: positionRef.current++,
+        },
+        version,
+        lang,
+        language: lang,
+        docusaurus_tag,
+      };
+
+      records.push(headingRecord);
+
+      // Find content under this heading
+      const allBetweenHeadings = $(el).nextUntil(`h1,h2,h3,h4,h5,h6`);
+      const contentElements = allBetweenHeadings
+        .filter('p, li, td:last-child') // Check the elements themselves
+        .add(allBetweenHeadings.find('p, li, td:last-child')) // Check descendants
+        .toArray();
+
+      if (contentElements.length > 0) {
+        const contentText = contentElements
+          .map((el) => $(el).text().trim())
           .filter(Boolean)
-          .map((v) => v.replace(/[^0-9a-z]/gi, '').toLowerCase())
-          .join('-');
-        const hashedObjectID = createHash('sha256').update(objectID).digest('hex');
+          .join(' ');
 
-        return {
-          objectID: hashedObjectID,
-          hierarchy,
-          url,
-          anchor,
-          url_without_anchor: prodUrl.toString(),
-          content,
-          version,
-          lang,
-          docusaurus_tag,
-        };
-      })
-      .get();
+        if (contentText) {
+          const contentObjectID = createHash('sha256')
+            .update(Object.values(hierarchy).filter(Boolean).join('-') + `-content-${positionRef.current}`)
+            .digest('hex');
+
+          const contentRecord: DocSearchRecord = {
+            objectID: contentObjectID,
+            type: 'content',
+            hierarchy,
+            content: contentText,
+            url,
+            url_without_anchor: prodUrl.toString(),
+            anchor,
+            weight: {
+              ...calculateWeight({ url, type: 'content' }),
+              position: positionRef.current++,
+            },
+            version,
+            lang,
+            language: lang,
+            docusaurus_tag,
+          };
+
+          records.push(contentRecord);
+        }
+      }
+    });
+
+    return records;
   }
 
-  const lvl1 = extractHeadingLevel(1);
-  const lvl2 = extractHeadingLevel(2);
-  const lvl3 = extractHeadingLevel(3);
-  const lvl4 = extractHeadingLevel(4);
-  const lvl5 = extractHeadingLevel(5);
-  const lvl6 = extractHeadingLevel(6);
+  const positionRef = { current: position };
+  const lvl1 = extractHeadingLevel(1, positionRef);
+  const lvl2 = extractHeadingLevel(2, positionRef);
+  const lvl3 = extractHeadingLevel(3, positionRef);
+  const lvl4 = extractHeadingLevel(4, positionRef);
+  const lvl5 = extractHeadingLevel(5, positionRef);
+  const lvl6 = extractHeadingLevel(6, positionRef);
 
   const parsedUrl = new URL(request.url);
   const basePath = '/developers/plugin-tools/';
@@ -114,6 +162,30 @@ function generateObjectId(request: LoadedRequest<Request>) {
   }
   const segments = pathname.split('/').filter(Boolean);
   return segments.length > 0 ? `${segments.join('_')}` : `index`;
+}
+
+const levelWeights = {
+  lvl0: 100,
+  lvl1: 100,
+  lvl2: 90,
+  lvl3: 80,
+  lvl4: 70,
+  lvl5: 60,
+  lvl6: 50,
+  content: 0,
+};
+
+const basePath = '/developers/plugin-tools/';
+
+function calculateWeight({ url, type }: { url: string; type: DocSearchRecord['type'] }) {
+  const pathname = new URL(url).pathname;
+  const pathnameWithoutBasePath = pathname.startsWith(basePath) ? pathname.slice(basePath.length) : pathname;
+  const depth = pathnameWithoutBasePath.split('/').filter(Boolean).length;
+  const pageRank = Math.max(0, 110 - depth * 10);
+  return {
+    pageRank,
+    level: levelWeights[type],
+  };
 }
 
 const crawler = new CheerioCrawler({
@@ -155,9 +227,10 @@ const localhostUrls = urls
   .filter((url: string) => !url.endsWith('/search'))
   .map((url: string) => url.replace(/https:\/\/grafana(-dev)?\.com/, 'http://localhost:3000'));
 
-// Run the crawler and wait for it to finish.
+await crawler.run(localhostUrls);
+
 // Can pass individual urls for testing purposes.
 // const url = ['http://localhost:3000/developers/plugin-tools/how-to-guides/extend-configurations/'];
-await crawler.run(localhostUrls);
+// await crawler.run(url);
 
 log.info('Crawler finished.');
