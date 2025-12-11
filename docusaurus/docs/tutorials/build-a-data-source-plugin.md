@@ -70,7 +70,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 
 1. Create a couple of helper variables for testing purposes.
 
-   The math here only generates mock test data. It should be replaced later with real values fetched from the data source you want to connect to Grafana.
+   The math here only generates mock test data. Replace it later with real values fetched from the data source you want to connect to Grafana.
 
    ```ts title="src/datasource.ts"
    // duration of the time range, in milliseconds.
