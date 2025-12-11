@@ -68,27 +68,9 @@ Let's see how to create and return a data frame from the `query` method. In this
    }
    ```
 
-1. In the `map` function, use the `lodash/defaults` package to set default values for query properties that haven't been set:
+1. Create a couple of helper variables.
 
-   ```ts title="src/datasource.ts"
-   import defaults from 'lodash/defaults';
-
-   const query = defaults(target, defaultQuery);
-   ```
-
-1. Create a default query at the top of datasource.ts:
-
-   ```ts title="src/datasource.ts"
-   export const defaultQuery: Partial<MyQuery> = {
-     constant: 6.5,
-   };
-   ```
-
-### Update the values for your data frame
-
-Next, add the actual values to the data frame. Don't worry about the math used to calculate the values!
-
-1. Create a couple of helper variables:
+   Don't worry about the math used to calculate the values!
 
    ```ts title="src/datasource.ts"
    // duration of the time range, in milliseconds.
@@ -98,38 +80,71 @@ Next, add the actual values to the data frame. Don't worry about the math used t
    const step = duration / 1000;
    ```
 
-1. Add the values to the data frame:
+1. Create two arrays to hold the data and populate them with timestamps and values.
 
    ```ts title="src/datasource.ts"
+   const timestamps: number[] = [];
+   const values: number[] = [];
+
    for (let t = 0; t < duration; t += step) {
-     frame.add({ time: from + t, value: Math.sin((2 * Math.PI * t) / duration) });
+     timestamps.push(from + t);
+     values.push(Math.sin((2 * Math.PI * t) / duration));
    }
    ```
 
-   The `frame.add()` accepts an object where the keys corresponds to the name of each field in the data frame.
-
-### Create the data frame
-
-Next, create the data frame:
-
-1. Create a data frame with a time field and a number field:
+1. Create a data frame with a time field and a number field, passing the arrays to the `values` property.
 
    ```ts title="src/datasource.ts"
    const frame = createDataFrame({
      refId: query.refId,
      fields: [
-       { name: 'time', type: FieldType.time },
-       { name: 'value', type: FieldType.number },
+       { name: 'time', type: FieldType.time, values: timestamps },
+       { name: 'value', type: FieldType.number, values: values },
      ],
    });
    ```
 
    `refId` needs to be set to tell Grafana which query that generated this date frame.
 
-1. Return the data frame:
+1. Finally, return the data frame. Your query function should look something like this:
 
    ```ts title="src/datasource.ts"
-   return frame;
+   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
+    const { range } = options;
+    const from = range!.from.valueOf();
+    const to = range!.to.valueOf();
+
+    const data = options.targets.map(target => {
+      const duration = to - from;
+      const step = duration / 1000;
+
+      const timestamps: number[] = [];
+      const values: number[] = [];
+
+      for (let t = 0; t < duration; t += step) {
+        timestamps.push(from + t);
+        values.push(Math.sin((2 * Math.PI * t) / duration));
+      }
+
+      return createDataFrame({
+        refId: query.refId,
+        fields: [
+          {
+            name: 'time',
+            type: FieldType.time,
+            values: timestamps
+          },
+          {
+            name: 'value',
+            type: FieldType.number,
+            values: values
+          },
+        ],
+      });
+    });
+
+    return { data };
+   }
    ```
 
 ### Do a health check
@@ -143,7 +158,7 @@ Finally, implement the health check function:
    ```ts title="src/datasource.ts"
    async testDatasource() {
      return {
-       status: 200,
+       status: '200',
        statusText: 'Success',
      };
    }
