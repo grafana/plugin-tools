@@ -61,7 +61,7 @@ jobs:
             Automated update of `@grafana/e2e-selectors` to version `${{ inputs.version }}`.
 
             Triggered by grafana/grafana when changes were detected in the e2e-selectors package.
-          branch: bump-e2e-selectors-${{ inputs.version }}
+          branch: bump-e2e-selectors
           delete-branch: true
           labels: |
             dependencies
