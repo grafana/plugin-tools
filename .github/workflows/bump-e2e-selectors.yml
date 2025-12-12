@@ -62,6 +62,7 @@ jobs:
 
             Triggered by grafana/grafana when changes were detected in the e2e-selectors package.
           branch: bump-e2e-selectors
+          base: main
           delete-branch: true
           labels: |
             dependencies
