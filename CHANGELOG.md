@@ -1,3 +1,16 @@
+# (Fri Dec 12 2025)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.0.4`
+  - Plugin E2E: Bump e2e-selectors [#2341](https://github.com/grafana/plugin-tools/pull/2341) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Dec 05 2025)
 
 #### 🐛 Bug Fix
