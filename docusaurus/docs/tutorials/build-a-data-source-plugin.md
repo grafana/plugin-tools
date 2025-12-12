@@ -96,7 +96,7 @@ Let's see how to create and return a data frame from the `query` method. In this
 
    ```ts title="src/datasource.ts"
    const frame = createDataFrame({
-     refId: query.refId,
+     refId: target.refId,
      fields: [
        { name: 'time', type: FieldType.time, values: timestamps },
        { name: 'value', type: FieldType.number, values: values },
@@ -127,7 +127,7 @@ Let's see how to create and return a data frame from the `query` method. In this
       }
 
       return createDataFrame({
-        refId: query.refId,
+        refId: target.refId,
         fields: [
           {
             name: 'time',
@@ -158,8 +158,8 @@ Finally, implement the health check function:
    ```ts title="src/datasource.ts"
    async testDatasource() {
      return {
-       status: '200',
-       statusText: 'Success',
+       status: 'success',
+       message: 'Success',
      };
    }
    ```
