@@ -104,7 +104,7 @@ Let's see how to create and return a data frame from the `query` method. In this
    });
    ```
 
-   `refId` needs to be set to tell Grafana which query that generated this date frame.
+   `refId` needs to be set to tell Grafana which query that generated this data frame.
 
 1. Finally, return the data frame. Your query function should look something like this:
 
