@@ -1,0 +1,50 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      time: "02:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      grafana-production:
+        patterns:
+          - "@grafana/*"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@types/*"
+          - "typescript"
+      unit-test:
+        patterns:
+          - "vitest*"
+          - "rollup*"
+          - "vite*"
+    ignore:
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "02:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+
+  {{#if hasBackend}}
+  - package-ecosystem: gomod
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "02:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+  {{/if}}
