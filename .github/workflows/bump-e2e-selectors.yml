@@ -13,7 +13,7 @@ permissions: {}
 jobs:
   bump:
     name: Bump e2e-selectors version
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-x64
     permissions:
       contents: read
       id-token: write
@@ -22,6 +22,7 @@ jobs:
         id: get-secrets
         uses: grafana/shared-workflows/actions/get-vault-secrets@a37de51f3d713a30a9e4b21bcdfbd38170020593 # get-vault-secrets/v1.3.0
         with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
             GITHUB_APP_ID=plugins-platform-bot-app:app_id
             GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
@@ -34,15 +35,17 @@ jobs:
           app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
           private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PRIVATE_KEY }}
 
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           token: ${{ steps.generate-token.outputs.token }}
+          persist-credentials: false
 
-      - name: Setup Node.js
+      - name: Setup nodejs
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Update @grafana/e2e-selectors
         run: |
