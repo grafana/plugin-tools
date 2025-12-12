@@ -1,3 +1,15 @@
+# v6.4.4 (Fri Dec 12 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2343](https://github.com/grafana/plugin-tools/pull/2343) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v6.4.3 (Fri Dec 05 2025)
 
 #### 🐛 Bug Fix
