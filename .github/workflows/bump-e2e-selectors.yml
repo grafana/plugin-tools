@@ -48,8 +48,10 @@ jobs:
           cache: 'npm'
 
       - name: Update @grafana/e2e-selectors
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
-          npm install @grafana/e2e-selectors@${{ inputs.version }} --workspace=@grafana/plugin-e2e --save-exact
+          npm install "@grafana/e2e-selectors@${VERSION}" --workspace=@grafana/plugin-e2e --save-exact
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
