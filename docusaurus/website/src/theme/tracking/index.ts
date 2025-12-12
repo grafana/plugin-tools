@@ -1,6 +1,5 @@
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import { RudderStack } from './types';
-import { initSearchTracking } from './search';
 
 declare global {
   interface Window {
@@ -68,7 +67,6 @@ export function startTracking(
       }
       // clean up afterwards so trackPage
       rudderQueue = undefined;
-      initSearchTracking(rudderstack);
     };
 
     const el = document.createElement('script');
