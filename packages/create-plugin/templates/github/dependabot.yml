@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
+      interval: "weekly"
     # Wait 5 days before updating to help circumvent supply chain attacks
     cooldown:
       default-days: 5
