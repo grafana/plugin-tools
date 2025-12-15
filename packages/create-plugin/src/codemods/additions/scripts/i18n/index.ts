@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import type { Context } from '../../../context.js';
 import { additionsDebug } from '../../../utils.js';
-import { updateDockerCompose, updatePluginJson, createI18nextConfig } from './config-updates.js';
+import { updateDockerCompose, updatePluginJson, createI18nextConfig, ensureI18nextExternal } from './config-updates.js';
 import { addI18nInitialization, createLoadResourcesFile } from './code-generation.js';
 import { updateEslintConfig, addI18nDependency, addSemverDependency, addI18nextCli } from './tooling.js';
 import { checkNeedsBackwardCompatibility, createLocaleFiles } from './utils.js';
@@ -76,6 +76,13 @@ export default function i18nAddition(context: Context, options: I18nOptions): Co
 
   // 10. Create i18next.config.ts
   createI18nextConfig(context);
+
+  // 11. Ensure i18next is in externals array
+  try {
+    ensureI18nextExternal(context);
+  } catch (error) {
+    additionsDebug(`Error ensuring i18next external: ${error instanceof Error ? error.message : String(error)}`);
+  }
 
   return context;
 }
