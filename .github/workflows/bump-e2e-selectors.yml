@@ -66,6 +66,7 @@ jobs:
           branch: bump-e2e-selectors
           base: main
           delete-branch: true
+          sign-commits: true
           labels: |
             dependencies
             release
