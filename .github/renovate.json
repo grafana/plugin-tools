@@ -1,6 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
+  "ignorePresets": [
+    "github>grafana/grafana-renovate-config//presets/base",
+    "github>grafana/grafana-renovate-config//presets/automerge",
+    "github>grafana/grafana-renovate-config//presets/labels",
+    "github>grafana/grafana-renovate-config//presets/npm"
+  ],
   "includePaths": [
     "package.json",
     "packages/**",
@@ -19,13 +25,13 @@
   "skipInstalls": false,
   "reviewers": ["team:grafana/plugins-platform-frontend"],
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
-  // Extends the github-actions manager to include create-plugin workflow templates
-  // See: https://docs.renovatebot.com/modules/manager/#extending-a-managers-default-managerfilepatterns
   "github-actions": {
-    "managerFilePatterns": ["packages/create-plugin/templates/github/workflows/.*\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/(^|/)packages/create-plugin/templates/github/workflows/.+\\.ya?ml$/"
+    ]
   },
   "postUpdateOptions": ["npmDedupe"],
-  "labels": ["dependencies", "javascript"],
+  "labels": ["dependencies", "javascript", "no-changelog"],
   "customManagers": [
     {
       "customType": "regex",
@@ -50,7 +56,7 @@
       "automerge": false,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
-      "labels": ["dependencies", "patch"],
+      "labels": ["dependencies", "javascript", "patch"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
@@ -64,7 +70,7 @@
       "automerge": true,
       "groupName": "e2e-selector dependencies",
       "groupSlug": "plugin-e2e-selectors",
-      "labels": ["dependencies", "patch", "release"],
+      "labels": ["dependencies", "javascript", "patch", "release"],
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "modified",
       "rangeStrategy": "bump",
@@ -77,7 +83,7 @@
     {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
-      "labels": ["dependencies", "release", "patch"],
+      "labels": ["dependencies", "javascript", "release", "patch"],
       "matchUpdateTypes": ["minor", "major"],
       "matchPackageNames": [
         "/@grafana/*/",
@@ -90,7 +96,6 @@
     },
     {
       "groupName": "docusaurus dependencies",
-      "labels": ["dependencies", "javascript", "no-changelog"],
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
     },
@@ -103,7 +108,7 @@
       "automerge": true,
       "groupName": "auto-merged devDependencies",
       "groupSlug": "dev-dependencies-automerge",
-      "labels": ["dependencies", "javascript", "no-changelog"],
+      "addLabels": ["no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies", "optionalDependencies"],
       "matchPackageNames": [
@@ -119,19 +124,28 @@
       "automerge": true,
       "groupName": "auto-merged patch dependencies",
       "groupSlug": "prod-dependencies-automerge",
-      "labels": ["dependencies", "javascript", "no-changelog"],
+      "addLabels": ["no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
-      // disable automerge temporarily until we know the action can update create-plugin hbs templates.
+      "automerge": false,
+      "groupName": "create-plugin template github actions",
+      "labels": ["release", "patch", "create-plugin"],
+      "matchManagers": ["github-actions"],
+      "matchFileNames": [
+        "packages/create-plugin/templates/github/workflows/**"
+      ],
+      "pinDigests": false
+    },
+    {
       "automerge": false,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
-      "reviewers": ["jackw"],
-      "matchManagers": ["github-actions"]
+      "matchManagers": ["github-actions"],
+      "matchFileNames": [".github/workflows/**"]
     }
   ],
   "vulnerabilityAlerts": {

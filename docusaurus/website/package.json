@@ -1,6 +1,6 @@
 {
   "name": "website",
-  "version": "5.0.0",
+  "version": "5.1.1",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -13,9 +13,13 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "lint": "eslint --cache '../docs/**/*.{md,mdx}'",
+    "typecheck": "tsc",
+    "test": "vitest",
+    "test:ci": "vitest --run"
   },
   "dependencies": {
+    "@coffeeandfun/remove-pii": "^2.0.0",
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-client-redirects": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.2",
@@ -23,6 +27,7 @@
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "cookiejs": "^2.1.2",
+    "debounce": "^3.0.0",
     "docusaurus-lunr-search": "^3.6.0",
     "gridsome-remark-figure-caption": "1.2.2",
     "prism-react-renderer": "^2.1.0",
@@ -30,13 +35,14 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@docusaurus/faster": "^3.9.1",
-    "@docusaurus/module-type-aliases": "^3.9.1",
-    "@docusaurus/remark-plugin-npm2yarn": "^3.9.1",
-    "@docusaurus/tsconfig": "^3.9.1",
-    "dotenv": "^17.2.2",
+    "@docusaurus/faster": "^3.9.2",
+    "@docusaurus/module-type-aliases": "^3.9.2",
+    "@docusaurus/remark-plugin-npm2yarn": "^3.9.2",
+    "@docusaurus/tsconfig": "^3.9.2",
+    "dotenv": "^17.2.3",
     "raw-loader": "^4.0.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.10"
   },
   "browserslist": {
     "production": [

@@ -2,7 +2,6 @@
 node_modules
 
 # Build output
-packages/create-plugin/generated
 dist
 build
 
@@ -49,3 +48,6 @@ playwright/.auth
 # Used in CI to pass built packages to the next job
 packed-artifacts/
 .mise.toml
+
+# Don't commit local claude settings
+.claude/settings.local.json

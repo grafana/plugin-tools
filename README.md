@@ -102,6 +102,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/juanicabanas"><img src="https://avatars.githubusercontent.com/u/11707172?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Juan Cabanas</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=juanicabanas" title="Documentation">📖</a></td>
     <td align="center"><a href="https://mattcowley.co.uk/"><img src="https://avatars.githubusercontent.com/u/12371363?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Cowley</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=MattIPv4" title="Tests">⚠️</a> <a href="https://github.com/grafana/plugin-tools/commits?author=MattIPv4" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/apps/renovate-sh-app"><img src="https://avatars.githubusercontent.com/u/7195757?v=4?s=100" width="100px;" alt=""/><br /><sub><b>renovate-sh-app[bot]</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=renovate-sh-app[bot]" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

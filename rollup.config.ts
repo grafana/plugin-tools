@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { chmod } from 'node:fs/promises';
 import { join } from 'node:path';
 import { inspect } from 'node:util';
-import { defineConfig, Plugin, RollupOptions } from 'rollup';
+import { defineConfig, ExternalOption, Plugin, RollupOptions } from 'rollup';
 import del from 'rollup-plugin-delete';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
@@ -19,7 +19,7 @@ const preserveModulesRoot = join(projectRoot, 'src');
 const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
 
 const input: string[] = [];
-const external: string[] = [];
+const external: ExternalOption = [];
 if (pkg.bin) {
   input.push(getSourceFilePath(pkg.bin));
 }
@@ -34,14 +34,16 @@ if (pkg.name === '@grafana/plugin-e2e') {
 
 // TODO: Remove this once we have a better way to extend this config
 if (pkg.name === '@grafana/create-plugin') {
-  const globOptions: GlobOptions = {
-    cwd: join(preserveModulesRoot, 'migrations', 'scripts'),
+  const codeModsGlobOptions: GlobOptions = {
+    cwd: join(preserveModulesRoot, 'codemods'),
     ignore: ['**/*.test.ts'],
     absolute: true,
   };
-  const migrations = glob.sync('**/*.ts', globOptions).map((m) => m.toString());
-  input.push(...migrations);
+  const codeMods = glob.sync('{migrations,additions}/scripts/*.ts', codeModsGlobOptions).map((m) => m.toString());
+  input.push(...codeMods);
+
   external.push('prettier');
+  external.push(/^recast\/parsers\//);
 }
 
 if (pkg.dependencies) {

@@ -1,3 +1,250 @@
+# v6.4.4 (Fri Dec 12 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2343](https://github.com/grafana/plugin-tools/pull/2343) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.4.3 (Fri Dec 05 2025)
+
+#### 🐛 Bug Fix
+
+- fix: only migrate eslint if plugin depends on eslint < 9.0.0 [#2338](https://github.com/grafana/plugin-tools/pull/2338) ([@jackw](https://github.com/jackw))
+- Update dependency @grafana/plugin-e2e to v3.0.3 [#2335](https://github.com/grafana/plugin-tools/pull/2335) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.4.2 (Thu Nov 27 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: update valibot to ^1.2.0 [#2331](https://github.com/grafana/plugin-tools/pull/2331) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.4.1 (Wed Nov 26 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: bump swc/core to ^1.14.0 to fix segfault on Linux ARM [#2328](https://github.com/grafana/plugin-tools/pull/2328) ([@xnyo](https://github.com/xnyo))
+
+#### Authors: 1
+
+- Giuseppe Guerra ([@xnyo](https://github.com/xnyo))
+
+---
+
+# v6.4.0 (Tue Nov 25 2025)
+
+#### 🚀 Enhancement
+
+- Vibe: Adding agents.md when scaffolding panel plugin [#2314](https://github.com/grafana/plugin-tools/pull/2314) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
+# v6.3.1 (Tue Nov 25 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana dependencies to v12.3.0 [#2318](https://github.com/grafana/plugin-tools/pull/2318) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.3.0 (Tue Nov 25 2025)
+
+#### 🚀 Enhancement
+
+- Playwright: Bumping deploy-reports action [#2319](https://github.com/grafana/plugin-tools/pull/2319) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.2.2 (Fri Nov 21 2025)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency glob to v11.1.0 [security] [#2308](https://github.com/grafana/plugin-tools/pull/2308) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.2.1 (Thu Nov 20 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: use migration description for commit messages [#2315](https://github.com/grafana/plugin-tools/pull/2315) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.2.0 (Thu Nov 20 2025)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Support new add cmd [#2233](https://github.com/grafana/plugin-tools/pull/2233) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.1.14 (Wed Nov 19 2025)
+
+#### 🐛 Bug Fix
+
+- Create plugin: Update go templates [#2313](https://github.com/grafana/plugin-tools/pull/2313) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.13 (Wed Nov 19 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.12 (Mon Nov 17 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: fix replacing version and plugin id in nested plugins [#2287](https://github.com/grafana/plugin-tools/pull/2287) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.11 (Fri Nov 14 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update create-plugin template github actions [#2301](https://github.com/grafana/plugin-tools/pull/2301) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- chore(deps): update dependency @grafana/eslint-config to v9 [#2285](https://github.com/grafana/plugin-tools/pull/2285) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.10 (Thu Nov 13 2025)
+
+#### 🐛 Bug Fix
+
+- Feat: use latest create-plugin-update workflow [#2299](https://github.com/grafana/plugin-tools/pull/2299) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.9 (Wed Nov 12 2025)
+
+#### 🐛 Bug Fix
+
+- Create plugin: use react 18.3.x [#2283](https://github.com/grafana/plugin-tools/pull/2283) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.8 (Fri Nov 07 2025)
+
+### Release Notes
+
+#### chore(deps): update grafana patch dependencies ([#2217](https://github.com/grafana/plugin-tools/pull/2217))
+
+<details>
+<summary>grafana/grafana (@&#8203;grafana/data)</summary>
+
+---
+
+#### 🐛 Bug Fix
+
+- Create plugin: fix permissions issue in cp-update workflow [#2281](https://github.com/grafana/plugin-tools/pull/2281) ([@jackw](https://github.com/jackw))
+- chore(deps): update grafana patch dependencies [#2217](https://github.com/grafana/plugin-tools/pull/2217) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.1.7 (Mon Nov 03 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Fix workflow references [#2261](https://github.com/grafana/plugin-tools/pull/2261) ([@StephenKing](https://github.com/StephenKing))
+
+#### Authors: 1
+
+- Steffen Gebert ([@StephenKing](https://github.com/StephenKing))
+
+---
+
+# v6.1.6 (Mon Nov 03 2025)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3 [#2259](https://github.com/grafana/plugin-tools/pull/2259) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.1.5 (Tue Oct 28 2025)
 
 #### 🐛 Bug Fix

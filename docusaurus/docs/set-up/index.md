@@ -16,10 +16,20 @@ keywords:
   - configuration
 ---
 
-These guides walk you through setting up your development environment for Grafana plugin development. Including:
+# Set up your development environment
 
-- Running a development Grafana server with your plugin installed using Docker
-- Setting up GitHub workflows to automate your development and release process
-- Extending configurations for ESLint, Prettier, Jest, TypeScript, and Webpack
+This section helps you configure a complete development environment for Grafana plugin development. You'll learn how to set up local development tools and automate your development workflow.
+
+Before you begin, ensure you have the following:
+
+- A Grafana plugin project created with [`create-plugin`](/get-started.md)
+- Docker installed on your system
+- A GitHub repository for your plugin (optional, for CI/CD setup)
+
+These guides cover essential development environment setup:
+
+- **Docker environment**: Run a development Grafana server with your plugin installed using Docker.
+- **GitHub workflows**: Set up GitHub workflows to automate your development and release process.
+- **Configuration extensions**: Extend configurations for ESLint, Prettier, Jest, TypeScript, and Webpack.
 
 <DocLinkList />
