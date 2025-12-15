@@ -4,47 +4,64 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-      time: "02:00"
-      timezone: "UTC"
+    # Wait 5 days before updating to help circumvent supply chain attacks
+    cooldown:
+      default-days: 5
+      # Exclude plugin-e2e to prevent false positives with canary e2e tests
+      exclude:
+        - "@grafana/plugin-e2e"
     open-pull-requests-limit: 5
-    versioning-strategy: increase-if-necessary
     commit-message:
       prefix: "chore"
       include: "scope"
     groups:
-      grafana-production:
-        patterns:
-          - "@grafana/*"
-      eslint:
-        patterns:
-          - "eslint*"
-          - "@types/*"
-          - "typescript"
       unit-test:
         patterns:
-          - "vitest*"
-          - "rollup*"
-          - "vite*"
-    ignore:
-      - dependency-name: "react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
+          - "@testing-library/*"
+          - "jest*"
+          - "@types/jest"
+      eslint:
+        patterns:
+          - "@grafana/eslint-config"
+          - "eslint*"
+          - "@typescript-eslint/*"
+          - "@stylistic/*"
+      grafana:
+        patterns:
+          - "@grafana/*"
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: daily
-      time: "02:00"
-      timezone: "UTC"
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(ci)"
     open-pull-requests-limit: 5
 
-  {{#if hasBackend}}
-  - package-ecosystem: gomod
+{{#if hasBackend}}
+  - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: daily
-      time: "02:00"
-      timezone: "UTC"
+      interval: "weekly"
     open-pull-requests-limit: 5
-  {{/if}}
+    allow:
+      - dependency-name: "github.com/grafana/grafana-plugin-sdk-go"
+        dependency-type: "all"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+{{/if}}
