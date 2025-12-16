@@ -72,7 +72,7 @@ The addition automatically detects your plugin's `grafanaDependency` version:
 
 ## Running Multiple Times
 
-This addition is **defensive** and can be run multiple times safely. Each operation checks if it's already been done:
+This addition can be run multiple times safely. It uses defensive programming to check if configurations already exist before adding them, preventing duplicates and overwrites:
 
 ### Adding New Locales
 
@@ -88,9 +88,9 @@ npx @grafana/create-plugin add i18n --locales en-US,es-ES,sv-SE
 
 The addition will:
 
-- ✅ Merge new locales into `plugin.json` without duplicates
-- ✅ Create only the new locale files (won't overwrite existing ones)
-- ✅ Skip updating files that already have i18n configured
+- Merge new locales into `plugin.json` without duplicates
+- Create only the new locale files (won't overwrite existing ones)
+- Skip updating files that already have i18n configured
 
 ## Files Created
 
