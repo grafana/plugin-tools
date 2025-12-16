@@ -87,7 +87,7 @@ export function addI18nInitialization(context: Context, needsBackwardCompatibili
     const i18nInitCode = needsBackwardCompatibility
       ? `// Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
 // In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
-const loaders = semver.lt(config?.buildInfo?.version || '0.0.0', '12.1.0') ? [loadResources] : [];
+const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources] : [];
 
 await initPluginTranslations(pluginJson.id, loaders);`
       : `await initPluginTranslations(pluginJson.id);`;
