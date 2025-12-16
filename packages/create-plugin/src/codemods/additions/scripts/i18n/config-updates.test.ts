@@ -13,7 +13,7 @@ describe('config-updates', () => {
       ensureI18nextExternal(context);
 
       const externalsContent = context.getFile('.config/bundler/externals.ts');
-      expect(externalsContent).toContain("'i18next'");
+      expect(externalsContent).toMatch(/["']i18next["']/);
       expect(externalsContent).toContain("'react'");
       expect(externalsContent).toContain("'react-dom'");
     });
@@ -27,7 +27,7 @@ describe('config-updates', () => {
       ensureI18nextExternal(context);
 
       const externalsContent = context.getFile('.config/bundler/externals.ts');
-      const i18nextCount = (externalsContent?.match(/'i18next'/g) || []).length;
+      const i18nextCount = (externalsContent?.match(/["']i18next["']/g) || []).length;
       expect(i18nextCount).toBe(1);
     });
 
@@ -45,7 +45,7 @@ export const config: Configuration = {
       ensureI18nextExternal(context);
 
       const webpackConfig = context.getFile('.config/webpack/webpack.config.ts');
-      expect(webpackConfig).toContain("'i18next'");
+      expect(webpackConfig).toMatch(/["']i18next["']/);
       expect(webpackConfig).toContain("'react'");
       expect(webpackConfig).toContain("'react-dom'");
     });
@@ -69,10 +69,10 @@ export const config: Configuration = {
 
       // Should update externals.ts, not webpack.config.ts
       const externalsContent = context.getFile('.config/bundler/externals.ts');
-      expect(externalsContent).toContain("'i18next'");
+      expect(externalsContent).toMatch(/["']i18next["']/);
 
       const webpackConfig = context.getFile('.config/webpack/webpack.config.ts');
-      expect(webpackConfig).not.toContain("'i18next'");
+      expect(webpackConfig).not.toMatch(/["']i18next["']/);
     });
   });
 
