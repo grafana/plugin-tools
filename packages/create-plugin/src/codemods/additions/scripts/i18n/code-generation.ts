@@ -73,10 +73,12 @@ export function addI18nInitialization(context: Context, needsBackwardCompatibili
       );
     }
 
-    // Add imports after the first import statement
-    const firstImportIndex = ast.program.body.findIndex((node: any) => node.type === 'ImportDeclaration');
-    if (firstImportIndex !== -1) {
-      ast.program.body.splice(firstImportIndex + 1, 0, ...imports);
+    // Find the last import index (use consistent approach for both imports and initialization)
+    const lastImportIndex = ast.program.body.findLastIndex((node: any) => node.type === 'ImportDeclaration');
+
+    // Add imports after the last import statement
+    if (lastImportIndex !== -1) {
+      ast.program.body.splice(lastImportIndex + 1, 0, ...imports);
     } else {
       ast.program.body.unshift(...imports);
     }
@@ -85,7 +87,7 @@ export function addI18nInitialization(context: Context, needsBackwardCompatibili
     const i18nInitCode = needsBackwardCompatibility
       ? `// Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
 // In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
-const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources] : [];
+const loaders = semver.lt(config?.buildInfo?.version || '0.0.0', '12.1.0') ? [loadResources] : [];
 
 await initPluginTranslations(pluginJson.id, loaders);`
       : `await initPluginTranslations(pluginJson.id);`;
@@ -95,10 +97,10 @@ await initPluginTranslations(pluginJson.id, loaders);`
       parser: babelParser,
     });
 
-    // Find the last import index
-    const lastImportIndex = ast.program.body.findLastIndex((node: any) => node.type === 'ImportDeclaration');
-    if (lastImportIndex !== -1) {
-      ast.program.body.splice(lastImportIndex + 1, 0, ...initAst.program.body);
+    // Find the last import index again (after adding new imports)
+    const finalLastImportIndex = ast.program.body.findLastIndex((node: any) => node.type === 'ImportDeclaration');
+    if (finalLastImportIndex !== -1) {
+      ast.program.body.splice(finalLastImportIndex + 1, 0, ...initAst.program.body);
     } else {
       ast.program.body.unshift(...initAst.program.body);
     }
@@ -135,7 +137,7 @@ export function createLoadResourcesFile(context: Context): void {
 import pluginJson from 'plugin.json';
 
 const resources = LANGUAGES.reduce<Record<string, () => Promise<{ default: Resources }>>>((acc, lang) => {
-  acc[lang.code] = async () => await import(\`./locales/\${lang.code}/\${pluginJson.id}.json\`);
+  acc[lang.code] = () => import(\`./locales/\${lang.code}/\${pluginJson.id}.json\`);
   return acc;
 }, {});
 

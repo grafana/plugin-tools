@@ -43,12 +43,21 @@ export function checkReactVersion(context: Context): void {
 export function checkNeedsBackwardCompatibility(context: Context): boolean {
   const pluginJsonRaw = context.getFile('src/plugin.json');
   if (!pluginJsonRaw) {
-    return false;
+    // Default to backward compat for safety when plugin.json is missing
+    return true;
   }
 
   try {
     const pluginJson = JSON.parse(pluginJsonRaw);
-    const currentGrafanaDep = pluginJson.dependencies?.grafanaDependency || '>=11.0.0';
+    const currentGrafanaDep = pluginJson.dependencies?.grafanaDependency;
+
+    if (!currentGrafanaDep) {
+      additionsDebug(
+        'Warning: grafanaDependency is missing from plugin.json. Assuming backward compatibility mode is needed.'
+      );
+      return true;
+    }
+
     const minVersion = coerce('12.1.0');
     const currentVersion = coerce(currentGrafanaDep.replace(/^[><=]+/, ''));
 

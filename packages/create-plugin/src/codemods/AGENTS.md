@@ -38,7 +38,7 @@ Additions are optional features that developers choose to add via `create-plugin
 ### Addition Behavior
 
 - Additions add new features or capabilities to a plugin (e.g., i18n support, testing frameworks, etc.)
-- it should be safe to run multiple times
+- It should be safe to run multiple times
 - Always use defensive programming: check if features already exist before adding them
 - Use `additionsDebug()` for logging to help with troubleshooting
 - If the addition accepts user input, export a `schema` object using `valibot` for input validation

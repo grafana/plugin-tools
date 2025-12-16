@@ -73,14 +73,18 @@ export function updateEslintConfig(context: Context): void {
     const imports = ast.program.body.filter((node: any) => node.type === 'ImportDeclaration');
     const lastImport = imports[imports.length - 1];
 
-    if (lastImport) {
-      const pluginImport = builders.importDeclaration(
-        [builders.importDefaultSpecifier(builders.identifier('grafanaI18nPlugin'))],
-        builders.literal('@grafana/i18n/eslint-plugin')
-      );
+    // Always create the plugin import
+    const pluginImport = builders.importDeclaration(
+      [builders.importDefaultSpecifier(builders.identifier('grafanaI18nPlugin'))],
+      builders.literal('@grafana/i18n/eslint-plugin')
+    );
 
+    if (lastImport) {
       const lastImportIndex = ast.program.body.indexOf(lastImport);
       ast.program.body.splice(lastImportIndex + 1, 0, pluginImport);
+    } else {
+      // No imports found, insert at the beginning
+      ast.program.body.unshift(pluginImport);
     }
 
     // Find the defineConfig array and add the plugin config

@@ -10,7 +10,7 @@ npx @grafana/create-plugin add i18n --locales <locales>
 
 ## Requirements
 
-- **Grafana >= 11.0.0**: i18n is not supported for Grafana versions prior to 11.0.0. If your plugin's `grafanaDependency` is set to a version < 11.0.0, the script will automatically update it to `>=11.0.0`.
+- **Grafana >= 11.0.0**: i18n is not supported for Grafana versions prior to 11.0.0. If your plugin's `grafanaDependency` is set to a version < 11.0.0, the script will automatically update it to `>=11.0.0` (it will not exit with an error).
 - **React >= 18**: The `@grafana/i18n` package requires React 18 or higher. If your plugin uses React < 18, the script will exit with an error and prompt you to upgrade.
 
 ## Required Flags
