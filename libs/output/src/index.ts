@@ -1,21 +1,22 @@
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 import { EOL } from 'os';
 
 type Colors = 'red' | 'cyan' | 'green' | 'yellow' | 'gray';
 
 type TaskStatus = 'success' | 'failure' | 'skipped';
 
-function isCI() {
-  return (
-    (process.env.CI && process.env.CI !== 'false') || // Drone CI plus others
-    process.env.GITHUB_ACTIONS === 'true' // GitHub Actions
-  );
-}
+// TODO: check to see if we still need this
+// function isCI() {
+//   return (
+//     (process.env.CI && process.env.CI !== 'false') || // Drone CI plus others
+//     process.env.GITHUB_ACTIONS === 'true' // GitHub Actions
+//   );
+// }
 
-if (isCI()) {
-  // Disable coloring when running in CI environments.
-  chalk.level = 0;
-}
+// if (isCI()) {
+//   // Disable coloring when running in CI environments.
+//   process.env.NODE_DISABLE_COLORS = 'true';
+// }
 
 export class Output {
   private appName: string;
@@ -39,7 +40,7 @@ export class Output {
   }
 
   addHorizontalLine(color: Colors) {
-    const separator = chalk.dim[color](this.separator);
+    const separator = styleText(['dim', color], this.separator);
     this.write(`${separator}${EOL}`);
   }
 
@@ -58,20 +59,20 @@ export class Output {
   private getStatusIcon(taskStatus: TaskStatus) {
     switch (taskStatus) {
       case 'success':
-        return chalk.green('✓');
+        return styleText(['green'], '✓');
       case 'failure':
-        return chalk.red('⨯');
+        return styleText(['red'], '⨯');
       case 'skipped':
-        return chalk.yellow('−');
+        return styleText(['yellow'], '−');
     }
   }
 
   private addPrefix(color: Colors, text: string) {
-    const namePrefix = chalk.reset.inverse.bold[color](` ${this.appName} `);
+    const namePrefix = styleText(['reset', 'inverse', 'bold', color], ` ${this.appName} `);
     if (!this.appVersion) {
       return `${namePrefix} ${text}`;
     }
-    const nameAndVersionPrefix = chalk.reset.inverse.bold[color](` ${this.appName}@${this.appVersion} `);
+    const nameAndVersionPrefix = styleText(['reset', 'inverse', 'bold', color], ` ${this.appName}@${this.appVersion} `);
     return `${nameAndVersionPrefix} ${text}`;
   }
 
@@ -97,13 +98,13 @@ export class Output {
     withPrefix?: boolean;
   }) {
     this.addNewLine();
-    this.writeTitle('red', chalk.red.bold(title), withPrefix);
+    this.writeTitle('red', styleText(['red', 'bold'], title), withPrefix);
     this.writeBody(body);
 
     if (link) {
       this.addNewLine();
-      this.write(`${chalk.gray('Learn more about this error: ')}
-  ${chalk.cyan(link)}`);
+      this.write(`${styleText(['gray'], 'Learn more about this error: ')}
+  ${styleText(['cyan'], link)}`);
     }
     this.addNewLine();
   }
@@ -120,12 +121,12 @@ export class Output {
     withPrefix?: boolean;
   }) {
     this.addNewLine();
-    this.writeTitle('yellow', chalk.yellow.bold(title), withPrefix);
+    this.writeTitle('yellow', styleText(['yellow', 'bold'], title), withPrefix);
     this.writeBody(body);
 
     if (link) {
       this.addNewLine();
-      this.write(`${chalk.gray('Learn more about this warning: ')}
+      this.write(`${styleText(['gray'], 'Learn more about this warning: ')}
   ${this.formatUrl(link)}`);
     }
     this.addNewLine();
@@ -133,14 +134,14 @@ export class Output {
 
   success({ title, body, withPrefix = true }: { title: string; body?: string[]; withPrefix?: boolean }) {
     this.addNewLine();
-    this.writeTitle('green', chalk.green.bold(title), withPrefix);
+    this.writeTitle('green', styleText(['green', 'bold'], title), withPrefix);
     this.writeBody(body);
     this.addNewLine();
   }
 
   log({ title, body, withPrefix = true }: { title: string; body?: string[]; withPrefix?: boolean }) {
     this.addNewLine();
-    this.writeTitle('cyan', chalk.cyan.bold(title), withPrefix);
+    this.writeTitle('cyan', styleText(['cyan', 'bold'], title), withPrefix);
     this.writeBody(body);
     this.addNewLine();
   }
@@ -158,11 +159,11 @@ export class Output {
   }
 
   formatCode(code: string) {
-    return chalk.italic.cyan(code);
+    return styleText(['italic', 'cyan'], code);
   }
 
   formatUrl(url: string) {
-    return chalk.reset.blue.underline(url);
+    return styleText(['reset', 'blue', 'underline'], url);
   }
 
   statusList(status: TaskStatus, list: string[]) {
