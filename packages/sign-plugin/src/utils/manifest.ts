@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { postData } from './request.js';
 import { output } from './utils.output.js';
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
 
@@ -112,7 +112,7 @@ export async function signManifest(manifest: ManifestInfo): Promise<string> {
       output.error({
         title: 'Error signing manifest.',
         body: [
-          `Server responded with status code ${chalk.yellow(info.status)} along with:`,
+          `Server responded with status code ${styleText(['yellow'], info.status.toString())} along with:`,
           ...output.bulletList(dataAsArray),
         ],
       });
