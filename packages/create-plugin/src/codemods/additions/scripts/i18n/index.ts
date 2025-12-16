@@ -88,15 +88,15 @@ export default function i18nAddition(context: Context, options: I18nOptions): Co
   }
 
   // Success message with next steps
-  console.log('\n✅ i18n support has been successfully added to your plugin!\n');
-  console.log('Next steps:');
-  console.log('1. Follow the instructions to translate your source code:');
-  console.log(
+  additionsDebug('\n✅ i18n support has been successfully added to your plugin!\n');
+  additionsDebug('Next steps:');
+  additionsDebug('1. Follow the instructions to translate your source code:');
+  additionsDebug(
     '   https://grafana.com/developers/plugin-tools/how-to-guides/plugin-internationalization-grafana-11#determine-the-text-to-translate'
   );
-  console.log('2. Run the i18n-extract script to scan your code for translatable strings:');
-  console.log('   npm run i18n-extract  (or yarn/pnpm run i18n-extract)');
-  console.log('3. Fill in your locale JSON files with translated strings\n');
+  additionsDebug('2. Run the i18n-extract script to scan your code for translatable strings:');
+  additionsDebug('   npm run i18n-extract  (or yarn/pnpm run i18n-extract)');
+  additionsDebug('3. Fill in your locale JSON files with translated strings\n');
 
   return context;
 }
