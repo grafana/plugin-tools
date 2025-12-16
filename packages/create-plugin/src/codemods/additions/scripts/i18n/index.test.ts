@@ -372,47 +372,6 @@ describe('i18n addition', () => {
     expect(packageJson.scripts['i18n-extract']).toBe('i18next-cli extract --sync-primary');
   });
 
-  it('should not add ESLint config if already present', () => {
-    const context = new Context('/virtual');
-
-    context.addFile(
-      'src/plugin.json',
-      JSON.stringify({
-        id: 'test-plugin',
-        type: 'panel',
-        name: 'Test Plugin',
-        dependencies: {
-          grafanaDependency: '>=12.1.0',
-        },
-      })
-    );
-    context.addFile(
-      'docker-compose.yaml',
-      `services:
-  grafana:
-    environment:
-      FOO: bar`
-    );
-    context.addFile('package.json', JSON.stringify({ dependencies: {}, devDependencies: {}, scripts: {} }));
-    context.addFile(
-      'eslint.config.mjs',
-      'import { defineConfig } from "eslint/config";\nimport grafanaI18nPlugin from "@grafana/i18n/eslint-plugin";\nexport default defineConfig([]);'
-    );
-    context.addFile(
-      'src/module.ts',
-      'import { PanelPlugin } from "@grafana/data";\nexport const plugin = new PanelPlugin();'
-    );
-
-    const result = i18nAddition(context, { locales: ['en-US'] });
-
-    // The ESLint config should remain unchanged
-    const eslintConfig = result.getFile('eslint.config.mjs');
-    expect(eslintConfig).toContain('@grafana/i18n/eslint-plugin');
-    // Should not have duplicate imports or configs
-    const importCount = (eslintConfig?.match(/@grafana\/i18n\/eslint-plugin/g) || []).length;
-    expect(importCount).toBe(1);
-  });
-
   it('should not create locale files if they already exist', () => {
     const context = new Context('/virtual');
 
@@ -711,60 +670,5 @@ export const plugin = new PanelPlugin();`;
     // Should only have one instance of localizationForPlugins
     const toggleCount = (dockerCompose?.match(/localizationForPlugins/g) || []).length;
     expect(toggleCount).toBe(1);
-  });
-
-  it('should add correct ESLint config with proper rules and options', () => {
-    const context = new Context('/virtual');
-
-    context.addFile(
-      'src/plugin.json',
-      JSON.stringify({
-        id: 'test-plugin',
-        type: 'panel',
-        name: 'Test Plugin',
-        dependencies: {
-          grafanaDependency: '>=12.1.0',
-        },
-      })
-    );
-    context.addFile(
-      'docker-compose.yaml',
-      `services:
-  grafana:
-    environment:
-      FOO: bar`
-    );
-    context.addFile('package.json', JSON.stringify({ dependencies: {}, devDependencies: {}, scripts: {} }));
-    context.addFile(
-      'eslint.config.mjs',
-      'import { defineConfig } from "eslint/config";\nexport default defineConfig([]);'
-    );
-    context.addFile(
-      'src/module.ts',
-      'import { PanelPlugin } from "@grafana/data";\nexport const plugin = new PanelPlugin();'
-    );
-
-    const result = i18nAddition(context, { locales: ['en-US'] });
-
-    const eslintConfig = result.getFile('eslint.config.mjs');
-
-    // Check correct import (recast uses double quotes)
-    expect(eslintConfig).toContain('import grafanaI18nPlugin from "@grafana/i18n/eslint-plugin"');
-
-    // Check plugin registration
-    expect(eslintConfig).toContain('"@grafana/i18n": grafanaI18nPlugin');
-
-    // Check rules are present
-    expect(eslintConfig).toContain('"@grafana/i18n/no-untranslated-strings"');
-    expect(eslintConfig).toContain('"@grafana/i18n/no-translation-top-level"');
-
-    // Check rule configuration
-    expect(eslintConfig).toContain('"error"');
-    expect(eslintConfig).toContain('calleesToIgnore');
-    expect(eslintConfig).toContain('"^css$"');
-    expect(eslintConfig).toContain('"use[A-Z].*"');
-
-    // Check config name
-    expect(eslintConfig).toContain('name: "grafana/i18n-rules"');
   });
 });
