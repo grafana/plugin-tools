@@ -8,6 +8,11 @@ Adds internationalization (i18n) support to a Grafana plugin.
 npx @grafana/create-plugin add i18n --locales <locales>
 ```
 
+## Requirements
+
+- **Grafana >= 11.0.0**: i18n is not supported for Grafana versions prior to 11.0.0. If your plugin's `grafanaDependency` is set to a version < 11.0.0, the script will automatically update it to `>=11.0.0`.
+- **React >= 18**: The `@grafana/i18n` package requires React 18 or higher. If your plugin uses React < 18, the script will exit with an error and prompt you to upgrade.
+
 ## Required Flags
 
 ### `--locales`
@@ -24,6 +29,12 @@ npx @grafana/create-plugin add i18n --locales en-US,es-ES,sv-SE
 
 ## What This Addition Does
 
+**Important:** This script sets up the infrastructure and configuration needed for translations. After running this script, you'll need to:
+
+1. Mark up your code with translation functions (`t()` and `<Trans>`)
+2. Run `npm run i18n-extract` to extract translatable strings
+3. Fill in the locale JSON files with translated strings
+
 This addition configures your plugin for internationalization by:
 
 1. **Updating `docker-compose.yaml`** - Adds the `localizationForPlugins` feature toggle to your local Grafana instance
@@ -39,9 +50,11 @@ This addition configures your plugin for internationalization by:
 
 ## Backward Compatibility
 
+**Note:** i18n is not supported for Grafana versions prior to 11.0.0.
+
 The addition automatically detects your plugin's `grafanaDependency` version:
 
-### Grafana >= 12.1.0 (Modern)
+### Grafana >= 12.1.0
 
 - Sets `grafanaDependency` to `>=12.1.0`
 - Grafana handles loading translations automatically
@@ -49,7 +62,7 @@ The addition automatically detects your plugin's `grafanaDependency` version:
 - No `loadResources.ts` file needed
 - No `semver` dependency needed
 
-### Grafana 11.0.0 - 12.0.x (Backward Compatible)
+### Grafana 11.0.0 - 12.0.x
 
 - Keeps or sets `grafanaDependency` to `>=11.0.0`
 - Plugin handles loading translations
@@ -57,7 +70,7 @@ The addition automatically detects your plugin's `grafanaDependency` version:
 - Adds runtime version check using `semver`
 - Initialization with loaders: `await initPluginTranslations(pluginJson.id, loaders)`
 
-## Running Multiple Times (Idempotent)
+## Running Multiple Times
 
 This addition is **defensive** and can be run multiple times safely. Each operation checks if it's already been done:
 
@@ -78,16 +91,6 @@ The addition will:
 - ✅ Merge new locales into `plugin.json` without duplicates
 - ✅ Create only the new locale files (won't overwrite existing ones)
 - ✅ Skip updating files that already have i18n configured
-
-### What Won't Be Duplicated
-
-- **Locale files**: Existing locale JSON files are never overwritten (preserves your translations)
-- **Dependencies**: Won't re-add dependencies that already exist
-- **ESLint config**: Won't duplicate the i18n plugin import or rules
-- **Module initialization**: Won't add `initPluginTranslations` if it's already present
-- **Support files**: Won't overwrite `i18next.config.ts` or `loadResources.ts` if they exist
-- **npm scripts**: Won't overwrite the `i18n-extract` script if it exists
-- **Docker feature toggle**: Won't duplicate the feature toggle
 
 ## Files Created
 
@@ -126,9 +129,7 @@ your-plugin/
 
 After running this addition:
 
-1. **Extract translations**: Run `npm run i18n-extract` to scan your code for translatable strings
-2. **Add translations**: Fill in your locale JSON files with translated strings
-3. **Use in code**: Import and use the translation functions:
+1. **Use in code**: Import and use the translation functions to mark up your code:
 
    ```typescript
    import { t, Trans } from '@grafana/i18n';
@@ -141,6 +142,9 @@ After running this addition:
      This is a description
    </Trans>
    ```
+
+2. **Extract translations**: Run `npm run i18n-extract` to scan your code for translatable strings
+3. **Add translations**: Fill in your locale JSON files with translated strings
 
 ## Debug Output
 
