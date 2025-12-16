@@ -5,7 +5,7 @@ import { additionsDebug } from '../../../utils.js';
 import { updateDockerCompose, updatePluginJson, createI18nextConfig, ensureI18nextExternal } from './config-updates.js';
 import { addI18nInitialization, createLoadResourcesFile } from './code-generation.js';
 import { updateEslintConfig, addI18nDependency, addSemverDependency, addI18nextCli } from './tooling.js';
-import { checkNeedsBackwardCompatibility, createLocaleFiles } from './utils.js';
+import { checkNeedsBackwardCompatibility, createLocaleFiles, checkReactVersion } from './utils.js';
 
 /**
  * I18n addition schema using Valibot
@@ -38,6 +38,9 @@ export default function i18nAddition(context: Context, options: I18nOptions): Co
   const { locales } = options;
 
   additionsDebug('Adding i18n support with locales:', locales);
+
+  // Check React version early - @grafana/i18n requires React 18+
+  checkReactVersion(context);
 
   // Determine if we need backward compatibility (Grafana < 12.1.0)
   const needsBackwardCompatibility = checkNeedsBackwardCompatibility(context);
