@@ -164,35 +164,9 @@ function addI18nextToExternalsArray(externalsArray: recast.types.namedTypes.Arra
     return false;
   }
 
-  // Find the position after 'rxjs' to insert 'i18next'
-  let insertIndex = -1;
-  for (let i = 0; i < externalsArray.elements.length; i++) {
-    const element = externalsArray.elements[i];
-    if (element && (element.type === 'Literal' || element.type === 'StringLiteral') && element.value === 'rxjs') {
-      insertIndex = i + 1;
-      break;
-    }
-  }
-
-  // If 'rxjs' not found, append to the end (before the function at the end)
-  if (insertIndex === -1) {
-    // Find the last non-function element
-    for (let i = externalsArray.elements.length - 1; i >= 0; i--) {
-      const element = externalsArray.elements[i];
-      if (element && element.type !== 'FunctionExpression' && element.type !== 'ArrowFunctionExpression') {
-        insertIndex = i + 1;
-        break;
-      }
-    }
-    // If still not found, append at the end
-    if (insertIndex === -1) {
-      insertIndex = externalsArray.elements.length;
-    }
-  }
-
-  // Insert 'i18next' at the found position
-  externalsArray.elements.splice(insertIndex, 0, builders.literal('i18next'));
-  additionsDebug(`Added 'i18next' to externals array at position ${insertIndex}`);
+  // Append 'i18next' to the end of the array
+  externalsArray.elements.push(builders.literal('i18next'));
+  additionsDebug("Added 'i18next' to externals array");
   return true;
 }
 
