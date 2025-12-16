@@ -15,8 +15,8 @@ jobs:
     name: Bump e2e-selectors version
     runs-on: ubuntu-x64
     permissions:
-      contents: read
-      id-token: write
+      contents: write
+      pull-requests: write
     steps:
       - name: Get secrets
         id: get-secrets
