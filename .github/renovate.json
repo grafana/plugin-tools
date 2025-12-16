@@ -67,20 +67,6 @@
       "minimumReleaseAge": null
     },
     {
-      "automerge": true,
-      "groupName": "e2e-selector dependencies",
-      "groupSlug": "plugin-e2e-selectors",
-      "labels": ["dependencies", "javascript", "patch", "release"],
-      "matchPackageNames": ["@grafana/e2e-selectors"],
-      "followTag": "modified",
-      "rangeStrategy": "bump",
-      "matchFileNames": [
-        "packages/plugin-e2e/package.json",
-        "package-lock.json"
-      ],
-      "minimumReleaseAge": null
-    },
-    {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
       "labels": ["dependencies", "javascript", "release", "patch"],
