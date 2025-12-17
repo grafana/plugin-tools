@@ -139,9 +139,10 @@ describe('004-eslint9-flat-config', () => {
               'plugin:react/recommended',
               'prettier',
             ],
-            plugins: ['simple-import-sort'],
+            plugins: ['simple-import-sort', '@grafana/eslint-plugin-plugins'],
             rules: {
               'simple-import-sort/imports': 'error',
+              '@grafana/plugins/import-is-compatible': 'warn',
             },
             overrides: [
               {
@@ -163,6 +164,7 @@ describe('004-eslint9-flat-config', () => {
         import react from "eslint-plugin-react";
         import prettier from "eslint-config-prettier/flat";
         import simpleImportSort from "eslint-plugin-simple-import-sort";
+        import grafanaEslintPluginPlugins from "@grafana/eslint-plugin-plugins";
 
         export default defineConfig([
           js.configs.recommended,
@@ -173,10 +175,12 @@ describe('004-eslint9-flat-config', () => {
           {
             plugins: {
               "simple-import-sort": simpleImportSort,
+              "@grafana/plugins": grafanaEslintPluginPlugins,
             },
 
             rules: {
               "simple-import-sort/imports": "error",
+              "@grafana/plugins/import-is-compatible": "warn",
             },
           },
           {

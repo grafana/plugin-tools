@@ -340,12 +340,12 @@ function getPluginVarName(pluginName: string) {
 
 function getPluginShortName(pluginName: string) {
   if (pluginName.startsWith('@')) {
-    let match = pluginName.match(/^@([^/]+)\/eslint-plugin$/);
+    let match = new RegExp(`^(@[^/]+)\/eslint-plugin$`, 'u').exec(pluginName);
 
     if (match) {
       return match[1];
     }
-    match = pluginName.match(/^@([^/]+)\/eslint-plugin-(.+)$/);
+    match = new RegExp(`^(@[^/]+)\/eslint-plugin-(.+)$`, 'u').exec(pluginName);
 
     if (match) {
       return `${match[1]}/${match[2]}`;
