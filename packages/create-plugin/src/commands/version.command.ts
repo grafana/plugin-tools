@@ -1,8 +1,8 @@
-import { output } from '../utils/utils.console.js';
+import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
 
 export const version = async () => {
   try {
-    output.log({ title: '' });
+    console.log(CURRENT_APP_VERSION);
   } catch (error) {
     console.error(error);
     process.exit(1);
