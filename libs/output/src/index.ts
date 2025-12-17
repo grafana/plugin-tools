@@ -5,19 +5,6 @@ type Colors = 'red' | 'cyan' | 'green' | 'yellow' | 'gray';
 
 type TaskStatus = 'success' | 'failure' | 'skipped';
 
-// TODO: check to see if we still need this
-// function isCI() {
-//   return (
-//     (process.env.CI && process.env.CI !== 'false') || // Drone CI plus others
-//     process.env.GITHUB_ACTIONS === 'true' // GitHub Actions
-//   );
-// }
-
-// if (isCI()) {
-//   // Disable coloring when running in CI environments.
-//   process.env.NODE_DISABLE_COLORS = 'true';
-// }
-
 export class Output {
   private appName: string;
   private appVersion?: string;
