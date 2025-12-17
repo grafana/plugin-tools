@@ -1,3 +1,15 @@
+# v6.5.3 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- fix: version command simplified output [#2352](https://github.com/grafana/plugin-tools/pull/2352) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.5.2 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
