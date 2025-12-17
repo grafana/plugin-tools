@@ -1,5 +1,5 @@
 import { machine } from 'node:os';
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 import { TemplateData } from '../../types.js';
 import { output } from '../../utils/utils.console.js';
 import { normalizeId } from '../../utils/utils.handlebars.js';
@@ -11,16 +11,16 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
 
   const commands = output.bulletList([
     output.formatCode(`cd ./${directory}`),
-    `${output.formatCode(packageManagerName + ' install')} ${chalk.dim('to install frontend dependencies')}`,
-    `${output.formatCode(packageManagerName + ' exec playwright install chromium')} ${chalk.dim('to install e2e test dependencies')}`,
-    `${output.formatCode(packageManagerName + ' run dev')} ${chalk.dim('to build (and watch) the plugin frontend code')}`,
+    `${output.formatCode(packageManagerName + ' install')} ${styleText(['dim'], 'to install frontend dependencies')}`,
+    `${output.formatCode(packageManagerName + ' exec playwright install chromium')} ${styleText(['dim'], 'to install e2e test dependencies')}`,
+    `${output.formatCode(packageManagerName + ' run dev')} ${styleText(['dim'], 'to build (and watch) the plugin frontend code')}`,
     ...(answers.hasBackend
       ? [
-          `${getBackendCmd()} ${chalk.dim('to build the plugin backend code. Rerun this command every time you edit your backend files')}`,
+          `${getBackendCmd()} ${styleText(['dim'], 'to build the plugin backend code. Rerun this command every time you edit your backend files')}`,
         ]
       : []),
-    `${output.formatCode('docker compose up')} ${chalk.dim('to start a grafana development server')}`,
-    `Open ${output.formatUrl('http://localhost:3000')} ${chalk.dim('in your browser to begin developing your plugin')}`,
+    `${output.formatCode('docker compose up')} ${styleText(['dim'], 'to start a grafana development server')}`,
+    `Open ${output.formatUrl('http://localhost:3000')} ${styleText(['dim'], 'in your browser to begin developing your plugin')}`,
   ]);
 
   output.log({
@@ -29,7 +29,8 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
       'Run the following commands to get started:',
       ...commands,
       '',
-      chalk.italic(
+      styleText(
+        ['italic'],
         `Note: We strongly recommend creating a new Git repository by running ${output.formatCode('git init')} in ./${directory} before continuing.`
       ),
       '',

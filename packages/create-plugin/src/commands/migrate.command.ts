@@ -18,7 +18,7 @@ import {
   writePackageManagerInPackageJson,
 } from '../utils/utils.npm.js';
 import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 
 export const migrate = async () => {
   try {
@@ -161,7 +161,7 @@ export const migrate = async () => {
     output.success({
       title: 'Migration completed successfully.',
       body: [
-        chalk.bold("What's next?"),
+        styleText(['bold'], "What's next?"),
         ...nextSteps,
         'See instructions on how to customize your configuration here: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations',
       ],

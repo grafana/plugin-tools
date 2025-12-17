@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 import Enquirer from 'enquirer';
 import { Output } from '@libs/output';
 import { CURRENT_APP_VERSION } from './utils.version.js';
@@ -14,7 +14,7 @@ export async function confirmPrompt(message: string): Promise<boolean> {
   const question: Record<string, boolean> = await prompt({
     name: 'confirmPrompt',
     type: 'confirm',
-    message: chalk.bold(message),
+    message: styleText(['bold'], message),
   });
 
   return question['confirmPrompt'];
@@ -25,7 +25,7 @@ export async function selectPrompt(message: string, choices: string[]): Promise<
     name: 'selectPrompt',
     type: 'select',
     choices,
-    message: chalk.bold(message),
+    message: styleText(['bold'], message),
   });
 
   return question['selectPrompt'];
