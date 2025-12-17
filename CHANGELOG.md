@@ -1,3 +1,27 @@
+# (Wed Dec 17 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all your work!
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.5.0`
+  - feat: add dependabot config for plugins [#2248](https://github.com/grafana/plugin-tools/pull/2248) ([@joonseolee](https://github.com/joonseolee) [@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.1.0`
+  - Plugin-e2e: Fix toggle viz selector for Grafana < 12.4.0 [#2350](https://github.com/grafana/plugin-tools/pull/2350) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 3
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joonseo Lee ([@joonseolee](https://github.com/joonseolee))
+
+---
+
 # (Fri Dec 12 2025)
 
 #### 🐛 Bug Fix

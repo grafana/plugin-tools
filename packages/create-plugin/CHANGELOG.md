@@ -1,3 +1,20 @@
+# v6.5.0 (Wed Dec 17 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: add dependabot config for plugins [#2248](https://github.com/grafana/plugin-tools/pull/2248) ([@joonseolee](https://github.com/joonseolee) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joonseo Lee ([@joonseolee](https://github.com/joonseolee))
+
+---
+
 # v6.4.4 (Fri Dec 12 2025)
 
 #### 🐛 Bug Fix
