@@ -96,7 +96,7 @@ export class PanelEditPage extends GrafanaPage {
     await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
 
-    const vizSelector = semver.lte(this.ctx.grafanaVersion, '12.3.0')
+    const vizSelector = semver.lt(this.ctx.grafanaVersion, '12.4.0')
       ? this.ctx.selectors.components.PanelEditor.toggleVizPicker
       : this.ctx.selectors.components.PanelEditor.OptionsPane.header;
     await expect(
@@ -123,7 +123,7 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the name of the visualization currently selected in the panel editor
    */
   getVisualizationName(): Locator {
-    const vizSelector = semver.lte(this.ctx.grafanaVersion, '12.3.0')
+    const vizSelector = semver.lt(this.ctx.grafanaVersion, '12.4.0')
       ? this.ctx.selectors.components.PanelEditor.toggleVizPicker
       : this.ctx.selectors.components.PanelEditor.OptionsPane.header;
     return this.getByGrafanaSelector(vizSelector);
