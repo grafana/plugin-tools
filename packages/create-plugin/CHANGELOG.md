@@ -1,3 +1,15 @@
+# v6.5.1 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: bump plugin-e2e version [#2351](https://github.com/grafana/plugin-tools/pull/2351) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v6.5.0 (Wed Dec 17 2025)
 
 :tada: This release contains work from a new contributor! :tada:
