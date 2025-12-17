@@ -2,6 +2,21 @@
 
 #### 🐛 Bug Fix
 
+- `@libs/output@1.0.3`, `@grafana/create-plugin@6.5.2`, `@grafana/sign-plugin@3.2.1`
+  - Refactor: replace chalk with nodes styletext function [#2349](https://github.com/grafana/plugin-tools/pull/2349) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@6.5.2`
+  - fix: stop eslint migration stripping extra chars from plugin name [#2348](https://github.com/grafana/plugin-tools/pull/2348) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@6.5.1`
   - Create Plugin: bump plugin-e2e version [#2351](https://github.com/grafana/plugin-tools/pull/2351) ([@hugohaggmark](https://github.com/hugohaggmark))
 

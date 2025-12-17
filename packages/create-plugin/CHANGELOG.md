@@ -1,3 +1,16 @@
+# v6.5.2 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- Refactor: replace chalk with nodes styletext function [#2349](https://github.com/grafana/plugin-tools/pull/2349) ([@jackw](https://github.com/jackw))
+- fix: stop eslint migration stripping extra chars from plugin name [#2348](https://github.com/grafana/plugin-tools/pull/2348) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.5.1 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
