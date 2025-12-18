@@ -3,7 +3,7 @@ You are an expert Grafana datasource plugin developer for this project.
 ## Your role
 
 - You are fluent in TypeScript and React (frontend)
-- You are fluent in Go (backend)
+{{#if hasBackend}}- You are fluent in Go (backend){{/if}}
 - You know how to use Grafana dashboards
 - You know how to setup and manage Grafana datasources
 
@@ -14,13 +14,14 @@ Datasource plugins are used to fetch and query data from external systems.
 
 ### Plugin anatomy
 
-A typical datasource with backend plugin includes:
+{{#if hasBackend}}A typical datasource with backend plugin includes:{{/if}}
+{{#unless hasBackend}}A typical datasource frontend only plugin includes:{{/unless}}
 
 **plugin.json**
 
 - Declares plugin ID, type (`datasource`), name, version
 - Gives Grafana the instructions it needs during startup to know how to run the plugin.
-- Needs to define `backend:true` to launch the backend part of Grafana during startup.
+{{#if hasBackend}}- Needs to define `backend:true` to launch the backend part of Grafana during startup.{{/if}}
 
 **Main module (`src/module.ts`)**
 
@@ -41,6 +42,7 @@ A typical datasource with backend plugin includes:
 - React component where users manage and configure a data source instance
 - Configures instance specific settings (like URLs or credentials)
 
+{{#if hasBackend}}
 **Main module (`pkg/main.go`)**
 
 - Register a factory function with `grafana-plugin-sdk-go` to create datasource backend instances
@@ -55,6 +57,7 @@ A typical datasource with backend plugin includes:
 **Instance Settings (`pkg/models/settings.go`)**
 
 - Loads instance settings by parsing its persisted JSON, retrieving secure and non-secure values, and returning a combined settings object for the plugin to use at runtime.
+{{/if}}
 
 ### Repository layout
 
@@ -68,10 +71,12 @@ A typical datasource with backend plugin includes:
 - `tests/` — E2E tests (if present)
 - `provisioning/` — Local development provisioning
 - `README.md` — Human documentation
+{{#if hasBackend}}
 - `pkg/` - Backend (Go)
 - `pkg/main.go` - Backend entry point
 - `pkg/plugin/datasource.go` - Datasource implementation
 - `Magefile.go` - Backend build tasks
+{{/if}}
 - `package.json` - Frontend build scripts + deps
 
 ## Coding guidelines
@@ -94,12 +99,14 @@ You must **NOT**:
 - Modify anything inside `.config/*`
 - Remove/change existing query model without a migration handler
 - Break public APIs (query model)
+{{#if hasBackend}}
 - Use the local file system
 - Use environment variables
 - Execute arbitrary code in the backend
 - Log sensitive data
-- Use upstream Golang HTTP client in the backend.
-- Use `info` level for logging.
+- Use upstream Golang HTTP client in the backend
+- Use `info` level for logging
+{{/if}}
 
 You **SHOULD**:
 
@@ -108,9 +115,10 @@ You **SHOULD**:
 - Follow official Grafana datasource plugin patterns
 - Use idiomatic React + TypeScript
 - Use secureJsonData instead of jsonData for credentials and sensitive data
-- Error happening should be logged with level `error`
-- Use Grafana plugin SDK HTTP client in the backend.
-- Use `debug` or `error` level for logging.
+{{#if hasBackend}}
+- Use Grafana plugin SDK HTTP client in the backend
+- Use `debug` or `error` level for logging
+{{/if}}
 
 ## Instructions for specific tasks
 - [Add template variable support](./tasks/support-template-variables.md)
