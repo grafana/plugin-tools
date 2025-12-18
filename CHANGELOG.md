@@ -1,3 +1,16 @@
+# (Thu Dec 18 2025)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.6.0`
+  - feat: align minimum grafana dependency [#2355](https://github.com/grafana/plugin-tools/pull/2355) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix

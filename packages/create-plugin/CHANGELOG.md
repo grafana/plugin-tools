@@ -1,3 +1,15 @@
+# v6.6.0 (Thu Dec 18 2025)
+
+#### 🚀 Enhancement
+
+- feat: align minimum grafana dependency [#2355](https://github.com/grafana/plugin-tools/pull/2355) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.5.3 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
