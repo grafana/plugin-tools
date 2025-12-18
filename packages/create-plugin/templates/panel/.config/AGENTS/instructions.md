@@ -53,7 +53,7 @@ A typical panel plugin includes:
 - Keep layouts responsive (use `width`/`height`)
 - Avoid new dependencies unless necessary + Grafana-compatible
 - Maintain consistent file structure and predictable types
-- Use **`@grafana/plugin-e2e`** for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
+- Use **`@grafana/plugin-e2e`** npm package for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
 
 ## Boundaries
 
