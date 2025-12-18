@@ -46,13 +46,13 @@ describe('getConfig', () => {
 
     it('should override default feature flags via cli args', async () => {
       mocks.argv = {
-        'feature-flags': 'bundleGrafanaUI',
+        'feature-flags': 'useExperimentalRspack',
       };
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
         version: CURRENT_APP_VERSION,
-        features: { ...DEFAULT_FEATURE_FLAGS, bundleGrafanaUI: true },
+        features: { ...DEFAULT_FEATURE_FLAGS, useExperimentalRspack: true },
       });
     });
   });
@@ -95,7 +95,7 @@ describe('getConfig', () => {
       const userConfig: UserConfig = {
         features: {
           useReactRouterV6: true,
-          bundleGrafanaUI: true,
+          useExperimentalRspack: true,
         },
       };
 
@@ -119,7 +119,7 @@ describe('getConfig', () => {
       const userConfig: UserConfig = {
         features: {
           useReactRouterV6: false,
-          bundleGrafanaUI: false,
+          useExperimentalRspack: false,
         },
       };
 
