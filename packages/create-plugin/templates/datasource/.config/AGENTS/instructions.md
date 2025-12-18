@@ -19,7 +19,8 @@ A typical datasource with backend plugin includes:
 **plugin.json**
 
 - Declares plugin ID, type (`datasource`), name, version
-- Loaded by Grafana at startup
+- Gives Grafana the instructions it needs during startup to know how to run the plugin.
+- Needs to define `backend:true` to launch the backend part of Grafana during startup.
 
 **Main module (`src/module.ts`)**
 
@@ -50,6 +51,10 @@ A typical datasource with backend plugin includes:
 - CheckHealth (validates API key from settings)
 - Dispose (cleanup hook).
 - NewDatasource factory called when Grafana starts instance of plugin
+
+**Instance Settings (`pkg/models/settings.go`)**
+
+- Loads instance settings by parsing its persisted JSON, retrieving secure and non-secure values, and returning a combined settings object for the plugin to use at runtime.
 
 ### Repository layout
 
@@ -92,6 +97,9 @@ You must **NOT**:
 - Use the local file system
 - Use environment variables
 - Execute arbitrary code in the backend
+- Log sensitive data
+- Use upstream Golang HTTP client in the backend.
+- Use `info` level for logging.
 
 You **SHOULD**:
 
@@ -101,5 +109,8 @@ You **SHOULD**:
 - Use idiomatic React + TypeScript
 - Use secureJsonData instead of jsonData for credentials and sensitive data
 - Error happening should be logged with level `error`
+- Use Grafana plugin SDK HTTP client in the backend.
+- Use `debug` or `error` level for logging.
 
 ## Instructions for specific tasks
+- [Add template variable support](./tasks/support-template-variables.md)
