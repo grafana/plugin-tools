@@ -10,8 +10,6 @@ import { writeFile } from 'node:fs/promises';
 import { EOL } from 'node:os';
 
 export type FeatureFlags = {
-  bundleGrafanaUI?: boolean;
-
   // If set to true, the plugin will be scaffolded with React Router v6. Defaults to true.
   // (Attention! We always scaffold new projects with React Router v6, so if you are changing this to `false` manually you will need to make changes to the React code as well.)
   useReactRouterV6?: boolean;
