@@ -1,10 +1,10 @@
 import * as v from 'valibot';
 import * as recast from 'recast';
-import * as typeScriptParser from 'recast/parsers/typescript.js';
 import { coerce, gte } from 'semver';
 
 import type { Context } from '../../../context.js';
 import { additionsDebug } from '../../../utils.js';
+import { updateExternalsArray, type ExternalsArrayModifier } from '../../../utils.externals.js';
 
 const { builders } = recast.types;
 
@@ -12,8 +12,6 @@ export const schema = v.object({});
 
 type BundleGrafanaUIOptions = v.InferOutput<typeof schema>;
 
-const EXTERNALS_PATH = '.config/bundler/externals.ts';
-const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
 const PLUGIN_JSON_PATH = 'src/plugin.json';
 const MIN_GRAFANA_VERSION = '10.2.0';
 
@@ -121,131 +119,14 @@ function modifyExternalsArray(externalsArray: recast.types.namedTypes.ArrayExpre
   return hasChanges;
 }
 
-function updateExternalsFile(context: Context): boolean {
-  if (!context.doesFileExist(EXTERNALS_PATH)) {
-    additionsDebug(`${EXTERNALS_PATH} not found, skipping`);
-    return false;
-  }
-
-  const externalsContent = context.getFile(EXTERNALS_PATH);
-  if (!externalsContent) {
-    return false;
-  }
-
-  try {
-    const ast = recast.parse(externalsContent, {
-      parser: typeScriptParser,
-    });
-
-    let hasChanges = false;
-
-    recast.visit(ast, {
-      visitVariableDeclarator(path) {
-        const { node } = path;
-
-        if (
-          node.id.type === 'Identifier' &&
-          node.id.name === 'externals' &&
-          node.init &&
-          node.init.type === 'ArrayExpression'
-        ) {
-          additionsDebug('Found externals array in externals.ts');
-          if (modifyExternalsArray(node.init)) {
-            hasChanges = true;
-          }
-        }
-
-        return this.traverse(path);
-      },
-    });
-
-    if (hasChanges) {
-      const output = recast.print(ast, {
-        tabWidth: 2,
-        trailingComma: true,
-        lineTerminator: '\n',
-      });
-      context.updateFile(EXTERNALS_PATH, output.code);
-      additionsDebug(`Updated ${EXTERNALS_PATH}`);
-    }
-
-    return hasChanges;
-  } catch (error) {
-    additionsDebug(`Error updating ${EXTERNALS_PATH}:`, error);
-    return false;
-  }
-}
-
-function updateWebpackConfigFile(context: Context): boolean {
-  if (!context.doesFileExist(WEBPACK_CONFIG_PATH)) {
-    additionsDebug(`${WEBPACK_CONFIG_PATH} not found, skipping`);
-    return false;
-  }
-
-  const webpackContent = context.getFile(WEBPACK_CONFIG_PATH);
-  if (!webpackContent) {
-    return false;
-  }
-
-  try {
-    const ast = recast.parse(webpackContent, {
-      parser: typeScriptParser,
-    });
-
-    let hasChanges = false;
-    let foundExternals = false;
-
-    recast.visit(ast, {
-      visitObjectExpression(path) {
-        const { node } = path;
-        const properties = node.properties;
-
-        if (properties) {
-          for (const prop of properties) {
-            if (prop && (prop.type === 'Property' || prop.type === 'ObjectProperty')) {
-              const key = 'key' in prop ? prop.key : null;
-              const value = 'value' in prop ? prop.value : null;
-
-              if (
-                key &&
-                key.type === 'Identifier' &&
-                key.name === 'externals' &&
-                value &&
-                value.type === 'ArrayExpression'
-              ) {
-                foundExternals = true;
-                additionsDebug('Found externals property in webpack.config.ts');
-                if (modifyExternalsArray(value)) {
-                  hasChanges = true;
-                }
-              }
-            }
-          }
-        }
-
-        return this.traverse(path);
-      },
-    });
-
-    if (!foundExternals) {
-      additionsDebug('No externals property found in webpack.config.ts');
-    }
-
-    if (hasChanges) {
-      const output = recast.print(ast, {
-        tabWidth: 2,
-        trailingComma: true,
-        lineTerminator: '\n',
-      });
-      context.updateFile(WEBPACK_CONFIG_PATH, output.code);
-      additionsDebug(`Updated ${WEBPACK_CONFIG_PATH}`);
-    }
-
-    return hasChanges;
-  } catch (error) {
-    additionsDebug(`Error updating ${WEBPACK_CONFIG_PATH}:`, error);
-    return false;
-  }
+/**
+ * Creates a modifier function for updateExternalsArray that removes @grafana/ui
+ * and adds react-inlinesvg
+ */
+function createBundleGrafanaUIModifier(): ExternalsArrayModifier {
+  return (externalsArray: recast.types.namedTypes.ArrayExpression) => {
+    return modifyExternalsArray(externalsArray);
+  };
 }
 
 /**
@@ -300,13 +181,8 @@ export default function bundleGrafanaUI(context: Context, _options: BundleGrafan
   // Ensure minimum Grafana version requirement
   ensureMinGrafanaVersion(context);
 
-  // Try new structure first: .config/bundler/externals.ts
-  const updatedExternals = updateExternalsFile(context);
-
-  // Fall back to legacy structure: .config/webpack/webpack.config.ts with inline externals
-  if (!updatedExternals) {
-    updateWebpackConfigFile(context);
-  }
+  // Update externals array using the shared utility
+  updateExternalsArray(context, createBundleGrafanaUIModifier());
 
   return context;
 }
