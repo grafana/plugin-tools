@@ -94,7 +94,6 @@ describe('getConfig', () => {
       const userConfigPath = path.join(tmpDir, '.cprc.json');
       const userConfig: UserConfig = {
         features: {
-          useReactRouterV6: true,
           bundleGrafanaUI: true,
         },
       };
@@ -118,7 +117,6 @@ describe('getConfig', () => {
       };
       const userConfig: UserConfig = {
         features: {
-          useReactRouterV6: false,
           bundleGrafanaUI: false,
         },
       };
