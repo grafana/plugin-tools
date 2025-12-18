@@ -10,7 +10,6 @@ import { writeFile } from 'node:fs/promises';
 import { EOL } from 'node:os';
 
 export type FeatureFlags = {
-  bundleGrafanaUI?: boolean;
   useExperimentalRspack?: boolean;
   useExperimentalUpdates?: boolean;
 };
