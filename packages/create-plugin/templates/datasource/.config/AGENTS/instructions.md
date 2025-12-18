@@ -59,7 +59,7 @@ A typical datasource with backend plugin includes:
 - `src/datasource.ts` - Datasource implementation
 - `src/components/QueryEditor.tsx` — Query builder UI
 - `src/components/ConfigEditor.tsx` — Data source settings UI
-- `src/types.ts` — Shared frontend models
+- `src/types.ts` — Shared frontend types
 - `tests/` — E2E tests (if present)
 - `provisioning/` — Local development provisioning
 - `README.md` — Human documentation
@@ -79,7 +79,7 @@ A typical datasource with backend plugin includes:
 - Keep layouts responsive (use `width`/`height`)
 - Avoid new dependencies unless necessary + Grafana-compatible
 - Maintain consistent file structure and predictable types
-- Use **`@grafana/plugin-e2e`** for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
+- Use **`@grafana/plugin-e2e`** npm package for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
 
 ## Boundaries
 
