@@ -1,7 +1,7 @@
 import { AnalyzedMatch } from './types/processors.js';
 import { PluginAnalysisResults, AnalysisResult, DependencyIssue } from './types/reporters.js';
 import { getPattern } from './patterns/definitions.js';
-import { getPluginJson } from './utils/plugin.js';
+import { getPluginJson, hasExternalisedJsxRuntime } from './utils/plugin.js';
 import { DependencyContext } from './utils/dependencies.js';
 import path from 'node:path';
 
@@ -59,6 +59,7 @@ export function generateAnalysisResults(
 }
 
 function filterMatches(matches: AnalyzedMatch[]): AnalyzedMatch[] {
+  const externalisedJsxRuntime = hasExternalisedJsxRuntime();
   const filtered = matches.filter((match) => {
     // TODO: add mode for strict / loose filtering
     if (match.type === 'source' && (match.confidence === 'none' || match.confidence === 'unknown')) {
@@ -82,6 +83,14 @@ function filterMatches(matches: AnalyzedMatch[]): AnalyzedMatch[] {
       (match.sourceFile.includes('jsx-runtime') || match.sourceFile.includes('jsx-dev-runtime'))
     ) {
       return false;
+    }
+
+    // JSX runtime imports are only an issue if they are not externalised in webpack config.
+    if (
+      match.type === 'dependency' &&
+      (match.pattern === 'jsxRuntimeImport' || match.pattern === '__SECRET_INTERNALS')
+    ) {
+      return !externalisedJsxRuntime;
     }
 
     return true;
