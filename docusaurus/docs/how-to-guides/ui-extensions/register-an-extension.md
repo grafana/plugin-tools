@@ -244,13 +244,6 @@ export const plugin = new AppPlugin().addLink({
 });
 ```
 
-:::note
-
-The `openInNewTab` property is a hint to the extension point about how the link should behave.
-Make sure to always check the implementation for the specific extension point you're targeting to understand how it handles the `openInNewTab` property.
-
-:::
-
 ## Work with component extensions
 
 ### Best practices for adding components
