@@ -75,7 +75,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   findDOMNode: {
     severity: 'removed',
     impactLevel: 'critical',
-    description: 'findDOMNode removed from React and ReactDOM in React 19',
+    description: 'findDOMNode removed from ReactDOM in React 19',
     fix: {
       description: 'Replace ReactDOM.findDOMNode with DOM refs',
       before: 'const node = findDOMNode(this);',
