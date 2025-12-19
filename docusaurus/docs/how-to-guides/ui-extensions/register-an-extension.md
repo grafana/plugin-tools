@@ -223,6 +223,27 @@ export const plugin = new AppPlugin().addLink({
 
 </details>
 
+### Open a link in a new tab
+
+You can provide a hint to extension points that your link should be opened in a new tab by using the `openInNewTab` property. This is a hint to the extension point implementation - it's up to the extension point to decide how to handle it.
+
+1. Add the `openInNewTab` property to your link configuration:
+
+```tsx title="src/module.tsx"
+import { PluginExtensionPoints } from '@grafana/data';
+import pluginJson from './plugin.json';
+
+export const plugin = new AppPlugin().addLink({
+  title: 'External documentation',
+  description: 'Open plugin documentation in a new tab',
+  targets: [PluginExtensionPoints.DashboardPanelMenu],
+  path: `/a/${pluginJson.id}/docs`,
+
+  // Add this field to your link config
+  openInNewTab: true,
+});
+```
+
 ## Work with component extensions
 
 ### Best practices for adding components
