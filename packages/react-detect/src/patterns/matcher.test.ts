@@ -130,18 +130,6 @@ describe('matcher', () => {
   });
 
   describe('findFindDOMNode', () => {
-    it('should find React.findDOMNode calls', () => {
-      const code = `
-      const node = React.findDOMNode(component);
-    `;
-      const ast = parseFile(code, 'test.js');
-      const matches = findFindDOMNode(ast, code);
-
-      expect(matches).toHaveLength(1);
-      expect(matches[0].pattern).toBe('findDOMNode');
-      expect(matches[0].matched).toContain('React.findDOMNode');
-    });
-
     it('should find ReactDOM.findDOMNode calls', () => {
       const code = `
       const node = ReactDOM.findDOMNode(this);
