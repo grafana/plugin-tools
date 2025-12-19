@@ -76,6 +76,7 @@
     "packages/plugin-types-bundler",
     "packages/eslint-plugin-plugins",
     "packages/tsconfig",
+    "packages/react-detect",
     "libs/*"
   ],
   "lint-staged": {
