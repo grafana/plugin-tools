@@ -1,7 +1,6 @@
 {
   "features": {
     "bundleGrafanaUI": {{ bundleGrafanaUI }},
-    "useReactRouterV6": {{ useReactRouterV6 }},
     "useExperimentalRspack": {{ useExperimentalRspack }}
   }
 }
