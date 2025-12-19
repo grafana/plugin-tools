@@ -20,7 +20,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
       description:
         'Externalize react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
     },
-    link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#libraries-depending-on-react-internals-may-block-upgrades',
+    link: 'https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config',
   },
   defaultProps: {
     severity: 'removed',

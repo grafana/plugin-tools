@@ -22,9 +22,13 @@ export function consoleReporter(results: PluginAnalysisResults) {
       body: [
         `Plugin: ${results.plugin.name} version: ${results.plugin.version}`,
         'Good news! Your plugin appears to be compatible with React 19.',
-        '',
-        ...summaryMsg,
       ],
+    });
+    output.addHorizontalLine('green');
+    output.success({
+      title: 'Next steps',
+      body: summaryMsg,
+      withPrefix: false,
     });
     return;
   }
