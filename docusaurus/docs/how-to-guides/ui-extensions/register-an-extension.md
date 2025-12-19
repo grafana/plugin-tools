@@ -225,7 +225,7 @@ export const plugin = new AppPlugin().addLink({
 
 ### Open a link in a new tab
 
-You can provide a hint to extension points that your link should be opened in a new tab by using the `openInNewTab` property. Note that this is always just a hint - it's up to the extension point implementation to decide how to handle it.
+You can provide a hint to extension points that your link should be opened in a new tab by using the `openInNewTab` property. This is a hint to the extension point implementation - it's up to the extension point to decide how to handle it.
 
 1. Add the `openInNewTab` property to your link configuration:
 
