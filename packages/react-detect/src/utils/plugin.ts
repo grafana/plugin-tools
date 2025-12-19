@@ -1,5 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import { parseFile } from '../parser.js';
+import { walk } from './ast.js';
 
 interface PluginJson {
   id: string;
@@ -47,26 +49,35 @@ export function readJsonFile(filename: string) {
   }
 }
 
-export function hasTsConfigAutomaticJsx(): boolean {
-  const tsConfigPathsToCheck = ['tsconfig.json', '.config/tsconfig.json'];
-
-  for (const tsConfigPath of tsConfigPathsToCheck) {
-    const jsxConfig = readJsonFile(path.join(process.cwd(), tsConfigPath));
-    const jsx = jsxConfig?.compilerOptions?.jsx;
-    if (jsx === 'react-jsx' || jsx === 'react-jsxdev') {
-      return true;
-    }
-  }
-  return false;
-}
-
-export function hasSwcAutomaticJsx(): boolean {
-  const webpackConfigPathsToCheck = ['webpack.config.js', '.config/webpack/webpack.config.js'];
+export function hasExternalisedJsxRuntime(): boolean {
+  const webpackConfigPathsToCheck = ['webpack.config.ts', '.config/webpack/webpack.config.ts'];
+  let found = false;
   for (const webpackConfigPath of webpackConfigPathsToCheck) {
-    const webpackConfig = fs.readFileSync(path.join(process.cwd(), webpackConfigPath)).toString();
-    if (webpackConfig.includes("runtime: 'automatic'")) {
-      return true;
+    if (isFile(path.join(process.cwd(), webpackConfigPath))) {
+      const webpackConfig = fs.readFileSync(path.join(process.cwd(), webpackConfigPath)).toString();
+      const webpackConfigAst = parseFile(webpackConfig, webpackConfigPath);
+
+      walk(webpackConfigAst, (node) => {
+        // check for 'react/jsx-runtime' in externals: [array]
+        if (
+          node.type === 'Property' &&
+          node.key.type === 'Identifier' &&
+          node.key.name === 'externals' &&
+          node.value.type === 'ArrayExpression'
+        ) {
+          for (const element of node.value.elements) {
+            if (
+              element &&
+              element.type === 'Literal' &&
+              typeof element.value === 'string' &&
+              element.value.includes('react/jsx-runtime')
+            ) {
+              found = true;
+            }
+          }
+        }
+      });
     }
   }
-  return false;
+  return found;
 }
