@@ -36,6 +36,18 @@ __webpack_public_path__ =
 `,
 });
 
+const logoPaths = Array.from(
+  new Set([
+    pluginJson.info?.logos?.large,
+    pluginJson.info?.logos?.small,
+  ])
+).filter(Boolean);
+
+const screenshotPaths =
+  Array.from(
+    new Set(pluginJson.info?.screenshots?.map((s) => s.path))
+  ).filter(Boolean) || [];
+
 export type Env = {
   [key: string]: true | string | Env;
 };
@@ -174,9 +186,10 @@ const config = async (env: Env): Promise<Configuration> => {
           { from: '../LICENSE', to: '.' },
           { from: '../CHANGELOG.md', to: '.', force: true },
           { from: '**/*.json', to: '.' },
-          { from: 'img/logo.svg', to: '.', noErrorOnMissing: true },
-          { from: 'img/screenshots/**/*', to: '.', noErrorOnMissing: true },
           { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
+          ...logoPaths.map((logoPath) => ({ from: logoPath, to: '.', noErrorOnMissing: true })),
+          ...screenshotPaths.map((screenshotPath) => ({
+            from: screenshotPath, to: '.', noErrorOnMissing: true })),
         ],
       }),
       // Replace certain template-variables in the README and plugin.json
