@@ -1,3 +1,17 @@
+# (Wed Jan 07 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.1.1`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-20331417332 [#2354](https://github.com/grafana/plugin-tools/pull/2354) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Dec 18 2025)
 
 #### 🚀 Enhancement
