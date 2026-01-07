@@ -24,7 +24,8 @@ import { externals } from '../bundler/externals.ts';
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 const pluginVersion = getPackageJson().version;
-
+const logoPaths = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(Boolean);
+const screenshotPaths = Array.from(new Set(pluginJson.info?.screenshots?.map((s: { path: string }) => s.path)));
 const virtualPublicPath = new VirtualModulesPlugin({
   'node_modules/grafana-public-path.js': `
 import amdMetaModule from 'amd-module';
@@ -35,18 +36,6 @@ __webpack_public_path__ =
     : 'public/plugins/${pluginJson.id}/';
 `,
 });
-
-const logoPaths = Array.from(
-  new Set([
-    pluginJson.info?.logos?.large,
-    pluginJson.info?.logos?.small,
-  ])
-).filter(Boolean);
-
-const screenshotPaths =
-  Array.from(
-    new Set(pluginJson.info?.screenshots?.map((s) => s.path))
-  ).filter(Boolean) || [];
 
 export type Env = {
   [key: string]: true | string | Env;
@@ -187,9 +176,11 @@ const config = async (env: Env): Promise<Configuration> => {
           { from: '../CHANGELOG.md', to: '.', force: true },
           { from: '**/*.json', to: '.' },
           { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
-          ...logoPaths.map((logoPath) => ({ from: logoPath, to: '.', noErrorOnMissing: true })),
+          ...logoPaths.map((logoPath) => ({ from: logoPath, to: logoPath })),
           ...screenshotPaths.map((screenshotPath) => ({
-            from: screenshotPath, to: '.', noErrorOnMissing: true })),
+            from: screenshotPath,
+            to: screenshotPath,
+          })),
         ],
       }),
       // Replace certain template-variables in the README and plugin.json
