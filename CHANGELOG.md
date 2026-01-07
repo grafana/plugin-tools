@@ -2,6 +2,39 @@
 
 #### 🐛 Bug Fix
 
+- `website@5.1.2`
+  - Update dependency @grafana/faro-web-sdk to v2 [#2363](https://github.com/grafana/plugin-tools/pull/2363) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Jan 07 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.7.0`
+  - chore: only support react router v6 for new plugin scaffolds [#2360](https://github.com/grafana/plugin-tools/pull/2360) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.0`
+  - Update grafana patch dependencies to v12.3.1 [#2362](https://github.com/grafana/plugin-tools/pull/2362) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jan 07 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@3.1.1`
   - Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-20331417332 [#2354](https://github.com/grafana/plugin-tools/pull/2354) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]) [@sunker](https://github.com/sunker))
 
