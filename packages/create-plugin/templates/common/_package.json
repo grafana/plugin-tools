@@ -31,8 +31,7 @@
     "@types/jest": "^29.5.0",
     "@types/node": "^20.8.7",
     "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",{{#if isAppType}}{{#unless useReactRouterV6}}
-    "@types/react-router-dom": "^{{ reactRouterVersion }}",{{/unless}}{{/if}}
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",{{#unless useExperimentalRspack}}
     "copy-webpack-plugin": "^11.0.0",{{/unless}}
@@ -72,15 +71,15 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "^12.3.0",
-    "@grafana/i18n": "^12.3.0",
-    "@grafana/runtime": "^12.3.0",
-    "@grafana/ui": "^12.3.0",
-    "@grafana/schema": "^12.3.0",{{#if_eq pluginType "scenesapp" }}
+    "@grafana/data": "^12.3.1",
+    "@grafana/i18n": "^12.3.1",
+    "@grafana/runtime": "^12.3.1",
+    "@grafana/ui": "^12.3.1",
+    "@grafana/schema": "^12.3.1",{{#if_eq pluginType "scenesapp" }}
     "@grafana/scenes": "{{ scenesVersion }}",{{/if_eq}}
     "react": "^18.3.0",
     "react-dom": "^18.3.0"{{#if isAppType}},
-    "react-router-dom": "^{{ reactRouterVersion }}",
+    "react-router-dom": "^6.22.0",
     "rxjs": "7.8.2"{{/if}}
   },
   "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}"

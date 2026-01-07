@@ -22,15 +22,14 @@ export const externals: ExternalsType = [
   'redux',
   'rxjs',
   'i18next',
-  'react-router',{{#unless useReactRouterV6}}
-  'react-router-dom',{{/unless}}
+  'react-router',
   'd3',
   'angular',{{#unless bundleGrafanaUI}}
   /^@grafana\/ui/i,{{/unless}}
   /^@grafana\/runtime/i,
   /^@grafana\/data/i,{{#if bundleGrafanaUI}}
   'react-inlinesvg',{{/if}}
-  
+
   // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
   ({ request }: ExternalItemFunctionData, callback: (error?: Error, result?: string) => void) => {
     const prefix = 'grafana/';
