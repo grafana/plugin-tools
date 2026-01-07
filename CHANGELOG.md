@@ -1,5 +1,19 @@
 # (Wed Jan 07 2026)
 
+#### 🐛 Bug Fix
+
+- `website@5.1.2`
+  - Update dependency @grafana/faro-web-sdk to v2 [#2363](https://github.com/grafana/plugin-tools/pull/2363) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Jan 07 2026)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@6.7.0`
