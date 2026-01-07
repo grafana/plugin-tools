@@ -163,9 +163,12 @@ const config = async (env): Promise<Configuration> => {
           { from: '../LICENSE', to: '.' },
           { from: '../CHANGELOG.md', to: '.', force: true },
           { from: '**/*.json', to: '.' },
-          { from: 'img/logo.svg', to: '.', noErrorOnMissing: true },
-          { from: 'img/screenshots/**/*', to: '.', noErrorOnMissing: true },
           { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
+          ...logoPaths.map((logoPath) => ({ from: logoPath, to: logoPath })),
+          ...screenshotPaths.map((screenshotPath) => ({
+            from: screenshotPath,
+            to: screenshotPath,
+          })),
         ],
       }),
       // Replace certain template-variables in the README and plugin.json
