@@ -104,6 +104,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/apps/renovate-sh-app"><img src="https://avatars.githubusercontent.com/u/7195757?v=4?s=100" width="100px;" alt=""/><br /><sub><b>renovate-sh-app[bot]</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=renovate-sh-app[bot]" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/apps/grafana-plugins-platform-bot"><img src="https://avatars.githubusercontent.com/u/7195757?v=4?s=100" width="100px;" alt=""/><br /><sub><b>grafana-plugins-platform-bot[bot]</b></sub></a><br /><a href="https://github.com/grafana/plugin-tools/commits?author=grafana-plugins-platform-bot[bot]" title="Code">💻</a></td>
   </tr>
 </table>
 
