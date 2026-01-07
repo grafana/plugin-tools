@@ -23,7 +23,7 @@
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-client-redirects": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.2",
-    "@grafana/faro-web-sdk": "^1.9.0",
+    "@grafana/faro-web-sdk": "^2.0.0",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "cookiejs": "^2.1.2",
