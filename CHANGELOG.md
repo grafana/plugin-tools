@@ -1,5 +1,24 @@
 # (Wed Jan 07 2026)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.7.0`
+  - chore: only support react router v6 for new plugin scaffolds [#2360](https://github.com/grafana/plugin-tools/pull/2360) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.0`
+  - Update grafana patch dependencies to v12.3.1 [#2362](https://github.com/grafana/plugin-tools/pull/2362) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Jan 07 2026)
+
 #### 🐛 Bug Fix
 
 - `@grafana/plugin-e2e@3.1.1`
