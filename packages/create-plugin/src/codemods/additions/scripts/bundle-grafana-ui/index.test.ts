@@ -5,6 +5,7 @@ import bundleGrafanaUI from './index.js';
 
 const EXTERNALS_PATH = '.config/bundler/externals.ts';
 const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
+const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
 const PLUGIN_JSON_PATH = 'src/plugin.json';
 
 const defaultExternalsContent = `import type { Configuration, ExternalItemFunctionData } from 'webpack';
@@ -235,6 +236,188 @@ describe('bundle-grafana-ui', () => {
 
       const pluginJson = JSON.parse(result.getFile(PLUGIN_JSON_PATH) || '{}');
       expect(pluginJson.dependencies.grafanaDependency).toBe('>=10.2.0');
+    });
+  });
+
+  describe('resolve configuration updates', () => {
+    const webpackConfigWithResolve = `import type { Configuration } from 'webpack';
+
+const baseConfig: Configuration = {
+  module: {
+    rules: [],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: ['node_modules'],
+  },
+};
+
+export default baseConfig;`;
+
+    const rspackConfigWithResolve = `import type { Configuration } from '@rspack/core';
+
+const baseConfig: Configuration = {
+  module: {
+    rules: [],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: ['node_modules'],
+  },
+};
+
+export default baseConfig;`;
+
+    describe('webpack.config.ts', () => {
+      it('should add .mjs to resolve.extensions', () => {
+        const context = new Context('/virtual');
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithResolve);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(WEBPACK_CONFIG_PATH) || '';
+        expect(content).toMatch(
+          /extensions:\s*\[['"]\.js['"],\s*['"]\.jsx['"],\s*['"]\.ts['"],\s*['"]\.tsx['"],\s*['"]\.mjs['"]/
+        );
+      });
+
+      it('should add module rule for .mjs files with resolve.fullySpecified: false', () => {
+        const context = new Context('/virtual');
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithResolve);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(WEBPACK_CONFIG_PATH) || '';
+        // Check for module rule with .mjs test, node_modules include, and resolve.fullySpecified: false
+        expect(content).toMatch(/test:\s*\/\\\.mjs\$/);
+        expect(content).toMatch(/include:\s*\/node_modules\//);
+        expect(content).toMatch(/resolve:\s*\{[^}]*fullySpecified:\s*false/);
+      });
+
+      it('should be idempotent for resolve configuration', () => {
+        const context = new Context('/virtual');
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithResolve);
+
+        const result1 = bundleGrafanaUI(context, {});
+        const content1 = result1.getFile(WEBPACK_CONFIG_PATH) || '';
+
+        // Verify first run added .mjs to extensions and module rule
+        expect(content1).toMatch(/['"]\.mjs['"]/);
+        expect(content1).toMatch(/test:\s*\/\\\.mjs\$/);
+        expect(content1).toMatch(/resolve:\s*\{[^}]*fullySpecified:\s*false/);
+
+        const context2 = new Context('/virtual');
+        context2.addFile(WEBPACK_CONFIG_PATH, content1);
+        const result2 = bundleGrafanaUI(context2, {});
+
+        // Second run should produce identical content (idempotent)
+        const content2 = result2.getFile(WEBPACK_CONFIG_PATH) || '';
+        expect(content2).toBe(content1);
+      });
+
+      it('should not duplicate .mjs if already present', () => {
+        const webpackConfigWithMjs = `import type { Configuration } from 'webpack';
+
+const baseConfig: Configuration = {
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs'],
+    modules: ['node_modules'],
+  },
+};
+
+export default baseConfig;`;
+
+        const context = new Context('/virtual');
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithMjs);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(WEBPACK_CONFIG_PATH) || '';
+        // Count occurrences of .mjs in extensions array
+        const mjsMatches = content.match(/['"]\.mjs['"]/g);
+        expect(mjsMatches?.length).toBe(1);
+      });
+
+      it('should not duplicate .mjs module rule if already present', () => {
+        const webpackConfigWithMjsRule = `import type { Configuration } from 'webpack';
+
+const baseConfig: Configuration = {
+  module: {
+    rules: [
+      {
+        test: /\\.mjs$/,
+        include: /node_modules/,
+        resolve: {
+          fullySpecified: false,
+        },
+        type: 'javascript/auto',
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: ['node_modules'],
+  },
+};
+
+export default baseConfig;`;
+
+        const context = new Context('/virtual');
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithMjsRule);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(WEBPACK_CONFIG_PATH) || '';
+        // Count occurrences of .mjs test pattern in module rules
+        const mjsRuleMatches = content.match(/test:\s*\/\\\.mjs\$/g);
+        expect(mjsRuleMatches?.length).toBe(1);
+      });
+    });
+
+    describe('rspack.config.ts', () => {
+      it('should add .mjs to resolve.extensions', () => {
+        const context = new Context('/virtual');
+        context.addFile(RSPACK_CONFIG_PATH, rspackConfigWithResolve);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(RSPACK_CONFIG_PATH) || '';
+        expect(content).toMatch(
+          /extensions:\s*\[['"]\.js['"],\s*['"]\.jsx['"],\s*['"]\.ts['"],\s*['"]\.tsx['"],\s*['"]\.mjs['"]/
+        );
+      });
+
+      it('should add module rule for .mjs files with resolve.fullySpecified: false', () => {
+        const context = new Context('/virtual');
+        context.addFile(RSPACK_CONFIG_PATH, rspackConfigWithResolve);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(RSPACK_CONFIG_PATH) || '';
+        // Check for module rule with .mjs test, node_modules include, and resolve.fullySpecified: false
+        expect(content).toMatch(/test:\s*\/\\\.mjs\$/);
+        expect(content).toMatch(/include:\s*\/node_modules\//);
+        expect(content).toMatch(/resolve:\s*\{[^}]*fullySpecified:\s*false/);
+      });
+
+      it('should prefer rspack.config.ts over webpack.config.ts when both exist', () => {
+        const context = new Context('/virtual');
+        context.addFile(RSPACK_CONFIG_PATH, rspackConfigWithResolve);
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithResolve);
+
+        const result = bundleGrafanaUI(context, {});
+
+        // rspack.config.ts should be updated
+        const rspackContent = result.getFile(RSPACK_CONFIG_PATH) || '';
+        expect(rspackContent).toMatch(/['"]\.mjs['"]/);
+        expect(rspackContent).toMatch(/test:\s*\/\\\.mjs\$/);
+        expect(rspackContent).toMatch(/resolve:\s*\{[^}]*fullySpecified:\s*false/);
+
+        // webpack.config.ts should NOT be updated
+        const webpackContent = result.getFile(WEBPACK_CONFIG_PATH) || '';
+        expect(webpackContent).not.toMatch(/['"]\.mjs['"]/);
+        expect(webpackContent).not.toMatch(/test:\s*\/\\\.mjs\$/);
+      });
     });
   });
 });

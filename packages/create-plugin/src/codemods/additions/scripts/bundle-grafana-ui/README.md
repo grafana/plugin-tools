@@ -21,6 +21,7 @@ This addition:
 1. **Updates `src/plugin.json`** - Ensures `grafanaDependency` is set to `>=10.2.0` or higher
 2. **Removes `/^@grafana\/ui/i` from externals** - This tells the bundler to include `@grafana/ui` in your plugin bundle rather than expecting Grafana to provide it
 3. **Adds `'react-inlinesvg'` to externals** - Since `@grafana/ui` uses `react-inlinesvg` internally and Grafana provides it at runtime, we add it to externals to avoid bundling it twice
+4. **Updates bundler resolve configuration** - Adds `.mjs` to `resolve.extensions` and sets `resolve.fullySpecified: false` to handle ESM imports from `@grafana/ui` and its dependencies (e.g., `rc-picker`, `ol/format/WKT`)
 
 ## When to Use This
 
@@ -49,8 +50,10 @@ your-plugin/
 ├── src/
 │   └── plugin.json             # Modified: grafanaDependency updated if needed
 ├── .config/
-│   └── bundler/
-│       └── externals.ts        # Modified: removes @grafana/ui, adds react-inlinesvg
+│   ├── bundler/
+│   │   └── externals.ts        # Modified: removes @grafana/ui, adds react-inlinesvg
+│   └── rspack/
+│       └── rspack.config.ts     # Modified: resolve.extensions and resolve.fullySpecified updated
 ```
 
 Or for legacy structure:
@@ -61,5 +64,5 @@ your-plugin/
 │   └── plugin.json             # Modified: grafanaDependency updated if needed
 ├── .config/
 │   └── webpack/
-│       └── webpack.config.ts   # Modified: externals array updated
+│       └── webpack.config.ts   # Modified: externals array and resolve configuration updated
 ```
