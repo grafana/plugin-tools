@@ -22,7 +22,7 @@ const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 const logoPaths = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(Boolean);
-const screenshotPaths = Array.from(new Set(pluginJson.info?.screenshots?.map((s: { path: string }) => s.path)));
+const screenshotPaths = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];
 const virtualPublicPath = new RspackVirtualModulePlugin({
   'grafana-public-path': `
 import amdMetaModule from 'amd-module';

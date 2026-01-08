@@ -25,7 +25,7 @@ const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 const pluginVersion = getPackageJson().version;
 const logoPaths = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(Boolean);
-const screenshotPaths = Array.from(new Set(pluginJson.info?.screenshots?.map((s: { path: string }) => s.path)));
+const screenshotPaths = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];
 const virtualPublicPath = new VirtualModulesPlugin({
   'node_modules/grafana-public-path.js': `
 import amdMetaModule from 'amd-module';
