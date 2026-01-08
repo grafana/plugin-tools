@@ -21,6 +21,7 @@ export type TemplateData = {
   isAppType: boolean;
   isNPM: boolean;
   version: string;
+  bundleGrafanaUI: boolean;
   scenesVersion: string;
   useExperimentalRspack: boolean;
   pluginExecutable?: string;

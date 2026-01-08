@@ -1,4 +1,10 @@
-import { EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
+import {
+  DEFAULT_FEATURE_FLAGS,
+  EXPORT_PATH_PREFIX,
+  EXTRA_TEMPLATE_VARIABLES,
+  PLUGIN_TYPES,
+  TEMPLATE_PATHS,
+} from '../constants.js';
 import { GenerateCliArgs, TemplateData } from '../types.js';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import {
@@ -89,6 +95,7 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = CURRENT_APP_VERSION;
+  const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
   const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
@@ -113,6 +120,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isAppType: isAppType(cliArgs.pluginType),
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
+      bundleGrafanaUI,
       scenesVersion: '^6.10.4',
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,
@@ -136,6 +144,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isAppType: isAppType(pluginJson.type),
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
+      bundleGrafanaUI,
       scenesVersion: '^6.10.4',
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
