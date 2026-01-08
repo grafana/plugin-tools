@@ -294,6 +294,50 @@ export default baseConfig;`;
         expect(content).toMatch(/resolve:\s*\{[^}]*fullySpecified:\s*false/);
       });
 
+      it('should insert .mjs rule at position 1 (after imports-loader rule)', () => {
+        const webpackConfigWithImportsLoader = `import type { Configuration } from 'webpack';
+
+const baseConfig: Configuration = {
+  module: {
+    rules: [
+      {
+        test: /src\\/(?:.*\\/)?module\\.tsx?$/,
+        use: [
+          {
+            loader: 'imports-loader',
+            options: {
+              imports: 'side-effects grafana-public-path',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: ['node_modules'],
+  },
+};
+
+export default baseConfig;`;
+
+        const context = new Context('/virtual');
+        context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithImportsLoader);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(WEBPACK_CONFIG_PATH) || '';
+        // Find the position of imports-loader rule and .mjs rule
+        const importsLoaderIndex = content.indexOf('imports-loader');
+        const mjsRuleIndex = content.indexOf('test: /\\.mjs$/');
+
+        // .mjs rule should come after imports-loader rule
+        expect(mjsRuleIndex).toBeGreaterThan(importsLoaderIndex);
+
+        // Verify .mjs rule is present
+        expect(content).toMatch(/test:\s*\/\\\.mjs\$/);
+      });
+
       it('should be idempotent for resolve configuration', () => {
         const context = new Context('/virtual');
         context.addFile(WEBPACK_CONFIG_PATH, webpackConfigWithResolve);
@@ -398,6 +442,50 @@ export default baseConfig;`;
         expect(content).toMatch(/test:\s*\/\\\.mjs\$/);
         expect(content).toMatch(/include:\s*\/node_modules\//);
         expect(content).toMatch(/resolve:\s*\{[^}]*fullySpecified:\s*false/);
+      });
+
+      it('should insert .mjs rule at position 1 (after imports-loader rule)', () => {
+        const rspackConfigWithImportsLoader = `import type { Configuration } from '@rspack/core';
+
+const baseConfig: Configuration = {
+  module: {
+    rules: [
+      {
+        test: /src\\/(?:.*\\/)?module\\.tsx?$/,
+        use: [
+          {
+            loader: 'imports-loader',
+            options: {
+              imports: 'side-effects grafana-public-path',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: ['node_modules'],
+  },
+};
+
+export default baseConfig;`;
+
+        const context = new Context('/virtual');
+        context.addFile(RSPACK_CONFIG_PATH, rspackConfigWithImportsLoader);
+
+        const result = bundleGrafanaUI(context, {});
+
+        const content = result.getFile(RSPACK_CONFIG_PATH) || '';
+        // Find the position of imports-loader rule and .mjs rule
+        const importsLoaderIndex = content.indexOf('imports-loader');
+        const mjsRuleIndex = content.indexOf('test: /\\.mjs$/');
+
+        // .mjs rule should come after imports-loader rule
+        expect(mjsRuleIndex).toBeGreaterThan(importsLoaderIndex);
+
+        // Verify .mjs rule is present
+        expect(content).toMatch(/test:\s*\/\\\.mjs\$/);
       });
 
       it('should prefer rspack.config.ts over webpack.config.ts when both exist', () => {

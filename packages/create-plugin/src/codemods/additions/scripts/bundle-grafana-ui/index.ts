@@ -349,7 +349,7 @@ function updateModuleRules(moduleObject: recast.types.namedTypes.ObjectExpressio
     }
   }
 
-  // Add .mjs rule if missing (insert at beginning so it's processed before rules that exclude node_modules)
+  // Add .mjs rule if missing (insert at position 1, after imports-loader rule which must be first)
   if (!hasMjsRule && rulesProperty && 'value' in rulesProperty) {
     const rulesArray = rulesProperty.value as recast.types.namedTypes.ArrayExpression;
     const mjsRule = builders.objectExpression([
@@ -364,8 +364,8 @@ function updateModuleRules(moduleObject: recast.types.namedTypes.ObjectExpressio
       ),
       builders.property('init', builders.identifier('type'), builders.literal('javascript/auto')),
     ]);
-    // Insert at the beginning of the rules array
-    rulesArray.elements.unshift(mjsRule);
+    // Insert at position 1 (second position) to keep imports-loader first
+    rulesArray.elements.splice(1, 0, mjsRule);
     hasChanges = true;
     additionsDebug('Added module rule for .mjs files in node_modules with resolve.fullySpecified: false');
   }
