@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@6.7.3`
+  - fix: remove unused Compiler type import from Webpack plugin [#2370](https://github.com/grafana/plugin-tools/pull/2370) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@6.7.2`
   - feat: bump all dev deps to latest [#2359](https://github.com/grafana/plugin-tools/pull/2359) ([@jackw](https://github.com/jackw))
 

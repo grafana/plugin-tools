@@ -1,3 +1,15 @@
+# v6.7.3 (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
+- fix: remove unused Compiler type import from Webpack plugin [#2370](https://github.com/grafana/plugin-tools/pull/2370) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
 # v6.7.2 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
