@@ -58,7 +58,7 @@ For example:
 
 - Prepare a docker-compose.yml file with all the necessary services set up to use the plugin. 
   - For example, a data source plugin often requires a service that provides the data and some seed data.
-  - Running Docker compose up from an fresh environment should be enough to make the dashboard example work.
+  - Running Docker compose up from a fresh environment should be enough to make the dashboard example work.
 
 - Use and update the sample dashboard to continuously verify behavior as part of your development process. If appropriate, configure your plugin so that it can return data.
 
