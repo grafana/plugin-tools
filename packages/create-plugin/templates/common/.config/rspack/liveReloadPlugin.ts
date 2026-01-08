@@ -1,8 +1,19 @@
-const path = require('path');
-const WebSocket = require('ws');
-const http = require('http');
+import path from 'path';
+import { Compilation, type Compiler } from '@rspack/core';
+import { WebSocketServer } from 'ws';
+import { createServer } from 'http';
+
+interface RspackLiveReloadPluginOptions {
+  port?: number;
+  delay?: number;
+  appendScriptTag?: boolean;
+  protocol?: string;
+}
 
 class RspackLiveReloadPlugin {
+  options: RspackLiveReloadPluginOptions;
+  httpServer: ReturnType<typeof createServer> | null = null;
+  server: WebSocketServer | null = null;
   constructor(options = {}) {
     this.options = Object.assign(
       {
@@ -15,10 +26,10 @@ class RspackLiveReloadPlugin {
     );
   }
 
-  apply(compiler) {
+  apply(compiler: Compiler) {
     const isRspack = compiler.rspack !== undefined;
     if (!isRspack) {
-      throw new Error('This plugin is designed to work with Rspack 1');
+      throw new Error('This plugin is designed to work with Rspack.');
     }
 
     compiler.hooks.afterEmit.tap('RspackLiveReloadPlugin', (compilation) => {
@@ -40,7 +51,7 @@ class RspackLiveReloadPlugin {
 
     const port = this.options.port;
 
-    this.httpServer = http.createServer((req, res) => {
+    this.httpServer = createServer((req, res) => {
       if (req.url === '/livereload.js') {
         res.writeHead(200, { 'Content-Type': 'application/javascript' });
         res.end(this._getLiveReloadScript());
@@ -50,7 +61,7 @@ class RspackLiveReloadPlugin {
       }
     });
 
-    this.server = new WebSocket.Server({ server: this.httpServer });
+    this.server = new WebSocketServer({ server: this.httpServer });
     this.httpServer.listen(port, () => {
       console.log(`LiveReload server started on http://localhost:${port}`);
     });
@@ -68,22 +79,34 @@ class RspackLiveReloadPlugin {
     });
   }
 
-  _injectLiveReloadScript(compilation) {
+  _injectLiveReloadScript(compilation: Compilation) {
     compilation.hooks.processAssets.tap(
       {
         name: 'RspackLiveReloadPlugin',
-        stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+        stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
       },
       (assets) => {
         Object.keys(assets).forEach((filename) => {
           if (path.extname(filename) === '.html') {
-            const assetSource = compilation.getAsset(filename).source;
+            const assetSource = compilation.getAsset(filename)?.source;
+            if (!assetSource) {
+              return;
+            }
+
             const updatedSource = assetSource
               .source()
+              .toString()
               .replace('</body>', `<script src="http://localhost:${this.options.port}/livereload.js"></script></body>`);
+
             compilation.updateAsset(filename, {
               source: () => updatedSource,
+              buffer: () => Buffer.from(updatedSource),
               size: () => updatedSource.length,
+              map: () => null,
+              sourceAndMap: () => ({ source: updatedSource, map: null }),
+              updateHash: (hash) => {
+                hash.update(updatedSource);
+              },
             });
           }
         });
@@ -107,4 +130,4 @@ class RspackLiveReloadPlugin {
   }
 }
 
-module.exports = RspackLiveReloadPlugin;
+export default RspackLiveReloadPlugin;
