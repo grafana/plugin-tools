@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/react-detect@0.2.1`
+  - refactor: update docker tag for react19 dev preview image [#2378](https://github.com/grafana/plugin-tools/pull/2378) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@6.7.3`
   - fix: remove unused Compiler type import from Webpack plugin [#2370](https://github.com/grafana/plugin-tools/pull/2370) ([@MattIPv4](https://github.com/MattIPv4))
 
