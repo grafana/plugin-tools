@@ -53,7 +53,7 @@ Provision your plugin with the required testing files and setup that can run fro
 
 For example:
 
-- Create an example dashboard with their working plugin, export it as a JSON, and put it in their provisioning files. This is required for panel and data source plugins.
+- Create an example dashboard with your working plugin, export it as a JSON, and put it in your provisioning files. This is required for panel and data source plugins.
   - If necessary, create a provisioning file for the data source associated with the dashboard.
 
 - Prepare a docker-compose.yml file with all the necessary services set up to use the plugin. 
