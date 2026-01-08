@@ -1,5 +1,18 @@
 # (Thu Jan 08 2026)
 
+#### 🚀 Enhancement
+
+- `@grafana/react-detect@0.2.0`
+  - React Detect: New package [#2358](https://github.com/grafana/plugin-tools/pull/2358) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Jan 08 2026)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.7.1`

@@ -1,0 +1,43 @@
+{
+  "name": "@grafana/react-detect",
+  "description": "Run various checks to detect if a Grafana plugin is compatible with React.",
+  "version": "0.2.0",
+  "repository": {
+    "directory": "packages/react-detect",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^8.46.2",
+    "@typescript-eslint/typescript-estree": "^8.46.2",
+    "fast-glob": "^3.3.2",
+    "minimist": "^1.2.8",
+    "snyk-nodejs-lockfile-parser": "^2.4.4",
+    "source-map": "^0.7.4"
+  },
+  "devDependencies": {
+    "@libs/output": "1.0.3",
+    "@types/minimist": "^1.2.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
