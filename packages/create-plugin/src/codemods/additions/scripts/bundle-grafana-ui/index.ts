@@ -26,10 +26,10 @@ export default function bundleGrafanaUI(context: Context, _options: BundleGrafan
   updateExternalsArray(context, createBundleGrafanaUIModifier());
 
   // Update bundler resolve configuration to handle ESM imports
-  updateResolveExtensionsSimple(context);
+  updateResolveExtensions(context);
 
   // Update module rules directly with simple string manipulation
-  updateModuleRulesSimple(context);
+  updateModuleRules(context);
 
   return context;
 }
@@ -132,10 +132,9 @@ function createBundleGrafanaUIModifier(): ExternalsArrayModifier {
 }
 
 /**
- * Updates resolve extensions to add .mjs using simple string manipulation
- * This is a simplified approach that may not handle all edge cases, but is much simpler
+ * Updates resolve extensions to add .mjs using string manipulation
  */
-function updateResolveExtensionsSimple(context: Context): void {
+function updateResolveExtensions(context: Context): void {
   const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
     ? RSPACK_CONFIG_PATH
     : context.doesFileExist(WEBPACK_CONFIG_PATH)
@@ -171,10 +170,9 @@ function updateResolveExtensionsSimple(context: Context): void {
 }
 
 /**
- * Updates module rules to add .mjs rule using simple string manipulation
- * This is a simplified approach that may not handle all edge cases, but is much simpler
+ * Updates module rules to add .mjs rule using string manipulation
  */
-function updateModuleRulesSimple(context: Context): void {
+function updateModuleRules(context: Context): void {
   const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
     ? RSPACK_CONFIG_PATH
     : context.doesFileExist(WEBPACK_CONFIG_PATH)
