@@ -1,3 +1,15 @@
+# v6.7.1 (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
+- fix: stop copying all images to bundle [#2369](https://github.com/grafana/plugin-tools/pull/2369) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.7.0 (Wed Jan 07 2026)
 
 #### 🚀 Enhancement
