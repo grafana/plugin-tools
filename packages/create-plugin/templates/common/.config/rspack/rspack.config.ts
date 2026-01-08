@@ -12,11 +12,12 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
-import RspackLiveReloadPlugin from './liveReloadPlugin';
-import { BuildModeRspackPlugin } from './BuildModeRspackPlugin';
-import { DIST_DIR, SOURCE_DIR } from './constants';
-import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
-import { externals } from '../bundler/externals';
+
+import RspackLiveReloadPlugin from './liveReloadPlugin.ts';
+import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
+import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
+import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from '../bundler/utils.ts';
+import { externals } from '../bundler/externals.ts';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();

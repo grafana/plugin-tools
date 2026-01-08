@@ -17,8 +17,8 @@ import LiveReloadPlugin from 'webpack-livereload-plugin';
 import VirtualModulesPlugin from 'webpack-virtual-modules';
 
 import { BuildModeWebpackPlugin } from './BuildModeWebpackPlugin.ts';
-import { DIST_DIR, SOURCE_DIR } from './constants.ts';
-import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils.ts';
+import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
+import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
 
 const pluginJson = getPluginJson();
