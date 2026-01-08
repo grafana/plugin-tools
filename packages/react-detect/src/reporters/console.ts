@@ -3,9 +3,9 @@ import { isExternal } from '../utils/dependencies.js';
 import { output } from '../utils/output.js';
 
 const summaryMsg = [
-  `We strongly recommend testing your plugin using the React 19 Grafana docker image: ${output.formatCode('grafana/grafana:12.4.0-react19')}`,
+  `We strongly recommend testing your plugin using the React 19 Grafana docker image: ${output.formatCode('grafana/grafana:dev-preview-react19')}`,
   ...output.bulletList([
-    `Start the server with ${output.formatCode('GRAFANA_VERSION=12.4.0-react19 GRAFANA_IMAGE=grafana docker compose up --build')} flag and manually test your plugin.`,
+    `Start the server with ${output.formatCode('GRAFANA_VERSION=dev-preview-react19 GRAFANA_IMAGE=grafana docker compose up --build')} flag and manually test your plugin.`,
     'Run any e2e tests to try and catch any potential issues.',
     'Manually test your plugin in the browser. Look for any console warnings or errors related to React.',
   ]),
