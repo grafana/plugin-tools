@@ -1,3 +1,16 @@
+# (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.1`
+  - fix: stop copying all images to bundle [#2369](https://github.com/grafana/plugin-tools/pull/2369) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jan 07 2026)
 
 #### 🐛 Bug Fix
