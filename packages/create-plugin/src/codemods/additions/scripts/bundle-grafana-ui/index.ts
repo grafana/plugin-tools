@@ -1,22 +1,34 @@
 import * as v from 'valibot';
 import * as recast from 'recast';
-import * as typeScriptParser from 'recast/parsers/typescript.js';
 import { coerce, gte } from 'semver';
 
 import type { Context } from '../../../context.js';
 import { additionsDebug } from '../../../utils.js';
+import { updateBundlerConfig, type ModuleRulesModifier, type ResolveModifier } from '../../../utils.bundler-config.js';
 import { updateExternalsArray, type ExternalsArrayModifier } from '../../../utils.externals.js';
 
 const { builders } = recast.types;
 
-export const schema = v.object({});
-
-type BundleGrafanaUIOptions = v.InferOutput<typeof schema>;
-
 const PLUGIN_JSON_PATH = 'src/plugin.json';
 const MIN_GRAFANA_VERSION = '10.2.0';
-const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
-const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
+
+export const schema = v.object({});
+type BundleGrafanaUIOptions = v.InferOutput<typeof schema>;
+
+export default function bundleGrafanaUI(context: Context, _options: BundleGrafanaUIOptions): Context {
+  additionsDebug('Running bundle-grafana-ui addition...');
+
+  // Ensure minimum Grafana version requirement
+  ensureMinGrafanaVersion(context);
+
+  // Update externals array using the shared utility
+  updateExternalsArray(context, createBundleGrafanaUIModifier());
+
+  // Update bundler resolve configuration to handle ESM imports
+  updateBundlerConfig(context, createResolveModifier(), createModuleRulesModifier());
+
+  return context;
+}
 
 /**
  * Checks if an AST node is a regex matching @grafana/ui
@@ -58,7 +70,7 @@ function isGrafanaDataRegex(element: recast.types.namedTypes.ASTNode): boolean {
  * Removes /^@grafana\/ui/i regex from externals array and adds 'react-inlinesvg'
  * @returns true if changes were made, false otherwise
  */
-function modifyExternalsArray(externalsArray: recast.types.namedTypes.ArrayExpression): boolean {
+function removeGrafanaUiAndAddReactInlineSvg(externalsArray: recast.types.namedTypes.ArrayExpression): boolean {
   let hasChanges = false;
   let hasGrafanaUiExternal = false;
   let hasReactInlineSvg = false;
@@ -128,302 +140,163 @@ function modifyExternalsArray(externalsArray: recast.types.namedTypes.ArrayExpre
  */
 function createBundleGrafanaUIModifier(): ExternalsArrayModifier {
   return (externalsArray: recast.types.namedTypes.ArrayExpression) => {
-    return modifyExternalsArray(externalsArray);
+    return removeGrafanaUiAndAddReactInlineSvg(externalsArray);
   };
 }
 
 /**
- * Updates the bundler's resolve configuration to handle ESM imports from @grafana/ui
- * - Adds '.mjs' to resolve.extensions
- * - Adds fullySpecified: false to allow extensionless imports in node_modules
+ * Creates a modifier function for updateBundlerConfig that adds '.mjs' to resolve.extensions
  */
-function updateBundlerResolveConfig(context: Context): void {
-  // Try rspack config first (newer structure)
-  if (context.doesFileExist(RSPACK_CONFIG_PATH)) {
-    additionsDebug(`Found ${RSPACK_CONFIG_PATH}, updating resolve configuration...`);
-    const rspackContent = context.getFile(RSPACK_CONFIG_PATH);
-    if (rspackContent) {
-      try {
-        const ast = recast.parse(rspackContent, {
-          parser: typeScriptParser,
-        });
+function createResolveModifier(): ResolveModifier {
+  return (resolveObject: recast.types.namedTypes.ObjectExpression): boolean => {
+    if (!resolveObject.properties) {
+      return false;
+    }
 
-        let hasChanges = false;
+    let hasChanges = false;
+    let hasMjsExtension = false;
+    let extensionsProperty: recast.types.namedTypes.Property | null = null;
 
-        recast.visit(ast, {
-          visitObjectExpression(path) {
-            const { node } = path;
-            const properties = node.properties;
+    // Check current state
+    for (const prop of resolveObject.properties) {
+      if (!prop || (prop.type !== 'Property' && prop.type !== 'ObjectProperty')) {
+        continue;
+      }
 
-            if (properties) {
-              for (const prop of properties) {
-                if (prop && (prop.type === 'Property' || prop.type === 'ObjectProperty')) {
-                  const key = 'key' in prop ? prop.key : null;
-                  const value = 'value' in prop ? prop.value : null;
+      const key = 'key' in prop ? prop.key : null;
+      const value = 'value' in prop ? prop.value : null;
 
-                  // Find the resolve property
-                  if (
-                    key &&
-                    key.type === 'Identifier' &&
-                    key.name === 'resolve' &&
-                    value &&
-                    value.type === 'ObjectExpression'
-                  ) {
-                    hasChanges = updateResolveObject(value) || hasChanges;
-                  }
-
-                  // Find the module property to add .mjs rule
-                  if (
-                    key &&
-                    key.type === 'Identifier' &&
-                    key.name === 'module' &&
-                    value &&
-                    value.type === 'ObjectExpression'
-                  ) {
-                    hasChanges = updateModuleRules(value) || hasChanges;
-                  }
-                }
-              }
+      if (key && key.type === 'Identifier') {
+        if (key.name === 'extensions' && value && value.type === 'ArrayExpression') {
+          extensionsProperty = prop as recast.types.namedTypes.Property;
+          // Check if .mjs is already in the extensions array
+          for (const element of value.elements) {
+            if (
+              element &&
+              (element.type === 'Literal' || element.type === 'StringLiteral') &&
+              'value' in element &&
+              element.value === '.mjs'
+            ) {
+              hasMjsExtension = true;
+              break;
             }
-
-            return this.traverse(path);
-          },
-        });
-
-        if (hasChanges) {
-          const output = recast.print(ast, {
-            tabWidth: 2,
-            trailingComma: true,
-            lineTerminator: '\n',
-          });
-          context.updateFile(RSPACK_CONFIG_PATH, output.code);
-          additionsDebug(`Updated ${RSPACK_CONFIG_PATH}`);
+          }
         }
-      } catch (error) {
-        additionsDebug(`Error updating ${RSPACK_CONFIG_PATH}:`, error);
       }
     }
-    return;
-  }
 
-  // Fall back to webpack config (legacy structure)
-  if (context.doesFileExist(WEBPACK_CONFIG_PATH)) {
-    additionsDebug(`Found ${WEBPACK_CONFIG_PATH}, updating resolve configuration...`);
-    const webpackContent = context.getFile(WEBPACK_CONFIG_PATH);
-    if (webpackContent) {
-      try {
-        const ast = recast.parse(webpackContent, {
-          parser: typeScriptParser,
-        });
-
-        let hasChanges = false;
-
-        recast.visit(ast, {
-          visitObjectExpression(path) {
-            const { node } = path;
-            const properties = node.properties;
-
-            if (properties) {
-              for (const prop of properties) {
-                if (prop && (prop.type === 'Property' || prop.type === 'ObjectProperty')) {
-                  const key = 'key' in prop ? prop.key : null;
-                  const value = 'value' in prop ? prop.value : null;
-
-                  // Find the resolve property
-                  if (
-                    key &&
-                    key.type === 'Identifier' &&
-                    key.name === 'resolve' &&
-                    value &&
-                    value.type === 'ObjectExpression'
-                  ) {
-                    hasChanges = updateResolveObject(value) || hasChanges;
-                  }
-
-                  // Find the module property to add .mjs rule
-                  if (
-                    key &&
-                    key.type === 'Identifier' &&
-                    key.name === 'module' &&
-                    value &&
-                    value.type === 'ObjectExpression'
-                  ) {
-                    hasChanges = updateModuleRules(value) || hasChanges;
-                  }
-                }
-              }
-            }
-
-            return this.traverse(path);
-          },
-        });
-
-        if (hasChanges) {
-          const output = recast.print(ast, {
-            tabWidth: 2,
-            trailingComma: true,
-            lineTerminator: '\n',
-          });
-          context.updateFile(WEBPACK_CONFIG_PATH, output.code);
-          additionsDebug(`Updated ${WEBPACK_CONFIG_PATH}`);
-        }
-      } catch (error) {
-        additionsDebug(`Error updating ${WEBPACK_CONFIG_PATH}:`, error);
-      }
+    // Add .mjs to extensions if missing
+    if (!hasMjsExtension && extensionsProperty && 'value' in extensionsProperty) {
+      const extensionsArray = extensionsProperty.value as recast.types.namedTypes.ArrayExpression;
+      extensionsArray.elements.push(builders.literal('.mjs'));
+      hasChanges = true;
+      additionsDebug("Added '.mjs' to resolve.extensions");
     }
-  }
+
+    return hasChanges;
+  };
 }
 
 /**
- * Updates module rules to add a rule for .mjs files in node_modules with resolve.fullySpecified: false
+ * Creates a modifier function for updateBundlerConfig that adds a module rule for .mjs files
+ * in node_modules with resolve.fullySpecified: false
  */
-function updateModuleRules(moduleObject: recast.types.namedTypes.ObjectExpression): boolean {
-  if (!moduleObject.properties) {
-    return false;
-  }
-
-  let hasChanges = false;
-  let hasMjsRule = false;
-  let rulesProperty: recast.types.namedTypes.Property | null = null;
-
-  // Find the rules property
-  for (const prop of moduleObject.properties) {
-    if (!prop || (prop.type !== 'Property' && prop.type !== 'ObjectProperty')) {
-      continue;
+function createModuleRulesModifier(): ModuleRulesModifier {
+  return (moduleObject: recast.types.namedTypes.ObjectExpression): boolean => {
+    if (!moduleObject.properties) {
+      return false;
     }
 
-    const key = 'key' in prop ? prop.key : null;
-    const value = 'value' in prop ? prop.value : null;
+    let hasChanges = false;
+    let hasMjsRule = false;
+    let rulesProperty: recast.types.namedTypes.Property | null = null;
 
-    if (key && key.type === 'Identifier' && key.name === 'rules' && value && value.type === 'ArrayExpression') {
-      rulesProperty = prop as recast.types.namedTypes.Property;
-      // Check if .mjs rule already exists
-      for (const element of value.elements) {
-        if (element && element.type === 'ObjectExpression' && element.properties) {
-          for (const ruleProp of element.properties) {
-            if (
-              ruleProp &&
-              (ruleProp.type === 'Property' || ruleProp.type === 'ObjectProperty') &&
-              'key' in ruleProp &&
-              ruleProp.key.type === 'Identifier' &&
-              ruleProp.key.name === 'test'
-            ) {
-              const testValue = 'value' in ruleProp ? ruleProp.value : null;
-              if (testValue) {
-                // Check for RegExpLiteral with .mjs pattern
-                if (testValue.type === 'RegExpLiteral' && 'pattern' in testValue && testValue.pattern === '\\.mjs$') {
-                  hasMjsRule = true;
-                  break;
-                }
-                // Check for Literal with regex property
-                if (
-                  testValue.type === 'Literal' &&
-                  'regex' in testValue &&
-                  testValue.regex &&
-                  typeof testValue.regex === 'object' &&
-                  'pattern' in testValue.regex &&
-                  testValue.regex.pattern === '\\.mjs$'
-                ) {
-                  hasMjsRule = true;
-                  break;
-                }
-                // Check for string literal containing .mjs
-                if (
-                  testValue.type === 'Literal' &&
-                  'value' in testValue &&
-                  typeof testValue.value === 'string' &&
-                  testValue.value.includes('.mjs')
-                ) {
-                  hasMjsRule = true;
-                  break;
+    // Find the rules property
+    for (const prop of moduleObject.properties) {
+      if (!prop || (prop.type !== 'Property' && prop.type !== 'ObjectProperty')) {
+        continue;
+      }
+
+      const key = 'key' in prop ? prop.key : null;
+      const value = 'value' in prop ? prop.value : null;
+
+      if (key && key.type === 'Identifier' && key.name === 'rules' && value && value.type === 'ArrayExpression') {
+        rulesProperty = prop as recast.types.namedTypes.Property;
+        // Check if .mjs rule already exists
+        for (const element of value.elements) {
+          if (element && element.type === 'ObjectExpression' && element.properties) {
+            for (const ruleProp of element.properties) {
+              if (
+                ruleProp &&
+                (ruleProp.type === 'Property' || ruleProp.type === 'ObjectProperty') &&
+                'key' in ruleProp &&
+                ruleProp.key.type === 'Identifier' &&
+                ruleProp.key.name === 'test'
+              ) {
+                const testValue = 'value' in ruleProp ? ruleProp.value : null;
+                if (testValue) {
+                  // Check for RegExpLiteral with .mjs pattern
+                  if (testValue.type === 'RegExpLiteral' && 'pattern' in testValue && testValue.pattern === '\\.mjs$') {
+                    hasMjsRule = true;
+                    break;
+                  }
+                  // Check for Literal with regex property
+                  if (
+                    testValue.type === 'Literal' &&
+                    'regex' in testValue &&
+                    testValue.regex &&
+                    typeof testValue.regex === 'object' &&
+                    'pattern' in testValue.regex &&
+                    testValue.regex.pattern === '\\.mjs$'
+                  ) {
+                    hasMjsRule = true;
+                    break;
+                  }
+                  // Check for string literal containing .mjs
+                  if (
+                    testValue.type === 'Literal' &&
+                    'value' in testValue &&
+                    typeof testValue.value === 'string' &&
+                    testValue.value.includes('.mjs')
+                  ) {
+                    hasMjsRule = true;
+                    break;
+                  }
                 }
               }
             }
           }
-        }
-        if (hasMjsRule) {
-          break;
-        }
-      }
-      break;
-    }
-  }
-
-  // Add .mjs rule if missing (insert at position 1, after imports-loader rule which must be first)
-  if (!hasMjsRule && rulesProperty && 'value' in rulesProperty) {
-    const rulesArray = rulesProperty.value as recast.types.namedTypes.ArrayExpression;
-    const mjsRule = builders.objectExpression([
-      builders.property('init', builders.identifier('test'), builders.literal(/\.mjs$/)),
-      builders.property('init', builders.identifier('include'), builders.literal(/node_modules/)),
-      builders.property(
-        'init',
-        builders.identifier('resolve'),
-        builders.objectExpression([
-          builders.property('init', builders.identifier('fullySpecified'), builders.literal(false)),
-        ])
-      ),
-      builders.property('init', builders.identifier('type'), builders.literal('javascript/auto')),
-    ]);
-    // Insert at position 1 (second position) to keep imports-loader first
-    rulesArray.elements.splice(1, 0, mjsRule);
-    hasChanges = true;
-    additionsDebug('Added module rule for .mjs files in node_modules with resolve.fullySpecified: false');
-  }
-
-  return hasChanges;
-}
-
-/**
- * Updates a resolve object expression to add .mjs extension
- * Note: We don't set fullySpecified: false globally because .mjs files need
- * rule-level configuration to override ESM's strict fully-specified import requirements
- */
-function updateResolveObject(resolveObject: recast.types.namedTypes.ObjectExpression): boolean {
-  if (!resolveObject.properties) {
-    return false;
-  }
-
-  let hasChanges = false;
-  let hasMjsExtension = false;
-  let extensionsProperty: recast.types.namedTypes.Property | null = null;
-
-  // Check current state
-  for (const prop of resolveObject.properties) {
-    if (!prop || (prop.type !== 'Property' && prop.type !== 'ObjectProperty')) {
-      continue;
-    }
-
-    const key = 'key' in prop ? prop.key : null;
-    const value = 'value' in prop ? prop.value : null;
-
-    if (key && key.type === 'Identifier') {
-      if (key.name === 'extensions' && value && value.type === 'ArrayExpression') {
-        extensionsProperty = prop as recast.types.namedTypes.Property;
-        // Check if .mjs is already in the extensions array
-        for (const element of value.elements) {
-          if (
-            element &&
-            (element.type === 'Literal' || element.type === 'StringLiteral') &&
-            'value' in element &&
-            element.value === '.mjs'
-          ) {
-            hasMjsExtension = true;
+          if (hasMjsRule) {
             break;
           }
         }
+        break;
       }
     }
-  }
 
-  // Add .mjs to extensions if missing
-  if (!hasMjsExtension && extensionsProperty && 'value' in extensionsProperty) {
-    const extensionsArray = extensionsProperty.value as recast.types.namedTypes.ArrayExpression;
-    extensionsArray.elements.push(builders.literal('.mjs'));
-    hasChanges = true;
-    additionsDebug("Added '.mjs' to resolve.extensions");
-  }
+    // Add .mjs rule if missing (insert at position 1, after imports-loader rule which must be first)
+    if (!hasMjsRule && rulesProperty && 'value' in rulesProperty) {
+      const rulesArray = rulesProperty.value as recast.types.namedTypes.ArrayExpression;
+      const mjsRule = builders.objectExpression([
+        builders.property('init', builders.identifier('test'), builders.literal(/\.mjs$/)),
+        builders.property('init', builders.identifier('include'), builders.literal(/node_modules/)),
+        builders.property(
+          'init',
+          builders.identifier('resolve'),
+          builders.objectExpression([
+            builders.property('init', builders.identifier('fullySpecified'), builders.literal(false)),
+          ])
+        ),
+        builders.property('init', builders.identifier('type'), builders.literal('javascript/auto')),
+      ]);
+      // Insert at position 1 (second position) to keep imports-loader first
+      rulesArray.elements.splice(1, 0, mjsRule);
+      hasChanges = true;
+      additionsDebug('Added module rule for .mjs files in node_modules with resolve.fullySpecified: false');
+    }
 
-  return hasChanges;
+    return hasChanges;
+  };
 }
 
 /**
@@ -470,19 +343,4 @@ function ensureMinGrafanaVersion(context: Context): void {
   } catch (error) {
     additionsDebug(`Error updating ${PLUGIN_JSON_PATH}:`, error);
   }
-}
-
-export default function bundleGrafanaUI(context: Context, _options: BundleGrafanaUIOptions): Context {
-  additionsDebug('Running bundle-grafana-ui addition...');
-
-  // Ensure minimum Grafana version requirement
-  ensureMinGrafanaVersion(context);
-
-  // Update externals array using the shared utility
-  updateExternalsArray(context, createBundleGrafanaUIModifier());
-
-  // Update bundler resolve configuration to handle ESM imports
-  updateBundlerResolveConfig(context);
-
-  return context;
 }
