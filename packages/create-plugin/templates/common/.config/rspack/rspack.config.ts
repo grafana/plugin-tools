@@ -21,7 +21,8 @@ import { externals } from '../bundler/externals';
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
-
+const logoPaths = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(Boolean);
+const screenshotPaths = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];
 const virtualPublicPath = new RspackVirtualModulePlugin({
   'grafana-public-path': `
 import amdMetaModule from 'amd-module';
@@ -161,14 +162,13 @@ const config = async (env): Promise<Configuration> => {
           { from: 'plugin.json', to: '.' },
           { from: '../LICENSE', to: '.' },
           { from: '../CHANGELOG.md', to: '.', force: true },
-          { from: '**/*.json', to: '.' }, // TODO<Add an error for checking the basic structure of the repo>
-          { from: '**/*.svg', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/*.png', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/*.html', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'img/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'libs/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'static/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/query_help.md', to: '.', noErrorOnMissing: true }, // Optional
+          { from: '**/*.json', to: '.' },
+          { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
+          ...logoPaths.map((logoPath) => ({ from: logoPath, to: logoPath })),
+          ...screenshotPaths.map((screenshotPath) => ({
+            from: screenshotPath,
+            to: screenshotPath,
+          })),
         ],
       }),
       // Replace certain template-variables in the README and plugin.json
