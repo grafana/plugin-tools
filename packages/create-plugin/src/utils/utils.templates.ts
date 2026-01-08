@@ -1,10 +1,4 @@
-import {
-  DEFAULT_FEATURE_FLAGS,
-  EXPORT_PATH_PREFIX,
-  EXTRA_TEMPLATE_VARIABLES,
-  PLUGIN_TYPES,
-  TEMPLATE_PATHS,
-} from '../constants.js';
+import { EXPORT_PATH_PREFIX, EXTRA_TEMPLATE_VARIABLES, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { GenerateCliArgs, TemplateData } from '../types.js';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import {
