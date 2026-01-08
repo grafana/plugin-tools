@@ -4,13 +4,15 @@ import { coerce, gte } from 'semver';
 
 import type { Context } from '../../../context.js';
 import { additionsDebug } from '../../../utils.js';
-import { updateBundlerConfig, type ModuleRulesModifier, type ResolveModifier } from '../../../utils.bundler-config.js';
+import { updateBundlerConfig, type ResolveModifier } from '../../../utils.bundler-config.js';
 import { updateExternalsArray, type ExternalsArrayModifier } from '../../../utils.externals.js';
 
 const { builders } = recast.types;
 
 const PLUGIN_JSON_PATH = 'src/plugin.json';
 const MIN_GRAFANA_VERSION = '10.2.0';
+const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
+const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
 
 export const schema = v.object({});
 type BundleGrafanaUIOptions = v.InferOutput<typeof schema>;
@@ -25,7 +27,10 @@ export default function bundleGrafanaUI(context: Context, _options: BundleGrafan
   updateExternalsArray(context, createBundleGrafanaUIModifier());
 
   // Update bundler resolve configuration to handle ESM imports
-  updateBundlerConfig(context, createResolveModifier(), createModuleRulesModifier());
+  updateBundlerConfig(context, createResolveModifier());
+
+  // Update module rules directly with simple string manipulation
+  updateModuleRulesSimple(context);
 
   return context;
 }
@@ -198,105 +203,64 @@ function createResolveModifier(): ResolveModifier {
 }
 
 /**
- * Creates a modifier function for updateBundlerConfig that adds a module rule for .mjs files
- * in node_modules with resolve.fullySpecified: false
+ * Updates module rules to add .mjs rule using simple string manipulation
+ * This is a simplified approach that may not handle all edge cases, but is much simpler
  */
-function createModuleRulesModifier(): ModuleRulesModifier {
-  return (moduleObject: recast.types.namedTypes.ObjectExpression): boolean => {
-    if (!moduleObject.properties) {
-      return false;
-    }
+function updateModuleRulesSimple(context: Context): void {
+  const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
+    ? RSPACK_CONFIG_PATH
+    : context.doesFileExist(WEBPACK_CONFIG_PATH)
+      ? WEBPACK_CONFIG_PATH
+      : null;
 
-    let hasChanges = false;
-    let hasMjsRule = false;
-    let rulesProperty: recast.types.namedTypes.Property | null = null;
+  if (!configPath) {
+    return;
+  }
 
-    // Find the rules property
-    for (const prop of moduleObject.properties) {
-      if (!prop || (prop.type !== 'Property' && prop.type !== 'ObjectProperty')) {
-        continue;
+  const content = context.getFile(configPath);
+  if (!content) {
+    return;
+  }
+
+  // Check if rule already exists
+  if (content.includes('test: /\\.mjs$') || content.includes('test: /\\\\.mjs$')) {
+    return;
+  }
+
+  const mjsRule = `{
+        test: /\\.mjs$/,
+        include: /node_modules/,
+        resolve: {
+          fullySpecified: false,
+        },
+        type: 'javascript/auto',
+      },`;
+
+  // Simple approach: find rules array and insert after first rule
+  let updated = content;
+
+  // Case 1: Empty array - insert at start
+  if (content.match(/rules:\s*\[\s*\]/)) {
+    updated = content.replace(/(rules:\s*\[\s*)(\])/, `$1${mjsRule}\n      $2`);
+  }
+  // Case 2: Find first rule and insert after it
+  else {
+    // Match: rules: [ { ... }, and insert mjs rule after the first rule
+    // The regex finds the first complete rule object (balanced braces)
+    updated = content.replace(/(rules:\s*\[\s*)(\{[\s\S]*?\}),(\s*)/, (match, prefix, firstRule, suffix) => {
+      // Check if we already inserted (avoid double insertion)
+      if (match.includes('test: /\\.mjs$')) {
+        return match;
       }
+      // Insert mjs rule after first rule
+      return `${prefix}${firstRule},\n      ${mjsRule}${suffix}`;
+    });
+  }
 
-      const key = 'key' in prop ? prop.key : null;
-      const value = 'value' in prop ? prop.value : null;
-
-      if (key && key.type === 'Identifier' && key.name === 'rules' && value && value.type === 'ArrayExpression') {
-        rulesProperty = prop as recast.types.namedTypes.Property;
-        // Check if .mjs rule already exists
-        for (const element of value.elements) {
-          if (element && element.type === 'ObjectExpression' && element.properties) {
-            for (const ruleProp of element.properties) {
-              if (
-                ruleProp &&
-                (ruleProp.type === 'Property' || ruleProp.type === 'ObjectProperty') &&
-                'key' in ruleProp &&
-                ruleProp.key.type === 'Identifier' &&
-                ruleProp.key.name === 'test'
-              ) {
-                const testValue = 'value' in ruleProp ? ruleProp.value : null;
-                if (testValue) {
-                  // Check for RegExpLiteral with .mjs pattern
-                  if (testValue.type === 'RegExpLiteral' && 'pattern' in testValue && testValue.pattern === '\\.mjs$') {
-                    hasMjsRule = true;
-                    break;
-                  }
-                  // Check for Literal with regex property
-                  if (
-                    testValue.type === 'Literal' &&
-                    'regex' in testValue &&
-                    testValue.regex &&
-                    typeof testValue.regex === 'object' &&
-                    'pattern' in testValue.regex &&
-                    testValue.regex.pattern === '\\.mjs$'
-                  ) {
-                    hasMjsRule = true;
-                    break;
-                  }
-                  // Check for string literal containing .mjs
-                  if (
-                    testValue.type === 'Literal' &&
-                    'value' in testValue &&
-                    typeof testValue.value === 'string' &&
-                    testValue.value.includes('.mjs')
-                  ) {
-                    hasMjsRule = true;
-                    break;
-                  }
-                }
-              }
-            }
-          }
-          if (hasMjsRule) {
-            break;
-          }
-        }
-        break;
-      }
-    }
-
-    // Add .mjs rule if missing (insert at position 1, after imports-loader rule which must be first)
-    if (!hasMjsRule && rulesProperty && 'value' in rulesProperty) {
-      const rulesArray = rulesProperty.value as recast.types.namedTypes.ArrayExpression;
-      const mjsRule = builders.objectExpression([
-        builders.property('init', builders.identifier('test'), builders.literal(/\.mjs$/)),
-        builders.property('init', builders.identifier('include'), builders.literal(/node_modules/)),
-        builders.property(
-          'init',
-          builders.identifier('resolve'),
-          builders.objectExpression([
-            builders.property('init', builders.identifier('fullySpecified'), builders.literal(false)),
-          ])
-        ),
-        builders.property('init', builders.identifier('type'), builders.literal('javascript/auto')),
-      ]);
-      // Insert at position 1 (second position) to keep imports-loader first
-      rulesArray.elements.splice(1, 0, mjsRule);
-      hasChanges = true;
-      additionsDebug('Added module rule for .mjs files in node_modules with resolve.fullySpecified: false');
-    }
-
-    return hasChanges;
-  };
+  if (updated !== content) {
+    context.updateFile(configPath, updated);
+    additionsDebug('Added module rule for .mjs files in node_modules with resolve.fullySpecified: false');
+  }
 }
 
 /**
