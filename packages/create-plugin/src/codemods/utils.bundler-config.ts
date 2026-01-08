@@ -8,6 +8,29 @@ const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
 const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
 
 /**
+ * Gets the bundler config file path and content, preferring rspack over webpack
+ * @returns Object with path and content, or null if no config file exists
+ */
+export function getBundlerConfig(context: Context): { path: string; content: string } | null {
+  const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
+    ? RSPACK_CONFIG_PATH
+    : context.doesFileExist(WEBPACK_CONFIG_PATH)
+      ? WEBPACK_CONFIG_PATH
+      : null;
+
+  if (!configPath) {
+    return null;
+  }
+
+  const content = context.getFile(configPath);
+  if (!content) {
+    return null;
+  }
+
+  return { path: configPath, content };
+}
+
+/**
  * Type for a function that modifies a resolve object expression
  * @param resolveObject - The AST node representing the resolve configuration
  * @returns true if changes were made, false otherwise

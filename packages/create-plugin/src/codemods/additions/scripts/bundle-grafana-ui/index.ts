@@ -4,14 +4,13 @@ import { coerce, gte } from 'semver';
 
 import type { Context } from '../../../context.js';
 import { additionsDebug } from '../../../utils.js';
+import { getBundlerConfig } from '../../../utils.bundler-config.js';
 import { updateExternalsArray, type ExternalsArrayModifier } from '../../../utils.externals.js';
 
 const { builders } = recast.types;
 
 const PLUGIN_JSON_PATH = 'src/plugin.json';
 const MIN_GRAFANA_VERSION = '10.2.0';
-const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
-const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
 
 export const schema = v.object({});
 type BundleGrafanaUIOptions = v.InferOutput<typeof schema>;
@@ -135,20 +134,12 @@ function createBundleGrafanaUIModifier(): ExternalsArrayModifier {
  * Updates resolve extensions to add .mjs using string manipulation
  */
 function updateResolveExtensions(context: Context): void {
-  const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
-    ? RSPACK_CONFIG_PATH
-    : context.doesFileExist(WEBPACK_CONFIG_PATH)
-      ? WEBPACK_CONFIG_PATH
-      : null;
-
-  if (!configPath) {
+  const config = getBundlerConfig(context);
+  if (!config) {
     return;
   }
 
-  const content = context.getFile(configPath);
-  if (!content) {
-    return;
-  }
+  const { path: configPath, content } = config;
 
   // Check if .mjs already exists
   if (content.includes("'.mjs'") || content.includes('".mjs"')) {
@@ -173,20 +164,12 @@ function updateResolveExtensions(context: Context): void {
  * Updates module rules to add .mjs rule using string manipulation
  */
 function updateModuleRules(context: Context): void {
-  const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
-    ? RSPACK_CONFIG_PATH
-    : context.doesFileExist(WEBPACK_CONFIG_PATH)
-      ? WEBPACK_CONFIG_PATH
-      : null;
-
-  if (!configPath) {
+  const config = getBundlerConfig(context);
+  if (!config) {
     return;
   }
 
-  const content = context.getFile(configPath);
-  if (!content) {
-    return;
-  }
+  const { path: configPath, content } = config;
 
   // Check if rule already exists
   if (content.includes('test: /\\.mjs$') || content.includes('test: /\\\\.mjs$')) {
