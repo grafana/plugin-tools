@@ -1,5 +1,18 @@
 # (Thu Jan 08 2026)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.2`
+  - feat: bump all dev deps to latest [#2359](https://github.com/grafana/plugin-tools/pull/2359) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Jan 08 2026)
+
 #### 🚀 Enhancement
 
 - `@grafana/react-detect@0.2.0`
