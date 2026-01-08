@@ -1,10 +1,5 @@
 {
   "features": {
-<<<<<<< HEAD
-    "bundleGrafanaUI": {{ bundleGrafanaUI }},
-=======
-    "useReactRouterV6": {{ useReactRouterV6 }},
->>>>>>> 91a41873 (renome var)
     "useExperimentalRspack": {{ useExperimentalRspack }}
   }
 }
