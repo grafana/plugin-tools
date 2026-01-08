@@ -4,7 +4,6 @@ import { coerce, gte } from 'semver';
 
 import type { Context } from '../../../context.js';
 import { additionsDebug } from '../../../utils.js';
-import { updateBundlerConfig, type ResolveModifier } from '../../../utils.bundler-config.js';
 import { updateExternalsArray, type ExternalsArrayModifier } from '../../../utils.externals.js';
 
 const { builders } = recast.types;
@@ -27,7 +26,7 @@ export default function bundleGrafanaUI(context: Context, _options: BundleGrafan
   updateExternalsArray(context, createBundleGrafanaUIModifier());
 
   // Update bundler resolve configuration to handle ESM imports
-  updateBundlerConfig(context, createResolveModifier());
+  updateResolveExtensionsSimple(context);
 
   // Update module rules directly with simple string manipulation
   updateModuleRulesSimple(context);
@@ -36,37 +35,20 @@ export default function bundleGrafanaUI(context: Context, _options: BundleGrafan
 }
 
 /**
- * Checks if an AST node is a regex matching @grafana/ui
- * The pattern in the AST is "^@grafana\/ui" (backslash-escaped forward slash)
+ * Checks if an AST node is a regex matching a Grafana package pattern
+ * @param element - The AST node to check
+ * @param pattern - The regex pattern to match (e.g., "^@grafana\\/ui" or "^@grafana\\/data")
  */
-function isGrafanaUiRegex(element: recast.types.namedTypes.ASTNode): boolean {
+function isGrafanaRegex(element: recast.types.namedTypes.ASTNode, pattern: string): boolean {
   // Handle RegExpLiteral (TypeScript parser)
   if (element.type === 'RegExpLiteral') {
     const regexNode = element as recast.types.namedTypes.RegExpLiteral;
-    return regexNode.pattern === '^@grafana\\/ui' && regexNode.flags === 'i';
+    return regexNode.pattern === pattern && regexNode.flags === 'i';
   }
   // Handle Literal with regex property (other parsers)
   if (element.type === 'Literal' && 'regex' in element && element.regex) {
     const regex = element.regex as { pattern: string; flags: string };
-    return regex.pattern === '^@grafana\\/ui' && regex.flags === 'i';
-  }
-  return false;
-}
-
-/**
- * Checks if an AST node is a regex matching @grafana/data
- * The pattern in the AST is "^@grafana\/data" (backslash-escaped forward slash)
- */
-function isGrafanaDataRegex(element: recast.types.namedTypes.ASTNode): boolean {
-  // Handle RegExpLiteral (TypeScript parser)
-  if (element.type === 'RegExpLiteral') {
-    const regexNode = element as recast.types.namedTypes.RegExpLiteral;
-    return regexNode.pattern === '^@grafana\\/data' && regexNode.flags === 'i';
-  }
-  // Handle Literal with regex property (other parsers)
-  if (element.type === 'Literal' && 'regex' in element && element.regex) {
-    const regex = element.regex as { pattern: string; flags: string };
-    return regex.pattern === '^@grafana\\/data' && regex.flags === 'i';
+    return regex.pattern === pattern && regex.flags === 'i';
   }
   return false;
 }
@@ -87,7 +69,7 @@ function removeGrafanaUiAndAddReactInlineSvg(externalsArray: recast.types.namedT
     }
 
     // Check for /^@grafana\/ui/i regex
-    if (isGrafanaUiRegex(element)) {
+    if (isGrafanaRegex(element, '^@grafana\\/ui')) {
       hasGrafanaUiExternal = true;
     }
 
@@ -108,7 +90,7 @@ function removeGrafanaUiAndAddReactInlineSvg(externalsArray: recast.types.namedT
       if (!element) {
         return true;
       }
-      return !isGrafanaUiRegex(element);
+      return !isGrafanaRegex(element, '^@grafana\\/ui');
     });
     hasChanges = true;
     additionsDebug('Removed /^@grafana\\/ui/i from externals array');
@@ -120,7 +102,7 @@ function removeGrafanaUiAndAddReactInlineSvg(externalsArray: recast.types.namedT
     let insertIndex = -1;
     for (let i = 0; i < externalsArray.elements.length; i++) {
       const element = externalsArray.elements[i];
-      if (element && isGrafanaDataRegex(element)) {
+      if (element && isGrafanaRegex(element, '^@grafana\\/data')) {
         insertIndex = i + 1;
         break;
       }
@@ -150,56 +132,42 @@ function createBundleGrafanaUIModifier(): ExternalsArrayModifier {
 }
 
 /**
- * Creates a modifier function for updateBundlerConfig that adds '.mjs' to resolve.extensions
+ * Updates resolve extensions to add .mjs using simple string manipulation
+ * This is a simplified approach that may not handle all edge cases, but is much simpler
  */
-function createResolveModifier(): ResolveModifier {
-  return (resolveObject: recast.types.namedTypes.ObjectExpression): boolean => {
-    if (!resolveObject.properties) {
-      return false;
+function updateResolveExtensionsSimple(context: Context): void {
+  const configPath = context.doesFileExist(RSPACK_CONFIG_PATH)
+    ? RSPACK_CONFIG_PATH
+    : context.doesFileExist(WEBPACK_CONFIG_PATH)
+      ? WEBPACK_CONFIG_PATH
+      : null;
+
+  if (!configPath) {
+    return;
+  }
+
+  const content = context.getFile(configPath);
+  if (!content) {
+    return;
+  }
+
+  // Check if .mjs already exists
+  if (content.includes("'.mjs'") || content.includes('".mjs"')) {
+    return;
+  }
+
+  // Add .mjs to extensions array
+  const updated = content.replace(/(extensions:\s*\[)([^\]]+)(\])/, (match, prefix, extensions, suffix) => {
+    if (extensions.includes('.mjs')) {
+      return match;
     }
+    return `${prefix}${extensions}, '.mjs'${suffix}`;
+  });
 
-    let hasChanges = false;
-    let hasMjsExtension = false;
-    let extensionsProperty: recast.types.namedTypes.Property | null = null;
-
-    // Check current state
-    for (const prop of resolveObject.properties) {
-      if (!prop || (prop.type !== 'Property' && prop.type !== 'ObjectProperty')) {
-        continue;
-      }
-
-      const key = 'key' in prop ? prop.key : null;
-      const value = 'value' in prop ? prop.value : null;
-
-      if (key && key.type === 'Identifier') {
-        if (key.name === 'extensions' && value && value.type === 'ArrayExpression') {
-          extensionsProperty = prop as recast.types.namedTypes.Property;
-          // Check if .mjs is already in the extensions array
-          for (const element of value.elements) {
-            if (
-              element &&
-              (element.type === 'Literal' || element.type === 'StringLiteral') &&
-              'value' in element &&
-              element.value === '.mjs'
-            ) {
-              hasMjsExtension = true;
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    // Add .mjs to extensions if missing
-    if (!hasMjsExtension && extensionsProperty && 'value' in extensionsProperty) {
-      const extensionsArray = extensionsProperty.value as recast.types.namedTypes.ArrayExpression;
-      extensionsArray.elements.push(builders.literal('.mjs'));
-      hasChanges = true;
-      additionsDebug("Added '.mjs' to resolve.extensions");
-    }
-
-    return hasChanges;
-  };
+  if (updated !== content) {
+    context.updateFile(configPath, updated);
+    additionsDebug("Added '.mjs' to resolve.extensions");
+  }
 }
 
 /**
