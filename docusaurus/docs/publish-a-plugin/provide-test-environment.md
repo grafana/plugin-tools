@@ -43,7 +43,7 @@ Depending on the type and complexity of your plugin, we require the following re
 
 ## How to provide test configurations and environments
 
-Provisioning allows you to add resources in a YAML file under a `/provisioning` directory. We can then use those files to test your plugin as you intented it to work, and provide a better and faster review.
+Provisioning allows you to add resources in a YAML file under a `/provisioning` directory. We can then use those files to test your plugin as you intended it to work, and provide a better and faster review.
 
 Starting in v2.8.0, `create-plugin` generates provisioning capabilities for all plugin types (apps, datasources and panels) and includes a sample dashboard. If you scaffolded your plugin with a previous version of `create-plugin`, you can run a new command to add the missing provisioning files.
 
