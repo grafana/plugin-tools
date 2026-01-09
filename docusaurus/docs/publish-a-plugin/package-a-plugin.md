@@ -74,7 +74,9 @@ Package a plugin to organize the plugin code and make it ready for use in your o
    22 files, 92516655 bytes uncompressed, 34319591 bytes compressed:  62.9%
    ```
 
-When you've packaged your plugin, you can proceed to:
+## Next steps
 
-- [publish a plugin](./publish-or-update-a-plugin.md) to share it with the world, or
-- [install a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin) by extracting it into your plugin directory.
+After you've packaged your plugin, you can proceed to:
+
+- [Publish your plugin](./publish-or-update-a-plugin.md) to share it with the world, or
+- [Install a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin) by extracting it into your plugin directory.
