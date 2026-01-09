@@ -15,9 +15,9 @@ keywords:
 
 # Automate the packaging and signing of your plugin with GitHub CI
 
-Set up your plugin to use the supplied [Github workflows](../set-up/set-up-github) from [create-plugin](../get-started.md) to ensure that your plugin builds and packages in the correct format. Additionally, you can use the zip file that this workflow produces to test the plugin. 
+Set up your plugin to use the supplied [GitHub workflows](../set-up/set-up-github) from [create-plugin](../get-started.md) to ensure that your plugin builds and packages in the correct format. Additionally, you can use the zip file that this workflow produces to test the plugin. 
 
-If you include a Grafana Access Policy Token in your [Github repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), the system automatically creates a signed build that you can use to test the plugin locally before submission. For information about how to create this token, refer to the [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token) documentation.
+If you include a Grafana Access Policy Token in your [GitHub repository secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization), the system automatically creates a signed build that you can use to test the plugin locally before submission. For information about how to create this token, refer to the [sign a plugin](./sign-a-plugin.md#generate-an-access-policy-token) documentation.
 
 When you create a release tag, the process becomes automated and results in a zip file that you can submit for publication to the [Grafana plugin catalog](https://grafana.com/plugins).
 
