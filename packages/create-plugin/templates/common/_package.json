@@ -65,7 +65,7 @@
     "webpack-cli": "^6.0.0",
     "webpack-livereload-plugin": "^3.0.2",
     "webpack-subresource-integrity": "^5.1.0",
-    "webpack-virtual-modules": "^0.6.2"{{/unless}}{{#if useExperimentalRspack}}
+    "webpack-virtual-modules": "^0.6.2"{{/unless}}{{#if useExperimentalRspack}},
     "ws": "^8.13.0"{{/if}}
   },
   "engines": {
