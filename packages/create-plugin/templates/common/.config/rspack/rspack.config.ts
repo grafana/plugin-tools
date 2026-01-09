@@ -16,15 +16,13 @@ import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 import RspackLiveReloadPlugin from './liveReloadPlugin.ts';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
-import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from '../bundler/utils.ts';
+import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
 import { copyFilePatterns } from '../bundler/copyFiles.ts';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
-const logoPaths = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(Boolean);
-const screenshotPaths = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];
 const virtualPublicPath = new RspackVirtualModulePlugin({
   'grafana-public-path': `
 import amdMetaModule from 'amd-module';
