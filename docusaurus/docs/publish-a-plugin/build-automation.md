@@ -23,7 +23,11 @@ When you create a release tag, the process becomes automated and results in a zi
 
 You can use the links to the archive and zip files from the release page to make your plugin submission.
 
-## Package your plugin
+## Package your plugin with GitHub CI
+
+Follow these steps to package your plugin with GitHub CI. 
+
+To package your plugin in a ZIP file manually, refer to [Package a plugin](./package-a-plugin.md).
 
 ### Set up the release workflow
 
@@ -261,4 +265,6 @@ The generated changelog follows a standardized format that clearly categorizes c
 
 ## Next steps
 
-After you package your plugin, proceed to [publish a plugin](./publish-or-update-a-plugin.md) or [install a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
+Your plugin is now packaged and signed. 
+
+You can now proceed to [publish your plugin](./publish-or-update-a-plugin.md), or [install a packaged plugin](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-a-packaged-plugin).
