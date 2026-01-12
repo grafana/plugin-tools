@@ -1,3 +1,15 @@
+# v6.7.4 (Mon Jan 12 2026)
+
+#### 🐛 Bug Fix
+
+- chore: cleanup bundler duplicates [#2379](https://github.com/grafana/plugin-tools/pull/2379) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.7.3 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
