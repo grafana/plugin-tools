@@ -31,7 +31,8 @@
     "@types/jest": "^29.5.0",
     "@types/node": "^24.0.0",
     "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
+    "@types/react-dom": "^18.3.0",{{#if useExperimentalRspack}}
+    "@types/ws": "^8.18.1",{{/if}}
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",{{#unless useExperimentalRspack}}
     "copy-webpack-plugin": "^13.0.0",{{/unless}}
@@ -64,7 +65,8 @@
     "webpack-cli": "^6.0.0",
     "webpack-livereload-plugin": "^3.0.2",
     "webpack-subresource-integrity": "^5.1.0",
-    "webpack-virtual-modules": "^0.6.2"{{/unless}}
+    "webpack-virtual-modules": "^0.6.2"{{/unless}}{{#if useExperimentalRspack}},
+    "ws": "^8.13.0"{{/if}}
   },
   "engines": {
     "node": ">=22"

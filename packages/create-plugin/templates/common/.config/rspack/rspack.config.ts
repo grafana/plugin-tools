@@ -12,17 +12,17 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
-import RspackLiveReloadPlugin from './liveReloadPlugin';
-import { BuildModeRspackPlugin } from './BuildModeRspackPlugin';
-import { DIST_DIR, SOURCE_DIR } from './constants';
-import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
-import { externals } from '../bundler/externals';
+
+import RspackLiveReloadPlugin from './liveReloadPlugin.ts';
+import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
+import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
+import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
+import { externals } from '../bundler/externals.ts';
+import { copyFilePatterns } from '../bundler/copyFiles.ts';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
-const logoPaths = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(Boolean);
-const screenshotPaths = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];
 const virtualPublicPath = new RspackVirtualModulePlugin({
   'grafana-public-path': `
 import amdMetaModule from 'amd-module';
@@ -155,21 +155,7 @@ const config = async (env): Promise<Configuration> => {
         entryOnly: true,
       }),
       new rspack.CopyRspackPlugin({
-        patterns: [
-          // If src/README.md exists use it; otherwise the root README
-          // To `compiler.options.output`
-          { from: hasReadme() ? 'README.md' : '../README.md', to: '.', force: true },
-          { from: 'plugin.json', to: '.' },
-          { from: '../LICENSE', to: '.' },
-          { from: '../CHANGELOG.md', to: '.', force: true },
-          { from: '**/*.json', to: '.' },
-          { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
-          ...logoPaths.map((logoPath) => ({ from: logoPath, to: logoPath })),
-          ...screenshotPaths.map((screenshotPath) => ({
-            from: screenshotPath,
-            to: screenshotPath,
-          })),
-        ],
+        patterns: copyFilePatterns,
       }),
       // Replace certain template-variables in the README and plugin.json
       new ReplaceInFileWebpackPlugin([
