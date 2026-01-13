@@ -48,7 +48,7 @@ Find the whole letter at [Grafana Developer Newsletter - July 2025](https://comm
   - Removal of all UI Extensions deprecated APIs ('getPluginExtensions', 'usePluginExtensions', 'usePluginLinkExtensions', 'usePluginComponentExtensions')
 - Grafana 12.0.2: 
   - Plugins declaring a dependency on another plugin can no longer reference a specific version 
-- Apps still using React Router 5 need to [upgrade to version 6](/migration-guides/update-from-grafana-versions/migrate-10_0_x-to-10_1_x.md)
+- Apps still using React Router 5 need to [upgrade to version 6](/migration-guides/update-from-grafana-versions/migrate-10_0_x-to-10_1_x)
   - @grafana/scenes version 6 also moves to use React Router 6
 
 ### New platform capabilities and other updates
