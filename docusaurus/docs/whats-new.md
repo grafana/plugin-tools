@@ -60,9 +60,9 @@ Find the whole letter at [Grafana Developer Newsletter - July 2025](https://comm
 
 ### New documentation
 
-- [Manage backwards compatibility with runtime checks](/how-to-guide/runtime-checks.md)
+- [Manage backwards compatibility with runtime checks](/how-to-guide/runtime-checks)
 - [Action sets, folder access levels with permissions](/how-to-guides/app-plugins/implement-rbac-in-app-plugins#action-sets-folder-access-levels-with-permissions) in the How to implement RBAC in app plugins doc
-- [Add support for Private Data Source Connect (PDC)](/how-to-guides/data-source-plugins/add-support-for-pdc.md)
-- [About LLMs and MCP in Grafana plugins](how-to-guides/app-plugins/use-llms-and-mcp#about-llms-and-mcp-in-grafana-plugins.md)
+- [Add support for Private Data Source Connect (PDC)](/how-to-guides/data-source-plugins/add-support-for-pdc)
+- [About LLMs and MCP in Grafana plugins](how-to-guides/app-plugins/use-llms-and-mcp#about-llms-and-mcp-in-grafana-plugins)
 
 
