@@ -13,5 +13,56 @@ keywords:
 
 # What's new?
 
+SUBSCRIBE FORM
+
+## October 2025
+
+Find the whole letter at [Grafana Developer Newsletter - October 2025](https://community.grafana.com/t/grafana-developer-newsletter-october-2025/159137).
+
+### New platform capabilities and other updates
+
+- Internationalization (i18n) is now supported in Grafana plugins. Refer to [Translate your plugin](/how-to-guides/plugin-internationalization) for all the details
+- Tooling updates now run a series of migrations to imrpove the updating experience. Find more details in [Grafana Developer Newsletter - October 2025](https://community.grafana.com/t/grafana-developer-newsletter-october-2025/159137)
+- The Plugin validator can now output its results into a JSON format 
+
+### New documentation
+
+- [Debug your plugins with React Tools](/how-to-guides/debugging-plugins) tutorial
+- Revamp of [UI extensions documentation](/how-to-guides/ui-extensions/), including:
+  - Best practices 
+  - When to use add and when to use expose to share content 
+  - Testing UI extensions between multiple plugins, 
+  - Exposing a lazy loaded component
+  - Using UI extensions for general functions
+- [How to make your datasource support SQL Expressions](/how-to-guides/data-source-plugins/sql-requirements)
+- We're currently working on improving our [Data structure documentation](https://grafana.com/developers/dataplane/)
+
+## July 2025
+
+Find the whole letter at [Grafana Developer Newsletter - July 2025](https://community.grafana.com/t/grafana-developer-newsletter-july-2025/154227).
+
+### Breaking changes
+
+- Grafana 12.0.0:
+  - Removal of AngularJS
+  - Removal of all UI Extensions deprecated APIs ('getPluginExtensions', 'usePluginExtensions', 'usePluginLinkExtensions', 'usePluginComponentExtensions')
+- Grafana 12.0.2: 
+  - Plugins declaring a dependency on another plugin can no longer reference a specific version 
+- Apps still using React Router 5 need to [upgrade to version 6](/migration-guides/update-from-grafana-versions/migrate-10_0_x-to-10_1_x.md)
+  - @grafana/scenes version 6 also moves to use React Router 6
+
+### New platform capabilities and other updates
+
+- Plugin usage stats are now available in your “My Plugins” area on grafana.com
+- You can now [add user-specific persistent storage to your plugins](/how-to-guides/add-user-storage)
+- If you’re creating extension points, you can [share typescript types between plugins](https://github.com/grafana/plugin-actions/tree/main/bundle-types)
+- Our recommended end-to-end workflows got an update! Refer to [Grafana Developer Newsletter - July 2025](https://community.grafana.com/t/grafana-developer-newsletter-october-2025/159137) for all the details
+
+### New documentation
+
+- [Manage backwards compatibility with runtime checks](/how-to-guide/runtime-checks.md)
+- [Action sets, folder access levels with permissions](/how-to-guides/app-plugins/implement-rbac-in-app-plugins#action-sets-folder-access-levels-with-permissions) in the How to implement RBAC in app plugins doc
+- [Add support for Private Data Source Connect (PDC)](/how-to-guides/data-source-plugins/add-support-for-pdc.md)
+- [About LLMs and MCP in Grafana plugins](how-to-guides/app-plugins/use-llms-and-mcp#about-llms-and-mcp-in-grafana-plugins.md)
 
 
