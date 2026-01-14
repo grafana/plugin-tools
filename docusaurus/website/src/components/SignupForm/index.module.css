@@ -1,0 +1,79 @@
+.signupContainer {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1rem;
+    justify-items: center;
+    width: 100%;
+    max-width: var(--ifm-container-width);
+    box-sizing: border-box;
+  }
+  
+  .signupForm {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .formGroup {
+    display: flex;
+    margin-bottom: 1rem;
+    flex-direction: row;
+    gap: 16px;
+  }
+  
+  .emailInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    background-color: #22252b;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .emailInput:focus {
+    border-color: var(--ifm-color-primary);
+  }
+  
+  .subscribeButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0 4px 4px 0;
+    font-weight: 600;
+    color: var(--ifm-color-primary);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: #3d71d9;
+    border: none;
+  }
+  
+  .successMessage {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+  }
+  
+  .errorMessage {
+    margin-top: 0.5rem;
+    color: var(--ifm-color-danger);
+  }
+
+  .privacyPolicyLink {
+    color: rgb(110, 159, 255);
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 400px) {
+    .formGroup {
+      flex-direction: column;
+    }
+    
+    .subscribeButton {
+      width: 100%;
+      margin-top: 8px;
+    }
+    
+    .signupContainer {
+      padding: 1.5rem 1rem;
+    }
+  }
