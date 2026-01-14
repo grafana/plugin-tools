@@ -1,3 +1,17 @@
+# v6.7.5 (Wed Jan 14 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update create-plugin template github actions [#2389](https://github.com/grafana/plugin-tools/pull/2389) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- chore(deps): update dependency @grafana/plugin-e2e to v3.1.2 [#2386](https://github.com/grafana/plugin-tools/pull/2386) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- chore(deps): update grafana patch dependencies [#2375](https://github.com/grafana/plugin-tools/pull/2375) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.7.4 (Mon Jan 12 2026)
 
 #### 🐛 Bug Fix
