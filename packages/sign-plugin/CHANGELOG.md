@@ -1,3 +1,15 @@
+# v3.2.1 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- Refactor: replace chalk with nodes styletext function [#2349](https://github.com/grafana/plugin-tools/pull/2349) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v3.2.0 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix

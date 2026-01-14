@@ -13,37 +13,28 @@ keywords:
 
 # Sign a plugin
 
-All Grafana Labs-authored plugins, including Enterprise plugins, are signed so that we can verify their authenticity with [signature verification](https://grafana.com/docs/grafana/latest/administration/plugin-management#plugin-signatures). By [default](https://grafana.com/docs/grafana/latest/administration/plugin-management#allow-unsigned-plugins), Grafana requires all plugins to be signed in order for them to be loaded.
+Grafana Labs signs all Grafana Labs-authored plugins, including Enterprise plugins, so that Grafana can verify their authenticity with signature verification. By default, Grafana requires all plugins to be signed before it loads them. 
 
-:::info
+Refer to [Plugin signatures](https://grafana.com/docs/grafana/latest/administration/plugin-management/plugin-sign/) for more details.
 
-You don't need to sign a plugin during development or when submitting a plugin for review for the first time. The [Docker development environment](../set-up/) that is scaffolded with `@grafana/create-plugin` is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development), which allows you to load the plugin without a signature.
+## Before you begin
 
-:::
+### Signatures during plugin development
 
-## Public or private plugins
+You don't need to sign a plugin during development or when you submit a plugin for review for the first time. The [Docker development environment](../set-up/) that `@grafana/create-plugin` scaffolds is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development), which allows you to load the plugin without a signature.
 
-Plugins can have different [signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) depending on their author, related technology, and intended use.
+### Generate an Access Policy token
 
-A plugin can be either _public_ or _private_: 
-
-- Public plugins are signed as Community or Commercial. They're distributed within the [Grafana plugin catalog](https://grafana.com/plugins) and are available for others to install.
-- Private plugins are only available for use within your organization.
-
-Before signing your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
-
-## Generate an Access Policy token
-
-To verify ownership of your plugin, generate an Access Policy token that you'll use every time you need to sign a new version of your plugin.
+To verify ownership of your plugin, generate an Access Policy token that you use every time you sign a new version of your plugin.
 
 1. [Create a Grafana Cloud account](https://grafana.com/signup).
 
-1. Log into your account, and then go to **My Account > Security > Access Policies**.
+1. Log in to your account, and then go to **My Account > Security > Access Policies**.
 
 1. Click **Create access policy**.
 
-   Realm: has to be **your-org-name** (all-stacks)  
-   Scope: **plugins:write**
+   **Realm:** Set to _`<YOUR_ORG_NAME>`_ (all-stacks)  
+   **Scope:** Set to **plugins:write**
 
    ![Create access policy.](/img/create-access-policy-v2.png)
 
@@ -57,19 +48,30 @@ To verify ownership of your plugin, generate an Access Policy token that you'll 
 
 1. Proceed to signing your [public plugin](#sign-a-public-plugin) or [private plugin](#sign-a-private-plugin).
 
+## Public or private plugins
+
+Plugins can have different [signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) depending on their author, related technology, and intended use.
+
+A plugin can be either _public_ or _private_: 
+
+- **Public plugins:** Grafana signs these as Community or Commercial. Grafana distributes them within the [Grafana plugin catalog](https://grafana.com/plugins) and makes them available for others to install.
+- **Private plugins:** These are only available for use within your organization.
+
+Before you sign your plugin, review the [Plugins policy](https://grafana.com/legal/plugins/) to determine the appropriate signature for your plugin.
+
 ## Sign a public plugin
 
-Public plugins need to be reviewed by the Grafana team before you can sign them.
+The Grafana team needs to review public plugins before you can sign them.
 
 1. Submit your plugin for [review](./publish-or-update-a-plugin.md).
-1. If we approve your plugin, you're granted a plugin signature level. You need this signature level to proceed.
-1. In your plugin directory, export the Access Policy token as an environment variable using the token you just created.
+1. If the team approves your plugin, you're granted a plugin signature level. You need this signature level to proceed.
+1. In your plugin directory, export the Access Policy token as an environment variable using the token you just created:
 
-   ```bash
+   ```sh
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
    ```
 
-1. Next, sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin:
+1. Sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin:
 
    ```shell npm2yarn
    npx @grafana/sign-plugin@latest
@@ -77,13 +79,13 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
 ## Sign a private plugin
 
-1. In your plugin directory, export the Access Policy token as an environment variable using the token you just created.
+1. In your plugin directory, export the Access Policy token as an environment variable using the token you created:
 
-   ```bash
+   ```sh
    export GRAFANA_ACCESS_POLICY_TOKEN=<YOUR_ACCESS_POLICY_TOKEN>
    ```
 
-1. Next, sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin:
+1. Sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin:
 
    ```shell npm2yarn
    npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
@@ -91,12 +93,12 @@ Public plugins need to be reviewed by the Grafana team before you can sign them.
 
 ## Add a plugin manifest for verification
 
-For Grafana to verify the digital signature of a plugin, include a signed manifest file, `MANIFEST.txt`. The signed manifest file contains two sections:
+For Grafana to verify the digital signature of a plugin, the plugin must include a signed manifest file, `MANIFEST.txt`. The signed manifest file contains two sections:
 
-- **Signed message -** Contains plugin metadata and plugin files with their respective checksums (SHA256).
-- **Digital signature -** Created by encrypting the signed message using a private key. Grafana has a public key built-in that can be used to verify that the digital signature has been encrypted using the expected private key.
+- **Signed message:** Contains plugin metadata and plugin files with their respective checksums (SHA256).
+- **Digital signature:** Created by encrypting the signed message using a private key. Grafana has a built-in public key that it uses to verify that the digital signature was encrypted using the expected private key.
 
-**Example**
+**Example:**
 
 ```txt
 -----BEGIN PGP SIGNED MESSAGE-----
@@ -136,14 +138,14 @@ T6scfmuhWC/TOcm83EVoCzIV3R5dOTKHqkjIUg==
 
 ### Why do I get a "Modified signature" error?
 
-In some cases an invalid `MANIFEST.txt` is generated because of an issue when signing the plugin on Windows. You can fix this by replacing all double backslashes, `\\`, with a forward slash, `/`, in the `MANIFEST.txt` file. You need to do this every time you sign your plugin.
+In some cases, the system generates an invalid `MANIFEST.txt` because of an issue when signing the plugin on Windows. You can fix this by replacing all double backslashes, `\\`, with a forward slash, `/`, in the `MANIFEST.txt` file. You need to do this every time you sign your plugin.
 
 ### Why do I get a "Field is required: `rootUrls`" error for my public plugin?
 
-With a _public_ plugin, your plugin doesn't have a plugin signature level assigned to it yet. A Grafana team member will assign a signature level to your plugin once it has been reviewed and approved. For more information, refer to [Sign a public plugin](#sign-a-public-plugin).
+With a _public_ plugin, your plugin doesn't have a plugin signature level assigned to it yet. A Grafana team member assigns a signature level to your plugin after they review and approve it. For more information, refer to the [Sign a public plugin](#sign-a-public-plugin) section.
 
 ### Why do I get a "Field is required: `rootUrls`" error for my private plugin?
 
-With a _private_ plugin, you need to add a `rootUrls` flag to the `plugin:sign` command. The `rootUrls` must match the [`root_url`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#root_url) configuration. For more information, refer to [Sign a private plugin](#sign-a-private-plugin).
+With a _private_ plugin, you need to add a `rootUrls` flag to the `plugin:sign` command. The `rootUrls` must match the [`root_url`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana#root_url) configuration. For more information, refer to the [Sign a private plugin](#sign-a-private-plugin) section.
 
 If you still get this error, make sure that the Access Policy token was generated by a Grafana Cloud account that matches the first part of the plugin ID.

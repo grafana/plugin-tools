@@ -96,7 +96,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = CURRENT_APP_VERSION;
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
-  const getReactRouterVersion = () => (features.useReactRouterV6 ? '6.22.0' : '5.2.0');
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
   const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
@@ -122,9 +121,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
-      reactRouterVersion: getReactRouterVersion(),
-      scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
+      scenesVersion: '^6.10.4',
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,
     };
@@ -148,9 +145,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      useReactRouterV6: features.useReactRouterV6 ?? DEFAULT_FEATURE_FLAGS.useReactRouterV6,
-      reactRouterVersion: getReactRouterVersion(),
-      scenesVersion: features.useReactRouterV6 ? '^6.10.4' : '^5.41.3',
+      scenesVersion: '^6.10.4',
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,

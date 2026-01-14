@@ -1,3 +1,174 @@
+# v6.7.5 (Wed Jan 14 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update create-plugin template github actions [#2389](https://github.com/grafana/plugin-tools/pull/2389) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- chore(deps): update dependency @grafana/plugin-e2e to v3.1.2 [#2386](https://github.com/grafana/plugin-tools/pull/2386) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- chore(deps): update grafana patch dependencies [#2375](https://github.com/grafana/plugin-tools/pull/2375) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.7.4 (Mon Jan 12 2026)
+
+#### 🐛 Bug Fix
+
+- chore: cleanup bundler duplicates [#2379](https://github.com/grafana/plugin-tools/pull/2379) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.7.3 (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
+- fix: remove unused Compiler type import from Webpack plugin [#2370](https://github.com/grafana/plugin-tools/pull/2370) ([@MattIPv4](https://github.com/MattIPv4))
+
+#### Authors: 1
+
+- Matt Cowley ([@MattIPv4](https://github.com/MattIPv4))
+
+---
+
+# v6.7.2 (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
+- feat: bump all dev deps to latest [#2359](https://github.com/grafana/plugin-tools/pull/2359) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.7.1 (Thu Jan 08 2026)
+
+#### 🐛 Bug Fix
+
+- fix: stop copying all images to bundle [#2369](https://github.com/grafana/plugin-tools/pull/2369) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.7.0 (Wed Jan 07 2026)
+
+#### 🚀 Enhancement
+
+- chore: only support react router v6 for new plugin scaffolds [#2360](https://github.com/grafana/plugin-tools/pull/2360) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- Update grafana patch dependencies to v12.3.1 [#2362](https://github.com/grafana/plugin-tools/pull/2362) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.6.0 (Thu Dec 18 2025)
+
+#### 🚀 Enhancement
+
+- feat: align minimum grafana dependency [#2355](https://github.com/grafana/plugin-tools/pull/2355) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.5.3 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- fix: version command simplified output [#2352](https://github.com/grafana/plugin-tools/pull/2352) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.5.2 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- Refactor: replace chalk with nodes styletext function [#2349](https://github.com/grafana/plugin-tools/pull/2349) ([@jackw](https://github.com/jackw))
+- fix: stop eslint migration stripping extra chars from plugin name [#2348](https://github.com/grafana/plugin-tools/pull/2348) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v6.5.1 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: bump plugin-e2e version [#2351](https://github.com/grafana/plugin-tools/pull/2351) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v6.5.0 (Wed Dec 17 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: add dependabot config for plugins [#2248](https://github.com/grafana/plugin-tools/pull/2248) ([@joonseolee](https://github.com/joonseolee) [@jackw](https://github.com/jackw))
+
+#### Authors: 2
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Joonseo Lee ([@joonseolee](https://github.com/joonseolee))
+
+---
+
+# v6.4.4 (Fri Dec 12 2025)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2343](https://github.com/grafana/plugin-tools/pull/2343) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.4.3 (Fri Dec 05 2025)
+
+#### 🐛 Bug Fix
+
+- fix: only migrate eslint if plugin depends on eslint < 9.0.0 [#2338](https://github.com/grafana/plugin-tools/pull/2338) ([@jackw](https://github.com/jackw))
+- Update dependency @grafana/plugin-e2e to v3.0.3 [#2335](https://github.com/grafana/plugin-tools/pull/2335) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v6.4.2 (Thu Nov 27 2025)
 
 #### 🐛 Bug Fix

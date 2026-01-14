@@ -1,3 +1,52 @@
+# v3.1.1 (Wed Jan 07 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-20331417332 [#2354](https://github.com/grafana/plugin-tools/pull/2354) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]) [@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v3.1.0 (Wed Dec 17 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin-e2e: Fix toggle viz selector for Grafana < 12.4.0 [#2350](https://github.com/grafana/plugin-tools/pull/2350) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v3.0.4 (Fri Dec 12 2025)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump e2e-selectors [#2341](https://github.com/grafana/plugin-tools/pull/2341) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v3.0.3 (Thu Dec 04 2025)
+
+#### 🐛 Bug Fix
+
+- plugins-e2e: fix visualization lookup flow [#2339](https://github.com/grafana/plugin-tools/pull/2339) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # v3.0.2 (Thu Nov 27 2025)
 
 #### 🐛 Bug Fix

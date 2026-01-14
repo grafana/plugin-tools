@@ -6,7 +6,7 @@ import minimist from 'minimist';
 import { dirname, relative, resolve } from 'node:path';
 import * as recast from 'recast';
 import type { Context } from '../../context.js';
-import { addDependenciesToPackageJson, migrationsDebug } from '../../utils.js';
+import { addDependenciesToPackageJson, isVersionGreater, migrationsDebug } from '../../utils.js';
 
 type Imports = Map<string, { name?: string; bindings?: string[] }>;
 
@@ -23,7 +23,8 @@ const devDependenciesToUpdate = {
 };
 
 export default function migrate(context: Context): Context {
-  const needsMigration = context.doesFileExist('.eslintrc');
+  const packageJson = JSON.parse(context.getFile('package.json') || '');
+  const needsMigration = isVersionGreater(devDependenciesToUpdate.eslint, packageJson.devDependencies?.eslint);
   if (!needsMigration) {
     return context;
   }
@@ -339,12 +340,12 @@ function getPluginVarName(pluginName: string) {
 
 function getPluginShortName(pluginName: string) {
   if (pluginName.startsWith('@')) {
-    let match = pluginName.match(/^@([^/]+)\/eslint-plugin$/);
+    let match = new RegExp(`^(@[^/]+)\/eslint-plugin$`, 'u').exec(pluginName);
 
     if (match) {
       return match[1];
     }
-    match = pluginName.match(/^@([^/]+)\/eslint-plugin-(.+)$/);
+    match = new RegExp(`^(@[^/]+)\/eslint-plugin-(.+)$`, 'u').exec(pluginName);
 
     if (match) {
       return `${match[1]}/${match[2]}`;

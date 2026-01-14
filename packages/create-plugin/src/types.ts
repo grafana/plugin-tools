@@ -22,9 +22,7 @@ export type TemplateData = {
   isNPM: boolean;
   version: string;
   bundleGrafanaUI: boolean;
-  useReactRouterV6: boolean;
   scenesVersion: string;
-  reactRouterVersion: string;
   useExperimentalRspack: boolean;
   pluginExecutable?: string;
   frontendBundler: 'webpack' | 'rspack';

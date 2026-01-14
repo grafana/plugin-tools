@@ -2,9 +2,22 @@ import migrate from './004-eslint9-flat-config.js';
 import { Context } from '../../context.js';
 
 describe('004-eslint9-flat-config', () => {
+  let context: Context;
+
+  beforeEach(() => {
+    context = new Context('/virtual');
+  });
+
   describe('migration', () => {
     it('should migrate default create-plugin scaffolded configs', async () => {
-      const context = new Context('/virtual');
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          devDependencies: {
+            eslint: '^8.0.0',
+          },
+        })
+      );
       context.addFile('.eslintrc', JSON.stringify({ extends: ['./.config/.eslintrc'] }));
       context.addFile(
         '.config/.eslintrc',
@@ -73,11 +86,15 @@ describe('004-eslint9-flat-config', () => {
     });
 
     it('should migrate legacy eslint config with ignore patterns', async () => {
-      const context = new Context('/virtual');
       context.addFile('.eslintrc', JSON.stringify({ rules: { 'no-console': 'error' } }));
       context.addFile(
         'package.json',
-        JSON.stringify({ scripts: { lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .' } })
+        JSON.stringify({
+          scripts: { lint: 'eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .' },
+          devDependencies: {
+            eslint: '^8.0.0',
+          },
+        })
       );
       context.addFile('.eslintignore', '*.test.ts');
       context.addFile('.gitignore', ['.github', '.vscode', 'playwright-report', '**/dist'].join('\n'));
@@ -103,8 +120,14 @@ describe('004-eslint9-flat-config', () => {
     });
 
     it('should attempt to migrate eslint configs with extends, plugins, rules, and overrides', async () => {
-      const context = new Context('/virtual');
-
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          devDependencies: {
+            eslint: '^8.0.0',
+          },
+        })
+      );
       context.addFile(
         '.eslintrc',
         JSON.stringify(
@@ -116,9 +139,10 @@ describe('004-eslint9-flat-config', () => {
               'plugin:react/recommended',
               'prettier',
             ],
-            plugins: ['simple-import-sort'],
+            plugins: ['simple-import-sort', '@grafana/eslint-plugin-plugins'],
             rules: {
               'simple-import-sort/imports': 'error',
+              '@grafana/plugins/import-is-compatible': 'warn',
             },
             overrides: [
               {
@@ -140,6 +164,7 @@ describe('004-eslint9-flat-config', () => {
         import react from "eslint-plugin-react";
         import prettier from "eslint-config-prettier/flat";
         import simpleImportSort from "eslint-plugin-simple-import-sort";
+        import grafanaEslintPluginPlugins from "@grafana/eslint-plugin-plugins";
 
         export default defineConfig([
           js.configs.recommended,
@@ -150,10 +175,12 @@ describe('004-eslint9-flat-config', () => {
           {
             plugins: {
               "simple-import-sort": simpleImportSort,
+              "@grafana/plugins": grafanaEslintPluginPlugins,
             },
 
             rules: {
               "simple-import-sort/imports": "error",
+              "@grafana/plugins/import-is-compatible": "warn",
             },
           },
           {
@@ -165,7 +192,6 @@ describe('004-eslint9-flat-config', () => {
     });
 
     it('should update package.json scripts and devDependencies', async () => {
-      const context = new Context('/virtual');
       context.addFile(
         'package.json',
         JSON.stringify({
@@ -217,7 +243,14 @@ describe('004-eslint9-flat-config', () => {
     });
 
     it('should not make additional changes when run multiple times', async () => {
-      const context = new Context('/virtual');
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          devDependencies: {
+            eslint: '^8.0.0',
+          },
+        })
+      );
       context.addFile('.eslintrc', JSON.stringify({ extends: ['./.config/.eslintrc'] }));
       context.addFile(
         '.config/.eslintrc',
@@ -225,6 +258,56 @@ describe('004-eslint9-flat-config', () => {
       );
 
       await expect(migrate).toBeIdempotent(context);
+    });
+
+    it('should not migrate when eslint version is already at target version', async () => {
+      const originalPackageJson = JSON.stringify({
+        devDependencies: {
+          eslint: '^9.0.0',
+        },
+      });
+      context.addFile('package.json', originalPackageJson);
+      context.addFile('.eslintrc', JSON.stringify({ extends: ['@grafana/eslint-config'] }));
+
+      const result = await migrate(context);
+
+      // Migration should not run - no flat config created, legacy config remains, package.json unchanged
+      expect(result.getFile('eslint.config.mjs')).toBeUndefined();
+      expect(result.getFile('.eslintrc')).toBeDefined();
+      expect(result.getFile('package.json')).toEqual(originalPackageJson);
+    });
+
+    it('should not migrate when eslint version is newer than target version', async () => {
+      const originalPackageJson = JSON.stringify({
+        devDependencies: {
+          eslint: '^10.0.0',
+        },
+      });
+      context.addFile('package.json', originalPackageJson);
+      context.addFile('.eslintrc', JSON.stringify({ extends: ['@grafana/eslint-config'] }));
+
+      const result = await migrate(context);
+
+      // Migration should not run - no flat config created, legacy config remains, package.json unchanged
+      expect(result.getFile('eslint.config.mjs')).toBeUndefined();
+      expect(result.getFile('.eslintrc')).toBeDefined();
+      expect(result.getFile('package.json')).toEqual(originalPackageJson);
+    });
+
+    it('should migrate when eslint version is older than target version', async () => {
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          devDependencies: {
+            eslint: '^8.57.0',
+          },
+        })
+      );
+      context.addFile('.eslintrc', JSON.stringify({ extends: ['@grafana/eslint-config'] }));
+
+      const result = await migrate(context);
+      expect(result.getFile('eslint.config.mjs')).toBeDefined();
+      expect(result.getFile('.eslintrc')).toBeUndefined();
     });
   });
 });

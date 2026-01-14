@@ -1,0 +1,74 @@
+name: Bump @grafana/e2e-selectors
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of @grafana/e2e-selectors to update to (e.g., 12.4.0-19890644192)'
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  bump:
+    name: Bump e2e-selectors version
+    runs-on: ubuntu-x64
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Get secrets
+        id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@a37de51f3d713a30a9e4b21bcdfbd38170020593 # get-vault-secrets/v1.3.0
+        with:
+          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
+          repo_secrets: |
+            GITHUB_APP_ID=plugins-platform-bot-app:app_id
+            GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
+          export_env: false
+
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        with:
+          app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
+          private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          persist-credentials: false
+
+      - name: Setup nodejs
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Update @grafana/e2e-selectors
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          npm install "@grafana/e2e-selectors@${VERSION}" --workspace=@grafana/plugin-e2e --save-exact
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          commit-message: 'plugin-e2e: bump @grafana/e2e-selectors to ${{ inputs.version }}'
+          title: 'Plugin E2E: Bump @grafana/e2e-selectors to ${{ inputs.version }}'
+          body: |
+            Automated update of `@grafana/e2e-selectors` to version `${{ inputs.version }}`.
+
+            Triggered by grafana/grafana when changes were detected in the e2e-selectors package.
+          branch: bump-e2e-selectors
+          base: main
+          delete-branch: true
+          sign-commits: true
+          labels: |
+            dependencies
+            release
+            patch

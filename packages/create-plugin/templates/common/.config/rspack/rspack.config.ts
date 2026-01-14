@@ -12,16 +12,17 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
-import RspackLiveReloadPlugin from './liveReloadPlugin';
-import { BuildModeRspackPlugin } from './BuildModeRspackPlugin';
-import { DIST_DIR, SOURCE_DIR } from './constants';
-import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from './utils';
-import { externals } from '../bundler/externals';
+
+import RspackLiveReloadPlugin from './liveReloadPlugin.ts';
+import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
+import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
+import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
+import { externals } from '../bundler/externals.ts';
+import { copyFilePatterns } from '../bundler/copyFiles.ts';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
-
 const virtualPublicPath = new RspackVirtualModulePlugin({
   'grafana-public-path': `
 import amdMetaModule from 'amd-module';
@@ -154,22 +155,7 @@ const config = async (env): Promise<Configuration> => {
         entryOnly: true,
       }),
       new rspack.CopyRspackPlugin({
-        patterns: [
-          // If src/README.md exists use it; otherwise the root README
-          // To `compiler.options.output`
-          { from: hasReadme() ? 'README.md' : '../README.md', to: '.', force: true },
-          { from: 'plugin.json', to: '.' },
-          { from: '../LICENSE', to: '.' },
-          { from: '../CHANGELOG.md', to: '.', force: true },
-          { from: '**/*.json', to: '.' }, // TODO<Add an error for checking the basic structure of the repo>
-          { from: '**/*.svg', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/*.png', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/*.html', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'img/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'libs/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'static/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/query_help.md', to: '.', noErrorOnMissing: true }, // Optional
-        ],
+        patterns: copyFilePatterns,
       }),
       // Replace certain template-variables in the README and plugin.json
       new ReplaceInFileWebpackPlugin([

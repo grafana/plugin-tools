@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 import { glob } from 'glob';
 import minimist from 'minimist';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
@@ -26,7 +26,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   if (exportPathIsPopulated && !IS_DEV) {
     output.error({
       title: 'Aborting plugin scaffold.',
-      body: [`Directory ${chalk.bold(exportPath)} exists and contains files.`],
+      body: [`Directory ${styleText(['bold'], exportPath)} exists and contains files.`],
     });
     process.exit(1);
   }
@@ -200,7 +200,7 @@ async function execPostScaffoldFunction<T>(fn: AsyncFunction<T>, ...args: Parame
   try {
     const resultMsg = await fn.apply(undefined, args);
     if (resultMsg) {
-      console.log(`${chalk.green('✔︎')} ${resultMsg}`);
+      console.log(`${styleText(['green'], '✔︎')} ${resultMsg}`);
     }
   } catch (error) {
     if (error instanceof Error) {

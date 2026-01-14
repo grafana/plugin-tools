@@ -18,6 +18,7 @@
     "react-dom",
     "lerna",
     "@grafana/scenes",
+    "@grafana/e2e-selectors",
     "@libs/output",
     "@libs/version"
   ],
@@ -61,22 +62,7 @@
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
         "/@grafana/*/",
-        "/grafana/grafana-enterprise/",
-        "!@grafana/e2e-selectors"
-      ],
-      "minimumReleaseAge": null
-    },
-    {
-      "automerge": true,
-      "groupName": "e2e-selector dependencies",
-      "groupSlug": "plugin-e2e-selectors",
-      "labels": ["dependencies", "javascript", "patch", "release"],
-      "matchPackageNames": ["@grafana/e2e-selectors"],
-      "followTag": "modified",
-      "rangeStrategy": "bump",
-      "matchFileNames": [
-        "packages/plugin-e2e/package.json",
-        "package-lock.json"
+        "/grafana/grafana-enterprise/"
       ],
       "minimumReleaseAge": null
     },
@@ -88,7 +74,6 @@
       "matchPackageNames": [
         "/@grafana/*/",
         "/grafana/grafana-enterprise/",
-        "!@grafana/e2e-selectors",
         "!@grafana/eslint-config",
         "!@grafana/scenes"
       ],
@@ -115,8 +100,7 @@
         "!/^@?docusaurus/",
         "!/^@auto-it/",
         "!/^auto/",
-        "!/@grafana/*/",
-        "!@grafana/e2e-selectors"
+        "!/@grafana/*/"
       ],
       "rangeStrategy": "bump"
     },

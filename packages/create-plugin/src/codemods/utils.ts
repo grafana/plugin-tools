@@ -2,7 +2,7 @@ import { dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import chalk from 'chalk';
+import { styleText } from 'node:util';
 import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
@@ -15,11 +15,11 @@ export function printChanges(context: Context, key: string, description: string)
 
   for (const [filePath, { changeType }] of Object.entries(changes)) {
     if (changeType === 'add') {
-      lines.push(`${chalk.green('ADD')} ${filePath}`);
+      lines.push(`${styleText(['green'], 'ADD')} ${filePath}`);
     } else if (changeType === 'update') {
-      lines.push(`${chalk.yellow('UPDATE')} ${filePath}`);
+      lines.push(`${styleText(['yellow'], 'UPDATE')} ${filePath}`);
     } else if (changeType === 'delete') {
-      lines.push(`${chalk.red('DELETE')} ${filePath}`);
+      lines.push(`${styleText(['red'], 'DELETE')} ${filePath}`);
     }
   }
 
