@@ -176,7 +176,7 @@ export class DataSource extends DataSourceApi<MyQuery> {
 }
 ```
 
-Note that `getTemplateSrv().replace()` is used inside `metricFindQuery` so variable queries can themselves use other variables (e.g. cascading variables).
+Note that `getTemplateSrv().replace()` is used inside `metricFindQuery` so variable queries can themselves use other variables (for example, cascading variables).
 
 #### Create a `VariableQueryEditor` component
 
