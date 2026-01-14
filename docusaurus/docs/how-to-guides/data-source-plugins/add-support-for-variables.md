@@ -48,23 +48,10 @@ export function SimplePanel({ options, data, width, height, replaceVariables }: 
 
 For data sources, you need to use the `getTemplateSrv`, which returns an instance of `TemplateSrv`.
 
-1. Import `getTemplateSrv` and `TemplateSrv` from the `runtime` package:
+1. Import `getTemplateSrv` from the `runtime` package:
 
    ```ts
-   import { getTemplateSrv, TemplateSrv } from '@grafana/runtime';
-   ```
-
-1. Inject `TemplateSrv` in your data source constructor:
-
-   ```ts
-   export class DataSource extends DataSourceApi<MyQuery> {
-     constructor(
-       instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>,
-       private readonly templateSrv: TemplateSrv = getTemplateSrv()
-     ) {
-       super(instanceSettings);
-     }
-   }
+   import { getTemplateSrv } from '@grafana/runtime';
    ```
 
 1. In your `query` method, call the `replace` method with a user-defined template string:
@@ -74,7 +61,7 @@ For data sources, you need to use the `getTemplateSrv`, which returns an instanc
      const targets = options.targets.filter((t) => !t.hide);
 
      const interpolatedTargets = targets.map((target) => {
-       const rawQuery = this.templateSrv.replace(
+       const rawQuery = getTemplateSrv().replace(
          target.rawQuery ?? '',
          options.scopedVars // include scoped vars for panel/time range
        );
@@ -151,27 +138,24 @@ For a data source to support query variables, implement the `metricFindQuery` me
 
 ```ts
 import { MetricFindValue } from '@grafana/data';
-import { getTemplateSrv, TemplateSrv } from '@grafana/runtime';
+import { getTemplateSrv } from '@grafana/runtime';
 import { MyVariableQuery } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery> {
-  constructor(
-    instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>,
-    private readonly templateSrv: TemplateSrv = getTemplateSrv()
-  ) {
+  constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
   }
 
   async metricFindQuery(variableQuery: MyVariableQuery | string, options?: any): Promise<MetricFindValue[]> {
     if (typeof variableQuery === 'string') {
-      const interpolated = this.templateSrv.replace(variableQuery);
+      const interpolated = getTemplateSrv().replace(variableQuery);
       const response = await this.fetchVariableValues({ rawQuery: interpolated });
       return response.map((name) => ({ text: name }));
     }
 
     // If using MyVariableQuery model:
-    const namespace = this.templateSrv.replace(variableQuery.namespace);
-    const rawQuery = this.templateSrv.replace(variableQuery.rawQuery);
+    const namespace = getTemplateSrv().replace(variableQuery.namespace);
+    const rawQuery = getTemplateSrv().replace(variableQuery.rawQuery);
 
     const response = await this.fetchMetricNames(namespace, rawQuery);
 
