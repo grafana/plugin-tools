@@ -284,10 +284,7 @@ Finally, assign the `VariableSupport` to `this.variables` in your data source co
 import { MyVariableSupport } from './variableSupport';
 
 export class DataSource extends DataSourceApi<MyQuery> {
-  constructor(
-    instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>,
-    private readonly templateSrv: TemplateSrv = getTemplateSrv()
-  ) {
+  constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
     // assign the variable property to the new VariableSupport
     // to add variable support for this datasource
