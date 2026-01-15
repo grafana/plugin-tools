@@ -3,7 +3,7 @@ name: Detect changed files
 description: Detects whether any matching files have changed in the current PR
 inputs:
   self:
-    description: The path to the calling workflow (e.g. .github/workflows/backend-unit-tests.yml). It is regarded as any category.
+    description: The path to the calling workflow (for example `.github/workflows/backend-unit-tests.yml`). Change detection always treats this file as part of every category.
     required: true
 outputs:
   self:
