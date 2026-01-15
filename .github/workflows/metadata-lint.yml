@@ -59,7 +59,7 @@ jobs:
 
       - name: Verify metadata.md
         run: |
-          uncommited_error_message="ERROR! Changes to metadata.md have not been committed. Please run 'npm -w website run prebuild', commit the changes and push again."
+          error_message="ERROR! metadata.md is out of sync with Grafanas plugin.schema.json. Please run 'npm -w website run prebuild', commit the changes and push again."
           file_diff="$(git diff --name-only)"
           if [ -n "$file_diff" ]; then
               echo "$file_diff"
