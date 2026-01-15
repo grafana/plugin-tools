@@ -94,11 +94,17 @@ export class PanelEditPage extends GrafanaPage {
       await showPanelEditElement.click();
     }
 
-    await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
-
-    // when suggestions got updated in 12.4.0, it became necessary to ensure the "All Visualizations" tab is selected
+    // when suggestions got updated in 12.4.0, it became necessary to ensure the "All Visualizations" tab is selected,
+    // and also we need to check whether we're already rendering the viz picker or not since creating a new panel shows
+    // the viz picker by default when the panel editor is opened
     if (semver.gte(this.ctx.grafanaVersion, '12.4.0')) {
-      await this.getByGrafanaSelector(this.ctx.selectors.components.Tab.title('All visualizations')).click();
+      const allVisualizationsTab = this.ctx.selectors.components.Tab.title('All visualizations');
+      if (!(await this.getByGrafanaSelector(allVisualizationsTab).isVisible())) {
+        await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
+      }
+      await this.getByGrafanaSelector(allVisualizationsTab).click();
+    } else {
+      await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
     }
 
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
