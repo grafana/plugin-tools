@@ -23,7 +23,7 @@ A typical panel plugin includes:
 - Declares plugin ID, type (`panel`), name, version
 - Loaded by Grafana at startup
 
-**Main module (`src/module.ts`)**
+**Main module (`src/module.ts(x)`)**
 
 - Exports: `new PanelPlugin(PanelComponent)`
 - Registers panel options, migrations, defaults, ui extensions

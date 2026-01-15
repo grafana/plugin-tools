@@ -23,7 +23,7 @@ Datasource plugins are used to fetch and query data from external systems.
 - Gives Grafana the instructions it needs during startup to know how to run the plugin.
 {{#if hasBackend}}- Needs to define `backend:true` to launch the backend part of Grafana during startup.{{/if}}
 
-**Main module (`src/module.ts`)**
+**Main module (`src/module.ts(x)`)**
 
 - Exports: `new DataSourcePlugin(DataSource)`
 - Registers query editor, config editor
