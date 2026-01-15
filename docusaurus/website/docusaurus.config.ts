@@ -214,6 +214,7 @@ const config: Config = {
       sdkUrl: process.env.DEV_PORTAL_RUDDERSTACK_SDK_URL,
     },
     canSpamUrl: `${PORTAL_URL}/canspam`,
+    gcomUrl: process.env.DEV_PORTAL_GCOM_URL,
     faroConfig: {
       url: process.env.DEV_PORTAL_FARO_CONFIG_URL,
       appName: process.env.DEV_PORTAL_FARO_CONFIG_APP_NAME,
