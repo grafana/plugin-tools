@@ -1,3 +1,15 @@
+# v0.4.0 (Thu Jan 15 2026)
+
+#### 🚀 Enhancement
+
+- feat: allow skipping dependency and build tooling analysis [#2397](https://github.com/grafana/plugin-tools/pull/2397) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.3.0 (Thu Jan 15 2026)
 
 #### 🚀 Enhancement
