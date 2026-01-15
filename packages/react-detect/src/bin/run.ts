@@ -4,7 +4,15 @@ import minimist from 'minimist';
 import { detect19 } from '../commands/detect19.js';
 
 const args = process.argv.slice(2);
-const argv = minimist(args);
+const argv = minimist(args, {
+  boolean: ['json', 'skipBuildTooling', 'skipDependencies'],
+  string: ['pluginRoot'],
+  default: {
+    json: false,
+    skipBuildTooling: false,
+    skipDependencies: false,
+  },
+});
 
 const commands: Record<string, (argv: minimist.ParsedArgs) => Promise<void>> = {
   detect19,

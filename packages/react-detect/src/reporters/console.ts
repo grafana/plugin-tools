@@ -16,6 +16,27 @@ const summaryMsg = [
 ];
 
 export function consoleReporter(results: PluginAnalysisResults) {
+  if (!results.summary.analyzedBuildTooling || !results.summary.analyzedDependencies) {
+    const skippedFeatures: string[] = [];
+    if (!results.summary.analyzedBuildTooling) {
+      skippedFeatures.push('Build tooling analysis (webpack config checks)');
+    }
+    if (!results.summary.analyzedDependencies) {
+      skippedFeatures.push('Dependency tree analysis (lockfile parsing)');
+    }
+
+    output.warning({
+      title: 'Analysis Skipped',
+      body: [
+        'The following analyses were skipped:',
+        ...output.bulletList(skippedFeatures),
+        '',
+        'Results may be incomplete. Remove skip flags for full analysis.',
+      ],
+    });
+    output.addHorizontalLine('yellow');
+  }
+
   if (results.summary.totalIssues === 0) {
     output.success({
       title: 'No React 19 breaking changes detected.',
