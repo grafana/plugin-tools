@@ -6,32 +6,41 @@ import { jsonReporter } from '../reporters/json.js';
 import { consoleReporter } from '../reporters/console.js';
 import { extractAllSources } from '../source-extractor.js';
 import { analyzeSourceFiles } from '../analyzer.js';
+import { output } from '../utils/output.js';
 /**
  * Main detect command for finding React 19 breaking changes
  */
 export async function detect19(argv: minimist.ParsedArgs) {
-  const pluginRoot = argv.pluginRoot || process.cwd();
+  try {
+    const pluginRoot = argv.pluginRoot || process.cwd();
 
-  const allMatches = await getAllMatches(pluginRoot);
-  const depContext = new DependencyContext();
-  await depContext.loadDependencies(pluginRoot);
+    const allMatches = await getAllMatches(pluginRoot);
+    const depContext = new DependencyContext();
+    await depContext.loadDependencies(pluginRoot);
 
-  const matchesWithRootDependency = allMatches.map((match) => {
-    if (match.type === 'dependency' && match.packageName) {
-      return { ...match, rootDependency: depContext.findRootDependency(match.packageName) };
+    const matchesWithRootDependency = allMatches.map((match) => {
+      if (match.type === 'dependency' && match.packageName) {
+        return { ...match, rootDependency: depContext.findRootDependency(match.packageName) };
+      }
+      return match;
+    });
+
+    const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext);
+
+    if (argv.json) {
+      jsonReporter(results);
+    } else {
+      consoleReporter(results);
     }
-    return match;
-  });
 
-  const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext);
-
-  if (argv.json) {
-    jsonReporter(results);
-  } else {
-    consoleReporter(results);
+    process.exit(results.summary.totalIssues > 0 ? 1 : 0);
+  } catch (error) {
+    output.error({
+      title: 'Error during detection',
+      body: [(error as Error).message],
+    });
+    process.exit(1);
   }
-
-  process.exit(results.summary.totalIssues > 0 ? 1 : 0);
 }
 
 async function getAllMatches(pluginRoot: string) {

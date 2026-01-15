@@ -47,6 +47,7 @@ export function hasReactComponent(ast: TSESTree.Program): boolean {
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'ClassDeclaration' &&
       node.superClass?.type === 'MemberExpression' &&
       node.superClass.object.type === 'Identifier' &&
@@ -71,7 +72,7 @@ export function hasFunctionComponentPattern(ast: TSESTree.Program): boolean {
 
   let found = false;
   walk(ast, (node) => {
-    if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
+    if (node && (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression')) {
       found = true;
     }
   });
@@ -84,6 +85,7 @@ function hasReactImport(ast: TSESTree.Program): boolean {
 
   walk(ast, (node) => {
     if (
+      node &&
       node.type === 'ImportDeclaration' &&
       node.source.type === 'Literal' &&
       (node.source.value === 'react' || node.source.value === 'react-dom')
@@ -99,7 +101,7 @@ function hasJSX(ast: TSESTree.Program): boolean {
   let found = false;
 
   walk(ast, (node) => {
-    if (node.type === 'JSXElement' || node.type === 'JSXFragment') {
+    if (node && (node.type === 'JSXElement' || node.type === 'JSXFragment')) {
       found = true;
     }
   });
@@ -111,7 +113,12 @@ function hasHooks(ast: TSESTree.Program): boolean {
   let found = false;
 
   walk(ast, (node) => {
-    if (node.type === 'CallExpression' && node.callee.type === 'Identifier' && node.callee.name.startsWith('use')) {
+    if (
+      node &&
+      node.type === 'CallExpression' &&
+      node.callee.type === 'Identifier' &&
+      node.callee.name.startsWith('use')
+    ) {
       found = true;
     }
   });
