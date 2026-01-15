@@ -1,3 +1,15 @@
+# v0.3.0 (Thu Jan 15 2026)
+
+#### 🚀 Enhancement
+
+- feat: support yarn v1 [#2395](https://github.com/grafana/plugin-tools/pull/2395) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.2.1 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
