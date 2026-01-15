@@ -37,7 +37,7 @@ export class DependencyContext {
           pruneCycles: false,
         });
       } else if (lockfile === 'yarn.lock') {
-        if (lockfileContent.includes('# yarn lockfile v1')) {
+        if (/#\s*yarn lockfile v1/i.test(lockfileContent)) {
           this.depGraph = await parseYarnLockV1Project(pkgJsonContentString, lockfileContent, {
             includeDevDeps: true,
             includeOptionalDeps: true,

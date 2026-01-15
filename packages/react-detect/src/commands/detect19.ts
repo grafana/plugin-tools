@@ -39,6 +39,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
       title: 'Error during detection',
       body: [(error as Error).message],
     });
+    process.exit(1);
   }
 }
 
