@@ -37,13 +37,6 @@ jobs:
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
-      - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@a37de51f3d713a30a9e4b21bcdfbd38170020593 # get-vault-secrets/v1.3.0
-        with:
-          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
-          repo_secrets: |
-            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
-
       - name: Checkout repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -51,7 +44,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: nrwl/nx-set-shas@826660b82addbef3abff5fa871492ebad618c9e1 # v4.3.3
       - name: Setup nodejs
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
