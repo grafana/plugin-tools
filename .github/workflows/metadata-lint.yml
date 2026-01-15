@@ -63,6 +63,6 @@ jobs:
           file_diff="$(git diff --name-only)"
           if [ -n "$file_diff" ]; then
               echo "$file_diff"
-              echo "${uncommited_error_message}"
+              echo "${error_message}"
               exit 1
           fi
