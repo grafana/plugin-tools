@@ -49,7 +49,10 @@ export async function detect19(argv: minimist.ParsedArgs) {
             return match;
           });
 
-    const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext);
+    const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext, {
+      skipBuildTooling,
+      skipDependencies,
+    });
 
     if (argv.json) {
       jsonReporter(results);
