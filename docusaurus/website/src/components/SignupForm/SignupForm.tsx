@@ -56,11 +56,6 @@ function SignupForm() {
   return (
     <div className={styles.signupContainer}>
       <div className={styles.signupContainer}>
-        <p>
-          Be the first to know about new tools, features, and opportunities
-          available to you in the Grafana developer ecosystem!
-        </p>
-
         {success ? (
           <div className={clsx(styles.successMessage, "alert alert--info")}>
             <b>🎉 You're in!</b>
