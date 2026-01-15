@@ -98,7 +98,7 @@ export class PanelEditPage extends GrafanaPage {
 
     // when suggestions got updated in 12.4.0, it became necessary to ensure the "All Visualizations" tab is selected
     if (semver.gte(this.ctx.grafanaVersion, '12.4.0')) {
-      await this.getByGrafanaSelector(this.ctx.selectors.components.Tab.title('All Visualizations')).click();
+      await this.getByGrafanaSelector(this.ctx.selectors.components.Tab.title('All visualizations')).click();
     }
 
     await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
