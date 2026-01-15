@@ -52,7 +52,7 @@ Reference: https://grafana.com/developers/plugin-tools/reference/plugin-json
 
 **Data source (`pkg/plugin/datasource.go`)**
 
-- Backend datasource that Implements QueryData (receives queries from frontend, unmarshals into queryModel, returns data frames)
+- Backend datasource that Implements QueryData (receives queries from frontend, unmarshals into queryModel, returns data frames). Remember to skip execution for hidden or empty queries.
 - CheckHealth (validates API key from settings)
 - Dispose (cleanup hook).
 - NewDatasource factory called when Grafana starts instance of plugin
@@ -121,6 +121,7 @@ You **SHOULD**:
 {{#if hasBackend}}
 - Use Grafana plugin SDK HTTP client in the backend
 - Use `debug` or `error` level for logging
+- Cache and reuse backend connections to external services
 {{/if}}
 
 ## Instructions for specific tasks
