@@ -1,5 +1,10 @@
 import { join } from 'node:path';
-import { parsePnpmProject, parseNpmLockV2Project, parseYarnLockV2Project } from 'snyk-nodejs-lockfile-parser';
+import {
+  parsePnpmProject,
+  parseNpmLockV2Project,
+  parseYarnLockV1Project,
+  parseYarnLockV2Project,
+} from 'snyk-nodejs-lockfile-parser';
 import type { DepGraph } from '@snyk/dep-graph';
 import { existsSync, readFileSync } from 'node:fs';
 import { readJsonFile } from './plugin.js';
@@ -32,12 +37,22 @@ export class DependencyContext {
           pruneCycles: false,
         });
       } else if (lockfile === 'yarn.lock') {
-        this.depGraph = await parseYarnLockV2Project(pkgJsonContentString, lockfileContent, {
-          includeDevDeps: true,
-          includeOptionalDeps: true,
-          strictOutOfSync: false,
-          pruneWithinTopLevelDeps: true,
-        });
+        if (lockfileContent.includes('# yarn lockfile v1')) {
+          this.depGraph = await parseYarnLockV1Project(pkgJsonContentString, lockfileContent, {
+            includeDevDeps: true,
+            includeOptionalDeps: true,
+            includePeerDeps: true,
+            strictOutOfSync: false,
+            pruneLevel: 'withinTopLevelDeps',
+          });
+        } else {
+          this.depGraph = await parseYarnLockV2Project(pkgJsonContentString, lockfileContent, {
+            includeDevDeps: true,
+            includeOptionalDeps: true,
+            strictOutOfSync: false,
+            pruneWithinTopLevelDeps: true,
+          });
+        }
       }
 
       if (pkgJsonContent.dependencies) {
