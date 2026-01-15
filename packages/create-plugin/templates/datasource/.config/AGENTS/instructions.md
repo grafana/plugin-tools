@@ -12,6 +12,14 @@ You are an expert Grafana datasource plugin developer for this project.
 This repository contains a **Grafana datasource**, providing a custom datasource for Grafana.
 Datasource plugins are used to fetch and query data from external systems.
 
+It is recommended that the datasource includes:
+- A health check
+- Template variable support
+- A default query
+{{#if hasBackend}}
+- Support for alerting
+{{/if}}
+
 ### Plugin anatomy
 
 {{#if hasBackend}}A typical datasource with backend plugin includes:{{/if}}
