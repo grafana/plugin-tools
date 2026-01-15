@@ -56,12 +56,9 @@ function SignupForm() {
   return (
     <div className={styles.signupContainer}>
       <div className={styles.signupContainer}>
-        <h2 className="margin-bottom--md">
-          <p>Sign up for our developer updates</p>
-        </h2>
         <p>
           Be the first to know about new tools, features, and opportunities
-          available to you in the Grafana developer ecosystem
+          available to you in the Grafana developer ecosystem!
         </p>
 
         {success ? (
