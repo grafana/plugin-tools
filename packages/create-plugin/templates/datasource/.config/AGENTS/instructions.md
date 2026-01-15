@@ -32,7 +32,8 @@ Reference: https://grafana.com/developers/plugin-tools/reference/plugin-json
 
 **Data source (`src/datasource.ts`)**
 
-- Frontend datasource that extends DataSourceWithBackend.
+{{#if hasBackend}}- Frontend datasource that extends DataSourceWithBackend.{{/if}}
+{{#unless hasBackend}}- Frontend datasource that extends DataSourceApi<MyQuery>.{{/unless}}
 - Connects the UI to the backend, provides the default query, applies template variables, filters queries, and sends them to the Go backend for execution
 
 **Query editor (`src/QueryEditor.tsx`)**
