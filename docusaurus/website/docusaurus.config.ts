@@ -83,6 +83,21 @@ const config: Config = {
         redirects,
       },
     ],
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        // Enable with defaults
+        generate: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: false,
+        },
+        include: {
+          includeBlog: false,
+          includePages: false,
+          includeDocs: true,
+        },
+      },
+    ],
   ],
   presets: [
     [
