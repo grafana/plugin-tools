@@ -10,6 +10,12 @@ const sidebars: SidebarsConfig = {
       label: 'Get started',
     },
 
+    {
+      type: 'doc',
+      id: 'whats-new',
+      label: "What's new"
+    },
+
     // Set up
     {
       type: 'category',

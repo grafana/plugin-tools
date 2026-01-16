@@ -24,6 +24,9 @@ const grafanaPrismTheme: PrismTheme = {
   },
 };
 
+console.log(`Building with environment variables from: ${__dirname}/${envFile}`);
+console.log(`process.env.DEV_PORTAL_HOST: ${process.env.DEV_PORTAL_HOST}`);
+
 const config: Config = {
   title: 'Grafana Plugin Tools',
   tagline: 'Scaffold a Grafana plugin with one command',
@@ -81,6 +84,25 @@ const config: Config = {
         // This plugin is only active in production because it works on the build output.
         // Edit the redirects in file://./websiteRedirects.json
         redirects,
+      },
+    ],
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        // Markdown file generation options
+        markdown: {
+          enableFiles: true,
+          relativePaths: false,
+          includeBlog: false,
+          includePages: false,
+          includeDocs: true,
+        },
+        llmsTxt: {
+          enableLlmsFullTxt: true,
+          includeBlog: false,
+          includePages: false,
+          includeDocs: true,
+        },
       },
     ],
   ],
@@ -214,6 +236,7 @@ const config: Config = {
       sdkUrl: process.env.DEV_PORTAL_RUDDERSTACK_SDK_URL,
     },
     canSpamUrl: `${PORTAL_URL}/canspam`,
+    gcomUrl: process.env.DEV_PORTAL_GCOM_URL,
     faroConfig: {
       url: process.env.DEV_PORTAL_FARO_CONFIG_URL,
       appName: process.env.DEV_PORTAL_FARO_CONFIG_APP_NAME,

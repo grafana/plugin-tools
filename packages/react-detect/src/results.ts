@@ -5,12 +5,18 @@ import { getPluginJson, hasExternalisedJsxRuntime } from './utils/plugin.js';
 import { DependencyContext } from './utils/dependencies.js';
 import path from 'node:path';
 
+export interface AnalysisOptions {
+  skipBuildTooling: boolean;
+  skipDependencies: boolean;
+}
+
 export function generateAnalysisResults(
   matches: AnalyzedMatch[],
   pluginRoot: string,
-  depContext: DependencyContext
+  depContext: DependencyContext | null,
+  options: AnalysisOptions = { skipBuildTooling: false, skipDependencies: false }
 ): PluginAnalysisResults {
-  const filtered = filterMatches(matches);
+  const filtered = filterMatches(matches, options.skipBuildTooling);
   const pluginJson = getPluginJson(pluginRoot);
   const sourceMatches = filtered.filter((m) => m.type === 'source');
   const dependencyMatches = filtered.filter((m) => m.type === 'dependency');
@@ -49,6 +55,8 @@ export function generateAnalysisResults(
       dependencyIssuesCount: dependencyMatches.length,
       status: totalIssues > 0 ? 'action_required' : 'no_action_required',
       affectedDependencies: Array.from(affectedDeps),
+      analyzedBuildTooling: !options.skipBuildTooling,
+      analyzedDependencies: !options.skipDependencies,
     },
     issues: {
       critical,
@@ -58,8 +66,9 @@ export function generateAnalysisResults(
   };
 }
 
-function filterMatches(matches: AnalyzedMatch[]): AnalyzedMatch[] {
-  const externalisedJsxRuntime = hasExternalisedJsxRuntime();
+function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean): AnalyzedMatch[] {
+  // Only check webpack config if NOT skipping build tooling
+  const externalisedJsxRuntime = skipBuildTooling ? false : hasExternalisedJsxRuntime();
   const filtered = matches.filter((match) => {
     // TODO: add mode for strict / loose filtering
     if (match.type === 'source' && (match.confidence === 'none' || match.confidence === 'unknown')) {
@@ -139,7 +148,10 @@ function generateResult(match: AnalyzedMatch): AnalysisResult {
 /**
  * Build DependencyIssue objects grouped by package
  */
-function buildDependencyIssues(dependencyMatches: AnalyzedMatch[], depContext: DependencyContext): DependencyIssue[] {
+function buildDependencyIssues(
+  dependencyMatches: AnalyzedMatch[],
+  depContext: DependencyContext | null
+): DependencyIssue[] {
   // Group by package
   const byPackage = new Map<string, AnalyzedMatch[]>();
   for (const match of dependencyMatches) {
@@ -154,7 +166,8 @@ function buildDependencyIssues(dependencyMatches: AnalyzedMatch[], depContext: D
   const issues: DependencyIssue[] = [];
   for (const [packageName, matches] of byPackage) {
     const rootDep = matches[0].rootDependency || packageName;
-    const version = depContext.getVersion(packageName) || null;
+    // Handle null depContext gracefully with optional chaining
+    const version = depContext?.getVersion(packageName) || null;
 
     issues.push({
       packageName,

@@ -1,3 +1,29 @@
+# (Thu Jan 15 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/react-detect@0.4.0`
+  - feat: allow skipping dependency and build tooling analysis [#2397](https://github.com/grafana/plugin-tools/pull/2397) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Thu Jan 15 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/react-detect@0.3.0`
+  - feat: support yarn v1 [#2395](https://github.com/grafana/plugin-tools/pull/2395) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Wed Jan 14 2026)
 
 #### 🐛 Bug Fix

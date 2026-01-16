@@ -32,6 +32,8 @@ export interface PluginAnalysisResults {
     dependencyIssuesCount: number;
     status: 'action_required' | 'no_action_required';
     affectedDependencies: string[];
+    analyzedBuildTooling: boolean;
+    analyzedDependencies: boolean;
   };
   issues: {
     critical: AnalysisResult[];
