@@ -86,12 +86,16 @@ const config: Config = {
     [
       '@signalwire/docusaurus-plugin-llms-txt',
       {
-        // Enable with defaults
-        generate: {
-          enableMarkdownFiles: true,
-          enableLlmsFullTxt: false,
+        // Markdown file generation options
+        markdown: {
+          enableFiles: true,
+          relativePaths: false,
+          includeBlog: false,
+          includePages: false,
+          includeDocs: true,
         },
-        include: {
+        llmsTxt: {
+          enableLlmsFullTxt: true,
           includeBlog: false,
           includePages: false,
           includeDocs: true,
