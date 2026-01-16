@@ -60,6 +60,10 @@ export async function detect19(argv: minimist.ParsedArgs) {
       consoleReporter(results);
     }
 
+    if (argv.noExitCode) {
+      process.exit(0);
+    }
+
     process.exit(results.summary.totalIssues > 0 ? 1 : 0);
   } catch (error) {
     output.error({
