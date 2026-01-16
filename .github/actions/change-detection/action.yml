@@ -1,0 +1,39 @@
+
+name: Detect changed files
+description: Detects whether any matching files have changed in the current PR
+inputs:
+  self:
+    description: The path to the calling workflow (for example `.github/workflows/backend-unit-tests.yml`). Change detection always treats this file as part of every category.
+    required: true
+outputs:
+  self:
+    description: Whether the calling workflow has changed in any way
+    value: ${{ steps.changed-files.outputs.self_any_changed || 'true' }}
+  docs:
+    description: Whether the docs or self have changed in any way
+    value: ${{ steps.changed-files.outputs.docs_any_changed || 'true' }}
+runs:
+  using: composite
+  steps:
+    # Assumption: We've done a checkout with the actions/checkout action.
+    # It must persist credentials to allow the changed-files action to get more history.
+    - name: Detect changes
+      id: changed-files
+      if: github.event_name == 'pull_request'
+      uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
+      with:
+        files_yaml: |
+          self:
+            - '.github/actions/change-detection/**'
+            - '${{ inputs.self }}'
+          docs:
+            - 'docusaurus/docs/**'
+            - '.github/actions/change-detection/**'
+            - '${{ inputs.self }}'
+    - name: Print all change groups
+      shell: bash
+      run: |
+        echo "Self: ${{ steps.changed-files.outputs.self_any_changed || 'true' }}"
+        echo " --> ${{ steps.changed-files.outputs.self_all_changed_files }}"
+        echo "Docs: ${{ steps.changed-files.outputs.docs_any_changed || 'true' }}"
+        echo " --> ${{ steps.changed-files.outputs.docs_all_changed_files }}"
