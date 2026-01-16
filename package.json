@@ -13,7 +13,7 @@
     "dev": "nx run-many --target=dev --parallel",
     "docs": "nx start website",
     "docs:clear": "nx clear website",
-    "docs:build": "nx build website",
+    "docs:build": "nx build website --skip-nx-cache",
     "docs:test": "nx test website",
     "docs:test:ci": "nx test:ci website",
     "lint": "nx run-many --target=lint --parallel",
