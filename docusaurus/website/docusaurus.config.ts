@@ -24,6 +24,9 @@ const grafanaPrismTheme: PrismTheme = {
   },
 };
 
+console.log(`Building with environment variables from: ${__dirname}/${envFile}`);
+console.log(`process.env.DEV_PORTAL_HOST: ${process.env.DEV_PORTAL_HOST}`);
+
 const config: Config = {
   title: 'Grafana Plugin Tools',
   tagline: 'Scaffold a Grafana plugin with one command',
