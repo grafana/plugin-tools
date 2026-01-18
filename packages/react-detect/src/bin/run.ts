@@ -5,13 +5,13 @@ import { detect19 } from '../commands/detect19.js';
 
 const args = process.argv.slice(2);
 const argv = minimist(args, {
-  boolean: ['json', 'skipBuildTooling', 'skipDependencies', 'noExitCode'],
+  boolean: ['json', 'skipBuildTooling', 'skipDependencies', 'noErrorExitCode'],
   string: ['pluginRoot'],
   default: {
     json: false,
     skipBuildTooling: false,
     skipDependencies: false,
-    noExitCode: false,
+    noErrorExitCode: false,
   },
 });
 
