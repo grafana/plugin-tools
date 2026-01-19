@@ -60,7 +60,11 @@ export async function detect19(argv: minimist.ParsedArgs) {
       consoleReporter(results);
     }
 
-    process.exit(results.summary.totalIssues > 0 ? 1 : 0);
+    if (argv.noErrorExitCode) {
+      process.exitCode = 0;
+    } else {
+      process.exitCode = results.summary.totalIssues > 0 ? 1 : 0;
+    }
   } catch (error) {
     output.error({
       title: 'Error during detection',

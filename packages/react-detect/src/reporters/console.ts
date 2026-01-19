@@ -1,6 +1,7 @@
-import { AnalysisResult, PluginAnalysisResults } from '../types/reporters.js';
+import { PluginAnalysisResults } from '../types/reporters.js';
 import { isExternal } from '../utils/dependencies.js';
 import { output } from '../utils/output.js';
+import { groupByPattern, groupByPackage } from './utils.js';
 
 const summaryMsg = [
   `We strongly recommend testing your plugin using the React 19 Grafana docker image: ${output.formatCode('grafana/grafana:dev-preview-react19')}`,
@@ -147,30 +148,4 @@ export function consoleReporter(results: PluginAnalysisResults) {
     body: summaryMsg,
     withPrefix: false,
   });
-}
-
-function groupByPattern(issues: AnalysisResult[]): Record<string, AnalysisResult[]> {
-  return issues.reduce(
-    (groups, issue) => {
-      if (!groups[issue.pattern]) {
-        groups[issue.pattern] = [];
-      }
-      groups[issue.pattern].push(issue);
-      return groups;
-    },
-    {} as Record<string, AnalysisResult[]>
-  );
-}
-
-function groupByPackage(issues: AnalysisResult[]): Record<string, AnalysisResult[]> {
-  return issues.reduce(
-    (groups, issue) => {
-      if (!groups[issue.packageName!]) {
-        groups[issue.packageName!] = [];
-      }
-      groups[issue.packageName!].push(issue);
-      return groups;
-    },
-    {} as Record<string, AnalysisResult[]>
-  );
 }

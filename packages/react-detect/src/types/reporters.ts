@@ -53,3 +53,24 @@ export interface DependencyIssue {
     reason: string;
   };
 }
+
+export interface MergedDependencyIssue {
+  pattern: string;
+  severity: Severity;
+  impactLevel: 'critical' | 'warning';
+  locations: Array<{
+    type: 'source' | 'dependency';
+    file: string;
+    line: number;
+    column: number;
+  }>;
+  problem: string;
+  fix: {
+    description: string;
+    before: string;
+    after: string;
+  };
+  link: string;
+  packageNames: string[];
+  rootDependencies: string[];
+}
