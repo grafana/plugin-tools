@@ -1,3 +1,16 @@
+# (Mon Jan 19 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/react-detect@0.5.0`
+  - feat: add arg to prevent exit code 1 and improve json output [#2406](https://github.com/grafana/plugin-tools/pull/2406) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Jan 15 2026)
 
 #### 🚀 Enhancement
