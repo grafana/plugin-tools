@@ -15,9 +15,8 @@ User storage allows your Grafana plugin to store user-specific data in the Grafa
 
 :::important
 
-- This feature is available in Grafana 11.5 and later.
-- It requires the `userStorageAPI` feature flag to be enabled.
-- If a plugin uses this feature but it's not enabled in the Grafana instance, the browser `localStorage` will be used as the storage mechanism instead.
+- This feature is GA in Grafana 12.0 and later.
+- This feature is available in Grafana 11.5 and later under the `userStorageAPI` feature flag. If a plugin uses this feature but it's not enabled in the Grafana instance, the browser's `localStorage` will be used as the storage mechanism instead.
 
 :::
 
