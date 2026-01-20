@@ -39,25 +39,31 @@ export type PluginOptions = {
   provisioningRootDir: string;
   /**
    * Optionally, you can add or override feature toggles.
-   * The feature toggles you specify here will only work in the frontend. If you need a feature toggle to work across the entire stack, you
-   * need to need to enable the feature in the Grafana config. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
+   * The feature toggles you specify here will work for both legacy feature toggles (via `window.grafanaBootData.settings.featureToggles`)
+   * and OpenFeature flags (via OFREP API interception).
    *
-   * To override feature toggles globally in the playwright.config.ts file: 
+   * If you need a feature toggle to work across the entire stack, you need to enable the feature in the Grafana config.
+   * Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
+   *
+   * @example
+   * ```typescript
+   * // Override feature toggles globally in playwright.config.ts
    * export default defineConfig({
-      use: {
-        featureToggles: {
-          exploreMixedDatasource: true,
-          redshiftAsyncQueryDataSupport: false
-        },
-      },
-    });
-   * 
-   * To override feature toggles for tests in a certain file:
-     test.use({
-      featureToggles: {
-        exploreMixedDatasource: true,
-      },
+   *   use: {
+   *     featureToggles: {
+   *       exploreMixedDatasource: true,
+   *       redshiftAsyncQueryDataSupport: false
+   *     },
+   *   },
    * });
+   *
+   * // Override feature toggles for tests in a specific file
+   * test.use({
+   *   featureToggles: {
+   *     exploreMixedDatasource: true,
+   *   },
+   * });
+   * ```
    */
   featureToggles: Record<string, boolean>;
 
@@ -98,7 +104,21 @@ export type PluginOptions = {
    * If no credentials are provided, the server default admin:admin credentials will be used.
    */
   grafanaAPICredentials: Credentials;
-  openFeature: OpenFeatureOption;
+
+  /**
+   * Artificial latency in milliseconds to add to OpenFeature OFREP API responses.
+   * Useful for testing how the UI behaves with slow network conditions when fetching feature flags.
+   *
+   * @default 0
+   * @example
+   * ```typescript
+   * // Simulate 500ms network latency for OpenFeature flag fetching
+   * test.use({
+   *   openFeatureLatency: 500,
+   * });
+   * ```
+   */
+  openFeatureLatency: number;
 };
 
 export type PluginFixture = {
