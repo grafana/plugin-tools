@@ -10,6 +10,7 @@ export const DEFAULT_ADMIN_USER: User = {
 export const options: Fixtures<{}, PluginOptions> = {
   userPreferences: [{}, { option: true, scope: 'worker' }],
   featureToggles: [{}, { option: true, scope: 'worker' }],
+  openFeature: [{ flags: {} }, { option: true, scope: 'worker' }],
   provisioningRootDir: [path.join(process.cwd(), 'provisioning'), { option: true, scope: 'worker' }],
   user: [DEFAULT_ADMIN_USER, { option: true, scope: 'worker' }],
   grafanaAPICredentials: [DEFAULT_ADMIN_USER, { option: true, scope: 'worker' }],
