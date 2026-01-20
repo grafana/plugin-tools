@@ -160,3 +160,11 @@ test('expand collapsed options group', async ({ gotoPanelEditPage, grafanaVersio
   await dataLinksOptions.expand();
   expect(await dataLinksOptions.isExpanded()).toBeTruthy();
 });
+
+test('set visualization', async ({ gotoPanelEditPage }) => {
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
+
+  await expect(panelEdit.getVisualizationName()).toHaveText('Clock');
+  await panelEdit.setVisualization('Table');
+  await expect(panelEdit.getVisualizationName()).toHaveText('Table');
+});
