@@ -1,5 +1,18 @@
 # (Tue Jan 20 2026)
 
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.6`
+  - Create Plugin: Bump plugin-e2e [#2407](https://github.com/grafana/plugin-tools/pull/2407) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 20 2026)
+
 :tada: This release contains work from a new contributor! :tada:
 
 Thank you, Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd)), for all your work!
