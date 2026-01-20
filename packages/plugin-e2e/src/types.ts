@@ -98,6 +98,7 @@ export type PluginOptions = {
    * If no credentials are provided, the server default admin:admin credentials will be used.
    */
   grafanaAPICredentials: Credentials;
+  openFeature: OpenFeatureOption;
 };
 
 export type PluginFixture = {
