@@ -1,3 +1,22 @@
+# (Tue Jan 20 2026)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.1.3`
+  - Suggestions: Add All Visualizations click for 12.4 and greater [#2399](https://github.com/grafana/plugin-tools/pull/2399) ([@fastfrwrd](https://github.com/fastfrwrd) [@hugohaggmark](https://github.com/hugohaggmark) [@sunker](https://github.com/sunker))
+
+#### Authors: 3
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
 # (Mon Jan 19 2026)
 
 #### 🚀 Enhancement
