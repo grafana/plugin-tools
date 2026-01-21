@@ -7,14 +7,14 @@ test.use({
   },
 });
 
-test('should intercept single flag evaluation endpoint', async ({ page, grafanaVersion }) => {
+test('should intercept single flag evaluation endpoint', async ({ page, grafanaVersion, selectors, namespace }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   // Make a request to the single flag endpoint which will be intercepted
-  const singleFlagResponse = await page.evaluate(async () => {
+  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/singleTestFlag`;
+
+  const singleFlagResponse = await page.evaluate(async (url) => {
     try {
-      const response = await fetch(
-        '/apis/features.grafana.app/v0alpha1/namespaces/default/ofrep/v1/evaluate/flags/singleTestFlag'
-      );
+      const response = await fetch(url);
       if (response.ok) {
         return response.json();
       }
@@ -22,7 +22,7 @@ test('should intercept single flag evaluation endpoint', async ({ page, grafanaV
     } catch {
       return null;
     }
-  });
+  }, flagUrl);
 
   if (singleFlagResponse) {
     expect(singleFlagResponse.key).toBe('singleTestFlag');

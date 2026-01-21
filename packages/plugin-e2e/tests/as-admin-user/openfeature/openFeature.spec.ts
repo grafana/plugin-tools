@@ -11,11 +11,14 @@ test.use({
 test('should intercept OFREP bulk evaluation and override flags via featureToggles', async ({
   page,
   grafanaVersion,
+  selectors,
+  namespace,
 }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   // Set up a listener to capture the OFREP response
   const responsePromise = page.waitForResponse(
-    (response) => response.url().includes('/ofrep/v1/evaluate/flags') && !response.url().endsWith('/'),
+    (response) =>
+      response.url().includes(selectors.apis.OpenFeature.ofrepBulkPath(namespace)) && !response.url().endsWith('/'),
     { timeout: 5000 }
   );
 
@@ -49,11 +52,17 @@ test('should intercept OFREP bulk evaluation and override flags via featureToggl
   }
 });
 
-test('should merge custom featureToggles with backend default flags', async ({ page, grafanaVersion }) => {
+test('should merge custom featureToggles with backend default flags', async ({
+  page,
+  grafanaVersion,
+  selectors,
+  namespace,
+}) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   // Set up a listener to capture the OFREP response
   const responsePromise = page.waitForResponse(
-    (response) => response.url().includes('/ofrep/v1/evaluate/flags') && !response.url().endsWith('/'),
+    (response) =>
+      response.url().includes(selectors.apis.OpenFeature.ofrepBulkPath(namespace)) && !response.url().endsWith('/'),
     { timeout: 5000 }
   );
 
