@@ -1,4 +1,5 @@
 import { expect, test } from '../../../src';
+import { lt } from 'semver';
 
 const LATENCY_MS = 200;
 
@@ -9,7 +10,8 @@ test.use({
   openFeatureLatency: LATENCY_MS,
 });
 
-test('should apply artificial latency to OFREP responses', async ({ page }) => {
+test('should apply artificial latency to OFREP responses', async ({ page, grafanaVersion }) => {
+  test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   const startTime = Date.now();
 
   // Make a request to the single flag endpoint which will be intercepted

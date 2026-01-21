@@ -1,4 +1,5 @@
 import { expect, test } from '../../../src';
+import { lt } from 'semver';
 
 test.use({
   featureToggles: {
@@ -6,7 +7,8 @@ test.use({
   },
 });
 
-test('should intercept single flag evaluation endpoint', async ({ page }) => {
+test('should intercept single flag evaluation endpoint', async ({ page, grafanaVersion }) => {
+  test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   // Make a request to the single flag endpoint which will be intercepted
   const singleFlagResponse = await page.evaluate(async () => {
     try {

@@ -1,4 +1,5 @@
 import { expect, test } from '../../../src';
+import { lt } from 'semver';
 
 test.use({
   featureToggles: {
@@ -7,7 +8,11 @@ test.use({
   },
 });
 
-test('should intercept OFREP bulk evaluation and override flags via featureToggles', async ({ page }) => {
+test('should intercept OFREP bulk evaluation and override flags via featureToggles', async ({
+  page,
+  grafanaVersion,
+}) => {
+  test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   // Set up a listener to capture the OFREP response
   const responsePromise = page.waitForResponse(
     (response) => response.url().includes('/ofrep/v1/evaluate/flags') && !response.url().endsWith('/'),
@@ -44,7 +49,8 @@ test('should intercept OFREP bulk evaluation and override flags via featureToggl
   }
 });
 
-test('should merge custom featureToggles with backend default flags', async ({ page }) => {
+test('should merge custom featureToggles with backend default flags', async ({ page, grafanaVersion }) => {
+  test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   // Set up a listener to capture the OFREP response
   const responsePromise = page.waitForResponse(
     (response) => response.url().includes('/ofrep/v1/evaluate/flags') && !response.url().endsWith('/'),
