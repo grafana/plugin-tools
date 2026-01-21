@@ -131,6 +131,14 @@ export type PluginFixture = {
   grafanaVersion: string;
 
   /**
+   * The Grafana namespace/tenant id that was detected when the test runner was started.
+   *
+   * The namespace will be picked from window.grafanaBootData.settings.namespace.
+   * Defaults to 'default' if not available.
+   */
+  namespace: string;
+
+  /**
    * The E2E selectors to use for the current version of Grafana.
    * See https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/selecting-elements#grafana-end-to-end-selectors for more information.
    */
@@ -372,10 +380,27 @@ export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectorGrou
 >;
 
 /**
+ * Internal fixtures that are not exposed in the test API.
+ * These fixtures can be used by other fixtures but not by tests directly.
+ */
+export type InternalFixtures = {
+  /**
+   * Boot data fetched from Grafana.
+   * Used internally by grafanaVersion and namespace fixtures.
+   * @internal
+   */
+  bootData: {
+    version: string;
+    namespace: string;
+  };
+};
+
+/**
  * Playwright args used when defining fixtures
  */
 export type PlaywrightArgs = PluginFixture &
   PluginOptions &
+  InternalFixtures &
   PlaywrightTestArgs &
   PlaywrightTestOptions &
   PlaywrightWorkerArgs &
