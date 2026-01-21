@@ -390,8 +390,8 @@ export type InternalFixtures = {
    * @internal
    */
   bootData: {
-    version: string;
-    namespace: string;
+    version: string | undefined;
+    namespace: string | undefined;
   };
 };
 

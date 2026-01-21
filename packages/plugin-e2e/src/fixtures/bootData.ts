@@ -1,8 +1,8 @@
 import { PlaywrightTestArgs, TestFixture } from '@playwright/test';
 
 interface BootData {
-  version: string;
-  namespace: string;
+  version: string | undefined;
+  namespace: string | undefined;
 }
 
 type BootDataFixture = TestFixture<BootData, PlaywrightTestArgs>;
@@ -13,9 +13,6 @@ type BootDataFixture = TestFixture<BootData, PlaywrightTestArgs>;
  * to consolidate boot data fetching to avoid creating multiple temporary pages.
  */
 export const bootData: BootDataFixture = async ({ context }, use) => {
-  const version = process.env.GRAFANA_VERSION ?? '';
-  let namespace = '';
-
   // creates a temporary page to avoid circular dependencies between fixtures
   const tempPage = await context.newPage();
   try {
@@ -27,14 +24,14 @@ export const bootData: BootDataFixture = async ({ context }, use) => {
       };
     });
 
-    // plugins may override version in CI via env var
-    const finalVersion = version || bootDataSettings.version;
-    namespace = bootDataSettings.namespace || 'default';
-
-    await use({ version: finalVersion, namespace });
+    await use({
+      version: bootDataSettings.version,
+      namespace: bootDataSettings.namespace,
+    });
   } catch (error) {
     console.error('@grafana/plugin-e2e: Failed to fetch boot data', error);
-    await use({ version: version || '', namespace: 'default' });
+    // provide undefined values if fetch fails (fixtures will apply their own defaults)
+    await use({ version: undefined, namespace: undefined });
   } finally {
     await tempPage.close();
   }
