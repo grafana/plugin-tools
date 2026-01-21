@@ -346,6 +346,10 @@ jobs:
           workdir: ./${{ matrix.workingDir }}
         if: ${{ matrix.hasBackend == true }}
 
+      - name: Install golangci-lint
+        if: ${{ matrix.hasBackend == true }}
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
       - name: Lint backend
         if: ${{ matrix.hasBackend == true }}
         uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
