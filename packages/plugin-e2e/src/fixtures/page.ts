@@ -5,12 +5,6 @@ import { overrideGrafanaBootData } from './scripts/overrideGrafanaBootData';
 
 type PageFixture = TestFixture<Page, PlaywrightArgs>;
 
-/** OFREP bulk evaluation endpoint pattern */
-const OFREP_BULK_PATTERN = '**/apis/features.grafana.app/**/ofrep/v1/evaluate/flags';
-
-/** OFREP single flag evaluation endpoint pattern */
-const OFREP_SINGLE_PATTERN = '**/apis/features.grafana.app/**/ofrep/v1/evaluate/flags/*';
-
 /**
  * Represents a single flag in the OFREP response
  */
@@ -135,17 +129,18 @@ async function handleSingleFlagRoute(
 async function setupOpenFeatureRoutes(
   page: Page,
   featureToggles: Record<string, boolean>,
-  latency: number
+  latency: number,
+  selectors: PlaywrightArgs['selectors']
 ): Promise<void> {
   console.log('@grafana/plugin-e2e: setting up OpenFeature OFREP interception', { featureToggles, latency });
 
   // Intercept bulk evaluation endpoint
-  await page.route(OFREP_BULK_PATTERN, async (route) => {
+  await page.route(selectors.apis.OpenFeature.ofrepBulkPattern, async (route) => {
     await handleBulkEvaluationRoute(route, featureToggles, latency);
   });
 
   // Intercept single flag evaluation endpoint
-  await page.route(OFREP_SINGLE_PATTERN, async (route) => {
+  await page.route(selectors.apis.OpenFeature.ofrepSinglePattern, async (route) => {
     await handleSingleFlagRoute(route, featureToggles, latency);
   });
 }
@@ -166,7 +161,10 @@ async function setupOpenFeatureRoutes(
  *   newly attached frame.
  * The script is evaluated after the document was created but before any of its scripts were run.
  */
-export const page: PageFixture = async ({ page, featureToggles, userPreferences, openFeatureLatency }, use) => {
+export const page: PageFixture = async (
+  { page, featureToggles, userPreferences, openFeatureLatency, selectors },
+  use
+) => {
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;
 
@@ -182,7 +180,7 @@ export const page: PageFixture = async ({ page, featureToggles, userPreferences,
   // Set up OpenFeature OFREP route interception BEFORE navigation
   // This ensures featureToggles also work for OpenFeature-based flags
   if (hasFeatureToggles) {
-    await setupOpenFeatureRoutes(page, featureToggles, openFeatureLatency);
+    await setupOpenFeatureRoutes(page, featureToggles, openFeatureLatency, selectors);
   }
 
   await page.goto('/');

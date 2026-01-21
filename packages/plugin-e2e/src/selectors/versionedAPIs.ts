@@ -43,6 +43,14 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: (pluginId: string) => `/api/plugins/${pluginId}/settings`,
     },
   },
+  OpenFeature: {
+    ofrepBulkPattern: {
+      '12.1.0': '**/apis/features.grafana.app/**/ofrep/v1/evaluate/flags',
+    },
+    ofrepSinglePattern: {
+      '12.1.0': '**/apis/features.grafana.app/**/ofrep/v1/evaluate/flags/*',
+    },
+  },
 } satisfies VersionedSelectorGroup;
 
 export type VersionedAPIs = typeof versionedAPIs;
