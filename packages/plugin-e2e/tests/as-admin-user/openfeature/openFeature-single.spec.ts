@@ -1,0 +1,31 @@
+import { expect, test } from '../../../src';
+
+test.use({
+  featureToggles: {
+    singleTestFlag: true,
+  },
+});
+
+test('should intercept single flag evaluation endpoint', async ({ page }) => {
+  // Make a request to the single flag endpoint which will be intercepted
+  const singleFlagResponse = await page.evaluate(async () => {
+    try {
+      const response = await fetch(
+        '/apis/features.grafana.app/v0alpha1/namespaces/default/ofrep/v1/evaluate/flags/singleTestFlag'
+      );
+      if (response.ok) {
+        return response.json();
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  });
+
+  if (singleFlagResponse) {
+    expect(singleFlagResponse.key).toBe('singleTestFlag');
+    expect(singleFlagResponse.value).toBe(true);
+    expect(singleFlagResponse.reason).toBe('STATIC');
+    expect(singleFlagResponse.variant).toBe('playwright-override');
+  }
+});
