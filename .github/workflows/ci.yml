@@ -352,7 +352,7 @@ jobs:
         with:
           version: latest
           working-directory: ./${{ matrix.workingDir }}
-          args: run ./...
+          args: ./...
 
       - name: Test plugin backend
         if: ${{ matrix.hasBackend == true }}
