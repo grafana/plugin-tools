@@ -1,0 +1,40 @@
+{
+  "name": "@grafana/ts-grapher",
+  "description": "A utility for analyzing TypeScript dependency relationships.",
+  "version": "0.0.1",
+  "repository": {
+    "directory": "packages/ts-grapher",
+    "url": "git+https://github.com/grafana/plugin-tools.git"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "test": "vitest --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "glob": "^13.0.0",
+    "minimist": "^1.2.8",
+    "ts-morph": "^27.0.2"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
