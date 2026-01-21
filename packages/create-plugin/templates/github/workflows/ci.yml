@@ -63,7 +63,7 @@ jobs:
         if: steps.check-for-backend.outputs.has-backend == 'true'
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod 
+          go-version-file: go.mod
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
