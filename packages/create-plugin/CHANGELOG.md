@@ -1,3 +1,41 @@
+# v6.7.8 (Thu Jan 22 2026)
+
+#### 🐛 Bug Fix
+
+- Fix: Pin golint-ci in scaffolded plugins [#2414](https://github.com/grafana/plugin-tools/pull/2414) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.7.7 (Thu Jan 22 2026)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump go version in plugin templates [#2409](https://github.com/grafana/plugin-tools/pull/2409) ([@sunker](https://github.com/sunker))
+- chore(deps): update dependency @grafana/plugin-e2e to v3.1.4 [#2413](https://github.com/grafana/plugin-tools/pull/2413) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v6.7.6 (Tue Jan 20 2026)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2407](https://github.com/grafana/plugin-tools/pull/2407) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v6.7.5 (Wed Jan 14 2026)
 
 #### 🐛 Bug Fix

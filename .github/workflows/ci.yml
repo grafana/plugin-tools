@@ -334,10 +334,17 @@ jobs:
 
       - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
-          go-version: '~1.25.0'
-          check-latest: true
+          go-version-file: ./${{ matrix.workingDir }}/go.mod
           cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
         if: ${{ matrix.hasBackend == true }}
+
+      - name: Lint backend
+        if: ${{ matrix.hasBackend == true }}
+        uses: golangci/golangci-lint-action@9fae48acfc02a90574d7c304a1758ef9895495fa # v7.0.1
+        with:
+          version: latest
+          working-directory: ./${{ matrix.workingDir }}
+          args: ./...
 
       - name: Build plugin backend
         uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
@@ -346,6 +353,14 @@ jobs:
           args: -v build:linux
           workdir: ./${{ matrix.workingDir }}
         if: ${{ matrix.hasBackend == true }}
+
+      - name: Test plugin backend
+        if: ${{ matrix.hasBackend == true }}
+        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        with:
+          version: latest
+          args: test
+          workdir: ./${{ matrix.workingDir }}
 
       - name: Install playwright dependencies
         run: npm exec playwright install --with-deps chromium

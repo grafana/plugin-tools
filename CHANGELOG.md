@@ -1,3 +1,89 @@
+# (Thu Jan 22 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.8`
+  - Fix: Pin golint-ci in scaffolded plugins [#2414](https://github.com/grafana/plugin-tools/pull/2414) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Jan 22 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.7`
+  - Create Plugin: Bump go version in plugin templates [#2409](https://github.com/grafana/plugin-tools/pull/2409) ([@sunker](https://github.com/sunker))
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.1.4 [#2413](https://github.com/grafana/plugin-tools/pull/2413) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Jan 21 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.1.4`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-21205677807 [#2410](https://github.com/grafana/plugin-tools/pull/2410) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Tue Jan 20 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.6`
+  - Create Plugin: Bump plugin-e2e [#2407](https://github.com/grafana/plugin-tools/pull/2407) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Jan 20 2026)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd)), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.1.3`
+  - Suggestions: Add All Visualizations click for 12.4 and greater [#2399](https://github.com/grafana/plugin-tools/pull/2399) ([@fastfrwrd](https://github.com/fastfrwrd) [@hugohaggmark](https://github.com/hugohaggmark) [@sunker](https://github.com/sunker))
+
+#### Authors: 3
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# (Mon Jan 19 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/react-detect@0.5.0`
+  - feat: add arg to prevent exit code 1 and improve json output [#2406](https://github.com/grafana/plugin-tools/pull/2406) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Jan 15 2026)
 
 #### 🚀 Enhancement

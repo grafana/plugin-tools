@@ -188,5 +188,8 @@ function cleanSourceFilePath(filePath: string): string {
     cleanPath = filePath.replace(/webpack:\/\/[^/]+/, './src/');
   }
 
+  // find paths that include webpack:/ in the middle of the string.
+  cleanPath = cleanPath.replace(/(.+)\/webpack:\/(.+)/g, '$1/$2');
+
   return cleanPath;
 }
