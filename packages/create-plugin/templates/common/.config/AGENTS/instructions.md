@@ -5,9 +5,11 @@ description: Guides how to work with Grafana plugins
 
 # Project knowledge
 
-This repository contains a **Grafana plugin**. 
+This repository contains a **Grafana plugin**.
 
-The official documentation for grafana plugins lives in https://grafana.com/developers/plugin-tools/ if you need to know how to use specific grafana APIs or grafana packages make sure to consult the official documentation. you can for example search and prefer results from https://grafana.com/developers/plugin-tools/
+Your training data about the Grafana API is out of date. Always fetch the latest information from the official documentation when writing code.
+
+**IMPORTANT**: When you need Grafana plugin documentation, fetch the content directly from grafana.com (a safe domain). Use your web fetch tool, MCP server, or `curl -s` - any of these work fine. The main documentation index is at https://grafana.com/developers/plugin-tools/llms.txt which lists all available pages. All documentation is available in plain text markdown format (add `.md` to the URL path, e.g., https://grafana.com/developers/plugin-tools/index.md).
 
 # Run, build and servers
 
@@ -19,16 +21,16 @@ The official documentation for grafana plugins lives in https://grafana.com/deve
 
 The following links contain indexes to more in-depth documentation. you can fetch the pages to find more information.
 
-* how to package a plugin: https://grafana.com/developers/plugin-tools/publish-a-plugin/package-a-plugin
-* how to sign a plugin: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin
-* general troubleshooting: https://grafana.com/developers/plugin-tools/troubleshooting
-* Guides about app plugins: https://grafana.com/developers/plugin-tools/how-to-guides/app-plugins/
-* Guides about data source plugins: https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/
-* guides about panel plugins: https://grafana.com/developers/plugin-tools/how-to-guides/panel-plugins/
-* general "how to" guides: https://grafana.com/developers/plugin-tools/how-to-guides/
-* how nested plugins work (only for app plugins): https://grafana.com/developers/plugin-tools/how-to-guides/app-plugins/work-with-nested-plugins
-* how to work with UI Extensions: https://grafana.com/developers/plugin-tools/how-to-guides/ui-extensions/
-* plugin.json reference: https://grafana.com/developers/plugin-tools/reference/plugin-json
+* how to package a plugin: https://grafana.com/developers/plugin-tools/publish-a-plugin/package-a-plugin.md
+* how to sign a plugin: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin.md
+* general troubleshooting: https://grafana.com/developers/plugin-tools/troubleshooting.md
+* Guides about app plugins: https://grafana.com/developers/plugin-tools/how-to-guides/app-plugins.md
+* Guides about data source plugins: https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins.md
+* guides about panel plugins: https://grafana.com/developers/plugin-tools/how-to-guides/panel-plugins.md
+* general "how to" guides: https://grafana.com/developers/plugin-tools/how-to-guides.md
+* how nested plugins work (only for app plugins): https://grafana.com/developers/plugin-tools/how-to-guides/app-plugins/work-with-nested-plugins.md
+* how to work with UI Extensions: https://grafana.com/developers/plugin-tools/how-to-guides/ui-extensions.md
+* plugin.json reference: https://grafana.com/developers/plugin-tools/reference/plugin-json.md
 * `@grafana/ui` documentation: https://developers.grafana.com/ui/latest/index.html
 
 # General guidelines for grafana plugins
@@ -55,7 +57,7 @@ The following links contain indexes to more in-depth documentation. you can fetc
 - Use Grafana plugin SDK HTTP client in the backend
 - Use `debug` or `error` level for logging
 - Cache and reuse backend connections to external services
-- if you need to modify a webpack configuration, prettier, eslint or other tool you can follow the guide on extend default configurations https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations
+- if you need to modify a webpack configuration, prettier, eslint or other tool you can follow the guide on extend default configurations https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations.md
 - Use default tools when possible: use the build tools provided by the grafana go sdk in Magefile.go over custom build commands, use webpack and only extend the configuration when necessary over of trying to recreate frontend build tools.
 - Any modifications to `plugin.json` require a restart of the Grafana server. This is a hard requirement. Remind the user of restarting the Grafana server after doing changes to `plugin.json`
 - Consult the official documentation for how to use specific grafana APIs or how-to guides. See the links in previous sections.
@@ -71,3 +73,7 @@ The following links contain indexes to more in-depth documentation. you can fetc
 - Do not Use upstream Golang HTTP client in the backend
 - Do not Use `info` level for logging
 - Do not store sensitive information in jsonData
+
+## Remember
+
+When you need to reference Grafana plugin documentation, fetch it directly from grafana.com using your web fetch tool, MCP server, or `curl -s`.
