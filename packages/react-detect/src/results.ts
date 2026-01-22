@@ -88,7 +88,7 @@ function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean): Ana
     if (
       match.type === 'dependency' &&
       match.pattern === '__SECRET_INTERNALS' &&
-      match.packageName === 'react' &&
+      (match.packageName === 'react' || match.packageName === 'react-dom') &&
       (match.sourceFile.includes('jsx-runtime') || match.sourceFile.includes('jsx-dev-runtime'))
     ) {
       return false;
