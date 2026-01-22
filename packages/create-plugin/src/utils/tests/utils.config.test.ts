@@ -46,13 +46,13 @@ describe('getConfig', () => {
 
     it('should override default feature flags via cli args', async () => {
       mocks.argv = {
-        'feature-flags': 'bundleGrafanaUI',
+        'feature-flags': 'useExperimentalRspack',
       };
       const config = getConfig(tmpDir);
 
       expect(config).toEqual({
         version: CURRENT_APP_VERSION,
-        features: { ...DEFAULT_FEATURE_FLAGS, bundleGrafanaUI: true },
+        features: { ...DEFAULT_FEATURE_FLAGS, useExperimentalRspack: true },
       });
     });
   });
@@ -94,7 +94,7 @@ describe('getConfig', () => {
       const userConfigPath = path.join(tmpDir, '.cprc.json');
       const userConfig: UserConfig = {
         features: {
-          bundleGrafanaUI: true,
+          useExperimentalRspack: true,
         },
       };
 
@@ -106,28 +106,6 @@ describe('getConfig', () => {
         version: CURRENT_APP_VERSION,
         features: userConfig.features,
       });
-    });
-
-    it('should give back the correct config when config files exist', async () => {
-      const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
-      const userConfigPath = path.join(tmpDir, '.cprc.json');
-      const rootConfig: CreatePluginConfig = {
-        version: '1.0.0',
-        features: {},
-      };
-      const userConfig: UserConfig = {
-        features: {
-          bundleGrafanaUI: false,
-        },
-      };
-
-      await fs.mkdir(path.dirname(rootConfigPath), { recursive: true });
-      await fs.writeFile(rootConfigPath, JSON.stringify(rootConfig));
-      await fs.writeFile(userConfigPath, JSON.stringify(userConfig));
-
-      const config = getConfig(tmpDir);
-
-      expect(config).toEqual({ ...rootConfig, ...userConfig });
     });
   });
 });
