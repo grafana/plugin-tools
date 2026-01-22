@@ -4,10 +4,12 @@ import { lt } from 'semver';
 const LATENCY_MS = 200;
 
 test.use({
-  featureToggles: {
-    latencyTestFlag: true,
+  openFeature: {
+    flags: {
+      latencyTestFlag: true,
+    },
+    latency: LATENCY_MS,
   },
-  openFeatureLatency: LATENCY_MS,
 });
 
 test('should apply artificial latency to OFREP responses', async ({ page, grafanaVersion, selectors, namespace }) => {

@@ -23,6 +23,12 @@ import { VariablePage } from './models/pages/VariablePage';
 import { VersionedAPIs } from './selectors/versionedAPIs';
 import { VersionedConstants } from './selectors/versionedConstants';
 
+/**
+ * Value types supported by OpenFeature flags.
+ * Aligns with the OpenFeature specification.
+ */
+export type FeatureFlagValue = boolean | string | number | object;
+
 export type PluginOptions = {
   /**
    * When using the readProvisioning fixture, files will be read from this directory. If no directory is provided,
@@ -68,6 +74,33 @@ export type PluginOptions = {
   featureToggles: Record<string, boolean>;
 
   /**
+   * OpenFeature configuration for flag overrides and network simulation.
+   * Flags will be intercepted via OFREP API and merged with backend flags.
+   *
+   * Use this instead of `featureToggles` for any feature toggle that is using the new
+   * OpenFeature system in Grafana.
+   *
+   * @example
+   * ```typescript
+   * test.use({
+   *   openFeature: {
+   *     flags: {
+   *       enableNewUI: true,              // boolean
+   *       themeColor: "blue",             // string
+   *       maxRetries: 3,                  // number
+   *       apiConfig: { tier: "premium" }, // object
+   *     },
+   *     latency: 200, // optional: artificial latency in ms for OFREP responses
+   *   },
+   * });
+   * ```
+   */
+  openFeature: {
+    flags: Record<string, FeatureFlagValue>;
+    latency?: number;
+  };
+
+  /**
    * Optionally, you can add or override user preferences for the Grafana user.
    * The user preferences you specify here will be applied to window.grafanaBootData.user.preferences object.
    * Since all tests receive a new, isolated browser context, the user preferences will be reset for each test.
@@ -104,21 +137,6 @@ export type PluginOptions = {
    * If no credentials are provided, the server default admin:admin credentials will be used.
    */
   grafanaAPICredentials: Credentials;
-
-  /**
-   * Artificial latency in milliseconds to add to OpenFeature OFREP API responses.
-   * Useful for testing how the UI behaves with slow network conditions when fetching feature flags.
-   *
-   * @default 0
-   * @example
-   * ```typescript
-   * // Simulate 500ms network latency for OpenFeature flag fetching
-   * test.use({
-   *   openFeatureLatency: 500,
-   * });
-   * ```
-   */
-  openFeatureLatency: number;
 };
 
 export type PluginFixture = {
