@@ -45,8 +45,12 @@ export type PluginOptions = {
   provisioningRootDir: string;
   /**
    * Optionally, you can add or override feature toggles.
-   * The feature toggles you specify here will work for both legacy feature toggles (via `window.grafanaBootData.settings.featureToggles`)
-   * and OpenFeature flags (via OFREP API interception).
+   * This option only supports boolean values and is primarily used for legacy feature toggles
+   * (via `window.grafanaBootData.settings.featureToggles`).
+   *
+   * **For OpenFeature-based flags, use the `openFeature` option instead.**
+   * The `openFeature` option supports multi-type values (boolean, string, number, object)
+   * as required by the OpenFeature specification.
    *
    * If you need a feature toggle to work across the entire stack, you need to enable the feature in the Grafana config.
    * Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
@@ -77,8 +81,14 @@ export type PluginOptions = {
    * OpenFeature configuration for flag overrides and network simulation.
    * Flags will be intercepted via OFREP API and merged with backend flags.
    *
-   * Use this instead of `featureToggles` for any feature toggle that is using the new
-   * OpenFeature system in Grafana.
+   * **Use this for any feature flags that use the OpenFeature system in Grafana (Grafana 12.1.0+).**
+   * This option supports all OpenFeature value types: boolean, string, number, and object.
+   *
+   * **Important:** This only affects frontend flag evaluation via OFREP API. It does not affect
+   * backend feature flags (GOFF) or server-side behavior. If you need feature flags to work
+   * across the entire stack, you must enable them in the Grafana configuration.
+   *
+   * For legacy boolean-only feature toggles, use the `featureToggles` option instead.
    *
    * @example
    * ```typescript
@@ -264,6 +274,7 @@ export type PluginFixture = {
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
+   * Only works for legacy feature toggles (window.grafanaBootData.settings.featureToggles).
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
 
