@@ -1,3 +1,18 @@
+# (Thu Jan 22 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.7.7`
+  - Create Plugin: Bump go version in plugin templates [#2409](https://github.com/grafana/plugin-tools/pull/2409) ([@sunker](https://github.com/sunker))
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.1.4 [#2413](https://github.com/grafana/plugin-tools/pull/2413) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Wed Jan 21 2026)
 
 #### 🐛 Bug Fix
