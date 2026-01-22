@@ -1,3 +1,15 @@
+# v6.7.8 (Thu Jan 22 2026)
+
+#### 🐛 Bug Fix
+
+- Fix: Pin golint-ci in scaffolded plugins [#2414](https://github.com/grafana/plugin-tools/pull/2414) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v6.7.7 (Thu Jan 22 2026)
 
 #### 🐛 Bug Fix
