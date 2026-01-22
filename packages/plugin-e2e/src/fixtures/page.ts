@@ -1,4 +1,5 @@
 import { Page, TestFixture } from '@playwright/test';
+import { gte } from 'semver';
 
 import { PlaywrightArgs } from '../types';
 import { setupOpenFeatureRoutes } from './openFeature';
@@ -11,10 +12,10 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  *
  * Feature toggles are applied in two ways:
  * 1. Legacy: Added directly to the window.grafanaBootData.settings.featureToggles object via init script
- * 2. OpenFeature: Intercepted and merged into OFREP API responses
+ * 2. OpenFeature: Intercepted and merged into OFREP API responses (Grafana 12.1.0+)
  *
- * This dual approach ensures feature toggles work regardless of whether Grafana is using legacy toggles
- * or the newer OpenFeature system.
+ * The `featureToggles` option uses the legacy approach only.
+ * The `openFeature` option uses OFREP API interception and requires Grafana >= 12.1.0.
  *
  * page.addInitScript adds a script which would be evaluated in one of the following scenarios:
  * - Whenever the page is navigated.
@@ -22,7 +23,10 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  *   newly attached frame.
  * The script is evaluated after the document was created but before any of its scripts were run.
  */
-export const page: PageFixture = async ({ page, featureToggles, openFeature, userPreferences, selectors }, use) => {
+export const page: PageFixture = async (
+  { page, featureToggles, openFeature, userPreferences, grafanaVersion, selectors },
+  use
+) => {
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
   const hasOpenFeature = Object.keys(openFeature.flags).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;
@@ -37,9 +41,9 @@ export const page: PageFixture = async ({ page, featureToggles, openFeature, use
   }
 
   // set up OpenFeature OFREP route interception BEFORE navigation
-  // this ensures both featureToggles and openFeature work for OpenFeature-based flags
-  if (hasFeatureToggles || hasOpenFeature) {
-    await setupOpenFeatureRoutes(page, featureToggles, openFeature.flags, openFeature.latency ?? 0, selectors);
+  // only runs if openFeature flags are provided and Grafana version >= 12.1.0
+  if (hasOpenFeature && gte(grafanaVersion, '12.1.0')) {
+    await setupOpenFeatureRoutes(page, openFeature.flags, openFeature.latency ?? 0, selectors);
   }
 
   await page.goto('/');

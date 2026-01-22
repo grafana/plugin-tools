@@ -2,8 +2,11 @@ import { expect, test } from '../../../src';
 import { lt } from 'semver';
 
 test.use({
-  featureToggles: {
-    singleTestFlag: true,
+  openFeature: {
+    flags: {
+      singleTestFlag: true,
+    },
+    latency: 0,
   },
 });
 

@@ -125,31 +125,22 @@ async function handleSingleFlagRoute(
  */
 export async function setupOpenFeatureRoutes(
   page: Page,
-  featureToggles: Record<string, boolean>,
   openFeature: Record<string, FeatureFlagValue>,
   latency: number,
   selectors: PlaywrightArgs['selectors']
 ): Promise<void> {
-  // merge both options - openFeature takes precedence over featureToggles
-  const mergedFlags: Record<string, FeatureFlagValue> = {
-    ...featureToggles,
-    ...openFeature,
-  };
-
   console.log('@grafana/plugin-e2e: setting up OpenFeature OFREP interception', {
-    featureToggles,
     openFeature,
-    mergedFlags,
     latency,
   });
 
   // intercept bulk evaluation endpoint
   await page.route(selectors.apis.OpenFeature.ofrepBulkPattern, async (route) => {
-    await handleBulkEvaluationRoute(route, mergedFlags, latency);
+    await handleBulkEvaluationRoute(route, openFeature, latency);
   });
 
   // intercept single flag evaluation endpoint
   await page.route(selectors.apis.OpenFeature.ofrepSinglePattern, async (route) => {
-    await handleSingleFlagRoute(route, mergedFlags, latency);
+    await handleSingleFlagRoute(route, openFeature, latency);
   });
 }
