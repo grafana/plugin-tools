@@ -81,14 +81,15 @@ export type PluginOptions = {
    * OpenFeature configuration for flag overrides and network simulation.
    * Flags will be intercepted via OFREP API and merged with backend flags.
    *
-   * **Use this for any feature flags that use the OpenFeature system in Grafana (Grafana 12.1.0+).**
-   * This option supports all OpenFeature value types: boolean, string, number, and object.
+   * Use this for any feature flags that use the OpenFeature system in Grafana.
+   * This option supports all OpenFeature value types: boolean, string, number and object.
    *
-   * **Important:** This only affects frontend flag evaluation via OFREP API. It does not affect
+   * This only affects frontend flag evaluation via OFREP API. It does not affect
    * backend feature flags (GOFF) or server-side behavior. If you need feature flags to work
    * across the entire stack, you must enable them in the Grafana configuration.
    *
-   * For legacy boolean-only feature toggles, use the `featureToggles` option instead.
+   * For legacy feature toggles (window.grafanaBootData.settings.featureToggles),
+   * use the `featureToggles` option instead.
    *
    * @example
    * ```typescript

@@ -16,7 +16,7 @@ test('should apply artificial latency to OFREP responses', async ({ page, grafan
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
   const startTime = Date.now();
 
-  // Make a request to the single flag endpoint which will be intercepted
+  // make a request to the single flag endpoint which will be intercepted
   const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/latencyTestFlag`;
 
   const response = await page.evaluate(async (url) => {
@@ -34,11 +34,11 @@ test('should apply artificial latency to OFREP responses', async ({ page, grafan
   const elapsed = Date.now() - startTime;
 
   if (response) {
-    // Verify the response is correct
+    // verify the response is correct
     expect(response.key).toBe('latencyTestFlag');
     expect(response.value).toBe(true);
 
-    // Verify the latency was applied (allow some margin for timing variance)
+    // verify  the latency was applied (allow some margin for timing variance)
     expect(elapsed).toBeGreaterThanOrEqual(LATENCY_MS - 50);
   }
 });

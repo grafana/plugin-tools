@@ -16,7 +16,7 @@ test.use({
       numberFlagZero: 0,
       numberFlagNegative: -1,
       // object flags
-      objectFlag: { tier: 'premium', maxRetries: 3 },
+      objectFlag: { tier: 'free', maxRetries: 3 },
       objectFlagNested: { config: { api: { timeout: 5000, retries: 3 }, features: ['a', 'b'] } },
       objectFlagArray: [1, 2, 3],
     },
@@ -79,7 +79,7 @@ test('should support all OpenFeature value types in bulk evaluation', async ({
 
     // object flags
     const objectFlag = findFlag('objectFlag');
-    expect(objectFlag?.value).toEqual({ tier: 'premium', maxRetries: 3 });
+    expect(objectFlag?.value).toEqual({ tier: 'free', maxRetries: 3 });
 
     const objectNested = findFlag('objectFlagNested');
     expect(objectNested?.value).toEqual({
@@ -208,7 +208,7 @@ test('should support object flag in single evaluation', async ({ page, grafanaVe
 
   if (response) {
     expect(response.key).toBe('objectFlag');
-    expect(response.value).toEqual({ tier: 'premium', maxRetries: 3 });
+    expect(response.value).toEqual({ tier: 'free', maxRetries: 3 });
     expect(response.reason).toBe('STATIC');
   }
 });
