@@ -1,3 +1,15 @@
+# v0.5.1 (Fri Jan 23 2026)
+
+#### 🐛 Bug Fix
+
+- fix: silence warnings so json flag prints valid json [#2417](https://github.com/grafana/plugin-tools/pull/2417) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.5.0 (Mon Jan 19 2026)
 
 #### 🚀 Enhancement

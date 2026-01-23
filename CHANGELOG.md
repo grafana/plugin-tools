@@ -1,3 +1,16 @@
+# (Fri Jan 23 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/react-detect@0.5.1`
+  - fix: silence warnings so json flag prints valid json [#2417](https://github.com/grafana/plugin-tools/pull/2417) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Jan 22 2026)
 
 #### 🐛 Bug Fix
