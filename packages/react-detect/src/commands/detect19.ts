@@ -15,6 +15,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
     const pluginRoot = argv.pluginRoot || process.cwd();
     const skipDependencies = argv.skipDependencies || false;
     const skipBuildTooling = argv.skipBuildTooling || false;
+    const jsonOutput = argv.json || false;
 
     const allMatches = await getAllMatches(pluginRoot);
 
@@ -25,15 +26,17 @@ export async function detect19(argv: minimist.ParsedArgs) {
       try {
         await depContext.loadDependencies(pluginRoot);
       } catch (error) {
-        // Log warning but continue with null context
-        output.warning({
-          title: 'Failed to load dependencies',
-          body: [
-            (error as Error).message,
-            'Continuing without dependency analysis.',
-            'Use --skipDependencies to suppress this warning.',
-          ],
-        });
+        // Log warning only if not in JSON output mode and continue with null context
+        if (!jsonOutput) {
+          output.warning({
+            title: 'Failed to load dependencies',
+            body: [
+              (error as Error).message,
+              'Continuing without dependency analysis.',
+              'Use --skipDependencies to suppress this warning.',
+            ],
+          });
+        }
         depContext = null;
       }
     }
