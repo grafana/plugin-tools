@@ -52,8 +52,8 @@
   "devDependencies": {
     "@types/eslint": "^9.6.1",
     "@types/semver": "^7.7.1",
-    "@typescript-eslint/parser": "^8.53.0",
-    "@typescript-eslint/rule-tester": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.1",
+    "@typescript-eslint/rule-tester": "^8.53.1",
     "concurrently": "^9.2.1"
   },
   "peerDependencies": {
