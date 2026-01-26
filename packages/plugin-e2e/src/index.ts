@@ -30,7 +30,7 @@ import { explorePage } from './fixtures/explorePage';
 import { bootData } from './fixtures/bootData';
 import { grafanaVersion } from './fixtures/grafanaVersion';
 import { namespace } from './fixtures/namespace';
-import { isFeatureToggleEnabled } from './fixtures/isFeatureToggleEnabled';
+import { isFeatureToggleEnabled, isLegacyFeatureToggleEnabled } from './fixtures/isFeatureToggleEnabled';
 import { page } from './fixtures/page';
 import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
@@ -74,6 +74,9 @@ export { AppPage } from './models/pages/AppPage';
 // types
 export * from './types';
 
+// helper functions
+export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
+
 // first extend with internal fixtures (not exposed to tests)
 const testWithInternal = base.extend<InternalFixtures>({
   bootData,
@@ -100,6 +103,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   readProvisionedAlertRule,
   readProvisionedDashboard,
   isFeatureToggleEnabled,
+  isLegacyFeatureToggleEnabled,
   createUser,
   gotoDashboardPage,
   gotoPanelEditPage,

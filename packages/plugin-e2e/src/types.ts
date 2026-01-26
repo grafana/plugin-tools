@@ -280,6 +280,13 @@ export type PluginFixture = {
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
 
   /**
+   * Checks if a legacy feature toggle is enabled.
+   * This only checks window.grafanaBootData.settings.featureToggles (legacy system).
+   * For OpenFeature flags, use getBooleanOpenFeatureFlag instead.
+   */
+  isLegacyFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
    * Client that allows you to use certain endpoints in the Grafana http API.
    *
    The GrafanaAPIClient doesn't call the Grafana HTTP API on behalf of the logged in user -
