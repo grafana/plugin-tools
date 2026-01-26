@@ -43,7 +43,7 @@
     "dotenv": "^17.2.3",
     "raw-loader": "^4.0.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.18"
   },
   "browserslist": {
     "production": [

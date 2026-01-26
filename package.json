@@ -32,7 +32,7 @@
     "@auto-it/omit-release-notes": "11.3.6",
     "@auto-it/slack": "11.3.6",
     "@grafana/eslint-config": "^9.0.0",
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.58.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
@@ -47,7 +47,7 @@
     "auto": "11.3.6",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsdoc": "^62.2.0",
+    "eslint-plugin-jsdoc": "^62.3.1",
     "eslint-plugin-mdx": "^3.6.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -55,14 +55,14 @@
     "husky": "^9.1.7",
     "lerna": "^9.0.3",
     "lint-staged": "^16.2.7",
-    "prettier": "3.8.0",
+    "prettier": "3.8.1",
     "publint": "^0.3.12",
-    "rollup": "^4.55.2",
+    "rollup": "^4.56.0",
     "rollup-plugin-delete": "^3.0.2",
     "rollup-plugin-dts": "^6.3.0",
     "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=24"
@@ -91,17 +91,17 @@
   },
   "optionalDependencies": {
     "@esbuild/linux-x64": "0.27.2",
-    "@rollup/rollup-linux-x64-gnu": "^4.55.2",
+    "@rollup/rollup-linux-x64-gnu": "^4.56.0",
     "@swc/html-linux-x64-gnu": "^1.15.10",
-    "lightningcss-darwin-arm64": "1.31.0",
-    "lightningcss-darwin-x64": "1.31.0",
-    "lightningcss-freebsd-x64": "1.31.0",
-    "lightningcss-linux-arm-gnueabihf": "1.31.0",
-    "lightningcss-linux-arm64-gnu": "1.31.0",
-    "lightningcss-linux-arm64-musl": "1.31.0",
-    "lightningcss-linux-x64-gnu": "1.31.0",
-    "lightningcss-linux-x64-musl": "1.31.0",
-    "lightningcss-win32-arm64-msvc": "1.31.0",
-    "lightningcss-win32-x64-msvc": "1.31.0"
+    "lightningcss-darwin-arm64": "1.31.1",
+    "lightningcss-darwin-x64": "1.31.1",
+    "lightningcss-freebsd-x64": "1.31.1",
+    "lightningcss-linux-arm-gnueabihf": "1.31.1",
+    "lightningcss-linux-arm64-gnu": "1.31.1",
+    "lightningcss-linux-arm64-musl": "1.31.1",
+    "lightningcss-linux-x64-gnu": "1.31.1",
+    "lightningcss-linux-x64-musl": "1.31.1",
+    "lightningcss-win32-arm64-msvc": "1.31.1",
+    "lightningcss-win32-x64-msvc": "1.31.1"
   }
 }
