@@ -10,14 +10,28 @@ export const getBooleanOpenFeatureFlag: GetBooleanOpenFeatureFlagFixture = async
   await use(async (flagKey: string) => {
     try {
       const url = selectors.apis.OpenFeature.ofrepSinglePath(namespace, flagKey);
-      const response = await page.request.get(url);
 
-      if (!response.ok()) {
-        throw new Error(`Failed to fetch OpenFeature flag "${flagKey}": ${response.status()} ${response.statusText()}`);
+      // make the request from within the page context to use the same authentication
+      const result = await page.evaluate(async (flagUrl) => {
+        const response = await fetch(flagUrl);
+
+        if (!response.ok) {
+          return {
+            error: true,
+            status: response.status,
+            statusText: response.statusText,
+          };
+        }
+
+        const body = await response.json();
+        return { error: false, value: body.value };
+      }, url);
+
+      if (result.error) {
+        throw new Error(`Failed to fetch OpenFeature flag "${flagKey}": ${result.status} ${result.statusText}`);
       }
 
-      const body = await response.json();
-      const value = body.value;
+      const value = result.value;
 
       if (typeof value !== 'boolean') {
         throw new Error(
