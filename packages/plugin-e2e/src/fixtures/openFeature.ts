@@ -34,8 +34,10 @@ async function handleBulkEvaluationRoute(
   flags: Record<string, FeatureFlagValue>,
   latency: number
 ): Promise<void> {
+  let response: Awaited<ReturnType<Route['fetch']>> | undefined;
+
   try {
-    const response = await route.fetch();
+    response = await route.fetch();
 
     if (!response.ok()) {
       await route.fulfill({ response });
@@ -78,7 +80,16 @@ async function handleBulkEvaluationRoute(
     });
   } catch (error) {
     console.error('@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation', error);
-    await route.continue();
+    // fulfill with original response if available, otherwise return error response
+    if (response) {
+      await route.fulfill({ response });
+    } else {
+      await route.fulfill({
+        status: 500,
+        body: JSON.stringify({ error: 'Failed to intercept OFREP request' }),
+        headers: { 'content-type': 'application/json' },
+      });
+    }
   }
 }
 
@@ -113,10 +124,17 @@ async function handleSingleFlagRoute(
       return;
     }
 
-    await route.continue();
+    // fetch the original response if we don't have an override
+    const response = await route.fetch();
+    await route.fulfill({ response });
   } catch (error) {
     console.error('@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation', error);
-    await route.continue();
+    // return error response since we can't continue after route.fetch()
+    await route.fulfill({
+      status: 500,
+      body: JSON.stringify({ error: 'Failed to intercept OFREP request' }),
+      headers: { 'content-type': 'application/json' },
+    });
   }
 }
 
