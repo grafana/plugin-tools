@@ -2,13 +2,15 @@ import { expect, test } from '../../../src';
 import { lt } from 'semver';
 
 test.use({
-  featureToggles: {
-    testFlagTrue: true,
-    testFlagFalse: false,
+  openFeature: {
+    flags: {
+      testFlagTrue: true,
+      testFlagFalse: false,
+    },
   },
 });
 
-test('should intercept OFREP bulk evaluation and override flags via featureToggles', async ({
+test('should intercept OFREP bulk evaluation and override flags via openFeature', async ({
   page,
   grafanaVersion,
   selectors,
@@ -30,7 +32,7 @@ test('should intercept OFREP bulk evaluation and override flags via featureToggl
     const response = await responsePromise;
     const body = await response.json();
 
-    // response should contain our overridden flags from featureToggles
+    // response should contain our overridden flags from openFeature
     const testFlagTrue = body.flags?.find((f: { key: string }) => f.key === 'testFlagTrue');
     const testFlagFalse = body.flags?.find((f: { key: string }) => f.key === 'testFlagFalse');
 
@@ -50,7 +52,7 @@ test('should intercept OFREP bulk evaluation and override flags via featureToggl
   }
 });
 
-test('should merge custom featureToggles with backend default flags', async ({
+test('should merge custom openFeature flags with backend default flags', async ({
   page,
   grafanaVersion,
   selectors,
