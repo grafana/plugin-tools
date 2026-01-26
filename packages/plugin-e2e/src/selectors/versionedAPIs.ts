@@ -55,8 +55,8 @@ export const versionedAPIs = {
         `/apis/features.grafana.app/v0alpha1/namespaces/${namespace}/ofrep/v1/evaluate/flags`,
     },
     ofrepSinglePath: {
-      '12.1.0': (namespace = 'default') =>
-        `/apis/features.grafana.app/v0alpha1/namespaces/${namespace}/ofrep/v1/evaluate/flags`,
+      '12.1.0': (namespace = 'default', flagKey: string) =>
+        `/apis/features.grafana.app/v0alpha1/namespaces/${namespace}/ofrep/v1/evaluate/flags/${flagKey}`,
     },
   },
 } satisfies VersionedSelectorGroup;

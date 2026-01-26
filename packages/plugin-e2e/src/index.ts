@@ -31,6 +31,7 @@ import { bootData } from './fixtures/bootData';
 import { grafanaVersion } from './fixtures/grafanaVersion';
 import { namespace } from './fixtures/namespace';
 import { isFeatureToggleEnabled, isLegacyFeatureToggleEnabled } from './fixtures/isFeatureToggleEnabled';
+import { getBooleanOpenFeatureFlag } from './fixtures/getOpenFeatureFlag';
 import { page } from './fixtures/page';
 import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
@@ -104,6 +105,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   readProvisionedDashboard,
   isFeatureToggleEnabled,
   isLegacyFeatureToggleEnabled,
+  getBooleanOpenFeatureFlag,
   createUser,
   gotoDashboardPage,
   gotoPanelEditPage,

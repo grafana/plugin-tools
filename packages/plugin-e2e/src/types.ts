@@ -276,6 +276,7 @@ export type PluginFixture = {
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
    * Only works for legacy feature toggles (window.grafanaBootData.settings.featureToggles).
+   * @deprecated Use isLegacyFeatureToggleEnabled instead. For OpenFeature flags, use getBooleanOpenFeatureFlag.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
 
@@ -285,6 +286,22 @@ export type PluginFixture = {
    * For OpenFeature flags, use getBooleanOpenFeatureFlag instead.
    */
   isLegacyFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Gets the value of a boolean OpenFeature flag by calling the OFREP API.
+   * This retrieves the current flag value from Grafana's OpenFeature system.
+   *
+   * Note: This requires Grafana >= 12.1.0 (when OpenFeature OFREP was introduced).
+   *
+   * @example
+   * ```typescript
+   * test('should check OpenFeature flag', async ({ getBooleanOpenFeatureFlag }) => {
+   *   const isEnabled = await getBooleanOpenFeatureFlag('myFeatureFlag');
+   *   expect(isEnabled).toBe(true);
+   * });
+   * ```
+   */
+  getBooleanOpenFeatureFlag(flagKey: string): Promise<boolean>;
 
   /**
    * Client that allows you to use certain endpoints in the Grafana http API.

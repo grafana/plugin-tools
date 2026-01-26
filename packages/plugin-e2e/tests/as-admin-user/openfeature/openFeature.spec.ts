@@ -97,3 +97,17 @@ test('should merge custom openFeature flags with backend default flags', async (
     console.log('OFREP endpoint not called - OpenFeature may not be enabled');
   }
 });
+
+test('should retrieve flag values using getBooleanOpenFeatureFlag fixture', async ({
+  getBooleanOpenFeatureFlag,
+  grafanaVersion,
+}) => {
+  test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
+
+  // should retrieve our overridden flags
+  const testFlagTrue = await getBooleanOpenFeatureFlag('testFlagTrue');
+  const testFlagFalse = await getBooleanOpenFeatureFlag('testFlagFalse');
+
+  expect(testFlagTrue).toBe(true);
+  expect(testFlagFalse).toBe(false);
+});
