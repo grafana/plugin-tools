@@ -38,7 +38,7 @@ test('should apply artificial latency to OFREP responses', async ({ page, grafan
     expect(response.key).toBe('latencyTestFlag');
     expect(response.value).toBe(true);
 
-    // verify  the latency was applied (allow some margin for timing variance)
+    // verify the latency was applied (allow some margin for timing variance)
     expect(elapsed).toBeGreaterThanOrEqual(LATENCY_MS - 50);
   }
 });
