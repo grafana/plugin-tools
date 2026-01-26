@@ -30,7 +30,7 @@ test('should intercept OFREP bulk evaluation and override flags via featureToggl
     const response = await responsePromise;
     const body = await response.json();
 
-    // response should contains our overridden flags from featureToggles
+    // response should contain our overridden flags from featureToggles
     const testFlagTrue = body.flags?.find((f: { key: string }) => f.key === 'testFlagTrue');
     const testFlagFalse = body.flags?.find((f: { key: string }) => f.key === 'testFlagFalse');
 
