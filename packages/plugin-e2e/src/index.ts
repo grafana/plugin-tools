@@ -1,6 +1,13 @@
 import { test as base, expect as baseExpect, Locator } from '@playwright/test';
 
-import { AlertPageOptions, AlertVariant, ContainTextOptions, PluginFixture, PluginOptions } from './types';
+import {
+  AlertPageOptions,
+  AlertVariant,
+  ContainTextOptions,
+  InternalFixtures,
+  PluginFixture,
+  PluginOptions,
+} from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
 import { grafanaAPIClient } from './fixtures/grafanaAPIClient';
 import { createDataSource } from './fixtures/commands/createDataSource';
@@ -20,8 +27,11 @@ import { readProvisionedDataSource } from './fixtures/commands/readProvisionedDa
 import { readProvisionedAlertRule } from './fixtures/commands/readProvisionedAlertRule';
 import { dashboardPage } from './fixtures/dashboardPage';
 import { explorePage } from './fixtures/explorePage';
+import { bootData } from './fixtures/bootData';
 import { grafanaVersion } from './fixtures/grafanaVersion';
-import { isFeatureToggleEnabled } from './fixtures/isFeatureToggleEnabled';
+import { namespace } from './fixtures/namespace';
+import { isFeatureToggleEnabled, isLegacyFeatureToggleEnabled } from './fixtures/isFeatureToggleEnabled';
+import { getBooleanOpenFeatureFlag } from './fixtures/getOpenFeatureFlag';
 import { page } from './fixtures/page';
 import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
@@ -65,9 +75,19 @@ export { AppPage } from './models/pages/AppPage';
 // types
 export * from './types';
 
-export const test = base.extend<PluginFixture, PluginOptions>({
+// helper functions
+export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
+
+// first extend with internal fixtures (not exposed to tests)
+const testWithInternal = base.extend<InternalFixtures>({
+  bootData,
+});
+
+// then extend with public fixtures
+export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   selectors: e2eSelectors,
   grafanaVersion,
+  namespace,
   login,
   grafanaAPIClient,
   createDataSourceConfigPage,
@@ -84,6 +104,8 @@ export const test = base.extend<PluginFixture, PluginOptions>({
   readProvisionedAlertRule,
   readProvisionedDashboard,
   isFeatureToggleEnabled,
+  isLegacyFeatureToggleEnabled,
+  getBooleanOpenFeatureFlag,
   createUser,
   gotoDashboardPage,
   gotoPanelEditPage,
@@ -115,6 +137,10 @@ declare global {
     grafanaBootData: {
       settings: {
         featureToggles: Record<string, boolean>;
+        buildInfo: {
+          version: string;
+        };
+        namespace: string;
       };
     };
   }

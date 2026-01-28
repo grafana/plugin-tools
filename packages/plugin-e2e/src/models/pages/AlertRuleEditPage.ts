@@ -3,7 +3,7 @@ import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '.
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
 import { expect } from '@playwright/test';
-import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
+import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 
 export class AlertRuleEditPage extends GrafanaPage {
@@ -42,7 +42,7 @@ export class AlertRuleEditPage extends GrafanaPage {
   }
 
   async isAdvancedModeSupported() {
-    const alertingQueryAndExpressionsStepMode = await isFeatureEnabled(
+    const alertingQueryAndExpressionsStepMode = await isLegacyFeatureEnabled(
       this.ctx.page,
       'alertingQueryAndExpressionsStepMode'
     );

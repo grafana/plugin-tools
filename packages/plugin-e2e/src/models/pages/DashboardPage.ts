@@ -5,7 +5,7 @@ import { GrafanaPage } from './GrafanaPage';
 import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
-import { isFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
+import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -87,7 +87,7 @@ export class DashboardPage extends GrafanaPage {
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages, constants } = this.ctx.selectors;
 
-    const scenesEnabled = await isFeatureEnabled(this.ctx.page, 'dashboardScene');
+    const scenesEnabled = await isLegacyFeatureEnabled(this.ctx.page, 'dashboardScene');
 
     // In scenes powered dashboards, one needs to click the edit button before adding a new panel in already existing dashboards
     if (scenesEnabled && this.dashboard?.uid) {
