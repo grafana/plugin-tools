@@ -1,3 +1,23 @@
+# (Thu Jan 29 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@3.2.0`
+  - Plugin E2E: OpenFeature support [#2408](https://github.com/grafana/plugin-tools/pull/2408) ([@sunker](https://github.com/sunker))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.8.0`
+  - chore(deps): update grafana patch dependencies to v12.3.2 [#2420](https://github.com/grafana/plugin-tools/pull/2420) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+  - fix(deps): update dependency which to v6 [#2393](https://github.com/grafana/plugin-tools/pull/2393) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Jan 23 2026)
 
 #### 🐛 Bug Fix

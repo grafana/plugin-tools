@@ -1,3 +1,15 @@
+# v3.2.0 (Thu Jan 29 2026)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: OpenFeature support [#2408](https://github.com/grafana/plugin-tools/pull/2408) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.1.4 (Wed Jan 21 2026)
 
 #### 🐛 Bug Fix

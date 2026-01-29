@@ -1,3 +1,16 @@
+# v6.8.0 (Thu Jan 29 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana patch dependencies to v12.3.2 [#2420](https://github.com/grafana/plugin-tools/pull/2420) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- fix(deps): update dependency which to v6 [#2393](https://github.com/grafana/plugin-tools/pull/2393) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.7.8 (Thu Jan 22 2026)
 
 #### 🐛 Bug Fix
