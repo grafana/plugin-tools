@@ -23,6 +23,12 @@ import { VariablePage } from './models/pages/VariablePage';
 import { VersionedAPIs } from './selectors/versionedAPIs';
 import { VersionedConstants } from './selectors/versionedConstants';
 
+/**
+ * Value types supported by OpenFeature flags.
+ * Aligns with the OpenFeature specification.
+ */
+export type FeatureFlagValue = boolean | string | number | object;
+
 export type PluginOptions = {
   /**
    * When using the readProvisioning fixture, files will be read from this directory. If no directory is provided,
@@ -39,27 +45,71 @@ export type PluginOptions = {
   provisioningRootDir: string;
   /**
    * Optionally, you can add or override feature toggles.
-   * The feature toggles you specify here will only work in the frontend. If you need a feature toggle to work across the entire stack, you
-   * need to need to enable the feature in the Grafana config. Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
+   * This option only supports boolean values and is primarily used for legacy feature toggles
+   * (via `window.grafanaBootData.settings.featureToggles`).
    *
-   * To override feature toggles globally in the playwright.config.ts file: 
+   * **For OpenFeature-based flags, use the `openFeature` option instead.**
+   * The `openFeature` option supports multi-type values (boolean, string, number, object)
+   * as required by the OpenFeature specification.
+   *
+   * If you need a feature toggle to work across the entire stack, you need to enable the feature in the Grafana config.
+   * Also see https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/feature-toggles
+   *
+   * @example
+   * ```typescript
+   * // Override feature toggles globally in playwright.config.ts
    * export default defineConfig({
-      use: {
-        featureToggles: {
-          exploreMixedDatasource: true,
-          redshiftAsyncQueryDataSupport: false
-        },
-      },
-    });
-   * 
-   * To override feature toggles for tests in a certain file:
-     test.use({
-      featureToggles: {
-        exploreMixedDatasource: true,
-      },
+   *   use: {
+   *     featureToggles: {
+   *       exploreMixedDatasource: true,
+   *       redshiftAsyncQueryDataSupport: false
+   *     },
+   *   },
    * });
+   *
+   * // Override feature toggles for tests in a specific file
+   * test.use({
+   *   featureToggles: {
+   *     exploreMixedDatasource: true,
+   *   },
+   * });
+   * ```
    */
   featureToggles: Record<string, boolean>;
+
+  /**
+   * OpenFeature configuration for flag overrides and network simulation.
+   * Flags will be intercepted via OFREP API and merged with backend flags.
+   *
+   * Use this for any feature flags that use the OpenFeature system in Grafana.
+   * This option supports all OpenFeature value types: boolean, string, number and object.
+   *
+   * This only affects frontend flag evaluation via OFREP API. It does not affect
+   * backend feature flags (GOFF) or server-side behavior. If you need feature flags to work
+   * across the entire stack, you must enable them in the Grafana configuration.
+   *
+   * For legacy feature toggles (window.grafanaBootData.settings.featureToggles),
+   * use the `featureToggles` option instead.
+   *
+   * @example
+   * ```typescript
+   * test.use({
+   *   openFeature: {
+   *     flags: {
+   *       enableNewUI: true,              // boolean
+   *       themeColor: "blue",             // string
+   *       maxRetries: 3,                  // number
+   *       apiConfig: { tier: "premium" }, // object
+   *     },
+   *     latency: 200, // optional: artificial latency in ms for OFREP responses
+   *   },
+   * });
+   * ```
+   */
+  openFeature: {
+    flags: Record<string, FeatureFlagValue>;
+    latency?: number;
+  };
 
   /**
    * Optionally, you can add or override user preferences for the Grafana user.
@@ -108,6 +158,14 @@ export type PluginFixture = {
    * the version will be picked from window.grafanaBootData.settings.buildInfo.version.
    */
   grafanaVersion: string;
+
+  /**
+   * The Grafana namespace/tenant id that was detected when the test runner was started.
+   *
+   * The namespace will be picked from window.grafanaBootData.settings.namespace.
+   * Defaults to 'default' if not available.
+   */
+  namespace: string;
 
   /**
    * The E2E selectors to use for the current version of Grafana.
@@ -217,8 +275,33 @@ export type PluginFixture = {
 
   /**
    * Function that checks if a feature toggle is enabled. Only works for frontend feature toggles.
+   * Only works for legacy feature toggles (window.grafanaBootData.settings.featureToggles).
+   * @deprecated Use isLegacyFeatureToggleEnabled instead. For OpenFeature flags, use getBooleanOpenFeatureFlag.
    */
   isFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Checks if a legacy feature toggle is enabled.
+   * This only checks window.grafanaBootData.settings.featureToggles (legacy system).
+   * For OpenFeature flags, use getBooleanOpenFeatureFlag instead.
+   */
+  isLegacyFeatureToggleEnabled<T = object>(featureToggle: keyof T): Promise<boolean>;
+
+  /**
+   * Gets the value of a boolean OpenFeature flag by calling the OFREP API.
+   * This retrieves the current flag value from Grafana's OpenFeature system.
+   *
+   * Note: This requires Grafana >= 12.1.0 (when OpenFeature OFREP was introduced).
+   *
+   * @example
+   * ```typescript
+   * test('should check OpenFeature flag', async ({ getBooleanOpenFeatureFlag }) => {
+   *   const isEnabled = await getBooleanOpenFeatureFlag('myFeatureFlag');
+   *   expect(isEnabled).toBe(true);
+   * });
+   * ```
+   */
+  getBooleanOpenFeatureFlag(flagKey: string): Promise<boolean>;
 
   /**
    * Client that allows you to use certain endpoints in the Grafana http API.
@@ -351,10 +434,27 @@ export type PluginTestCtx = { grafanaVersion: string; selectors: E2ESelectorGrou
 >;
 
 /**
+ * Internal fixtures that are not exposed in the test API.
+ * These fixtures can be used by other fixtures but not by tests directly.
+ */
+export type InternalFixtures = {
+  /**
+   * Boot data fetched from Grafana.
+   * Used internally by grafanaVersion and namespace fixtures.
+   * @internal
+   */
+  bootData: {
+    version: string | undefined;
+    namespace: string | undefined;
+  };
+};
+
+/**
  * Playwright args used when defining fixtures
  */
 export type PlaywrightArgs = PluginFixture &
   PluginOptions &
+  InternalFixtures &
   PlaywrightTestArgs &
   PlaywrightTestOptions &
   PlaywrightWorkerArgs &
