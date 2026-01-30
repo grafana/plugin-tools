@@ -30,7 +30,7 @@ jobs:
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
 
       - name: Checkout repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
@@ -38,7 +38,7 @@ jobs:
 
       - uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
       - name: Setup nodejs
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
@@ -97,7 +97,7 @@ jobs:
           export_env: false
 
       - name: Setup nodejs
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: '24'
 
@@ -175,7 +175,7 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - name: Setup nodejs
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: '24'
 
@@ -289,7 +289,7 @@ jobs:
             DOCKERHUB_PASSWORD=dockerhub:password
 
       - name: Setup nodejs
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: '24'
 
@@ -332,7 +332,7 @@ jobs:
         run: npm run test:ci
         working-directory: ./${{ matrix.workingDir }}
 
-      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
+      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
           go-version-file: ./${{ matrix.workingDir }}/go.mod
           cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
@@ -488,7 +488,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
@@ -536,7 +536,7 @@ jobs:
           permission-issues: write
           permission-pull-requests: write
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           token: ${{ steps.generate-token.outputs.token }}
           persist-credentials: false
@@ -545,7 +545,7 @@ jobs:
         run: git fetch --unshallow --tags
 
       - name: Setup nodejs
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
