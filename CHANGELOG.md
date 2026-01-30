@@ -2,6 +2,22 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@3.2.1`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-21513454430 [#2423](https://github.com/grafana/plugin-tools/pull/2423) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+- `@grafana/create-plugin@6.8.3`
+  - fix(deps): update dependency glob to v13 [#2392](https://github.com/grafana/plugin-tools/pull/2392) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@6.8.2`
   - chore(deps): update create-plugin template github actions [#2415](https://github.com/grafana/plugin-tools/pull/2415) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
 

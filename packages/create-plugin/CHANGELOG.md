@@ -1,3 +1,15 @@
+# v6.8.3 (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency glob to v13 [#2392](https://github.com/grafana/plugin-tools/pull/2392) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.8.2 (Fri Jan 30 2026)
 
 #### 🐛 Bug Fix
