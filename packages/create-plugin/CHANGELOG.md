@@ -1,3 +1,15 @@
+# v6.8.2 (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update create-plugin template github actions [#2415](https://github.com/grafana/plugin-tools/pull/2415) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.8.1 (Fri Jan 30 2026)
 
 #### 🐛 Bug Fix

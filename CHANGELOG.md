@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@6.8.2`
+  - chore(deps): update create-plugin template github actions [#2415](https://github.com/grafana/plugin-tools/pull/2415) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@6.8.1`
   - chore(deps): update dependency @grafana/plugin-e2e to v3.2.0 [#2421](https://github.com/grafana/plugin-tools/pull/2421) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
 
