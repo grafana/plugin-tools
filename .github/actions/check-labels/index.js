@@ -1,7 +1,7 @@
 // @ts-check
 import core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
-import { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } from './messages';
+import { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } from './messages.js';
 
 async function run() {
   try {
