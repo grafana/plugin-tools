@@ -1,7 +1,7 @@
 // @ts-check
-const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
-const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
-const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
+export const prMessageSymbol = `<!-- plugin-tools-auto-check-labels-comment -->`;
+export const prIntroMessage = `Hello! 👋 This repository uses [Auto](https://intuit.github.io/auto/) for releasing packages using PR labels.`;
+export const prMessageLabelDetails = `<details><summary>🏷️ More info about which labels to use</summary>
 <br />
 
 - If the changes only affect the docs website, documentation, or this repository's tooling add the \`no-changelog\` label.
@@ -13,11 +13,12 @@ const prMessageLabelDetails = `<details><summary>🏷️ More info about which l
 </details>
 `;
 
-const prReleaseLabelMessage = '- _Optionally_ if using a `patch`, `minor` or `major` label also add the `release` label if you would like this PR to trigger npm package publishing.';
+export const prReleaseLabelMessage =
+  '- _Optionally_ if using a `patch`, `minor` or `major` label also add the `release` label if you would like this PR to trigger npm package publishing.';
 
 module.exports = {
   prMessageSymbol,
   prIntroMessage,
   prMessageLabelDetails,
-  prReleaseLabelMessage
+  prReleaseLabelMessage,
 };
