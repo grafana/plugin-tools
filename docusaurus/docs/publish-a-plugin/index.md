@@ -15,7 +15,7 @@ import PublishReviewNote from '@shared/publish-review-note.md';
 
 :::note
 
-To administer, update, or delete your plugins, or to submit a new plugin, refer to the [Plugins Amin page](https://grafana.com/orgs/grafana/plugins).
+To administer, update, or delete your plugins, or to submit a new plugin, refer to the [Plugins Admin page](https://grafana.com/orgs/grafana/plugins).
 
 :::
 
