@@ -5,6 +5,12 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "repository": {
     "directory": "packages/plugin-docs-renderer",
     "url": "https://github.com/grafana/plugin-tools"
