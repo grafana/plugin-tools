@@ -41,6 +41,6 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   }
 }
