@@ -43,5 +43,9 @@
   },
   "engines": {
     "node": ">=24"
+  },
+  "dependencies": {
+    "marked": "^13.0.0",
+    "gray-matter": "^4.0.3"
   }
 }
