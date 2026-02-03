@@ -1,0 +1,40 @@
+{
+  "name": "@grafana/plugin-docs-renderer",
+  "version": "0.1.0",
+  "description": "A library for rendering Grafana plugin documentation from markdown files.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "directory": "packages/plugin-docs-renderer",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "documentation",
+    "markdown",
+    "renderer"
+  ],
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
