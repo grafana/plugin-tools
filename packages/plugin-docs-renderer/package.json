@@ -1,6 +1,7 @@
 {
   "name": "@grafana/plugin-docs-renderer",
   "version": "0.0.1",
+  "private": "true",
   "description": "A library for rendering Grafana plugin documentation from markdown files.",
   "type": "module",
   "main": "./dist/index.js",
