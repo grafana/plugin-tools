@@ -6,6 +6,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": "./dist/bin/run.js",
   "files": [
     "dist",
     "LICENSE",
@@ -43,5 +44,17 @@
   },
   "engines": {
     "node": ">=24"
+  },
+  "dependencies": {
+    "marked": "^13.0.0",
+    "gray-matter": "^4.0.3",
+    "minimist": "^1.2.8",
+    "isomorphic-dompurify": "^2.16.0",
+    "debug": "^4.3.7"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.5",
+    "@types/dompurify": "^3.0.5",
+    "@types/debug": "^4.1.12"
   }
 }
