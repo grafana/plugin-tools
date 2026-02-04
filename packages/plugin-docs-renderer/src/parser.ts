@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import matter from 'gray-matter';
+import DOMPurify from 'isomorphic-dompurify';
 
 /**
  * Result of parsing a markdown file.
@@ -33,7 +34,10 @@ export function parseMarkdown(content: string): ParsedMarkdown {
     breaks: false, // don't convert \n to <br>
   });
 
-  const html = marked.parse(markdownContent) as string;
+  const rawHtml = marked.parse(markdownContent) as string;
+
+  // sanitize HTML to prevent XSS attacks
+  const html = DOMPurify.sanitize(rawHtml);
 
   return {
     frontmatter,
