@@ -178,6 +178,113 @@ describe('matcher', () => {
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('ReactDOM.render');
     });
+
+    it('should match render on imports from ReactDOM', () => {
+      const code = `
+      import ReactDOM from 'react-dom';
+      ReactDOM.render(<App />, document.getElementById('root'));
+    `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('ReactDOM.render');
+    });
+
+    it('should match render call site, not import statement', () => {
+      const code = `
+      import { render } from 'react-dom';
+      render(<App />, document.getElementById('root'));
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('ReactDOM.render');
+      expect(matches[0].line).toBe(3); // Call site line, not import line (which is line 2)
+    });
+
+    it('should match render call site with require, not require statement', () => {
+      const code = `
+      const { render } = require('react-dom');
+      render(<App />, document.getElementById('root'));
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('ReactDOM.render');
+      expect(matches[0].line).toBe(3); // Call site line, not require line (which is line 2)
+    });
+
+    it('should handle renamed imports', () => {
+      const code = `
+      import { render as renderApp } from 'react-dom';
+      renderApp(<App />, document.getElementById('root'));
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('ReactDOM.render');
+      expect(matches[0].line).toBe(3);
+      expect(matches[0].matched).toContain('renderApp');
+    });
+
+    it('should detect multiple render call sites from single import', () => {
+      const code = `
+      import { render } from 'react-dom';
+      render(<App />, document.getElementById('root'));
+      render(<AnotherApp />, document.getElementById('another'));
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(2);
+      expect(matches[0].line).toBe(3);
+      expect(matches[1].line).toBe(4);
+    });
+
+    it('should not match local render function', () => {
+      const code = `
+      function render(element, container) {
+        return element;
+      }
+      render(<App />, document.getElementById('root'));
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should handle mixed patterns in same file', () => {
+      const code = `
+      import ReactDOM from 'react-dom';
+      import { render } from 'react-dom';
+      ReactDOM.render(<App1 />, document.getElementById('root1'));
+      render(<App2 />, document.getElementById('root2'));
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(2);
+      expect(matches[0].line).toBe(4); // ReactDOM.render call
+      expect(matches[1].line).toBe(5); // render call
+    });
+
+    it('should not match render with wrong number of arguments', () => {
+      const code = `
+      import { render } from 'react-dom';
+      render(); // 0 arguments
+      render(<App />); // 1 argument
+      render(<App />, container, callback, extra); // 4 arguments
+      `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findReactDOMRender(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
   });
 
   describe('findReactDOMUnmountComponentAtNode', () => {

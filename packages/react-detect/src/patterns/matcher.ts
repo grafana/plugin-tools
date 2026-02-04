@@ -1,6 +1,6 @@
 import { TSESTree } from '@typescript-eslint/typescript-estree';
 import { PatternMatch } from '../types/processors.js';
-import { getSurroundingCode, walk } from '../utils/ast.js';
+import { getSurroundingCode, trackImportsFromPackage, walk } from '../utils/ast.js';
 
 export function findPatternMatches(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
@@ -169,28 +169,35 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string): PatternMat
 
 export function findReactDOMRender(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
+  const imports = trackImportsFromPackage(ast, 'react-dom');
+  const renderLocalNames = imports.namedImports.get('render') || new Set();
 
-  walk(ast, (node) => {
-    if (node && node.type === 'CallExpression') {
-      // ReactDOM.render()
-      if (
-        node.callee.type === 'MemberExpression' &&
-        node.callee.object.type === 'Identifier' &&
-        node.callee.object.name === 'ReactDOM' &&
-        node.callee.property.type === 'Identifier' &&
-        node.callee.property.name === 'render' &&
-        (node.arguments.length === 2 || node.arguments.length === 3)
-      ) {
+  walk(ast, (node: TSESTree.Node) => {
+    if (!node || node.type !== 'CallExpression') {
+      return;
+    }
+
+    const hasValidArgs = node.arguments.length === 2 || node.arguments.length === 3;
+
+    // Find ReactDOM.render
+    if (
+      node.callee &&
+      node.callee.type === 'MemberExpression' &&
+      node.callee.object &&
+      node.callee.object.type === 'Identifier' &&
+      node.callee.property &&
+      node.callee.property.type === 'Identifier' &&
+      node.callee.property.name === 'render' &&
+      hasValidArgs
+    ) {
+      if (imports.defaultImports.has(node.callee.object.name) || node.callee.object.name === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'ReactDOM.render', code));
       }
-      // render() (direct import from 'react-dom')
-      else if (
-        node.callee.type === 'Identifier' &&
-        node.callee.name === 'render' &&
-        (node.arguments.length === 2 || node.arguments.length === 3)
-      ) {
-        matches.push(createPatternMatch(node, 'ReactDOM.render', code));
-      }
+    }
+
+    // Find render(...) if imported from react-dom
+    if (node.callee && node.callee.type === 'Identifier' && renderLocalNames.has(node.callee.name) && hasValidArgs) {
+      matches.push(createPatternMatch(node, 'ReactDOM.render', code));
     }
   });
 
