@@ -60,4 +60,29 @@ Body text here.`;
     expect(result.frontmatter).toEqual({});
     expect(result.html).toContain('<h1>Title</h1>');
   });
+
+  it('should sanitize potentially dangerous HTML', () => {
+    const markdown = `
+# Test
+
+<script>alert('xss')</script>
+
+<img src="x" onerror="alert('xss')">
+
+Regular content.
+`;
+
+    const result = parseMarkdown(markdown);
+
+    // script tags should be removed
+    expect(result.html).not.toContain('<script>');
+    expect(result.html).not.toContain('alert(');
+
+    // event handlers should be removed
+    expect(result.html).not.toContain('onerror');
+
+    // safe content should remain
+    expect(result.html).toContain('<h1>Test</h1>');
+    expect(result.html).toContain('<p>Regular content.</p>');
+  });
 });
