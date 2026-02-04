@@ -19,7 +19,7 @@ export function generateAnalysisResults(
   const filtered = filterMatches(matches, options.skipBuildTooling);
   const pluginJson = getPluginJson(pluginRoot);
 
-  // Filter out externalized dependencies and known compatible versions
+  // Filter out externalized dependencies
   const filteredWithoutExternals = filtered.filter((match) => shouldIncludeDependencyMatch(match, depContext));
 
   const sourceMatches = filteredWithoutExternals.filter((m) => m.type === 'source');
@@ -70,34 +70,9 @@ export function generateAnalysisResults(
   };
 }
 
-/**
- * Determines whether a match should be included in the analysis results.
- *
- * This function filters out:
- * - Externalized dependencies provided by Grafana at runtime (react, @grafana/*, etc.)
- * - Dependencies with versions known to be compatible with React 18 and 19 (to be implemented)
- *
- * @param match - The analyzed match to check
- * @param _depContext - Dependency context for version lookups (reserved for future use)
- * @returns true if the match should be included in results, false if it should be filtered out
- */
 function shouldIncludeDependencyMatch(match: AnalyzedMatch, _depContext: DependencyContext | null): boolean {
-  // Always include source code matches
-  if (match.type === 'source') {
-    return true;
-  }
-
-  // Filter out externalized dependencies provided by Grafana
-  if (match.type === 'dependency' && match.rootDependency) {
-    if (isExternal(match.rootDependency)) {
-      return false;
-    }
-
-    // TODO: Add version-specific compatibility checks here
-    // Example: Check if dependency version is known to be compatible with React 18/19
-    // if (_depContext && isKnownCompatibleVersion(match.packageName, _depContext.getVersion(match.packageName))) {
-    //   return false;
-    // }
+  if (match.type === 'dependency' && match.rootDependency && isExternal(match.rootDependency)) {
+    return false;
   }
 
   return true;
