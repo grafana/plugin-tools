@@ -26,7 +26,14 @@ export interface LoadedDocs {
  */
 async function findMarkdownFiles(dir: string, baseDir: string): Promise<string[]> {
   const files: string[] = [];
-  const entries = await readdir(dir, { withFileTypes: true });
+
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to read directory ${dir}: ${message}`);
+  }
 
   for (const entry of entries) {
     const fullPath = join(dir, entry.name);
@@ -53,18 +60,44 @@ async function findMarkdownFiles(dir: string, baseDir: string): Promise<string[]
 export async function loadDocsFolder(rootPath: string): Promise<LoadedDocs> {
   // read and parse manifest.json
   const manifestPath = join(rootPath, 'manifest.json');
-  const manifestContent = await readFile(manifestPath, 'utf-8');
-  const manifest = JSON.parse(manifestContent) as Manifest;
+
+  let manifestContent;
+  try {
+    manifestContent = await readFile(manifestPath, 'utf-8');
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to read manifest.json at ${manifestPath}: ${message}`);
+  }
+
+  let manifest;
+  try {
+    manifest = JSON.parse(manifestContent) as Manifest;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to parse manifest.json: ${message}`);
+  }
 
   // find all markdown files
-  const markdownPaths = await findMarkdownFiles(rootPath, rootPath);
+  let markdownPaths;
+  try {
+    markdownPaths = await findMarkdownFiles(rootPath, rootPath);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to find markdown files in ${rootPath}: ${message}`);
+  }
 
   // read all markdown files
   const files: MarkdownFiles = {};
   for (const filePath of markdownPaths) {
     const relativePath = relative(rootPath, filePath);
-    const content = await readFile(filePath, 'utf-8');
-    files[relativePath] = content;
+
+    try {
+      const content = await readFile(filePath, 'utf-8');
+      files[relativePath] = content;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to read markdown file ${relativePath}: ${message}`);
+    }
   }
 
   return {

@@ -22,10 +22,21 @@ export interface ParsedMarkdown {
  *
  * @param content - The raw markdown content to parse
  * @returns The parsed result with frontmatter and HTML
+ * @throws {Error} If markdown parsing fails
  */
 export function parseMarkdown(content: string): ParsedMarkdown {
   // extract frontmatter using gray-matter
-  const { data: frontmatter, content: markdownContent } = matter(content);
+  let frontmatter: Record<string, unknown>;
+  let markdownContent: string;
+
+  try {
+    const result = matter(content);
+    frontmatter = result.data;
+    markdownContent = result.content;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to extract frontmatter: ${message}`);
+  }
 
   // parse markdown to HTML using marked
   // configure marked to use GitHub Flavored Markdown
@@ -34,10 +45,22 @@ export function parseMarkdown(content: string): ParsedMarkdown {
     breaks: false, // don't convert \n to <br>
   });
 
-  const rawHtml = marked.parse(markdownContent) as string;
+  let rawHtml: string;
+  try {
+    rawHtml = marked.parse(markdownContent) as string;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to parse markdown: ${message}`);
+  }
 
   // sanitize HTML to prevent XSS attacks
-  const html = DOMPurify.sanitize(rawHtml);
+  let html: string;
+  try {
+    html = DOMPurify.sanitize(rawHtml);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to sanitize HTML: ${message}`);
+  }
 
   return {
     frontmatter,
