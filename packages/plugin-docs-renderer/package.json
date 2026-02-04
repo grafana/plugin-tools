@@ -47,6 +47,10 @@
   },
   "dependencies": {
     "marked": "^13.0.0",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.5"
   }
 }

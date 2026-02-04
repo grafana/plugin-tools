@@ -1,32 +1,21 @@
 #!/usr/bin/env node
-import { access, writeFile } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
+import minimist from 'minimist';
 import { loadDocsFolder } from '../loader.js';
 import { parseMarkdown } from '../parser.js';
 
 async function main() {
-  const docsPath = process.argv[2];
-
-  // find --output flag
-  const outputIndex = process.argv.indexOf('--output');
-  const outputPath = outputIndex !== -1 ? process.argv[outputIndex + 1] : undefined;
-
-  // check if the first argument is present
-  if (docsPath === undefined) {
-    console.error('Please provide the path to the docs folder as an argument.');
-    process.exit(1);
-  }
-
-  // check if --output flag is provided
-  if (outputPath === undefined) {
-    console.error('Please provide an output file using the --output flag.');
-    process.exit(1);
-  }
+  const argv = minimist(process.argv.slice(2));
+  // get docs path from command line arguments or use default (./docs)
+  const docsPath = argv._[0] || './docs';
 
   // check if the path exists
   try {
     await access(docsPath);
   } catch {
     console.error(`Path not found: ${docsPath}`);
+    console.error('Usage: npx @grafana/plugin-docs-renderer [docs-folder]');
+    console.error('Example: npx @grafana/plugin-docs-renderer ./docs');
     process.exit(1);
   }
 
@@ -44,14 +33,13 @@ async function main() {
       };
     }
 
-    // write output to file
+    // output to console
     const result = {
       manifest,
       pages,
     };
 
-    await writeFile(outputPath, JSON.stringify(result, null, 2), 'utf-8');
-    console.log(`Documentation rendered successfully to ${outputPath}`);
+    console.log(JSON.stringify(result, null, 2));
   } catch (error) {
     if (error instanceof Error) {
       console.error('Error processing documentation:', error.message);
