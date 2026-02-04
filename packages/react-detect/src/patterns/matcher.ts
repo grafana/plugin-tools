@@ -144,23 +144,32 @@ export function findStringRefs(ast: TSESTree.Program, code: string): PatternMatc
 
 export function findFindDOMNode(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
+  const imports = trackImportsFromPackage(ast, 'react-dom');
+  const findDOMNodeLocalNames = imports.namedImports.get('findDOMNode') || new Set();
 
-  walk(ast, (node) => {
-    if (node && node.type === 'CallExpression') {
-      // React.findDOMNode() or ReactDOM.findDOMNode()
-      if (
-        node.callee.type === 'MemberExpression' &&
-        node.callee.object.type === 'Identifier' &&
-        (node.callee.object.name === 'ReactDOM' || node.callee.object.name === 'React') &&
-        node.callee.property.type === 'Identifier' &&
-        node.callee.property.name === 'findDOMNode'
-      ) {
+  walk(ast, (node: TSESTree.Node) => {
+    if (!node || node.type !== 'CallExpression') {
+      return;
+    }
+
+    if (
+      node.callee &&
+      node.callee.type === 'MemberExpression' &&
+      node.callee.object &&
+      node.callee.object.type === 'Identifier' &&
+      node.callee.property &&
+      node.callee.property.type === 'Identifier' &&
+      node.callee.property.name === 'findDOMNode'
+    ) {
+      const objectName = node.callee.object.name;
+      if (imports.defaultImports.has(objectName) || objectName === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'findDOMNode', code));
       }
-      // findDOMNode() (direct import)
-      else if (node.callee.type === 'Identifier' && node.callee.name === 'findDOMNode') {
-        matches.push(createPatternMatch(node, 'findDOMNode', code));
-      }
+    }
+
+    // Find findDOMNode(...) if imported from react-dom
+    if (node.callee && node.callee.type === 'Identifier' && findDOMNodeLocalNames.has(node.callee.name)) {
+      matches.push(createPatternMatch(node, 'findDOMNode', code));
     }
   });
 
@@ -179,7 +188,6 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string): Pattern
 
     const hasValidArgs = node.arguments.length === 2 || node.arguments.length === 3;
 
-    // Find ReactDOM.render
     if (
       node.callee &&
       node.callee.type === 'MemberExpression' &&
@@ -190,7 +198,8 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string): Pattern
       node.callee.property.name === 'render' &&
       hasValidArgs
     ) {
-      if (imports.defaultImports.has(node.callee.object.name) || node.callee.object.name === 'ReactDOM') {
+      const objectName = node.callee.object.name;
+      if (imports.defaultImports.has(objectName) || objectName === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'ReactDOM.render', code));
       }
     }
@@ -206,28 +215,35 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string): Pattern
 
 export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
+  const imports = trackImportsFromPackage(ast, 'react-dom');
+  const unmountLocalNames = imports.namedImports.get('unmountComponentAtNode') || new Set();
 
-  walk(ast, (node) => {
-    if (node && node.type === 'CallExpression') {
-      // ReactDOM.unmountComponentAtNode()
-      if (
-        node.callee.type === 'MemberExpression' &&
-        node.callee.object.type === 'Identifier' &&
-        node.callee.object.name === 'ReactDOM' &&
-        node.callee.property.type === 'Identifier' &&
-        node.callee.property.name === 'unmountComponentAtNode' &&
-        node.arguments.length === 1
-      ) {
+  walk(ast, (node: TSESTree.Node) => {
+    if (!node || node.type !== 'CallExpression') {
+      return;
+    }
+
+    const hasValidArgs = node.arguments.length === 1;
+
+    if (
+      node.callee &&
+      node.callee.type === 'MemberExpression' &&
+      node.callee.object &&
+      node.callee.object.type === 'Identifier' &&
+      node.callee.property &&
+      node.callee.property.type === 'Identifier' &&
+      node.callee.property.name === 'unmountComponentAtNode' &&
+      hasValidArgs
+    ) {
+      const objectName = node.callee.object.name;
+      if (imports.defaultImports.has(objectName) || objectName === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
       }
-      // unmountComponentAtNode() (direct import)
-      else if (
-        node.callee.type === 'Identifier' &&
-        node.callee.name === 'unmountComponentAtNode' &&
-        node.arguments.length === 1
-      ) {
-        matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
-      }
+    }
+
+    // Find unmountComponentAtNode(...) if imported from react-dom
+    if (node.callee && node.callee.type === 'Identifier' && unmountLocalNames.has(node.callee.name) && hasValidArgs) {
+      matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
     }
   });
 
@@ -236,28 +252,39 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
 
 export function findCreateFactory(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
+  const imports = trackImportsFromPackage(ast, 'react');
+  const createFactoryLocalNames = imports.namedImports.get('createFactory') || new Set();
 
-  walk(ast, (node) => {
-    if (node && node.type === 'CallExpression') {
-      // React.createFactory()
-      if (
-        node.callee.type === 'MemberExpression' &&
-        node.callee.object.type === 'Identifier' &&
-        node.callee.object.name === 'React' &&
-        node.callee.property.type === 'Identifier' &&
-        node.callee.property.name === 'createFactory' &&
-        node.arguments.length === 1
-      ) {
+  walk(ast, (node: TSESTree.Node) => {
+    if (!node || node.type !== 'CallExpression') {
+      return;
+    }
+
+    const hasValidArgs = node.arguments.length === 1;
+
+    if (
+      node.callee &&
+      node.callee.type === 'MemberExpression' &&
+      node.callee.object &&
+      node.callee.object.type === 'Identifier' &&
+      node.callee.property &&
+      node.callee.property.type === 'Identifier' &&
+      node.callee.property.name === 'createFactory' &&
+      hasValidArgs
+    ) {
+      if (imports.defaultImports.has(node.callee.object.name) || node.callee.object.name === 'React') {
         matches.push(createPatternMatch(node, 'createFactory', code));
       }
-      // createFactory() (direct import)
-      else if (
-        node.callee.type === 'Identifier' &&
-        node.callee.name === 'createFactory' &&
-        node.arguments.length === 1
-      ) {
-        matches.push(createPatternMatch(node, 'createFactory', code));
-      }
+    }
+
+    // Find createFactory(...) if imported from react
+    if (
+      node.callee &&
+      node.callee.type === 'Identifier' &&
+      createFactoryLocalNames.has(node.callee.name) &&
+      hasValidArgs
+    ) {
+      matches.push(createPatternMatch(node, 'createFactory', code));
     }
   });
 
