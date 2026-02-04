@@ -2,7 +2,7 @@ import { AnalyzedMatch } from './types/processors.js';
 import { PluginAnalysisResults, AnalysisResult, DependencyIssue } from './types/reporters.js';
 import { getPattern } from './patterns/definitions.js';
 import { getPluginJson, hasExternalisedJsxRuntime } from './utils/plugin.js';
-import { DependencyContext } from './utils/dependencies.js';
+import { DependencyContext, isExternal } from './utils/dependencies.js';
 import path from 'node:path';
 
 export interface AnalysisOptions {
@@ -18,15 +18,19 @@ export function generateAnalysisResults(
 ): PluginAnalysisResults {
   const filtered = filterMatches(matches, options.skipBuildTooling);
   const pluginJson = getPluginJson(pluginRoot);
-  const sourceMatches = filtered.filter((m) => m.type === 'source');
-  const dependencyMatches = filtered.filter((m) => m.type === 'dependency');
 
-  const criticalMatches = filtered.filter((m) => {
+  // Filter out externalized dependencies and known compatible versions
+  const filteredWithoutExternals = filtered.filter((match) => shouldIncludeDependencyMatch(match, depContext));
+
+  const sourceMatches = filteredWithoutExternals.filter((m) => m.type === 'source');
+  const dependencyMatches = filteredWithoutExternals.filter((m) => m.type === 'dependency');
+
+  const criticalMatches = filteredWithoutExternals.filter((m) => {
     const pattern = getPattern(m.pattern);
     return pattern?.impactLevel === 'critical';
   });
 
-  const warningMatches = filtered.filter((m) => {
+  const warningMatches = filteredWithoutExternals.filter((m) => {
     const pattern = getPattern(m.pattern);
     return pattern?.impactLevel === 'warning';
   });
@@ -35,9 +39,9 @@ export function generateAnalysisResults(
   const warnings = warningMatches.map((m) => generateResult(m));
   const dependencies = buildDependencyIssues(dependencyMatches, depContext);
 
-  const totalIssues = filtered.length;
+  const totalIssues = filteredWithoutExternals.length;
   const affectedDeps = new Set(
-    dependencyMatches.map((m) => m.packageName).filter((name): name is string => name !== undefined)
+    dependencies.map((m) => m.packageName).filter((name): name is string => name !== undefined)
   );
 
   return {
@@ -52,7 +56,7 @@ export function generateAnalysisResults(
       critical: critical.length,
       warnings: warnings.length,
       sourceIssuesCount: sourceMatches.length,
-      dependencyIssuesCount: dependencyMatches.length,
+      dependencyIssuesCount: dependencies.length,
       status: totalIssues > 0 ? 'action_required' : 'no_action_required',
       affectedDependencies: Array.from(affectedDeps),
       analyzedBuildTooling: !options.skipBuildTooling,
@@ -64,6 +68,39 @@ export function generateAnalysisResults(
       dependencies,
     },
   };
+}
+
+/**
+ * Determines whether a match should be included in the analysis results.
+ *
+ * This function filters out:
+ * - Externalized dependencies provided by Grafana at runtime (react, @grafana/*, etc.)
+ * - Dependencies with versions known to be compatible with React 18 and 19 (to be implemented)
+ *
+ * @param match - The analyzed match to check
+ * @param _depContext - Dependency context for version lookups (reserved for future use)
+ * @returns true if the match should be included in results, false if it should be filtered out
+ */
+function shouldIncludeDependencyMatch(match: AnalyzedMatch, _depContext: DependencyContext | null): boolean {
+  // Always include source code matches
+  if (match.type === 'source') {
+    return true;
+  }
+
+  // Filter out externalized dependencies provided by Grafana
+  if (match.type === 'dependency' && match.rootDependency) {
+    if (isExternal(match.rootDependency)) {
+      return false;
+    }
+
+    // TODO: Add version-specific compatibility checks here
+    // Example: Check if dependency version is known to be compatible with React 18/19
+    // if (_depContext && isKnownCompatibleVersion(match.packageName, _depContext.getVersion(match.packageName))) {
+    //   return false;
+    // }
+  }
+
+  return true;
 }
 
 function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean): AnalyzedMatch[] {
