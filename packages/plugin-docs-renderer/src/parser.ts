@@ -1,6 +1,9 @@
 import { marked } from 'marked';
 import matter from 'gray-matter';
 import DOMPurify from 'isomorphic-dompurify';
+import createDebug from 'debug';
+
+const debug = createDebug('plugin-docs-renderer:parser');
 
 /**
  * Result of parsing a markdown file.
@@ -25,6 +28,8 @@ export interface ParsedMarkdown {
  * @throws {Error} If markdown parsing fails
  */
 export function parseMarkdown(content: string): ParsedMarkdown {
+  debug('Parsing markdown content (%d bytes)', content.length);
+
   // extract frontmatter using gray-matter
   let frontmatter: Record<string, unknown>;
   let markdownContent: string;
@@ -33,6 +38,7 @@ export function parseMarkdown(content: string): ParsedMarkdown {
     const result = matter(content);
     frontmatter = result.data;
     markdownContent = result.content;
+    debug('Extracted frontmatter with %d key(s)', Object.keys(frontmatter).length);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Failed to extract frontmatter: ${message}`);
@@ -48,6 +54,7 @@ export function parseMarkdown(content: string): ParsedMarkdown {
   let rawHtml: string;
   try {
     rawHtml = marked.parse(markdownContent) as string;
+    debug('Parsed markdown to HTML (%d bytes)', rawHtml.length);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Failed to parse markdown: ${message}`);
@@ -57,6 +64,7 @@ export function parseMarkdown(content: string): ParsedMarkdown {
   let html: string;
   try {
     html = DOMPurify.sanitize(rawHtml);
+    debug('Sanitized HTML (%d bytes)', html.length);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Failed to sanitize HTML: ${message}`);
