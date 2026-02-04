@@ -59,6 +59,9 @@ export function trackImportsFromPackage(ast: TSESTree.Program, packageName: stri
         if (spec.type === 'ImportDefaultSpecifier') {
           // e.g import symbol from packageName
           tracking.defaultImports.add(spec.local.name);
+        } else if (spec.type === 'ImportNamespaceSpecifier') {
+          // e.g import * as symbol from packageName
+          tracking.defaultImports.add(spec.local.name);
         } else if (spec.type === 'ImportSpecifier' && spec.imported && spec.imported.type === 'Identifier') {
           // import { symbol } from packageName OR import { symbol as localName } from packageName
           const importedName = spec.imported.name;
