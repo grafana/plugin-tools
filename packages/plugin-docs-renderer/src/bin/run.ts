@@ -19,7 +19,6 @@ async function commandServe(docsPath: string, port: number, liveReload: boolean)
     } else {
       console.error('Error starting server:', error);
     }
-    process.exit(1);
   }
 }
 
