@@ -132,9 +132,6 @@ export function startServer(options: ServerOptions): Express {
 
   // serve documentation pages
   app.get('/:slug?', async (req: Request, res: Response) => {
-    const requestedSlug = req.params.slug || 'index';
-    debug('Request for slug: %s', requestedSlug);
-
     try {
       // load manifest from disk
       const manifestPath = join(docsPath, 'manifest.json');
@@ -148,6 +145,8 @@ export function startServer(options: ServerOptions): Express {
         res.status(404).send('No pages found in manifest');
         return;
       }
+
+      debug('Request for slug: %s', slug);
 
       // find the file for this slug
       const fileName = findPageBySlug(slug, manifest.pages);
