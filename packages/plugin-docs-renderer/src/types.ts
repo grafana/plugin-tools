@@ -55,3 +55,34 @@ export interface Manifest {
 export interface MarkdownFiles {
   [filePath: string]: string;
 }
+
+/**
+ * Frontmatter metadata from a markdown file.
+ */
+export interface Frontmatter {
+  /**
+   * The display title of the page.
+   */
+  title: string;
+
+  /**
+   * A brief description of the page content.
+   */
+  description: string;
+
+  /**
+   * The position of this page in the sidebar navigation (used for sorting).
+   * Pages with lower numbers appear first.
+   */
+  sidebar_position: number;
+
+  /**
+   * Optional custom URL slug. If not provided, generated from file path.
+   */
+  slug?: string;
+
+  /**
+   * Optional tags for SEO and categorization.
+   */
+  tags?: string[];
+}
