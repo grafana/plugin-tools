@@ -55,7 +55,7 @@ async function main() {
 
   // parse port
   const port = parseInt(argv.port, 10);
-  if (isNaN(port) || port < 1 || port > 65535) {
+  if (isNaN(port)) {
     console.error(`Error: Invalid port: ${argv.port}`);
     process.exit(1);
   }
