@@ -55,6 +55,8 @@
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",
-    "@types/express": "^4.17.21"
+    "@types/express": "^4.17.21",
+    "supertest": "^7.0.0",
+    "@types/supertest": "^6.0.2"
   }
 }
