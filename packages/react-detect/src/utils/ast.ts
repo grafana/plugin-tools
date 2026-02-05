@@ -26,21 +26,7 @@ interface ImportTracking {
 }
 
 /**
- *
- * @param ast - The AST to analyze
- * @param packageName - The package name to track (e.g., 'react-dom')
- *
- * @example
- * // For code: import ReactDOM from 'react-dom'
- * // Returns: { defaultImports: Set(['ReactDOM']), namedImports: Map() }
- *
- * @example
- * // For code: import { render } from 'react-dom'
- * // Returns: { defaultImports: Set(), namedImports: Map([['render', Set(['render'])]]) }
- *
- * @example
- * // For code: import { render as r } from 'react-dom'
- * // Returns: { defaultImports: Set(), namedImports: Map([['render', Set(['r'])]]) }
+ * Tracks imports from a specified package within the given AST.
  */
 export function trackImportsFromPackage(ast: TSESTree.Program, packageName: string): ImportTracking {
   const tracking: ImportTracking = {
@@ -54,65 +40,64 @@ export function trackImportsFromPackage(ast: TSESTree.Program, packageName: stri
     }
 
     // ES6 Import declarations
-    if (node.type === 'ImportDeclaration' && node.source && node.source.value === packageName) {
-      node.specifiers.forEach((spec) => {
-        if (spec.type === 'ImportDefaultSpecifier') {
-          // e.g import symbol from packageName
-          tracking.defaultImports.add(spec.local.name);
-        } else if (spec.type === 'ImportNamespaceSpecifier') {
-          // e.g import * as symbol from packageName
-          tracking.defaultImports.add(spec.local.name);
-        } else if (spec.type === 'ImportSpecifier' && spec.imported && spec.imported.type === 'Identifier') {
-          // import { symbol } from packageName OR import { symbol as localName } from packageName
-          const importedName = spec.imported.name;
-          const localName = spec.local.name;
-
-          if (!tracking.namedImports.has(importedName)) {
-            tracking.namedImports.set(importedName, new Set());
-          }
-          tracking.namedImports.get(importedName)?.add(localName);
-        }
-      });
+    if (node.type === 'ImportDeclaration' && node.source?.value === packageName) {
+      handleImportDeclaration(node, tracking);
     }
 
     // CommonJS require()
     if (node.type === 'VariableDeclaration') {
       node.declarations.forEach((decl) => {
-        if (
-          decl.init?.type === 'CallExpression' &&
-          decl.init.callee &&
-          decl.init.callee.type === 'Identifier' &&
-          decl.init.callee.name === 'require' &&
-          decl.init.arguments[0]?.type === 'Literal' &&
-          decl.init.arguments[0].value === packageName
-        ) {
-          if (decl.id.type === 'Identifier') {
-            // e.g const symbol = require('packageName')
-            tracking.defaultImports.add(decl.id.name);
-          } else if (decl.id.type === 'ObjectPattern') {
-            // e.g const { symbol } = require('packageName') OR const { symbol: localName } = require('packageName')
-            decl.id.properties.forEach((prop) => {
-              if (
-                prop.type === 'Property' &&
-                prop.key &&
-                prop.key.type === 'Identifier' &&
-                prop.value &&
-                prop.value.type === 'Identifier'
-              ) {
-                const importedName = prop.key.name;
-                const localName = prop.value.name;
-
-                if (!tracking.namedImports.has(importedName)) {
-                  tracking.namedImports.set(importedName, new Set());
-                }
-                tracking.namedImports.get(importedName)?.add(localName);
-              }
-            });
-          }
+        if (isRequireCall(decl, packageName)) {
+          handleRequireDeclaration(decl, tracking);
         }
       });
     }
   });
 
   return tracking;
+}
+
+function addNamedImport(tracking: ImportTracking, importedName: string, localName: string): void {
+  let localNames = tracking.namedImports.get(importedName);
+  if (!localNames) {
+    localNames = new Set();
+    tracking.namedImports.set(importedName, localNames);
+  }
+  localNames.add(localName);
+}
+
+function handleImportDeclaration(node: TSESTree.ImportDeclaration, tracking: ImportTracking): void {
+  node.specifiers.forEach((spec) => {
+    if (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier') {
+      // e.g import symbol from packageName OR import * as symbol from packageName
+      tracking.defaultImports.add(spec.local.name);
+    } else if (spec.type === 'ImportSpecifier' && spec.imported?.type === 'Identifier') {
+      // import { symbol } from packageName OR import { symbol as localName } from packageName
+      addNamedImport(tracking, spec.imported.name, spec.local.name);
+    }
+  });
+}
+
+function isRequireCall(decl: TSESTree.VariableDeclarator, packageName: string): boolean {
+  return (
+    decl.init?.type === 'CallExpression' &&
+    decl.init.callee?.type === 'Identifier' &&
+    decl.init.callee.name === 'require' &&
+    decl.init.arguments[0]?.type === 'Literal' &&
+    decl.init.arguments[0].value === packageName
+  );
+}
+
+function handleRequireDeclaration(decl: TSESTree.VariableDeclarator, tracking: ImportTracking): void {
+  if (decl.id.type === 'Identifier') {
+    // e.g const symbol = require('packageName')
+    tracking.defaultImports.add(decl.id.name);
+  } else if (decl.id.type === 'ObjectPattern') {
+    // e.g const { symbol } = require('packageName') OR const { symbol: localName } = require('packageName')
+    decl.id.properties.forEach((prop) => {
+      if (prop.type === 'Property' && prop.key?.type === 'Identifier' && prop.value?.type === 'Identifier') {
+        addNamedImport(tracking, prop.key.name, prop.value.name);
+      }
+    });
+  }
 }
