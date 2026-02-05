@@ -2,10 +2,13 @@
 import { access } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import minimist from 'minimist';
+import createDebug from 'debug';
 import { startServer } from '../server.js';
 
+const debug = createDebug('plugin-docs-renderer:cli');
+
 async function commandServe(docsPath: string, port: number, liveReload: boolean) {
-  console.log('Starting development server...\n');
+  debug('Command serve: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
   try {
     startServer({
@@ -14,6 +17,7 @@ async function commandServe(docsPath: string, port: number, liveReload: boolean)
       liveReload,
     });
   } catch (error) {
+    debug('Failed to start server: %O', error);
     if (error instanceof Error) {
       console.error('Error starting server:', error.message);
     } else {
@@ -23,6 +27,8 @@ async function commandServe(docsPath: string, port: number, liveReload: boolean)
 }
 
 async function main() {
+  debug('CLI invoked with args: %O', process.argv.slice(2));
+
   const argv = minimist(process.argv.slice(2), {
     boolean: ['reload'],
     string: ['port'],
@@ -37,11 +43,14 @@ async function main() {
   });
 
   const docsPath = resolve(argv._[0] || './docs');
+  debug('Resolved docs path: %s', docsPath);
 
   // check if the path exists
   try {
     await access(docsPath);
+    debug('Docs path exists');
   } catch {
+    debug('Docs path not found: %s', docsPath);
     console.error(`Error: Path not found: ${docsPath}`);
     process.exit(1);
   }
@@ -49,9 +58,11 @@ async function main() {
   // parse port
   const port = parseInt(argv.port, 10);
   if (isNaN(port) || port < 1 || port > 65535) {
+    debug('Invalid port: %s', argv.port);
     console.error(`Error: Invalid port: ${argv.port}`);
     process.exit(1);
   }
+  debug('Validated port: %d', port);
 
   await commandServe(docsPath, port, argv.reload);
 }

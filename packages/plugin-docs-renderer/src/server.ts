@@ -2,8 +2,11 @@ import express, { type Express, type Request, type Response } from 'express';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { watch } from 'chokidar';
+import createDebug from 'debug';
 import { parseMarkdown } from './parser.js';
 import type { Manifest, Page } from './types.js';
+
+const debug = createDebug('plugin-docs-renderer:server');
 
 export interface ServerOptions {
   docsPath: string;
@@ -76,6 +79,8 @@ function generatePageHTML(title: string, content: string, manifest: Manifest, li
 export function startServer(options: ServerOptions): Express {
   const { docsPath, port = 3000, liveReload = false } = options;
 
+  debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
+
   const app = express();
   let lastModified = Date.now();
 
@@ -83,11 +88,11 @@ export function startServer(options: ServerOptions): Express {
   const watcher = watch([join(docsPath, '**/*.md'), join(docsPath, 'manifest.json')], {
     ignoreInitial: true,
   });
+  debug('File watcher initialized for %s', docsPath);
 
   watcher.on('change', async (path) => {
-    console.log(`File changed: ${path}`);
+    debug('File changed: %s', path);
     lastModified = Date.now();
-    console.log('✓ Change detected');
   });
 
   // serve static assets (images, etc.)
@@ -125,6 +130,9 @@ export function startServer(options: ServerOptions): Express {
 
   // serve documentation pages
   app.get('/:slug?', async (req: Request, res: Response) => {
+    const requestedSlug = req.params.slug || 'index';
+    debug('Request for slug: %s', requestedSlug);
+
     try {
       // load manifest from disk
       const manifestPath = join(docsPath, 'manifest.json');
@@ -134,6 +142,7 @@ export function startServer(options: ServerOptions): Express {
       // default to first page in manifest
       const slug = req.params.slug || manifest.pages[0]?.slug;
       if (!slug) {
+        debug('No pages found in manifest');
         res.status(404).send('No pages found in manifest');
         return;
       }
@@ -141,9 +150,12 @@ export function startServer(options: ServerOptions): Express {
       // find the file for this slug
       const fileName = findPageBySlug(slug, manifest.pages);
       if (!fileName) {
+        debug('Page not found for slug: %s', slug);
         res.status(404).send('Page not found');
         return;
       }
+
+      debug('Serving page: %s -> %s', slug, fileName);
 
       // read and parse the markdown file
       const filePath = join(docsPath, fileName);
@@ -154,6 +166,7 @@ export function startServer(options: ServerOptions): Express {
       const html = generatePageHTML(title, parsed.html, manifest, liveReload);
       res.send(html);
     } catch (error) {
+      debug('Error serving page: %O', error);
       console.error('Error serving page:', error);
       res.status(500).send('Internal server error');
     }
@@ -161,6 +174,7 @@ export function startServer(options: ServerOptions): Express {
 
   // start the server
   app.listen(port, () => {
+    debug('Server listening on port %d', port);
     console.log(`\n📄 Plugin Documentation Server`);
     console.log(`✓ Serving: ${docsPath}`);
     console.log(`✓ URL: http://localhost:${port}`);
