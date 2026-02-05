@@ -3,7 +3,7 @@ import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { glob, GlobOptions } from 'glob';
 import { readFileSync } from 'node:fs';
-import { chmod } from 'node:fs/promises';
+import { chmod, cp } from 'node:fs/promises';
 import { join } from 'node:path';
 import { inspect } from 'node:util';
 import { defineConfig, ExternalOption, Plugin, RollupOptions } from 'rollup';
@@ -76,6 +76,7 @@ const defaultOptions: Array<Partial<RollupOptions>> = [
         tsconfig: tsconfigPath,
       }),
       shebang(),
+      copyAssets(),
     ],
   },
 ];
@@ -122,6 +123,20 @@ function shebang(): Plugin {
           const filePath = options.dir ? `${options.dir}/${fileName}` : fileName;
           await chmod(filePath, 0o755);
         }
+      }
+    },
+  };
+}
+
+// Copy static assets to dist
+function copyAssets(): Plugin {
+  return {
+    name: 'copy-assets',
+    async writeBundle() {
+      if (pkg.name === '@grafana/plugin-docs-renderer') {
+        const srcViews = join(projectRoot, 'src', 'views');
+        const distViews = join(projectRoot, 'dist', 'views');
+        await cp(srcViews, distViews, { recursive: true });
       }
     },
   };
