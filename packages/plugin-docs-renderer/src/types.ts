@@ -1,10 +1,4 @@
 /**
- * Core types for the plugin documentation renderer.
- *
- * These types define the structure of documentation manifests and pages.
- */
-
-/**
  * Represents a documentation page in the manifest.
  */
 export interface Page {
@@ -33,11 +27,6 @@ export interface Page {
  * The documentation manifest that defines the structure and navigation.
  */
 export interface Manifest {
-  /**
-   * The manifest format version.
-   */
-  version: string;
-
   /**
    * The title of the documentation.
    */
