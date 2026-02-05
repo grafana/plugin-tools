@@ -5,7 +5,7 @@ import type { Express } from 'express';
 import { startServer, type Server } from './server.js';
 
 describe('startServer', () => {
-  const testDocsPath = join(__dirname, '__fixtures__', 'test-docs');
+  const testDocsPath = join(__dirname, '..', '__fixtures__', 'test-docs');
   let app: Express;
   let server: Server | null = null;
 

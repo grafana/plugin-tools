@@ -5,8 +5,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
-import { parseMarkdown } from './parser.js';
-import type { Manifest, Page } from './types.js';
+import { parseMarkdown } from '../parser.js';
+import type { Manifest, Page } from '../types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
