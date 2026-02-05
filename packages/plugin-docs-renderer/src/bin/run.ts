@@ -37,7 +37,7 @@ async function main() {
     },
   });
 
-  const docsPath = resolve(argv._[1] || './docs');
+  const docsPath = resolve(argv._[0] || './docs');
 
   // check if the path exists
   try {
