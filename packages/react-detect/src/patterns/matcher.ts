@@ -24,13 +24,7 @@ export function findDefaultProps(ast: TSESTree.Program, code: string): PatternMa
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'AssignmentExpression' &&
-      node.left.type === 'MemberExpression' &&
-      node.left.property.type === 'Identifier' &&
-      node.left.property.name === 'defaultProps'
-    ) {
+    if (isAssignmentToProperty(node, 'defaultProps')) {
       matches.push(createPatternMatch(node, 'defaultProps', code));
     }
   });
@@ -42,13 +36,7 @@ export function findPropTypes(ast: TSESTree.Program, code: string): PatternMatch
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'AssignmentExpression' &&
-      node.left.type === 'MemberExpression' &&
-      node.left.property.type === 'Identifier' &&
-      node.left.property.name === 'propTypes'
-    ) {
+    if (isAssignmentToProperty(node, 'propTypes')) {
       matches.push(createPatternMatch(node, 'propTypes', code));
     }
   });
@@ -60,13 +48,7 @@ export function findContextTypes(ast: TSESTree.Program, code: string): PatternMa
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'AssignmentExpression' &&
-      node.left.type === 'MemberExpression' &&
-      node.left.property.type === 'Identifier' &&
-      node.left.property.name === 'contextTypes'
-    ) {
+    if (isAssignmentToProperty(node, 'contextTypes')) {
       matches.push(createPatternMatch(node, 'contextTypes', code));
     }
   });
@@ -78,13 +60,7 @@ export function findGetChildContext(ast: TSESTree.Program, code: string): Patter
   const matches: PatternMatch[] = [];
 
   walk(ast, (node) => {
-    if (
-      node &&
-      node.type === 'AssignmentExpression' &&
-      node.left.type === 'MemberExpression' &&
-      node.left.property.type === 'Identifier' &&
-      node.left.property.name === 'getChildContext'
-    ) {
+    if (isAssignmentToProperty(node, 'getChildContext')) {
       matches.push(createPatternMatch(node, 'getChildContext', code));
     }
   });
@@ -152,15 +128,7 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string): PatternMat
       return;
     }
 
-    if (
-      node.callee &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.object &&
-      node.callee.object.type === 'Identifier' &&
-      node.callee.property &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'findDOMNode'
-    ) {
+    if (isMemberExpressionWithIdentifier(node.callee, 'findDOMNode')) {
       const objectName = node.callee.object.name;
       if (imports.defaultImports.has(objectName) || objectName === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'findDOMNode', code));
@@ -168,7 +136,7 @@ export function findFindDOMNode(ast: TSESTree.Program, code: string): PatternMat
     }
 
     // Find findDOMNode(...) if imported from react-dom
-    if (node.callee && node.callee.type === 'Identifier' && findDOMNodeLocalNames.has(node.callee.name)) {
+    if (node.callee?.type === 'Identifier' && findDOMNodeLocalNames.has(node.callee.name)) {
       matches.push(createPatternMatch(node, 'findDOMNode', code));
     }
   });
@@ -188,16 +156,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string): Pattern
 
     const hasValidArgs = node.arguments.length === 2 || node.arguments.length === 3;
 
-    if (
-      node.callee &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.object &&
-      node.callee.object.type === 'Identifier' &&
-      node.callee.property &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'render' &&
-      hasValidArgs
-    ) {
+    if (isMemberExpressionWithIdentifier(node.callee, 'render') && hasValidArgs) {
       const objectName = node.callee.object.name;
       if (imports.defaultImports.has(objectName) || objectName === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'ReactDOM.render', code));
@@ -205,7 +164,7 @@ export function findReactDOMRender(ast: TSESTree.Program, code: string): Pattern
     }
 
     // Find render(...) if imported from react-dom
-    if (node.callee && node.callee.type === 'Identifier' && renderLocalNames.has(node.callee.name) && hasValidArgs) {
+    if (node.callee?.type === 'Identifier' && renderLocalNames.has(node.callee.name) && hasValidArgs) {
       matches.push(createPatternMatch(node, 'ReactDOM.render', code));
     }
   });
@@ -225,16 +184,7 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
 
     const hasValidArgs = node.arguments.length === 1;
 
-    if (
-      node.callee &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.object &&
-      node.callee.object.type === 'Identifier' &&
-      node.callee.property &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'unmountComponentAtNode' &&
-      hasValidArgs
-    ) {
+    if (isMemberExpressionWithIdentifier(node.callee, 'unmountComponentAtNode') && hasValidArgs) {
       const objectName = node.callee.object.name;
       if (imports.defaultImports.has(objectName) || objectName === 'ReactDOM') {
         matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
@@ -242,7 +192,7 @@ export function findReactDOMUnmountComponentAtNode(ast: TSESTree.Program, code: 
     }
 
     // Find unmountComponentAtNode(...) if imported from react-dom
-    if (node.callee && node.callee.type === 'Identifier' && unmountLocalNames.has(node.callee.name) && hasValidArgs) {
+    if (node.callee?.type === 'Identifier' && unmountLocalNames.has(node.callee.name) && hasValidArgs) {
       matches.push(createPatternMatch(node, 'ReactDOM.unmountComponentAtNode', code));
     }
   });
@@ -262,33 +212,47 @@ export function findCreateFactory(ast: TSESTree.Program, code: string): PatternM
 
     const hasValidArgs = node.arguments.length === 1;
 
-    if (
-      node.callee &&
-      node.callee.type === 'MemberExpression' &&
-      node.callee.object &&
-      node.callee.object.type === 'Identifier' &&
-      node.callee.property &&
-      node.callee.property.type === 'Identifier' &&
-      node.callee.property.name === 'createFactory' &&
-      hasValidArgs
-    ) {
+    if (isMemberExpressionWithIdentifier(node.callee, 'createFactory') && hasValidArgs) {
       if (imports.defaultImports.has(node.callee.object.name) || node.callee.object.name === 'React') {
         matches.push(createPatternMatch(node, 'createFactory', code));
       }
     }
 
     // Find createFactory(...) if imported from react
-    if (
-      node.callee &&
-      node.callee.type === 'Identifier' &&
-      createFactoryLocalNames.has(node.callee.name) &&
-      hasValidArgs
-    ) {
+    if (node.callee?.type === 'Identifier' && createFactoryLocalNames.has(node.callee.name) && hasValidArgs) {
       matches.push(createPatternMatch(node, 'createFactory', code));
     }
   });
 
   return matches;
+}
+
+function isMemberExpressionWithIdentifier(
+  node: TSESTree.Node | null | undefined,
+  propertyName: string
+): node is TSESTree.MemberExpression & { property: TSESTree.Identifier; object: TSESTree.Identifier } {
+  return (
+    node?.type === 'MemberExpression' &&
+    node.object?.type === 'Identifier' &&
+    node.property?.type === 'Identifier' &&
+    node.property.name === propertyName
+  );
+}
+
+function isAssignmentToProperty(
+  node: TSESTree.Node | null | undefined,
+  propertyName: string
+): node is TSESTree.AssignmentExpression & {
+  left: TSESTree.MemberExpression & {
+    property: TSESTree.Identifier;
+  };
+} {
+  return (
+    node?.type === 'AssignmentExpression' &&
+    node.left?.type === 'MemberExpression' &&
+    node.left.property?.type === 'Identifier' &&
+    node.left.property.name === propertyName
+  );
 }
 
 export function createPatternMatch(node: any, pattern: string, code: string): PatternMatch {
