@@ -10,10 +10,11 @@ const debug = createDebug('plugin-docs-renderer:server');
 
 export interface ServerOptions {
   docsPath: string;
-  port?: number;
+  port: number;
   liveReload?: boolean;
 }
 
+// will support nested pages in the future
 function generateNavItems(pages: Page[]): string {
   return pages.map((page) => `<li><a href="/${page.slug}">${page.title}</a></li>`).join('\n');
 }

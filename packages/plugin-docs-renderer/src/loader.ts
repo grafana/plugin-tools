@@ -114,7 +114,6 @@ export async function loadDocsFolder(rootPath: string): Promise<LoadedDocs> {
   }
 
   debug('Successfully loaded docs folder with %d file(s)', Object.keys(files).length);
-
   return {
     manifest,
     files,
