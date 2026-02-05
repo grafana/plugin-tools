@@ -76,7 +76,7 @@ describe('startServer', () => {
     const response = await request(app).get('/img/test.png');
 
     expect(response.status).toBe(200);
-    // check that the file was served (binary content)
+    expect(response.type).toBe('image/png');
     expect(response.body).toBeDefined();
   });
 
