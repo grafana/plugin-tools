@@ -3,7 +3,7 @@ import { access } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import minimist from 'minimist';
 import createDebug from 'debug';
-import { startServer } from '../server.js';
+import { startServer } from '../server/server.js';
 
 const debug = createDebug('plugin-docs-renderer:cli');
 
