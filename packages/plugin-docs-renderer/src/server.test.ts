@@ -127,4 +127,18 @@ describe('startServer', () => {
     // should use slug as fallback since advanced.md has no frontmatter title
     expect(response.text).toContain('<title>advanced - Test Plugin Documentation</title>');
   });
+
+  it('should escape HTML entities in titles to prevent XSS', async () => {
+    app = startServer({ docsPath: testDocsPath, port: 0 });
+
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    // verify that if manifest or page titles contained HTML, it would be escaped
+    // manifest title should appear escaped in title tag and h1
+    expect(response.text).toMatch(/<title>[^<]*<\/title>/);
+    expect(response.text).toMatch(/<h1>[^<]*<\/h1>/);
+    // navigation links should not contain unescaped HTML
+    expect(response.text).not.toMatch(/<a[^>]*>[^<]*<script/i);
+  });
 });

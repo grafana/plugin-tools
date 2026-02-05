@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
+import escapeHtml from 'escape-html';
 import { parseMarkdown } from './parser.js';
 import type { Manifest, Page } from './types.js';
 
@@ -16,7 +17,7 @@ export interface ServerOptions {
 
 // will support nested pages in the future
 function generateNavItems(pages: Page[]): string {
-  return pages.map((page) => `<li><a href="/${page.slug}">${page.title}</a></li>`).join('\n');
+  return pages.map((page) => `<li><a href="/${escapeHtml(page.slug)}">${escapeHtml(page.title)}</a></li>`).join('\n');
 }
 
 /**
@@ -52,11 +53,11 @@ function generatePageHTML(title: string, content: string, manifest: Manifest, li
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} - ${manifest.title}</title>
+  <title>${escapeHtml(title)} - ${escapeHtml(manifest.title)}</title>
 </head>
 <body>
   <nav>
-    <h1>${manifest.title}</h1>
+    <h1>${escapeHtml(manifest.title)}</h1>
     <ul>
       ${navItems}
     </ul>
