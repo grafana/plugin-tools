@@ -15,6 +15,11 @@ export interface ServerOptions {
   liveReload?: boolean;
 }
 
+export interface Server {
+  app: Express;
+  close: () => Promise<void>;
+}
+
 // will support nested pages in the future
 function generateNavItems(pages: Page[]): string {
   return pages.map((page) => `<li><a href="/${escapeHtml(page.slug)}">${escapeHtml(page.title)}</a></li>`).join('\n');
@@ -76,9 +81,9 @@ function generatePageHTML(title: string, content: string, manifest: Manifest, li
  * Starts a development server for previewing plugin documentation.
  *
  * @param options - Server configuration options
- * @returns The Express app instance
+ * @returns Server instance with app and close method
  */
-export function startServer(options: ServerOptions): Express {
+export function startServer(options: ServerOptions): Server {
   const { docsPath, port = 3000, liveReload = false } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
@@ -171,7 +176,7 @@ export function startServer(options: ServerOptions): Express {
   });
 
   // start the server
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`\n📄 Plugin Documentation Server`);
     console.log(`✓ Serving: ${docsPath}`);
     console.log(`✓ URL: http://localhost:${port}`);
@@ -179,5 +184,12 @@ export function startServer(options: ServerOptions): Express {
     console.log(`\n🔍 Watching for changes...\n`);
   });
 
-  return app;
+  const close = async () => {
+    await watcher.close();
+    return new Promise<void>((resolve, reject) => {
+      server.close((err) => (err ? reject(err) : resolve()));
+    });
+  };
+
+  return { app, close };
 }

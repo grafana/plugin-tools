@@ -2,24 +2,24 @@ import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import { join } from 'node:path';
 import type { Express } from 'express';
-import { startServer } from './server.js';
+import { startServer, type Server } from './server.js';
 
 describe('startServer', () => {
   const testDocsPath = join(__dirname, '__fixtures__', 'test-docs');
   let app: Express;
+  let server: Server | null = null;
 
-  afterEach(() => {
-    // cleanup: close any open connections
-    if (app) {
-      const server = (app as any).server;
-      if (server?.close) {
-        server.close();
-      }
+  afterEach(async () => {
+    if (server) {
+      await server.close();
+      server = null;
     }
   });
 
   it('should serve the homepage (first page in manifest)', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/');
 
@@ -30,7 +30,9 @@ describe('startServer', () => {
   });
 
   it('should serve a specific page by slug', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/guide');
 
@@ -41,7 +43,9 @@ describe('startServer', () => {
   });
 
   it('should serve a nested page by slug', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/advanced');
 
@@ -51,7 +55,9 @@ describe('startServer', () => {
   });
 
   it('should return 404 for non-existent page', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/non-existent');
 
@@ -60,7 +66,9 @@ describe('startServer', () => {
   });
 
   it('should include navigation links', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/');
 
@@ -71,7 +79,9 @@ describe('startServer', () => {
   });
 
   it('should serve static assets from img directory', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/img/test.png');
 
@@ -81,7 +91,9 @@ describe('startServer', () => {
   });
 
   it('should not include live reload script by default', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0, liveReload: false });
+    const result = startServer({ docsPath: testDocsPath, port: 0, liveReload: false });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/');
 
@@ -91,7 +103,9 @@ describe('startServer', () => {
   });
 
   it('should include live reload script when enabled', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
+    const result = startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/');
 
@@ -101,7 +115,9 @@ describe('startServer', () => {
   });
 
   it('should have live reload endpoint when enabled', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
+    const result = startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/__reload__?t=0');
 
@@ -110,7 +126,9 @@ describe('startServer', () => {
   });
 
   it('should use frontmatter title when available', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/home');
 
@@ -119,7 +137,9 @@ describe('startServer', () => {
   });
 
   it('should fallback to slug when no frontmatter title', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/advanced');
 
@@ -129,7 +149,9 @@ describe('startServer', () => {
   });
 
   it('should escape HTML entities in titles to prevent XSS', async () => {
-    app = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
 
     const response = await request(app).get('/');
 
