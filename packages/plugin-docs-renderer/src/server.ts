@@ -1,11 +1,15 @@
 import express, { type Express, type Request, type Response } from 'express';
 import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
-import escapeHtml from 'escape-html';
 import { parseMarkdown } from './parser.js';
 import type { Manifest, Page } from './types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const debug = createDebug('plugin-docs-renderer:server');
 
@@ -18,63 +22,6 @@ export interface ServerOptions {
 export interface Server {
   app: Express;
   close: () => Promise<void>;
-}
-
-// will support nested pages in the future
-function generateNavItems(pages: Page[]): string {
-  return pages.map((page) => `<li><a href="/${escapeHtml(page.slug)}">${escapeHtml(page.title)}</a></li>`).join('\n');
-}
-
-/**
- * Generates an HTML template for a documentation page.
- */
-function generatePageHTML(title: string, content: string, manifest: Manifest, liveReload: boolean): string {
-  // generate a simple navigation from manifest
-  const navItems = generateNavItems(manifest.pages);
-
-  // optional live reload script
-  const reloadScript = liveReload
-    ? `
-    <script>
-      let lastCheck = Date.now();
-      setInterval(async () => {
-        try {
-          const res = await fetch('/__reload__?t=' + lastCheck);
-          if (res.status === 205) {
-            location.reload();
-          }
-          lastCheck = Date.now();
-        } catch (e) {
-          // Ignore fetch errors
-        }
-      }, 1000);
-    </script>
-  `
-    : '';
-
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(title)} - ${escapeHtml(manifest.title)}</title>
-</head>
-<body>
-  <nav>
-    <h1>${escapeHtml(manifest.title)}</h1>
-    <ul>
-      ${navItems}
-    </ul>
-  </nav>
-  <hr>
-  <main>
-    ${content}
-  </main>
-  ${reloadScript}
-</body>
-</html>
-  `.trim();
 }
 
 /**
@@ -91,13 +38,20 @@ export function startServer(options: ServerOptions): Server {
   const app = express();
   let lastModified = Date.now();
 
+  // configure EJS
+  app.set('view engine', 'ejs');
+  app.set('views', join(__dirname, 'views'));
+
+  const manifestPath = join(docsPath, 'manifest.json');
+  let manifest: Manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
+
   // setup file watcher
   const watcher = watch([join(docsPath, '**/*.md'), join(docsPath, 'manifest.json')], {
     ignoreInitial: true,
   });
   debug('File watcher initialized for %s', docsPath);
 
-  watcher.on('change', async (path) => {
+  watcher.on('change', (path) => {
     debug('File changed: %s', path);
     lastModified = Date.now();
   });
@@ -138,11 +92,6 @@ export function startServer(options: ServerOptions): Server {
   // serve documentation pages
   app.get('/:slug?', async (req: Request, res: Response) => {
     try {
-      // load manifest from disk
-      const manifestPath = join(docsPath, 'manifest.json');
-      const manifestContent = await readFile(manifestPath, 'utf-8');
-      const manifest: Manifest = JSON.parse(manifestContent);
-
       // default to first page in manifest
       const slug = req.params.slug || manifest.pages[0]?.slug;
       if (!slug) {
@@ -167,8 +116,13 @@ export function startServer(options: ServerOptions): Server {
       const parsed = parseMarkdown(fileContent);
 
       const title = (parsed.frontmatter.title as string) || slug;
-      const html = generatePageHTML(title, parsed.html, manifest, liveReload);
-      res.send(html);
+
+      res.render('plugin-details-page', {
+        title,
+        content: parsed.html,
+        manifest,
+        liveReload,
+      });
     } catch (error) {
       console.error('Error serving page:', error);
       res.status(500).send('Internal server error');
