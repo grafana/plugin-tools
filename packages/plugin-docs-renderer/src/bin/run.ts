@@ -48,9 +48,7 @@ async function main() {
   // check if the path exists
   try {
     await access(docsPath);
-    debug('Docs path exists');
   } catch {
-    debug('Docs path not found: %s', docsPath);
     console.error(`Error: Path not found: ${docsPath}`);
     process.exit(1);
   }
@@ -58,11 +56,9 @@ async function main() {
   // parse port
   const port = parseInt(argv.port, 10);
   if (isNaN(port) || port < 1 || port > 65535) {
-    debug('Invalid port: %s', argv.port);
     console.error(`Error: Invalid port: ${argv.port}`);
     process.exit(1);
   }
-  debug('Validated port: %d', port);
 
   await commandServe(docsPath, port, argv.reload);
 }

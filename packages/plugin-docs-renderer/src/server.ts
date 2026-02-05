@@ -95,7 +95,7 @@ export function startServer(options: ServerOptions): Express {
     lastModified = Date.now();
   });
 
-  // serve static assets (images, etc.)
+  // serve static assets
   app.use('/img', express.static(join(docsPath, 'img')));
   app.use('/assets', express.static(join(docsPath, 'assets')));
   app.use('/images', express.static(join(docsPath, 'images')));
@@ -105,9 +105,9 @@ export function startServer(options: ServerOptions): Express {
     app.get('/__reload__', (req: Request, res: Response) => {
       const clientTime = parseInt(req.query.t as string, 10) || 0;
       if (lastModified > clientTime) {
-        res.status(205).send(); // 205 = Reset Content (signals reload)
+        res.status(205).send(); //signals reload
       } else {
-        res.status(204).send(); // 204 = No Content (no changes)
+        res.status(204).send(); // no changes
       }
     });
   }
@@ -155,8 +155,6 @@ export function startServer(options: ServerOptions): Express {
         return;
       }
 
-      debug('Serving page: %s -> %s', slug, fileName);
-
       // read and parse the markdown file
       const filePath = join(docsPath, fileName);
       const fileContent = await readFile(filePath, 'utf-8');
@@ -166,7 +164,6 @@ export function startServer(options: ServerOptions): Express {
       const html = generatePageHTML(title, parsed.html, manifest, liveReload);
       res.send(html);
     } catch (error) {
-      debug('Error serving page: %O', error);
       console.error('Error serving page:', error);
       res.status(500).send('Internal server error');
     }
@@ -174,7 +171,6 @@ export function startServer(options: ServerOptions): Express {
 
   // start the server
   app.listen(port, () => {
-    debug('Server listening on port %d', port);
     console.log(`\n📄 Plugin Documentation Server`);
     console.log(`✓ Serving: ${docsPath}`);
     console.log(`✓ URL: http://localhost:${port}`);
