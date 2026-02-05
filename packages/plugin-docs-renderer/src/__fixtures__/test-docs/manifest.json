@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "title": "Test Plugin Documentation",
+  "pages": [
+    {
+      "title": "Home",
+      "slug": "home",
+      "file": "home.md"
+    },
+    {
+      "title": "Guide",
+      "slug": "guide",
+      "file": "guide.md",
+      "children": [
+        {
+          "title": "Advanced",
+          "slug": "advanced",
+          "file": "advanced.md"
+        }
+      ]
+    }
+  ]
+}
