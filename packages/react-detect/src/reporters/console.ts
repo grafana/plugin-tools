@@ -4,15 +4,16 @@ import { output } from '../utils/output.js';
 import { groupByPattern, groupByPackage } from './utils.js';
 
 const summaryMsg = [
-  `We strongly recommend testing your plugin using the React 19 Grafana docker image: ${output.formatCode('grafana/grafana:dev-preview-react19')}`,
+  `We strongly recommend testing your plugin using the React 19 Grafana docker image: ${output.formatCode('grafana/grafana-enterprise:dev-preview-react19')}`,
   ...output.bulletList([
-    `Start the server with ${output.formatCode('GRAFANA_VERSION=dev-preview-react19 GRAFANA_IMAGE=grafana docker compose up --build')} flag and manually test your plugin.`,
+    `Start the server with ${output.formatCode('GRAFANA_VERSION=dev-preview-react19 docker compose up --build')} flag and manually test your plugin.`,
     'Run any e2e tests to try and catch any potential issues.',
     'Manually test your plugin in the browser. Look for any console warnings or errors related to React.',
   ]),
   '',
   'For more information, please refer to:',
   `React 19 blog post: ${output.formatUrl('https://react.dev/blog/2024/04/25/react-19-upgrade-guide')}.`,
+  `Grafana React 19 announcement: ${output.formatUrl('https://grafana.com/blog/react-19-is-coming-to-grafana-what-plugin-developers-need-to-know/')}`,
   `Grafana developer documentation: ${output.formatUrl('https://grafana.com/developers/plugin-tools/set-up/set-up-docker')}`,
 ];
 
