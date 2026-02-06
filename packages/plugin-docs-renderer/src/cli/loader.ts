@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import createDebug from 'debug';
-import type { Manifest, MarkdownFiles } from './types.js';
+import type { Manifest, MarkdownFiles } from '../types.js';
 
 const debug = createDebug('plugin-docs-renderer:loader');
 
@@ -82,7 +82,7 @@ export async function loadDocsFolder(rootPath: string): Promise<LoadedDocs> {
   let manifest;
   try {
     manifest = JSON.parse(manifestContent) as Manifest;
-    debug('Parsed manifest: title=%s, version=%s, pages=%d', manifest.title, manifest.version, manifest.pages.length);
+    debug('Parsed manifest: title=%s, pages=%d', manifest.title, manifest.pages.length);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Failed to parse manifest.json: ${message}`);

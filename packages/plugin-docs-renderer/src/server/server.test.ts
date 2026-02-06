@@ -17,33 +17,33 @@ describe('startServer', () => {
   });
 
   it('should serve the homepage (first page in manifest)', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
     const response = await request(app).get('/');
 
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<title>Home Page - Test Plugin Documentation</title>');
+    expect(response.text).toContain('<title>Home Page - Plugin Documentation</title>');
     expect(response.text).toContain('<h1>Welcome</h1>');
     expect(response.text).toContain('This is the home page of the test documentation.');
   });
 
   it('should serve a specific page by slug', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
     const response = await request(app).get('/guide');
 
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<title>User Guide - Test Plugin Documentation</title>');
+    expect(response.text).toContain('<title>User Guide - Plugin Documentation</title>');
     expect(response.text).toContain('<h1>User Guide</h1>');
     expect(response.text).toContain('This is a guide page.');
   });
 
   it('should serve a nested page by slug', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
@@ -55,7 +55,7 @@ describe('startServer', () => {
   });
 
   it('should return 404 for non-existent page', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
@@ -66,7 +66,7 @@ describe('startServer', () => {
   });
 
   it('should include navigation links', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
@@ -74,12 +74,12 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('<nav>');
-    expect(response.text).toContain('<a href="/home">Home</a>');
-    expect(response.text).toContain('<a href="/guide">Guide</a>');
+    expect(response.text).toContain('<a href="/home">Home Page</a>');
+    expect(response.text).toContain('<a href="/guide">User Guide</a>');
   });
 
   it('should serve static assets from img directory', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
@@ -91,7 +91,7 @@ describe('startServer', () => {
   });
 
   it('should not include live reload script by default', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0, liveReload: false });
+    const result = await startServer({ docsPath: testDocsPath, port: 0, liveReload: false });
     server = result;
     app = result.app;
 
@@ -103,7 +103,7 @@ describe('startServer', () => {
   });
 
   it('should include live reload script when enabled', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
+    const result = await startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
     server = result;
     app = result.app;
 
@@ -115,7 +115,7 @@ describe('startServer', () => {
   });
 
   it('should have live reload endpoint when enabled', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
+    const result = await startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
     server = result;
     app = result.app;
 
@@ -126,30 +126,30 @@ describe('startServer', () => {
   });
 
   it('should use frontmatter title when available', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
     const response = await request(app).get('/home');
 
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<title>Home Page - Test Plugin Documentation</title>');
+    expect(response.text).toContain('<title>Home Page - Plugin Documentation</title>');
   });
 
-  it('should fallback to slug when no frontmatter title', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+  it('should use frontmatter title from advanced page', async () => {
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
     const response = await request(app).get('/advanced');
 
     expect(response.status).toBe(200);
-    // should use slug as fallback since advanced.md has no frontmatter title
-    expect(response.text).toContain('<title>advanced - Test Plugin Documentation</title>');
+    // advanced.md now has frontmatter with title
+    expect(response.text).toContain('<title>Advanced Topics - Plugin Documentation</title>');
   });
 
   it('should escape HTML entities in titles to prevent XSS', async () => {
-    const result = startServer({ docsPath: testDocsPath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
     server = result;
     app = result.app;
 
