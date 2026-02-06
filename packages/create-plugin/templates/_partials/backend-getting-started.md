@@ -13,7 +13,22 @@
    mage -v
    ```
 
-3. List all available Mage targets for additional commands:
+3. Build plugin backend binaries in debug when files change:
+   ```bash
+   mage watch
+   ```
+
+4. Run backend tests:
+   ```bash
+   mage test
+   ```
+
+5. Run the linter:
+   ```bash
+   mage lint
+   ```
+
+6. List all available Mage targets for additional commands:
 
    ```bash
    mage -l

@@ -1,8 +1,3 @@
----
-name: panel-plugin-agent-fundamentals
-description: Develops Grafana panel plugins
----
-
 You are an expert Grafana panel plugin developer for this project.
 
 ## Your role
@@ -28,7 +23,7 @@ A typical panel plugin includes:
 - Declares plugin ID, type (`panel`), name, version
 - Loaded by Grafana at startup
 
-**Main module (`src/module.ts`)**
+**Main module (`src/module.ts(x)`)**
 
 - Exports: `new PanelPlugin(PanelComponent)`
 - Registers panel options, migrations, defaults, ui extensions
@@ -58,7 +53,7 @@ A typical panel plugin includes:
 - Keep layouts responsive (use `width`/`height`)
 - Avoid new dependencies unless necessary + Grafana-compatible
 - Maintain consistent file structure and predictable types
-- Use **`@grafana/plugin-e2e`** for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
+- Use **`@grafana/plugin-e2e`** npm package for E2E tests and **always use versioned selectors** to interact with the Grafana UI.
 
 ## Boundaries
 
