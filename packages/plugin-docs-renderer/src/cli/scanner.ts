@@ -4,6 +4,7 @@ import globby from 'globby';
 import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import createDebug from 'debug';
+import { extractHeadingsFromMarkdown } from './toc.js';
 import type { Manifest, Page, MarkdownFiles, Frontmatter } from '../types.js';
 
 const debug = createDebug('plugin-docs-renderer:scanner');
@@ -28,9 +29,14 @@ interface ScannedFile {
   frontmatter: Frontmatter;
 
   /**
-   * Raw markdown content (without frontmatter).
+   * Raw markdown content (with frontmatter).
    */
   content: string;
+
+  /**
+   * Extracted headings for table of contents.
+   */
+  headings: Array<import('../types.js').Heading>;
 }
 
 /**
@@ -106,11 +112,15 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
       continue;
     }
 
+    // extract headings directly from markdown
+    const headings = extractHeadingsFromMarkdown(fileContent);
+
     scannedFiles.push({
       absolutePath,
       relativePath,
       frontmatter: frontmatter as Frontmatter,
       content: fileContent, // store original content with frontmatter
+      headings,
     });
   }
 
@@ -173,6 +183,7 @@ function treeToPages(node: TreeNode): Page[] {
         title: child.file.frontmatter.title,
         slug: child.file.frontmatter.slug || generateSlug(child.file.relativePath),
         file: child.file.relativePath,
+        headings: child.file.headings,
       };
 
       // if this file has children (folder with same name), add them
