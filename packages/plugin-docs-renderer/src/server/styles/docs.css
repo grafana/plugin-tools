@@ -1,0 +1,430 @@
+/**
+ * Minimal Grafana-themed CSS for Plugin Documentation Renderer
+ * Based on Grafana design tokens and marketing website styling
+ */
+
+/* ==================== CSS Variables (Design Tokens) ==================== */
+:root {
+  /* Colors - Grafana brand */
+  --color-primary: #ff8833;
+  --color-primary-hover: #ff6a00;
+
+  /* Grays */
+  --color-gray-50: #f7f8fa;
+  --color-gray-100: #eaedf0;
+  --color-gray-200: #d8d8df;
+  --color-gray-300: #c7c7d1;
+  --color-gray-400: #9e9ea8;
+  --color-gray-500: #6e6e78;
+  --color-gray-600: #52525c;
+  --color-gray-700: #3d3d47;
+  --color-gray-800: #24242b;
+  --color-gray-900: #18181d;
+
+  /* Blues */
+  --color-blue-500: #2970ff;
+  --color-blue-600: #1b55f5;
+  --color-blue-100: #d9e8ff;
+
+  /* Greens */
+  --color-green-500: #17b26a;
+  --color-green-100: #d3f8e0;
+
+  /* Typography */
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+
+  /* Font sizes */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+
+  /* Spacing */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-12: 3rem; /* 48px */
+
+  /* Borders */
+  --border-radius: 0.375rem;
+  --border-color: var(--color-gray-200);
+}
+
+/* ==================== Base Styles ==================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-gray-900);
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-gray-50);
+}
+
+/* ==================== Header ==================== */
+.docs-header {
+  background-color: var(--color-gray-900);
+  color: white;
+  padding: var(--space-4);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.docs-header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.docs-header-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin: 0;
+}
+
+.docs-header-badge {
+  font-size: var(--text-sm);
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-800);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--border-radius);
+}
+
+/* ==================== Three-Column Layout ==================== */
+.docs-container {
+  display: grid;
+  grid-template-columns: 250px 1fr 200px;
+  gap: var(--space-8);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-8);
+}
+
+/* Responsive: collapse sidebars on mobile */
+@media (max-width: 768px) {
+  .docs-container {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+
+  .docs-nav,
+  .docs-toc {
+    display: none;
+  }
+}
+
+/* ==================== Left Sidebar: Navigation ==================== */
+.docs-nav {
+  position: sticky;
+  top: var(--space-4);
+  height: fit-content;
+  max-height: calc(100vh - var(--space-8));
+  overflow-y: auto;
+}
+
+.docs-nav-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0 0 var(--space-4) 0;
+  color: var(--color-gray-900);
+}
+
+.docs-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docs-nav-item {
+  margin-bottom: var(--space-1);
+}
+
+/* collapsible items */
+.docs-nav-item.collapsible {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* toggle button for collapsible sections */
+.docs-nav-toggle {
+  background: none;
+  border: none;
+  padding: var(--space-2);
+  margin: 0;
+  cursor: pointer;
+  color: var(--color-gray-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.docs-nav-toggle:hover {
+  color: var(--color-gray-900);
+}
+
+.docs-nav-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+/* rotate chevron when expanded */
+.docs-nav-item.expanded > .docs-nav-toggle svg {
+  transform: rotate(90deg);
+}
+
+.docs-nav-link {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-gray-700);
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  font-size: var(--text-sm);
+  transition: all 0.15s ease;
+  flex: 1;
+}
+
+.docs-nav-link:hover {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-900);
+}
+
+.docs-nav-link.active {
+  background-color: var(--color-blue-100);
+  color: var(--color-blue-600);
+  font-weight: 600;
+}
+
+/* non-clickable labels for sections without files */
+.docs-nav-label {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-gray-900);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  flex: 1;
+}
+
+/* nested navigation items */
+.docs-nav-list .docs-nav-list {
+  margin-left: var(--space-4);
+  margin-top: var(--space-1);
+  width: 100%;
+  display: none;
+}
+
+/* show nested list when parent is expanded */
+.docs-nav-item.expanded > .docs-nav-list {
+  display: block;
+}
+
+/* ==================== Center: Main Content ==================== */
+.docs-content {
+  background-color: white;
+  padding: var(--space-8);
+  border-radius: var(--border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+}
+
+/* Typography for content */
+.docs-content h1 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin: 0 0 var(--space-6) 0;
+  line-height: 1.2;
+}
+
+.docs-content h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin: var(--space-8) 0 var(--space-4) 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.docs-content h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.docs-content h3 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin: var(--space-6) 0 var(--space-3) 0;
+}
+
+.docs-content p {
+  margin: 0 0 var(--space-4) 0;
+  line-height: 1.7;
+  color: var(--color-gray-700);
+}
+
+.docs-content a {
+  color: var(--color-blue-500);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.docs-content a:hover {
+  border-bottom-color: var(--color-blue-500);
+}
+
+.docs-content ul,
+.docs-content ol {
+  margin: 0 0 var(--space-4) 0;
+  padding-left: var(--space-6);
+}
+
+.docs-content li {
+  margin-bottom: var(--space-2);
+  line-height: 1.7;
+  color: var(--color-gray-700);
+}
+
+.docs-content code {
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+  background-color: var(--color-gray-100);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  color: var(--color-gray-900);
+}
+
+.docs-content pre {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-100);
+  padding: var(--space-4);
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4) 0;
+}
+
+.docs-content pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: var(--text-sm);
+}
+
+.docs-content blockquote {
+  border-left: 4px solid var(--color-blue-500);
+  padding-left: var(--space-4);
+  margin: var(--space-4) 0;
+  color: var(--color-gray-600);
+  font-style: italic;
+}
+
+.docs-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-4) 0;
+}
+
+.docs-content th,
+.docs-content td {
+  padding: var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.docs-content th {
+  font-weight: 600;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+}
+
+.docs-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  margin: var(--space-4) 0;
+}
+
+/* ==================== Right Sidebar: Table of Contents ==================== */
+.docs-toc {
+  position: sticky;
+  top: var(--space-4);
+  height: fit-content;
+  max-height: calc(100vh - var(--space-8));
+  overflow-y: auto;
+}
+
+.docs-toc-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-gray-700);
+  margin: 0 0 var(--space-3) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docs-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docs-toc-item {
+  margin-bottom: var(--space-2);
+}
+
+.docs-toc-link {
+  display: block;
+  color: var(--color-gray-600);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  transition: color 0.15s ease;
+  padding: var(--space-1) 0;
+}
+
+.docs-toc-link:hover {
+  color: var(--color-blue-500);
+}
+
+/* Nested TOC items (h3) */
+.docs-toc-list .docs-toc-list {
+  margin-left: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+/* ==================== Scrollbar Styling ==================== */
+.docs-nav::-webkit-scrollbar,
+.docs-toc::-webkit-scrollbar {
+  width: 6px;
+}
+
+.docs-nav::-webkit-scrollbar-track,
+.docs-toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.docs-nav::-webkit-scrollbar-thumb,
+.docs-toc::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: 3px;
+}
+
+.docs-nav::-webkit-scrollbar-thumb:hover,
+.docs-toc::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
+}
