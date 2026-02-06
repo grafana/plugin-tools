@@ -137,6 +137,10 @@ function copyAssets(): Plugin {
         const srcViews = join(projectRoot, 'src', 'server', 'views');
         const distViews = join(projectRoot, 'dist', 'server', 'views');
         await cp(srcViews, distViews, { recursive: true });
+
+        const srcStyles = join(projectRoot, 'src', 'server', 'styles');
+        const distStyles = join(projectRoot, 'dist', 'server', 'styles');
+        await cp(srcStyles, distStyles, { recursive: true });
       }
     },
   };
