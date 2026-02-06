@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - <%= manifest.title %></title>
+  <link rel="stylesheet" href="/styles/docs.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="docs-header">
+    <div class="docs-header-content">
+      <h1 class="docs-header-title">📦 <%= manifest.title %></h1>
+      <span class="docs-header-badge">Local Preview</span>
+    </div>
+  </header>
+
+  <!-- Three-column layout: nav | content | toc -->
+  <div class="docs-container">
+    <!-- Left: Docs navigation tree -->
+    <nav class="docs-nav">
+      <h2 class="docs-nav-title">Documentation</h2>
+      <%- include('partials/navigation', { pages: manifest.pages, currentPath }) %>
+    </nav>
+
+    <!-- Center: Main content -->
+    <main class="docs-content">
+      <%- content %>
+    </main>
+
+    <!-- Right: Table of contents -->
+    <aside class="docs-toc">
+      <h3 class="docs-toc-title">On this page</h3>
+      <%- include('partials/toc', { headings }) %>
+    </aside>
+  </div>
+
+  <script>
+    // collapsible navigation
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleButtons = document.querySelectorAll('.docs-nav-toggle');
+
+      toggleButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const navItem = button.closest('.docs-nav-item');
+          navItem.classList.toggle('expanded');
+        });
+      });
+
+      // expand active page's parent sections by default
+      const activeLink = document.querySelector('.docs-nav-link.active');
+      if (activeLink) {
+        let parent = activeLink.closest('.docs-nav-list');
+        while (parent) {
+          const parentItem = parent.closest('.docs-nav-item');
+          if (parentItem) {
+            parentItem.classList.add('expanded');
+          }
+          parent = parentItem?.parentElement.closest('.docs-nav-list');
+        }
+      }
+    });
+  </script>
+
+  <% if (liveReload) { %>
+  <script>
+    let lastCheck = Date.now();
+    setInterval(async () => {
+      try {
+        const res = await fetch('/__reload__?t=' + lastCheck);
+        if (res.status === 205) {
+          location.reload();
+        }
+        lastCheck = Date.now();
+      } catch (e) {
+        // ignore fetch errors
+      }
+    }, 1000);
+  </script>
+  <% } %>
+</body>
+</html>

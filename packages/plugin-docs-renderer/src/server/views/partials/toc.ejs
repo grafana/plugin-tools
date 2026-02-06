@@ -1,0 +1,13 @@
+<% if (!headings || headings.length === 0) { %>
+  <p style="color: var(--color-gray-500); font-size: var(--text-sm);">No headings found</p>
+<% } else { %>
+  <ul class="docs-toc-list">
+    <% headings.forEach(heading => { %>
+      <li class="docs-toc-item" <%= heading.level === 3 ? 'style="margin-left: var(--space-3);"' : '' %>>
+        <a href="#<%= heading.id %>" class="docs-toc-link">
+          <%= heading.text %>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+<% } %>
