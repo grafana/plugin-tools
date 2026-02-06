@@ -49,33 +49,24 @@ export interface ScannedDocs {
 }
 
 /**
- * Strips number prefix from a filename or folder name.
- * Examples: "01-overview.md" → "overview.md", "02-config" → "config"
- */
-function stripNumberPrefix(name: string): string {
-  return name.replace(/^\d+-/, '');
-}
-
-/**
  * Generates a URL slug from a file path.
  * Examples:
- *   "01-overview.md" → "overview"
- *   "config/01-auth.md" → "config/auth"
+ *   "overview.md" → "overview"
+ *   "config/auth.md" → "config/auth"
  */
 function generateSlug(filePath: string): string {
   const slugger = new GithubSlugger();
   const parsed = parse(filePath);
 
-  // Build slug parts by slugifying each segment separately
+  // build slug parts by slugifying each segment separately
   const parts: string[] = [];
 
   if (parsed.dir) {
-    const dirParts = parsed.dir.split(sep).map(stripNumberPrefix);
+    const dirParts = parsed.dir.split(sep);
     parts.push(...dirParts.map((part) => slugger.slug(part)));
   }
 
-  const name = stripNumberPrefix(parsed.name);
-  parts.push(slugger.slug(name));
+  parts.push(slugger.slug(parsed.name));
 
   return parts.join('/');
 }
@@ -89,7 +80,7 @@ function generateSlug(filePath: string): string {
 async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
   debug('Scanning for markdown files in: %s', docsPath);
 
-  // Find all .md files recursively
+  // find all .md files recursively
   const pattern = join(docsPath, '**/*.md');
   const filePaths = await globby(pattern, {
     ignore: ['**/node_modules/**', '**/dist/**'],
@@ -102,11 +93,11 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
   for (const absolutePath of filePaths) {
     const relativePath = relative(docsPath, absolutePath);
 
-    // Read and parse the file
+    // read and parse the file
     const fileContent = await readFile(absolutePath, 'utf-8');
     const parsed = matter(fileContent);
 
-    // Validate frontmatter has required fields
+    // validate frontmatter has required fields
     const frontmatter = parsed.data as Partial<Frontmatter>;
     if (!frontmatter.title || !frontmatter.description || frontmatter.sidebar_position === undefined) {
       console.warn(
@@ -119,7 +110,7 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
       absolutePath,
       relativePath,
       frontmatter: frontmatter as Frontmatter,
-      content: parsed.content,
+      content: fileContent, // store original content with frontmatter
     });
   }
 
@@ -146,7 +137,7 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
     const parts = file.relativePath.split(sep);
     let current = root;
 
-    // Navigate/create tree structure
+    // navigate/create tree structure
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
       if (!current.children.has(part)) {
@@ -155,7 +146,7 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
       current = current.children.get(part)!;
     }
 
-    // Add the file at the leaf
+    // add the file at the leaf
     const fileName = parts[parts.length - 1];
     current.children.set(fileName, {
       name: fileName,
@@ -173,7 +164,7 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
 function treeToPages(node: TreeNode): Page[] {
   const pages: Page[] = [];
 
-  // Convert children to array and sort by sidebar_position
+  // convert children to array and sort by sidebar_position
   const childEntries = Array.from(node.children.entries());
   const sortedEntries = childEntries.sort((a, b) => {
     const aPos = a[1].file?.frontmatter.sidebar_position ?? Infinity;
@@ -183,25 +174,24 @@ function treeToPages(node: TreeNode): Page[] {
 
   for (const [name, child] of sortedEntries) {
     if (child.file) {
-      // It's a markdown file
+      // it's a markdown file
       const page: Page = {
         title: child.file.frontmatter.title,
         slug: child.file.frontmatter.slug || generateSlug(child.file.relativePath),
         file: child.file.relativePath,
       };
 
-      // If this file has children (folder with same name), add them
+      // if this file has children (folder with same name), add them
       if (child.children.size > 0) {
         page.children = treeToPages(child);
       }
 
       pages.push(page);
     } else if (child.children.size > 0) {
-      // It's a directory without a file - create category
-      const categoryName = stripNumberPrefix(name);
+      // it's a directory without a file - create category
       const page: Page = {
-        title: categoryName.charAt(0).toUpperCase() + categoryName.slice(1).replace(/-/g, ' '),
-        slug: categoryName,
+        title: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
+        slug: name,
         file: '',
         children: treeToPages(child),
       };
@@ -221,10 +211,10 @@ function treeToPages(node: TreeNode): Page[] {
 function buildManifest(scannedFiles: ScannedFile[]): Manifest {
   debug('Building manifest from %d file(s)', scannedFiles.length);
 
-  // Build tree structure from file paths
+  // build tree structure from file paths
   const tree = buildTree(scannedFiles);
 
-  // Convert tree to pages array
+  // convert tree to pages array
   const pages = treeToPages(tree);
 
   const manifest: Manifest = {
@@ -245,17 +235,17 @@ function buildManifest(scannedFiles: ScannedFile[]): Manifest {
 export async function scanDocsFolder(docsPath: string): Promise<ScannedDocs> {
   debug('Starting scan of docs folder: %s', docsPath);
 
-  // Scan all markdown files
+  // scan all markdown files
   const scannedFiles = await scanMarkdownFiles(docsPath);
 
   if (scannedFiles.length === 0) {
     throw new Error(`No valid markdown files found in ${docsPath}`);
   }
 
-  // Build manifest from scanned files
+  // build manifest from scanned files
   const manifest = buildManifest(scannedFiles);
 
-  // Create files map
+  // create files map
   const files: MarkdownFiles = {};
   for (const file of scannedFiles) {
     files[file.relativePath] = file.content;
