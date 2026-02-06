@@ -1,11 +1,11 @@
 import express, { type Express, type Request, type Response } from 'express';
 import { readFile } from 'node:fs/promises';
-import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
 import { parseMarkdown } from '../parser.js';
+import { scanDocsFolder } from '../cli/scanner.js';
 import type { Manifest, Page } from '../types.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,7 +30,7 @@ export interface Server {
  * @param options - Server configuration options
  * @returns Server instance with app and close method
  */
-export function startServer(options: ServerOptions): Server {
+export async function startServer(options: ServerOptions): Promise<Server> {
   const { docsPath, port = 3000, liveReload = false } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
@@ -42,18 +42,29 @@ export function startServer(options: ServerOptions): Server {
   app.set('view engine', 'ejs');
   app.set('views', join(__dirname, 'views'));
 
-  const manifestPath = join(docsPath, 'manifest.json');
-  let manifest: Manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
+  // Scan filesystem and generate manifest
+  debug('Scanning docs folder: %s', docsPath);
+  const scanned = await scanDocsFolder(docsPath);
+  let manifest: Manifest = scanned.manifest;
+  debug('Manifest generated with %d pages', manifest.pages.length);
 
-  // setup file watcher
-  const watcher = watch([join(docsPath, '**/*.md'), join(docsPath, 'manifest.json')], {
+  // setup file watcher for markdown files
+  const watcher = watch(join(docsPath, '**/*.md'), {
     ignoreInitial: true,
   });
   debug('File watcher initialized for %s', docsPath);
 
-  watcher.on('change', (path) => {
+  watcher.on('change', async (path) => {
     debug('File changed: %s', path);
     lastModified = Date.now();
+
+    // scan again to update manifest
+    try {
+      const rescanned = await scanDocsFolder(docsPath);
+      manifest = rescanned.manifest;
+    } catch (error) {
+      console.error('Error re-scanning docs folder:', error);
+    }
   });
 
   // serve static assets
@@ -89,11 +100,12 @@ export function startServer(options: ServerOptions): Server {
     return null;
   }
 
-  // serve documentation pages
-  app.get('/:slug?', async (req: Request, res: Response) => {
+  // serve documentation pages (matches single and nested paths)
+  app.get('*', async (req: Request, res: Response) => {
     try {
-      // default to first page in manifest
-      const slug = req.params.slug || manifest.pages[0]?.slug;
+      // Extract slug from path (remove leading slash)
+      const slug = req.path === '/' ? manifest.pages[0]?.slug || '' : req.path.slice(1);
+
       if (!slug) {
         debug('No pages found in manifest');
         res.status(404).send('No pages found in manifest');

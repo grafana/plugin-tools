@@ -11,7 +11,7 @@ async function commandServe(docsPath: string, port: number, liveReload: boolean)
   debug('Command serve: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
   try {
-    startServer({
+    await startServer({
       docsPath,
       port,
       liveReload,
@@ -23,6 +23,7 @@ async function commandServe(docsPath: string, port: number, liveReload: boolean)
     } else {
       console.error('Error starting server:', error);
     }
+    process.exit(1);
   }
 }
 

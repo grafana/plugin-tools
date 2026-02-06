@@ -65,10 +65,19 @@ function stripNumberPrefix(name: string): string {
 function generateSlug(filePath: string): string {
   const slugger = new GithubSlugger();
   const parsed = parse(filePath);
-  const dir = parsed.dir ? parsed.dir.split(sep).map(stripNumberPrefix).join('/') : '';
+
+  // Build slug parts by slugifying each segment separately
+  const parts: string[] = [];
+
+  if (parsed.dir) {
+    const dirParts = parsed.dir.split(sep).map(stripNumberPrefix);
+    parts.push(...dirParts.map((part) => slugger.slug(part)));
+  }
+
   const name = stripNumberPrefix(parsed.name);
-  const fullPath = dir ? `${dir}/${name}` : name;
-  return slugger.slug(fullPath);
+  parts.push(slugger.slug(name));
+
+  return parts.join('/');
 }
 
 /**
