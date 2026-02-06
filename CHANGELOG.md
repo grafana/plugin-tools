@@ -1,3 +1,19 @@
+# (Fri Feb 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/react-detect@0.5.2`
+  - fix: reduce false positives [#2434](https://github.com/grafana/plugin-tools/pull/2434) ([@jackw](https://github.com/jackw))
+- `@grafana/create-plugin@6.8.4`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.2.1 [#2427](https://github.com/grafana/plugin-tools/pull/2427) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Jan 30 2026)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,15 @@
+# v0.5.2 (Fri Feb 06 2026)
+
+#### 🐛 Bug Fix
+
+- fix: reduce false positives [#2434](https://github.com/grafana/plugin-tools/pull/2434) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.5.1 (Fri Jan 23 2026)
 
 #### 🐛 Bug Fix
