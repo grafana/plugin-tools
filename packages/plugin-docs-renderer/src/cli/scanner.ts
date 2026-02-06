@@ -127,9 +127,6 @@ interface TreeNode {
   children: Map<string, TreeNode>;
 }
 
-/**
- * Builds a tree from file paths.
- */
 function buildTree(scannedFiles: ScannedFile[]): TreeNode {
   const root: TreeNode = { name: '', children: new Map() };
 
@@ -158,19 +155,16 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
   return root;
 }
 
-/**
- * Converts a tree node to Page array (recursively).
- */
+// converts a tree node to Page array (recursively).
 function treeToPages(node: TreeNode): Page[] {
   const pages: Page[] = [];
 
   // convert children to array and sort by sidebar_position
   const childEntries = Array.from(node.children.entries());
-  const sortedEntries = childEntries.sort((a, b) => {
-    const aPos = a[1].file?.frontmatter.sidebar_position ?? Infinity;
-    const bPos = b[1].file?.frontmatter.sidebar_position ?? Infinity;
-    return aPos - bPos;
-  });
+  const sortedEntries = childEntries.sort(
+    (a, b) =>
+      (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity)
+  );
 
   for (const [name, child] of sortedEntries) {
     if (child.file) {
