@@ -49,7 +49,6 @@ export const EXTRA_TEMPLATE_VARIABLES = {
 };
 
 export const DEFAULT_FEATURE_FLAGS = {
-  bundleGrafanaUI: false,
   useExperimentalRspack: false,
   useExperimentalUpdates: true,
 };
