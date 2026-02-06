@@ -72,6 +72,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   app.use('/img', express.static(join(docsPath, 'img')));
   app.use('/assets', express.static(join(docsPath, 'assets')));
   app.use('/images', express.static(join(docsPath, 'images')));
+  app.use('/styles', express.static(join(__dirname, 'styles')));
 
   // live reload endpoint (if enabled)
   if (liveReload) {
@@ -86,10 +87,10 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   }
 
   // helper to find page by slug in manifest
-  function findPageBySlug(slug: string, pages: Page[]): string | null {
+  function findPageBySlug(slug: string, pages: Page[]): Page | null {
     for (const page of pages) {
       if (page.slug === slug) {
-        return page.file;
+        return page;
       }
       if (page.children) {
         const found = findPageBySlug(slug, page.children);
@@ -104,7 +105,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // serve documentation pages (matches single and nested paths)
   app.get('*', async (req: Request, res: Response) => {
     try {
-      // Extract slug from path (remove leading slash)
+      // extract slug from path (remove leading slash)
       const slug = req.path === '/' ? manifest.pages[0]?.slug || '' : req.path.slice(1);
 
       if (!slug) {
@@ -115,18 +116,18 @@ export async function startServer(options: ServerOptions): Promise<Server> {
 
       debug('Request for slug: %s', slug);
 
-      // find the file for this slug
-      const fileName = findPageBySlug(slug, manifest.pages);
-      if (!fileName) {
+      // find the page for this slug
+      const page = findPageBySlug(slug, manifest.pages);
+      if (!page) {
         debug('Page not found for slug: %s', slug);
         res.status(404).send('Page not found');
         return;
       }
 
       // get markdown content from memory
-      const fileContent = files[fileName];
+      const fileContent = files[page.file];
       if (!fileContent) {
-        debug('File content not found in memory for: %s', fileName);
+        debug('File content not found in memory for: %s', page.file);
         res.status(404).send('File content not found');
         return;
       }
@@ -135,10 +136,12 @@ export async function startServer(options: ServerOptions): Promise<Server> {
 
       const title = (parsed.frontmatter.title as string) || slug;
 
-      res.render('plugin-details-page', {
+      res.render('docs-layout', {
         title,
         content: parsed.html,
         manifest,
+        currentPath: slug,
+        headings: page.headings || [],
         liveReload,
       });
     } catch (error) {

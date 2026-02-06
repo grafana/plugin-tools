@@ -2,8 +2,19 @@ import { marked } from 'marked';
 import matter from 'gray-matter';
 import DOMPurify from 'isomorphic-dompurify';
 import createDebug from 'debug';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
 
 const debug = createDebug('plugin-docs-renderer:parser');
+
+// configure marked once at module level with gfm and heading IDs
+marked.use({
+  gfm: true,
+  breaks: false,
+});
+
+// use marked-gfm-heading-id extension for automatic heading IDs
+// @ts-expect-error - type mismatch due to duplicate marked instances in monorepo
+marked.use(gfmHeadingId());
 
 /**
  * Result of parsing a markdown file.
@@ -45,12 +56,7 @@ export function parseMarkdown(content: string): ParsedMarkdown {
   }
 
   // parse markdown to HTML using marked
-  // configure marked to use GitHub Flavored Markdown
-  marked.setOptions({
-    gfm: true, // enable GitHub Flavored Markdown
-    breaks: false, // don't convert \n to <br>
-  });
-
+  // heading IDs are automatically added by marked-gfm-heading-id extension
   let rawHtml: string;
   try {
     rawHtml = marked.parse(markdownContent) as string;
