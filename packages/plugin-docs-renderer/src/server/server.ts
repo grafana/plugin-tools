@@ -1,12 +1,11 @@
 import express, { type Express, type Request, type Response } from 'express';
-import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
 import { parseMarkdown } from '../parser.js';
 import { scanDocsFolder } from '../cli/scanner.js';
-import type { Manifest, Page } from '../types.js';
+import type { Manifest, Page, MarkdownFiles } from '../types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,11 +41,12 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   app.set('view engine', 'ejs');
   app.set('views', join(__dirname, 'views'));
 
-  // Scan filesystem and generate manifest
+  // Scan filesystem and generate manifest + load files into memory
   debug('Scanning docs folder: %s', docsPath);
   const scanned = await scanDocsFolder(docsPath);
   let manifest: Manifest = scanned.manifest;
-  debug('Manifest generated with %d pages', manifest.pages.length);
+  let files: MarkdownFiles = scanned.files;
+  debug('Manifest generated with %d pages, %d files loaded', manifest.pages.length, Object.keys(files).length);
 
   // setup file watcher for markdown files
   const watcher = watch(join(docsPath, '**/*.md'), {
@@ -62,6 +62,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     try {
       const rescanned = await scanDocsFolder(docsPath);
       manifest = rescanned.manifest;
+      files = rescanned.files;
     } catch (error) {
       console.error('Error re-scanning docs folder:', error);
     }
@@ -122,9 +123,14 @@ export async function startServer(options: ServerOptions): Promise<Server> {
         return;
       }
 
-      // read and parse the markdown file
-      const filePath = join(docsPath, fileName);
-      const fileContent = await readFile(filePath, 'utf-8');
+      // get markdown content from memory
+      const fileContent = files[fileName];
+      if (!fileContent) {
+        debug('File content not found in memory for: %s', fileName);
+        res.status(404).send('File content not found');
+        return;
+      }
+
       const parsed = parseMarkdown(fileContent);
 
       const title = (parsed.frontmatter.title as string) || slug;
