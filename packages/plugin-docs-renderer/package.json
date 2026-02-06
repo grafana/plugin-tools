@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-docs-renderer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": "true",
   "description": "A library for rendering Grafana plugin documentation from markdown files.",
   "type": "module",
@@ -46,15 +46,15 @@
     "node": ">=24"
   },
   "dependencies": {
-    "marked": "^13.0.0",
+    "debug": "^4.3.7",
     "gray-matter": "^4.0.3",
-    "minimist": "^1.2.8",
     "isomorphic-dompurify": "^2.16.0",
-    "debug": "^4.3.7"
+    "marked": "^13.0.0",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
-    "@types/minimist": "^1.2.5",
+    "@types/debug": "^4.1.12",
     "@types/dompurify": "^3.0.5",
-    "@types/debug": "^4.1.12"
+    "@types/minimist": "^1.2.5"
   }
 }
