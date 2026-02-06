@@ -10,7 +10,7 @@ describe('scanDocsFolder', () => {
 
     expect(result.manifest).toBeDefined();
     expect(result.manifest.title).toBe('Plugin Documentation');
-    expect(result.manifest.pages).toHaveLength(3);
+    expect(result.manifest.pages).toHaveLength(4); // home, guide, advanced, config
   });
 
   it('should sort pages by sidebar_position', async () => {
@@ -38,7 +38,7 @@ describe('scanDocsFolder', () => {
     const result = await scanDocsFolder(testDocsPath);
 
     expect(result.files).toBeDefined();
-    expect(Object.keys(result.files)).toHaveLength(3);
+    expect(Object.keys(result.files)).toHaveLength(5); // includes nested config files
     expect(result.files['home.md']).toContain('---');
     expect(result.files['home.md']).toContain('title: Home Page');
     expect(result.files['home.md']).toContain('# Welcome');
@@ -66,5 +66,56 @@ describe('scanDocsFolder', () => {
     const emptyPath = join(__dirname, '..', '__fixtures__', 'non-existent');
 
     await expect(scanDocsFolder(emptyPath)).rejects.toThrow('No valid markdown files found');
+  });
+
+  describe('nested directories', () => {
+    it('should create category page for directories with files', async () => {
+      const result = await scanDocsFolder(testDocsPath);
+
+      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      expect(configPage).toBeDefined();
+      expect(configPage?.title).toBe('Config');
+      expect(configPage?.children).toBeDefined();
+      expect(configPage?.children).toHaveLength(2);
+    });
+
+    it('should generate slugs with directory prefixes', async () => {
+      const result = await scanDocsFolder(testDocsPath);
+
+      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const children = configPage?.children || [];
+
+      expect(children[0].slug).toBe('config/settings');
+      expect(children[1].slug).toBe('config/database');
+    });
+
+    it('should sort nested pages by sidebar_position', async () => {
+      const result = await scanDocsFolder(testDocsPath);
+
+      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const children = configPage?.children || [];
+
+      expect(children[0].title).toBe('Settings');
+      expect(children[1].title).toBe('Database');
+    });
+
+    it('should store nested files with relative paths', async () => {
+      const result = await scanDocsFolder(testDocsPath);
+
+      expect(result.files['config/settings.md']).toBeDefined();
+      expect(result.files['config/settings.md']).toContain('title: Settings');
+      expect(result.files['config/database.md']).toBeDefined();
+      expect(result.files['config/database.md']).toContain('title: Database');
+    });
+
+    it('should reference nested files correctly in page objects', async () => {
+      const result = await scanDocsFolder(testDocsPath);
+
+      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const children = configPage?.children || [];
+
+      expect(children[0].file).toBe('config/settings.md');
+      expect(children[1].file).toBe('config/database.md');
+    });
   });
 });
