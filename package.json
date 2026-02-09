@@ -78,6 +78,7 @@
     "packages/tsconfig",
     "packages/react-detect",
     "packages/plugin-docs-renderer",
+    "packages/plugin-docs-cli",
     "libs/*"
   ],
   "lint-staged": {
