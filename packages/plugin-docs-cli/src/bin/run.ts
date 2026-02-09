@@ -5,7 +5,7 @@ import minimist from 'minimist';
 import createDebug from 'debug';
 import { startServer } from '../server/server.js';
 
-const debug = createDebug('plugin-docs-renderer:cli');
+const debug = createDebug('plugin-docs-cli:main');
 
 async function commandServe(docsPath: string, port: number, liveReload: boolean) {
   debug('Command serve: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);

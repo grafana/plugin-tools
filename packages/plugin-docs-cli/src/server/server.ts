@@ -3,14 +3,14 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
-import { parseMarkdown } from '../parser.js';
-import { scanDocsFolder } from '../cli/scanner.js';
-import type { Manifest, Page, MarkdownFiles } from '../types.js';
+import { parseMarkdown } from '@grafana/plugin-docs-renderer';
+import { scanDocsFolder } from '../lib/scanner.js';
+import type { Manifest, Page, MarkdownFiles } from '@grafana/plugin-docs-renderer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const debug = createDebug('plugin-docs-renderer:server');
+const debug = createDebug('plugin-docs-cli:server');
 
 export interface ServerOptions {
   docsPath: string;

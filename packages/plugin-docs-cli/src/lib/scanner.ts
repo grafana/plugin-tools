@@ -5,9 +5,9 @@ import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import createDebug from 'debug';
 import { extractHeadingsFromMarkdown } from './toc.js';
-import type { Manifest, Page, MarkdownFiles, Frontmatter } from '../types.js';
+import type { Manifest, Page, MarkdownFiles, Frontmatter } from '@grafana/plugin-docs-renderer';
 
-const debug = createDebug('plugin-docs-renderer:scanner');
+const debug = createDebug('plugin-docs-cli:scanner');
 
 /**
  * A scanned markdown file with parsed frontmatter.
@@ -36,7 +36,7 @@ interface ScannedFile {
   /**
    * Extracted headings for table of contents.
    */
-  headings: Array<import('../types.js').Heading>;
+  headings: Array<import('@grafana/plugin-docs-renderer').Heading>;
 }
 
 /**

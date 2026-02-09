@@ -133,7 +133,7 @@ function copyAssets(): Plugin {
   return {
     name: 'copy-assets',
     async writeBundle() {
-      if (pkg.name === '@grafana/plugin-docs-renderer') {
+      if (pkg.name === '@grafana/plugin-docs-cli') {
         const srcViews = join(projectRoot, 'src', 'server', 'views');
         const distViews = join(projectRoot, 'dist', 'server', 'views');
         await cp(srcViews, distViews, { recursive: true });
