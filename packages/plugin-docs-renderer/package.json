@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
-    "@types/dompurify": "^3.0.5",
+    "@types/dompurify": "^3.2.0",
     "@types/minimist": "^1.2.5"
   }
 }
