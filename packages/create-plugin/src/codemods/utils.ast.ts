@@ -61,6 +61,28 @@ export function insertArrayElement(
   }
 }
 
+export function isProperty(
+  node: recast.types.ASTNode
+): node is recast.types.namedTypes.Property | recast.types.namedTypes.ObjectProperty {
+  return node.type === 'Property' || node.type === 'ObjectProperty';
+}
+
+export function findObjectProperty(obj: recast.types.namedTypes.ObjectExpression, propertyName: string) {
+  if (!obj.properties) {
+    return null;
+  }
+
+  const property = obj.properties.find(
+    (prop) =>
+      isProperty(prop) &&
+      ((prop.key.type === 'Identifier' && prop.key.name === propertyName) ||
+        (prop.key.type === 'Literal' && prop.key.value === propertyName) ||
+        (prop.key.type === 'StringLiteral' && prop.key.value === propertyName))
+  );
+
+  return property;
+}
+
 // Used to determine if a string can be used as an identifier without needing to be quoted. e.g. object.foo vs object['foo-bar']
 export function isValidIdentifier(name: string) {
   return /^[a-z_$][0-9a-z_$]*$/iu.test(name);
