@@ -27,6 +27,41 @@ export function printAST(node: recast.types.ASTNode, optionOverrides: recast.Opt
   }).code;
 }
 
+export function findStringInArray(arr: recast.types.namedTypes.ArrayExpression, value: string) {
+  if (!arr.elements) {
+    return -1;
+  }
+
+  return arr.elements.findIndex((element) => {
+    if (!element) {
+      return false;
+    }
+    if (element.type === 'Literal' || element.type === 'StringLiteral') {
+      return element.value === value;
+    }
+    return false;
+  });
+}
+
+export function insertArrayElement(
+  arr: recast.types.namedTypes.ArrayExpression,
+  value: recast.types.namedTypes.ArrayExpression['elements'][number],
+  position: 'start' | 'end' | number
+) {
+  if (!arr.elements) {
+    arr.elements = [];
+  }
+
+  if (position === 'start') {
+    arr.elements.unshift(value);
+  } else if (position === 'end') {
+    arr.elements.push(value);
+  } else {
+    arr.elements.splice(position, 0, value);
+  }
+}
+
+// Used to determine if a string can be used as an identifier without needing to be quoted. e.g. object.foo vs object['foo-bar']
 export function isValidIdentifier(name: string) {
   return /^[a-z_$][0-9a-z_$]*$/iu.test(name);
 }
