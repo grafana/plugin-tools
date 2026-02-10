@@ -60,11 +60,10 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   });
   debug('File watcher initialized for %s', docsPath);
 
-  watcher.on('change', async (path) => {
-    debug('File changed: %s', path);
+  const rescan = async (event: string, path: string) => {
+    debug('File %s: %s', event, path);
     lastModified = Date.now();
 
-    // scan again to update manifest
     try {
       const rescanned = await scanDocsFolder(docsPath);
       manifest = rescanned.manifest;
@@ -72,7 +71,11 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     } catch (error) {
       console.error('Error re-scanning docs folder:', error);
     }
-  });
+  };
+
+  watcher.on('change', (path) => rescan('changed', path));
+  watcher.on('add', (path) => rescan('added', path));
+  watcher.on('unlink', (path) => rescan('removed', path));
 
   // serve static assets
   app.use('/img', express.static(join(docsPath, 'img')));
