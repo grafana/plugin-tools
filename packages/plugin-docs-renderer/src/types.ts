@@ -61,9 +61,10 @@ export interface Frontmatter {
 
   /**
    * The position of this page in the sidebar navigation (used for sorting).
-   * Pages with lower numbers appear first.
+   * Pages with lower numbers appear first. When omitted, the page sorts
+   * after positioned pages, alphabetically by filename.
    */
-  sidebar_position: number;
+  sidebar_position?: number;
 
   /**
    * Optional custom URL slug. If not provided, generated from file path.

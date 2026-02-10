@@ -95,14 +95,19 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
 
     // read and parse the file
     const fileContent = await readFile(absolutePath, 'utf-8');
-    const parsed = matter(fileContent);
+
+    let parsed;
+    try {
+      parsed = matter(fileContent);
+    } catch (error) {
+      debug('Failed to parse frontmatter for %s: %s', relativePath, error);
+      continue;
+    }
 
     // validate frontmatter has required fields
     const frontmatter = parsed.data as Partial<Frontmatter>;
-    if (!frontmatter.title || !frontmatter.description || frontmatter.sidebar_position === undefined) {
-      console.warn(
-        `Warning: ${relativePath} missing required frontmatter fields (title, description, sidebar_position)`
-      );
+    if (!frontmatter.title || !frontmatter.description) {
+      console.warn(`Warning: ${relativePath} missing required frontmatter fields (title, description)`);
       continue;
     }
 
@@ -159,12 +164,16 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
 function treeToPages(node: TreeNode): Page[] {
   const pages: Page[] = [];
 
-  // convert children to array and sort by sidebar_position
+  // convert children to array and sort by sidebar_position, then alphabetically by name
   const childEntries = Array.from(node.children.entries());
-  const sortedEntries = childEntries.sort(
-    (a, b) =>
-      (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity)
-  );
+  const sortedEntries = childEntries.sort((a, b) => {
+    const posA = a[1].file?.frontmatter.sidebar_position ?? Infinity;
+    const posB = b[1].file?.frontmatter.sidebar_position ?? Infinity;
+    if (posA !== posB) {
+      return posA - posB;
+    }
+    return a[0].localeCompare(b[0]);
+  });
 
   for (const [name, child] of sortedEntries) {
     if (child.file) {
