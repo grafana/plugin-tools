@@ -43,7 +43,13 @@ export async function startServer(options: ServerOptions): Promise<Server> {
 
   // Scan filesystem and generate manifest + load files into memory
   debug('Scanning docs folder: %s', docsPath);
-  const scanned = await scanDocsFolder(docsPath);
+  let scanned;
+  try {
+    scanned = await scanDocsFolder(docsPath);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to scan docs folder "${docsPath}": ${message}`);
+  }
   let manifest: Manifest = scanned.manifest;
   let files: MarkdownFiles = scanned.files;
   debug('Manifest generated with %d pages, %d files loaded', manifest.pages.length, Object.keys(files).length);
