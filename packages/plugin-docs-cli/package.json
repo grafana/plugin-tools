@@ -4,8 +4,6 @@
   "private": "true",
   "description": "CLI tool for developing, validating, and previewing Grafana plugin documentation locally.",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "bin": "./dist/bin/run.js",
   "files": [
     "dist",
