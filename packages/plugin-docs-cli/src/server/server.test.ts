@@ -25,7 +25,7 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('<title>Home Page - Plugin Documentation</title>');
-    expect(response.text).toContain('<h1>Welcome</h1>');
+    expect(response.text).toContain('<h1 id="welcome">Welcome</h1>');
     expect(response.text).toContain('This is the home page of the test documentation.');
   });
 
@@ -38,7 +38,7 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('<title>User Guide - Plugin Documentation</title>');
-    expect(response.text).toContain('<h1>User Guide</h1>');
+    expect(response.text).toContain('<h1 id="user-guide">User Guide</h1>');
     expect(response.text).toContain('This is a guide page.');
   });
 
@@ -50,7 +50,7 @@ describe('startServer', () => {
     const response = await request(app).get('/advanced');
 
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<h1>Advanced Topics</h1>');
+    expect(response.text).toContain('<h1 id="advanced-topics">Advanced Topics</h1>');
     expect(response.text).toContain('This covers advanced topics.');
   });
 
@@ -73,9 +73,9 @@ describe('startServer', () => {
     const response = await request(app).get('/');
 
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<nav>');
-    expect(response.text).toContain('<a href="/home">Home Page</a>');
-    expect(response.text).toContain('<a href="/guide">User Guide</a>');
+    expect(response.text).toContain('class="docs-nav"');
+    expect(response.text).toContain('<a href="/home"');
+    expect(response.text).toContain('<a href="/guide"');
   });
 
   it('should serve static assets from img directory', async () => {
@@ -158,8 +158,8 @@ describe('startServer', () => {
     expect(response.status).toBe(200);
     // verify that if manifest or page titles contained HTML, it would be escaped
     // manifest title should appear escaped in title tag and h1
-    expect(response.text).toMatch(/<title>[^<]*<\/title>/);
-    expect(response.text).toMatch(/<h1>[^<]*<\/h1>/);
+    expect(response.text).toMatch(/<title[^>]*>[^<]*<\/title>/);
+    expect(response.text).toMatch(/<h1[^>]*>[^<]*<\/h1>/);
     // navigation links should not contain unescaped HTML
     expect(response.text).not.toMatch(/<a[^>]*>[^<]*<script/i);
   });

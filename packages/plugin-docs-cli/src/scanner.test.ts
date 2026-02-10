@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { scanDocsFolder } from './scanner.js';
 
 describe('scanDocsFolder', () => {
-  const testDocsPath = join(__dirname, '..', '__fixtures__', 'test-docs');
+  const testDocsPath = join(__dirname, '__fixtures__', 'test-docs');
 
   it('should scan markdown files and generate manifest', async () => {
     const result = await scanDocsFolder(testDocsPath);
@@ -63,7 +63,7 @@ describe('scanDocsFolder', () => {
   });
 
   it('should throw error when no valid markdown files found', async () => {
-    const emptyPath = join(__dirname, '..', '__fixtures__', 'non-existent');
+    const emptyPath = join(__dirname, '__fixtures__', 'non-existent');
 
     await expect(scanDocsFolder(emptyPath)).rejects.toThrow('No valid markdown files found');
   });

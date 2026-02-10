@@ -6,7 +6,7 @@ describe('parseMarkdown', () => {
     const markdown = '# Hello World\n\nThis is a paragraph.';
     const result = parseMarkdown(markdown);
 
-    expect(result.html).toContain('<h1>Hello World</h1>');
+    expect(result.html).toContain('<h1 id="hello-world">Hello World</h1>');
     expect(result.html).toContain('<p>This is a paragraph.</p>');
     expect(result.frontmatter).toEqual({});
   });
@@ -26,7 +26,7 @@ Body text here.`;
       title: 'Test Page',
       description: 'A test page',
     });
-    expect(result.html).toContain('<h1>Content</h1>');
+    expect(result.html).toContain('<h1 id="content">Content</h1>');
     expect(result.html).toContain('<p>Body text here.</p>');
   });
 
@@ -82,7 +82,7 @@ Regular content.
     expect(result.html).not.toContain('onerror');
 
     // safe content should remain
-    expect(result.html).toContain('<h1>Test</h1>');
+    expect(result.html).toContain('<h1 id="test">Test</h1>');
     expect(result.html).toContain('<p>Regular content.</p>');
   });
 });
