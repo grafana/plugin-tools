@@ -7,7 +7,7 @@
 
 import { marked } from 'marked';
 import GithubSlugger from 'github-slugger';
-import type { Heading } from '@grafana/plugin-docs-renderer';
+import type { Heading } from './types.js';
 
 // re-export Heading type for convenience
 export type { Heading };
