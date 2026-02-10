@@ -68,6 +68,26 @@ describe('scanDocsFolder', () => {
     await expect(scanDocsFolder(emptyPath)).rejects.toThrow('No valid markdown files found');
   });
 
+  describe('malformed metadata', () => {
+    const malformedDocsPath = join(__dirname, '..', '__fixtures__', 'test-docs-malformed');
+
+    it('should skip files with malformed YAML frontmatter and process valid ones', async () => {
+      const result = await scanDocsFolder(malformedDocsPath);
+
+      expect(result.manifest.pages).toHaveLength(1);
+      expect(result.manifest.pages[0].title).toBe('Valid Page');
+    });
+
+    it('should not include malformed or incomplete files in the files map', async () => {
+      const result = await scanDocsFolder(malformedDocsPath);
+
+      expect(result.files['valid.md']).toBeDefined();
+      expect(result.files['malformed-yaml.md']).toBeUndefined();
+      expect(result.files['no-frontmatter.md']).toBeUndefined();
+      expect(result.files['missing-fields.md']).toBeUndefined();
+    });
+  });
+
   describe('nested directories', () => {
     it('should create category page for directories with files', async () => {
       const result = await scanDocsFolder(testDocsPath);
