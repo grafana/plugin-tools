@@ -76,7 +76,7 @@ describe('utils.ast', () => {
         insertArrayElement(arrayExpr!, { type: 'Literal', value: 'start' }, 'start');
 
         const output = printAST(ast, {});
-        expect(output).toContain(`["start", 'foo', 'bar']`);
+        expect(output).toContain(`['start', 'foo', 'bar']`);
       });
 
       it('should insert at end position', () => {
@@ -86,7 +86,7 @@ describe('utils.ast', () => {
         insertArrayElement(arrayExpr!, { type: 'Literal', value: 'end' }, 'end');
 
         const output = printAST(ast, {});
-        expect(output).toContain(`['foo', 'bar', "end"]`);
+        expect(output).toContain(`['foo', 'bar', 'end']`);
       });
 
       it('should insert at numeric index', () => {
@@ -96,7 +96,7 @@ describe('utils.ast', () => {
         insertArrayElement(arrayExpr!, { type: 'Literal', value: 'bar' }, 1);
 
         const output = printAST(ast, {});
-        expect(output).toContain(`['foo', "bar", 'baz']`);
+        expect(output).toContain(`['foo', 'bar', 'baz']`);
       });
 
       it('should create elements array if missing', () => {
@@ -346,7 +346,7 @@ describe('utils.ast', () => {
         ast.program.body = [importDecl];
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import React from "react";`);
+        expect(output).toBe(`import React from 'react';`);
       });
 
       it('should create named imports only', () => {
@@ -356,7 +356,7 @@ describe('utils.ast', () => {
         ast.program.body = [importDecl];
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import { useState, useEffect } from "react";`);
+        expect(output).toBe(`import { useState, useEffect } from 'react';`);
       });
 
       it('should create mixed import (default + named)', () => {
@@ -366,7 +366,7 @@ describe('utils.ast', () => {
         ast.program.body = [importDecl];
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import React, { useState } from "react";`);
+        expect(output).toBe(`import React, { useState } from 'react';`);
       });
 
       it('should create import with alias', () => {
@@ -376,7 +376,7 @@ describe('utils.ast', () => {
         ast.program.body = [importDecl];
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import { map as mapOp } from "rxjs";`);
+        expect(output).toBe(`import { map as mapOp } from 'rxjs';`);
       });
 
       it('should create side-effect import with no specifiers', () => {
@@ -386,7 +386,7 @@ describe('utils.ast', () => {
         ast.program.body = [importDecl];
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import "side-effect-module";`);
+        expect(output).toBe(`import 'side-effect-module';`);
       });
     });
 
@@ -418,7 +418,7 @@ describe('utils.ast', () => {
         insertImports(ast, [importDecl]);
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import React from "react";\nconst x = 1;`);
+        expect(output).toBe(`import React from 'react';\nconst x = 1;`);
       });
 
       it('should insert after the last import', () => {
@@ -429,7 +429,7 @@ describe('utils.ast', () => {
 
         const output = printAST(ast, {});
         expect(output).toBe(
-          `import React from 'react';\nimport _ from 'lodash';\nimport { map } from "rxjs";\nconst x = 1;`
+          `import React from 'react';\nimport _ from 'lodash';\nimport { map } from 'rxjs';\nconst x = 1;`
         );
       });
 
@@ -443,7 +443,7 @@ describe('utils.ast', () => {
         insertImports(ast, imports);
 
         const output = printAST(ast, {});
-        expect(output).toBe(`import React from "react";\nimport { map } from "lodash";\nconst x = 1;`);
+        expect(output).toBe(`import React from 'react';\nimport { map } from 'lodash';\nconst x = 1;`);
       });
     });
 

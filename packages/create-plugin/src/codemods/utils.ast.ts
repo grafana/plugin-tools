@@ -18,11 +18,12 @@ export function parseAsTypescript(source: string): ParseResult {
   }
 }
 
-export function printAST(node: recast.types.ASTNode, optionOverrides: recast.Options): string {
+export function printAST(node: recast.types.ASTNode, optionOverrides?: recast.Options): string {
   return recast.print(node, {
     tabWidth: 2,
     trailingComma: true,
     lineTerminator: '\n',
+    quote: 'single',
     ...optionOverrides,
   }).code;
 }
@@ -65,6 +66,25 @@ export function isProperty(
   node: recast.types.ASTNode
 ): node is recast.types.namedTypes.Property | recast.types.namedTypes.ObjectProperty {
   return node.type === 'Property' || node.type === 'ObjectProperty';
+}
+
+export function findVariableDeclaration(
+  ast: recast.types.ASTNode,
+  variableName: string
+): recast.types.namedTypes.VariableDeclarator | null {
+  let found = null;
+
+  recast.types.visit(ast, {
+    visitVariableDeclarator(path) {
+      if (path.node.id.type === 'Identifier' && path.node.id.name === variableName) {
+        found = path.node;
+        return false; // Stop traversal
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return found;
 }
 
 export function findObjectProperty(obj: recast.types.namedTypes.ObjectExpression, propertyName: string) {
