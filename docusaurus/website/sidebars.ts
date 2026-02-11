@@ -13,7 +13,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'doc',
       id: 'whats-new',
-      label: "What's new"
+      label: "What's new",
     },
 
     // Set up
@@ -294,6 +294,7 @@ const sidebars: SidebarsConfig = {
             id: 'migration-guides/update-from-grafana-versions/migration-from-grafana',
           },
           items: [
+            'migration-guides/update-from-grafana-versions/migrate-12_x-to-13_x',
             'migration-guides/update-from-grafana-versions/migrate-11_6_x-to-12_0_x',
             'migration-guides/update-from-grafana-versions/migrate-11_5_x-to-11_6_x',
             'migration-guides/update-from-grafana-versions/migrate-10_x-to-11_x',
