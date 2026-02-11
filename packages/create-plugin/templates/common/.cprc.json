@@ -1,6 +1,5 @@
 {
   "features": {
-    "bundleGrafanaUI": {{ bundleGrafanaUI }},
     "useExperimentalRspack": {{ useExperimentalRspack }}
   }
 }
