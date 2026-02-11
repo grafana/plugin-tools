@@ -3,7 +3,7 @@ import * as typeScriptParser from 'recast/parsers/typescript.js';
 
 const { builders } = recast.types;
 interface ParseResult {
-  ast: recast.types.ASTNode | null;
+  ast: recast.types.namedTypes.File | null;
   error: Error | null;
 }
 
@@ -81,6 +81,107 @@ export function findObjectProperty(obj: recast.types.namedTypes.ObjectExpression
   );
 
   return property;
+}
+
+export function getImportFrom(
+  ast: recast.types.ASTNode,
+  moduleName: string
+): recast.types.namedTypes.ImportDeclaration | null {
+  let found = null;
+
+  recast.types.visit(ast, {
+    visitImportDeclaration(path) {
+      if (path.node.source.value === moduleName) {
+        found = path.node;
+        return false; // Stop traversal
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return found;
+}
+
+export function createImport(
+  specifiers: {
+    default?: string;
+    named?: Array<{ name: string; alias?: string }>;
+  },
+  modulePath: string
+): recast.types.namedTypes.ImportDeclaration {
+  const importSpecifiers: Array<
+    recast.types.namedTypes.ImportDefaultSpecifier | recast.types.namedTypes.ImportSpecifier
+  > = [];
+
+  if (specifiers.default) {
+    importSpecifiers.push(builders.importDefaultSpecifier(builders.identifier(specifiers.default)));
+  }
+
+  if (specifiers.named) {
+    for (const { name, alias } of specifiers.named) {
+      importSpecifiers.push(
+        builders.importSpecifier(
+          builders.identifier(name),
+          alias ? builders.identifier(alias) : builders.identifier(name)
+        )
+      );
+    }
+  }
+
+  return builders.importDeclaration(importSpecifiers, builders.literal(modulePath));
+}
+
+export function updateImport(
+  existingImport: recast.types.namedTypes.ImportDeclaration,
+  specifiers: {
+    default?: string;
+    named?: Array<{ name: string; alias?: string }>;
+  }
+): void {
+  if (!existingImport.specifiers) {
+    existingImport.specifiers = [];
+  }
+
+  // Handle default import
+  if (specifiers.default) {
+    const hasDefault = existingImport.specifiers.some((s) => s.type === 'ImportDefaultSpecifier');
+
+    if (hasDefault) {
+      throw new Error(`Cannot add default import "${specifiers.default}" because a default import already exists`);
+    }
+
+    existingImport.specifiers.unshift(builders.importDefaultSpecifier(builders.identifier(specifiers.default)));
+  }
+
+  if (specifiers.named) {
+    for (const { name, alias } of specifiers.named) {
+      const alreadyExists = existingImport.specifiers.some(
+        (spec) => spec.type === 'ImportSpecifier' && spec.imported.name === name
+      );
+
+      if (!alreadyExists) {
+        existingImport.specifiers.push(
+          builders.importSpecifier(
+            builders.identifier(name),
+            alias ? builders.identifier(alias) : builders.identifier(name)
+          )
+        );
+      }
+    }
+  }
+}
+
+export function insertImports(
+  ast: recast.types.namedTypes.File,
+  imports: recast.types.namedTypes.ImportDeclaration[]
+): void {
+  const lastImportIndex = ast.program.body.findLastIndex((node: any) => node.type === 'ImportDeclaration');
+
+  if (lastImportIndex !== -1) {
+    ast.program.body.splice(lastImportIndex + 1, 0, ...imports);
+  } else {
+    ast.program.body.unshift(...imports);
+  }
 }
 
 // Used to determine if a string can be used as an identifier without needing to be quoted. e.g. object.foo vs object['foo-bar']
