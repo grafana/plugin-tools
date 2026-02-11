@@ -1,3 +1,64 @@
+# v6.8.4 (Fri Feb 06 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.2.1 [#2427](https://github.com/grafana/plugin-tools/pull/2427) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.8.3 (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
+- fix(deps): update dependency glob to v13 [#2392](https://github.com/grafana/plugin-tools/pull/2392) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.8.2 (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update create-plugin template github actions [#2415](https://github.com/grafana/plugin-tools/pull/2415) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.8.1 (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.2.0 [#2421](https://github.com/grafana/plugin-tools/pull/2421) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.8.0 (Thu Jan 29 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana patch dependencies to v12.3.2 [#2420](https://github.com/grafana/plugin-tools/pull/2420) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- fix(deps): update dependency which to v6 [#2393](https://github.com/grafana/plugin-tools/pull/2393) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.7.8 (Thu Jan 22 2026)
 
 #### 🐛 Bug Fix

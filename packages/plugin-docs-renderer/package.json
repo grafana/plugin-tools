@@ -1,0 +1,60 @@
+{
+  "name": "@grafana/plugin-docs-renderer",
+  "version": "0.0.3",
+  "private": "true",
+  "description": "A library for rendering Grafana plugin documentation from markdown files.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": "./dist/bin/run.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "directory": "packages/plugin-docs-renderer",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "documentation",
+    "markdown",
+    "renderer"
+  ],
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "debug": "^4.3.7",
+    "gray-matter": "^4.0.3",
+    "isomorphic-dompurify": "^2.16.0",
+    "marked": "^13.0.0",
+    "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.12",
+    "@types/dompurify": "^3.2.0",
+    "@types/minimist": "^1.2.5"
+  }
+}

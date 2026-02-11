@@ -43,6 +43,22 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: (pluginId: string) => `/api/plugins/${pluginId}/settings`,
     },
   },
+  OpenFeature: {
+    ofrepBulkPattern: {
+      '12.1.0': '**/apis/features.grafana.app/**/ofrep/v*/evaluate/flags',
+    },
+    ofrepSinglePattern: {
+      '12.1.0': '**/apis/features.grafana.app/**/ofrep/v*/evaluate/flags/*',
+    },
+    ofrepBulkPath: {
+      '12.1.0': (namespace = 'default') =>
+        `/apis/features.grafana.app/v0alpha1/namespaces/${namespace}/ofrep/v1/evaluate/flags`,
+    },
+    ofrepSinglePath: {
+      '12.1.0': (namespace = 'default', flagKey: string) =>
+        `/apis/features.grafana.app/v0alpha1/namespaces/${namespace}/ofrep/v1/evaluate/flags/${flagKey}`,
+    },
+  },
 } satisfies VersionedSelectorGroup;
 
 export type VersionedAPIs = typeof versionedAPIs;

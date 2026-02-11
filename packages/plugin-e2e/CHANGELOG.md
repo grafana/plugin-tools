@@ -1,3 +1,39 @@
+# v3.2.2 (Tue Feb 10 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-21636304584 [#2432](https://github.com/grafana/plugin-tools/pull/2432) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.2.1 (Fri Jan 30 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 12.4.0-21513454430 [#2423](https://github.com/grafana/plugin-tools/pull/2423) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.2.0 (Thu Jan 29 2026)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: OpenFeature support [#2408](https://github.com/grafana/plugin-tools/pull/2408) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.1.4 (Wed Jan 21 2026)
 
 #### 🐛 Bug Fix

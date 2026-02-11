@@ -1,7 +1,7 @@
 // @ts-check
-const core = require('@actions/core');
-const { context, getOctokit } = require('@actions/github');
-const { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } = require('./messages');
+import * as core from '@actions/core';
+import { context, getOctokit } from '@actions/github';
+import { prMessageSymbol, prIntroMessage, prMessageLabelDetails, prReleaseLabelMessage } from './messages.js';
 
 async function run() {
   try {
