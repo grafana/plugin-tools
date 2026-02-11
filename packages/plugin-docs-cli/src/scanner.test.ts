@@ -38,7 +38,7 @@ describe('scanDocsFolder', () => {
     const result = await scanDocsFolder(testDocsPath);
 
     expect(result.files).toBeDefined();
-    expect(Object.keys(result.files)).toHaveLength(5); // includes nested config files
+    expect(Object.keys(result.files)).toHaveLength(6); // includes nested config files + index
     expect(result.files['home.md']).toContain('---');
     expect(result.files['home.md']).toContain('title: Home Page');
     expect(result.files['home.md']).toContain('# Welcome');
@@ -69,12 +69,13 @@ describe('scanDocsFolder', () => {
   });
 
   describe('nested directories', () => {
-    it('should create category page for directories with files', async () => {
+    it('should promote index.md as the directory page', async () => {
       const result = await scanDocsFolder(testDocsPath);
 
       const configPage = result.manifest.pages.find((p) => p.slug === 'config');
       expect(configPage).toBeDefined();
-      expect(configPage?.title).toBe('Config');
+      expect(configPage?.title).toBe('Configuration');
+      expect(configPage?.file).toBe('config/index.md');
       expect(configPage?.children).toBeDefined();
       expect(configPage?.children).toHaveLength(2);
     });

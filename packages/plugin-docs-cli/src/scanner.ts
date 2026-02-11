@@ -169,8 +169,21 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
 function treeToPages(node: TreeNode): Page[] {
   const pages: Page[] = [];
 
-  // convert children to array and sort by sidebar_position
+  // Promote index.md files: if a directory has an index.md child,
+  // use it as the directory's own file so its sidebar_position is
+  // used for sorting and its frontmatter provides the page metadata.
   const childEntries = Array.from(node.children.entries());
+  for (const [, child] of childEntries) {
+    if (!child.file && child.children.has('index.md')) {
+      const indexNode = child.children.get('index.md')!;
+      if (indexNode.file) {
+        child.file = indexNode.file;
+        child.children.delete('index.md');
+      }
+    }
+  }
+
+  // convert children to array and sort by sidebar_position
   const sortedEntries = childEntries.sort(
     (a, b) =>
       (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity)
@@ -178,10 +191,14 @@ function treeToPages(node: TreeNode): Page[] {
 
   for (const [name, child] of sortedEntries) {
     if (child.file) {
-      // it's a markdown file
+      // it's a markdown file (or a directory with a promoted index.md)
+      const parsed = parse(child.file.relativePath);
+      const isIndex = parsed.name === 'index' && parsed.dir !== '';
+
       const page: Page = {
         title: child.file.frontmatter.title,
-        slug: child.file.frontmatter.slug || generateSlug(child.file.relativePath),
+        slug:
+          child.file.frontmatter.slug || (isIndex ? generateSlug(parsed.dir) : generateSlug(child.file.relativePath)),
         file: child.file.relativePath,
         headings: child.file.headings,
       };
@@ -193,7 +210,7 @@ function treeToPages(node: TreeNode): Page[] {
 
       pages.push(page);
     } else if (child.children.size > 0) {
-      // it's a directory without a file - create category
+      // it's a directory without an index file - create category
       const page: Page = {
         title: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
         slug: name,
