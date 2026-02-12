@@ -9,6 +9,7 @@ import {
   printAST,
 } from '../../utils.ast.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
+import { fileURLToPath } from 'node:url';
 
 export default function externalizeJSXRuntime(context: Context): Context {
   const hasExternalsFile = context.doesFileExist('.config/bundler/externals.ts');
@@ -105,7 +106,9 @@ export default function externalizeJSXRuntime(context: Context): Context {
 }
 
 function renderExternalsTemplate() {
-  const externalsPath = new URL('../../../../templates/common/.config/bundler/externals.ts', import.meta.url).pathname;
+  const externalsPath = fileURLToPath(
+    new URL('../../../../templates/common/.config/bundler/externals.ts', import.meta.url)
+  );
   const rendered = renderTemplate(externalsPath, true);
   return rendered;
 }
