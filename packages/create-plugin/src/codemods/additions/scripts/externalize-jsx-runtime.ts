@@ -1,4 +1,4 @@
-import { minSatisfying, gtr, ltr, coerce, minVersion, gte, lt } from 'semver';
+import { minVersion, lt, gte } from 'semver';
 import type { Context } from '../../context.js';
 import {
   createImport,
@@ -25,13 +25,13 @@ export default function externalizeJSXRuntime(context: Context): Context {
     const bundlerConfigFile = context.getFile(bundlerConfigFilePath);
 
     if (bundlerConfigFile) {
-      const bundlerConfigAST = parseAsTypescript(context.getFile(bundlerConfigFilePath) || '');
-      const importDec = createImport({ named: [{ name: 'externals' }] }, '../bundler/externals.ts');
-      if (!bundlerConfigAST.ast) {
-        throw new Error(`Failed to parse ${bundlerConfigFilePath}`);
+      const parsedBundlerConfig = parseAsTypescript(bundlerConfigFile);
+
+      if (!parsedBundlerConfig.success) {
+        throw new Error(`Failed to parse ${bundlerConfigFilePath}. Error: ${parsedBundlerConfig.error.message}`);
       }
-      insertImports(bundlerConfigAST.ast, [importDec]);
-      const baseConfig = findVariableDeclaration(bundlerConfigAST.ast, 'baseConfig');
+
+      const baseConfig = findVariableDeclaration(parsedBundlerConfig.ast, 'baseConfig');
       if (!baseConfig) {
         throw new Error(`Could not find baseConfig variable declaration in ${bundlerConfigFilePath}`);
       }
@@ -42,31 +42,59 @@ export default function externalizeJSXRuntime(context: Context): Context {
 
       const externalsProperty = findObjectProperty(baseConfig.init, 'externals');
       if (externalsProperty?.type === 'ObjectProperty' && externalsProperty.value.type === 'ArrayExpression') {
+        const importDec = createImport({ named: [{ name: 'externals' }] }, '../bundler/externals.ts');
+        insertImports(parsedBundlerConfig.ast, [importDec]);
         externalsProperty.value = {
           type: 'Identifier',
           name: 'externals',
         };
         externalsProperty.shorthand = true;
+        context.updateFile(bundlerConfigFilePath, printAST(parsedBundlerConfig.ast));
       }
-
-      context.updateFile(bundlerConfigFilePath, printAST(bundlerConfigAST.ast));
+    } else {
+      throw new Error('Could not find a bundler config in `./config` to update with externals import.');
     }
   } else {
     const rendered = renderExternalsTemplate();
     context.updateFile('.config/bundler/externals.ts', rendered);
   }
 
+  const semverRanges = ['>=11.6.11 <12', '>=12.0.10 <12.1', '>=12.1.7 <12.2', '>=12.2.5 <12.3', '>=12.3.0'];
+  const externalsHasJsxRuntime = context.getFile('.config/bundler/externals.ts')?.includes('react/jsx-runtime');
   const pluginJsonContent = context.getFile('src/plugin.json');
-  if (pluginJsonContent) {
-    const pluginJson = JSON.parse(pluginJsonContent);
-    if (pluginJson.dependencies?.grafanaDependency !== undefined) {
-      const pluginMinSupportedVersion = minVersion(pluginJson.dependencies.grafanaDependency);
-      if (pluginMinSupportedVersion && lt(pluginMinSupportedVersion, '12.3.0')) {
-        pluginJson.dependencies.grafanaDependency =
-          '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
-        context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
-      }
+  if (pluginJsonContent && externalsHasJsxRuntime) {
+    let pluginJson;
+    try {
+      pluginJson = JSON.parse(pluginJsonContent);
+    } catch (error) {
+      throw new Error(`Failed to parse src/plugin.json: ${error}`);
     }
+
+    if (pluginJson.dependencies?.grafanaDependency === undefined) {
+      pluginJson.dependencies = {
+        ...pluginJson.dependencies,
+        grafanaDependency: '>=12.3.0',
+      };
+      context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
+    }
+
+    const pluginMinSupportedVersion = minVersion(pluginJson.dependencies.grafanaDependency);
+
+    if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.3.0')) {
+      return context;
+    }
+
+    if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.2.0')) {
+      pluginJson.dependencies.grafanaDependency = semverRanges.slice(3).join(' || ');
+    } else if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.1.0')) {
+      pluginJson.dependencies.grafanaDependency = semverRanges.slice(2).join(' || ');
+    } else if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.0.0')) {
+      pluginJson.dependencies.grafanaDependency = semverRanges.slice(1).join(' || ');
+    } else if (pluginMinSupportedVersion && lt(pluginMinSupportedVersion, '12.0.0')) {
+      pluginJson.dependencies.grafanaDependency = semverRanges.join(' || ');
+    }
+
+    context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
   }
 
   return context;

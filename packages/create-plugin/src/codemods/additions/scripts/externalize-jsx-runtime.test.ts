@@ -1,7 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { Context } from '../../context.js';
-import migrate from './externalize-jsx-runtime.js';
+import externalizeJSXRuntime from './externalize-jsx-runtime.js';
 
 vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
@@ -11,25 +9,21 @@ vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   };
 });
 
+vi.mock(import('../../utils.js'), async (importOriginal) => {
+  const originalModule = await importOriginal();
+  // Disk I/O is slow so render template once and return in mocked renderTemplate function.
+  const externalsTemplatePath = new URL('../../../../templates/common/.config/bundler/externals.ts', import.meta.url)
+    .pathname;
+  const renderedExternalsTemplate = originalModule.renderTemplate(externalsTemplatePath, true);
+  return {
+    ...originalModule,
+    renderTemplate: () => renderedExternalsTemplate,
+  };
+});
+
 describe('externalizeJSXRuntime', () => {
-  it('renders the externals template if it does not exist', () => {
-    const context = new Context();
-    const result = migrate(context);
-
-    expect(result.doesFileExist('.config/bundler/externals.ts')).toBeTruthy();
-  });
-  it('updates the externals template if it exists', () => {
-    const context = new Context();
-    const originalContent = 'original content';
-    context.addFile('.config/bundler/externals.ts', originalContent);
-    const result = migrate(context);
-    const updatedContent = result.getFile('.config/bundler/externals.ts');
-
-    expect(updatedContent).not.toEqual(originalContent);
-  });
-  it('updates the bundler config to import externals if it does not exist', () => {
-    const context = new Context();
-    const webpackConfigContent = `
+  let context: Context;
+  const baseConfigContent = `
       import { defineConfig } from 'webpack';
 
       const config = async (env: Env): Promise<Configuration> => {
@@ -44,100 +38,174 @@ describe('externalizeJSXRuntime', () => {
       };
       export default config;
     `;
-    context.addFile('.config/webpack/webpack.config.ts', webpackConfigContent);
-    const result = migrate(context);
-    const updatedWebpackConfig = result.getFile('.config/webpack/webpack.config.ts');
 
-    expect(updatedWebpackConfig).toContain(`import { externals } from '../bundler/externals.ts'`);
-    expect(updatedWebpackConfig).toContain('externals,');
+  beforeEach(() => {
+    context = new Context('/virtual');
   });
-  it('updates the plugin.json to support jsx-runtime patched versions of Grafana', () => {
-    const context = new Context();
-    const pluginJsonContent = JSON.stringify({
-      id: 'my-plugin-id',
-      dependencies: {
-        grafanaDependency: '>=11.6.0 <12',
-      },
+
+  describe('externals template', () => {
+    it('renders the externals template if it does not exist', () => {
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      const result = externalizeJSXRuntime(context);
+
+      expect(result.doesFileExist('.config/bundler/externals.ts')).toBeTruthy();
     });
-    context.addFile('src/plugin.json', pluginJsonContent);
-    const result = migrate(context);
-    const updatedPluginJsonContent = result.getFile('src/plugin.json');
-    const updatedPluginJson = JSON.parse(updatedPluginJsonContent || '{}');
 
-    expect(updatedPluginJson.dependencies.grafanaDependency).toBe(
-      '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0'
-    );
+    it('updates the externals template if it exists', () => {
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      const originalContent = 'original content';
+      context.addFile('.config/bundler/externals.ts', originalContent);
+      const result = externalizeJSXRuntime(context);
+
+      expect(result.getFile('.config/bundler/externals.ts')).toContain('react/jsx-runtime');
+    });
   });
-});
 
-describe('semver range handling for grafanaDependency', () => {
-  const EXPECTED_UPDATED_RANGE = '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
+  describe('bundler config', () => {
+    it('updates webpack config to import externals', () => {
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      const result = externalizeJSXRuntime(context);
+      const updatedConfig = result.getFile('.config/webpack/webpack.config.ts');
 
-  describe('should NOT update when min version >= 12.3.0', () => {
-    it.each([
-      ['>=12.3.0', 'gte range at 12.3.0'],
-      ['>=12.3.1', 'gte range above 12.3.0'],
-      ['>=12.4.0', 'gte range at 12.4.0'],
-      ['>=13.0.0', 'gte range at 13.0.0'],
-      ['^12.3.0', 'caret range at 12.3.0'],
-      ['^12.4.0', 'caret range above 12.3.0'],
-      ['~12.3.0', 'tilde range at 12.3.0'],
-      ['~12.4.0', 'tilde range above 12.3.0'],
-      ['12.3.0', 'exact version at 12.3.0'],
-      ['12.4.0', 'exact version above 12.3.0'],
-      ['>=12.3.0 <13', 'bounded range starting at 12.3.0'],
-      ['>=12.3.0 <14 || >=14.0.0', 'complex OR range with min >= 12.3.0'],
-    ])('%s (%s)', (range) => {
-      const context = new Context();
+      expect(updatedConfig).toContain(`import { externals } from '../bundler/externals.ts'`);
+      expect(updatedConfig).toContain('externals,');
+    });
+
+    it('updates rspack config to import externals when webpack config does not exist', () => {
+      context.addFile('.config/rspack/rspack.config.ts', baseConfigContent);
+      const result = externalizeJSXRuntime(context);
+      const updatedConfig = result.getFile('.config/rspack/rspack.config.ts');
+
+      expect(updatedConfig).toContain(`import { externals } from '../bundler/externals.ts'`);
+      expect(updatedConfig).toContain('externals,');
+    });
+
+    it('throws when no bundler config exists', () => {
+      expect(() => externalizeJSXRuntime(context)).toThrow('Could not find a bundler config');
+    });
+
+    it('throws when bundler config cannot be parsed', () => {
+      context.addFile('.config/webpack/webpack.config.ts', 'invalid {{ typescript');
+
+      expect(() => externalizeJSXRuntime(context)).toThrow('Failed to parse .config/webpack/webpack.config.ts');
+    });
+
+    it('throws when baseConfig variable is not found', () => {
+      context.addFile('.config/webpack/webpack.config.ts', 'const otherConfig = {};');
+
+      expect(() => externalizeJSXRuntime(context)).toThrow(
+        'Could not find baseConfig variable declaration in .config/webpack/webpack.config.ts'
+      );
+    });
+
+    it('throws when baseConfig is not an object', () => {
+      context.addFile('.config/webpack/webpack.config.ts', 'const baseConfig = "not an object";');
+
+      expect(() => externalizeJSXRuntime(context)).toThrow(
+        'baseConfig variable in .config/webpack/webpack.config.ts is not an object.'
+      );
+    });
+
+    it('does not modify bundler config when externals property is not an array', () => {
+      const configWithFunctionExternals = `
+        const baseConfig = {
+          externals: () => {},
+        };
+      `;
+      context.addFile('.config/webpack/webpack.config.ts', configWithFunctionExternals);
+      const result = externalizeJSXRuntime(context);
+      const updatedConfig = result.getFile('.config/webpack/webpack.config.ts');
+
+      expect(updatedConfig).not.toContain(`import { externals }`);
+      expect(updatedConfig).toContain('externals: () => {}');
+    });
+  });
+
+  describe('plugin.json semver range updates', () => {
+    const ALL_RANGES = '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
+    const FROM_12_0 = '>=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
+    const FROM_12_1 = '>=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
+    const FROM_12_2 = '>=12.2.5 <12.3 || >=12.3.0';
+
+    function runMigration(grafanaDependency: string) {
       context.addFile(
         'src/plugin.json',
         JSON.stringify({
           id: 'my-plugin-id',
-          dependencies: { grafanaDependency: range },
+          dependencies: { grafanaDependency },
         })
       );
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      const result = externalizeJSXRuntime(context);
+      return JSON.parse(result.getFile('src/plugin.json') || '{}');
+    }
 
-      const result = migrate(context);
-      const updatedPluginJson = JSON.parse(result.getFile('src/plugin.json') || '{}');
-
-      expect(updatedPluginJson.dependencies.grafanaDependency).toBe(range);
+    describe('should NOT update when min version >= 12.3.0', () => {
+      it.each([['>=12.3.0'], ['>=13.0.0'], ['12.3.1'], ['>=12.3.0 <13']])('%s', (range) => {
+        const pluginJson = runMigration(range);
+        expect(pluginJson.dependencies.grafanaDependency).toBe(range);
+      });
     });
-  });
 
-  describe('should update when min version < 12.3.0', () => {
-    it.each([
-      ['>=11.0.0', 'gte range below 12.3.0'],
-      ['>=11.6.0', 'gte range at 11.6.0'],
-      ['>=12.0.0', 'gte range at 12.0.0'],
-      ['>=12.2.0', 'gte range at 12.2.0'],
-      ['>=12.2.9', 'gte range just below 12.3.0'],
-      ['>11.0.0', 'gt range below 12.3.0'],
-      ['>12.2.9', 'gt range just below 12.3.0'],
-      ['^11.0.0', 'caret range below 12.3.0'],
-      ['^12.0.0', 'caret range at 12.0.0'],
-      ['^12.2.0', 'caret range at 12.2.0'],
-      ['~11.0.0', 'tilde range below 12.3.0'],
-      ['~12.2.0', 'tilde range at 12.2.0'],
-      ['11.0.0', 'exact version below 12.3.0'],
-      ['12.2.9', 'exact version just below 12.3.0'],
-      ['>=11.0.0 <12', 'bounded range below 12.3.0'],
-      ['>=11.6.0 <12', 'bounded range at 11.6.0'],
-      ['>=10.0.0 || >=11.0.0 <12', 'complex OR range with min < 12.3.0'],
-      ['11.0.0 - 12.2.0', 'hyphen range below 12.3.0'],
-    ])('%s (%s)', (range) => {
-      const context = new Context();
+    describe('should update to all ranges when min version < 12.0.0', () => {
+      it.each([['>=11.0.0'], ['11.6.0'], ['>=11.0.0 <12']])('%s', (range) => {
+        const pluginJson = runMigration(range);
+        expect(pluginJson.dependencies.grafanaDependency).toBe(ALL_RANGES);
+      });
+    });
+
+    describe('should update from 12.0 ranges when min version >= 12.0.0 and < 12.1.0', () => {
+      it.each([['>=12.0.0'], ['12.0.0'], ['>=12.0.0 <12.1']])('%s', (range) => {
+        const pluginJson = runMigration(range);
+        expect(pluginJson.dependencies.grafanaDependency).toBe(FROM_12_0);
+      });
+    });
+
+    describe('should update from 12.1 ranges when min version >= 12.1.0 and < 12.2.0', () => {
+      it.each([['>=12.1.0'], ['12.1.0'], ['>=12.1.0 <12.2']])('%s', (range) => {
+        const pluginJson = runMigration(range);
+        expect(pluginJson.dependencies.grafanaDependency).toBe(FROM_12_1);
+      });
+    });
+
+    describe('should update from 12.2 ranges when min version >= 12.2.0 and < 12.3.0', () => {
+      it.each([['>=12.2.0'], ['12.2.0'], ['>=12.2.0 <12.3']])('%s', (range) => {
+        const pluginJson = runMigration(range);
+        expect(pluginJson.dependencies.grafanaDependency).toBe(FROM_12_2);
+      });
+    });
+
+    it('does not modify plugin.json when file does not exist', () => {
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      const result = externalizeJSXRuntime(context);
+
+      expect(result.getFile('src/plugin.json')).toBeUndefined();
+    });
+
+    it('should set grafanaDependency to >=12.3.0 when undefined', () => {
       context.addFile(
         'src/plugin.json',
         JSON.stringify({
           id: 'my-plugin-id',
-          dependencies: { grafanaDependency: range },
         })
       );
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      const result = externalizeJSXRuntime(context);
+      const pluginJson = JSON.parse(result.getFile('src/plugin.json') || '{}');
 
-      const result = migrate(context);
-      const updatedPluginJson = JSON.parse(result.getFile('src/plugin.json') || '{}');
-
-      expect(updatedPluginJson.dependencies.grafanaDependency).toBe(EXPECTED_UPDATED_RANGE);
+      expect(pluginJson.dependencies.grafanaDependency).toBe('>=12.3.0');
     });
+
+    it('should throw an error when plugin.json contains invalid JSON', () => {
+      context.addFile('src/plugin.json', 'invalid json');
+      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+
+      expect(() => externalizeJSXRuntime(context)).toThrow('Failed to parse src/plugin.json');
+    });
+  });
+
+  it('should be idempotent', async () => {
+    context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+    await expect(externalizeJSXRuntime).toBeIdempotent(context);
   });
 });
