@@ -5,6 +5,7 @@ import {
   findObjectProperty,
   findVariableDeclaration,
   insertImports,
+  isProperty,
   parseAsTypescript,
   printAST,
 } from '../../utils.ast.js';
@@ -45,7 +46,7 @@ export default function externalizeJSXRuntime(context: Context): Context {
       }
 
       const externalsProperty = findObjectProperty(baseConfig.init, 'externals');
-      if (externalsProperty?.type === 'ObjectProperty' && externalsProperty.value.type === 'ArrayExpression') {
+      if (externalsProperty && isProperty(externalsProperty) && externalsProperty.value.type === 'ArrayExpression') {
         const importDec = createImport({ named: [{ name: 'externals' }] }, '../bundler/externals.ts');
         insertImports(parsedBundlerConfig.ast, [importDec]);
         externalsProperty.value = {

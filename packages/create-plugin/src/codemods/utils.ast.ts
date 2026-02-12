@@ -53,7 +53,7 @@ export function isProperty(
 
 export function findObjectProperty(obj: recast.types.namedTypes.ObjectExpression, propertyName: string) {
   if (!obj.properties) {
-    return null;
+    return undefined;
   }
 
   const property = obj.properties.find(

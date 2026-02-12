@@ -82,7 +82,7 @@ describe('utils.ast', () => {
         expect(prop).toBeDefined();
       });
 
-      it('should return null when property not found', () => {
+      it('should return undefined when property not found', () => {
         const ast = createTestAST(`const obj = { foo: 'bar' };`);
         const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
 
@@ -91,7 +91,7 @@ describe('utils.ast', () => {
         expect(prop).toBeUndefined();
       });
 
-      it('should return null for empty object', () => {
+      it('should return undefined for empty object', () => {
         const ast = createTestAST(`const obj = {};`);
         const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
 
