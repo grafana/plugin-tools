@@ -20,7 +20,14 @@ export default function externalizeJSXRuntime(context: Context): Context {
 
     context.addFile('.config/bundler/externals.ts', rendered);
 
-    const bundlerConfigFilePath = context.doesFileExist('.config/webpack/webpack.config.ts')
+    const webpackConfigExists = context.doesFileExist('.config/webpack/webpack.config.ts');
+    const rspackConfigExists = context.doesFileExist('.config/rspack/rspack.config.ts');
+
+    if (!webpackConfigExists && !rspackConfigExists) {
+      additionsDebug('No bundler config found in `./config`. Skipping updating bundler config with externals import.');
+      return context;
+    }
+    const bundlerConfigFilePath = webpackConfigExists
       ? '.config/webpack/webpack.config.ts'
       : '.config/rspack/rspack.config.ts';
 
@@ -101,6 +108,10 @@ export default function externalizeJSXRuntime(context: Context): Context {
     }
 
     context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
+  } else {
+    additionsDebug(
+      'Skipping updating plugin.json with new grafanaDependency range due to missing src/plugin.json or externals.ts does not include react/jsx-runtime.'
+    );
   }
 
   return context;
