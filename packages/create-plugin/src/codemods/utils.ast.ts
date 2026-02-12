@@ -2,19 +2,17 @@ import * as recast from 'recast';
 import * as typeScriptParser from 'recast/parsers/typescript.js';
 
 const { builders } = recast.types;
-interface ParseResult {
-  ast: recast.types.namedTypes.File | null;
-  error: Error | null;
-}
+
+type ParseResult = { success: true; ast: recast.types.namedTypes.File } | { success: false; error: Error };
 
 export function parseAsTypescript(source: string): ParseResult {
   try {
     const ast = recast.parse(source, {
       parser: typeScriptParser,
     });
-    return { ast, error: null };
+    return { success: true, ast };
   } catch (error: unknown) {
-    return { ast: null, error: error instanceof Error ? error : new Error(String(error)) };
+    return { success: false, error: error instanceof Error ? error : new Error(String(error)) };
   }
 }
 

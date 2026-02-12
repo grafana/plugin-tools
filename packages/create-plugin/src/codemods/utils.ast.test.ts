@@ -18,8 +18,8 @@ import {
 // Helper to create a simple test AST from source code
 function createTestAST(source: string) {
   const result = parseAsTypescript(source);
-  if (!result.ast) {
-    throw new Error('Failed to parse test source');
+  if (!result.success) {
+    throw new Error(`Failed to parse test source. Error: ${result.error.message}`);
   }
   return result.ast;
 }
