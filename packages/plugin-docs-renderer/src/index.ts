@@ -1,10 +1,5 @@
-// export types
-export type { Manifest, Page, MarkdownFiles } from './types.js';
-
-// export parser functions
+// Library exports - pure markdown parsing functions only
+// (CLI utilities like filesystem scanning are not exported)
 export { parseMarkdown } from './parser.js';
 export type { ParsedMarkdown } from './parser.js';
-
-// export loader functions
-export { loadDocsFolder } from './loader.js';
-export type { LoadedDocs } from './loader.js';
+export type { Manifest, Page, MarkdownFiles, Frontmatter } from './types.js';

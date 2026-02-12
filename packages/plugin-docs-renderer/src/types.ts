@@ -1,10 +1,4 @@
 /**
- * Core types for the plugin documentation renderer.
- *
- * These types define the structure of documentation manifests and pages.
- */
-
-/**
  * Represents a documentation page in the manifest.
  */
 export interface Page {
@@ -34,11 +28,6 @@ export interface Page {
  */
 export interface Manifest {
   /**
-   * The manifest format version.
-   */
-  version: string;
-
-  /**
    * The title of the documentation.
    */
   title: string;
@@ -54,4 +43,36 @@ export interface Manifest {
  */
 export interface MarkdownFiles {
   [filePath: string]: string;
+}
+
+/**
+ * Frontmatter metadata from a markdown file.
+ */
+export interface Frontmatter {
+  /**
+   * The display title of the page.
+   */
+  title: string;
+
+  /**
+   * A brief description of the page content.
+   */
+  description: string;
+
+  /**
+   * The position of this page in the sidebar navigation (used for sorting).
+   * Pages with lower numbers appear first. When omitted, the page sorts
+   * after positioned pages, alphabetically by filename.
+   */
+  sidebar_position?: number;
+
+  /**
+   * Optional custom URL slug. If not provided, generated from file path.
+   */
+  slug?: string;
+
+  /**
+   * Optional tags for SEO and categorization.
+   */
+  tags?: string[];
 }
