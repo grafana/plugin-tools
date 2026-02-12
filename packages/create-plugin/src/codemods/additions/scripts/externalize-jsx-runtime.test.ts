@@ -80,32 +80,6 @@ describe('externalizeJSXRuntime', () => {
       expect(updatedConfig).toContain('externals,');
     });
 
-    it('throws when no bundler config exists', () => {
-      expect(() => externalizeJSXRuntime(context)).toThrow('Could not find a bundler config');
-    });
-
-    it('throws when bundler config cannot be parsed', () => {
-      context.addFile('.config/webpack/webpack.config.ts', 'invalid {{ typescript');
-
-      expect(() => externalizeJSXRuntime(context)).toThrow('Failed to parse .config/webpack/webpack.config.ts');
-    });
-
-    it('throws when baseConfig variable is not found', () => {
-      context.addFile('.config/webpack/webpack.config.ts', 'const otherConfig = {};');
-
-      expect(() => externalizeJSXRuntime(context)).toThrow(
-        'Could not find baseConfig variable declaration in .config/webpack/webpack.config.ts'
-      );
-    });
-
-    it('throws when baseConfig is not an object', () => {
-      context.addFile('.config/webpack/webpack.config.ts', 'const baseConfig = "not an object";');
-
-      expect(() => externalizeJSXRuntime(context)).toThrow(
-        'baseConfig variable in .config/webpack/webpack.config.ts is not an object.'
-      );
-    });
-
     it('does not modify bundler config when externals property is not an array', () => {
       const configWithFunctionExternals = `
         const baseConfig = {
@@ -194,13 +168,6 @@ describe('externalizeJSXRuntime', () => {
       const pluginJson = JSON.parse(result.getFile('src/plugin.json') || '{}');
 
       expect(pluginJson.dependencies.grafanaDependency).toBe('>=12.3.0');
-    });
-
-    it('should throw an error when plugin.json contains invalid JSON', () => {
-      context.addFile('src/plugin.json', 'invalid json');
-      context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
-
-      expect(() => externalizeJSXRuntime(context)).toThrow('Failed to parse src/plugin.json');
     });
   });
 

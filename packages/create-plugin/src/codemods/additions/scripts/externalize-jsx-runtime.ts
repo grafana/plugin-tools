@@ -8,7 +8,7 @@ import {
   parseAsTypescript,
   printAST,
 } from '../../utils.ast.js';
-import { renderTemplate } from '../../utils.js';
+import { additionsDebug, renderTemplate } from '../../utils.js';
 
 export default function externalizeJSXRuntime(context: Context): Context {
   const hasExternalsFile = context.doesFileExist('.config/bundler/externals.ts');
@@ -28,16 +28,19 @@ export default function externalizeJSXRuntime(context: Context): Context {
       const parsedBundlerConfig = parseAsTypescript(bundlerConfigFile);
 
       if (!parsedBundlerConfig.success) {
-        throw new Error(`Failed to parse ${bundlerConfigFilePath}. Error: ${parsedBundlerConfig.error.message}`);
+        additionsDebug(`Failed to parse ${bundlerConfigFilePath}. Error: ${parsedBundlerConfig.error.message}`);
+        return context;
       }
 
       const baseConfig = findVariableDeclaration(parsedBundlerConfig.ast, 'baseConfig');
       if (!baseConfig) {
-        throw new Error(`Could not find baseConfig variable declaration in ${bundlerConfigFilePath}`);
+        additionsDebug(`Could not find baseConfig variable declaration in ${bundlerConfigFilePath}`);
+        return context;
       }
 
       if (baseConfig.init?.type !== 'ObjectExpression') {
-        throw new Error(`baseConfig variable in ${bundlerConfigFilePath} is not an object.`);
+        additionsDebug(`baseConfig variable in ${bundlerConfigFilePath} is not an object.`);
+        return context;
       }
 
       const externalsProperty = findObjectProperty(baseConfig.init, 'externals');
@@ -52,7 +55,7 @@ export default function externalizeJSXRuntime(context: Context): Context {
         context.updateFile(bundlerConfigFilePath, printAST(parsedBundlerConfig.ast));
       }
     } else {
-      throw new Error('Could not find a bundler config in `./config` to update with externals import.');
+      additionsDebug('Could not find a bundler config in `./config` to update with externals import.');
     }
   } else {
     const rendered = renderExternalsTemplate();
@@ -67,7 +70,8 @@ export default function externalizeJSXRuntime(context: Context): Context {
     try {
       pluginJson = JSON.parse(pluginJsonContent);
     } catch (error) {
-      throw new Error(`Failed to parse src/plugin.json: ${error}`);
+      additionsDebug(`Failed to parse src/plugin.json: ${error}`);
+      return context;
     }
 
     if (pluginJson.dependencies?.grafanaDependency === undefined) {
