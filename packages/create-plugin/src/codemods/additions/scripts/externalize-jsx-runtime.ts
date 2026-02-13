@@ -1,4 +1,4 @@
-import { minVersion, lt, gte, prerelease, coerce } from 'semver';
+import { minVersion, lt, gte, coerce } from 'semver';
 import type { Context } from '../../context.js';
 import {
   createImport,

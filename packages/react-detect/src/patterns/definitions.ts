@@ -7,7 +7,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     description: 'React internals __SECRET_INTERNALS renamed to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
     fix: {
       description:
-        'Externalise react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
+        'The dependency is relying on React internals that have been renamed in React 19. Search for an updated version, reach out to the maintainer, or find an alternative dependency.',
     },
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#libraries-depending-on-react-internals-may-block-upgrades',
   },
@@ -18,7 +18,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
       'Bundling react/jsx-runtime will break with React 19 due to `__SECRET_INTERNALS...` renamed to `_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE`',
     fix: {
       description:
-        'Externalize react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
+        'Run `npx @grafana/create-plugin@latest add externalize-jsx-runtime`. Your plugin will only be compatible with Grafana >=12.3.0',
     },
     link: 'https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config',
   },
