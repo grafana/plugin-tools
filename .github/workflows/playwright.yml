@@ -27,7 +27,7 @@ jobs:
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
-          skip-grafana-dev-image: false
+          skip-grafana-dev-image: true
           # limit: 0 # Uncomment to test all versions since 8.5.0. Useful when testing compatibility for new APIs.
 
   playwright-tests:
@@ -49,7 +49,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
