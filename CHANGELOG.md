@@ -1,3 +1,22 @@
+# (Fri Feb 13 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.9.0`
+  - LLMs: Scaffold AGENTS.md for LLM coding agents [#2398](https://github.com/grafana/plugin-tools/pull/2398) ([@academo](https://github.com/academo))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.3.0`
+  - Plugin E2E: Fix tab selector [#2451](https://github.com/grafana/plugin-tools/pull/2451) ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # (Tue Feb 10 2026)
 
 #### 🐛 Bug Fix

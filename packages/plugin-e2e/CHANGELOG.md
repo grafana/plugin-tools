@@ -1,3 +1,15 @@
+# v3.3.0 (Fri Feb 13 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix tab selector [#2451](https://github.com/grafana/plugin-tools/pull/2451) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.2.2 (Tue Feb 10 2026)
 
 #### 🐛 Bug Fix

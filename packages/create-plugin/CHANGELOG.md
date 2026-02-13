@@ -1,3 +1,15 @@
+# v6.9.0 (Fri Feb 13 2026)
+
+#### 🚀 Enhancement
+
+- LLMs: Scaffold AGENTS.md for LLM coding agents [#2398](https://github.com/grafana/plugin-tools/pull/2398) ([@academo](https://github.com/academo))
+
+#### Authors: 1
+
+- Esteban Beltran ([@academo](https://github.com/academo))
+
+---
+
 # v6.8.4 (Fri Feb 06 2026)
 
 #### 🐛 Bug Fix
