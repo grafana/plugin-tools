@@ -88,6 +88,7 @@ export class PanelEditPage extends GrafanaPage {
    * Sets the visualization for the panel. This method will open the visualization picker, select the given visualization
    */
   async setVisualization(visualization: Visualization | string) {
+    const { components, constants } = this.ctx.selectors;
     const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
     const showPanelEditElementCount = await showPanelEditElement.count();
     if (showPanelEditElementCount > 0) {
@@ -98,20 +99,20 @@ export class PanelEditPage extends GrafanaPage {
     // and also we need to check whether we're already rendering the viz picker or not since creating a new panel shows
     // the viz picker by default when the panel editor is opened
     if (semver.gte(this.ctx.grafanaVersion, '12.4.0')) {
-      const allVisualizationsTab = this.ctx.selectors.components.Tab.title('All visualizations');
+      const allVisualizationsTab = components.Tab.title(constants.Tab.title);
       if (!(await this.getByGrafanaSelector(allVisualizationsTab).isVisible())) {
-        await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
+        await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
       }
       await this.getByGrafanaSelector(allVisualizationsTab).click();
     } else {
-      await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.toggleVizPicker).click();
+      await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
     }
 
-    await this.getByGrafanaSelector(this.ctx.selectors.components.PluginVisualization.item(visualization)).click();
+    await this.getByGrafanaSelector(components.PluginVisualization.item(visualization)).click();
 
     const vizSelector = semver.lt(this.ctx.grafanaVersion, '12.4.0')
-      ? this.ctx.selectors.components.PanelEditor.toggleVizPicker
-      : this.ctx.selectors.components.PanelEditor.OptionsPane.header;
+      ? components.PanelEditor.toggleVizPicker
+      : components.PanelEditor.OptionsPane.header;
     await expect(
       this.getByGrafanaSelector(vizSelector),
       `Could not set visualization to ${visualization}. Ensure the panel is installed.`

@@ -21,6 +21,12 @@ export const versionedConstants = {
       [MIN_GRAFANA_VERSION]: () => 'div[class="rc-cascader-menus"]',
     },
   },
+  Tab: {
+    title: {
+      '12.4.0': 'Visualizations',
+      [MIN_GRAFANA_VERSION]: 'All visualizations',
+    },
+  },
 } satisfies VersionedSelectorGroup;
 
 export type VersionedConstants = typeof versionedConstants;
