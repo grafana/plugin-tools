@@ -19,7 +19,7 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     fix: {
       description: `Run ${styleText(['italic', 'cyan'], 'npx @grafana/create-plugin@latest add externalize-jsx-runtime')}.\n   Your plugin will only be compatible with specific versions of Grafana`,
     },
-    link: 'https://grafana.com/blog/react-19-is-coming-to-grafana-what-plugin-developers-need-to-know/#the-__secret_internals-issue',
+    link: 'https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions/migrate-12_x-to-13_x#react-19-upgrade',
   },
   defaultProps: {
     severity: 'removed',
