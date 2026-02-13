@@ -1,4 +1,4 @@
-import { minVersion, lt, gte } from 'semver';
+import { minVersion, lt, gte, prerelease, coerce } from 'semver';
 import type { Context } from '../../context.js';
 import {
   createImport,
@@ -71,7 +71,7 @@ export default function externalizeJSXRuntime(context: Context): Context {
     context.updateFile('.config/bundler/externals.ts', rendered);
   }
 
-  const semverRanges = ['>=11.6.11 <12', '>=12.0.10 <12.1', '>=12.1.7 <12.2', '>=12.2.5 <12.3', '>=12.3.0'];
+  const semverRanges = ['>=11.6.11 <12', '>=12.0.10 <12.1', '>=12.1.7 <12.2', '>=12.2.5'];
   const externalsHasJsxRuntime = context.getFile('.config/bundler/externals.ts')?.includes('react/jsx-runtime');
   const pluginJsonContent = context.getFile('src/plugin.json');
   if (pluginJsonContent && externalsHasJsxRuntime) {
@@ -86,14 +86,20 @@ export default function externalizeJSXRuntime(context: Context): Context {
     if (pluginJson.dependencies?.grafanaDependency === undefined) {
       pluginJson.dependencies = {
         ...pluginJson.dependencies,
-        grafanaDependency: '>=12.3.0',
+        grafanaDependency: '>=12.2.5',
       };
       context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
     }
 
-    const pluginMinSupportedVersion = minVersion(pluginJson.dependencies.grafanaDependency);
+    let pluginMinSupportedVersion = minVersion(pluginJson.dependencies.grafanaDependency);
 
-    if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.3.0')) {
+    if (pluginMinSupportedVersion && pluginMinSupportedVersion.prerelease.length) {
+      pluginMinSupportedVersion = coerce(
+        `${pluginMinSupportedVersion.major}.${pluginMinSupportedVersion.minor}.${pluginMinSupportedVersion.patch}`
+      );
+    }
+
+    if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.2.5')) {
       return context;
     }
 

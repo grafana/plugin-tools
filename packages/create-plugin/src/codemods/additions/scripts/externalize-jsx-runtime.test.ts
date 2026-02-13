@@ -96,10 +96,10 @@ describe('externalizeJSXRuntime', () => {
   });
 
   describe('plugin.json semver range updates', () => {
-    const ALL_RANGES = '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
-    const FROM_12_0 = '>=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
-    const FROM_12_1 = '>=12.1.7 <12.2 || >=12.2.5 <12.3 || >=12.3.0';
-    const FROM_12_2 = '>=12.2.5 <12.3 || >=12.3.0';
+    const ALL_RANGES = '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5';
+    const FROM_12_0 = '>=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5';
+    const FROM_12_1 = '>=12.1.7 <12.2 || >=12.2.5';
+    const FROM_12_2 = '>=12.2.5';
 
     function runMigration(grafanaDependency: string) {
       context.addFile(
@@ -114,11 +114,14 @@ describe('externalizeJSXRuntime', () => {
       return JSON.parse(result.getFile('src/plugin.json') || '{}');
     }
 
-    describe('should NOT update when min version >= 12.3.0', () => {
-      it.each([['>=12.3.0'], ['>=13.0.0'], ['12.3.1'], ['>=12.3.0 <13']])('%s', (range) => {
-        const pluginJson = runMigration(range);
-        expect(pluginJson.dependencies.grafanaDependency).toBe(range);
-      });
+    describe('should NOT update when min version >= 12.2.5', () => {
+      it.each([['>=12.2.5'], ['>=12.3.0'], ['>=12.3.0-0'], ['12.3.1'], ['>=13.0.0'], ['>=12.3.0 <13']])(
+        '%s',
+        (range) => {
+          const pluginJson = runMigration(range);
+          expect(pluginJson.dependencies.grafanaDependency).toBe(range);
+        }
+      );
     });
 
     describe('should update to all ranges when min version < 12.0.0', () => {
@@ -129,21 +132,21 @@ describe('externalizeJSXRuntime', () => {
     });
 
     describe('should update from 12.0 ranges when min version >= 12.0.0 and < 12.1.0', () => {
-      it.each([['>=12.0.0'], ['12.0.0'], ['>=12.0.0 <12.1']])('%s', (range) => {
+      it.each([['>=12.0.0'], ['12.0.0'], ['12.0.0-0'], ['>=12.0.0 <12.1']])('%s', (range) => {
         const pluginJson = runMigration(range);
         expect(pluginJson.dependencies.grafanaDependency).toBe(FROM_12_0);
       });
     });
 
     describe('should update from 12.1 ranges when min version >= 12.1.0 and < 12.2.0', () => {
-      it.each([['>=12.1.0'], ['12.1.0'], ['>=12.1.0 <12.2']])('%s', (range) => {
+      it.each([['>=12.1.0'], ['12.1.0'], ['12.1.0-0'], ['>=12.1.0 <12.2']])('%s', (range) => {
         const pluginJson = runMigration(range);
         expect(pluginJson.dependencies.grafanaDependency).toBe(FROM_12_1);
       });
     });
 
     describe('should update from 12.2 ranges when min version >= 12.2.0 and < 12.3.0', () => {
-      it.each([['>=12.2.0'], ['12.2.0'], ['>=12.2.0 <12.3']])('%s', (range) => {
+      it.each([['>=12.2.0'], ['12.2.0'], ['12.2.0-0'], ['>=12.2.0 <12.3']])('%s', (range) => {
         const pluginJson = runMigration(range);
         expect(pluginJson.dependencies.grafanaDependency).toBe(FROM_12_2);
       });
@@ -156,7 +159,7 @@ describe('externalizeJSXRuntime', () => {
       expect(result.getFile('src/plugin.json')).toBeUndefined();
     });
 
-    it('should set grafanaDependency to >=12.3.0 when undefined', () => {
+    it('should set grafanaDependency to >=12.2.5 when undefined', () => {
       context.addFile(
         'src/plugin.json',
         JSON.stringify({
@@ -167,7 +170,7 @@ describe('externalizeJSXRuntime', () => {
       const result = externalizeJSXRuntime(context);
       const pluginJson = JSON.parse(result.getFile('src/plugin.json') || '{}');
 
-      expect(pluginJson.dependencies.grafanaDependency).toBe('>=12.3.0');
+      expect(pluginJson.dependencies.grafanaDependency).toBe('>=12.2.5');
     });
   });
 
