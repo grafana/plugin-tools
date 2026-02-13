@@ -1,3 +1,4 @@
+import { styleText } from 'node:util';
 import { PatternDefinition } from '../types/patterns.js';
 
 export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
@@ -14,13 +15,11 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
   jsxRuntimeImport: {
     severity: 'renamed',
     impactLevel: 'critical',
-    description:
-      'Bundling react/jsx-runtime will break with React 19 due to `__SECRET_INTERNALS...` renamed to `_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE`',
+    description: 'Bundling react/jsx-runtime will break with React 19 due to renamed `__SECRET_INTERNALS`',
     fix: {
-      description:
-        'Run `npx @grafana/create-plugin@latest add externalize-jsx-runtime`. Your plugin will only be compatible with Grafana >=12.3.0',
+      description: `Run ${styleText(['italic', 'cyan'], 'npx @grafana/create-plugin@latest add externalize-jsx-runtime')}.\n   Your plugin will only be compatible with specific versions of Grafana`,
     },
-    link: 'https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config',
+    link: 'https://grafana.com/blog/react-19-is-coming-to-grafana-what-plugin-developers-need-to-know/#the-__secret_internals-issue',
   },
   defaultProps: {
     severity: 'removed',
