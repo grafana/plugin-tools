@@ -1,3 +1,4 @@
+import { styleText } from 'node:util';
 import { PatternDefinition } from '../types/patterns.js';
 
 export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
@@ -7,20 +8,18 @@ export const PATTERN_DEFINITIONS: Record<string, PatternDefinition> = {
     description: 'React internals __SECRET_INTERNALS renamed to _DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE',
     fix: {
       description:
-        'Externalise react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
+        'The dependency is relying on React internals that have been renamed in React 19. Search for an updated version, reach out to the maintainer, or find an alternative dependency.',
     },
     link: 'https://react.dev/blog/2024/04/25/react-19-upgrade-guide#libraries-depending-on-react-internals-may-block-upgrades',
   },
   jsxRuntimeImport: {
     severity: 'renamed',
     impactLevel: 'critical',
-    description:
-      'Bundling react/jsx-runtime will break with React 19 due to `__SECRET_INTERNALS...` renamed to `_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE`',
+    description: 'Bundling react/jsx-runtime will break with React 19 due to renamed `__SECRET_INTERNALS`',
     fix: {
-      description:
-        'Externalize react/jsx-runtime in webpack config. Your plugin will only be compatible with Grafana >=12.3.0',
+      description: `Run ${styleText(['italic', 'cyan'], 'npx @grafana/create-plugin@latest add externalize-jsx-runtime')}.\n   Your plugin will only be compatible with specific versions of Grafana`,
     },
-    link: 'https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config',
+    link: 'https://grafana.com/developers/plugin-tools/migration-guides/update-from-grafana-versions/migrate-12_x-to-13_x#react-19-upgrade',
   },
   defaultProps: {
     severity: 'removed',
