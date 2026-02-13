@@ -50,11 +50,8 @@ export function readJsonFile(filename: string) {
 }
 
 export function hasExternalisedJsxRuntime(): boolean {
-  const webpackConfigPathsToCheck = [
-    'webpack.config.ts',
-    '.config/webpack/webpack.config.ts',
-    '.config/bundler/externals.ts',
-  ];
+  const webpackConfigPathsToCheck = ['webpack.config.ts', '.config/webpack/webpack.config.ts'];
+  const bundlerExternalPathsToCheck = ['.config/bundler/externals.ts'];
   let found = false;
   for (const webpackConfigPath of webpackConfigPathsToCheck) {
     if (isFile(path.join(process.cwd(), webpackConfigPath))) {
@@ -83,5 +80,33 @@ export function hasExternalisedJsxRuntime(): boolean {
       });
     }
   }
+  for (const bundlerExternalPath of bundlerExternalPathsToCheck) {
+    if (isFile(path.join(process.cwd(), bundlerExternalPath))) {
+      const bundlerExternals = fs.readFileSync(path.join(process.cwd(), bundlerExternalPath)).toString();
+      const bundlerExternalsAst = parseFile(bundlerExternals, bundlerExternalPath);
+
+      walk(bundlerExternalsAst, (node) => {
+        // check for 'react/jsx-runtime' in variable array declaration
+        if (
+          node.type === 'VariableDeclarator' &&
+          node.id.type === 'Identifier' &&
+          node.id.name === 'externals' &&
+          node.init?.type === 'ArrayExpression'
+        ) {
+          for (const element of node.init.elements) {
+            if (
+              element &&
+              element.type === 'Literal' &&
+              typeof element.value === 'string' &&
+              element.value.includes('react/jsx-runtime')
+            ) {
+              found = true;
+            }
+          }
+        }
+      });
+    }
+  }
+
   return found;
 }
