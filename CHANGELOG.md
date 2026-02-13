@@ -2,6 +2,19 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/create-plugin@6.10.0`, `@grafana/react-detect@0.6.0`
+  - feat: externalize jsx-runtime [#2448](https://github.com/grafana/plugin-tools/pull/2448) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Feb 13 2026)
+
+#### 🚀 Enhancement
+
 - `@grafana/create-plugin@6.9.0`
   - LLMs: Scaffold AGENTS.md for LLM coding agents [#2398](https://github.com/grafana/plugin-tools/pull/2398) ([@academo](https://github.com/academo))
 

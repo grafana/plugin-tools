@@ -1,3 +1,15 @@
+# v0.6.0 (Fri Feb 13 2026)
+
+#### 🚀 Enhancement
+
+- feat: externalize jsx-runtime [#2448](https://github.com/grafana/plugin-tools/pull/2448) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.5.2 (Fri Feb 06 2026)
 
 #### 🐛 Bug Fix
