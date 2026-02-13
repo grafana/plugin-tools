@@ -50,7 +50,11 @@ export function readJsonFile(filename: string) {
 }
 
 export function hasExternalisedJsxRuntime(): boolean {
-  const webpackConfigPathsToCheck = ['webpack.config.ts', '.config/webpack/webpack.config.ts'];
+  const webpackConfigPathsToCheck = [
+    'webpack.config.ts',
+    '.config/webpack/webpack.config.ts',
+    '.config/bundler/externals.ts',
+  ];
   let found = false;
   for (const webpackConfigPath of webpackConfigPathsToCheck) {
     if (isFile(path.join(process.cwd(), webpackConfigPath))) {
