@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import {
   parsePnpmProject,
   parseNpmLockV2Project,
@@ -16,29 +16,29 @@ export class DependencyContext {
   private depGraph: DepGraph | null = null;
 
   async loadDependencies(pluginRoot = process.cwd()): Promise<void> {
-    // traverse up the directory tree to find the lockfile and package.json
     const lockfile = getLockFilePath(pluginRoot);
     const packageJsonPath = join(pluginRoot, 'package.json');
 
     if (lockfile) {
       const pkgJsonContent = readJsonFile(packageJsonPath);
+      const lockFileName = basename(lockfile);
       const lockfileContent = readFileSync(lockfile, 'utf8');
       const pkgJsonContentString = JSON.stringify(pkgJsonContent);
-      if (lockfile.endsWith('pnpm-lock.yaml')) {
+      if (lockFileName === 'pnpm-lock.yaml') {
         this.depGraph = await parsePnpmProject(pkgJsonContentString, lockfileContent, {
           includeDevDeps: true,
           includeOptionalDeps: true,
           strictOutOfSync: false,
           pruneWithinTopLevelDeps: false,
         });
-      } else if (lockfile.endsWith('package-lock.json')) {
+      } else if (lockFileName === 'package-lock.json') {
         this.depGraph = await parseNpmLockV2Project(pkgJsonContentString, lockfileContent, {
           includeDevDeps: true,
           includeOptionalDeps: true,
           strictOutOfSync: false,
           pruneCycles: false,
         });
-      } else if (lockfile.endsWith('yarn.lock')) {
+      } else if (lockFileName === 'yarn.lock') {
         if (/#\s*yarn lockfile v1/i.test(lockfileContent)) {
           this.depGraph = await parseYarnLockV1Project(pkgJsonContentString, lockfileContent, {
             includeDevDeps: true,
