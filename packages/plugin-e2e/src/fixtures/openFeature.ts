@@ -32,7 +32,8 @@ function delay(ms: number): Promise<void> {
 async function handleBulkEvaluationRoute(
   route: Route,
   flags: Record<string, FeatureFlagValue>,
-  latency: number
+  latency: number,
+  log: boolean
 ): Promise<void> {
   let response: Awaited<ReturnType<Route['fetch']>> | undefined;
 
@@ -79,7 +80,10 @@ async function handleBulkEvaluationRoute(
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
-    console.error('@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation', error);
+    if (log) {
+      console.error('@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation', error);
+    }
+
     // fulfill with original response if available, otherwise return error response
     if (response) {
       await route.fulfill({ response });
@@ -99,7 +103,8 @@ async function handleBulkEvaluationRoute(
 async function handleSingleFlagRoute(
   route: Route,
   flags: Record<string, FeatureFlagValue>,
-  latency: number
+  latency: number,
+  log: boolean
 ): Promise<void> {
   try {
     const url = new URL(route.request().url());
@@ -128,7 +133,10 @@ async function handleSingleFlagRoute(
     const response = await route.fetch();
     await route.fulfill({ response });
   } catch (error) {
-    console.error('@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation', error);
+    if (log) {
+      console.error('@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation', error);
+    }
+
     // return error response since we can't continue after route.fetch()
     await route.fulfill({
       status: 500,
@@ -145,20 +153,23 @@ export async function setupOpenFeatureRoutes(
   page: Page,
   openFeature: Record<string, FeatureFlagValue>,
   latency: number,
+  log: boolean,
   selectors: PlaywrightArgs['selectors']
 ): Promise<void> {
-  console.log('@grafana/plugin-e2e: setting up OpenFeature OFREP interception', {
-    openFeature,
-    latency,
-  });
+  if (log) {
+    console.log('@grafana/plugin-e2e: setting up OpenFeature OFREP interception', {
+      openFeature,
+      latency,
+    });
+  }
 
   // intercept bulk evaluation endpoint
   await page.route(selectors.apis.OpenFeature.ofrepBulkPattern, async (route) => {
-    await handleBulkEvaluationRoute(route, openFeature, latency);
+    await handleBulkEvaluationRoute(route, openFeature, latency, log);
   });
 
   // intercept single flag evaluation endpoint
   await page.route(selectors.apis.OpenFeature.ofrepSinglePattern, async (route) => {
-    await handleSingleFlagRoute(route, openFeature, latency);
+    await handleSingleFlagRoute(route, openFeature, latency, log);
   });
 }

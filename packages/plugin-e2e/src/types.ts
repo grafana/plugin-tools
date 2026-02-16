@@ -102,6 +102,7 @@ export type PluginOptions = {
    *       apiConfig: { tier: "premium" }, // object
    *     },
    *     latency: 200, // optional: artificial latency in ms for OFREP responses
+   *     log: false, // optional: disable logging for OFREP interception (defaults to true)
    *   },
    * });
    * ```
@@ -109,6 +110,7 @@ export type PluginOptions = {
   openFeature: {
     flags: Record<string, FeatureFlagValue>;
     latency?: number;
+    log?: boolean;
   };
 
   /**

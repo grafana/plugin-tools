@@ -43,7 +43,7 @@ export const page: PageFixture = async (
   // set up OpenFeature OFREP route interception BEFORE navigation
   // only runs if openFeature flags are provided and Grafana version >= 12.1.0
   if (hasOpenFeature && gte(grafanaVersion, '12.1.0')) {
-    await setupOpenFeatureRoutes(page, openFeature.flags, openFeature.latency ?? 0, selectors);
+    await setupOpenFeatureRoutes(page, openFeature.flags, openFeature.latency ?? 0, openFeature.log ?? true, selectors);
   }
 
   await page.goto('/');
