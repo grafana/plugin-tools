@@ -7,6 +7,7 @@ import {
   Response,
   TestInfo,
 } from '@playwright/test';
+import type { AxeResults, RunOptions as AxeRunOptions } from 'axe-core';
 import { SelectorsOf, versionedComponents, versionedPages } from '@grafana/e2e-selectors';
 
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
@@ -423,6 +424,15 @@ export type PluginFixture = {
    * Fixture command that navigates to an AppPage for a given plugin.
    */
   gotoAppPage: (args: GotoAppPageArgs) => Promise<AppPage>;
+
+  /**
+   * Fixture command that scans the current page for accessibility violations using axe-core.
+   * By default, it checks for WCAG 2.0 A and AA level violations, as well as WCAG 2.1 A and AA.
+   * You can customize the rules that are checked by passing options to the command.
+   *
+   * You can use this in conjuntion with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
+   */
+  scanForA11yViolations: (options?: AxeRunOptions) => Promise<AxeResults>;
 };
 
 /**

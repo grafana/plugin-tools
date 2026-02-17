@@ -37,6 +37,7 @@ import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
 import { variableEditPage } from './fixtures/variableEditPage';
 import { alertRuleEditPage } from './fixtures/alertRuleEditPage';
+import { scanForA11yViolations } from './fixtures/scanForA11yViolations';
 import { options } from './options';
 import { toHaveAlert } from './matchers/toHaveAlert';
 import { toDisplayPreviews } from './matchers/toDisplayPreviews';
@@ -49,6 +50,7 @@ import { toHaveSelected } from './matchers/toHaveSelected';
 import { Select } from './models/components/Select';
 import { Switch } from './models/components/Switch';
 import { toBeChecked } from './matchers/toBeChecked';
+import { toHaveNoA11yViolations } from './matchers/toHaveNoA11yViolations';
 import { RadioGroup } from './models/components/RadioGroup';
 import { toHaveChecked } from './matchers/toHaveChecked';
 import { MultiSelect } from './models/components/MultiSelect';
@@ -116,6 +118,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   gotoDataSourceConfigPage,
   gotoAppConfigPage,
   gotoAppPage,
+  scanForA11yViolations,
   ...options,
 });
 
@@ -127,6 +130,7 @@ export const expect = baseExpect.extend({
   toBeChecked,
   toHaveChecked,
   toHaveColor,
+  toHaveNoA11yViolations,
 });
 
 export { selectors } from '@playwright/test';
