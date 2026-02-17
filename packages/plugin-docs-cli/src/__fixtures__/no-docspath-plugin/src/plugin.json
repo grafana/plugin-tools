@@ -1,0 +1,5 @@
+{
+  "type": "datasource",
+  "name": "Test Plugin",
+  "id": "test-plugin"
+}
