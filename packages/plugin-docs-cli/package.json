@@ -28,7 +28,7 @@
     "lint": "eslint --cache ./src",
     "lint:fix": "npm run lint -- --fix",
     "lint:package": "publint",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
