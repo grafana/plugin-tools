@@ -8,7 +8,7 @@ export const scanForA11yViolations: TestFixture<
   (options?: AxeRunOptions) => Promise<AxeResults>,
   PlaywrightArgs
 > = async ({ page }, use, testInfo) => {
-  use(async (options?: AxeRunOptions) => {
+  await use(async (options?: AxeRunOptions) => {
     const builder = new AxeBuilder({ page }).withTags([
       'wcag2a',
       'wcag2aa',
