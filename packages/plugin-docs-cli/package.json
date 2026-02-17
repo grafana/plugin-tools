@@ -46,7 +46,7 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@grafana/plugin-docs-parser": "file:../plugin-docs-parser",
+    "@grafana/plugin-docs-parser": "^0.0.1",
     "chokidar": "^4.0.0",
     "debug": "^4.3.7",
     "ejs": "^4.0.1",
