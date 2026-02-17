@@ -1,0 +1,57 @@
+<%
+/**
+ * Navigation partial - renders the left sidebar navigation tree
+ *
+ * Parameters:
+ * - pages: Array of Page objects from manifest
+ * - currentPath: Current page slug for highlighting
+ * - level: Nesting level (optional, for recursion)
+ */
+const renderPages = (pages, currentPath, level = 0) => {
+  if (!pages || pages.length === 0) return '';
+
+  return pages.map(page => {
+    const isActive = page.slug === currentPath;
+    const hasChildren = page.children && page.children.length > 0;
+    const hasFile = page.file && page.file.length > 0;
+    const activeClass = isActive ? ' active' : '';
+    const collapsibleClass = hasChildren ? ' collapsible' : '';
+
+    let html = `<li class="docs-nav-item${collapsibleClass}">`;
+
+    // add chevron for collapsible sections
+    if (hasChildren) {
+      html += `<button class="docs-nav-toggle" aria-label="Toggle section">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>`;
+    }
+
+    // escape HTML entities in titles to prevent XSS
+    const safeTitle = page.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // render as link only if page has a file, otherwise just text
+    if (hasFile) {
+      html += `<a href="/${page.slug}" class="docs-nav-link${activeClass}">${safeTitle}</a>`;
+    } else {
+      html += `<span class="docs-nav-label">${safeTitle}</span>`;
+    }
+
+    if (hasChildren) {
+      html += `
+        <ul class="docs-nav-list">
+          ${renderPages(page.children, currentPath, level + 1)}
+        </ul>
+      `;
+    }
+
+    html += '</li>';
+    return html;
+  }).join('');
+};
+%>
+
+<ul class="docs-nav-list">
+  <%- renderPages(pages, currentPath) %>
+</ul>
