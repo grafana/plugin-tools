@@ -1,3 +1,15 @@
+# v0.6.1 (Tue Feb 17 2026)
+
+#### 🐛 Bug Fix
+
+- feat: support reading lock files for plugins in monorepos [#2454](https://github.com/grafana/plugin-tools/pull/2454) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.6.0 (Fri Feb 13 2026)
 
 #### 🚀 Enhancement
