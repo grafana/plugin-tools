@@ -14,9 +14,10 @@ test.describe('scanForA11yViolations', () => {
 
     const report = await scanForA11yViolations();
     expect(report).toHaveNoA11yViolations({
-      // this is the complete list of a11y violations on this page today. maybe we want to do something more flake-proof here,
-      // but I do like that this test confirms that some violations are actually being detected
-      ignoredRules: ['label', 'list', 'listitem', 'page-has-heading-one'],
+      // this is the complete list of a11y violations on this page today for the spread of versions we test.
+      // maybe we want to do something more flake-proof here, but I do like that this test confirms that
+      // violations are actually being detected with the default configuration.
+      ignoredRules: ['label', 'list', 'listitem', 'page-has-heading-one', 'aria-command-name', 'aria-prohibited-attr'],
     });
   });
 
@@ -37,11 +38,15 @@ test.describe('scanForA11yViolations', () => {
     expect(report1, 'sanity check that dashboard page has no contrast issues to begin with').toHaveNoA11yViolations();
 
     await page.evaluate(() => {
-      const newDiv = document.createElement('div');
-      newDiv.id = 'playwright-inserted-element';
-      newDiv.textContent = 'Hello world!';
-      newDiv.style.color = 'rgb(0, 0, 0)'; // black text on black background to create a contrast issue
-      document.body.prepend(newDiv); // insert at the beginning of the body to ensure it's visible
+      // write two strings into the document, one white, one black. Depending on the current theme, at least one should
+      // trigger a contrast issue.
+      for (const color of ['rgb(0, 0, 0)', 'rgb(255, 255, 255)']) {
+        const newDiv = document.createElement('div');
+        newDiv.id = 'playwright-inserted-element';
+        newDiv.textContent = 'Hello world!';
+        newDiv.style.color = color; // black text on black background to create a contrast issue
+        document.body.prepend(newDiv); // insert at the beginning of the body to ensure it's visible
+      }
     });
 
     await page.waitForSelector('#playwright-inserted-element');
