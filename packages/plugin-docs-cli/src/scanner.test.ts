@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
+import type { Page } from '@grafana/plugin-docs-parser';
 import { scanDocsFolder } from './scanner.js';
 
 describe('scanDocsFolder', () => {
@@ -72,7 +73,7 @@ describe('scanDocsFolder', () => {
     it('should promote index.md as the directory page', async () => {
       const result = await scanDocsFolder(testDocsPath);
 
-      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const configPage = result.manifest.pages.find((p: Page) => p.slug === 'config');
       expect(configPage).toBeDefined();
       expect(configPage?.title).toBe('Configuration');
       expect(configPage?.file).toBe('config/index.md');
@@ -83,7 +84,7 @@ describe('scanDocsFolder', () => {
     it('should generate slugs with directory prefixes', async () => {
       const result = await scanDocsFolder(testDocsPath);
 
-      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const configPage = result.manifest.pages.find((p: Page) => p.slug === 'config');
       const children = configPage?.children || [];
 
       expect(children[0].slug).toBe('config/settings');
@@ -93,7 +94,7 @@ describe('scanDocsFolder', () => {
     it('should sort nested pages by sidebar_position', async () => {
       const result = await scanDocsFolder(testDocsPath);
 
-      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const configPage = result.manifest.pages.find((p: Page) => p.slug === 'config');
       const children = configPage?.children || [];
 
       expect(children[0].title).toBe('Settings');
@@ -112,7 +113,7 @@ describe('scanDocsFolder', () => {
     it('should reference nested files correctly in page objects', async () => {
       const result = await scanDocsFolder(testDocsPath);
 
-      const configPage = result.manifest.pages.find((p) => p.slug === 'config');
+      const configPage = result.manifest.pages.find((p: Page) => p.slug === 'config');
       const children = configPage?.children || [];
 
       expect(children[0].file).toBe('config/settings.md');
