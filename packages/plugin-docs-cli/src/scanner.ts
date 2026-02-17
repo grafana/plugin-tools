@@ -54,18 +54,18 @@ export interface ScannedDocs {
  *   "config/auth.md" → "config/auth"
  */
 function generateSlug(filePath: string): string {
-  const slugger = new GithubSlugger();
   const parsed = parse(filePath);
 
-  // build slug parts by slugifying each segment separately
+  // fresh slugger per segment to avoid uniqueness suffixes (e.g. config/config → config/config-1)
+  const slugSegment = (segment: string): string => new GithubSlugger().slug(segment);
+
   const parts: string[] = [];
 
   if (parsed.dir) {
-    const dirParts = parsed.dir.split(sep);
-    parts.push(...dirParts.map((part) => slugger.slug(part)));
+    parts.push(...parsed.dir.split(sep).map(slugSegment));
   }
 
-  parts.push(slugger.slug(parsed.name));
+  parts.push(slugSegment(parsed.name));
 
   return parts.join('/');
 }
