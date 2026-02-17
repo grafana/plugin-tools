@@ -1,0 +1,54 @@
+{
+  "name": "@grafana/plugin-docs-cli",
+  "version": "0.0.1",
+  "private": "true",
+  "description": "CLI tool for developing, validating and previewing Grafana plugin documentation locally.",
+  "type": "module",
+  "bin": "./dist/bin/run.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "directory": "packages/plugin-docs-cli",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "rollup -c ../../rollup.config.ts --configPlugin esbuild --watch",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "grafana",
+    "plugin",
+    "documentation",
+    "cli",
+    "preview",
+    "validation"
+  ],
+  "bugs": {
+    "url": "https://github.com/grafana/plugin-tools/issues"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "debug": "^4.3.7"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.12"
+  }
+}
