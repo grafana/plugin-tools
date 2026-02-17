@@ -16,18 +16,17 @@ export async function toHaveNoA11yViolations(
     return {
       pass: true,
       expected: threshold,
-      message: () =>
-        `No more than ${threshold} Axe violations found (actual: ${violations.length}).`,
+      message: () => `No more than ${threshold} Axe violations found (actual: ${violations.length}).`,
     };
   } catch (err: unknown) {
-    let message = err instanceof Error ? err.toString() : 'Unknown error';
+    let message = err instanceof Error ? err.toString().replace(/^Error: /, '') : 'Unknown error';
     if (violations.length > 0) {
       const violationDetails = violations
         .flatMap((v) => [
-          `- Rule: ${v.id}`,
-          `  Description: ${v.description}`,
-          `  Docs: ${v.helpUrl}`,
-          `  Affected nodes: \n${v.nodes.map((node) => `    - ${node.html}`).join('\n')}`,
+          `- Rule:   ${v.description}`,
+          `  ID:     ${v.id} (${v.helpUrl})`,
+          `  Impact: ${v.impact}`,
+          `  Affected nodes:\n${v.nodes.map((node) => `    - ${node.html}`).join('\n')}`,
         ])
         .join('\n');
 
