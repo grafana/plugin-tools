@@ -71,6 +71,31 @@ function generateSlug(filePath: string): string {
 }
 
 /**
+ * Normalizes and validates a custom slug from frontmatter.
+ * Returns null when the slug is unsafe or malformed.
+ */
+function normalizeCustomSlug(rawSlug: string): string | null {
+  const trimmed = rawSlug.trim().replace(/^\/+|\/+$/g, '');
+
+  if (!trimmed) {
+    return null;
+  }
+
+  // Restrict to route-safe characters only.
+  if (!/^[A-Za-z0-9/_-]+$/.test(trimmed)) {
+    return null;
+  }
+
+  // Disallow traversal-like and empty segments.
+  const segments = trimmed.split('/');
+  if (segments.some((segment) => !segment || segment === '.' || segment === '..')) {
+    return null;
+  }
+
+  return trimmed;
+}
+
+/**
  * Recursively scans a directory for markdown files and parses their frontmatter.
  *
  * @param docsPath - Absolute path to the docs folder
@@ -193,11 +218,18 @@ function treeToPages(node: TreeNode): Page[] {
       // it's a markdown file (or a directory with a promoted index.md)
       const parsed = parse(child.file.relativePath);
       const isIndex = parsed.name === 'index' && parsed.dir !== '';
+      const generatedSlug = isIndex ? generateSlug(parsed.dir) : generateSlug(child.file.relativePath);
+      const customSlug = child.file.frontmatter.slug ? normalizeCustomSlug(child.file.frontmatter.slug) : null;
+
+      if (child.file.frontmatter.slug && !customSlug) {
+        console.warn(
+          `Warning: ${child.file.relativePath} contains an invalid frontmatter slug and will use generated slug instead`
+        );
+      }
 
       const page: Page = {
         title: child.file.frontmatter.title,
-        slug:
-          child.file.frontmatter.slug || (isIndex ? generateSlug(parsed.dir) : generateSlug(child.file.relativePath)),
+        slug: customSlug || generatedSlug,
         file: child.file.relativePath,
       };
 

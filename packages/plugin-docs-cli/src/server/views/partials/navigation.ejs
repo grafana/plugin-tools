@@ -30,10 +30,14 @@ const renderPages = (pages, currentPath, level = 0) => {
 
     // escape HTML entities in titles to prevent XSS
     const safeTitle = page.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const safeHref = '/' + String(page.slug)
+      .split('/')
+      .map((segment) => encodeURIComponent(segment))
+      .join('/');
 
     // render as link only if page has a file, otherwise just text
     if (hasFile) {
-      html += `<a href="/${page.slug}" class="docs-nav-link${activeClass}">${safeTitle}</a>`;
+      html += `<a href="${safeHref}" class="docs-nav-link${activeClass}">${safeTitle}</a>`;
     } else {
       html += `<span class="docs-nav-label">${safeTitle}</span>`;
     }

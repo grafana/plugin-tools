@@ -69,6 +69,14 @@ describe('scanDocsFolder', () => {
     await expect(scanDocsFolder(emptyPath)).rejects.toThrow('No valid markdown files found');
   });
 
+  it('should ignore unsafe frontmatter slugs and fallback to generated slug', async () => {
+    const unsafeSlugPath = join(__dirname, '__fixtures__', 'unsafe-slug-docs');
+    const result = await scanDocsFolder(unsafeSlugPath);
+
+    expect(result.manifest.pages).toHaveLength(1);
+    expect(result.manifest.pages[0].slug).toBe('home');
+  });
+
   describe('nested directories', () => {
     it('should promote index.md as the directory page', async () => {
       const result = await scanDocsFolder(testDocsPath);

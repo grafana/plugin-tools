@@ -6,6 +6,7 @@ import { startServer, type Server } from './server.js';
 
 describe('startServer', () => {
   const testDocsPath = join(__dirname, '..', '__fixtures__', 'test-docs');
+  const unsafeSlugDocsPath = join(__dirname, '..', '__fixtures__', 'unsafe-slug-docs');
   let app: Express;
   let server: Server | null = null;
 
@@ -189,5 +190,18 @@ describe('startServer', () => {
     expect(response.text).toMatch(/<h1[^>]*>[^<]*<\/h1>/);
     // navigation links should not contain unescaped HTML
     expect(response.text).not.toMatch(/<a[^>]*>[^<]*<script/i);
+  });
+
+  it('should not render unsafe slug content in navigation href attributes', async () => {
+    const result = await startServer({ docsPath: unsafeSlugDocsPath, port: 0 });
+    server = result;
+    app = result.app;
+
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<a href="/home"');
+    expect(response.text).not.toContain('onclick=');
+    expect(response.text).not.toContain('%22');
   });
 });
