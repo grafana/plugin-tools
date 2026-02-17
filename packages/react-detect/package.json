@@ -28,6 +28,7 @@
   "dependencies": {
     "@typescript-eslint/parser": "^8.46.2",
     "@typescript-eslint/typescript-estree": "^8.46.2",
+    "pm-detect": "0.4.0",
     "fast-glob": "^3.3.2",
     "minimist": "^1.2.8",
     "snyk-nodejs-lockfile-parser": "^2.4.4",
