@@ -5,9 +5,9 @@
 /packages/eslint-plugin-plugins @grafana/plugins-platform-frontend
 /packages/plugin-docs-renderer @grafana/plugins-platform-frontend
 /packages/plugin-e2e @grafana/plugins-platform-frontend
-/packages/plugin-meta-extractor
 /packages/plugin-types-bundler @grafana/plugins-platform-frontend
 /packages/react-detect @grafana/grafana-frontend-platform
+/packages/sign-plugin @grafana/plugins-platform-frontend
 /packages/tsconfig @grafana/grafana-frontend-platform
 
 /docusaurus/website @grafana/grafana-frontend-platform
