@@ -430,7 +430,7 @@ export type PluginFixture = {
    * By default, it checks for WCAG 2.0 A and AA level violations, as well as WCAG 2.1 A and AA.
    * You can customize the rules that are checked by passing options to the command.
    *
-   * You can use this in conjuntion with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
+   * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
    */
   scanForA11yViolations: (options?: AxeRunOptions) => Promise<AxeResults>;
 };
