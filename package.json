@@ -77,7 +77,7 @@
     "packages/eslint-plugin-plugins",
     "packages/tsconfig",
     "packages/react-detect",
-    "packages/plugin-docs-renderer",
+    "packages/plugin-docs-parser",
     "packages/plugin-docs-cli",
     "libs/*"
   ],
