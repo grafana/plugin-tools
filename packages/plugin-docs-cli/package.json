@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-docs-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "CLI tool for developing, validating and previewing Grafana plugin documentation locally.",
   "type": "module",
