@@ -1,4 +1,3 @@
-import { report } from 'process';
 import { test, expect } from '../../../src';
 
 test.describe('scanForA11yViolations', () => {
