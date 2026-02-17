@@ -1,7 +1,7 @@
 {
   "name": "@grafana/react-detect",
   "description": "Run various checks to detect if a Grafana plugin is compatible with React.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "repository": {
     "directory": "packages/react-detect",
     "url": "https://github.com/grafana/plugin-tools"
@@ -28,9 +28,9 @@
   "dependencies": {
     "@typescript-eslint/parser": "^8.46.2",
     "@typescript-eslint/typescript-estree": "^8.46.2",
-    "pm-detect": "0.4.0",
     "fast-glob": "^3.3.2",
     "minimist": "^1.2.8",
+    "pm-detect": "0.4.0",
     "snyk-nodejs-lockfile-parser": "^2.4.4",
     "source-map": "^0.7.4"
   },
