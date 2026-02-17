@@ -1,3 +1,15 @@
+# v3.3.2 (Tue Feb 17 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix OFREP single flag evaluation [#2456](https://github.com/grafana/plugin-tools/pull/2456) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.3.1 (Tue Feb 17 2026)
 
 #### 🐛 Bug Fix

@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@3.3.2`
+  - Plugin E2E: Fix OFREP single flag evaluation [#2456](https://github.com/grafana/plugin-tools/pull/2456) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Feb 17 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/react-detect@0.6.1`
   - feat: support reading lock files for plugins in monorepos [#2454](https://github.com/grafana/plugin-tools/pull/2454) ([@jackw](https://github.com/jackw))
 
