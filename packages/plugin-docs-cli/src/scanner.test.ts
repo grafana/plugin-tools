@@ -69,6 +69,12 @@ describe('scanDocsFolder', () => {
     await expect(scanDocsFolder(emptyPath)).rejects.toThrow('No valid markdown files found');
   });
 
+  it('should skip files with wrong frontmatter types', async () => {
+    const invalidPath = join(__dirname, '__fixtures__', 'invalid-frontmatter-docs');
+
+    await expect(scanDocsFolder(invalidPath)).rejects.toThrow('No valid markdown files found');
+  });
+
   it('should ignore unsafe frontmatter slugs and fallback to generated slug', async () => {
     const unsafeSlugPath = join(__dirname, '__fixtures__', 'unsafe-slug-docs');
     const result = await scanDocsFolder(unsafeSlugPath);

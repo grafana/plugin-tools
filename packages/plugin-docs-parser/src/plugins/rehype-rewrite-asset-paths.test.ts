@@ -62,6 +62,27 @@ describe('rehypeRewriteAssetPaths', () => {
     expect(anchor.properties.href).toBe('page.md');
   });
 
+  it('should leave data: URIs untouched', () => {
+    const node = img('data:image/png;base64,iVBORw0KGgo=');
+    transform(tree(node));
+
+    expect(node.properties.src).toBe('data:image/png;base64,iVBORw0KGgo=');
+  });
+
+  it('should leave blob: URLs untouched', () => {
+    const node = img('blob:http://localhost:3000/abc-123');
+    transform(tree(node));
+
+    expect(node.properties.src).toBe('blob:http://localhost:3000/abc-123');
+  });
+
+  it('should leave root-relative URLs untouched', () => {
+    const node = img('/images/logo.png');
+    transform(tree(node));
+
+    expect(node.properties.src).toBe('/images/logo.png');
+  });
+
   it('should skip img elements without a string src', () => {
     const node: Element = {
       type: 'element',

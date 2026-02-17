@@ -23,8 +23,15 @@ export function rehypeRewriteAssetPaths(options: RewriteAssetPathsOptions) {
         return;
       }
 
-      // skip absolute and protocol-relative URLs
-      if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+      // skip absolute, protocol-relative, data, blob and root-relative URLs
+      if (
+        src.startsWith('http://') ||
+        src.startsWith('https://') ||
+        src.startsWith('//') ||
+        src.startsWith('data:') ||
+        src.startsWith('blob:') ||
+        src.startsWith('/')
+      ) {
         return;
       }
 

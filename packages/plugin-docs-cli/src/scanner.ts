@@ -131,11 +131,15 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
     const fileContent = await readFile(absolutePath, 'utf-8');
     const parsed = matter(fileContent);
 
-    // validate frontmatter has required fields
+    // validate frontmatter has required fields with correct types
     const frontmatter = parsed.data as Partial<Frontmatter>;
-    if (!frontmatter.title || !frontmatter.description || frontmatter.sidebar_position === undefined) {
+    if (
+      typeof frontmatter.title !== 'string' ||
+      typeof frontmatter.description !== 'string' ||
+      typeof frontmatter.sidebar_position !== 'number'
+    ) {
       console.warn(
-        `Warning: ${relativePath} missing required frontmatter fields (title, description, sidebar_position)`
+        `Warning: ${relativePath} missing or invalid required frontmatter fields (title: string, description: string, sidebar_position: number)`
       );
       continue;
     }

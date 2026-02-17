@@ -76,6 +76,24 @@ Body text here.`;
     expect(html).toContain('Title');
   });
 
+  it('should preserve safe raw HTML elements like <details>', () => {
+    const markdown = `# FAQ
+
+<details>
+<summary>How does it work?</summary>
+
+It works by parsing markdown.
+
+</details>`;
+
+    const result = parseMarkdown(markdown);
+    const html = toHtml(result.hast);
+
+    expect(html).toContain('<details>');
+    expect(html).toContain('<summary>');
+    expect(html).toContain('It works by parsing markdown.');
+  });
+
   it('should sanitize potentially dangerous HTML', () => {
     const markdown = `
 # Test

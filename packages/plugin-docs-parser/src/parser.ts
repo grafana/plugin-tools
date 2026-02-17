@@ -2,6 +2,7 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
+import rehypeRaw from 'rehype-raw';
 import rehypeSlug from 'rehype-slug';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import matter from 'gray-matter';
@@ -79,8 +80,10 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
     .use(remarkParse)
     .use(remarkGfm)
     // allow raw HTML in markdown (e.g. <details>, <img>) to pass through to hast;
-    // rehype-sanitize downstream strips anything dangerous
+    // rehype-raw parses the raw nodes into proper hast elements so
+    // rehype-sanitize can inspect and strip anything dangerous
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
     .use(rehypeSlug);
 
   // rewrite asset paths before sanitization so URLs are final
