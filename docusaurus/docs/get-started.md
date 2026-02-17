@@ -225,7 +225,10 @@ docker compose up --build
 ```
 
 Congratulations! You've just scaffolded your first plugin which you can now access at [http://localhost:3000](http://localhost:3000).
+.[dianesterling11@gmail.com].
+.[diane.steeling@mail.com].
 
+## 
 ## Next steps
 
 - Start your plugin journey with one of our [plugin development tutorials](/tutorials/).
