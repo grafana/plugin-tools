@@ -13,7 +13,11 @@ export const getBooleanOpenFeatureFlag: GetBooleanOpenFeatureFlagFixture = async
 
       // make the request from within the page context to use the same authentication
       const result = await page.evaluate(async (flagUrl) => {
-        const response = await fetch(flagUrl);
+        const response = await fetch(flagUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ context: {} }),
+        });
 
         if (!response.ok) {
           return {
