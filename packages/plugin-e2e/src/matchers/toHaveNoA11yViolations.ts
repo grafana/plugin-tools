@@ -1,10 +1,10 @@
 import { MatcherReturnType } from '@playwright/test';
 import { AxeResults } from 'axe-core';
 
-export async function toHaveNoA11yViolations(
+export function toHaveNoA11yViolations(
   results: AxeResults,
   options?: { threshold?: number; ignoredRules?: string[] }
-): Promise<MatcherReturnType> {
+): MatcherReturnType {
   const threshold = options?.threshold ?? 0;
   let violations: AxeResults['violations'] = [];
   try {

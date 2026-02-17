@@ -44,11 +44,12 @@ test.describe('scanForA11yViolations', () => {
       newDiv.style.position = 'fixed'; // fixed position to ensure it is visible
       newDiv.style.top = '100px';
       newDiv.style.left = '100px';
+      newDiv.style.background = 'rgb(20, 20, 20)'; // dark gray background
       newDiv.style.color = 'rgb(10, 10, 10)'; // dark gray text on dark gray background to create a contrast issue
       document.body.appendChild(newDiv); // insert at the beginning of the body to ensure it's visible
     });
 
-    await page.waitForSelector('#playwright-inserted-element');
+    await expect(page.locator('#playwright-inserted-element')).toBeVisible();
     const report2 = await scanForA11yViolations({ runOnly: ['color-contrast'] });
     expect(report2, 'intentionally inserted contrast issue was flagged').not.toHaveNoA11yViolations();
 
