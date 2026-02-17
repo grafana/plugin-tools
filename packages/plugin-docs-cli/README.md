@@ -11,4 +11,4 @@ npx @grafana/plugin-docs-cli serve
 npx @grafana/plugin-docs-cli serve --port 3001 --reload
 ```
 
-For the core parsing library, see [@grafana/plugin-docs-renderer](../plugin-docs-renderer).
+For the core parsing library, see [@grafana/plugin-docs-parser](../plugin-docs-parser).

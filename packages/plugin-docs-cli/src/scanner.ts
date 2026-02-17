@@ -3,7 +3,7 @@ import { join, relative, parse, sep } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import createDebug from 'debug';
-import type { Manifest, Page, MarkdownFiles, Frontmatter } from '@grafana/plugin-docs-renderer';
+import type { Manifest, Page, MarkdownFiles, Frontmatter } from '@grafana/plugin-docs-parser';
 
 const debug = createDebug('plugin-docs-cli:scanner');
 

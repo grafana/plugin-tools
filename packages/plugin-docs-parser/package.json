@@ -1,5 +1,5 @@
 {
-  "name": "@grafana/plugin-docs-renderer",
+  "name": "@grafana/plugin-docs-parser",
   "version": "0.0.1",
   "private": "true",
   "description": "A lightweight library for parsing Grafana plugin documentation from markdown to HAST.",
@@ -13,7 +13,7 @@
     "CHANGELOG.md"
   ],
   "repository": {
-    "directory": "packages/plugin-docs-renderer",
+    "directory": "packages/plugin-docs-parser",
     "url": "https://github.com/grafana/plugin-tools"
   },
   "author": "Grafana",
@@ -36,7 +36,7 @@
     "plugin",
     "documentation",
     "markdown",
-    "renderer"
+    "parser"
   ],
   "bugs": {
     "url": "https://github.com/grafana/plugin-tools/issues"
