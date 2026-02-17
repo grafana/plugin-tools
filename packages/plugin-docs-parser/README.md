@@ -5,7 +5,8 @@ Lightweight library for parsing Grafana plugin documentation from markdown to HA
 ## Usage
 
 ```ts
-import { parseMarkdown, toHtml } from '@grafana/plugin-docs-parser';
+import { parseMarkdown } from '@grafana/plugin-docs-parser';
+import { toHtml } from 'hast-util-to-html';
 
 const { frontmatter, hast, headings } = parseMarkdown(markdownContent);
 const html = toHtml(hast);

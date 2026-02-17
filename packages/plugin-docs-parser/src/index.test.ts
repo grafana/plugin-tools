@@ -1,13 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { parseMarkdown, toHtml, type Manifest, type Page, type MarkdownFiles } from './index.js';
+import { parseMarkdown, type Manifest, type Page, type MarkdownFiles } from './index.js';
 
-describe('@grafana/plugin-docs-renderer', () => {
-  it('should re-export toHtml for HAST serialization', () => {
+describe('@grafana/plugin-docs-parser', () => {
+  it('should export parseMarkdown', () => {
     const result = parseMarkdown('# Hello');
-    const html = toHtml(result.hast);
-
-    expect(html).toContain('<h1');
-    expect(html).toContain('Hello');
+    expect(result.hast).toBeDefined();
+    expect(result.frontmatter).toBeDefined();
+    expect(result.headings).toBeDefined();
   });
 
   it('should export core types', () => {

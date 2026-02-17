@@ -51,6 +51,7 @@
     "debug": "^4.3.7",
     "ejs": "^4.0.1",
     "express": "^4.18.0",
+    "hast-util-to-html": "^9.0.0",
     "github-slugger": "^1.5.0",
     "gray-matter": "^4.0.3",
     "minimist": "^1.2.8"

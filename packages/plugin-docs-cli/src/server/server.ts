@@ -3,7 +3,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
-import { parseMarkdown, toHtml, type Manifest, type Page, type MarkdownFiles } from '@grafana/plugin-docs-parser';
+import { parseMarkdown, type Manifest, type Page, type MarkdownFiles } from '@grafana/plugin-docs-parser';
+import { toHtml } from 'hast-util-to-html';
 import { scanDocsFolder } from '../scanner.js';
 
 const __filename = fileURLToPath(import.meta.url);

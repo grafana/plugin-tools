@@ -36,8 +36,8 @@ export interface ParsedMarkdown {
 
   /**
    * The parsed content as an HTML Abstract Syntax Tree (HAST).
-   * Use `toHtml()` from `hast-util-to-html` (re-exported from this package)
-   * to serialize to an HTML string, or `toJsxRuntime()` from
+   * Use `toHtml()` from `hast-util-to-html` to serialize to an HTML string,
+   * or `toJsxRuntime()` from
    * `hast-util-to-jsx-runtime` for React rendering.
    */
   hast: HastRoot;
