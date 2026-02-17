@@ -16,7 +16,8 @@ export async function toHaveNoA11yViolations(
     return {
       pass: true,
       expected: threshold,
-      message: () => `Fewer than ${threshold} Axe violations found.`,
+      message: () =>
+        `No more than ${threshold} Axe violations found (actual: ${violations.length}).`,
     };
   } catch (err: unknown) {
     let message = err instanceof Error ? err.toString() : 'Unknown error';
