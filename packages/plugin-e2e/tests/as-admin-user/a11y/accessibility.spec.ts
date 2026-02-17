@@ -42,11 +42,13 @@ test.describe('scanForA11yViolations', () => {
       newDiv.id = 'playwright-inserted-element';
       newDiv.textContent = 'Hello world!';
       newDiv.style.position = 'fixed'; // fixed position to ensure it is visible
-      newDiv.style.top = '100px';
-      newDiv.style.left = '100px';
+      newDiv.style.zIndex = '99999'; // very high z-index to ensure it is on top of other elements
+      newDiv.style.top = window.innerHeight / 2 + 'px'; // vertically centered
+      newDiv.style.left = window.innerWidth / 2 + 'px'; // horizontally centered
       newDiv.style.background = 'rgb(20, 20, 20)'; // dark gray background
       newDiv.style.color = 'rgb(10, 10, 10)'; // dark gray text on dark gray background to create a contrast issue
-      document.body.appendChild(newDiv); // insert at the beginning of the body to ensure it's visible
+      const insertRoot = document.body.querySelector('#root') || document.body; // try to insert within the root element if it exists, otherwise fall back to body
+      insertRoot.appendChild(newDiv); // insert at the beginning of the body to ensure it's visible
     });
 
     await expect(page.locator('#playwright-inserted-element')).toBeVisible();
