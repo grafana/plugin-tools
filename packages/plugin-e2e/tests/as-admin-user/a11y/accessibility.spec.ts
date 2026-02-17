@@ -51,7 +51,7 @@ test.describe('scanForA11yViolations', () => {
     expect(report2, 'ignoring the rule passes the assertion').toHaveNoA11yViolations({
       ignoredRules: ['color-contrast'],
     });
-    expect(report2, 'ignoring a different rule rule fails the assertion').not.toHaveNoA11yViolations({
+    expect(report2, 'ignoring a different rule fails the assertion').not.toHaveNoA11yViolations({
       ignoredRules: ['region'],
     });
     expect(report2, 'threshold of 0 fails the assertion').not.toHaveNoA11yViolations({
