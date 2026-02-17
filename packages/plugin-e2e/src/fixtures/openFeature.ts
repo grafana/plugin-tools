@@ -147,11 +147,6 @@ export async function setupOpenFeatureRoutes(
   latency: number,
   selectors: PlaywrightArgs['selectors']
 ): Promise<void> {
-  console.log('@grafana/plugin-e2e: setting up OpenFeature OFREP interception', {
-    openFeature,
-    latency,
-  });
-
   // intercept bulk evaluation endpoint
   await page.route(selectors.apis.OpenFeature.ofrepBulkPattern, async (route) => {
     await handleBulkEvaluationRoute(route, openFeature, latency);
