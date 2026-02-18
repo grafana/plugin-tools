@@ -8,6 +8,7 @@
       "cache": true
     },
     "typecheck": {
+      "dependsOn": ["^build"],
       "inputs": ["default", "{projectRoot}/tsconfig.json", "{workspaceRoot}/tsconfig.base.json"],
       "cache": true
     },
