@@ -1,10 +1,9 @@
 import { MatcherReturnType } from '@playwright/test';
 import { AxeResults } from 'axe-core';
 
-export function toHaveNoA11yViolations(
-  results: AxeResults,
-  options?: { threshold?: number; ignoredRules?: string[] }
-): MatcherReturnType {
+import { A11yViolationsOptions } from '../types';
+
+export function toHaveNoA11yViolations(results: AxeResults, options?: A11yViolationsOptions): MatcherReturnType {
   const threshold = options?.threshold ?? 0;
   const violations = results.violations.filter((violation) => !options?.ignoredRules?.includes(violation.id));
 

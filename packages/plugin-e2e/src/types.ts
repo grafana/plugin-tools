@@ -826,6 +826,14 @@ export interface UserPreferences {
 }
 
 /**
+ * Accessibility violations options
+ */
+export interface A11yViolationsOptions {
+  threshold?: number;
+  ignoredRules?: string[];
+}
+
+/**
  * Panel visualization types
  */
 export type Visualization =
