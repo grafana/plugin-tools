@@ -2,7 +2,7 @@
 const isActive = page.slug === currentPath;
 const hasChildren = page.children && page.children.length > 0;
 const hasFile = page.file && page.file.length > 0;
-const safeHref = '/' + String(page.slug).split('/').map(s => encodeURIComponent(s)).join('/');
+const href = '/' + page.slug;
 -%>
 <li class="docs-nav-item<%= hasChildren ? ' collapsible' : '' %>">
   <% if (hasChildren) { %>
@@ -13,7 +13,7 @@ const safeHref = '/' + String(page.slug).split('/').map(s => encodeURIComponent(
   </button>
   <% } %>
   <% if (hasFile) { %>
-  <a href="<%= safeHref %>" class="docs-nav-link<%= isActive ? ' active' : '' %>"><%= page.title %></a>
+  <a href="<%= href %>" class="docs-nav-link<%= isActive ? ' active' : '' %>"><%= page.title %></a>
   <% } else { %>
   <span class="docs-nav-label"><%= page.title %></span>
   <% } %>
