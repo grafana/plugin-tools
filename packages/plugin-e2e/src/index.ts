@@ -79,6 +79,7 @@ export * from './types';
 
 // helper functions
 export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
+export { DEFAULT_A11Y_TAGS } from './fixtures/scanForA11yViolations';
 
 // first extend with internal fixtures (not exposed to tests)
 const testWithInternal = base.extend<InternalFixtures>({

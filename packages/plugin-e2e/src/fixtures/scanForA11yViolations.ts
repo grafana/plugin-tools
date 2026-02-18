@@ -10,6 +10,7 @@ export const scanForA11yViolations: TestFixture<
   (options?: AxeRunOptions) => Promise<AxeResults>,
   PlaywrightArgs
 > = async ({ page }, use, testInfo) => {
+  let inc = 1;
   await use(async (options?: AxeRunOptions) => {
     const builder = new AxeBuilder({ page }).withTags(DEFAULT_A11Y_TAGS);
     if (options) {
@@ -18,7 +19,7 @@ export const scanForA11yViolations: TestFixture<
 
     const accessibilityScanResults = await builder.analyze();
 
-    testInfo.attach('axe', {
+    testInfo.attach(`axe-${inc++}`, {
       body: JSON.stringify(accessibilityScanResults, null, 2),
       contentType: 'application/json',
     });
