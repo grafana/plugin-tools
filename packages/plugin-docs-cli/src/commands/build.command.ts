@@ -7,19 +7,15 @@ import { scanDocsFolder } from '../scanner.js';
 const debug = createDebug('plugin-docs-cli:build');
 
 /**
- * Builds plugin documentation for publishing.
+ * Core build logic. Exported for testing.
  *
- * Scans the docs folder, generates a manifest from the filesystem structure
- * and copies everything to dist/ for inclusion in the plugin archive.
- *
- * @param projectRoot - The root directory of the plugin project (defaults to cwd)
+ * @param projectRoot - The root directory of the plugin project
  */
-export async function build(projectRoot?: string): Promise<void> {
-  const root = projectRoot || process.cwd();
-  debug('Build command invoked with projectRoot: %s', root);
+export async function buildDocs(projectRoot: string): Promise<void> {
+  debug('Build invoked with projectRoot: %s', projectRoot);
 
   // resolve docs path from plugin.json
-  const docsPath = await resolveDocsPath(root);
+  const docsPath = await resolveDocsPath(projectRoot);
 
   // validate docs path exists
   try {
@@ -34,8 +30,8 @@ export async function build(projectRoot?: string): Promise<void> {
   const { manifest } = await scanDocsFolder(docsPath);
 
   // determine output directory: dist/{relative docsPath}/
-  const relativeDocsPath = relative(root, docsPath);
-  const outputDir = join(root, 'dist', relativeDocsPath);
+  const relativeDocsPath = relative(projectRoot, docsPath);
+  const outputDir = join(projectRoot, 'dist', relativeDocsPath);
   debug('Output directory: %s', outputDir);
 
   // clean and recreate output directory
@@ -58,4 +54,17 @@ export async function build(projectRoot?: string): Promise<void> {
   console.log(`\n📦 Documentation built successfully`);
   console.log(`✓ Pages: ${countPages(manifest.pages)}`);
   console.log(`✓ Output: ${outputDir}\n`);
+}
+
+/**
+ * CLI entry point for the build command.
+ * Handles errors and exits with appropriate codes.
+ */
+export async function build(): Promise<void> {
+  try {
+    await buildDocs(process.cwd());
+  } catch (error) {
+    console.error(`Error: ${error instanceof Error ? error.message : error}`);
+    process.exit(1);
+  }
 }
