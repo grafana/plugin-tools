@@ -826,6 +826,7 @@ export interface UserPreferences {
 }
 
 /**
+ * @alpha - the API for accessibility scanning is still being finalized and may change in future releases. Feedback is welcome!
  * Accessibility violations options
  */
 export interface A11yViolationsOptions {

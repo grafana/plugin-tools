@@ -3,6 +3,12 @@ import { AxeResults } from 'axe-core';
 
 import { A11yViolationsOptions } from '../types';
 
+/**
+ * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+ * @param {AxeResults} results  - The results from an Axe accessibility scan.
+ * @param {A11yViolationsOptions} options - Options for configuring the accessibility violations check.
+ * @returns {MatcherReturnType} - The result of the accessibility violations check.
+ */
 export function toHaveNoA11yViolations(results: AxeResults, options?: A11yViolationsOptions): MatcherReturnType {
   const threshold = options?.threshold ?? 0;
   const violations = results.violations.filter((violation) => !options?.ignoredRules?.includes(violation.id));
