@@ -1,0 +1,27 @@
+<%
+const isActive = page.slug === currentPath;
+const hasChildren = page.children && page.children.length > 0;
+const hasFile = page.file && page.file.length > 0;
+const href = '/' + page.slug;
+-%>
+<li class="docs-nav-item<%= hasChildren ? ' collapsible' : '' %>">
+  <% if (hasChildren) { %>
+  <button class="docs-nav-toggle" aria-label="Toggle section">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <% } %>
+  <% if (hasFile) { %>
+  <a href="<%= href %>" class="docs-nav-link<%= isActive ? ' active' : '' %>"><%= page.title %></a>
+  <% } else { %>
+  <span class="docs-nav-label"><%= page.title %></span>
+  <% } %>
+  <% if (hasChildren) { %>
+  <ul class="docs-nav-list">
+    <% page.children.forEach(child => { %>
+    <%- include('navigation-item', { page: child, currentPath }) %>
+    <% }) %>
+  </ul>
+  <% } %>
+</li>

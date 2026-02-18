@@ -1,0 +1,5 @@
+<ul class="docs-nav-list">
+  <% pages.forEach(page => { %>
+  <%- include('navigation-item', { page, currentPath }) %>
+  <% }) %>
+</ul>
