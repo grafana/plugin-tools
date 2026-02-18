@@ -76,7 +76,9 @@ export function findSecretInternals(ast: TSESTree.Program, code: string): Patter
       node &&
       node.type === 'MemberExpression' &&
       node.property.type === 'Identifier' &&
-      node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED'
+      node.property.name === '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED' &&
+      // Exclude optional chaining like React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?.ReactCurrentDispatcher
+      !node.optional
     ) {
       matches.push(createPatternMatch(node, '__SECRET_INTERNALS', code));
     }
