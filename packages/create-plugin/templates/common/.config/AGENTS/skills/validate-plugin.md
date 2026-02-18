@@ -7,22 +7,22 @@ Always use the bash commands below directly. Do NOT use MCP tools for validation
 ## Usage
 
 ```
-/validate-plugin [path-to-plugin-dir]
+/validate-plugin
 ```
 
-If no path is provided, defaults to the current directory.
+Run this from the root of your plugin directory.
 
 ## Steps
 
 1. Check if `npx` or `docker` is available. npx is preferred, docker is the fallback:
    ```bash
-   command -v npx >/dev/null 2>&1 && echo "VALIDATOR=npx" || { command -v docker >/dev/null 2>&1 && echo "VALIDATOR=docker"; } || echo "VALIDATOR=none"
+   VALIDATOR=$(command -v npx >/dev/null 2>&1 && echo "npx" || (command -v docker >/dev/null 2>&1 && echo "docker" || echo "none"))
    ```
-   If neither is found (`VALIDATOR=none`), stop immediately and tell the user: "Neither npx nor docker is installed. Please install Node.js (for npx) or Docker to run the plugin validator."
+   If `VALIDATOR` is `none`, stop immediately and tell the user: "Neither npx nor docker is installed. Please install Node.js (for npx) or Docker to run the plugin validator."
 
-2. Find `src/plugin.json` (or `plugin.json`) in the plugin directory and extract the plugin ID and whether it has a backend:
+2. Find `src/plugin.json` (or `plugin.json`) in the plugin directory and extract the plugin ID and whether it has a backend. Sanitize `PLUGIN_ID` to only allow characters valid in a Grafana plugin ID:
    ```bash
-   PLUGIN_ID=$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')
+   PLUGIN_ID=$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/' | tr -cd 'a-zA-Z0-9._-')
    HAS_BACKEND=$(grep -c '"backend" *: *true' src/plugin.json || true)
    ```
 
@@ -49,16 +49,16 @@ If no path is provided, defaults to the current directory.
    rm -rf "${PLUGIN_ID}"
    ```
 
-6. Run the validator with JSON output using whichever tool was found in step 1:
-   If npx (preferred):
+6. Run the validator with JSON output using `$VALIDATOR` from step 1:
+   If `$VALIDATOR` is `npx`:
    ```bash
    npx -y @grafana/plugin-validator@latest -jsonOutput -sourceCodeUri file://. "${ZIP_NAME}"
    ```
-   If docker (fallback):
+   If `$VALIDATOR` is `docker`:
    ```bash
    docker run --pull=always \
-     -v "$(pwd)/${ZIP_NAME}:/archive.zip:ro" \
-     -v "$(pwd):/source:ro" \
+     -v "${PWD}/${ZIP_NAME}:/archive.zip:ro" \
+     -v "${PWD}:/source:ro" \
      grafana/plugin-validator-cli -jsonOutput -sourceCodeUri file:///source /archive.zip
    ```
 
