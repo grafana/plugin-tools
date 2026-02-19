@@ -23,7 +23,12 @@ export async function resolveDocsPath(projectRoot?: string): Promise<string> {
     throw new Error(`Could not find src/plugin.json in ${root}`);
   }
 
-  const pluginJson: { docsPath?: string } = JSON.parse(raw);
+  let pluginJson: { docsPath?: string };
+  try {
+    pluginJson = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`Failed to parse ${pluginJsonPath}: ${error instanceof Error ? error.message : error}`);
+  }
 
   if (!pluginJson.docsPath) {
     throw new Error('"docsPath" is not set in src/plugin.json');
