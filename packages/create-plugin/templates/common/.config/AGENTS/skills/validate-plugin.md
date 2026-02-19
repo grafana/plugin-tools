@@ -16,9 +16,9 @@ Run this from the root of your plugin directory.
 
 1. Check if `npx` or `docker` is available. npx is preferred, docker is the fallback:
    ```bash
-   VALIDATOR=$(command -v npx >/dev/null 2>&1 && echo "npx" || (command -v docker >/dev/null 2>&1 && echo "docker" || echo "none"))
+   RUN_ENGINE=$(command -v npx >/dev/null 2>&1 && echo "npx" || (command -v docker >/dev/null 2>&1 && echo "docker" || echo "none"))
    ```
-   If `VALIDATOR` is `none`, stop immediately and tell the user: "Neither npx nor docker is installed. Please install Node.js (for npx) or Docker to run the plugin validator."
+   If `RUN_ENGINE` is `none`, stop immediately and tell the user: "Neither npx nor docker is installed. Please install Node.js (for npx) or Docker to run the plugin validator."
 
 2. Find `src/plugin.json` (or `plugin.json`) in the plugin directory and extract the plugin ID and whether it has a backend. Sanitize `PLUGIN_ID` to only allow characters valid in a Grafana plugin ID:
    ```bash
@@ -49,12 +49,12 @@ Run this from the root of your plugin directory.
    rm -rf "${PLUGIN_ID}"
    ```
 
-6. Run the validator with JSON output using `$VALIDATOR` from step 1:
-   If `$VALIDATOR` is `npx`:
+6. Run the validator with JSON output using `$RUN_ENGINE` from step 1:
+   If `$RUN_ENGINE` is `npx`:
    ```bash
    npx -y @grafana/plugin-validator@latest -jsonOutput -sourceCodeUri file://. "${ZIP_NAME}"
    ```
-   If `$VALIDATOR` is `docker`:
+   If `$RUN_ENGINE` is `docker`:
    ```bash
    docker run --pull=always \
      -v "${PWD}/${ZIP_NAME}:/archive.zip:ro" \
