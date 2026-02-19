@@ -2,15 +2,15 @@
 
 * @grafana/plugins-platform-frontend @grafana/grafana-frontend-platform
 
-/packages/create-plugin @grafana/grafana-frontend-platform
-/packages/eslint-plugin-plugins @grafana/plugins-platform-frontend
-/packages/plugin-docs-parser @grafana/plugins-platform-frontend
-/packages/plugin-docs-cli @grafana/plugins-platform-frontend
-/packages/plugin-e2e @grafana/plugins-platform-frontend
-/packages/plugin-types-bundler @grafana/plugins-platform-frontend
-/packages/react-detect @grafana/grafana-frontend-platform
-/packages/sign-plugin @grafana/plugins-platform-frontend
-/packages/tsconfig @grafana/grafana-frontend-platform
+/packages/create-plugin/ @grafana/grafana-frontend-platform
+/packages/eslint-plugin-plugins/ @grafana/plugins-platform-frontend
+/packages/plugin-docs-parser/ @grafana/plugins-platform-frontend
+/packages/plugin-docs-cli/ @grafana/plugins-platform-frontend
+/packages/plugin-e2e/ @grafana/plugins-platform-frontend
+/packages/plugin-types-bundler/ @grafana/plugins-platform-frontend
+/packages/react-detect/ @grafana/grafana-frontend-platform
+/packages/sign-plugin/ @grafana/plugins-platform-frontend
+/packages/tsconfig/ @grafana/grafana-frontend-platform
 
-/docusaurus/website @grafana/grafana-frontend-platform
-/docusuarus/docs @grafana/grafana-frontend-platform @grafana/docs-squad
+/docusaurus/website/ @grafana/grafana-frontend-platform
+/docusuarus/docs/ @grafana/grafana-frontend-platform @grafana/docs-squad
