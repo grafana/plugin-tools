@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
-import { resolveDocsPath } from './serve.command.js';
+import { resolveDocsPath } from './utils.plugin.js';
 
 describe('resolveDocsPath', () => {
   const fixturesPath = join(__dirname, '..', '__fixtures__');

@@ -2,6 +2,7 @@
 import minimist from 'minimist';
 import createDebug from 'debug';
 import { serve } from '../commands/serve.command.js';
+import { build } from '../commands/build.command.js';
 
 const debug = createDebug('plugin-docs-cli:main');
 
@@ -17,6 +18,7 @@ async function main() {
     console.error('');
     console.error('Commands:');
     console.error('  serve   Start the local docs preview server');
+    console.error('  build   Build docs for publishing (generates manifest, copies to dist/)');
     process.exit(1);
   }
 
@@ -35,6 +37,10 @@ async function main() {
         },
       });
       await serve(serveArgv);
+      break;
+    }
+    case 'build': {
+      await build();
       break;
     }
     default:
