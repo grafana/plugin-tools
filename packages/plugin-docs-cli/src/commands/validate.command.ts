@@ -11,5 +11,5 @@ export async function validateCommand(docsPath: string): Promise<void> {
 
   console.log(JSON.stringify(result, null, 2));
 
-  process.exit(result.valid ? 0 : 1);
+  process.exitCode = result.valid ? 0 : 1;
 }
