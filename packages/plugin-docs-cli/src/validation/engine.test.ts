@@ -66,7 +66,7 @@ describe('validate', () => {
     expect(result.diagnostics).toHaveLength(1);
   });
 
-  it('should ignore findings with unknown rule ids', async () => {
+  it('should throw when a finding references an unknown rule id', async () => {
     const rules: RuleCategory[] = [
       {
         definitions: [{ id: 'known', severity: 'error' }],
@@ -77,8 +77,6 @@ describe('validate', () => {
       },
     ];
 
-    const result = await validate(input, rules);
-    expect(result.diagnostics).toHaveLength(1);
-    expect(result.diagnostics[0].rule).toBe('known');
+    await expect(validate(input, rules)).rejects.toThrow('Unknown rule id encountered during validation: unknown');
   });
 });
