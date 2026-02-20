@@ -29,7 +29,7 @@ export async function validate(input: ValidationInput, rules: RuleCategory[]): P
   for (const finding of allFindings) {
     const def = definitionMap.get(finding.rule);
     if (!def) {
-      continue;
+      throw new Error(`Unknown rule id encountered during validation: ${finding.rule}`);
     }
 
     diagnostics.push({ ...finding, severity: def.severity });
