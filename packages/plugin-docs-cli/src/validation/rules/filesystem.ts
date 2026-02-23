@@ -1,20 +1,9 @@
 import { access, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { Finding, RuleDefinition, ValidationInput } from '../types.js';
+import type { Diagnostic, ValidationInput } from '../types.js';
 
-export const filesystemDefinitions: RuleDefinition[] = [
-  {
-    id: 'root-index-exists',
-    severity: 'error',
-  },
-  {
-    id: 'has-markdown-files',
-    severity: 'error',
-  },
-];
-
-export async function checkFilesystem(input: ValidationInput): Promise<Finding[]> {
-  const findings: Finding[] = [];
+export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
+  const diagnostics: Diagnostic[] = [];
 
   // check for at least one .md file
   let hasMarkdown = false;
@@ -26,8 +15,9 @@ export async function checkFilesystem(input: ValidationInput): Promise<Finding[]
   }
 
   if (!hasMarkdown) {
-    findings.push({
+    diagnostics.push({
       rule: 'has-markdown-files',
+      severity: 'error',
       title: 'Docs folder must contain at least one .md file',
       detail:
         'The docs folder must contain at least one markdown file. Add markdown files with valid frontmatter to get started.',
@@ -38,13 +28,14 @@ export async function checkFilesystem(input: ValidationInput): Promise<Finding[]
   try {
     await access(join(input.docsPath, 'index.md'));
   } catch {
-    findings.push({
+    diagnostics.push({
       rule: 'root-index-exists',
+      severity: 'error',
       title: 'Root index.md must exist',
       detail:
         'The docs folder must contain an index.md file at its root. This serves as the landing page for your plugin documentation.',
     });
   }
 
-  return findings;
+  return diagnostics;
 }

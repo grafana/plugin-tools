@@ -1,30 +1,15 @@
 export type Severity = 'error' | 'warning' | 'info';
 
 /**
- * A finding from a rule check - no severity attached.
- * The engine stamps severity based on the rule definition.
+ * A diagnostic reported by a rule runner.
  */
-export interface Finding {
+export interface Diagnostic {
   rule: string;
+  severity: Severity;
   file?: string;
   line?: number;
   title: string;
   detail: string;
-}
-
-/**
- * A diagnostic is a finding with severity stamped by the engine.
- */
-export interface Diagnostic extends Finding {
-  severity: Severity;
-}
-
-/**
- * Metadata for a single validation rule.
- */
-export interface RuleDefinition {
-  id: string;
-  severity: Severity;
 }
 
 /**
@@ -43,6 +28,6 @@ export interface ValidationResult {
 }
 
 /**
- * A function that checks rules and returns findings.
+ * A function that checks rules and returns diagnostics.
  */
-export type RuleRunner = (input: ValidationInput) => Finding[] | Promise<Finding[]>;
+export type RuleRunner = (input: ValidationInput) => Diagnostic[] | Promise<Diagnostic[]>;

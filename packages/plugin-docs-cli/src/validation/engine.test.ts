@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { validate, type RuleCategory } from './engine.js';
-import type { ValidationInput } from './types.js';
+import { validate } from './engine.js';
+import type { RuleRunner, ValidationInput } from './types.js';
 
 describe('validate', () => {
   const input: ValidationInput = { docsPath: '/fake' };
@@ -11,72 +11,45 @@ describe('validate', () => {
     expect(result.diagnostics).toEqual([]);
   });
 
-  it('should stamp severity from rule definition', async () => {
-    const rules: RuleCategory[] = [
-      {
-        definitions: [{ id: 'test-rule', severity: 'error' }],
-        run: () => [{ rule: 'test-rule', title: 'Test', detail: 'Detail' }],
-      },
-    ];
+  it('should collect diagnostics from runners', async () => {
+    const runner: RuleRunner = () => [{ rule: 'test-rule', severity: 'error', title: 'Test', detail: 'Detail' }];
 
-    const result = await validate(input, rules);
+    const result = await validate(input, [runner]);
+    expect(result.diagnostics).toHaveLength(1);
     expect(result.diagnostics[0].severity).toBe('error');
   });
 
   it('should set valid to false when any diagnostic is an error', async () => {
-    const rules: RuleCategory[] = [
-      {
-        definitions: [{ id: 'err', severity: 'error' }],
-        run: () => [{ rule: 'err', title: 'Bad', detail: '' }],
-      },
-    ];
+    const runner: RuleRunner = () => [{ rule: 'err', severity: 'error', title: 'Bad', detail: '' }];
 
-    const result = await validate(input, rules);
+    const result = await validate(input, [runner]);
     expect(result.valid).toBe(false);
   });
 
   it('should set valid to true when all diagnostics are warnings or info', async () => {
-    const rules: RuleCategory[] = [
-      {
-        definitions: [
-          { id: 'w', severity: 'warning' },
-          { id: 'i', severity: 'info' },
-        ],
-        run: () => [
-          { rule: 'w', title: 'Warn', detail: '' },
-          { rule: 'i', title: 'Info', detail: '' },
-        ],
-      },
+    const runner: RuleRunner = () => [
+      { rule: 'w', severity: 'warning', title: 'Warn', detail: '' },
+      { rule: 'i', severity: 'info', title: 'Info', detail: '' },
     ];
 
-    const result = await validate(input, rules);
+    const result = await validate(input, [runner]);
     expect(result.valid).toBe(true);
     expect(result.diagnostics).toHaveLength(2);
   });
 
   it('should handle async rule runners', async () => {
-    const rules: RuleCategory[] = [
-      {
-        definitions: [{ id: 'async-rule', severity: 'error' }],
-        run: async () => [{ rule: 'async-rule', title: 'Async', detail: '' }],
-      },
-    ];
+    const runner: RuleRunner = async () => [{ rule: 'async-rule', severity: 'error', title: 'Async', detail: '' }];
 
-    const result = await validate(input, rules);
+    const result = await validate(input, [runner]);
     expect(result.diagnostics).toHaveLength(1);
   });
 
-  it('should throw when a finding references an unknown rule id', async () => {
-    const rules: RuleCategory[] = [
-      {
-        definitions: [{ id: 'known', severity: 'error' }],
-        run: () => [
-          { rule: 'unknown', title: 'Ghost', detail: '' },
-          { rule: 'known', title: 'Real', detail: '' },
-        ],
-      },
-    ];
+  it('should collect diagnostics from multiple runners', async () => {
+    const runner1: RuleRunner = () => [{ rule: 'a', severity: 'error', title: 'A', detail: '' }];
+    const runner2: RuleRunner = () => [{ rule: 'b', severity: 'warning', title: 'B', detail: '' }];
 
-    await expect(validate(input, rules)).rejects.toThrow('Unknown rule id encountered during validation: unknown');
+    const result = await validate(input, [runner1, runner2]);
+    expect(result.diagnostics).toHaveLength(2);
+    expect(result.valid).toBe(false);
   });
 });

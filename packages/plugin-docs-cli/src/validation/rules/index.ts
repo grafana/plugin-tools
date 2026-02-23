@@ -1,7 +1,4 @@
-import type { RuleCategory } from '../engine.js';
-import { filesystemDefinitions, checkFilesystem } from './filesystem.js';
+import type { RuleRunner } from '../types.js';
+import { checkFilesystem } from './filesystem.js';
 
-/**
- * All registered rule categories.
- */
-export const allRules: RuleCategory[] = [{ definitions: filesystemDefinitions, run: checkFilesystem }];
+export const allRules: RuleRunner[] = [checkFilesystem];
