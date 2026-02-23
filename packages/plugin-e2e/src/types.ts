@@ -432,9 +432,25 @@ export type PluginFixture = {
    *
    * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
    */
-  scanForA11yViolations: (options?: AxeRunOptions) => Promise<AxeResults>;
+  scanForA11yViolations: (context?: AxeRunOptions | AxeScanContext) => Promise<AxeResults>;
 };
 
+export type AxeScanContext = {
+  /**
+   * axe-core run options used to customize which rules and checks are executed.
+   */
+  options?: AxeRunOptions;
+  /**
+   * A CSS selector or Playwright Locator (or an array of them) that defines which part
+   * of the page should be included in the accessibility scan.
+   */
+  include?: string | Locator | Array<string | Locator>;
+  /**
+   * A CSS selector or Playwright Locator (or an array of them) that defines what should be
+   * excluded from the accessibility scan.
+   */
+  exclude?: string | Locator | Array<string | Locator>;
+};
 /**
  * The context object passed to page object models
  */
