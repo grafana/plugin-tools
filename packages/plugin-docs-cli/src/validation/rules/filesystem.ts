@@ -2,6 +2,9 @@ import { access, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Diagnostic, ValidationInput } from '../types.js';
 
+const RULE_HAS_MARKDOWN = 'has-markdown-files';
+const RULE_ROOT_INDEX = 'root-index-exists';
+
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
@@ -16,7 +19,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
 
   if (!hasMarkdown) {
     diagnostics.push({
-      rule: 'has-markdown-files',
+      rule: RULE_HAS_MARKDOWN,
       severity: 'error',
       title: 'Docs folder must contain at least one .md file',
       detail:
@@ -29,7 +32,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     await access(join(input.docsPath, 'index.md'));
   } catch {
     diagnostics.push({
-      rule: 'root-index-exists',
+      rule: RULE_ROOT_INDEX,
       severity: 'error',
       title: 'Root index.md must exist',
       detail:
