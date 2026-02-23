@@ -1,4 +1,5 @@
 import { test as base, expect as baseExpect, Locator } from '@playwright/test';
+import type { AxeResults } from 'axe-core';
 
 import {
   AlertPageOptions,
@@ -7,6 +8,7 @@ import {
   InternalFixtures,
   PluginFixture,
   PluginOptions,
+  A11yViolationsOptions,
 } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
 import { grafanaAPIClient } from './fixtures/grafanaAPIClient';
@@ -199,6 +201,15 @@ declare global {
        * Asserts that a color picker has expected color selected
        */
       toHaveColor(colorPicker: ColorPicker, rgbOrHex: string, options?: { timeout?: number }): Promise<R>;
+
+      /**
+       * @alpha - the API for accessibility scanning is still being finalized and may change in future releases. Feedback is welcome!
+       * Asserts that the page has no accessibility violations.
+       * You can customize the rules that are checked by passing options to the command.
+       *
+       * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
+       */
+      toHaveNoA11yViolations(results: AxeResults, options?: A11yViolationsOptions): Promise<R>;
     }
   }
 }

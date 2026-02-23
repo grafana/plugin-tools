@@ -7,7 +7,7 @@ import {
   Response,
   TestInfo,
 } from '@playwright/test';
-import type { AxeResults, RunOptions as AxeRunOptions } from 'axe-core';
+import type { AxeResults, RunOptions as AxeRunOptions, SerialFrameSelector } from 'axe-core';
 import { SelectorsOf, versionedComponents, versionedPages } from '@grafana/e2e-selectors';
 
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
@@ -432,10 +432,13 @@ export type PluginFixture = {
    *
    * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
    */
-  scanForA11yViolations: (context?: AxeRunOptions | AxeScanContext) => Promise<AxeResults>;
+  scanForA11yViolations: (context?: AxeScanContext) => Promise<AxeResults>;
 };
 
-export type AxeScanContext = {
+/**
+ * @alpha - the API for accessibility scanning is still being finalized and may change in future releases. Feedback is welcome!
+ */
+export interface AxeScanContext {
   /**
    * axe-core run options used to customize which rules and checks are executed.
    */
@@ -444,13 +447,14 @@ export type AxeScanContext = {
    * A CSS selector or Playwright Locator (or an array of them) that defines which part
    * of the page should be included in the accessibility scan.
    */
-  include?: string | Locator | Array<string | Locator>;
+  include?: SerialFrameSelector;
   /**
    * A CSS selector or Playwright Locator (or an array of them) that defines what should be
    * excluded from the accessibility scan.
    */
-  exclude?: string | Locator | Array<string | Locator>;
-};
+  exclude?: SerialFrameSelector;
+}
+
 /**
  * The context object passed to page object models
  */
