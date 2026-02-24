@@ -192,3 +192,7 @@ npm run e2e
 {{#if_eq pluginType "panel"}}
 - E2E testing a panel plugin: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/test-a-panel-plugin/
 {{/if_eq}}
+{{#if isAppType}}
+- E2E testing an app plugin: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/test-an-app-plugin/
+{{/if}}
+
