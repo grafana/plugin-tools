@@ -6,20 +6,15 @@ import { buildDocs } from './build.command.js';
 
 describe('build', () => {
   let tmpDir: string;
+  let docsPath: string;
   const fixturesPath = join(__dirname, '..', '__fixtures__');
 
   beforeEach(async () => {
     tmpDir = await mkdtemp(join(tmpdir(), 'plugin-docs-build-'));
-
-    // set up src/plugin.json
-    await mkdir(join(tmpDir, 'src'), { recursive: true });
-    await writeFile(
-      join(tmpDir, 'src', 'plugin.json'),
-      JSON.stringify({ type: 'datasource', name: 'Test Plugin', id: 'test-plugin', docsPath: 'docs' })
-    );
+    docsPath = join(tmpDir, 'docs');
 
     // copy test-docs fixture as the docs folder
-    await cp(join(fixturesPath, 'test-docs'), join(tmpDir, 'docs'), { recursive: true });
+    await cp(join(fixturesPath, 'test-docs'), docsPath, { recursive: true });
   });
 
   afterEach(async () => {
@@ -27,7 +22,7 @@ describe('build', () => {
   });
 
   it('should generate manifest.json in the output directory', async () => {
-    await buildDocs(tmpDir);
+    await buildDocs(tmpDir, docsPath);
 
     const manifestPath = join(tmpDir, 'dist', 'docs', 'manifest.json');
     const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
@@ -39,7 +34,7 @@ describe('build', () => {
   });
 
   it('should copy markdown files preserving directory structure', async () => {
-    await buildDocs(tmpDir);
+    await buildDocs(tmpDir, docsPath);
 
     const outputDir = join(tmpDir, 'dist', 'docs');
 
@@ -53,7 +48,7 @@ describe('build', () => {
   });
 
   it('should copy non-markdown assets', async () => {
-    await buildDocs(tmpDir);
+    await buildDocs(tmpDir, docsPath);
 
     const imgPath = join(tmpDir, 'dist', 'docs', 'img', 'test.png');
     await expect(access(imgPath)).resolves.toBeUndefined();
@@ -66,13 +61,13 @@ describe('build', () => {
     await mkdir(outputDir, { recursive: true });
     await writeFile(join(outputDir, 'stale.txt'), 'should be removed');
 
-    await buildDocs(tmpDir);
+    await buildDocs(tmpDir, docsPath);
 
     await expect(access(join(outputDir, 'stale.txt'))).rejects.toThrow();
   });
 
   it('should include nested pages with children in manifest', async () => {
-    await buildDocs(tmpDir);
+    await buildDocs(tmpDir, docsPath);
 
     const manifestPath = join(tmpDir, 'dist', 'docs', 'manifest.json');
     const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
@@ -84,15 +79,6 @@ describe('build', () => {
   });
 
   it('should throw when docs path does not exist', async () => {
-    // point to a non-existent docs folder
-    await writeFile(join(tmpDir, 'src', 'plugin.json'), JSON.stringify({ docsPath: 'nonexistent' }));
-
-    await expect(buildDocs(tmpDir)).rejects.toThrow('Docs path not found');
-  });
-
-  it('should throw when plugin.json is missing', async () => {
-    await rm(join(tmpDir, 'src', 'plugin.json'));
-
-    await expect(buildDocs(tmpDir)).rejects.toThrow('Could not find src/plugin.json');
+    await expect(buildDocs(tmpDir, join(tmpDir, 'nonexistent'))).rejects.toThrow();
   });
 });
