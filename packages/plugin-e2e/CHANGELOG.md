@@ -1,3 +1,15 @@
+# v3.3.3 (Tue Feb 24 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Use right selector version for viz tab [#2479](https://github.com/grafana/plugin-tools/pull/2479) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.3.2 (Tue Feb 17 2026)
 
 #### 🐛 Bug Fix
