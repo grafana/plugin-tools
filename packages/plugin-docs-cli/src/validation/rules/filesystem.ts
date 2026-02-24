@@ -1,0 +1,44 @@
+import { access, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { Diagnostic, ValidationInput } from '../types.js';
+
+const RULE_HAS_MARKDOWN = 'has-markdown-files';
+const RULE_ROOT_INDEX = 'root-index-exists';
+
+export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
+  const diagnostics: Diagnostic[] = [];
+
+  // check for at least one .md file
+  let hasMarkdown = false;
+  try {
+    const entries = await readdir(input.docsPath, { recursive: true });
+    hasMarkdown = entries.some((entry) => entry.endsWith('.md'));
+  } catch {
+    // docsPath doesn't exist or isn't readable - will be caught by has-markdown-files
+  }
+
+  if (!hasMarkdown) {
+    diagnostics.push({
+      rule: RULE_HAS_MARKDOWN,
+      severity: 'error',
+      title: 'Docs folder must contain at least one .md file',
+      detail:
+        'The docs folder must contain at least one markdown file. Add markdown files with valid frontmatter to get started.',
+    });
+  }
+
+  // check for root index.md
+  try {
+    await access(join(input.docsPath, 'index.md'));
+  } catch {
+    diagnostics.push({
+      rule: RULE_ROOT_INDEX,
+      severity: 'error',
+      title: 'Root index.md must exist',
+      detail:
+        'The docs folder must contain an index.md file at its root. This serves as the landing page for your plugin documentation.',
+    });
+  }
+
+  return diagnostics;
+}

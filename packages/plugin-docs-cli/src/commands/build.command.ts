@@ -1,30 +1,18 @@
-import { access, cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import createDebug from 'debug';
-import { resolveDocsPath } from '../utils/utils.plugin.js';
 import { scanDocsFolder } from '../scanner.js';
 
 const debug = createDebug('plugin-docs-cli:build');
 
 /**
- * Core build logic. Exported for testing.
+ * Core build logic.
  *
  * @param projectRoot - The root directory of the plugin project
+ * @param docsPath - Resolved absolute path to the docs directory
  */
-export async function buildDocs(projectRoot: string): Promise<void> {
-  debug('Build invoked with projectRoot: %s', projectRoot);
-
-  // resolve docs path from plugin.json
-  const docsPath = await resolveDocsPath(projectRoot);
-
-  // validate docs path exists
-  try {
-    await access(docsPath);
-  } catch {
-    throw new Error(
-      `Docs path not found: ${docsPath}\nCheck that the "docsPath" in src/plugin.json points to an existing directory.`
-    );
-  }
+export async function buildDocs(projectRoot: string, docsPath: string): Promise<void> {
+  debug('Build invoked with projectRoot: %s, docsPath: %s', projectRoot, docsPath);
 
   // scan docs folder and generate manifest
   const { manifest } = await scanDocsFolder(docsPath);
@@ -54,17 +42,4 @@ export async function buildDocs(projectRoot: string): Promise<void> {
   console.log(`\n📦 Documentation built successfully`);
   console.log(`✓ Pages: ${countPages(manifest.pages)}`);
   console.log(`✓ Output: ${outputDir}\n`);
-}
-
-/**
- * CLI entry point for the build command.
- * Handles errors and exits with appropriate codes.
- */
-export async function build(): Promise<void> {
-  try {
-    await buildDocs(process.cwd());
-  } catch (error) {
-    console.error(`Error: ${error instanceof Error ? error.message : error}`);
-    process.exit(1);
-  }
 }
