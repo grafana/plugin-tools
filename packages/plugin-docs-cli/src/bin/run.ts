@@ -65,7 +65,13 @@ async function main() {
       break;
     }
     case 'validate': {
-      await validateCommand(docsPath);
+      const validateArgv = minimist(process.argv.slice(3), {
+        boolean: ['strict'],
+        default: {
+          strict: true,
+        },
+      });
+      await validateCommand(docsPath, { strict: validateArgv.strict });
       break;
     }
     default:

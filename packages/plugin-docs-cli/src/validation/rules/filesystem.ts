@@ -69,7 +69,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     if (!hasMd) {
       diagnostics.push({
         rule: RULE_NO_EMPTY_DIR,
-        severity: 'warning',
+        severity: input.strict ? 'error' : 'warning',
         file: dirPath,
         title: 'Directory contains no markdown files',
         detail: `"${dir.name}" contains no .md files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
@@ -77,7 +77,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     }
   }
 
-  // no-spaces-in-names (error) and valid-file-naming (info): applies to file stems and dir names
+  // no-spaces-in-names (error) and valid-file-naming (strict-dependent): applies to file stems and dir names
   const namesToCheck = [
     ...mdFiles.map((e) => ({ slug: e.name.slice(0, -3), label: e.name, path: join(e.parentPath, e.name) })),
     ...dirs.map((e) => ({ slug: e.name, label: e.name, path: join(e.parentPath, e.name) })),
@@ -94,7 +94,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     } else if (!SLUG_SAFE_RE.test(item.slug)) {
       diagnostics.push({
         rule: RULE_VALID_NAMING,
-        severity: 'info',
+        severity: input.strict ? 'error' : 'warning',
         file: item.path,
         title: 'Name contains non-slug characters',
         detail: `"${item.label}" should use only lowercase letters, digits and hyphens for clean URL slugs.`,
