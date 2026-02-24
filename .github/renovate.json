@@ -116,6 +116,16 @@
     },
     {
       "automerge": false,
+      "groupName": "plugin-e2e template version",
+      "labels": ["dependencies", "javascript", "release", "patch"],
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["@grafana/plugin-e2e"],
+      "minimumReleaseAge": "0",
+      "prPriority": 10,
+      "prConcurrentLimit": 0
+    },
+    {
+      "automerge": false,
       "groupName": "create-plugin template github actions",
       "labels": ["release", "patch", "create-plugin"],
       "matchManagers": ["github-actions"],
