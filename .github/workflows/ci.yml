@@ -476,7 +476,7 @@ jobs:
           npx -y knip --config ../packed-artifacts/knip.json --reporter markdown --no-exit-code
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Failing build due to test failures (canary versions)
+      - name: Failing build due to test failures (latest versions)
         if: steps.run-e2e-tests.outcome != 'success' || steps.run-e2e-tests-min-version.outcome != 'success'
         run: exit 1
 
