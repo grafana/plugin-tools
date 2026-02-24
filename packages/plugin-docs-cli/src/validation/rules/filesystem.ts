@@ -13,6 +13,9 @@ const RULE_NO_EMPTY_DIR = 'no-empty-directories';
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
 
+// directories that are expected to contain non-markdown assets
+const ASSET_DIRS = new Set(['img']);
+
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
@@ -52,16 +55,9 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   for (const dir of dirs) {
     const dirPath = join(dir.parentPath, dir.name);
 
-    // nested-dir-has-index: subdirectories without index.md become unnamed categories
-    const hasIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === dirPath);
-    if (!hasIndex) {
-      diagnostics.push({
-        rule: RULE_NESTED_DIR_INDEX,
-        severity: 'warning',
-        file: dirPath,
-        title: 'Subdirectory is missing index.md',
-        detail: `"${dir.name}" has no index.md. Without one, it will appear as an unnamed category using a title-cased directory name.`,
-      });
+    // asset directories like img/ are expected to have no markdown
+    if (ASSET_DIRS.has(dir.name)) {
+      continue;
     }
 
     // no-empty-directories: directories with no .md files at any depth serve no purpose
@@ -73,6 +69,19 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
         file: dirPath,
         title: 'Directory contains no markdown files',
         detail: `"${dir.name}" contains no .md files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
+      });
+      continue;
+    }
+
+    // nested-dir-has-index: only relevant for dirs that have .md files but no index.md
+    const hasIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === dirPath);
+    if (!hasIndex) {
+      diagnostics.push({
+        rule: RULE_NESTED_DIR_INDEX,
+        severity: 'warning',
+        file: dirPath,
+        title: 'Subdirectory is missing index.md',
+        detail: `"${dir.name}" has no index.md. Without one, it will appear as an unnamed category using a title-cased directory name.`,
       });
     }
   }
