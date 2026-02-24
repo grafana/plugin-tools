@@ -2,7 +2,7 @@
 
 ## Important
 
-Always use the bash commands below directly. Do NOT use MCP tools for validation.
+Always use the bash commands below directly.
 
 ## Usage
 
@@ -39,7 +39,7 @@ Run this from the root of your plugin directory.
 5. Run the validator with JSON output using `$RUN_ENGINE` from step 1 and `$ZIP_NAME` from step 4:
    If `$RUN_ENGINE` is `npx`:
    ```bash
-   npx -y @grafana/plugin-validator@latest -jsonOutput "${ZIP_NAME}"
+   npx -y @grafana/plugin-validator@latest -jsonOutput $ZIP_NAME
    ```
    If `$RUN_ENGINE` is `docker`:
    ```bash
