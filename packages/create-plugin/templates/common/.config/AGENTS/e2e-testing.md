@@ -6,6 +6,7 @@ This plugin uses `@grafana/plugin-e2e` and Playwright for end-to-end testing.
 - Always use `@grafana/plugin-e2e` fixtures and page models instead of raw Playwright navigation. They handle Grafana version differences automatically.
 - Place test files in `tests/` as `*.spec.ts`.
 - Each test must be independent and assume fresh state.
+- If tests fail against newer Grafana versions, update `@grafana/plugin-e2e` first. It evolves alongside Grafana core to handle selector and API changes.
 
 ## Selecting elements
 
