@@ -183,17 +183,3 @@ GRAFANA_IMAGE=grafana-dev GRAFANA_VERSION=12.4.0-211043112277 npm run server
 # terminal 2
 npm run e2e
 ```
-
-## Documentation
-
-- E2E testing guide: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin
-{{#if_eq pluginType "datasource"}}
-- E2E testing a datasource plugin: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/test-a-data-source-plugin/
-{{/if_eq}}
-{{#if_eq pluginType "panel"}}
-- E2E testing a panel plugin: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/test-a-panel-plugin/
-{{/if_eq}}
-{{#if isAppType}}
-- E2E testing an app plugin: https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/test-an-app-plugin/
-{{/if}}
-
