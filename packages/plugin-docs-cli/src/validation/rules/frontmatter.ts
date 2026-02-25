@@ -1,16 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import matter from 'gray-matter';
-import type { Diagnostic, ValidationInput } from '../types.js';
-
-const RULE_BLOCK_EXISTS = 'frontmatter-block-exists';
-const RULE_VALID_YAML = 'frontmatter-valid-yaml';
-const RULE_REQUIRED_FIELDS = 'frontmatter-required-fields';
-const RULE_FIELD_TYPES = 'frontmatter-field-types';
-const RULE_VALID_SLUG = 'frontmatter-valid-slug';
-const RULE_NO_H1 = 'no-h1-heading';
-const RULE_DUPLICATE_POSITION = 'no-duplicate-sidebar-position';
-const RULE_DUPLICATE_SLUG = 'no-duplicate-slugs';
+import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 
 const REQUIRED_FIELDS: Array<{ key: string; type: string }> = [
   { key: 'title', type: 'string' },
@@ -115,7 +106,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     // frontmatter-block-exists: file must start with ---
     if (!raw.startsWith('---')) {
       diagnostics.push({
-        rule: RULE_BLOCK_EXISTS,
+        rule: Rule.BlockExists,
         severity: 'error',
         file: relativePath,
         line: 1,
@@ -131,7 +122,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       ({ data } = matter(raw));
     } catch (err) {
       diagnostics.push({
-        rule: RULE_VALID_YAML,
+        rule: Rule.ValidYaml,
         severity: 'error',
         file: relativePath,
         line: 1,
@@ -145,7 +136,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     for (const { key, type } of REQUIRED_FIELDS) {
       if (!(key in data)) {
         diagnostics.push({
-          rule: RULE_REQUIRED_FIELDS,
+          rule: Rule.RequiredFields,
           severity: 'error',
           file: relativePath,
           line: 1,
@@ -154,7 +145,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
         });
       } else if (typeof data[key] !== type) {
         diagnostics.push({
-          rule: RULE_FIELD_TYPES,
+          rule: Rule.FieldTypes,
           severity: 'error',
           file: relativePath,
           line: findFieldLine(raw, key),
@@ -167,7 +158,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     // check custom slug if present
     if ('slug' in data && typeof data.slug === 'string' && !isSlugSafe(data.slug)) {
       diagnostics.push({
-        rule: RULE_VALID_SLUG,
+        rule: Rule.ValidSlug,
         severity: 'warning',
         file: relativePath,
         line: findFieldLine(raw, 'slug'),
@@ -180,7 +171,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     const h1Line = findH1Line(raw);
     if (h1Line) {
       diagnostics.push({
-        rule: RULE_NO_H1,
+        rule: Rule.NoH1,
         severity: 'warning',
         file: relativePath,
         line: h1Line,
@@ -213,7 +204,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       if (prev) {
         for (const dup of [prev, record]) {
           diagnostics.push({
-            rule: RULE_DUPLICATE_POSITION,
+            rule: Rule.DuplicatePosition,
             severity: input.strict ? 'error' : 'warning',
             file: dup.relativePath,
             line: dup.sidebarPositionLine,
@@ -237,7 +228,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     if (prev) {
       for (const dup of [prev, record]) {
         diagnostics.push({
-          rule: RULE_DUPLICATE_SLUG,
+          rule: Rule.DuplicateSlug,
           severity: 'error',
           file: dup.relativePath,
           line: dup.customSlugLine,
