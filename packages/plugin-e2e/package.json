@@ -34,17 +34,19 @@
     "node": ">=20 <=24"
   },
   "peerDependencies": {
-    "@playwright/test": "^1.52.0"
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.52.0",
+    "axe-core": "^4.11.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.1",
     "@types/uuid": "^11.0.0",
+    "axe-core": "^4.11.1",
     "dotenv": "^17.2.4"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.11.1",
     "@grafana/e2e-selectors": "12.4.0-21983999378",
-    "axe-core": "^4.11.1",
     "semver": "^7.5.4",
     "uuid": "^13.0.0",
     "yaml": "^2.3.4"
