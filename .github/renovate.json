@@ -115,7 +115,7 @@
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
-      "automerge": false,
+      "automerge": true,
       "groupName": "plugin-e2e template version",
       "labels": ["dependencies", "javascript", "release", "patch"],
       "matchManagers": ["custom.regex"],
