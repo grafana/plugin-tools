@@ -1,6 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
-import { join, sep } from 'node:path';
+import { join, extname, sep } from 'node:path';
 import type { Diagnostic, ValidationInput } from '../types.js';
 
 const RULE_HAS_MARKDOWN = 'has-markdown-files';
@@ -9,12 +9,17 @@ const RULE_NESTED_DIR_INDEX = 'nested-dir-has-index';
 const RULE_NO_SPACES = 'no-spaces-in-names';
 const RULE_VALID_NAMING = 'valid-file-naming';
 const RULE_NO_EMPTY_DIR = 'no-empty-directories';
+const RULE_NO_SYMLINKS = 'no-symlinks';
+const RULE_ALLOWED_FILE_TYPES = 'allowed-file-types';
 
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
 
 // directories that are expected to contain non-markdown assets
 const ASSET_DIRS = new Set(['img']);
+
+// allowed file extensions in the docs folder (.md + permitted image formats)
+export const ALLOWED_EXTENSIONS = new Set(['.md', '.png', '.jpg', '.jpeg', '.webp', '.gif']);
 
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -28,6 +33,33 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
 
   const mdFiles = entries.filter((e) => e.isFile() && e.name.endsWith('.md'));
   const dirs = entries.filter((e) => e.isDirectory());
+  const symlinks = entries.filter((e) => e.isSymbolicLink());
+  const nonMdFiles = entries.filter((e) => e.isFile() && !e.name.endsWith('.md'));
+
+  // no-symlinks
+  for (const link of symlinks) {
+    diagnostics.push({
+      rule: RULE_NO_SYMLINKS,
+      severity: 'error',
+      file: join(link.parentPath, link.name),
+      title: 'Symlinks are not allowed',
+      detail: `"${link.name}" is a symbolic link. Use actual files instead of symlinks.`,
+    });
+  }
+
+  // allowed-file-types: non-.md files must be permitted image formats
+  for (const file of nonMdFiles) {
+    const ext = extname(file.name).toLowerCase();
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
+      diagnostics.push({
+        rule: RULE_ALLOWED_FILE_TYPES,
+        severity: input.strict ? 'error' : 'info',
+        file: join(file.parentPath, file.name),
+        title: 'File type not allowed',
+        detail: `"${file.name}" is not an allowed file type. Only .md and image files (png, jpg, jpeg, webp, gif) are permitted in the docs folder.`,
+      });
+    }
+  }
 
   // has-markdown-files
   if (mdFiles.length === 0) {
