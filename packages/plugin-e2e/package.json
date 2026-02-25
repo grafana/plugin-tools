@@ -33,6 +33,14 @@
   "engines": {
     "node": ">=20 <=24"
   },
+  "peerDependenciesMeta": {
+    "@axe-core/playwright": {
+      "optional": true
+    },
+    "axe-core": {
+      "optional": true
+    }
+  },
   "peerDependencies": {
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.52.0",
