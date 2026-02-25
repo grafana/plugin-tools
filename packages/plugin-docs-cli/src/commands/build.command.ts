@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, lstat, mkdir, rm, writeFile } from 'node:fs/promises';
 import { extname, join, relative } from 'node:path';
 import createDebug from 'debug';
 import { scanDocsFolder } from '../scanner.js';
@@ -30,9 +30,12 @@ export async function buildDocs(projectRoot: string, docsPath: string): Promise<
   // copy only allowed file types to output (mirrors the allowed-file-types validation rule)
   await cp(docsPath, outputDir, {
     recursive: true,
-    filter: (src) => {
-      const ext = extname(src).toLowerCase();
-      return ext === '' || ALLOWED_EXTENSIONS.has(ext);
+    filter: async (src) => {
+      const stat = await lstat(src);
+      if (stat.isDirectory()) {
+        return true;
+      }
+      return ALLOWED_EXTENSIONS.has(extname(src).toLowerCase());
     },
   });
   debug('Copied docs folder to %s', outputDir);
