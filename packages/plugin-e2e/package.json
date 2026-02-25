@@ -34,11 +34,15 @@
     "node": ">=20 <=24"
   },
   "peerDependencies": {
-    "@playwright/test": "^1.52.0"
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.52.0",
+    "axe-core": "^4.11.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.1",
     "@types/uuid": "^11.0.0",
+    "axe-core": "^4.11.1",
     "dotenv": "^17.2.4"
   },
   "dependencies": {
