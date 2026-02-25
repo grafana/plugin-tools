@@ -168,18 +168,18 @@ Align with `grafanaDependency` in `plugin.json`.
 
 ```bash
 # terminal 1
-GRAFANA_VERSION=11.3.0 npm run server
+GRAFANA_VERSION=11.3.0 {{packageManagerName}} run server
 
 # terminal 2
-npm run e2e
+{{packageManagerName}} run e2e
 ```
 
 **Latest dev image** (forwards compatibility):
 
 ```bash
 # terminal 1
-GRAFANA_IMAGE=grafana-dev GRAFANA_VERSION=12.4.0-211043112277 npm run server
+GRAFANA_IMAGE=grafana-dev GRAFANA_VERSION=12.4.0-211043112277 {{packageManagerName}} run server
 
 # terminal 2
-npm run e2e
+{{packageManagerName}} run e2e
 ```
