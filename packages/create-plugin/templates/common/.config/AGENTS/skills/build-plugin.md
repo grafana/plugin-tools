@@ -17,8 +17,6 @@ Run this from the root of your plugin directory.
        grep '"packageManager"' package.json | sed -E 's/.*"packageManager" *: *"([^@]+).*/\1/'
      elif [ -f "pnpm-lock.yaml" ]; then
        echo "pnpm"
-     elif [ -f "bun.lock" ] || [ -f "bun.lockb" ]; then
-       echo "bun"
      elif [ -f "yarn.lock" ]; then
        echo "yarn"
      else
