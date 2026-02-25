@@ -28,10 +28,10 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     // docsPath doesn't exist or isn't readable
   }
 
-  const mdFiles = entries.filter((e) => e.isFile() && e.name.endsWith('.md'));
+  const mdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() === '.md');
   const dirs = entries.filter((e) => e.isDirectory());
   const symlinks = entries.filter((e) => e.isSymbolicLink());
-  const nonMdFiles = entries.filter((e) => e.isFile() && !e.name.endsWith('.md'));
+  const nonMdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() !== '.md');
 
   // no-symlinks
   for (const link of symlinks) {
