@@ -1,5 +1,18 @@
 # (Wed Feb 25 2026)
 
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@3.4.0`
+  - A11y: add fixture and matcher for a11y tests with Axe [#2462](https://github.com/grafana/plugin-tools/pull/2462) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# (Wed Feb 25 2026)
+
 #### 🐛 Bug Fix
 
 - Create Plugin: Bump plugin-e2e [#2480](https://github.com/grafana/plugin-tools/pull/2480) ([@sunker](https://github.com/sunker))
