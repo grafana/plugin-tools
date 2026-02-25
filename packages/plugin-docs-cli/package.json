@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-docs-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "CLI tool for developing, validating and previewing Grafana plugin documentation locally.",
   "type": "module",
@@ -46,14 +46,14 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@grafana/plugin-docs-parser": "^0.0.1",
+    "@grafana/plugin-docs-parser": "^0.0.2",
     "chokidar": "^4.0.0",
     "debug": "^4.3.7",
     "ejs": "^4.0.1",
     "express": "^4.18.0",
-    "hast-util-to-html": "^9.0.0",
     "github-slugger": "^1.5.0",
     "gray-matter": "^4.0.3",
+    "hast-util-to-html": "^9.0.0",
     "minimist": "^1.2.8"
   },
   "devDependencies": {
