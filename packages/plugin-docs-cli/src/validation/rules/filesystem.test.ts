@@ -52,7 +52,7 @@ describe('checkFilesystem', () => {
   it('should not report nested-dir-has-index for directory with no markdown files', async () => {
     const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
 
-    // img/ has no .md files at all - caught by no-empty-directories instead
+    // img/ has images but no .md files - nested-dir-has-index only applies to dirs with .md files
     const finding = findings.find((f) => f.rule === 'nested-dir-has-index' && f.file?.endsWith('img'));
     expect(finding).toBeUndefined();
   });
@@ -87,12 +87,23 @@ describe('checkFilesystem', () => {
     expect(findings.find((f) => f.rule === 'nested-dir-has-index')).toBeUndefined();
   });
 
-  it('should not report no-empty-directories for img/ asset directory', async () => {
+  it('should not report no-empty-directories for directory containing image files', async () => {
     const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
 
-    // img/ is the standard image directory and should be skipped
+    // img/ has test.png (an allowed image file) so it is not considered empty
     const finding = findings.find((f) => f.rule === 'no-empty-directories' && f.file?.endsWith('img'));
     expect(finding).toBeUndefined();
+  });
+
+  it('should not report no-empty-directories for directory with only image files', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'images'));
+    await writeFile(join(tmp, 'images', 'screenshot.png'), '');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === 'no-empty-directories')).toBeUndefined();
   });
 
   it('should not report no-empty-directories for directory with markdown files', async () => {
@@ -103,7 +114,7 @@ describe('checkFilesystem', () => {
     expect(finding).toBeUndefined();
   });
 
-  it('should report no-empty-directories for subdir with no markdown files', async () => {
+  it('should report no-empty-directories for subdir with no allowed files', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await mkdir(join(tmp, 'assets'));

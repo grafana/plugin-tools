@@ -15,9 +15,6 @@ const RULE_ALLOWED_FILE_TYPES = 'allowed-file-types';
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
 
-// directories that are expected to contain non-markdown assets
-const ASSET_DIRS = new Set(['img']);
-
 // allowed file extensions in the docs folder (.md + permitted image formats)
 export const ALLOWED_EXTENSIONS = new Set(['.md', '.png', '.jpg', '.jpeg', '.webp', '.gif']);
 
@@ -87,25 +84,30 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   for (const dir of dirs) {
     const dirPath = join(dir.parentPath, dir.name);
 
-    // asset directories like img/ are expected to have no markdown
-    if (ASSET_DIRS.has(dir.name)) {
-      continue;
-    }
-
-    // no-empty-directories: directories with no .md files at any depth serve no purpose
-    const hasMd = mdFiles.some((e) => e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep));
-    if (!hasMd) {
+    // no-empty-directories: directories with no allowed-extension files at any depth serve no purpose
+    const hasAllowed = entries.some(
+      (e) =>
+        e.isFile() &&
+        ALLOWED_EXTENSIONS.has(extname(e.name).toLowerCase()) &&
+        (e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep))
+    );
+    if (!hasAllowed) {
       diagnostics.push({
         rule: RULE_NO_EMPTY_DIR,
         severity: input.strict ? 'error' : 'warning',
         file: dirPath,
-        title: 'Directory contains no markdown files',
-        detail: `"${dir.name}" contains no .md files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
+        title: 'Directory contains no documentation files',
+        detail: `"${dir.name}" contains no .md or image files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
       });
       continue;
     }
 
-    // nested-dir-has-index: only relevant for dirs that have .md files but no index.md
+    // nested-dir-has-index: only relevant for dirs that have .md files; image-only dirs don't need one
+    const hasMd = mdFiles.some((e) => e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep));
+    if (!hasMd) {
+      continue;
+    }
+
     const hasIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === dirPath);
     if (!hasIndex) {
       diagnostics.push({
