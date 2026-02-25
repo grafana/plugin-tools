@@ -1,4 +1,5 @@
 import { test as base, expect as baseExpect, Locator } from '@playwright/test';
+import type { AxeResults } from 'axe-core';
 
 import {
   AlertPageOptions,
@@ -7,6 +8,7 @@ import {
   InternalFixtures,
   PluginFixture,
   PluginOptions,
+  A11yViolationsOptions,
 } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
 import { grafanaAPIClient } from './fixtures/grafanaAPIClient';
@@ -37,6 +39,7 @@ import { panelEditPage } from './fixtures/panelEditPage';
 import { selectors as e2eSelectors } from './fixtures/selectors';
 import { variableEditPage } from './fixtures/variableEditPage';
 import { alertRuleEditPage } from './fixtures/alertRuleEditPage';
+import { scanForA11yViolations } from './fixtures/scanForA11yViolations';
 import { options } from './options';
 import { toHaveAlert } from './matchers/toHaveAlert';
 import { toDisplayPreviews } from './matchers/toDisplayPreviews';
@@ -49,6 +52,7 @@ import { toHaveSelected } from './matchers/toHaveSelected';
 import { Select } from './models/components/Select';
 import { Switch } from './models/components/Switch';
 import { toBeChecked } from './matchers/toBeChecked';
+import { toHaveNoA11yViolations } from './matchers/toHaveNoA11yViolations';
 import { RadioGroup } from './models/components/RadioGroup';
 import { toHaveChecked } from './matchers/toHaveChecked';
 import { MultiSelect } from './models/components/MultiSelect';
@@ -77,6 +81,7 @@ export * from './types';
 
 // helper functions
 export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
+export { DEFAULT_A11Y_TAGS } from './fixtures/scanForA11yViolations';
 
 // first extend with internal fixtures (not exposed to tests)
 const testWithInternal = base.extend<InternalFixtures>({
@@ -116,6 +121,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   gotoDataSourceConfigPage,
   gotoAppConfigPage,
   gotoAppPage,
+  scanForA11yViolations,
   ...options,
 });
 
@@ -127,6 +133,7 @@ export const expect = baseExpect.extend({
   toBeChecked,
   toHaveChecked,
   toHaveColor,
+  toHaveNoA11yViolations,
 });
 
 export { selectors } from '@playwright/test';
@@ -194,6 +201,15 @@ declare global {
        * Asserts that a color picker has expected color selected
        */
       toHaveColor(colorPicker: ColorPicker, rgbOrHex: string, options?: { timeout?: number }): Promise<R>;
+
+      /**
+       * @alpha - the API for accessibility scanning is still being finalized and may change in future releases. Feedback is welcome!
+       * Asserts that the page has no accessibility violations.
+       * You can customize the rules that are checked by passing options to the command.
+       *
+       * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
+       */
+      toHaveNoA11yViolations(results: AxeResults, options?: A11yViolationsOptions): Promise<R>;
     }
   }
 }
