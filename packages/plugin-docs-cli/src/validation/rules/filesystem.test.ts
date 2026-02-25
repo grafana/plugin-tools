@@ -49,22 +49,6 @@ describe('checkFilesystem', () => {
     expect(findings.find((f) => f.rule === 'has-markdown-files')).toBeDefined();
   });
 
-  it('should not report nested-dir-has-index for directory with no markdown files', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
-
-    // img/ has images but no .md files - nested-dir-has-index only applies to dirs with .md files
-    const finding = findings.find((f) => f.rule === 'nested-dir-has-index' && f.file?.endsWith('img'));
-    expect(finding).toBeUndefined();
-  });
-
-  it('should not report nested-dir-has-index for subdirectory with index.md', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
-
-    // config/ has an index.md directly inside it
-    const finding = findings.find((f) => f.rule === 'nested-dir-has-index' && f.file?.endsWith('config'));
-    expect(finding).toBeUndefined();
-  });
-
   it('should report nested-dir-has-index when subdir lacks index.md', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
@@ -87,12 +71,15 @@ describe('checkFilesystem', () => {
     expect(findings.find((f) => f.rule === 'nested-dir-has-index')).toBeUndefined();
   });
 
-  it('should not report no-empty-directories for directory containing image files', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
+  it('should not report nested-dir-has-index for image-only subdir', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'img'));
+    await writeFile(join(tmp, 'img', 'screenshot.png'), '');
 
-    // img/ has test.png (an allowed image file) so it is not considered empty
-    const finding = findings.find((f) => f.rule === 'no-empty-directories' && f.file?.endsWith('img'));
-    expect(finding).toBeUndefined();
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === 'nested-dir-has-index')).toBeUndefined();
   });
 
   it('should not report no-empty-directories for directory with only image files', async () => {
@@ -104,14 +91,6 @@ describe('checkFilesystem', () => {
     const findings = await checkFilesystem({ docsPath: tmp, strict: true });
 
     expect(findings.find((f) => f.rule === 'no-empty-directories')).toBeUndefined();
-  });
-
-  it('should not report no-empty-directories for directory with markdown files', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
-
-    // config/ has several .md files
-    const finding = findings.find((f) => f.rule === 'no-empty-directories' && f.file?.endsWith('config'));
-    expect(finding).toBeUndefined();
   });
 
   it('should report no-empty-directories for subdir with no allowed files', async () => {
