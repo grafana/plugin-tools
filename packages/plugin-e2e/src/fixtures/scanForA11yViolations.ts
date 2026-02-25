@@ -1,6 +1,5 @@
-import AxeBuilder from '@axe-core/playwright';
 import { TestFixture } from '@playwright/test';
-import { AxeResults } from 'axe-core';
+import type { AxeResults } from 'axe-core';
 
 import { PlaywrightArgs, AxeScanContext } from '../types';
 
@@ -14,25 +13,31 @@ export const scanForA11yViolations: TestFixture<
   PlaywrightArgs
 > = async ({ page }, use, testInfo) => {
   let inc = 1;
-  await use(async (context?: AxeScanContext) => {
-    const builder = new AxeBuilder({ page }).withTags(DEFAULT_A11Y_TAGS);
-    if (context?.options) {
-      builder.options(context!.options);
-    }
-    if (context?.include) {
-      builder.include(context!.include);
-    }
-    if (context?.exclude) {
-      builder.exclude(context!.exclude);
-    }
 
-    const accessibilityScanResults = await builder.analyze();
+  try {
+    const { AxeBuilder } = await import('@axe-core/playwright');
+    await use(async (context?: AxeScanContext) => {
+      const builder = new AxeBuilder({ page }).withTags(DEFAULT_A11Y_TAGS);
+      if (context?.options) {
+        builder.options(context!.options);
+      }
+      if (context?.include) {
+        builder.include(context!.include);
+      }
+      if (context?.exclude) {
+        builder.exclude(context!.exclude);
+      }
 
-    testInfo.attach(`axe-${inc++}`, {
-      body: JSON.stringify(accessibilityScanResults, null, 2),
-      contentType: 'application/json',
+      const accessibilityScanResults = await builder.analyze();
+
+      testInfo.attach(`axe-${inc++}`, {
+        body: JSON.stringify(accessibilityScanResults, null, 2),
+        contentType: 'application/json',
+      });
+
+      return accessibilityScanResults;
     });
-
-    return accessibilityScanResults;
-  });
+  } catch (error) {
+    throw new Error('@axe-core/playwright must be installed as a peer dependency to use a11y scanning.');
+  }
 };
