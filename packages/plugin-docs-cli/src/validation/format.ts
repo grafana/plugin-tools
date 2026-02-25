@@ -1,14 +1,10 @@
-import type { Diagnostic, ValidationResult } from './types.js';
+import type { Severity, ValidationResult } from './types.js';
 
-const SEVERITY_LABEL: Record<string, string> = {
+const SEVERITY_LABEL: Record<Severity, string> = {
   error: 'error',
   warning: 'warn ',
   info: 'info ',
 };
-
-function countBySeverity(diagnostics: Diagnostic[], severity: string): number {
-  return diagnostics.filter((d) => d.severity === severity).length;
-}
 
 /**
  * Formats a validation result as human-readable text.
@@ -21,9 +17,11 @@ export function formatResult(result: ValidationResult): string {
     return lines.join('\n');
   }
 
-  const errors = countBySeverity(result.diagnostics, 'error');
-  const warnings = countBySeverity(result.diagnostics, 'warning');
-  const infos = countBySeverity(result.diagnostics, 'info');
+  const counts: Record<Severity, number> = { error: 0, warning: 0, info: 0 };
+  for (const d of result.diagnostics) {
+    counts[d.severity]++;
+  }
+  const { error: errors, warning: warnings, info: infos } = counts;
 
   // summary line
   const parts: string[] = [];
