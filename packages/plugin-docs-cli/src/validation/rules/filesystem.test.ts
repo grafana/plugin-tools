@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
-import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { checkFilesystem } from './filesystem.js';
 
@@ -196,5 +196,57 @@ describe('checkFilesystem', () => {
       expect(finding).toBeDefined();
       expect(finding!.severity).toBe('warning');
     });
+  });
+
+  it('should report no-symlinks for a symlinked file', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    const target = join(tmp, 'index.md');
+    await symlink(target, join(tmp, 'link.md'));
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    const finding = findings.find((f) => f.rule === 'no-symlinks');
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.file).toContain('link.md');
+  });
+
+  it('should report allowed-file-types as error in strict mode for disallowed extension', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'config.json'), '{}');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    const finding = findings.find((f) => f.rule === 'allowed-file-types');
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.file).toContain('config.json');
+  });
+
+  it('should report allowed-file-types as info in non-strict mode', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'notes.txt'), 'some notes');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: false });
+
+    const finding = findings.find((f) => f.rule === 'allowed-file-types');
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('info');
+  });
+
+  it('should not report allowed-file-types for permitted image formats', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await mkdir(join(tmp, 'img'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'img', 'screenshot.png'), '');
+    await writeFile(join(tmp, 'img', 'photo.jpg'), '');
+    await writeFile(join(tmp, 'img', 'animation.gif'), '');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === 'allowed-file-types')).toBeUndefined();
   });
 });
