@@ -177,7 +177,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
         line: h1Line,
         title: 'Avoid h1 headings in content',
         detail:
-          'The page title comes from frontmatter. Any h1 in the body will be stripped by the parser. Use h2 (##) or lower.',
+          'The page title comes from frontmatter. Any h1 in the body will be stripped by the parser and replaced by the frontmatter title. Use h2 (##) or lower.',
       });
     }
 
@@ -195,23 +195,33 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
   // no-duplicate-sidebar-position: siblings (same parent dir) must have unique positions
   const byDir = Map.groupBy(records, (r) => r.parentDir);
   for (const siblings of byDir.values()) {
-    const seen = new Map<number, FileRecord>();
+    const seen = new Map<number, FileRecord | null>();
     for (const record of siblings) {
       if (record.sidebarPosition === undefined) {
         continue;
       }
       const prev = seen.get(record.sidebarPosition);
       if (prev) {
-        for (const dup of [prev, record]) {
+        // report current file; only report prev on the first collision (when prev is still set)
+        if (prev !== null) {
           diagnostics.push({
             rule: Rule.DuplicatePosition,
             severity: input.strict ? 'error' : 'warning',
-            file: dup.relativePath,
-            line: dup.sidebarPositionLine,
+            file: prev.relativePath,
+            line: prev.sidebarPositionLine,
             title: `Duplicate sidebar_position: ${record.sidebarPosition}`,
             detail: `"${prev.relativePath}" and "${record.relativePath}" share sidebar_position ${record.sidebarPosition}. Each sibling page must have a unique position.`,
           });
+          seen.set(record.sidebarPosition, null);
         }
+        diagnostics.push({
+          rule: Rule.DuplicatePosition,
+          severity: input.strict ? 'error' : 'warning',
+          file: record.relativePath,
+          line: record.sidebarPositionLine,
+          title: `Duplicate sidebar_position: ${record.sidebarPosition}`,
+          detail: `"${prev.relativePath}" and "${record.relativePath}" share sidebar_position ${record.sidebarPosition}. Each sibling page must have a unique position.`,
+        });
       } else {
         seen.set(record.sidebarPosition, record);
       }

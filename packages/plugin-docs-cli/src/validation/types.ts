@@ -1,25 +1,27 @@
 export type Severity = 'error' | 'warning' | 'info';
 
-export enum Rule {
+export const Rule = {
   // filesystem rules
-  HasMarkdown = 'has-markdown-files',
-  RootIndex = 'root-index-exists',
-  NestedDirIndex = 'nested-dir-has-index',
-  NoSpaces = 'no-spaces-in-names',
-  ValidNaming = 'valid-file-naming',
-  NoEmptyDir = 'no-empty-directories',
-  NoSymlinks = 'no-symlinks',
-  AllowedFileTypes = 'allowed-file-types',
+  HasMarkdown: 'has-markdown-files',
+  RootIndex: 'root-index-exists',
+  NestedDirIndex: 'nested-dir-has-index',
+  NoSpaces: 'no-spaces-in-names',
+  ValidNaming: 'valid-file-naming',
+  NoEmptyDir: 'no-empty-directories',
+  NoSymlinks: 'no-symlinks',
+  AllowedFileTypes: 'allowed-file-types',
   // frontmatter rules
-  BlockExists = 'frontmatter-block-exists',
-  ValidYaml = 'frontmatter-valid-yaml',
-  RequiredFields = 'frontmatter-required-fields',
-  FieldTypes = 'frontmatter-field-types',
-  ValidSlug = 'frontmatter-valid-slug',
-  NoH1 = 'no-h1-heading',
-  DuplicatePosition = 'no-duplicate-sidebar-position',
-  DuplicateSlug = 'no-duplicate-slugs',
-}
+  BlockExists: 'frontmatter-block-exists',
+  ValidYaml: 'frontmatter-valid-yaml',
+  RequiredFields: 'frontmatter-required-fields',
+  FieldTypes: 'frontmatter-field-types',
+  ValidSlug: 'frontmatter-valid-slug',
+  NoH1: 'no-h1-heading',
+  DuplicatePosition: 'no-duplicate-sidebar-position',
+  DuplicateSlug: 'no-duplicate-slugs',
+} as const;
+
+export type Rule = (typeof Rule)[keyof typeof Rule];
 
 /**
  * A diagnostic reported by a rule runner.

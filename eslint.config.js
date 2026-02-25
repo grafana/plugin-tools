@@ -79,4 +79,12 @@ module.exports = [
       ...mdxPlugin.flatCodeBlocks.rules,
     },
   },
+  {
+    name: 'plugin-tools/typescript-overrides',
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-redeclare': 'off',
+      // TS compiler enforces redeclaration rules; the const+type same-name pattern (as-const maps) would be a false positive
+    },
+  },
 ];

@@ -12,6 +12,7 @@ export function rehypeStripH1() {
         parent.children.splice(index, 1);
         return [SKIP, index];
       }
+      return;
     });
   };
 }
