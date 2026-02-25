@@ -1,3 +1,18 @@
+# (Wed Feb 25 2026)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2480](https://github.com/grafana/plugin-tools/pull/2480) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@6.10.2`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.3.3 [#2446](https://github.com/grafana/plugin-tools/pull/2446) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Feb 24 2026)
 
 #### 🐛 Bug Fix
