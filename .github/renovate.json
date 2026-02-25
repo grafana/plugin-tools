@@ -120,7 +120,7 @@
       "labels": ["dependencies", "javascript", "release", "patch"],
       "matchManagers": ["custom.regex"],
       "matchPackageNames": ["@grafana/plugin-e2e"],
-      "minimumReleaseAge": "0",
+      "minimumReleaseAge": null,
       "prPriority": 10,
       "prConcurrentLimit": 0
     },
