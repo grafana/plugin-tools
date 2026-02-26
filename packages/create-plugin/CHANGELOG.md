@@ -1,3 +1,15 @@
+# v6.11.0 (Thu Feb 26 2026)
+
+#### 🚀 Enhancement
+
+- feat: plugin-validator skill config for claude and codex [#2468](https://github.com/grafana/plugin-tools/pull/2468) ([@s4kh](https://github.com/s4kh))
+
+#### Authors: 1
+
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
 # v6.10.3 (Thu Feb 26 2026)
 
 #### 🐛 Bug Fix

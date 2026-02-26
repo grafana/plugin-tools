@@ -1,5 +1,23 @@
 # (Thu Feb 26 2026)
 
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.11.0`
+  - feat: plugin-validator skill config for claude and codex [#2468](https://github.com/grafana/plugin-tools/pull/2468) ([@s4kh](https://github.com/s4kh))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency rollup to v4.59.0 [security] [#2487](https://github.com/grafana/plugin-tools/pull/2487) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
+# (Thu Feb 26 2026)
+
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.10.3`
