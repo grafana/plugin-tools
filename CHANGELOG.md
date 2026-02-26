@@ -1,3 +1,44 @@
+# (Thu Feb 26 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.10.3`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.4.0 [#2483](https://github.com/grafana/plugin-tools/pull/2483) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Wed Feb 25 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@3.4.0`
+  - A11y: add fixture and matcher for a11y tests with Axe [#2462](https://github.com/grafana/plugin-tools/pull/2462) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# (Wed Feb 25 2026)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2480](https://github.com/grafana/plugin-tools/pull/2480) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@6.10.2`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.3.3 [#2446](https://github.com/grafana/plugin-tools/pull/2446) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Feb 24 2026)
 
 #### 🐛 Bug Fix

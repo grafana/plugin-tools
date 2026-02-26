@@ -16,6 +16,7 @@ end-to-end test Grafana plugins with ease.
 - **Custom Models:** Provides custom models that represent pages and components in Grafana, simplifying maintenance and creating reusable code to avoid repetition.
 - **Expect Matchers:** Includes a range of expect matchers that are specialized for Grafana plugin assertions, helping you validate plugin behavior more effectively.
 - **Version Compatibility:** Ensures that your plugin is tested across multiple versions of Grafana, guaranteeing compatibility and stability.
+- **Accessibility testing:** Integration with Axe to support configurable accessibility tests within your tests, with default rules aligned with Grafana's [WCAG2AA](https://www.w3.org/TR/WCAG21/) target.
 - **Integration with Playwright:** Seamlessly integrates with the Playwright testing framework, leveraging its powerful browser automation capabilities.
 
 ## Get started

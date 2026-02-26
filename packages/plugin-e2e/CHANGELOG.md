@@ -1,3 +1,15 @@
+# v3.4.0 (Wed Feb 25 2026)
+
+#### 🚀 Enhancement
+
+- A11y: add fixture and matcher for a11y tests with Axe [#2462](https://github.com/grafana/plugin-tools/pull/2462) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
 # v3.3.3 (Tue Feb 24 2026)
 
 #### 🐛 Bug Fix
