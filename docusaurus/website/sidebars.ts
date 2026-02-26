@@ -100,6 +100,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/add-support-for-externally-shared-dashboards',
         'how-to-guides/data-source-plugins/add-support-for-pdc',
         'how-to-guides/data-source-plugins/add-support-for-variables',
+        'how-to-guides/data-source-plugins/add-default-variables-and-links',
         'how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend',
         'how-to-guides/data-source-plugins/create-data-frames',
         'how-to-guides/data-source-plugins/error-handling',
