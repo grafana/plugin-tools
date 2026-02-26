@@ -29,7 +29,7 @@ The following Extension Points are available:
 | **`AlertingRecordingRuleAction`** | Link      | Extend the alert rule menu with custom actions for recording rules.  |
 | **`AlertInstanceAction`**         | Link      | Extend the alert instances table with custom actions.                |
 | **`CommandPalette`**              | Link      | Extend the command palette with custom actions.                      |
-| **`DashboardPanelMenu`**          | Link      | Extend the panel menu with custom actions.                           |
+| **`DashboardPanelMenu`**          | Link      | Extend the panel menu with custom actions. Supports the `group` property to place links at the root level or in root-level submenus. |
 | **`ExploreToolbarAction`**        | Link      | Extend the "Add" button on the Explore page with custom actions.     |
 | **`UserProfileTab`**              | Component | Extend the user profile page with custom tabs.                       |
 

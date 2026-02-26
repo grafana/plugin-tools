@@ -132,7 +132,8 @@ export const plugin = new AppPlugin().addLink({
       // - description
       // - path
       // - icon
-      // - category
+      // - group
+      // - category (deprecated, use group instead)
       return {
         path: `/a/${pluginJson.id}/foo/timeseries`,
       };
@@ -222,6 +223,44 @@ export const plugin = new AppPlugin().addLink({
 ```
 
 </details>
+
+### Place a link in the panel menu root
+
+:::info
+Available in Grafana >=v11.5.0.
+:::
+
+By default, plugin link extensions targeting `DashboardPanelMenu` are placed under an **Extensions** submenu. You can use the `group` property to place a link at the root level of the panel menu (alongside View, Edit, Share, and so on), or to create a custom root-level submenu.
+
+| `group` configuration | Where the link appears |
+| --- | --- |
+| _(omitted)_ | Under the **Extensions** submenu (default) |
+| `{ name: '${root}' }` | At the root level of the panel menu |
+| `{ name: '${root}/My submenu' }` | In a **My submenu** root-level submenu |
+| `{ name: '${root}/My submenu', icon: 'heart' }` | In a **My submenu** root-level submenu with a custom icon |
+| `{ name: 'Custom' }` (no `${root}` prefix) | Under the **Extensions** submenu, grouped by "Custom" |
+
+```tsx title="src/module.tsx"
+import { PluginExtensionPoints } from '@grafana/data';
+import pluginJson from './plugin.json';
+
+export const plugin = new AppPlugin().addLink({
+  title: 'Declare incident',
+  description: 'Declare an incident from the panel menu',
+  targets: [PluginExtensionPoints.DashboardPanelMenu],
+  path: `/a/${pluginJson.id}/declare-incident`,
+  // Place this link at the root level of the panel menu
+  group: { name: '${root}' },
+});
+```
+
+:::note
+The following reserved group names **cannot** be used at the root level: `View`, `Edit`, `Share`, `Inspect`, `More...`, `Remove`, `Extensions`.
+:::
+
+:::note
+The `category` property is deprecated. Use `group` instead.
+:::
 
 ### Open a link in a new tab
 

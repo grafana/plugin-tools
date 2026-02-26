@@ -100,7 +100,8 @@ The `addLink()` method takes a single `config` object with the following propert
 | **`description`**   | A human readable description for the link.                                                                                                                                                                                         | true     |
 | **`path?`**         | A path within your app plugin where you would like to send users when they click the link. (Use either `path` or `onClick`.) <br /> _Example: `"/a/myorg-incidents-app/incidents"`_                                                | true     |
 | **`onClick?`**      | A callback that should be triggered when the user clicks the link. (Use either `path` or `onClick`.)                                                                                                                               | false    |
-| **`category?`**     | A category that should be used to group your link with other links.                                                                                                                                                                | false    |
+| **`group?`**        | An object (`{ name: string; icon?: IconName }`) that controls where the link appears in extension points that support grouping, such as the dashboard panel menu. Use `{ name: '${root}' }` to place the link at the root level, or `{ name: '${root}/Submenu name' }` to create a root-level submenu. Available in Grafana >=v11.5.0. | false    |
+| **`category?`**     | _Deprecated: use `group` instead._ A category that should be used to group your link with other links.                                                                                                                             | false    |
 | **`icon?`**         | An icon that should be used while displaying your link. <br /> _Example: `"edit"` or `"bookmark"`. [See all available icon names &rarr;](https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/types/icon.ts#L1)_ | false    |
 | **`openInNewTab?`** | A hint to the extension point that this link should be opened in a new tab. The extension point implementation determines how this hint is used. <br /> _Example: `true`_                                                        | false    |
 | **`configure?`**    | A function that is called prior to displaying the link which enables you to dynamically change or hide your link depending on its `context`.                                                                                       | false    |
@@ -114,6 +115,7 @@ The method returns the `AppPlugin` instance to allow for chaining.
 - [Hide a link in certain conditions](../../how-to-guides/ui-extensions/register-an-extension.md#hide-a-link-in-certain-conditions)
 - [Update the path based on the context](../../how-to-guides/ui-extensions/register-an-extension.md#update-the-path-based-on-the-context)
 - [Open a modal from the `onClick()`](../../how-to-guides/ui-extensions/register-an-extension.md#open-a-modal-from-the-onclick)
+- [Place a link in the panel menu root](../../how-to-guides/ui-extensions/register-an-extension.md#place-a-link-in-the-panel-menu-root)
 
 ### `addFunction`
 
