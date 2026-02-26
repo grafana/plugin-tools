@@ -25,15 +25,13 @@ Data source plugins can register default variables and dashboard links that are 
 
 ## Key behaviors
 
-- **Not persisted**: Default variables and links are loaded at dashboard load time. They are not saved as part of the dashboard model.
-- **URL sync**: Default variables appear in the URL as query parameters, so shared dashboard links preserve the selected values.
-- **Read-only**: Default variables and links are displayed as read-only in the dashboard settings views. Users cannot edit or remove them from the dashboard.
+- **Not persisted.** Default variables and links are loaded at dashboard load time. They are not saved as part of the dashboard model.
+- **URL sync.** Default variables appear in the URL as query parameters, so shared dashboard links preserve the selected values.
+- **Read-only.** Default variables and links are displayed as read-only in the dashboard settings views. Users cannot edit or remove them from the dashboard.
 
 ## Add default variables
 
-Implement the optional `getDefaultVariables` method on your `DataSourceApi` class. It returns an array of `VariableKind` objects using the v2 dashboard schema.
-
-The recommended pattern is to use `hide: 'inControlsMenu'` so that default variables appear in the dashboard controls menu rather than the main variable bar.
+Implement the optional `getDefaultVariables` method on your `DataSourceApi` class to return an array of `VariableKind` objects using the v2 dashboard schema. Set `hide` to `'inControlsMenu'` so that default variables appear in the dashboard controls menu rather than the main variable bar:
 
 ```ts title="src/datasource.ts"
 import { DataSourceApi, DataSourceInstanceSettings } from '@grafana/data';
@@ -78,9 +76,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
 ## Add default dashboard links
 
-Implement the optional `getDefaultLinks` method on your `DataSourceApi` class. It returns an array of `DashboardLink` objects.
-
-The recommended pattern is to use `placement: 'inControlsMenu'` so that default links appear in the dashboard controls menu.
+Implement the optional `getDefaultLinks` method on your `DataSourceApi` class to return an array of `DashboardLink` objects. Set `placement` to `'inControlsMenu'` so that default links appear in the dashboard controls menu:
 
 ```ts title="src/datasource.ts"
 async getDefaultLinks(): Promise<DashboardLink[]> {
