@@ -36,21 +36,16 @@
   "peerDependenciesMeta": {
     "@axe-core/playwright": {
       "optional": true
-    },
-    "axe-core": {
-      "optional": true
     }
   },
   "peerDependencies": {
     "@axe-core/playwright": "^4.11.1",
-    "@playwright/test": "^1.52.0",
-    "axe-core": "^4.11.1"
+    "@playwright/test": "^1.52.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.1",
     "@types/uuid": "^11.0.0",
-    "axe-core": "^4.11.1",
     "dotenv": "^17.2.4"
   },
   "dependencies": {
