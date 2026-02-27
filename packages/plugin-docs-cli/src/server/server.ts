@@ -111,7 +111,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   }
 
   // serve documentation pages (matches single and nested paths)
-  app.get('*', async (req: Request, res: Response) => {
+  app.get('/{*splat}', async (req: Request, res: Response) => {
     try {
       // extract slug from path (remove leading/trailing slashes)
       const slug = req.path === '/' ? manifest.pages[0]?.slug || '' : req.path.replace(/^\/|\/$/g, '');
