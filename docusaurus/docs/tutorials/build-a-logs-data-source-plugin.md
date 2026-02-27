@@ -18,18 +18,17 @@ Grafana data source plugins support metrics, logs, and other data types. The ste
 
 ## Before you begin
 
-This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. We recommend that you review this material before continuing.
+This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. Review this material before continuing.
 
 ## Add logs support to your data source
 
-To add logs support to an existing data source, you need to:
+To add logs support to an existing data source:
 
-1. Enable logs support
-1. Construct the log data frame
+1. [Enable logs support](#enable-logs-support)
+1. [Build the log data frame](#build-the-log-data-frame)
+1. Optionally, you can improve the user experience with one or more [optional features](#enhance-your-logs-data-source-plugin-with-optional-features).
 
-When these steps are done, then you can improve the user experience with one or more [optional features](#enhance-your-logs-data-source-plugin-with-optional-features).
-
-### Step 1: Enable logs support
+## Enable logs support
 
 Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../reference/metadata.md) file.
 
@@ -39,11 +38,11 @@ Tell Grafana that your data source plugin can return log data, by adding `"logs"
 }
 ```
 
-### Step 2: Construct the log data frame
+## Build the log data frame
 
-### Logs data frame format
+Grafana supports a variety of different data sources. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_, a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata. Learn more in [Data frames](../key-concepts/data-frames).
 
-The log data frame should include following fields:
+The _log data frame_ can include following fields:
 
 | Field name    | Field type                                      | Required field | Description                                                                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -55,7 +54,7 @@ The log data frame should include following fields:
 
 Logs data frame's `type` needs to be set to `type: DataFrameType.LogLines` in data frame's meta.
 
-**Example of constructing a logs data frame in Go:**
+### Example: Build a logs data frame in Go
 
 ```go
 frame := data.NewFrame(
@@ -72,7 +71,7 @@ frame.SetMeta(&data.FrameMeta{
 })
 ```
 
-**Example of constructing a logs data frame in TypeScript:**
+### Example: Build a logs data frame in Go TypeScript
 
 ```ts
 import { createDataFrame, DataFrameType, FieldType } from '@grafana/data';
