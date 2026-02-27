@@ -22,7 +22,7 @@ async function main() {
     console.error('Commands:');
     console.error('  serve      Start the local docs preview server');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
-    console.error('  validate   Validate documentation');
+    console.error('  validate   Validate documentation (--json for machine-readable output)');
     process.exit(1);
   }
 
@@ -65,7 +65,14 @@ async function main() {
       break;
     }
     case 'validate': {
-      await validateCommand(docsPath);
+      const validateArgv = minimist(process.argv.slice(3), {
+        boolean: ['strict', 'json'],
+        default: {
+          strict: true,
+          json: false,
+        },
+      });
+      await validateCommand(docsPath, { strict: validateArgv.strict, json: validateArgv.json });
       break;
     }
     default:

@@ -17,6 +17,7 @@ export interface Diagnostic {
  */
 export interface ValidationInput {
   docsPath: string;
+  strict: boolean;
 }
 
 /**
