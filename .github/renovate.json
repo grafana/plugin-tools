@@ -115,6 +115,16 @@
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
+      "automerge": true,
+      "groupName": "plugin-e2e template version",
+      "labels": ["dependencies", "javascript", "release", "patch"],
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["@grafana/plugin-e2e"],
+      "minimumReleaseAge": null,
+      "prPriority": 10,
+      "prConcurrentLimit": 0
+    },
+    {
       "automerge": false,
       "groupName": "create-plugin template github actions",
       "labels": ["release", "patch", "create-plugin"],

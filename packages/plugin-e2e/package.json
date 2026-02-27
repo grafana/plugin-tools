@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "3.3.2",
+  "version": "3.4.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -34,11 +34,15 @@
     "node": ">=20 <=24"
   },
   "peerDependencies": {
-    "@playwright/test": "^1.52.0"
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.52.0",
+    "axe-core": "^4.11.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.2",
     "@types/uuid": "^11.0.0",
+    "axe-core": "^4.11.1",
     "dotenv": "^17.3.1"
   },
   "dependencies": {

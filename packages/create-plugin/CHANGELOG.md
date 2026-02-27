@@ -1,3 +1,51 @@
+# v7.0.0 (Fri Feb 27 2026)
+
+#### 💥 Breaking Change
+
+- Create Plugin: add loadResources in scenes template [#2477](https://github.com/grafana/plugin-tools/pull/2477) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# v6.11.0 (Thu Feb 26 2026)
+
+#### 🚀 Enhancement
+
+- feat: plugin-validator skill config for claude and codex [#2468](https://github.com/grafana/plugin-tools/pull/2468) ([@s4kh](https://github.com/s4kh))
+
+#### Authors: 1
+
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
+# v6.10.3 (Thu Feb 26 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.4.0 [#2483](https://github.com/grafana/plugin-tools/pull/2483) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v6.10.2 (Wed Feb 25 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.3.3 [#2446](https://github.com/grafana/plugin-tools/pull/2446) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v6.10.1 (Mon Feb 16 2026)
 
 #### 🐛 Bug Fix
@@ -416,7 +464,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 #### 🐛 Bug Fix
 
-- Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
+- Create Plugin: remove types/testing-library\_\_jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
 
 #### Authors: 1
 

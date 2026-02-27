@@ -1,3 +1,88 @@
+# (Fri Feb 27 2026)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@7.0.0`
+  - Create Plugin: add loadResources in scenes template [#2477](https://github.com/grafana/plugin-tools/pull/2477) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Thu Feb 26 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.11.0`
+  - feat: plugin-validator skill config for claude and codex [#2468](https://github.com/grafana/plugin-tools/pull/2468) ([@s4kh](https://github.com/s4kh))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency rollup to v4.59.0 [security] [#2487](https://github.com/grafana/plugin-tools/pull/2487) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
+# (Thu Feb 26 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@6.10.3`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.4.0 [#2483](https://github.com/grafana/plugin-tools/pull/2483) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Wed Feb 25 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@3.4.0`
+  - A11y: add fixture and matcher for a11y tests with Axe [#2462](https://github.com/grafana/plugin-tools/pull/2462) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# (Wed Feb 25 2026)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump plugin-e2e [#2480](https://github.com/grafana/plugin-tools/pull/2480) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@6.10.2`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.3.3 [#2446](https://github.com/grafana/plugin-tools/pull/2446) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue Feb 24 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.3.3`
+  - Plugin E2E: Use right selector version for viz tab [#2479](https://github.com/grafana/plugin-tools/pull/2479) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Tue Feb 17 2026)
 
 #### 🐛 Bug Fix
@@ -705,7 +790,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.1.13`
-  - Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
+  - Create Plugin: remove types/testing-library\_\_jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
 
 #### Authors: 1
 
@@ -827,7 +912,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 - Jack Westbrook ([@&#8203;jackw](https://redirect.github.com/jackw))
 
-***
+---
 
 ---
 

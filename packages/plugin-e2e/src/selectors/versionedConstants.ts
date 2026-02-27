@@ -23,7 +23,7 @@ export const versionedConstants = {
   },
   Tab: {
     title: {
-      '12.4.0': 'Visualizations',
+      '13.0.0': 'Visualizations',
       [MIN_GRAFANA_VERSION]: 'All visualizations',
     },
   },
