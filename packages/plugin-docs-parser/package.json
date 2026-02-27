@@ -59,6 +59,6 @@
     "vfile": "^6.0.0"
   },
   "devDependencies": {
-    "hast-util-to-html": "^9.0.0"
+    "hast-util-to-html": "^9.0.5"
   }
 }
