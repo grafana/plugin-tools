@@ -121,7 +121,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      scenesVersion: '^6.10.4',
+      scenesVersion: '^7.0.0',
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,
     };
@@ -145,7 +145,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       isNPM: isNPM(packageManagerName),
       version: currentVersion,
       bundleGrafanaUI,
-      scenesVersion: '^6.10.4',
+      scenesVersion: '^7.0.0',
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
       frontendBundler,

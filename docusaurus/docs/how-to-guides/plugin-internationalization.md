@@ -107,7 +107,7 @@ Update your `create-plugin` configs to the latest version using the following co
 npx @grafana/create-plugin@latest update
 ```
 
-### Initialize translations in `module.ts`
+### Initialize translations in `module.ts` for a plugin without `@grafana/scenes`
 
 Add plugin translation to `module.ts`:
 
@@ -116,6 +116,16 @@ import { initPluginTranslations } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 
 await initPluginTranslations(pluginJson.id);
+```
+
+### Initialize translations in `module.ts` for a plugin that uses `@grafana/scenes`
+
+```ts title="module.ts"
+import { initPluginTranslations } from '@grafana/i18n';
+import pluginJson from 'plugin.json';
+import { loadResources } from '@grafana/scenes';
+
+await initPluginTranslations(pluginJson.id, [loadResources]);
 ```
 
 <PluginInternationalizationShared />

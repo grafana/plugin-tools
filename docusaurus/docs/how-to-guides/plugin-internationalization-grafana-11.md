@@ -137,7 +137,7 @@ export const loadResources: ResourceLoader = async (resolvedLanguage: string) =>
 };
 ```
 
-### Initialize translations in `module.ts`
+### Initialize translations in `module.ts` for a plugin without `@grafana/scenes`
 
 Add plugin translation and loaders logic to `module.ts`:
 
@@ -151,6 +151,23 @@ import { loadResources } from './loadResources';
 // Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
 // In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
 const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources] : [];
+
+await initPluginTranslations(pluginJson.id, loaders);
+```
+
+### Initialize translations in `module.ts` for a plugin that uses `@grafana/scenes`
+
+```ts title="module.ts"
+import { initPluginTranslations } from '@grafana/i18n';
+import pluginJson from 'plugin.json';
+import { config } from '@grafana/runtime';
+import semver from 'semver';
+import { loadResources } from './loadResources';
+import { loadResources as ScenesResources } from '@grafana/scenes';
+
+// Before Grafana version 12.1.0 the plugin is responsible for loading translation resources
+// In Grafana version 12.1.0 and later Grafana is responsible for loading translation resources
+const loaders = semver.lt(config?.buildInfo?.version, '12.1.0') ? [loadResources, ScenesResources] : [ScenesResources];
 
 await initPluginTranslations(pluginJson.id, loaders);
 ```
