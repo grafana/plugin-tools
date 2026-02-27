@@ -132,7 +132,9 @@ export const plugin = new AppPlugin().addLink({
       // - description
       // - path
       // - icon
-      // - category
+      // - category (deprecated, use group instead)
+      // - group
+      // - openInNewTab
       return {
         path: `/a/${pluginJson.id}/foo/timeseries`,
       };
