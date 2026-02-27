@@ -1,3 +1,16 @@
+# (Fri Feb 27 2026)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@7.0.0`
+  - Create Plugin: add loadResources in scenes template [#2477](https://github.com/grafana/plugin-tools/pull/2477) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
 # (Thu Feb 26 2026)
 
 #### 🚀 Enhancement
