@@ -160,6 +160,26 @@ describe('checkFrontmatter', () => {
     const dups = findings.filter((f) => f.rule === Rule.DuplicatePosition);
     expect(dups).toHaveLength(2);
     expect(dups[0].title).toContain('1');
+    const files = dups.map((d) => d.file);
+    expect(files).toContain('a.md');
+    expect(files).toContain('b.md');
+  });
+
+  it('should report no-duplicate-sidebar-position for all three files when three siblings share a position', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    const fm = (pos: number) => `---\ntitle: Page\ndescription: A page\nsidebar_position: ${pos}\n---\n`;
+    await writeFile(join(tmp, 'a.md'), fm(1));
+    await writeFile(join(tmp, 'b.md'), fm(1));
+    await writeFile(join(tmp, 'c.md'), fm(1));
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    const dups = findings.filter((f) => f.rule === Rule.DuplicatePosition);
+    expect(dups).toHaveLength(3);
+    const files = dups.map((d) => d.file);
+    expect(files).toContain('a.md');
+    expect(files).toContain('b.md');
+    expect(files).toContain('c.md');
   });
 
   it('should not report no-duplicate-sidebar-position for unique positions', async () => {
@@ -170,6 +190,19 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
     expect(findings.find((f) => f.rule === Rule.DuplicatePosition)).toBeUndefined();
+  });
+
+  it('should report no-duplicate-sidebar-position as warning in non-strict mode', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    const fm = (pos: number) => `---\ntitle: Page\ndescription: A page\nsidebar_position: ${pos}\n---\n`;
+    await writeFile(join(tmp, 'a.md'), fm(1));
+    await writeFile(join(tmp, 'b.md'), fm(1));
+
+    const findings = await checkFrontmatter({ docsPath: tmp, strict: false });
+
+    const dup = findings.find((f) => f.rule === Rule.DuplicatePosition);
+    expect(dup).toBeDefined();
+    expect(dup!.severity).toBe('warning');
   });
 
   it('should not report no-duplicate-sidebar-position for same position in different dirs', async () => {
@@ -196,6 +229,9 @@ describe('checkFrontmatter', () => {
     expect(dups).toHaveLength(2);
     expect(dups[0].severity).toBe('error');
     expect(dups[0].title).toContain('same-slug');
+    const files = dups.map((d) => d.file);
+    expect(files).toContain('a.md');
+    expect(files).toContain('b.md');
   });
 
   it('should not report no-duplicate-slugs for unique custom slugs', async () => {

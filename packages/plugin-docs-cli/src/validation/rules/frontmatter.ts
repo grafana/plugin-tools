@@ -167,7 +167,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
         file: relativePath,
         line: findFieldLine(raw, 'slug'),
         title: 'Invalid custom slug',
-        detail: `The slug "${data.slug}" contains unsafe characters. Only letters, digits, hyphens and forward slashes are allowed.`,
+        detail: `The slug "${data.slug}" contains unsafe characters. Only letters, digits, underscores, hyphens and forward slashes are allowed.`,
       });
     }
 
@@ -196,38 +196,27 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
   }
 
   // no-duplicate-sidebar-position: siblings (same parent dir) must have unique positions
+  // two-pass: count occurrences first, then report every sibling that uses a duplicate position
   const byDir = Map.groupBy(records, (r) => r.parentDir);
   for (const siblings of byDir.values()) {
-    const seen = new Map<number, FileRecord | null>();
+    const posCounts = new Map<number, number>();
     for (const record of siblings) {
-      if (record.sidebarPosition === undefined) {
+      if (record.sidebarPosition !== undefined) {
+        posCounts.set(record.sidebarPosition, (posCounts.get(record.sidebarPosition) ?? 0) + 1);
+      }
+    }
+    for (const record of siblings) {
+      if (record.sidebarPosition === undefined || (posCounts.get(record.sidebarPosition) ?? 0) <= 1) {
         continue;
       }
-      const prev = seen.get(record.sidebarPosition);
-      if (prev) {
-        // report current file; only report prev on the first collision (when prev is still set)
-        if (prev !== null) {
-          diagnostics.push({
-            rule: Rule.DuplicatePosition,
-            severity: input.strict ? 'error' : 'warning',
-            file: prev.relativePath,
-            line: prev.sidebarPositionLine,
-            title: `Duplicate sidebar_position: ${record.sidebarPosition}`,
-            detail: `"${prev.relativePath}" and "${record.relativePath}" share sidebar_position ${record.sidebarPosition}. Each sibling page must have a unique position.`,
-          });
-          seen.set(record.sidebarPosition, null);
-        }
-        diagnostics.push({
-          rule: Rule.DuplicatePosition,
-          severity: input.strict ? 'error' : 'warning',
-          file: record.relativePath,
-          line: record.sidebarPositionLine,
-          title: `Duplicate sidebar_position: ${record.sidebarPosition}`,
-          detail: `"${prev.relativePath}" and "${record.relativePath}" share sidebar_position ${record.sidebarPosition}. Each sibling page must have a unique position.`,
-        });
-      } else {
-        seen.set(record.sidebarPosition, record);
-      }
+      diagnostics.push({
+        rule: Rule.DuplicatePosition,
+        severity: input.strict ? 'error' : 'warning',
+        file: record.relativePath,
+        line: record.sidebarPositionLine,
+        title: `Duplicate sidebar_position: ${record.sidebarPosition}`,
+        detail: `sidebar_position ${record.sidebarPosition} is shared by multiple siblings. Each sibling page must have a unique position.`,
+      });
     }
   }
 
