@@ -18,20 +18,19 @@ Grafana data source plugins support metrics, logs, and other data types. The ste
 
 ## Before you begin
 
-This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. We recommend that you review this material before continuing.
+This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. Review this material before proceeding with this guide.
 
 ## Add logs support to your data source
 
-To add logs support to an existing data source, you need to:
+To add logs support to an existing data source:
 
-1. Enable logs support
-1. Construct the log data frame
+1. [Enable logs support](#enable-logs-support)
+1. [Build the logs data frame](#build-the-logs-data-frame)
+1. Optionally, you can improve the user experience with one or more [optional features](#enhance-your-logs-data-source-plugin-with-optional-features).
 
-When these steps are done, then you can improve the user experience with one or more [optional features](#enhance-your-logs-data-source-plugin-with-optional-features).
+## Enable logs support
 
-### Step 1: Enable logs support
-
-Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../reference/metadata.md) file.
+Add `"logs": true` to the [plugin.json](../reference/metadata.md) file to tell Grafana that your data source plugin can return log data:
 
 ```json title="src/plugin.json"
 {
@@ -39,11 +38,11 @@ Tell Grafana that your data source plugin can return log data, by adding `"logs"
 }
 ```
 
-### Step 2: Construct the log data frame
+## Build the logs data frame
 
-### Logs data frame format
+Grafana supports a variety of different data sources. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_, a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata. Learn more in [Data frames](../key-concepts/data-frames).
 
-The log data frame should include following fields:
+The _log data frame_ can include following fields:
 
 | Field name    | Field type                                      | Required field | Description                                                                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -55,7 +54,7 @@ The log data frame should include following fields:
 
 Logs data frame's `type` needs to be set to `type: DataFrameType.LogLines` in data frame's meta.
 
-**Example of constructing a logs data frame in Go:**
+### Example: Build a logs data frame in Go
 
 ```go
 frame := data.NewFrame(
@@ -72,7 +71,7 @@ frame.SetMeta(&data.FrameMeta{
 })
 ```
 
-**Example of constructing a logs data frame in TypeScript:**
+### Example: Build a logs data frame in Go TypeScript
 
 ```ts
 import { createDataFrame, DataFrameType, FieldType } from '@grafana/data';
@@ -99,9 +98,7 @@ const result = createDataFrame({
 
 You can use the following optional features to enhance your logs data source plugin in the Explore and Logs panel.
 
-[Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If the data source produces log results, we highly recommend implementing the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
-
-The following steps show the process for adding support for Explore features in a data source plugin through a seamless integration. Implement these APIs to enhance the user experience and take advantage of Explore's powerful log investigation capabilities.
+[Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If your data source produces log results, you can implement the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
 
 ### Show log results in Explore's Logs view
 
@@ -128,11 +125,15 @@ const result = createDataFrame({
 });
 ```
 
+### Order logs in Explore view
+
+TBC
+
 ### Highlight searched words
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute.
+Implement this feature in the data frame as a meta attribute.
 
 :::
 
@@ -167,15 +168,15 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute, or in the data frame as a field.
+Implement this feature in the data frame as a meta attribute or as a field.
 
 :::
 
 [Log result meta information](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-result-meta-information) can be used to communicate information about logs results to the user. The following information can be shared with the user:
 
-- **Count of received logs vs limit** - Displays the count of received logs compared to the specified limit. Data frames should set a limit with a meta attribute for the number of requested log lines.
+- **Count of received logs vs limit**: Displays the count of received logs compared to the specified limit. Data frames should set a limit with a meta attribute for the number of requested log lines.
 - **Error**: Displays possible errors in your log results. Data frames should to have an `error` in the `meta` attribute.
-- **Common labels**: Displays labels present in the `labels` data frame field that are the same for all displayed log lines. This feature is supported for data sources that produce log data frames with an labels field. Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+- **Common labels**: Displays labels present in the `labels` data frame field that are the same for all displayed log lines. This feature is supported for data sources that produce log data frames with an labels field. Refer to [Build the logs data frame](#build-the-logs-data-frame) for more information.
 
 **Example in Go:**
 
@@ -204,7 +205,7 @@ const result = createDataFrame({
 });
 ```
 
-### Logs to trace using data link with URL
+### Logs with trace IDs 
 
 If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and _URL data links_. These links should use the trace ID value to accurately link to the appropriate trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
 
@@ -238,19 +239,19 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a field.
+Implement this feature in the data frame as a field.
 
 :::
 
 Color-coded [log levels](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-level) are displayed at the beginning of each log line. They allow users to quickly assess the severity of log entries and facilitate log analysis and troubleshooting. The log level is determined from the `severity` field of the data frame. If the `severity` field isn't present, Grafana tries to evaluate the level based on the content of the log line. If inferring the log level from the content isn't possible, the log level is then set to `unknown`.
 
-Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+Refer to [Build the logs data frame](#build-the-logs-data-frame) for more information.
 
 ### Copy link to log line
 
 :::note
 
-This feature must be implemented in the data frame as a field.
+Implement this feature in the data frame as a field.
 
 :::
 
@@ -258,9 +259,9 @@ This feature must be implemented in the data frame as a field.
 
 If the underlying database doesn't return an `id` field, you can implement one within the data source. For example, in the Loki data source, a combination of nanosecond timestamp, labels, and the content of the log line is used to create a unique `id`. On the other hand, Elasticsearch returns an `_id` field that is unique for the specified index. In such cases, to ensure uniqueness, both the `index name` and `_id` are used to create a unique `id`.
 
-Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+Refer to [Build the logs data frame](#build-the-logs-data-frame) for more information.
 
-### Filter fields using Log details
+### Filter fields using log details
 
 :::note
 
@@ -302,7 +303,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 :::note
 
-Implement this feature data source method and enabled in `plugin.json`
+Implement this feature as a data source method and enabled it in `plugin.json`.
 
 :::
 
@@ -404,7 +405,7 @@ These APIs can be used in data sources within the [`grafana/grafana`](https://gi
 
 :::note
 
-It is implemented in data source by implementing `DataSourceWithXXXSupport` interface.
+Implement it in the data source with the `DataSourceWithXXXSupport` interface.
 
 :::
 
