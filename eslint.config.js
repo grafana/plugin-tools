@@ -81,7 +81,7 @@ module.exports = [
   },
   {
     name: 'plugin-tools/typescript-overrides',
-    files: ['packages/plugin-docs-cli/**/*.{ts,tsx}'],
+    files: ['packages/plugin-docs-cli/src/validation/types.ts'],
     rules: {
       'no-redeclare': 'off',
       // ts compiler handles redeclaration; using the same name for a const object and its derived type (e.g. `const Foo = {...} as const; type Foo = ...`) is valid ts but trips eslint

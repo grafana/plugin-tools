@@ -117,7 +117,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
         file: relativePath,
         line: 1,
         title: 'Missing frontmatter block',
-        detail: 'Every page must start with a frontmatter block (---). Add title, description and sidebar_position.',
+        detail: 'Every page must start with a frontmatter block (---). Add at least title and description.',
       });
       continue;
     }
@@ -206,7 +206,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       parentDir: dirname(relativePath),
       sidebarPosition: typeof data.sidebar_position === 'number' ? data.sidebar_position : undefined,
       sidebarPositionLine: findFieldLine(raw, 'sidebar_position'),
-      customSlug: typeof data.slug === 'string' && isSlugSafe(data.slug) ? data.slug : undefined,
+      customSlug:
+        typeof data.slug === 'string' && isSlugSafe(data.slug) ? data.slug.trim().replace(/^\/+|\/+$/g, '') : undefined,
       customSlugLine: findFieldLine(raw, 'slug'),
     });
   }
