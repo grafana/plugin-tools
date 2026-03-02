@@ -215,6 +215,9 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports) {
           if (pluginName === 'react') {
             basePath = `${varName}.configs.flat`;
           }
+          if (pluginName === 'import') {
+            basePath = `${varName}.flatConfigs`;
+          }
           if (isValidIdentifier(configName)) {
             extendsNodes.push(builders.identifier(`${basePath}.${configName}`));
           } else {

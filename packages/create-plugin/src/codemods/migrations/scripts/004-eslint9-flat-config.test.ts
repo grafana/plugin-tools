@@ -279,8 +279,11 @@ describe('004-eslint9-flat-config', () => {
         import jsxA11y from "eslint-plugin-jsx-a11y";
         import importPlugin from "eslint-plugin-import";
 
-        export default defineConfig(
-          [...baseConfig, jsxA11y.configs.strict, importPlugin.configs.recommended, {
+        export default defineConfig([
+          ...baseConfig,
+          jsxA11y.configs.strict,
+          importPlugin.flatConfigs.recommended,
+          {
             plugins: {
               "import": importPlugin,
               "jsx-a11y": jsxA11y,
@@ -297,8 +300,8 @@ describe('004-eslint9-flat-config', () => {
 
               "import/resolver": "typescript",
             },
-          }],
-        );"
+          },
+        ]);"
       `);
     });
 
