@@ -3,7 +3,7 @@ import { validate } from './engine.js';
 import type { RuleRunner, ValidationInput } from './types.js';
 
 describe('validate', () => {
-  const input: ValidationInput = { docsPath: '/fake' };
+  const input: ValidationInput = { docsPath: '/fake', strict: true };
 
   it('should return valid when no rules are provided', async () => {
     const result = await validate(input, []);
