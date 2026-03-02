@@ -210,9 +210,10 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports) {
           const extendParts = extendWithoutPluginPrefix.split('/');
           const importName = normaliseImportedModuleName(extendParts[0]);
           const [pluginName, configName] = extendParts;
-          let basePath = `${pluginName}.configs`;
+          const varName = getPluginVarName(pluginName);
+          let basePath = `${varName}.configs`;
           if (pluginName === 'react') {
-            basePath = `${pluginName}.configs.flat`;
+            basePath = `${varName}.configs.flat`;
           }
           if (isValidIdentifier(configName)) {
             extendsNodes.push(builders.identifier(`${basePath}.${configName}`));
@@ -221,7 +222,7 @@ function migrateExtends(extendsConfig: string | string[], imports: Imports) {
               builders.memberExpression(builders.identifier(basePath), builders.literal(configName), true)
             );
           }
-          imports.set(importName, { name: pluginName });
+          imports.set(importName, { name: varName });
         } else {
           // We assume that the extended config supports flat config format
           const varName = getPluginVarName(extend);
