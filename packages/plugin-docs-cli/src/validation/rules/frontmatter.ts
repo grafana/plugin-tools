@@ -1,5 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import type { Dirent } from 'node:fs';
+import { join, dirname, relative } from 'node:path';
 import matter from 'gray-matter';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 
@@ -33,7 +34,7 @@ function findFieldLine(raw: string, key: string): number | undefined {
   const lines = raw.split('\n');
   // frontmatter starts after the opening ---, so skip line 0
   for (let i = 1; i < lines.length; i++) {
-    if (lines[i] === '---') {
+    if (lines[i].trim() === '---') {
       break;
     }
     if (lines[i].startsWith(`${key}:`)) {
@@ -44,13 +45,14 @@ function findFieldLine(raw: string, key: string): number | undefined {
 }
 
 /**
- * Finds the 1-based line number of the first h1 heading (# ) in the markdown body.
+ * Finds the 1-based line numbers of all h1 headings (# ) in the markdown body.
  * The body starts after the closing --- of frontmatter.
  */
-function findH1Line(raw: string): number | undefined {
+function findH1Lines(raw: string): number[] {
   const lines = raw.split('\n');
   let inFrontmatter = false;
   let passedFrontmatter = false;
+  const result: number[] = [];
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].trim() === '---') {
       if (!inFrontmatter) {
@@ -61,10 +63,10 @@ function findH1Line(raw: string): number | undefined {
       continue;
     }
     if (passedFrontmatter && /^# /.test(lines[i])) {
-      return i + 1;
+      result.push(i + 1);
     }
   }
-  return undefined;
+  return result;
 }
 
 // tracks per-file data needed for cross-file duplicate checks
@@ -80,22 +82,24 @@ interface FileRecord {
 export async function checkFrontmatter(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
-  let entries: string[] = [];
+  let entries: Dirent[] = [];
   try {
-    entries = await readdir(input.docsPath, { recursive: true });
+    entries = await readdir(input.docsPath, { recursive: true, withFileTypes: true });
   } catch {
     // docsPath doesn't exist - filesystem rules handle this
     return diagnostics;
   }
 
   const mdFiles = entries.filter(
-    (entry) => entry.endsWith('.md') && !entry.includes('node_modules') && !entry.includes('dist')
+    (e) =>
+      e.isFile() && e.name.endsWith('.md') && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
   );
 
   const records: FileRecord[] = [];
 
-  for (const relativePath of mdFiles) {
-    const absolutePath = join(input.docsPath, relativePath);
+  for (const file of mdFiles) {
+    const absolutePath = join(file.parentPath, file.name);
+    const relativePath = relative(input.docsPath, absolutePath);
     let raw: string;
     try {
       raw = await readFile(absolutePath, 'utf-8');
@@ -168,8 +172,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     }
 
     // check for h1 headings in body - title comes from frontmatter
-    const h1Line = findH1Line(raw);
-    if (h1Line) {
+    for (const h1Line of findH1Lines(raw)) {
       diagnostics.push({
         rule: Rule.NoH1,
         severity: 'warning',
@@ -229,26 +232,25 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
   }
 
   // no-duplicate-slugs: custom slugs must be unique across all files
-  const slugSeen = new Map<string, FileRecord>();
+  // two-pass: count occurrences first, then report every file that uses a duplicate slug
+  const slugCounts = new Map<string, number>();
   for (const record of records) {
-    if (!record.customSlug) {
+    if (record.customSlug) {
+      slugCounts.set(record.customSlug, (slugCounts.get(record.customSlug) ?? 0) + 1);
+    }
+  }
+  for (const record of records) {
+    if (!record.customSlug || (slugCounts.get(record.customSlug) ?? 0) <= 1) {
       continue;
     }
-    const prev = slugSeen.get(record.customSlug);
-    if (prev) {
-      for (const dup of [prev, record]) {
-        diagnostics.push({
-          rule: Rule.DuplicateSlug,
-          severity: 'error',
-          file: dup.relativePath,
-          line: dup.customSlugLine,
-          title: `Duplicate slug: "${record.customSlug}"`,
-          detail: `"${prev.relativePath}" and "${record.relativePath}" both use slug "${record.customSlug}". Each page must have a unique URL slug.`,
-        });
-      }
-    } else {
-      slugSeen.set(record.customSlug, record);
-    }
+    diagnostics.push({
+      rule: Rule.DuplicateSlug,
+      severity: 'error',
+      file: record.relativePath,
+      line: record.customSlugLine,
+      title: `Duplicate slug: "${record.customSlug}"`,
+      detail: `Slug "${record.customSlug}" is used by multiple pages. Each page must have a unique URL slug.`,
+    });
   }
 
   return diagnostics;

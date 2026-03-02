@@ -81,10 +81,10 @@ module.exports = [
   },
   {
     name: 'plugin-tools/typescript-overrides',
-    files: ['**/*.{ts,tsx}'],
+    files: ['packages/plugin-docs-cli/**/*.{ts,tsx}'],
     rules: {
       'no-redeclare': 'off',
-      // TS compiler enforces redeclaration rules; the const+type same-name pattern (as-const maps) would be a false positive
+      // ts compiler handles redeclaration; using the same name for a const object and its derived type (e.g. `const Foo = {...} as const; type Foo = ...`) is valid ts but trips eslint
     },
   },
 ];

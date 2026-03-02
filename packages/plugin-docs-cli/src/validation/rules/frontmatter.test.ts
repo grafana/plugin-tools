@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { checkFrontmatter } from './frontmatter.js';
+import { Rule } from '../types.js';
 
 const input = (docsPath: string) => ({ docsPath, strict: true });
 
@@ -13,7 +14,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
-    const missing = findings.filter((f) => f.rule === 'frontmatter-required-fields');
+    const missing = findings.filter((f) => f.rule === Rule.RequiredFields);
     expect(missing).toHaveLength(2);
     expect(missing.map((f) => f.title)).toContain('Missing required field: description');
     expect(missing.map((f) => f.title)).toContain('Missing required field: sidebar_position');
@@ -23,7 +24,7 @@ describe('checkFrontmatter', () => {
     const invalidDocs = join(__dirname, '..', '..', '__fixtures__', 'invalid-frontmatter-docs');
     const findings = await checkFrontmatter(input(invalidDocs));
 
-    const typeErrors = findings.filter((f) => f.rule === 'frontmatter-field-types');
+    const typeErrors = findings.filter((f) => f.rule === Rule.FieldTypes);
     expect(typeErrors.length).toBeGreaterThanOrEqual(3);
     expect(typeErrors.some((f) => f.title.includes('title'))).toBe(true);
     expect(typeErrors.some((f) => f.title.includes('description'))).toBe(true);
@@ -34,7 +35,7 @@ describe('checkFrontmatter', () => {
     const unsafeDocs = join(__dirname, '..', '..', '__fixtures__', 'unsafe-slug-docs');
     const findings = await checkFrontmatter(input(unsafeDocs));
 
-    const slugWarning = findings.find((f) => f.rule === 'frontmatter-valid-slug');
+    const slugWarning = findings.find((f) => f.rule === Rule.ValidSlug);
     expect(slugWarning).toBeDefined();
     expect(slugWarning!.severity).toBe('warning');
   });
@@ -67,7 +68,7 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'page.md'), '---\ntitle: 123\ndescription: Valid\nsidebar_position: 1\n---\n');
 
     const findings = await checkFrontmatter(input(tmp));
-    const titleError = findings.find((f) => f.rule === 'frontmatter-field-types' && f.title.includes('title'));
+    const titleError = findings.find((f) => f.rule === Rule.FieldTypes && f.title.includes('title'));
     expect(titleError).toBeDefined();
     expect(titleError!.line).toBe(2);
   });
@@ -80,7 +81,7 @@ describe('checkFrontmatter', () => {
     );
 
     const findings = await checkFrontmatter(input(tmp));
-    const h1 = findings.find((f) => f.rule === 'no-h1-heading');
+    const h1 = findings.find((f) => f.rule === Rule.NoH1);
     expect(h1).toBeDefined();
     expect(h1!.severity).toBe('warning');
     expect(h1!.line).toBe(7);
@@ -94,7 +95,7 @@ describe('checkFrontmatter', () => {
     );
 
     const findings = await checkFrontmatter(input(tmp));
-    expect(findings.find((f) => f.rule === 'no-h1-heading')).toBeUndefined();
+    expect(findings.find((f) => f.rule === Rule.NoH1)).toBeUndefined();
   });
 
   it('should check files in subdirectories', async () => {
@@ -104,7 +105,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
-    const missing = findings.filter((f) => f.rule === 'frontmatter-required-fields');
+    const missing = findings.filter((f) => f.rule === Rule.RequiredFields);
     expect(missing).toHaveLength(3);
     expect(missing[0].file).toContain('sub');
   });
@@ -120,7 +121,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
-    const finding = findings.find((f) => f.rule === 'frontmatter-block-exists');
+    const finding = findings.find((f) => f.rule === Rule.BlockExists);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
     expect(finding!.line).toBe(1);
@@ -134,7 +135,7 @@ describe('checkFrontmatter', () => {
     );
 
     const findings = await checkFrontmatter(input(tmp));
-    expect(findings.find((f) => f.rule === 'frontmatter-block-exists')).toBeUndefined();
+    expect(findings.find((f) => f.rule === Rule.BlockExists)).toBeUndefined();
   });
 
   it('should report frontmatter-valid-yaml for invalid YAML', async () => {
@@ -143,7 +144,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
-    const finding = findings.find((f) => f.rule === 'frontmatter-valid-yaml');
+    const finding = findings.find((f) => f.rule === Rule.ValidYaml);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
   });
@@ -156,7 +157,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
-    const dups = findings.filter((f) => f.rule === 'no-duplicate-sidebar-position');
+    const dups = findings.filter((f) => f.rule === Rule.DuplicatePosition);
     expect(dups).toHaveLength(2);
     expect(dups[0].title).toContain('1');
   });
@@ -168,7 +169,7 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'b.md'), fm(2));
 
     const findings = await checkFrontmatter(input(tmp));
-    expect(findings.find((f) => f.rule === 'no-duplicate-sidebar-position')).toBeUndefined();
+    expect(findings.find((f) => f.rule === Rule.DuplicatePosition)).toBeUndefined();
   });
 
   it('should not report no-duplicate-sidebar-position for same position in different dirs', async () => {
@@ -179,7 +180,7 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'sub', 'b.md'), fm(1));
 
     const findings = await checkFrontmatter(input(tmp));
-    expect(findings.find((f) => f.rule === 'no-duplicate-sidebar-position')).toBeUndefined();
+    expect(findings.find((f) => f.rule === Rule.DuplicatePosition)).toBeUndefined();
   });
 
   it('should report no-duplicate-slugs for two files with the same custom slug', async () => {
@@ -191,7 +192,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
-    const dups = findings.filter((f) => f.rule === 'no-duplicate-slugs');
+    const dups = findings.filter((f) => f.rule === Rule.DuplicateSlug);
     expect(dups).toHaveLength(2);
     expect(dups[0].severity).toBe('error');
     expect(dups[0].title).toContain('same-slug');
@@ -205,6 +206,6 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'b.md'), fm(2, 'slug-two'));
 
     const findings = await checkFrontmatter(input(tmp));
-    expect(findings.find((f) => f.rule === 'no-duplicate-slugs')).toBeUndefined();
+    expect(findings.find((f) => f.rule === Rule.DuplicateSlug)).toBeUndefined();
   });
 });
