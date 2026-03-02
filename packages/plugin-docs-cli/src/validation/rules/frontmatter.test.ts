@@ -15,9 +15,8 @@ describe('checkFrontmatter', () => {
     const findings = await checkFrontmatter(input(tmp));
 
     const missing = findings.filter((f) => f.rule === Rule.RequiredFields);
-    expect(missing).toHaveLength(2);
+    expect(missing).toHaveLength(1);
     expect(missing.map((f) => f.title)).toContain('Missing required field: description');
-    expect(missing.map((f) => f.title)).toContain('Missing required field: sidebar_position');
   });
 
   it('should report wrong field types', async () => {
@@ -106,7 +105,7 @@ describe('checkFrontmatter', () => {
     const findings = await checkFrontmatter(input(tmp));
 
     const missing = findings.filter((f) => f.rule === Rule.RequiredFields);
-    expect(missing).toHaveLength(3);
+    expect(missing).toHaveLength(2);
     expect(missing[0].file).toContain('sub');
   });
 

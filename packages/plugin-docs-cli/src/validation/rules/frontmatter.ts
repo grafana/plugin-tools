@@ -7,8 +7,10 @@ import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 const REQUIRED_FIELDS: Array<{ key: string; type: string }> = [
   { key: 'title', type: 'string' },
   { key: 'description', type: 'string' },
-  { key: 'sidebar_position', type: 'number' },
 ];
+
+// optional fields: validated only when present
+const OPTIONAL_FIELDS: Array<{ key: string; type: string }> = [{ key: 'sidebar_position', type: 'number' }];
 
 /**
  * Checks whether a custom slug is safe for use in URLs.
@@ -148,6 +150,20 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
           detail: `Every page needs a "${key}" (${type}) in its frontmatter.`,
         });
       } else if (typeof data[key] !== type) {
+        diagnostics.push({
+          rule: Rule.FieldTypes,
+          severity: 'error',
+          file: relativePath,
+          line: findFieldLine(raw, key),
+          title: `Wrong type for field: ${key}`,
+          detail: `"${key}" should be a ${type} but got ${typeof data[key]}.`,
+        });
+      }
+    }
+
+    // check optional fields: wrong type only when the field is present
+    for (const { key, type } of OPTIONAL_FIELDS) {
+      if (key in data && typeof data[key] !== type) {
         diagnostics.push({
           rule: Rule.FieldTypes,
           severity: 'error',
