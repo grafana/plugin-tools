@@ -206,7 +206,7 @@ If you are developing a data source plugin that handles both logs and traces, an
 **Example in TypeScript:**
 
 ```ts
-import { createDataFrame } from '@grafana/data';
+import { createDataFrame, FieldType } from '@grafana/data';
 
 const result = createDataFrame({
   fields: [
