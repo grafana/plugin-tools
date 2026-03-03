@@ -46,7 +46,7 @@ Add `"logs": true` to the [plugin.json](../reference/metadata.md) file to tell G
 
 Grafana supports a variety of different data sources. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_, a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata. Learn more in [Data frames](../key-concepts/data-frames).
 
-The _log data frame_ can include following fields:
+The _log data frame_ can include the following fields:
 
 | Field name    | Field type                                      | Required field | Description                                                                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
