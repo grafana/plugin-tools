@@ -16,7 +16,7 @@ keywords:
 You can use the following APIs **to work with data sources with logs within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
 
 :::note
-For information on how to build a data source plugin with logs refer to [Build a logs data source plugin](../../tutorials/build-a-logs-data-source-plugin). 
+For information on how to build a data source plugin with logs refer to [Build a logs data source plugin](../tutorials/build-a-logs-data-source-plugin). 
 :::
 
 ## Show full-range logs volume
