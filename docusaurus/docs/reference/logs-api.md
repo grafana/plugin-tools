@@ -33,7 +33,7 @@ With [full range logs volume](https://grafana.com/docs/grafana/latest/explore/lo
 
 :::note
 
-This API must be implemented in data source in typescript code.
+Implement this API in the data source in TypeScript.
 
 :::
 
