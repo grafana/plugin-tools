@@ -103,7 +103,7 @@ export function getPackageManagerSilentInstallCmd(packageManagerName: string, pa
   switch (packageManagerName) {
     case 'yarn':
       if (lt(packageManagerVersion, '2.0.0')) {
-        return 'yarn install --silent --ignore-scripts';
+        return 'yarn install --silent --ignore-scripts --ignore-engines';
       }
       // Yarn Berry: --mode update-lockfile allows lockfile updates in CI
       return 'yarn install --mode update-lockfile --silent';

@@ -242,6 +242,69 @@ describe('004-eslint9-flat-config', () => {
       });
     });
 
+    it('should handle js keywords in eslint config names', async () => {
+      context.addFile(
+        'package.json',
+        JSON.stringify({
+          devDependencies: {
+            eslint: '^8.0.0',
+          },
+        })
+      );
+      context.addFile(
+        '.eslintrc',
+        JSON.stringify({
+          extends: ['./.config/.eslintrc', 'plugin:jsx-a11y/strict', 'plugin:import/recommended'],
+          plugins: ['import', 'jsx-a11y'],
+          settings: {
+            'import/parsers': {
+              '@typescript-eslint/parser': ['.ts', '.tsx'],
+            },
+            'import/resolver': 'typescript',
+          },
+          rules: {
+            'import/no-useless-path-segments': 'error',
+          },
+        })
+      );
+      context.addFile(
+        '.config/.eslintrc',
+        JSON.stringify({ extends: ['@grafana/eslint-config'], root: true, rules: { 'react/prop-types': 'off' } })
+      );
+
+      const result = await migrate(context);
+      expect(result.getFile('eslint.config.mjs')).toMatchInlineSnapshot(`
+        "import { defineConfig } from "eslint/config";
+        import baseConfig from "./.config/eslint.config.mjs";
+        import jsxA11y from "eslint-plugin-jsx-a11y";
+        import importPlugin from "eslint-plugin-import";
+
+        export default defineConfig([
+          ...baseConfig,
+          jsxA11y.configs.strict,
+          importPlugin.flatConfigs.recommended,
+          {
+            plugins: {
+              "import": importPlugin,
+              "jsx-a11y": jsxA11y,
+            },
+
+            rules: {
+              "import/no-useless-path-segments": "error",
+            },
+
+            settings: {
+              "import/parsers": {
+                "@typescript-eslint/parser": [".ts", ".tsx"],
+              },
+
+              "import/resolver": "typescript",
+            },
+          },
+        ]);"
+      `);
+    });
+
     it('should not make additional changes when run multiple times', async () => {
       context.addFile(
         'package.json',
