@@ -106,6 +106,7 @@ export class ExampleDatasource
     }
 
     return { ...logsVolumeRequest, targets };
+  }
 }
 ```
 
