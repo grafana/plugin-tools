@@ -303,7 +303,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 :::note
 
-Implement this feature as a data source method and enabled it in `plugin.json`.
+Implement this feature as a data source method and enable it in `plugin.json`.
 
 :::
 
