@@ -214,7 +214,7 @@ const result = createDataFrame({
     ...,
     { name: 'traceID',
       type: FieldType.string,
-      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q' 'k777549127c371903a2lw34'],
+      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q', 'k777549127c371903a2lw34'],
       config: {
         links: [
           {
