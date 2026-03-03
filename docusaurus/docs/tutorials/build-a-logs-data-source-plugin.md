@@ -58,7 +58,7 @@ The _log data frame_ can include the following fields:
 
 Logs data frame's `type` needs to be set to `type: DataFrameType.LogLines` in data frame's meta.
 
-### Example: Build a logs data frame in Go
+### Example: Build a logs data frame in Go
 
 ```go
 frame := data.NewFrame(
