@@ -17,7 +17,7 @@ keywords:
 Grafana data source plugins support metrics, logs, and other data types. The steps to build a logs data source plugin are largely the same as for a metrics data source, but there are a few differences which we will explain in this guide.
 
 :::note
-For information on the available APIs to use with data sources with logs refer to [Log data sources API reference guides](../reference/logs-api.md). 
+For information on the available APIs for log data sources, refer to [Log data sources API reference guides](../reference/logs-api.md).
 :::
 
 ## Before you begin
