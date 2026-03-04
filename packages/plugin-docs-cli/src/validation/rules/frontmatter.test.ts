@@ -13,6 +13,7 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'page.md'), '---\ntitle: Hello\n---\n# Hi\n');
 
     const findings = await checkFrontmatter(input(tmp));
+    expect(findings).toHaveLength(2); // 1 missing description + 1 h1 warning
 
     const missing = findings.filter((f) => f.rule === Rule.RequiredFields);
     expect(missing).toHaveLength(1);
@@ -24,7 +25,7 @@ describe('checkFrontmatter', () => {
     const findings = await checkFrontmatter(input(invalidDocs));
 
     const typeErrors = findings.filter((f) => f.rule === Rule.FieldTypes);
-    expect(typeErrors.length).toBeGreaterThanOrEqual(3);
+    expect(typeErrors).toHaveLength(3);
     expect(typeErrors.some((f) => f.title.includes('title'))).toBe(true);
     expect(typeErrors.some((f) => f.title.includes('description'))).toBe(true);
     expect(typeErrors.some((f) => f.title.includes('sidebar_position'))).toBe(true);
@@ -67,6 +68,7 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'page.md'), '---\ntitle: 123\ndescription: Valid\nsidebar_position: 1\n---\n');
 
     const findings = await checkFrontmatter(input(tmp));
+    expect(findings).toHaveLength(1);
     const titleError = findings.find((f) => f.rule === Rule.FieldTypes && f.title.includes('title'));
     expect(titleError).toBeDefined();
     expect(titleError!.line).toBe(2);
@@ -80,6 +82,7 @@ describe('checkFrontmatter', () => {
     );
 
     const findings = await checkFrontmatter(input(tmp));
+    expect(findings).toHaveLength(1);
     const h1 = findings.find((f) => f.rule === Rule.NoH1);
     expect(h1).toBeDefined();
     expect(h1!.severity).toBe('warning');
@@ -120,6 +123,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
+    expect(findings).toHaveLength(1);
     const finding = findings.find((f) => f.rule === Rule.BlockExists);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
@@ -143,6 +147,7 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
 
+    expect(findings).toHaveLength(1);
     const finding = findings.find((f) => f.rule === Rule.ValidYaml);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
@@ -198,6 +203,7 @@ describe('checkFrontmatter', () => {
     await writeFile(join(tmp, 'b.md'), fm(1));
 
     const findings = await checkFrontmatter({ docsPath: tmp, strict: false });
+    expect(findings).toHaveLength(2);
 
     const dup = findings.find((f) => f.rule === Rule.DuplicatePosition);
     expect(dup).toBeDefined();
