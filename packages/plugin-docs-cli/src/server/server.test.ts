@@ -26,7 +26,7 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('<title>Home Page - Plugin Documentation</title>');
-    expect(response.text).toContain('<h1 id="welcome">Welcome</h1>');
+    expect(response.text).toContain('<h1 class="docs-page-title">Home Page</h1>');
     expect(response.text).toContain('This is the home page of the test documentation.');
   });
 
@@ -39,7 +39,7 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('<title>User Guide - Plugin Documentation</title>');
-    expect(response.text).toContain('<h1 id="user-guide">User Guide</h1>');
+    expect(response.text).toContain('<h1 class="docs-page-title">User Guide</h1>');
     expect(response.text).toContain('This is a guide page.');
   });
 
@@ -51,7 +51,7 @@ describe('startServer', () => {
     const response = await request(app).get('/advanced');
 
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<h1 id="advanced-topics">Advanced Topics</h1>');
+    expect(response.text).toContain('<h1 class="docs-page-title">Advanced Topics</h1>');
     expect(response.text).toContain('This covers advanced topics.');
   });
 
@@ -158,7 +158,7 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('<title>Settings - Plugin Documentation</title>');
-    expect(response.text).toContain('<h1 id="settings">Settings</h1>');
+    expect(response.text).toContain('<h1 class="docs-page-title">Settings</h1>');
   });
 
   it('should render headings in the table of contents sidebar', async () => {

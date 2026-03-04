@@ -86,7 +86,7 @@ export interface Frontmatter {
    * The position of this page in the sidebar navigation (used for sorting).
    * Pages with lower numbers appear first.
    */
-  sidebar_position: number;
+  sidebar_position?: number;
 
   /**
    * Optional custom URL slug. If not provided, generated from file path.

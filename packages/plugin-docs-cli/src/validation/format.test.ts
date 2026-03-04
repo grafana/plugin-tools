@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { formatResult } from './format.js';
-import type { ValidationResult } from './types.js';
+import { Rule, type ValidationResult } from './types.js';
 
 describe('formatResult', () => {
   it('should show success for valid result with no diagnostics', () => {
@@ -13,7 +13,7 @@ describe('formatResult', () => {
   it('should show error count and ✗ icon when errors exist', () => {
     const result: ValidationResult = {
       valid: false,
-      diagnostics: [{ rule: 'test', severity: 'error', title: 'Bad thing', detail: 'Fix it' }],
+      diagnostics: [{ rule: Rule.HasMarkdown, severity: 'error', title: 'Bad thing', detail: 'Fix it' }],
     };
     const output = formatResult(result);
     expect(output).toContain('✗');
@@ -25,7 +25,7 @@ describe('formatResult', () => {
   it('should show ⚠ icon when only warnings exist', () => {
     const result: ValidationResult = {
       valid: true,
-      diagnostics: [{ rule: 'test', severity: 'warning', title: 'Heads up', detail: '' }],
+      diagnostics: [{ rule: Rule.NestedDirIndex, severity: 'warning', title: 'Heads up', detail: '' }],
     };
     const output = formatResult(result);
     expect(output).toContain('⚠');
@@ -36,9 +36,9 @@ describe('formatResult', () => {
     const result: ValidationResult = {
       valid: false,
       diagnostics: [
-        { rule: 'a', severity: 'error', title: 'A', detail: '' },
-        { rule: 'b', severity: 'error', title: 'B', detail: '' },
-        { rule: 'c', severity: 'warning', title: 'C', detail: '' },
+        { rule: Rule.NoSpaces, severity: 'error', title: 'A', detail: '' },
+        { rule: Rule.ValidNaming, severity: 'error', title: 'B', detail: '' },
+        { rule: Rule.NoEmptyDir, severity: 'warning', title: 'C', detail: '' },
       ],
     };
     const output = formatResult(result);
@@ -49,7 +49,7 @@ describe('formatResult', () => {
   it('should include file path when present', () => {
     const result: ValidationResult = {
       valid: false,
-      diagnostics: [{ rule: 'test', severity: 'error', file: 'docs/page.md', title: 'Problem', detail: '' }],
+      diagnostics: [{ rule: Rule.RootIndex, severity: 'error', file: 'docs/page.md', title: 'Problem', detail: '' }],
     };
     const output = formatResult(result);
     expect(output).toContain('docs/page.md');
@@ -58,7 +58,7 @@ describe('formatResult', () => {
   it('should show file:line when line number is present', () => {
     const result: ValidationResult = {
       valid: false,
-      diagnostics: [{ rule: 'test', severity: 'error', file: 'page.md', line: 7, title: 'H1', detail: '' }],
+      diagnostics: [{ rule: Rule.NoH1, severity: 'error', file: 'page.md', line: 7, title: 'H1', detail: '' }],
     };
     const output = formatResult(result);
     expect(output).toContain('page.md:7');
@@ -68,9 +68,9 @@ describe('formatResult', () => {
     const result: ValidationResult = {
       valid: false,
       diagnostics: [
-        { rule: 'a', severity: 'error', title: 'Error', detail: '' },
-        { rule: 'b', severity: 'warning', title: 'Warning', detail: '' },
-        { rule: 'c', severity: 'info', title: 'Info', detail: '' },
+        { rule: Rule.BlockExists, severity: 'error', title: 'Error', detail: '' },
+        { rule: Rule.ValidSlug, severity: 'warning', title: 'Warning', detail: '' },
+        { rule: Rule.AllowedFileTypes, severity: 'info', title: 'Info', detail: '' },
       ],
     };
     const output = formatResult(result);
