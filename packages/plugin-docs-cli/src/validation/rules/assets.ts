@@ -182,11 +182,13 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     let match: RegExpExecArray | null;
     while ((match = imageRefRe.exec(content)) !== null) {
       const ref = match[2];
-      // skip external URLs and data URIs
-      if (/^https?:\/\//i.test(ref) || /^data:/i.test(ref)) {
+      // skip external URLs, protocol-relative URLs, blob URLs and data URIs
+      if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref) || /^data:/i.test(ref)) {
         continue;
       }
-      const resolvedPath = normalize(join(dirname(mdRelPath), ref));
+
+      // root-relative paths (e.g. /img/foo.png) resolve against docs root
+      const resolvedPath = ref.startsWith('/') ? normalize(ref.slice(1)) : normalize(join(dirname(mdRelPath), ref));
       referencedPaths.add(resolvedPath);
 
       // referenced-images-exist: check that the target file exists on disk

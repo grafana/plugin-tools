@@ -422,6 +422,33 @@ describe('checkAssets', () => {
       expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
     });
 
+    it('should skip protocol-relative URLs', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![logo](//cdn.example.com/logo.png)'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
+    });
+
+    it('should skip blob URLs', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![img](blob:http://localhost/abc)'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
+    });
+
+    it('should resolve root-relative paths against docs root', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'img'));
+      await writeFile(join(tmp, 'img', 'logo.png'), bufferOfSize(100));
+      await mkdir(join(tmp, 'sub'));
+      await writeFile(join(tmp, 'sub', 'page.md'), md('![logo](/img/logo.png)'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
+    });
+
     it('should skip data URIs', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md('![pixel](data:image/png;base64,abc123)'));
