@@ -1,3 +1,29 @@
+# v7.0.2 (Tue Mar 03 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana dependencies to v12.4.0 [#2481](https://github.com/grafana/plugin-tools/pull/2481) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.1 (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- fix: migrations yarn 1 install and eslint config issues [#2503](https://github.com/grafana/plugin-tools/pull/2503) ([@jackw](https://github.com/jackw))
+- chore(deps): update dependency @grafana/plugin-e2e to v3.4.1 [#2502](https://github.com/grafana/plugin-tools/pull/2502) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.0.0 (Fri Feb 27 2026)
 
 #### 💥 Breaking Change
