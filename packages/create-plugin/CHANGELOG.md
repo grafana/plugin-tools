@@ -1,3 +1,15 @@
+# v7.0.2 (Tue Mar 03 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana dependencies to v12.4.0 [#2481](https://github.com/grafana/plugin-tools/pull/2481) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v7.0.1 (Mon Mar 02 2026)
 
 #### 🐛 Bug Fix
