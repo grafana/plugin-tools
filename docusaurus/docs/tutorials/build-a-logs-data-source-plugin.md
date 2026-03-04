@@ -99,7 +99,7 @@ const result = createDataFrame({
 [Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If your data source produces log results, you can implement the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
 
 :::note
-For more information on the available APIs for data sources, refer to [Data sources API reference guide](../reference/datasource-apis.md).
+For more information on the available APIs for data sources, refer to the [Data sources API reference guide](../reference/datasource-apis.md).
 :::
 
 ### Show log results in Explore's Logs view
@@ -208,32 +208,6 @@ const result = createDataFrame({
 If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and _URL data links_. These links use the trace ID value to accurately create a trace query that produces the relevant trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
 
 For example:
-
-```ts
-import { createDataFrame, FieldType } from '@grafana/data';
-
-const result = createDataFrame({
-  fields: [
-    ...,
-    { name: 'traceID',
-      type: FieldType.string,
-      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q' 'k777549127c371903a2lw34'],
-      config: {
-        links: [
-          {
-            // Be sure to adjust this example based on your data source logic.
-            title: 'Trace view',
-            url: `http://linkToTraceID/${__value.raw}` // ${__value.raw} is a variable that will be replaced with actual traceID value.
-          }
-        ]
-      }
-    }
-  ],
-  ...,
-});
-```
-
-Another example:
 
 ```ts
 import { createDataFrame, FieldType } from '@grafana/data';

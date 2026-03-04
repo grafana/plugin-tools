@@ -19,7 +19,11 @@ You can use the following data source APIs **to work with data sources within th
 
 ## The `DataSourceWithXXXSupport` API
 
-Use the `DataSourceWithXXXSupport` interface to expand your data source plugin capabilities.
+Use the `DataSourceWithXXXSupport` interface to expand your data source plugin capabilities. Available APIs include:
+
+- `DataSourceWithSupplementaryQueriesSupport`
+- `DataSourceWithLogsContextSupport`
+- `DataSourceWithLogsLabelTypesSupport` 
 
 ## Show full-range logs volume
 
@@ -100,7 +104,7 @@ export class ExampleDatasource
 }
 ```
 
-## Logs sample
+## Implement logs sample support
 
 The [logs sample](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-sample) feature enables users to view samples of log lines that contributed to the visualized metrics, providing deeper insights into the data. 
 
@@ -180,7 +184,7 @@ export class ExampleDatasource
 For an example of how to implement the logs sample in the Elasticsearch data source, refer to [Elasticsearch: Enable logs samples for metric queries](https://github.com/grafana/grafana/pull/70258/).
 :::
 
-## Log context query editor
+## Create a log context query editor
 
 [Log context](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-context) is a feature in Explore that enables the display of additional lines of context surrounding a log entry that matches a specific search query. With this feature users gain deeper insights into the log data by viewing the log entry within its relevant context. Because Grafana will show the surrounding log lines, users can gain a better understanding of the sequence of events and the context in which the log entry occurred, improving log analysis and troubleshooting.
 
@@ -237,3 +241,7 @@ export class ExampleDatasource
   }
 }
 ```
+
+## Use logs with `labelTypes`
+
+If your data sources use `labelTypes` to categorize, you can make your logs compliant using the `DataSourceWithLogsLabelTypesSupport` interface.
