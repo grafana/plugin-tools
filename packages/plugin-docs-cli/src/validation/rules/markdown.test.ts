@@ -544,3 +544,30 @@ describe('checkMarkdown', () => {
     });
   });
 });
+
+describe('edge cases', () => {
+  it('should not skip regular links when same pattern also appears as image ref on same line', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+    // ![x](../a) is an image ref (path traversal), [x](../a) is a regular link (path traversal)
+    await writeFile(join(tmp, 'index.md'), md('![x](../a.png) [x](../a.md)'));
+
+    const findings = await checkMarkdown(input(tmp));
+
+    const traversal = findings.filter((f) => f.rule === Rule.NoPathTraversal);
+    // should have TWO path traversal diagnostics: one from image ref, one from link
+    expect(traversal).toHaveLength(2);
+  });
+
+  it('should report data:text/html URI in image ref as dangerous URL', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+    await writeFile(join(tmp, 'index.md'), md('![xss](data:text/html,<script>alert(1)</script>)'));
+
+    const findings = await checkMarkdown(input(tmp));
+
+    const finding = findings.find((f) => f.rule === Rule.NoDangerousUrls);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    // should NOT be caught by no-base64-images (that's only for data:image/...;base64,...)
+    expect(findings.find((f) => f.rule === Rule.NoBase64Images)).toBeUndefined();
+  });
+});

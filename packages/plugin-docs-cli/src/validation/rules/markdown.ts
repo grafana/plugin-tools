@@ -4,7 +4,6 @@ import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
-// excludes markdown-safe self-closing <br> and <!-- comments -->
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
 
 // tags that are allowed in markdown (commonly used and safe)
@@ -35,19 +34,6 @@ const EXTERNAL_URL_RE = /^https?:\/\//i;
 const PATH_TRAVERSAL_RE = /(?:^|\/)\.\.\//;
 
 /**
- * Finds the 1-based line number of the first occurrence of a string in content.
- */
-function findLine(content: string, needle: string): number | undefined {
-  const lines = content.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].includes(needle)) {
-      return i + 1;
-    }
-  }
-  return undefined;
-}
-
-/**
  * Checks whether a line is inside a fenced code block.
  * Returns a set of 1-based line numbers that are inside code blocks.
  */
@@ -68,22 +54,6 @@ function getCodeBlockLines(content: string): Set<number> {
   }
 
   return codeLines;
-}
-
-/**
- * Finds the 1-based line number of a match, skipping code blocks.
- */
-function findLineOutsideCode(content: string, needle: string, codeLines: Set<number>): number | undefined {
-  const lines = content.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    if (codeLines.has(i + 1)) {
-      continue;
-    }
-    if (lines[i].includes(needle)) {
-      return i + 1;
-    }
-  }
-  return undefined;
 }
 
 /**
@@ -168,10 +138,6 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       if (tagName === 'script' || ALLOWED_HTML_TAGS.has(tagName)) {
         continue;
       }
-      // skip HTML comments
-      if (match[0].startsWith('<!--')) {
-        continue;
-      }
       diagnostics.push({
         rule: Rule.NoRawHtml,
         severity: input.strict ? 'error' : 'warning',
@@ -252,15 +218,13 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     // process links (non-image)
+    const contentLines = content.split('\n');
     for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines)) {
       const ref = match[2];
 
-      // skip image links (already handled above) - the LINK_RE also matches ![...](...) prefix
-      // but since LINK_RE is [text](url) and IMAGE_REF_RE is ![alt](url), we need to check
-      // if this match is preceded by ! on the same line
-      const lineContent = content.split('\n')[line - 1];
-      const matchIndex = lineContent.indexOf(match[0]);
-      if (matchIndex > 0 && lineContent[matchIndex - 1] === '!') {
+      // skip image links (already handled above) - LINK_RE also matches the [alt](url) part
+      // of ![alt](url), so check if the char before this match is !
+      if (match.index > 0 && contentLines[line - 1][match.index - 1] === '!') {
         continue;
       }
 
