@@ -2,8 +2,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, sep, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-
-const ALLOWED_IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
+import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
 const IMAGE_FILE_NAME_RE = /^[a-z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
@@ -57,7 +56,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
   }
 
   const allFiles = entries.filter((e) => e.isFile());
-  const imageFiles = allFiles.filter((e) => ALLOWED_IMAGE_EXT.has(extname(e.name).toLowerCase()));
+  const imageFiles = allFiles.filter((e) => ALLOWED_IMAGE_EXTENSIONS.has(extname(e.name).toLowerCase()));
   const svgFiles = allFiles.filter((e) => extname(e.name).toLowerCase() === '.svg');
   const mdFiles = allFiles.filter((e) => e.name.endsWith('.md'));
 
@@ -102,7 +101,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       // handled by no-svg-files
       continue;
     }
-    if (!ALLOWED_IMAGE_EXT.has(ext)) {
+    if (!ALLOWED_IMAGE_EXTENSIONS.has(ext)) {
       diagnostics.push({
         rule: Rule.AllowedImageFormats,
         severity: input.strict ? 'error' : 'info',
