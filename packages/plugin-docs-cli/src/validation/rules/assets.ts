@@ -3,6 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, sep, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
+
 const IMAGE_FILE_NAME_RE = /^[a-z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
@@ -164,6 +165,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
   }
 
   // referenced-images-exist and no-orphaned-images: parse markdown for image refs
+  const allFilePaths = new Set(allFiles.map((e) => rel(e)));
   const referencedPaths = new Set<string>();
 
   for (const md of mdFiles) {
@@ -188,8 +190,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       referencedPaths.add(resolvedPath);
 
       // referenced-images-exist: check that the target file exists on disk
-      const entryExists = allFiles.some((e) => rel(e) === resolvedPath);
-      if (!entryExists) {
+      if (!allFilePaths.has(resolvedPath)) {
         diagnostics.push({
           rule: Rule.ReferencedImagesExist,
           severity: 'error',

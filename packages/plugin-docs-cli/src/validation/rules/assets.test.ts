@@ -83,6 +83,16 @@ describe('checkAssets', () => {
       expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeUndefined();
     });
 
+    it('should not report images inside img/ subdirectory', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await writeFile(join(tmp, 'index.md'), md());
+      await mkdir(join(tmp, 'img', 'screenshots'), { recursive: true });
+      await writeFile(join(tmp, 'img', 'screenshots', 'step1.png'), bufferOfSize(100));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeUndefined();
+    });
+
     it('should report images in docs root', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md());
@@ -394,6 +404,16 @@ describe('checkAssets', () => {
       expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
     });
 
+    it('should handle ./ prefix in image refs', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'img'));
+      await writeFile(join(tmp, 'img', 'screenshot.png'), bufferOfSize(100));
+      await writeFile(join(tmp, 'index.md'), md('![alt](./img/screenshot.png)'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
+    });
+
     it('should skip external URLs', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md('![logo](https://example.com/logo.png)'));
@@ -467,6 +487,17 @@ describe('checkAssets', () => {
       // should have images-in-img-dir but not no-orphaned-images
       expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeDefined();
       expect(findings.find((f) => f.rule === Rule.NoOrphanedImages)).toBeUndefined();
+    });
+
+    it('should handle references to img subdirectories', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'img', 'screenshots'), { recursive: true });
+      await writeFile(join(tmp, 'img', 'screenshots', 'step1.png'), bufferOfSize(100));
+      await writeFile(join(tmp, 'index.md'), md('![step](img/screenshots/step1.png)'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoOrphanedImages)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
     });
 
     it('should detect references from different markdown files', async () => {
