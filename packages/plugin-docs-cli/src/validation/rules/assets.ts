@@ -1,6 +1,6 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
-import { join, extname, dirname, relative, sep, normalize } from 'node:path';
+import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
 
@@ -8,15 +8,6 @@ const IMAGE_FILE_NAME_RE = /^[a-z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
 const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
-
-/**
- * Checks whether a relative path is inside a directory named `img`.
- */
-function isInImgDir(relativePath: string): boolean {
-  const parts = relativePath.split(sep);
-  // check directory components (everything except the filename)
-  return parts.slice(0, -1).includes('img');
-}
 
 /**
  * Formats a byte count as a human-readable string.
@@ -75,42 +66,6 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       title: 'SVG files are not allowed',
       detail: `"${svg.name}" is an SVG file. SVG files can contain embedded scripts and pose an XSS risk. Use PNG or WebP instead.`,
     });
-  }
-
-  // images-in-img-dir: all image files must be inside an img/ directory
-  for (const img of imageFiles) {
-    const relPath = rel(img);
-    if (!isInImgDir(relPath)) {
-      diagnostics.push({
-        rule: Rule.ImagesInImgDir,
-        severity: input.strict ? 'error' : 'info',
-        file: relPath,
-        title: 'Image not in img/ directory',
-        detail: `"${img.name}" must be inside an img/ directory. Move it to the img/ folder next to the markdown files that reference it.`,
-      });
-    }
-  }
-
-  // allowed-image-formats: files in img/ dirs must be allowed image formats
-  for (const file of allFiles) {
-    const relPath = rel(file);
-    if (!isInImgDir(relPath)) {
-      continue;
-    }
-    const ext = extname(file.name).toLowerCase();
-    if (ext === '.svg') {
-      // handled by no-svg-files
-      continue;
-    }
-    if (!ALLOWED_IMAGE_EXTENSIONS.has(ext)) {
-      diagnostics.push({
-        rule: Rule.AllowedImageFormats,
-        severity: input.strict ? 'error' : 'info',
-        file: relPath,
-        title: 'Image format not allowed',
-        detail: `"${file.name}" is not an allowed image format. Only png, jpg, jpeg, webp and gif files are permitted.`,
-      });
-    }
   }
 
   // image-file-naming: image filenames must use only [a-z0-9-_.]
@@ -209,10 +164,6 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
   if (input.strict) {
     for (const img of imageFiles) {
       const relPath = rel(img);
-      // only check images that are in img/ directories
-      if (!isInImgDir(relPath)) {
-        continue;
-      }
       if (!referencedPaths.has(relPath)) {
         diagnostics.push({
           rule: Rule.NoOrphanedImages,

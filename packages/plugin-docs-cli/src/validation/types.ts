@@ -20,8 +20,6 @@ export const Rule = {
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
   // asset rules
-  ImagesInImgDir: 'images-in-img-dir',
-  AllowedImageFormats: 'allowed-image-formats',
   NoSvg: 'no-svg-files',
   ReferencedImagesExist: 'referenced-images-exist',
   MaxImageSize: 'max-image-size',

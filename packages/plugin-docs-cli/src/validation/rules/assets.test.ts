@@ -59,145 +59,6 @@ describe('checkAssets', () => {
     });
   });
 
-  // --- images-in-img-dir ---
-
-  describe('images-in-img-dir', () => {
-    it('should not report images inside img/ directory', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md('![alt](img/screenshot.png)'));
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'screenshot.png'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeUndefined();
-    });
-
-    it('should not report images inside nested img/ directory', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'sub'), { recursive: true });
-      await mkdir(join(tmp, 'sub', 'img'));
-      await writeFile(join(tmp, 'sub', 'img', 'diagram.png'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeUndefined();
-    });
-
-    it('should not report images inside img/ subdirectory', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img', 'screenshots'), { recursive: true });
-      await writeFile(join(tmp, 'img', 'screenshots', 'step1.png'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeUndefined();
-    });
-
-    it('should report images in docs root', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await writeFile(join(tmp, 'screenshot.png'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp));
-
-      const finding = findings.find((f) => f.rule === Rule.ImagesInImgDir);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('error');
-    });
-
-    it('should report images in non-img directory', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'assets'));
-      await writeFile(join(tmp, 'assets', 'photo.jpg'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp));
-
-      const finding = findings.find((f) => f.rule === Rule.ImagesInImgDir);
-      expect(finding).toBeDefined();
-      expect(finding!.file).toContain('photo.jpg');
-    });
-
-    it('should report as info in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await writeFile(join(tmp, 'screenshot.png'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.ImagesInImgDir);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('info');
-    });
-  });
-
-  // --- allowed-image-formats ---
-
-  describe('allowed-image-formats', () => {
-    it('should not report allowed image formats in img/', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'a.png'), '');
-      await writeFile(join(tmp, 'img', 'b.jpg'), '');
-      await writeFile(join(tmp, 'img', 'c.jpeg'), '');
-      await writeFile(join(tmp, 'img', 'd.webp'), '');
-      await writeFile(join(tmp, 'img', 'e.gif'), '');
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.find((f) => f.rule === Rule.AllowedImageFormats)).toBeUndefined();
-    });
-
-    it('should report disallowed formats in img/', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'photo.bmp'), '');
-
-      const findings = await checkAssets(input(tmp));
-
-      const finding = findings.find((f) => f.rule === Rule.AllowedImageFormats);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('error');
-      expect(finding!.file).toContain('photo.bmp');
-    });
-
-    it('should report as info in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'photo.tiff'), '');
-
-      const findings = await checkAssets(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.AllowedImageFormats);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('info');
-    });
-
-    it('should not flag SVG in img/ (handled by no-svg-files)', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'icon.svg'), '<svg></svg>');
-
-      const findings = await checkAssets(input(tmp));
-
-      // should have no-svg-files but not allowed-image-formats
-      expect(findings.find((f) => f.rule === Rule.NoSvg)).toBeDefined();
-      expect(findings.find((f) => f.rule === Rule.AllowedImageFormats)).toBeUndefined();
-    });
-
-    it('should not report files outside img/', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await writeFile(join(tmp, 'notes.txt'), 'hello');
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.find((f) => f.rule === Rule.AllowedImageFormats)).toBeUndefined();
-    });
-  });
-
   // --- image-file-naming ---
 
   describe('image-file-naming', () => {
@@ -505,15 +366,17 @@ describe('checkAssets', () => {
       expect(findings.find((f) => f.rule === Rule.NoOrphanedImages)).toBeUndefined();
     });
 
-    it('should not report images outside img/ as orphaned', async () => {
+    it('should report unreferenced images anywhere as orphaned', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'stray.png'), bufferOfSize(100));
       await writeFile(join(tmp, 'index.md'), md('## No images'));
 
       const findings = await checkAssets(input(tmp));
-      // should have images-in-img-dir but not no-orphaned-images
-      expect(findings.find((f) => f.rule === Rule.ImagesInImgDir)).toBeDefined();
-      expect(findings.find((f) => f.rule === Rule.NoOrphanedImages)).toBeUndefined();
+
+      const finding = findings.find((f) => f.rule === Rule.NoOrphanedImages);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('info');
+      expect(finding!.file).toContain('stray.png');
     });
 
     it('should handle references to img subdirectories', async () => {
