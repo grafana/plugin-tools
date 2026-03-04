@@ -133,13 +133,9 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
 
     // validate frontmatter has required fields with correct types
     const frontmatter = parsed.data as Partial<Frontmatter>;
-    if (
-      typeof frontmatter.title !== 'string' ||
-      typeof frontmatter.description !== 'string' ||
-      typeof frontmatter.sidebar_position !== 'number'
-    ) {
+    if (typeof frontmatter.title !== 'string' || typeof frontmatter.description !== 'string') {
       console.warn(
-        `Warning: ${relativePath} missing or invalid required frontmatter fields (title: string, description: string, sidebar_position: number)`
+        `Warning: ${relativePath} missing or invalid required frontmatter fields (title: string, description: string)`
       );
       continue;
     }
