@@ -4,7 +4,7 @@ import { parseMarkdown } from './parser.js';
 
 describe('parseMarkdown', () => {
   it('should return a valid HAST root node', () => {
-    const markdown = '# Hello World';
+    const markdown = '## Hello World';
     const result = parseMarkdown(markdown);
 
     expect(result.hast).toBeDefined();
@@ -17,9 +17,19 @@ describe('parseMarkdown', () => {
     const result = parseMarkdown(markdown);
     const html = toHtml(result.hast);
 
-    expect(html).toContain('<h1 id="hello-world">Hello World</h1>');
+    expect(html).not.toContain('<h1');
     expect(html).toContain('<p>This is a paragraph.</p>');
     expect(result.frontmatter).toEqual({});
+  });
+
+  it('should strip h1 headings from the body', () => {
+    const markdown = '# Page Title\n\n## Section\n\nContent.';
+    const result = parseMarkdown(markdown);
+    const html = toHtml(result.hast);
+
+    expect(html).not.toContain('<h1');
+    expect(html).toContain('<h2');
+    expect(html).toContain('Content.');
   });
 
   it('should extract frontmatter', () => {
@@ -38,7 +48,7 @@ Body text here.`;
       title: 'Test Page',
       description: 'A test page',
     });
-    expect(html).toContain('<h1 id="content">Content</h1>');
+    expect(html).not.toContain('<h1');
     expect(html).toContain('<p>Body text here.</p>');
   });
 
@@ -67,7 +77,7 @@ Body text here.`;
   it('should handle empty frontmatter', () => {
     const markdown = `---
 ---
-# Title`;
+## Title`;
 
     const result = parseMarkdown(markdown);
     const html = toHtml(result.hast);
@@ -77,7 +87,7 @@ Body text here.`;
   });
 
   it('should preserve safe raw HTML elements like <details>', () => {
-    const markdown = `# FAQ
+    const markdown = `## FAQ
 
 <details>
 <summary>How does it work?</summary>
@@ -115,8 +125,8 @@ Regular content.
     // event handlers should be removed
     expect(html).not.toContain('onerror');
 
-    // safe content should remain
-    expect(html).toContain('<h1 id="test">Test</h1>');
+    // safe content should remain (h1 is stripped, paragraph is kept)
+    expect(html).not.toContain('<h1');
     expect(html).toContain('<p>Regular content.</p>');
   });
 
