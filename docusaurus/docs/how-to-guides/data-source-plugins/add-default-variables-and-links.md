@@ -17,11 +17,19 @@ keywords:
 
 :::note
 
-This feature is available from Grafana 13.0.
+This feature is available from Grafana 13.0 and later.
 
 :::
 
 Data source plugins can register default variables and dashboard links that are automatically loaded onto any dashboard using that data source. This is useful when your data source requires certain filter variables or benefits from having quick-access links to external documentation or related tools.
+
+## Before you begin
+
+Ensure your development environment meets the following prerequisites:
+
+- **Grafana version:** Grafana 13.0 or later.
+- **`@grafana/data`:** Version 13.0.0 or later.
+- **`@grafana/schema`:** Version 13.0.0 or later.
 
 ## Key behaviors
 
@@ -98,14 +106,3 @@ async getDefaultLinks(): Promise<DashboardLink[]> {
 }
 ```
 
-## Types reference
-
-Both methods use types from the `@grafana/schema` package:
-
-```ts
-import { VariableKind, DashboardLink } from '@grafana/schema/apis/dashboard.grafana.app/v2';
-```
-
-`VariableKind` is a union type that supports several variable kinds including `CustomVariable`, `QueryVariable`, `DatasourceVariable`, `IntervalVariable`, `TextVariable`, `ConstantVariable`, and others. Each kind has a `spec` object with properties specific to that variable type.
-
-`DashboardLink` defines a dashboard link with properties such as `title`, `url`, `type`, `icon`, `targetBlank`, and `placement`.
