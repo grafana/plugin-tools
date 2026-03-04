@@ -344,5 +344,5 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 ### Log context
 
-Refer to [Log context query editor](../reference/datasource-apis#log-context-query-editor) in the Data source API reference guide for more information.
+Refer to [Log context query editor](../reference/datasource-apis#create-a-log-context-query-editor) in the Data source API reference guide for more information.
 
