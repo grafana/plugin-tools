@@ -23,7 +23,6 @@ Use the `DataSourceWithXXXSupport` interface to expand your data source plugin c
 
 - `DataSourceWithSupplementaryQueriesSupport`
 - `DataSourceWithLogsContextSupport`
-- `DataSourceWithLogsLabelTypesSupport` 
 
 ## Show full-range logs volume
 
@@ -242,6 +241,3 @@ export class ExampleDatasource
 }
 ```
 
-## Use logs with `labelTypes`
-
-If your data sources use `labelTypes` to categorize, you can make your logs compliant using the `DataSourceWithLogsLabelTypesSupport` interface.
