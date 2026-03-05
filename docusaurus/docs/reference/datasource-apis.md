@@ -14,15 +14,14 @@ keywords:
   - apis
 ---
 
-You can use the following data source APIs **to work with data sources within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
-
-
-## The `DataSourceWithXXXSupport` API
-
 Use the `DataSourceWithXXXSupport` interface to expand your data source plugin capabilities. Available APIs include:
 
 - `DataSourceWithSupplementaryQueriesSupport`
 - `DataSourceWithLogsContextSupport`
+
+:::note
+These APIs **only work with data sources within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
+:::
 
 ## Show full-range logs volume
 
