@@ -43,9 +43,12 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
     }
   }
 
-  setRootConfig({ version: CURRENT_APP_VERSION });
+  // Only set the version in the config file if there were migrations to run.
+  if (migrations.length > 0) {
+    setRootConfig({ version: CURRENT_APP_VERSION });
 
-  if (options.commitEachMigration) {
-    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
+    if (options.commitEachMigration) {
+      await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
+    }
   }
 }
