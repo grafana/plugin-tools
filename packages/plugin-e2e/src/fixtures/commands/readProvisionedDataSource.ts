@@ -19,7 +19,13 @@ export const readProvisionedDataSource: ReadProvisionedDataSourceFixture = async
     // supports $VAR, ${VAR} and ${VAR:-default} syntax.
     const contents = raw.replace(/\$\{(\w+)(?::-(.*?))?\}|\$(\w+)/g, (_, braced, fallback, plain) => {
       const varName = braced ?? plain;
-      return process.env[varName] ?? fallback ?? '';
+      const value = process.env[varName];
+      // For ${VAR:-default}, treat empty string as unset, matching shell/Grafana semantics.
+      if (fallback !== undefined) {
+        return value === undefined || value === '' ? fallback : value ?? '';
+      }
+      // For $VAR or ${VAR} without fallback, preserve existing behavior.
+      return value ?? '';
     });
     const yml = parseYml(contents);
     if (!name) {
