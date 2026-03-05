@@ -25,7 +25,6 @@ import { styleText } from 'node:util';
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
 
 export const migrate = async (argv: minimist.ParsedArgs) => {
-  await performPreCodemodChecks(argv);
   const rootPath = resolve(process.cwd(), '.config/.cprc.json');
   let rootConfig;
   try {
@@ -45,6 +44,7 @@ export const migrate = async (argv: minimist.ParsedArgs) => {
     });
     process.exit(1);
   }
+  await performPreCodemodChecks(argv);
 
   try {
     // 0. Warning
