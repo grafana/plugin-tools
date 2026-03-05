@@ -39,7 +39,7 @@ export const migrate = async (argv: minimist.ParsedArgs) => {
       title: `Your plugin is already using create-plugin.`,
       body: [
         'This command is designed to migrate plugins from @grafana/toolkit to @grafana/create-plugin, it should not be used to update plugins that already use @grafana/create-plugin.',
-        'To update your plugin to the latest version of @grafana/create-plugin please use the `update` command instead.',
+        `To update your plugin to the latest version of @grafana/create-plugin please use the ${output.formatCode('update')} command instead.`,
       ],
     });
     process.exit(1);
