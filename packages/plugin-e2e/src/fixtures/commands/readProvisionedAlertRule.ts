@@ -17,7 +17,11 @@ export const readProvisionedAlertRule: ReadProvisionedAlertRuleFixture = async (
     const raw = await promises.readFile(resolvedPath, 'utf8');
     const contents = raw.replace(/\$\{([A-Za-z_][A-Za-z0-9_]*)(?::-(.*?))?\}|\$([A-Za-z_][A-Za-z0-9_]*)/g, (_, braced, fallback, plain) => {
       const varName = braced ?? plain;
-      return process.env[varName] ?? fallback ?? '';
+      const envValue = process.env[varName];
+      if (envValue === undefined || envValue === '') {
+        return fallback ?? '';
+      }
+      return envValue;
     });
     const yml = parseYml(contents);
     let group = yml.groups[0];
