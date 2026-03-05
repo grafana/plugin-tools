@@ -1,3 +1,16 @@
+# (Thu Mar 05 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.3`
+  - fix: exit migrate command if plugin is using create-plugin [#2510](https://github.com/grafana/plugin-tools/pull/2510) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Mar 03 2026)
 
 #### 🐛 Bug Fix
