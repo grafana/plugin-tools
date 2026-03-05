@@ -205,7 +205,7 @@ const result = createDataFrame({
 
 ### Logs-to-trace using internal data links
 
-If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and _URL data links_. These links use the trace ID value to accurately create a trace query that produces the relevant trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
+If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and internal data links. These internal links use the trace ID value to accurately create a trace query that produces the relevant trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
 
 For example:
 
