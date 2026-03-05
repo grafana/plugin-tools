@@ -1,3 +1,4 @@
+import minimist from 'minimist';
 import { MIGRATION_CONFIG } from '../constants.js';
 import { displayArrayAsList, confirmPrompt, output } from '../utils/utils.console.js';
 import { compileTemplateFiles, getTemplateData } from '../utils/utils.templates.js';
@@ -19,8 +20,24 @@ import {
 } from '../utils/utils.npm.js';
 import { getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { styleText } from 'node:util';
+import { performPreCodemodChecks } from '../utils/utils.checks.js';
+import { getConfig } from '../utils/utils.config.js';
 
-export const migrate = async () => {
+export const migrate = async (argv: minimist.ParsedArgs) => {
+  await performPreCodemodChecks(argv);
+  const { version } = getConfig();
+
+  if (version) {
+    output.error({
+      title: `Your plugin is using create-plugin version ${version}.`,
+      body: [
+        'This command is designed to migrate plugins from @grafana/toolkit to @grafana/create-plugin, it should not be used to update plugins that already use @grafana/create-plugin.',
+        'If you want to update your plugin to the latest version of @grafana/create-plugin please use the `update` command instead.',
+      ],
+    });
+    process.exit(1);
+  }
+
   try {
     // 0. Warning
     // -----------
