@@ -222,13 +222,14 @@ const result = createDataFrame({
         links: [
           {
             title: 'Trace view',
-            url: '',
             internal: {
               // Be sure to adjust this example with datasourceUid, datasourceName and query based on your data source logic.
               datasourceUid: instanceSettings.uid,
               datasourceName: instanceSettings.name,
               query: {
-                { ...query, queryType: 'trace', traceId: '${__value.raw}'}, // ${__value.raw} is a variable that will be replaced with actual traceID value.
+                ...query,
+                queryType: 'trace',
+                traceId: '${__value.raw}', // ${__value.raw} is a variable that will be replaced with actual traceID value.
               }
             }
 
