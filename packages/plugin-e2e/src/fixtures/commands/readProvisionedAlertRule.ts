@@ -15,7 +15,7 @@ export const readProvisionedAlertRule: ReadProvisionedAlertRuleFixture = async (
   await use(async ({ fileName, groupName, ruleTitle }) => {
     const resolvedPath = path.resolve(path.join(provisioningRootDir, ALERTING_DIR, fileName));
     const raw = await promises.readFile(resolvedPath, 'utf8');
-    const contents = raw.replace(/\$\{(\w+)(?::-(.*?))?\}|\$(\w+)/g, (_, braced, fallback, plain) => {
+    const contents = raw.replace(/\$\{([A-Za-z_][A-Za-z0-9_]*)(?::-(.*?))?\}|\$([A-Za-z_][A-Za-z0-9_]*)/g, (_, braced, fallback, plain) => {
       const varName = braced ?? plain;
       return process.env[varName] ?? fallback ?? '';
     });
