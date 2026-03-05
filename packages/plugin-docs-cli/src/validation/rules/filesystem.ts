@@ -1,16 +1,7 @@
 import { readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, sep } from 'node:path';
-import type { Diagnostic, ValidationInput } from '../types.js';
-
-const RULE_HAS_MARKDOWN = 'has-markdown-files';
-const RULE_ROOT_INDEX = 'root-index-exists';
-const RULE_NESTED_DIR_INDEX = 'nested-dir-has-index';
-const RULE_NO_SPACES = 'no-spaces-in-names';
-const RULE_VALID_NAMING = 'valid-file-naming';
-const RULE_NO_EMPTY_DIR = 'no-empty-directories';
-const RULE_NO_SYMLINKS = 'no-symlinks';
-const RULE_ALLOWED_FILE_TYPES = 'allowed-file-types';
+import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
@@ -36,7 +27,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   // no-symlinks
   for (const link of symlinks) {
     diagnostics.push({
-      rule: RULE_NO_SYMLINKS,
+      rule: Rule.NoSymlinks,
       severity: 'error',
       file: join(link.parentPath, link.name),
       title: 'Symlinks are not allowed',
@@ -49,7 +40,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     const ext = extname(file.name).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(ext)) {
       diagnostics.push({
-        rule: RULE_ALLOWED_FILE_TYPES,
+        rule: Rule.AllowedFileTypes,
         severity: input.strict ? 'error' : 'info',
         file: join(file.parentPath, file.name),
         title: 'File type not allowed',
@@ -61,7 +52,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   // has-markdown-files
   if (mdFiles.length === 0) {
     diagnostics.push({
-      rule: RULE_HAS_MARKDOWN,
+      rule: Rule.HasMarkdown,
       severity: 'error',
       title: 'Docs folder must contain at least one .md file',
       detail:
@@ -73,7 +64,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   const hasRootIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === input.docsPath);
   if (!hasRootIndex) {
     diagnostics.push({
-      rule: RULE_ROOT_INDEX,
+      rule: Rule.RootIndex,
       severity: 'error',
       title: 'Root index.md must exist',
       detail:
@@ -93,7 +84,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     );
     if (!hasAllowed) {
       diagnostics.push({
-        rule: RULE_NO_EMPTY_DIR,
+        rule: Rule.NoEmptyDir,
         severity: input.strict ? 'error' : 'warning',
         file: dirPath,
         title: 'Directory contains no documentation files',
@@ -111,7 +102,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     const hasIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === dirPath);
     if (!hasIndex) {
       diagnostics.push({
-        rule: RULE_NESTED_DIR_INDEX,
+        rule: Rule.NestedDirIndex,
         severity: 'warning',
         file: dirPath,
         title: 'Subdirectory is missing index.md',
@@ -128,7 +119,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   for (const item of namesToCheck) {
     if (/\s/.test(item.slug)) {
       diagnostics.push({
-        rule: RULE_NO_SPACES,
+        rule: Rule.NoSpaces,
         severity: 'error',
         file: item.path,
         title: 'Name contains spaces',
@@ -136,7 +127,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
       });
     } else if (!SLUG_SAFE_RE.test(item.slug)) {
       diagnostics.push({
-        rule: RULE_VALID_NAMING,
+        rule: Rule.ValidNaming,
         severity: input.strict ? 'error' : 'warning',
         file: item.path,
         title: 'Name contains non-slug characters',
