@@ -4,10 +4,11 @@ import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
 
-const IMAGE_FILE_NAME_RE = /^[a-z0-9\-_.]+$/;
+const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
 const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_DATA_URI_SIZE = 300 * 1024; // 300KB
 
 /**
  * Formats a byte count as a human-readable string.
@@ -68,7 +69,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     });
   }
 
-  // image-file-naming: image filenames must use only [a-z0-9-_.]
+  // image-file-naming: image filenames must use only [a-zA-Z0-9-_.]
   for (const img of imageFiles) {
     if (!IMAGE_FILE_NAME_RE.test(img.name)) {
       diagnostics.push({
@@ -76,7 +77,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
         severity: input.strict ? 'error' : 'info',
         file: rel(img),
         title: 'Image filename contains invalid characters',
-        detail: `"${img.name}" should use only lowercase letters, digits, hyphens, underscores and dots.`,
+        detail: `"${img.name}" should use only letters, digits, hyphens, underscores and dots.`,
       });
     }
   }
@@ -137,8 +138,29 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     let match: RegExpExecArray | null;
     while ((match = imageRefRe.exec(content)) !== null) {
       const ref = match[2];
-      // skip external URLs, protocol-relative URLs, blob URLs and data URIs
-      if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref) || /^data:/i.test(ref)) {
+      // skip external URLs, protocol-relative URLs and blob URLs
+      if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref)) {
+        continue;
+      }
+
+      // max-data-uri-size: check size of inline data URIs
+      if (/^data:/i.test(ref)) {
+        const commaIdx = ref.indexOf(',');
+        if (commaIdx !== -1) {
+          const encoded = ref.slice(commaIdx + 1);
+          const isBase64 = /;base64$/i.test(ref.slice(0, commaIdx));
+          const byteSize = isBase64 ? Math.ceil((encoded.length * 3) / 4) : encoded.length;
+          if (byteSize > MAX_DATA_URI_SIZE) {
+            diagnostics.push({
+              rule: Rule.MaxDataUriSize,
+              severity: input.strict ? 'error' : 'info',
+              file: mdRelPath,
+              line: findRefLine(content, ref),
+              title: 'Data URI exceeds 300KB limit',
+              detail: `Inline data URI is approximately ${formatBytes(byteSize)} which exceeds the 300KB limit. Use a file reference instead.`,
+            });
+          }
+        }
         continue;
       }
 

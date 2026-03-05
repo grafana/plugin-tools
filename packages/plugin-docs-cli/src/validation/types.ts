@@ -26,6 +26,7 @@ export const Rule = {
   MaxTotalImagesSize: 'max-total-images-size',
   ImageFileNaming: 'image-file-naming',
   NoOrphanedImages: 'no-orphaned-images',
+  MaxDataUriSize: 'max-data-uri-size',
 } as const;
 
 export type Rule = (typeof Rule)[keyof typeof Rule];
