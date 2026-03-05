@@ -1,7 +1,7 @@
 ---
-id: logs-api
-title: Log data sources API reference guides
-description: API reference guides for working with data sources with logs.
+id: datasource-apis
+title: Data sources APIs reference guide
+description: API reference guides for working with data sources.
 keywords:
   - grafana
   - plugins
@@ -11,31 +11,23 @@ keywords:
   - log
   - logs
   - api
+  - apis
 ---
 
-You can use the following APIs **to work with data sources with logs within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
+Use the `DataSourceWithXXXSupport` interface to expand your data source plugin capabilities. Available APIs include:
+
+- `DataSourceWithSupplementaryQueriesSupport`
+- `DataSourceWithLogsContextSupport`
 
 :::note
-For information on how to build a logs data source plugin, refer to [Build a logs data source plugin](../tutorials/build-a-logs-data-source-plugin).
+These APIs **only work with data sources within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
 :::
 
 ## Show full-range logs volume
 
-:::note
+With [full range logs volume](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-volume), Explore displays a graph showing the log distribution for all the entered log queries. 
 
-Implement it in the data source with the `DataSourceWithXXXSupport` interface.
-
-:::
-
-With [full range logs volume](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-volume), Explore displays a graph showing the log distribution for all the entered log queries. To add full-range logs volume support to the data source plugin, use the `DataSourceWithSupplementaryQueriesSupport` API.
-
-**How to implement `DataSourceWithSupplementaryQueriesSupport` API in data source:**
-
-:::note
-
-Implement this API in the data source in TypeScript.
-
-:::
+To add full-range logs volume support to the data source plugin, implement the `DataSourceWithSupplementaryQueriesSupport` API in your data source in TypeScript.
 
 ```ts
 import {
@@ -110,17 +102,11 @@ export class ExampleDatasource
 }
 ```
 
-## Logs sample
+## Implement logs sample support
 
-:::note
+The [logs sample](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-sample) feature enables users to view samples of log lines that contributed to the visualized metrics, providing deeper insights into the data. 
 
-Implement this API in a data source by implementing the `DataSourceWithXXXSupport` interface.
-
-:::
-
-The [logs sample](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-sample) feature is a valuable addition when your data source supports both logs and metrics. It enables users to view samples of log lines that contributed to the visualized metrics, providing deeper insights into the data.
-
-To implement the logs sample support in your data source plugin, you can use the `DataSourceWithSupplementaryQueriesSupport` API.
+To implement logs sample support in your data source plugin, use the `DataSourceWithSupplementaryQueriesSupport` API.
 
 ```ts
 import {
@@ -192,60 +178,65 @@ export class ExampleDatasource
 }
 ```
 
-For an example of how to implement the logs sample in the Elasticsearch data source, refer to [PR 70258](https://github.com/grafana/grafana/pull/70258/).
-
-## Logs to trace using internal data links
-
 :::note
-
-This feature is currently not supported for external plugins outside of the Grafana repo. The `@internal` API is currently under development.
-
+For an example of how to implement the logs sample in the Elasticsearch data source, refer to [Elasticsearch: Enable logs samples for metric queries](https://github.com/grafana/grafana/pull/70258/).
 :::
 
-If you are developing a data source plugin that handles both logs and traces, and your log data contains trace IDs, you can enhance your log data frames by adding a field with trace ID values and internal data links. These links should use the trace ID value to accurately create a trace query that produces relevant trace. This enhancement enables users to seamlessly move from log lines to the traces.
+## Create a log context query editor
 
-**Example in TypeScript:**
+[Log context](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-context) is a feature in Explore that enables the display of additional lines of context surrounding a log entry that matches a specific search query. With this feature users gain deeper insights into the log data by viewing the log entry within its relevant context. Because Grafana will show the surrounding log lines, users can gain a better understanding of the sequence of events and the context in which the log entry occurred, improving log analysis and troubleshooting.
+
+To implement this feature, use the `DataSourceWithLogsContextSupport` interface.
 
 ```ts
-import { createDataFrame, FieldType } from '@grafana/data';
+import {
+  DataQueryRequest,
+  DataQueryResponse,
+  DataSourceWithLogsContextSupport,
+  LogRowContextOptions,
+  LogRowContextQueryDirection,
+  LogRowModel,
+} from '@grafana/data';
+import { catchError, lastValueFrom, of, switchMap, Observable } from 'rxjs';
 
-const result = createDataFrame({
-  fields: [
-    ...,
-    { name: 'traceID',
-      type: FieldType.string,
-      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q', 'k777549127c371903a2lw34'],
-      config: {
-        links: [
-          {
-            title: 'Trace view',
-            url: '',
-            internal: {
-              // Be sure to adjust this example with datasourceUid, datasourceName and query based on your data source logic.
-              datasourceUid: instanceSettings.uid,
-              datasourceName: instanceSettings.name,
-              query: {
-                { ...query, queryType: 'trace', traceId: '${__value.raw}'}, // ${__value.raw} is a variable that will be replaced with actual traceID value.
-              }
-            }
+export class ExampleDatasource
+  extends DataSourceApi<ExampleQuery, ExampleOptions>
+  implements DataSourceWithLogsContextSupport<ExampleQuery>
+{
+  // Retrieve context for a given log row
+  async getLogRowContext(
+    row: LogRowModel,
+    options?: LogRowContextOptions,
+    query?: ExampleQuery
+  ): Promise<DataQueryResponse> {
+    // Be sure to adjust this example implementation of createRequestFromQuery based on your data source logic.
+    // Remember to replace variables with `getTemplateSrv` and the passed `options.scopedVars` before returning your `request` object.
+    const request = createRequestFromQuery(row, query, options);
+    return lastValueFrom(
+      // Be sure to adjust this example of this.query based on your data source logic.
+      this.query(request).pipe(
+        catchError((err) => {
+          const error: DataQueryError = {
+            message: 'Error during context query. Please check JS console logs.',
+            status: err.status,
+            statusText: err.statusText,
+          };
+          throw error;
+        }),
+        // Be sure to adjust this example of processResultsToDataQueryResponse based on your data source logic.
+        switchMap((res) => of(processResultsToDataQueryResponse(res)))
+      )
+    );
+  }
 
-          }
-        ]
-      }
-
-    }
-  ],
-  ...,
-});
+  // Retrieve the context query object for a given log row. This is currently used to open LogContext queries in a split view.
+  getLogRowContextQuery(
+    row: LogRowModel,
+    options?: LogRowContextOptions,
+    query?: ExampleQuery
+  ): Promise<ExampleQuery | null> {
+    // Data source internal implementation that creates context query based on row, options and original query
+  }
+}
 ```
-
-## Log context query editor
-
-:::note
-
-This feature is currently not supported for external plugins outside of the Grafana repo. The`@alpha` API is currently under development.
-
-:::
-
-It allows plugin developers to display a custom UI in the context view by implementing the `getLogRowContextUi?(row: LogRowModel, runContextQuery?: () => void, origQuery?: TQuery): React.ReactNode;` method.
 
