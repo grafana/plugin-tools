@@ -14,7 +14,12 @@ const ALERTING_DIR = 'alerting';
 export const readProvisionedAlertRule: ReadProvisionedAlertRuleFixture = async ({ provisioningRootDir }, use) => {
   await use(async ({ fileName, groupName, ruleTitle }) => {
     const resolvedPath = path.resolve(path.join(provisioningRootDir, ALERTING_DIR, fileName));
-    const contents = await promises.readFile(resolvedPath, 'utf8');
+    const raw = await promises.readFile(resolvedPath, 'utf8');
+    // expand env vars the same way Grafana does when loading provisioning YAML
+    const contents = raw.replace(/\$\{(\w+)(?::-(.*?))?\}|\$(\w+)/g, (_, braced, fallback, plain) => {
+      const varName = braced ?? plain;
+      return process.env[varName] ?? fallback ?? '';
+    });
     const yml = parseYml(contents);
     let group = yml.groups[0];
     if (groupName) {
