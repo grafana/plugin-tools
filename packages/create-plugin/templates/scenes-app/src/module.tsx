@@ -1,11 +1,12 @@
 import React, { Suspense, lazy } from 'react';
-import { initPluginTranslations } from '@grafana/i18n';
 import { AppPlugin, type AppRootProps } from '@grafana/data';
+import { initPluginTranslations } from '@grafana/i18n';
+import { loadResources } from '@grafana/scenes';
 import { LoadingPlaceholder } from '@grafana/ui';
 import type { AppConfigProps } from './components/AppConfig/AppConfig';
 import pluginJson from 'plugin.json';
 
-await initPluginTranslations(pluginJson.id);
+await initPluginTranslations(pluginJson.id, [loadResources]);
 
 const LazyApp = lazy(() => import('./components/App/App'));
 const LazyAppConfig = lazy(() => import('./components/AppConfig/AppConfig'));

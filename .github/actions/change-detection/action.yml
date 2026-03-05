@@ -20,7 +20,7 @@ runs:
     - name: Detect changes
       id: changed-files
       if: github.event_name == 'pull_request'
-      uses: tj-actions/changed-files@24d32ffd492484c1d75e0c0b894501ddb9d30d62 # v47
+      uses: tj-actions/changed-files@7dee1b0c1557f278e5c7dc244927139d78c0e22a # v47.0.4
       with:
         files_yaml: |
           self:

@@ -16,22 +16,25 @@ keywords:
 
 Grafana data source plugins support metrics, logs, and other data types. The steps to build a logs data source plugin are largely the same as for a metrics data source, but there are a few differences which we will explain in this guide.
 
+:::note
+For information on the available APIs for log data sources, refer to [Log data sources API reference guides](../reference/logs-api.md).
+:::
+
 ## Before you begin
 
-This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. We recommend that you review this material before continuing.
+This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. Review this material before proceeding with this guide.
 
 ## Add logs support to your data source
 
-To add logs support to an existing data source, you need to:
+To add logs support to an existing data source:
 
-1. Enable logs support
-1. Construct the log data frame
+1. [Enable logs support](#enable-logs-support)
+1. [Build the logs data frame](#build-the-logs-data-frame)
+1. Optionally, you can improve the user experience with one or more [optional features](#enhance-your-logs-data-source-plugin-with-optional-features).
 
-When these steps are done, then you can improve the user experience with one or more [optional features](#enhance-your-logs-data-source-plugin-with-optional-features).
+## Enable logs support
 
-### Step 1: Enable logs support
-
-Tell Grafana that your data source plugin can return log data, by adding `"logs": true` to the [plugin.json](../reference/metadata.md) file.
+Add `"logs": true` to the [plugin.json](../reference/metadata.md) file to tell Grafana that your data source plugin can return log data:
 
 ```json title="src/plugin.json"
 {
@@ -39,11 +42,11 @@ Tell Grafana that your data source plugin can return log data, by adding `"logs"
 }
 ```
 
-### Step 2: Construct the log data frame
+## Build the logs data frame
 
-### Logs data frame format
+Grafana supports a variety of different data sources. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a _data frame_, a collection of fields organized as columns. Each field, in turn, consists of a collection of values and metadata. Learn more in [Data frames](../key-concepts/data-frames).
 
-The log data frame should include following fields:
+The _log data frame_ can include the following fields:
 
 | Field name    | Field type                                      | Required field | Description                                                                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -55,7 +58,7 @@ The log data frame should include following fields:
 
 Logs data frame's `type` needs to be set to `type: DataFrameType.LogLines` in data frame's meta.
 
-**Example of constructing a logs data frame in Go:**
+### Example: Build a logs data frame in Go
 
 ```go
 frame := data.NewFrame(
@@ -72,7 +75,7 @@ frame.SetMeta(&data.FrameMeta{
 })
 ```
 
-**Example of constructing a logs data frame in TypeScript:**
+### Example: Build a logs data frame in Go TypeScript
 
 ```ts
 import { createDataFrame, DataFrameType, FieldType } from '@grafana/data';
@@ -99,9 +102,7 @@ const result = createDataFrame({
 
 You can use the following optional features to enhance your logs data source plugin in the Explore and Logs panel.
 
-[Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If the data source produces log results, we highly recommend implementing the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
-
-The following steps show the process for adding support for Explore features in a data source plugin through a seamless integration. Implement these APIs to enhance the user experience and take advantage of Explore's powerful log investigation capabilities.
+[Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If your data source produces log results, you can implement the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
 
 ### Show log results in Explore's Logs view
 
@@ -132,7 +133,7 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute.
+Implement this feature in the data frame as a meta attribute.
 
 :::
 
@@ -167,15 +168,15 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a meta attribute, or in the data frame as a field.
+Implement this feature in the data frame as a meta attribute or as a field.
 
 :::
 
 [Log result meta information](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-result-meta-information) can be used to communicate information about logs results to the user. The following information can be shared with the user:
 
-- **Count of received logs vs limit** - Displays the count of received logs compared to the specified limit. Data frames should set a limit with a meta attribute for the number of requested log lines.
+- **Count of received logs vs limit**: Displays the count of received logs compared to the specified limit. Data frames should set a limit with a meta attribute for the number of requested log lines.
 - **Error**: Displays possible errors in your log results. Data frames should to have an `error` in the `meta` attribute.
-- **Common labels**: Displays labels present in the `labels` data frame field that are the same for all displayed log lines. This feature is supported for data sources that produce log data frames with an labels field. Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+- **Common labels**: Displays labels present in the `labels` data frame field that are the same for all displayed log lines. This feature is supported for data sources that produce log data frames with an labels field. Refer to [Build the logs data frame](#build-the-logs-data-frame) for more information.
 
 **Example in Go:**
 
@@ -204,7 +205,7 @@ const result = createDataFrame({
 });
 ```
 
-### Logs to trace using data link with URL
+### Logs with trace IDs 
 
 If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and _URL data links_. These links should use the trace ID value to accurately link to the appropriate trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
 
@@ -238,19 +239,19 @@ const result = createDataFrame({
 
 :::note
 
-This feature must be implemented in the data frame as a field.
+Implement this feature in the data frame as a field.
 
 :::
 
 Color-coded [log levels](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-level) are displayed at the beginning of each log line. They allow users to quickly assess the severity of log entries and facilitate log analysis and troubleshooting. The log level is determined from the `severity` field of the data frame. If the `severity` field isn't present, Grafana tries to evaluate the level based on the content of the log line. If inferring the log level from the content isn't possible, the log level is then set to `unknown`.
 
-Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+Refer to [Build the logs data frame](#build-the-logs-data-frame) for more information.
 
 ### Copy link to log line
 
 :::note
 
-This feature must be implemented in the data frame as a field.
+Implement this feature in the data frame as a field.
 
 :::
 
@@ -258,9 +259,9 @@ This feature must be implemented in the data frame as a field.
 
 If the underlying database doesn't return an `id` field, you can implement one within the data source. For example, in the Loki data source, a combination of nanosecond timestamp, labels, and the content of the log line is used to create a unique `id`. On the other hand, Elasticsearch returns an `_id` field that is unique for the specified index. In such cases, to ensure uniqueness, both the `index name` and `_id` are used to create a unique `id`.
 
-Refer to [Logs data frame format](#logs-data-frame-format) for more information.
+Refer to [Build the logs data frame](#build-the-logs-data-frame) for more information.
 
-### Filter fields using Log details
+### Filter fields using log details
 
 :::note
 
@@ -302,7 +303,7 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 :::note
 
-Implement this feature data source method and enabled in `plugin.json`
+Implement this feature as a data source method and enable it in `plugin.json`.
 
 :::
 
@@ -396,235 +397,3 @@ export class ExampleDatasource
 }
 ```
 
-## APIs under development
-
-These APIs can be used in data sources within the [`grafana/grafana`](https://github.com/grafana/grafana) repository. They are not supported for external plugin developers.
-
-### Show full-range logs volume
-
-:::note
-
-It is implemented in data source by implementing `DataSourceWithXXXSupport` interface.
-
-:::
-
-With [full range logs volume](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-volume), Explore displays a graph showing the log distribution for all the entered log queries. To add full-range logs volume support to the data source plugin, use the `DataSourceWithSupplementaryQueriesSupport` API.
-
-**How to implement `DataSourceWithSupplementaryQueriesSupport` API in data source:**
-
-:::note
-
-This API must be implemented in data source in typescript code.
-
-:::
-
-```ts
-import {
-  DataSourceWithSupplementaryQueriesSupport,
-  LogLevel,
-  SupplementaryQueryOptions,
-  SupplementaryQueryType,
-} from '@grafana/data';
-
-export class ExampleDatasource
-  extends DataSourceApi<ExampleQuery, ExampleOptions>
-  implements DataSourceWithSupplementaryQueriesSupport<ExampleQuery>
-{
-  // Returns supplementary query types that data source supports.
-  getSupportedSupplementaryQueryTypes(): SupplementaryQueryType[] {
-    return [SupplementaryQueryType.LogsVolume];
-  }
-
-  // Returns a supplementary query to be used to fetch supplementary data based on the provided type and original query.
-  // If provided query is not suitable for provided supplementary query type, undefined should be returned.
-  getSupplementaryQuery(options: SupplementaryQueryOptions, query: ExampleQuery): ExampleQuery | undefined {
-    if (!this.getSupportedSupplementaryQueryTypes().includes(options.type)) {
-      return undefined;
-    }
-
-    switch (options.type) {
-      case SupplementaryQueryType.LogsVolume:
-        // This is a mocked implementation. Be sure to adjust this based on your data source logic.
-        return { ...query, refId: `logs-volume-${query.refId}`, queryType: 'count' };
-      default:
-        return undefined;
-    }
-  }
-
-  // It generates a DataQueryRequest for a specific supplementary query type.
-  // @returns A DataQueryRequest for the supplementary queries or undefined if not supported.
-  getSupplementaryRequest(
-    type: SupplementaryQueryType,
-    request: DataQueryRequest<ExampleQuery>,
-    options?: SupplementaryQueryOptions
-  ): DataQueryRequest<ExampleQuery> | undefined {
-    if (!this.getSupportedSupplementaryQueryTypes().includes(type)) {
-      return undefined;
-    }
-
-    switch (type) {
-      case SupplementaryQueryType.LogsVolume:
-        const logsVolumeOption: LogsVolumeOption =
-          options?.type === SupplementaryQueryType.LogsVolume ? options : { type };
-        return this.getLogsVolumeDataProvider(request, logsVolumeOption);
-      default:
-        return undefined;
-    }
-  }
-
-  // Be sure to adjust this example based your data source logic.
-  private getLogsVolumeDataProvider(
-    request: DataQueryRequest<ExampleQuery>,
-    options: LogsVolumeOption
-  ): DataQueryRequest<ExampleQuery> | undefined {
-    const logsVolumeRequest = cloneDeep(request);
-    const targets = logsVolumeRequest.targets
-      .map((query) => this.getSupplementaryQuery(options, query))
-      .filter((query): query is ExampleQuery => !!query);
-
-    if (!targets.length) {
-      return undefined;
-    }
-
-    return { ...logsVolumeRequest, targets };
-}
-```
-
-### Logs sample
-
-:::note
-
-Implement this API in a data source by implementing the `DataSourceWithXXXSupport` interface.
-
-:::
-
-The [logs sample](https://grafana.com/docs/grafana/latest/explore/logs-integration/#logs-sample) feature is a valuable addition when your data source supports both logs and metrics. It enables users to view samples of log lines that contributed to the visualized metrics, providing deeper insights into the data.
-
-To implement the logs sample support in your data source plugin, you can use the `DataSourceWithSupplementaryQueriesSupport` API.
-
-```ts
-import {
-  DataSourceWithSupplementaryQueriesSupport,
-  SupplementaryQueryOptions,
-  SupplementaryQueryType,
-} from '@grafana/data';
-
-export class ExampleDatasource
-  extends DataSourceApi<ExampleQuery, ExampleOptions>
-  implements DataSourceWithSupplementaryQueriesSupport<ExampleQuery>
-{
-  // Returns supplementary query types that data source supports.
-  getSupportedSupplementaryQueryTypes(): SupplementaryQueryType[] {
-    return [SupplementaryQueryType.LogsSample];
-  }
-
-  // Returns a supplementary query to be used to fetch supplementary data based on the provided type and original query.
-  // If provided query is not suitable for provided supplementary query type, undefined should be returned.
-  getSupplementaryQuery(options: SupplementaryQueryOptions, query: ExampleQuery): ExampleQuery | undefined {
-    if (!this.getSupportedSupplementaryQueryTypes().includes(options.type)) {
-      return undefined;
-    }
-
-    switch (options.type) {
-      case SupplementaryQueryType.LogsSample:
-        // Be sure to adjust this example based on your data source logic.
-        return { ...query, refId: `logs-sample-${query.refId}`, queryType: 'logs' };
-      default:
-        return undefined;
-    }
-  }
-
-  // It generates a DataQueryRequest for a specific supplementary query type.
-  // @returns A DataQueryRequest for the supplementary queries or undefined if not supported.
-  getSupplementaryRequest(
-    type: SupplementaryQueryType,
-    request: DataQueryRequest<ExampleQuery>,
-    options?: SupplementaryQueryOptions
-  ): DataQueryRequest<ExampleQuery> | undefined {
-    if (!this.getSupportedSupplementaryQueryTypes().includes(type)) {
-      return undefined;
-    }
-
-    switch (type) {
-      case SupplementaryQueryType.LogsSample:
-        const logsSampleOption: LogsSampleOptions =
-          options?.type === SupplementaryQueryType.LogsSample ? options : { type };
-        return this.getLogsSampleDataProvider(request, logsSampleOption);
-      default:
-        return undefined;
-    }
-  }
-  
-  private getLogsSampleDataProvider(
-    request: DataQueryRequest<ExampleQuery>,
-    options?: LogsSampleOptions
-  ): DataQueryRequest<ExampleQuery> | undefined {
-    const logsSampleRequest = cloneDeep(request);
-    const targets = logsSampleRequest.targets
-      .map((query) => this.getSupplementaryQuery({ type: SupplementaryQueryType.LogsSample, limit: 100 }, query))
-      .filter((query): query is ExampleQuery => !!query);
-
-    if (!targets.length) {
-      return undefined;
-    }
-    return { ...logsSampleRequest, targets };
-  }
-}
-```
-
-For an example of how to implement the logs sample in the Elasticsearch data source, refer to [PR 70258](https://github.com/grafana/grafana/pull/70258/).
-
-### Logs to trace using internal data links
-
-:::note
-
-This feature is currently not supported for external plugins outside of the Grafana repo. The `@internal` API is currently under development.
-
-:::
-
-If you are developing a data source plugin that handles both logs and traces, and your log data contains trace IDs, you can enhance your log data frames by adding a field with trace ID values and internal data links. These links should use the trace ID value to accurately create a trace query that produces relevant trace. This enhancement enables users to seamlessly move from log lines to the traces.
-
-**Example in TypeScript:**
-
-```ts
-import { createDataFrame } from '@grafana/data';
-
-const result = createDataFrame({
-  fields: [
-    ...,
-    { name: 'traceID',
-      type: FieldType.string,
-      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q' 'k777549127c371903a2lw34'],
-      config: {
-        links: [
-          {
-            title: 'Trace view',
-            url: '',
-            internal: {
-              // Be sure to adjust this example with datasourceUid, datasourceName and query based on your data source logic.
-              datasourceUid: instanceSettings.uid,
-              datasourceName: instanceSettings.name,
-              query: {
-                { ...query, queryType: 'trace', traceId: '${__value.raw}'}, // ${__value.raw} is a variable that will be replaced with actual traceID value.
-              }
-            }
-
-          }
-        ]
-      }
-
-    }
-  ],
-  ...,
-});
-```
-
-### Log context query editor
-
-:::note
-
-This feature is currently not supported for external plugins outside of the Grafana repo. The`@alpha` API is currently under development.
-
-:::
-
-It allows plugin developers to display a custom UI in the context view by implementing the `getLogRowContextUi?(row: LogRowModel, runContextQuery?: () => void, origQuery?: TQuery): React.ReactNode;` method.

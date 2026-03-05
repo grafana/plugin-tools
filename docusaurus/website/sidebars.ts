@@ -350,10 +350,11 @@ const sidebars: SidebarsConfig = {
         'plugin-examples/plugin-examples',
         'reference/plugin-json',
         'reference/cli-commands',
+        'reference/logs-api',
         {
           type: 'category',
-          label: 'UI extensions reference',
-          description: 'Reeference guides for UI extensions.',
+          label: 'UI extensions reference guides',
+          description: 'Reference guides for UI extensions.',
           link: {
             type: 'doc',
             id: 'reference/ui-extensions-reference/ui-extensions-reference',

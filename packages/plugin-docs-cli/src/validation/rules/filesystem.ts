@@ -1,25 +1,58 @@
-import { access, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
-import type { Diagnostic, ValidationInput } from '../types.js';
+import { readdir } from 'node:fs/promises';
+import type { Dirent } from 'node:fs';
+import { join, extname, sep } from 'node:path';
+import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 
-const RULE_HAS_MARKDOWN = 'has-markdown-files';
-const RULE_ROOT_INDEX = 'root-index-exists';
+// slug-safe: lowercase letters, digits and hyphens only
+const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
+
+// allowed file extensions in the docs folder (.md + permitted image formats)
+export const ALLOWED_EXTENSIONS = new Set(['.md', '.png', '.jpg', '.jpeg', '.webp', '.gif']);
 
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
-  // check for at least one .md file
-  let hasMarkdown = false;
+  let entries: Dirent[] = [];
   try {
-    const entries = await readdir(input.docsPath, { recursive: true });
-    hasMarkdown = entries.some((entry) => entry.endsWith('.md'));
+    entries = await readdir(input.docsPath, { recursive: true, withFileTypes: true });
   } catch {
-    // docsPath doesn't exist or isn't readable - will be caught by has-markdown-files
+    // docsPath doesn't exist or isn't readable
   }
 
-  if (!hasMarkdown) {
+  const mdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() === '.md');
+  const dirs = entries.filter((e) => e.isDirectory());
+  const symlinks = entries.filter((e) => e.isSymbolicLink());
+  const nonMdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() !== '.md');
+
+  // no-symlinks
+  for (const link of symlinks) {
     diagnostics.push({
-      rule: RULE_HAS_MARKDOWN,
+      rule: Rule.NoSymlinks,
+      severity: 'error',
+      file: join(link.parentPath, link.name),
+      title: 'Symlinks are not allowed',
+      detail: `"${link.name}" is a symbolic link. Use actual files instead of symlinks.`,
+    });
+  }
+
+  // allowed-file-types: non-.md files must be permitted image formats
+  for (const file of nonMdFiles) {
+    const ext = extname(file.name).toLowerCase();
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
+      diagnostics.push({
+        rule: Rule.AllowedFileTypes,
+        severity: input.strict ? 'error' : 'info',
+        file: join(file.parentPath, file.name),
+        title: 'File type not allowed',
+        detail: `"${file.name}" is not an allowed file type. Only .md and image files (png, jpg, jpeg, webp, gif) are permitted in the docs folder.`,
+      });
+    }
+  }
+
+  // has-markdown-files
+  if (mdFiles.length === 0) {
+    diagnostics.push({
+      rule: Rule.HasMarkdown,
       severity: 'error',
       title: 'Docs folder must contain at least one .md file',
       detail:
@@ -27,17 +60,80 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     });
   }
 
-  // check for root index.md
-  try {
-    await access(join(input.docsPath, 'index.md'));
-  } catch {
+  // root-index-exists
+  const hasRootIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === input.docsPath);
+  if (!hasRootIndex) {
     diagnostics.push({
-      rule: RULE_ROOT_INDEX,
+      rule: Rule.RootIndex,
       severity: 'error',
       title: 'Root index.md must exist',
       detail:
         'The docs folder must contain an index.md file at its root. This serves as the landing page for your plugin documentation.',
     });
+  }
+
+  for (const dir of dirs) {
+    const dirPath = join(dir.parentPath, dir.name);
+
+    // no-empty-directories: directories with no allowed-extension files at any depth serve no purpose
+    const hasAllowed = entries.some(
+      (e) =>
+        e.isFile() &&
+        ALLOWED_EXTENSIONS.has(extname(e.name).toLowerCase()) &&
+        (e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep))
+    );
+    if (!hasAllowed) {
+      diagnostics.push({
+        rule: Rule.NoEmptyDir,
+        severity: input.strict ? 'error' : 'warning',
+        file: dirPath,
+        title: 'Directory contains no documentation files',
+        detail: `"${dir.name}" contains no .md or image files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
+      });
+      continue;
+    }
+
+    // nested-dir-has-index: only relevant for dirs that have .md files; image-only dirs don't need one
+    const hasMd = mdFiles.some((e) => e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep));
+    if (!hasMd) {
+      continue;
+    }
+
+    const hasIndex = mdFiles.some((e) => e.name === 'index.md' && e.parentPath === dirPath);
+    if (!hasIndex) {
+      diagnostics.push({
+        rule: Rule.NestedDirIndex,
+        severity: 'warning',
+        file: dirPath,
+        title: 'Subdirectory is missing index.md',
+        detail: `"${dir.name}" has no index.md. Without one, it will appear as an unnamed category using a title-cased directory name.`,
+      });
+    }
+  }
+
+  // no-spaces-in-names (error) and valid-file-naming (strict-dependent): applies to file stems and dir names
+  const namesToCheck = [
+    ...mdFiles.map((e) => ({ slug: e.name.slice(0, -3), label: e.name, path: join(e.parentPath, e.name) })),
+    ...dirs.map((e) => ({ slug: e.name, label: e.name, path: join(e.parentPath, e.name) })),
+  ];
+  for (const item of namesToCheck) {
+    if (/\s/.test(item.slug)) {
+      diagnostics.push({
+        rule: Rule.NoSpaces,
+        severity: 'error',
+        file: item.path,
+        title: 'Name contains spaces',
+        detail: `"${item.label}" contains spaces which break URL slugs. Use hyphens instead.`,
+      });
+    } else if (!SLUG_SAFE_RE.test(item.slug)) {
+      diagnostics.push({
+        rule: Rule.ValidNaming,
+        severity: input.strict ? 'error' : 'warning',
+        file: item.path,
+        title: 'Name contains non-slug characters',
+        detail: `"${item.label}" should use only lowercase letters, digits and hyphens for clean URL slugs.`,
+      });
+    }
   }
 
   return diagnostics;

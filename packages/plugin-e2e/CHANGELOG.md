@@ -1,3 +1,15 @@
+# v3.4.1 (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22358195095 [#2466](https://github.com/grafana/plugin-tools/pull/2466) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
 # v3.4.0 (Wed Feb 25 2026)
 
 #### 🚀 Enhancement

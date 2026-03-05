@@ -1,3 +1,75 @@
+# (Tue Mar 03 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.2`
+  - chore(deps): update grafana dependencies to v12.4.0 [#2481](https://github.com/grafana/plugin-tools/pull/2481) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.1`
+  - fix: migrations yarn 1 install and eslint config issues [#2503](https://github.com/grafana/plugin-tools/pull/2503) ([@jackw](https://github.com/jackw))
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.4.1 [#2502](https://github.com/grafana/plugin-tools/pull/2502) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.1`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22358195095 [#2466](https://github.com/grafana/plugin-tools/pull/2466) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Fri Feb 27 2026)
+
+#### 💥 Breaking Change
+
+- `@grafana/create-plugin@7.0.0`
+  - Create Plugin: add loadResources in scenes template [#2477](https://github.com/grafana/plugin-tools/pull/2477) ([@hugohaggmark](https://github.com/hugohaggmark))
+
+#### Authors: 1
+
+- Hugo Häggmark ([@hugohaggmark](https://github.com/hugohaggmark))
+
+---
+
+# (Thu Feb 26 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@6.11.0`
+  - feat: plugin-validator skill config for claude and codex [#2468](https://github.com/grafana/plugin-tools/pull/2468) ([@s4kh](https://github.com/s4kh))
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency rollup to v4.59.0 [security] [#2487](https://github.com/grafana/plugin-tools/pull/2487) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Syerikjan Kh ([@s4kh](https://github.com/s4kh))
+
+---
+
 # (Thu Feb 26 2026)
 
 #### 🐛 Bug Fix

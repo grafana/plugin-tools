@@ -1,7 +1,8 @@
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { cp, lstat, mkdir, rm, writeFile } from 'node:fs/promises';
+import { extname, join, relative } from 'node:path';
 import createDebug from 'debug';
 import { scanDocsFolder } from '../scanner.js';
+import { ALLOWED_EXTENSIONS } from '../validation/rules/filesystem.js';
 
 const debug = createDebug('plugin-docs-cli:build');
 
@@ -26,8 +27,17 @@ export async function buildDocs(projectRoot: string, docsPath: string): Promise<
   await rm(outputDir, { recursive: true, force: true });
   await mkdir(outputDir, { recursive: true });
 
-  // copy entire docs folder to output (preserves .md files, images and other assets)
-  await cp(docsPath, outputDir, { recursive: true });
+  // copy only allowed file types to output (mirrors the allowed-file-types validation rule)
+  await cp(docsPath, outputDir, {
+    recursive: true,
+    filter: async (src) => {
+      const stat = await lstat(src);
+      if (stat.isDirectory()) {
+        return true;
+      }
+      return ALLOWED_EXTENSIONS.has(extname(src).toLowerCase());
+    },
+  });
   debug('Copied docs folder to %s', outputDir);
 
   // write generated manifest
