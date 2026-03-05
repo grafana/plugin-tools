@@ -28,7 +28,8 @@ type RunMigrationsOptions = {
 export async function runMigrations(migrations: Migration[], options: RunMigrationsOptions = {}) {
   const migrationList = migrations.map((meta) => `${meta.name} (${meta.description})`);
 
-  const migrationListBody = migrationList.length > 0 ? output.bulletList(migrationList) : ['No migrations to run.'];
+  const migrationListBody =
+    migrationList.length > 0 ? output.bulletList(migrationList) : ['No migrations to run. Exiting.'];
 
   output.log({ title: 'Running the following migrations:', body: migrationListBody });
 

@@ -38,9 +38,11 @@ export const update = async (argv: minimist.ParsedArgs) => {
       commitEachMigration: !!argv.commit,
       codemodOptions,
     });
-    output.success({
-      title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
-    });
+    if (migrations.length > 0) {
+      output.success({
+        title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
+      });
+    }
   } catch (error) {
     if (error instanceof Error) {
       output.error({
