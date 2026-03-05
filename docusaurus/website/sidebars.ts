@@ -349,7 +349,7 @@ const sidebars: SidebarsConfig = {
         'plugin-examples/plugin-examples',
         'reference/plugin-json',
         'reference/cli-commands',
-        'reference/logs-api',
+        'reference/datasource-apis',
         {
           type: 'category',
           label: 'UI extensions reference guides',
