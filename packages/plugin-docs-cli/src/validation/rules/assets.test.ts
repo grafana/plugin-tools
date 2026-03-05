@@ -318,6 +318,17 @@ describe('checkAssets', () => {
       expect(findings.find((f) => f.rule === Rule.ReferencedImagesExist)).toBeUndefined();
     });
 
+    it('should report references that escape the docs root via ../../../', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![escape](../../etc/passwd)'));
+
+      const findings = await checkAssets(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ReferencedImagesExist);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('error');
+    });
+
     it('should report multiple broken references in the same file', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md('![a](img/one.png)\n![b](img/two.png)'));
