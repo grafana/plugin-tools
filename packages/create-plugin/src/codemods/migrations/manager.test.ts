@@ -229,6 +229,12 @@ describe('Migrations', () => {
       expect(setRootConfig).not.toHaveBeenCalled();
     });
 
+    it('should NOT create any commits if there are no migrations to run, even when commitEachMigration is true', async () => {
+      await runMigrations([], { commitEachMigration: true });
+
+      expect(setRootConfig).not.toHaveBeenCalled();
+      expect(gitCommitNoVerify).not.toHaveBeenCalled();
+    });
     it('should NOT update version in ".config/.cprc.json" if any of the migrations fail', async () => {
       migrationTwoFn.mockImplementation(async () => {
         throw new Error('Unknown error.');
