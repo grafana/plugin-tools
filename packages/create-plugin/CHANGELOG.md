@@ -1,3 +1,15 @@
+# v7.0.5 (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- fix: set config version only if migrations ran [#2513](https://github.com/grafana/plugin-tools/pull/2513) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.0.4 (Fri Mar 06 2026)
 
 #### 🐛 Bug Fix
