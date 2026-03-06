@@ -1,3 +1,16 @@
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.2`
+  - Plugin E2E: Expand provisioning file variables [#2512](https://github.com/grafana/plugin-tools/pull/2512) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu Mar 05 2026)
 
 #### 🐛 Bug Fix
