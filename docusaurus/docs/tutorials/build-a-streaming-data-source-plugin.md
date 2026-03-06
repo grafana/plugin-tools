@@ -102,7 +102,7 @@ export interface MyQuery extends DataQuery {
 }
 ```
 
-3. In the `src/datasource.ts` file, indicate a query through a stream channel. This file is where the query executed by the frontend part of your plugin is made. Add the following method to the `DataSource` class:
+3. In the `src/datasource.ts` file, indicate a query through a stream channel. This file is where the plugin frontend executes the query. Add the following method to the `DataSource` class:
 
 ```tsx
   query(request: DataQueryRequest<MyQuery>): Observable<DataQueryResponse> {
@@ -111,7 +111,7 @@ export interface MyQuery extends DataQuery {
       return getGrafanaLiveSrv().getDataStream({
         addr: {
           scope: LiveChannelScope.DataSource,
-          stream: this.uid, // since the scope is a data source the UID should be used
+          stream: this.uid, // since the scope is a data source, use the UID
           path: `my-ws/${query.refId}-${query.lowerLimit}-${query.upperLimit}-${query.tickInterval}`, // this will allow each new query to create a new connection
           data: {
             ...query,
@@ -127,7 +127,7 @@ export interface MyQuery extends DataQuery {
 The call to `getGrafanaLiveSrv()` returns a reference to a Grafana backend, and the `getDataStream` call creates the stream. As shown in this code snippet, we need to provide some data to create the stream:
 
 - **`scope`** - defines how the channel is used and controlled (specify `data source`)
-- **`stream`** - it is the namespace for the scope, and it depends on it. Since we are using a data source scope, the stream should be the data source UID
+- **`stream`** -  namespace for the scope. Since the scope is a data source, use the data source UID
 - **`path`** - part that can distinguish between channels created by the same data source. In this example, we want to create a different channel for every query, so we will use the query parameters as part of the path.
 - **`data`** - used to exchange information between the frontend and the backend
 
