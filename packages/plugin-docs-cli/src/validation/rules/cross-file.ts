@@ -80,7 +80,9 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
     return diagnostics;
   }
 
-  const allFiles = entries.filter((e) => e.isFile());
+  const allFiles = entries.filter(
+    (e) => e.isFile() && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
+  );
   const mdFiles = allFiles.filter((e) => e.name.endsWith('.md'));
   const allFilePaths = new Set(allFiles.map((e) => relative(input.docsPath, join(e.parentPath, e.name))));
 
@@ -119,15 +121,12 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
 
       // anchor-links-resolve: same-file anchor (#section)
       if (!pathPart) {
-        if (!input.strict) {
-          continue;
-        }
         if (anchor) {
           const headings = fileHeadings.get(relPath);
           if (headings && !headings.has(anchor)) {
             diagnostics.push({
               rule: Rule.AnchorLinksResolve,
-              severity: 'error',
+              severity: input.strict ? 'error' : 'warning',
               file: relPath,
               line,
               title: 'Anchor link does not resolve',
@@ -160,12 +159,12 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
       }
 
       // anchor-links-resolve: if the link has an anchor, check it resolves in the target file
-      if (anchor && input.strict) {
+      if (anchor) {
         const targetHeadings = fileHeadings.get(resolvedPath);
         if (targetHeadings && !targetHeadings.has(anchor)) {
           diagnostics.push({
             rule: Rule.AnchorLinksResolve,
-            severity: 'error',
+            severity: input.strict ? 'error' : 'warning',
             file: relPath,
             line,
             title: 'Anchor link does not resolve',

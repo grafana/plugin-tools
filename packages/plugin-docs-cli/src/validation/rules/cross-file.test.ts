@@ -160,12 +160,15 @@ describe('checkCrossFile', () => {
       expect(finding!.detail).toContain('#nonexistent');
     });
 
-    it('should skip anchor validation in non-strict mode', async () => {
+    it('should report anchor as warning in non-strict mode', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await writeFile(join(tmp, 'index.md'), md('## Hello\n\n[jump](#nonexistent)'));
 
       const findings = await checkCrossFile(input(tmp, false));
-      expect(findings.find((f) => f.rule === Rule.AnchorLinksResolve)).toBeUndefined();
+
+      const finding = findings.find((f) => f.rule === Rule.AnchorLinksResolve);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('warning');
     });
 
     it('should not report valid cross-file anchor', async () => {

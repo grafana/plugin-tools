@@ -70,7 +70,10 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     return diagnostics;
   }
 
-  const mdFiles = entries.filter((e) => e.isFile() && e.name.endsWith('.md'));
+  const mdFiles = entries.filter(
+    (e) =>
+      e.isFile() && e.name.endsWith('.md') && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
+  );
 
   for (const md of mdFiles) {
     const absPath = join(md.parentPath, md.name);
