@@ -3,6 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, relative, dirname, normalize } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { getCodeBlockLines } from './utils.js';
 
 // matches markdown links: [text](url)
 const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
@@ -12,28 +13,6 @@ const SKIP_URL_RE = /^(https?:\/\/|mailto:|tel:|data:|javascript:|vbscript:)/i;
 
 // matches headings in markdown: ## Heading text
 const HEADING_RE = /^(#{2,6})\s+(.+)$/;
-
-/**
- * Returns a set of 1-based line numbers inside fenced code blocks.
- */
-function getCodeBlockLines(content: string): Set<number> {
-  const lines = content.split('\n');
-  const codeLines = new Set<number>();
-  let inCodeBlock = false;
-
-  for (let i = 0; i < lines.length; i++) {
-    if (/^```/.test(lines[i].trim())) {
-      inCodeBlock = !inCodeBlock;
-      codeLines.add(i + 1);
-      continue;
-    }
-    if (inCodeBlock) {
-      codeLines.add(i + 1);
-    }
-  }
-
-  return codeLines;
-}
 
 /**
  * Extracts heading anchor IDs from markdown content using github-slugger

@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { getCodeBlockLines } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -32,29 +33,6 @@ const EXTERNAL_URL_RE = /^https?:\/\//i;
 
 // matches path traversal
 const PATH_TRAVERSAL_RE = /(?:^|\/)\.\.\//;
-
-/**
- * Checks whether a line is inside a fenced code block.
- * Returns a set of 1-based line numbers that are inside code blocks.
- */
-function getCodeBlockLines(content: string): Set<number> {
-  const lines = content.split('\n');
-  const codeLines = new Set<number>();
-  let inCodeBlock = false;
-
-  for (let i = 0; i < lines.length; i++) {
-    if (/^```/.test(lines[i].trim())) {
-      inCodeBlock = !inCodeBlock;
-      codeLines.add(i + 1);
-      continue;
-    }
-    if (inCodeBlock) {
-      codeLines.add(i + 1);
-    }
-  }
-
-  return codeLines;
-}
 
 /**
  * Tests a regex against content lines, skipping code blocks.

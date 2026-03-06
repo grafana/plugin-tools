@@ -221,5 +221,14 @@ describe('checkCrossFile', () => {
       const findings = await checkCrossFile(input(tmp));
       expect(findings.find((f) => f.rule === Rule.AnchorLinksResolve)).toBeUndefined();
     });
+
+    it('should resolve duplicate heading slugs with suffix', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      // github-slugger appends -1 for the second occurrence of the same heading
+      await writeFile(join(tmp, 'index.md'), md('## Setup\n\n## Setup\n\n[first](#setup)\n[second](#setup-1)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.AnchorLinksResolve)).toBeUndefined();
+    });
   });
 });
