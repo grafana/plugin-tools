@@ -1,0 +1,202 @@
+import { readFile, readdir, stat } from 'node:fs/promises';
+import type { Dirent } from 'node:fs';
+import { join, extname, dirname, relative, normalize } from 'node:path';
+import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
+
+const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
+const MAX_STATIC_SIZE = 300 * 1024; // 300KB
+const MAX_GIF_SIZE = 1024 * 1024; // 1MB
+const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_DATA_URI_SIZE = 300 * 1024; // 300KB
+
+/**
+ * Formats a byte count as a human-readable string.
+ */
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) {
+    return `${bytes}B`;
+  }
+  const kb = bytes / 1024;
+  if (kb < 1024) {
+    return `${Math.round(kb)}KB`;
+  }
+  const mb = kb / 1024;
+  return `${mb.toFixed(1)}MB`;
+}
+
+/**
+ * Finds the 1-based line number of the first occurrence of a string in content.
+ */
+function findRefLine(content: string, ref: string): number | undefined {
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes(ref)) {
+      return i + 1;
+    }
+  }
+  return undefined;
+}
+
+export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]> {
+  const diagnostics: Diagnostic[] = [];
+
+  let entries: Dirent[] = [];
+  try {
+    entries = await readdir(input.docsPath, { recursive: true, withFileTypes: true });
+  } catch {
+    return diagnostics;
+  }
+
+  const allFiles = entries.filter((e) => e.isFile());
+  const imageFiles = allFiles.filter((e) => ALLOWED_IMAGE_EXTENSIONS.has(extname(e.name).toLowerCase()));
+  const svgFiles = allFiles.filter((e) => extname(e.name).toLowerCase() === '.svg');
+  const mdFiles = allFiles.filter((e) => e.name.endsWith('.md'));
+
+  // helper to get path relative to docsPath
+  function rel(entry: Dirent): string {
+    return relative(input.docsPath, join(entry.parentPath, entry.name));
+  }
+
+  // no-svg-files: SVG is an XSS risk
+  for (const svg of svgFiles) {
+    diagnostics.push({
+      rule: Rule.NoSvg,
+      severity: 'error',
+      file: rel(svg),
+      title: 'SVG files are not allowed',
+      detail: `"${svg.name}" is an SVG file. SVG files can contain embedded scripts and pose an XSS risk. Use PNG or WebP instead.`,
+    });
+  }
+
+  // image-file-naming: image filenames must use only [a-zA-Z0-9-_.]
+  for (const img of imageFiles) {
+    if (!IMAGE_FILE_NAME_RE.test(img.name)) {
+      diagnostics.push({
+        rule: Rule.ImageFileNaming,
+        severity: input.strict ? 'error' : 'info',
+        file: rel(img),
+        title: 'Image filename contains invalid characters',
+        detail: `"${img.name}" should use only letters, digits, hyphens, underscores and dots.`,
+      });
+    }
+  }
+
+  // max-image-size and max-total-images-size: check individual and total sizes
+  let totalSize = 0;
+  for (const img of imageFiles) {
+    const absPath = join(img.parentPath, img.name);
+    let size: number;
+    try {
+      const st = await stat(absPath);
+      size = st.size;
+    } catch {
+      continue;
+    }
+    totalSize += size;
+
+    const ext = extname(img.name).toLowerCase();
+    const isGif = ext === '.gif';
+    const maxSize = isGif ? MAX_GIF_SIZE : MAX_STATIC_SIZE;
+    const maxLabel = isGif ? '1MB' : '300KB';
+    if (size > maxSize) {
+      diagnostics.push({
+        rule: Rule.MaxImageSize,
+        severity: input.strict ? 'error' : 'info',
+        file: rel(img),
+        title: `Image exceeds ${maxLabel} limit`,
+        detail: `"${img.name}" is ${formatBytes(size)} which exceeds the ${maxLabel} limit for ${isGif ? 'GIF' : 'static'} images. Compress or resize the image.`,
+      });
+    }
+  }
+
+  // max-total-images-size: only in strict mode (serve = '-')
+  if (input.strict && totalSize > MAX_TOTAL_SIZE) {
+    diagnostics.push({
+      rule: Rule.MaxTotalImagesSize,
+      severity: 'warning',
+      title: 'Total image size exceeds 5MB',
+      detail: `Total image size is ${formatBytes(totalSize)} which exceeds the 5MB limit. Reduce the number or size of images.`,
+    });
+  }
+
+  // referenced-images-exist and no-orphaned-images: parse markdown for image refs
+  const allFilePaths = new Set(allFiles.map((e) => rel(e)));
+  const referencedPaths = new Set<string>();
+
+  for (const md of mdFiles) {
+    const absPath = join(md.parentPath, md.name);
+    const mdRelPath = rel(md);
+    let content: string;
+    try {
+      content = await readFile(absPath, 'utf-8');
+    } catch {
+      continue;
+    }
+
+    const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+    let match: RegExpExecArray | null;
+    while ((match = imageRefRe.exec(content)) !== null) {
+      const ref = match[2];
+      // skip external URLs, protocol-relative URLs and blob URLs
+      if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref)) {
+        continue;
+      }
+
+      // max-data-uri-size: check size of inline data URIs
+      if (/^data:/i.test(ref)) {
+        const commaIdx = ref.indexOf(',');
+        if (commaIdx !== -1) {
+          const encoded = ref.slice(commaIdx + 1);
+          const isBase64 = /;base64$/i.test(ref.slice(0, commaIdx));
+          const byteSize = isBase64 ? Math.ceil((encoded.length * 3) / 4) : encoded.length;
+          if (byteSize > MAX_DATA_URI_SIZE) {
+            diagnostics.push({
+              rule: Rule.MaxDataUriSize,
+              severity: input.strict ? 'error' : 'info',
+              file: mdRelPath,
+              line: findRefLine(content, ref),
+              title: 'Data URI exceeds 300KB limit',
+              detail: `Inline data URI is approximately ${formatBytes(byteSize)} which exceeds the 300KB limit. Use a file reference instead.`,
+            });
+          }
+        }
+        continue;
+      }
+
+      // root-relative paths (e.g. /img/foo.png) resolve against docs root
+      const resolvedPath = ref.startsWith('/') ? normalize(ref.slice(1)) : normalize(join(dirname(mdRelPath), ref));
+      referencedPaths.add(resolvedPath);
+
+      // referenced-images-exist: check that the target file exists on disk
+      if (!allFilePaths.has(resolvedPath)) {
+        diagnostics.push({
+          rule: Rule.ReferencedImagesExist,
+          severity: 'error',
+          file: mdRelPath,
+          line: findRefLine(content, ref),
+          title: 'Referenced image does not exist',
+          detail: `Image "${ref}" referenced in markdown does not exist on disk.`,
+        });
+      }
+    }
+  }
+
+  // no-orphaned-images: only in strict mode (serve = '-')
+  if (input.strict) {
+    for (const img of imageFiles) {
+      const relPath = rel(img);
+      if (!referencedPaths.has(relPath)) {
+        diagnostics.push({
+          rule: Rule.NoOrphanedImages,
+          severity: 'info',
+          file: relPath,
+          title: 'Unreferenced image',
+          detail: `"${img.name}" is not referenced by any markdown file. Remove it if it is no longer needed.`,
+        });
+      }
+    }
+  }
+
+  return diagnostics;
+}
