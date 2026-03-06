@@ -32,17 +32,24 @@ export const update = async (argv: minimist.ParsedArgs) => {
     }
 
     const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
+
+    if (migrations.length === 0) {
+      output.log({
+        title: 'No migrations to run, exiting.',
+      });
+
+      process.exit(0);
+    }
+
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
     await runMigrations(migrations, {
       commitEachMigration: !!argv.commit,
       codemodOptions,
     });
-    if (migrations.length > 0) {
-      output.success({
-        title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
-      });
-    }
+    output.success({
+      title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
+    });
   } catch (error) {
     if (error instanceof Error) {
       output.error({

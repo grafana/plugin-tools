@@ -28,8 +28,7 @@ type RunMigrationsOptions = {
 export async function runMigrations(migrations: Migration[], options: RunMigrationsOptions = {}) {
   const migrationList = migrations.map((meta) => `${meta.name} (${meta.description})`);
 
-  const migrationListBody =
-    migrationList.length > 0 ? output.bulletList(migrationList) : ['No migrations to run. Exiting.'];
+  const migrationListBody = migrationList.length > 0 ? output.bulletList(migrationList) : ['No migrations to run.'];
 
   output.log({ title: 'Running the following migrations:', body: migrationListBody });
 
@@ -44,12 +43,9 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
     }
   }
 
-  // Only set the version in the config file if there were migrations to run.
-  if (migrations.length > 0) {
-    await setRootConfig({ version: CURRENT_APP_VERSION });
+  await setRootConfig({ version: CURRENT_APP_VERSION });
 
-    if (options.commitEachMigration) {
-      await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
-    }
+  if (options.commitEachMigration) {
+    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
   }
 }
