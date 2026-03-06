@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@7.0.5`
+  - fix: set config version only if migrations ran [#2513](https://github.com/grafana/plugin-tools/pull/2513) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@7.0.4`
   - chore(deps): update dependency @grafana/plugin-e2e to v3.4.2 [#2515](https://github.com/grafana/plugin-tools/pull/2515) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
 
