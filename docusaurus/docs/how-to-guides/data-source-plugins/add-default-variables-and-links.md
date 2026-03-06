@@ -36,6 +36,7 @@ Ensure your development environment meets the following prerequisites:
 - **Not persisted.** Default variables and links are loaded at dashboard load time. They are not saved as part of the dashboard model.
 - **URL sync.** Default variables appear in the URL as query parameters, so shared dashboard links preserve the selected values.
 - **Read-only.** Default variables and links are displayed as read-only in the dashboard settings views. Users cannot edit or remove them from the dashboard.
+- **Name prefixing.** Grafana automatically prefixes default variable names with the data source plugin ID to prevent collisions with user-defined template variables. For example, a variable named `environment` from a `prometheus` data source becomes `prometheus_environment` in the URL. The original `name` is used as the display label if no `label` is provided.
 
 ## Add default variables
 
