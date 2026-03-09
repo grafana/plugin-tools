@@ -16,7 +16,12 @@ export function getMinSupportedVersionFromPackageJson(): string {
     throw new Error('Could not determine minimum supported version from package.json');
   }
 
-  return minVersion.toString();
+  const coerced = semver.coerce(minVersion.toString());
+  if (!coerced) {
+    throw new Error(`Could not coerce version "${minVersion.toString()}" to a valid semver version`);
+  }
+
+  return coerced.toString();
 }
 
 export function getMinSupportedGrafanaVersion(context: Readonly<TSESLint.RuleContext<MessageIds, Options>>) {
