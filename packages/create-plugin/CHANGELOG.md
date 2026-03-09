@@ -1,3 +1,39 @@
+# v7.0.5 (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- fix: set config version only if migrations ran [#2513](https://github.com/grafana/plugin-tools/pull/2513) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v7.0.4 (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.4.2 [#2515](https://github.com/grafana/plugin-tools/pull/2515) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.3 (Thu Mar 05 2026)
+
+#### 🐛 Bug Fix
+
+- fix: exit migrate command if plugin is using create-plugin [#2510](https://github.com/grafana/plugin-tools/pull/2510) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.0.2 (Tue Mar 03 2026)
 
 #### 🐛 Bug Fix

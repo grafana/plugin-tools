@@ -43,7 +43,7 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
     }
   }
 
-  setRootConfig({ version: CURRENT_APP_VERSION });
+  await setRootConfig({ version: CURRENT_APP_VERSION });
 
   if (options.commitEachMigration) {
     await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);

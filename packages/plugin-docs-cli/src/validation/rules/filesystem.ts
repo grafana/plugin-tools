@@ -6,8 +6,11 @@ import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
 
+// permitted image formats shared across filesystem and asset rules
+export const ALLOWED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
+
 // allowed file extensions in the docs folder (.md + permitted image formats)
-export const ALLOWED_EXTENSIONS = new Set(['.md', '.png', '.jpg', '.jpeg', '.webp', '.gif']);
+export const ALLOWED_EXTENSIONS = new Set(['.md', ...ALLOWED_IMAGE_EXTENSIONS]);
 
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];

@@ -1,3 +1,55 @@
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.5`
+  - fix: set config version only if migrations ran [#2513](https://github.com/grafana/plugin-tools/pull/2513) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.4`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.4.2 [#2515](https://github.com/grafana/plugin-tools/pull/2515) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.2`
+  - Plugin E2E: Expand provisioning file variables [#2512](https://github.com/grafana/plugin-tools/pull/2512) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Mar 05 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.3`
+  - fix: exit migrate command if plugin is using create-plugin [#2510](https://github.com/grafana/plugin-tools/pull/2510) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue Mar 03 2026)
 
 #### 🐛 Bug Fix
