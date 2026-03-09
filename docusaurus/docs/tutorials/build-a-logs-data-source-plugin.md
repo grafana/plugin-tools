@@ -16,10 +16,6 @@ keywords:
 
 Grafana data source plugins support metrics, logs, and other data types. The steps to build a logs data source plugin are largely the same as for a metrics data source, but there are a few differences which we will explain in this guide.
 
-:::note
-For information on the available APIs for log data sources, refer to [Log data sources API reference guides](../reference/logs-api.md).
-:::
-
 ## Before you begin
 
 This guide assumes that you're already familiar with how to [Build a data source plugin](./build-a-data-source-plugin.md) for metrics. Review this material before proceeding with this guide.
@@ -100,9 +96,11 @@ const result = createDataFrame({
 
 ## Enhance your logs data source plugin with optional features
 
-You can use the following optional features to enhance your logs data source plugin in the Explore and Logs panel.
-
 [Explore](https://grafana.com/docs/grafana/latest/explore/) provides a useful interface for investigating incidents and troubleshooting logs. If your data source produces log results, you can implement the following APIs to allow your users to get the most out of the logs UI and its features within Explore.
+
+:::note
+For more information on the available APIs for data sources, refer to the [Data sources API reference guide](../reference/datasource-apis.md).
+:::
 
 ### Show log results in Explore's Logs view
 
@@ -205,11 +203,11 @@ const result = createDataFrame({
 });
 ```
 
-### Logs with trace IDs 
+### Logs-to-trace using internal data links
 
-If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and _URL data links_. These links should use the trace ID value to accurately link to the appropriate trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
+If your log data contains **trace IDs**, you can enhance your log data frames by adding a field with _trace ID values_ and internal data links. These internal links use the trace ID value to accurately create a trace query that produces the relevant trace. This enhancement enables users to seamlessly move from log lines to the relevant traces.
 
-**Example in TypeScript:**
+For example:
 
 ```ts
 import { createDataFrame, FieldType } from '@grafana/data';
@@ -219,16 +217,26 @@ const result = createDataFrame({
     ...,
     { name: 'traceID',
       type: FieldType.string,
-      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q' 'k777549127c371903a2lw34'],
+      values: ['a006649127e371903a2de979', 'e206649127z371903c3be12q', 'k777549127c371903a2lw34'],
       config: {
         links: [
           {
-            // Be sure to adjust this example based on your data source logic.
             title: 'Trace view',
-            url: `http://linkToTraceID/${__value.raw}` // ${__value.raw} is a variable that will be replaced with actual traceID value.
+            internal: {
+              // Be sure to adjust this example with datasourceUid, datasourceName and query based on your data source logic.
+              datasourceUid: instanceSettings.uid,
+              datasourceName: instanceSettings.name,
+              query: {
+                ...query,
+                queryType: 'trace',
+                traceId: '${__value.raw}', // ${__value.raw} is a variable that will be replaced with actual traceID value.
+              }
+            }
+
           }
         ]
       }
+
     }
   ],
   ...,
@@ -337,63 +345,5 @@ export class ExampleDatasource extends DataSourceApi<ExampleQuery, ExampleOption
 
 ### Log context
 
-:::note
-
-Implement this feature through the `DataSourceWithLogsContextSupport` interface.
-
-:::
-
-[Log context](https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-context) is a feature in Explore that enables the display of additional lines of context surrounding a log entry that matches a specific search query. This feature allows users to gain deeper insights into the log data by viewing the log entry within its relevant context. Because Grafana will show the surrounding log lines, users can gain a better understanding of the sequence of events and the context in which the log entry occurred, improving log analysis and troubleshooting.
-
-```ts
-import {
-  DataQueryRequest,
-  DataQueryResponse,
-  DataSourceWithLogsContextSupport,
-  LogRowContextOptions,
-  LogRowContextQueryDirection,
-  LogRowModel,
-} from '@grafana/data';
-import { catchError, lastValueFrom, of, switchMap, Observable } from 'rxjs';
-
-export class ExampleDatasource
-  extends DataSourceApi<ExampleQuery, ExampleOptions>
-  implements DataSourceWithLogsContextSupport<ExampleQuery>
-{
-  // Retrieve context for a given log row
-  async getLogRowContext(
-    row: LogRowModel,
-    options?: LogRowContextOptions,
-    query?: ExampleQuery
-  ): Promise<DataQueryResponse> {
-    // Be sure to adjust this example implementation of createRequestFromQuery based on your data source logic.
-    // Remember to replace variables with `getTemplateSrv` and the passed `options.scopedVars` before returning your `request` object.
-    const request = createRequestFromQuery(row, query, options);
-    return lastValueFrom(
-      // Be sure to adjust this example of this.query based on your data source logic.
-      this.query(request).pipe(
-        catchError((err) => {
-          const error: DataQueryError = {
-            message: 'Error during context query. Please check JS console logs.',
-            status: err.status,
-            statusText: err.statusText,
-          };
-          throw error;
-        }),
-        // Be sure to adjust this example of processResultsToDataQueryResponse based on your data source logic.
-        switchMap((res) => of(processResultsToDataQueryResponse(res)))
-      )
-    );
-  }
-
-  // Retrieve the context query object for a given log row. This is currently used to open LogContext queries in a split view.
-  getLogRowContextQuery(
-    row: LogRowModel,
-    options?: LogRowContextOptions,
-    query?: ExampleQuery
-  ): Promise<ExampleQuery | null> {
-    // Data source internal implementation that creates context query based on row, options and original query
-  }
-}
-```
+Refer to [Log context query editor](../reference/datasource-apis#create-a-log-context-query-editor) in the data source API reference guide for more information.
 

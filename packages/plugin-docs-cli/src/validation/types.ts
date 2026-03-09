@@ -19,6 +19,14 @@ export const Rule = {
   NoH1: 'no-h1-heading',
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
+  // asset rules
+  NoSvg: 'no-svg-files',
+  ReferencedImagesExist: 'referenced-images-exist',
+  MaxImageSize: 'max-image-size',
+  MaxTotalImagesSize: 'max-total-images-size',
+  ImageFileNaming: 'image-file-naming',
+  NoOrphanedImages: 'no-orphaned-images',
+  MaxDataUriSize: 'max-data-uri-size',
 } as const;
 
 export type Rule = (typeof Rule)[keyof typeof Rule];
