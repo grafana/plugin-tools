@@ -13,8 +13,8 @@ const ALLOWED_HTML_TAGS = new Set(['br', 'wbr', 'hr', 'details', 'summary']);
 // matches <script> tags (opening or self-closing)
 const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
 
-// matches HTML event handler attributes like onclick="...", onerror="..."
-const EVENT_HANDLER_RE = /\bon[a-z]+\s*=\s*["'][^"']*["']/gi;
+// matches HTML event handler attributes like onclick="...", onerror="...", ontoggle=alert(1)
+const EVENT_HANDLER_RE = /\bon[a-z]+\s*=\s*(?:["'][^"']*["']|[^\s>]+)/gi;
 
 // matches markdown image references: ![alt](url)
 const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;

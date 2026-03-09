@@ -131,6 +131,17 @@ describe('checkMarkdown', () => {
       expect(scriptFindings.some((f) => f.title.includes('Event handler'))).toBe(true);
     });
 
+    it('should report unquoted event handler attributes', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('<details ontoggle=alert(1)>x</details>'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const scriptFindings = findings.filter((f) => f.rule === Rule.NoScriptTags);
+      expect(scriptFindings.length).toBeGreaterThanOrEqual(1);
+      expect(scriptFindings.some((f) => f.title.includes('Event handler'))).toBe(true);
+    });
+
     it('should not report script tags inside code blocks', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('```html\n<script>safe()</script>\n```'));

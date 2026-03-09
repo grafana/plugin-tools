@@ -52,7 +52,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
         console.log(formatResult(result));
       }
     } catch (error) {
-      debug('Validation failed: %O', error);
+      console.error('Validation failed:', error instanceof Error ? error.message : error);
     }
   };
 
