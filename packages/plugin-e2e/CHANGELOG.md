@@ -1,3 +1,15 @@
+# v3.4.4 (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- A11y: make the axe peer deps optional [#2485](https://github.com/grafana/plugin-tools/pull/2485) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
 # v3.4.3 (Mon Mar 09 2026)
 
 #### 🐛 Bug Fix

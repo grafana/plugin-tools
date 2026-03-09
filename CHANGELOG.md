@@ -2,6 +2,21 @@
 
 #### 🐛 Bug Fix
 
+- Plugin E2E: Bump e2e-version action to v1.2.0 [#2518](https://github.com/grafana/plugin-tools/pull/2518) ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@3.4.4`
+  - A11y: make the axe peer deps optional [#2485](https://github.com/grafana/plugin-tools/pull/2485) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-e2e@3.4.3`
   - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22732949497 [#2509](https://github.com/grafana/plugin-tools/pull/2509) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
 
