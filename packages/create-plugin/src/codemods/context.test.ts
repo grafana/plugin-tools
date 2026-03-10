@@ -73,7 +73,7 @@ describe('Context', () => {
       expect(() => context.updateFile('file.txt', 'new content')).toThrowError('File file.txt does not exist');
     });
 
-    it('should not replace an update with an add if the file was added in the current context', () => {
+    it("should preserve the 'add' changeType when updating a file that was added in the current context", () => {
       const context = new Context();
       context.addFile('file.txt', 'content');
       context.updateFile('file.txt', 'new content');
