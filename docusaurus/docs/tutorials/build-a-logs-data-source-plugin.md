@@ -127,6 +127,12 @@ const result = createDataFrame({
 });
 ```
 
+### Set log ordering in Explore's Logs view
+
+TBC
+
+https://github.com/grafana/grafana/issues/117524
+
 ### Highlight searched words
 
 :::note
