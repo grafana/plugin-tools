@@ -1,3 +1,15 @@
+# v7.0.6 (Tue Mar 10 2026)
+
+#### 🐛 Bug Fix
+
+- Update actions/download-artifact action to v8 [#2522](https://github.com/grafana/plugin-tools/pull/2522) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v7.0.5 (Fri Mar 06 2026)
 
 #### 🐛 Bug Fix
