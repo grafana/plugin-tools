@@ -27,6 +27,21 @@ export const Rule = {
   ImageFileNaming: 'image-file-naming',
   NoOrphanedImages: 'no-orphaned-images',
   MaxDataUriSize: 'max-data-uri-size',
+  // markdown + security rules
+  NoRawHtml: 'no-raw-html',
+  ImageRefsRelative: 'image-refs-relative',
+  InternalLinksRelative: 'internal-links-relative',
+  NoDangerousUrls: 'no-dangerous-urls',
+  NoScriptTags: 'no-script-tags',
+  NoPathTraversal: 'no-path-traversal',
+  NoBase64Images: 'no-base64-images',
+  NoExternalImages: 'no-external-images',
+  // cross-file rules
+  InternalLinksResolve: 'internal-links-resolve',
+  AnchorLinksResolve: 'anchor-links-resolve',
+  // manifest rules
+  ManifestValid: 'manifest-valid',
+  ManifestRefsExist: 'manifest-refs-exist',
 } as const;
 
 export type Rule = (typeof Rule)[keyof typeof Rule];
