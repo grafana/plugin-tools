@@ -1,5 +1,5 @@
-import { MatcherReturnType } from '@playwright/test';
-import { AxeResults } from 'axe-core';
+import type { MatcherReturnType } from '@playwright/test';
+import type { AxeResults } from 'axe-core';
 
 import { A11yViolationsOptions } from '../types';
 

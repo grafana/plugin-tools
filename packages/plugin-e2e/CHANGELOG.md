@@ -1,3 +1,27 @@
+# v3.4.4 (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- A11y: make the axe peer deps optional [#2485](https://github.com/grafana/plugin-tools/pull/2485) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# v3.4.3 (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22732949497 [#2509](https://github.com/grafana/plugin-tools/pull/2509) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
 # v3.4.2 (Fri Mar 06 2026)
 
 #### 🐛 Bug Fix

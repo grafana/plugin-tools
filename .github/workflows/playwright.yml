@@ -23,7 +23,7 @@ jobs:
 
       - name: Resolve Grafana E2E versions
         id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@698612a13f3253e7dcd5b3c66823acc73321a5ed # e2e-version/v1.1.2
+        uses: grafana/plugin-actions/e2e-version@c246b748568a80db2a20ab5c65ff01b8b4f342c4 # e2e-version/v1.2.0
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
