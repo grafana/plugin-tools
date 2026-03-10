@@ -1,3 +1,16 @@
+# (Tue Mar 10 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.6`
+  - Update actions/download-artifact action to v8 [#2522](https://github.com/grafana/plugin-tools/pull/2522) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # (Mon Mar 09 2026)
 
 #### 🐛 Bug Fix
