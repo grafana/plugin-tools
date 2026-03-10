@@ -58,7 +58,9 @@ export class Context {
     }
 
     if (originalContent !== content) {
-      this.files[path] = { content, changeType: 'update' };
+      // new files should be written as 'add' to ensure their directories are created.
+      const isNewFile = this.files[path]?.changeType === 'add';
+      this.files[path] = { content, changeType: isNewFile ? 'add' : 'update' };
     } else {
       codemodsDebug(`Context.updateFile() - no updates for ${filePath}`);
     }
