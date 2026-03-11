@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-e2e@3.4.5`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22898798261 [#2523](https://github.com/grafana/plugin-tools/pull/2523) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/create-plugin@7.0.7`
   - Update dependency @grafana/plugin-e2e to v3.4.4 [#2519](https://github.com/grafana/plugin-tools/pull/2519) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
 - `@grafana/eslint-plugin-plugins@0.6.4`
