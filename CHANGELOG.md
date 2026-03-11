@@ -1,3 +1,19 @@
+# (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.7`
+  - Update dependency @grafana/plugin-e2e to v3.4.4 [#2519](https://github.com/grafana/plugin-tools/pull/2519) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- `@grafana/eslint-plugin-plugins@0.6.4`
+  - ESLint Plugin: strip prerelease tags from resolved min Grafana version [#2520](https://github.com/grafana/plugin-tools/pull/2520) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Tue Mar 10 2026)
 
 #### 🐛 Bug Fix
