@@ -307,7 +307,7 @@ export const additionsDebug = debug.extend('additions');
 export function renderTemplate(
   templatePath: string,
   includeWarning = false,
-  templateDataOverrides?: Record<string, unknown>
+  templateDataOverrides: Record<string, unknown> = {}
 ): string {
   const templateData = { ...getTemplateData(), ...templateDataOverrides };
   let rendered = renderHandlebarsTemplate(readFileSync(templatePath, 'utf-8'), templateData);
