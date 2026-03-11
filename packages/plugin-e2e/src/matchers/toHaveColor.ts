@@ -9,7 +9,16 @@ export async function toHaveColor(
   options?: { timeout?: number }
 ): Promise<MatcherReturnType> {
   try {
-    await expect(colorPicker.locator().getByRole('textbox')).toHaveValue(rgbOrHex, options);
+    // ColorPickerInput renders an inline textbox, while ColorValueEditor
+    // renders a swatch button + a span with the color value (no textbox).
+    const textbox = colorPicker.locator().getByRole('textbox');
+    const hasTextbox = (await textbox.count()) > 0;
+
+    if (hasTextbox) {
+      await expect(textbox).toHaveValue(rgbOrHex, options);
+    } else {
+      await expect(colorPicker.locator()).toContainText(rgbOrHex, options);
+    }
 
     return {
       pass: true,
