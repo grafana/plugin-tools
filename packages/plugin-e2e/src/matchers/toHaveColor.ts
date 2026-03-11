@@ -10,16 +10,17 @@ export async function toHaveColor(
 ): Promise<MatcherReturnType> {
   try {
     // ColorPickerInput renders an inline textbox, while ColorValueEditor
-    // renders a swatch button + a span with the color value (no textbox).
+    // renders a swatch button + a div with the color value (no textbox).
     const textbox = colorPicker.locator().getByRole('textbox');
     const hasTextbox = (await textbox.count()) > 0;
 
     if (hasTextbox) {
       await expect(textbox).toHaveValue(rgbOrHex, options);
     } else {
-      // target the span adjacent to the swatch button to avoid matching
-      // against field label or description text in the parent container
-      const colorValue = colorPicker.locator().locator('button + span');
+      // target the element adjacent to the swatch button to avoid matching
+      // against field label or description text in the parent container.
+      // uses wildcard (*) because the element is a <div>, not a <span>
+      const colorValue = colorPicker.locator().locator('button + *');
       await expect(colorValue).toHaveText(rgbOrHex, options);
     }
 
