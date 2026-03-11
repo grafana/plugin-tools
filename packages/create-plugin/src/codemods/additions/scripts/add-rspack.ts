@@ -71,20 +71,18 @@ export default function addRspack(context: Context): Context {
 
 function updateCprcConfig(context: Context): void {
   const cprcPath = '.config/.cprc.json';
-  const config = getConfig();
-
-  const updated = {
-    ...config,
-    features: {
-      ...config.features,
-      useExperimentalRspack: true,
-    },
-  };
-
   if (context.doesFileExist(cprcPath)) {
+    const config = readJsonFile(context, cprcPath);
+
+    const updated = {
+      ...config,
+      features: {
+        ...config.features,
+        useExperimentalRspack: true,
+      },
+    };
+
     context.updateFile(cprcPath, JSON.stringify(updated, null, 2));
-  } else {
-    context.addFile(cprcPath, JSON.stringify(updated, null, 2));
   }
 }
 
@@ -120,7 +118,7 @@ function handleCustomWebpackConfig(context: Context): boolean {
 }
 
 interface PackageJson {
-  scripts?: Record<string, string>;
+  scripts: Record<string, string>;
   [key: string]: unknown;
 }
 
@@ -134,15 +132,12 @@ function updatePackageJson(context: Context, hasCustomConfig: boolean): void {
   removeDependenciesFromPackageJson(context, [], WEBPACK_ONLY_DEV_DEPENDENCIES);
 
   const packageJson = readJsonFile<PackageJson>(context, 'package.json');
-
   const configPath = hasCustomConfig ? './rspack.config.ts' : './.config/rspack/rspack.config.ts';
-
   const updatedScripts = {
     ...packageJson.scripts,
     build: `rspack -c ${configPath} --env production`,
     dev: `rspack -w -c ${configPath} --env development`,
   };
-
   const updatedPackageJson = {
     ...packageJson,
     scripts: updatedScripts,
@@ -172,6 +167,7 @@ import grafanaConfig from './.config/rspack/rspack.config';
 // 4. Delete ./webpack.config.ts
 //
 // See: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations
+
 throw new Error(
   '[add-rspack] This plugin has a custom webpack configuration that needs ' +
     'manual migration to rspack. See the comments in this file for instructions.'
