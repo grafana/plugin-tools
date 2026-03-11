@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from 'vitest';
 const mockToHaveValue = vi.fn();
 const mockToContainText = vi.fn();
 vi.mock('@playwright/test', () => ({
-  expect: (locator: unknown) => ({
+  expect: () => ({
     toHaveValue: mockToHaveValue,
     toContainText: mockToContainText,
   }),
