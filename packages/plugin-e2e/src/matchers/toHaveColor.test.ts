@@ -2,11 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 
 // mock @playwright/test's expect so we can control assertion outcomes
 const mockToHaveValue = vi.fn();
-const mockToContainText = vi.fn();
+const mockToHaveText = vi.fn();
 vi.mock('@playwright/test', () => ({
   expect: () => ({
     toHaveValue: mockToHaveValue,
-    toContainText: mockToContainText,
+    toHaveText: mockToHaveText,
   }),
 }));
 
@@ -18,8 +18,12 @@ function createMockColorPicker(hasTextbox: boolean): ColorPicker {
     count: vi.fn().mockResolvedValue(hasTextbox ? 1 : 0),
   };
 
+  const mockColorValueSpan = {};
+
   const mockLocator = {
     getByRole: vi.fn().mockReturnValue(mockTextbox),
+    // button + span selector targets the color value span next to the swatch button
+    locator: vi.fn().mockReturnValue(mockColorValueSpan),
   };
 
   return {
@@ -30,7 +34,7 @@ function createMockColorPicker(hasTextbox: boolean): ColorPicker {
 describe('toHaveColor', () => {
   beforeEach(() => {
     mockToHaveValue.mockReset();
-    mockToContainText.mockReset();
+    mockToHaveText.mockReset();
   });
 
   it('should use toHaveValue when a textbox is present (ColorPickerInput)', async () => {
@@ -41,17 +45,17 @@ describe('toHaveColor', () => {
 
     expect(result.pass).toBe(true);
     expect(mockToHaveValue).toHaveBeenCalledWith('#ff0000', undefined);
-    expect(mockToContainText).not.toHaveBeenCalled();
+    expect(mockToHaveText).not.toHaveBeenCalled();
   });
 
-  it('should use toContainText when no textbox is present (ColorValueEditor)', async () => {
+  it('should use toHaveText on the color value span when no textbox is present (ColorValueEditor)', async () => {
     const colorPicker = createMockColorPicker(false);
-    mockToContainText.mockResolvedValue(undefined);
+    mockToHaveText.mockResolvedValue(undefined);
 
     const result = await toHaveColor(colorPicker, '#ff0000');
 
     expect(result.pass).toBe(true);
-    expect(mockToContainText).toHaveBeenCalledWith('#ff0000', undefined);
+    expect(mockToHaveText).toHaveBeenCalledWith('#ff0000', undefined);
     expect(mockToHaveValue).not.toHaveBeenCalled();
   });
 
@@ -64,13 +68,13 @@ describe('toHaveColor', () => {
     expect(mockToHaveValue).toHaveBeenCalledWith('rgb(255, 0, 0)', { timeout: 5000 });
   });
 
-  it('should pass timeout options through to toContainText', async () => {
+  it('should pass timeout options through to toHaveText', async () => {
     const colorPicker = createMockColorPicker(false);
-    mockToContainText.mockResolvedValue(undefined);
+    mockToHaveText.mockResolvedValue(undefined);
 
     await toHaveColor(colorPicker, 'rgb(255, 0, 0)', { timeout: 5000 });
 
-    expect(mockToContainText).toHaveBeenCalledWith('rgb(255, 0, 0)', { timeout: 5000 });
+    expect(mockToHaveText).toHaveBeenCalledWith('rgb(255, 0, 0)', { timeout: 5000 });
   });
 
   it('should return pass: false when textbox assertion fails', async () => {
@@ -85,11 +89,23 @@ describe('toHaveColor', () => {
 
   it('should return pass: false when text content assertion fails', async () => {
     const colorPicker = createMockColorPicker(false);
-    mockToContainText.mockRejectedValue(new Error('Expected text "#ff0000" not found'));
+    mockToHaveText.mockRejectedValue(new Error('Expected text "#ff0000" not found'));
 
     const result = await toHaveColor(colorPicker, '#ff0000');
 
     expect(result.pass).toBe(false);
     expect(result.message()).toContain('#ff0000');
+  });
+
+  it('should target the span after the swatch button to avoid matching label text', async () => {
+    const colorPicker = createMockColorPicker(false);
+    mockToHaveText.mockResolvedValue(undefined);
+    const mockLocator = colorPicker.locator();
+
+    await toHaveColor(colorPicker, '#ff0000');
+
+    // verify it uses the "button + span" selector to scope to the color value,
+    // not toContainText on the whole field editor which would match label text
+    expect(mockLocator.locator).toHaveBeenCalledWith('button + span');
   });
 });

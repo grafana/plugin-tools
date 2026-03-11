@@ -17,7 +17,10 @@ export async function toHaveColor(
     if (hasTextbox) {
       await expect(textbox).toHaveValue(rgbOrHex, options);
     } else {
-      await expect(colorPicker.locator()).toContainText(rgbOrHex, options);
+      // target the span adjacent to the swatch button to avoid matching
+      // against field label or description text in the parent container
+      const colorValue = colorPicker.locator().locator('button + span');
+      await expect(colorValue).toHaveText(rgbOrHex, options);
     }
 
     return {
