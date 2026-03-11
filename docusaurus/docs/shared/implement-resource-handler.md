@@ -52,7 +52,6 @@ func (p *MyPlugin) handleNamespaces(rw http.ResponseWriter, req *http.Request) {
   if err != nil {
     return
   }
-  rw.WriteHeader(http.StatusOK)
 }
 
 func (p *MyPlugin) handleProjects(rw http.ResponseWriter, req *http.Request) {
@@ -61,7 +60,6 @@ func (p *MyPlugin) handleProjects(rw http.ResponseWriter, req *http.Request) {
   if err != nil {
     return
   }
-  rw.WriteHeader(http.StatusOK)
 }
 ```
 
@@ -82,7 +80,6 @@ func (p *MyPlugin) handleSomeRoute(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		return
 	}
-	rw.WriteHeader(http.StatusOK)
 }
 ```
 
