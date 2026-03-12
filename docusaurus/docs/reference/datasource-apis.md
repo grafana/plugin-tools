@@ -18,6 +18,7 @@ Use the `DataSourceWithXXXSupport` interface to expand your data source plugin c
 
 - `DataSourceWithSupplementaryQueriesSupport`
 - `DataSourceWithLogsContextSupport`
+- `DataSourceWithLogsLabelTypesSupport`
 
 :::note
 These APIs **only work with data sources within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
@@ -239,4 +240,8 @@ export class ExampleDatasource
   }
 }
 ```
+
+## Use logs with `labelTypes`
+
+If your data sources use `labelTypes` to categorize, you can make your logs compliant using the `DataSourceWithLogsLabelTypesSupport` interface.
 
