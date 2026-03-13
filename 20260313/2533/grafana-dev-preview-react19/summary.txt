@@ -1,0 +1,5 @@
+GRAFANA_IMAGE=grafana
+GRAFANA_VERSION=dev-preview-react19
+OUTPUT=success
+PLUGIN_NAME=
+UPLOAD_REPORT_ENABLED=true
