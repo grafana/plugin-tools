@@ -104,9 +104,8 @@ describe('toHaveColor', () => {
 
     await toHaveColor(colorPicker, '#ff0000');
 
-    // verify it uses the "button + *" selector to scope to the color value,
-    // not toContainText on the whole field editor which would match label text.
-    // uses wildcard because the element is a <div>, not a <span>
-    expect(mockLocator.locator).toHaveBeenCalledWith('button + *');
+    // verify it targets the span sibling of the button's wrapper div,
+    // not the whole field editor which would match label text
+    expect(mockLocator.locator).toHaveBeenCalledWith('div:has(button) + span');
   });
 });

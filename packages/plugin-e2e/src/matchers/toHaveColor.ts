@@ -17,10 +17,10 @@ export async function toHaveColor(
     if (hasTextbox) {
       await expect(textbox).toHaveValue(rgbOrHex, options);
     } else {
-      // target the element adjacent to the swatch button to avoid matching
-      // against field label or description text in the parent container.
-      // uses wildcard (*) because the element is a <div>, not a <span>
-      const colorValue = colorPicker.locator().locator('button + *');
+      // ColorValueEditor wraps the button in a div, with the color value
+      // in a sibling span: div.colorPicker > button + /div > span.colorText
+      // use structural selector to avoid depending on Emotion class names
+      const colorValue = colorPicker.locator().locator('div:has(button) + span');
       await expect(colorValue).toHaveText(rgbOrHex, options);
     }
 
