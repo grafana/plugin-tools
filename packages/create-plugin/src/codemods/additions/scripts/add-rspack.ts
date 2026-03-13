@@ -7,7 +7,6 @@ import {
   removeDependenciesFromPackageJson,
   renderTemplate,
 } from '../../utils.js';
-import { getConfig } from '../../../utils/utils.config.js';
 
 const RSPACK_TEMPLATE_DATA_OVERRIDES = {
   useExperimentalRspack: true,
