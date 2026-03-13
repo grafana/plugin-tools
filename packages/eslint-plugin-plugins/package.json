@@ -58,6 +58,6 @@
   },
   "peerDependencies": {
     "@types/eslint": "^8.56.10 || ^9.0.0",
-    "eslint": "^8.56.0 || ^9.0.0"
+    "eslint": "^10.0.0"
   }
 }
