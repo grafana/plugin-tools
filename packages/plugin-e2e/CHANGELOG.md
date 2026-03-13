@@ -1,3 +1,15 @@
+# v3.4.7 (Fri Mar 13 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix toHaveColor matcher for ColorValueEditor [#2527](https://github.com/grafana/plugin-tools/pull/2527) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.4.6 (Fri Mar 13 2026)
 
 #### 🐛 Bug Fix
