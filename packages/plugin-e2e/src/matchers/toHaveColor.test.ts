@@ -1,8 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 
 // mock @playwright/test's expect so we can control assertion outcomes
-const mockToHaveValue = vi.fn();
-const mockToHaveText = vi.fn();
+const { mockToHaveValue, mockToHaveText } = vi.hoisted(() => {
+  return {
+    mockToHaveValue: vi.fn(),
+    mockToHaveText: vi.fn(),
+  };
+});
 vi.mock('@playwright/test', () => ({
   expect: () => ({
     toHaveValue: mockToHaveValue,
