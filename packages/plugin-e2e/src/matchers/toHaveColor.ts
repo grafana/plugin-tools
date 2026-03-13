@@ -18,7 +18,7 @@ export async function toHaveColor(
       await expect(textbox).toHaveValue(rgbOrHex, options);
     } else {
       // ColorValueEditor wraps the button in a div, with the color value
-      // in a sibling span: div.colorPicker > button + /div > span.colorText
+      // in an adjacent sibling span: div:has(button) + span.colorText
       // use structural selector to avoid depending on Emotion class names
       const colorValue = colorPicker.locator().locator('div:has(button) + span');
       await expect(colorValue).toHaveText(rgbOrHex, options);
