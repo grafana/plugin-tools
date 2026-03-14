@@ -27,7 +27,7 @@
   "dependencies": {
     "find-up": "^8.0.0",
     "minimist": "^1.2.2",
-    "proxy-agent": "6.5.0"
+    "proxy-agent": "7.0.0"
   },
   "devDependencies": {
     "@libs/output": "^1.0.3",
