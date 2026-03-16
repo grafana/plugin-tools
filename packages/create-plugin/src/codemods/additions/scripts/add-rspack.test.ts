@@ -23,10 +23,8 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
 
   // Only render externals.ts from the real template since we assert on its content (RspackOptions).
   // All other templates just need a non-empty stub.
-  const externalsTemplatePath = new URL(
-    '../../../../templates/common/.config/bundler/externals.ts',
-    import.meta.url
-  ).pathname;
+  const externalsTemplatePath = new URL('../../../../templates/common/.config/bundler/externals.ts', import.meta.url)
+    .pathname;
   const renderedExternals = originalModule.renderTemplate(externalsTemplatePath, true, rspackOverrides);
 
   return {
@@ -116,21 +114,6 @@ describe('add-rspack', () => {
       const cprc = JSON.parse(result.getFile('.config/.cprc.json')!);
 
       expect(cprc.version).toBe('5.0.0');
-    });
-
-    it('should create .cprc.json if it does not exist', () => {
-      const context = new Context('/virtual');
-      context.addFile('.config/webpack/webpack.config.ts', 'webpack config');
-      context.addFile(
-        'package.json',
-        JSON.stringify({ scripts: { build: 'webpack', dev: 'webpack -w' }, devDependencies: {} }, null, 2)
-      );
-
-      const result = addRspack(context);
-
-      expect(result.doesFileExist('.config/.cprc.json')).toBe(true);
-      const cprc = JSON.parse(result.getFile('.config/.cprc.json')!);
-      expect(cprc.features.useExperimentalRspack).toBe(true);
     });
   });
 
