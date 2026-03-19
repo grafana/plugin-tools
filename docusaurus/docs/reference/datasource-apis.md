@@ -243,5 +243,52 @@ export class ExampleDatasource
 
 ## Use logs with `labelTypes`
 
-If your data sources use `labelTypes` to categorize, you can make your logs compliant using the `DataSourceWithLogsLabelTypesSupport` interface.
+The [Log Details](https://grafana.com/docs/grafana-cloud/visualizations/simplified-exploration/logs/view-logs/#log-details) component is the part of the Logs Visualization that displays the available fields and labels that are related with each log line. For data sources that support labels, such as those that follow the Grafana Data Structure [specification](https://grafana.com/developers/dataplane/logs) for logs, and wants to group those labels by different types of categories inside the Log Details component, it is possible by implementing the `DataSourceWithLogsLabelTypesSupport` interface.
 
+The `DataSourceWithLogsLabelTypesSupport` exposes a function that receives the name of the label to resolve the corresponding type, the original logs Data Frame, and the index of the corresponding log line for this label in the Data Frame. The expected return value of this function is the display name of the label category.
+
+
+```ts
+import {  DataSourceWithLogsLabelTypesSupport } from '@grafana/data';
+
+const DATAPLANE_LABEL_TYPES_NAME = 'labelTypes';
+
+export class ExampleDatasource
+  extends DataSourceApi<ExampleQuery, ExampleOptions>
+  implements DataSourceWithLogsLabelTypesSupport
+{
+  /**
+   * Given a label name, the Data Frame, and the index of the log line, resolve the display name for this label, if it has one.
+   * @param labelKey
+   * @param frame
+   * @param index
+   */
+  getLabelDisplayTypeFromFrame(labelKey: string, frame: DataFrame | undefined, index: number | null) {
+    if (!frame) {
+      return null;
+    }
+
+    const typeField = frame.fields.find((field) => field.name === DATAPLANE_LABEL_TYPES_NAME);
+    if (!typeField) {
+      return null;
+    }
+
+    // If the log line index is not provided, look for a log line with the same labelKey
+    if (index === null) {
+      index = typeField.values.findIndex((typeFieldValue) => typeFieldValue[labelKey]);
+    }
+
+    const valueTypes = typeField?.values[index];
+    switch (valueTypes?.[labelKey]) {
+      case 'I':
+        return 'Indexed fields';
+      case 'S':
+        return 'Structured metadata';
+      case 'P':
+        return 'Parsed fields';
+      default:
+        return null;
+    }
+  }
+}
+```
