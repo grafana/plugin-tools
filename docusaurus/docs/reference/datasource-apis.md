@@ -243,9 +243,11 @@ export class ExampleDatasource
 
 ## Use logs with `labelTypes`
 
-The [Log Details](https://grafana.com/docs/grafana-cloud/visualizations/simplified-exploration/logs/view-logs/#log-details) component is the part of the Logs Visualization that displays the available fields and labels that are related with each log line. For data sources that support labels, such as those that follow the Grafana Data Structure [specification](https://grafana.com/developers/dataplane/logs) for logs, and wants to group those labels by different types of categories inside the Log Details component, it is possible by implementing the `DataSourceWithLogsLabelTypesSupport` interface.
+The [Log Details](https://grafana.com/docs/grafana-cloud/visualizations/simplified-exploration/logs/view-logs/#log-details) Logs Visualization component displays the available fields and labels related to each log line. 
 
-The `DataSourceWithLogsLabelTypesSupport` exposes a function that receives the name of the label to resolve the corresponding type, the original logs Data Frame, and the index of the corresponding log line for this label in the Data Frame. The expected return value of this function is the display name of the label category.
+If your data source support labels, such as those that follow the [Grafana data plane specification for logs](https://grafana.com/developers/dataplane/logs), you can group those labels by different types of categories inside the Log Details component by implementing the `DataSourceWithLogsLabelTypesSupport` interface.
+
+The `DataSourceWithLogsLabelTypesSupport` exposes a function that receives the name of the label to resolve the corresponding type, the original logs data frame, and the index of the corresponding log line for this label in the data frame. The expected return value of this function is the display name of the label category.
 
 
 ```ts
