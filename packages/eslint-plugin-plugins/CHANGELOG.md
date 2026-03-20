@@ -1,3 +1,15 @@
+# v0.6.4 (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
+- ESLint Plugin: strip prerelease tags from resolved min Grafana version [#2520](https://github.com/grafana/plugin-tools/pull/2520) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # v0.5.2 (Thu Oct 23 2025)
 
 #### 🐛 Bug Fix
