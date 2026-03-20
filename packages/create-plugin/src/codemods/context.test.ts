@@ -62,16 +62,22 @@ describe('Context', () => {
 
   describe('updateFile', () => {
     it('should update a file in the context', () => {
-      const context = new Context();
-      context.addFile('file.txt', 'content');
-      context.updateFile('file.txt', 'new content');
-      expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'update' } });
+      const context = new Context(`${__dirname}/migrations/fixtures`);
+      context.updateFile('foo/bar.ts', 'new content');
+      expect(context.listChanges()).toEqual({ 'foo/bar.ts': { content: 'new content', changeType: 'update' } });
     });
 
     it('should not update a file if it does not exist', () => {
       const context = new Context();
 
       expect(() => context.updateFile('file.txt', 'new content')).toThrowError('File file.txt does not exist');
+    });
+
+    it("should preserve the 'add' changeType when updating a file that was added in the current context", () => {
+      const context = new Context();
+      context.addFile('file.txt', 'content');
+      context.updateFile('file.txt', 'new content');
+      expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'add' } });
     });
   });
 
