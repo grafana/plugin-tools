@@ -55,6 +55,7 @@ jobs:
           npm install "@grafana/e2e-selectors@${VERSION}" --workspace=@grafana/plugin-e2e --save-exact
 
       - name: Create Pull Request
+        id: create-pr
         uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725 # v8.0.0
         with:
           token: ${{ steps.generate-token.outputs.token }}
@@ -72,3 +73,9 @@ jobs:
             dependencies
             release
             patch
+
+      - name: Enable auto-merge
+        if: steps.create-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: gh pr merge "${{ steps.create-pr.outputs.pull-request-number }}" --auto --squash --yes
