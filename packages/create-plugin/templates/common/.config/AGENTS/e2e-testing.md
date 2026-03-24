@@ -1,3 +1,8 @@
+---
+name: e2e testing instructions for a grafana plugin
+description: Guides how to write e2e tests using @grafana/plugin-e2e
+---
+
 # E2E testing a Grafana plugin
 
 This plugin uses `@grafana/plugin-e2e` and Playwright for end-to-end testing.
@@ -164,11 +169,11 @@ Tests often need pre-configured datasources, dashboards or alert rules. Use [Gra
 Tests should be run against multiple Grafana versions. Check `grafanaDependency` in `src/plugin.json` for the minimum supported version.
 
 **Min supported version**:
-Align with `grafanaDependency` in `plugin.json`.
+Use the version from `grafanaDependency` in `plugin.json`.
 
 ```bash
-# terminal 1
-GRAFANA_VERSION=11.3.0 {{packageManagerName}} run server
+# terminal 1 - replace <min-supported-version> with the grafanaDependency version
+GRAFANA_VERSION=<min-supported-version> {{packageManagerName}} run server
 
 # terminal 2
 {{packageManagerName}} run e2e
@@ -177,8 +182,8 @@ GRAFANA_VERSION=11.3.0 {{packageManagerName}} run server
 **Latest dev image** (forwards compatibility):
 
 ```bash
-# terminal 1
-GRAFANA_IMAGE=grafana-dev GRAFANA_VERSION=12.4.0-211043112277 {{packageManagerName}} run server
+# terminal 1 - use the latest dev image tag from https://hub.docker.com/r/grafana/grafana-dev/tags
+GRAFANA_IMAGE=grafana-dev GRAFANA_VERSION=<latest-dev-tag> {{packageManagerName}} run server
 
 # terminal 2
 {{packageManagerName}} run e2e
