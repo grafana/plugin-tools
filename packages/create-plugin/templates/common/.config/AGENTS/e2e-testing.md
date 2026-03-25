@@ -101,7 +101,7 @@ await expect(page.getByLabel('TLS Enabled')).not.toBeChecked();
 
 `@grafana/plugin-e2e` exposes page models and fixtures that encapsulate common UI operations and handle Grafana version differences.
 
-To discover all available fixtures, options, models and matchers, read the exports in `node_modules/@grafana/plugin-e2e/src/index.ts`.
+To discover all available fixtures, options, models and matchers, read the exports in `node_modules/@grafana/plugin-e2e/dist/index.d.ts` (or refer to the `@grafana/plugin-e2e` package README/docs).
 
 ### Fixtures
 
