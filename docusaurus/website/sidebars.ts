@@ -152,6 +152,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/panel-plugins/migration-handler-for-panels',
         'how-to-guides/panel-plugins/read-data-from-a-data-source',
         'how-to-guides/panel-plugins/subscribe-events',
+        'how-to-guides/panel-plugins/add-suggestions-support',
       ],
     },
 

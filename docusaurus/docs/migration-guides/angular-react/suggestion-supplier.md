@@ -18,11 +18,17 @@ keywords:
 
 You can add a suggestion supplier to examine query data coming from a panel and suggest usage of the plugin for the type of data detected. This guide provides instructions for doing so along with links to relevant examples.
 
-A good example is the `stat` panel, which inspects the query resukts and ranks itself "high" for a single series, and "low" for multiple series (or even none).
+A good example is the `stat` panel, which inspects the query results and ranks itself "high" for a single series, and "low" for multiple series (or even none).
 
 ## Add the suggestion supplier
 
-Here is an example suggestion suppler seen as part of `module.ts`:
+:::warning
+
+The class-based API shown below (`new MyDataSuggestionsSupplier()` with `getSuggestionsForData`) is deprecated. For new plugins, use the function-based API instead. Refer to [Add visualization suggestions to panel plugins](/how-to-guides/panel-plugins/add-suggestions-support) for the current approach.
+
+:::
+
+Here is an example of the deprecated class-based supplier, shown as part of `module.ts`:
 
 ```ts
 import { MyDataSuggestionsSupplier } from './suggestions';
@@ -31,7 +37,7 @@ import { MyDataSuggestionsSupplier } from './suggestions';
 .setSuggestionsSupplier(new MyDataSuggestionsSupplier());
 ```
 
-Here is an example suggestion supplier derived from polystat:
+Here is the corresponding class definition derived from polystat:
 
 ```ts
 import { VisualizationSuggestionsBuilder } from '@grafana/data';
@@ -70,6 +76,21 @@ If the suggestion supplier ranks the plugin high incorrectly, the end result wil
 It's best to offer the plugin only to query data that matches well-known criteria that the plugin can process and visualize.
 
 :::
+
+## Current (function-based) API
+
+For plugins that are not migrating from Angular, or for new development, use the function-based supplier instead:
+
+```ts
+export const plugin = new PanelPlugin<MyOptions>(MyPanel).setSuggestionsSupplier((dataSummary) => {
+  if (!dataSummary.hasData || !dataSummary.hasFieldType(FieldType.number)) {
+    return;
+  }
+  return [{ name: 'MyPanel' }];
+});
+```
+
+For a full guide including scoring, multiple suggestions, and `cardOptions`, refer to [Add visualization suggestions to panel plugins](/how-to-guides/panel-plugins/add-suggestions-support).
 
 ## Additional resources
 
