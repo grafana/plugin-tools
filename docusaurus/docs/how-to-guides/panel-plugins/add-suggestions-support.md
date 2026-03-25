@@ -33,7 +33,7 @@ Suggestions are sorted by the following priority:
 2. Within each tier (core vs. external), suggestions are sorted by score in descending order.
 3. Within the same tier and score, suggestions that match the data's `preferredVisualisationType` rank higher.
 
-This means your goal as an external plugin author is to return an accurate score so your plugin surfaces correctly relative to other external plugins when the data is a good fit.
+Return an accurate score so your plugin surfaces correctly relative to other external plugins when the data is a good fit.
 
 ### The `suggestions` field in `plugin.json`
 

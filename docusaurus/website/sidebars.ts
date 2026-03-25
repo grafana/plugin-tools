@@ -325,7 +325,6 @@ const sidebars: SidebarsConfig = {
             'migration-guides/angular-react/migrate-angularjs-configuration-settings-to-react',
             'migration-guides/angular-react/angular-react-convert-from-time_series2',
             'migration-guides/angular-react/targeting-older-releases',
-            'migration-guides/angular-react/add-suggestion-supplier',
           ],
         },
         'migration-guides/migrate-from-toolkit',
