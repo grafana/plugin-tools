@@ -302,4 +302,3 @@ describe('mySuggestionsSupplier', () => {
 - Return `void` (or nothing) from your supplier when the data is not a good fit for your panel plugin. Never return an empty array — it signals that you have looked at the data and decided no variant is suitable, but the outcome is the same as `void` without allocating an extra array.
 - The `name` field on a suggestion defaults to the plugin's display name from `plugin.json`. Override it only when you are returning multiple suggestions that need distinct names.
 - `options` and `fieldConfig` in a suggestion are merged with the plugin's defaults using `lodash.defaultsDeep`, so you should only include the fields you want to override within a suggestion.
-- `setSuggestionsSupplier` is marked `@alpha`, and the API may change in future Grafana versions.
