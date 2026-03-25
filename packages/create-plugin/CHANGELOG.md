@@ -1,3 +1,15 @@
+# v7.1.0 (Wed Mar 25 2026)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Add agentic instructions for e2e testing [#2478](https://github.com/grafana/plugin-tools/pull/2478) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v7.0.8 (Mon Mar 16 2026)
 
 #### 🐛 Bug Fix
