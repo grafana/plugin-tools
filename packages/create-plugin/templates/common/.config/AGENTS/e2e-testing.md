@@ -7,7 +7,7 @@ description: Guides how to write e2e tests using @grafana/plugin-e2e
 
 This plugin uses `@grafana/plugin-e2e` and Playwright for end-to-end testing.
 
-- Always import `test` and `expect` from `@grafana/plugin-e2e`, not from `@playwright/test`.
+- Import `test` and `expect` from `@grafana/plugin-e2e`, or from your project's fixtures entrypoint (for example `./fixtures`) if it re-exports them. Do not import them from `@playwright/test` directly.
 - Always use `@grafana/plugin-e2e` fixtures and page models instead of raw Playwright navigation. They handle Grafana version differences automatically.
 - Place test files in `tests/` as `*.spec.ts`.
 - Each test must be independent and assume fresh state.
