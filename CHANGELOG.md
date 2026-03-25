@@ -1,5 +1,20 @@
 # (Wed Mar 25 2026)
 
+#### 🐛 Bug Fix
+
+- CI: Fix auto-merge step in bump-e2e-selectors workflow [#2540](https://github.com/grafana/plugin-tools/pull/2540) ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@3.4.9`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23499763764 [#2539](https://github.com/grafana/plugin-tools/pull/2539) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 25 2026)
+
 #### 🚀 Enhancement
 
 - `@grafana/create-plugin@7.1.0`
