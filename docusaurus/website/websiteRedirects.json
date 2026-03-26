@@ -146,13 +146,17 @@
   {
     "from": ["/get-started/best-practices"],
     "to": "/key-concepts/best-practices"
-  },  
+  },
   {
     "from": ["/key-concepts/ui-extensions"],
     "to": "/how-to-guides/ui-extensions/ui-extensions-concepts"
-  },   
+  },
   {
     "from": ["/how-to-guides/ui-extensions/expose-a-lazy-loaded-component"],
     "to": "/how-to-guides/ui-extensions/expose-a-component"
-  }         
+  },
+  {
+    "from": ["/migration-guides/angular-react/add-suggestion-supplier"],
+    "to": "/how-to-guides/panel-plugins/add-suggestions-support"
+  }
 ]
