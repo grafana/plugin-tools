@@ -25,6 +25,8 @@ Grafana's Visualization Suggestions feature shows users a ranked list of panel t
 
 When a user opens the visualization picker, Grafana calls each panel plugin's Suggestions supplier with a summary of the current panel data. Each plugin returns zero or more `VisualizationSuggestion` objects describing how to configure the plugin for that data. Grafana then ranks all Suggestions and presents them to the user.
 
+![The Grafana visualization picker showing the Suggestions tab with ranked panel options](/img/viz-suggestions-grafana-13.png)
+
 ### Ranking order
 
 Suggestions are sorted by the following priority:
