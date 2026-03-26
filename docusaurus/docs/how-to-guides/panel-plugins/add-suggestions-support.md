@@ -1,7 +1,7 @@
 ---
 id: add-suggestions-support
-title: Add visualization suggestions to panel plugins
-description: How to add visualization suggestions to panel plugins so they appear in the Grafana visualization picker.
+title: Implement Visualization Suggestions for panel plugins
+description: How to set up Visualization Suggestions for panel plugins so they appear in the Grafana visualization picker.
 keywords:
   - grafana
   - plugins
@@ -11,9 +11,9 @@ keywords:
   - panel
 ---
 
-# Add visualization suggestions to panel plugins
+# Add Visualization Suggestions to panel plugins
 
-Grafana's visualization picker shows users a ranked list of panel types that are suitable for their current data. This guide explains how to implement visualization suggestions in your external panel plugin so it appears in that list.
+Grafana's Visualization Suggestions feature shows users a ranked list of panel types that are suitable for their current data. In Grafana 13, Visualization Suggestions became the default way to select a visualization type in the visualization picker, and we opened up the ability for external plugins to provide their own Visualization Suggestions. This guide explains how to implement Visualization Suggestions for your external panel plugin so it appears in that list.
 
 ## Prerequisites
 
@@ -21,9 +21,9 @@ Grafana's visualization picker shows users a ranked list of panel types that are
 - Familiarity with TypeScript
 - A panel plugin with a `module.ts` entry point
 
-## How suggestions work
+## How Suggestions work
 
-When a user opens the visualization picker, Grafana calls each panel plugin's suggestions supplier with a summary of the current panel data. Each plugin returns zero or more `VisualizationSuggestion` objects describing how to configure the plugin for that data. Grafana then ranks all suggestions and presents them to the user.
+When a user opens the visualization picker, Grafana calls each panel plugin's Suggestions supplier with a summary of the current panel data. Each plugin returns zero or more `VisualizationSuggestion` objects describing how to configure the plugin for that data. Grafana then ranks all Suggestions and presents them to the user.
 
 ### Ranking order
 
@@ -37,7 +37,7 @@ Return an accurate score so your plugin surfaces correctly relative to other ext
 
 ### The `suggestions` field in `plugin.json`
 
-To opt your plugin in to the suggestions system, set `"suggestions": true` in your `plugin.json`:
+To opt your plugin in to the Suggestions system, set `"suggestions": true` in your `plugin.json`:
 
 ```json title="plugin.json"
 {
@@ -102,7 +102,8 @@ If your panel has a narrow data requirement (for example, it only works with a s
 This is the pattern used by the Flame Graph panel, which checks for required fields by inspecting `rawFrames` because it needs to validate field-level metadata:
 
 ```ts title="module.ts"
-import { PanelPlugin } from '@grafana/data';
+import { PanelPlugin, DataFrame, FieldType } from '@grafana/data';
+
 import { MyPanel } from './MyPanel';
 import { MyPanelOptions } from './types';
 
@@ -142,7 +143,6 @@ import {
   VisualizationSuggestionScore,
   VisualizationSuggestionsSupplier,
 } from '@grafana/data';
-import { defaultsDeep } from 'lodash';
 import { MyPanelOptions, MyFieldConfig, GraphDrawStyle } from './types';
 
 export const mySuggestionsSupplier: VisualizationSuggestionsSupplier<MyPanelOptions, MyFieldConfig> = (dataSummary) => {
@@ -189,8 +189,8 @@ export const mySuggestionsSupplier: VisualizationSuggestionsSupplier<MyPanelOpti
     },
   ];
 
-  // Apply score to all suggestions
-  return suggestions.map((s) => defaultsDeep(s, { score }));
+  // Apply score to all suggestions (score is only used if not already set on the suggestion)
+  return suggestions.map((s) => ({ score, ...s }));
 };
 ```
 
@@ -301,4 +301,4 @@ describe('mySuggestionsSupplier', () => {
 
 - Return `void` (or nothing) from your supplier when the data is not a good fit for your panel plugin. Never return an empty array — it signals that you have looked at the data and decided no variant is suitable, but the outcome is the same as `void` without allocating an extra array.
 - The `name` field on a suggestion defaults to the plugin's display name from `plugin.json`. Override it only when you are returning multiple suggestions that need distinct names.
-- `options` and `fieldConfig` in a suggestion are merged with the plugin's defaults using `lodash.defaultsDeep`, so you should only include the fields you want to override within a suggestion.
+- `options` and `fieldConfig` in a suggestion are merged with the plugin's defaults, so you should only include the fields you want to override within a suggestion.
