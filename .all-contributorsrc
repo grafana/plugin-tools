@@ -395,6 +395,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "urbiz-grafana",
+      "name": "Anna Urbiztondo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/218751872?v=4",
+      "profile": "https://github.com/urbiz-grafana",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7
