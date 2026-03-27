@@ -1,3 +1,70 @@
+# (Wed Mar 25 2026)
+
+#### 🐛 Bug Fix
+
+- CI: Fix auto-merge step in bump-e2e-selectors workflow [#2540](https://github.com/grafana/plugin-tools/pull/2540) ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@3.4.9`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23499763764 [#2539](https://github.com/grafana/plugin-tools/pull/2539) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 25 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@7.1.0`
+  - Create Plugin: Add agentic instructions for e2e testing [#2478](https://github.com/grafana/plugin-tools/pull/2478) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Mar 19 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-docs-cli@0.0.10`, `@grafana/plugin-docs-parser@0.0.4`
+  - Plugin Docs: Publish packages to NPM [#2537](https://github.com/grafana/plugin-tools/pull/2537) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 18 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.8`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23251034887 [#2533](https://github.com/grafana/plugin-tools/pull/2533) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Mon Mar 16 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.8`
+  - Update dependency @grafana/plugin-e2e to v3.4.7 [#2529](https://github.com/grafana/plugin-tools/pull/2529) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # (Fri Mar 13 2026)
 
 #### 🐛 Bug Fix

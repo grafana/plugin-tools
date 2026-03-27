@@ -1,7 +1,6 @@
 {
   "name": "@grafana/plugin-docs-parser",
-  "version": "0.0.3",
-  "private": true,
+  "version": "0.0.4",
   "description": "A lightweight library for parsing Grafana plugin documentation from markdown to HAST.",
   "type": "module",
   "main": "./dist/index.js",

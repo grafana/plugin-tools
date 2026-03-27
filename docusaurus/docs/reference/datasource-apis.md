@@ -18,6 +18,7 @@ Use the `DataSourceWithXXXSupport` interface to expand your data source plugin c
 
 - `DataSourceWithSupplementaryQueriesSupport`
 - `DataSourceWithLogsContextSupport`
+- `DataSourceWithLogsLabelTypesSupport`
 
 :::note
 These APIs **only work with data sources within the [`grafana/grafana`](https://github.com/grafana/grafana) repository**. They are not supported for external plugin developers.
@@ -240,3 +241,56 @@ export class ExampleDatasource
 }
 ```
 
+## Use logs with `labelTypes`
+
+The [Log Details](https://grafana.com/docs/grafana-cloud/visualizations/simplified-exploration/logs/view-logs/#log-details) Logs Visualization component displays the available fields and labels related to each log line. 
+
+If your data source support labels, such as those that follow the [Grafana data plane specification for logs](https://grafana.com/developers/dataplane/logs), you can group those labels by different types of categories inside the Log Details component by implementing the `DataSourceWithLogsLabelTypesSupport` interface.
+
+The `DataSourceWithLogsLabelTypesSupport` exposes a function that receives the name of the label to resolve the corresponding type, the original logs data frame, and the index of the corresponding log line for this label in the data frame. The expected return value of this function is the display name of the label category.
+
+
+```ts
+import {  DataSourceWithLogsLabelTypesSupport } from '@grafana/data';
+
+const DATAPLANE_LABEL_TYPES_NAME = 'labelTypes';
+
+export class ExampleDatasource
+  extends DataSourceApi<ExampleQuery, ExampleOptions>
+  implements DataSourceWithLogsLabelTypesSupport
+{
+  /**
+   * Given a label name, the Data Frame, and the index of the log line, resolve the display name for this label, if it has one.
+   * @param labelKey
+   * @param frame
+   * @param index
+   */
+  getLabelDisplayTypeFromFrame(labelKey: string, frame: DataFrame | undefined, index: number | null) {
+    if (!frame) {
+      return null;
+    }
+
+    const typeField = frame.fields.find((field) => field.name === DATAPLANE_LABEL_TYPES_NAME);
+    if (!typeField) {
+      return null;
+    }
+
+    // If the log line index is not provided, look for a log line with the same labelKey
+    if (index === null) {
+      index = typeField.values.findIndex((typeFieldValue) => typeFieldValue[labelKey]);
+    }
+
+    const valueTypes = typeField?.values[index];
+    switch (valueTypes?.[labelKey]) {
+      case 'I':
+        return 'Indexed fields';
+      case 'S':
+        return 'Structured metadata';
+      case 'P':
+        return 'Parsed fields';
+      default:
+        return null;
+    }
+  }
+}
+```
