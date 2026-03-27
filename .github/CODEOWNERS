@@ -13,4 +13,4 @@
 /packages/tsconfig/ @grafana/grafana-frontend-platform
 
 /docusaurus/website/ @grafana/grafana-frontend-platform
-/docusuarus/docs/ @grafana/grafana-frontend-platform @grafana/docs-squad
+/docusaurus/docs/ @grafana/grafana-frontend-platform @urbiz-grafana
