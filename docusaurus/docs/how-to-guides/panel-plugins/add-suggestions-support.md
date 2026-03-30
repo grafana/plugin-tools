@@ -32,7 +32,7 @@ When a user opens the visualization picker, Grafana calls each panel plugin's Su
 Suggestions are sorted by the following priority:
 
 1. **Core plugins always rank above external plugins**, regardless of score. An external plugin with a score of `Best` will appear below a core plugin with a score of `OK`.
-2. Within each tier (core vs. external), suggestions are sorted by score in descending order.
+2. Within each tier (core or external), suggestions are sorted by score in descending order.
 3. Within the same tier and score, suggestions that match the data's `preferredVisualisationType` rank higher.
 
 Return an accurate score so your plugin surfaces correctly relative to other external plugins when the data is a good fit.
