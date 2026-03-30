@@ -78,7 +78,7 @@ export const plugin = new PanelPlugin<MyPanelOptions>(MyPanel).setSuggestionsSup
 
 ## Understanding `PanelDataSummary`
 
-The `PanelDataSummary` object gives you a pre-computed summary of the current data frames. Prefer the summary methods and attributes over `rawFrames` — they are faster and cover the most common cases:
+The `PanelDataSummary` object gives you a pre-computed summary of the current data frames. Use the summary methods and attributes over `rawFrames` — they are faster and cover the most common cases:
 
 | API                                                         | Description                                                    |
 | ----------------------------------------------------------- | -------------------------------------------------------------- |
