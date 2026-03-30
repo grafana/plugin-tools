@@ -223,7 +223,42 @@ If you do not set a score, Grafana defaults to `OK`. It is fine to omit the scor
 
 ## Customize the suggestion card with `cardOptions`
 
-The `cardOptions.previewModifier` function lets you adjust how a suggestion looks in the small preview card rendered in the visualization picker. It is called just before the card is rendered, and you should mutate the suggestion object directly:
+Suggestion preview cards render a live panel at a small size. The `cardOptions` object controls how the card looks and how much data it receives. Use it to keep preview cards fast and visually clear - especially important when users have large datasets.
+
+### Limit preview data with `maxSeries` and `maxRows`
+
+Preview cards render a real panel instance, so passing a full dataset into a small thumbnail can cause slow rendering. Use `maxSeries` and `maxRows` to cap the data before it reaches the card renderer:
+
+| Property    | Type     | Description                                                      |
+| ----------- | -------- | ---------------------------------------------------------------- |
+| `maxSeries` | `number` | Maximum number of data frames (series) passed to the preview     |
+| `maxRows`   | `number` | Maximum number of rows per data frame passed to the preview      |
+
+Pick limits based on what makes visual sense at preview scale. For example, a stat panel only needs a handful of series to convey its layout, while a bar chart benefits from capping rows to avoid rendering hundreds of thin bars:
+
+```ts
+// Stat panel: limit to 6 series for a clean preview
+cardOptions: {
+  maxSeries: 6,
+  previewModifier: (s) => {
+    if (s.options?.reduceOptions?.values) {
+      s.options.reduceOptions.limit = 6;
+    }
+  },
+},
+
+// Bar chart: cap rows when the dataset is large
+cardOptions: {
+  maxRows: 20,
+  previewModifier: (s) => {
+    s.options!.legend = { showLegend: false };
+  },
+},
+```
+
+### Adjust preview appearance with `previewModifier`
+
+The `previewModifier` function lets you adjust how a suggestion looks in the preview card. It is called just before the card is rendered, and you should mutate the suggestion object directly:
 
 ```ts
 cardOptions: {
@@ -239,7 +274,7 @@ cardOptions: {
 },
 ```
 
-The `previewModifier` only affects how the card is rendered — it does not change what gets applied when the user selects the suggestion.
+The `previewModifier` only affects how the card is rendered - it does not change what gets applied when the user selects the suggestion.
 
 ## Test your supplier
 
