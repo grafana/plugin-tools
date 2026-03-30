@@ -241,7 +241,7 @@ cardOptions: {
 
 The `previewModifier` only affects how the card is rendered — it does not change what gets applied when the user selects the suggestion.
 
-## Testing your supplier
+## Test your supplier
 
 Because the supplier is a plain function, you can test it directly to confirm its behavior:
 
