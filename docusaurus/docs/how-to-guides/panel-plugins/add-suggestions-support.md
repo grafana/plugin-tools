@@ -54,7 +54,7 @@ Without this field, Grafana will not call your supplier.
 
 ## Set up the supplier
 
-Call `setSuggestionsSupplier` on your `PanelPlugin` instance in `module.ts`. The supplier is a function that receives a [`PanelDataSummary`](#understanding-paneldatasummary) and returns an array of `VisualizationSuggestion` objects, or `void` (no suggestions):
+Call `setSuggestionsSupplier` on your `PanelPlugin` instance in `module.ts`. The supplier is a function that receives a [`PanelDataSummary`](#understand-paneldatasummary) and returns an array of `VisualizationSuggestion` objects, or `void` (no suggestions):
 
 ```ts title="module.ts"
 import { PanelPlugin } from '@grafana/data';
@@ -101,7 +101,7 @@ Use `rawFrames` only when you need to inspect field names, custom metadata, or o
 
 If your panel has a narrow data requirement (for example, it only works with a specific frame format), return a single suggestion when the data matches, and `void` otherwise.
 
-This is the pattern used by the Flame Graph panel, which checks for required fields by inspecting `rawFrames` because it needs to validate field-level metadata:
+This is the pattern used by the Flame Graph panel. It inspects `rawFrames` to check for required fields because it needs to validate field-level metadata:
 
 ```ts title="module.ts"
 import { PanelPlugin, DataFrame, FieldType } from '@grafana/data';
@@ -221,7 +221,7 @@ Use the `VisualizationSuggestionScore` enum to communicate how well your plugin 
 
 If you do not set a score, Grafana defaults to `OK`. It is fine to omit the score unless you have a specific reason to rank a suggestion higher or lower.
 
-## Customizing the suggestion card with `cardOptions`
+## Customize the suggestion card with `cardOptions`
 
 The `cardOptions.previewModifier` function lets you adjust how a suggestion looks in the small preview card rendered in the visualization picker. It is called just before the card is rendered, and you should mutate the suggestion object directly:
 
