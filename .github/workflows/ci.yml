@@ -466,7 +466,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.event.pull_request.head.repo.fork != true }}
+        if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.fork != true }}
         env:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
