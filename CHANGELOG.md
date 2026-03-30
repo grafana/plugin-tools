@@ -1,3 +1,19 @@
+# (Fri Mar 27 2026)
+
+#### 🐛 Bug Fix
+
+- Fix typo in CODEOWNERS for docusaurus/docs [#2545](https://github.com/grafana/plugin-tools/pull/2545) ([@urbiz-grafana](https://github.com/urbiz-grafana))
+- `@grafana/plugin-e2e@3.4.10`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23624974663 [#2543](https://github.com/grafana/plugin-tools/pull/2543) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]) [@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 3
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Anna Urbiztondo ([@urbiz-grafana](https://github.com/urbiz-grafana))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # (Wed Mar 25 2026)
 
 #### 🐛 Bug Fix

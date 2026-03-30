@@ -12,5 +12,5 @@
 /packages/sign-plugin/ @grafana/plugins-platform-frontend
 /packages/tsconfig/ @grafana/grafana-frontend-platform
 
-/docusaurus/website/ @grafana/grafana-frontend-platform
-/docusuarus/docs/ @grafana/grafana-frontend-platform @grafana/docs-squad
+/docusaurus/website/ @grafana/grafana-frontend-platform @grafana/docs-plugins
+/docusaurus/docs/ @grafana/grafana-frontend-platform @grafana/docs-plugins
