@@ -52,7 +52,7 @@ To opt your plugin in to the Suggestions system, set `"suggestions": true` in yo
 
 Without this field, Grafana will not call your supplier.
 
-## Setting up the supplier
+## Set up the supplier
 
 Call `setSuggestionsSupplier` on your `PanelPlugin` instance in `module.ts`. The supplier is a function that receives a [`PanelDataSummary`](#understanding-paneldatasummary) and returns an array of `VisualizationSuggestion` objects, or `void` (no suggestions):
 
