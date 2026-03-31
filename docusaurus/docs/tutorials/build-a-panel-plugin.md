@@ -289,3 +289,8 @@ If you want to know more about data frames, check out our introduction to [Data 
 ## Summary
 
 In this tutorial you learned how to create a custom visualization for your dashboards.
+
+## Next steps
+
+- [Add visualization suggestions to panel plugins](/how-to-guides/panel-plugins/add-suggestions-support) — make your panel appear in Grafana's visualization picker by implementing a suggestions supplier.
+- [Add data links support to panel plugins](/how-to-guides/panel-plugins/add-datalinks-support) — allow users to navigate from your visualization to other dashboards or external URLs.

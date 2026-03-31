@@ -152,6 +152,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/panel-plugins/migration-handler-for-panels',
         'how-to-guides/panel-plugins/read-data-from-a-data-source',
         'how-to-guides/panel-plugins/subscribe-events',
+        'how-to-guides/panel-plugins/add-suggestions-support',
       ],
     },
 
@@ -324,7 +325,6 @@ const sidebars: SidebarsConfig = {
             'migration-guides/angular-react/migrate-angularjs-configuration-settings-to-react',
             'migration-guides/angular-react/angular-react-convert-from-time_series2',
             'migration-guides/angular-react/targeting-older-releases',
-            'migration-guides/angular-react/add-suggestion-supplier',
           ],
         },
         'migration-guides/migrate-from-toolkit',
