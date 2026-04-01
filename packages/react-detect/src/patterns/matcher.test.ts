@@ -92,6 +92,7 @@ describe('matcher', () => {
   describe('findStringRefs', () => {
     it('should find stringRefs assignments in source code', () => {
       const code = `
+    import React from 'react';
     class MyComponent extends React.Component {
       componentDidMount() {
         this.refs.input.focus();
@@ -111,6 +112,7 @@ describe('matcher', () => {
 
     it('should find bracket notation refs access', () => {
       const code = `
+      import React from 'react';
       class MyComponent extends React.Component {
         componentDidMount() {
           this.refs['input'].focus();
@@ -126,6 +128,35 @@ describe('matcher', () => {
       expect(matches).toHaveLength(1);
       expect(matches[0].pattern).toBe('stringRefs');
       expect(matches[0].matched).toContain('this.refs');
+    });
+
+    it('should not match this.refs in files without a React import', () => {
+      const code = `
+      class ComponentRegistry {
+        getRef() {
+          return this.refs.primary;
+        }
+      }
+    `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findStringRefs(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should not match bare this.refs access without property access', () => {
+      const code = `
+      import React from 'react';
+      class MyComponent extends React.Component {
+        getAllRefs() {
+          return this.refs;
+        }
+      }
+    `;
+      const ast = parseFile(code, 'test.js');
+      const matches = findStringRefs(ast, code);
+
+      expect(matches).toHaveLength(0);
     });
   });
 
