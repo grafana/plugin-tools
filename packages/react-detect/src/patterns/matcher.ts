@@ -102,14 +102,21 @@ export function findJsxRuntimeImports(ast: TSESTree.Program, code: string): Patt
 
 export function findStringRefs(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
+  const imports = trackImportsFromPackage(ast, 'react');
+
+  const hasReactImport = imports.defaultImports.size > 0 || imports.namedImports.size > 0;
+  if (!hasReactImport) {
+    return matches;
+  }
 
   walk(ast, (node) => {
     if (
       node &&
       node.type === 'MemberExpression' &&
-      node.object.type === 'ThisExpression' &&
-      node.property.type === 'Identifier' &&
-      node.property.name === 'refs'
+      node.object?.type === 'MemberExpression' &&
+      node.object.object?.type === 'ThisExpression' &&
+      node.object.property?.type === 'Identifier' &&
+      node.object.property.name === 'refs'
     ) {
       matches.push(createPatternMatch(node, 'stringRefs', code));
     }
