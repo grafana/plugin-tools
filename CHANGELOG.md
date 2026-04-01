@@ -1,3 +1,17 @@
+# (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
+- CI: Add auto-approve to bump-e2e-selectors workflow [#2549](https://github.com/grafana/plugin-tools/pull/2549) ([@sunker](https://github.com/sunker))
+- Update CODEOWNERS for Docusaurus paths [#2546](https://github.com/grafana/plugin-tools/pull/2546) ([@urbiz-grafana](https://github.com/urbiz-grafana))
+
+#### Authors: 2
+
+- Anna Urbiztondo ([@urbiz-grafana](https://github.com/urbiz-grafana))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Fri Mar 27 2026)
 
 #### 🐛 Bug Fix
