@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@7.1.2`
+  - Update dependency @grafana/plugin-e2e to v3.4.11 [#2554](https://github.com/grafana/plugin-tools/pull/2554) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/react-detect@0.6.2`
   - fix: reduce false positives in findStringRefs [#2551](https://github.com/grafana/plugin-tools/pull/2551) ([@jackw](https://github.com/jackw))
 
