@@ -1,3 +1,15 @@
+# v0.6.2 (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
+- fix: reduce false positives in findStringRefs [#2551](https://github.com/grafana/plugin-tools/pull/2551) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.6.1 (Tue Feb 17 2026)
 
 #### 🐛 Bug Fix

@@ -1,3 +1,125 @@
+# v7.1.1 (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v3.4.10 [#2536](https://github.com/grafana/plugin-tools/pull/2536) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.1.0 (Wed Mar 25 2026)
+
+#### 🚀 Enhancement
+
+- Create Plugin: Add agentic instructions for e2e testing [#2478](https://github.com/grafana/plugin-tools/pull/2478) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v7.0.8 (Mon Mar 16 2026)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v3.4.7 [#2529](https://github.com/grafana/plugin-tools/pull/2529) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.7 (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
+- Update dependency @grafana/plugin-e2e to v3.4.4 [#2519](https://github.com/grafana/plugin-tools/pull/2519) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.6 (Tue Mar 10 2026)
+
+#### 🐛 Bug Fix
+
+- Update actions/download-artifact action to v8 [#2522](https://github.com/grafana/plugin-tools/pull/2522) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.5 (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- fix: set config version only if migrations ran [#2513](https://github.com/grafana/plugin-tools/pull/2513) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v7.0.4 (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.4.2 [#2515](https://github.com/grafana/plugin-tools/pull/2515) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.3 (Thu Mar 05 2026)
+
+#### 🐛 Bug Fix
+
+- fix: exit migrate command if plugin is using create-plugin [#2510](https://github.com/grafana/plugin-tools/pull/2510) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v7.0.2 (Tue Mar 03 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update grafana dependencies to v12.4.0 [#2481](https://github.com/grafana/plugin-tools/pull/2481) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# v7.0.1 (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- fix: migrations yarn 1 install and eslint config issues [#2503](https://github.com/grafana/plugin-tools/pull/2503) ([@jackw](https://github.com/jackw))
+- chore(deps): update dependency @grafana/plugin-e2e to v3.4.1 [#2502](https://github.com/grafana/plugin-tools/pull/2502) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.0.0 (Fri Feb 27 2026)
 
 #### 💥 Breaking Change

@@ -198,7 +198,15 @@ declare global {
       toHaveChecked(radioGroup: RadioGroup, expected: string, options?: { timeout?: number }): Promise<R>;
 
       /**
-       * Asserts that a color picker has expected color selected
+       * Asserts that a color picker displays the expected color value.
+       *
+       * Grafana normalizes all color values to lowercase hex (e.g. `#ff5733`),
+       * so always pass lowercase hex as the expected value.
+       *
+       * @example
+       * ```ts
+       * await expect(panel.fieldByLabel('Line color').colorPicker()).toHaveColor('#ff5733');
+       * ```
        */
       toHaveColor(colorPicker: ColorPicker, rgbOrHex: string, options?: { timeout?: number }): Promise<R>;
 

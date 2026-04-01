@@ -6,6 +6,9 @@ import createDebug from 'debug';
 import { parseMarkdown, type Manifest, type Page, type MarkdownFiles } from '@grafana/plugin-docs-parser';
 import { toHtml } from 'hast-util-to-html';
 import { scanDocsFolder } from '../scanner.js';
+import { validate } from '../validation/engine.js';
+import { formatResult } from '../validation/format.js';
+import { allRules } from '../validation/rules/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,12 +44,27 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   app.set('view engine', 'ejs');
   app.set('views', join(__dirname, 'views'));
 
+  // run validation in non-strict mode and log results without blocking
+  const runValidation = async () => {
+    try {
+      const result = await validate({ docsPath, strict: false }, allRules);
+      if (result.diagnostics.length > 0) {
+        console.log(formatResult(result));
+      }
+    } catch (error) {
+      console.error('Validation failed:', error instanceof Error ? error.message : error);
+    }
+  };
+
   // scan filesystem and generate manifest + load files into memory
   debug('Scanning docs folder: %s', docsPath);
   const scanned = await scanDocsFolder(docsPath);
   let manifest: Manifest = scanned.manifest;
   let files: MarkdownFiles = scanned.files;
   debug('Manifest generated with %d pages, %d files loaded', manifest.pages.length, Object.keys(files).length);
+
+  // validate on startup
+  await runValidation();
 
   // setup file watcher for markdown files
   const watcher = watch(join(docsPath, '**/*.md'), {
@@ -65,6 +83,8 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     } catch (error) {
       console.error('Error re-scanning docs folder:', error);
     }
+
+    await runValidation();
   };
 
   watcher.on('change', (p) => rescan('changed', p));

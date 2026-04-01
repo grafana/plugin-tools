@@ -1,3 +1,124 @@
+# v3.4.10 (Fri Mar 27 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23624974663 [#2543](https://github.com/grafana/plugin-tools/pull/2543) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]) [@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# v3.4.9 (Wed Mar 25 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23499763764 [#2539](https://github.com/grafana/plugin-tools/pull/2539) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.4.8 (Wed Mar 18 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23251034887 [#2533](https://github.com/grafana/plugin-tools/pull/2533) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.4.7 (Fri Mar 13 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix toHaveColor matcher for ColorValueEditor [#2527](https://github.com/grafana/plugin-tools/pull/2527) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v3.4.6 (Fri Mar 13 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22967232448 [#2530](https://github.com/grafana/plugin-tools/pull/2530) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.4.5 (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22898798261 [#2523](https://github.com/grafana/plugin-tools/pull/2523) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.4.4 (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- A11y: make the axe peer deps optional [#2485](https://github.com/grafana/plugin-tools/pull/2485) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 1
+
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# v3.4.3 (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22732949497 [#2509](https://github.com/grafana/plugin-tools/pull/2509) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# v3.4.2 (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Expand provisioning file variables [#2512](https://github.com/grafana/plugin-tools/pull/2512) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# v3.4.1 (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22358195095 [#2466](https://github.com/grafana/plugin-tools/pull/2466) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
 # v3.4.0 (Wed Feb 25 2026)
 
 #### 🚀 Enhancement

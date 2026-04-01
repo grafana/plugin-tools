@@ -131,16 +131,9 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
     const fileContent = await readFile(absolutePath, 'utf-8');
     const parsed = matter(fileContent);
 
-    // validate frontmatter has required fields with correct types
+    // skip files without required frontmatter (validation rules report these)
     const frontmatter = parsed.data as Partial<Frontmatter>;
-    if (
-      typeof frontmatter.title !== 'string' ||
-      typeof frontmatter.description !== 'string' ||
-      typeof frontmatter.sidebar_position !== 'number'
-    ) {
-      console.warn(
-        `Warning: ${relativePath} missing or invalid required frontmatter fields (title: string, description: string, sidebar_position: number)`
-      );
+    if (typeof frontmatter.title !== 'string' || typeof frontmatter.description !== 'string') {
       continue;
     }
 
@@ -225,11 +218,7 @@ function treeToPages(node: TreeNode): Page[] {
       const generatedSlug = isIndex ? generateSlug(parsed.dir) : generateSlug(child.file.relativePath);
       const customSlug = child.file.frontmatter.slug ? normalizeCustomSlug(child.file.frontmatter.slug) : null;
 
-      if (child.file.frontmatter.slug && !customSlug) {
-        console.warn(
-          `Warning: ${child.file.relativePath} contains an invalid frontmatter slug and will use generated slug instead`
-        );
-      }
+      // invalid slugs fall back to generated slug (validation rules report these)
 
       const page: Page = {
         title: child.file.frontmatter.title,

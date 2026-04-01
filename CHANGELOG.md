@@ -1,3 +1,315 @@
+# (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/react-detect@0.6.2`
+  - fix: reduce false positives in findStringRefs [#2551](https://github.com/grafana/plugin-tools/pull/2551) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.1.1`
+  - Update dependency @grafana/plugin-e2e to v3.4.10 [#2536](https://github.com/grafana/plugin-tools/pull/2536) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Wed Apr 01 2026)
+
+#### 🐛 Bug Fix
+
+- CI: Add auto-approve to bump-e2e-selectors workflow [#2549](https://github.com/grafana/plugin-tools/pull/2549) ([@sunker](https://github.com/sunker))
+- Update CODEOWNERS for Docusaurus paths [#2546](https://github.com/grafana/plugin-tools/pull/2546) ([@urbiz-grafana](https://github.com/urbiz-grafana))
+
+#### Authors: 2
+
+- Anna Urbiztondo ([@urbiz-grafana](https://github.com/urbiz-grafana))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Mar 27 2026)
+
+#### 🐛 Bug Fix
+
+- Fix typo in CODEOWNERS for docusaurus/docs [#2545](https://github.com/grafana/plugin-tools/pull/2545) ([@urbiz-grafana](https://github.com/urbiz-grafana))
+- `@grafana/plugin-e2e@3.4.10`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23624974663 [#2543](https://github.com/grafana/plugin-tools/pull/2543) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]) [@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 3
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Anna Urbiztondo ([@urbiz-grafana](https://github.com/urbiz-grafana))
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
+# (Wed Mar 25 2026)
+
+#### 🐛 Bug Fix
+
+- CI: Fix auto-merge step in bump-e2e-selectors workflow [#2540](https://github.com/grafana/plugin-tools/pull/2540) ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@3.4.9`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23499763764 [#2539](https://github.com/grafana/plugin-tools/pull/2539) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 2
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 25 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@7.1.0`
+  - Create Plugin: Add agentic instructions for e2e testing [#2478](https://github.com/grafana/plugin-tools/pull/2478) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Mar 19 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-docs-cli@0.0.10`, `@grafana/plugin-docs-parser@0.0.4`
+  - Plugin Docs: Publish packages to NPM [#2537](https://github.com/grafana/plugin-tools/pull/2537) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Wed Mar 18 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.8`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-23251034887 [#2533](https://github.com/grafana/plugin-tools/pull/2533) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Mon Mar 16 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.8`
+  - Update dependency @grafana/plugin-e2e to v3.4.7 [#2529](https://github.com/grafana/plugin-tools/pull/2529) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Fri Mar 13 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.7`
+  - Plugin E2E: Fix toHaveColor matcher for ColorValueEditor [#2527](https://github.com/grafana/plugin-tools/pull/2527) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Fri Mar 13 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.6`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22967232448 [#2530](https://github.com/grafana/plugin-tools/pull/2530) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.5`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22898798261 [#2523](https://github.com/grafana/plugin-tools/pull/2523) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Wed Mar 11 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.7`
+  - Update dependency @grafana/plugin-e2e to v3.4.4 [#2519](https://github.com/grafana/plugin-tools/pull/2519) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+- `@grafana/eslint-plugin-plugins@0.6.4`
+  - ESLint Plugin: strip prerelease tags from resolved min Grafana version [#2520](https://github.com/grafana/plugin-tools/pull/2520) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Tue Mar 10 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.6`
+  - Update actions/download-artifact action to v8 [#2522](https://github.com/grafana/plugin-tools/pull/2522) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Bump e2e-version action to v1.2.0 [#2518](https://github.com/grafana/plugin-tools/pull/2518) ([@sunker](https://github.com/sunker))
+- `@grafana/plugin-e2e@3.4.4`
+  - A11y: make the axe peer deps optional [#2485](https://github.com/grafana/plugin-tools/pull/2485) ([@fastfrwrd](https://github.com/fastfrwrd))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Paul Marbach ([@fastfrwrd](https://github.com/fastfrwrd))
+
+---
+
+# (Mon Mar 09 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.3`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22732949497 [#2509](https://github.com/grafana/plugin-tools/pull/2509) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.5`
+  - fix: set config version only if migrations ran [#2513](https://github.com/grafana/plugin-tools/pull/2513) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.4`
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.4.2 [#2515](https://github.com/grafana/plugin-tools/pull/2515) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Fri Mar 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.2`
+  - Plugin E2E: Expand provisioning file variables [#2512](https://github.com/grafana/plugin-tools/pull/2512) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Mar 05 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.3`
+  - fix: exit migrate command if plugin is using create-plugin [#2510](https://github.com/grafana/plugin-tools/pull/2510) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Tue Mar 03 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.2`
+  - chore(deps): update grafana dependencies to v12.4.0 [#2481](https://github.com/grafana/plugin-tools/pull/2481) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
+# (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.0.1`
+  - fix: migrations yarn 1 install and eslint config issues [#2503](https://github.com/grafana/plugin-tools/pull/2503) ([@jackw](https://github.com/jackw))
+  - chore(deps): update dependency @grafana/plugin-e2e to v3.4.1 [#2502](https://github.com/grafana/plugin-tools/pull/2502) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Mon Mar 02 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.1`
+  - Plugin E2E: Bump @grafana/e2e-selectors to 13.0.0-22358195095 [#2466](https://github.com/grafana/plugin-tools/pull/2466) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
+
+#### Authors: 1
+
+- [@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot])
+
+---
+
 # (Fri Feb 27 2026)
 
 #### 💥 Breaking Change

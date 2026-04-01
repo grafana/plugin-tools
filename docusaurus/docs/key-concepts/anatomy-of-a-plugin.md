@@ -126,11 +126,19 @@ For more details on panel visualizations, refer to the [panel plugin tutorial](/
 
 ### Panel options
 
-Panel options allow users to customize the behavior and appearance of the panel plugin. You can define these options by implementing the `OptionsEditor` component, which can expose options relevant to the visualization. These options are passed into the panel’s `render()` function, allowing for dynamic updates based on user inputs.
+Panel options allow users to customize the behavior and appearance of the panel plugin. You can define these options by implementing the `OptionsEditor` component, which can expose options relevant to the visualization. These options are passed into the panel's `render()` function, allowing for dynamic updates based on user inputs.
 
 You can see an example of how to implement panel options in the [basic panel tutorial](/tutorials/build-a-panel-plugin).
 
 ![An example of custom panel options on the right](./images/panel-options.png)
+
+### Visualization suggestions
+
+Panel plugins can participate in Grafana's visualization picker by returning suggestions based on the current panel data. When a user opens the visualization picker in the panel editor, Grafana calls each plugin's suggestions supplier with a summary of the data and uses the results to rank and display suitable panel types.
+
+To opt in, set `"suggestions": true` in `plugin.json` and call `setSuggestionsSupplier` on your `PanelPlugin` instance in `module.ts`. The supplier receives a `PanelDataSummary` and returns an array of `VisualizationSuggestion` objects — or nothing if the plugin is not a good fit for the data.
+
+For a complete walkthrough, refer to [Add visualization suggestions to panel plugins](/how-to-guides/panel-plugins/add-suggestions-support).
 
 ## Plugin folder structure
 

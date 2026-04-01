@@ -100,6 +100,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/add-support-for-externally-shared-dashboards',
         'how-to-guides/data-source-plugins/add-support-for-pdc',
         'how-to-guides/data-source-plugins/add-support-for-variables',
+        'how-to-guides/data-source-plugins/add-default-variables-and-links',
         'how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend',
         'how-to-guides/data-source-plugins/create-data-frames',
         'how-to-guides/data-source-plugins/error-handling',
@@ -151,6 +152,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/panel-plugins/migration-handler-for-panels',
         'how-to-guides/panel-plugins/read-data-from-a-data-source',
         'how-to-guides/panel-plugins/subscribe-events',
+        'how-to-guides/panel-plugins/add-suggestions-support',
       ],
     },
 
@@ -323,7 +325,6 @@ const sidebars: SidebarsConfig = {
             'migration-guides/angular-react/migrate-angularjs-configuration-settings-to-react',
             'migration-guides/angular-react/angular-react-convert-from-time_series2',
             'migration-guides/angular-react/targeting-older-releases',
-            'migration-guides/angular-react/add-suggestion-supplier',
           ],
         },
         'migration-guides/migrate-from-toolkit',
@@ -349,10 +350,11 @@ const sidebars: SidebarsConfig = {
         'plugin-examples/plugin-examples',
         'reference/plugin-json',
         'reference/cli-commands',
+        'reference/datasource-apis',
         {
           type: 'category',
-          label: 'UI extensions reference',
-          description: 'Reeference guides for UI extensions.',
+          label: 'UI extensions reference guides',
+          description: 'Reference guides for UI extensions.',
           link: {
             type: 'doc',
             id: 'reference/ui-extensions-reference/ui-extensions-reference',
