@@ -14,13 +14,16 @@ interface PluginJson {
 
 let cachedPluginJson: PluginJson | null = null;
 
-export function getPluginJson(dir?: string) {
+export function resetPluginJsonCache() {
+  cachedPluginJson = null;
+}
+
+export function getPluginJson(distDir: string) {
   if (cachedPluginJson) {
     return cachedPluginJson;
   }
 
-  const srcPath = dir ? path.join(dir, 'dist') : path.join(process.cwd(), 'dist');
-  const pluginJsonPath = path.join(srcPath, 'plugin.json');
+  const pluginJsonPath = path.join(distDir, 'plugin.json');
   cachedPluginJson = readJsonFile(pluginJsonPath);
   return cachedPluginJson;
 }
