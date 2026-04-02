@@ -1,19 +1,16 @@
 import fg from 'fast-glob';
-import { join } from 'node:path';
 
-export async function findSourceMapFiles(directory: string): Promise<string[]> {
-  const distDirectory = join(directory, 'dist');
-
+export async function findSourceMapFiles(distDir: string): Promise<string[]> {
   try {
     const files = await fg('**/*.js.map', {
-      cwd: distDirectory,
+      cwd: distDir,
       absolute: true,
       ignore: ['**/node_modules/**'],
     });
     return files;
   } catch (error) {
     throw new Error(
-      `Error finding source map files in ${distDirectory}: ${error instanceof Error ? error.message : 'Unknown error'}`
+      `Error finding source map files in "${distDir}": ${error instanceof Error ? error.message : 'Unknown error'}`
     );
   }
 }
