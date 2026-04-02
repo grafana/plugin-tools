@@ -3,29 +3,9 @@ import fs from 'node:fs';
 import { parseFile } from '../parser.js';
 import { walk } from './ast.js';
 
-interface PluginJson {
-  id: string;
-  type: string;
-  info: {
-    version: string;
-  };
-  name: string;
-}
-
-let cachedPluginJson: PluginJson | null = null;
-
-export function resetPluginJsonCache() {
-  cachedPluginJson = null;
-}
-
 export function getPluginJson(distDir: string) {
-  if (cachedPluginJson) {
-    return cachedPluginJson;
-  }
-
   const pluginJsonPath = path.join(distDir, 'plugin.json');
-  cachedPluginJson = readJsonFile(pluginJsonPath);
-  return cachedPluginJson;
+  return readJsonFile(pluginJsonPath);
 }
 
 function isFile(path: string) {
@@ -52,13 +32,13 @@ export function readJsonFile(filename: string) {
   }
 }
 
-export function hasExternalisedJsxRuntime(): boolean {
+export function hasExternalisedJsxRuntime(pluginRoot: string): boolean {
   const webpackConfigPathsToCheck = ['webpack.config.ts', '.config/webpack/webpack.config.ts'];
   const bundlerExternalPathsToCheck = ['.config/bundler/externals.ts'];
   let found = false;
   for (const webpackConfigPath of webpackConfigPathsToCheck) {
-    if (isFile(path.join(process.cwd(), webpackConfigPath))) {
-      const webpackConfig = fs.readFileSync(path.join(process.cwd(), webpackConfigPath)).toString();
+    if (isFile(path.join(pluginRoot, webpackConfigPath))) {
+      const webpackConfig = fs.readFileSync(path.join(pluginRoot, webpackConfigPath)).toString();
       const webpackConfigAst = parseFile(webpackConfig, webpackConfigPath);
 
       walk(webpackConfigAst, (node) => {
@@ -84,8 +64,8 @@ export function hasExternalisedJsxRuntime(): boolean {
     }
   }
   for (const bundlerExternalPath of bundlerExternalPathsToCheck) {
-    if (isFile(path.join(process.cwd(), bundlerExternalPath))) {
-      const bundlerExternals = fs.readFileSync(path.join(process.cwd(), bundlerExternalPath)).toString();
+    if (isFile(path.join(pluginRoot, bundlerExternalPath))) {
+      const bundlerExternals = fs.readFileSync(path.join(pluginRoot, bundlerExternalPath)).toString();
       const bundlerExternalsAst = parseFile(bundlerExternals, bundlerExternalPath);
 
       walk(bundlerExternalsAst, (node) => {

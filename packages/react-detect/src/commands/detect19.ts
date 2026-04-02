@@ -54,7 +54,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
             return match;
           });
 
-    const results = generateAnalysisResults(matchesWithRootDependency, distDir, depContext, {
+    const results = generateAnalysisResults(matchesWithRootDependency, distDir, pluginRoot, depContext, {
       skipBuildTooling,
       skipDependencies,
     });

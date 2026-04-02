@@ -13,10 +13,11 @@ export interface AnalysisOptions {
 export function generateAnalysisResults(
   matches: AnalyzedMatch[],
   distDir: string,
+  pluginRoot: string,
   depContext: DependencyContext | null,
   options: AnalysisOptions = { skipBuildTooling: false, skipDependencies: false }
 ): PluginAnalysisResults {
-  const filtered = filterMatches(matches, options.skipBuildTooling);
+  const filtered = filterMatches(matches, options.skipBuildTooling, pluginRoot);
   const pluginJson = getPluginJson(distDir);
 
   // Filter out externalized dependencies
@@ -35,9 +36,9 @@ export function generateAnalysisResults(
     return pattern?.impactLevel === 'warning';
   });
 
-  const critical = criticalMatches.map((m) => generateResult(m));
-  const warnings = warningMatches.map((m) => generateResult(m));
-  const dependencies = buildDependencyIssues(dependencyMatches, depContext);
+  const critical = criticalMatches.map((m) => generateResult(m, pluginRoot));
+  const warnings = warningMatches.map((m) => generateResult(m, pluginRoot));
+  const dependencies = buildDependencyIssues(dependencyMatches, depContext, pluginRoot);
 
   const totalIssues = filteredWithoutExternals.length;
   const affectedDeps = new Set(
@@ -78,9 +79,9 @@ function shouldIncludeDependencyMatch(match: AnalyzedMatch, _depContext: Depende
   return true;
 }
 
-function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean): AnalyzedMatch[] {
+function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean, pluginRoot: string): AnalyzedMatch[] {
   // Only check webpack config if NOT skipping build tooling
-  const externalisedJsxRuntime = skipBuildTooling ? false : hasExternalisedJsxRuntime();
+  const externalisedJsxRuntime = skipBuildTooling ? false : hasExternalisedJsxRuntime(pluginRoot);
   const filtered = matches.filter((match) => {
     // TODO: add mode for strict / loose filtering
     if (match.type === 'source' && (match.confidence === 'none' || match.confidence === 'unknown')) {
@@ -120,7 +121,7 @@ function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean): Ana
   return filtered;
 }
 
-function generateResult(match: AnalyzedMatch): AnalysisResult {
+function generateResult(match: AnalyzedMatch, pluginRoot: string): AnalysisResult {
   const pattern = getPattern(match.pattern);
 
   if (!pattern) {
@@ -135,7 +136,7 @@ function generateResult(match: AnalyzedMatch): AnalysisResult {
     impactLevel: pattern.impactLevel,
     location: {
       type: match.type,
-      file: path.join(process.cwd(), cleanFilePath),
+      file: path.join(pluginRoot, cleanFilePath),
       line: match.sourceLine,
       column: match.sourceColumn,
     },
@@ -162,7 +163,8 @@ function generateResult(match: AnalyzedMatch): AnalysisResult {
  */
 function buildDependencyIssues(
   dependencyMatches: AnalyzedMatch[],
-  depContext: DependencyContext | null
+  depContext: DependencyContext | null,
+  pluginRoot: string
 ): DependencyIssue[] {
   // Group by package
   const byPackage = new Map<string, AnalyzedMatch[]>();
@@ -185,7 +187,7 @@ function buildDependencyIssues(
       packageName,
       version: version || 'unknown',
       rootDependency: rootDep,
-      issues: matches.map((m) => generateResult(m)),
+      issues: matches.map((m) => generateResult(m, pluginRoot)),
     });
   }
 
