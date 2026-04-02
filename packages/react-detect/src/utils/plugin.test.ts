@@ -18,8 +18,8 @@ describe('getPluginJson', () => {
     const { getPluginJson } = await import('./plugin.js');
     const result = getPluginJson(distDir);
 
-    expect(result.id).toBe('my-plugin');
-    expect(result.info.version).toBe('2.0.0');
+    expect(result?.id).toBe('my-plugin');
+    expect(result?.info.version).toBe('2.0.0');
   });
 
   it('throws when plugin.json does not exist in the given distDir', async () => {

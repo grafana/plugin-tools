@@ -1,4 +1,5 @@
 import minimist from 'minimist';
+import { join } from 'node:path';
 import { findSourceMapFiles } from '../file-scanner.js';
 import { generateAnalysisResults } from '../results.js';
 import { DependencyContext } from '../utils/dependencies.js';
@@ -13,11 +14,12 @@ import { output } from '../utils/output.js';
 export async function detect19(argv: minimist.ParsedArgs) {
   try {
     const pluginRoot = argv.pluginRoot || process.cwd();
+    const distDir = argv.distDir || join(pluginRoot, 'dist');
     const skipDependencies = argv.skipDependencies || false;
     const skipBuildTooling = argv.skipBuildTooling || false;
     const jsonOutput = argv.json || false;
 
-    const allMatches = await getAllMatches(pluginRoot);
+    const allMatches = await getAllMatches(distDir);
 
     // Conditionally load dependencies
     let depContext: DependencyContext | null = null;
@@ -52,7 +54,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
             return match;
           });
 
-    const results = generateAnalysisResults(matchesWithRootDependency, pluginRoot, depContext, {
+    const results = generateAnalysisResults(matchesWithRootDependency, distDir, depContext, {
       skipBuildTooling,
       skipDependencies,
     });
@@ -77,11 +79,11 @@ export async function detect19(argv: minimist.ParsedArgs) {
   }
 }
 
-async function getAllMatches(pluginRoot: string) {
-  const sourcemapPaths = await findSourceMapFiles(pluginRoot);
+async function getAllMatches(distDir: string) {
+  const sourcemapPaths = await findSourceMapFiles(distDir);
 
   if (sourcemapPaths.length === 0) {
-    throw new Error('No source map files found in dist directory. Make sure to build your plugin first.');
+    throw new Error(`No source map files found in "${distDir}". Make sure to build your plugin first.`);
   }
 
   const sources = await extractAllSources(sourcemapPaths);

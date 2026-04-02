@@ -6,7 +6,7 @@ import { detect19 } from '../commands/detect19.js';
 const args = process.argv.slice(2);
 const argv = minimist(args, {
   boolean: ['json', 'skipBuildTooling', 'skipDependencies', 'noErrorExitCode'],
-  string: ['pluginRoot'],
+  string: ['pluginRoot', 'distDir'],
   default: {
     json: false,
     skipBuildTooling: false,

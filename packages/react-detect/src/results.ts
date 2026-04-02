@@ -12,12 +12,12 @@ export interface AnalysisOptions {
 
 export function generateAnalysisResults(
   matches: AnalyzedMatch[],
-  pluginRoot: string,
+  distDir: string,
   depContext: DependencyContext | null,
   options: AnalysisOptions = { skipBuildTooling: false, skipDependencies: false }
 ): PluginAnalysisResults {
   const filtered = filterMatches(matches, options.skipBuildTooling);
-  const pluginJson = getPluginJson(pluginRoot);
+  const pluginJson = getPluginJson(distDir);
 
   // Filter out externalized dependencies
   const filteredWithoutExternals = filtered.filter((match) => shouldIncludeDependencyMatch(match, depContext));
