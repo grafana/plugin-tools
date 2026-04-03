@@ -33,6 +33,8 @@ export function findDefaultProps(ast: TSESTree.Program, code: string): PatternMa
     if (
       isAssignmentToProperty(node, 'defaultProps') &&
       node.left.object.type === 'Identifier' &&
+      // React components must start with an uppercase letter (e.g. MyComponent vs formConfig).
+      // This filters out defaultProps assignments on plain objects that aren't React components.
       /^[A-Z]/.test(node.left.object.name)
     ) {
       matches.push(createPatternMatch(node, 'defaultProps', code));
