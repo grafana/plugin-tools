@@ -109,6 +109,9 @@ function collectClassComponentNames(ast: TSESTree.Program): Set<string> {
   // return statements, and standalone expression statements. We walk all SequenceExpression
   // nodes regardless of where they appear.
   walk(ast, (node) => {
+    if (!node) {
+      return;
+    }
     if (node.type !== 'SequenceExpression') {
       return;
     }
