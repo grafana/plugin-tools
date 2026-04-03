@@ -22,9 +22,19 @@ export function findPatternMatches(ast: TSESTree.Program, code: string): Pattern
 
 export function findDefaultProps(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
+  const imports = trackImportsFromPackage(ast, 'react');
+  const hasReactImport = imports.defaultImports.size > 0 || imports.namedImports.size > 0;
+
+  if (!hasReactImport) {
+    return matches;
+  }
 
   walk(ast, (node) => {
-    if (isAssignmentToProperty(node, 'defaultProps')) {
+    if (
+      isAssignmentToProperty(node, 'defaultProps') &&
+      node.left.object.type === 'Identifier' &&
+      /^[A-Z]/.test(node.left.object.name)
+    ) {
       matches.push(createPatternMatch(node, 'defaultProps', code));
     }
   });
