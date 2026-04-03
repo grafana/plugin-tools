@@ -1,3 +1,17 @@
+# (Fri Apr 03 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.1.3`
+  - Update actions/upload-artifact action to v7 [#2531](https://github.com/grafana/plugin-tools/pull/2531) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]) [@Ukochka](https://github.com/Ukochka))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka))
+
+---
+
 # (Wed Apr 01 2026)
 
 #### 🐛 Bug Fix
