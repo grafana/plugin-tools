@@ -166,6 +166,85 @@ describe('matcher', () => {
       expect(matches[0].pattern).toBe('defaultProps');
     });
 
+    it('should not flag defaultProps on a Babel _class alias in a sequence expression (react-window pattern)', () => {
+      // Real Babel output uses TWO aliases: _temp = _class = IIFE(...)
+      // _inheritsLoose adds FixedSizeList to the exclusion set, but the actual
+      // defaultProps assignment targets _class — nested inside the chained assignment.
+      const code = `
+      import React, { PureComponent } from 'react';
+      var _class, _temp;
+      var FixedSizeList = (_temp = _class = function (_PureComponent) {
+        _inheritsLoose(FixedSizeList, _PureComponent);
+      }(PureComponent), _class.defaultProps = { direction: 'ltr' }, _temp);
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should not flag defaultProps when _class is assigned inside a factory function return sequence', () => {
+      const code = `
+      import { PureComponent } from 'react';
+      function createGrid() {
+        var _class;
+        return _class = function (_PureComponent) {
+          _inheritsLoose(Grid, _PureComponent);
+          function Grid() {}
+          return Grid;
+        }(PureComponent), _class.defaultProps = {
+          direction: 'ltr',
+          useIsScrolling: false
+        }, _class;
+      }
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should not flag defaultProps when _class is co-declared separately and _inheritsLoose uses a different identifier', () => {
+      const code = `
+      import { Component } from 'react';
+      var _class, _temp;
+      _inheritsLoose(onClickOutside, Component);
+      function onClickOutside() {}
+      (_class = onClickOutside,
+        _class.displayName = 'OnClickOutside',
+        _class.defaultProps = {
+          eventTypes: ['click', 'touchend'],
+          excludeScrollbar: false
+        }
+      );
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should not flag defaultProps on a TypeScript-compiled class (__extends pattern)', () => {
+      const code = `
+      import React from 'react';
+      var ReactAce = /** @class */ (function (_super) {
+        __extends(ReactAce, _super);
+        function ReactAce(props) {
+          return _super.call(this, props) || this;
+        }
+        return ReactAce;
+      }(React.Component));
+      ReactAce.defaultProps = {
+        name: 'ace-editor',
+        focus: false
+      };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
     it('should not flag defaultProps on a class component alongside a function component', () => {
       const code = `
       import React from 'react';

@@ -62,13 +62,20 @@ function hasReactInScope(ast: TSESTree.Program): boolean {
  * These are excluded from defaultProps flagging because class component defaultProps
  * is still valid in React 19.
  *
- * Detects two forms:
+ * Pass 1 collects identifiers from:
  * - Native ES6: `class Foo extends React.Component` / `extends Component`
  * - Babel compiled: `_inherits(Foo, ...)` / `_inheritsLoose(Foo, ...)`
+ * - TypeScript compiled: `__extends(Foo, ...)`
+ *
+ * Pass 2 resolves `_class` aliases found in any sequence expression:
+ * - Babel: `(_temp = _class = IIFE, _class.defaultProps = {...}, _temp)`
+ * - Factory return: `return _class = IIFE, _class.defaultProps = {...}, _class`
+ * - Standalone alias: `(_class = knownComponent, _class.defaultProps = {...})`
  */
 function collectClassComponentNames(ast: TSESTree.Program): Set<string> {
   const names = new Set<string>();
 
+  // Pass 1: collect identifiers that are provably class components.
   walk(ast, (node) => {
     // Native class syntax: class Foo extends React.Component or extends Component
     if (
@@ -80,11 +87,12 @@ function collectClassComponentNames(ast: TSESTree.Program): Set<string> {
       names.add(node.id.name);
     }
 
-    // Babel compiled class inheritance: _inherits(Foo, ...) or _inheritsLoose(Foo, ...)
+    // Babel/TypeScript compiled class inheritance:
+    //   _inherits(Foo, ...) / _inheritsLoose(Foo, ...) / __extends(Foo, ...)
     if (
       node.type === 'CallExpression' &&
       node.callee.type === 'Identifier' &&
-      (node.callee.name === '_inherits' || node.callee.name === '_inheritsLoose') &&
+      (node.callee.name === '_inherits' || node.callee.name === '_inheritsLoose' || node.callee.name === '__extends') &&
       node.arguments.length >= 1 &&
       node.arguments[0].type === 'Identifier'
     ) {
@@ -92,7 +100,68 @@ function collectClassComponentNames(ast: TSESTree.Program): Set<string> {
     }
   });
 
+  // Pass 2: resolve _class aliases in any SequenceExpression.
+  // Babel assigns the class object to a short-lived alias and then assigns .defaultProps
+  // on it within a sequence expression. This pattern appears in VariableDeclarators,
+  // return statements, and standalone expression statements. We walk all SequenceExpression
+  // nodes regardless of where they appear.
+  walk(ast, (node) => {
+    if (node.type !== 'SequenceExpression') {
+      return;
+    }
+
+    // Build identifier → ultimate-assigned-value map, unwrapping chained assignments.
+    // For `_temp = _class = IIFE(...)`, both _temp and _class map to the IIFE.
+    const assignmentMap = new Map<string, TSESTree.Expression>();
+    for (const expr of node.expressions) {
+      collectChainedAssignments(expr as TSESTree.Expression, assignmentMap);
+    }
+
+    // Promote any identifier that has .defaultProps assigned in this sequence
+    // if it was assigned to a known class identifier or a CallExpression (IIFE).
+    for (const expr of node.expressions) {
+      if (
+        expr.type === 'AssignmentExpression' &&
+        expr.left.type === 'MemberExpression' &&
+        expr.left.object.type === 'Identifier' &&
+        expr.left.property.type === 'Identifier' &&
+        expr.left.property.name === 'defaultProps'
+      ) {
+        const alias = expr.left.object.name;
+        const value = assignmentMap.get(alias);
+        if (value && (value.type === 'CallExpression' || (value.type === 'Identifier' && names.has(value.name)))) {
+          names.add(alias);
+        }
+      }
+    }
+  });
+
   return names;
+}
+
+/**
+ * Recursively walks a (possibly chained) AssignmentExpression and maps each
+ * identifier on the left side to the ultimate non-assignment right-hand value.
+ *
+ * For `_temp = _class = IIFE(...)`:
+ *   _temp → IIFE (CallExpression)
+ *   _class → IIFE (CallExpression)
+ */
+function collectChainedAssignments(expr: TSESTree.Expression, map: Map<string, TSESTree.Expression>): void {
+  if (expr.type !== 'AssignmentExpression') {
+    return;
+  }
+  if (expr.left.type === 'Identifier') {
+    map.set(expr.left.name, getUltimateValue(expr.right as TSESTree.Expression));
+  }
+  collectChainedAssignments(expr.right as TSESTree.Expression, map);
+}
+
+function getUltimateValue(expr: TSESTree.Expression): TSESTree.Expression {
+  if (expr.type === 'AssignmentExpression') {
+    return getUltimateValue(expr.right as TSESTree.Expression);
+  }
+  return expr;
 }
 
 function isReactBaseClass(node: TSESTree.Expression): boolean {
