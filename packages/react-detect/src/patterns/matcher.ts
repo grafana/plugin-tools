@@ -170,7 +170,7 @@ function getUltimateValue(expr: TSESTree.Expression): TSESTree.Expression {
 function isReactBaseClass(node: TSESTree.Expression): boolean {
   // React.Component or React.PureComponent (any namespace alias)
   if (
-    node.type === 'MemberExpression' &&
+    node?.type === 'MemberExpression' &&
     node.property.type === 'Identifier' &&
     (node.property.name === 'Component' || node.property.name === 'PureComponent')
   ) {
@@ -178,7 +178,7 @@ function isReactBaseClass(node: TSESTree.Expression): boolean {
   }
 
   // Direct named import: extends Component or extends PureComponent
-  if (node.type === 'Identifier' && (node.name === 'Component' || node.name === 'PureComponent')) {
+  if (node?.type === 'Identifier' && (node.name === 'Component' || node.name === 'PureComponent')) {
     return true;
   }
 
