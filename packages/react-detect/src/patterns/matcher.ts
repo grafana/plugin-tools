@@ -22,14 +22,12 @@ export function findPatternMatches(ast: TSESTree.Program, code: string): Pattern
 
 export function findDefaultProps(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
-  const reactImports = trackImportsFromPackage(ast, 'react');
-  const jsxRuntimeImports = trackImportsFromPackage(ast, 'react/jsx-runtime');
-  const jsxDevRuntimeImports = trackImportsFromPackage(ast, 'react/jsx-dev-runtime');
+  const hasImports = (imports: ReturnType<typeof trackImportsFromPackage>): boolean =>
+    imports.defaultImports.size > 0 || imports.namedImports.size > 0;
   const hasReactImport =
-    reactImports.defaultImports.size > 0 ||
-    reactImports.namedImports.size > 0 ||
-    jsxRuntimeImports.namedImports.size > 0 ||
-    jsxDevRuntimeImports.namedImports.size > 0;
+    hasImports(trackImportsFromPackage(ast, 'react')) ||
+    hasImports(trackImportsFromPackage(ast, 'react/jsx-runtime')) ||
+    hasImports(trackImportsFromPackage(ast, 'react/jsx-dev-runtime'));
 
   if (!hasReactImport) {
     return matches;

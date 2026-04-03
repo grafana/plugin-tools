@@ -77,6 +77,19 @@ describe('matcher', () => {
       expect(matches[0].pattern).toBe('defaultProps');
     });
 
+    it('should find defaultProps when react/jsx-runtime is imported as a default import', () => {
+      const code = `
+      import ReactJSX from 'react/jsx-runtime';
+      function MyComponent() {}
+      MyComponent.defaultProps = { foo: 'bar' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('defaultProps');
+    });
+
     it('should find defaultProps when react/jsx-dev-runtime is imported', () => {
       const code = `
       import { jsxDEV as _jsxDEV } from 'react/jsx-dev-runtime';
