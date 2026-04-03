@@ -64,6 +64,32 @@ describe('matcher', () => {
       expect(matches).toHaveLength(0);
     });
 
+    it('should find defaultProps when react/jsx-runtime is imported (automatic JSX transform)', () => {
+      const code = `
+      import { jsx as _jsx } from 'react/jsx-runtime';
+      function MyComponent() {}
+      MyComponent.defaultProps = { foo: 'bar' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('defaultProps');
+    });
+
+    it('should find defaultProps when react/jsx-dev-runtime is imported', () => {
+      const code = `
+      import { jsxDEV as _jsxDEV } from 'react/jsx-dev-runtime';
+      function MyComponent() {}
+      MyComponent.defaultProps = { foo: 'bar' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('defaultProps');
+    });
+
     it('should not flag non-React objects with defaultProps even alongside React components', () => {
       const code = `
       import React from 'react';
