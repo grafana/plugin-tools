@@ -77,6 +77,9 @@ function collectClassComponentNames(ast: TSESTree.Program): Set<string> {
 
   // Pass 1: collect identifiers that are provably class components.
   walk(ast, (node) => {
+    if (!node) {
+      return;
+    }
     // Native class syntax: class Foo extends React.Component or extends Component
     if (
       (node.type === 'ClassDeclaration' || node.type === 'ClassExpression') &&
