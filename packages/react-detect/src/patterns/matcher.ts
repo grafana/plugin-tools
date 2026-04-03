@@ -22,30 +22,95 @@ export function findPatternMatches(ast: TSESTree.Program, code: string): Pattern
 
 export function findDefaultProps(ast: TSESTree.Program, code: string): PatternMatch[] {
   const matches: PatternMatch[] = [];
-  const hasImports = (imports: ReturnType<typeof trackImportsFromPackage>): boolean =>
-    imports.defaultImports.size > 0 || imports.namedImports.size > 0;
-  const hasReactImport =
-    hasImports(trackImportsFromPackage(ast, 'react')) ||
-    hasImports(trackImportsFromPackage(ast, 'react/jsx-runtime')) ||
-    hasImports(trackImportsFromPackage(ast, 'react/jsx-dev-runtime'));
 
-  if (!hasReactImport) {
+  if (!hasReactInScope(ast)) {
     return matches;
   }
+
+  // Class component defaultProps is still valid in React 19 — only function components are affected.
+  // We build an exclusion set of identifiers that are provably class components so they are skipped,
+  // and flag everything else. This works for both unminified source and minified compiled bundles
+  // where PascalCase is not a reliable signal.
+  const classComponents = collectClassComponentNames(ast);
 
   walk(ast, (node) => {
     if (
       isAssignmentToProperty(node, 'defaultProps') &&
       node.left.object.type === 'Identifier' &&
-      // React components must start with an uppercase letter (e.g. MyComponent vs formConfig).
-      // This filters out defaultProps assignments on plain objects that aren't React components.
-      /^[A-Z]/.test(node.left.object.name)
+      !classComponents.has(node.left.object.name)
     ) {
       matches.push(createPatternMatch(node, 'defaultProps', code));
     }
   });
 
   return matches;
+}
+
+function hasReactInScope(ast: TSESTree.Program): boolean {
+  const hasImports = (imports: ReturnType<typeof trackImportsFromPackage>): boolean =>
+    imports.defaultImports.size > 0 || imports.namedImports.size > 0;
+
+  return (
+    hasImports(trackImportsFromPackage(ast, 'react')) ||
+    hasImports(trackImportsFromPackage(ast, 'react/jsx-runtime')) ||
+    hasImports(trackImportsFromPackage(ast, 'react/jsx-dev-runtime'))
+  );
+}
+
+/**
+ * Returns the set of identifier names that are provably class components in this file.
+ * These are excluded from defaultProps flagging because class component defaultProps
+ * is still valid in React 19.
+ *
+ * Detects two forms:
+ * - Native ES6: `class Foo extends React.Component` / `extends Component`
+ * - Babel compiled: `_inherits(Foo, ...)` / `_inheritsLoose(Foo, ...)`
+ */
+function collectClassComponentNames(ast: TSESTree.Program): Set<string> {
+  const names = new Set<string>();
+
+  walk(ast, (node) => {
+    // Native class syntax: class Foo extends React.Component or extends Component
+    if (
+      (node.type === 'ClassDeclaration' || node.type === 'ClassExpression') &&
+      node.superClass !== null &&
+      isReactBaseClass(node.superClass) &&
+      node.id?.type === 'Identifier'
+    ) {
+      names.add(node.id.name);
+    }
+
+    // Babel compiled class inheritance: _inherits(Foo, ...) or _inheritsLoose(Foo, ...)
+    if (
+      node.type === 'CallExpression' &&
+      node.callee.type === 'Identifier' &&
+      (node.callee.name === '_inherits' || node.callee.name === '_inheritsLoose') &&
+      node.arguments.length >= 1 &&
+      node.arguments[0].type === 'Identifier'
+    ) {
+      names.add(node.arguments[0].name);
+    }
+  });
+
+  return names;
+}
+
+function isReactBaseClass(node: TSESTree.Expression): boolean {
+  // React.Component or React.PureComponent (any namespace alias)
+  if (
+    node.type === 'MemberExpression' &&
+    node.property.type === 'Identifier' &&
+    (node.property.name === 'Component' || node.property.name === 'PureComponent')
+  ) {
+    return true;
+  }
+
+  // Direct named import: extends Component or extends PureComponent
+  if (node.type === 'Identifier' && (node.name === 'Component' || node.name === 'PureComponent')) {
+    return true;
+  }
+
+  return false;
 }
 
 export function findPropTypes(ast: TSESTree.Program, code: string): PatternMatch[] {

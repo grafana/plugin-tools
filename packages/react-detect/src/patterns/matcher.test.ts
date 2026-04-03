@@ -41,16 +41,79 @@ describe('matcher', () => {
       expect(matches[0].pattern).toBe('defaultProps');
     });
 
-    it('should not flag defaultProps on camelCase identifiers even with a React import', () => {
+    it('should flag defaultProps on minified (lowercase) identifiers when React is in scope', () => {
+      const code = `
+      import { jsx as _jsx } from 'react/jsx-runtime';
+      function k() {}
+      k.defaultProps = { foo: 'bar' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(1);
+      expect(matches[0].pattern).toBe('defaultProps');
+    });
+
+    it('should not flag defaultProps on a native class component extending React.Component', () => {
       const code = `
       import React from 'react';
-      const formConfig = {};
-      formConfig.defaultProps = { size: 'medium' };
+      class Resizable extends React.Component {}
+      Resizable.defaultProps = { handle: 'se' };
     `;
       const ast = parseFile(code, 'module.js');
       const matches = findDefaultProps(ast, code);
 
       expect(matches).toHaveLength(0);
+    });
+
+    it('should not flag defaultProps on a class component extending Component (named import)', () => {
+      const code = `
+      import { Component } from 'react';
+      class MyWidget extends Component {}
+      MyWidget.defaultProps = { size: 'md' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should not flag defaultProps on a Babel-compiled class (_inheritsLoose pattern)', () => {
+      const code = `
+      import React from 'react';
+      function _class() {}
+      _inheritsLoose(_class, React.Component);
+      _class.defaultProps = { foo: 'bar' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should not flag defaultProps on a Babel-compiled class (_inherits pattern)', () => {
+      const code = `
+      import React from 'react';
+      function _class() {}
+      _inherits(_class, React.Component);
+      _class.defaultProps = { foo: 'bar' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(0);
+    });
+
+    it('should flag defaultProps when React is in scope but identifier is not a class component', () => {
+      const code = `
+      import React from 'react';
+      function ye() { return null; }
+      ye.defaultProps = { size: 'sm' };
+    `;
+      const ast = parseFile(code, 'module.js');
+      const matches = findDefaultProps(ast, code);
+
+      expect(matches).toHaveLength(1);
     });
 
     it('should not flag defaultProps when there is no React import', () => {
@@ -103,19 +166,19 @@ describe('matcher', () => {
       expect(matches[0].pattern).toBe('defaultProps');
     });
 
-    it('should not flag non-React objects with defaultProps even alongside React components', () => {
+    it('should not flag defaultProps on a class component alongside a function component', () => {
       const code = `
       import React from 'react';
-      function MyComponent() { return null; }
-      const pluginConfig = {};
-      pluginConfig.defaultProps = { key: 'value' };
-      MyComponent.defaultProps = { foo: 'bar' };
+      class Legacy extends React.Component {}
+      Legacy.defaultProps = { theme: 'dark' };
+      function Modern() { return null; }
+      Modern.defaultProps = { theme: 'light' };
     `;
       const ast = parseFile(code, 'module.js');
       const matches = findDefaultProps(ast, code);
 
       expect(matches).toHaveLength(1);
-      expect(matches[0].matched).toContain('MyComponent.defaultProps');
+      expect(matches[0].matched).toContain('Modern.defaultProps');
     });
   });
 
