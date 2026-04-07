@@ -31,4 +31,4 @@ services:
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: {{ pluginId }}
-      GF_FEATURE_TOGGLES_SPLASHSCREEN: "false"
+      GF_FEATURE_TOGGLES_splashScreen: "false"
