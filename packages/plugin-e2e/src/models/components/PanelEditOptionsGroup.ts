@@ -38,6 +38,9 @@ export class PanelEditOptionsGroup {
   }
 
   getRadioGroup(label: string): RadioGroup {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return new RadioGroup(this.ctx, this.getByTestId(label).getByRole('radiogroup'));
+    }
     if (gte(this.ctx.grafanaVersion, '10.2.0')) {
       return new RadioGroup(this.ctx, this.getByLabel(label).getByRole('radiogroup'));
     }
@@ -45,14 +48,23 @@ export class PanelEditOptionsGroup {
   }
 
   getSwitch(label: string): Switch {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return new Switch(this.ctx, this.getByTestId(label));
+    }
     return new Switch(this.ctx, this.getByLabel(label));
   }
 
   getTextInput(label: string): Locator {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return this.getByTestId(label).getByRole('textbox');
+    }
     return this.getByLabel(label).getByRole('textbox');
   }
 
   getNumberInput(label: string): Locator {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return this.getByTestId(label).getByRole('spinbutton');
+    }
     return this.getByLabel(label).getByRole('spinbutton');
   }
 
@@ -64,23 +76,39 @@ export class PanelEditOptionsGroup {
   }
 
   getSelect(label: string): Select {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return new Select(this.ctx, this.getByTestId(label));
+    }
     return new Select(this.ctx, this.getByLabel(label));
   }
 
   getMultiSelect(label: string): MultiSelect {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return new MultiSelect(this.ctx, this.getByTestId(label));
+    }
     return new MultiSelect(this.ctx, this.getByLabel(label));
   }
 
   getColorPicker(label: string): ColorPicker {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return new ColorPicker(this.ctx, this.getByTestId(label));
+    }
     return new ColorPicker(this.ctx, this.getByLabel(label));
   }
 
   getUnitPicker(label: string): UnitPicker {
+    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
+      return new UnitPicker(this.ctx, this.getByTestId(label));
+    }
     return new UnitPicker(this.ctx, this.getByLabel(label));
   }
 
   private getByLabel(optionLabel: string): Locator {
     return this.element.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
+  }
+
+  private getByTestId(optionLabel: string): Locator {
+    return this.element.getByTestId(`data-testid ${this.groupLabel} ${optionLabel} field property editor`);
   }
 
   private getOptionsGroupToggle(): Locator {
