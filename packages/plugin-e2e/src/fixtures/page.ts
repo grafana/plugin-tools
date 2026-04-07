@@ -28,7 +28,6 @@ export const page: PageFixture = async (
   use
 ) => {
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
-  const hasOpenFeature = Object.keys(openFeature.flags).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;
 
   // set up legacy feature toggle overrides via init script
@@ -40,10 +39,15 @@ export const page: PageFixture = async (
     }
   }
 
+  // Always suppress the splash screen (enabled by default in Grafana 13+) to prevent the portal
+  // overlay from blocking test interactions. Tests that need the splash screen can explicitly
+  // re-enable it with: test.use({ openFeature: { flags: { splashScreen: true } } })
+  const mergedOpenFeatureFlags = { splashScreen: false, ...openFeature.flags };
+
   // set up OpenFeature OFREP route interception BEFORE navigation
-  // only runs if openFeature flags are provided and Grafana version >= 12.1.0
-  if (hasOpenFeature && gte(grafanaVersion, '12.1.0')) {
-    await setupOpenFeatureRoutes(page, openFeature.flags, openFeature.latency ?? 0, selectors);
+  // Grafana >= 12.1.0 required for OFREP support
+  if (gte(grafanaVersion, '12.1.0')) {
+    await setupOpenFeatureRoutes(page, mergedOpenFeatureFlags, openFeature.latency ?? 0, selectors);
   }
 
   await page.goto('/');
