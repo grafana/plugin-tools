@@ -1,3 +1,16 @@
+# (Tue Apr 07 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/react-detect@0.6.3`
+  - fix: narrow defaultProps detection to React components only [#2559](https://github.com/grafana/plugin-tools/pull/2559) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Fri Apr 03 2026)
 
 #### 🐛 Bug Fix
