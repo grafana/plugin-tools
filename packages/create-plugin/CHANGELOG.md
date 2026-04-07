@@ -1,3 +1,15 @@
+# v7.1.4 (Tue Apr 07 2026)
+
+#### 🐛 Bug Fix
+
+- chore(deps): update dependency @grafana/plugin-e2e to v3.4.12 [#2566](https://github.com/grafana/plugin-tools/pull/2566) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # v7.1.3 (Fri Apr 03 2026)
 
 #### 🐛 Bug Fix
