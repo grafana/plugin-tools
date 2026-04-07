@@ -404,6 +404,15 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "Sergej-Vlasov",
+      "name": "Sergej-Vlasov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37613182?v=4",
+      "profile": "https://github.com/Sergej-Vlasov",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
