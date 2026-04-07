@@ -108,7 +108,7 @@ export class PanelEditOptionsGroup {
   }
 
   private getByTestId(optionLabel: string): Locator {
-    return this.element.getByTestId(`${this.groupLabel} ${optionLabel} field property editor`);
+    return this.element.getByTestId(`data-testid ${this.groupLabel} ${optionLabel} field property editor`);
   }
 
   private getOptionsGroupToggle(): Locator {
