@@ -1,5 +1,24 @@
 # (Tue Apr 07 2026)
 
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@Sergej-Vlasov](https://github.com/Sergej-Vlasov), for all your work!
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.4.12`
+  - AddPanel: Default dashboardScene feature toggle to true in tests [#2563](https://github.com/grafana/plugin-tools/pull/2563) ([@Sergej-Vlasov](https://github.com/Sergej-Vlasov))
+  - Chore: update PanelEditOptionsGroup selectors [#2564](https://github.com/grafana/plugin-tools/pull/2564) ([@ashharrison90](https://github.com/ashharrison90))
+
+#### Authors: 2
+
+- [@Sergej-Vlasov](https://github.com/Sergej-Vlasov)
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+
+---
+
+# (Tue Apr 07 2026)
+
 #### 🐛 Bug Fix
 
 - `@grafana/react-detect@0.6.3`
