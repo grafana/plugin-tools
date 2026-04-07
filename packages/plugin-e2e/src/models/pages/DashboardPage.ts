@@ -87,7 +87,12 @@ export class DashboardPage extends GrafanaPage {
   async addPanel(): Promise<PanelEditPage> {
     const { components, pages, constants } = this.ctx.selectors;
 
-    const scenesEnabled = await isLegacyFeatureEnabled(this.ctx.page, 'dashboardScene');
+    // scenes feature toggle deprecated in v13 (no longer possible to disable)
+    let scenesEnabled = true;
+
+    if (semver.lt(this.ctx.grafanaVersion, '13.0.0')) {
+      scenesEnabled = await isLegacyFeatureEnabled(this.ctx.page, 'dashboardScene');
+    }
 
     // In scenes powered dashboards, one needs to click the edit button before adding a new panel in already existing dashboards
     if (scenesEnabled && this.dashboard?.uid) {
