@@ -1,7 +1,3 @@
-# These default owners will match all PRs unless a later match takes precedence.
-
-* @grafana/plugins-platform-frontend @grafana/grafana-frontend-platform
-
 /packages/create-plugin/ @grafana/grafana-frontend-platform
 /packages/eslint-plugin-plugins/ @grafana/plugins-platform-frontend
 /packages/plugin-docs-parser/ @grafana/plugins-platform-frontend
