@@ -117,7 +117,7 @@ npm install --save-dev @types/semver
 To handle translation resource loading let's add `src/loadResources.ts`
 
 ```ts title="src/loadResources.ts"
-import { LANGUAGES, ResourceLoader, Resources } from '@grafana/i18n';
+import { DEFAULT_LANGUAGE, LANGUAGES, ResourceLoader, Resources } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 
 const resources = LANGUAGES.reduce<Record<string, () => Promise<{ default: Resources }>>>((acc, lang) => {
@@ -126,6 +126,11 @@ const resources = LANGUAGES.reduce<Record<string, () => Promise<{ default: Resou
 }, {});
 
 export const loadResources: ResourceLoader = async (resolvedLanguage: string) => {
+  // Don't load resources for the default language as they are already embedded in the source code
+  if (resolvedLanguage === DEFAULT_LANGUAGE) {
+    return {};
+  }
+
   try {
     const translation = await resources[resolvedLanguage]();
     return translation.default;
