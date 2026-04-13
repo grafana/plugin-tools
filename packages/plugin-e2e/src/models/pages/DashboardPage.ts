@@ -112,7 +112,6 @@ export class DashboardPage extends GrafanaPage {
     }
 
     if (semver.gte(this.ctx.grafanaVersion, '13.0.0')) {
-      // await this.ctx.page.waitForTimeout(500); // wait for the sidebar animation to finish
       await this.ctx.page.waitForSelector(resolveGrafanaSelector(this.ctx.selectors.components.Sidebar.container));
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
       if (!(await newPanelButton.isVisible())) {
