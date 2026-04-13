@@ -108,7 +108,7 @@ test('enter value in number input', async ({ gotoPanelEditPage }) => {
 test('select color in color picker', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '3' });
   const clockOptions = panelEdit.getCustomOptions('Clock');
-  const backgroundColor = clockOptions.getColorPicker('Background color');
+  const backgroundColor = clockOptions.getColorPicker('Background Color');
 
   await backgroundColor.selectOption('#73bf69');
   await expect(backgroundColor).toHaveColor('#73bf69');

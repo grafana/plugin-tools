@@ -95,7 +95,10 @@ export class AlertRuleEditPage extends GrafanaPage {
 
     if (advancedModeSupported && !(await this.advancedModeSwitch.isChecked()) && refId === 'A') {
       // return the default query row
-      return new AlertRuleQuery(this.ctx, this.ctx.page.getByTestId('query-editor-row'));
+      return new AlertRuleQuery(
+        this.ctx,
+        this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows)
+      );
     }
 
     // return query by refId
