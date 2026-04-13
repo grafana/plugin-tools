@@ -1,3 +1,15 @@
+# v3.4.13 (Mon Apr 13 2026)
+
+#### 🐛 Bug Fix
+
+- Chore: Update to latest `e2e-selectors` [#2569](https://github.com/grafana/plugin-tools/pull/2569) ([@ashharrison90](https://github.com/ashharrison90))
+
+#### Authors: 1
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+
+---
+
 # v3.4.12 (Tue Apr 07 2026)
 
 :tada: This release contains work from a new contributor! :tada:
