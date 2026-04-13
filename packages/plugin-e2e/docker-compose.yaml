@@ -11,7 +11,7 @@ services:
       - GF_PANELS_ENABLE_ALPHA=true
       - GF_FEATURE_TOGGLES_splashScreen=false
       # TODO we need to handle new layouts in the e2e tests!
-      - GF_FEATURE_TOGGLES_dashboardNewLayouts=false
+      - GF_FEATURE_TOGGLES_dashboardNewLayouts=true
     ports:
       - 3000:3000/tcp
     volumes:
