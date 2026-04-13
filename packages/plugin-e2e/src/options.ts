@@ -7,11 +7,16 @@ export const DEFAULT_ADMIN_USER: User = {
   password: process.env.GRAFANA_ADMIN_PASSWORD || 'admin',
 };
 
+const DEFAULT_OPEN_FEATURE_FLAGS = {
+  // disable the splash screen by default for all consumers of plugin-e2e
+  splashScreen: false,
+};
+
 export const options: Fixtures<{}, PluginOptions> = {
   userPreferences: [{}, { option: true, scope: 'worker' }],
   featureToggles: [{}, { option: true, scope: 'worker' }],
   openFeature: [
-    { flags: {}, latency: 0 },
+    { flags: DEFAULT_OPEN_FEATURE_FLAGS, latency: 0 },
     { option: true, scope: 'worker' },
   ],
   provisioningRootDir: [path.join(process.cwd(), 'provisioning'), { option: true, scope: 'worker' }],

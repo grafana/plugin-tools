@@ -9,8 +9,7 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ID=1
       - GF_PANELS_ENABLE_ALPHA=true
-      - GF_FEATURE_TOGGLES_splashScreen=false
-      # TODO we need to handle new layouts in the e2e tests!
+      - GF_FEATURE_TOGGLES_splashScreen=true
       - GF_FEATURE_TOGGLES_dashboardNewLayouts=true
     ports:
       - 3000:3000/tcp
