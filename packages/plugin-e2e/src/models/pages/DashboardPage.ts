@@ -6,6 +6,7 @@ import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
+import { resolveGrafanaSelector } from '../utils';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -110,7 +111,15 @@ export class DashboardPage extends GrafanaPage {
       }
     }
 
-    if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
+    if (semver.gte(this.ctx.grafanaVersion, '13.0.0')) {
+      await this.ctx.page.waitForSelector(resolveGrafanaSelector(this.ctx.selectors.components.Sidebar.container));
+      const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
+      if (!(await newPanelButton.isVisible())) {
+        await this.getByGrafanaSelector(pages.Dashboard.Sidebar.addButton).click();
+      }
+      await this.getByGrafanaSelector(components.Sidebar.newPanelButton).click();
+      await this.getByGrafanaSelector(components.Sidebar.configurePanelButton).click();
+    } else if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
       let addButton = this.getByGrafanaSelector(
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
       );
