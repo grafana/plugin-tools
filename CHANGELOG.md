@@ -1,5 +1,18 @@
 # (Mon Apr 13 2026)
 
+#### 🚀 Enhancement
+
+- `@grafana/plugin-e2e@3.5.0`
+  - Plugin E2E: Add support for Grafana 13 new dashboard layout [#2572](https://github.com/grafana/plugin-tools/pull/2572) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Mon Apr 13 2026)
+
 #### 🐛 Bug Fix
 
 - `@grafana/plugin-e2e@3.4.13`
