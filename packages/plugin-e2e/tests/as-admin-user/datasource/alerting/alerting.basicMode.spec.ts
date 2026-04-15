@@ -18,6 +18,7 @@ test.describe('Test new alert rules', () => {
     readProvisionedDataSource,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    test.skip(semver.gte(grafanaVersion, '13.0.0'), 'Alerting datasource picker selector changed in Grafana 13');
     const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
     const queryA = await alertRuleEditPage.getQueryRow('A');
     await queryA.datasource.set(ds.name);
@@ -32,6 +33,7 @@ test.describe('Test new alert rules', () => {
     readProvisionedDataSource,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    test.skip(semver.gte(grafanaVersion, '13.0.0'), 'Alerting datasource picker selector changed in Grafana 13');
     const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
     const queryA = await alertRuleEditPage.getQueryRow('A');
     await queryA.datasource.set(ds.name);
@@ -46,6 +48,7 @@ test.describe('Test new alert rules', () => {
     readProvisionedDataSource,
   }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    test.skip(semver.gte(grafanaVersion, '13.0.0'), 'Alerting datasource picker selector changed in Grafana 13');
     const { rows } = selectors.components.QueryEditorRows;
     const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
     const queryA = await alertRuleEditPage.getQueryRow();

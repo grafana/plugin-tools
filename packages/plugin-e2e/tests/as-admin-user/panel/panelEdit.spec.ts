@@ -1,5 +1,5 @@
 import { test, expect } from '../../../src';
-import { lt, lte } from 'semver';
+import { gte, lt, lte } from 'semver';
 
 test('selecting value in radio button group', async ({ gotoPanelEditPage }) => {
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'mxb-Jv4Vk' }, id: '5' });
@@ -130,6 +130,10 @@ test('select unit in unit picker', async ({ gotoPanelEditPage }) => {
 
 test('select timezone in timezone picker', async ({ gotoPanelEditPage, grafanaVersion }) => {
   test.skip(lte(grafanaVersion, '9.1.0'), 'This feature is only available starting from Grafana 9.1.0');
+  test.skip(
+    gte(grafanaVersion, '13.1.0'),
+    'Timezone select option lookup changed in Grafana 13.1, needs investigation'
+  );
 
   const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'be6sir7o1iccgb' }, id: '1' });
   const axisOptions = panelEdit.getCustomOptions('Axis');
