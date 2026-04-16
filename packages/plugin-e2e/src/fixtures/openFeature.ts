@@ -19,11 +19,17 @@ interface OFREPBulkResponse {
   flags: OFREPFlag[];
 }
 
-/**
- * Delays execution for the specified number of milliseconds
- */
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// returns true for errors that occur when the page/context is torn down mid-request
+function isTeardownError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    (error.message.includes('Target page, context or browser has been closed') ||
+      error.message.includes('Fetch response has been disposed'))
+  );
 }
 
 /**
@@ -136,8 +142,7 @@ async function handleSingleFlagRoute(
     const response = await route.fetch();
     await route.fulfill({ response });
   } catch (error) {
-    // page was closed during teardown - route handling is no longer possible
-    if (error instanceof Error && error.message.includes('Target page, context or browser has been closed')) {
+    if (isTeardownError(error)) {
       return;
     }
     console.error('@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation', error);
