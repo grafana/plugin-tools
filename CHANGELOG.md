@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/create-plugin@7.1.7`
+  - Create Plugin: Bump @grafana/plugin-e2e to 3.5.1 [#2580](https://github.com/grafana/plugin-tools/pull/2580) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Thu Apr 16 2026)
+
+#### 🐛 Bug Fix
+
 - Plugin E2E: Bump @grafana/e2e-selectors to 13.1.0-24335230309 [#2548](https://github.com/grafana/plugin-tools/pull/2548) ([@grafana-plugins-platform-bot[bot]](https://github.com/grafana-plugins-platform-bot[bot]))
 - `@grafana/plugin-e2e@3.5.1`
   - Plugin E2E: Fix Grafana 13 compatibility [#2579](https://github.com/grafana/plugin-tools/pull/2579) ([@sunker](https://github.com/sunker))

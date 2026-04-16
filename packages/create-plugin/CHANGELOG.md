@@ -1,3 +1,15 @@
+# v7.1.7 (Thu Apr 16 2026)
+
+#### 🐛 Bug Fix
+
+- Create Plugin: Bump @grafana/plugin-e2e to 3.5.1 [#2580](https://github.com/grafana/plugin-tools/pull/2580) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v7.1.6 (Thu Apr 16 2026)
 
 #### 🐛 Bug Fix
