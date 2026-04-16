@@ -19,6 +19,9 @@ interface OFREPBulkResponse {
   flags: OFREPFlag[];
 }
 
+/**
+ * Delays execution for the specified number of milliseconds
+ */
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
