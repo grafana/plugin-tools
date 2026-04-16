@@ -83,4 +83,4 @@ EOF
 )"
 ```
 
-Return the PR URL to the user.
+Post the PR URL to the user as a clickable markdown link, e.g. `[grafana/plugin-tools#123](https://github.com/grafana/plugin-tools/pull/123)`.
