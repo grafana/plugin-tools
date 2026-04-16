@@ -1,3 +1,15 @@
+# v3.5.1 (Thu Apr 16 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix Grafana 13 compatibility [#2579](https://github.com/grafana/plugin-tools/pull/2579) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.5.0 (Mon Apr 13 2026)
 
 #### 🚀 Enhancement

@@ -1,3 +1,15 @@
+# v7.1.6 (Thu Apr 16 2026)
+
+#### 🐛 Bug Fix
+
+- chore: pin @grafana production deps to 12.4.2 [#2577](https://github.com/grafana/plugin-tools/pull/2577) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.1.5 (Tue Apr 14 2026)
 
 #### 🐛 Bug Fix
