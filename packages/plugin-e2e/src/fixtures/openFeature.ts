@@ -79,16 +79,24 @@ async function handleBulkEvaluationRoute(
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
+    // teardown-time errors - route/response are no longer usable, nothing to do
+    if (isTeardownError(error)) {
+      return;
+    }
     console.error('@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation', error);
     // fulfill with original response if available, otherwise return error response
-    if (response) {
-      await route.fulfill({ response });
-    } else {
-      await route.fulfill({
-        status: 500,
-        body: JSON.stringify({ error: 'Failed to intercept OFREP request' }),
-        headers: { 'content-type': 'application/json' },
-      });
+    try {
+      if (response) {
+        await route.fulfill({ response });
+      } else {
+        await route.fulfill({
+          status: 500,
+          body: JSON.stringify({ error: 'Failed to intercept OFREP request' }),
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+    } catch {
+      // ignore errors when fulfilling after a previous failure
     }
   }
 }
@@ -128,13 +136,21 @@ async function handleSingleFlagRoute(
     const response = await route.fetch();
     await route.fulfill({ response });
   } catch (error) {
+    // page was closed during teardown - route handling is no longer possible
+    if (error instanceof Error && error.message.includes('Target page, context or browser has been closed')) {
+      return;
+    }
     console.error('@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation', error);
     // return error response since we can't continue after route.fetch()
-    await route.fulfill({
-      status: 500,
-      body: JSON.stringify({ error: 'Failed to intercept OFREP request' }),
-      headers: { 'content-type': 'application/json' },
-    });
+    try {
+      await route.fulfill({
+        status: 500,
+        body: JSON.stringify({ error: 'Failed to intercept OFREP request' }),
+        headers: { 'content-type': 'application/json' },
+      });
+    } catch {
+      // ignore errors when fulfilling after a previous failure
+    }
   }
 }
 
