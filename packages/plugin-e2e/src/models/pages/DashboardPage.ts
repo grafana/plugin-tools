@@ -119,7 +119,7 @@ export class DashboardPage extends GrafanaPage {
       }
       await this.getByGrafanaSelector(components.Sidebar.newPanelButton).click();
 
-      const configureButton = semver.eq(this.ctx.grafanaVersion, '13.0.0')
+      const configureButton = semver.lt(this.ctx.grafanaVersion, '13.1.0')
         ? this.getByGrafanaSelector(components.Sidebar.container).getByRole('button', { name: 'Configure' })
         : this.getByGrafanaSelector(components.Sidebar.configurePanelButton);
 
