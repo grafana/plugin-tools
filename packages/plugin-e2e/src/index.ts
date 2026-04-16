@@ -22,6 +22,7 @@ import { gotoDashboardPage } from './fixtures/commands/gotoDashboardPage';
 import { gotoDataSourceConfigPage } from './fixtures/commands/gotoDataSourceConfigPage';
 import { gotoPanelEditPage } from './fixtures/commands/gotoPanelEditPage';
 import { gotoAlertRuleEditPage } from './fixtures/commands/gotoAlertRuleEditPage';
+import { getDataSourcePicker } from './fixtures/commands/getDataSourcePicker';
 import { gotoVariableEditPage } from './fixtures/commands/gotoVariableEditPage';
 import { login } from './fixtures/commands/login';
 import { readProvisionedDashboard } from './fixtures/commands/readProvisionedDashboard';
@@ -118,6 +119,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   gotoVariablePage,
   gotoAnnotationEditPage,
   gotoAlertRuleEditPage,
+  getDataSourcePicker,
   gotoDataSourceConfigPage,
   gotoAppConfigPage,
   gotoAppPage,

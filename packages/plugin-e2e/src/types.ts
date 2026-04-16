@@ -16,6 +16,7 @@ import { AppConfigPage } from './models/pages/AppConfigPage';
 import { AppPage } from './models/pages/AppPage';
 import { DashboardPage } from './models/pages/DashboardPage';
 import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
+import { DataSourcePicker } from './models/components/DataSourcePicker';
 import { ExplorePage } from './models/pages/ExplorePage';
 import { GrafanaAPIClient } from './models/GrafanaAPIClient';
 import { PanelEditPage } from './models/pages/PanelEditPage';
@@ -433,6 +434,15 @@ export type PluginFixture = {
    * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
    */
   scanForA11yViolations: (context?: AxeScanContext) => Promise<AxeResults>;
+
+  /**
+   * Fixture command that returns a {@link DataSourcePicker} instance.
+   *
+   * Optionally pass a root locator to scope the picker to a specific container.
+   * This is useful when interacting with a data source picker on pages that are
+   * not covered by other page fixtures (e.g. {@link PanelEditPage} or {@link ExplorePage}).
+   */
+  getDataSourcePicker: (root?: Locator) => DataSourcePicker;
 };
 
 /**
