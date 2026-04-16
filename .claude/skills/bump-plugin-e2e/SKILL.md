@@ -41,9 +41,8 @@ Example (prefix was `^`, keep it `^`):
 Use a git worktree so the current workspace is never disturbed.
 
 ```bash
-WORKTREE=/tmp/plugin-tools-e2e-bump
+WORKTREE=$(mktemp -d)
 BRANCH=create-plugin/bump-plugin-e2e-<NEW_VERSION>
-REPO_ROOT=$(git rev-parse --show-toplevel)
 
 git worktree add "$WORKTREE" -b "$BRANCH" main
 ```
