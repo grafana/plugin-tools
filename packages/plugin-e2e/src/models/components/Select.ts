@@ -38,7 +38,7 @@ export async function selectByValueOrLabel(
   // the caller already filtered the list by typing and the option label doesn't match
   // the search term (e.g. timezone picker in Grafana 13.1+ shows "Stockholm CEST UTC+02:00"
   // when searching "Europe/Stockholm")
-  if (!(await option.count())) {
+  if (!(await option.count()) && (await allOptions.count()) === 1) {
     option = allOptions.first();
   }
 
