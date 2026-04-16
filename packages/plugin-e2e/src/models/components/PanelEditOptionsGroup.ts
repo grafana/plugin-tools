@@ -79,15 +79,11 @@ export class PanelEditOptionsGroup {
     return new UnitPicker(this.ctx, this.getFieldLocator(label));
   }
 
-  // returns the field property editor locator, handling all Grafana version variants:
-  // - 13.1.0+: data-testid="data-testid ${group} ${field} field property editor"
-  // - older: aria-label="${group} ${field} field property editor"
   private getFieldLocator(optionLabel: string): Locator {
-    const suffix = `${this.groupLabel} ${optionLabel} field property editor`;
-    if (gte(this.ctx.grafanaVersion, '13.1.0')) {
-      return this.element.getByTestId(`data-testid ${suffix}`);
-    }
-    return this.element.getByLabel(suffix);
+    const selector = resolveGrafanaSelector(
+      this.ctx.selectors.components.PanelEditor.OptionsPane.fieldLabel(`${this.groupLabel} ${optionLabel}`)
+    );
+    return this.element.locator(selector);
   }
 
   private getOptionsGroupToggle(): Locator {
