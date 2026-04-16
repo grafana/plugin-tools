@@ -23,26 +23,39 @@ Save the output - this is `<NEW_VERSION>`.
 
 Read [packages/create-plugin/templates/common/\_package.json](packages/create-plugin/templates/common/_package.json) and note the current `@grafana/plugin-e2e` semver range (line ~20).
 
-If the current range already matches `^<NEW_VERSION>`, stop - nothing to do.
+Note the semver range prefix (e.g. `^`, `~`, or exact). If the version number already matches `<NEW_VERSION>`, stop - nothing to do.
 
 ### 3. Update \_package.json
 
-Edit the file, replacing the existing `@grafana/plugin-e2e` version range with `^<NEW_VERSION>`.
+Replace only the version number, preserving the existing range prefix exactly.
 
-Example change:
+Example (prefix was `^`, keep it `^`):
 
 ```json
 - "@grafana/plugin-e2e": "^3.5.0",
 + "@grafana/plugin-e2e": "^3.6.0",
 ```
 
-### 4. Create a branch and commit
+### 4. Create a worktree, commit and push
+
+Use a git worktree so the current workspace is never disturbed.
 
 ```bash
-git checkout -b bump/plugin-e2e-<NEW_VERSION>
-git add packages/create-plugin/templates/common/_package.json
-git commit -m "Create Plugin: bump @grafana/plugin-e2e to ^<NEW_VERSION>"
-git push -u origin bump/plugin-e2e-<NEW_VERSION>
+WORKTREE=/tmp/plugin-tools-e2e-bump
+BRANCH=bump/plugin-e2e-<NEW_VERSION>
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+git worktree add "$WORKTREE" -b "$BRANCH" main
+```
+
+Edit the `_package.json` inside the worktree (same relative path: `packages/create-plugin/templates/common/_package.json`), then commit and push:
+
+```bash
+git -C "$WORKTREE" add packages/create-plugin/templates/common/_package.json
+git -C "$WORKTREE" commit -m "Create Plugin: bump @grafana/plugin-e2e to ^<NEW_VERSION>"
+git -C "$WORKTREE" push -u origin "$BRANCH"
+
+git worktree remove "$WORKTREE"
 ```
 
 ### 5. Open a draft PR
