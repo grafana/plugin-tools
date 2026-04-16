@@ -118,7 +118,12 @@ export class DashboardPage extends GrafanaPage {
         await this.getByGrafanaSelector(pages.Dashboard.Sidebar.addButton).click();
       }
       await this.getByGrafanaSelector(components.Sidebar.newPanelButton).click();
-      await this.getByGrafanaSelector(components.Sidebar.configurePanelButton).click();
+
+      const configureButton = semver.lt(this.ctx.grafanaVersion, '13.1.0')
+        ? this.getByGrafanaSelector(components.Sidebar.container).getByRole('button', { name: 'Configure' })
+        : this.getByGrafanaSelector(components.Sidebar.configurePanelButton);
+
+      await configureButton.click();
     } else if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
       let addButton = this.getByGrafanaSelector(
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)

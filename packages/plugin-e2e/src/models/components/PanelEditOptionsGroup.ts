@@ -38,77 +38,52 @@ export class PanelEditOptionsGroup {
   }
 
   getRadioGroup(label: string): RadioGroup {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return new RadioGroup(this.ctx, this.getByTestId(label).getByRole('radiogroup'));
-    }
     if (gte(this.ctx.grafanaVersion, '10.2.0')) {
-      return new RadioGroup(this.ctx, this.getByLabel(label).getByRole('radiogroup'));
+      return new RadioGroup(this.ctx, this.getFieldLocator(label).getByRole('radiogroup'));
     }
-    return new RadioGroup(this.ctx, this.getByLabel(label));
+    return new RadioGroup(this.ctx, this.getFieldLocator(label));
   }
 
   getSwitch(label: string): Switch {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return new Switch(this.ctx, this.getByTestId(label));
-    }
-    return new Switch(this.ctx, this.getByLabel(label));
+    return new Switch(this.ctx, this.getFieldLocator(label));
   }
 
   getTextInput(label: string): Locator {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return this.getByTestId(label).getByRole('textbox');
-    }
-    return this.getByLabel(label).getByRole('textbox');
+    return this.getFieldLocator(label).getByRole('textbox');
   }
 
   getNumberInput(label: string): Locator {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return this.getByTestId(label).getByRole('spinbutton');
-    }
-    return this.getByLabel(label).getByRole('spinbutton');
+    return this.getFieldLocator(label).getByRole('spinbutton');
   }
 
   getSliderInput(label: string): Locator {
     if (gte(this.ctx.grafanaVersion, '9.1.0')) {
       return this.getNumberInput(label);
     }
-    return this.getByLabel(label).getByRole('textbox');
+    return this.getFieldLocator(label).getByRole('textbox');
   }
 
   getSelect(label: string): Select {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return new Select(this.ctx, this.getByTestId(label));
-    }
-    return new Select(this.ctx, this.getByLabel(label));
+    return new Select(this.ctx, this.getFieldLocator(label));
   }
 
   getMultiSelect(label: string): MultiSelect {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return new MultiSelect(this.ctx, this.getByTestId(label));
-    }
-    return new MultiSelect(this.ctx, this.getByLabel(label));
+    return new MultiSelect(this.ctx, this.getFieldLocator(label));
   }
 
   getColorPicker(label: string): ColorPicker {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return new ColorPicker(this.ctx, this.getByTestId(label));
-    }
-    return new ColorPicker(this.ctx, this.getByLabel(label));
+    return new ColorPicker(this.ctx, this.getFieldLocator(label));
   }
 
   getUnitPicker(label: string): UnitPicker {
-    if (gte(this.ctx.grafanaVersion, '13.0.0-24085625829')) {
-      return new UnitPicker(this.ctx, this.getByTestId(label));
-    }
-    return new UnitPicker(this.ctx, this.getByLabel(label));
+    return new UnitPicker(this.ctx, this.getFieldLocator(label));
   }
 
-  private getByLabel(optionLabel: string): Locator {
-    return this.element.getByLabel(`${this.groupLabel} ${optionLabel} field property editor`);
-  }
-
-  private getByTestId(optionLabel: string): Locator {
-    return this.element.getByTestId(`data-testid ${this.groupLabel} ${optionLabel} field property editor`);
+  private getFieldLocator(optionLabel: string): Locator {
+    const selector = resolveGrafanaSelector(
+      this.ctx.selectors.components.PanelEditor.OptionsPane.fieldLabel(`${this.groupLabel} ${optionLabel}`)
+    );
+    return this.element.locator(selector);
   }
 
   private getOptionsGroupToggle(): Locator {

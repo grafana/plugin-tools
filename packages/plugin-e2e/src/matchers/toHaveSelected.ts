@@ -49,14 +49,20 @@ async function expectSelectToBe(
 
   try {
     actual = await select.locator(select.ctx.selectors.constants.Select.singleValueContainer('')).innerText(options);
-    expect(actual).toMatch(value);
 
-    return {
-      pass: true,
-      actual: actual,
-      expected: value,
-      message: () => `Value successfully selected`,
-    };
+    // primary check: exact string or regex match
+    try {
+      expect(actual).toMatch(value);
+      return { pass: true, actual, expected: value, message: () => `Value successfully selected` };
+    } catch {
+      // fallback: handles Grafana 13.1+ timezone picker where the displayed value is only
+      // the city name (e.g. "Stockholm") while the expected value is the full IANA path
+      // (e.g. "Europe/Stockholm"). Only applies to string values containing "/".
+      if (typeof value === 'string' && value.endsWith('/' + actual.trim())) {
+        return { pass: true, actual, expected: value, message: () => `Value successfully selected` };
+      }
+      throw new Error(`Expected: ${value}\nReceived: ${actual}`);
+    }
   } catch (err: unknown) {
     return {
       message: () => getMessage(value.toString(), err instanceof Error ? err.toString() : 'Unknown error'),

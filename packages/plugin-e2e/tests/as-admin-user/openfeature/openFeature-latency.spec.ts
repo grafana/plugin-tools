@@ -17,7 +17,7 @@ test('should apply artificial latency to OFREP responses', async ({ page, grafan
   const startTime = Date.now();
 
   // make a request to the single flag endpoint which will be intercepted
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/latencyTestFlag`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'latencyTestFlag');
 
   const response = await page.evaluate(async (url) => {
     try {

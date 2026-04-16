@@ -32,71 +32,77 @@ test('should support all OpenFeature value types in bulk evaluation', async ({
 }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const responsePromise = page.waitForResponse(
-    (response) =>
-      response.url().includes(selectors.apis.OpenFeature.ofrepBulkPath(namespace)) && !response.url().endsWith('/'),
-    { timeout: 5000 }
-  );
+  const bulkUrl = selectors.apis.OpenFeature.ofrepBulkPath(namespace);
+  const body = await page.evaluate(async (url) => {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ context: {} }),
+      });
+      if (res.ok) {
+        return res.json();
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }, bulkUrl);
 
-  await page.goto('/');
-
-  try {
-    const response = await responsePromise;
-    const body = await response.json();
-
-    // helper to find flag by key
-    const findFlag = (key: string) => body.flags?.find((f: { key: string }) => f.key === key);
-
-    // boolean flags
-    const booleanTrue = findFlag('booleanFlagTrue');
-    expect(booleanTrue?.value).toBe(true);
-    expect(booleanTrue?.reason).toBe('STATIC');
-    expect(booleanTrue?.variant).toBe('playwright-override');
-
-    const booleanFalse = findFlag('booleanFlagFalse');
-    expect(booleanFalse?.value).toBe(false);
-
-    // string flags
-    const stringFlag = findFlag('stringFlag');
-    expect(stringFlag?.value).toBe('enabled');
-    expect(stringFlag?.reason).toBe('STATIC');
-
-    const stringEmpty = findFlag('stringFlagEmpty');
-    expect(stringEmpty?.value).toBe('');
-
-    // number flags
-    const numberFlag = findFlag('numberFlag');
-    expect(numberFlag?.value).toBe(42);
-
-    const numberFloat = findFlag('numberFlagFloat');
-    expect(numberFloat?.value).toBe(3.14);
-
-    const numberZero = findFlag('numberFlagZero');
-    expect(numberZero?.value).toBe(0);
-
-    const numberNegative = findFlag('numberFlagNegative');
-    expect(numberNegative?.value).toBe(-1);
-
-    // object flags
-    const objectFlag = findFlag('objectFlag');
-    expect(objectFlag?.value).toEqual({ tier: 'free', maxRetries: 3 });
-
-    const objectNested = findFlag('objectFlagNested');
-    expect(objectNested?.value).toEqual({
-      config: { api: { timeout: 5000, retries: 3 }, features: ['a', 'b'] },
-    });
-
-    const objectArray = findFlag('objectFlagArray');
-    expect(objectArray?.value).toEqual([1, 2, 3]);
-  } catch (error) {
-    console.log('OFREP endpoint not called - OpenFeature may not be enabled', error);
+  if (!body) {
+    return;
   }
+
+  // helper to find flag by key
+  const findFlag = (key: string) => body.flags?.find((f: { key: string }) => f.key === key);
+
+  // boolean flags
+  const booleanTrue = findFlag('booleanFlagTrue');
+  expect(booleanTrue?.value).toBe(true);
+  expect(booleanTrue?.reason).toBe('STATIC');
+  expect(booleanTrue?.variant).toBe('playwright-override');
+
+  const booleanFalse = findFlag('booleanFlagFalse');
+  expect(booleanFalse?.value).toBe(false);
+
+  // string flags
+  const stringFlag = findFlag('stringFlag');
+  expect(stringFlag?.value).toBe('enabled');
+  expect(stringFlag?.reason).toBe('STATIC');
+
+  const stringEmpty = findFlag('stringFlagEmpty');
+  expect(stringEmpty?.value).toBe('');
+
+  // number flags
+  const numberFlag = findFlag('numberFlag');
+  expect(numberFlag?.value).toBe(42);
+
+  const numberFloat = findFlag('numberFlagFloat');
+  expect(numberFloat?.value).toBe(3.14);
+
+  const numberZero = findFlag('numberFlagZero');
+  expect(numberZero?.value).toBe(0);
+
+  const numberNegative = findFlag('numberFlagNegative');
+  expect(numberNegative?.value).toBe(-1);
+
+  // object flags
+  const objectFlag = findFlag('objectFlag');
+  expect(objectFlag?.value).toEqual({ tier: 'free', maxRetries: 3 });
+
+  const objectNested = findFlag('objectFlagNested');
+  expect(objectNested?.value).toEqual({
+    config: { api: { timeout: 5000, retries: 3 }, features: ['a', 'b'] },
+  });
+
+  const objectArray = findFlag('objectFlagArray');
+  expect(objectArray?.value).toEqual([1, 2, 3]);
 });
 
 test('should support boolean flag in single evaluation', async ({ page, grafanaVersion, selectors, namespace }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/booleanFlagTrue`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'booleanFlagTrue');
 
   const response = await page.evaluate(async (url) => {
     try {
@@ -121,7 +127,7 @@ test('should support boolean flag in single evaluation', async ({ page, grafanaV
 test('should support string flag in single evaluation', async ({ page, grafanaVersion, selectors, namespace }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/stringFlag`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'stringFlag');
 
   const response = await page.evaluate(async (url) => {
     try {
@@ -145,7 +151,7 @@ test('should support string flag in single evaluation', async ({ page, grafanaVe
 test('should support number flag in single evaluation', async ({ page, grafanaVersion, selectors, namespace }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/numberFlag`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'numberFlag');
 
   const response = await page.evaluate(async (url) => {
     try {
@@ -169,7 +175,7 @@ test('should support number flag in single evaluation', async ({ page, grafanaVe
 test('should support number zero in single evaluation', async ({ page, grafanaVersion, selectors, namespace }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/numberFlagZero`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'numberFlagZero');
 
   const response = await page.evaluate(async (url) => {
     try {
@@ -192,7 +198,7 @@ test('should support number zero in single evaluation', async ({ page, grafanaVe
 test('should support object flag in single evaluation', async ({ page, grafanaVersion, selectors, namespace }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/objectFlag`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'objectFlag');
 
   const response = await page.evaluate(async (url) => {
     try {
@@ -221,7 +227,7 @@ test('should support nested object flag in single evaluation', async ({
 }) => {
   test.skip(lt(grafanaVersion, '12.1.0'), 'OpenFeature OFREP was introduced in Grafana 12.1.0');
 
-  const flagUrl = `${selectors.apis.OpenFeature.ofrepSinglePath(namespace)}/objectFlagNested`;
+  const flagUrl = selectors.apis.OpenFeature.ofrepSinglePath(namespace, 'objectFlagNested');
 
   const response = await page.evaluate(async (url) => {
     try {
