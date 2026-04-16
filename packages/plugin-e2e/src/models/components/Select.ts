@@ -12,6 +12,8 @@ export class Select extends ComponentBase {
 
   async selectOption(values: string, options?: SelectOptionsType): Promise<string> {
     const menu = await openSelect(this, options);
+    // fill to filter options - required for virtualized lists (e.g. timezone picker in Grafana 13.1+)
+    await this.locator().getByRole('combobox').fill(values);
     return selectByValueOrLabel(values, menu, this.ctx, options);
   }
 }
