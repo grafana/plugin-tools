@@ -14,9 +14,9 @@ import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
 import { AppConfigPage } from './models/pages/AppConfigPage';
 import { AppPage } from './models/pages/AppPage';
+import { Components } from './models/Components';
 import { DashboardPage } from './models/pages/DashboardPage';
 import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
-import { DataSourcePicker } from './models/components/DataSourcePicker';
 import { ExplorePage } from './models/pages/ExplorePage';
 import { GrafanaAPIClient } from './models/GrafanaAPIClient';
 import { PanelEditPage } from './models/pages/PanelEditPage';
@@ -436,13 +436,20 @@ export type PluginFixture = {
   scanForA11yViolations: (context?: AxeScanContext) => Promise<AxeResults>;
 
   /**
-   * Fixture command that returns a {@link DataSourcePicker} instance.
+   * Factory for components that are not attached to a specific page.
    *
-   * Optionally pass a root locator to scope the picker to a specific container.
-   * This is useful when interacting with a data source picker on pages that are
+   * Use this fixture to interact with a Grafana UI component on a page that is
    * not covered by other page fixtures (e.g. {@link PanelEditPage} or {@link ExplorePage}).
+   *
+   * @example
+   * ```typescript
+   * test('my test', async ({ components, page }) => {
+   *   const picker = components.getDataSourcePicker();
+   *   await picker.set('gdev-prometheus');
+   * });
+   * ```
    */
-  getDataSourcePicker: (root?: Locator) => DataSourcePicker;
+  components: Components;
 };
 
 /**

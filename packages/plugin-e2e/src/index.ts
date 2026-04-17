@@ -11,6 +11,7 @@ import {
   A11yViolationsOptions,
 } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
+import { components } from './fixtures/components';
 import { grafanaAPIClient } from './fixtures/grafanaAPIClient';
 import { createDataSource } from './fixtures/commands/createDataSource';
 import { createDataSourceConfigPage } from './fixtures/commands/createDataSourceConfigPage';
@@ -22,7 +23,6 @@ import { gotoDashboardPage } from './fixtures/commands/gotoDashboardPage';
 import { gotoDataSourceConfigPage } from './fixtures/commands/gotoDataSourceConfigPage';
 import { gotoPanelEditPage } from './fixtures/commands/gotoPanelEditPage';
 import { gotoAlertRuleEditPage } from './fixtures/commands/gotoAlertRuleEditPage';
-import { getDataSourcePicker } from './fixtures/commands/getDataSourcePicker';
 import { gotoVariableEditPage } from './fixtures/commands/gotoVariableEditPage';
 import { login } from './fixtures/commands/login';
 import { readProvisionedDashboard } from './fixtures/commands/readProvisionedDashboard';
@@ -61,6 +61,7 @@ import { toHaveColor } from './matchers/toHaveColor';
 import { ColorPicker } from './models/components/ColorPicker';
 
 // models
+export { Components } from './models/Components';
 export { DataSourcePicker } from './models/components/DataSourcePicker';
 export { Panel } from './models/components/Panel';
 export { TimeRange } from './models/components/TimeRange';
@@ -119,7 +120,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   gotoVariablePage,
   gotoAnnotationEditPage,
   gotoAlertRuleEditPage,
-  getDataSourcePicker,
+  components,
   gotoDataSourceConfigPage,
   gotoAppConfigPage,
   gotoAppPage,
