@@ -1,7 +1,7 @@
 name: E2E tests (nightly)
 on:
   schedule:
-    - cron: '0 6 * * *' # daily at 06:00 UTC
+    - cron: '0 6 * * 1-5' # weekdays at 06:00 UTC
   workflow_dispatch:
 
 concurrency:
