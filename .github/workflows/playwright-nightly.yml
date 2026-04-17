@@ -180,6 +180,15 @@ jobs:
                       "text": "*Event*: ${{ github.event_name }}"
                     }
                   ]
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": ":bulb: Want a head-start on the cause? Run `/diagnose-plugin-e2e-incompatibility ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}` in Claude Code to get a ranked list of suspect `grafana/grafana` commits."
+                    }
+                  ]
                 }
               ]
             }
