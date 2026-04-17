@@ -65,6 +65,7 @@ import { DashboardPage } from './models/pages/DashboardPage';
 // models
 export { Components } from './models/Components';
 export { DataSourcePicker } from './models/components/DataSourcePicker';
+export { ScopedComponent } from './models/components/ScopedComponent';
 export { Panel } from './models/components/Panel';
 export { TimeRange } from './models/components/TimeRange';
 export { AnnotationEditPage } from './models/pages/AnnotationEditPage';
