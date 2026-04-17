@@ -1,4 +1,3 @@
-import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../types';
 import { DataSourcePicker } from './components/DataSourcePicker';
 
@@ -8,16 +7,19 @@ import { DataSourcePicker } from './components/DataSourcePicker';
  * Use this when you need to interact with a Grafana UI component on a page
  * that is not covered by one of the page fixtures (e.g. {@link PanelEditPage}
  * or {@link ExplorePage}).
+ *
+ * To scope a component to a sub-tree of the DOM, use `within(root)`:
+ *
+ * @example
+ * ```typescript
+ * await components.dataSourcePicker.set('prom');
+ * await components.dataSourcePicker.within(panel).set('prom');
+ * ```
  */
 export class Components {
-  constructor(private ctx: PluginTestCtx) {}
+  readonly dataSourcePicker: DataSourcePicker;
 
-  /**
-   * Returns a {@link DataSourcePicker} instance.
-   *
-   * Optionally pass a root locator to scope the picker to a specific container.
-   */
-  getDataSourcePicker(root?: Locator): DataSourcePicker {
-    return new DataSourcePicker(this.ctx, root);
+  constructor(ctx: PluginTestCtx) {
+    this.dataSourcePicker = new DataSourcePicker(ctx);
   }
 }
