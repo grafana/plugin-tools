@@ -55,7 +55,7 @@
     "husky": "^9.1.7",
     "lerna": "^9.0.3",
     "lint-staged": "^16.2.7",
-    "prettier": "3.8.2",
+    "prettier": "3.8.3",
     "publint": "^0.3.12",
     "rollup": "^4.57.1",
     "rollup-plugin-delete": "^3.0.2",
