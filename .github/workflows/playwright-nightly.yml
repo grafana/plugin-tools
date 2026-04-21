@@ -1,0 +1,197 @@
+name: E2E tests (nightly)
+on:
+  schedule:
+    - cron: '0 6 * * 1-5' # weekdays at 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+
+permissions:
+  contents: read
+
+jobs:
+  resolve-versions:
+    name: Resolve Grafana images
+    runs-on: ubuntu-x64
+    timeout-minutes: 3
+    outputs:
+      matrix: ${{ steps.resolve-versions.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Resolve Grafana E2E versions
+        id: resolve-versions
+        uses: grafana/plugin-actions/e2e-version@c246b748568a80db2a20ab5c65ff01b8b4f342c4 # e2e-version/v1.2.0
+        with:
+          version-resolver-type: plugin-grafana-dependency
+          grafana-dependency: '>=8.5.0'
+          skip-grafana-dev-image: false
+          skip-grafana-react-19-preview-image: true
+          # limit to latest stable + grafana-dev (2 entries total)
+          limit: 1
+
+  playwright-tests:
+    needs: resolve-versions
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
+    permissions:
+      contents: read
+      id-token: write
+    name: ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
+    runs-on: ubuntu-x64
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version-file: ".nvmrc"
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build --w @grafana/plugin-e2e
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Get secrets for DockerHub login
+        id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        with:
+          common_secrets: |
+            DOCKERHUB_USERNAME=dockerhub:username
+            DOCKERHUB_PASSWORD=dockerhub:password
+          export_env: false
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          username: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_USERNAME }}
+          password: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_PASSWORD }}
+
+      - name: Start Grafana
+        working-directory: ./packages/plugin-e2e
+        run: |
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
+
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
+        with:
+          url: http://localhost:3000/login
+
+      - name: Run Playwright tests
+        id: run-tests
+        run: npm run playwright:test --w @grafana/plugin-e2e
+
+      - name: Upload e2e test summary
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
+        if: ${{ always() && !cancelled() }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-outcome: ${{ steps.run-tests.outcome }}
+          report-dir: packages/plugin-e2e/playwright-report
+
+  publish-report:
+    if: ${{ always() && !cancelled() }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-x64
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Publish report
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@5da62466881cdba091672353cf3c72ca348d01b1 # deploy-report-pages/v1.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          retention-days: 7
+
+  notify:
+    if: ${{ always() }}
+    needs: [playwright-tests, publish-report]
+    runs-on: ubuntu-x64
+    permissions:
+      id-token: write
+    steps:
+      - name: Get Slack webhook from Vault
+        id: get-secrets
+        uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
+        with:
+          export_env: false
+          # secret is stored in the ci/repo/grafana/plugin-tools path in Vault
+          repo_secrets: |
+            SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
+
+      - name: Notify Slack on failure
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+        if: contains(fromJson('["failure"]'), needs.playwright-tests.result)
+        with:
+          payload-templated: true
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":blob-sad: <${{ github.server_url }}/${{ github.repository }}|plugin-e2e> nightly E2E run `${{ needs.playwright-tests.result }}` against grafana-dev and latest stable"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":github: View Playwright report",
+                        "emoji": true
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                      "action_id": "view-report"
+                    }
+                  ]
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*: <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Event*: ${{ github.event_name }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": ":bulb: Want a head-start on the cause? Run `/diagnose-plugin-e2e-incompatibility ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}` in Claude Code to get a ranked list of suspect `grafana/grafana` commits."
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.get-secrets.outputs.secrets).SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
