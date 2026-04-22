@@ -36,6 +36,7 @@ describe('generateAnalysisResults', () => {
     bundledFilePath: `node_modules/${packageName}/index.js`,
   });
 
+  const distDir = process.cwd();
   const pluginRoot = process.cwd();
   const depContext = new DependencyContext();
   const options: AnalysisOptions = {
@@ -64,7 +65,7 @@ describe('generateAnalysisResults', () => {
         bundledFilePath: 'src/components/MyComponent.tsx',
       };
       const matches: AnalyzedMatch[] = [sourceMatch, createDependencyMatch('react', 'react')];
-      const results = generateAnalysisResults(matches, pluginRoot, depContext, options);
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
 
       expect(results.summary.sourceIssuesCount).toBe(1);
       expect(results.summary.dependencyIssuesCount).toBe(0);
@@ -75,7 +76,7 @@ describe('generateAnalysisResults', () => {
         createDependencyMatch('lodash', 'lodash'), // lodash is externalized by Grafana
         createDependencyMatch('axios', 'axios'),
       ];
-      const results = generateAnalysisResults(matches, pluginRoot, depContext, options);
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
 
       expect(results.issues.dependencies).toHaveLength(1);
       expect(results.issues.dependencies[0].packageName).toBe('axios');
@@ -87,7 +88,7 @@ describe('generateAnalysisResults', () => {
         createDependencyMatch('@grafana/ui', '@grafana/ui'),
         createDependencyMatch('@custom/package', '@custom/package'),
       ];
-      const results = generateAnalysisResults(matches, pluginRoot, depContext, options);
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
 
       expect(results.issues.dependencies).toHaveLength(1);
       expect(results.issues.dependencies[0].packageName).toBe('@custom/package');
@@ -98,7 +99,7 @@ describe('generateAnalysisResults', () => {
         createDependencyMatch('@grafana/data/utils', '@grafana/data'),
         createDependencyMatch('@custom/package/utils', '@custom/package'),
       ];
-      const results = generateAnalysisResults(matches, pluginRoot, depContext, options);
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
 
       expect(results.issues.dependencies).toHaveLength(1);
       expect(results.issues.dependencies[0].packageName).toBe('@custom/package/utils');
@@ -111,7 +112,7 @@ describe('generateAnalysisResults', () => {
         createDependencyMatch('scheduler', 'react'),
         createDependencyMatch('debug', 'axios'), // Non-externalized root dependency
       ];
-      const results = generateAnalysisResults(matches, pluginRoot, depContext, options);
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
 
       expect(results.issues.dependencies).toHaveLength(1);
       expect(results.issues.dependencies[0].packageName).toBe('debug');
@@ -125,7 +126,7 @@ describe('generateAnalysisResults', () => {
         createDependencyMatch('@grafana/data', '@grafana/data'),
         createDependencyMatch('axios', 'axios'),
       ];
-      const results = generateAnalysisResults(matches, pluginRoot, depContext, options);
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
       // Filter to only critical dep issues
       const reportedDeps = results.issues.critical.filter((i) => i.location.type === 'dependency');
       expect(reportedDeps).toHaveLength(1);
