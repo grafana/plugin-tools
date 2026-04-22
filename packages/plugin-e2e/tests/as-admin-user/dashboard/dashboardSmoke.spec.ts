@@ -40,8 +40,9 @@ test.describe('dashboard smoke tests', () => {
   test('manually scrolling a below-fold panel into view triggers its query', async ({ gotoDashboardPage }) => {
     const dashboard = await gotoDashboardPage({ uid: 'smoke-test-dashboard' });
 
-    // "Lower Right" (y=16) is always in the DOM but below the fold at 1280x720 —
-    // use it here because y=40 panels are lazy-rendered and not yet in the DOM
+    // "Lower Right" (y=16) is below the fold at 1280x720; in Grafana 13.x scenes the
+    // panel element is lazy-rendered, so Panel.scrollIntoView() must find the grid
+    // container first before the title element exists in the DOM
     const lowerRight = dashboard.getPanelByTitle('Lower Right');
     await lowerRight.scrollIntoView();
     await expect(lowerRight.locator).toBeInViewport();

@@ -68,8 +68,31 @@ export class Panel extends GrafanaPage {
 
   /**
    * Scrolls the panel into the viewport, triggering its query if not yet started.
+   *
+   * In Grafana 13.x+ with scenes, panels are lazy-rendered: the panel element does not
+   * exist in the DOM until its grid container enters the viewport. This method scrolls
+   * `.react-grid-item` containers progressively until the panel element appears, then
+   * scrolls the panel element precisely into view. In older Grafana versions the panel
+   * element is always in the DOM, so the loop exits early and delegates to the standard
+   * scroll path.
    */
   async scrollIntoView(): Promise<void> {
+    // fast path: panel already in DOM (eager render or already in viewport)
+    if (await this.locator.isVisible({ timeout: 500 }).catch(() => false)) {
+      await this.locator.scrollIntoViewIfNeeded();
+      return;
+    }
+
+    // slow path: lazy-rendered panel - scroll grid items until the panel element appears
+    const containers = this.ctx.page.locator('.react-grid-item');
+    const count = await containers.count();
+    for (let i = 0; i < count; i++) {
+      await containers.nth(i).scrollIntoViewIfNeeded();
+      if (await this.locator.isVisible({ timeout: 500 }).catch(() => false)) {
+        break;
+      }
+    }
+
     await this.locator.scrollIntoViewIfNeeded();
   }
 
