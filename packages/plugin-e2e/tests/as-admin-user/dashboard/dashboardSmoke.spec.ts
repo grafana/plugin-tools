@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import { expect, test } from '../../../src';
 
 test.describe.configure({ mode: 'parallel' });
@@ -21,7 +22,14 @@ test.describe('dashboard smoke tests', () => {
     await expect(dashboard).not.toHavePanelErrors();
   });
 
-  test('scrollAll reaches below-fold panels — bottom row receives query responses', async ({ gotoDashboardPage }) => {
+  test('scrollAll reaches below-fold panels — bottom row receives query responses', async ({
+    gotoDashboardPage,
+    grafanaVersion,
+  }) => {
+    // the scroll mechanism relies on document.documentElement.scrollTop which behaves
+    // differently in pre-scenes Grafana — skip the viewport assertions on older versions
+    test.skip(semver.lt(grafanaVersion, '9.5.0'), 'viewport-based scroll not supported in this Grafana version');
+
     const dashboard = await gotoDashboardPage({ uid: 'smoke-test-dashboard' });
 
     // without scrollAll the bottom row panels are not in viewport and their
