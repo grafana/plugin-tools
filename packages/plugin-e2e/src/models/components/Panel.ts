@@ -83,12 +83,22 @@ export class Panel extends GrafanaPage {
       return;
     }
 
-    // slow path: lazy-rendered panel - scroll grid items until the panel element appears
+    // slow path: lazy-rendered panel - scroll grid items until the panel element appears.
+    // in Grafana 13.x with dashboardNewLayouts, .react-grid-item elements are not in the
+    // DOM immediately after navigation (~1-2s for the grid layout to render), so we wait
+    // for at least one to appear before iterating. the 500ms pause after each container
+    // matches scrollToRevealAllPanels: it gives IntersectionObserver time to fire and the
+    // VizPanel time to mount before we check.
     const containers = this.ctx.page.locator('.react-grid-item');
+    await containers
+      .first()
+      .waitFor({ state: 'attached', timeout: 5_000 })
+      .catch(() => {});
     const count = await containers.count();
     for (let i = 0; i < count; i++) {
       await containers.nth(i).scrollIntoViewIfNeeded();
-      if (await this.locator.isVisible({ timeout: 500 }).catch(() => false)) {
+      await this.ctx.page.waitForTimeout(500);
+      if (await this.locator.isVisible().catch(() => false)) {
         break;
       }
     }

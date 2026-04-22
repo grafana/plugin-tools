@@ -56,12 +56,19 @@ export class DashboardPage extends GrafanaPage {
 
   /**
    * Scrolls each panel container into view so that below-fold panels have their queries triggered.
-   * Targets .react-grid-item containers (always in the DOM, even before VizPanel renders) rather
+   * Targets .react-grid-item containers (present in the DOM before VizPanel renders) rather
    * than panel title/content elements which only exist after lazy rendering. Playwright's native
    * scrollIntoViewIfNeeded finds the correct scroll container automatically across Grafana versions.
+   *
+   * In Grafana 13.x with dashboardNewLayouts, the grid renders asynchronously after navigation
+   * (~1-2s), so we wait for the first container to appear before iterating.
    */
   private async scrollToRevealAllPanels(): Promise<void> {
     const containers = this.ctx.page.locator('.react-grid-item');
+    await containers
+      .first()
+      .waitFor({ state: 'attached', timeout: 5_000 })
+      .catch(() => {});
     const count = await containers.count();
 
     for (let i = 0; i < count; i++) {
