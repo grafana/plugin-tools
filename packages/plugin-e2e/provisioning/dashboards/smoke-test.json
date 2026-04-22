@@ -1,0 +1,201 @@
+{
+  "id": null,
+  "uid": "smoke-test-dashboard",
+  "title": "Smoke Test Dashboard",
+  "tags": [],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Top Left",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 2,
+      "title": "Top Right",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 3,
+      "title": "Middle Left",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 4,
+      "title": "Middle Right",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 5,
+      "title": "Lower Left",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 6,
+      "title": "Lower Right",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 9,
+      "title": "Deep Left",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 10,
+      "title": "Deep Right",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 7,
+      "title": "Bottom Left",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 40 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    },
+    {
+      "id": 8,
+      "title": "Bottom Right",
+      "type": "timeseries",
+      "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 40 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "test",
+          "datasource": { "type": "grafana-test-datasource", "uid": "P6E498B96656A7F9B" }
+        }
+      ],
+      "options": {
+        "tooltip": { "mode": "single" },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "fieldConfig": { "defaults": {}, "overrides": [] }
+    }
+  ]
+}

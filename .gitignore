@@ -39,9 +39,10 @@ nx-cloud.env
 
 # End to End tests
 playwright-report/
-packages/plugin-e2e/test-results/
+test-results/
 packages/plugin-e2e/playwright/.cache/
 packages/plugin-e2e/playwright/.auth
+packages/plugin-e2e/.playwright-mcp/
 playwright/.cache/
 playwright/.auth
 

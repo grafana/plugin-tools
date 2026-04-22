@@ -67,6 +67,13 @@ export class Panel extends GrafanaPage {
   }
 
   /**
+   * Scrolls the panel into the viewport, triggering its query if not yet started.
+   */
+  async scrollIntoView(): Promise<void> {
+    await this.locator.scrollIntoViewIfNeeded();
+  }
+
+  /**
    * Returns the locator for the panel error (if any)
    */
   getErrorIcon(): Locator {
