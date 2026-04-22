@@ -1,3 +1,15 @@
+# v0.6.4 (Wed Apr 22 2026)
+
+#### 🐛 Bug Fix
+
+- feat: add --distDir arg to specify built plugin directory [#2558](https://github.com/grafana/plugin-tools/pull/2558) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v0.6.3 (Tue Apr 07 2026)
 
 #### 🐛 Bug Fix

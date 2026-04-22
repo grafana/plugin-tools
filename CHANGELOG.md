@@ -1,3 +1,16 @@
+# (Wed Apr 22 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/react-detect@0.6.4`
+  - feat: add --distDir arg to specify built plugin directory [#2558](https://github.com/grafana/plugin-tools/pull/2558) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Thu Apr 16 2026)
 
 #### 🐛 Bug Fix
