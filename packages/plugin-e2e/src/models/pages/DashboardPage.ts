@@ -55,26 +55,17 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
-   * Scrolls the full dashboard height so that below-fold panels have their queries triggered.
-   * Uses document.documentElement.scrollTop because Chrome propagates body's overflow:auto to
-   * the document root — body.scrollTop is effectively read-only in this configuration.
+   * Scrolls each panel container into view so that below-fold panels have their queries triggered.
+   * Targets .react-grid-item containers (always in the DOM, even before VizPanel renders) rather
+   * than panel title/content elements which only exist after lazy rendering. Playwright's native
+   * scrollIntoViewIfNeeded finds the correct scroll container automatically across Grafana versions.
    */
   private async scrollToRevealAllPanels(): Promise<void> {
-    const viewportHeight = await this.ctx.page.evaluate(() => window.innerHeight);
+    const containers = this.ctx.page.locator('.react-grid-item');
+    const count = await containers.count();
 
-    for (let i = 0; i < 20; i++) {
-      const { scrollTop, scrollHeight } = await this.ctx.page.evaluate(() => ({
-        scrollTop: document.documentElement.scrollTop,
-        scrollHeight: document.documentElement.scrollHeight,
-      }));
-      const maxScrollTop = Math.max(0, scrollHeight - viewportHeight);
-      if (scrollTop >= maxScrollTop) {
-        break;
-      }
-      const nextScrollTop = Math.min(scrollTop + viewportHeight, maxScrollTop);
-      await this.ctx.page.evaluate((y) => {
-        document.documentElement.scrollTop = y;
-      }, nextScrollTop);
+    for (let i = 0; i < count; i++) {
+      await containers.nth(i).scrollIntoViewIfNeeded();
       // allow IntersectionObserver to fire and lazy-rendered panels to mount and start queries
       await this.ctx.page.waitForTimeout(500);
     }
