@@ -19,7 +19,7 @@
     "test:ci": "vitest --run"
   },
   "dependencies": {
-    "@coffeeandfun/remove-pii": "^2.0.0",
+    "@coffeeandfun/remove-pii": "^3.0.0",
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-client-redirects": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.2",
