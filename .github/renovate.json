@@ -18,7 +18,6 @@
     "react-dom",
     "lerna",
     "@grafana/scenes",
-    "@grafana/e2e-selectors",
     "@libs/output",
     "@libs/version"
   ],
@@ -62,7 +61,8 @@
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
         "/@grafana/*/",
-        "/grafana/grafana-enterprise/"
+        "/grafana/grafana-enterprise/",
+        "!@grafana/e2e-selectors"
       ],
       "minimumReleaseAge": null
     },
@@ -75,7 +75,8 @@
         "/@grafana/*/",
         "/grafana/grafana-enterprise/",
         "!@grafana/eslint-config",
-        "!@grafana/scenes"
+        "!@grafana/scenes",
+        "!@grafana/e2e-selectors"
       ],
       "minimumReleaseAge": null
     },
@@ -140,6 +141,20 @@
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
       "matchManagers": ["github-actions"],
       "matchFileNames": [".github/workflows/**"]
+    },
+    {
+      "automerge": true,
+      "groupName": "e2e-selectors nightly",
+      "groupSlug": "plugin-e2e-selectors",
+      "labels": ["dependencies", "javascript", "patch", "release"],
+      "matchPackageNames": ["@grafana/e2e-selectors"],
+      "followTag": "nightly",
+      "rangeStrategy": "bump",
+      "matchFileNames": [
+        "packages/plugin-e2e/package.json",
+        "package-lock.json"
+      ],
+      "minimumReleaseAge": null
     }
   ],
   "vulnerabilityAlerts": {
