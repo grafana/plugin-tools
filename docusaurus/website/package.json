@@ -42,7 +42,7 @@
     "@signalwire/docusaurus-plugin-llms-txt": "2.0.0-alpha.7",
     "dotenv": "^17.2.4",
     "raw-loader": "^4.0.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.0",
     "vitest": "^4.0.18"
   },
   "browserslist": {
