@@ -77,11 +77,12 @@ export class Panel extends GrafanaPage {
    */
   async scrollIntoView(): Promise<void> {
     if (await this.locator.isVisible().catch(() => false)) {
+      // element is already in the DOM - Playwright can scroll it into view directly
+      await this.locator.scrollIntoViewIfNeeded();
       return;
     }
-    // panel not yet visible - scroll page viewport-by-viewport until it appears
-    // (in Grafana 13.x scenes, VizPanel content isn't mounted until the grid container
-    // enters the viewport, so the locator element won't exist in the DOM until then)
+    // panel not yet in DOM (Grafana 13.x lazy render) - scroll page viewport-by-viewport
+    // until the element mounts, then scroll it precisely into view
     const viewportHeight = await this.ctx.page.evaluate(() => window.innerHeight);
     let scrollY = 0;
     while (true) {
@@ -96,6 +97,8 @@ export class Panel extends GrafanaPage {
         break;
       }
     }
+    // element has mounted but may be above the current scroll position — bring it precisely into view
+    await this.locator.scrollIntoViewIfNeeded().catch(() => {});
   }
 
   /**
