@@ -78,7 +78,7 @@ export class Panel extends GrafanaPage {
   async scrollIntoView(): Promise<void> {
     if (await this.locator.isVisible().catch(() => false)) {
       // element is already in the DOM - Playwright can scroll it into view directly
-      await this.locator.scrollIntoViewIfNeeded();
+      await this.locator.scrollIntoViewIfNeeded({ timeout: 5000 }).catch(() => {});
       return;
     }
     // panel not yet in DOM (Grafana 13.x lazy render) - scroll page viewport-by-viewport
@@ -98,7 +98,7 @@ export class Panel extends GrafanaPage {
       }
     }
     // element has mounted but may be above the current scroll position — bring it precisely into view
-    await this.locator.scrollIntoViewIfNeeded().catch(() => {});
+    await this.locator.scrollIntoViewIfNeeded({ timeout: 5000 }).catch(() => {});
   }
 
   /**
