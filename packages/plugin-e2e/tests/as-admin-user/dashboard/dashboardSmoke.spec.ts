@@ -33,9 +33,9 @@ test.describe('dashboard smoke tests', () => {
     await dashboard.waitForPanelsQueriesToComplete({ scrollAll: true });
     await expect(dashboard).not.toHavePanelErrors();
 
-    // after scrollAll the bottom panel should have been scrolled into view and rendered
-    // (use toBeVisible rather than toBeInViewport — some Grafana versions reset the
-    // scroll position after queries complete, making viewport assertions unreliable)
+    // explicitly scroll to the bottom panel — some Grafana versions reset the scroll
+    // position after queries complete, potentially unmounting it from the DOM
+    await bottomLeft.scrollIntoView();
     await expect(bottomLeft.locator).toBeVisible();
   });
 
