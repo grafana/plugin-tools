@@ -71,39 +71,31 @@ export class Panel extends GrafanaPage {
    *
    * In Grafana 13.x+ with scenes, panels are lazy-rendered: the panel element does not
    * exist in the DOM until its grid container enters the viewport. This method scrolls
-   * `.react-grid-item` containers progressively until the panel element appears, then
-   * scrolls the panel element precisely into view. In older Grafana versions the panel
-   * element is always in the DOM, so the loop exits early and delegates to the standard
-   * scroll path.
+   * the page viewport-by-viewport until the panel element appears, then returns. The
+   * 500ms pause per step gives IntersectionObserver time to fire and the VizPanel time
+   * to mount before checking visibility.
    */
   async scrollIntoView(): Promise<void> {
-    // fast path: panel already in DOM (eager render or already in viewport)
-    if (await this.locator.isVisible({ timeout: 500 }).catch(() => false)) {
-      await this.locator.scrollIntoViewIfNeeded();
+    if (await this.locator.isVisible().catch(() => false)) {
       return;
     }
-
-    // slow path: lazy-rendered panel - scroll grid items until the panel element appears.
-    // in Grafana 13.x with dashboardNewLayouts, .react-grid-item elements are not in the
-    // DOM immediately after navigation (~1-2s for the grid layout to render), so we wait
-    // for at least one to appear before iterating. the 500ms pause after each container
-    // matches scrollToRevealAllPanels: it gives IntersectionObserver time to fire and the
-    // VizPanel time to mount before we check.
-    const containers = this.ctx.page.locator('.react-grid-item');
-    await containers
-      .first()
-      .waitFor({ state: 'attached', timeout: 5_000 })
-      .catch(() => {});
-    const count = await containers.count();
-    for (let i = 0; i < count; i++) {
-      await containers.nth(i).scrollIntoViewIfNeeded();
+    // panel not yet visible - scroll page viewport-by-viewport until it appears
+    // (in Grafana 13.x scenes, VizPanel content isn't mounted until the grid container
+    // enters the viewport, so the locator element won't exist in the DOM until then)
+    const viewportHeight = await this.ctx.page.evaluate(() => window.innerHeight);
+    let scrollY = 0;
+    while (true) {
+      const scrollHeight = await this.ctx.page.evaluate(() => document.documentElement.scrollHeight);
+      if (scrollY >= scrollHeight) {
+        break;
+      }
+      scrollY = Math.min(scrollY + viewportHeight, scrollHeight);
+      await this.ctx.page.evaluate((y) => window.scrollTo(0, y), scrollY);
       await this.ctx.page.waitForTimeout(500);
       if (await this.locator.isVisible().catch(() => false)) {
         break;
       }
     }
-
-    await this.locator.scrollIntoViewIfNeeded();
   }
 
   /**

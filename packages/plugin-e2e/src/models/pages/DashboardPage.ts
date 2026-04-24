@@ -55,25 +55,25 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
-   * Scrolls each panel container into view so that below-fold panels have their queries triggered.
-   * Targets .react-grid-item containers (present in the DOM before VizPanel renders) rather
-   * than panel title/content elements which only exist after lazy rendering. Playwright's native
-   * scrollIntoViewIfNeeded finds the correct scroll container automatically across Grafana versions.
+   * Scrolls the page viewport-by-viewport to trigger below-fold panel queries.
    *
-   * In Grafana 13.x with dashboardNewLayouts, the grid renders asynchronously after navigation
-   * (~1-2s), so we wait for the first container to appear before iterating.
+   * In Grafana 13.x with scenes, panels are lazy-rendered: VizPanel content isn't mounted
+   * until the grid container enters the viewport. Scrolling by viewport height ensures
+   * IntersectionObserver fires for each row before moving on. The 500ms pause is required
+   * for the observer to fire and lazy panels to initiate their queries.
    */
   private async scrollToRevealAllPanels(): Promise<void> {
-    const containers = this.ctx.page.locator('.react-grid-item');
-    await containers
-      .first()
-      .waitFor({ state: 'attached', timeout: 5_000 })
-      .catch(() => {});
-    const count = await containers.count();
+    const viewportHeight = await this.ctx.page.evaluate(() => window.innerHeight);
+    let scrollY = 0;
 
-    for (let i = 0; i < count; i++) {
-      await containers.nth(i).scrollIntoViewIfNeeded();
-      // allow IntersectionObserver to fire and lazy-rendered panels to mount and start queries
+    while (true) {
+      const scrollHeight = await this.ctx.page.evaluate(() => document.documentElement.scrollHeight);
+      if (scrollY >= scrollHeight) {
+        break;
+      }
+      scrollY = Math.min(scrollY + viewportHeight, scrollHeight);
+      await this.ctx.page.evaluate((y) => window.scrollTo(0, y), scrollY);
+      // 500ms allows IntersectionObserver to fire and lazy-rendered panels to mount and start queries
       await this.ctx.page.waitForTimeout(500);
     }
   }
