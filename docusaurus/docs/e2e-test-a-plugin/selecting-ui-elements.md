@@ -140,7 +140,7 @@ You can use the `InlineSwitch` component to interact with the UI.
 
 Like in the `Checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
 
-Use `getByRole('switch', { name: /label/i })` rather than `getByLabel` — newer versions of Grafana add `aria-label` to the `<label>` element itself, which causes `getByLabel` to match multiple elements and fail in strict mode.
+Use `getByRole('switch', { name: /TLS Enabled/i })` rather than `getByLabel` — newer versions of Grafana add `aria-label` to the `<label>` element itself, which causes `getByLabel` to match multiple elements and fail in strict mode.
 
 ```ts title="Playwright test"
 let switchLocator = page.getByRole('switch', { name: /TLS Enabled/i });
