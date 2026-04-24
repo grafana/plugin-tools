@@ -128,10 +128,9 @@ await expect(page.getByRole('checkbox', { name: 'TLS Enabled' })).not.toBeChecke
 
 You can use the `InlineSwitch` component to interact with the UI.
 
-```tsx title="UI componevnt"
+```tsx title="UI component"
 <InlineField label="TLS Enabled">
   <InlineSwitch
-    // the InlineSwitch label needs to match the label of the InlineField
     label="TLS Enabled"
     value={value}
     onChange={handleOnChange}
@@ -141,22 +140,10 @@ You can use the `InlineSwitch` component to interact with the UI.
 
 Like in the `Checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
 
+Use `getByRole('switch', { name: /label/i })` rather than `getByLabel` — newer versions of Grafana add `aria-label` to the `<label>` element itself, which causes `getByLabel` to match multiple elements and fail in strict mode.
+
 ```ts title="Playwright test"
-let switchLocator = page.getByLabel('TLS Enabled');
+let switchLocator = page.getByRole('switch', { name: /TLS Enabled/i });
 await switchLocator.uncheck({ force: true });
 await expect(switchLocator).not.toBeChecked();
-```
-
-:::note
-
-In Grafana versions older than 9.3.0, the label can't be associated with the checkbox in the `InlineSwitch` component. If you want your tests to run in Grafana versions prior to 9.3.0, you need to access the field in the following way:
-
-:::
-
-```ts title="Playwright test"
-const label = 'Inline field with switch';
-let switchLocator = page.getByLabel(label);
-if (semver.lt(grafanaVersion, '9.3.0')) {
-  switchLocator = page.locator(`[label="${label}"]`).locator('../label');
-}
 ```

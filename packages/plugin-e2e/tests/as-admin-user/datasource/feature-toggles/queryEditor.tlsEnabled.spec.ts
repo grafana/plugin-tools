@@ -28,6 +28,6 @@ test('should display TLS enabled field when tlsEnabled feature toggle is set to 
   const row = panelEditPage.getQueryEditorRow('A');
   const locator = semver.lt(grafanaVersion, '9.3.0')
     ? row.locator(`[label="TLS Enabled"]`).locator('../label')
-    : row.getByLabel('TLS Enabled');
+    : row.getByRole('switch', { name: /TLS Enabled/i });
   await expect(locator).toBeVisible();
 });
