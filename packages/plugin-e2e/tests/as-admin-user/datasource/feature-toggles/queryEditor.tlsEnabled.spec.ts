@@ -26,8 +26,11 @@ test('should display TLS enabled field when tlsEnabled feature toggle is set to 
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
   const row = panelEditPage.getQueryEditorRow('A');
+  // role="switch" was added to InlineSwitch in Grafana 11.5; use getByLabel for older versions
   const locator = semver.lt(grafanaVersion, '9.3.0')
     ? row.locator(`[label="TLS Enabled"]`).locator('../label')
-    : row.getByRole('switch', { name: /TLS Enabled/i });
+    : semver.lt(grafanaVersion, '11.5.0')
+      ? row.getByLabel('TLS Enabled')
+      : row.getByRole('switch', { name: /TLS Enabled/i });
   await expect(locator).toBeVisible();
 });
