@@ -1,3 +1,15 @@
+# v3.6.0 (Fri Apr 24 2026)
+
+#### 🚀 Enhancement
+
+- Plugin E2E: Add dashboard smoke testing support [#2586](https://github.com/grafana/plugin-tools/pull/2586) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.5.1 (Thu Apr 16 2026)
 
 #### 🐛 Bug Fix
