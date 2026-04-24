@@ -1,4 +1,5 @@
 import * as semver from 'semver';
+import { expect } from '@playwright/test';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
@@ -11,6 +12,8 @@ import { resolveGrafanaSelector } from '../utils';
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
+  private pendingQueryCount = 0;
+  private hasSeenQuery = false;
 
   constructor(
     readonly ctx: PluginTestCtx,
@@ -25,6 +28,19 @@ export class DashboardPage extends GrafanaPage {
    * Navigates to the dashboard page. If a dashboard uid was not provided, it's assumed that it's a new dashboard.
    */
   async goto(options: NavigateOptions = {}) {
+    // arm listeners before navigation to capture responses from panels that load instantly
+    this.ctx.page.on('request', (req) => {
+      if (req.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+        this.pendingQueryCount++;
+        this.hasSeenQuery = true;
+      }
+    });
+    this.ctx.page.on('response', (res) => {
+      if (res.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+        this.pendingQueryCount = Math.max(0, this.pendingQueryCount - 1);
+      }
+    });
+
     let url = this.dashboard?.uid
       ? this.ctx.selectors.pages.Dashboard.url(this.dashboard.uid)
       : this.ctx.selectors.pages.AddDashboard.url;
@@ -36,6 +52,60 @@ export class DashboardPage extends GrafanaPage {
     }
 
     return super.navigate(url, options);
+  }
+
+  /**
+   * Scrolls the page viewport-by-viewport to trigger below-fold panel queries.
+   *
+   * In Grafana 13.x with scenes, panels are lazy-rendered: VizPanel content isn't mounted
+   * until the grid container enters the viewport. Scrolling by viewport height ensures
+   * IntersectionObserver fires for each row before moving on. The 500ms pause is required
+   * for the observer to fire and lazy panels to initiate their queries.
+   */
+  private async scrollToRevealAllPanels(): Promise<void> {
+    const viewportHeight = await this.ctx.page.evaluate(() => window.innerHeight);
+    let scrollY = 0;
+
+    while (true) {
+      const scrollHeight = await this.ctx.page.evaluate(() => document.documentElement.scrollHeight);
+      if (scrollY >= scrollHeight) {
+        break;
+      }
+      scrollY = Math.min(scrollY + viewportHeight, scrollHeight);
+      await this.ctx.page.evaluate((y) => window.scrollTo(0, y), scrollY);
+      // 500ms allows IntersectionObserver to fire and lazy-rendered panels to mount and start queries
+      await this.ctx.page.waitForTimeout(500);
+    }
+  }
+
+  /**
+   * Waits until all initiated panel queries have received responses.
+   *
+   * By default only waits for queries already triggered (panels in the viewport at navigation
+   * time or explicitly scrolled into view). Pass `scrollAll: true` to first scroll the full
+   * dashboard so that below-fold panels are also triggered before waiting.
+   *
+   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+   */
+  async waitForPanelsQueriesToComplete({
+    timeout = 30_000,
+    scrollAll = false,
+  }: { timeout?: number; scrollAll?: boolean } = {}): Promise<void> {
+    // brief grace period for the first query to initiate on slow CI machines
+    await expect
+      .poll(() => this.hasSeenQuery, { timeout: 2_000 })
+      .toBe(true)
+      .catch(() => {}); // dashboards with no data source panels are valid
+
+    // wait for the initially-visible panels to settle before scrolling; Grafana resets
+    // the scroll position during initial layout, so scrolling too early has no effect
+    await expect.poll(() => this.pendingQueryCount === 0, { timeout }).toBe(true);
+
+    if (scrollAll) {
+      await this.scrollToRevealAllPanels();
+      // wait for newly-revealed below-fold panel queries to complete
+      await expect.poll(() => this.pendingQueryCount === 0, { timeout }).toBe(true);
+    }
   }
 
   /**

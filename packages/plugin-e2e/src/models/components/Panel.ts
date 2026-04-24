@@ -67,6 +67,41 @@ export class Panel extends GrafanaPage {
   }
 
   /**
+   * Scrolls the panel into the viewport, triggering its query if not yet started.
+   *
+   * In Grafana 13.x+ with scenes, panels are lazy-rendered: the panel element does not
+   * exist in the DOM until its grid container enters the viewport. This method scrolls
+   * the page viewport-by-viewport until the panel element appears, then returns. The
+   * 500ms pause per step gives IntersectionObserver time to fire and the VizPanel time
+   * to mount before checking visibility.
+   */
+  async scrollIntoView(): Promise<void> {
+    if (await this.locator.isVisible().catch(() => false)) {
+      // element is already in the DOM - Playwright can scroll it into view directly
+      await this.locator.scrollIntoViewIfNeeded({ timeout: 5000 }).catch(() => {});
+      return;
+    }
+    // panel not yet in DOM (Grafana 13.x lazy render) - scroll page viewport-by-viewport
+    // until the element mounts, then scroll it precisely into view
+    const viewportHeight = await this.ctx.page.evaluate(() => window.innerHeight);
+    let scrollY = 0;
+    while (true) {
+      const scrollHeight = await this.ctx.page.evaluate(() => document.documentElement.scrollHeight);
+      if (scrollY >= scrollHeight) {
+        break;
+      }
+      scrollY = Math.min(scrollY + viewportHeight, scrollHeight);
+      await this.ctx.page.evaluate((y) => window.scrollTo(0, y), scrollY);
+      await this.ctx.page.waitForTimeout(500);
+      if (await this.locator.isVisible().catch(() => false)) {
+        break;
+      }
+    }
+    // element has mounted but may be above the current scroll position — bring it precisely into view
+    await this.locator.scrollIntoViewIfNeeded({ timeout: 5000 }).catch(() => {});
+  }
+
+  /**
    * Returns the locator for the panel error (if any)
    */
   getErrorIcon(): Locator {

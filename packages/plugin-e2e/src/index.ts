@@ -58,6 +58,8 @@ import { toHaveChecked } from './matchers/toHaveChecked';
 import { MultiSelect } from './models/components/MultiSelect';
 import { toHaveColor } from './matchers/toHaveColor';
 import { ColorPicker } from './models/components/ColorPicker';
+import { toHavePanelErrors } from './matchers/toHavePanelErrors';
+import { DashboardPage } from './models/pages/DashboardPage';
 
 // models
 export { DataSourcePicker } from './models/components/DataSourcePicker';
@@ -134,6 +136,7 @@ export const expect = baseExpect.extend({
   toHaveChecked,
   toHaveColor,
   toHaveNoA11yViolations,
+  toHavePanelErrors,
 });
 
 export { selectors } from '@playwright/test';
@@ -218,6 +221,15 @@ declare global {
        * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
        */
       toHaveNoA11yViolations(results: AxeResults, options?: A11yViolationsOptions): Promise<R>;
+
+      /**
+       * Asserts that a dashboard has panel errors. Omit `count` to assert at least one error.
+       * Pass `count` to assert exactly that many panels with errors.
+       * Use `.not.toHavePanelErrors()` to assert no panel errors.
+       *
+       * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+       */
+      toHavePanelErrors(this: Matchers<unknown, DashboardPage>, count?: number): Promise<R>;
     }
   }
 }
