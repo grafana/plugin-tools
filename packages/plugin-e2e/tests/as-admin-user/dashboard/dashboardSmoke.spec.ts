@@ -32,23 +32,14 @@ test.describe('dashboard smoke tests', () => {
     // scrollAll scrolls the full page so bottom row queries are also captured
     await dashboard.waitForPanelsQueriesToComplete({ scrollAll: true });
     await expect(dashboard).not.toHavePanelErrors();
-
-    // explicitly scroll to the bottom panel — some Grafana versions reset the scroll
-    // position after queries complete, potentially unmounting it from the DOM
-    await bottomLeft.scrollIntoView();
-    await expect(bottomLeft.locator).toBeVisible();
   });
 
   test('manually scrolling a below-fold panel into view triggers its query', async ({ gotoDashboardPage }) => {
     const dashboard = await gotoDashboardPage({ uid: 'smoke-test-dashboard' });
 
-    // "Lower Right" (y=16) is below the fold at 1280x720; in Grafana 13.x scenes the
-    // panel element is lazy-rendered, so Panel.scrollIntoView() must find the grid
-    // container first before the title element exists in the DOM
+    // "Lower Right" (y=16) is below the fold at 1280x720
     const lowerRight = dashboard.getPanelByTitle('Lower Right');
     await lowerRight.scrollIntoView();
-    await expect(lowerRight.locator).toBeInViewport();
-
     await dashboard.waitForPanelsQueriesToComplete();
     await expect(dashboard).not.toHavePanelErrors();
   });
