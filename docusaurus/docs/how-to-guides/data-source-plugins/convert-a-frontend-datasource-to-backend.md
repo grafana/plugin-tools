@@ -391,7 +391,6 @@ func handleTables(w http.ResponseWriter, r *http.Request) {
   // Handle errors (omited)
 
 	w.Write(body)
-	w.WriteHeader(http.StatusOK)
 }
 ```
 
