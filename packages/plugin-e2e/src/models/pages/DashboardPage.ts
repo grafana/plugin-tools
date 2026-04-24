@@ -84,6 +84,8 @@ export class DashboardPage extends GrafanaPage {
    * By default only waits for queries already triggered (panels in the viewport at navigation
    * time or explicitly scrolled into view). Pass `scrollAll: true` to first scroll the full
    * dashboard so that below-fold panels are also triggered before waiting.
+   *
+   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
    */
   async waitForPanelsQueriesToComplete({
     timeout = 30_000,

@@ -226,6 +226,8 @@ declare global {
        * Asserts that a dashboard has panel errors. Omit `count` to assert at least one error.
        * Pass `count` to assert exactly that many panels with errors.
        * Use `.not.toHavePanelErrors()` to assert no panel errors.
+       *
+       * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
        */
       toHavePanelErrors(this: Matchers<unknown, DashboardPage>, count?: number): Promise<R>;
     }

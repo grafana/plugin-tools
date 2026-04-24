@@ -1,5 +1,8 @@
 import { DashboardPage } from '../models/pages/DashboardPage';
 
+/**
+ * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+ */
 export const toHavePanelErrors = async (dashboard: DashboardPage, expectedCount?: number) => {
   const errorLocator = dashboard.getByGrafanaSelector(dashboard.ctx.selectors.components.Panels.Panel.status('error'));
   const count = await errorLocator.count();
