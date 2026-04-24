@@ -5,5 +5,5 @@ test.use({ storageState: 'playwright/.auth/admin.json', user: { user: 'admin', p
 
 test('should not redirect to start page when permissions to navigate to page is exist', async ({ page }) => {
   await page.goto('/datasources', { waitUntil: 'networkidle' });
-  await expect(page).toHaveURL(/\/datasources/, { timeout: 10_000 });
+  await expect(page).toHaveURL(/\/datasources$/, { timeout: 10_000 });
 });
