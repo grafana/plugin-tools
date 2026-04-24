@@ -1,0 +1,5 @@
+GRAFANA_IMAGE=grafana-enterprise
+GRAFANA_VERSION=dev-preview-react19
+OUTPUT=failure
+PLUGIN_NAME=
+UPLOAD_REPORT_ENABLED=true

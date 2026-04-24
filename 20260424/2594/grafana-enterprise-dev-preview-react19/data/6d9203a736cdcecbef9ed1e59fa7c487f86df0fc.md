@@ -1,0 +1,51 @@
+# Page snapshot
+
+```yaml
+- main [ref=e7]:
+  - log [ref=e8]
+  - generic [ref=e11]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - img "Grafana" [ref=e15]
+        - heading "Welcome to Grafana" [level=1] [ref=e17]
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e25]: Email or username
+          - textbox "Email or username" [active] [ref=e30]:
+            - /placeholder: email or username
+        - generic [ref=e31]:
+          - generic [ref=e34]: Password
+          - generic [ref=e38]:
+            - textbox "Password" [ref=e39]:
+              - /placeholder: password
+            - switch "Show password" [ref=e41] [cursor=pointer]:
+              - img [ref=e42]
+        - button "Log in" [ref=e44] [cursor=pointer]:
+          - generic [ref=e45]: Log in
+        - link "Forgot your password?" [ref=e47] [cursor=pointer]:
+          - /url: /user/password/send-reset-email
+          - generic [ref=e48]: Forgot your password?
+    - list [ref=e51]:
+      - listitem [ref=e52]:
+        - img [ref=e53]
+        - link "Documentation" [ref=e55] [cursor=pointer]:
+          - /url: https://grafana.com/docs/grafana/latest/?utm_source=grafana_footer
+        - text: "|"
+      - listitem [ref=e56]:
+        - img [ref=e57]
+        - link "Support" [ref=e59] [cursor=pointer]:
+          - /url: https://grafana.com/products/enterprise/?utm_source=grafana_footer
+        - text: "|"
+      - listitem [ref=e60]:
+        - img [ref=e61]
+        - link "Community" [ref=e63] [cursor=pointer]:
+          - /url: https://community.grafana.com/?utm_source=grafana_footer
+        - text: "|"
+      - listitem [ref=e64]:
+        - link "Enterprise (Free & unlicensed)" [ref=e65] [cursor=pointer]:
+          - /url: https://grafana.com/products/enterprise/?utm_source=grafana_footer
+        - text: "|"
+      - listitem [ref=e66]:
+        - link "Grafana v13.1.0-local (20da590803)" [ref=e67] [cursor=pointer]:
+          - /url: https://github.com/grafana/grafana/blob/main/CHANGELOG.md
+```
