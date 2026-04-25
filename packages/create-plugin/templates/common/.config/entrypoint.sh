@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Default to development mode; switch to production when DEV=false
+if [ "${DEV}" = "false" ]; then
+    export GF_DEFAULT_APP_MODE="production"
+fi
+
 if [ "${DEV}" = "false" ]; then
     echo "Starting test mode"
     exec /run.sh
