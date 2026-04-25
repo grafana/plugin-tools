@@ -19,8 +19,7 @@ ENV DEV "${development}"
 ENV GF_AUTH_ANONYMOUS_ORG_ROLE "Admin"
 ENV GF_AUTH_ANONYMOUS_ENABLED "${anonymous_auth_enabled}"
 ENV GF_AUTH_BASIC_ENABLED "false"
-# Set development mode so plugins can be loaded without the need to sign
-ENV GF_DEFAULT_APP_MODE "development"
+# GF_DEFAULT_APP_MODE is set dynamically in entrypoint.sh based on the DEV build arg
 
 
 LABEL maintainer="Grafana Labs <hello@grafana.com>"
