@@ -1,3 +1,16 @@
+# (Sat Apr 25 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.2.2`
+  - Update dependency @grafana/plugin-e2e to v3.6.1 [#2597](https://github.com/grafana/plugin-tools/pull/2597) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 1
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+
+---
+
 # (Fri Apr 24 2026)
 
 #### 🐛 Bug Fix
