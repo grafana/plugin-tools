@@ -11,6 +11,7 @@ import {
   A11yViolationsOptions,
 } from './types';
 import { annotationEditPage } from './fixtures/annotationEditPage';
+import { components } from './fixtures/components';
 import { grafanaAPIClient } from './fixtures/grafanaAPIClient';
 import { createDataSource } from './fixtures/commands/createDataSource';
 import { createDataSourceConfigPage } from './fixtures/commands/createDataSourceConfigPage';
@@ -62,7 +63,9 @@ import { toHavePanelErrors } from './matchers/toHavePanelErrors';
 import { DashboardPage } from './models/pages/DashboardPage';
 
 // models
+export { Components } from './models/Components';
 export { DataSourcePicker } from './models/components/DataSourcePicker';
+export { ScopedComponent } from './models/components/ScopedComponent';
 export { Panel } from './models/components/Panel';
 export { TimeRange } from './models/components/TimeRange';
 export { AnnotationEditPage } from './models/pages/AnnotationEditPage';
@@ -120,6 +123,7 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   gotoVariablePage,
   gotoAnnotationEditPage,
   gotoAlertRuleEditPage,
+  components,
   gotoDataSourceConfigPage,
   gotoAppConfigPage,
   gotoAppPage,

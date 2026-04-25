@@ -1,16 +1,8 @@
 import * as semver from 'semver';
-import { Locator, expect } from '@playwright/test';
-import { PluginTestCtx } from '../../types';
-import { GrafanaPage } from '../pages/GrafanaPage';
+import { expect } from '@playwright/test';
+import { ScopedComponent } from './ScopedComponent';
 
-export class DataSourcePicker extends GrafanaPage {
-  constructor(
-    ctx: PluginTestCtx,
-    private root?: Locator
-  ) {
-    super(ctx);
-  }
-
+export class DataSourcePicker extends ScopedComponent {
   /**
    * Sets the data source picker to the provided name
    */

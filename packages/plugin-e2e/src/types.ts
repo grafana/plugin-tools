@@ -14,6 +14,7 @@ import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
 import { AppConfigPage } from './models/pages/AppConfigPage';
 import { AppPage } from './models/pages/AppPage';
+import { Components } from './models/Components';
 import { DashboardPage } from './models/pages/DashboardPage';
 import { DataSourceConfigPage } from './models/pages/DataSourceConfigPage';
 import { ExplorePage } from './models/pages/ExplorePage';
@@ -433,6 +434,22 @@ export type PluginFixture = {
    * You can use this in conjunction with the .toHaveNoA11yViolations matcher to assert that there are no accessibility violations on the page.
    */
   scanForA11yViolations: (context?: AxeScanContext) => Promise<AxeResults>;
+
+  /**
+   * Factory for components that are not attached to a specific page.
+   *
+   * Use this fixture to interact with a Grafana UI component on a page that is
+   * not covered by other page fixtures (e.g. {@link PanelEditPage} or {@link ExplorePage}).
+   *
+   * @example
+   * ```typescript
+   * test('my test', async ({ components, page }) => {
+   *   const picker = components.getDataSourcePicker();
+   *   await picker.set('gdev-prometheus');
+   * });
+   * ```
+   */
+  components: Components;
 };
 
 /**
