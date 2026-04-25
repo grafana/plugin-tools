@@ -31,7 +31,7 @@ jobs:
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
 {{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
@@ -74,14 +74,14 @@ jobs:
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: buildAll
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: test
@@ -187,7 +187,7 @@ jobs:
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
 {{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
