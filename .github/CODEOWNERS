@@ -10,3 +10,6 @@
 
 /docusaurus/website/ @grafana/grafana-frontend-platform @grafana/docs-plugins
 /docusaurus/docs/ @grafana/grafana-frontend-platform @grafana/docs-plugins
+
+/.github/workflows/playwright.yml @grafana/plugins-platform-frontend
+/.github/workflows/playwright-nightly.yml @grafana/plugins-platform-frontend
