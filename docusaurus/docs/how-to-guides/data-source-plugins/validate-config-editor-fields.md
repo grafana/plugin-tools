@@ -102,7 +102,7 @@ The API stores errors by field name but does not render them or trigger re-rende
 
 A `validateField` helper updates both at once. Call it in `onBlur` handlers so errors appear as the user moves between fields. The registered validator re-runs all checks on submit, resetting `fieldErrors` to the current state of every field — catching anything the user never blurred.
 
-The `useEffect` must also pre-clear errors for fields that are already populated when the editor loads, so existing datasource configurations don't show errors on open.
+The `useEffect` must also pre-clear errors for fields that are already populated when the editor loads, so existing data source configurations don't show errors on open.
 
 ```tsx
 import { useEffect, useState } from 'react';
