@@ -22,12 +22,22 @@ export class Switch extends ComponentBase {
 
   async check(options?: CheckOptionsType): Promise<void> {
     const target = await this.getSwitch(options);
-    return target.check({ force: true, ...options });
+    if (lt(this.ctx.grafanaVersion, '11.3.0')) {
+      return target.check({ force: true, ...options });
+    }
+    if (!(await this.element.isChecked())) {
+      await target.click({ force: true });
+    }
   }
 
   async uncheck(options?: CheckOptionsType): Promise<void> {
     const target = await this.getSwitch(options);
-    return target.uncheck({ force: true, ...options });
+    if (lt(this.ctx.grafanaVersion, '11.3.0')) {
+      return target.uncheck({ force: true, ...options });
+    }
+    if (await this.element.isChecked()) {
+      await target.click({ force: true });
+    }
   }
 
   private async getSwitch(options: CheckOptionsType): Promise<Locator> {
