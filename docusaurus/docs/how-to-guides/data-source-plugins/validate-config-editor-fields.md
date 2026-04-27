@@ -18,13 +18,13 @@ keywords:
 
 :::
 
-This guide explains how to validate fields in a data source config editor. Frontend validation catches missing or invalid configuration before a save request is sent to the backend, rather than waiting for a backend error response.
+This guide explains how to validate fields in a data source config editor. Frontend validation catches missing or invalid configuration before the form is submitted — preventing both the save request and the backend health check from running when required fields are missing.
 
 ## How it works
 
 Grafana passes a `validation` prop of type `DataSourceConfigValidationAPI` to your config editor via `DataSourcePluginOptionsEditorProps`. The object is stable across renders, so it's safe to pass to hooks and effects.
 
-When the user clicks **Save & test**, Grafana calls `validation.validate()`, which runs all registered validators. If any validator returns `false`, the save is blocked and a summary of the field errors is shown where the datasource health check result normally appears.
+When the user clicks **Save & test**, Grafana calls `validation.validate()`, which runs all registered validators. If any validator returns `false`, the save and the backend health check are both skipped, and a summary of the field errors is shown where the health check result normally appears.
 
 The `DataSourceConfigValidationAPI` interface provides:
 
@@ -79,6 +79,21 @@ export function ConfigEditor({ options, onOptionsChange, validation }: DataSourc
     </Field>
   );
 }
+```
+
+Validators can also be async, making it possible to run checks like verifying a connection before allowing a save:
+
+```tsx
+return validation.registerValidation(async () => {
+  try {
+    await testConnection(options);
+    validation.clearError('connection');
+    return true;
+  } catch (e) {
+    validation.setError('connection', 'Could not connect. Check your URL and credentials.');
+    return false;
+  }
+});
 ```
 
 ## Add inline field errors
