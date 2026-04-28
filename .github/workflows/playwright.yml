@@ -23,7 +23,7 @@ jobs:
 
       - name: Resolve Grafana E2E versions
         id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@c246b748568a80db2a20ab5c65ff01b8b4f342c4 # e2e-version/v1.2.0
+        uses: grafana/plugin-actions/e2e-version@73cd57e848b81e75e3c17697e6701c9fa1404bcc # e2e-version/v2.0.0
         with:
           version-resolver-type: plugin-grafana-dependency
           grafana-dependency: '>=8.5.0'
@@ -83,7 +83,7 @@ jobs:
           ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
 
       - name: Wait for grafana server
-        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@016148f3c2f244edb17da23f0d9aa0661b6dbf6f # wait-for-grafana/v1.0.3
         with:
           url: http://localhost:3000/login
 
