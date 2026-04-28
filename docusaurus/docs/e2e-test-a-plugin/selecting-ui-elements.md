@@ -130,20 +130,26 @@ You can use the `InlineSwitch` component to interact with the UI.
 
 ```tsx title="UI component"
 <InlineField label="TLS Enabled">
-  <InlineSwitch
-    label="TLS Enabled"
-    value={value}
-    onChange={handleOnChange}
-  />
+  <InlineSwitch label="TLS Enabled" value={value} onChange={handleOnChange} />
 </InlineField>
 ```
 
-Like in the `Checkbox` component, you need to bypass the Playwright actionability check by setting `force: true`.
-
 Use `getByRole('switch', { name: /TLS Enabled/i })` rather than `getByLabel` — newer versions of Grafana add `aria-label` to the `<label>` element itself, which causes `getByLabel` to match multiple elements and fail in strict mode.
 
+Use `isChecked()` combined with `click({ force: true })` rather than `check()`/`uncheck()`. The `check()` and `uncheck()` methods assert the final state after clicking, which can race with React's re-render cycle on newer versions of Grafana and cause intermittent failures.
+
 ```ts title="Playwright test"
-let switchLocator = page.getByRole('switch', { name: /TLS Enabled/i });
-await switchLocator.uncheck({ force: true });
+const switchLocator = page.getByRole('switch', { name: /TLS Enabled/i });
+
+// checking
+if (!(await switchLocator.isChecked())) {
+  await switchLocator.click({ force: true });
+}
+await expect(switchLocator).toBeChecked();
+
+// unchecking
+if (await switchLocator.isChecked()) {
+  await switchLocator.click({ force: true });
+}
 await expect(switchLocator).not.toBeChecked();
 ```
