@@ -186,3 +186,60 @@ test('should display dropdown with two values when two frames are passed to the 
   await expect(panelEditPage.getByTestIdOrAriaLabel(selectors.components.Select.option)).toHaveText(['a', 'b']);
 });
 ```
+
+## Test for accessibility violations
+
+`@grafana/plugin-e2e` ships with an [Axe](https://www.deque.com/axe/)-powered `scanForA11yViolations` fixture and a `toHaveNoA11yViolations` matcher so you can catch accessibility regressions in your panel as part of your end-to-end suite. By default the scan runs the WCAG 2.0 and 2.1 A and AA rule sets, which match Grafana's [WCAG 2.1 AA](https://www.w3.org/TR/WCAG21/) target.
+
+:::note
+The accessibility scanning APIs are currently `@alpha` — the surface may change before becoming stable. Feedback is welcome on [GitHub](https://github.com/grafana/plugin-tools/issues).
+:::
+
+The following test renders a panel from a provisioned dashboard and asserts that there are no accessibility violations on the page:
+
+```ts
+test('panel has no accessibility violations', async ({
+  gotoDashboardPage,
+  readProvisionedDashboard,
+  scanForA11yViolations,
+}) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'my-panel-dashboard.json' });
+  const dashboardPage = await gotoDashboardPage({ ...dashboard });
+  await expect(dashboardPage.getPanelByTitle('My panel').locator).toBeVisible();
+
+  const report = await scanForA11yViolations();
+  expect(report).toHaveNoA11yViolations();
+});
+```
+
+When violations are found, `toHaveNoA11yViolations` prints each rule, its impact, and the affected DOM nodes, and the full Axe report is attached to the Playwright test result as a JSON artifact.
+
+### Scope a scan to your panel
+
+Pass `include` or `exclude` to limit the scan to a CSS selector (or array of selectors). This is useful when you only want to assert on your own panel and not the surrounding Grafana chrome:
+
+```ts
+const report = await scanForA11yViolations({
+  include: '[data-testid="data-testid panel content"]',
+});
+expect(report).toHaveNoA11yViolations();
+```
+
+You can also pass through any [axe-core run options](https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#options-parameter) — for example, to run a single rule:
+
+```ts
+const report = await scanForA11yViolations({
+  options: { runOnly: ['color-contrast'] },
+});
+```
+
+### Tune the assertion
+
+`toHaveNoA11yViolations` accepts a `threshold` (the maximum number of violations to allow) and `ignoredRules` (axe rule IDs to skip when counting violations). This is helpful when adopting accessibility testing on an existing plugin and you want to track new regressions without fixing every pre-existing issue up front:
+
+```ts
+expect(report).toHaveNoA11yViolations({
+  threshold: 2,
+  ignoredRules: ['color-contrast'],
+});
+```
