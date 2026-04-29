@@ -191,8 +191,14 @@ test('should display dropdown with two values when two frames are passed to the 
 
 `@grafana/plugin-e2e` ships with an [Axe](https://www.deque.com/axe/)-powered `scanForA11yViolations` fixture and a `toHaveNoA11yViolations` matcher so you can catch accessibility regressions in your panel as part of your end-to-end suite. By default the scan runs the WCAG 2.0 and 2.1 A and AA rule sets, which match Grafana's [WCAG 2.1 AA](https://www.w3.org/TR/WCAG21/) target.
 
+`@axe-core/playwright` is an optional peer dependency, so install it alongside `@grafana/plugin-e2e` to use these APIs:
+
+```bash
+npm install --save-dev @axe-core/playwright
+```
+
 :::note
-The accessibility scanning APIs are currently `@alpha` — the surface may change before becoming stable. Feedback is welcome on [GitHub](https://github.com/grafana/plugin-tools/issues).
+The accessibility scanning APIs are `@alpha`. The surface may change before it becomes stable. Feedback is welcome on [GitHub](https://github.com/grafana/plugin-tools/issues).
 :::
 
 The following test renders a panel from a provisioned dashboard and asserts that there are no accessibility violations on the page:
@@ -216,11 +222,11 @@ When violations are found, `toHaveNoA11yViolations` prints each rule, its impact
 
 ### Scope a scan to your panel
 
-Pass `include` or `exclude` to limit the scan to a CSS selector (or array of selectors). This is useful when you only want to assert on your own panel and not the surrounding Grafana chrome:
+Pass `include` or `exclude` to limit the scan to a CSS selector (or array of selectors). This is useful when you only want to assert on the markup your plugin owns rather than the surrounding Grafana chrome. Add a `data-testid` to your panel's root element and target it from the test:
 
 ```ts
 const report = await scanForA11yViolations({
-  include: '[data-testid="data-testid panel content"]',
+  include: '[data-testid="my-panel-root"]',
 });
 expect(report).toHaveNoA11yViolations();
 ```
