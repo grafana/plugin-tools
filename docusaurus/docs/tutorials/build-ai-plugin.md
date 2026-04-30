@@ -42,8 +42,8 @@ This tutorial uses the following API details:
 - Base URL: `https://cc-workshop-proxy.grafana.fun/bcapi/`
 - Authorization header: `Authorization: Bearer barcelona2026`
 - Endpoints:
-  - `GET /bcapi/station_information`
-  - `GET /bcapi/station_status`
+  - `GET /station_information`
+  - `GET /station_status`
  
 ## 1. Create the data source plugin scaffold
  
