@@ -1,5 +1,5 @@
 ---
-id: build-a-plugin-with-ai
+id: build-ai-plugin
 title: Build a plugin with AI
 sidebar_position: 40
 description: Learn how to build a Grafana data source plugin and app plugin by prompting an AI coding assistant.
