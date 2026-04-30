@@ -5,7 +5,7 @@ import { UnitPicker } from './UnitPicker';
 import { Select } from './Select';
 import { MultiSelect } from './MultiSelect';
 import { Switch } from './Switch';
-import { gte } from 'semver';
+import { gte, lte } from 'semver';
 import { RadioGroup } from './RadioGroup';
 import { resolveGrafanaSelector } from '../utils';
 
@@ -57,10 +57,7 @@ export class PanelEditOptionsGroup {
   }
 
   getSliderInput(label: string): Locator {
-    if (gte(this.ctx.grafanaVersion, '13.0.0')) {
-      return this.getTextInput(label);
-    }
-    if (gte(this.ctx.grafanaVersion, '9.1.0')) {
+    if (gte(this.ctx.grafanaVersion, '9.1.0') && lte(this.ctx.grafanaVersion, '13.1.0')) {
       return this.getNumberInput(label);
     }
     return this.getTextInput(label);
