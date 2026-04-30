@@ -1,3 +1,15 @@
+# v3.7.0 (Thu Apr 30 2026)
+
+#### 🐛 Bug Fix
+
+- CI: bump plugin-actions/e2e-version to v2.0.0 [#2594](https://github.com/grafana/plugin-tools/pull/2594) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.6.0 (Fri Apr 24 2026)
 
 #### 🚀 Enhancement

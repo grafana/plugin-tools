@@ -1,3 +1,22 @@
+# (Thu Apr 30 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/tsconfig@2.1.0`
+  - feat: add support for Typescript 6 [#2595](https://github.com/grafana/plugin-tools/pull/2595) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.3.0`, `@grafana/plugin-e2e@3.7.0`
+  - CI: bump plugin-actions/e2e-version to v2.0.0 [#2594](https://github.com/grafana/plugin-tools/pull/2594) ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Sat Apr 25 2026)
 
 #### 🐛 Bug Fix
