@@ -148,6 +148,7 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/panel-plugins/add-datalinks-support',
         'how-to-guides/panel-plugins/custom-panel-option-editors',
         'how-to-guides/panel-plugins/error-handling-for-panel-plugins',
+        'how-to-guides/panel-plugins/field-overrides',
         'how-to-guides/panel-plugins/interpolate-variables',
         'how-to-guides/panel-plugins/migration-handler-for-panels',
         'how-to-guides/panel-plugins/read-data-from-a-data-source',
