@@ -17,30 +17,33 @@ keywords:
  
 This tutorial shows you how to build a Grafana plugin by prompting an AI coding assistant step by step. You create a data source plugin for the Barcelona Bicing API, and then create an app plugin that uses that data source to show station data in a list and on a map.
  
-The goal is not to let AI guess. The goal is to give it clear prompts, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
- 
 In this tutorial, you'll:
  
 1. Scaffold a data source plugin with a backend component.
 1. Prompt an AI tool to implement the data source.
 1. Scaffold an app plugin.
 1. Prompt the AI tool to build the app views.
-1. Optionally prompt the AI tool to add an AI feature inside the app.
+1. Optionally, you can prompt the AI tool to add an AI feature inside the app.
+
+## Working with AI
+
+When working with AI, you're steering the wheel! **Do not to let AI guess**. Instead, give it clear prompts, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
  
 ## Prerequisites
  
-Before you begin, ensure you have:
+Before you begin:
  
 - Install Grafana v10.0 or later.
 - Install a current LTS version of Node.js.
 - Install [Docker](https://docs.docker.com/get-docker/).
 - Install [Go](https://go.dev/) and [Mage](https://magefile.org/) for the data source backend.
 - Have an AI coding assistant available in your editor or terminal.
+- Register for an access token at the [Barcelona Open Data portal](https://opendata-ajuntament.barcelona.cat/es/tokens). You need this token to authenticate requests to the Bicing API.
  
 This tutorial uses the following API details:
  
-- Base URL: `https://cc-workshop-proxy.grafana.fun/bcapi/`
-- Authorization header: `Authorization: Bearer barcelona2026`
+- Base URL: `<API_BASE_URL>` (available from the [Barcelona Open Data portal](https://opendata-ajuntament.barcelona.cat/data/es/dataset/estat-estacions-bicing) after token registration)
+- Authorization header: `Authorization: Bearer <YOUR_ACCESS_TOKEN>`
 - Endpoints:
   - `GET /station_information`
   - `GET /station_status`
@@ -66,24 +69,18 @@ Start the frontend watcher:
 npm run dev
 ```
  
-To build the backend binary, run one of the following commands depending on your platform.
- 
-On Linux:
- 
+The Grafana development server runs in a Docker Linux container, so the backend binary must target Linux regardless of your local operating system.
+
+On x86_64:
+
 ```sh
 mage -v build:linux
 ```
- 
-On Arm64 Linux:
- 
+
+On Arm64:
+
 ```sh
 mage -v build:linuxARM64
-```
- 
-On macOS:
- 
-```sh
-mage -v build:darwin
 ```
  
 Start Grafana:
@@ -114,17 +111,17 @@ Do not invent API fields, routes, or Grafana plugin APIs.
 If something is unclear, ask me a short question instead of guessing.
  
 Facts you must use:
-- Base URL: https://cc-workshop-proxy.grafana.fun/bcapi/
-- Auth header: Authorization: Bearer barcelona2026
+- Base URL: <API_BASE_URL>
+- Auth header: Authorization: Bearer <YOUR_ACCESS_TOKEN>
 - Endpoints:
-  - GET /bcapi/station_information
-  - GET /bcapi/station_status
+  - GET /station_information
+  - GET /station_status
 - Both endpoints return a response wrapper with data.stations
  
 Data source plugin requirements:
 - Keep API requests in the Go backend component
-- Add a config editor with a base API URL defaulting to https://cc-workshop-proxy.grafana.fun/bcapi/
-- Store the API key in secureJsonData
+- Add a config editor with a base API URL field (no default value — the user must enter it)
+- Store the API token in secureJsonData
 - Add a query editor with two query types: station_status and station_information
 - If station_information is selected, let the user choose a station from a dropdown
 - Return Grafana data frames
@@ -153,11 +150,11 @@ Tasks:
 Requirements:
 - Use the backend component in Go for all API requests
 - Keep the plugin as a data source plugin with backend support
-- Add a config editor with a base API URL defaulting to https://cc-workshop-proxy.grafana.fun/bcapi/
-- Store the API key in secureJsonData
+- Add a config editor with a base API URL field (no default — the user enters the URL from the Barcelona Open Data portal)
+- Store the API token in secureJsonData
 - Add a query editor with two query types: station_status and station_information
 - If station_information is selected, let the user choose a station from a dropdown
-- Use Authorization: Bearer <api key> when calling the API
+- Use Authorization: Bearer <token from secureJsonData> when calling the API
 - Unwrap data.stations from the API response
 - Return Grafana data frames that Grafana can render
 - Add a health check for Save & Test
@@ -204,7 +201,7 @@ npm run server
 Then verify the result:
  
 1. Open your data source settings in Grafana.
-1. Enter the base URL and API key.
+1. Enter the base URL from the Barcelona Open Data portal and your access token.
 1. Click **Save & Test**.
 1. Open **Explore** and run both query types.
  
@@ -374,7 +371,7 @@ Stop the AI and correct the prompt. For this tutorial, the app plugin must read 
  
 If you're using an AI coding assistant to follow this tutorial, keep your context short and factual:
  
-- Cache only verified facts: base URL, auth header, endpoint names, plugin IDs, and restart rules.
+- Cache only verified facts: base URL (entered by the user), auth header, endpoint names, plugin IDs, and restart rules.
 - Re-read the current query model before editing the query editor or backend.
 - Treat `secureJsonData` as mandatory for secrets, not a suggestion.
 - If the app starts making direct API calls, classify that as drift and repair it.
