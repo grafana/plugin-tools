@@ -57,10 +57,13 @@ export class PanelEditOptionsGroup {
   }
 
   getSliderInput(label: string): Locator {
+    if (gte(this.ctx.grafanaVersion, '13.0.0')) {
+      return this.getTextInput(label);
+    }
     if (gte(this.ctx.grafanaVersion, '9.1.0')) {
       return this.getNumberInput(label);
     }
-    return this.getFieldLocator(label).getByRole('textbox');
+    return this.getTextInput(label);
   }
 
   getSelect(label: string): Select {
