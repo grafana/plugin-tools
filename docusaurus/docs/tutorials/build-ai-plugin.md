@@ -210,9 +210,9 @@ Then verify the result:
  
 If everything works, you see live station data.
  
-{{< admonition type="note" >}}
+:::note
 Frontend changes usually appear through the watcher. Backend changes don't. If the AI edits Go files, restart Grafana before you debug anything else.
-{{< /admonition >}}
+:::
  
 ## 4. Create the app plugin scaffold
  
