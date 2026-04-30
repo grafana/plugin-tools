@@ -146,6 +146,7 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'how-to-guides/panel-plugins/add-datalinks-support',
+        'how-to-guides/panel-plugins/add-value-mappings-support',
         'how-to-guides/panel-plugins/custom-panel-option-editors',
         'how-to-guides/panel-plugins/error-handling-for-panel-plugins',
         'how-to-guides/panel-plugins/interpolate-variables',
