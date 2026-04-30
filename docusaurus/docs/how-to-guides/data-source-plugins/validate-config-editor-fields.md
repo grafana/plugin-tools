@@ -1,6 +1,6 @@
 ---
 id: validate-config-editor-fields
-title: Validate config editor fields
+title: Validate fields in the config editor
 description: How to use the DataSourceConfigValidationAPI to validate fields in your data source config editor.
 keywords:
   - grafana
@@ -13,20 +13,20 @@ keywords:
 ---
 
 :::note
-
-`DataSourceConfigValidationAPI` is currently in alpha and may change in future Grafana releases.
-
+The `DataSourceConfigValidationAPI` is currently in alpha and may change in future Grafana releases.
 :::
 
-This guide explains how to validate fields in a data source config editor. Frontend validation catches missing or invalid configuration before the form is submitted — preventing both the save request and the backend health check from running when required fields are missing.
+This guide explains how to validate fields in a data source configuration editor. Use frontend validation to catch missing or invalid configuration before you submit the form, preventing both the save request and the backend health check from running if required fields are missing.
 
 ## How it works
 
-Grafana passes a `validation` prop of type `DataSourceConfigValidationAPI` to your config editor via `DataSourcePluginOptionsEditorProps`. The object is stable across renders, so it's safe to pass to hooks and effects.
+Grafana uses `DataSourcePluginOptionsEditorProps` to pass a `validation` prop of the type `DataSourceConfigValidationAPI` to your config editor. The object is stable across renders, so it's safe to pass to hooks and effects.
 
-When the user clicks **Save & test**, Grafana calls `validation.validate()`, which runs all registered validators. If any validator returns `false`, the save and the backend health check are both skipped, and a summary of the field errors is shown where the health check result normally appears.
+When a user clicks **Save & test**, Grafana calls `validation.validate()`, which runs all registered validators. If any validator returns `false`, Grafana skips both the save and the backend health check and shows a summary of the field errors where the health check result normally appears.
 
-The `DataSourceConfigValidationAPI` interface provides:
+### Available validations
+
+The `DataSourceConfigValidationAPI` interface provides the following validators:
 
 | Method | Description |
 |---|---|
@@ -37,7 +37,7 @@ The `DataSourceConfigValidationAPI` interface provides:
 | `isValid()` | Returns `true` if there are no active field errors. Useful for conditionally disabling UI. |
 | `getErrors()` | Returns the current map of field errors, keyed by field name. |
 
-## Block submission with a validator
+## Block data submission with a validator
 
 Use `registerValidation` to prevent saving when required fields are missing. Collect errors into an object, record them via `setError`, and return `false` to block the save.
 
@@ -98,7 +98,7 @@ return validation.registerValidation(async () => {
 
 ## Add inline field errors
 
-The API stores errors by field name but does not render them or trigger re-renders. To display errors next to fields, maintain your own `fieldErrors` state and keep it in sync with the API.
+The API stores errors by field name but doesn't render them or trigger re-renders. To display errors next to fields, maintain your own `fieldErrors` state and keep it in sync with the API.
 
 A `validateField` helper updates both at once. Call it in `onBlur` handlers so errors appear as the user moves between fields. The registered validator re-runs all checks on submit, resetting `fieldErrors` to the current state of every field — catching anything the user never blurred.
 
@@ -173,6 +173,6 @@ export function ConfigEditor({ options, onOptionsChange, validation }: DataSourc
 }
 ```
 
-## See also
+## Related documentation
 
-- [Error handling in data source plugins](./error-handling-in-data-source-plugins.md)
+For information about error handling, refer to [Error handling in data source plugins](./error-handling-in-data-source-plugins.md).
