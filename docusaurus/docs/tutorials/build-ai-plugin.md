@@ -15,7 +15,7 @@ keywords:
  
 # Build a plugin with AI
  
-This tutorial shows you how to build a Grafana plugin by prompting an AI coding assistant step by step. You create a data source plugin for the Barcelona Bicing API, and then create an app plugin that uses that data source to show station data in a list and on a map.
+This tutorial shows you how to build a Grafana plugin by prompting an AI coding assistant step by step. First, you create a data source plugin using the Barcelona Bicing API, and then you create an app plugin that uses that data source to show station data in a list and on a map.
  
 In this tutorial, you'll:
  
@@ -25,10 +25,12 @@ In this tutorial, you'll:
 1. Prompt the AI tool to build the app views.
 1. Optionally, you can prompt the AI tool to add an AI feature inside the app.
 
-## Working with AI
+:::note
 
 When working with AI, you're steering the wheel! **Do not to let AI guess**. Instead, give it clear prompts, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
  
+:::
+
 ## Prerequisites
  
 Before you begin:
@@ -38,19 +40,16 @@ Before you begin:
 - Install [Docker](https://docs.docker.com/get-docker/).
 - Install [Go](https://go.dev/) and [Mage](https://magefile.org/) for the data source backend.
 - Have an AI coding assistant available in your editor or terminal.
-- Register for an access token at the [Barcelona Open Data portal](https://opendata-ajuntament.barcelona.cat/es/tokens). You need this token to authenticate requests to the Bicing API.
+- No access token is required for the endpoints used in this tutorial.
  
 This tutorial uses the following API details:
- 
-- Base URL: `<API_BASE_URL>` (available from the [Barcelona Open Data portal](https://opendata-ajuntament.barcelona.cat/data/es/dataset/estat-estacions-bicing) after token registration)
-- Authorization header: `Authorization: Bearer <YOUR_ACCESS_TOKEN>`
-- Endpoints:
-  - `GET /station_information`
-  - `GET /station_status`
+
+- Station information URL: `https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_information`
+- Station status URL: `https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_status`
  
 ## 1. Create the data source plugin scaffold
  
-Scaffold a data source plugin with a backend:
+Scaffold a data source plugin (in this case, called `bcapi`) with a backend:
  
 ```sh
 npx @grafana/create-plugin@latest --plugin-type=datasource --backend --plugin-name=bcapi --org-name=myorg
@@ -99,9 +98,9 @@ Verify that the scaffold loads:
  
 You don't see real data at this point. This is expected.
  
-## 2. Give the AI the source of truth
+## 2. Give your AI agent the data source of truth
  
-Before you ask the AI to change code, paste this prompt into your AI tool:
+Before you ask your AI agent to change code, paste this prompt into your AI tool:
  
 ```text
 I am building a Grafana plugin around the Barcelona Bicing API.
@@ -111,17 +110,13 @@ Do not invent API fields, routes, or Grafana plugin APIs.
 If something is unclear, ask me a short question instead of guessing.
  
 Facts you must use:
-- Base URL: <API_BASE_URL>
-- Auth header: Authorization: Bearer <YOUR_ACCESS_TOKEN>
-- Endpoints:
-  - GET /station_information
-  - GET /station_status
+- Station information URL: https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_information
+- Station status URL: https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_status
 - Both endpoints return a response wrapper with data.stations
  
 Data source plugin requirements:
 - Keep API requests in the Go backend component
-- Add a config editor with a base API URL field (no default value — the user must enter it)
-- Store the API token in secureJsonData
+- Add a config editor with station information URL and station status URL fields (no default values)
 - Add a query editor with two query types: station_status and station_information
 - If station_information is selected, let the user choose a station from a dropdown
 - Return Grafana data frames
@@ -134,7 +129,7 @@ App plugin requirements:
 - The app should later add a second page with a map view
 ```
  
-This prompt gives the AI the constraints it needs before you ask it to write code.
+**This prompt gives the AI the constraints it needs before you ask it to write code.**
  
 ## 3. Prompt the AI to build the data source
  
@@ -150,11 +145,9 @@ Tasks:
 Requirements:
 - Use the backend component in Go for all API requests
 - Keep the plugin as a data source plugin with backend support
-- Add a config editor with a base API URL field (no default — the user enters the URL from the Barcelona Open Data portal)
-- Store the API token in secureJsonData
+- Add a config editor with station information URL and station status URL fields (no default values)
 - Add a query editor with two query types: station_status and station_information
 - If station_information is selected, let the user choose a station from a dropdown
-- Use Authorization: Bearer <token from secureJsonData> when calling the API
 - Unwrap data.stations from the API response
 - Return Grafana data frames that Grafana can render
 - Add a health check for Save & Test
@@ -173,7 +166,6 @@ Implement the plan now.
  
 Keep these rules in place:
 - Backend requests only
-- secureJsonData for the API key
 - no invented API fields
 - use station_id when joining station data
 ```
@@ -182,17 +174,16 @@ Keep these rules in place:
  
 Check that:
  
-- `src/plugin.json` still describes a data source plugin with a backend
-- the config editor stores the base URL in `jsonData`
-- the API key is stored in `secureJsonData`
-- the query editor exposes `station_status` and `station_information`
-- the backend calls the API and unwraps `data.stations`
-- the plugin returns Grafana data frames
-- **Save & Test** runs a real health check
+- `src/plugin.json` still describes a data source plugin with a backend.
+- The config editor stores the station information URL and station status URL in `jsonData`.
+- The query editor exposes `station_status` and `station_information`.
+- The backend calls the API and unwraps `data.stations`.
+- The plugin returns Grafana data frames.
+- **Save & Test** runs a real health check.
  
 ### Verify the data source in Grafana
  
-If the AI changed Go files, stop the running Grafana process and start it again:
+If the AI changed any Go files, stop the running Grafana process and start it again:
  
 ```sh
 npm run server
@@ -201,7 +192,7 @@ npm run server
 Then verify the result:
  
 1. Open your data source settings in Grafana.
-1. Enter the base URL from the Barcelona Open Data portal and your access token.
+1. Enter the station information URL and station status URL.
 1. Click **Save & Test**.
 1. Open **Explore** and run both query types.
  
@@ -287,7 +278,7 @@ Keep these rules in place:
  
 ## 6. Prompt the AI to add the map page
  
-Once the list page works, use this prompt:
+After the list page works, use this prompt:
  
 ```text
 Add a second page to this Grafana app plugin.
@@ -371,25 +362,10 @@ Stop the AI and correct the prompt. For this tutorial, the app plugin must read 
  
 If you're using an AI coding assistant to follow this tutorial, keep your context short and factual:
  
-- Cache only verified facts: base URL (entered by the user), auth header, endpoint names, plugin IDs, and restart rules.
+- Cache only verified facts: station information URL, station status URL, endpoint names, plugin IDs, and restart rules.
 - Re-read the current query model before editing the query editor or backend.
-- Treat `secureJsonData` as mandatory for secrets, not a suggestion.
 - If the app starts making direct API calls, classify that as drift and repair it.
 - After each milestone, compress the state into five facts or fewer before the next prompt.
- 
-## Summary
- 
-In this tutorial, you used prompts to build a Grafana plugin with AI.
- 
-You:
- 
-- Scaffolded a data source plugin with a backend component.
-- Prompted the AI to implement the data source.
-- Scaffolded an app plugin.
-- Prompted the AI to add a list page and a map page.
-- Optionally, prompted the AI to add an AI feature inside the app.
- 
-The important part is not which AI tool you use. The important part is giving it precise prompts, keeping it grounded in Grafana plugin APIs, and verifying each milestone in Grafana.
  
 ## Next steps
  
