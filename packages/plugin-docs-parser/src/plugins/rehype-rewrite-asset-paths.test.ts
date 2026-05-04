@@ -172,12 +172,50 @@ describe('rehypeRewriteAssetPaths', () => {
       expect(node.properties.src).toBe(`${baseWithFile}/examples/img/foo.png`);
     });
 
-    it('should not crash on a leading-slash file (invalid input, best-effort)', () => {
+    it('should tolerate a leading-slash file (normalized away)', () => {
       const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: '/examples/azure.md' });
       const node = img('img/foo.png');
+      t(tree(node));
 
-      expect(() => t(tree(node))).not.toThrow();
-      expect(typeof node.properties.src).toBe('string');
+      expect(node.properties.src).toBe(`${baseWithFile}/examples/img/foo.png`);
+    });
+
+    it('should tolerate Windows-style backslash separators in file', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'examples\\azure.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/examples/img/foo.png`);
+    });
+
+    it('should tolerate mixed slashes in file', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'a\\b/c/page.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/a/b/c/img/foo.png`);
+    });
+  });
+
+  describe('skip behavior for non-relative srcs', () => {
+    const t = rehypeRewriteAssetPaths({ assetBaseUrl: 'https://cdn.example.com/docs', file: 'examples/azure.md' });
+
+    it.each([
+      'mailto:hello@example.com',
+      'ftp://files.example.com/x.png',
+      'irc://example.com',
+      'tel:+1234567890',
+      'javascript:alert(1)',
+    ])('should leave %s untouched', (src) => {
+      const node = img(src);
+      t(tree(node));
+      expect(node.properties.src).toBe(src);
+    });
+  });
+
+  describe('protocol-relative assetBaseUrl', () => {
+    it('should throw when assetBaseUrl is protocol-relative', () => {
+      expect(() => rehypeRewriteAssetPaths({ assetBaseUrl: '//cdn.example.com/docs' })).toThrow(/protocol-relative/);
     });
   });
 
