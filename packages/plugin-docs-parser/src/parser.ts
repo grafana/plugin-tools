@@ -21,10 +21,19 @@ export type { Heading } from './types.js';
 export interface ParseOptions {
   /**
    * Base URL for resolving relative image/asset paths.
-   * When set, relative image src attributes are rewritten to absolute CDN URLs.
+   * When set, relative image src attributes are rewritten.
+   * Must be an absolute URL or a root-relative path.
    * Example: "https://plugins-cdn.grafana-dev.net/my-plugin/1.0.0/public/plugins/my-plugin/docs"
    */
   assetBaseUrl?: string;
+
+  /**
+   * Path to the doc file relative to the docs root, forward-slash separated, no leading slash
+   * (e.g. "examples/azure.md"). Pass `Page.file` from the manifest. When set, relative image
+   * srcs resolve from the doc file's directory rather than from `assetBaseUrl`. Has no effect
+   * when `assetBaseUrl` is omitted.
+   */
+  file?: string;
 }
 
 /**
@@ -90,7 +99,10 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
 
   // rewrite asset paths before sanitization so URLs are final
   if (options?.assetBaseUrl) {
-    processor.use(rehypeRewriteAssetPaths, { assetBaseUrl: options.assetBaseUrl });
+    processor.use(rehypeRewriteAssetPaths, {
+      assetBaseUrl: options.assetBaseUrl,
+      file: options.file,
+    });
   }
 
   // rewrite relative .md links to clean URLs

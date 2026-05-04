@@ -94,4 +94,119 @@ describe('rehypeRewriteAssetPaths', () => {
 
     expect(node.properties.src).toBeUndefined();
   });
+
+  describe('with file option (per-page resolution)', () => {
+    const baseWithFile = 'https://cdn.example.com/foo/docs';
+
+    it('should resolve relative src from the doc file directory, not the docs root', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'examples/azure.md' });
+      const node = img('img/screenshot.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/examples/img/screenshot.png`);
+    });
+
+    it('should normalize ./ in relative srcs', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'examples/azure.md' });
+      const node = img('./img/screenshot.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/examples/img/screenshot.png`);
+    });
+
+    it('should resolve ../ relative srcs against the parent directory', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'examples/azure.md' });
+      const node = img('../shared/logo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/shared/logo.png`);
+    });
+
+    it('should resolve from assetBaseUrl when file is at the root', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'index.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/img/foo.png`);
+    });
+
+    it('should resolve from assetBaseUrl when file is empty', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: '' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/img/foo.png`);
+    });
+
+    it('should leave absolute and special srcs untouched even with file set', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'examples/azure.md' });
+      const inputs = [
+        'https://example.com/logo.png',
+        'http://example.com/logo.png',
+        '//example.com/logo.png',
+        '/absolute.png',
+        'data:image/png;base64,iVBORw0KGgo=',
+        'blob:http://localhost:3000/abc',
+      ];
+
+      for (const src of inputs) {
+        const node = img(src);
+        t(tree(node));
+        expect(node.properties.src).toBe(src);
+      }
+    });
+
+    it('should handle a deeply nested file path', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: 'a/b/c/page.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/a/b/c/img/foo.png`);
+    });
+
+    it('should handle assetBaseUrl with a trailing slash', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile + '/', file: 'examples/azure.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe(`${baseWithFile}/examples/img/foo.png`);
+    });
+
+    it('should not crash on a leading-slash file (invalid input, best-effort)', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: baseWithFile, file: '/examples/azure.md' });
+      const node = img('img/foo.png');
+
+      expect(() => t(tree(node))).not.toThrow();
+      expect(typeof node.properties.src).toBe('string');
+    });
+  });
+
+  describe('with root-relative assetBaseUrl (CLI use case)', () => {
+    it('should resolve relative srcs against the doc file directory and produce a root-relative URL', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: '/', file: 'examples/azure.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe('/examples/img/foo.png');
+    });
+
+    it('should resolve from a root-relative subpath', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: '/static/docs', file: 'examples/azure.md' });
+      const node = img('img/foo.png');
+      t(tree(node));
+
+      expect(node.properties.src).toBe('/static/docs/examples/img/foo.png');
+    });
+
+    it('should leave non-relative srcs untouched', () => {
+      const t = rehypeRewriteAssetPaths({ assetBaseUrl: '/', file: 'examples/azure.md' });
+      const inputs = ['https://example.com/x.png', 'data:image/png;base64,iVBORw0KGgo=', '/already/absolute.png'];
+
+      for (const src of inputs) {
+        const node = img(src);
+        t(tree(node));
+        expect(node.properties.src).toBe(src);
+      }
+    });
+  });
 });

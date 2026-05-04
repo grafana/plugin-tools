@@ -160,7 +160,13 @@ export async function startServer(options: ServerOptions): Promise<Server> {
         return;
       }
 
-      const parsed = parseMarkdown(fileContent);
+      // route through the parser's asset rewriting so local preview exercises the same
+      // code path as production. assetBaseUrl '/' produces root-relative srcs which the
+      // express.static handler at the docs root serves unchanged.
+      const parsed = parseMarkdown(fileContent, {
+        assetBaseUrl: '/',
+        file: page.file,
+      });
       const title = page.title || slug;
 
       res.render('docs-layout', {
