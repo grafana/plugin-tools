@@ -61,7 +61,7 @@ export default [
     name: '009-remove-tsconfig-baseurl',
     version: '7.4.1',
     description:
-      'Replace deprecated baseUrl compiler option in .config/tsconfig.json with an equivalent paths catch-all.',
+      'Fix TypeScript 6 compatibility: baseUrl is deprecated in TS6 (error TS5101) and must be replaced with an equivalent paths entry to preserve non-relative import resolution.',
     scriptPath: import.meta.resolve('./scripts/009-remove-tsconfig-baseurl.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
