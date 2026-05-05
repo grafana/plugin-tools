@@ -168,13 +168,20 @@ export class AlertRuleEditPage extends GrafanaPage {
           return;
         }
 
-        let body: { results: { [key: string]: { status: number } } } = await response.json();
-        const statuses = Object.keys(body.results).map((key) => body.results[key].status);
+        try {
+          const body: { results?: { [key: string]: { status: number } } } = await response.json();
+          const results = body.results ?? {};
+          const statuses = Object.values(results)
+            .map((r) => r?.status)
+            .filter((s): s is number => typeof s === 'number');
 
-        await route.fulfill({
-          response,
-          status: statuses.every((status) => status >= 200 && status < 300) ? 200 : statuses[0],
-        });
+          await route.fulfill({
+            response,
+            status: statuses.length > 0 && statuses.every((s) => s >= 200 && s < 300) ? 200 : (statuses[0] ?? 200),
+          });
+        } catch {
+          await route.fulfill({ response });
+        }
       });
     }
     const responsePromise = this.ctx.page.waitForResponse(

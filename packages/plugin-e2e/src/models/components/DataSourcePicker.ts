@@ -15,6 +15,10 @@ export class DataSourcePicker extends ScopedComponent {
       datasourcePicker = this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
         root: this.root,
       }).locator('input');
+    } else if (this.root && (await datasourcePicker.count()) === 0) {
+      // In some Grafana versions the datasource picker is rendered outside the scoped root
+      // (e.g. Grafana 13.x Enterprise alerting renders it above the query-editor-row)
+      datasourcePicker = this.ctx.page.getByTestId(this.ctx.selectors.components.DataSourcePicker.inputV2);
     }
 
     await expect(datasourcePicker).toBeVisible();
