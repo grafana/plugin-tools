@@ -57,6 +57,13 @@ export default [
       'Harden bundle-stats/bundle-size workflow permissions: contents permission was set to write but only read access is required; restricted to read for least-privilege.',
     scriptPath: import.meta.resolve('./scripts/008-bundle-stats-permissions.js'),
   },
+  {
+    name: '009-remove-tsconfig-baseurl',
+    version: '7.4.1',
+    description:
+      'Replace deprecated baseUrl compiler option in .config/tsconfig.json with an equivalent paths catch-all.',
+    scriptPath: import.meta.resolve('./scripts/009-remove-tsconfig-baseurl.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
