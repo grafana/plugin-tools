@@ -1,5 +1,6 @@
 import { PluginTestCtx } from '../types';
 import { DataSourcePicker } from './components/DataSourcePicker';
+import { TimeRange } from './components/TimeRange';
 
 /**
  * Factory for components that are not attached to a specific page.
@@ -18,8 +19,10 @@ import { DataSourcePicker } from './components/DataSourcePicker';
  */
 export class Components {
   readonly dataSourcePicker: DataSourcePicker;
+  readonly timeRangePicker: TimeRange;
 
   constructor(ctx: PluginTestCtx) {
     this.dataSourcePicker = new DataSourcePicker(ctx);
+    this.timeRangePicker = new TimeRange(ctx);
   }
 }
