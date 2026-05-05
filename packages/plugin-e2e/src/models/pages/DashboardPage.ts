@@ -181,7 +181,14 @@ export class DashboardPage extends GrafanaPage {
       }
     }
 
-    if (semver.gte(this.ctx.grafanaVersion, '13.0.0')) {
+    // Grafana 13.0+ uses a new sidebar UI when the dashboardNewLayouts toggle is on.
+    // When the toggle is off, Grafana 13 still renders the legacy toolbar UI, so we
+    // fall through to the >= 9.5.0 branch below.
+    const useNewSidebarLayout =
+      semver.gte(this.ctx.grafanaVersion, '13.0.0') &&
+      (await isLegacyFeatureEnabled(this.ctx.page, 'dashboardNewLayouts'));
+
+    if (useNewSidebarLayout) {
       await this.ctx.page.waitForSelector(resolveGrafanaSelector(this.ctx.selectors.components.Sidebar.container));
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
       if (!(await newPanelButton.isVisible())) {
