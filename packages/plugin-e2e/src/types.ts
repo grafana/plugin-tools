@@ -443,9 +443,9 @@ export type PluginFixture = {
    *
    * @example
    * ```typescript
-   * test('my test', async ({ components, page }) => {
-   *   const picker = components.getDataSourcePicker();
-   *   await picker.set('gdev-prometheus');
+   * test('my test', async ({ components }) => {
+   *   await components.dataSourcePicker.set('gdev-prometheus');
+   *   await components.dataSourcePicker.within(someLocator).set('gdev-tempo');
    * });
    * ```
    */
