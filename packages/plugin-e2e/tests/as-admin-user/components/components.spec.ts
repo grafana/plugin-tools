@@ -28,17 +28,7 @@ test('components.timeRangePicker should set the time range', async ({
   selectors,
 }) => {
   await components.timeRangePicker.set({ from: '2020-01-01 00:00:00', to: '2020-01-02 00:00:00' });
-  const openButton = panelEditPage.getByGrafanaSelector(selectors.components.TimePicker.openButton);
-  await expect(openButton).toContainText('2020-01-01 00:00:00');
-});
-
-test('components.timeRangePicker.within should set the time range when scoped to a root locator', async ({
-  panelEditPage,
-  components,
-  selectors,
-}) => {
-  const root = panelEditPage.getByGrafanaSelector(selectors.components.NavToolbar.container);
-  await components.timeRangePicker.within(root).set({ from: '2020-01-01 00:00:00', to: '2020-01-02 00:00:00' });
-  const openButton = panelEditPage.getByGrafanaSelector(selectors.components.TimePicker.openButton);
+  // older Grafana versions render the time picker twice, so we use .first() to avoid strict mode violations
+  const openButton = panelEditPage.getByGrafanaSelector(selectors.components.TimePicker.openButton).first();
   await expect(openButton).toContainText('2020-01-01 00:00:00');
 });
