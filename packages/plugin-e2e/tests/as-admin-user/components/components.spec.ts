@@ -1,4 +1,3 @@
-import * as semver from 'semver';
 import { expect, test } from '../../../src';
 
 test('components.dataSourcePicker should set the data source', async ({
@@ -39,15 +38,10 @@ test('components.timeRangePicker.within should set the time range when scoped to
   readProvisionedDashboard,
   components,
   selectors,
-  grafanaVersion,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
-  // NavToolbar.container was introduced in Grafana 9.4.0; use the legacy PageToolbar for older versions
-  const root = semver.gte(grafanaVersion, '9.4.0')
-    ? dashboardPage.getByGrafanaSelector(selectors.components.NavToolbar.container)
-    : dashboardPage.getByGrafanaSelector(selectors.components.PageToolbar.container);
-  await components.timeRangePicker.within(root).set({ from: '2020-01-01 00:00:00', to: '2020-01-02 00:00:00' });
+  await components.timeRangePicker.within(dashboardPage.toolbar).set({ from: '2020-01-01 00:00:00', to: '2020-01-02 00:00:00' });
   const openButton = dashboardPage.getByGrafanaSelector(selectors.components.TimePicker.openButton).first();
   await expect(openButton).toContainText('2020-01-01 00:00:00');
 });

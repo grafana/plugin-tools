@@ -55,6 +55,19 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
+   * Returns a locator for the dashboard toolbar.
+   *
+   * Resolves to `NavToolbar.container` on Grafana ≥ 9.4.0 (when it was introduced),
+   * and falls back to `PageToolbar.container` on older versions.
+   */
+  get toolbar() {
+    const { components } = this.ctx.selectors;
+    return semver.gte(this.ctx.grafanaVersion, '9.4.0')
+      ? this.getByGrafanaSelector(components.NavToolbar.container)
+      : this.ctx.page.locator('.page-toolbar');
+  }
+
+  /**
    * Scrolls the page viewport-by-viewport to trigger below-fold panel queries.
    *
    * In Grafana 13.x with scenes, panels are lazy-rendered: VizPanel content isn't mounted
