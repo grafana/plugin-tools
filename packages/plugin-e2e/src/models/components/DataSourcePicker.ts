@@ -15,12 +15,6 @@ export class DataSourcePicker extends ScopedComponent {
       datasourcePicker = this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
         root: this.root,
       }).locator('input');
-    } else if (this.root && (await datasourcePicker.count()) === 0) {
-      // The input wasn't found inside the scoped root, so fall back to a page-wide search.
-      // This can happen when Grafana moves the picker to a higher level in the component tree
-      // than the root that was passed in — for example, Grafana 13 Enterprise's alerting editor
-      // renders the datasource picker above (outside) the query-editor-row container.
-      datasourcePicker = this.ctx.page.getByTestId(this.ctx.selectors.components.DataSourcePicker.inputV2);
     }
 
     await expect(datasourcePicker).toBeVisible();

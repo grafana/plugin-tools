@@ -15,10 +15,8 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  * 1. Legacy: Added directly to the window.grafanaBootData.settings.featureToggles object via init script
  * 2. OpenFeature: Intercepted and merged into OFREP API responses (Grafana 12.1.0+)
  *
- * The `featureToggles` option uses both approaches: the legacy init script (all versions) and OFREP
- * interception (Grafana 12.1.0+). The dual injection prevents the server's OFREP bulk-evaluation
- * response from overriding the bootData values after the app loads.
- * The `openFeature` option uses OFREP API interception only and requires Grafana >= 12.1.0.
+ * The `featureToggles` option uses the legacy approach only.
+ * The `openFeature` option uses OFREP API interception and requires Grafana >= 12.1.0.
  *
  * page.addInitScript adds a script which would be evaluated in one of the following scenarios:
  * - Whenever the page is navigated.
@@ -31,15 +29,9 @@ export const page: PageFixture = async (
   use
 ) => {
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
+  const mergedFlags = { ...DEFAULT_OPEN_FEATURE_FLAGS, ...openFeature.flags };
+  const hasOpenFeature = Object.keys(mergedFlags).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;
-
-  // Merge featureToggles into OFREP flags so that Grafana 12.1.0+ runtime OFREP
-  // evaluation reflects the same values as the bootData override. Without this,
-  // the server's OFREP bulk-evaluation response can override bootData values (e.g.
-  // tlsEnabled, alertingQueryAndExpressionsStepMode) after the app has loaded.
-  // openFeature.flags takes highest precedence; DEFAULT_OPEN_FEATURE_FLAGS is baseline.
-  const mergedFlags = { ...DEFAULT_OPEN_FEATURE_FLAGS, ...featureToggles, ...openFeature.flags };
-  const hasOFREPFlags = Object.keys(mergedFlags).length > 0;
 
   // set up legacy feature toggle overrides via init script
   if (hasFeatureToggles || hasUserPreferences) {
@@ -51,8 +43,8 @@ export const page: PageFixture = async (
   }
 
   // set up OpenFeature OFREP route interception BEFORE navigation
-  // only runs if there are flags to inject and Grafana version >= 12.1.0
-  if (hasOFREPFlags && gte(grafanaVersion, '12.1.0')) {
+  // only runs if openFeature flags are provided and Grafana version >= 12.1.0
+  if (hasOpenFeature && gte(grafanaVersion, '12.1.0')) {
     await setupOpenFeatureRoutes(page, mergedFlags, openFeature.latency ?? 0, selectors);
   }
 
