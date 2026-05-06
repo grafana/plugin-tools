@@ -534,7 +534,7 @@ jobs:
           repo_secrets: |
             GITHUB_APP_ID=plugins-platform-bot-app:app_id
             GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
-            SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url
+            SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url_fp
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
           export_env: false
 
