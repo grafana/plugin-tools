@@ -23,6 +23,7 @@ export const isFaroSetup = (config: FaroConfig) =>
 // Enqueue all rudderstack requests until it is loaded and consent is granted
 let rudderstack: Partial<RudderStack> = {};
 let rudderQueue = [];
+let trackingInitialized = false;
 const rudderMethods = ['page', 'track', 'identify', 'reset'];
 for (const method of rudderMethods) {
   rudderstack[method] = (...args) => {
@@ -49,9 +50,10 @@ export function startTracking(
   faroConfig: FaroConfig,
   shouldTrack: boolean
 ) {
-  if (!shouldTrack) {
+  if (!shouldTrack || trackingInitialized) {
     return;
   }
+  trackingInitialized = true;
 
   if (isRudderstackSetup(rudderStackConfig)) {
     const { writeKey, url, configUrl } = rudderStackConfig;
