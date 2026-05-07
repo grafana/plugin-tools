@@ -55,6 +55,23 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
+   * Returns a locator for the dashboard toolbar area that contains the time range controls.
+   *
+   * - Grafana ≥ 11.1.0: resolves to `Dashboard.Controls` (scenes-based dashboard controls bar)
+   * - Grafana 9.4.0–11.0.x: resolves to `NavToolbar.container`
+   * - Grafana < 9.4.0: falls back to `.page-toolbar`
+   */
+  get toolbar() {
+    const { components, pages } = this.ctx.selectors;
+    if (semver.gte(this.ctx.grafanaVersion, '11.1.0')) {
+      return this.getByGrafanaSelector(pages.Dashboard.Controls);
+    }
+    return semver.gte(this.ctx.grafanaVersion, '9.4.0')
+      ? this.getByGrafanaSelector(components.NavToolbar.container)
+      : this.ctx.page.locator('.page-toolbar');
+  }
+
+  /**
    * Scrolls the page viewport-by-viewport to trigger below-fold panel queries.
    *
    * In Grafana 13.x with scenes, panels are lazy-rendered: VizPanel content isn't mounted
