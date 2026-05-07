@@ -1,3 +1,21 @@
+# (Wed May 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.7.1`
+  - Chore: Update slider selector [#2604](https://github.com/grafana/plugin-tools/pull/2604) ([@ashharrison90](https://github.com/ashharrison90))
+  - Plugin E2E: Fix addPanel timeout when dashboardNewLayouts is disabled [#2612](https://github.com/grafana/plugin-tools/pull/2612) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@7.3.1`
+  - fix: override moduleResolution in scaffolded ts-node config [#2610](https://github.com/grafana/plugin-tools/pull/2610) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
 # (Thu Apr 30 2026)
 
 #### 🚀 Enhancement
@@ -1315,7 +1333,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.1.13`
-  - Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
+  - Create Plugin: remove types/testing-library\_\_jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
 
 #### Authors: 1
 
@@ -1436,8 +1454,6 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 ##### Authors: 1
 
 - Jack Westbrook ([@&#8203;jackw](https://redirect.github.com/jackw))
-
-***
 
 ---
 

@@ -1,3 +1,17 @@
+# v3.7.1 (Wed May 06 2026)
+
+#### 🐛 Bug Fix
+
+- Chore: Update slider selector [#2604](https://github.com/grafana/plugin-tools/pull/2604) ([@ashharrison90](https://github.com/ashharrison90))
+- Plugin E2E: Fix addPanel timeout when dashboardNewLayouts is disabled [#2612](https://github.com/grafana/plugin-tools/pull/2612) ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v3.7.0 (Thu Apr 30 2026)
 
 #### 🐛 Bug Fix
