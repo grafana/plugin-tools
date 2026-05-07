@@ -1457,8 +1457,6 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
----
-
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.1.6`
