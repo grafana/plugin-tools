@@ -23,7 +23,7 @@
   ],
   "separateMajorMinor": false,
   "skipInstalls": false,
-  "reviewers": ["team:grafana/plugins-platform-frontend"],
+  "reviewers": ["team:grafana/grafana-catalog"],
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
   "github-actions": {
     "managerFilePatterns": [
