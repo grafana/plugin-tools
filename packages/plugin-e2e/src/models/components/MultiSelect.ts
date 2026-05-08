@@ -9,6 +9,15 @@ export class MultiSelect extends ComponentBase {
     super(ctx, element);
   }
 
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    return base.locator('[class*="-grafana-select-value-container-multi"]');
+  }
+
+  within(root: Locator): MultiSelect {
+    return new MultiSelect(this.ctx, MultiSelect.getContainer(this.ctx, root));
+  }
+
   async selectOptions(values: string[], options?: SelectOptionsType): Promise<string[]> {
     const menu = await openSelect(this, options);
 
