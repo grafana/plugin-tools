@@ -10,6 +10,15 @@ export class ColorPicker extends ComponentBase {
     super(ctx, element);
   }
 
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    return base.locator('[data-testid*="colorswatch"]');
+  }
+
+  within(root: Locator): ColorPicker {
+    return new ColorPicker(this.ctx, ColorPicker.getContainer(this.ctx, root));
+  }
+
   async selectOption(rgbOrHex: string, options?: SelectOptionsType): Promise<void> {
     await this.element.getByRole('button').click(options);
     await this.getCustomTab().click(options);

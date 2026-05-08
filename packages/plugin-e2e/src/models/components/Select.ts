@@ -9,6 +9,18 @@ export class Select extends ComponentBase {
     super(ctx, element);
   }
 
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    // TODO: add data-testid branch for >= 13.1.0 once @grafana/e2e-selectors is updated
+    return base.locator(
+      '[class*="-grafana-select-value-container"]:not([class*="-grafana-select-value-container-multi"])'
+    );
+  }
+
+  within(root: Locator): Select {
+    return new Select(this.ctx, Select.getContainer(this.ctx, root));
+  }
+
   async selectOption(values: string, options?: SelectOptionsType): Promise<string> {
     const menu = await openSelect(this, options);
     // type into whichever input gained focus when the select opened - handles virtualized

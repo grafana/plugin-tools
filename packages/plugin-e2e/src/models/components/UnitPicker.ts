@@ -8,6 +8,15 @@ export class UnitPicker extends ComponentBase {
     super(ctx, element);
   }
 
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    return base.locator('div:has(> div > [data-testid="input-wrapper"] input[placeholder="Choose"])');
+  }
+
+  within(root: Locator): UnitPicker {
+    return new UnitPicker(this.ctx, UnitPicker.getContainer(this.ctx, root));
+  }
+
   async selectOption(value: string, options?: SelectOptionsType): Promise<void> {
     await this.element.getByRole('textbox').click();
     const option = await this.getOption(value, options);

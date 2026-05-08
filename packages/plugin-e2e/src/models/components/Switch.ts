@@ -12,6 +12,18 @@ export class Switch extends ComponentBase {
     this.group = group;
   }
 
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '12.0.0')) {
+      return base.locator('div:has(> input[type="checkbox"][role="switch"])');
+    }
+    return base.locator('div:has(> input[type="checkbox"] + label)');
+  }
+
+  within(root: Locator): Switch {
+    return new Switch(this.ctx, Switch.getContainer(this.ctx, root));
+  }
+
   private static getElement(ctx: PluginTestCtx, group: Locator): Locator {
     if (gte(ctx.grafanaVersion, '11.5.0')) {
       return group.getByRole('switch');
