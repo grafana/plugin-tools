@@ -66,7 +66,7 @@ export default [
   },
   {
     name: '009-ts-node-nodenext',
-    version: '7.3.1',
+    version: '7.4.1',
     description:
       'Fix ts-node compatibility with the latest @grafana/tsconfig: outdated module/moduleResolution/target overrides break TypeScript 5/6 builds, replaced with nodenext/nodenext/es2022.',
     scriptPath: import.meta.resolve('./scripts/009-ts-node-nodenext.js'),
