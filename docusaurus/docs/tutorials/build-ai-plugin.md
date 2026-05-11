@@ -13,27 +13,20 @@ keywords:
   - app
 ---
  
-# Build a plugin with AI
+# Build a plugin with AI 
  
 This tutorial shows you how to build a Grafana plugin by prompting an AI coding assistant step by step. First, you create a data source plugin using the Barcelona Bicing API, and then you create an app plugin that uses that data source to show station data in a list and on a map.
  
 In this tutorial, you'll:
  
-1. Scaffold a data source plugin with a backend component.
-1. Prompt an AI tool to implement the data source.
-1. Scaffold an app plugin.
-1. Prompt the AI tool to build the app views.
-1. Optionally, you can prompt the AI tool to add an AI feature inside the app.
+1. [Scaffold a data source plugin with a backend component](#1-create-the-data-source-plugin-scaffold).
+1. [Prompt your AI tool to implement the data source](#2-prompt-your-ai-tool-to-implement-the-data-source).
+1. [Scaffold an app plugin](#3-create-the-app-plugin-scaffold).
+1. [Prompt your AI tool to build the app views](#4-prompt-your-ai-tool-to-build-the-app-list-view).
 
-:::note
-
-When working with AI, you're steering the wheel! **Do not to let AI guess**. Instead, give it clear prompts, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
+## Before you begin
  
-:::
-
-## Prerequisites
- 
-Before you begin:
+Before you begin, make sure to:
  
 - Install Grafana v10.0 or later.
 - Install a current LTS version of Node.js.
@@ -46,7 +39,21 @@ This tutorial uses the following API details:
 
 - Station information URL: `https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_information`
 - Station status URL: `https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_status`
+
+### Useful tips to work with AI agents
+
+When working with AI, you're steering the wheel! 
+
+**Do not to let the AI tool guess**. Instead, give it clear prompts with guidelines and constraints, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
+
+These patterns help keep the AI useful:
  
+- **Start with facts**: Give the API contract, plugin type, and hard constraints first.
+- **Ask for a short plan**: This helps catch drift before the AI edits files.
+- **Tell it what not to do**: For example, no invented API fields and no direct app-to-API calls.
+- **Ask it to name files before editing**: This makes review easier.
+- **Keep prompts milestone-sized**: One milestone for the data source, one for the list page, one for the map page.
+
 ## 1. Create the data source plugin scaffold
  
 Scaffold a data source plugin (in this case, called `bcapi`) with a backend:
@@ -97,9 +104,9 @@ Verify that the scaffold loads:
 1. Open **Explore** and select the data source.
  
 You don't see real data at this point. This is expected.
- 
-## 2. Give your AI agent the data source of truth
- 
+
+## 2. Prompt your AI tool to implement the data source
+
 Before you ask your AI agent to change code, paste this prompt into your AI tool:
  
 ```text
@@ -129,11 +136,7 @@ App plugin requirements:
 - The app should later add a second page with a map view
 ```
  
-**This prompt gives the AI the constraints it needs before you ask it to write code.**
- 
-## 3. Prompt the AI to build the data source
- 
-Use this prompt in the data source plugin directory:
+Next, prompt the AI to build the data source in the data source plugin directory:
  
 ```text
 Help me build this Grafana data source plugin.
@@ -202,7 +205,7 @@ If everything works, you see live station data.
 Frontend changes usually appear through the watcher. Backend changes don't. If the AI edits Go files, restart Grafana before you debug anything else.
 :::
  
-## 4. Create the app plugin scaffold
+## 3. Create the app plugin scaffold
  
 Create an app plugin:
  
@@ -228,11 +231,13 @@ Start Grafana:
 ```sh
 npm run server
 ```
- 
+
+## 4. Prompt your AI tool to build the app list view
+
+:::note 
 Before you prompt the AI, make sure your data source plugin is available in the same Grafana environment.
- 
-## 5. Prompt the AI to build the app list view
- 
+:::
+
 Use this prompt in the app plugin directory:
  
 ```text
@@ -247,6 +252,7 @@ Requirements:
 - Let me select the Bicing data source at the top of the page
 - Default to the first matching data source instance if one exists
 - Use the data source plugin to query station data
+- Query through the data source plugin
 - Do not make direct HTTP requests to the Bicing API from the app
 - Show the list of stations
 - Show station details when I hover over a station
@@ -257,18 +263,7 @@ Important constraints:
 - Do not bypass the data source plugin
 - Tell me which files you plan to change before editing them
 ```
- 
-If your AI tool needs a second prompt to proceed, use:
- 
-```text
-Implement the plan now.
- 
-Keep these rules in place:
-- query through the data source plugin
-- no direct API calls from the app
-- keep the first page simple
-```
- 
+
 ### Verify the list view
  
 1. Open **Apps** and navigate to your app.
@@ -276,7 +271,7 @@ Keep these rules in place:
 1. Confirm that the app reads from the data source.
 1. Hover over a station and verify that details appear.
  
-## 6. Prompt the AI to add the map page
+### Prompt the AI to add the map page
  
 After the list page works, use this prompt:
  
@@ -303,35 +298,6 @@ Then verify the result:
 1. Verify that stations appear on the map.
 1. Verify that hover details match the station data.
  
-## 7. Prompt the AI to add an AI feature (optional)
- 
-After the base app works, you can add an AI-powered feature inside the plugin.
- 
-Use this prompt:
- 
-```text
-Add a station insight feature to the map page.
- 
-Requirements:
-- When a user clicks a station marker, use @grafana/llm to ask for a short explanation about that station and how to use it
-- Use a non-streaming API
-- Show a useful loading state and error state
-- Do not block the rest of the map UI while waiting for the response
-- Keep the map usable even if the LLM feature fails
-```
- 
-Before you do this, ensure your Grafana instance has the Grafana LLM app installed and configured. For more information, refer to [Use LLMs and Grafana MCP in Grafana app plugins](../how-to-guides/app-plugins/use-llms-and-mcp.md).
- 
-## 8. Prompt patterns that work well
- 
-These patterns help keep the AI useful:
- 
-- **Start with facts**: Give the API contract, plugin type, and hard constraints first.
-- **Ask for a short plan**: This helps catch drift before the AI edits files.
-- **Tell it what not to do**: For example, no invented API fields and no direct app-to-API calls.
-- **Ask it to name files before editing**: This makes review easier.
-- **Keep prompts milestone-sized**: One milestone for the data source, one for the list page, one for the map page.
- 
 ## Troubleshooting
  
 ### The data source shows no data right after scaffolding
@@ -357,15 +323,6 @@ Try the following:
 ### The AI starts bypassing the data source
  
 Stop the AI and correct the prompt. For this tutorial, the app plugin must read station data through the data source plugin. Don't let the app call the Bicing API directly.
- 
-## Notes for AI coding assistants
- 
-If you're using an AI coding assistant to follow this tutorial, keep your context short and factual:
- 
-- Cache only verified facts: station information URL, station status URL, endpoint names, plugin IDs, and restart rules.
-- Re-read the current query model before editing the query editor or backend.
-- If the app starts making direct API calls, classify that as drift and repair it.
-- After each milestone, compress the state into five facts or fewer before the next prompt.
  
 ## Next steps
  
