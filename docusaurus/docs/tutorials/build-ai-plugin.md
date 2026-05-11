@@ -152,7 +152,7 @@ Data source plugin requirements:
 - Keep API requests in the Go backend component
 - Add a config editor with station information URL and station status URL fields (no default values)
 - Add a query editor with two query types: station_status and station_information
-- If station_information is selected, let the user choose a station from a dropdown
+- If `station_information` is selected, let the user choose a station from a dropdown
 - Return Grafana data frames
 - Add a working Save & Test health check
  
@@ -244,7 +244,7 @@ Create an app plugin:
 npx @grafana/create-plugin@latest --plugin-type=app --plugin-name=bcapi --org-name=myorg --no-backend
 ```
  
-Move into the new app plugin directory and install dependencies:
+Move into the new app plugin directory and install the dependencies:
  
 ```sh
 cd myorg-bcapi-app
