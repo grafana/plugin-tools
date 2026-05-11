@@ -12,9 +12,9 @@ export class RadioGroup extends ComponentBase {
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
     if (gte(ctx.grafanaVersion, '10.0.0')) {
-      return base.locator('[role="radiogroup"]');
+      return base.locator('[role="radiogroup"]').first();
     }
-    return base.locator('div:has(> div > input[type="radio"][name^="radiogroup-"])');
+    return base.locator('div:has(> div > input[type="radio"][name^="radiogroup-"])').first();
   }
 
   within(root: Locator): RadioGroup {

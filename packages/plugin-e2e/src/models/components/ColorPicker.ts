@@ -15,7 +15,7 @@ export class ColorPicker extends ComponentBase {
     // The colorswatch data-testid lives on the swatch element itself, but
     // selectOption() and toHaveColor() expect the parent container that
     // wraps the swatch button and its sibling color-value span.
-    return base.locator('[data-testid*="colorswatch"]').locator('xpath=..');
+    return base.locator('[data-testid*="colorswatch"]').locator('xpath=..').first();
   }
 
   within(root: Locator): ColorPicker {
