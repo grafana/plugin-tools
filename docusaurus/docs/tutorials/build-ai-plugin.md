@@ -33,18 +33,21 @@ Before you begin, make sure to:
 - Install [Docker](https://docs.docker.com/get-docker/).
 - Install [Go](https://go.dev/) and [Mage](https://magefile.org/) for the data source backend.
 - Have an AI coding assistant available in your editor or terminal.
-- No access token is required for the endpoints used in this tutorial.
  
 This tutorial uses the following API details:
 
 - Station information URL: `https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_information`
 - Station status URL: `https://barcelona.publicbikesystem.net/customer/ube/gbfs/v1/en/station_status`
 
-### Useful tips to work with AI agents
+No access token is required for the endpoints used in this tutorial.
 
-When working with AI, you're steering the wheel! 
+### Useful tips to work with AI tools
 
-**Do not to let the AI tool guess**. Instead, give it clear prompts with guidelines and constraints, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
+:::important
+**Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
+:::
+
+When working with AI, you're steering the wheel! Do not to let your AI tool guess. Instead, give it clear prompts with guidelines and constraints, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
 
 These patterns help keep the AI useful:
  
@@ -55,27 +58,39 @@ These patterns help keep the AI useful:
 - **Keep prompts milestone-sized**: One milestone for the data source, one for the list page, one for the map page.
 
 ## 1. Create the data source plugin scaffold
- 
+
+:::important
+**Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
+:::
+
+### Scaffold the plugin and build the frontend 
+
 Scaffold a data source plugin (in this case, called `bcapi`) with a backend:
  
 ```sh
 npx @grafana/create-plugin@latest --plugin-type=datasource --backend --plugin-name=bcapi --org-name=myorg
 ```
  
-Move into the plugin directory and install dependencies:
+Move into the plugin directory, install the dependencies, and follow any other prompt to update or fix your setup.
  
 ```sh
-cd myorg-bcapi-datasource
+cd ./myorg-bcapi-datasource
 npm install
 ```
  
-Start the frontend watcher:
+Build the frontend watcher:
  
 ```sh
 npm run dev
 ```
- 
-The Grafana development server runs in a Docker Linux container, so the backend binary must target Linux regardless of your local operating system.
+
+**Keep this terminal tab open and open a new one to continue**.
+
+### Build the plugin backend and start the development server
+
+The Grafana development server runs in a Docker Linux container, so the backend binary must target Linux regardless of your local operating system. 
+
+**Open a new terminal tab** and run the following to build the plugin backend code: 
 
 On x86_64:
 
@@ -88,13 +103,25 @@ On Arm64:
 ```sh
 mage -v build:linuxARM64
 ```
- 
-Start Grafana:
+
+:::note
+Re-run this command every time you edit your backend files.
+:::
+
+Start the Grafana development server:
  
 ```sh
 npm run server
 ```
- 
+
+Or, direvtly with Docker:
+
+```sh
+docker compose up
+```
+
+### Open Grafana
+
 Open Grafana at [http://localhost:3000](http://localhost:3000).
  
 Verify that the scaffold loads:
@@ -206,7 +233,11 @@ Frontend changes usually appear through the watcher. Backend changes don't. If t
 :::
  
 ## 3. Create the app plugin scaffold
- 
+
+:::important
+**Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
+:::
+
 Create an app plugin:
  
 ```sh
@@ -226,7 +257,7 @@ Start the frontend watcher:
 npm run dev
 ```
  
-Start Grafana:
+**In a different tab**, start the Grafana development server:
  
 ```sh
 npm run server
