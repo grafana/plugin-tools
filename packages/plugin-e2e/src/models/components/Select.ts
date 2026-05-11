@@ -12,9 +12,11 @@ export class Select extends ComponentBase {
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
     // TODO: add data-testid branch for >= 13.1.0 once @grafana/e2e-selectors is updated
-    return base.locator(
-      '[class*="-grafana-select-value-container"]:not([class*="-grafana-select-value-container-multi"])'
-    );
+    // The CSS class targets the value container itself, but toHaveSelected uses a
+    // descendant query starting from that class, so the element must be a parent.
+    return base
+      .locator('[class*="-grafana-select-value-container"]:not([class*="-grafana-select-value-container-multi"])')
+      .locator('xpath=..');
   }
 
   within(root: Locator): Select {

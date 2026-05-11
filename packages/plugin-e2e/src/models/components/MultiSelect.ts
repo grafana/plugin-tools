@@ -11,7 +11,9 @@ export class MultiSelect extends ComponentBase {
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
-    return base.locator('[class*="-grafana-select-value-container-multi"]');
+    // The CSS class targets the value container itself, but toHaveSelected uses a
+    // descendant query starting from that class, so the element must be a parent.
+    return base.locator('[class*="-grafana-select-value-container-multi"]').locator('xpath=..');
   }
 
   within(root: Locator): MultiSelect {
