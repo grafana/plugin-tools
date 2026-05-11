@@ -1,19 +1,15 @@
 import * as semver from 'semver';
-import { PluginTestCtx, TimeRangeArgs } from '../../types';
-import { GrafanaPage } from '../pages/GrafanaPage';
+import { TimeRangeArgs } from '../../types';
+import { ScopedComponent } from './ScopedComponent';
 
-export class TimeRange extends GrafanaPage {
-  constructor(ctx: PluginTestCtx) {
-    super(ctx);
-  }
-
+export class TimeRange extends ScopedComponent {
   /**
    * Opens the time picker and sets the time range to the provided values
    */
   async set({ from, to, zone }: TimeRangeArgs) {
     const { TimeZonePicker, TimePicker, Select } = this.ctx.selectors.components;
     try {
-      await this.getByGrafanaSelector(TimePicker.openButton).click();
+      await this.getByGrafanaSelector(TimePicker.openButton, { root: this.root }).click();
     } catch (e) {
       // seems like in older versions of Grafana the time picker markup is rendered twice
       await this.ctx.page.locator('[aria-controls="TimePickerContent"]').last().click();

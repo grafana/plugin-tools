@@ -104,11 +104,12 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/data-source-plugins/add-default-variables-and-links',
         'how-to-guides/data-source-plugins/convert-a-frontend-datasource-to-backend',
         'how-to-guides/data-source-plugins/create-data-frames',
+        'how-to-guides/data-source-plugins/validate-config-editor-fields',    
         'how-to-guides/data-source-plugins/error-handling',
         'how-to-guides/data-source-plugins/fetch-data-from-frontend',
         'how-to-guides/data-source-plugins/include-dashboards',
         'how-to-guides/data-source-plugins/profile-backend-plugin',
-        'how-to-guides/data-source-plugins/sql-requirements',
+        'how-to-guides/data-source-plugins/sql-requirements',    
       ],
     },
 

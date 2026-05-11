@@ -1,3 +1,27 @@
+# v7.3.1 (Wed May 06 2026)
+
+#### 🐛 Bug Fix
+
+- fix: override moduleResolution in scaffolded ts-node config [#2610](https://github.com/grafana/plugin-tools/pull/2610) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 1
+
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# v7.3.0 (Thu Apr 30 2026)
+
+#### 🐛 Bug Fix
+
+- CI: bump plugin-actions/e2e-version to v2.0.0 [#2594](https://github.com/grafana/plugin-tools/pull/2594) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v7.2.2 (Sat Apr 25 2026)
 
 #### 🐛 Bug Fix
@@ -683,7 +707,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 #### 🐛 Bug Fix
 
-- Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
+- Create Plugin: remove types/testing-library\_\_jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
 
 #### Authors: 1
 

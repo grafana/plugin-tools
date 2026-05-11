@@ -1,3 +1,40 @@
+# (Wed May 06 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.7.1`
+  - Chore: Update slider selector [#2604](https://github.com/grafana/plugin-tools/pull/2604) ([@ashharrison90](https://github.com/ashharrison90))
+  - Plugin E2E: Fix addPanel timeout when dashboardNewLayouts is disabled [#2612](https://github.com/grafana/plugin-tools/pull/2612) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@7.3.1`
+  - fix: override moduleResolution in scaffolded ts-node config [#2610](https://github.com/grafana/plugin-tools/pull/2610) ([@tolzhabayev](https://github.com/tolzhabayev))
+
+#### Authors: 3
+
+- Ashley Harrison ([@ashharrison90](https://github.com/ashharrison90))
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Timur Olzhabayev ([@tolzhabayev](https://github.com/tolzhabayev))
+
+---
+
+# (Thu Apr 30 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/tsconfig@2.1.0`
+  - feat: add support for Typescript 6 [#2595](https://github.com/grafana/plugin-tools/pull/2595) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.3.0`, `@grafana/plugin-e2e@3.7.0`
+  - CI: bump plugin-actions/e2e-version to v2.0.0 [#2594](https://github.com/grafana/plugin-tools/pull/2594) ([@sunker](https://github.com/sunker))
+
+#### Authors: 2
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Sat Apr 25 2026)
 
 #### 🐛 Bug Fix
@@ -1296,7 +1333,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 #### 🐛 Bug Fix
 
 - `@grafana/create-plugin@6.1.13`
-  - Create Plugin: remove types/testing-library__jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
+  - Create Plugin: remove types/testing-library\_\_jest-dom [#2250](https://github.com/grafana/plugin-tools/pull/2250) ([@jackw](https://github.com/jackw))
 
 #### Authors: 1
 
@@ -1417,8 +1454,6 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 ##### Authors: 1
 
 - Jack Westbrook ([@&#8203;jackw](https://redirect.github.com/jackw))
-
-***
 
 ---
 
