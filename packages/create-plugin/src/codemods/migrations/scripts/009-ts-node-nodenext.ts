@@ -7,9 +7,9 @@ const FORMATTING_OPTIONS = {
   formattingOptions: { insertSpaces: true, tabSize: 2 },
 };
 
-const UPDATES: Array<{ key: string; oldValue: string; newValue: string }> = [
+const UPDATES: Array<{ key: string; oldValue?: string; newValue: string }> = [
   { key: 'module', oldValue: 'commonjs', newValue: 'nodenext' },
-  { key: 'moduleResolution', oldValue: 'node', newValue: 'nodenext' },
+  { key: 'moduleResolution', newValue: 'nodenext' },
   { key: 'target', oldValue: 'es5', newValue: 'es2022' },
 ];
 
@@ -22,9 +22,11 @@ export default function migrate(context: Context) {
   let next = original;
 
   for (const { key, oldValue, newValue } of UPDATES) {
-    const oldPattern = `"${key}": "${oldValue}"`;
-    if (!next.includes(oldPattern)) {
-      continue;
+    if (oldValue !== undefined) {
+      const oldPattern = `"${key}": "${oldValue}"`;
+      if (!next.includes(oldPattern)) {
+        continue;
+      }
     }
     next = applyEdits(next, modify(next, ['ts-node', 'compilerOptions', key], newValue, FORMATTING_OPTIONS));
   }

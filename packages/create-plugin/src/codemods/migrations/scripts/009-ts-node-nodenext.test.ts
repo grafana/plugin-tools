@@ -88,8 +88,11 @@ describe('009-ts-node-nodenext', () => {
     expect(result.hasChanges()).toBe(false);
   });
 
-  it('should leave user-customised values untouched and only update keys at known-old values', () => {
-    const partiallyCustomised = SCAFFOLDED_TSCONFIG.replace('"target": "es5"', '"target": "es2020"');
+  it('should leave user-customised module/target untouched but always force moduleResolution to nodenext', () => {
+    const partiallyCustomised = SCAFFOLDED_TSCONFIG.replace('"target": "es5"', '"target": "es2020"').replace(
+      '"moduleResolution": "node"',
+      '"moduleResolution": "bundler"'
+    );
 
     const context = new Context('/virtual');
     context.addFile('.config/tsconfig.json', partiallyCustomised);
@@ -100,6 +103,7 @@ describe('009-ts-node-nodenext', () => {
     expect(updated).toContain('"module": "nodenext"');
     expect(updated).toContain('"moduleResolution": "nodenext"');
     expect(updated).toContain('"target": "es2020"');
+    expect(updated).not.toContain('"moduleResolution": "bundler"');
     expect(updated).not.toContain('"target": "es2022"');
   });
 });
