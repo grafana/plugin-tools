@@ -16,7 +16,8 @@ export class Select extends ComponentBase {
     // descendant query starting from that class, so the element must be a parent.
     return base
       .locator('[class*="-grafana-select-value-container"]:not([class*="-grafana-select-value-container-multi"])')
-      .locator('xpath=..');
+      .locator('xpath=..')
+      .first();
   }
 
   within(root: Locator): Select {

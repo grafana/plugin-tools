@@ -10,7 +10,7 @@ export class UnitPicker extends ComponentBase {
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
-    return base.locator('div:has(> div > [data-testid="input-wrapper"] input[placeholder="Choose"])');
+    return base.locator('div:has(> div > [data-testid="input-wrapper"] input[placeholder="Choose"])').first();
   }
 
   within(root: Locator): UnitPicker {
