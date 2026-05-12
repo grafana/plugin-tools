@@ -14,7 +14,9 @@ export class RadioGroup extends ComponentBase {
     if (gte(ctx.grafanaVersion, '10.0.0')) {
       return base.locator('[role="radiogroup"]').first();
     }
-    return base.locator('div:has(> div > input[type="radio"][name^="radiogroup-"])').first();
+    return base
+      .locator('div:has(> input[type="radio"]), div:has(> div > input[type="radio"])')
+      .first();
   }
 
   within(root: Locator): RadioGroup {
