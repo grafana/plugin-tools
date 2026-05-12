@@ -31,7 +31,7 @@ Before you begin, make sure to:
 - Install Grafana v10.0 or later.
 - Install a current LTS version of Node.js.
 - Install [Docker](https://docs.docker.com/get-docker/).
-- Install [Go](https://go.dev/) and [Mage](https://magefile.org/) for the data source backend.
+- Install [Go](https://go.dev/) and [Mage](https://magefile.org/) for the data source plugin backend.
 - Have an AI coding assistant available in your editor or terminal.
  
 This tutorial uses the following API details:
@@ -65,7 +65,7 @@ These patterns help keep the AI useful:
 
 ### Scaffold the plugin and build the frontend 
 
-Scaffold a data source plugin (in this case, called `bcapi`) with a backend:
+Scaffold a data source plugin (in this case, let's call it `bcapi`) with a backend component:
  
 ```sh
 npx @grafana/create-plugin@latest --plugin-type=datasource --backend --plugin-name=bcapi --org-name=myorg
@@ -114,7 +114,7 @@ Start the Grafana development server:
 npm run server
 ```
 
-Or, direvtly with Docker:
+Or, start it directly with Docker:
 
 ```sh
 docker compose up
@@ -130,11 +130,13 @@ Verify that the scaffold loads:
 1. Add your new data source.
 1. Open **Explore** and select the data source.
  
+:::note
 You don't see real data at this point. This is expected.
+:::
 
 ## 2. Prompt your AI tool to implement the data source
 
-Before you ask your AI agent to change code, paste this prompt into your AI tool:
+Before you ask your AI agent to change any code, paste this prompt into your AI tool:
  
 ```text
 I am building a Grafana plugin around the Barcelona Bicing API.
@@ -219,7 +221,7 @@ If the AI changed any Go files, stop the running Grafana process and start it ag
 npm run server
 ```
  
-Then verify the result:
+Next verify the result:
  
 1. Open your data source settings in Grafana.
 1. Enter the station information URL and station status URL.
