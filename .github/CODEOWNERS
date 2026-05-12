@@ -3,7 +3,7 @@
 /packages/plugin-docs-parser/ @grafana/grafana-catalog
 /packages/plugin-docs-cli/ @grafana/grafana-catalog
 /packages/plugin-e2e/ @grafana/grafana-catalog
-/packages/plugin-types-bundler/ @grafana/grafana-catalog
+/packages/plugin-types-bundler/ @grafana/grafana-frontend-platform
 /packages/react-detect/ @grafana/grafana-frontend-platform
 /packages/sign-plugin/ @grafana/grafana-catalog
 /packages/tsconfig/ @grafana/grafana-frontend-platform
