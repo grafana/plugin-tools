@@ -50,6 +50,13 @@ export default [
       'Add setupTests.d.ts for @testing-library/jest-dom types and remove @types/testing-library__jest-dom npm package.',
     scriptPath: import.meta.resolve('./scripts/007-remove-testing-library-types.js'),
   },
+  {
+    name: '008-bundle-stats-permissions',
+    version: '7.3.2',
+    description:
+      'Harden ./.github/workflows/bundle-stats.yml: contents permission was set to write but only read access is required; restricted to read for least-privilege.',
+    scriptPath: import.meta.resolve('./scripts/008-bundle-stats-permissions.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
