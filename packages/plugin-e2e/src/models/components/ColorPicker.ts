@@ -11,15 +11,14 @@ export class ColorPicker extends ComponentBase {
   }
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
-    const base = root ?? ctx.page;
-    // The colorswatch data-testid lives on the swatch element itself, but
-    // selectOption() and toHaveColor() expect the parent container that
-    // wraps the swatch button and its sibling color-value span.
-    return base.locator('[data-testid*="colorswatch"]').locator('xpath=..').first();
+    if (root) {
+      return root;
+    }
+    return ctx.page.locator('[data-testid*="colorswatch"]').locator('xpath=..').first();
   }
 
   within(root: Locator): ColorPicker {
-    return new ColorPicker(this.ctx, ColorPicker.getContainer(this.ctx, root));
+    return new ColorPicker(this.ctx, root);
   }
 
   async selectOption(rgbOrHex: string, options?: SelectOptionsType): Promise<void> {
