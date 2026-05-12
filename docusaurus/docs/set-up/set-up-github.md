@@ -169,7 +169,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
   actions: read
 
@@ -181,7 +181,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: grafana/plugin-actions/bundle-size@main
+      - uses: grafana/plugin-actions/bundle-size@bundle-size/v1.0.2
 ```
 
 ### Troubleshooting
