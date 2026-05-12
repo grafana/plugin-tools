@@ -1,3 +1,17 @@
+# v3.7.2 (Tue May 12 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Select MultiSelect options sequentially [#2626](https://github.com/grafana/plugin-tools/pull/2626) (marcusandersson@Marcuss-MBP.lan)
+- Update dependency @grafana/e2e-selectors to v13.1.0-25644485979 [#2623](https://github.com/grafana/plugin-tools/pull/2623) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 2
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v3.7.1 (Wed May 06 2026)
 
 #### 🐛 Bug Fix
