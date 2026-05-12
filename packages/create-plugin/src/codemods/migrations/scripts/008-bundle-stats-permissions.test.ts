@@ -88,6 +88,27 @@ jobs:
     expect(context.getFile(workflowPath)).toBe(original);
   });
 
+  it('should not modify anything if permissions.contents is none', async () => {
+    const context = new Context('/virtual');
+    const original = `name: Bundle Stats
+on: [pull_request]
+permissions:
+  contents: none
+  pull-requests: write
+  actions: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+`;
+    context.addFile(workflowPath, original);
+
+    await migrate(context);
+
+    expect(context.getFile(workflowPath)).toBe(original);
+  });
+
   it('should update permissions.contents from write to read', async () => {
     const context = new Context('/virtual');
     context.addFile(

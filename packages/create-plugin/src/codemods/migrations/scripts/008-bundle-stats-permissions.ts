@@ -16,11 +16,7 @@ export default async function migrate(context: Context) {
 
   const workflowDoc = parseDocument(workflowContent);
 
-  if (!workflowDoc.hasIn(['permissions', 'contents'])) {
-    return context;
-  }
-
-  if (workflowDoc.getIn(['permissions', 'contents']) === 'read') {
+  if (workflowDoc.getIn(['permissions', 'contents']) !== 'write') {
     return context;
   }
 
