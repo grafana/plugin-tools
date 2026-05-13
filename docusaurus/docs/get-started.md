@@ -8,7 +8,7 @@ keywords:
   - plugin
   - create-plugin
   - getting started
-slug: /  
+slug: /
 ---
 
 import ScaffoldNPM from '@shared/createplugin-scaffold.md';
@@ -46,7 +46,7 @@ If this is your first time creating a plugin, we recommend that you familiarize 
 
 ## Signature classifications of Grafana plugins
 
-Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins. 
+Familiarize yourself with the signature classifications of Grafana plugins, such as the distinction between private and public plugins.
 
 Note that if you want to publish a plugin associated with a commercial offering to the official Grafana catalog, a paid subscription is typically required. Learn more about [Grafana's plugins policy](https://grafana.com/legal/plugins/).
 
@@ -93,7 +93,11 @@ You'll need to have the following tools set up:
 
 #### Supported package managers
 
-When you first run `@grafana/create-plugin`, choose your package manager: `npm`, `pnpm`, or `yarn`.
+`@grafana/create-plugin` officially supports the following Node package managers:
+
+- `npm` (>=10.0.0)
+- `pnpm` (>=10.0.0)
+- `yarn` (>=4.0.0)
 
 :::note
 The Yarn commands on this website are compatible with Yarn Berry (>=2.0.0). If you are using Yarn 1.x.x we suggest you upgrade to [Yarn Berry](https://yarnpkg.com/migration/guide). Alternatively you can use `yarn create @grafana/plugin` to run commands with Yarn 1.x.x.
