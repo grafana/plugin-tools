@@ -135,8 +135,7 @@ function getActionsForTemplateFolder({
 }) {
   let files = glob.sync(`${folderPath}/**`, { dot: true });
 
-  // The npmrc file is only useful for `pnpm` settings. We can remove it for other package managers.
-  if (templateData.packageManagerName !== 'pnpm') {
+  if (templateData.packageManagerName !== 'npm') {
     files = files.filter((file) => path.basename(file) !== 'npmrc');
   }
 
