@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import migrate from './009-ts-node-nodenext.js';
+import migrate from './010-ts-node-nodenext.js';
 import { Context } from '../../context.js';
 
 const SCAFFOLDED_TSCONFIG = `/*

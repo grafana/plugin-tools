@@ -65,11 +65,11 @@ export default [
     scriptPath: import.meta.resolve('./scripts/009-remove-tsconfig-baseurl.js'),
   },
   {
-    name: '009-ts-node-nodenext',
+    name: '010-ts-node-nodenext',
     version: '7.4.1',
     description:
       'Fix ts-node compatibility with the latest @grafana/tsconfig: outdated module/moduleResolution/target overrides break TypeScript 5/6 builds, replaced with nodenext/nodenext/es2022.',
-    scriptPath: import.meta.resolve('./scripts/009-ts-node-nodenext.js'),
+    scriptPath: import.meta.resolve('./scripts/010-ts-node-nodenext.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
