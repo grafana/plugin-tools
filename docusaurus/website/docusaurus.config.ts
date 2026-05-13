@@ -1,7 +1,6 @@
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
 import dotenv from 'dotenv';
-// @ts-expect-error - no types available for this package
 import remarkFigureCaption from 'gridsome-remark-figure-caption';
 import npm2yarn from '@docusaurus/remark-plugin-npm2yarn';
 import { resolve } from 'node:path';
