@@ -24,9 +24,18 @@ export async function configureYarn(cwd: string, packageManagerVersion: string) 
         shell: true,
         cwd,
       });
-      return 'Configured Yarn Berry to use node_modules (PnP is not supported)';
+      spawnSync('yarn', ['config', 'set', 'executeScripts', 'false'], {
+        shell: true,
+        cwd,
+      });
+      return 'Configured Yarn Berry to use node_modules and disabled script execution during installation.';
     }
-    return '';
+    spawnSync('yarn', ['config', 'set', 'ignore-scripts', 'true'], {
+      shell: true,
+      cwd,
+    });
+
+    return 'Configured Yarn to ignore scripts during installation.';
   } catch (error) {
     throw new Error(
       'There was an error configuring Yarn. Please run `yarn set version stable && yarn config set nodeLinker node-modules` in your plugin directory.'
