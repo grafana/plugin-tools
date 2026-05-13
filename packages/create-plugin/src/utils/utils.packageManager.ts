@@ -9,36 +9,31 @@ const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
 const YARN_LOCKFILE = 'yarn.lock';
 const SUPPORTED_PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'];
-const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'yarn', packageManagerVersion: '1.22.22' };
+const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'npm', packageManagerVersion: '10.9.0' };
 
 export type PackageManager = {
   packageManagerName: string;
   packageManagerVersion: string;
 };
 
-export async function configureYarn(cwd: string, packageManagerVersion: string) {
+export async function configureYarn(cwd: string) {
   try {
-    const isYarnBerry = gte(packageManagerVersion, '2.0.0');
-    if (isYarnBerry) {
-      spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
-        shell: true,
-        cwd,
-      });
-      spawnSync('yarn', ['config', 'set', 'enableScripts', 'false'], {
-        shell: true,
-        cwd,
-      });
-      return 'Configured Yarn Berry to use node_modules and disabled script execution during installation.';
-    }
-    spawnSync('yarn', ['config', 'set', 'ignore-scripts', 'true'], {
+    spawnSync('yarn', ['set', 'version', 'stable'], {
       shell: true,
       cwd,
     });
-
-    return 'Configured Yarn to ignore scripts during installation.';
+    spawnSync('yarn', ['config', 'set', 'nodeLinker', 'node-modules'], {
+      shell: true,
+      cwd,
+    });
+    spawnSync('yarn', ['config', 'set', 'enableScripts', 'false'], {
+      shell: true,
+      cwd,
+    });
+    return 'Configured Yarn Berry to use node_modules and disabled script execution during installation.';
   } catch (error) {
     throw new Error(
-      'There was an error configuring Yarn. Please run `yarn set version stable && yarn config set nodeLinker node-modules` in your plugin directory.'
+      'There was an error configuring Yarn. Please run `yarn set version stable && yarn config set nodeLinker node-modules && yarn config set enableScripts false` in your plugin directory.'
     );
   }
 }
