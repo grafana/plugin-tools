@@ -1,3 +1,15 @@
+# v7.4.0 (Wed May 13 2026)
+
+#### 🚀 Enhancement
+
+- feat: harden bundle-stats workflow permissions [#2627](https://github.com/grafana/plugin-tools/pull/2627) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.3.1 (Wed May 06 2026)
 
 #### 🐛 Bug Fix
