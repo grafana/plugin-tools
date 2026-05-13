@@ -30,7 +30,12 @@ export async function configureYarn(cwd: string) {
       shell: true,
       cwd,
     });
-    return 'Configured Yarn Berry to use node_modules and disabled script execution during installation.';
+    // TODO: Remove this once grafana/react-data-grid is published to NPM.
+    spawnSync('yarn', ['config', 'set', 'approvedGitRepositories', '--json', `'["https://github.com/grafana/*"]'`], {
+      shell: true,
+      cwd,
+    });
+    return 'Configured Yarn Berry to use node_modules, disabled script execution, and set approved Git repositories.';
   } catch (error) {
     throw new Error(
       'There was an error configuring Yarn. Please run `yarn set version stable && yarn config set nodeLinker node-modules && yarn config set enableScripts false` in your plugin directory.'
