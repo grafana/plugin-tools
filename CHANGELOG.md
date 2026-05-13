@@ -2,6 +2,19 @@
 
 #### 🚀 Enhancement
 
+- `@grafana/create-plugin@7.5.0`
+  - feat: disable package manager script execution [#2630](https://github.com/grafana/plugin-tools/pull/2630) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# (Wed May 13 2026)
+
+#### 🚀 Enhancement
+
 - `@grafana/create-plugin@7.4.0`
   - feat: harden bundle-stats workflow permissions [#2627](https://github.com/grafana/plugin-tools/pull/2627) ([@jackw](https://github.com/jackw))
 

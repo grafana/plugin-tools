@@ -1,3 +1,15 @@
+# v7.5.0 (Wed May 13 2026)
+
+#### 🚀 Enhancement
+
+- feat: disable package manager script execution [#2630](https://github.com/grafana/plugin-tools/pull/2630) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.4.0 (Wed May 13 2026)
 
 #### 🚀 Enhancement
