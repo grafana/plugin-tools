@@ -135,7 +135,8 @@ function getActionsForTemplateFolder({
 }) {
   let files = glob.sync(`${folderPath}/**`, { dot: true });
 
-  if (templateData.packageManagerName !== 'npm') {
+  // If the user selected yarn as their package manager, filter out npmrc file from templates since it's only needed for npm/pnpm.
+  if (templateData.packageManagerName === 'yarn') {
     files = files.filter((file) => path.basename(file) !== 'npmrc');
   }
 
