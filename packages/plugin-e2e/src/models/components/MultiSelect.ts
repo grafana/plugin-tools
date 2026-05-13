@@ -12,10 +12,10 @@ export class MultiSelect extends ComponentBase {
   async selectOptions(values: string[], options?: SelectOptionsType): Promise<string[]> {
     const menu = await openSelect(this, options);
 
-    return Promise.all(
-      values.map((value) => {
-        return selectByValueOrLabel(value, menu, this.ctx, options);
-      })
-    );
+    const selected: string[] = [];
+    for (const value of values) {
+      selected.push(await selectByValueOrLabel(value, menu, this.ctx, options));
+    }
+    return selected;
   }
 }

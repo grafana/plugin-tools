@@ -1,3 +1,20 @@
+# (Tue May 12 2026)
+
+#### 🐛 Bug Fix
+
+- chore: add packageManager to package.json [#2628](https://github.com/grafana/plugin-tools/pull/2628) ([@jackw](https://github.com/jackw))
+- `@grafana/plugin-e2e@3.7.2`
+  - Plugin E2E: Select MultiSelect options sequentially [#2626](https://github.com/grafana/plugin-tools/pull/2626) (marcusandersson@Marcuss-MBP.lan)
+  - Update dependency @grafana/e2e-selectors to v13.1.0-25644485979 [#2623](https://github.com/grafana/plugin-tools/pull/2623) ([@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot]))
+
+#### Authors: 3
+
+- [@renovate-sh-app[bot]](https://github.com/renovate-sh-app[bot])
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Wed May 06 2026)
 
 #### 🐛 Bug Fix
