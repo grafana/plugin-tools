@@ -24,7 +24,7 @@ export async function configureYarn(cwd: string, packageManagerVersion: string) 
         shell: true,
         cwd,
       });
-      spawnSync('yarn', ['config', 'set', 'executeScripts', 'false'], {
+      spawnSync('yarn', ['config', 'set', 'enableScripts', 'false'], {
         shell: true,
         cwd,
       });
