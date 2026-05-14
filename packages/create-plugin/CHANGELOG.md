@@ -1,3 +1,15 @@
+# v7.6.0 (Thu May 14 2026)
+
+#### 🚀 Enhancement
+
+- feat: support Typescript 6 [#2614](https://github.com/grafana/plugin-tools/pull/2614) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.5.0 (Wed May 13 2026)
 
 #### 🚀 Enhancement
