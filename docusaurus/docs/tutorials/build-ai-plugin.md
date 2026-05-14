@@ -126,9 +126,9 @@ Open Grafana at [http://localhost:3000](http://localhost:3000).
  
 Verify that the scaffold loads:
  
-1. Open **Connections** > **Data sources**.
+1. Go to **Connections** > **Data sources**.
 1. Add your new data source.
-1. Open **Explore** and select the data source.
+1. Go to **Explore** and select the data source you just created.
  
 :::note
 You don't see real data at this point. This is expected.
@@ -190,57 +190,39 @@ Important constraints:
 - Keep the query model simple and typed
 - Tell me which files you plan to change before editing them
 ```
+
+If the AI changed any Go files, stop the running Grafana process and start it again:
  
-Some AI tools, such as those with an agentic mode, separate the planning phase from editing. If your tool asks you to approve a plan before it makes changes, use this follow-up prompt:
- 
-```text
-Implement the plan now.
- 
-Keep these rules in place:
-- Backend requests only
-- no invented API fields
-- use station_id when joining station data
+```sh
+npm run server
 ```
+
+### Review the data source 
+
+Verify the result:
  
-### What to review after the AI edits the data source
- 
-Check that:
+1. Go to **Connections** > **Data sources** and select the data source.
+1. If missing, enter the station information URL and station status URL.
+1. Click **Save & Test**. If everything works, you see live station data. If there's any errors, run them by your tool until they're fixed.
+1. Go back to **Explore** and run both query types.
+
+As a suggestion, you can check that:
  
 - `src/plugin.json` still describes a data source plugin with a backend.
 - The config editor stores the station information URL and station status URL in `jsonData`.
 - The query editor exposes `station_status` and `station_information`.
 - The backend calls the API and unwraps `data.stations`.
 - The plugin returns Grafana data frames.
-- **Save & Test** runs a real health check.
- 
-### Verify the data source in Grafana
- 
-If the AI changed any Go files, stop the running Grafana process and start it again:
- 
-```sh
-npm run server
-```
- 
-Next verify the result:
- 
-1. Open your data source settings in Grafana.
-1. Enter the station information URL and station status URL.
-1. Click **Save & Test**.
-1. Open **Explore** and run both query types.
- 
-If everything works, you see live station data.
- 
-:::note
-Frontend changes usually appear through the watcher. Backend changes don't. If the AI edits Go files, restart Grafana before you debug anything else.
-:::
- 
+
 ## 3. Create the app plugin scaffold
 
 :::important
 **Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
+
+Make sure your to build the app plugin **in the same Grafana environment** as the data source plugin.
 :::
 
-Create an app plugin:
+In a new terminal, create an app plugin:
  
 ```sh
 npx @grafana/create-plugin@latest --plugin-type=app --plugin-name=bcapi --org-name=myorg --no-backend
@@ -265,11 +247,13 @@ npm run dev
 npm run server
 ```
 
+### Verify the app plugin
+
+In your Grafana instance, go to **Connections** > **Apps** and check the app plugin has been scaffolded.
+
 ## 4. Prompt your AI tool to build the app list view
 
-:::note 
-Before you prompt the AI, make sure your data source plugin is available in the same Grafana environment.
-:::
+### Prompt the AI to add the list view 
 
 Use this prompt in the app plugin directory:
  
@@ -297,16 +281,16 @@ Important constraints:
 - Tell me which files you plan to change before editing them
 ```
 
-### Verify the list view
+#### Verify the list view
  
-1. Open **Apps** and navigate to your app.
+1. Go to **Apps** and navigate to your app.
 1. Confirm that the page loads.
 1. Confirm that the app reads from the data source.
 1. Hover over a station and verify that details appear.
  
 ### Prompt the AI to add the map page
  
-After the list page works, use this prompt:
+After the list page works, use this prompt to add the map view:
  
 ```text
 Add a second page to this Grafana app plugin.
@@ -324,10 +308,11 @@ Important constraints:
 - Keep the changes focused on adding the map page
 ```
  
-Then verify the result:
+#### Verify the map view
  
 1. Reload Grafana.
-1. Open the new map page from the app navigation.
+1. Go to **Apps** and navigate to your app.
+1. Go to the newly created map page from the app navigation.
 1. Verify that stations appear on the map.
 1. Verify that hover details match the station data.
  
@@ -358,6 +343,10 @@ Try the following:
 Stop the AI and correct the prompt. For this tutorial, the app plugin must read station data through the data source plugin. Don't let the app call the Bicing API directly.
  
 ## Next steps
+
+You're done! 
+
+Next, you can:
  
 - [Build a data source plugin](./build-a-data-source-plugin.md)
 - [Build a data source plugin backend component](./build-a-data-source-backend-plugin.md)
