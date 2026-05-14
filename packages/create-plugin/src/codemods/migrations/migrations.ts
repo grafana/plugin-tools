@@ -57,6 +57,20 @@ export default [
       'Harden bundle-stats/bundle-size workflow permissions: contents permission was set to write but only read access is required; restricted to read for least-privilege.',
     scriptPath: import.meta.resolve('./scripts/008-bundle-stats-permissions.js'),
   },
+  {
+    name: '009-remove-tsconfig-baseurl',
+    version: '7.4.1',
+    description:
+      'Fix TypeScript 6 compatibility: baseUrl is deprecated in TS6 (error TS5101) and must be replaced with an equivalent paths entry to preserve non-relative import resolution.',
+    scriptPath: import.meta.resolve('./scripts/009-remove-tsconfig-baseurl.js'),
+  },
+  {
+    name: '010-ts-node-nodenext',
+    version: '7.4.1',
+    description:
+      'Fix ts-node compatibility with the latest @grafana/tsconfig: outdated module/moduleResolution/target overrides break TypeScript 5/6 builds, replaced with nodenext/nodenext/es2022.',
+    scriptPath: import.meta.resolve('./scripts/010-ts-node-nodenext.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
