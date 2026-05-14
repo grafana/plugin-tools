@@ -125,6 +125,6 @@ yarn add @grafana/plugin-e2e@0.3.0-canary.623.aedff75.0
 yarn e2e:plugin
 ```
 
-6. If all tests pass in `grafana/grafana` and the PR in `grafana/plugin-tools` is approved, tag `@grafana/plugins-platform-frontend` and ask them to merge the PR.
+6. If all tests pass in `grafana/grafana` and the PR in `grafana/plugin-tools` is approved, tag `@grafana/grafana-catalog` and ask them to merge the PR.
 
 7. Once the PR is merged, `auto` will publish a patch/minor release to npm. Then you discard changes from step 5, and can go ahead and install the new release of @grafana/plugin-e2e in grafana/grafana.
