@@ -60,7 +60,7 @@ These patterns help keep the AI useful:
 ## 1. Create the data source plugin scaffold
 
 :::important
-**Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
+**Do not let AI bootstrap the plugin. Make sure you're using `create-plugin` to perform the initial scaffolding.**
 :::
 
 ### Scaffold the plugin and build the frontend 
