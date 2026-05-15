@@ -191,7 +191,7 @@ Important constraints:
 - Tell me which files you plan to change before editing them
 ```
 
-If the AI changed any Go files, stop the running Grafana process and start it again:
+Review the changes made, if any Go files have been modified, stop the running Grafana process and start it again:
  
 ```sh
 npm run server
