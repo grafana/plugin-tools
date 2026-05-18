@@ -53,7 +53,7 @@ When working with AI, you're steering the wheel! Do not let your AI tool guess. 
 These patterns help keep the AI useful:
  
 - **Start with facts**: Give the API contract, plugin type, and hard constraints first.
-- **Ask it to for confirm before executing any task**: This helps catch drift before the AI edits files.
+- **Ask it to confirm before executing any task**: This helps catch drift before the AI edits files.
 - **Tell it what not to do**: For example, no invented API fields and no direct app-to-API calls.
 - **Ask it to name files before editing**: This makes review easier.
 - **Keep prompts milestone-sized**: One milestone for the data source, one for the list page, one for the map page.
