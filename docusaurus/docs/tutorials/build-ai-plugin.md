@@ -28,7 +28,7 @@ In this tutorial, you'll:
  
 Before you begin, make sure to:
  
-- Install Grafana v10.0 or later.
+- Install the latest version of Grafana.
 - Install a current LTS version of Node.js.
 - Install [Docker](https://docs.docker.com/get-docker/).
 - Install [Go](https://go.dev/) and [Mage](https://magefile.org/) for the data source plugin backend.
@@ -52,7 +52,7 @@ When working with AI, you're steering the wheel! Do not to let your AI tool gues
 These patterns help keep the AI useful:
  
 - **Start with facts**: Give the API contract, plugin type, and hard constraints first.
-- **Ask for a short plan**: This helps catch drift before the AI edits files.
+- **Ask it to for confirm before executing any task**: This helps catch drift before the AI edits files.
 - **Tell it what not to do**: For example, no invented API fields and no direct app-to-API calls.
 - **Ask it to name files before editing**: This makes review easier.
 - **Keep prompts milestone-sized**: One milestone for the data source, one for the list page, one for the map page.
@@ -127,11 +127,11 @@ Open Grafana at [http://localhost:3000](http://localhost:3000).
 Verify that the scaffold loads:
  
 1. Go to **Connections** > **Data sources**.
-1. Add your new data source.
-1. Go to **Explore** and select the data source you just created.
+1. Look for your new data source.
+1. Go to **Explore** and select the data source you just created. To learn how to query and visualize your data, refer to [Explore your data](https://grafana.com/docs/grafana/latest/visualizations/explore/).
  
 :::note
-You don't see real data at this point. This is expected.
+You don't see real data at this point. This is expected. 
 :::
 
 ## 2. Prompt your AI tool to implement the data source
@@ -157,15 +157,9 @@ Data source plugin requirements:
 - If `station_information` is selected, let the user choose a station from a dropdown
 - Return Grafana data frames
 - Add a working Save & Test health check
- 
-App plugin requirements:
-- The app must use the data source plugin instead of calling the API directly
-- The app should show a station list view
-- The app should show station details on hover
-- The app should later add a second page with a map view
 ```
  
-Next, prompt the AI to build the data source in the data source plugin directory:
+Next, set the AI in plan mode and prompt it to build the data source in the data source plugin directory:
  
 ```text
 Help me build this Grafana data source plugin.
@@ -206,14 +200,6 @@ Verify the result:
 1. Click **Save & Test**. If everything works, you see live station data. If there's any errors, run them by your tool until they're fixed.
 1. Go back to **Explore** and run both query types.
 
-As a suggestion, you can check that:
- 
-- `src/plugin.json` still describes a data source plugin with a backend.
-- The config editor stores the station information URL and station status URL in `jsonData`.
-- The query editor exposes `station_status` and `station_information`.
-- The backend calls the API and unwraps `data.stations`.
-- The plugin returns Grafana data frames.
-
 ## 3. Create the app plugin scaffold
 
 :::important
@@ -249,7 +235,7 @@ npm run server
 
 ### Verify the app plugin
 
-In your Grafana instance, go to **Connections** > **Apps** and check the app plugin has been scaffolded.
+In your Grafana instance, go to **Connections** and check the app plugin has been scaffolded.
 
 ## 4. Prompt your AI tool to build the app list view
 
@@ -318,7 +304,7 @@ Important constraints:
  
 ## Troubleshooting
  
-### The data source shows no data right after scaffolding
+### The data source shows no real data right after scaffolding
  
 This is expected. The scaffold loads, but it does not query a real API yet.
  
@@ -346,9 +332,8 @@ Stop the AI and correct the prompt. For this tutorial, the app plugin must read 
 
 You're done! 
 
-Next, you can:
- 
-- [Build a data source plugin](./build-a-data-source-plugin.md)
-- [Build a data source plugin backend component](./build-a-data-source-backend-plugin.md)
-- [Build an app plugin](./build-an-app-plugin.md)
-- [Use LLMs and Grafana MCP in Grafana app plugins](../how-to-guides/app-plugins/use-llms-and-mcp.md)
+Next, you can learn about:
+
+- [Plugins in Grafana](https://grafana.com/docs/grafana/latest/administration/plugin-management/)
+- [Data visualization](https://grafana.com/docs/grafana/latest/visualizations/) 
+- [Developer resources](https://grafana.com/docs/grafana/latest/developer-resources/)
