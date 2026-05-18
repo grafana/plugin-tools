@@ -79,7 +79,7 @@ cd ./myorg-bcapi-datasource
 npm install
 ```
  
-Build the frontend watcher:
+Start the frontend watcher:
  
 ```sh
 npm run dev
