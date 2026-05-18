@@ -198,7 +198,7 @@ Verify the result:
  
 1. Go to **Connections** > **Data sources** and select the data source.
 1. If missing, enter the station information URL and station status URL.
-1. Click **Save & Test**. If everything works, you see live station data. If there's any errors, run them by your tool until they're fixed.
+1. Click **Save & Test**. If everything works, you see live station data. If there are any errors, run them by your tool until they're fixed.
 1. Go back to **Explore** and run both query types.
 
 ## 3. Create the app plugin scaffold
