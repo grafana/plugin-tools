@@ -206,7 +206,7 @@ Verify the result:
 :::important
 **Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
 
-Make sure your to build the app plugin **in the same Grafana environment** as the data source plugin.
+Make sure you build the app plugin **in the same Grafana environment** as the data source plugin.
 :::
 
 In a new terminal, create an app plugin:
