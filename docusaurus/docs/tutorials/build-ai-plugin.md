@@ -204,8 +204,6 @@ Verify the result:
 ## 3. Create the app plugin scaffold
 
 :::important
-**Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
-
 Make sure you build the app plugin **in the same Grafana environment** as the data source plugin.
 :::
 
@@ -245,7 +243,7 @@ In your Grafana instance, go to **Connections** and check the app plugin has bee
 Use this prompt in the app plugin directory:
  
 ```text
-Help me build this Grafana app plugin.
+Help me build a Grafana app plugin that has the `myorg-bcapi-datasource` data source plugin installed when it starts. 
  
 Tasks:
 1. Review the scaffold and propose a short plan.
@@ -260,6 +258,7 @@ Requirements:
 - Show the list of stations
 - Show station details when I hover over a station
 - Keep the UI simple and easy to verify in Grafana
+- The plugin must run unsigned
  
 Important constraints:
 - Follow the official Grafana plugin documentation
