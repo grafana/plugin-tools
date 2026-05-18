@@ -243,7 +243,7 @@ In your Grafana instance, go to **Connections** and check the app plugin has bee
 Use this prompt in the app plugin directory:
  
 ```text
-Help me build a Grafana app plugin that has the `myorg-bcapi-datasource` data source plugin installed when it starts. 
+Help me build a Grafana app plugin that has the `myorg-bcapi-datasource` data source plugin installed when it starts. Use docker-compose to provision the plugin.
  
 Tasks:
 1. Review the scaffold and propose a short plan.
