@@ -1,4 +1,5 @@
 import { Locator } from '@playwright/test';
+import { gte } from 'semver';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
@@ -11,7 +12,9 @@ export class Select extends ComponentBase {
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
-    // TODO: add data-testid branch for >= 13.1.0 once @grafana/e2e-selectors is updated
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.Select.container)).first();
+    }
     // The CSS class targets the value container itself, but toHaveSelected uses a
     // descendant query starting from that class, so the element must be a parent.
     return base

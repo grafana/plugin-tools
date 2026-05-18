@@ -3,6 +3,7 @@ import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
 import { gte } from 'semver';
+import { resolveGrafanaSelector } from '../utils';
 
 export class RadioGroup extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
@@ -11,6 +12,9 @@ export class RadioGroup extends ComponentBase {
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.RadioGroup.container)).first();
+    }
     if (gte(ctx.grafanaVersion, '10.0.0')) {
       return base.locator('[role="radiogroup"]').first();
     }

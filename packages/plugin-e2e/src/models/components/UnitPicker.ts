@@ -1,7 +1,9 @@
 import { Locator } from '@playwright/test';
+import { gte } from 'semver';
 import { PluginTestCtx } from '../../types';
 import { SelectOptionsType } from './types';
 import { ComponentBase } from './ComponentBase';
+import { resolveGrafanaSelector } from '../utils';
 
 export class UnitPicker extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
@@ -10,6 +12,9 @@ export class UnitPicker extends ComponentBase {
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.UnitPicker.container)).first();
+    }
     return base.locator('div:has(> div > [data-testid="input-wrapper"] input[placeholder="Choose"])').first();
   }
 

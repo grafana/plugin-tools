@@ -3,6 +3,7 @@ import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
 import { gte, lt } from 'semver';
+import { resolveGrafanaSelector } from '../utils';
 
 export class Switch extends ComponentBase {
   private group: Locator;
@@ -14,6 +15,9 @@ export class Switch extends ComponentBase {
 
   static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
     const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.Switch.container)).first();
+    }
     if (gte(ctx.grafanaVersion, '12.0.0')) {
       return base.locator('div:has(> input[type="checkbox"][role="switch"])').first();
     }
