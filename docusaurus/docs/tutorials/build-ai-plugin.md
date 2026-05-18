@@ -5,6 +5,7 @@ sidebar_position: 40
 description: Learn how to build a Grafana data source plugin and app plugin by prompting an AI coding assistant.
 keywords:
   - grafana
+  - claude
   - plugins
   - plugin
   - ai
