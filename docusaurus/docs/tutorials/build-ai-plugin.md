@@ -48,7 +48,7 @@ No access token is required for the endpoints used in this tutorial.
 **Do not let AI bootstrap the plugin. Make sure you're using `create-plugin`.**
 :::
 
-When working with AI, you're steering the wheel! Do not to let your AI tool guess. Instead, give it clear prompts with guidelines and constraints, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
+When working with AI, you're steering the wheel! Do not let your AI tool guess. Instead, give it clear prompts with guidelines and constraints, keep it inside Grafana plugin patterns, and verify each milestone in Grafana before moving on.
 
 These patterns help keep the AI useful:
  
