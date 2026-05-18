@@ -255,8 +255,7 @@ Requirements:
 - Keep only one page in the navigation to start with
 - Let me select the Bicing data source at the top of the page
 - Default to the first matching data source instance if one exists
-- Use the data source plugin to query station data
-- Query through the data source plugin
+- Query station data through the data source plugin
 - Do not make direct HTTP requests to the Bicing API from the app
 - Show the list of stations
 - Show station details when I hover over a station
