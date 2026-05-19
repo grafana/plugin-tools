@@ -70,6 +70,14 @@ export default function catalogDocs(context: Context, options: CatalogDocsOption
   // step 7: bump build-plugin version in release.yml
   bumpBuildPluginVersion(context);
 
+  // step 8: print next-steps summary
+  console.log(`
+Next steps:
+  - Fill in the stub docs under ${docsPath}/ with your plugin's actual content
+  - Run \`npm run docs:serve\` to preview the docs locally
+  - Run \`npm run docs:validate\` to check for issues before pushing
+`);
+
   return context;
 }
 

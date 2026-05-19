@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Context } from '../../../context.js';
 import catalogDocs from './index.js';
 
-// capture the real existsSync before mocking so we can restore it in beforeEach
+// capture the real existsSync before mocking so we can delegate to it in beforeEach
 const { existsSync: realExistsSync } = await vi.importActual<typeof import('node:fs')>('node:fs');
 
 vi.mock('node:fs', async (importOriginal) => {
