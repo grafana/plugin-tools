@@ -11,4 +11,9 @@ export default [
     description: 'Externalizes the react JSX runtime to help migrate plugins to React 19',
     scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
   },
+  {
+    name: 'catalog-docs',
+    description: 'Enables multi-page docs for the Grafana Plugin Catalog',
+    scriptPath: import.meta.resolve('./scripts/catalog-docs/index.js'),
+  },
 ] satisfies Codemod[];
