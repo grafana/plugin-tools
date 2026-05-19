@@ -25,14 +25,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "find-up": "^8.0.0",
-    "minimist": "^1.2.2",
+    "find-up": "7.0.0",
+    "minimist": "1.2.8",
     "proxy-agent": "8.0.1"
   },
   "devDependencies": {
     "@libs/output": "^1.0.3",
     "@libs/version": "^1.0.2",
-    "@types/minimist": "^1.2.5"
+    "@types/minimist": "1.2.5"
   },
   "engines": {
     "node": ">=20"

@@ -33,12 +33,12 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "dependencies": {
-    "debug": "^4.3.4",
-    "typescript": "^5.4.5"
+    "debug": "4.4.3",
+    "typescript": "5.9.3"
   },
   "devDependencies": {
-    "@grafana/data": "^12.0.0",
-    "@types/node": "^24.10.11",
-    "react": "^18.2.0"
+    "@grafana/data": "12.4.3",
+    "@types/node": "24.10.14",
+    "react": "18.3.1"
   }
 }

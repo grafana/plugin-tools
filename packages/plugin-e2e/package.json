@@ -43,15 +43,15 @@
     "@playwright/test": "^1.52.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.1",
-    "@playwright/test": "^1.58.1",
-    "@types/uuid": "^11.0.0",
-    "dotenv": "^17.2.4"
+    "@axe-core/playwright": "4.11.1",
+    "@playwright/test": "1.58.2",
+    "@types/uuid": "11.0.0",
+    "dotenv": "8.6.0"
   },
   "dependencies": {
     "@grafana/e2e-selectors": "13.1.0-25644485979",
-    "semver": "^7.5.4",
-    "uuid": "^13.0.0",
-    "yaml": "^2.3.4"
+    "semver": "7.7.2",
+    "uuid": "13.0.2",
+    "yaml": "2.9.0"
   }
 }
