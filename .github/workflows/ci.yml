@@ -565,7 +565,8 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          # disabled caching to prevent a poisoned cache affecting releases.
+          package-manager-cache: false
 
       - name: Install dependencies
         run: npm ci --no-audit
