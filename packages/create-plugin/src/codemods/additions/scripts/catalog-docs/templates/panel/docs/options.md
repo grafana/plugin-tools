@@ -4,8 +4,6 @@ description: Reference for {{pluginName}} panel options.
 sidebar_position: 2
 ---
 
-# Panel options
-
 List and describe the options available in the panel editor.
 
 ## Standard options
