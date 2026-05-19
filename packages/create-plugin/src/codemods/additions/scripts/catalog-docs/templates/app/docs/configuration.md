@@ -9,3 +9,5 @@ sidebar_position: 2
 Describe the configuration options for the {{pluginName}} app plugin.
 
 ## App settings
+
+## Provisioning
