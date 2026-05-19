@@ -531,8 +531,6 @@ jobs:
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
-            GITHUB_APP_ID=plugins-platform-bot-app:app_id
-            GITHUB_APP_PRIVATE_KEY=plugins-platform-bot-app:app_pem
             SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url_fp
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
           export_env: false
@@ -545,12 +543,10 @@ jobs:
 
       - name: Generate token
         id: generate-token
-        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        uses: grafana/shared-workflows/actions/create-github-app-token@259ba21cb3ff07724f331e26d926d655d24b317b # create-github-app-token/v0.2.3
         with:
-          app-id: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_ID }}
-          private-key: ${{ fromJSON(steps.get-secrets.outputs.secrets).GITHUB_APP_PRIVATE_KEY }}
-          permission-contents: write
-          permission-pull-requests: write
+          github_app: plugins-platform-bot-app
+          permission_set: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'release' || 'default' }}
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
