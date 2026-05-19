@@ -1,11 +1,15 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as v from 'valibot';
 import type { Context } from '../../../context.js';
 import { additionsDebug, addDependenciesToPackageJson } from '../../../utils.js';
-import { type CatalogDocsOptions, schema } from './schema.js';
 
-export { schema };
+export const schema = v.object({
+  docsPath: v.optional(v.string(), 'docs'),
+});
+
+type CatalogDocsOptions = v.InferOutput<typeof schema>;
 
 // TODO: replace with stable tag once plugin-actions PR #219 merges
 const REQUIRED_BUILD_PLUGIN_REF = 'eriksundell/plugin-docs-build-step';
