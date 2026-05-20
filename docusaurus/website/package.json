@@ -40,7 +40,7 @@
     "@docusaurus/remark-plugin-npm2yarn": "3.10.1",
     "@docusaurus/tsconfig": "3.10.1",
     "@signalwire/docusaurus-plugin-llms-txt": "2.0.0-alpha.7",
-    "dotenv": "8.6.0",
+    "dotenv": "17.3.1",
     "raw-loader": "4.0.2",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
