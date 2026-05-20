@@ -417,7 +417,6 @@ jobs:
           grafana-version: latest
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests.outcome }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get plugin min version
         id: min-version
@@ -462,7 +461,6 @@ jobs:
           grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check plugin.json
         run: |
@@ -498,7 +496,7 @@ jobs:
         run: exit 1
 
   publish-report:
-    if: ${{ always() && !cancelled() && github.event.pull_request.head.repo.fork != true }}
+    if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
     needs: [generate-plugins]
     runs-on: ubuntu-x64
     permissions:
