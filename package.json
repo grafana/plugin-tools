@@ -106,5 +106,5 @@
     "lightningcss-win32-arm64-msvc": "1.32.0",
     "lightningcss-win32-x64-msvc": "1.32.0"
   },
-  "packageManager": "npm@11.6.1"
+  "packageManager": "npm@11.12.1"
 }
