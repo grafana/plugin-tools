@@ -252,7 +252,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           # required for playwright-gh-pages
-          persist-credentials: true
+          persist-credentials: false
       - name: Publish report
         uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.1.0
         with:
