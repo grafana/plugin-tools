@@ -3,7 +3,13 @@ import { join, relative, parse, sep } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import createDebug from 'debug';
-import type { Manifest, Page, MarkdownFiles, Frontmatter } from '@grafana/plugin-docs-parser';
+import {
+  parseMarkdown,
+  type Manifest,
+  type Page,
+  type MarkdownFiles,
+  type Frontmatter,
+} from '@grafana/plugin-docs-parser';
 
 const debug = createDebug('plugin-docs-cli:scanner');
 
@@ -225,6 +231,13 @@ function treeToPages(node: TreeNode): Page[] {
         slug: customSlug || generatedSlug,
         file: child.file.relativePath,
       };
+
+      // extract h2/h3 headings via the canonical parser pipeline so heading
+      // IDs in the manifest match the IDs rendered at serve time
+      const { headings } = parseMarkdown(child.file.content);
+      if (headings.length > 0) {
+        page.headings = headings;
+      }
 
       // if this file has children (folder with same name), add them
       if (child.children.size > 0) {
