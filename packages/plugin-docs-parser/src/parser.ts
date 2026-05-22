@@ -2,11 +2,10 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
-import rehypeRaw from 'rehype-raw';
-import rehypeSlug from 'rehype-slug';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import matter from 'gray-matter';
+import * as yaml from 'js-yaml';
 import { VFile } from 'vfile';
+import { rehypeSlug } from './plugins/rehype-slug.js';
 import type { Root as HastRoot } from 'hast';
 import { rehypeRewriteAssetPaths } from './plugins/rehype-rewrite-asset-paths.js';
 import { rehypeRewriteDocLinks } from './plugins/rehype-rewrite-doc-links.js';
@@ -63,6 +62,17 @@ export interface ParsedMarkdown {
 // the default schema already allows id (via clobber) and className on code (for language-* classes).
 const sanitizeSchema = { ...defaultSchema, clobberPrefix: '' };
 
+const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/;
+
+function parseFrontmatter(content: string): { data: Record<string, unknown>; content: string } {
+  const match = content.match(FRONTMATTER_RE);
+  if (!match) {
+    return { data: {}, content };
+  }
+  const data = (yaml.load(match[1]) ?? {}) as Record<string, unknown>;
+  return { data, content: match[2] };
+}
+
 /**
  * Parses markdown content into a HAST tree with extracted frontmatter and headings.
  *
@@ -72,12 +82,12 @@ const sanitizeSchema = { ...defaultSchema, clobberPrefix: '' };
  * @throws {Error} If markdown parsing fails
  */
 export function parseMarkdown(content: string, options?: ParseOptions): ParsedMarkdown {
-  // extract frontmatter using gray-matter
+  // extract frontmatter
   let frontmatter: Record<string, unknown>;
   let markdownContent: string;
 
   try {
-    const result = matter(content);
+    const result = parseFrontmatter(content);
     frontmatter = result.data;
     markdownContent = result.content;
   } catch (error) {
@@ -85,17 +95,10 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
     throw new Error(`Failed to extract frontmatter: ${message}`);
   }
 
-  // build the unified pipeline: markdown → mdast → hast
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    // allow raw HTML in markdown (e.g. <details>, <img>) to pass through to hast;
-    // rehype-raw parses the raw nodes into proper hast elements so
-    // rehype-sanitize can inspect and strip anything dangerous
-    .use(remarkRehype, { allowDangerousHtml: true })
-    .use(rehypeRaw)
-    .use(rehypeStripH1)
-    .use(rehypeSlug);
+  // build the unified pipeline: markdown → mdast → hast.
+  // raw HTML in markdown is forbidden by the docs spec (see DESIGN_DOC.md),
+  // so allowDangerousHtml is off and any inline HTML gets dropped by remark-rehype.
+  const processor = unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeStripH1).use(rehypeSlug);
 
   // rewrite asset paths before sanitization so URLs are final
   if (options?.assetBaseUrl) {
