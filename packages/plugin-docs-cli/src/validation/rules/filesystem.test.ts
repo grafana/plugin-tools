@@ -250,4 +250,60 @@ describe('checkFilesystem', () => {
 
     expect(findings.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
   });
+
+  it('should not report max-nesting-depth for pages at depth 3 or shallower', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'a'));
+    await writeFile(join(tmp, 'a', 'index.md'), '---\ntitle: A\n---\n');
+    await mkdir(join(tmp, 'a', 'b'));
+    await writeFile(join(tmp, 'a', 'b', 'page.md'), '---\ntitle: Page\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === Rule.MaxNestingDepth)).toBeUndefined();
+  });
+
+  it('should report max-nesting-depth as error in strict mode for pages deeper than 3 levels', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'a', 'b', 'c'), { recursive: true });
+    await writeFile(join(tmp, 'a', 'b', 'c', 'page.md'), '---\ntitle: Deep\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    const finding = findings.find((f) => f.rule === Rule.MaxNestingDepth);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.file).toContain(join('a', 'b', 'c', 'page.md'));
+    expect(finding!.title).toContain('4 levels');
+  });
+
+  it('should report max-nesting-depth as info in non-strict mode for pages deeper than 3 levels', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'a', 'b', 'c'), { recursive: true });
+    await writeFile(join(tmp, 'a', 'b', 'c', 'page.md'), '---\ntitle: Deep\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: false });
+
+    const finding = findings.find((f) => f.rule === Rule.MaxNestingDepth);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('info');
+  });
+
+  it('should report max-nesting-depth once per offending file', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'a', 'b', 'c'), { recursive: true });
+    await writeFile(join(tmp, 'a', 'b', 'c', 'one.md'), '---\ntitle: One\n---\n');
+    await writeFile(join(tmp, 'a', 'b', 'c', 'two.md'), '---\ntitle: Two\n---\n');
+    await mkdir(join(tmp, 'a', 'b', 'c', 'd'), { recursive: true });
+    await writeFile(join(tmp, 'a', 'b', 'c', 'd', 'three.md'), '---\ntitle: Three\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    const depthFindings = findings.filter((f) => f.rule === Rule.MaxNestingDepth);
+    expect(depthFindings).toHaveLength(3);
+  });
 });
