@@ -12,8 +12,13 @@ export default [
     scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
   },
   {
-    name: 'catalog-docs',
-    description: 'Enables multi-page docs for the Grafana Plugin Catalog',
-    scriptPath: import.meta.resolve('./scripts/catalog-docs/index.js'),
+    name: 'datasource-docs',
+    description: 'Scaffolds multi-page documentation for a Grafana datasource plugin',
+    scriptPath: import.meta.resolve('./scripts/datasource-docs/index.js'),
+  },
+  {
+    name: 'panel-docs',
+    description: 'Scaffolds multi-page documentation for a Grafana panel plugin',
+    scriptPath: import.meta.resolve('./scripts/panel-docs/index.js'),
   },
 ] satisfies Codemod[];

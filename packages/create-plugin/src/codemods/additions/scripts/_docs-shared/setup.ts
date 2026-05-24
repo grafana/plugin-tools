@@ -1,20 +1,13 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import * as v from 'valibot';
 import type { Context } from '../../../context.js';
 import { additionsDebug, addDependenciesToPackageJson } from '../../../utils.js';
-
-export const schema = v.object({
-  docsPath: v.optional(v.string(), 'docs'),
-});
-
-type CatalogDocsOptions = v.InferOutput<typeof schema>;
 
 // TODO: replace with stable tag once plugin-actions PR #219 merges
 const REQUIRED_BUILD_PLUGIN_REF = 'eriksundell/plugin-docs-build-step';
 
-interface PluginJson {
+export interface PluginJson {
   type?: string;
   name?: string;
   docsPath?: string;
@@ -24,22 +17,23 @@ interface PluginJson {
   [key: string]: unknown;
 }
 
-// keyed by template file basename; if a copied file matches a key, it's only
-// generated when the predicate returns true. Files not listed here copy
-// unconditionally.
-const CONDITIONAL_FILES: Record<string, (ctx: { pluginJson: PluginJson; basePath: string }) => boolean> = {
-  'template-variables.md': ({ basePath }) => sourceContainsVariableSupport(basePath),
-  'annotations.md': ({ pluginJson }) => pluginJson.annotations === true,
-  'alerting.md': ({ pluginJson }) => pluginJson.alerting === true && pluginJson.backend === true,
-};
+export type ConditionalFilePredicate = (ctx: { pluginJson: PluginJson; basePath: string }) => boolean;
 
-export default function catalogDocs(context: Context, options: CatalogDocsOptions): Context {
-  const { docsPath } = options;
+export interface DocsSetupOptions {
+  context: Context;
+  docsPath: string;
+  templateBaseUrl: URL;
+  codemodName: string;
+  conditionalFiles?: Record<string, ConditionalFilePredicate>;
+}
+
+export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
+  const { context, docsPath, templateBaseUrl, codemodName, conditionalFiles = {} } = opts;
 
   // step 1: early exit if the docs directory already exists on disk
   if (existsSync(join(context.basePath, docsPath))) {
     throw new Error(
-      `A directory already exists at '${docsPath}'. Re-run with a different path:\n  create-plugin add catalog-docs --docsPath <alternative-path>`
+      `A directory already exists at '${docsPath}'. Re-run with a different path:\n  create-plugin add ${codemodName} --docsPath <alternative-path>`
     );
   }
 
@@ -63,8 +57,6 @@ export default function catalogDocs(context: Context, options: CatalogDocsOption
     context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
   }
 
-  // extract type and name for use in later steps
-  const pluginType = pluginJson.type ?? 'app';
   const pluginName = pluginJson.name ?? 'my-plugin';
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
@@ -74,10 +66,10 @@ export default function catalogDocs(context: Context, options: CatalogDocsOption
   addDocsScripts(context);
 
   // step 5: copy template files to docs folder
-  copyDocsTemplates(context, pluginType, docsPath, pluginName, pluginJson);
+  copyDocsTemplates(context, templateBaseUrl, docsPath, pluginName, pluginJson, conditionalFiles);
 
-  // step 6: copy validate-docs workflow
-  upsertFile(context, '.github/workflows/validate-docs.yml', readTemplateFile('workflows/validate-docs.yml'));
+  // step 6: copy validate-docs workflow from the shared templates folder (same dir as this file)
+  upsertFile(context, '.github/workflows/validate-docs.yml', readSharedTemplate('workflows/validate-docs.yml'));
 
   // step 7: bump build-plugin version in release.yml
   bumpBuildPluginVersion(context);
@@ -93,42 +85,30 @@ Next steps:
   return context;
 }
 
-function copyDocsTemplates(
+// parses src/plugin.json from the context and verifies its `type` matches the
+// expected value. Throws a helpful error otherwise. Returns the parsed object
+// so callers don't have to reparse.
+export function assertPluginType(
   context: Context,
-  pluginType: string,
-  docsPath: string,
-  pluginName: string,
-  pluginJson: PluginJson
-): void {
-  const templateFolderType = pluginType === 'scenesapp' ? 'app' : pluginType;
-  for (const typeFolder of ['common', templateFolderType]) {
-    const templateDir = fileURLToPath(new URL(`./templates/${typeFolder}/docs`, import.meta.url));
-    if (!existsSync(templateDir)) {
-      continue;
-    }
-    for (const filePath of listFilesRecursively(templateDir)) {
-      const relativePath = filePath.slice(templateDir.length + 1);
-      const targetPath = `${docsPath}/${relativePath}`;
-      const predicate = CONDITIONAL_FILES[basename(filePath)];
-      if (predicate && !predicate({ pluginJson, basePath: context.basePath })) {
-        additionsDebug(`${targetPath} skipped: plugin does not meet the conditions for this file`);
-        continue;
-      }
-      if (!context.doesFileExist(targetPath)) {
-        const content = readFileSync(filePath, 'utf-8').replaceAll('{{pluginName}}', pluginName);
-        context.addFile(targetPath, content);
-      } else {
-        additionsDebug(`${targetPath} already exists, skipping`);
-      }
-    }
+  opts: { expectedType: 'datasource' | 'panel'; codemodName: string }
+): PluginJson {
+  const raw = context.getFile('src/plugin.json');
+  if (raw === undefined) {
+    throw new Error('Cannot find src/plugin.json. Run this command from the plugin root directory.');
   }
-}
-
-function listFilesRecursively(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const fullPath = join(dir, entry.name);
-    return entry.isDirectory() ? listFilesRecursively(fullPath) : [fullPath];
-  });
+  let parsed: PluginJson;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    throw new Error(`Cannot parse src/plugin.json: ${e}`);
+  }
+  if (parsed.type !== opts.expectedType) {
+    const otherCommand = opts.expectedType === 'datasource' ? 'panel-docs' : 'datasource-docs';
+    throw new Error(
+      `create-plugin add ${opts.codemodName} only works on '${opts.expectedType}' plugins, but this plugin's type is '${parsed.type ?? 'unset'}'. Try create-plugin add ${otherCommand} if this is the other plugin type.`
+    );
+  }
+  return parsed;
 }
 
 const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
@@ -139,7 +119,7 @@ const VARIABLE_SUPPORT_RE =
 // hooks (CustomVariableSupport, StandardVariableSupport, DataSourceVariableSupport
 // or metricFindQuery). Returns true on the first match. Returns false if src/
 // doesn't exist.
-function sourceContainsVariableSupport(basePath: string): boolean {
+export function sourceContainsVariableSupport(basePath: string): boolean {
   const srcDir = join(basePath, 'src');
   if (!existsSync(srcDir)) {
     return false;
@@ -176,6 +156,42 @@ function walkForMatch(dir: string): boolean {
   return false;
 }
 
+function copyDocsTemplates(
+  context: Context,
+  templateBaseUrl: URL,
+  docsPath: string,
+  pluginName: string,
+  pluginJson: PluginJson,
+  conditionalFiles: Record<string, ConditionalFilePredicate>
+): void {
+  const docsTemplateDir = fileURLToPath(new URL('./docs', templateBaseUrl));
+  if (!existsSync(docsTemplateDir)) {
+    return;
+  }
+  for (const filePath of listFilesRecursively(docsTemplateDir)) {
+    const relativePath = filePath.slice(docsTemplateDir.length + 1);
+    const targetPath = `${docsPath}/${relativePath}`;
+    const predicate = conditionalFiles[basename(filePath)];
+    if (predicate && !predicate({ pluginJson, basePath: context.basePath })) {
+      additionsDebug(`${targetPath} skipped: plugin does not meet the conditions for this file`);
+      continue;
+    }
+    if (!context.doesFileExist(targetPath)) {
+      const content = readFileSync(filePath, 'utf-8').replaceAll('{{pluginName}}', pluginName);
+      context.addFile(targetPath, content);
+    } else {
+      additionsDebug(`${targetPath} already exists, skipping`);
+    }
+  }
+}
+
+function listFilesRecursively(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = join(dir, entry.name);
+    return entry.isDirectory() ? listFilesRecursively(fullPath) : [fullPath];
+  });
+}
+
 function upsertFile(context: Context, path: string, content: string): void {
   if (context.doesFileExist(path)) {
     context.updateFile(path, content);
@@ -184,7 +200,7 @@ function upsertFile(context: Context, path: string, content: string): void {
   }
 }
 
-function readTemplateFile(relativePath: string): string {
+function readSharedTemplate(relativePath: string): string {
   const templatePath = fileURLToPath(new URL(`./templates/${relativePath}`, import.meta.url));
   return readFileSync(templatePath, 'utf-8');
 }
