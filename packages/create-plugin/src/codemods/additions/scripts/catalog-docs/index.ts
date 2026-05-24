@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as v from 'valibot';
 import type { Context } from '../../../context.js';
@@ -18,8 +18,20 @@ interface PluginJson {
   type?: string;
   name?: string;
   docsPath?: string;
+  annotations?: boolean;
+  alerting?: boolean;
+  backend?: boolean;
   [key: string]: unknown;
 }
+
+// keyed by template file basename; if a copied file matches a key, it's only
+// generated when the predicate returns true. Files not listed here copy
+// unconditionally.
+const CONDITIONAL_FILES: Record<string, (ctx: { pluginJson: PluginJson; basePath: string }) => boolean> = {
+  'template-variables.md': ({ basePath }) => sourceContainsVariableSupport(basePath),
+  'annotations.md': ({ pluginJson }) => pluginJson.annotations === true,
+  'alerting.md': ({ pluginJson }) => pluginJson.alerting === true && pluginJson.backend === true,
+};
 
 export default function catalogDocs(context: Context, options: CatalogDocsOptions): Context {
   const { docsPath } = options;
@@ -62,7 +74,7 @@ export default function catalogDocs(context: Context, options: CatalogDocsOption
   addDocsScripts(context);
 
   // step 5: copy template files to docs folder
-  copyDocsTemplates(context, pluginType, docsPath, pluginName);
+  copyDocsTemplates(context, pluginType, docsPath, pluginName, pluginJson);
 
   // step 6: copy validate-docs workflow
   upsertFile(context, '.github/workflows/validate-docs.yml', readTemplateFile('workflows/validate-docs.yml'));
@@ -81,7 +93,13 @@ Next steps:
   return context;
 }
 
-function copyDocsTemplates(context: Context, pluginType: string, docsPath: string, pluginName: string): void {
+function copyDocsTemplates(
+  context: Context,
+  pluginType: string,
+  docsPath: string,
+  pluginName: string,
+  pluginJson: PluginJson
+): void {
   const templateFolderType = pluginType === 'scenesapp' ? 'app' : pluginType;
   for (const typeFolder of ['common', templateFolderType]) {
     const templateDir = fileURLToPath(new URL(`./templates/${typeFolder}/docs`, import.meta.url));
@@ -91,6 +109,11 @@ function copyDocsTemplates(context: Context, pluginType: string, docsPath: strin
     for (const filePath of listFilesRecursively(templateDir)) {
       const relativePath = filePath.slice(templateDir.length + 1);
       const targetPath = `${docsPath}/${relativePath}`;
+      const predicate = CONDITIONAL_FILES[basename(filePath)];
+      if (predicate && !predicate({ pluginJson, basePath: context.basePath })) {
+        additionsDebug(`${targetPath} skipped: plugin does not meet the conditions for this file`);
+        continue;
+      }
       if (!context.doesFileExist(targetPath)) {
         const content = readFileSync(filePath, 'utf-8').replaceAll('{{pluginName}}', pluginName);
         context.addFile(targetPath, content);
@@ -106,6 +129,51 @@ function listFilesRecursively(dir: string): string[] {
     const fullPath = join(dir, entry.name);
     return entry.isDirectory() ? listFilesRecursively(fullPath) : [fullPath];
   });
+}
+
+const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
+const VARIABLE_SUPPORT_RE =
+  /\b(?:CustomVariableSupport|StandardVariableSupport|DataSourceVariableSupport|metricFindQuery)\b/;
+
+// scans the plugin's src/ tree for any of the four Grafana variable-support
+// hooks (CustomVariableSupport, StandardVariableSupport, DataSourceVariableSupport
+// or metricFindQuery). Returns true on the first match. Returns false if src/
+// doesn't exist.
+function sourceContainsVariableSupport(basePath: string): boolean {
+  const srcDir = join(basePath, 'src');
+  if (!existsSync(srcDir)) {
+    return false;
+  }
+  return walkForMatch(srcDir);
+}
+
+function walkForMatch(dir: string): boolean {
+  let entries;
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return false;
+  }
+  for (const entry of entries) {
+    if (entry.name.startsWith('.') || entry.name === 'node_modules') {
+      continue;
+    }
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (walkForMatch(fullPath)) {
+        return true;
+      }
+      continue;
+    }
+    if (!SOURCE_EXTENSIONS.some((ext) => entry.name.endsWith(ext))) {
+      continue;
+    }
+    const content = readFileSync(fullPath, 'utf-8');
+    if (VARIABLE_SUPPORT_RE.test(content)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function upsertFile(context: Context, path: string, content: string): void {

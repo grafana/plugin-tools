@@ -1,5 +1,7 @@
-import { existsSync } from 'node:fs';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../../context.js';
 import catalogDocs from './index.js';
 
@@ -14,17 +16,51 @@ vi.mock('node:fs', async (importOriginal) => {
   };
 });
 
-function makeContext(pluginType = 'datasource'): Context {
-  const context = new Context('/virtual');
-  context.addFile('src/plugin.json', JSON.stringify({ type: pluginType, name: 'My Plugin' }));
+interface MakeContextOptions {
+  pluginType?: string;
+  pluginJsonExtras?: Record<string, unknown>;
+  basePath?: string;
+}
+
+function makeContext(pluginTypeOrOpts: string | MakeContextOptions = 'datasource'): Context {
+  const opts: MakeContextOptions =
+    typeof pluginTypeOrOpts === 'string' ? { pluginType: pluginTypeOrOpts } : pluginTypeOrOpts;
+  const { pluginType = 'datasource', pluginJsonExtras = {}, basePath = '/virtual' } = opts;
+  const context = new Context(basePath);
+  context.addFile('src/plugin.json', JSON.stringify({ type: pluginType, name: 'My Plugin', ...pluginJsonExtras }));
   context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
   context.addFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@v1.0.2\n');
   return context;
 }
 
 describe('catalog-docs codemod', () => {
+  const tempDirs: string[] = [];
+
+  function makeTempPluginDir(srcFiles: Record<string, string> = {}): string {
+    const dir = mkdtempSync(join(tmpdir(), 'catalog-docs-test-'));
+    tempDirs.push(dir);
+    if (Object.keys(srcFiles).length > 0) {
+      mkdirSync(join(dir, 'src'), { recursive: true });
+      for (const [relPath, content] of Object.entries(srcFiles)) {
+        const target = join(dir, 'src', relPath);
+        mkdirSync(join(target, '..'), { recursive: true });
+        writeFileSync(target, content);
+      }
+    }
+    return dir;
+  }
+
   beforeEach(() => {
     vi.mocked(existsSync).mockImplementation(realExistsSync);
+  });
+
+  afterEach(() => {
+    while (tempDirs.length > 0) {
+      const dir = tempDirs.pop();
+      if (dir) {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    }
   });
 
   describe('early exit', () => {
@@ -145,6 +181,134 @@ describe('catalog-docs codemod', () => {
       const context = makeContext('datasource');
       catalogDocs(context, { docsPath: 'my-docs' });
       expect(context.doesFileExist('my-docs/index.md')).toBe(true);
+    });
+
+    it('generates the standard datasource H2 headings in configuration.md', () => {
+      const context = makeContext('datasource');
+      catalogDocs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/configuration.md') ?? '';
+      expect(content).toContain('## Before you begin');
+      expect(content).toContain('## Configure the data source');
+      expect(content).toContain('## Configuration options');
+      expect(content).toContain('## Provision the data source');
+    });
+
+    it('generates troubleshooting.md as its own page', () => {
+      const context = makeContext('datasource');
+      catalogDocs(context, { docsPath: 'docs' });
+      expect(context.doesFileExist('docs/troubleshooting.md')).toBe(true);
+      const content = context.getFile('docs/troubleshooting.md') ?? '';
+      expect(content).toContain('## Common issues');
+    });
+
+    it('wraps each section in agent-hint blocks', () => {
+      const context = makeContext('datasource');
+      catalogDocs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/configuration.md') ?? '';
+      expect(content).toContain('<!-- agent-hint:start -->');
+      expect(content).toContain('<!-- agent-hint:end -->');
+    });
+  });
+
+  describe('conditional template files', () => {
+    describe('template-variables.md', () => {
+      it.each([
+        ['metricFindQuery', 'export function metricFindQuery(q: string) { return []; }\n'],
+        [
+          'CustomVariableSupport',
+          'import { CustomVariableSupport } from "@grafana/data"; class V extends CustomVariableSupport {}\n',
+        ],
+        [
+          'StandardVariableSupport',
+          'import { StandardVariableSupport } from "@grafana/data"; class V extends StandardVariableSupport {}\n',
+        ],
+        [
+          'DataSourceVariableSupport',
+          'import { DataSourceVariableSupport } from "@grafana/data"; class V extends DataSourceVariableSupport {}\n',
+        ],
+      ])('is generated when src contains %s', (_, source) => {
+        const basePath = makeTempPluginDir({ 'datasource.ts': source });
+        const context = makeContext({ basePath });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/template-variables.md')).toBe(true);
+        const content = context.getFile('docs/template-variables.md') ?? '';
+        expect(content).toContain('## Use query variables');
+      });
+
+      it('finds variable-support tokens in nested directories', () => {
+        const basePath = makeTempPluginDir({
+          'nested/deep/queries.ts': 'export const x = (ds: any) => ds.metricFindQuery("foo");\n',
+        });
+        const context = makeContext({ basePath });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/template-variables.md')).toBe(true);
+      });
+
+      it('is skipped when no variable-support token is found', () => {
+        const basePath = makeTempPluginDir({
+          'datasource.ts': 'export function query(q: string) { return []; }\n',
+        });
+        const context = makeContext({ basePath });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/template-variables.md')).toBe(false);
+      });
+
+      it('is skipped when src directory does not exist', () => {
+        const basePath = makeTempPluginDir();
+        const context = makeContext({ basePath });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/template-variables.md')).toBe(false);
+      });
+    });
+
+    describe('annotations.md', () => {
+      it('is generated when plugin.json sets annotations: true', () => {
+        const context = makeContext({ pluginJsonExtras: { annotations: true } });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/annotations.md')).toBe(true);
+        const content = context.getFile('docs/annotations.md') ?? '';
+        expect(content).toContain('## Create an annotation query');
+      });
+
+      it('is skipped when plugin.json omits annotations', () => {
+        const context = makeContext();
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/annotations.md')).toBe(false);
+      });
+
+      it('is skipped when plugin.json sets annotations: false', () => {
+        const context = makeContext({ pluginJsonExtras: { annotations: false } });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/annotations.md')).toBe(false);
+      });
+    });
+
+    describe('alerting.md', () => {
+      it('is generated when both alerting and backend are true', () => {
+        const context = makeContext({ pluginJsonExtras: { alerting: true, backend: true } });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/alerting.md')).toBe(true);
+        const content = context.getFile('docs/alerting.md') ?? '';
+        expect(content).toContain('## Create an alert rule');
+      });
+
+      it('is skipped when only alerting is true', () => {
+        const context = makeContext({ pluginJsonExtras: { alerting: true } });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/alerting.md')).toBe(false);
+      });
+
+      it('is skipped when only backend is true', () => {
+        const context = makeContext({ pluginJsonExtras: { backend: true } });
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/alerting.md')).toBe(false);
+      });
+
+      it('is skipped when neither alerting nor backend is set', () => {
+        const context = makeContext();
+        catalogDocs(context, { docsPath: 'docs' });
+        expect(context.doesFileExist('docs/alerting.md')).toBe(false);
+      });
     });
   });
 
