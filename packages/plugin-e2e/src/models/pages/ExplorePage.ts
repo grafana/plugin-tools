@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { lt } from '../../utils/version';
 import { Locator } from '@playwright/test';
 import { GrafanaPageArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
@@ -38,9 +38,9 @@ export class ExplorePage extends GrafanaPage {
     });
 
     // having to use these selectors is unfortunate, but the Explore page did not use data-testid on the panels before Grafana 10.
-    if (semver.lt(this.ctx.grafanaVersion, '9.3.0')) {
+    if (lt(this.ctx.grafanaVersion, '9.3.0')) {
       locator = page.getByText(suffix).locator('..').locator('..').locator('..');
-    } else if (semver.lt(this.ctx.grafanaVersion, '10.0.0')) {
+    } else if (lt(this.ctx.grafanaVersion, '10.0.0')) {
       locator = page.getByRole('button', { name: text }).locator('..');
     }
 

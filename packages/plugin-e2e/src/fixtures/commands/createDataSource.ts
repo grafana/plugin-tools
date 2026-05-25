@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { expect, TestFixture } from '@playwright/test';
 import { CreateDataSourceArgs, DataSourceSettings, PlaywrightArgs } from '../../types';
 import { GrafanaAPIClient } from '../../models/GrafanaAPIClient';
@@ -13,7 +12,7 @@ export const createDataSourceViaAPI = async (
   datasource: CreateDataSourceArgs
 ): Promise<DataSourceSettings> => {
   const { type, name } = datasource;
-  const dsName = name ?? `${type}-${uuidv4()}`;
+  const dsName = name ?? `${type}-${crypto.randomUUID()}`;
 
   const existingDataSource = await grafanaAPIClient.getDataSourceByName(dsName);
   if (existingDataSource.ok()) {
