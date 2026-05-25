@@ -57,7 +57,7 @@ export class PanelEditOptionsGroup {
   }
 
   getSliderInput(label: string): Locator {
-    if (gte(this.ctx.grafanaVersion, '9.1.0') && lt(this.ctx.grafanaVersion, '13.1.0-25389005429')) {
+    if (gte(this.ctx.grafanaVersion, '9.1.0') && lt(this.ctx.grafanaVersion, '13.1.0')) {
       return this.getNumberInput(label);
     }
     return this.getTextInput(label);
