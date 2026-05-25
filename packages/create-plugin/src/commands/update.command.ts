@@ -13,6 +13,7 @@ import { getConfig } from '../utils/utils.config.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 import { spawnSync } from 'node:child_process';
+import { updateDotConfigFolder } from '../utils/utils.plugin.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   await performPreCodemodChecks(argv);
@@ -33,20 +34,19 @@ export const update = async (argv: minimist.ParsedArgs) => {
 
     const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
 
-    if (migrations.length === 0) {
-      output.log({
-        title: 'No migrations to run, exiting.',
+    if (migrations.length > 0) {
+      // filter out minimist internal properties (_ and $0) before passing to codemod
+      const { _, $0, ...codemodOptions } = argv;
+      await runMigrations(migrations, {
+        commitEachMigration: !!argv.commit,
+        codemodOptions,
       });
-
-      process.exit(0);
     }
 
-    // filter out minimist internal properties (_ and $0) before passing to codemod
-    const { _, $0, ...codemodOptions } = argv;
-    await runMigrations(migrations, {
-      commitEachMigration: !!argv.commit,
-      codemodOptions,
-    });
+    // Sync the .config/ folder to ensure any new template files are created
+    // and existing ones are updated with proper template interpolation
+    await updateDotConfigFolder();
+
     output.success({
       title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
     });
