@@ -1,86 +1,139 @@
-function parseVer(v: string): [number, number, number, number] {
-  // split MAJOR.MINOR.PATCH from an optional dash-suffixed build number.
-  // Grafana dev/nightly builds use this suffix (e.g. `10.4.0-452423424142342`)
-  // and should be compared as a 4th component, with a missing suffix treated as 0.
-  // Non-numeric suffixes (e.g. `10.4.0-pre`) fall back to 0.
-  const [base, build = '0'] = v.split('-');
+interface ParsedVer {
+  major: number;
+  minor: number;
+  patch: number;
+  pre: string[] | null;
+}
+
+function parseVer(v: string): ParsedVer {
+  // split MAJOR.MINOR.PATCH from an optional dash-suffixed pre-release.
+  // Grafana dev/nightly builds use this form (e.g. `10.4.0-25389005429`).
+  // Build metadata after a `+` is stripped per semver.
+  const cleaned = v.split('+')[0];
+  const dash = cleaned.indexOf('-');
+  const base = dash === -1 ? cleaned : cleaned.slice(0, dash);
+  const preStr = dash === -1 ? '' : cleaned.slice(dash + 1);
   const [ma = 0, mi = 0, pa = 0] = base.split('.').map((s) => parseInt(s, 10));
-  const bu = parseInt(build, 10) || 0;
-  return [ma, mi, pa, bu];
+  return {
+    major: ma,
+    minor: mi,
+    patch: pa,
+    pre: preStr ? preStr.split('.') : null,
+  };
+}
+
+function cmpPre(a: string[], b: string[]): number {
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    const ai = a[i];
+    const bi = b[i];
+    // a longer set of identifiers has higher precedence when all preceding are equal
+    if (ai === undefined) {
+      return -1;
+    }
+    if (bi === undefined) {
+      return 1;
+    }
+    const aIsNum = /^\d+$/.test(ai);
+    const bIsNum = /^\d+$/.test(bi);
+    if (aIsNum && bIsNum) {
+      const diff = parseInt(ai, 10) - parseInt(bi, 10);
+      if (diff !== 0) {
+        return diff;
+      }
+    } else if (aIsNum) {
+      // numeric identifiers have lower precedence than non-numeric identifiers
+      return -1;
+    } else if (bIsNum) {
+      return 1;
+    } else if (ai < bi) {
+      return -1;
+    } else if (ai > bi) {
+      return 1;
+    }
+  }
+  return 0;
 }
 
 function cmp(a: string, b: string): number {
-  const [ma, na, pa, ba] = parseVer(a);
-  const [mb, nb, pb, bb] = parseVer(b);
-  if (ma !== mb) {
-    return ma - mb;
+  const va = parseVer(a);
+  const vb = parseVer(b);
+  if (va.major !== vb.major) {
+    return va.major - vb.major;
   }
-  if (na !== nb) {
-    return na - nb;
+  if (va.minor !== vb.minor) {
+    return va.minor - vb.minor;
   }
-  if (pa !== pb) {
-    return pa - pb;
+  if (va.patch !== vb.patch) {
+    return va.patch - vb.patch;
   }
-  return ba - bb;
+  // when MAJOR.MINOR.PATCH match, a version without a pre-release has higher
+  // precedence than one with a pre-release (semver section 11).
+  if (!va.pre && !vb.pre) {
+    return 0;
+  }
+  if (!va.pre) {
+    return 1;
+  }
+  if (!vb.pre) {
+    return -1;
+  }
+  return cmpPre(va.pre, vb.pre);
 }
 
 /**
  * Returns true when version `a` is greater than or equal to version `b`.
  *
- * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
- * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
- * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ * Follows semver precedence rules: a release has higher precedence than any
+ * pre-release of the same `MAJOR.MINOR.PATCH` (`1.2.3` > `1.2.3-anything`).
+ * Pre-release identifiers are compared dot-separated, numerics numerically
+ * and non-numerics lexicographically (`1.2.3-2` < `1.2.3-10`).
  *
- * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
- * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const gte = (a: string, b: string): boolean => cmp(a, b) >= 0;
 
 /**
  * Returns true when version `a` is strictly less than version `b`.
  *
- * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
- * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
- * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ * Follows semver precedence rules: a release has higher precedence than any
+ * pre-release of the same `MAJOR.MINOR.PATCH` (`1.2.3-anything` < `1.2.3`).
+ * Pre-release identifiers are compared dot-separated, numerics numerically
+ * and non-numerics lexicographically.
  *
- * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
- * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const lt = (a: string, b: string): boolean => cmp(a, b) < 0;
 
 /**
  * Returns true when version `a` is less than or equal to version `b`.
  *
- * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
- * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
- * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ * Follows semver precedence rules. See {@link lt} for details.
  *
- * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
- * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const lte = (a: string, b: string): boolean => cmp(a, b) <= 0;
 
 /**
  * Returns true when version `a` is strictly greater than version `b`.
  *
- * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
- * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
- * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ * Follows semver precedence rules. See {@link gte} for details.
  *
- * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
- * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const gt = (a: string, b: string): boolean => cmp(a, b) > 0;
 
 /**
- * Returns true when version `a` is equal to version `b` at MAJOR.MINOR.PATCH precision.
+ * Returns true when version `a` is equal to version `b` per semver precedence.
  *
- * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
- * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
- * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ * Build metadata (after `+`) is ignored. `1.2.3` and `1.2.3-pre` are not equal.
  *
- * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
- * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
 
@@ -96,7 +149,7 @@ export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
  * Caret (`^`) and tilde (`~`) prefixes and hyphen ranges are not supported.
  * Unrecognized comparator prefixes cause that comparator to evaluate to false.
  *
- * @param version - A semantic version string in the form `MAJOR.MINOR.PATCH`.
+ * @param version - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  * @param range - A range expression using the syntax described above.
  */
 export const satisfies = (version: string, range: string): boolean => {

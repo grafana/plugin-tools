@@ -87,6 +87,52 @@ describe('version', () => {
     });
   });
 
+  describe('pre-release precedence', () => {
+    it('treats any pre-release as lower than the matching release', () => {
+      // semver: 1.2.3-anything < 1.2.3
+      expect(lt('1.2.3-pre', '1.2.3')).toBe(true);
+      expect(lt('1.2.3-100', '1.2.3')).toBe(true);
+      expect(lt('1.2.3-25389005429', '1.2.3')).toBe(true);
+      expect(gt('1.2.3', '1.2.3-pre')).toBe(true);
+      expect(eq('1.2.3-pre', '1.2.3')).toBe(false);
+    });
+
+    it('compares numeric pre-release identifiers numerically', () => {
+      expect(gt('1.2.3-100', '1.2.3-50')).toBe(true);
+      expect(lt('1.2.3-50', '1.2.3-100')).toBe(true);
+      expect(eq('1.2.3-100', '1.2.3-100')).toBe(true);
+    });
+
+    it('handles large numeric build identifiers like Grafana nightlies', () => {
+      // matches the threshold pattern used in PanelEditOptionsGroup.ts
+      expect(gt('13.1.0-25500000000', '13.1.0-25389005429')).toBe(true);
+      expect(lt('13.1.0-25389005429', '13.1.0-25500000000')).toBe(true);
+      expect(lt('13.1.0-25389005429', '13.1.0')).toBe(true);
+    });
+
+    it('treats numeric identifiers as lower than non-numeric', () => {
+      // semver section 11.4.3
+      expect(lt('1.2.3-1', '1.2.3-alpha')).toBe(true);
+      expect(gt('1.2.3-alpha', '1.2.3-1')).toBe(true);
+    });
+
+    it('compares non-numeric identifiers lexicographically', () => {
+      expect(lt('1.2.3-alpha', '1.2.3-beta')).toBe(true);
+      expect(gt('1.2.3-beta', '1.2.3-alpha')).toBe(true);
+    });
+
+    it('treats a longer set of identifiers as higher precedence when prefix matches', () => {
+      // semver section 11.4.4
+      expect(lt('1.2.3-alpha', '1.2.3-alpha.1')).toBe(true);
+      expect(gt('1.2.3-alpha.1', '1.2.3-alpha')).toBe(true);
+    });
+
+    it('still uses MAJOR.MINOR.PATCH as primary ordering over pre-release', () => {
+      expect(gt('10.4.1', '10.4.0-999999')).toBe(true);
+      expect(gt('11.0.0', '10.4.0-999999')).toBe(true);
+    });
+  });
+
   describe('satisfies', () => {
     it('supports exact version match', () => {
       expect(satisfies('1.2.3', '1.2.3')).toBe(true);
@@ -126,41 +172,14 @@ describe('version', () => {
     });
   });
 
-  describe('build suffix', () => {
-    it('treats a build suffix as newer than the base release', () => {
-      expect(gt('10.4.0-100', '10.4.0')).toBe(true);
-      expect(gte('10.4.0-100', '10.4.0')).toBe(true);
-      expect(lt('10.4.0', '10.4.0-100')).toBe(true);
-    });
-
-    it('compares build numbers numerically', () => {
-      expect(gt('10.4.0-100', '10.4.0-50')).toBe(true);
-      expect(lt('10.4.0-50', '10.4.0-100')).toBe(true);
-      expect(eq('10.4.0-100', '10.4.0-100')).toBe(true);
-    });
-
-    it('handles very large build numbers', () => {
-      // Grafana dev builds use long commit-derived suffixes
-      expect(gt('10.4.0-452423424142342', '10.4.0')).toBe(true);
-      expect(gt('10.4.0-452423424142342', '10.4.0-452423424142341')).toBe(true);
-    });
-
-    it('falls back to 0 for non-numeric suffixes', () => {
-      // `10.4.0-pre` is treated as `10.4.0-0`, same as `10.4.0`
-      expect(eq('10.4.0-pre', '10.4.0')).toBe(true);
-      expect(gte('10.4.0-pre', '10.4.0')).toBe(true);
-      expect(lt('10.4.0-pre', '10.4.0')).toBe(false);
-    });
-
-    it('still uses MAJOR.MINOR.PATCH as primary ordering over build', () => {
-      // base release of a newer patch beats a build of an older patch
-      expect(gt('10.4.1', '10.4.0-999999')).toBe(true);
-      expect(gt('11.0.0', '10.4.0-999999')).toBe(true);
-    });
-  });
-
   describe('edge cases', () => {
-    it('returns false when comparing against non-numeric input', () => {
+    it('ignores build metadata after a `+`', () => {
+      // semver section 10: build metadata MUST be ignored when determining precedence
+      expect(eq('1.2.3+build.1', '1.2.3')).toBe(true);
+      expect(eq('1.2.3+build.1', '1.2.3+build.2')).toBe(true);
+    });
+
+    it('returns false when comparing against non-numeric base segments', () => {
       expect(gte('1.2.3', 'abc')).toBe(false);
       expect(lt('1.2.3', 'abc')).toBe(false);
       expect(eq('1.2.3', 'abc')).toBe(false);
