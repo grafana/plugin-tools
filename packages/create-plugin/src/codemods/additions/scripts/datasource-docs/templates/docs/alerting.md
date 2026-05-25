@@ -1,7 +1,7 @@
 ---
 title: Alerting
 description: Learn how to create alert rules with the {{pluginName}} data source.
-sidebar_position: 6
+sidebar_position: 8
 ---
 
 <!-- agent-hint:start -->

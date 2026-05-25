@@ -1,7 +1,7 @@
 ---
 title: Template variables
 description: Learn how to use template variables with the {{pluginName}} data source.
-sidebar_position: 4
+sidebar_position: 6
 ---
 
 <!-- agent-hint:start -->

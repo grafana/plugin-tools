@@ -1,7 +1,7 @@
 ---
 title: Annotations
 description: Learn how to use annotations with the {{pluginName}} data source.
-sidebar_position: 5
+sidebar_position: 7
 ---
 
 <!-- agent-hint:start -->

@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 description: Troubleshoot the {{pluginName}} data source.
-sidebar_position: 7
+sidebar_position: 9
 ---
 
 <!-- agent-hint:start -->

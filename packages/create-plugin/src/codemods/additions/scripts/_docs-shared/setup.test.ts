@@ -5,10 +5,12 @@ import { pathToFileURL } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../../context.js';
 import {
+  assertAgentLoop,
   assertPluginType,
   type ConditionalFilePredicate,
   setupDocsScaffolding,
   sourceContainsVariableSupport,
+  sourceIsSqlDatasource,
 } from './setup.js';
 
 // capture the real existsSync before mocking so we can delegate to it in beforeEach
@@ -270,6 +272,18 @@ describe('_docs-shared/setup', () => {
     });
   });
 
+  describe('assertAgentLoop', () => {
+    it('throws a friendly message when loop is undefined', () => {
+      expect(() => assertAgentLoop(undefined)).toThrow(
+        /Missing required flag: --agent-loop[\s\S]*--agent-loop=claude[\s\S]*--agent-loop=none/
+      );
+    });
+
+    it.each(['claude', 'codex', 'cursor', 'none'] as const)('accepts %s as a valid loop', (loop) => {
+      expect(() => assertAgentLoop(loop)).not.toThrow();
+    });
+  });
+
   describe('assertPluginType', () => {
     it('returns the parsed plugin.json when the type matches', () => {
       const context = makeContext({ pluginJson: { type: 'datasource', name: 'X' } });
@@ -341,6 +355,62 @@ describe('_docs-shared/setup', () => {
     it('returns false when src directory does not exist', () => {
       const basePath = makeTempPluginDir();
       expect(sourceContainsVariableSupport(basePath)).toBe(false);
+    });
+  });
+
+  describe('sourceIsSqlDatasource', () => {
+    function writeFile(basePath: string, relPath: string, content: string): void {
+      const target = join(basePath, relPath);
+      mkdirSync(join(target, '..'), { recursive: true });
+      writeFileSync(target, content);
+    }
+
+    it.each([
+      ['Go sqlds versioned import', 'datasource.go', 'import "github.com/grafana/sqlds/v3"\n'],
+      ['Go sqlds unversioned import', 'datasource.go', 'import "github.com/grafana/sqlds"\n'],
+      ['TS @grafana/sql double quotes', 'datasource.ts', 'import { SqlQueryEditorLazy } from "@grafana/sql";\n'],
+      ['TS @grafana/sql single quotes', 'datasource.ts', "import { SQLQuery } from '@grafana/sql';\n"],
+    ])('returns true for %s in src/', (_, file, content) => {
+      const basePath = makeTempPluginDir({ [file]: content });
+      expect(sourceIsSqlDatasource(basePath)).toBe(true);
+    });
+
+    it('walks pkg/ in addition to src/', () => {
+      const basePath = mkdtempSync(join(tmpdir(), 'docs-shared-test-'));
+      tempDirs.push(basePath);
+      writeFile(basePath, 'pkg/plugin/datasource.go', 'import "github.com/grafana/sqlds/v3"\n');
+      expect(sourceIsSqlDatasource(basePath)).toBe(true);
+    });
+
+    it('walks nested directories under src/', () => {
+      const basePath = makeTempPluginDir({
+        'backend/handler.go': 'import (\n  "github.com/grafana/sqlds"\n)\n',
+      });
+      expect(sourceIsSqlDatasource(basePath)).toBe(true);
+    });
+
+    it('returns false when sqlds is mentioned only in a comment-like string', () => {
+      const basePath = makeTempPluginDir({
+        'datasource.go': '// the sqlds library github.com/grafana/sqlds is not used here\nfunc main() {}\n',
+      });
+      expect(sourceIsSqlDatasource(basePath)).toBe(false);
+    });
+
+    it('returns false when only the Go stdlib database/sql is imported', () => {
+      const basePath = makeTempPluginDir({
+        'datasource.go': 'import "database/sql"\n',
+      });
+      expect(sourceIsSqlDatasource(basePath)).toBe(false);
+    });
+
+    it('returns false when no SQL signal is present', () => {
+      const basePath = makeTempPluginDir({ 'datasource.ts': 'export class DataSource {}\n' });
+      expect(sourceIsSqlDatasource(basePath)).toBe(false);
+    });
+
+    it('returns false when neither src/ nor pkg/ exists', () => {
+      const basePath = makeTempPluginDir();
+      expect(sourceIsSqlDatasource(basePath)).toBe(false);
     });
   });
 });
