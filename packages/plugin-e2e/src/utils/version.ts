@@ -1,16 +1,35 @@
-function parseVer(v: string): [number, number, number] {
-  const [ma = 0, mi = 0, pa = 0] = v.split('.').map(Number);
-  return [ma, mi, pa];
+function parseVer(v: string): [number, number, number, number] {
+  // split MAJOR.MINOR.PATCH from an optional dash-suffixed build number.
+  // Grafana dev/nightly builds use this suffix (e.g. `10.4.0-452423424142342`)
+  // and should be compared as a 4th component, with a missing suffix treated as 0.
+  // Non-numeric suffixes (e.g. `10.4.0-pre`) fall back to 0.
+  const [base, build = '0'] = v.split('-');
+  const [ma = 0, mi = 0, pa = 0] = base.split('.').map((s) => parseInt(s, 10));
+  const bu = parseInt(build, 10) || 0;
+  return [ma, mi, pa, bu];
 }
 
 function cmp(a: string, b: string): number {
-  const [ma, na, pa] = parseVer(a);
-  const [mb, nb, pb] = parseVer(b);
-  return ma !== mb ? ma - mb : na !== nb ? na - nb : pa - pb;
+  const [ma, na, pa, ba] = parseVer(a);
+  const [mb, nb, pb, bb] = parseVer(b);
+  if (ma !== mb) {
+    return ma - mb;
+  }
+  if (na !== nb) {
+    return na - nb;
+  }
+  if (pa !== pb) {
+    return pa - pb;
+  }
+  return ba - bb;
 }
 
 /**
  * Returns true when version `a` is greater than or equal to version `b`.
+ *
+ * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
+ * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
+ * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
  *
  * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
@@ -20,6 +39,10 @@ export const gte = (a: string, b: string): boolean => cmp(a, b) >= 0;
 /**
  * Returns true when version `a` is strictly less than version `b`.
  *
+ * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
+ * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
+ * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ *
  * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  */
@@ -27,6 +50,10 @@ export const lt = (a: string, b: string): boolean => cmp(a, b) < 0;
 
 /**
  * Returns true when version `a` is less than or equal to version `b`.
+ *
+ * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
+ * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
+ * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
  *
  * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
@@ -36,6 +63,10 @@ export const lte = (a: string, b: string): boolean => cmp(a, b) <= 0;
 /**
  * Returns true when version `a` is strictly greater than version `b`.
  *
+ * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
+ * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
+ * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
+ *
  * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  */
@@ -43,6 +74,10 @@ export const gt = (a: string, b: string): boolean => cmp(a, b) > 0;
 
 /**
  * Returns true when version `a` is equal to version `b` at MAJOR.MINOR.PATCH precision.
+ *
+ * Supports an optional numeric build suffix as a 4th component: `MAJOR.MINOR.PATCH-BUILD`.
+ * A missing suffix is treated as `0`, so `"10.4.0-100"` is newer than `"10.4.0"` (which is
+ * `"10.4.0-0"`). Non-numeric suffixes (e.g. `"10.4.0-pre"`) also fall back to `0`.
  *
  * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH`.
@@ -59,6 +94,7 @@ export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
  * - Disjunction (OR) via `||`: `">=1.2.3 <2.0.0 || >=3.0.0"`
  *
  * Caret (`^`) and tilde (`~`) prefixes and hyphen ranges are not supported.
+ * Unrecognized comparator prefixes cause that comparator to evaluate to false.
  *
  * @param version - A semantic version string in the form `MAJOR.MINOR.PATCH`.
  * @param range - A range expression using the syntax described above.

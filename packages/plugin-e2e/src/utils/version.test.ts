@@ -125,4 +125,50 @@ describe('version', () => {
       expect(satisfies('2.5.0', '>=1.0.0 <2.0.0 || >=3.0.0')).toBe(false);
     });
   });
+
+  describe('build suffix', () => {
+    it('treats a build suffix as newer than the base release', () => {
+      expect(gt('10.4.0-100', '10.4.0')).toBe(true);
+      expect(gte('10.4.0-100', '10.4.0')).toBe(true);
+      expect(lt('10.4.0', '10.4.0-100')).toBe(true);
+    });
+
+    it('compares build numbers numerically', () => {
+      expect(gt('10.4.0-100', '10.4.0-50')).toBe(true);
+      expect(lt('10.4.0-50', '10.4.0-100')).toBe(true);
+      expect(eq('10.4.0-100', '10.4.0-100')).toBe(true);
+    });
+
+    it('handles very large build numbers', () => {
+      // Grafana dev builds use long commit-derived suffixes
+      expect(gt('10.4.0-452423424142342', '10.4.0')).toBe(true);
+      expect(gt('10.4.0-452423424142342', '10.4.0-452423424142341')).toBe(true);
+    });
+
+    it('falls back to 0 for non-numeric suffixes', () => {
+      // `10.4.0-pre` is treated as `10.4.0-0`, same as `10.4.0`
+      expect(eq('10.4.0-pre', '10.4.0')).toBe(true);
+      expect(gte('10.4.0-pre', '10.4.0')).toBe(true);
+      expect(lt('10.4.0-pre', '10.4.0')).toBe(false);
+    });
+
+    it('still uses MAJOR.MINOR.PATCH as primary ordering over build', () => {
+      // base release of a newer patch beats a build of an older patch
+      expect(gt('10.4.1', '10.4.0-999999')).toBe(true);
+      expect(gt('11.0.0', '10.4.0-999999')).toBe(true);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('returns false when comparing against non-numeric input', () => {
+      expect(gte('1.2.3', 'abc')).toBe(false);
+      expect(lt('1.2.3', 'abc')).toBe(false);
+      expect(eq('1.2.3', 'abc')).toBe(false);
+    });
+
+    it('returns false for unsupported caret and tilde range prefixes', () => {
+      expect(satisfies('1.2.3', '~1.2.3')).toBe(false);
+      expect(satisfies('1.2.3', '^1.2.3')).toBe(false);
+    });
+  });
 });
