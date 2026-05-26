@@ -1,3 +1,18 @@
+# (Tue May 26 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-docs-cli@0.0.11`
+  - Plugin Docs CLI: Always sort root index.md first in manifest [#2636](https://github.com/grafana/plugin-tools/pull/2636) ([@sunker](https://github.com/sunker))
+- `@grafana/create-plugin@7.6.1`
+  - fix(create-plugin): make playwright report publishing opt-in [#2640](https://github.com/grafana/plugin-tools/pull/2640) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # (Thu May 14 2026)
 
 #### 🚀 Enhancement
