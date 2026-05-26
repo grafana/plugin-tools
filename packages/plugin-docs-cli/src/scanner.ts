@@ -204,11 +204,12 @@ function treeToPages(node: TreeNode): Page[] {
     }
   }
 
-  // convert children to array and sort by sidebar_position
-  const sortedEntries = childEntries.sort(
-    (a, b) =>
-      (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity)
-  );
+  // convert children to array and sort by sidebar_position; root index.md always first
+  const sortedEntries = childEntries.sort((a, b) => {
+    if (a[0] === 'index.md') { return -1; }
+    if (b[0] === 'index.md') { return 1; }
+    return (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity);
+  });
 
   for (const [name, child] of sortedEntries) {
     if (child.file) {
