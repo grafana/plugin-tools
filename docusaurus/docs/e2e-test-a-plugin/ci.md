@@ -80,7 +80,7 @@ This guide is based on the example workflow provided earlier in this document.
 
 ### Steps to enable report publishing
 
-1. Immediately following the step that executes the tests, add a step that uses the `upload-report-artifacts` Action to upload the report and a test summary as an to GitHub artifacts.
+1. Immediately following the step that executes the tests, add a step that uses the `upload-report-artifacts` Action to upload the report and a test summary to GitHub artifacts.
 
 ```yml
 - name: Run Playwright tests
@@ -91,7 +91,6 @@ This guide is based on the example workflow provided earlier in this document.
   uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@main
   if: ${{ (always() && !cancelled()) }}
   with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
     test-outcome: ${{ steps.run-tests.outcome }}
 ```
 
@@ -99,9 +98,12 @@ This guide is based on the example workflow provided earlier in this document.
 
 ```yml
 publish-report:
-  if: ${{ (always() && !cancelled()) }}
+  if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
   needs: [playwright-tests]
   runs-on: ubuntu-latest
+  permissions:
+    contents: write
+    pull-requests: write
   steps:
     - uses: actions/checkout@v4
     - name: Publish report
@@ -110,14 +112,14 @@ publish-report:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-3. Modify the workflow permissions to allow it to push changes, query the GitHub API and update PR comments.
+3. Modify the workflow permissions so the test jobs stay read-only and only the report publishing job gets write access.
 
 ```yml
 permissions:
-  contents: write
-  id-token: write
-  pull-requests: write
+  contents: read
 ```
+
+If you disable PR comments with the `pr-comment-summary` input, you can also remove `pull-requests: write` from the `publish-report` job. The `playwright-gh-pages` actions do not use OIDC, so `id-token: write` is not required for report publishing.
 
 4. If GitHub Pages is not yet enabled for your repository, configure a source branch for deployment. Follow the detailed instructions [here](https://github.com/grafana/plugin-actions/tree/main/playwright-gh-pages#github-pages-branch-configuration) to set it up.
 
@@ -125,15 +127,13 @@ For additional configuration options and examples, refer to the `playwright-gh-p
 
 ### Important considerations
 
-- **Public visibility**: By default, GitHub Pages sites are publicly accessible on the Internet. If your end-to-end tests include sensitive data or secrets, be aware of potential exposure risks.
+- **Public visibility**: By default, GitHub Pages sites are publicly accessible on the Internet. Playwright reports can include screenshots, traces, HTML output, and internal URLs, so review the published content carefully before enabling report publishing for sensitive repositories.
 - **Enterprise access control**: If you have a GitHub Enterprise account, you can configure access controls to restrict visibility. For details, refer to the [GitHub documentation](https://docs.github.com/en/enterprise-cloud@latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site).
+- **Fork pull requests**: Workflows triggered by `pull_request` from forks receive a read-only `GITHUB_TOKEN`. In that case the report publishing job may be unable to push the Pages branch or update PR comments. Avoid switching to `pull_request_target` just to get a write-capable token unless you have separately reviewed the security implications of running untrusted code with elevated permissions.
+- **Opt-in for new plugins**: GitHub Pages publishing is not scaffolded by default for newly generated plugins. Add the upload step and `publish-report` job only if you want public report hosting and accept the security trade-offs.
 
 ### Report summary
 
 The `publish-report` job adds a PR comment summarizing all the tests executed as part of the matrix. For tests that failed, the comment includes links to the GitHub Pages website, where the detailed reports can be browsed.
 
 ![](/img/e2e-report-summary.png)
-
-```
-
-```
