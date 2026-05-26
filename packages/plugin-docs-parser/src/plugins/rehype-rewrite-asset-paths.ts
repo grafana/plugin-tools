@@ -75,6 +75,8 @@ function resolveSrc(src: string, assetBaseUrl: string, file: string | undefined)
  * - `./foo` and `../foo` are normalized
  * - any `scheme:` URL (`http:`, `https:`, `data:`, `blob:`, `mailto:`, `ftp:`, ...),
  *   protocol-relative (`//`) and root-relative (`/`) srcs are left untouched
+ * - malformed srcs that the `URL` constructor rejects are left untouched so a single bad
+ *   image authored in markdown doesn't crash the whole parse
  * - When `file` is provided, relative srcs resolve from the doc file's directory; otherwise
  *   they resolve from `assetBaseUrl`
  */
@@ -101,7 +103,12 @@ export function rehypeRewriteAssetPaths(options: RewriteAssetPathsOptions) {
         return;
       }
 
-      node.properties.src = resolveSrc(src, options.assetBaseUrl, options.file);
+      try {
+        node.properties.src = resolveSrc(src, options.assetBaseUrl, options.file);
+      } catch {
+        // leave malformed srcs untouched - the rendered <img> will 404 visibly rather than
+        // taking down the entire docs page
+      }
     });
   };
 }
