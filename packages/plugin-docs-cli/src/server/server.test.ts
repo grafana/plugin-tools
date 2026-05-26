@@ -91,6 +91,20 @@ describe('startServer', () => {
     expect(response.body).toBeDefined();
   });
 
+  it('should rewrite relative image srcs to root-relative URLs based on the page directory', async () => {
+    const result = await startServer({ docsPath: testDocsPath, port: 0 });
+    server = result;
+    app = result.app;
+
+    const response = await request(app).get('/config/database');
+
+    expect(response.status).toBe(200);
+    // page lives at config/database.md, so `img/db-config.png` resolves under /config/img/...
+    expect(response.text).toContain('src="/config/img/db-config.png"');
+    // `../img/test.png` resolves up to the docs root
+    expect(response.text).toContain('src="/img/test.png"');
+  });
+
   it('should not include live reload script by default', async () => {
     const result = await startServer({ docsPath: testDocsPath, port: 0, liveReload: false });
     server = result;
