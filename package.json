@@ -89,7 +89,7 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "webpack-dev-server": "^5.2.1",
+    "webpack-dev-server": "5.2.4",
     "axios": "1.15.2",
     "follow-redirects": "1.16.0",
     "qs": "6.15.2",
