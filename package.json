@@ -89,7 +89,16 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "webpack-dev-server": "^5.2.1"
+    "webpack-dev-server": "^5.2.1",
+    "@octokit/plugin-paginate-rest": "11.4.1",
+    "@octokit/request": "9.2.1",
+    "@octokit/request-error": "5.1.1",
+    "axios": "1.15.2",
+    "brace-expansion": "5.0.6",
+    "follow-redirects": "1.16.0",
+    "qs": "6.15.2",
+    "tmp": "0.2.5",
+    "yaml": "2.8.3"
   },
   "packageManager": "npm@11.12.1"
 }
