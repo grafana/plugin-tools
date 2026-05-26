@@ -2,6 +2,19 @@
 
 #### 🐛 Bug Fix
 
+- `@grafana/plugin-docs-cli@0.0.12`, `@grafana/plugin-docs-parser@0.0.5`
+  - Plugin Docs: Resolve relative asset paths from doc file directory [#2611](https://github.com/grafana/plugin-tools/pull/2611) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
+# (Tue May 26 2026)
+
+#### 🐛 Bug Fix
+
 - `@grafana/plugin-docs-cli@0.0.11`
   - Plugin Docs CLI: Always sort root index.md first in manifest [#2636](https://github.com/grafana/plugin-tools/pull/2636) ([@sunker](https://github.com/sunker))
 - `@grafana/create-plugin@7.6.1`
