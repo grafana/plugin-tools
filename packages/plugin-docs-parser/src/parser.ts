@@ -69,7 +69,11 @@ function parseFrontmatter(content: string): { data: Record<string, unknown>; con
   if (!match) {
     return { data: {}, content };
   }
-  const data = (yaml.load(match[1]) ?? {}) as Record<string, unknown>;
+  // yaml.load can return scalars or arrays for malformed frontmatter; coerce
+  // anything that isn't a plain object back to {} so the public type holds.
+  const parsed = yaml.load(match[1]);
+  const data =
+    parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, unknown>) : {};
   return { data, content: match[2] };
 }
 
@@ -96,8 +100,8 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
   }
 
   // build the unified pipeline: markdown → mdast → hast.
-  // raw HTML in markdown is forbidden by the docs spec (see DESIGN_DOC.md),
-  // so allowDangerousHtml is off and any inline HTML gets dropped by remark-rehype.
+  // raw HTML in markdown is forbidden by the docs spec, so allowDangerousHtml
+  // is off and any inline HTML gets dropped by remark-rehype.
   const processor = unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeStripH1).use(rehypeSlug);
 
   // rewrite asset paths before sanitization so URLs are final

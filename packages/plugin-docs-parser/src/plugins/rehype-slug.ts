@@ -39,6 +39,11 @@ export function rehypeSlug() {
       }
 
       const base = slugify(nodeToString(node));
+      // skip if the heading produced no usable slug (e.g. emoji or punctuation only)
+      if (!base) {
+        return;
+      }
+
       const count = seen.get(base) ?? 0;
       seen.set(base, count + 1);
 
