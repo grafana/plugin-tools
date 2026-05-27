@@ -121,7 +121,7 @@ Or, start it directly with Docker:
 docker compose up
 ```
 
-### Open Grafana
+### Open Grafana and verify the scaffold
 
 Open your Grafana instance at [http://localhost:3000](http://localhost:3000).
  
