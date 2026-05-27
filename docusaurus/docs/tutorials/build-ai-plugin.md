@@ -123,7 +123,7 @@ docker compose up
 
 ### Open Grafana
 
-Open Grafana at [http://localhost:3000](http://localhost:3000).
+Open your Grafana instance at [http://localhost:3000](http://localhost:3000).
  
 Verify that the scaffold loads:
  
