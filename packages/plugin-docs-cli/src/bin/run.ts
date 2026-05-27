@@ -6,7 +6,6 @@ import { resolveDocsPath } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
 import { validateCommand } from '../commands/validate.command.js';
-import { affectedCommand } from '../commands/affected.command.js';
 
 const debug = createDebug('plugin-docs-cli:main');
 
@@ -24,7 +23,6 @@ async function main() {
     console.error('  serve      Start the local docs preview server');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
     console.error('  validate   Validate documentation (--json for machine-readable output)');
-    console.error('  affected   List doc pages whose frontmatter `relatedSources` references the given source file');
     process.exit(1);
   }
 
@@ -75,19 +73,6 @@ async function main() {
         },
       });
       await validateCommand(docsPath, { strict: validateArgv.strict, json: validateArgv.json });
-      break;
-    }
-    case 'affected': {
-      const affectedArgv = minimist(process.argv.slice(3), {
-        string: ['source'],
-        alias: { s: 'source' },
-      });
-      const source = affectedArgv.source;
-      if (typeof source !== 'string' || source.length === 0) {
-        console.error('Usage: plugin-docs-cli affected --source <path>');
-        process.exit(1);
-      }
-      await affectedCommand(docsPath, { source });
       break;
     }
     default:
