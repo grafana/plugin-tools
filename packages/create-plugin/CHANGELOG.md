@@ -1,3 +1,15 @@
+# v7.6.1 (Tue May 26 2026)
+
+#### 🐛 Bug Fix
+
+- fix(create-plugin): make playwright report publishing opt-in [#2640](https://github.com/grafana/plugin-tools/pull/2640) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v7.6.0 (Thu May 14 2026)
 
 #### 🚀 Enhancement

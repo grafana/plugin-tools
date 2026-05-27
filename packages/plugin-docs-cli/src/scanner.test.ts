@@ -15,6 +15,14 @@ describe('scanDocsFolder', () => {
     expect(result.manifest.pages).toHaveLength(4); // home, guide, advanced, config
   });
 
+  it('should sort root index.md first even when sidebar_position is not set', async () => {
+    const noPositionPath = join(__dirname, '__fixtures__', 'no-position-index-docs');
+    const result = await scanDocsFolder(noPositionPath);
+
+    expect(result.manifest.pages[0].slug).toBe('index');
+    expect(result.manifest.pages[0].file).toBe('index.md');
+  });
+
   it('should sort pages by sidebar_position', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
