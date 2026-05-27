@@ -1,6 +1,6 @@
 ---
 name: write-plugin-docs
-description: Authors or updates a single plugin docs page. Consults the source files implied by the page's section hints and title to keep content grounded in current code, and applies the project's style rules from `<docsPath>/AGENTS.md`. Use when filling a stub page, adding a new page, or updating docs after a code change.
+description: Authors or updates a single plugin docs page. Consults the source files implied by the page's section briefs and title to keep content grounded in current code, and applies the project's style rules from `<docsPath>/AGENTS.md`. Use when filling a stub page, adding a new page, or updating docs after a code change.
 ---
 
 # Write Plugin Docs
@@ -15,31 +15,31 @@ description: Authors or updates a single plugin docs page. Consults the source f
 
 Run from the plugin root. The page path can be an existing doc page (e.g. `<docsPath>/query-editor.md`) or a topic the user wants documented for the first time (e.g. "IAM user setup").
 
-Read `<docsPath>/AGENTS.md` before writing. It defines the frontmatter schema, voice rules, agent-hint protocol and the common page patterns catalog.
+Read `<docsPath>/AGENTS.md` before writing. It defines the frontmatter schema, voice rules, Section-brief protocol and the common page patterns catalog.
 
 ## Branch A: filling or updating an existing page
 
-1. Read the target page. Identify every `<!-- agent-hint:start --> ... <!-- agent-hint:end -->` block. Each sits under a section heading and scopes that section.
+1. Read the target page. Identify every `<!-- section-brief:start --> ... <!-- section-brief:end -->` block. Each sits under a section heading and scopes that section.
 
-2. Identify the source files that back the page. The page title and the agent-hint text imply the right source - the bootstrap-plugin-docs skill's page catalog lists conventional source-to-page mappings for the plugin type. Use grep, file listing and the import graph to find them.
+2. Identify the source files that back the page. The page title and the section-brief text imply the right source - the bootstrap-plugin-docs skill's page catalog lists conventional source-to-page mappings for the plugin type. Use grep, file listing and the import graph to find them.
 
 3. Read those source files. Only document fields, behaviours and types visible in the files you read. Do not invent.
 
 4. Read 1-2 sibling pages in the same `<docsPath>/` folder for tone and structure consistency.
 
 5. Fill each section in place. For each section:
-   - Use the hint as scope guidance.
+   - Use the brief as scope guidance.
    - Apply the style rules from `<docsPath>/AGENTS.md`.
    - Use real code examples drawn from source, not invented.
    - For numbered-step procedures, write a clean ordered list with one action per step.
    - For example queries, use the `dashboard.json` `targets` JSON shape, not free prose.
 
-6. Strip every `agent-hint` block after the corresponding section is written. The block format is exactly:
+6. Strip every `section-brief` block after the corresponding section is written. The block format is exactly:
 
    ```html
-   <!-- agent-hint:start -->
+   <!-- section-brief:start -->
    ...
-   <!-- agent-hint:end -->
+   <!-- section-brief:end -->
    ```
 
 7. Validate:

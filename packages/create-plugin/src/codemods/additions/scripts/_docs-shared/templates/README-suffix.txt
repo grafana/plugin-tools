@@ -12,9 +12,9 @@ agent loop's skills folder (.claude/skills/, .agents/skills/ or
                            first.
   write-plugin-docs      - per-page. Fills a stub page or updates an
                            existing one. Reads the source files implied by
-                           the page title and section hints.
+                           the page title and section briefs.
   review-plugin-docs     - reviews docs files for frontmatter compliance,
-                           style rules, agent-hint cleanup and factual
+                           style rules, section-brief cleanup and factual
                            alignment with source.
   validate-plugin-docs   - runs `npm run docs:validate --json`, applies
                            category-based fixes, iterates up to 3 times.

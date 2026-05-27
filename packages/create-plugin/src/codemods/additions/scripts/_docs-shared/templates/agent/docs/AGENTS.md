@@ -72,37 +72,39 @@ These are the canonical voice rules for plugin docs. Apply them when writing or 
 
 For deeper guidance, refer to the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/write/style-guide/).
 
-## The agent-hint protocol
+## The Section-brief protocol
+
+Section briefs are written for whoever fills the section - human author or AI agent. Read the brief, write the section content in its place, then strip the `<!-- section-brief:start --> ... <!-- section-brief:end -->` block.
 
 Scaffolded pages contain blocks like this under each section heading:
 
 ```markdown
 ## Before you begin
 
-<!-- agent-hint:start -->
+<!-- section-brief:start -->
 
 List prerequisites, required permissions, network connectivity, and any
 account-level setup users must complete before installing or configuring
 {{pluginName}} in Grafana.
 
-<!-- agent-hint:end -->
+<!-- section-brief:end -->
 ```
 
 Each block narrowly scopes the section it sits under. When filling a section:
 
-1. Read the hint.
-2. Write the section using the hint as scope guidance. For source-backed sections, read the source files implied by the page title and hint (the bootstrap-plugin-docs skill's page catalog lists conventional source-to-page mappings for the plugin type).
-3. Strip the hint block (`<!-- agent-hint:start --> ... <!-- agent-hint:end -->`) once the section is filled.
+1. Read the brief.
+2. Write the section using the brief as scope guidance. For source-backed sections, read the source files implied by the page title and brief (the bootstrap-plugin-docs skill's page catalog lists conventional source-to-page mappings for the plugin type).
+3. Strip the brief block (`<!-- section-brief:start --> ... <!-- section-brief:end -->`) once the section is filled.
 
-Hint blocks are plain HTML comments, so the parser ignores them if accidentally left in - but strip them anyway, they are noise.
+Section-brief blocks are plain HTML comments, so the parser ignores them if accidentally left in - but strip them anyway, they are noise.
 
 ## Skills
 
 Four skills support docs work. Each is a [Agent Skills](https://agentskills.io) directory under your agent loop's skills folder (`.claude/skills/<name>/SKILL.md`, `.agents/skills/<name>/SKILL.md` or `.cursor/skills/<name>/SKILL.md`):
 
 - **`bootstrap-plugin-docs`** - one-shot, plugin-wide. Mines `README.md` plus source files, routes existing content to the right stub pages, prompts for non-source-backed topics. Run this once after scaffolding if the plugin already has substantive docs in the README.
-- **`write-plugin-docs`** - per-page. Fills a stub page or updates an existing one. Reads the source files implied by the page title and section hints so it always works from current source.
-- **`review-plugin-docs`** - plugin-specific review against the 13 rules above, frontmatter requirements, agent-hint cleanup and factual alignment with source files.
+- **`write-plugin-docs`** - per-page. Fills a stub page or updates an existing one. Reads the source files implied by the page title and section briefs so it always works from current source.
+- **`review-plugin-docs`** - plugin-specific review against the 13 rules above, frontmatter requirements, section-brief cleanup and factual alignment with source files.
 - **`validate-plugin-docs`** - runs `npm run docs:validate --json`, groups diagnostics, applies fixes and re-runs up to 3 iterations.
 
 ## Adding a new page
@@ -111,7 +113,7 @@ The `bootstrap-plugin-docs` skill carries a per-plugin-type page catalog with co
 
 ## Do not
 
-- Use MDX, custom React components or HTML beyond the `<!-- agent-hint -->` blocks.
+- Use MDX, custom React components or HTML beyond the `<!-- section-brief -->` blocks.
 - Reference one-click installation - it has been removed from the plugin catalog.
 - Link to internal-only URLs (anything on `*.grafana-ops.net` or staging environments).
 - Invent query fields, configuration options or behaviours. If a page is source-backed, document only what is visible in the source files you read.

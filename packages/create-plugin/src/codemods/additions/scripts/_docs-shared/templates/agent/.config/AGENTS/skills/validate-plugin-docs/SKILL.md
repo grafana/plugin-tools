@@ -49,7 +49,7 @@ Run from the plugin root. Loops validate → fix → validate until clean or stu
    | `frontmatter-*`                                                  | Add missing required field, correct type, remove unknown field. Required fields are `title`, `description`, `sidebar_position`.      |
    | `has-markdown-files` / `*-index` / `*-naming`                    | Create missing required page from the same scaffold conventions used by `create-plugin add datasource-docs`. Rename misplaced files. |
    | `no-spaces-in-names` / `valid-file-naming`                       | Rename to kebab-case.                                                                                                                |
-   | `no-raw-html` / `no-script-tags`                                 | Remove offending HTML except the `<!-- agent-hint -->` blocks (which the parser ignores).                                            |
+   | `no-raw-html` / `no-script-tags`                                 | Remove offending HTML except the `<!-- section-brief -->` blocks (which the parser ignores).                                         |
    | `image-refs-relative` / `internal-links-relative`                | Fix path.                                                                                                                            |
    | `internal-links-resolve`                                         | Suggest closest existing page; ask the user before changing semantics.                                                               |
    | `referenced-images-exist` / `no-orphaned-images`                 | Flag for the user. Do not generate images. Do not delete referenced images.                                                          |

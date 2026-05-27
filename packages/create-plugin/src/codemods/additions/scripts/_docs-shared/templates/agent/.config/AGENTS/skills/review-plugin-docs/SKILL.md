@@ -1,6 +1,6 @@
 ---
 name: review-plugin-docs
-description: Plugin-specific review of docs files against frontmatter requirements, agent-hint cleanup, style rules, and factual alignment with source files. Reports findings without auto-editing. Use before merging changes that touch docs/**.
+description: Plugin-specific review of docs files against frontmatter requirements, section-brief cleanup, style rules, and factual alignment with source files. Reports findings without auto-editing. Use before merging changes that touch docs/**.
 ---
 
 # Review Plugin Docs
@@ -42,8 +42,8 @@ This skill is plugin-specific and intentionally narrow. For a heavyweight pass (
    - `title`, `description`, `sidebar_position` are all present.
    - `description` is a single concise sentence (not a paragraph).
 
-   **Agent-hint cleanup:**
-   - No `<!-- agent-hint:start -->` or `<!-- agent-hint:end -->` markers remain. If any are found, flag them and propose stripping them.
+   **Section-brief cleanup:**
+   - No `<!-- section-brief:start -->` or `<!-- section-brief:end -->` markers remain. If any are found, flag them and propose stripping them.
 
    **Style rule check** (against the 13 rules in `<docsPath>/AGENTS.md`):
    - Present tense, not future "will".
@@ -58,7 +58,7 @@ This skill is plugin-specific and intentionally narrow. For a heavyweight pass (
    - No `--` (double hyphens) - use `-` or `—`.
 
    **Factual alignment:**
-   - For each documented field, type or behaviour, locate it in `src/` via grep or path inspection. The page title and section hints suggest where to look (the bootstrap-plugin-docs skill's page catalog lists conventional source-to-page mappings for the plugin type). Flag anything invented.
+   - For each documented field, type or behaviour, locate it in `src/` via grep or path inspection. The page title and section briefs suggest where to look (the bootstrap-plugin-docs skill's page catalog lists conventional source-to-page mappings for the plugin type). Flag anything invented.
 
    **Forbidden content:**
    - No MDX or React components.
@@ -72,7 +72,7 @@ This skill is plugin-specific and intentionally narrow. For a heavyweight pass (
    [<docsPath>/configuration.md]
    - Line 12: STYLE - "users will see" should be "users see" (present tense).
    - Line 34: FACTUAL - documented field `region` not found in src/components/ConfigEditor.tsx. Verify or remove.
-   - Line 88: HINT - leftover agent-hint block. Strip lines 86-90.
+   - Line 88: BRIEF - leftover section-brief block. Strip lines 86-90.
    ```
 
 5. Do not auto-edit. Surface every finding in chat. If the user says "apply them", proceed page by page. After applying, run `npm run docs:validate -- --json` and report any remaining issues.

@@ -68,11 +68,11 @@ describe('panel-docs codemod', () => {
       expect(context.getFile('docs/troubleshooting.md') ?? '').toContain('## Common issues');
     });
 
-    it('wraps sections in agent-hint blocks', () => {
+    it('wraps sections in section-brief blocks', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
-      expect(context.getFile('docs/index.md') ?? '').toContain('<!-- agent-hint:start -->');
-      expect(context.getFile('docs/options.md') ?? '').toContain('<!-- agent-hint:start -->');
+      expect(context.getFile('docs/index.md') ?? '').toContain('<!-- section-brief:start -->');
+      expect(context.getFile('docs/options.md') ?? '').toContain('<!-- section-brief:start -->');
     });
 
     it('interpolates pluginName into the index page', () => {

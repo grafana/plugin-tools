@@ -111,11 +111,11 @@ describe('datasource-docs codemod', () => {
       expect(content).toContain('## Example queries');
     });
 
-    it('wraps generated sections in agent-hint blocks', () => {
+    it('wraps generated sections in section-brief blocks', () => {
       const context = makeContext();
       datasourceDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
-      expect(context.getFile('docs/configuration.md') ?? '').toContain('<!-- agent-hint:start -->');
-      expect(context.getFile('docs/index.md') ?? '').toContain('<!-- agent-hint:start -->');
+      expect(context.getFile('docs/configuration.md') ?? '').toContain('<!-- section-brief:start -->');
+      expect(context.getFile('docs/index.md') ?? '').toContain('<!-- section-brief:start -->');
     });
 
     it('writes the validate-docs workflow', () => {
