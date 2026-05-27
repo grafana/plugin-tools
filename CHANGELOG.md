@@ -1,3 +1,16 @@
+# (Wed May 27 2026)
+
+#### 🐛 Bug Fix
+
+- `@grafana/create-plugin@7.6.2`
+  - fix: pin dependencies for better security [#2658](https://github.com/grafana/plugin-tools/pull/2658) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # (Tue May 26 2026)
 
 #### 🐛 Bug Fix
