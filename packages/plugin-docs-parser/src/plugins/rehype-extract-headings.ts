@@ -1,8 +1,18 @@
 import type { Root, Element } from 'hast';
+import type { Node } from 'unist';
 import type { VFile } from 'vfile';
 import { visit } from 'unist-util-visit';
-import { toString } from 'hast-util-to-string';
 import type { Heading } from '../types.js';
+
+function hastToString(node: Node): string {
+  if ('value' in node) {
+    return node.value as string;
+  }
+  if ('children' in node) {
+    return (node.children as Node[]).map(hastToString).join('');
+  }
+  return '';
+}
 
 declare module 'vfile' {
   interface DataMap {
@@ -31,7 +41,7 @@ export function rehypeExtractHeadings() {
       headings.push({
         level: node.tagName === 'h2' ? 2 : 3,
         id,
-        text: toString(node),
+        text: hastToString(node),
       });
     });
 
