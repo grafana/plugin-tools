@@ -123,10 +123,9 @@ docker compose up
 
 ### Open Grafana and verify the scaffold
 
-Open your Grafana instance at [http://localhost:3000](http://localhost:3000).
- 
-Verify that the scaffold loads:
- 
+To verify that the scaffold loads:
+
+1. Open your Grafana instance at [http://localhost:3000](http://localhost:3000). 
 1. Go to **Connections** > **Data sources**.
 1. Add or select your new data source.
 1. Go to **Explore** and select the data source you just created. To learn how to query and visualize your data, refer to [Explore your data](https://grafana.com/docs/grafana/latest/visualizations/explore/).
