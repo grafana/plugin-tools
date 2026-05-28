@@ -21,7 +21,7 @@ async function run() {
     const hasReleaseLabel = labelNames.includes('release');
     const userName = pull_request?.user.login;
 
-    if (userName === 'renovate[bot]') {
+    if (userName === 'renovate[bot]' || userName === 'renovate-sh-app[bot]') {
       if (isMissingSemverLabel) {
         const files = await getPullRequestFiles({ octokit });
 
