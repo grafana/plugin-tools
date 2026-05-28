@@ -186,7 +186,7 @@ npx https://pkg.pr.new/grafana/plugin-tools/@grafana/<cli-package>@<commit-sha>
 > [!IMPORTANT]
 > The URL keys off the commit SHA, not a real semver version. Any `package.json` reference to a pkg.pr.new URL must be swapped back to the published version once the PR is merged and released.
 
-When you push new commits to a PR with the `preview` label, the existing pkg.pr.new comment is updated in place with the new commit sha.
+When you push new commits to a PR with the `preview` label, the existing pkg.pr.new comment is updated in place with the new commit SHA.
 
 ## Create A Release
 
