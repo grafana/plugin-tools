@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "7.6.1",
+  "version": "7.6.2",
   "repository": {
     "directory": "packages/create-plugin",
     "url": "https://github.com/grafana/plugin-tools"
@@ -25,32 +25,32 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/parser": "^7.28.5",
-    "@ivanmaxlogiudice/gitignore": "^0.0.2",
-    "change-case": "^5.4.0",
-    "debug": "^4.3.4",
-    "enquirer": "^2.4.1",
-    "find-up": "^8.0.0",
-    "glob": "^13.0.0",
-    "handlebars": "^4.7.8",
-    "jsonc-parser": "^3.3.1",
-    "minimist": "^1.2.8",
-    "recast": "^0.23.11",
-    "semver": "^7.3.5",
-    "title-case": "^4.3.0",
-    "valibot": "^1.2.0",
-    "which": "^6.0.0",
-    "yaml": "^2.7.0"
+    "@babel/parser": "7.29.0",
+    "@ivanmaxlogiudice/gitignore": "0.0.2",
+    "change-case": "5.4.4",
+    "debug": "4.4.3",
+    "enquirer": "2.4.1",
+    "find-up": "8.0.0",
+    "glob": "13.0.6",
+    "handlebars": "4.7.9",
+    "jsonc-parser": "3.3.1",
+    "minimist": "1.2.8",
+    "recast": "0.23.11",
+    "semver": "7.7.2",
+    "title-case": "4.3.2",
+    "valibot": "1.2.0",
+    "which": "6.0.1",
+    "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@libs/output": "^1.0.3",
-    "@libs/version": "^1.0.2",
-    "@types/glob": "^9.0.0",
-    "@types/minimist": "^1.2.5",
-    "@types/semver": "^7.7.1",
-    "@types/tmp": "^0.2.6",
-    "@types/which": "^3.0.4",
-    "tmp": "^0.2.5"
+    "@libs/output": "1.0.3",
+    "@libs/version": "1.0.2",
+    "@types/glob": "9.0.0",
+    "@types/minimist": "1.2.5",
+    "@types/semver": "7.7.1",
+    "@types/tmp": "0.2.6",
+    "@types/which": "3.0.4",
+    "tmp": "0.2.5"
   },
   "engines": {
     "node": ">=20"
