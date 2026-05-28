@@ -3,6 +3,7 @@
   "description": "Run various checks to detect if a Grafana plugin is compatible with React.",
   "version": "0.6.4",
   "repository": {
+    "type": "git",
     "directory": "packages/react-detect",
     "url": "https://github.com/grafana/plugin-tools"
   },
