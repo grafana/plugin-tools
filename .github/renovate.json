@@ -94,7 +94,6 @@
       "automerge": true,
       "groupName": "auto-merged devDependencies",
       "groupSlug": "dev-dependencies-automerge",
-      "addLabels": ["no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies", "optionalDependencies"],
       "matchPackageNames": [
@@ -109,7 +108,6 @@
       "automerge": true,
       "groupName": "auto-merged patch dependencies",
       "groupSlug": "prod-dependencies-automerge",
-      "addLabels": ["no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch"],
