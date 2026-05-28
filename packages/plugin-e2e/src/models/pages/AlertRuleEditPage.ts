@@ -2,9 +2,12 @@ import * as semver from 'semver';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
-import { expect } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
+// Alert pages render slowly on busy CI runners; give the rendering 15s headroom
+// before falling back to default 5s expect timeouts for downstream interactions.
+const ALERT_PAGE_READY_TIMEOUT = 15_000;
 
 export class AlertRuleEditPage extends GrafanaPage {
   constructor(
@@ -48,13 +51,13 @@ export class AlertRuleEditPage extends GrafanaPage {
     );
 
     if (alertingQueryAndExpressionsStepMode) {
-      await expect(this.advancedModeSwitch).toBeVisible();
-      await expect(this.advancedModeSwitch).toHaveCount(1);
+      await expect(this.advancedModeSwitch).toBeVisible({ timeout: ALERT_PAGE_READY_TIMEOUT });
+      await expect(this.advancedModeSwitch).toHaveCount(1, { timeout: ALERT_PAGE_READY_TIMEOUT });
       return true;
     }
 
-    await expect(this.advancedModeSwitch).not.toBeVisible();
-    await expect(this.advancedModeSwitch).toHaveCount(0);
+    await expect(this.advancedModeSwitch).not.toBeVisible({ timeout: ALERT_PAGE_READY_TIMEOUT });
+    await expect(this.advancedModeSwitch).toHaveCount(0, { timeout: ALERT_PAGE_READY_TIMEOUT });
     return false;
   }
 
@@ -93,18 +96,20 @@ export class AlertRuleEditPage extends GrafanaPage {
   async getQueryRow(refId = 'A'): Promise<AlertRuleQuery> {
     const advancedModeSupported = await this.isAdvancedModeSupported();
 
+    let locator: Locator;
     if (advancedModeSupported && !(await this.advancedModeSwitch.isChecked()) && refId === 'A') {
       // return the default query row
-      return new AlertRuleQuery(
-        this.ctx,
-        this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows)
-      );
+      locator = this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows);
+    } else {
+      // return query by refId
+      locator = this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+        has: this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRow.title(refId)),
+      });
     }
 
-    // return query by refId
-    const locator = this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).filter({
-      has: this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRow.title(refId)),
-    });
+    // Wait for the row to be mounted so subsequent interactions (e.g. setting the
+    // datasource) don't race against the alert page still rendering under slow CI.
+    await locator.first().waitFor({ state: 'visible', timeout: ALERT_PAGE_READY_TIMEOUT });
 
     return new AlertRuleQuery(this.ctx, locator);
   }
@@ -188,7 +193,7 @@ export class AlertRuleEditPage extends GrafanaPage {
       evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
 
-    await expect(evaluateButton).toBeVisible();
+    await expect(evaluateButton).toBeVisible({ timeout: ALERT_PAGE_READY_TIMEOUT });
 
     const evalReq = this.ctx.page
       .waitForRequest((req) => req.url().includes(this.ctx.selectors.apis.Alerting.eval), {
