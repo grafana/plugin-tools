@@ -111,7 +111,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 4: add docs:serve and docs:validate npm scripts
   addDocsScripts(context);
 
-  // step 5: copy template files to docs folder (includes README.txt)
+  // step 5: copy template files to docs folder (includes README.md)
   copyDocsTemplates(context, templateBaseUrl, docsPath, pluginName, pluginJson, conditionalFiles);
 
   // step 6: append the AI-workflow section to the docs README when an agent loop is selected
@@ -149,22 +149,16 @@ function printNextSteps(opts: {
 }): void {
   const { docsPath, agentAssistanceAdded, readmePresent, agentLoop } = opts;
   const lines = ['', 'Next steps:'];
-  if (agentAssistanceAdded && readmePresent) {
+  // the `agentLoop !== 'none'` check narrows the type for LOOP_SKILL_TARGET below.
+  // At runtime `agentAssistanceAdded` already implies a non-none loop.
+  if (agentAssistanceAdded && agentLoop !== 'none') {
+    const readmeMention = readmePresent ? ' (and mine your README for content)' : '';
     lines.push(
-      `  - Ask an AI agent to run the \`bootstrap-plugin-docs\` skill - it will mine your README and source files into the new ${docsPath}/ stubs`
+      `  - Run the \`/bootstrap-plugin-docs\` skill to generate docs for your current features${readmeMention}`
     );
-  } else if (agentAssistanceAdded) {
-    lines.push(
-      `  - Ask an AI agent to run the \`write-plugin-docs\` skill on each stub under ${docsPath}/ (read ${docsPath}/AGENTS.md first)`
-    );
+    lines.push(`  - Skills are available under ${LOOP_SKILL_TARGET[agentLoop]}/`);
   } else {
     lines.push(`  - Fill in the stub docs under ${docsPath}/ with your plugin's actual content`);
-  }
-  // the `agentLoop !== 'none'` check is required for TypeScript narrowing
-  // (LOOP_SKILL_TARGET is keyed by Exclude<AgentLoop, 'none'>). At runtime
-  // `agentAssistanceAdded` already implies a non-none loop.
-  if (agentAssistanceAdded && agentLoop !== 'none') {
-    lines.push(`  - Skills are available under ${LOOP_SKILL_TARGET[agentLoop]}/`);
   }
   lines.push('  - Run `npm run docs:serve` to preview the docs locally');
   lines.push('  - Run `npm run docs:validate` to check for issues before pushing');
@@ -377,13 +371,13 @@ function readSharedTemplate(relativePath: string): string {
 // README is missing from Context (e.g. a codemod chose not to scaffold one)
 // or if the suffix is already present.
 function appendAgentSuffixToReadme(context: Context, docsPath: string, pluginName: string): void {
-  const readmePath = `${docsPath}/README.txt`;
+  const readmePath = `${docsPath}/README.md`;
   const existing = context.getFile(readmePath);
   if (existing === undefined) {
     additionsDebug(`${readmePath} not found in context; skipping agent-workflow suffix`);
     return;
   }
-  const suffix = readSharedTemplate('README-suffix.txt').replaceAll('{{pluginName}}', pluginName);
+  const suffix = readSharedTemplate('README-suffix.md').replaceAll('{{pluginName}}', pluginName);
   if (existing.includes('AI authoring assistance')) {
     additionsDebug(`${readmePath} already contains the AI authoring section, skipping`);
     return;
@@ -476,8 +470,13 @@ function appendMultiPageDocsSectionToInstructions(context: Context, docsPath: st
     return;
   }
   const trailingNewline = existing.endsWith('\n') ? '' : '\n';
-  const appended = `${existing}${trailingNewline}\n${MULTI_PAGE_DOCS_MARKER}\n\nThis plugin uses multi-page docs in \`${docsPath}/\`. Read \`${docsPath}/AGENTS.md\` before authoring or editing pages.\n\n- Docs and source can drift apart if one changes without the other. When modifying a file under \`src/\`, check whether the pages under \`${docsPath}/\` still describe the file accurately and update them in the same change.\n- Four Agent Skills cover the docs workflows: \`bootstrap-plugin-docs\` (one-shot brownfield migration), \`write-plugin-docs\` (per-page authoring), \`review-plugin-docs\` (plugin-specific review), \`validate-plugin-docs\` (validate → fix loop). They are scaffolded under your agent loop's skills folder (\`.claude/skills/\`, \`.agents/skills/\` or \`.cursor/skills/\`).\n`;
-  context.updateFile(targetPath, appended);
+  const section = [
+    MULTI_PAGE_DOCS_MARKER,
+    '',
+    `This plugin uses multi-page docs under \`${docsPath}/\`. **Always update those pages when features change in \`src/\` (added, changed or removed).** Conventions, the feature-change checklist and the four authoring skills are in [\`${docsPath}/AGENTS.md\`](./${docsPath}/AGENTS.md).`,
+    '',
+  ].join('\n');
+  context.updateFile(targetPath, `${existing}${trailingNewline}\n${section}`);
 }
 
 function addDocsScripts(context: Context): void {

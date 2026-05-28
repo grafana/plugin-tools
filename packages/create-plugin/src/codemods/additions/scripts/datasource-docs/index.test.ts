@@ -131,29 +131,36 @@ describe('datasource-docs codemod', () => {
       expect(content).toContain('grafana/plugin-actions/build-plugin@eriksundell/plugin-docs-build-step');
     });
 
-    it('scaffolds docs/README.txt with the plugin name templated in', () => {
+    it('scaffolds docs/README.md with the plugin name templated in', () => {
       const context = makeContext();
       datasourceDocs(context, { docsPath: 'docs', agentLoop: 'none' });
-      const content = context.getFile('docs/README.txt') ?? '';
-      expect(content).toContain('My Plugin - documentation');
-      expect(content).toContain('How docs are published');
+      const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain('# My Plugin documentation');
+      expect(content).toContain('## How docs are published');
+      expect(content).toContain('## How to disable multi-page docs');
     });
 
-    it('appends the AI authoring section to README.txt when agentLoop is claude', () => {
+    it('appends the AI authoring section to README.md when agentLoop is claude', () => {
       const context = makeContext();
       datasourceDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
-      const content = context.getFile('docs/README.txt') ?? '';
-      expect(content).toContain('AI authoring assistance');
+      const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain('## AI authoring assistance');
       expect(content).toContain('bootstrap-plugin-docs');
-      expect(content).toContain('Recommended workflow');
+      expect(content).toContain('### Recommended workflow');
     });
 
-    it('omits the AI authoring section from README.txt when agentLoop is none', () => {
+    it('omits the AI authoring section from README.md when agentLoop is none', () => {
       const context = makeContext();
       datasourceDocs(context, { docsPath: 'docs', agentLoop: 'none' });
-      const content = context.getFile('docs/README.txt') ?? '';
+      const content = context.getFile('docs/README.md') ?? '';
       expect(content).not.toContain('AI authoring assistance');
       expect(content).not.toContain('bootstrap-plugin-docs');
+    });
+
+    it('does not scaffold a docs/README.txt (legacy filename)', () => {
+      const context = makeContext();
+      datasourceDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
+      expect(context.doesFileExist('docs/README.txt')).toBe(false);
     });
   });
 
@@ -166,6 +173,10 @@ describe('datasource-docs codemod', () => {
       expect(content).toContain('**My Plugin**');
       expect(content).toContain('## Style rules');
       expect(content).toContain('## Adding a new page');
+      // the feature-change directive lives here; instructions.md just points at it
+      expect(content).toContain('## Keeping docs in sync with source');
+      expect(content).toContain('add, change or remove a feature');
+      expect(content).toContain('/write-plugin-docs');
     });
 
     it('scaffolds all four authoring skills under .claude/skills/', () => {
@@ -183,7 +194,7 @@ describe('datasource-docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
     });
 
-    it('appends a Multi-page docs section to .config/AGENTS/instructions.md when present', () => {
+    it('appends a slim Multi-page docs pointer to .config/AGENTS/instructions.md when present', () => {
       const context = makeContext();
       context.addFile(
         '.config/AGENTS/instructions.md',
@@ -193,7 +204,12 @@ describe('datasource-docs codemod', () => {
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content).toContain('Existing content.');
       expect(content).toContain('## Multi-page docs');
+      // the directive itself is one sentence; the detail lives in docs/AGENTS.md
+      expect(content).toContain('Always update those pages when features change in `src/`');
       expect(content).toContain('docs/AGENTS.md');
+      // the section stays terse - no skill list, no bullet expansion
+      expect(content).not.toContain('/bootstrap-plugin-docs');
+      expect(content).not.toContain('Added feature');
     });
 
     it('does not duplicate the Multi-page docs section if already present', () => {

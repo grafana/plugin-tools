@@ -95,48 +95,127 @@ describe('panel-docs codemod', () => {
       );
     });
 
-    it('scaffolds the three shared skills (write, review, validate) under .claude/skills/', () => {
+    it('scaffolds all four skills (write, review, validate, bootstrap) under .claude/skills/', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
       expect(context.doesFileExist('.claude/skills/write-plugin-docs/SKILL.md')).toBe(true);
       expect(context.doesFileExist('.claude/skills/review-plugin-docs/SKILL.md')).toBe(true);
       expect(context.doesFileExist('.claude/skills/validate-plugin-docs/SKILL.md')).toBe(true);
+      expect(context.doesFileExist('.claude/skills/bootstrap-plugin-docs/SKILL.md')).toBe(true);
     });
 
-    it('does not scaffold the datasource-only bootstrap skill for panels', () => {
+    it('scaffolds a panel-specific bootstrap skill (not the datasource one)', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
-      expect(context.doesFileExist('.claude/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
+      const content = context.getFile('.claude/skills/bootstrap-plugin-docs/SKILL.md') ?? '';
+      expect(content).toContain('create-plugin add panel-docs');
+      expect(content).toContain('PanelPlugin');
+      expect(content).toContain('setPanelOptions');
+      expect(content).toContain('useFieldConfig');
     });
 
-    it('scaffolds the generic AGENTS.md authoring guide for panels', () => {
+    it('routes the bootstrap skill to the correct agent-loop path', () => {
+      const codexCtx = makeContext();
+      panelDocs(codexCtx, { docsPath: 'docs', agentLoop: 'codex' });
+      expect(codexCtx.doesFileExist('.agents/skills/bootstrap-plugin-docs/SKILL.md')).toBe(true);
+
+      const cursorCtx = makeContext();
+      panelDocs(cursorCtx, { docsPath: 'docs', agentLoop: 'cursor' });
+      expect(cursorCtx.doesFileExist('.cursor/skills/bootstrap-plugin-docs/SKILL.md')).toBe(true);
+    });
+
+    it('does not scaffold the bootstrap skill when agentLoop is none', () => {
+      const context = makeContext();
+      panelDocs(context, { docsPath: 'docs', agentLoop: 'none' });
+      expect(context.doesFileExist('.claude/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
+      expect(context.doesFileExist('.agents/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
+      expect(context.doesFileExist('.cursor/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
+    });
+
+    it('options.md asks for the Panel options table format with the four expected columns', () => {
+      const context = makeContext();
+      panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
+      const content = context.getFile('docs/options.md') ?? '';
+      expect(content).toContain('| Option | Type | Default | Description |');
+      expect(content).toContain('## Standard field options');
+      expect(content).toContain('## Custom field options');
+    });
+
+    it('appends a slim Multi-page docs pointer to .config/AGENTS/instructions.md when present', () => {
+      const context = makeContext();
+      context.addFile(
+        '.config/AGENTS/instructions.md',
+        '---\nname: agent information\ndescription: existing guide\n---\n\n# Grafana Plugin\n\nExisting content.\n'
+      );
+      panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
+      const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
+      expect(content).toContain('Existing content.');
+      expect(content).toContain('## Multi-page docs');
+      // the directive itself is one sentence; the detail lives in docs/AGENTS.md
+      expect(content).toContain('Always update those pages when features change in `src/`');
+      expect(content).toContain('docs/AGENTS.md');
+      // the section stays terse - no skill list, no bullet expansion
+      expect(content).not.toContain('/bootstrap-plugin-docs');
+      expect(content).not.toContain('Added feature');
+    });
+
+    it('does not duplicate the Multi-page docs section if already present', () => {
+      const context = makeContext();
+      const seeded = '# Plugin\n\n## Multi-page docs\n\nAlready here.\n';
+      context.addFile('.config/AGENTS/instructions.md', seeded);
+      panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
+      const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
+      expect(content.match(/## Multi-page docs/g)?.length).toBe(1);
+    });
+
+    it('does not append the Multi-page docs section when agentLoop is none', () => {
+      const context = makeContext();
+      context.addFile('.config/AGENTS/instructions.md', '# Grafana Plugin\n\nExisting content.\n');
+      panelDocs(context, { docsPath: 'docs', agentLoop: 'none' });
+      const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
+      expect(content).not.toContain('## Multi-page docs');
+    });
+
+    it('scaffolds the generic AGENTS.md authoring guide for panels with the feature-change directive', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
       expect(context.doesFileExist('docs/AGENTS.md')).toBe(true);
+      const content = context.getFile('docs/AGENTS.md') ?? '';
+      // the feature-change directive lives here; instructions.md just points at it
+      expect(content).toContain('## Keeping docs in sync with source');
+      expect(content).toContain('add, change or remove a feature');
+      expect(content).toContain('/write-plugin-docs');
     });
 
-    it('scaffolds docs/README.txt with panel-specific content', () => {
+    it('scaffolds docs/README.md with panel-specific content', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'none' });
-      const content = context.getFile('docs/README.txt') ?? '';
-      expect(content).toContain('My Panel - documentation');
+      const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain('# My Panel documentation');
       expect(content).toContain('data-formats.md');
-      expect(content).toContain('How docs are published');
+      expect(content).toContain('## How docs are published');
+      expect(content).toContain('## How to disable multi-page docs');
     });
 
-    it('appends the AI authoring section to README.txt when agentLoop is claude', () => {
+    it('appends the AI authoring section to README.md when agentLoop is claude', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
-      const content = context.getFile('docs/README.txt') ?? '';
-      expect(content).toContain('AI authoring assistance');
-      expect(content).toContain('Recommended workflow');
+      const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain('## AI authoring assistance');
+      expect(content).toContain('### Recommended workflow');
     });
 
-    it('omits the AI authoring section from README.txt when agentLoop is none', () => {
+    it('omits the AI authoring section from README.md when agentLoop is none', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'none' });
-      const content = context.getFile('docs/README.txt') ?? '';
+      const content = context.getFile('docs/README.md') ?? '';
       expect(content).not.toContain('AI authoring assistance');
+    });
+
+    it('does not scaffold a docs/README.txt (legacy filename)', () => {
+      const context = makeContext();
+      panelDocs(context, { docsPath: 'docs', agentLoop: 'claude' });
+      expect(context.doesFileExist('docs/README.txt')).toBe(false);
     });
   });
 });

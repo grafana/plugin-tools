@@ -11,6 +11,16 @@ This folder contains the multi-page documentation for the **{{pluginName}}** plu
 
 If you are filling in stub pages, maintaining docs alongside code changes or adding new pages, read this file first. Four skills, scaffolded under your agent loop's skills folder (`.claude/skills/`, `.agents/skills/` or `.cursor/skills/`), cover the common workflows.
 
+## Keeping docs in sync with source
+
+**Whenever you add, change or remove a feature in `src/`, update the matching pages in this folder in the same change:**
+
+- Added feature → extend the relevant page (new configuration field, new query field, new panel option etc.).
+- Changed feature → update the page text and any tables so they match the current behaviour.
+- Removed feature → delete the section or page and fix any cross-references that pointed to it.
+
+Use `/write-plugin-docs <page>` for routine per-feature updates. The full skill catalog is in the [Skills](#skills) section below.
+
 ## Frontmatter schema
 
 Every page starts with a YAML frontmatter block:

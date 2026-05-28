@@ -2,6 +2,7 @@ import { readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { isMetaFile } from './utils.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
@@ -22,7 +23,9 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     // docsPath doesn't exist or isn't readable
   }
 
-  const mdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() === '.md');
+  // skip repo-meta files (README.md, CONTRIBUTING.md etc.) at the source so
+  // they don't trip naming, index or has-markdown rules. They aren't pages.
+  const mdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() === '.md' && !isMetaFile(e.name));
   const dirs = entries.filter((e) => e.isDirectory());
   const symlinks = entries.filter((e) => e.isSymbolicLink());
   const nonMdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() !== '.md');
