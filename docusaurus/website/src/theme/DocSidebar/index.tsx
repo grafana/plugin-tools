@@ -4,7 +4,7 @@ import DocSidebarDesktop from '@theme/DocSidebar/Desktop';
 import DocSidebarMobile from '@theme/DocSidebar/Mobile';
 import type {Props} from '@theme/DocSidebar';
 
-export default function DocSidebar(props: Props): JSX.Element {
+export default function DocSidebar(props: Props): React.JSX.Element {
   const windowSize = useWindowSize();
 
   // Desktop sidebar visible on hydration: need SSR rendering

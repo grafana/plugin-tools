@@ -31,7 +31,7 @@ export default function DocSidebarDesktopContent({
   path,
   sidebar,
   className,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   const showAnnouncementBar = useShowAnnouncementBar();
 
   return (

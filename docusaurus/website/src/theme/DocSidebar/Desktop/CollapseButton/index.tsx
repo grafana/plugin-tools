@@ -6,7 +6,7 @@ import type {Props} from '@theme/DocSidebar/Desktop/CollapseButton';
 
 import styles from './styles.module.css';
 
-export default function CollapseButton({onClick}: Props): JSX.Element {
+export default function CollapseButton({onClick}: Props): React.JSX.Element {
   return (
     <button
       type="button"

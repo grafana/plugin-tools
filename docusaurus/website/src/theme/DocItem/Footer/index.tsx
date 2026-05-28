@@ -7,7 +7,7 @@ import TagsListInline from '@theme/TagsListInline';
 import EditMetaRow from '@theme/EditMetaRow';
 import { Rating } from '@site/src/components/Rating/Rating';
 
-export default function DocItemFooter(): JSX.Element | null {
+export default function DocItemFooter(): React.JSX.Element | null {
   const { metadata } = useDoc();
   const { editUrl, lastUpdatedAt, lastUpdatedBy, tags } = metadata;
 
