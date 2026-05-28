@@ -13,9 +13,10 @@
   - [Contribute Documentation](#contribute-documentation)
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
-  - [Create a Release](#create-a-release)
-    - [Release Version Calculation](#release-version-calculation)
-    - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
+- [Preview Your Changes Before Release](#preview-your-changes-before-release)
+- [Create a Release](#create-a-release)
+  - [Release Version Calculation](#release-version-calculation)
+  - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
 
 ## Introduction
 
@@ -159,6 +160,33 @@ Once you've filed the PR:
 - If the maintainer asks for any changes, edit your changes, push, and ask for another review. Additional tags (such as `needs-tests`) will be added depending on the review.
 - If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's okay! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
 - If your PR gets accepted, it will be marked as such, and merged into the `main` branch soon after. Your contribution will be distributed to the masses next time the maintainers [create a release](#create-a-release)
+
+## Preview Your Changes Before Release
+
+Whilst developing new features it possible to publish and install preview builds of every affected package using [pkg.pr.new](https://pkg.pr.new) — a free open-source service that builds and hosts SHA-keyed npm tarballs.
+
+To opt in:
+
+1. Add the `preview` label to your PR.
+2. CI builds every workspace and publishes the affected packages to pkg.pr.new.
+3. The [`pkg-pr-new[bot]`](https://github.com/apps/pkg-pr-new) posts a comment on the PR with one installable URL per affected package.
+
+Consumers install the preview by URL:
+
+```bash
+npm i https://pkg.pr.new/grafana/plugin-tools/@grafana/<package-name>@<commit-sha>
+```
+
+For CLI packages (`create-plugin`, `plugin-docs-cli`, `plugin-meta-extractor`, `plugin-types-bundler`, `react-detect`, `sign-plugin`), you can also run the binary directly without installing:
+
+```bash
+npx https://pkg.pr.new/grafana/plugin-tools/@grafana/<cli-package>@<commit-sha>
+```
+
+> [!IMPORTANT]
+> The URL keys off the commit SHA, not a real semver version. Any `package.json` reference to a pkg.pr.new URL must be swapped back to the published version once the PR is merged and released.
+
+When you push new commits to a PR with the `preview` label, the existing pkg.pr.new comment is updated in place with the new commit sha.
 
 ## Create A Release
 
