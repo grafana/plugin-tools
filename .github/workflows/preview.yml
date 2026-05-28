@@ -4,7 +4,6 @@ on:
     types: [labeled, synchronize]
 permissions:
   contents: read
-  id-token: write
 concurrency:
   group: preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true

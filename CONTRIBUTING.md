@@ -13,10 +13,10 @@
   - [Contribute Documentation](#contribute-documentation)
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
-- [Preview Your Changes Before Release](#preview-your-changes-before-release)
-- [Create a Release](#create-a-release)
-  - [Release Version Calculation](#release-version-calculation)
-  - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
+  - [Preview Your Changes Before Release](#preview-your-changes-before-release)
+  - [Create a Release](#create-a-release)
+    - [Release Version Calculation](#release-version-calculation)
+    - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
 
 ## Introduction
 
@@ -163,7 +163,7 @@ Once you've filed the PR:
 
 ## Preview Your Changes Before Release
 
-Whilst developing new features it possible to publish and install preview builds of every affected package using [pkg.pr.new](https://pkg.pr.new) — a free open-source service that builds and hosts SHA-keyed npm tarballs.
+Whilst developing new features it's possible to publish and install preview builds of every affected package using [pkg.pr.new](https://pkg.pr.new) — a free open-source service that builds and hosts SHA-keyed npm tarballs.
 
 To opt in:
 
