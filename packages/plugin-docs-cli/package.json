@@ -11,6 +11,7 @@
     "CHANGELOG.md"
   ],
   "repository": {
+    "type": "git",
     "directory": "packages/plugin-docs-cli",
     "url": "https://github.com/grafana/plugin-tools"
   },
