@@ -1,3 +1,27 @@
+# v7.6.2 (Wed May 27 2026)
+
+#### 🐛 Bug Fix
+
+- fix: pin dependencies for better security [#2658](https://github.com/grafana/plugin-tools/pull/2658) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
+# v7.6.1 (Tue May 26 2026)
+
+#### 🐛 Bug Fix
+
+- fix(create-plugin): make playwright report publishing opt-in [#2640](https://github.com/grafana/plugin-tools/pull/2640) ([@sunker](https://github.com/sunker))
+
+#### Authors: 1
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+
+---
+
 # v7.6.0 (Thu May 14 2026)
 
 #### 🚀 Enhancement
