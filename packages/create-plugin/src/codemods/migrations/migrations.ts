@@ -73,7 +73,7 @@ export default [
   },
   {
     name: '011-secure-sign-script',
-    version: '7.6.2',
+    version: '7.6.3',
     description:
       'Security: replace insecure inline `npx --yes @grafana/sign-plugin@latest` sign script with a locked @grafana/sign-plugin devDependency to prevent arbitrary code execution from a compromised @latest publish.',
     scriptPath: import.meta.resolve('./scripts/011-secure-sign-script.js'),
