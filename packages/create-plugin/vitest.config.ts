@@ -19,6 +19,11 @@ export default mergeConfig(
             return id;
           }
         },
+        load(id) {
+          if (id === 'virtual-test-migration.js' || id === 'virtual-test-migration2.js') {
+            return 'export default () => {};';
+          }
+        },
       },
     ],
   })
