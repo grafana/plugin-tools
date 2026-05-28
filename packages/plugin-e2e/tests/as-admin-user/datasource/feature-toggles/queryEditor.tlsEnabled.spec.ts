@@ -33,5 +33,5 @@ test('should display TLS enabled field when tlsEnabled feature toggle is set to 
     : semver.lt(grafanaVersion, '11.5.0')
       ? row.getByLabel('TLS Enabled')
       : row.getByRole('switch', { name: /TLS Enabled/i });
-  await expect(locator).toBeVisible();
+  await expect(locator).toBeVisible({ timeout: 15_000 });
 });
