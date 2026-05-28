@@ -13,18 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read
     outputs:
-      docs: ${{ steps.detect-changes.outputs.docs }}
+      docs: ${{ steps.detect-changes.outputs.changed }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
-          persist-credentials: true # required to get more history in the changed-files action
-          fetch-depth: 2
+          persist-credentials: false
       - name: Detect changes
         id: detect-changes
-        uses: ./.github/actions/change-detection
+        uses: ./.github/actions/paths-filter
         with:
-          self: .github/workflows/metadata-lint.yml
+          patterns: |
+            .github/workflows/metadata-lint.yml
+            .github/actions/paths-filter/**
+            docusaurus/docs/**
 
   lint-metadata:
     needs: detect-changes
