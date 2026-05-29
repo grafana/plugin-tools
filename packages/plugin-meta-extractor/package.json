@@ -19,6 +19,7 @@
     "provenance": true
   },
   "repository": {
+    "type": "git",
     "directory": "packages/plugin-meta-extractor",
     "url": "https://github.com/grafana/plugin-tools"
   },

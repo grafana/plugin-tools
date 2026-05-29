@@ -10,6 +10,7 @@
     "config"
   ],
   "repository": {
+    "type": "git",
     "directory": "packages/tsconfig",
     "url": "https://github.com/grafana/plugin-tools"
   },

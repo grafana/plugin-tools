@@ -30,6 +30,7 @@
     "provenance": true
   },
   "repository": {
+    "type": "git",
     "directory": "packages/plugin-types-bundler",
     "url": "https://github.com/grafana/plugin-tools"
   },

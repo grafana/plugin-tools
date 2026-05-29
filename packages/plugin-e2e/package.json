@@ -8,6 +8,7 @@
     "./package.json"
   ],
   "repository": {
+    "type": "git",
     "directory": "packages/plugin-e2e",
     "url": "https://github.com/grafana/plugin-tools"
   },

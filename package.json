@@ -55,6 +55,7 @@
     "husky": "^9.1.7",
     "lerna": "^9.0.3",
     "lint-staged": "^16.2.7",
+    "pkg-pr-new": "^0.0.75",
     "prettier": "3.8.3",
     "publint": "^0.3.12",
     "rollup": "^4.57.1",
