@@ -84,7 +84,8 @@
   },
   "overrides": {
     "webpack-dev-server": "^5.2.1",
-    "serialize-javascript": "7.0.3"
+    "serialize-javascript": "7.0.3",
+    "dompurify": "^3.4.0"
   },
   "packageManager": "npm@11.12.1"
 }
