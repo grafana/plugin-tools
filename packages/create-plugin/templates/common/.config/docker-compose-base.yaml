@@ -21,9 +21,9 @@ services:
       - SYS_PTRACE
 {{/if}}
     volumes:
-      - ../dist:/var/lib/grafana/plugins/{{ pluginId }}
-      - ../provisioning:/etc/grafana/provisioning
-      - ..:/root/{{ pluginId }}
+      - ../dist:/var/lib/grafana/plugins/{{ pluginId }}:Z
+      - ../provisioning:/etc/grafana/provisioning:Z
+      - ..:/root/{{ pluginId }}:Z
 
     environment:
       NODE_ENV: development

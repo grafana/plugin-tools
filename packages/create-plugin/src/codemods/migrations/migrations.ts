@@ -71,6 +71,12 @@ export default [
       'Fix ts-node compatibility with the latest @grafana/tsconfig: outdated module/moduleResolution/target overrides break TypeScript 5/6 builds, replaced with nodenext/nodenext/es2022.',
     scriptPath: import.meta.resolve('./scripts/010-ts-node-nodenext.js'),
   },
+  {
+    name: '013-enable-compose-selinux-relabel',
+    version: '7.4.1',
+    description: 'Enable SELinux bindmount relabeling allowing the use of rootless podman for plugin development',
+    scriptPath: import.meta.resolve('./scripts/012-enable-compose-selinux-relabel.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
