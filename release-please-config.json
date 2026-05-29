@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "node",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": false,
+  "include-component-in-tag": false,
+  "tag-separator": "@",
+  "separate-pull-requests": false,
+  "plugins": ["node-workspace"],
+  "changelog-sections": [
+    { "type": "feat", "section": "Features" },
+    { "type": "fix", "section": "Bug Fixes" },
+    { "type": "perf", "section": "Performance" },
+    { "type": "revert", "section": "Reverts" },
+    { "type": "chore", "section": "Miscellaneous", "hidden": true },
+    { "type": "docs", "section": "Documentation", "hidden": true },
+    { "type": "style", "section": "Styles", "hidden": true },
+    { "type": "refactor", "section": "Refactoring", "hidden": true },
+    { "type": "test", "section": "Tests", "hidden": true },
+    { "type": "build", "section": "Build", "hidden": true },
+    { "type": "ci", "section": "CI", "hidden": true }
+  ],
+  "packages": {
+    "packages/create-plugin": { "package-name": "@grafana/create-plugin" },
+    "packages/eslint-plugin-plugins": { "package-name": "@grafana/eslint-plugin-plugins" },
+    "packages/plugin-docs-cli": { "package-name": "@grafana/plugin-docs-cli" },
+    "packages/plugin-docs-parser": { "package-name": "@grafana/plugin-docs-parser" },
+    "packages/plugin-e2e": { "package-name": "@grafana/plugin-e2e" },
+    "packages/plugin-meta-extractor": { "package-name": "@grafana/plugin-meta-extractor" },
+    "packages/plugin-types-bundler": { "package-name": "@grafana/plugin-types-bundler" },
+    "packages/react-detect": { "package-name": "@grafana/react-detect" },
+    "packages/sign-plugin": { "package-name": "@grafana/sign-plugin" },
+    "packages/tsconfig": { "package-name": "@grafana/tsconfig" }
+  }
+}
