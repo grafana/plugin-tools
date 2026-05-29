@@ -24,8 +24,9 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
    - `src/module.ts` (the `PanelPlugin` builder chain - the load-bearing file for option extraction)
    - The panel React component referenced from `module.ts` (commonly `src/components/<PanelName>.tsx` or `src/<PanelName>.tsx`)
    - `src/types.ts` and any other source entry points
+   - `provisioning/dashboards/*.json` if present - bundled example dashboards. These are the canonical source for `<docsPath>/examples.md`: real working panel configs that already exercise the plugin's features. Prefer lifting examples from here over inventing them.
    - `README.md` and `CHANGELOG.md` if present (these may be near-empty boilerplate for fresh panels - that's fine)
-   - Image assets under `src/img/`, `screenshots/`, `<docsPath>/img/`
+   - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/`, `<docsPath>/img/`. If usable screenshots already exist in any of these locations, you may copy the relevant files into `<docsPath>/img/` during the fill pass and reference them from the doc pages. If no usable screenshots exist, flag the gap in the final summary - never generate new images.
 
 2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Locate `new PanelPlugin(...)` in `src/module.ts` (or wherever the default export lives). Walk the chained methods and extract:
    - **Panel purpose** (one sentence). Combine `plugin.json.info.description`, the React component's leading docstring and any descriptive `description:` strings inside `setPanelOptions` calls.
@@ -74,8 +75,6 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
      - `annotations: true` → "Reads from annotations queries"
      - `alertStates: true` → "Visualises alert state on the panel"
 
-   - **Migration handler** (`setMigrationHandler(...)`). Presence → Features bullet on `<docsPath>/index.md`: "Migrates older saved configurations automatically".
-
    - **Suggestions / presets suppliers** (`setSuggestionsSupplier(...)` / `setPresetsSupplier(...)`). Presence → Features bullets: "Appears in the Suggestions list when data shape matches" and "Ships preset configurations".
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
@@ -89,13 +88,12 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
 
    **Panel soft-signal catalog** (trigger → filename → scope):
 
-   | Trigger                                                                            | Filename                                  | Scope                                                                   |
-   | ---------------------------------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
-   | `setMigrationHandler(...)` in source                                               | `<docsPath>/migrations.md`                | Which config shapes are migrated and to what; recommended upgrade path. |
-   | `setSuggestionsSupplier(...)` in source                                            | mention in `<docsPath>/index.md` Features | When this panel surfaces in the Suggestions list.                       |
-   | `setPresetsSupplier(...)` in source                                                | `<docsPath>/presets.md`                   | The presets the panel ships, when each applies, screenshots.            |
-   | RBAC role declarations in `plugin.json`                                            | `<docsPath>/permissions.md`               | What each role grants, default assignments.                             |
-   | Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `<docsPath>/accessibility.md`             | Keyboard interaction, ARIA, contrast, motion preferences.               |
+   | Trigger                                                                            | Filename                                  | Scope                                                        |
+   | ---------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------ |
+   | `setSuggestionsSupplier(...)` in source                                            | mention in `<docsPath>/index.md` Features | When this panel surfaces in the Suggestions list.            |
+   | `setPresetsSupplier(...)` in source                                                | `<docsPath>/presets.md`                   | The presets the panel ships, when each applies, screenshots. |
+   | RBAC role declarations in `plugin.json`                                            | `<docsPath>/permissions.md`               | What each role grants, default assignments.                  |
+   | Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `<docsPath>/accessibility.md`             | Keyboard interaction, ARIA, contrast, motion preferences.    |
 
 5. **Prompt the author for non-source-backed context.** These questions matter more in greenfield runs, but ask in every run - source can't answer them. Ask explicitly:
 
@@ -124,7 +122,11 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
 
    - If `setPanelOptions` is absent, drop the `## Panel options` section. If `useFieldConfig` is absent, drop both Standard and Custom field options sections. Same for Tooltip and Legend - if the panel has no options under those categories (check the `category:` field in `setPanelOptions` add calls), remove the empty sections rather than leaving placeholder briefs.
 
-   **Special case: `<docsPath>/index.md` Features section.** Emit one bullet per detected capability from step 2 (annotations, alert states, suggestions, presets, migrations). Order: data support flags first, then UX surfaces (suggestions, presets), then migrations.
+   **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, the description lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't actually set, or describes a constraint the validator doesn't enforce), keep the description verbatim AND add a row to the gaps summary in step 8 with file + line references. Do not silently paraphrase the discrepancy away. Do not invent corrected wording. The author resolves the contradiction; the agent surfaces it.
+
+   **Special case: `<docsPath>/examples.md`.** If `provisioning/dashboards/*.json` exists, lift example configurations from there before falling back to invented ones. For each dashboard, extract panels of this plugin type (match by `type` field against `plugin.json.id`) and use the panel JSON as the example. Pair each example with a one-paragraph explanation of which features it exercises and what data shape it expects. If the provisioning directory is missing or has no relevant panels, only then construct examples from the source understanding plus author input.
+
+   **Special case: `<docsPath>/index.md` Features section.** Emit one bullet per detected capability from step 2 (annotations, alert states, suggestions, presets). Order: data support flags first, then UX surfaces (suggestions, presets).
 
    **Estimate per-page length.** Project the final size based on the content the page will absorb. If any threshold will be exceeded, plan to split the page into a folder:
    - More than 6 H2 sections, or
@@ -140,9 +142,16 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
 8. Report a summary to the user:
    - Pages drafted from source-only understanding (note when source was thin).
    - Pages drafted with README content layered in.
+   - Pages drafted from `provisioning/dashboards/*.json` content.
    - Pages added for detected optional features.
    - Pages added from author-named topics.
-   - Gaps flagged for the author (purpose unclear from source, computed defaults not expressible inline, README content that did not get routed, etc.).
+   - Screenshots copied from `src/img/screenshots/` (or similar) into `<docsPath>/img/`. List which pages they landed on. Flag pages that would benefit from screenshots but where none exist in the repo.
+   - Gaps flagged for the author:
+     - Description-vs-source contradictions kept verbatim per the verbatim-and-flag rule (cite file and line).
+     - Computed defaults not expressible inline.
+     - Purpose unclear from source.
+     - README content that did not get routed to any page.
+     - Pages that would benefit from a screenshot but the repo has none.
    - Final validation status.
 
 ## Notes

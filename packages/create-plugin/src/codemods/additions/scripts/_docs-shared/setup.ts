@@ -37,18 +37,30 @@ const LOOP_SKILL_TARGET: Record<Exclude<AgentLoop, 'none'>, string> = {
   cursor: '.cursor/skills',
 };
 
-// the path under the codemod's agent/ template tree where the canonical
-// (unrouted) skill files live. The codemod rewrites this prefix to the
-// loop-specific directory at scaffold time.
+// canonical prefixes under the codemod's agent/ template tree. Both get
+// rewritten at scaffold time:
+//   - SKILLS_TEMPLATE_PREFIX (`.config/AGENTS/skills/`) -> the loop-specific
+//     skills directory (`.claude/skills/`, `.agents/skills/`, `.cursor/skills/`)
+//   - DOCS_TEMPLATE_PREFIX (`docs/`) -> the user's chosen `<docsPath>/`. Without
+//     this rewrite, a non-default docsPath (e.g. `docs2`) ends up with the
+//     agent's docs/AGENTS.md scaffolded into a stray `docs/` folder while the
+//     actual pages live in `docs2/`.
 const SKILLS_TEMPLATE_PREFIX = '.config/AGENTS/skills/';
+const DOCS_TEMPLATE_PREFIX = 'docs/';
 
 // computes the destination path for an agent template file given the chosen
-// loop. Skill files are rerouted from the codemod's internal canonical path to
-// the loop's conventional skills directory. Everything else (docs/AGENTS.md
-// today) passes through unchanged.
-function targetPathForLoop(relPath: string, agentLoop: Exclude<AgentLoop, 'none'>): string | undefined {
+// loop and the user's docsPath. Two prefixes are rewritten; anything else
+// passes through unchanged.
+function targetPathForLoop(
+  relPath: string,
+  agentLoop: Exclude<AgentLoop, 'none'>,
+  docsPath: string
+): string | undefined {
   if (relPath.startsWith(SKILLS_TEMPLATE_PREFIX)) {
     return `${LOOP_SKILL_TARGET[agentLoop]}/${relPath.slice(SKILLS_TEMPLATE_PREFIX.length)}`;
+  }
+  if (relPath.startsWith(DOCS_TEMPLATE_PREFIX)) {
+    return `${docsPath}/${relPath.slice(DOCS_TEMPLATE_PREFIX.length)}`;
   }
   return relPath;
 }
@@ -67,7 +79,7 @@ export interface DocsSetupOptions {
    * (including `docs/AGENTS.md` and any skills).
    *
    * The `agent/` template subtree maps to the target plugin like this:
-   *   agent/docs/AGENTS.md                         -> docs/AGENTS.md
+   *   agent/docs/AGENTS.md                         -> <docsPath>/AGENTS.md
    *   agent/.config/AGENTS/skills/<name>/SKILL.md  -> <loop-skills-path>/<name>/SKILL.md
    */
   agentLoop?: AgentLoop;
@@ -128,7 +140,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 9: optionally scaffold AI authoring assistance (AGENTS.md, skills)
   let agentAssistanceAdded = false;
   if (agentLoop !== 'none') {
-    agentAssistanceAdded = copyAgentTemplates(context, templateBaseUrl, pluginName, agentLoop);
+    agentAssistanceAdded = copyAgentTemplates(context, templateBaseUrl, pluginName, agentLoop, docsPath);
     if (agentAssistanceAdded) {
       appendMultiPageDocsSectionToInstructions(context, docsPath);
     }
@@ -426,7 +438,8 @@ function copyAgentTemplates(
   context: Context,
   templateBaseUrl: URL,
   pluginName: string,
-  agentLoop: Exclude<AgentLoop, 'none'>
+  agentLoop: Exclude<AgentLoop, 'none'>,
+  docsPath: string
 ): boolean {
   const codemodAgentDir = fileURLToPath(new URL('./agent', templateBaseUrl));
   const sharedAgentDir = fileURLToPath(new URL('./templates/agent', import.meta.url));
@@ -437,7 +450,7 @@ function copyAgentTemplates(
     }
     for (const filePath of listFilesRecursively(agentTemplateDir)) {
       const relPath = filePath.slice(agentTemplateDir.length + 1);
-      const targetPath = targetPathForLoop(relPath, agentLoop);
+      const targetPath = targetPathForLoop(relPath, agentLoop, docsPath);
       if (targetPath === undefined) {
         continue;
       }

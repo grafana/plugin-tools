@@ -194,6 +194,16 @@ describe('datasource-docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
     });
 
+    it('scaffolds AGENTS.md under the configured docsPath when it is not the default', () => {
+      const context = makeContext();
+      datasourceDocs(context, { docsPath: 'documentation', agentLoop: 'claude' });
+      expect(context.doesFileExist('documentation/AGENTS.md')).toBe(true);
+      // regression: the agent template used to be written to `docs/AGENTS.md`
+      // literally regardless of `docsPath`, leaving a stray `docs/` folder
+      // alongside the actual docsPath tree.
+      expect(context.doesFileExist('docs/AGENTS.md')).toBe(false);
+    });
+
     it('appends a slim Multi-page docs pointer to .config/AGENTS/instructions.md when present', () => {
       const context = makeContext();
       context.addFile(

@@ -22,8 +22,9 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
 1. Inventory everything available. Read in parallel:
    - `src/plugin.json` (plugin type, name, declared capabilities like `annotations`, `alerting`, `backend`, `streaming`, `metrics`)
    - `src/datasource.ts`, `src/components/QueryEditor.tsx`, `src/components/ConfigEditor.tsx`, `src/types.ts`, and any other source entry points
+   - `provisioning/dashboards/*.json` if present - bundled example dashboards. Real working datasource queries already wired to panels. These are high-signal source material for example-query content; lift queries from here before inventing new ones.
    - `README.md` and `CHANGELOG.md` if present (these may be near-empty boilerplate for fresh plugins - that's fine)
-   - Image assets under `src/img/`, `screenshots/`, `<docsPath>/img/`
+   - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/`, `<docsPath>/img/`. If usable screenshots already exist in any of these locations, you may copy the relevant files into `<docsPath>/img/` during the fill pass and reference them from the doc pages. If no usable screenshots exist, flag the gap in the final summary - never generate new images.
 
 2. **Build a working understanding from source. This step is mandatory; do not skip even when README is rich.** Determine:
    - **What the plugin does in one sentence.** Combine signals from the data source class's purpose, ConfigEditor fields, query types, and `plugin.json` `info.description`.
@@ -94,6 +95,8 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
    - Writing one H2 per dashboard to `<docsPath>/dashboard.md`. Use the dashboard JSON's `title` as the heading (fall back to the `name` field from `plugin.json` if the dashboard `title` is missing). Body: 1-2 paragraphs covering the dashboard's purpose, the most useful panels it contains and the data or queries it expects. If the repo has screenshot assets that reference the dashboard, link them.
    - Best-effort: if a dashboard's purpose is unclear from the JSON alone, leave a TODO marker in that section and surface the gap in the final summary so the author can fill it in.
 
+   **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, names a default the constructor doesn't actually set, lists a query type that isn't implemented, or describes a constraint the validator doesn't enforce), keep the description verbatim AND add a row to the gaps summary in step 8 with file + line references. Do not silently paraphrase the discrepancy away. Do not invent corrected wording. The author resolves the contradiction; the agent surfaces it.
+
    **SQL plugin adjustments (if `github.com/grafana/sqlds` or `@grafana/sql` is in source).** When filling the generic pages for a SQL datasource, ensure these specific topics are covered:
    - `<docsPath>/configuration.md` → connection pool fields (`maxOpenConns`, `maxIdleConns`, `connMaxLifetime`), TLS settings and any driver-specific settings (warehouse, role, default schema/database/catalog).
    - `<docsPath>/query-editor.md` → builder vs code mode (the `@grafana/sql` `SqlQueryEditorLazy` gives both), how to use macros (cross-link to `macros.md`), how the format selector affects the result shape.
@@ -106,9 +109,17 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
 8. Report a summary to the user:
    - Pages drafted from source-only understanding (note when source was thin).
    - Pages drafted with README content layered in.
+   - Pages drafted from `provisioning/dashboards/*.json` content.
    - Pages added for detected optional features.
    - Pages added from author-named topics.
-   - Gaps flagged for the author (purpose unclear from source, external setup unanswered, dashboards with unclear intent, README content that did not get routed, etc.).
+   - Screenshots copied from `src/img/screenshots/` (or similar) into `<docsPath>/img/`. List which pages they landed on. Flag pages that would benefit from screenshots but where none exist in the repo.
+   - Gaps flagged for the author:
+     - Description-vs-source contradictions kept verbatim per the verbatim-and-flag rule (cite file and line).
+     - Purpose unclear from source.
+     - External setup unanswered.
+     - Dashboards with unclear intent.
+     - README content that did not get routed to any page.
+     - Pages that would benefit from a screenshot but the repo has none.
    - Final validation status.
 
 ## Notes

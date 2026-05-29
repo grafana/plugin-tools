@@ -187,6 +187,16 @@ describe('panel-docs codemod', () => {
       expect(content).toContain('/write-plugin-docs');
     });
 
+    it('scaffolds AGENTS.md under the configured docsPath when it is not the default', () => {
+      const context = makeContext();
+      panelDocs(context, { docsPath: 'documentation', agentLoop: 'claude' });
+      expect(context.doesFileExist('documentation/AGENTS.md')).toBe(true);
+      // regression: the agent template used to be written to `docs/AGENTS.md`
+      // literally regardless of `docsPath`, leaving a stray `docs/` folder
+      // alongside the actual docsPath tree.
+      expect(context.doesFileExist('docs/AGENTS.md')).toBe(false);
+    });
+
     it('scaffolds docs/README.md with panel-specific content', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs', agentLoop: 'none' });
