@@ -188,7 +188,7 @@ When you push new commits to a PR with the `preview` label, the existing pkg.pr.
 
 ## Create A Release
 
-Releases are managed by [release-please](https://github.com/googleapis/release-please). Each PR's title is the source of truth for version bumps and changelog entries there are no semver labels to apply.
+Releases are managed by [release-please](https://github.com/googleapis/release-please). Each PR's title is the source of truth for version bumps and changelog entries — there are no semver labels to apply.
 
 ### PR titles: Conventional Commits
 
@@ -202,28 +202,27 @@ The PR-title check (`.github/workflows/check-pr-title.yml`) blocks merges when t
 
 #### Bump mapping
 
-| Title prefix                                                          | Bump (≥1.0) | Bump (0.x)¹ | Changelog section         |
-| --------------------------------------------------------------------- | ----------- | ----------- | ------------------------- |
-| `feat:` / `feat(scope):`                                              | minor       | minor       | Features                  |
-| `fix:` / `fix(scope):`                                                | patch       | patch       | Bug Fixes                 |
-| `perf:`                                                               | patch       | patch       | Performance               |
-| `feat!:` / `BREAKING CHANGE:` footer                                  | major       | minor       | Breaking Changes          |
-| `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `style`, `revert` | no bump     | no bump     | Hidden no changelog entry |
+| Title prefix                                                          | Bump (≥1.0) | Bump (0.x)¹ | Changelog section           |
+| --------------------------------------------------------------------- | ----------- | ----------- | --------------------------- |
+| `feat:` / `feat(scope):`                                              | minor       | minor       | Features                    |
+| `fix:` / `fix(scope):`                                                | patch       | patch       | Bug Fixes                   |
+| `perf:`                                                               | patch       | patch       | Performance                 |
+| `feat!:` / `BREAKING CHANGE:` footer                                  | major       | minor       | Breaking Changes            |
+| `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `style`, `revert` | no bump     | no bump     | Hidden — no changelog entry |
 
-¹ `bump-minor-pre-major: true` in `release-please-config.json` preserves the project's historical behaviour for 0.x packages `feat:` produces a minor bump rather than the release-please default of patch.
+¹ `bump-minor-pre-major: true` in `release-please-config.json` preserves the project's historical behaviour for 0.x packages — `feat:` produces a minor bump rather than the release-please default of patch.
 
 ### How a release happens
 
 1. **PRs merge to `main`.** Each conventional-commit PR title joins the history.
 2. **release-please opens a release PR** automatically (titled `chore: release main`). The PR lists every package being bumped, the new versions, and the per-package changelog entries.
-3. **A maintainer reviews and merges the release PR.** This is the human gate review the diff, edit changelog text inline if needed, then merge.
-4. **The release workflow (`.github/workflows/release-please.yml`) runs on the merge to `main`.** It:
-   - Creates per-package git tags (`@grafana/<pkg>@<version>`) and GitHub Releases.
-   - Builds every workspace.
-   - **Stages** each bumped package on npm via `npm stage publish --provenance --access public` (OIDC-authenticated; no 2FA required for the stage step).
-   - Posts a Slack notification listing each staged package with links to its GitHub release and npm page.
+3. **A maintainer reviews and merges the release PR.** First human gate — review the diff, edit changelog text inline if needed, then merge.
+4. **The release workflow (`.github/workflows/release-please.yml`) runs on the merge to `main`** in two jobs:
+   - **`release` job** — release-please-action creates per-package git tags (`@grafana/<pkg>@<version>`) and GitHub Releases. Always runs on every push.
+   - **`publish` job** — gated by the `npm-publish` GitHub environment. Reviewers configured on the environment receive a deployment-approval prompt in the Actions UI; the job pauses until someone approves. Second human gate.
+5. **Once the publish job is approved**, it builds every workspace, stages each bumped package on npm via `npm stage publish --provenance --access public` (OIDC-authenticated; no 2FA required for the stage step), and posts a Slack notification listing each staged package with links to its GitHub release and npm page.
 
-Staged packages are uploaded to the npm registry but **not yet live**. They need explicit approval before consumers can install them.
+Staged packages are uploaded to the npm registry but **not yet live**. They need explicit approval on npmjs.com before consumers can install them — see the next section.
 
 ### Approving staged packages on npm
 
@@ -231,6 +230,6 @@ After the Slack notification fires:
 
 1. Log into [npmjs.com](https://www.npmjs.com/) with the 2FA-enabled account that has publish rights to `@grafana/*` packages.
 2. For each `@grafana/<pkg>` in the Slack message, navigate to its staged-packages view.
-3. Verify the staged versions then **Approve** each to send them the NPM registry.
+3. Verify the staged versions then **Approve** each to send them to the NPM registry.
 
 If you spot a problem with a staged package before approving, **Reject** removes the staged version without publishing.

@@ -2,12 +2,13 @@ name: Release
 on:
   push:
     branches: [main]
-permissions:
-  contents: read
-  id-token: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required to assume roles from GitHub's OIDC.
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       paths_released: ${{ steps.release.outputs.paths_released }}
@@ -30,6 +31,9 @@ jobs:
     needs: release
     if: ${{ needs.release.outputs.releases_created }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm Trusted Publishing (OIDC)
     environment: npm-publish
     concurrency:
       group: npm-publish
