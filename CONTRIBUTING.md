@@ -15,8 +15,6 @@
 - Manage Something ✅🙆🏼💃👔
   - [Preview Your Changes Before Release](#preview-your-changes-before-release)
   - [Create a Release](#create-a-release)
-    - [Release Version Calculation](#release-version-calculation)
-    - [Help! The release failed after the packages were published to the NPM registry](#help-the-release-failed-after-the-packages-were-published-to-the-npm-registry)
 
 ## Introduction
 
@@ -190,60 +188,49 @@ When you push new commits to a PR with the `preview` label, the existing pkg.pr.
 
 ## Create A Release
 
-Releases are managed by [Auto](https://intuit.github.io/auto/index) and PR labels.
+Releases are managed by [release-please](https://github.com/googleapis/release-please). Each PR's title is the source of truth for version bumps and changelog entries there are no semver labels to apply.
 
-> [!WARNING]
-> When merging a PR with the `release` label please avoid merging another PR. For further information [see here](https://intuit.github.io/auto/docs/welcome/quick-merge#with-skip-release).
+### PR titles: Conventional Commits
 
-When opening a PR please attach the necessary label for the change so releases are dealt with appropriately:
+Every merged PR title must follow the [Conventional Commits](https://www.conventionalcommits.org/) format:
 
-- **major** -> 💥 Breaking Change
-- **minor** -> 🚀 Enhancement
-- **patch** -> 🐛 Bug Fix
-- **no-changelog** -> 🙈 Don't impact versioning.
+```
+<type>[optional scope]: <description>
+```
 
-If you would like the PR to automatically publish a new release of a package when merged you should also add the `release` label to the PR. This is done using the [`onlyPublishWithReleaseLabel`](https://intuit.github.io/auto/docs/configuration/autorc#only-publish-with-release-label) flag to allow us greater control on when a release occurs.
+The PR-title check (`.github/workflows/check-pr-title.yml`) blocks merges when the title doesn't match. Renovate emits `chore(deps): ...` titles automatically; contributors handle their own.
 
-Bear in mind not every PR needs to make a version bump to a package. Please be mindful when labelling PRs.
+#### Bump mapping
 
-When a merge to the `main` branch occurs a github workflow will run `npm run release` which in turn calls `auto shipit`. The `auto shipit` command does the following things:
+| Title prefix                                                          | Bump (≥1.0) | Bump (0.x)¹ | Changelog section         |
+| --------------------------------------------------------------------- | ----------- | ----------- | ------------------------- |
+| `feat:` / `feat(scope):`                                              | minor       | minor       | Features                  |
+| `fix:` / `fix(scope):`                                                | patch       | patch       | Bug Fixes                 |
+| `perf:`                                                               | patch       | patch       | Performance               |
+| `feat!:` / `BREAKING CHANGE:` footer                                  | major       | minor       | Breaking Changes          |
+| `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `style`, `revert` | no bump     | no bump     | Hidden no changelog entry |
 
-1. **Check for 'release' Label**: 🔍 The command only triggers version bumps if the merged PR has a 'release' label.
-2. **Version Calculation**: 🧮 Determines the appropriate version bump per package by analyzing the labels of merged PRs since the last GH release.
-3. **Changelog Updates**: 📝 The command updates the CHANGELOG.md for affected packages and possibly the root CHANGELOG.md.
-4. **Commit and Tag**: 🏷️ It commits these changes and tags the repository.
-5. **GitHub Release Creation**: 📄 Creates a GitHub release for the new version.
-6. **NPM Publishing**: 🚀 If the conditions are met (e.g., 'release' label present), it publishes the packages to NPM.
-7. **Push Changes and Tags**: ⬆️ Finally, it pushes the version number, changelog updates, and tags to the repository.
+¹ `bump-minor-pre-major: true` in `release-please-config.json` preserves the project's historical behaviour for 0.x packages `feat:` produces a minor bump rather than the release-please default of patch.
 
-### Release Version Calculation
+### How a release happens
 
-Below is a bulleted list of what occurs under the hood when Auto is asked to release packages.
+1. **PRs merge to `main`.** Each conventional-commit PR title joins the history.
+2. **release-please opens a release PR** automatically (titled `chore: release main`). The PR lists every package being bumped, the new versions, and the per-package changelog entries.
+3. **A maintainer reviews and merges the release PR.** This is the human gate review the diff, edit changelog text inline if needed, then merge.
+4. **The release workflow (`.github/workflows/release-please.yml`) runs on the merge to `main`.** It:
+   - Creates per-package git tags (`@grafana/<pkg>@<version>`) and GitHub Releases.
+   - Builds every workspace.
+   - **Stages** each bumped package on npm via `npm stage publish --provenance --access public` (OIDC-authenticated; no 2FA required for the stage step).
+   - Posts a Slack notification listing each staged package with links to its GitHub release and npm page.
 
-1. Get latest release info from Github
-2. Get info for all merged PRs after the publish date of latest release
-3. Use the semver labels assigned to each of the merged PRs (`Major`, `Minor`, and `Patch`) to understand how to bump changed packages
-4. Pass the latest release tag and the calculated version bump to Lerna
-5. Lerna diffs each package workspace (since the latest release tag) to find which have changed and need to be published
-6. Lerna bumps each changed package using the calculated version bump in step 3
-7. Lerna publishes each package
+Staged packages are uploaded to the npm registry but **not yet live**. They need explicit approval before consumers can install them.
 
-> [!TIP]
-> We enable verbose logging in the release packages CI step to give plenty of information related to what Auto and Lerna are doing. This can prove most useful should issues occur with releasing packages.
+### Approving staged packages on npm
 
-### Help! The release failed after the packages were published to the NPM registry
+After the Slack notification fires:
 
-If the release step fails after the packages were published to the NPM registry manual clean up is required to sync the repo to the NPM registry before the next publish occurs otherwise further failures or potentially major releases containing duplicate version calculations could be pushed to the NPM registry.
+1. Log into [npmjs.com](https://www.npmjs.com/) with the 2FA-enabled account that has publish rights to `@grafana/*` packages.
+2. For each `@grafana/<pkg>` in the Slack message, navigate to its staged-packages view.
+3. Verify the staged versions then **Approve** each to send them the NPM registry.
 
-To sync the repo with the latest release(s) on the NPM registry we need to introduce the commits, tags and gh releases Auto _would_ have pushed had the publish command completed fully.
-
-- Locate the failed release workflow step from the `main` commit history.
-- Search the logs for `Commit  - @grafana/` to find the versions and `git tag` commands for each package that was published to the NPM registry.
-- Search the logs for `New Release Notes` to find the release notes markdown.
-- Checkout `main`.
-- For each published package update it's `changelog.md` file in the repo using the release notes markdown as a guide. It will not match each changelog file perfectly but the older entries can be used to match formatting. Now update the repos root `changelog.md` file, matching the formatting using older entries. Commit this to `main` with `git commit -m "Update CHANGELOG.md [skip ci]"`. ([example commit](https://github.com/grafana/plugin-tools/commit/e8b980e25e8752aaab9278cb43228f44733ca96f))
-- Update each published packages `package.json` file so the version matches the version published to the registry. Once done run `npm install`. Commit this to `main` with `git commit -m "Bump independent versions [skip ci]"`.
-- Now tag this version bump commit with the tag commands from the failed release workflow step. Tag the commit for each published package. The command should look like `git tag -a @grafana/create-plugin@<UPDATED_VERSION> -m "@grafana/create-plugin@<UPDATED_VERSION>"`. ([example commit](https://github.com/grafana/plugin-tools/commit/e8b980e25e8752aaab9278cb43228f44733ca96f))
-- Go to the [plugin-tools tags page](https://github.com/grafana/plugin-tools/tags) and delete any existing tags that match the versions of the packages that were released.
-- Once the tags are deleted push the commits and the tags from `main` to gh with `git push --follow-tags`.
-- Lastly create the GH releases for the packages from the [Github releases page](https://github.com/grafana/plugin-tools/releases).
+If you spot a problem with a staged package before approving, **Reject** removes the staged version without publishing.
