@@ -1,3 +1,15 @@
+# v7.7.0 (Fri May 29 2026)
+
+#### 🚀 Enhancement
+
+- feat: replace insecure sign script [#2656](https://github.com/grafana/plugin-tools/pull/2656) ([@jackw](https://github.com/jackw))
+
+#### Authors: 1
+
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+
+---
+
 # v7.6.2 (Wed May 27 2026)
 
 #### 🐛 Bug Fix
