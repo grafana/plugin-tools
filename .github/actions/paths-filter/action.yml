@@ -1,0 +1,64 @@
+name: Paths filter
+description: Detects whether any file changed in the current PR matches at least one of the supplied glob patterns.
+
+inputs:
+  patterns:
+    description: |
+      Newline-separated list of glob patterns to match against the changed files
+      in the PR. Patterns use bash glob syntax (e.g. `path/**`, `path/file.ext`).
+    required: true
+
+outputs:
+  changed:
+    description: '`''true''` if at least one changed file matches one of the patterns, otherwise `''false''`. Always `''true''` on non-pull_request events.'
+    value: ${{ steps.filter.outputs.changed }}
+
+runs:
+  using: composite
+  steps:
+    - name: Match changed files against patterns
+      id: filter
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        EVENT_NAME: ${{ github.event_name }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        PATTERNS: ${{ inputs.patterns }}
+      run: |
+        set -euo pipefail
+
+        if [[ "${EVENT_NAME}" != "pull_request" && "${EVENT_NAME}" != "pull_request_target" ]]; then
+          echo "Event '${EVENT_NAME}' is not a pull_request; defaulting changed=true."
+          echo "changed=true" >> "${GITHUB_OUTPUT}"
+          exit 0
+        fi
+
+        mapfile -t patterns < <(printf '%s\n' "${PATTERNS}" | sed -E 's/^[[:space:]]+|[[:space:]]+$//g' | grep -v '^$' || true)
+        if [[ ${#patterns[@]} -eq 0 ]]; then
+          echo "No patterns supplied; nothing to match."
+          echo "changed=false" >> "${GITHUB_OUTPUT}"
+          exit 0
+        fi
+
+        echo "Patterns:"
+        printf '  %s\n' "${patterns[@]}"
+
+        mapfile -t changed_files < <(gh api --paginate "/repos/${REPO}/pulls/${PR_NUMBER}/files" --jq '.[].filename')
+        echo "Changed files (${#changed_files[@]}):"
+        printf '  %s\n' "${changed_files[@]:-(none)}"
+
+        shopt -s extglob
+        any_match=false
+        for file in "${changed_files[@]:-}"; do
+          [[ -z "${file}" ]] && continue
+          for pattern in "${patterns[@]}"; do
+            if [[ "${file}" == ${pattern} ]]; then
+              echo "Match: ${file} ~ ${pattern}"
+              any_match=true
+              break
+            fi
+          done
+        done
+
+        echo "changed=${any_match}" >> "${GITHUB_OUTPUT}"
