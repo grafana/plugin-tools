@@ -9,6 +9,9 @@ jobs:
     permissions:
       contents: read
       id-token: write # required to assume roles from GitHub's OIDC.
+    concurrency:
+      group: release
+      cancel-in-progress: false
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       paths_released: ${{ steps.release.outputs.paths_released }}
@@ -29,7 +32,7 @@ jobs:
 
   publish:
     needs: release
-    if: ${{ needs.release.outputs.releases_created }}
+    if: ${{ needs.release.outputs.releases_created == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -52,9 +55,13 @@ jobs:
       - name: Install npm for npm stage publish
         run: npm install -g npm@11.15.0
 
-      - run: npm ci --no-audit
+      - name: Install dependencies
+        run: npm ci --no-audit
 
-      - run: npm run build
+      # Build all packages to ensure dist files are present for publishing
+      # Nx and release please don't share the same dependency graph so safer to build everything.
+      - name: Build all packages
+        run: npm run build
 
       - name: Publish to npm
         env:
