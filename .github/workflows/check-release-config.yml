@@ -1,0 +1,24 @@
+name: Check release-please config
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'release-please-config.json'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Verify release-please config covers every package
+        run: |
+          set -euo pipefail
+          declared=$(jq -r '.packages | keys[]' release-please-config.json | sort)
+          actual=$(find packages -mindepth 1 -maxdepth 1 -type d | sort)
+          diff <(echo "$declared") <(echo "$actual") || {
+            echo "release-please-config.json is out of sync with packages/ directory" >&2
+            exit 1
+          }
