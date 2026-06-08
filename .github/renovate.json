@@ -23,6 +23,8 @@
   ],
   "separateMajorMinor": false,
   "skipInstalls": false,
+  "semanticCommits": "enabled",
+  "commitMessagePrefix": "chore(deps):",
   "reviewers": ["team:grafana/grafana-catalog"],
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
   "github-actions": {
@@ -64,7 +66,8 @@
         "/grafana/grafana-enterprise/",
         "!@grafana/e2e-selectors"
       ],
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(deps):"
     },
     {
       "groupName": "grafana dependencies",
@@ -78,7 +81,8 @@
         "!@grafana/scenes",
         "!@grafana/e2e-selectors"
       ],
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(deps):"
     },
     {
       "groupName": "docusaurus dependencies",
@@ -94,7 +98,6 @@
       "automerge": true,
       "groupName": "auto-merged devDependencies",
       "groupSlug": "dev-dependencies-automerge",
-      "addLabels": ["no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["devDependencies", "optionalDependencies"],
       "matchPackageNames": [
@@ -109,7 +112,6 @@
       "automerge": true,
       "groupName": "auto-merged patch dependencies",
       "groupSlug": "prod-dependencies-automerge",
-      "addLabels": ["no-changelog"],
       "matchCurrentVersion": "!/^0/",
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch"],
@@ -123,7 +125,8 @@
       "matchPackageNames": ["@grafana/plugin-e2e"],
       "minimumReleaseAge": null,
       "prPriority": 10,
-      "prConcurrentLimit": 0
+      "prConcurrentLimit": 0,
+      "commitMessagePrefix": "fix(plugin-e2e):"
     },
     {
       "automerge": false,
@@ -133,14 +136,16 @@
       "matchFileNames": [
         "packages/create-plugin/templates/github/workflows/**"
       ],
-      "pinDigests": false
+      "pinDigests": false,
+      "commitMessagePrefix": "fix(create-plugin):"
     },
     {
       "automerge": false,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
       "matchManagers": ["github-actions"],
-      "matchFileNames": [".github/workflows/**"]
+      "matchFileNames": [".github/workflows/**"],
+      "commitMessagePrefix": "chore(ci):"
     },
     {
       "automerge": true,

@@ -13,7 +13,7 @@ keywords:
 
 # Sign a plugin
 
-Grafana Labs signs all Grafana Labs-authored plugins, including Enterprise plugins, so that Grafana can verify their authenticity with signature verification. By default, Grafana requires all plugins to be signed before it loads them. 
+Grafana Labs signs all Grafana Labs-authored plugins, including Enterprise plugins, so that Grafana can verify their authenticity with signature verification. By default, Grafana requires all plugins to be signed before it loads them.
 
 Refer to [Plugin signatures](https://grafana.com/docs/grafana/latest/administration/plugin-management/plugin-sign/) for more details.
 
@@ -52,7 +52,7 @@ To verify ownership of your plugin, generate an Access Policy token that you use
 
 Plugins can have different [signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) depending on their author, related technology, and intended use.
 
-A plugin can be either _public_ or _private_: 
+A plugin can be either _public_ or _private_:
 
 - **Public plugins:** Grafana signs these as Community or Commercial. Grafana distributes them within the [Grafana plugin catalog](https://grafana.com/plugins) and makes them available for others to install.
 - **Private plugins:** These are only available for use within your organization.
@@ -74,7 +74,7 @@ The Grafana team needs to review public plugins before you can sign them.
 1. Sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin:
 
    ```shell npm2yarn
-   npx @grafana/sign-plugin@latest
+   npm run sign
    ```
 
 ## Sign a private plugin
@@ -88,7 +88,7 @@ The Grafana team needs to review public plugins before you can sign them.
 1. Sign the plugin. The Grafana sign-plugin tool creates a [MANIFEST.txt](#add-a-plugin-manifest-for-verification) file in the `dist` directory of your plugin. After the `rootUrls` flag, enter a comma-separated list of URLs for the Grafana instances where you intend to install the plugin:
 
    ```shell npm2yarn
-   npx @grafana/sign-plugin@latest --rootUrls https://example.com/grafana
+   npm run sign -- --rootUrls https://example.com/grafana
    ```
 
 ## Add a plugin manifest for verification

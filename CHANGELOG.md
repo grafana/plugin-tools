@@ -1,3 +1,25 @@
+# (Fri May 29 2026)
+
+#### 🚀 Enhancement
+
+- `@grafana/create-plugin@7.7.0`
+  - feat: replace insecure sign script [#2656](https://github.com/grafana/plugin-tools/pull/2656) ([@jackw](https://github.com/jackw))
+
+#### 🐛 Bug Fix
+
+- `@grafana/plugin-e2e@3.9.0`
+  - Plugin E2E: Fix flaky alerting, TLS, and permissions tests on slow CI [#2675](https://github.com/grafana/plugin-tools/pull/2675) ([@mckn](https://github.com/mckn))
+- `@grafana/plugin-docs-parser@0.1.0`
+  - Plugin Docs Parser: Reduce dependency footprint [#2659](https://github.com/grafana/plugin-tools/pull/2659) ([@sunker](https://github.com/sunker))
+
+#### Authors: 3
+
+- Erik Sundell ([@sunker](https://github.com/sunker))
+- Jack Westbrook ([@jackw](https://github.com/jackw))
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # (Wed May 27 2026)
 
 #### 🐛 Bug Fix
