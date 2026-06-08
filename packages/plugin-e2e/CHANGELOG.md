@@ -1,3 +1,15 @@
+# v3.9.0 (Fri May 29 2026)
+
+#### 🐛 Bug Fix
+
+- Plugin E2E: Fix flaky alerting, TLS, and permissions tests on slow CI [#2675](https://github.com/grafana/plugin-tools/pull/2675) ([@mckn](https://github.com/mckn))
+
+#### Authors: 1
+
+- Marcus Andersson ([@mckn](https://github.com/mckn))
+
+---
+
 # v3.7.2 (Tue May 12 2026)
 
 #### 🐛 Bug Fix
