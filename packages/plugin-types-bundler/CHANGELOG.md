@@ -1,4 +1,13 @@
-# v0.4.4 (Tue Aug 05 2025)
+# Changelog
+
+## [0.6.1](https://github.com/grafana/plugin-tools/compare/plugin-types-bundler@0.6.0...plugin-types-bundler@0.6.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/node to v24 ([#2272](https://github.com/grafana/plugin-tools/issues/2272)) ([5ac3616](https://github.com/grafana/plugin-tools/commit/5ac3616cbc8c818758c0aef7ae926106a8c76bda))
+
+## v0.4.4 (Tue Aug 05 2025)
 
 #### 🐛 Bug Fix
 
@@ -11,7 +20,7 @@
 
 ---
 
-# v0.4.3 (Fri Jul 25 2025)
+## v0.4.3 (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix
 
@@ -24,7 +33,7 @@
 
 ---
 
-# v0.3.1 (Thu Apr 10 2025)
+## v0.3.1 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix
 
@@ -36,7 +45,7 @@
 
 ---
 
-# v0.3.0 (Thu Mar 13 2025)
+## v0.3.0 (Thu Mar 13 2025)
 
 #### 🚀 Enhancement
 
@@ -48,7 +57,7 @@
 
 ---
 
-# v0.2.5 (Thu Feb 20 2025)
+## v0.2.5 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
 
@@ -60,7 +69,7 @@
 
 ---
 
-# v0.2.4 (Tue Feb 04 2025)
+## v0.2.4 (Tue Feb 04 2025)
 
 #### 🐛 Bug Fix
 
@@ -72,7 +81,7 @@
 
 ---
 
-# v0.1.0 (Tue Nov 26 2024)
+## v0.1.0 (Tue Nov 26 2024)
 
 #### 🐛 Bug Fix
 
@@ -84,7 +93,7 @@
 
 ---
 
-# v0.0.6 (Thu Oct 31 2024)
+## v0.0.6 (Thu Oct 31 2024)
 
 #### 🐛 Bug Fix
 
@@ -96,7 +105,7 @@
 
 ---
 
-# v0.0.4 (Wed Oct 09 2024)
+## v0.0.4 (Wed Oct 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -108,7 +117,7 @@
 
 ---
 
-# v0.0.3 (Fri Oct 04 2024)
+## v0.0.3 (Fri Oct 04 2024)
 
 #### 🐛 Bug Fix
 
@@ -120,7 +129,7 @@
 
 ---
 
-# v0.0.2 (Thu Oct 03 2024)
+## v0.0.2 (Thu Oct 03 2024)
 
 #### 🐛 Bug Fix
 
@@ -132,7 +141,7 @@
 
 ---
 
-# v0.0.1 (Wed Sep 25 2024)
+## v0.0.1 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix
 

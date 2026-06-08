@@ -1,4 +1,42 @@
-# v7.7.0 (Fri May 29 2026)
+# Changelog
+
+## [7.8.0](https://github.com/grafana/plugin-tools/compare/create-plugin@7.7.0...create-plugin@7.8.0) (2026-06-08)
+
+
+### Features
+
+* add dependabot config for plugins ([#2248](https://github.com/grafana/plugin-tools/issues/2248)) ([5a89613](https://github.com/grafana/plugin-tools/commit/5a896131ff10b2cabc9bb5322485467dccb51746))
+* align minimum grafana dependency ([#2355](https://github.com/grafana/plugin-tools/issues/2355)) ([376811d](https://github.com/grafana/plugin-tools/commit/376811d7b7be614e1fe63f297a6a5b66f554620c))
+* bump all dev deps to latest ([#2359](https://github.com/grafana/plugin-tools/issues/2359)) ([aac95e1](https://github.com/grafana/plugin-tools/commit/aac95e16deacde0efc9aefdcf5c9d10516170d35))
+* disable package manager script execution ([#2630](https://github.com/grafana/plugin-tools/issues/2630)) ([4bea85d](https://github.com/grafana/plugin-tools/commit/4bea85dbbaf336fe5f772f78297d2a8d7fb33541))
+* externalize jsx-runtime ([#2448](https://github.com/grafana/plugin-tools/issues/2448)) ([d430c12](https://github.com/grafana/plugin-tools/commit/d430c127e628e0bc992de2082a841040d7fc822d))
+* harden bundle-stats workflow permissions ([#2627](https://github.com/grafana/plugin-tools/issues/2627)) ([df7780a](https://github.com/grafana/plugin-tools/commit/df7780a65905d6b64f3ae4bbf53a4019b5cd0dcf))
+* plugin-validator skill config for claude and codex ([#2468](https://github.com/grafana/plugin-tools/issues/2468)) ([f6b55c0](https://github.com/grafana/plugin-tools/commit/f6b55c05084eed9169813927311656277115165a))
+* replace insecure sign script ([#2656](https://github.com/grafana/plugin-tools/issues/2656)) ([cc270dc](https://github.com/grafana/plugin-tools/commit/cc270dcaf3ceddaf0f02850914711123785e28ca))
+* support Typescript 6 ([#2614](https://github.com/grafana/plugin-tools/issues/2614)) ([95147eb](https://github.com/grafana/plugin-tools/commit/95147eb7a5ab5cd3f7692ad0f460d5e7ca602822))
+* use latest create-plugin-update workflow ([#2299](https://github.com/grafana/plugin-tools/issues/2299)) ([ada0444](https://github.com/grafana/plugin-tools/commit/ada04442da6c1e1d962349c25016a8a493fbd6fc))
+
+
+### Bug Fixes
+
+* **create-plugin:** fix typo in scaffolded agent md templates ([#2578](https://github.com/grafana/plugin-tools/issues/2578)) ([46d8d69](https://github.com/grafana/plugin-tools/commit/46d8d695bcdb920f7d08ff0dddac5f9ca186ebf9))
+* **create-plugin:** make playwright report publishing opt-in ([#2640](https://github.com/grafana/plugin-tools/issues/2640)) ([6ad4a16](https://github.com/grafana/plugin-tools/commit/6ad4a16c00346a58b460dffc4e92ea0c644620a2))
+* **deps:** update dependency glob to v11.1.0 [security] ([#2308](https://github.com/grafana/plugin-tools/issues/2308)) ([6995c54](https://github.com/grafana/plugin-tools/commit/6995c5401ee4e165805ac46fffcad978573efac1))
+* **deps:** update dependency glob to v13 ([#2392](https://github.com/grafana/plugin-tools/issues/2392)) ([cf68069](https://github.com/grafana/plugin-tools/commit/cf680698c81c13f06b0a24e7c8a7b2afabcd6280))
+* **deps:** update dependency which to v6 ([#2393](https://github.com/grafana/plugin-tools/issues/2393)) ([187e93f](https://github.com/grafana/plugin-tools/commit/187e93faffbc7aec6c2fa551e09cbadd05ac370a))
+* exit migrate command if plugin is using create-plugin ([#2510](https://github.com/grafana/plugin-tools/issues/2510)) ([33aa67b](https://github.com/grafana/plugin-tools/commit/33aa67b5700cfff18bb02c240061358b3c2fd1cd))
+* migrations yarn 1 install and eslint config issues ([#2503](https://github.com/grafana/plugin-tools/issues/2503)) ([93e3d4b](https://github.com/grafana/plugin-tools/commit/93e3d4b6de77f027b59da069a42344ca51903f51))
+* only migrate eslint if plugin depends on eslint &lt; 9.0.0 ([#2338](https://github.com/grafana/plugin-tools/issues/2338)) ([7d728ab](https://github.com/grafana/plugin-tools/commit/7d728ab14e7410fe4deee3df85d96273c89b388c))
+* override moduleResolution in scaffolded ts-node config ([#2610](https://github.com/grafana/plugin-tools/issues/2610)) ([1b69c6b](https://github.com/grafana/plugin-tools/commit/1b69c6b113af8a7cbfcd1ecde015e602be5cd542))
+* pin dependencies for better security ([#2658](https://github.com/grafana/plugin-tools/issues/2658)) ([9d9a59b](https://github.com/grafana/plugin-tools/commit/9d9a59bd37c27b562cfe0d2a03bd7fe6e75cfc09))
+* Pin golint-ci in scaffolded plugins  ([#2414](https://github.com/grafana/plugin-tools/issues/2414)) ([6e34233](https://github.com/grafana/plugin-tools/commit/6e34233d6a33c809cf4ed901bab3174b267476bf))
+* remove unused Compiler type import from Webpack plugin ([#2370](https://github.com/grafana/plugin-tools/issues/2370)) ([0d4c039](https://github.com/grafana/plugin-tools/commit/0d4c0399cba9323b513057a6e02b448fea5278ad))
+* set config version only if migrations ran ([#2513](https://github.com/grafana/plugin-tools/issues/2513)) ([4e8751b](https://github.com/grafana/plugin-tools/commit/4e8751bc8e22ec2bdedbeb039e884a1b078c036d))
+* stop copying all images to bundle ([#2369](https://github.com/grafana/plugin-tools/issues/2369)) ([53784ec](https://github.com/grafana/plugin-tools/commit/53784ec5b8d38c25d744d0e6359b233165452a1e))
+* stop eslint migration stripping extra chars from plugin name ([#2348](https://github.com/grafana/plugin-tools/issues/2348)) ([039754a](https://github.com/grafana/plugin-tools/commit/039754ab6b8c389c28c60d8345954c11c00d5978))
+* version command simplified output ([#2352](https://github.com/grafana/plugin-tools/issues/2352)) ([28536bd](https://github.com/grafana/plugin-tools/commit/28536bdc74ed13fff3d7dab2d6ccd9d01e8603de))
+
+## v7.7.0 (Fri May 29 2026)
 
 #### 🚀 Enhancement
 
@@ -10,7 +48,7 @@
 
 ---
 
-# v7.6.2 (Wed May 27 2026)
+## v7.6.2 (Wed May 27 2026)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +60,7 @@
 
 ---
 
-# v7.6.1 (Tue May 26 2026)
+## v7.6.1 (Tue May 26 2026)
 
 #### 🐛 Bug Fix
 
@@ -34,7 +72,7 @@
 
 ---
 
-# v7.6.0 (Thu May 14 2026)
+## v7.6.0 (Thu May 14 2026)
 
 #### 🚀 Enhancement
 
@@ -46,7 +84,7 @@
 
 ---
 
-# v7.5.0 (Wed May 13 2026)
+## v7.5.0 (Wed May 13 2026)
 
 #### 🚀 Enhancement
 
@@ -58,7 +96,7 @@
 
 ---
 
-# v7.4.0 (Wed May 13 2026)
+## v7.4.0 (Wed May 13 2026)
 
 #### 🚀 Enhancement
 
@@ -70,7 +108,7 @@
 
 ---
 
-# v7.3.1 (Wed May 06 2026)
+## v7.3.1 (Wed May 06 2026)
 
 #### 🐛 Bug Fix
 
@@ -82,7 +120,7 @@
 
 ---
 
-# v7.3.0 (Thu Apr 30 2026)
+## v7.3.0 (Thu Apr 30 2026)
 
 #### 🐛 Bug Fix
 
@@ -94,7 +132,7 @@
 
 ---
 
-# v7.2.2 (Sat Apr 25 2026)
+## v7.2.2 (Sat Apr 25 2026)
 
 #### 🐛 Bug Fix
 
@@ -106,7 +144,7 @@
 
 ---
 
-# v7.2.1 (Fri Apr 24 2026)
+## v7.2.1 (Fri Apr 24 2026)
 
 #### 🐛 Bug Fix
 
@@ -118,7 +156,7 @@
 
 ---
 
-# v7.1.7 (Thu Apr 16 2026)
+## v7.1.7 (Thu Apr 16 2026)
 
 #### 🐛 Bug Fix
 
@@ -130,7 +168,7 @@
 
 ---
 
-# v7.1.6 (Thu Apr 16 2026)
+## v7.1.6 (Thu Apr 16 2026)
 
 #### 🐛 Bug Fix
 
@@ -142,7 +180,7 @@
 
 ---
 
-# v7.1.5 (Tue Apr 14 2026)
+## v7.1.5 (Tue Apr 14 2026)
 
 #### 🐛 Bug Fix
 
@@ -154,7 +192,7 @@
 
 ---
 
-# v7.1.4 (Tue Apr 07 2026)
+## v7.1.4 (Tue Apr 07 2026)
 
 #### 🐛 Bug Fix
 
@@ -166,7 +204,7 @@
 
 ---
 
-# v7.1.3 (Fri Apr 03 2026)
+## v7.1.3 (Fri Apr 03 2026)
 
 #### 🐛 Bug Fix
 
@@ -179,7 +217,7 @@
 
 ---
 
-# v7.1.2 (Wed Apr 01 2026)
+## v7.1.2 (Wed Apr 01 2026)
 
 #### 🐛 Bug Fix
 
@@ -191,7 +229,7 @@
 
 ---
 
-# v7.1.1 (Wed Apr 01 2026)
+## v7.1.1 (Wed Apr 01 2026)
 
 #### 🐛 Bug Fix
 
@@ -203,7 +241,7 @@
 
 ---
 
-# v7.1.0 (Wed Mar 25 2026)
+## v7.1.0 (Wed Mar 25 2026)
 
 #### 🚀 Enhancement
 
@@ -215,7 +253,7 @@
 
 ---
 
-# v7.0.8 (Mon Mar 16 2026)
+## v7.0.8 (Mon Mar 16 2026)
 
 #### 🐛 Bug Fix
 
@@ -227,7 +265,7 @@
 
 ---
 
-# v7.0.7 (Wed Mar 11 2026)
+## v7.0.7 (Wed Mar 11 2026)
 
 #### 🐛 Bug Fix
 
@@ -239,7 +277,7 @@
 
 ---
 
-# v7.0.6 (Tue Mar 10 2026)
+## v7.0.6 (Tue Mar 10 2026)
 
 #### 🐛 Bug Fix
 
@@ -251,7 +289,7 @@
 
 ---
 
-# v7.0.5 (Fri Mar 06 2026)
+## v7.0.5 (Fri Mar 06 2026)
 
 #### 🐛 Bug Fix
 
@@ -263,7 +301,7 @@
 
 ---
 
-# v7.0.4 (Fri Mar 06 2026)
+## v7.0.4 (Fri Mar 06 2026)
 
 #### 🐛 Bug Fix
 
@@ -275,7 +313,7 @@
 
 ---
 
-# v7.0.3 (Thu Mar 05 2026)
+## v7.0.3 (Thu Mar 05 2026)
 
 #### 🐛 Bug Fix
 
@@ -287,7 +325,7 @@
 
 ---
 
-# v7.0.2 (Tue Mar 03 2026)
+## v7.0.2 (Tue Mar 03 2026)
 
 #### 🐛 Bug Fix
 
@@ -299,7 +337,7 @@
 
 ---
 
-# v7.0.1 (Mon Mar 02 2026)
+## v7.0.1 (Mon Mar 02 2026)
 
 #### 🐛 Bug Fix
 
@@ -313,7 +351,7 @@
 
 ---
 
-# v7.0.0 (Fri Feb 27 2026)
+## v7.0.0 (Fri Feb 27 2026)
 
 #### 💥 Breaking Change
 
@@ -325,7 +363,7 @@
 
 ---
 
-# v6.11.0 (Thu Feb 26 2026)
+## v6.11.0 (Thu Feb 26 2026)
 
 #### 🚀 Enhancement
 
@@ -337,7 +375,7 @@
 
 ---
 
-# v6.10.3 (Thu Feb 26 2026)
+## v6.10.3 (Thu Feb 26 2026)
 
 #### 🐛 Bug Fix
 
@@ -349,7 +387,7 @@
 
 ---
 
-# v6.10.2 (Wed Feb 25 2026)
+## v6.10.2 (Wed Feb 25 2026)
 
 #### 🐛 Bug Fix
 
@@ -361,7 +399,7 @@
 
 ---
 
-# v6.10.1 (Mon Feb 16 2026)
+## v6.10.1 (Mon Feb 16 2026)
 
 #### 🐛 Bug Fix
 
@@ -373,7 +411,7 @@
 
 ---
 
-# v6.10.0 (Fri Feb 13 2026)
+## v6.10.0 (Fri Feb 13 2026)
 
 #### 🚀 Enhancement
 
@@ -385,7 +423,7 @@
 
 ---
 
-# v6.9.0 (Fri Feb 13 2026)
+## v6.9.0 (Fri Feb 13 2026)
 
 #### 🚀 Enhancement
 
@@ -397,7 +435,7 @@
 
 ---
 
-# v6.8.4 (Fri Feb 06 2026)
+## v6.8.4 (Fri Feb 06 2026)
 
 #### 🐛 Bug Fix
 
@@ -409,7 +447,7 @@
 
 ---
 
-# v6.8.3 (Fri Jan 30 2026)
+## v6.8.3 (Fri Jan 30 2026)
 
 #### 🐛 Bug Fix
 
@@ -421,7 +459,7 @@
 
 ---
 
-# v6.8.2 (Fri Jan 30 2026)
+## v6.8.2 (Fri Jan 30 2026)
 
 #### 🐛 Bug Fix
 
@@ -433,7 +471,7 @@
 
 ---
 
-# v6.8.1 (Fri Jan 30 2026)
+## v6.8.1 (Fri Jan 30 2026)
 
 #### 🐛 Bug Fix
 
@@ -445,7 +483,7 @@
 
 ---
 
-# v6.8.0 (Thu Jan 29 2026)
+## v6.8.0 (Thu Jan 29 2026)
 
 #### 🐛 Bug Fix
 
@@ -458,7 +496,7 @@
 
 ---
 
-# v6.7.8 (Thu Jan 22 2026)
+## v6.7.8 (Thu Jan 22 2026)
 
 #### 🐛 Bug Fix
 
@@ -470,7 +508,7 @@
 
 ---
 
-# v6.7.7 (Thu Jan 22 2026)
+## v6.7.7 (Thu Jan 22 2026)
 
 #### 🐛 Bug Fix
 
@@ -484,7 +522,7 @@
 
 ---
 
-# v6.7.6 (Tue Jan 20 2026)
+## v6.7.6 (Tue Jan 20 2026)
 
 #### 🐛 Bug Fix
 
@@ -496,7 +534,7 @@
 
 ---
 
-# v6.7.5 (Wed Jan 14 2026)
+## v6.7.5 (Wed Jan 14 2026)
 
 #### 🐛 Bug Fix
 
@@ -510,7 +548,7 @@
 
 ---
 
-# v6.7.4 (Mon Jan 12 2026)
+## v6.7.4 (Mon Jan 12 2026)
 
 #### 🐛 Bug Fix
 
@@ -522,7 +560,7 @@
 
 ---
 
-# v6.7.3 (Thu Jan 08 2026)
+## v6.7.3 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
 
@@ -534,7 +572,7 @@
 
 ---
 
-# v6.7.2 (Thu Jan 08 2026)
+## v6.7.2 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
 
@@ -546,7 +584,7 @@
 
 ---
 
-# v6.7.1 (Thu Jan 08 2026)
+## v6.7.1 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
 
@@ -558,7 +596,7 @@
 
 ---
 
-# v6.7.0 (Wed Jan 07 2026)
+## v6.7.0 (Wed Jan 07 2026)
 
 #### 🚀 Enhancement
 
@@ -575,7 +613,7 @@
 
 ---
 
-# v6.6.0 (Thu Dec 18 2025)
+## v6.6.0 (Thu Dec 18 2025)
 
 #### 🚀 Enhancement
 
@@ -587,7 +625,7 @@
 
 ---
 
-# v6.5.3 (Wed Dec 17 2025)
+## v6.5.3 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -599,7 +637,7 @@
 
 ---
 
-# v6.5.2 (Wed Dec 17 2025)
+## v6.5.2 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -612,7 +650,7 @@
 
 ---
 
-# v6.5.1 (Wed Dec 17 2025)
+## v6.5.1 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -624,7 +662,7 @@
 
 ---
 
-# v6.5.0 (Wed Dec 17 2025)
+## v6.5.0 (Wed Dec 17 2025)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -641,7 +679,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.4.4 (Fri Dec 12 2025)
+## v6.4.4 (Fri Dec 12 2025)
 
 #### 🐛 Bug Fix
 
@@ -653,7 +691,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.4.3 (Fri Dec 05 2025)
+## v6.4.3 (Fri Dec 05 2025)
 
 #### 🐛 Bug Fix
 
@@ -667,7 +705,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.4.2 (Thu Nov 27 2025)
+## v6.4.2 (Thu Nov 27 2025)
 
 #### 🐛 Bug Fix
 
@@ -679,7 +717,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.4.1 (Wed Nov 26 2025)
+## v6.4.1 (Wed Nov 26 2025)
 
 #### 🐛 Bug Fix
 
@@ -691,7 +729,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.4.0 (Tue Nov 25 2025)
+## v6.4.0 (Tue Nov 25 2025)
 
 #### 🚀 Enhancement
 
@@ -703,7 +741,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.3.1 (Tue Nov 25 2025)
+## v6.3.1 (Tue Nov 25 2025)
 
 #### 🐛 Bug Fix
 
@@ -715,7 +753,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.3.0 (Tue Nov 25 2025)
+## v6.3.0 (Tue Nov 25 2025)
 
 #### 🚀 Enhancement
 
@@ -727,7 +765,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.2.2 (Fri Nov 21 2025)
+## v6.2.2 (Fri Nov 21 2025)
 
 #### 🐛 Bug Fix
 
@@ -739,7 +777,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.2.1 (Thu Nov 20 2025)
+## v6.2.1 (Thu Nov 20 2025)
 
 #### 🐛 Bug Fix
 
@@ -751,7 +789,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.2.0 (Thu Nov 20 2025)
+## v6.2.0 (Thu Nov 20 2025)
 
 #### 🚀 Enhancement
 
@@ -763,7 +801,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.14 (Wed Nov 19 2025)
+## v6.1.14 (Wed Nov 19 2025)
 
 #### 🐛 Bug Fix
 
@@ -775,7 +813,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.13 (Wed Nov 19 2025)
+## v6.1.13 (Wed Nov 19 2025)
 
 #### 🐛 Bug Fix
 
@@ -787,7 +825,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.12 (Mon Nov 17 2025)
+## v6.1.12 (Mon Nov 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -799,7 +837,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.11 (Fri Nov 14 2025)
+## v6.1.11 (Fri Nov 14 2025)
 
 #### 🐛 Bug Fix
 
@@ -813,7 +851,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.10 (Thu Nov 13 2025)
+## v6.1.10 (Thu Nov 13 2025)
 
 #### 🐛 Bug Fix
 
@@ -825,7 +863,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.9 (Wed Nov 12 2025)
+## v6.1.9 (Wed Nov 12 2025)
 
 #### 🐛 Bug Fix
 
@@ -837,7 +875,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.8 (Fri Nov 07 2025)
+## v6.1.8 (Fri Nov 07 2025)
 
 ### Release Notes
 
@@ -860,7 +898,7 @@ Thank you, Joonseo Lee ([@joonseolee](https://github.com/joonseolee)), for all y
 
 ---
 
-# v6.1.7 (Mon Nov 03 2025)
+## v6.1.7 (Mon Nov 03 2025)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -876,7 +914,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.6 (Mon Nov 03 2025)
+## v6.1.6 (Mon Nov 03 2025)
 
 #### 🐛 Bug Fix
 
@@ -888,7 +926,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.5 (Tue Oct 28 2025)
+## v6.1.5 (Tue Oct 28 2025)
 
 #### 🐛 Bug Fix
 
@@ -900,7 +938,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.4 (Fri Oct 24 2025)
+## v6.1.4 (Fri Oct 24 2025)
 
 #### 🐛 Bug Fix
 
@@ -912,7 +950,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.3 (Thu Oct 23 2025)
+## v6.1.3 (Thu Oct 23 2025)
 
 #### 🐛 Bug Fix
 
@@ -924,7 +962,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.2 (Tue Oct 21 2025)
+## v6.1.2 (Tue Oct 21 2025)
 
 #### 🐛 Bug Fix
 
@@ -940,7 +978,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.1 (Wed Oct 15 2025)
+## v6.1.1 (Wed Oct 15 2025)
 
 #### 🐛 Bug Fix
 
@@ -952,7 +990,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.1.0 (Wed Oct 08 2025)
+## v6.1.0 (Wed Oct 08 2025)
 
 #### 🚀 Enhancement
 
@@ -964,7 +1002,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v6.0.0 (Tue Oct 07 2025)
+## v6.0.0 (Tue Oct 07 2025)
 
 #### 💥 Breaking Change
 
@@ -976,7 +1014,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.27.1 (Tue Oct 07 2025)
+## v5.27.1 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -988,7 +1026,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.27.0 (Tue Oct 07 2025)
+## v5.27.0 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -1002,7 +1040,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.9 (Mon Sep 29 2025)
+## v5.26.9 (Mon Sep 29 2025)
 
 #### 🐛 Bug Fix
 
@@ -1014,7 +1052,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.8 (Thu Sep 25 2025)
+## v5.26.8 (Thu Sep 25 2025)
 
 #### 🐛 Bug Fix
 
@@ -1026,7 +1064,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.7 (Wed Sep 24 2025)
+## v5.26.7 (Wed Sep 24 2025)
 
 #### 🐛 Bug Fix
 
@@ -1038,7 +1076,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.6 (Tue Sep 23 2025)
+## v5.26.6 (Tue Sep 23 2025)
 
 #### 🐛 Bug Fix
 
@@ -1052,7 +1090,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.5 (Thu Sep 18 2025)
+## v5.26.5 (Thu Sep 18 2025)
 
 #### 🐛 Bug Fix
 
@@ -1067,7 +1105,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.4 (Fri Sep 12 2025)
+## v5.26.4 (Fri Sep 12 2025)
 
 #### 🐛 Bug Fix
 
@@ -1081,7 +1119,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.3 (Thu Sep 11 2025)
+## v5.26.3 (Thu Sep 11 2025)
 
 #### 🐛 Bug Fix
 
@@ -1094,7 +1132,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.2 (Wed Sep 03 2025)
+## v5.26.2 (Wed Sep 03 2025)
 
 #### 🐛 Bug Fix
 
@@ -1106,7 +1144,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.1 (Mon Sep 01 2025)
+## v5.26.1 (Mon Sep 01 2025)
 
 #### 🐛 Bug Fix
 
@@ -1120,7 +1158,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.26.0 (Fri Aug 29 2025)
+## v5.26.0 (Fri Aug 29 2025)
 
 #### 🚀 Enhancement
 
@@ -1137,7 +1175,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.9 (Thu Aug 28 2025)
+## v5.25.9 (Thu Aug 28 2025)
 
 #### 🐛 Bug Fix
 
@@ -1151,7 +1189,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.8 (Tue Aug 05 2025)
+## v5.25.8 (Tue Aug 05 2025)
 
 #### 🐛 Bug Fix
 
@@ -1163,7 +1201,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.7 (Fri Jul 25 2025)
+## v5.25.7 (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix
 
@@ -1176,7 +1214,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.6 (Tue Jul 22 2025)
+## v5.25.6 (Tue Jul 22 2025)
 
 #### 🐛 Bug Fix
 
@@ -1188,7 +1226,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.5 (Fri Jul 18 2025)
+## v5.25.5 (Fri Jul 18 2025)
 
 #### 🐛 Bug Fix
 
@@ -1200,7 +1238,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.3 (Thu Jul 10 2025)
+## v5.25.3 (Thu Jul 10 2025)
 
 #### 🐛 Bug Fix
 
@@ -1212,7 +1250,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.2 (Thu Jul 03 2025)
+## v5.25.2 (Thu Jul 03 2025)
 
 #### 🐛 Bug Fix
 
@@ -1226,7 +1264,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.1 (Mon Jun 30 2025)
+## v5.25.1 (Mon Jun 30 2025)
 
 #### 🐛 Bug Fix
 
@@ -1238,7 +1276,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.25.0 (Wed Jun 25 2025)
+## v5.25.0 (Wed Jun 25 2025)
 
 #### 🚀 Enhancement
 
@@ -1250,7 +1288,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.24.0 (Fri Jun 20 2025)
+## v5.24.0 (Fri Jun 20 2025)
 
 #### 🚀 Enhancement
 
@@ -1262,7 +1300,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.23.2 (Wed Jun 18 2025)
+## v5.23.2 (Wed Jun 18 2025)
 
 #### 🐛 Bug Fix
 
@@ -1277,7 +1315,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.23.1 (Mon Jun 16 2025)
+## v5.23.1 (Mon Jun 16 2025)
 
 #### 🐛 Bug Fix
 
@@ -1289,7 +1327,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.23.0 (Mon Jun 16 2025)
+## v5.23.0 (Mon Jun 16 2025)
 
 #### 🚀 Enhancement
 
@@ -1307,7 +1345,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.22.4 (Wed Jun 11 2025)
+## v5.22.4 (Wed Jun 11 2025)
 
 #### 🐛 Bug Fix
 
@@ -1319,7 +1357,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.22.3 (Wed Jun 11 2025)
+## v5.22.3 (Wed Jun 11 2025)
 
 #### 🐛 Bug Fix
 
@@ -1332,7 +1370,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.22.2 (Tue Jun 10 2025)
+## v5.22.2 (Tue Jun 10 2025)
 
 #### 🐛 Bug Fix
 
@@ -1344,7 +1382,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.22.1 (Tue May 20 2025)
+## v5.22.1 (Tue May 20 2025)
 
 #### 🐛 Bug Fix
 
@@ -1356,7 +1394,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.22.0 (Wed May 14 2025)
+## v5.22.0 (Wed May 14 2025)
 
 #### 🚀 Enhancement
 
@@ -1368,7 +1406,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.21.0 (Tue May 13 2025)
+## v5.21.0 (Tue May 13 2025)
 
 #### 🚀 Enhancement
 
@@ -1380,7 +1418,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.20.2 (Tue May 13 2025)
+## v5.20.2 (Tue May 13 2025)
 
 #### 🐛 Bug Fix
 
@@ -1394,7 +1432,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.20.1 (Wed May 07 2025)
+## v5.20.1 (Wed May 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -1411,7 +1449,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.20.0 (Mon May 05 2025)
+## v5.20.0 (Mon May 05 2025)
 
 #### 🚀 Enhancement
 
@@ -1423,7 +1461,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.9 (Mon May 05 2025)
+## v5.19.9 (Mon May 05 2025)
 
 #### 🐛 Bug Fix
 
@@ -1435,7 +1473,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.8 (Thu Apr 24 2025)
+## v5.19.8 (Thu Apr 24 2025)
 
 #### 🐛 Bug Fix
 
@@ -1447,7 +1485,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.7 (Tue Apr 22 2025)
+## v5.19.7 (Tue Apr 22 2025)
 
 #### 🐛 Bug Fix
 
@@ -1459,7 +1497,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.6 (Tue Apr 22 2025)
+## v5.19.6 (Tue Apr 22 2025)
 
 #### 🐛 Bug Fix
 
@@ -1471,7 +1509,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.5 (Thu Apr 17 2025)
+## v5.19.5 (Thu Apr 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -1483,7 +1521,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.4 (Wed Apr 16 2025)
+## v5.19.4 (Wed Apr 16 2025)
 
 #### 🐛 Bug Fix
 
@@ -1496,7 +1534,7 @@ Thank you, Steffen Gebert ([@StephenKing](https://github.com/StephenKing)), for 
 
 ---
 
-# v5.19.3 (Tue Apr 15 2025)
+## v5.19.3 (Tue Apr 15 2025)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -1512,7 +1550,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.19.2 (Thu Apr 10 2025)
+## v5.19.2 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix
 
@@ -1524,7 +1562,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.19.1 (Thu Mar 27 2025)
+## v5.19.1 (Thu Mar 27 2025)
 
 #### 🐛 Bug Fix
 
@@ -1536,7 +1574,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.19.0 (Thu Mar 13 2025)
+## v5.19.0 (Thu Mar 13 2025)
 
 #### 🚀 Enhancement
 
@@ -1548,7 +1586,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.18.5 (Fri Mar 07 2025)
+## v5.18.5 (Fri Mar 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -1560,7 +1598,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.18.4 (Mon Mar 03 2025)
+## v5.18.4 (Mon Mar 03 2025)
 
 #### 🐛 Bug Fix
 
@@ -1572,7 +1610,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.18.3 (Fri Feb 21 2025)
+## v5.18.3 (Fri Feb 21 2025)
 
 #### 🐛 Bug Fix
 
@@ -1584,7 +1622,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.18.1 (Thu Feb 20 2025)
+## v5.18.1 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
 
@@ -1597,7 +1635,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.18.0 (Wed Feb 19 2025)
+## v5.18.0 (Wed Feb 19 2025)
 
 #### 🚀 Enhancement
 
@@ -1615,7 +1653,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.17.0 (Fri Feb 14 2025)
+## v5.17.0 (Fri Feb 14 2025)
 
 #### 🚀 Enhancement
 
@@ -1627,7 +1665,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.16.0 (Mon Feb 10 2025)
+## v5.16.0 (Mon Feb 10 2025)
 
 #### 🚀 Enhancement
 
@@ -1645,7 +1683,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.15.1 (Tue Feb 04 2025)
+## v5.15.1 (Tue Feb 04 2025)
 
 #### 🐛 Bug Fix
 
@@ -1657,7 +1695,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.15.0 (Tue Feb 04 2025)
+## v5.15.0 (Tue Feb 04 2025)
 
 #### 🐛 Bug Fix
 
@@ -1669,7 +1707,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.14.1 (Fri Jan 31 2025)
+## v5.14.1 (Fri Jan 31 2025)
 
 #### 🐛 Bug Fix
 
@@ -1684,7 +1722,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.14.0 (Tue Jan 28 2025)
+## v5.14.0 (Tue Jan 28 2025)
 
 #### 🚀 Enhancement
 
@@ -1696,7 +1734,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.13.0 (Mon Jan 13 2025)
+## v5.13.0 (Mon Jan 13 2025)
 
 #### 🚀 Enhancement
 
@@ -1708,7 +1746,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.12.4 (Tue Dec 31 2024)
+## v5.12.4 (Tue Dec 31 2024)
 
 #### 🐛 Bug Fix
 
@@ -1722,7 +1760,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.12.3 (Mon Dec 30 2024)
+## v5.12.3 (Mon Dec 30 2024)
 
 #### 🐛 Bug Fix
 
@@ -1734,7 +1772,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.12.2 (Fri Dec 20 2024)
+## v5.12.2 (Fri Dec 20 2024)
 
 #### 🐛 Bug Fix
 
@@ -1746,7 +1784,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.12.1 (Thu Dec 19 2024)
+## v5.12.1 (Thu Dec 19 2024)
 
 #### 🐛 Bug Fix
 
@@ -1760,7 +1798,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.12.0 (Wed Dec 18 2024)
+## v5.12.0 (Wed Dec 18 2024)
 
 #### 🚀 Enhancement
 
@@ -1779,7 +1817,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.11.1 (Mon Dec 09 2024)
+## v5.11.1 (Mon Dec 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -1791,7 +1829,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.11.0 (Mon Dec 09 2024)
+## v5.11.0 (Mon Dec 09 2024)
 
 #### 🚀 Enhancement
 
@@ -1811,7 +1849,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.10.1 (Tue Dec 03 2024)
+## v5.10.1 (Tue Dec 03 2024)
 
 #### 🐛 Bug Fix
 
@@ -1824,7 +1862,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.10.0 (Tue Nov 26 2024)
+## v5.10.0 (Tue Nov 26 2024)
 
 #### 🚀 Enhancement
 
@@ -1841,7 +1879,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.9.5 (Mon Nov 25 2024)
+## v5.9.5 (Mon Nov 25 2024)
 
 #### 🐛 Bug Fix
 
@@ -1854,7 +1892,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.9.4 (Thu Nov 21 2024)
+## v5.9.4 (Thu Nov 21 2024)
 
 #### 🐛 Bug Fix
 
@@ -1867,7 +1905,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.9.3 (Fri Nov 15 2024)
+## v5.9.3 (Fri Nov 15 2024)
 
 #### 🐛 Bug Fix
 
@@ -1881,7 +1919,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.9.2 (Thu Nov 14 2024)
+## v5.9.2 (Thu Nov 14 2024)
 
 #### 🐛 Bug Fix
 
@@ -1895,7 +1933,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.9.1 (Tue Nov 12 2024)
+## v5.9.1 (Tue Nov 12 2024)
 
 #### 🐛 Bug Fix
 
@@ -1909,7 +1947,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.9.0 (Mon Nov 11 2024)
+## v5.9.0 (Mon Nov 11 2024)
 
 #### 🚀 Enhancement
 
@@ -1937,7 +1975,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.8.2 (Mon Nov 04 2024)
+## v5.8.2 (Mon Nov 04 2024)
 
 #### 🐛 Bug Fix
 
@@ -1949,7 +1987,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.8.1 (Fri Nov 01 2024)
+## v5.8.1 (Fri Nov 01 2024)
 
 #### 🐛 Bug Fix
 
@@ -1963,7 +2001,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.8.0 (Fri Nov 01 2024)
+## v5.8.0 (Fri Nov 01 2024)
 
 #### 🚀 Enhancement
 
@@ -1975,7 +2013,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.7.5 (Fri Nov 01 2024)
+## v5.7.5 (Fri Nov 01 2024)
 
 #### 🐛 Bug Fix
 
@@ -1988,7 +2026,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.7.4 (Wed Oct 30 2024)
+## v5.7.4 (Wed Oct 30 2024)
 
 #### 🐛 Bug Fix
 
@@ -2001,7 +2039,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.7.3 (Mon Oct 28 2024)
+## v5.7.3 (Mon Oct 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2016,7 +2054,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.7.2 (Mon Oct 28 2024)
+## v5.7.2 (Mon Oct 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2028,7 +2066,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.7.1 (Fri Oct 25 2024)
+## v5.7.1 (Fri Oct 25 2024)
 
 #### 🐛 Bug Fix
 
@@ -2040,7 +2078,7 @@ Thank you, Matt Cowley ([@MattIPv4](https://github.com/MattIPv4)), for all your 
 
 ---
 
-# v5.7.0 (Thu Oct 24 2024)
+## v5.7.0 (Thu Oct 24 2024)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -2061,7 +2099,7 @@ Thank you, Jeff Levin ([@jalevin](https://github.com/jalevin)), for all your wor
 
 ---
 
-# v5.6.0 (Fri Oct 18 2024)
+## v5.6.0 (Fri Oct 18 2024)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -2087,7 +2125,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.5.3 (Wed Oct 09 2024)
+## v5.5.3 (Wed Oct 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -2099,7 +2137,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.5.2 (Tue Oct 08 2024)
+## v5.5.2 (Tue Oct 08 2024)
 
 #### 🐛 Bug Fix
 
@@ -2111,7 +2149,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.5.1 (Fri Oct 04 2024)
+## v5.5.1 (Fri Oct 04 2024)
 
 #### 🐛 Bug Fix
 
@@ -2123,7 +2161,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.5.0 (Fri Oct 04 2024)
+## v5.5.0 (Fri Oct 04 2024)
 
 #### 🚀 Enhancement
 
@@ -2140,7 +2178,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.4.2 (Thu Oct 03 2024)
+## v5.4.2 (Thu Oct 03 2024)
 
 #### 🐛 Bug Fix
 
@@ -2154,7 +2192,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.4.1 (Tue Oct 01 2024)
+## v5.4.1 (Tue Oct 01 2024)
 
 #### 🐛 Bug Fix
 
@@ -2167,7 +2205,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.4.0 (Mon Sep 30 2024)
+## v5.4.0 (Mon Sep 30 2024)
 
 #### 🚀 Enhancement
 
@@ -2179,7 +2217,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.12 (Mon Sep 30 2024)
+## v5.3.12 (Mon Sep 30 2024)
 
 #### 🐛 Bug Fix
 
@@ -2191,7 +2229,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.11 (Wed Sep 25 2024)
+## v5.3.11 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix
 
@@ -2205,7 +2243,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.10 (Mon Sep 09 2024)
+## v5.3.10 (Mon Sep 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -2217,7 +2255,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.9 (Thu Sep 05 2024)
+## v5.3.9 (Thu Sep 05 2024)
 
 #### 🐛 Bug Fix
 
@@ -2230,7 +2268,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.8 (Thu Sep 05 2024)
+## v5.3.8 (Thu Sep 05 2024)
 
 #### 🐛 Bug Fix
 
@@ -2242,7 +2280,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.7 (Fri Aug 30 2024)
+## v5.3.7 (Fri Aug 30 2024)
 
 #### 🐛 Bug Fix
 
@@ -2255,7 +2293,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.6 (Wed Aug 28 2024)
+## v5.3.6 (Wed Aug 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2267,7 +2305,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.5 (Wed Aug 28 2024)
+## v5.3.5 (Wed Aug 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2280,7 +2318,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.4 (Wed Aug 28 2024)
+## v5.3.4 (Wed Aug 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2292,7 +2330,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.3 (Tue Aug 27 2024)
+## v5.3.3 (Tue Aug 27 2024)
 
 #### 🐛 Bug Fix
 
@@ -2304,7 +2342,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.2 (Thu Aug 22 2024)
+## v5.3.2 (Thu Aug 22 2024)
 
 #### 🐛 Bug Fix
 
@@ -2316,7 +2354,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.1 (Wed Aug 21 2024)
+## v5.3.1 (Wed Aug 21 2024)
 
 #### 🐛 Bug Fix
 
@@ -2328,7 +2366,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.3.0 (Wed Aug 21 2024)
+## v5.3.0 (Wed Aug 21 2024)
 
 #### 🚀 Enhancement
 
@@ -2340,7 +2378,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.2.4 (Tue Aug 20 2024)
+## v5.2.4 (Tue Aug 20 2024)
 
 #### 🐛 Bug Fix
 
@@ -2352,7 +2390,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.2.3 (Fri Aug 16 2024)
+## v5.2.3 (Fri Aug 16 2024)
 
 #### 🐛 Bug Fix
 
@@ -2364,7 +2402,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.2.2 (Fri Aug 09 2024)
+## v5.2.2 (Fri Aug 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -2376,7 +2414,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.2.1 (Wed Aug 07 2024)
+## v5.2.1 (Wed Aug 07 2024)
 
 #### 🐛 Bug Fix
 
@@ -2388,7 +2426,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.2.0 (Wed Aug 07 2024)
+## v5.2.0 (Wed Aug 07 2024)
 
 #### 🚀 Enhancement
 
@@ -2400,7 +2438,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.1.1 (Wed Aug 07 2024)
+## v5.1.1 (Wed Aug 07 2024)
 
 #### 🐛 Bug Fix
 
@@ -2412,7 +2450,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.1.0 (Tue Aug 06 2024)
+## v5.1.0 (Tue Aug 06 2024)
 
 #### 🚀 Enhancement
 
@@ -2428,7 +2466,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v5.0.0 (Wed Jul 31 2024)
+## v5.0.0 (Wed Jul 31 2024)
 
 #### 💥 Breaking Change
 
@@ -2440,7 +2478,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.16.3 (Mon Jul 29 2024)
+## v4.16.3 (Mon Jul 29 2024)
 
 #### 🐛 Bug Fix
 
@@ -2452,7 +2490,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.16.2 (Fri Jul 12 2024)
+## v4.16.2 (Fri Jul 12 2024)
 
 #### 🐛 Bug Fix
 
@@ -2464,7 +2502,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.16.1 (Tue Jul 09 2024)
+## v4.16.1 (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -2476,7 +2514,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.16.0 (Mon Jul 08 2024)
+## v4.16.0 (Mon Jul 08 2024)
 
 #### 🚀 Enhancement
 
@@ -2488,7 +2526,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.15.0 (Thu Jul 04 2024)
+## v4.15.0 (Thu Jul 04 2024)
 
 #### 🚀 Enhancement
 
@@ -2500,7 +2538,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.14.1 (Thu Jul 04 2024)
+## v4.14.1 (Thu Jul 04 2024)
 
 #### 🐛 Bug Fix
 
@@ -2512,7 +2550,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.14.0 (Mon Jul 01 2024)
+## v4.14.0 (Mon Jul 01 2024)
 
 #### 🚀 Enhancement
 
@@ -2524,7 +2562,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.12.0 (Tue Jun 11 2024)
+## v4.12.0 (Tue Jun 11 2024)
 
 #### 🚀 Enhancement
 
@@ -2536,7 +2574,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.11.4 (Thu Jun 06 2024)
+## v4.11.4 (Thu Jun 06 2024)
 
 #### 🐛 Bug Fix
 
@@ -2551,7 +2589,7 @@ Thank you, Syerikjan Kh ([@s4kh](https://github.com/s4kh)), for all your work!
 
 ---
 
-# v4.11.3 (Tue Jun 04 2024)
+## v4.11.3 (Tue Jun 04 2024)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -2567,7 +2605,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.11.2 (Tue Jun 04 2024)
+## v4.11.2 (Tue Jun 04 2024)
 
 #### 🐛 Bug Fix
 
@@ -2579,7 +2617,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.11.1 (Mon May 27 2024)
+## v4.11.1 (Mon May 27 2024)
 
 #### 🐛 Bug Fix
 
@@ -2591,7 +2629,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.11.0 (Mon May 27 2024)
+## v4.11.0 (Mon May 27 2024)
 
 #### 🚀 Enhancement
 
@@ -2603,7 +2641,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.10.6 (Mon May 27 2024)
+## v4.10.6 (Mon May 27 2024)
 
 #### 🐛 Bug Fix
 
@@ -2615,7 +2653,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.10.5 (Fri May 24 2024)
+## v4.10.5 (Fri May 24 2024)
 
 #### 🐛 Bug Fix
 
@@ -2627,7 +2665,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.10.4 (Thu May 16 2024)
+## v4.10.4 (Thu May 16 2024)
 
 #### 🐛 Bug Fix
 
@@ -2639,7 +2677,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.10.3 (Wed May 08 2024)
+## v4.10.3 (Wed May 08 2024)
 
 #### 🐛 Bug Fix
 
@@ -2651,7 +2689,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.10.1 (Tue May 07 2024)
+## v4.10.1 (Tue May 07 2024)
 
 #### 🐛 Bug Fix
 
@@ -2663,7 +2701,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.10.0 (Mon May 06 2024)
+## v4.10.0 (Mon May 06 2024)
 
 #### 🚀 Enhancement
 
@@ -2675,7 +2713,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.9.2 (Fri May 03 2024)
+## v4.9.2 (Fri May 03 2024)
 
 #### 🐛 Bug Fix
 
@@ -2693,7 +2731,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.9.0 (Thu Apr 25 2024)
+## v4.9.0 (Thu Apr 25 2024)
 
 #### 🚀 Enhancement
 
@@ -2705,7 +2743,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.8.0 (Wed Apr 24 2024)
+## v4.8.0 (Wed Apr 24 2024)
 
 #### 🚀 Enhancement
 
@@ -2717,7 +2755,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.7.0 (Thu Apr 18 2024)
+## v4.7.0 (Thu Apr 18 2024)
 
 #### 🚀 Enhancement
 
@@ -2729,7 +2767,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.6.2 (Wed Apr 17 2024)
+## v4.6.2 (Wed Apr 17 2024)
 
 #### 🐛 Bug Fix
 
@@ -2741,7 +2779,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.6.1 (Fri Apr 05 2024)
+## v4.6.1 (Fri Apr 05 2024)
 
 #### 🐛 Bug Fix
 
@@ -2753,7 +2791,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.6.0 (Fri Apr 05 2024)
+## v4.6.0 (Fri Apr 05 2024)
 
 #### 🚀 Enhancement
 
@@ -2766,7 +2804,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.5.0 (Fri Apr 05 2024)
+## v4.5.0 (Fri Apr 05 2024)
 
 #### 🚀 Enhancement
 
@@ -2778,7 +2816,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.6 (Wed Apr 03 2024)
+## v4.4.6 (Wed Apr 03 2024)
 
 #### 🐛 Bug Fix
 
@@ -2790,7 +2828,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.5 (Tue Apr 02 2024)
+## v4.4.5 (Tue Apr 02 2024)
 
 #### 🐛 Bug Fix
 
@@ -2802,7 +2840,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.4 (Thu Mar 28 2024)
+## v4.4.4 (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2814,7 +2852,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.3 (Thu Mar 28 2024)
+## v4.4.3 (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2826,7 +2864,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.2 (Thu Mar 28 2024)
+## v4.4.2 (Thu Mar 28 2024)
 
 #### 🐛 Bug Fix
 
@@ -2838,7 +2876,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.1 (Wed Mar 27 2024)
+## v4.4.1 (Wed Mar 27 2024)
 
 #### 🐛 Bug Fix
 
@@ -2850,7 +2888,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.4.0 (Tue Mar 26 2024)
+## v4.4.0 (Tue Mar 26 2024)
 
 #### 🐛 Bug Fix
 
@@ -2862,7 +2900,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.3.0 (Fri Mar 22 2024)
+## v4.3.0 (Fri Mar 22 2024)
 
 #### 🚀 Enhancement
 
@@ -2879,7 +2917,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.2.5 (Mon Mar 18 2024)
+## v4.2.5 (Mon Mar 18 2024)
 
 #### 🐛 Bug Fix
 
@@ -2891,7 +2929,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.2.4 (Fri Mar 15 2024)
+## v4.2.4 (Fri Mar 15 2024)
 
 #### 🐛 Bug Fix
 
@@ -2903,7 +2941,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.2.3 (Thu Mar 14 2024)
+## v4.2.3 (Thu Mar 14 2024)
 
 #### 🐛 Bug Fix
 
@@ -2915,7 +2953,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.2.1 (Thu Feb 29 2024)
+## v4.2.1 (Thu Feb 29 2024)
 
 #### 🐛 Bug Fix
 
@@ -2930,7 +2968,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.2.0 (Wed Feb 21 2024)
+## v4.2.0 (Wed Feb 21 2024)
 
 #### 🐛 Bug Fix
 
@@ -2942,7 +2980,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.1.0 (Mon Feb 19 2024)
+## v4.1.0 (Mon Feb 19 2024)
 
 #### 🚀 Enhancement
 
@@ -2954,7 +2992,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.0.2 (Mon Feb 19 2024)
+## v4.0.2 (Mon Feb 19 2024)
 
 #### 🐛 Bug Fix
 
@@ -2967,7 +3005,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.0.1 (Thu Feb 15 2024)
+## v4.0.1 (Thu Feb 15 2024)
 
 #### 🐛 Bug Fix
 
@@ -2979,7 +3017,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v4.0.0 (Wed Feb 14 2024)
+## v4.0.0 (Wed Feb 14 2024)
 
 #### 💥 Breaking Change
 
@@ -2991,7 +3029,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v3.6.0 (Thu Feb 08 2024)
+## v3.6.0 (Thu Feb 08 2024)
 
 #### 🚀 Enhancement
 
@@ -3003,7 +3041,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v3.5.0 (Fri Feb 02 2024)
+## v3.5.0 (Fri Feb 02 2024)
 
 #### 🚀 Enhancement
 
@@ -3015,7 +3053,7 @@ Thank you, Giuseppe Marazzi ([@beppemarazzi](https://github.com/beppemarazzi)), 
 
 ---
 
-# v3.4.0 (Fri Feb 02 2024)
+## v3.4.0 (Fri Feb 02 2024)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3036,7 +3074,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.3.0 (Fri Feb 02 2024)
+## v3.3.0 (Fri Feb 02 2024)
 
 #### 🚀 Enhancement
 
@@ -3048,7 +3086,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.2.0 (Thu Feb 01 2024)
+## v3.2.0 (Thu Feb 01 2024)
 
 #### 🚀 Enhancement
 
@@ -3060,7 +3098,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.1.3 (Mon Jan 29 2024)
+## v3.1.3 (Mon Jan 29 2024)
 
 #### 🐛 Bug Fix
 
@@ -3072,7 +3110,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.1.2 (Thu Jan 25 2024)
+## v3.1.2 (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix
 
@@ -3085,7 +3123,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.1.1 (Fri Jan 19 2024)
+## v3.1.1 (Fri Jan 19 2024)
 
 #### 🐛 Bug Fix
 
@@ -3097,7 +3135,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.1.0 (Tue Jan 16 2024)
+## v3.1.0 (Tue Jan 16 2024)
 
 #### 🚀 Enhancement
 
@@ -3109,7 +3147,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v3.0.0 (Fri Jan 12 2024)
+## v3.0.0 (Fri Jan 12 2024)
 
 #### 💥 Breaking Change
 
@@ -3126,7 +3164,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v2.11.2 (Wed Jan 10 2024)
+## v2.11.2 (Wed Jan 10 2024)
 
 #### 🐛 Bug Fix
 
@@ -3138,7 +3176,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v2.11.1 (Wed Jan 10 2024)
+## v2.11.1 (Wed Jan 10 2024)
 
 #### 🐛 Bug Fix
 
@@ -3150,7 +3188,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v2.11.0 (Tue Jan 09 2024)
+## v2.11.0 (Tue Jan 09 2024)
 
 #### 🚀 Enhancement
 
@@ -3162,7 +3200,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v2.10.2 (Fri Jan 05 2024)
+## v2.10.2 (Fri Jan 05 2024)
 
 #### 🐛 Bug Fix
 
@@ -3174,7 +3212,7 @@ Thank you, Nicolas Ventura ([@6nv](https://github.com/6nv)), for all your work!
 
 ---
 
-# v2.10.1 (Thu Dec 14 2023)
+## v2.10.1 (Thu Dec 14 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3193,7 +3231,7 @@ Thank you, Carson ([@mure](https://github.com/mure)), for all your work!
 
 ---
 
-# v2.10.0 (Tue Dec 12 2023)
+## v2.10.0 (Tue Dec 12 2023)
 
 #### 🚀 Enhancement
 
@@ -3205,7 +3243,7 @@ Thank you, Carson ([@mure](https://github.com/mure)), for all your work!
 
 ---
 
-# v2.9.0 (Fri Dec 08 2023)
+## v2.9.0 (Fri Dec 08 2023)
 
 #### 🚀 Enhancement
 
@@ -3217,7 +3255,7 @@ Thank you, Carson ([@mure](https://github.com/mure)), for all your work!
 
 ---
 
-# v2.8.1 (Fri Dec 08 2023)
+## v2.8.1 (Fri Dec 08 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3233,7 +3271,7 @@ Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for al
 
 ---
 
-# v2.8.0 (Thu Dec 07 2023)
+## v2.8.0 (Thu Dec 07 2023)
 
 #### 🚀 Enhancement
 
@@ -3253,7 +3291,7 @@ Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for al
 
 ---
 
-# v2.7.0 (Mon Dec 04 2023)
+## v2.7.0 (Mon Dec 04 2023)
 
 #### 🚀 Enhancement
 
@@ -3265,7 +3303,7 @@ Thank you, Ludovic Muller ([@ludovicm67](https://github.com/ludovicm67)), for al
 
 ---
 
-# v2.6.0 (Tue Nov 07 2023)
+## v2.6.0 (Tue Nov 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3286,7 +3324,7 @@ Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joa
 
 ---
 
-# v2.5.1 (Thu Nov 02 2023)
+## v2.5.1 (Thu Nov 02 2023)
 
 #### 🐛 Bug Fix
 
@@ -3298,7 +3336,7 @@ Thank you, Joan López de la Franca Beltran ([@joanlopez](https://github.com/joa
 
 ---
 
-# v2.5.0 (Thu Nov 02 2023)
+## v2.5.0 (Thu Nov 02 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3319,7 +3357,7 @@ Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all y
 
 ---
 
-# v2.4.0 (Wed Oct 25 2023)
+## v2.4.0 (Wed Oct 25 2023)
 
 #### 🚀 Enhancement
 
@@ -3332,7 +3370,7 @@ Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all y
 
 ---
 
-# v2.3.0 (Tue Oct 24 2023)
+## v2.3.0 (Tue Oct 24 2023)
 
 #### 🚀 Enhancement
 
@@ -3349,7 +3387,7 @@ Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all y
 
 ---
 
-# v2.2.2 (Mon Oct 23 2023)
+## v2.2.2 (Mon Oct 23 2023)
 
 #### 🐛 Bug Fix
 
@@ -3361,7 +3399,7 @@ Thank you, Chris Bedwell ([@ckbedwell](https://github.com/ckbedwell)), for all y
 
 ---
 
-# v2.2.1 (Fri Oct 20 2023)
+## v2.2.1 (Fri Oct 20 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3379,7 +3417,7 @@ Thank you, Domas ([@domasx2](https://github.com/domasx2)), for all your work!
 
 ---
 
-# v2.2.0 (Tue Oct 17 2023)
+## v2.2.0 (Tue Oct 17 2023)
 
 #### 🚀 Enhancement
 
@@ -3391,7 +3429,7 @@ Thank you, Domas ([@domasx2](https://github.com/domasx2)), for all your work!
 
 ---
 
-# v2.1.2 (Mon Oct 16 2023)
+## v2.1.2 (Mon Oct 16 2023)
 
 #### 🐛 Bug Fix
 
@@ -3403,7 +3441,7 @@ Thank you, Domas ([@domasx2](https://github.com/domasx2)), for all your work!
 
 ---
 
-# v2.1.1 (Fri Oct 13 2023)
+## v2.1.1 (Fri Oct 13 2023)
 
 #### 🐛 Bug Fix
 
@@ -3415,7 +3453,7 @@ Thank you, Domas ([@domasx2](https://github.com/domasx2)), for all your work!
 
 ---
 
-# v2.1.0 (Fri Oct 13 2023)
+## v2.1.0 (Fri Oct 13 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3437,7 +3475,7 @@ Thank you, Zoltán Bedi ([@zoltanbedi](https://github.com/zoltanbedi)), for all 
 
 ---
 
-# v2.0.2 (Wed Oct 04 2023)
+## v2.0.2 (Wed Oct 04 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3453,7 +3491,7 @@ Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
 
 ---
 
-# v2.0.1 (Tue Oct 03 2023)
+## v2.0.1 (Tue Oct 03 2023)
 
 #### 🐛 Bug Fix
 
@@ -3465,7 +3503,7 @@ Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
 
 ---
 
-# v2.0.0 (Mon Oct 02 2023)
+## v2.0.0 (Mon Oct 02 2023)
 
 #### 🐛 Bug Fix
 
@@ -3483,7 +3521,7 @@ Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
 
 ---
 
-# v1.12.2 (Thu Sep 07 2023)
+## v1.12.2 (Thu Sep 07 2023)
 
 #### 🐛 Bug Fix
 
@@ -3499,7 +3537,7 @@ Thank you, null[@mikkancso](https://github.com/mikkancso), for all your work!
 
 ---
 
-# v1.12.1 (Fri Aug 25 2023)
+## v1.12.1 (Fri Aug 25 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3515,7 +3553,7 @@ Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for al
 
 ---
 
-# v1.12.0 (Fri Aug 18 2023)
+## v1.12.0 (Fri Aug 18 2023)
 
 #### 🚀 Enhancement
 
@@ -3527,7 +3565,7 @@ Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for al
 
 ---
 
-# v1.11.0 (Wed Aug 16 2023)
+## v1.11.0 (Wed Aug 16 2023)
 
 #### 🚀 Enhancement
 
@@ -3539,7 +3577,7 @@ Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for al
 
 ---
 
-# v1.10.1 (Mon Aug 14 2023)
+## v1.10.1 (Mon Aug 14 2023)
 
 #### 🐛 Bug Fix
 
@@ -3551,7 +3589,7 @@ Thank you, Andreas Christou ([@aangelisc](https://github.com/aangelisc)), for al
 
 ---
 
-# v1.10.0 (Mon Aug 07 2023)
+## v1.10.0 (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3567,7 +3605,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v1.9.1 (Wed Aug 02 2023)
+## v1.9.1 (Wed Aug 02 2023)
 
 #### 🐛 Bug Fix
 
@@ -3579,7 +3617,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v1.9.0 (Tue Jul 11 2023)
+## v1.9.0 (Tue Jul 11 2023)
 
 #### 🚀 Enhancement
 
@@ -3591,7 +3629,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v1.8.0 (Tue Jul 11 2023)
+## v1.8.0 (Tue Jul 11 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3612,7 +3650,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.7.0 (Wed Jul 05 2023)
+## v1.7.0 (Wed Jul 05 2023)
 
 #### 🚀 Enhancement
 
@@ -3629,7 +3667,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.6.3 (Mon Jun 12 2023)
+## v1.6.3 (Mon Jun 12 2023)
 
 #### 🐛 Bug Fix
 
@@ -3641,7 +3679,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.6.2 (Wed Jun 07 2023)
+## v1.6.2 (Wed Jun 07 2023)
 
 ### Release Notes
 
@@ -3661,7 +3699,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.6.1 (Tue Jun 06 2023)
+## v1.6.1 (Tue Jun 06 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3677,7 +3715,7 @@ Thank you, Ben Sully ([@sd2k](https://github.com/sd2k)), for all your work!
 
 ---
 
-# v1.6.0 (Tue Jun 06 2023)
+## v1.6.0 (Tue Jun 06 2023)
 
 #### 🚀 Enhancement
 
@@ -3689,7 +3727,7 @@ Thank you, Ben Sully ([@sd2k](https://github.com/sd2k)), for all your work!
 
 ---
 
-# v1.5.2 (Thu Jun 01 2023)
+## v1.5.2 (Thu Jun 01 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3705,7 +3743,7 @@ Thank you, Alex Simonok ([@asimonok](https://github.com/asimonok)), for all your
 
 ---
 
-# v1.5.1 (Wed May 31 2023)
+## v1.5.1 (Wed May 31 2023)
 
 #### 🐛 Bug Fix
 
@@ -3719,7 +3757,7 @@ Thank you, Alex Simonok ([@asimonok](https://github.com/asimonok)), for all your
 
 ---
 
-# v1.5.0 (Wed May 24 2023)
+## v1.5.0 (Wed May 24 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3736,7 +3774,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.4.0 (Tue May 23 2023)
+## v1.4.0 (Tue May 23 2023)
 
 #### 🚀 Enhancement
 
@@ -3748,7 +3786,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.3.3 (Fri May 19 2023)
+## v1.3.3 (Fri May 19 2023)
 
 #### 🐛 Bug Fix
 
@@ -3760,7 +3798,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.3.2 (Thu May 18 2023)
+## v1.3.2 (Thu May 18 2023)
 
 #### 🐛 Bug Fix
 
@@ -3779,7 +3817,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.3.1 (Mon May 15 2023)
+## v1.3.1 (Mon May 15 2023)
 
 #### 🐛 Bug Fix
 
@@ -3797,7 +3835,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.3.0 (Fri Apr 28 2023)
+## v1.3.0 (Fri Apr 28 2023)
 
 #### 🚀 Enhancement
 
@@ -3819,7 +3857,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.2.1 (Thu Mar 30 2023)
+## v1.2.1 (Thu Mar 30 2023)
 
 #### 🐛 Bug Fix
 
@@ -3833,7 +3871,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.2.0 (Fri Mar 17 2023)
+## v1.2.0 (Fri Mar 17 2023)
 
 #### 🚀 Enhancement
 
@@ -3845,7 +3883,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.1.3 (Mon Mar 13 2023)
+## v1.1.3 (Mon Mar 13 2023)
 
 #### 🐛 Bug Fix
 
@@ -3857,7 +3895,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.1.2 (Fri Mar 10 2023)
+## v1.1.2 (Fri Mar 10 2023)
 
 #### 🐛 Bug Fix
 
@@ -3869,7 +3907,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.1.1 (Tue Mar 07 2023)
+## v1.1.1 (Tue Mar 07 2023)
 
 #### 🐛 Bug Fix
 
@@ -3881,7 +3919,7 @@ Thank you, Dominik Prokop ([@dprokop](https://github.com/dprokop)), for all your
 
 ---
 
-# v1.1.0 (Mon Mar 06 2023)
+## v1.1.0 (Mon Mar 06 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3904,7 +3942,7 @@ Thank you, Romain Gaillard ([@romain-gaillard](https://github.com/romain-gaillar
 
 ---
 
-# v1.0.1 (Fri Mar 03 2023)
+## v1.0.1 (Fri Mar 03 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3922,7 +3960,7 @@ Thank you, Will Browne ([@wbrowne](https://github.com/wbrowne)), for all your wo
 
 ---
 
-# v1.0.0 (Fri Feb 03 2023)
+## v1.0.0 (Fri Feb 03 2023)
 
 #### 💥 Breaking Change
 
@@ -3934,7 +3972,7 @@ Thank you, Will Browne ([@wbrowne](https://github.com/wbrowne)), for all your wo
 
 ---
 
-# v0.11.0 (Fri Feb 03 2023)
+## v0.11.0 (Fri Feb 03 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -3951,7 +3989,7 @@ Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your wor
 
 ---
 
-# v0.10.0 (Thu Feb 02 2023)
+## v0.10.0 (Thu Feb 02 2023)
 
 #### 🚀 Enhancement
 
@@ -3963,7 +4001,7 @@ Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your wor
 
 ---
 
-# v0.9.1 (Thu Feb 02 2023)
+## v0.9.1 (Thu Feb 02 2023)
 
 #### 🐛 Bug Fix
 
@@ -3975,7 +4013,7 @@ Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your wor
 
 ---
 
-# v0.9.0 (Thu Jan 26 2023)
+## v0.9.0 (Thu Jan 26 2023)
 
 #### 🚀 Enhancement
 
@@ -3987,7 +4025,7 @@ Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your wor
 
 ---
 
-# v0.8.4 (Fri Jan 13 2023)
+## v0.8.4 (Fri Jan 13 2023)
 
 #### 🐛 Bug Fix
 
@@ -3999,7 +4037,7 @@ Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your wor
 
 ---
 
-# v0.8.3 (Thu Jan 12 2023)
+## v0.8.3 (Thu Jan 12 2023)
 
 #### 🐛 Bug Fix
 
@@ -4012,7 +4050,7 @@ Thank you, Isabella Siu ([@iwysiu](https://github.com/iwysiu)), for all your wor
 
 ---
 
-# v0.8.2 (Wed Jan 11 2023)
+## v0.8.2 (Wed Jan 11 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -4028,7 +4066,7 @@ Thank you, Sarah Zinger ([@sarahzinger](https://github.com/sarahzinger)), for al
 
 ---
 
-# v0.8.1 (Tue Dec 13 2022)
+## v0.8.1 (Tue Dec 13 2022)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -4044,7 +4082,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.8.0 (Wed Nov 30 2022)
+## v0.8.0 (Wed Nov 30 2022)
 
 #### 🚀 Enhancement
 
@@ -4056,7 +4094,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.7.1 (Tue Nov 29 2022)
+## v0.7.1 (Tue Nov 29 2022)
 
 #### 🐛 Bug Fix
 
@@ -4068,7 +4106,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.7.0 (Tue Nov 29 2022)
+## v0.7.0 (Tue Nov 29 2022)
 
 #### 🚀 Enhancement
 
@@ -4080,7 +4118,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.6.3 (Mon Nov 28 2022)
+## v0.6.3 (Mon Nov 28 2022)
 
 #### 🐛 Bug Fix
 
@@ -4092,7 +4130,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.6.2 (Thu Nov 24 2022)
+## v0.6.2 (Thu Nov 24 2022)
 
 #### 🐛 Bug Fix
 
@@ -4111,7 +4149,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.6.1 (Fri Nov 18 2022)
+## v0.6.1 (Fri Nov 18 2022)
 
 #### 🐛 Bug Fix
 
@@ -4123,7 +4161,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.6.0 (Fri Nov 18 2022)
+## v0.6.0 (Fri Nov 18 2022)
 
 #### 🚀 Enhancement
 
@@ -4135,7 +4173,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.5.4 (Fri Nov 18 2022)
+## v0.5.4 (Fri Nov 18 2022)
 
 #### 🐛 Bug Fix
 
@@ -4147,7 +4185,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.5.3 (Thu Nov 17 2022)
+## v0.5.3 (Thu Nov 17 2022)
 
 #### 🐛 Bug Fix
 
@@ -4159,7 +4197,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.5.2 (Thu Nov 17 2022)
+## v0.5.2 (Thu Nov 17 2022)
 
 #### 🐛 Bug Fix
 
@@ -4173,7 +4211,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.5.1 (Mon Nov 14 2022)
+## v0.5.1 (Mon Nov 14 2022)
 
 #### 🐛 Bug Fix
 
@@ -4185,7 +4223,7 @@ Thank you, Erik Sundell ([@sunker](https://github.com/sunker)), for all your wor
 
 ---
 
-# v0.5.0 (Mon Nov 07 2022)
+## v0.5.0 (Mon Nov 07 2022)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -4206,7 +4244,7 @@ Thank you, Giuseppe Guerra ([@xnyo](https://github.com/xnyo)), for all your work
 
 ---
 
-# v0.4.1 (Mon Oct 31 2022)
+## v0.4.1 (Mon Oct 31 2022)
 
 #### 🐛 Bug Fix
 

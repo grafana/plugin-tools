@@ -36,6 +36,13 @@
 
 # @grafana/plugin-docs-cli
 
+## [0.1.1](https://github.com/grafana/plugin-tools/compare/plugin-docs-cli@0.1.0...plugin-docs-cli@0.1.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chokidar to v5 ([#2464](https://github.com/grafana/plugin-tools/issues/2464)) ([b4d68d0](https://github.com/grafana/plugin-tools/commit/b4d68d0be0412755a8d8c598e28ee8af1898bb55))
+
 ## 0.0.1 (Unreleased)
 
 ### Features
