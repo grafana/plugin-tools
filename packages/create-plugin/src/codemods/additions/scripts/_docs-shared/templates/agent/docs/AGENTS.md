@@ -112,10 +112,13 @@ Section-brief blocks are plain HTML comments, so the parser ignores them if acci
 
 Four skills support docs work. Each is a [Agent Skills](https://agentskills.io) directory under your agent loop's skills folder (`.claude/skills/<name>/SKILL.md`, `.agents/skills/<name>/SKILL.md` or `.cursor/skills/<name>/SKILL.md`):
 
-- **`bootstrap-plugin-docs`** - one-shot, plugin-wide. Mines `README.md` plus source files, routes existing content to the right stub pages, prompts for non-source-backed topics. Run this once after scaffolding if the plugin already has substantive docs in the README.
-- **`write-plugin-docs`** - per-page. Fills a stub page or updates an existing one. Reads the source files implied by the page title and section briefs so it always works from current source.
-- **`review-plugin-docs`** - plugin-specific review against the 13 rules above, frontmatter requirements, section-brief cleanup and factual alignment with source files.
-- **`validate-plugin-docs`** - runs `npm run docs:validate --json`, groups diagnostics, applies fixes and re-runs up to 3 iterations.
+- **`bootstrap-plugin-docs`** - one-shot, run once after scaffolding. Mines `README.md` plus source files, routes existing content to the right stub pages and prompts for non-source-backed topics.
+
+For ongoing docs work, use these three skills in sequence:
+
+1. **`write-plugin-docs <page>`** - author or update a page. Call with a page path whenever you add, change or remove a feature (e.g. `/write-plugin-docs docs/options.md`).
+2. **`validate-plugin-docs`** - clean up structural errors. Call after writing or after any manual edits. Runs the validator, groups diagnostics and applies category-based auto-fixes up to 3 times.
+3. **`review-plugin-docs`** - style, factual and schema review. Call before opening a PR. Checks the 13 style rules above, frontmatter requirements, leftover section briefs and factual alignment with source.
 
 ## Adding a new page
 
