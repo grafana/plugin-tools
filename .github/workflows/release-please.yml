@@ -121,4 +121,8 @@ jobs:
         uses: grafana/shared-workflows/actions/send-slack-message@eb1fbd807f87aea8f40ff08dc9cd02872cad55b3 # send-slack-message/v2.0.5
         with:
           method: chat.postMessage
+          # Set explicitly: the shared action forwards this input unconditionally, so leaving
+          # it unset passes an empty string that overrides slackapi's own "false" default and
+          # throws on getBooleanInput. Our payload is pre-rendered, so no templating is needed.
+          payload-templated: false
           payload: ${{ steps.slack-payload.outputs.payload }}
