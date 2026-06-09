@@ -74,28 +74,16 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "12.4.2",
-    "@grafana/i18n": "12.4.2",
-    "@grafana/runtime": "12.4.2",
-    "@grafana/ui": "12.4.2",
-    "@grafana/schema": "12.4.2",{{#if_eq pluginType "scenesapp" }}
+    "@grafana/data": "13.0.2",
+    "@grafana/i18n": "13.0.2",
+    "@grafana/runtime": "13.0.2",
+    "@grafana/ui": "13.0.2",
+    "@grafana/schema": "13.0.2",{{#if_eq pluginType "scenesapp" }}
     "@grafana/scenes": "{{ scenesVersion }}",{{/if_eq}}
     "react": "^18.3.0",
     "react-dom": "^18.3.0"{{#if isAppType}},
     "react-router-dom": "^6.22.0",
     "rxjs": "7.8.2"{{/if}}
   },
-  "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}",
-  "overrides": {
-    "immutable": "5.1.5",
-    "serialize-javascript": "7.0.5",
-    "js-cookie": "3.0.7",
-    "dompurify": "3.4.6",
-    "fast-uri": "3.1.2",
-    "@protobufjs/utf8": "1.1.1",
-    "qs": "6.15.2",
-    "@grafana/ui": {
-      "uuid": "11.1.1"
-    }
-  }
+  "packageManager": "{{ packageManagerName }}@{{ packageManagerVersion }}"
 }
