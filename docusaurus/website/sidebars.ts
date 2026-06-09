@@ -76,6 +76,7 @@ const sidebars: SidebarsConfig = {
         'tutorials/build-a-logs-data-source-plugin',
         'tutorials/build-an-app-plugin',
         'tutorials/build-a-panel-plugin',
+        'tutorials/build-ai-plugin',        
       ],
     },
 
