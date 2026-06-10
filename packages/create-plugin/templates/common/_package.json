@@ -36,7 +36,7 @@
     "@types/ws": "^8.18.1",{{/if}}
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",{{#unless useExperimentalRspack}}
-    "copy-webpack-plugin": "^13.0.0",{{/unless}}
+    "copy-webpack-plugin": "^14.0.0",{{/unless}}
     "css-loader": "^7.1.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.0",
