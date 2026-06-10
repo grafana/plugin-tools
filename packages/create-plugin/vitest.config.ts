@@ -10,13 +10,17 @@ export default mergeConfig(
       setupFiles: ['./vitest.setup.ts'],
     },
     plugins: [
-      // This plugin is used to convince Vitest the mocked virtual migrations exist.
-      // https://vitest.dev/guide/mocking/modules.html#mocking-non-existing-module
+      // Convince Vitest the mocked virtual migrations exist (vitest 4.1+ needs both resolveId and load for dynamic bare-specifier imports).
       {
         name: 'virtual-migrations',
         resolveId(id) {
           if (id === 'virtual-test-migration.js' || id === 'virtual-test-migration2.js') {
             return id;
+          }
+        },
+        load(id) {
+          if (id === 'virtual-test-migration.js' || id === 'virtual-test-migration2.js') {
+            return 'export default () => {};';
           }
         },
       },
