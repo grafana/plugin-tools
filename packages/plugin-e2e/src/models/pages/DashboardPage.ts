@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { gte, lt } from '../../utils/version';
 import { expect } from '@playwright/test';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
@@ -63,10 +63,10 @@ export class DashboardPage extends GrafanaPage {
    */
   get toolbar() {
     const { components, pages } = this.ctx.selectors;
-    if (semver.gte(this.ctx.grafanaVersion, '11.1.0')) {
+    if (gte(this.ctx.grafanaVersion, '11.1.0')) {
       return this.getByGrafanaSelector(pages.Dashboard.Controls);
     }
-    return semver.gte(this.ctx.grafanaVersion, '9.4.0')
+    return gte(this.ctx.grafanaVersion, '9.4.0')
       ? this.getByGrafanaSelector(components.NavToolbar.container)
       : this.ctx.page.locator('.page-toolbar');
   }
@@ -147,7 +147,7 @@ export class DashboardPage extends GrafanaPage {
   getPanelByTitle(title: string): Panel {
     let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(title));
     // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
-    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+    if (lt(this.ctx.grafanaVersion, '9.5.0')) {
       locator = locator.locator('..').locator('..');
     }
     return new Panel(this.ctx, locator);
@@ -162,7 +162,7 @@ export class DashboardPage extends GrafanaPage {
    * await expect(panel.fieldNames()).toContainText(['time', 'temperature']);
    */
   getPanelById(panelId: string): Panel {
-    if (semver.lt(this.ctx.grafanaVersion, '11.3.0')) {
+    if (lt(this.ctx.grafanaVersion, '11.3.0')) {
       return new Panel(this.ctx, this.ctx.page.locator(`[data-panelid="${panelId}"]`));
     }
 
@@ -178,7 +178,7 @@ export class DashboardPage extends GrafanaPage {
     // scenes feature toggle deprecated in v13 (no longer possible to disable)
     let scenesEnabled = true;
 
-    if (semver.lt(this.ctx.grafanaVersion, '13.0.0')) {
+    if (lt(this.ctx.grafanaVersion, '13.0.0')) {
       scenesEnabled = await isLegacyFeatureEnabled(this.ctx.page, 'dashboardScene');
     }
 
@@ -202,8 +202,7 @@ export class DashboardPage extends GrafanaPage {
     // When the toggle is off, Grafana 13 still renders the legacy toolbar UI, so we
     // fall through to the >= 9.5.0 branch below.
     const useNewSidebarLayout =
-      semver.gte(this.ctx.grafanaVersion, '13.0.0') &&
-      (await isLegacyFeatureEnabled(this.ctx.page, 'dashboardNewLayouts'));
+      gte(this.ctx.grafanaVersion, '13.0.0') && (await isLegacyFeatureEnabled(this.ctx.page, 'dashboardNewLayouts'));
 
     if (useNewSidebarLayout) {
       await this.ctx.page.waitForSelector(resolveGrafanaSelector(this.ctx.selectors.components.Sidebar.container));
@@ -213,12 +212,12 @@ export class DashboardPage extends GrafanaPage {
       }
       await this.getByGrafanaSelector(components.Sidebar.newPanelButton).click();
 
-      const configureButton = semver.lt(this.ctx.grafanaVersion, '13.1.0')
+      const configureButton = lt(this.ctx.grafanaVersion, '13.1.0')
         ? this.getByGrafanaSelector(components.Sidebar.container).getByRole('button', { name: 'Configure' })
         : this.getByGrafanaSelector(components.Sidebar.configurePanelButton);
 
       await configureButton.click();
-    } else if (semver.gte(this.ctx.grafanaVersion, '9.5.0')) {
+    } else if (gte(this.ctx.grafanaVersion, '9.5.0')) {
       let addButton = this.getByGrafanaSelector(
         components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
       );

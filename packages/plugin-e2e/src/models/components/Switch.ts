@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
-import { gte, lt } from 'semver';
+import { gte, lt } from '../../utils/version';
 
 export class Switch extends ComponentBase {
   private group: Locator;

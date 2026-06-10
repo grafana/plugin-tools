@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { gte } from '../../utils/version';
 import { TimeRangeArgs } from '../../types';
 import { ScopedComponent } from './ScopedComponent';
 
@@ -16,7 +16,7 @@ export class TimeRange extends ScopedComponent {
     }
 
     if (zone) {
-      const changeTimeSettingsButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')
+      const changeTimeSettingsButton = gte(this.ctx.grafanaVersion, '11.0.0')
         ? this.getByGrafanaSelector(TimeZonePicker.changeTimeSettingsButton)
         : this.ctx.page.getByRole('button', { name: 'Change time settings' });
 

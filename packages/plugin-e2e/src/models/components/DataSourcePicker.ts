@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { lt } from '../../utils/version';
 import { expect } from '@playwright/test';
 import { ScopedComponent } from './ScopedComponent';
 
@@ -11,7 +11,7 @@ export class DataSourcePicker extends ScopedComponent {
       this.ctx.selectors.components.DataSourcePicker.inputV2
     );
 
-    if (semver.lt(this.ctx.grafanaVersion, '10.1.0')) {
+    if (lt(this.ctx.grafanaVersion, '10.1.0')) {
       datasourcePicker = this.getByGrafanaSelector(this.ctx.selectors.components.DataSourcePicker.container, {
         root: this.root,
       }).locator('input');

@@ -1,5 +1,5 @@
 import { Page, TestFixture } from '@playwright/test';
-import { gte } from 'semver';
+import { gte } from '../utils/version';
 
 import { PlaywrightArgs } from '../types';
 import { DEFAULT_OPEN_FEATURE_FLAGS } from '../options';
