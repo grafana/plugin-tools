@@ -127,7 +127,7 @@
       "minimumReleaseAge": null,
       "prPriority": 10,
       "prConcurrentLimit": 0,
-      "commitMessagePrefix": "fix(plugin-e2e):"
+      "commitMessagePrefix": "fix(templates):"
     },
     {
       "automerge": false,
@@ -138,7 +138,7 @@
         "packages/create-plugin/templates/github/workflows/**"
       ],
       "pinDigests": false,
-      "commitMessagePrefix": "fix(create-plugin):"
+      "commitMessagePrefix": "fix(templates):"
     },
     {
       "automerge": false,
@@ -160,7 +160,8 @@
         "packages/plugin-e2e/package.json",
         "package-lock.json"
       ],
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(deps):"
     }
   ],
   "vulnerabilityAlerts": {
