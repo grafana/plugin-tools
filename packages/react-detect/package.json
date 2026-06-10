@@ -32,7 +32,7 @@
     "fast-glob": "3.3.3",
     "minimist": "1.2.8",
     "pm-detect": "0.5.0",
-    "snyk-nodejs-lockfile-parser": "2.4.4",
+    "snyk-nodejs-lockfile-parser": "2.8.0",
     "source-map": "0.7.6"
   },
   "devDependencies": {
