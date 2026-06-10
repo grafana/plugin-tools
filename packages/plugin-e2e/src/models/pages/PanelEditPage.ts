@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { gte, lt } from '../../utils/version';
 import { expect, Locator, Response } from '@playwright/test';
 import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions, Visualization } from '../../types';
 import { DataSourcePicker } from '../components/DataSourcePicker';
@@ -30,7 +30,7 @@ export class PanelEditPage extends GrafanaPage {
       startsWith: true,
     });
     // in older versions, the panel selector is added to a child element, so we need to go up two levels to get the wrapper
-    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+    if (lt(this.ctx.grafanaVersion, '9.5.0')) {
       return locator.locator('..').locator('..');
     }
     return locator;
@@ -54,7 +54,7 @@ export class PanelEditPage extends GrafanaPage {
   async toggleTableView() {
     await radioButtonSetChecked(this.ctx.page, 'Table view', true);
     let locator = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.title(''));
-    if (semver.lt(this.ctx.grafanaVersion, '10.4.0')) {
+    if (lt(this.ctx.grafanaVersion, '10.4.0')) {
       locator = this.ctx.page.getByRole('table');
     }
     this.panel = new Panel(this.ctx, locator);
@@ -77,7 +77,7 @@ export class PanelEditPage extends GrafanaPage {
     const sectionGroupTitle = 'Panel options';
     await this.collapseSection(sectionGroupTitle);
 
-    const vizInput = semver.gte(this.ctx.grafanaVersion, '11.0.0')
+    const vizInput = gte(this.ctx.grafanaVersion, '11.0.0')
       ? this.getByGrafanaSelector(PanelEditor.OptionsPane.fieldInput(TITLE))
       : this.getByGrafanaSelector(OptionsGroup.group(sectionGroupTitle)).locator('input').first();
     await vizInput.fill(titleText);
@@ -98,7 +98,7 @@ export class PanelEditPage extends GrafanaPage {
     // when suggestions got updated in 12.4.0, it became necessary to ensure the "All Visualizations" tab is selected,
     // and also we need to check whether we're already rendering the viz picker or not since creating a new panel shows
     // the viz picker by default when the panel editor is opened
-    if (semver.gte(this.ctx.grafanaVersion, '12.4.0')) {
+    if (gte(this.ctx.grafanaVersion, '12.4.0')) {
       const allVisualizationsTab = components.Tab.title(constants.Tab.title);
       if (!(await this.getByGrafanaSelector(allVisualizationsTab).isVisible())) {
         await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
@@ -110,7 +110,7 @@ export class PanelEditPage extends GrafanaPage {
 
     await this.getByGrafanaSelector(components.PluginVisualization.item(visualization)).click();
 
-    const vizSelector = semver.lt(this.ctx.grafanaVersion, '12.4.0')
+    const vizSelector = lt(this.ctx.grafanaVersion, '12.4.0')
       ? components.PanelEditor.toggleVizPicker
       : components.PanelEditor.OptionsPane.header;
     await expect(
@@ -137,7 +137,7 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the name of the visualization currently selected in the panel editor
    */
   getVisualizationName(): Locator {
-    const vizSelector = semver.lt(this.ctx.grafanaVersion, '12.4.0')
+    const vizSelector = lt(this.ctx.grafanaVersion, '12.4.0')
       ? this.ctx.selectors.components.PanelEditor.toggleVizPicker
       : this.ctx.selectors.components.PanelEditor.OptionsPane.header;
     return this.getByGrafanaSelector(vizSelector);
@@ -148,7 +148,7 @@ export class PanelEditPage extends GrafanaPage {
    * In versions prior to 11.3.0, this method clicks the "Apply" button instead
    */
   async backToDashboard() {
-    if (semver.gte(this.ctx.grafanaVersion, '11.3.0')) {
+    if (gte(this.ctx.grafanaVersion, '11.3.0')) {
       await this.getByGrafanaSelector(
         this.ctx.selectors.components.NavToolbar.editDashboard.backToDashboardButton
       ).click();

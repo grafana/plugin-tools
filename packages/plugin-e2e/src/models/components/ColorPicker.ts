@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 import { PluginTestCtx } from '../../types';
 import { ComponentBase } from './ComponentBase';
 import { SelectOptionsType } from './types';
-import { gte } from 'semver';
+import { gte } from '../../utils/version';
 import { resolveGrafanaSelector } from '../utils';
 
 export class ColorPicker extends ComponentBase {

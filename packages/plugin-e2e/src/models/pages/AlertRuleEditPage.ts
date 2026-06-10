@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { gte, lt } from '../../utils/version';
 import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
@@ -31,7 +31,7 @@ export class AlertRuleEditPage extends GrafanaPage {
    * Returns a locator for hte alert rule name field
    */
   get alertRuleNameField() {
-    if (semver.gte(this.ctx.grafanaVersion, '11.1.0')) {
+    if (gte(this.ctx.grafanaVersion, '11.1.0')) {
       return this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.ruleNameField);
     }
 
@@ -165,7 +165,7 @@ export class AlertRuleEditPage extends GrafanaPage {
     // Starting from Grafana 10.0.0, the alerting evaluation endpoint started returning errors in a different way.
     // Even if one or many of the queries is failed, the status code for the http response is 200 so we have to check the status of each query instead.
     // If at least one query is failed, we the response of the evaluate method is mapped to the status of the first failed query.
-    if (semver.gte(this.ctx.grafanaVersion, '10.0.0')) {
+    if (gte(this.ctx.grafanaVersion, '10.0.0')) {
       await this.ctx.page.route(this.ctx.selectors.apis.Alerting.eval, async (route) => {
         const response = await route.fetch();
         if (!response.ok()) {
@@ -189,7 +189,7 @@ export class AlertRuleEditPage extends GrafanaPage {
 
     let evaluateButton = this.getByGrafanaSelector(this.ctx.selectors.components.AlertRules.previewButton);
 
-    if (semver.lt(this.ctx.grafanaVersion, '11.1.0')) {
+    if (lt(this.ctx.grafanaVersion, '11.1.0')) {
       evaluateButton = this.ctx.page.getByRole('button', { name: 'Preview', exact: true });
     }
 
