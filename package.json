@@ -87,5 +87,5 @@
     "serialize-javascript": "7.0.3",
     "dompurify": "^3.4.0"
   },
-  "packageManager": "npm@11.12.1"
+  "packageManager": "npm@11.16.0"
 }
