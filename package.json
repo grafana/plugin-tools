@@ -83,7 +83,8 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "webpack-dev-server": "^5.2.1"
+    "webpack-dev-server": "^5.2.1",
+    "serialize-javascript": "7.0.3"
   },
   "packageManager": "npm@11.12.1"
 }
