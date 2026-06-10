@@ -113,6 +113,12 @@
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
     {
+      "matchFileNames": ["packages/**"],
+      "matchDepTypes": ["dependencies"],
+      "matchPackageNames": ["!/@grafana/*/"],
+      "commitMessagePrefix": "fix(deps):"
+    },
+    {
       "automerge": true,
       "groupName": "plugin-e2e template version",
       "labels": ["dependencies", "javascript"],
