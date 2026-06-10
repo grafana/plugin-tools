@@ -44,8 +44,7 @@ Note that the annotation query result is rendered in an Alert component starting
 :::
 
 ```ts title="annotations.spec.ts"
-import * as semver from 'semver';
-import { expect, test } from '@grafana/plugin-e2e';
+import { expect, gte, test } from '@grafana/plugin-e2e';
 
 test('should run successfully and display a success alert box when query is valid', async ({
   annotationEditPage,
@@ -62,7 +61,7 @@ test('should run successfully and display a success alert box when query is vali
   from dataset
   where $__timeFilter(time) and humidity > 95`);
   await expect(annotationEditPage.runQuery()).toBeOK();
-  if (semver.gte(grafanaVersion, '11.0.0')) {
+  if (gte(grafanaVersion, '11.0.0')) {
     await expect(annotationEditPage).toHaveAlert('success');
   }
 });
@@ -88,7 +87,7 @@ test('should fail and display an error alert box when time field is missing in t
   from dataset
   where humidity > 95`);
   await expect(annotationEditPage.runQuery()).not.toBeOK();
-  if (semver.gte(grafanaVersion, '11.0.0')) {
+  if (gte(grafanaVersion, '11.0.0')) {
     await expect(annotationEditPage).toHaveAlert('error', { hasText: 'Time field is missing' });
   }
 });
@@ -107,7 +106,7 @@ test('annotation query in provisioned dashboard should return a 200 response', a
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   const annotationEditPage = await gotoAnnotationEditPage({ dashboard, id: '1' });
   await expect(annotationEditPage.runQuery()).toBeOK();
-  if (semver.gte(grafanaVersion, '11.0.0')) {
+  if (gte(grafanaVersion, '11.0.0')) {
     await expect(annotationEditPage).toHaveAlert('success', { hasText: /2 events.*/ });
   }
 });

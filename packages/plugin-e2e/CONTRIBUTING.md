@@ -113,18 +113,18 @@ Beware that scenarios provided by @grafana/plugin-e2e needs to be work in older 
 
 2. Run Playwright tests locally - `npm run playwright:test`
 
-3. Push the changes in your local PR, create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/) and add the labels `release` and `minor|patch`. CI will run all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is no longer compatible with older versions of Grafana.
+3. Push the changes in your local PR and create a draft PR in [grafana/plugin-tools](https://github.com/grafana/plugin-tools/). Make sure the PR title follows the [Conventional Commits](https://www.conventionalcommits.org/) format (for example `fix: ...` or `feat: ...`) so release-please calculates the version bump correctly. CI will run all Playwright tests against a set of different Grafana versions. If not all of them pass, it may be because you've introduced a change that is no longer compatible with older versions of Grafana.
 
-4. Once CI passes, `auto` will publish a canary release to NPM. You can find the version number at the bottom of the PR description.
+4. Add the **`preview`** label to your PR. [pkg.pr.new](https://pkg.pr.new) will post a comment with an installable preview URL for `@grafana/plugin-e2e` (and any other affected packages). See [Preview Your Changes Before Release](../../CONTRIBUTING.md#preview-your-changes-before-release) in the root `CONTRIBUTING.md` for details.
 
 5. Install the pre-release of @grafana/plugin-e2e in [grafana/grafana](https://github.com/grafana/grafana) and run Playwright tests.
 
 ```bash
 # In your local grafana development folder
-yarn add @grafana/plugin-e2e@0.3.0-canary.623.aedff75.0
+yarn add https://pkg.pr.new/grafana/plugin-tools/@grafana/plugin-e2e@<commit-sha>
 yarn e2e:plugin
 ```
 
 6. If all tests pass in `grafana/grafana` and the PR in `grafana/plugin-tools` is approved, tag `@grafana/grafana-catalog` and ask them to merge the PR.
 
-7. Once the PR is merged, `auto` will publish a patch/minor release to npm. Then you discard changes from step 5, and can go ahead and install the new release of @grafana/plugin-e2e in grafana/grafana.
+7. Once the PR is merged, release-please opens a release PR; merging that publishes the new version to npm (see [Create a Release](../../CONTRIBUTING.md#create-a-release)). Then you discard the pkg.pr.new change from step 5 and install the new release of @grafana/plugin-e2e in grafana/grafana.

@@ -1,0 +1,128 @@
+name: Release
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required to assume roles from GitHub's OIDC.
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+    steps:
+      - name: Generate token
+        id: app-token
+        uses: grafana/shared-workflows/actions/create-github-app-token@259ba21cb3ff07724f331e26d926d655d24b317b # create-github-app-token/v0.2.3
+        with:
+          github_app: grafana-plugins-platform-bot
+          permission_set: release
+
+      - id: release
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    needs: release
+    if: ${{ needs.release.outputs.releases_created == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm Trusted Publishing (OIDC)
+    environment: npm-publish
+    concurrency:
+      group: npm-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: .nvmrc
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
+
+      - name: Install npm for npm stage publish
+        run: npm install -g npm@11.15.0
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      # Build all packages to ensure dist files are present for publishing
+      # Nx and release please don't share the same dependency graph so safer to build everything.
+      - name: Build all packages
+        run: npm run build
+
+      - name: Publish to npm
+        env:
+          PATHS_RELEASED: ${{ needs.release.outputs.paths_released }}
+        run: |
+          set -euo pipefail
+          echo "$PATHS_RELEASED" | jq -r '.[]' | while read -r path; do
+            echo "Publishing $path"
+            (cd "$path" && npm stage publish --provenance --access public)
+          done
+
+      - name: Build Slack payload
+        id: slack-payload
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PATHS_RELEASED: ${{ needs.release.outputs.paths_released }}
+          REPO: ${{ github.repository }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const paths = JSON.parse(process.env.PATHS_RELEASED);
+            const lines = paths.map((p) => {
+              const { name, version } = JSON.parse(fs.readFileSync(`${p}/package.json`, 'utf8'));
+              const tag = `${name}@${version}`;
+              const releaseUrl = `https://github.com/${process.env.REPO}/releases/tag/${encodeURIComponent(tag)}`;
+              const npmUrl = `https://www.npmjs.com/package/${name}`;
+              return [
+                `• *<${releaseUrl}|${tag}>* - <${npmUrl}|npm>`
+              ].join('\n');
+            });
+            const payload = {
+              channel: 'C09CY9URN31',
+              text: `:package: Beep Boop! :robot: Plugin tools ${paths.length} package${paths.length === 1 ? '' : 's'} staged for release`,
+              blocks: [
+                {
+                  type: 'header',
+                  text: { type: 'plain_text', text: `:package: Beep Boop! :robot: Plugin tools ${paths.length} package${paths.length === 1 ? '' : 's'} staged for release` },
+                },
+                {
+                  type: 'section',
+                  text: { type: 'mrkdwn', text: lines.join('\n') },
+                },
+                {
+                  type: 'context',
+                  elements: [
+                    {
+                      type: 'mrkdwn',
+                      text: `Please login to <https://www.npmjs.com/|npmjs> to approve publishing. See <https://github.com/${process.env.REPO}/blob/main/CONTRIBUTING.md#create-a-release|CONTRIBUTING.md> for the full release walkthrough.`,
+                    },
+                  ],
+                },
+              ],
+            };
+            core.setOutput('payload', JSON.stringify(payload));
+
+      - name: Notify Slack
+        uses: grafana/shared-workflows/actions/send-slack-message@eb1fbd807f87aea8f40ff08dc9cd02872cad55b3 # send-slack-message/v2.0.5
+        with:
+          method: chat.postMessage
+          # Set explicitly: the shared action forwards this input unconditionally, so leaving
+          # it unset passes an empty string that overrides slackapi's own "false" default and
+          # throws on getBooleanInput. Our payload is pre-rendered, so no templating is needed.
+          payload-templated: false
+          payload: ${{ steps.slack-payload.outputs.payload }}

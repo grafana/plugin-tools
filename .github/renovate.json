@@ -1,5 +1,7 @@
 {
+  // Renovate config options: https://docs.renovatebot.com/configuration-options/
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  // Inherit Grafana's shared preset, but opt out of the parts we configure ourselves below.
   "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
   "ignorePresets": [
     "github>grafana/grafana-renovate-config//presets/base",
@@ -7,31 +9,42 @@
     "github>grafana/grafana-renovate-config//presets/labels",
     "github>grafana/grafana-renovate-config//presets/npm"
   ],
+  // Only manage manifests in these paths (keeps Renovate out of generated/fixture dirs).
   "includePaths": [
     "package.json",
     "packages/**",
     "docusaurus/**",
     ".github/**"
   ],
+  // Never bump these. react/react-dom track Grafana's supported runtime; @grafana/scenes is chosen
+  // per-scaffold via a template var; @libs/* are internal workspace packages (not published to npm).
   "ignoreDeps": [
     "react",
     "react-dom",
-    "lerna",
     "@grafana/scenes",
     "@libs/output",
     "@libs/version"
   ],
   "separateMajorMinor": false,
   "skipInstalls": false,
+  // Required for release-please
+  "semanticCommits": "enabled",
+  // Default prefix: assume an update does not ship.
+  "commitMessagePrefix": "chore(deps):",
   "reviewers": ["team:grafana/grafana-catalog"],
   "enabledManagers": ["custom.regex", "npm", "github-actions"],
+  // Limit the github-actions manager to create-plugin's scaffolded workflow templates.
+  // (This repo's own CI workflows under .github/workflows are matched by a packageRule below.)
   "github-actions": {
     "managerFilePatterns": [
       "/(^|/)packages/create-plugin/templates/github/workflows/.+\\.ya?ml$/"
     ]
   },
   "postUpdateOptions": ["npmDedupe"],
-  "labels": ["dependencies", "javascript", "no-changelog"],
+  "labels": ["dependencies", "javascript"],
+  // Custom regex managers:
+  //  1. @grafana/* versions inside create-plugin's template `_package.json`.
+  //  2. The grafana-enterprise image version pinned in docker-compose files.
   "customManagers": [
     {
       "customType": "regex",
@@ -51,12 +64,17 @@
       "datasourceTemplate": "docker"
     }
   ],
+  // packageRules apply IN ORDER; for a given update a later matching rule overrides an earlier one.
+  // Ordering matters for `commitMessagePrefix` - see the prod-deps catch-all comment.
   "packageRules": [
+    // Grafana libs ship inside our published packages, so their bumps must release. Patch bumps are
+    // batched into one PR (groupSlug = branch name). e2e-selectors is separate (own nightly rule);
+    // Skips zero major due to !/^0/.
     {
       "automerge": false,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
-      "labels": ["dependencies", "javascript", "patch"],
+      "labels": ["dependencies", "javascript"],
       "matchCurrentVersion": "!/^0/",
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
@@ -64,12 +82,14 @@
         "/grafana/grafana-enterprise/",
         "!@grafana/e2e-selectors"
       ],
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(deps):"
     },
+    // Same as above for minor/major grafana bumps.
     {
       "groupName": "grafana dependencies",
       "groupSlug": "all-grafana",
-      "labels": ["dependencies", "javascript", "release", "patch"],
+      "labels": ["dependencies", "javascript"],
       "matchUpdateTypes": ["minor", "major"],
       "matchPackageNames": [
         "/@grafana/*/",
@@ -78,18 +98,16 @@
         "!@grafana/scenes",
         "!@grafana/e2e-selectors"
       ],
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(deps):"
     },
+    // Docs-site deps need to be grouped to prevent docusaurus build errors.
     {
       "groupName": "docusaurus dependencies",
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
     },
-    {
-      "groupName": "auto dependencies",
-      "labels": ["dependencies", "javascript", "no-changelog"],
-      "matchPackageNames": ["/^@auto-it/", "/^auto/"]
-    },
+    // Dev-only deps never ship and auto-merge. Excludes 0.x due to risk of breaking changes.
     {
       "automerge": true,
       "groupName": "auto-merged devDependencies",
@@ -98,12 +116,12 @@
       "matchDepTypes": ["devDependencies", "optionalDependencies"],
       "matchPackageNames": [
         "!/^@?docusaurus/",
-        "!/^@auto-it/",
-        "!/^auto/",
         "!/@grafana/*/"
       ],
       "matchUpdateTypes": ["patch", "minor"]
     },
+    // Auto-merge non-0.x production patch bumps. This rule only ADDS automerge — the fix(deps):
+    // prefix comes from the catch-all below, which runs after it and wins.
     {
       "automerge": true,
       "groupName": "auto-merged patch dependencies",
@@ -113,38 +131,55 @@
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
     },
+    // Prod dependencies of published packages should ship to consumers. This group should come after the auto-merge
+    // rule for fix(deps).
+    {
+      "matchFileNames": ["packages/**"],
+      "matchDepTypes": ["dependencies"],
+      "matchPackageNames": ["!/@grafana/*/"],
+      "commitMessagePrefix": "fix(deps):"
+    },
+    // Bumps the @grafana/plugin-e2e version inside create-plugin's scaffolding template
+    // (_package.json, via the custom.regex manager). Routes to create-plugin by path so use fix(templates):.
     {
       "automerge": true,
       "groupName": "plugin-e2e template version",
-      "labels": ["dependencies", "javascript", "release", "patch"],
+      "labels": ["dependencies", "javascript"],
       "matchManagers": ["custom.regex"],
       "matchPackageNames": ["@grafana/plugin-e2e"],
       "minimumReleaseAge": null,
       "prPriority": 10,
-      "prConcurrentLimit": 0
+      "prConcurrentLimit": 0,
+      "commitMessagePrefix": "fix(templates):"
     },
+    // GitHub Actions inside create-plugin's scaffolded workflow templates - these ship to plugin
+    // authors, so warrant a create-plugin release with fix(templates):.
     {
       "automerge": false,
       "groupName": "create-plugin template github actions",
-      "labels": ["release", "patch", "create-plugin"],
+      "labels": ["create-plugin"],
       "matchManagers": ["github-actions"],
       "matchFileNames": [
         "packages/create-plugin/templates/github/workflows/**"
       ],
-      "pinDigests": false
+      "pinDigests": false,
+      "commitMessagePrefix": "fix(templates):"
     },
+    // This repo's own CI workflows (.github/workflows) are not shipped in any package so chore(ci) / no release.
     {
       "automerge": false,
       "groupName": "auto-merged gitHub actions",
-      "labels": ["ci", "github_actions", "dependencies", "no-changelog"],
+      "labels": ["ci", "github_actions", "dependencies"],
       "matchManagers": ["github-actions"],
-      "matchFileNames": [".github/workflows/**"]
+      "matchFileNames": [".github/workflows/**"],
+      "commitMessagePrefix": "chore(ci):"
     },
+    // @grafana/e2e-selectors are tracked on the nightly tag. Bumps here should release so fix(deps).
     {
       "automerge": true,
       "groupName": "e2e-selectors nightly",
       "groupSlug": "plugin-e2e-selectors",
-      "labels": ["dependencies", "javascript", "patch", "release"],
+      "labels": ["dependencies", "javascript"],
       "matchPackageNames": ["@grafana/e2e-selectors"],
       "followTag": "nightly",
       "rangeStrategy": "bump",
@@ -152,7 +187,8 @@
         "packages/plugin-e2e/package.json",
         "package-lock.json"
       ],
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(deps):"
     }
   ],
   "vulnerabilityAlerts": {

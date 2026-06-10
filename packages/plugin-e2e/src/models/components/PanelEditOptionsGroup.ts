@@ -5,7 +5,7 @@ import { UnitPicker } from './UnitPicker';
 import { Select } from './Select';
 import { MultiSelect } from './MultiSelect';
 import { Switch } from './Switch';
-import { gte, lt } from 'semver';
+import { gte, lt } from '../../utils/version';
 import { RadioGroup } from './RadioGroup';
 import { resolveGrafanaSelector } from '../utils';
 

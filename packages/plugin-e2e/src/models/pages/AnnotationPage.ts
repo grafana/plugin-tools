@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import { gte } from '../../utils/version';
 import { DashboardPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { AnnotationEditPage } from './AnnotationEditPage';
 import { GrafanaPage } from './GrafanaPage';
@@ -33,7 +33,7 @@ export class AnnotationPage extends GrafanaPage {
       await this.getByGrafanaSelector(addAnnotationCTAV2).click();
     } else {
       //the dashboard already has annotations
-      const newQueryButton = semver.gte(this.ctx.grafanaVersion, '11.0.0')
+      const newQueryButton = gte(this.ctx.grafanaVersion, '11.0.0')
         ? this.getByGrafanaSelector(addAnnotationCTAV2)
         : this.ctx.page.getByRole('button', { name: 'New query' });
       await newQueryButton.click();

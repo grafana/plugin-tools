@@ -1,5 +1,5 @@
 import { Locator } from '@playwright/test';
-import * as semver from 'semver';
+import { lt } from '../../utils/version';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
 
@@ -32,7 +32,7 @@ export class Panel extends GrafanaPage {
    */
   get data(): Locator {
     const panel = this.locator;
-    if (semver.lt(this.ctx.grafanaVersion, '12.2.0')) {
+    if (lt(this.ctx.grafanaVersion, '12.2.0')) {
       return panel.locator('[role="cell"]');
     }
 
@@ -55,7 +55,7 @@ export class Panel extends GrafanaPage {
     let menuItem = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.menuItems(item));
 
     // before 9.5.0, there were no proper selectors for the panel menu items
-    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+    if (lt(this.ctx.grafanaVersion, '9.5.0')) {
       panelMenu = this.locator.getByRole('heading');
       parentMenuItem = this.ctx.page.getByText(options?.parentItem ?? '');
       menuItem = this.ctx.page.getByRole('menu').getByText(item);
@@ -108,7 +108,7 @@ export class Panel extends GrafanaPage {
     let selector = this.ctx.selectors.components.Panels.Panel.status(ERROR_STATUS);
 
     // the selector (not the selector value) used to identify a panel error changed in 9.4.3
-    if (semver.lt(this.ctx.grafanaVersion, '9.5.0')) {
+    if (lt(this.ctx.grafanaVersion, '9.5.0')) {
       selector = this.ctx.selectors.components.Panels.Panel.headerCornerInfo(ERROR_STATUS);
     }
 

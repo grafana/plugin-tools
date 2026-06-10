@@ -18,9 +18,6 @@
   <a href="https://nx.dev/">
     <img src="https://img.shields.io/badge/nx-143055?style=for-the-badge&amp;logo=nx&amp;logoColor=white" alt="Nx" />
   </a>&nbsp;
-  <a href="https://github.com/intuit/auto">
-    <img src="https://img.shields.io/badge/release-auto.svg?colorA=888888&amp;colorB=9B065A&amp;label=auto" alt="Auto Release" />
-  </a>
   <br />
   <br />
 </div>
