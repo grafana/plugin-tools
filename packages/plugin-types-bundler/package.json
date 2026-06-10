@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-types-bundler",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Bundle grafana plugin typescript types for sharing with other plugins",
   "bin": "./dist/bin/run.js",
   "type": "module",
@@ -30,6 +30,7 @@
     "provenance": true
   },
   "repository": {
+    "type": "git",
     "directory": "packages/plugin-types-bundler",
     "url": "https://github.com/grafana/plugin-tools"
   },

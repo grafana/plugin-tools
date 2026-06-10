@@ -2,7 +2,7 @@
   "author": "Grafana Labs",
   "license": "Apache-2.0",
   "name": "@grafana/tsconfig",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Grafana's TypeScript config",
   "keywords": [
     "grafana",
@@ -10,6 +10,7 @@
     "config"
   ],
   "repository": {
+    "type": "git",
     "directory": "packages/tsconfig",
     "url": "https://github.com/grafana/plugin-tools"
   },

@@ -86,7 +86,7 @@ Body text here.`;
     expect(html).toContain('Title');
   });
 
-  it('should preserve safe raw HTML elements like <details>', () => {
+  it('should drop raw HTML elements per the docs spec', () => {
     const markdown = `## FAQ
 
 <details>
@@ -99,8 +99,10 @@ It works by parsing markdown.
     const result = parseMarkdown(markdown);
     const html = toHtml(result.hast);
 
-    expect(html).toContain('<details>');
-    expect(html).toContain('<summary>');
+    // raw HTML is forbidden by the docs spec, so <details>/<summary> get stripped
+    expect(html).not.toContain('<details>');
+    expect(html).not.toContain('<summary>');
+    // text content inside the raw block is preserved as a regular paragraph
     expect(html).toContain('It works by parsing markdown.');
   });
 

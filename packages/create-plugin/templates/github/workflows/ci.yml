@@ -11,12 +11,13 @@ on:
       - master
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build, lint and unit tests
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     outputs:
       plugin-id: $\{{ steps.metadata.outputs.plugin-id }}
       plugin-version: $\{{ steps.metadata.outputs.plugin-version }}
@@ -31,7 +32,7 @@ jobs:
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 {{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
@@ -67,21 +68,21 @@ jobs:
 
       - name: Lint backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
+        uses: golangci/golangci-lint-action@82606bf257cbaff209d206a39f5134f0cfbfd2ee # v9.2.1
         with:
           version: latest
           args: ./...
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: buildAll
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: test
@@ -138,8 +139,6 @@ jobs:
   resolve-versions:
     name: Resolve e2e images
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     timeout-minutes: 3
     needs: build
     if: $\{{ needs.build.outputs.has-e2e == 'true' }}
@@ -158,10 +157,6 @@ jobs:
   playwright-tests:
     needs: [resolve-versions, build]
     timeout-minutes: 15
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
     strategy:
       fail-fast: false
       matrix:
@@ -187,7 +182,7 @@ jobs:
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 {{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
@@ -215,14 +210,6 @@ jobs:
         id: run-tests
         run: {{ packageManagerName }} run e2e
 
-      - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
-        if: $\{{ always() && !cancelled() }}
-        with:
-          upload-report: false
-          github-token: $\{{ secrets.GITHUB_TOKEN }}
-          test-outcome: $\{{ steps.run-tests.outcome }}
-
       - name: Docker logs
         if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
         run: |
@@ -240,21 +227,4 @@ jobs:
       #     path: grafana-server.log
       #     retention-days: 5
 
-  publish-report:
-    if: $\{{ always() && !cancelled() }}
-    permissions:
-      contents: write
-      id-token: write
-      pull-requests: write
-    needs: [playwright-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          # required for playwright-gh-pages
-          persist-credentials: true
-      - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.1.0
-        with:
-          github-token: $\{{ secrets.GITHUB_TOKEN }}
 

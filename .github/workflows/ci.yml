@@ -417,7 +417,6 @@ jobs:
           grafana-version: latest
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests.outcome }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get plugin min version
         id: min-version
@@ -462,7 +461,6 @@ jobs:
           grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
           grafana-image: grafana-enterprise
           test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check plugin.json
         run: |
@@ -498,7 +496,7 @@ jobs:
         run: exit 1
 
   publish-report:
-    if: ${{ always() && !cancelled() && github.event.pull_request.head.repo.fork != true }}
+    if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
     needs: [generate-plugins]
     runs-on: ubuntu-x64
     permissions:
@@ -514,64 +512,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           retention-days: 7
-
-  release:
-    runs-on: ubuntu-latest
-    needs: [test, generate-plugins]
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && github.actor != 'dependabot[bot]'"
-    name: Release packages
-    env:
-      NX_BRANCH: ${{ github.event.number || github.ref_name }}
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - id: get-secrets
-        uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
-        with:
-          # Secrets placed in the ci/repo/grafana/plugin-tools in vault
-          repo_secrets: |
-            SLACK_WEBHOOK_URL=slack_webhook_url:slack_webhook_url_fp
-            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
-          export_env: false
-
-        # As recommended on NX docs the NX Cloud token should be set as an environment variable:
-        # https://nx.dev/ci/recipes/security/access-tokens#setting-ci-access-tokens
-      - id: add-nx-cloud-access-token-to-env
-        run: |
-          echo "NX_CLOUD_ACCESS_TOKEN=${{ fromJSON(steps.get-secrets.outputs.secrets).NX_CLOUD_ACCESS_TOKEN }}" >> $GITHUB_ENV
-
-      - name: Generate token
-        id: generate-token
-        uses: grafana/shared-workflows/actions/create-github-app-token@259ba21cb3ff07724f331e26d926d655d24b317b # create-github-app-token/v0.2.3
-        with:
-          github_app: plugins-platform-bot-app
-          permission_set: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'release' || 'default' }}
-
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
-          persist-credentials: false
-
-      - name: Prepare repository
-        run: git fetch --unshallow --tags
-
-      - name: Setup nodejs
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
-        with:
-          node-version-file: '.nvmrc'
-          registry-url: 'https://registry.npmjs.org'
-          # disabled caching to prevent a poisoned cache affecting releases.
-          package-manager-cache: false
-
-      - name: Install dependencies
-        run: npm ci --no-audit
-
-      - name: Build
-        run: npm run build
-
-      - name: Create Release
-        env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.get-secrets.outputs.secrets).SLACK_WEBHOOK_URL }}
-        run: npm run release
