@@ -90,11 +90,6 @@
       "matchPackageNames": ["/@?docusaurus/"]
     },
     {
-      "groupName": "auto dependencies",
-      "labels": ["dependencies", "javascript"],
-      "matchPackageNames": ["/^@auto-it/", "/^auto/"]
-    },
-    {
       "automerge": true,
       "groupName": "auto-merged devDependencies",
       "groupSlug": "dev-dependencies-automerge",
