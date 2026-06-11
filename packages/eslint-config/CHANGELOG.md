@@ -1,4 +1,4 @@
-# Grafana Eslint config changelog
+# Changelog
 
 ## 10.0.0
 
