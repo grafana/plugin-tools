@@ -8,5 +8,6 @@
   "packages/plugin-types-bundler": "0.6.0",
   "packages/react-detect": "0.7.0",
   "packages/sign-plugin": "3.3.0",
-  "packages/tsconfig": "2.2.0"
+  "packages/tsconfig": "2.2.0",
+  "packages/eslint-config": "10.0.0"
 }
