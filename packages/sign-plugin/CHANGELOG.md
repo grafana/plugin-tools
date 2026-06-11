@@ -1,4 +1,13 @@
-# v3.2.1 (Wed Dec 17 2025)
+# Changelog
+
+## [3.3.1](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.0...@grafana/sign-plugin@3.3.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* pin dependencies ([#2712](https://github.com/grafana/plugin-tools/issues/2712)) ([a0cf050](https://github.com/grafana/plugin-tools/commit/a0cf050adcc7cbc517175f781724f378eaf358a5))
+
+## v3.2.1 (Wed Dec 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -10,7 +19,7 @@
 
 ---
 
-# v3.2.0 (Tue Oct 07 2025)
+## v3.2.0 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +31,7 @@
 
 ---
 
-# v3.1.1 (Thu Apr 10 2025)
+## v3.1.1 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix
 
@@ -34,7 +43,7 @@
 
 ---
 
-# v3.1.0 (Thu Mar 13 2025)
+## v3.1.0 (Thu Mar 13 2025)
 
 #### 🚀 Enhancement
 
@@ -46,7 +55,7 @@
 
 ---
 
-# v3.0.8 (Thu Jan 09 2025)
+## v3.0.8 (Thu Jan 09 2025)
 
 #### 🐛 Bug Fix
 
@@ -58,7 +67,7 @@
 
 ---
 
-# v3.0.5 (Wed Dec 11 2024)
+## v3.0.5 (Wed Dec 11 2024)
 
 #### 🐛 Bug Fix
 
@@ -70,7 +79,7 @@
 
 ---
 
-# v3.0.4 (Wed Sep 25 2024)
+## v3.0.4 (Wed Sep 25 2024)
 
 #### 🐛 Bug Fix
 
@@ -82,7 +91,7 @@
 
 ---
 
-# v3.0.3 (Tue Jul 09 2024)
+## v3.0.3 (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix
 
@@ -94,7 +103,7 @@
 
 ---
 
-# v3.0.2 (Tue May 14 2024)
+## v3.0.2 (Tue May 14 2024)
 
 #### 🐛 Bug Fix
 
@@ -106,7 +115,7 @@
 
 ---
 
-# v3.0.1 (Thu Jan 25 2024)
+## v3.0.1 (Thu Jan 25 2024)
 
 #### 🐛 Bug Fix
 
@@ -119,7 +128,7 @@
 
 ---
 
-# v3.0.0 (Tue Jan 16 2024)
+## v3.0.0 (Tue Jan 16 2024)
 
 #### 💥 Breaking Change
 
@@ -136,7 +145,7 @@
 
 ---
 
-# v2.1.0 (Tue Oct 24 2023)
+## v2.1.0 (Tue Oct 24 2023)
 
 #### 🚀 Enhancement
 
@@ -148,7 +157,7 @@
 
 ---
 
-# v2.0.2 (Fri Oct 20 2023)
+## v2.0.2 (Fri Oct 20 2023)
 
 #### 🐛 Bug Fix
 
@@ -160,7 +169,7 @@
 
 ---
 
-# v2.0.1 (Tue Oct 03 2023)
+## v2.0.1 (Tue Oct 03 2023)
 
 #### 🐛 Bug Fix
 
@@ -172,7 +181,7 @@
 
 ---
 
-# v2.0.0 (Mon Oct 02 2023)
+## v2.0.0 (Mon Oct 02 2023)
 
 #### 🐛 Bug Fix
 
@@ -184,7 +193,7 @@
 
 ---
 
-# v1.1.0 (Mon Aug 07 2023)
+## v1.1.0 (Mon Aug 07 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -200,7 +209,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v1.0.3 (Mon Jul 10 2023)
+## v1.0.3 (Mon Jul 10 2023)
 
 #### 🐛 Bug Fix
 
@@ -212,7 +221,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v1.0.1 (Fri Mar 03 2023)
+## v1.0.1 (Fri Mar 03 2023)
 
 #### 🐛 Bug Fix
 
@@ -224,7 +233,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v1.0.0 (Fri Feb 03 2023)
+## v1.0.0 (Fri Feb 03 2023)
 
 #### 💥 Breaking Change
 
@@ -236,7 +245,7 @@ Thank you, Yulia Shanyrova ([@Ukochka](https://github.com/Ukochka)), for all you
 
 ---
 
-# v0.1.0 (Thu Jan 26 2023)
+## v0.1.0 (Thu Jan 26 2023)
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -252,7 +261,7 @@ Thank you, Tomas Basham ([@tomasbasham](https://github.com/tomasbasham)), for al
 
 ---
 
-# v0.0.3 (Thu Jan 26 2023)
+## v0.0.3 (Thu Jan 26 2023)
 
 #### 🐛 Bug Fix
 
@@ -264,7 +273,7 @@ Thank you, Tomas Basham ([@tomasbasham](https://github.com/tomasbasham)), for al
 
 ---
 
-# v0.0.2 (Mon Nov 07 2022)
+## v0.0.2 (Mon Nov 07 2022)
 
 #### 🐛 Bug Fix
 
@@ -276,7 +285,7 @@ Thank you, Tomas Basham ([@tomasbasham](https://github.com/tomasbasham)), for al
 
 ---
 
-# v0.0.1 (Mon Oct 31 2022)
+## v0.0.1 (Mon Oct 31 2022)
 
 #### 🐛 Bug Fix
 
