@@ -126,6 +126,28 @@ describe('sign command', () => {
     expect(mocks.postData).not.toHaveBeenCalled();
   });
 
+  it('should report an invalid root URL before a missing token', async () => {
+    vi.stubEnv('GRAFANA_ACCESS_POLICY_TOKEN', undefined);
+    const dir = pluginDistDir();
+
+    await expect(sign(argvFor({ distDir: dir, rootUrls: 'not-a-valid-url' }))).rejects.toThrow(PROCESS_EXIT_MESSAGE);
+
+    const stdout = stdoutSpy.mock.calls.map((call) => String(call[0])).join('');
+    expect(stdout).toContain('not-a-valid-url is not a valid URL');
+    expect(stdout).not.toContain('Missing GRAFANA_ACCESS_POLICY_TOKEN');
+  });
+
+  it('should prefer GRAFANA_ACCESS_POLICY_TOKEN over GRAFANA_API_KEY but still warn about deprecation', async () => {
+    vi.stubEnv('GRAFANA_API_KEY', 'legacy-api-key');
+    const dir = pluginDistDir();
+
+    await sign(argvFor({ distDir: dir }));
+
+    const stdout = stdoutSpy.mock.calls.map((call) => String(call[0])).join('');
+    expect(stdout).toContain('deprecated');
+    expect(mocks.postData.mock.calls[0][2]).toEqual({ Authorization: 'Bearer test-token' });
+  });
+
   it('should warn about deprecation but proceed when only GRAFANA_API_KEY is set', async () => {
     vi.stubEnv('GRAFANA_ACCESS_POLICY_TOKEN', undefined);
     vi.stubEnv('GRAFANA_API_KEY', 'legacy-api-key');
