@@ -1,14 +1,8 @@
-# grafana-eslint-config
+# Grafana / Eslint Config
 
 > Grafana's [ESLint](https://eslint.org) config.
 
 ## Installation
-
-```shell
-yarn add @grafana/eslint-config --dev
-```
-
-or:
 
 ```shell
 npm install @grafana/eslint-config --save-dev
@@ -20,12 +14,6 @@ Don't forget to install peerDependencies.
 
 ```sh
 npm info "@grafana/eslint-config@latest" peerDependencies
-```
-
-If using **npm 5+**, use this command:
-
-```sh
-npx install-peerdeps --dev @grafana/eslint-config
 ```
 
 If using a different package manager, run `npm info "@grafana/eslint-config@latest" peerDependencies` to list the peer dependencies and versions. Then run `yarn add --dev <dependency1>@<version> <dependency2>@<version> <dependency3>@<version>` for the listed peer dependencies.
