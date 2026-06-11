@@ -1,5 +1,18 @@
 # Grafana Eslint config changelog
 
+## 10.0.0
+
+- Support Eslint 10
+- Add typescript declaration
+- Replace @stylistic/eslint-plugin-ts with @stylistic/eslint-plugin
+
+- **Breaking**: Drop support for eslint 7 and legacy configs
+- **Breaking**: Make package ESM
+
+## 9.0.0
+
+- **Breaking**: Update react hooks plugin to v7
+
 ## 8.0.0
 
 - **Breaking**: Migrate dependencies to peerDependencies. Please make sure to install peerDependencies when using this package.
