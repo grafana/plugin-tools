@@ -35,7 +35,11 @@ async function* walk(dir: string, baseDir: string): RecursiveWalk {
       yield path.relative(baseDir, entry);
     } else if (d.isSymbolicLink()) {
       const realPath = await fs.realpath(entry);
-      if (!realPath.startsWith(baseDir)) {
+      // A prefix check would treat sibling paths like <baseDir>-evil as inside the base directory.
+      const relativeToBase = path.relative(baseDir, realPath);
+      const isOutsideBaseDir =
+        relativeToBase === '..' || relativeToBase.startsWith('..' + path.sep) || path.isAbsolute(relativeToBase);
+      if (isOutsideBaseDir) {
         throw new Error(
           `symbolic link ${path.relative(baseDir, entry)} targets a file outside of the base directory: ${baseDir}`
         );

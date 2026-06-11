@@ -97,6 +97,18 @@ describe('buildManifest', () => {
     await expect(buildManifest(dir)).rejects.toThrow(/targets a file outside of the base directory/);
   });
 
+  it('should throw when a symbolic link targets a sibling directory sharing the plugin directory prefix', async () => {
+    const containerDir = createTempDir();
+    tempDirs.push(containerDir);
+    const dir = path.join(containerDir, 'plugin');
+    const siblingDir = path.join(containerDir, 'plugin-evil');
+    writeFiles(dir, { 'plugin.json': JSON.stringify(DEFAULT_PLUGIN_JSON) });
+    writeFiles(siblingDir, { 'secret.txt': 'secret' });
+    symlinkSync(path.join(siblingDir, 'secret.txt'), path.join(dir, 'secret-link.txt'));
+
+    await expect(buildManifest(dir)).rejects.toThrow(/targets a file outside of the base directory/);
+  });
+
   it('should throw when plugin.json is missing', async () => {
     const dir = createTempDir();
     tempDirs.push(dir);

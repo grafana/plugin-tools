@@ -25,8 +25,6 @@ export const sign = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 
-  const token = getSigningToken();
-
   try {
     output.log({
       title: 'Signing plugin.',
@@ -48,6 +46,7 @@ export const sign = async (argv: minimist.ParsedArgs) => {
       manifest.createPlugin = { version: createPluginVersion };
     }
 
+    const token = getSigningToken();
     const signedManifest = await signManifest(manifest, token);
 
     saveManifest(pluginDistDir, signedManifest);
