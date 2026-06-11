@@ -70,7 +70,6 @@ Use the `isFeatureToggleEnabled` fixture to determine whether a certain feature 
 
 ```typescript
 import { test, expect } from '@grafana/plugin-e2e';
-import * as semver from 'semver';
 
 test('valid credentials should return a 200 status code', async ({
   createDataSourceConfigPage,

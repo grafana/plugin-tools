@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
-import { gte } from 'semver';
+import { gte } from '../../utils/version';
 
 export class RadioGroup extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {

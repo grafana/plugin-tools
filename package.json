@@ -56,7 +56,7 @@
     "rollup-plugin-dts": "^6.3.0",
     "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.8"
   },
   "engines": {
     "node": ">=24"
@@ -83,7 +83,9 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "webpack-dev-server": "^5.2.1"
+    "webpack-dev-server": "^5.2.1",
+    "serialize-javascript": "7.0.5",
+    "dompurify": "^3.4.0"
   },
-  "packageManager": "npm@11.12.1"
+  "packageManager": "npm@11.16.0"
 }

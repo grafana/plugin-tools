@@ -120,7 +120,7 @@ To contribute documentation:
 - Re-read what you wrote, and run a spellchecker on it to make sure you didn't miss anything.
 - Go to https://github.com/grafana/plugin-tools/pulls and open a new pull request with your changes.
 - Please make use of the Pull Request Template. If your PR is connected to an open issue, add a line in your PR's description that says `Fixes: #123`, where `#123` is the number of the issue you're fixing.
-- If you are a maintainer add the `type/docs` and `no-changelog` labels to the PR.
+- If you are a maintainer add the `type/docs` label to the PR and use a `docs:` PR title prefix so the change is excluded from package changelogs.
 
 Once you've filed the PR:
 

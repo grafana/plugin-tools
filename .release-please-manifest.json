@@ -1,5 +1,5 @@
 {
-  "packages/create-plugin": "7.7.0",
+  "packages/create-plugin": "7.7.1",
   "packages/eslint-plugin-plugins": "0.7.0",
   "packages/plugin-docs-cli": "0.1.0",
   "packages/plugin-docs-parser": "0.1.0",
