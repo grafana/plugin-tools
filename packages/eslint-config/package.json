@@ -25,7 +25,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/grafana/eslint-config-grafana.git"
+    "directory": "packages/eslint-config",
+    "url": "https://github.com/grafana/plugin-tools"
   },
   "publishConfig": {
     "access": "public"
@@ -58,6 +59,5 @@
     "eslint-plugin-react": ">=7.37.0",
     "eslint-plugin-react-hooks": ">=7.1.0",
     "typescript": ">=5.5.0"
-  },
-  "packageManager": "yarn@4.4.1"
+  }
 }
