@@ -31,7 +31,6 @@
     "change-case": "5.4.4",
     "debug": "4.4.3",
     "enquirer": "2.4.1",
-    "find-up": "8.0.0",
     "glob": "13.0.6",
     "handlebars": "4.7.9",
     "jsonc-parser": "3.3.1",
@@ -44,6 +43,7 @@
     "yaml": "2.9.0"
   },
   "devDependencies": {
+    "@libs/find-up": "1.0.0",
     "@libs/output": "1.0.3",
     "@libs/version": "1.0.2",
     "@types/glob": "9.0.0",
