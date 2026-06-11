@@ -16,11 +16,19 @@ const PORTAL_URL = `https://${process.env.DEV_PORTAL_HOST}`;
 const PORTAL_HOME_HREF = `${PORTAL_URL}/developers`;
 
 // Replace background and color to better match Grafana theme.
-const grafanaPrismTheme: PrismTheme = {
+const grafanaPrismDarkTheme: PrismTheme = {
   ...themes.oneDark,
   plain: {
     color: 'rgb(204, 204, 220)',
     backgroundColor: '#181b1f',
+  },
+};
+
+const grafanaPrismLightTheme: PrismTheme = {
+  ...themes.github,
+  plain: {
+    color: 'rgb(36, 41, 46)',
+    backgroundColor: '#ffffff',
   },
 };
 
@@ -210,7 +218,8 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Grafana Labs. Built with Docusaurus.`,
     },
     prism: {
-      theme: grafanaPrismTheme,
+      theme: grafanaPrismLightTheme,
+      darkTheme: grafanaPrismDarkTheme,
       additionalLanguages: ['bash', 'diff', 'json'],
       magicComments: [
         {
@@ -222,7 +231,7 @@ const config: Config = {
     },
     colorMode: {
       defaultMode: 'dark',
-      disableSwitch: true,
+      disableSwitch: false,
       respectPrefersColorScheme: false,
     },
   },
