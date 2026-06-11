@@ -1,4 +1,13 @@
-# v0.6.4 (Wed Apr 22 2026)
+# Changelog
+
+## [0.7.1](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.0...@grafana/react-detect@0.7.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* pin dependencies for better security ([#2714](https://github.com/grafana/plugin-tools/issues/2714)) ([0041842](https://github.com/grafana/plugin-tools/commit/0041842c22cef6d6906ab04ea077e79434f31eea))
+
+## v0.6.4 (Wed Apr 22 2026)
 
 #### 🐛 Bug Fix
 
@@ -10,7 +19,7 @@
 
 ---
 
-# v0.6.3 (Tue Apr 07 2026)
+## v0.6.3 (Tue Apr 07 2026)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +31,7 @@
 
 ---
 
-# v0.6.2 (Wed Apr 01 2026)
+## v0.6.2 (Wed Apr 01 2026)
 
 #### 🐛 Bug Fix
 
@@ -34,7 +43,7 @@
 
 ---
 
-# v0.6.1 (Tue Feb 17 2026)
+## v0.6.1 (Tue Feb 17 2026)
 
 #### 🐛 Bug Fix
 
@@ -46,7 +55,7 @@
 
 ---
 
-# v0.6.0 (Fri Feb 13 2026)
+## v0.6.0 (Fri Feb 13 2026)
 
 #### 🚀 Enhancement
 
@@ -58,7 +67,7 @@
 
 ---
 
-# v0.5.2 (Fri Feb 06 2026)
+## v0.5.2 (Fri Feb 06 2026)
 
 #### 🐛 Bug Fix
 
@@ -70,7 +79,7 @@
 
 ---
 
-# v0.5.1 (Fri Jan 23 2026)
+## v0.5.1 (Fri Jan 23 2026)
 
 #### 🐛 Bug Fix
 
@@ -82,7 +91,7 @@
 
 ---
 
-# v0.5.0 (Mon Jan 19 2026)
+## v0.5.0 (Mon Jan 19 2026)
 
 #### 🚀 Enhancement
 
@@ -94,7 +103,7 @@
 
 ---
 
-# v0.4.0 (Thu Jan 15 2026)
+## v0.4.0 (Thu Jan 15 2026)
 
 #### 🚀 Enhancement
 
@@ -106,7 +115,7 @@
 
 ---
 
-# v0.3.0 (Thu Jan 15 2026)
+## v0.3.0 (Thu Jan 15 2026)
 
 #### 🚀 Enhancement
 
@@ -118,7 +127,7 @@
 
 ---
 
-# v0.2.1 (Thu Jan 08 2026)
+## v0.2.1 (Thu Jan 08 2026)
 
 #### 🐛 Bug Fix
 
@@ -130,7 +139,7 @@
 
 ---
 
-# v0.2.0 (Thu Jan 08 2026)
+## v0.2.0 (Thu Jan 08 2026)
 
 #### 🚀 Enhancement
 
