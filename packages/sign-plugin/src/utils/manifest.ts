@@ -3,8 +3,6 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { postData } from './request.js';
-import { output } from './utils.output.js';
-import { styleText } from 'node:util';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
 
@@ -79,54 +77,28 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
   return manifest;
 }
 
-export async function signManifest(manifest: ManifestInfo): Promise<string> {
-  const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
-  const GRAFANA_ACCESS_POLICY_TOKEN = process.env.GRAFANA_ACCESS_POLICY_TOKEN;
-
-  if (!GRAFANA_ACCESS_POLICY_TOKEN && !GRAFANA_API_KEY) {
-    output.error({
-      title: 'Missing GRAFANA_ACCESS_POLICY_TOKEN.',
-      body: ['You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins.'],
-      link: 'https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token',
-    });
-    process.exit(1);
-  }
-  if (GRAFANA_API_KEY) {
-    output.warning({
-      title: 'Usage of GRAFANA_API_KEY is deprecated.',
-      body: ['Please migrate to using a GRAFANA_ACCESS_POLICY_TOKEN instead.'],
-      link: 'https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin',
-    });
-  }
-
+export async function signManifest(manifest: ManifestInfo, token: string): Promise<string> {
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
   const url = GRAFANA_COM_URL + '/plugins/ci/sign';
 
-  const token = GRAFANA_ACCESS_POLICY_TOKEN ? GRAFANA_ACCESS_POLICY_TOKEN : GRAFANA_API_KEY;
-  try {
-    const info = await postData(url, manifest, {
-      Authorization: 'Bearer ' + token,
-    });
-    if (info.status !== 200) {
-      const dataAsArray = Object.entries(JSON.parse(info.data)).map(([key, value]) => `${key}: ${value}`);
-      output.error({
-        title: 'Error signing manifest.',
-        body: [
-          `Server responded with status code ${styleText(['yellow'], info.status.toString())} along with:`,
-          ...output.bulletList(dataAsArray),
-        ],
-      });
-      process.exit(1);
-    }
+  const info = await postData(url, manifest, {
+    Authorization: 'Bearer ' + token,
+  });
 
-    return info.data;
-  } catch (err: any) {
-    const body = err.response?.data?.message ? [err.response.data.message] : [err.message];
-    output.error({
-      title: 'Error signing manifest.',
-      body,
-    });
-    process.exit(1);
+  if (info.status !== 200) {
+    throw new Error(`Server responded with status code ${info.status} along with: ${formatServerError(info.data)}`);
+  }
+
+  return info.data;
+}
+
+function formatServerError(data: string): string {
+  try {
+    return Object.entries(JSON.parse(data))
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(', ');
+  } catch (err) {
+    return data;
   }
 }
 
@@ -135,10 +107,6 @@ export function saveManifest(dir: string, signedManifest: string) {
     writeFileSync(path.join(dir, MANIFEST_FILE), signedManifest);
     return true;
   } catch (error) {
-    output.error({
-      title: 'Error saving manifest',
-      body: [`Failed to write signed manifest to ${dir}.`],
-    });
-    process.exit(1);
+    throw new Error(`Failed to write signed manifest to ${dir}.`);
   }
 }
