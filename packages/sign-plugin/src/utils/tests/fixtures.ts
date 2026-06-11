@@ -1,6 +1,6 @@
-import { mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
-import os from 'node:os';
+import { mkdirSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { dirSync } from 'tmp';
 
 export const DEFAULT_PLUGIN_JSON = {
   id: 'grafana-test-app',
@@ -10,10 +10,10 @@ export const DEFAULT_PLUGIN_JSON = {
   },
 };
 
-// realpathSync prevents false symlink-escape errors on macOS where os.tmpdir()
-// returns /var/... which resolves to /private/var/...
+// realpathSync prevents false symlink-escape errors on macOS where the temp dir
+// lives under /var/... which resolves to /private/var/...
 export function createTempDir(): string {
-  return realpathSync(mkdtempSync(path.join(os.tmpdir(), 'sign-plugin-test-')));
+  return realpathSync(dirSync({ prefix: 'sign-plugin-test-', unsafeCleanup: true }).name);
 }
 
 export function writeFiles(dir: string, files: Record<string, string>): void {
