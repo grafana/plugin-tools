@@ -1,4 +1,4 @@
-import { Linter } from "eslint";
+import { Linter } from 'eslint';
 
 declare const config: Linter.Config[];
 

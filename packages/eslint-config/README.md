@@ -61,19 +61,19 @@ You are then free to add/override properties.
 Note: Our shareable configs does not preconfigure `files`, `ignore`, or `languageOptions.globals`. For most of the cases, you probably want to configure some properties for your project.
 
 ```js
-const grafanaConfig = require("@grafana/eslint-config/flat");
+const grafanaConfig = require('@grafana/eslint-config/flat');
 
 /**
  * @type {Array<import('eslint').Linter.Config>}
  */
 module.exports = [
   {
-    ignores: [".github", ".yarn", "**/build/", "**/compiled/", "**/dist/"],
+    ignores: ['.github', '.yarn', '**/build/', '**/compiled/', '**/dist/'],
   },
   ...grafanaConfig,
   {
-    name: "myproject/defaults",
-    files: ["**/*.{ts,tsx,js,jsx}"],
+    name: 'myproject/defaults',
+    files: ['**/*.{ts,tsx,js,jsx}'],
     rules: {
       // add custom rules here.
     },
