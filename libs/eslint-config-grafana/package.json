@@ -2,8 +2,17 @@
   "author": "Grafana Labs",
   "license": "Apache-2.0",
   "name": "@grafana/eslint-config",
-  "main": "index.js",
-  "version": "9.0.0",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "version": "10.0.0",
   "description": "Grafana's ESLint config",
   "keywords": [
     "grafana",
@@ -23,13 +32,12 @@
   },
   "files": [
     "index.js",
-    "flat.js",
-    "base.js",
+    "index.d.ts",
     "README.md",
     "CHANGELOG.md"
   ],
   "devDependencies": {
-    "@stylistic/eslint-plugin-ts": "^2.9.0",
+    "@stylistic/eslint-plugin": "^5.0.0",
     "@types/eslint": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
     "@typescript-eslint/parser": "^8.9.0",
@@ -37,19 +45,19 @@
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-jsdoc": "^50.4.1",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-hooks": "^7.1.0",
     "typescript": "^5.5.0"
   },
   "peerDependencies": {
-    "@stylistic/eslint-plugin-ts": ">=2.9.0",
-    "@typescript-eslint/eslint-plugin": ">=6.18.0",
-    "@typescript-eslint/parser": ">=6.18.0",
-    "eslint": ">=8.0.0",
-    "eslint-config-prettier": ">=8.8.0",
-    "eslint-plugin-jsdoc": ">=46.8.0",
-    "eslint-plugin-react": ">=7.33.0",
-    "eslint-plugin-react-hooks": ">=7.0.0",
-    "typescript": ">=5.2.0"
+    "@stylistic/eslint-plugin": ">=5.0.0",
+    "@typescript-eslint/eslint-plugin": ">=8.9.0",
+    "@typescript-eslint/parser": ">=8.9.0",
+    "eslint": ">=8.57.0",
+    "eslint-config-prettier": ">=9.1.0",
+    "eslint-plugin-jsdoc": ">=50.4.0",
+    "eslint-plugin-react": ">=7.37.0",
+    "eslint-plugin-react-hooks": ">=7.1.0",
+    "typescript": ">=5.5.0"
   },
   "packageManager": "yarn@4.4.1"
 }
