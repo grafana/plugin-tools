@@ -2,6 +2,7 @@
 * @grafana/grafana-catalog @grafana/grafana-frontend-platform
 
 /packages/create-plugin/ @grafana/grafana-frontend-platform
+/packages/eslint-config/ @grafana/grafana-frontend-platform
 /packages/eslint-plugin-plugins/ @grafana/grafana-catalog
 /packages/plugin-docs-parser/ @grafana/grafana-catalog
 /packages/plugin-docs-cli/ @grafana/grafana-catalog
