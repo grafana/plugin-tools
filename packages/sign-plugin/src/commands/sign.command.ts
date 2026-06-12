@@ -46,7 +46,8 @@ export const sign = async (argv: minimist.ParsedArgs) => {
       manifest.createPlugin = { version: createPluginVersion };
     }
 
-    const signedManifest = await signManifest(manifest);
+    const token = getSigningToken();
+    const signedManifest = await signManifest(manifest, token);
 
     saveManifest(pluginDistDir, signedManifest);
     output.success({
@@ -63,3 +64,27 @@ export const sign = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 };
+
+function getSigningToken(): string {
+  const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
+  const GRAFANA_ACCESS_POLICY_TOKEN = process.env.GRAFANA_ACCESS_POLICY_TOKEN;
+  const token = GRAFANA_ACCESS_POLICY_TOKEN ? GRAFANA_ACCESS_POLICY_TOKEN : GRAFANA_API_KEY;
+
+  if (!token) {
+    output.error({
+      title: 'Missing GRAFANA_ACCESS_POLICY_TOKEN.',
+      body: ['You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins.'],
+      link: 'https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token',
+    });
+    process.exit(1);
+  }
+  if (GRAFANA_API_KEY) {
+    output.warning({
+      title: 'Usage of GRAFANA_API_KEY is deprecated.',
+      body: ['Please migrate to using a GRAFANA_ACCESS_POLICY_TOKEN instead.'],
+      link: 'https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin',
+    });
+  }
+
+  return token;
+}
