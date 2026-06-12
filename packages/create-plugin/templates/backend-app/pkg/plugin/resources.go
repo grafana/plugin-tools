@@ -12,7 +12,6 @@ func (a *App) handlePing(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 // handleEcho is an example HTTP POST resource that accepts a JSON with a "message" key and
@@ -34,7 +33,6 @@ func (a *App) handleEcho(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 // registerRoutes takes a *http.ServeMux and registers some HTTP handlers.

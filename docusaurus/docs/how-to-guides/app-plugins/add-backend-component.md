@@ -109,7 +109,6 @@ func (a *App) handleMyCustomEndpoint(w http.ResponseWriter, r *http.Request) {
   // handle the request
   // e.g. call a third-party API
   w.Write([]byte("my custom response"))
-  w.WriteHeader(http.StatusOK)
 }
 ```
 
