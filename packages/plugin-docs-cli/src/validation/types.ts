@@ -10,6 +10,7 @@ export const Rule = {
   NoEmptyDir: 'no-empty-directories',
   NoSymlinks: 'no-symlinks',
   AllowedFileTypes: 'allowed-file-types',
+  MaxNestingDepth: 'max-nesting-depth',
   // frontmatter rules
   BlockExists: 'frontmatter-block-exists',
   ValidYaml: 'frontmatter-valid-yaml',

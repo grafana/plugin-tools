@@ -1,10 +1,13 @@
 import { readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
-import { join, extname, sep } from 'node:path';
+import { join, extname, relative, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
+
+// max path segments from the docs root (e.g. `a/b/page.md` is 3)
+const MAX_NESTING_DEPTH = 3;
 
 // permitted image formats shared across filesystem and asset rules
 export const ALLOWED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
@@ -36,6 +39,21 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
       title: 'Symlinks are not allowed',
       detail: `"${link.name}" is a symbolic link. Use actual files instead of symlinks.`,
     });
+  }
+
+  // max-nesting-depth: report .md pages nested deeper than MAX_NESTING_DEPTH from docsPath
+  for (const file of mdFiles) {
+    const rel = relative(input.docsPath, join(file.parentPath, file.name));
+    const depth = rel.split(sep).length;
+    if (depth > MAX_NESTING_DEPTH) {
+      diagnostics.push({
+        rule: Rule.MaxNestingDepth,
+        severity: input.strict ? 'error' : 'info',
+        file: rel,
+        title: `Doc page nested too deeply (${depth} levels, max ${MAX_NESTING_DEPTH})`,
+        detail: `"${rel}" is ${depth} levels from the docs root. Deeply nested pages are hard to discover in the sidebar nav. Flatten the structure so no page is more than ${MAX_NESTING_DEPTH} levels deep.`,
+      });
+    }
   }
 
   // allowed-file-types: non-.md files must be permitted image formats
