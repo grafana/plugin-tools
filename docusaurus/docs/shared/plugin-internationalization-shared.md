@@ -118,6 +118,8 @@ Children stay in place because they carry the JSX structure (for example `<stron
 
 For reference, [grafana/grafana#125312](https://github.com/grafana/grafana/pull/125312) and [grafana/grafana#125316](https://github.com/grafana/grafana/pull/125316) migrated every plural `t()` and `<Trans>` in Grafana itself to this shape.
 
+This convention is enforced by the `@grafana/i18n/t-plural-defaults` and `@grafana/i18n/trans-plural-defaults` ESLint rules. See [Configure ESLint rules for translations](#configure-eslint-rules-for-translations) to enable them.
+
 ## Obtain the translated text
 
 Use the [`i18next-cli`](https://github.com/i18next/i18next-cli#readme) and `i18n-extract` to sweep all input files, extract tagged `i18n` keys, and save the translations.
@@ -225,6 +227,8 @@ export default defineConfig([
     rules: {
       '@grafana/i18n/no-untranslated-strings': ['error', { calleesToIgnore: ['^css$', 'use[A-Z].*'] }],
       '@grafana/i18n/no-translation-top-level': 'error',
+      '@grafana/i18n/t-plural-defaults': 'error',
+      '@grafana/i18n/trans-plural-defaults': 'error',
     },
   },
 ]);
