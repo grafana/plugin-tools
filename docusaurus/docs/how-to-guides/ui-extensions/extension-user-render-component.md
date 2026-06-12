@@ -50,8 +50,8 @@ export const InstanceToolbar = () => {
   return (
     <div>
       {/* Loop through the components added by plugins */}
-      {components.map(({ id, component: Component }) => (
-        <Component key={id} />
+      {components.map((Component) => (
+        <Component key={Component.meta.id} />
       ))}
     </div>
   );
@@ -96,8 +96,8 @@ export const InstanceToolbar = ({ instanceId }) => {
   return (
     <div>
       {/* Sharing contextual information using component props */}
-      {components.map(({ id, component: Component }) => (
-        <Component key={id} instanceId={instanceId} />
+      {components.map((Component) => (
+        <Component key={Component.meta.id} instanceId={instanceId} />
       ))}
     </div>
   );
@@ -138,7 +138,7 @@ export const InstanceToolbar = () => {
   // that has registered the extension.
   const allowedComponents = useMemo(() => {
     const allowedPluginIds = ['myorg-a-app', 'myorg-b-app'];
-    return components.filter(({ pluginId }) => allowedPluginIds.includes(pluginId));
+    return components.filter((Component) => allowedPluginIds.includes(Component.meta.pluginId));
   }, [components]);
 
   // ...
