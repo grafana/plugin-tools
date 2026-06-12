@@ -1,7 +1,7 @@
 import { gte, lt } from 'semver';
 
 import { basename } from 'node:path';
-import { findUpSync } from 'find-up';
+import { findUpSync } from '@libs/find-up';
 import { getPackageJson } from './utils.packagejson.js';
 import { spawnSync } from 'node:child_process';
 
