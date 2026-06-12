@@ -11,4 +11,14 @@ export default [
     description: 'Externalizes the react JSX runtime to help migrate plugins to React 19',
     scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
   },
+  {
+    name: 'datasource-docs',
+    description: 'Scaffolds multi-page documentation for a Grafana datasource plugin',
+    scriptPath: import.meta.resolve('./scripts/datasource-docs/index.js'),
+  },
+  {
+    name: 'panel-docs',
+    description: 'Scaffolds multi-page documentation for a Grafana panel plugin',
+    scriptPath: import.meta.resolve('./scripts/panel-docs/index.js'),
+  },
 ] satisfies Codemod[];
