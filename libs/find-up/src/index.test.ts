@@ -68,6 +68,14 @@ describe('findUpSync', () => {
     expect(findUpSync('file-that-does-not-exist.json', { cwd: rootDir })).toBeUndefined();
   });
 
+  it('should ignore directories that match the name and only return files', () => {
+    const rootDir = createFixtureTree(['package.json', 'a/.gitkeep']);
+    // A directory named like the candidate must be skipped, mirroring find-up's type: 'file' default.
+    mkdirSync(path.join(rootDir, 'a', 'package.json'));
+
+    expect(findUpSync('package.json', { cwd: path.join(rootDir, 'a') })).toBe(path.join(rootDir, 'package.json'));
+  });
+
   it('should default to the current working directory', () => {
     const rootDir = createFixtureTree(['package.json', 'a/.gitkeep']);
     vi.spyOn(process, 'cwd').mockReturnValue(path.join(rootDir, 'a'));

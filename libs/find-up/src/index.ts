@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { statSync } from 'node:fs';
 import path from 'node:path';
 
 interface FindUpSyncOptions {
@@ -13,7 +13,9 @@ export function findUpSync(name: string | string[], options: FindUpSyncOptions =
   while (currentDir !== previousDir) {
     for (const candidateName of names) {
       const candidatePath = path.join(currentDir, candidateName);
-      if (existsSync(candidatePath)) {
+      // Match files only, mirroring find-up/locate-path (type: 'file' by default).
+      const stat = statSync(candidatePath, { throwIfNoEntry: false });
+      if (stat?.isFile()) {
         return candidatePath;
       }
     }
