@@ -1,5 +1,21 @@
 # Changelog
 
+## [7.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.7.1...@grafana/create-plugin@7.8.0) (2026-06-11)
+
+
+### Features
+
+* **deps:** bump grafana libs to 13.0.2 ([#2708](https://github.com/grafana/plugin-tools/issues/2708)) ([aa149de](https://github.com/grafana/plugin-tools/commit/aa149de372c87092d59c09049228c54bd5f54763))
+
+
+### Bug Fixes
+
+* correct relative @-import path in plugin skill files ([#2709](https://github.com/grafana/plugin-tools/issues/2709)) ([c1793f0](https://github.com/grafana/plugin-tools/commit/c1793f06444f1c11a0acc577a1d7cc43b7fd3bcd))
+* **deps:** bump copy-webpack-plugin to 14.0.0 ([#2710](https://github.com/grafana/plugin-tools/issues/2710)) ([a50d0cb](https://github.com/grafana/plugin-tools/commit/a50d0cbfd84f4b5d0b3d636a1f9936025df41ee0))
+* **deps:** Update dependency semver to v7.8.2 ([#2688](https://github.com/grafana/plugin-tools/issues/2688)) ([2395e45](https://github.com/grafana/plugin-tools/commit/2395e456066c4385a0e9543e073efae06113adec))
+* **deps:** Update dependency valibot to v1.4.1 ([#2716](https://github.com/grafana/plugin-tools/issues/2716)) ([345632a](https://github.com/grafana/plugin-tools/commit/345632ac71d90ba72a7ce4b290def3ac4f0387e3))
+* **templates:** Update create-plugin template github actions ([#2674](https://github.com/grafana/plugin-tools/issues/2674)) ([8afa2ea](https://github.com/grafana/plugin-tools/commit/8afa2ea47af94e15d51610bc2e77fe1959297486))
+
 ## [7.7.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.7.0...@grafana/create-plugin@7.7.1) (2026-06-09)
 
 
