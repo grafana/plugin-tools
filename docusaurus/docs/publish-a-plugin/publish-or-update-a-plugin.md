@@ -86,15 +86,15 @@ All plugin submissions, new or updates, go through the same automated and rigoro
 
 ## Monetize your plugin
 
-Grafana Marketplace provides an optional path for plugin developers, independent software vendors, and partners to sell and distribute commercial plugins through the Grafana plugin catalog, subject to the approval and discretion of Grafana Labs. Paid Marketplace plugins can help fund ongoing development, maintenance, updates, and support.
+Grafana Marketplace provides an optional path for plugin developers, independent software vendors, and partners to sell and distribute commercial plugins through the Grafana plugin catalog, subject to the approval and discretion of Grafana Labs. 
 
-Marketplace plugins are published in Grafana Catalog with a `Marketplace` label, and can be proprietary. 
+Marketplace plugins are published in the Grafana Catalog with a `Marketplace` label, and can be proprietary. Paid Marketplace plugins can help you fund ongoing development, maintenance, updates, and support.
+
+For more background, refer to the [Grafana Marketplace pilot announcement](https://grafana.com/blog/grafana-marketplace-pilot/). 
 
 :::caution
 
-Marketplace submissions follow a separate review process from free plugins. If you want have any questions or wish to submit a monetizable plugin, contact the Grafana Marketplace team at `plugins-marketplace@grafana.com`. 
-
-For more background, refer to the [Grafana Marketplace pilot announcement](https://grafana.com/blog/grafana-marketplace-pilot/). 
+Marketplace submissions follow a separate review process from free plugins. If you have any questions or wish to submit a monetizable plugin, contact the Grafana Marketplace team at [plugins-marketplace@grafana.com](plugins-marketplace@grafana.com). 
 
 :::
 
