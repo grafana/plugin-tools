@@ -94,7 +94,7 @@ For more background, refer to the [Grafana Marketplace pilot announcement](https
 
 :::caution
 
-Marketplace submissions follow a separate review process from free plugins. If you have any questions or wish to submit a monetizable plugin, contact the Grafana Marketplace team at [plugins-marketplace@grafana.com](plugins-marketplace@grafana.com). 
+Marketplace submissions follow a separate review process from free plugins. If you have any questions or wish to submit a monetizable plugin, contact the Grafana Marketplace team at [plugins-marketplace@grafana.com](mailto:plugins-marketplace@grafana.com). 
 
 :::
 
