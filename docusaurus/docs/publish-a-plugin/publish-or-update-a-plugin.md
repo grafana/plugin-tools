@@ -16,7 +16,14 @@ keywords:
 
 You've just built your plugin and now you want to share it with the world! 
 
-Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugins) makes it easily discoverable by millions of Grafana users. Read on to learn how to manage the lifecycle of a plugin in the catalog, from publishing and updating to potentially deprecating.
+Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugins) makes it easily discoverable by millions of Grafana users. Read on to learn how to manage the lifecycle of a plugin in the catalog, from publishing and updating to potentially deprecating. The Grafana plugin catalog is free of charge.
+
+:::note
+
+Starting in April 2026, you can **offer your plugins through the Grafana Marketplace**, an optional way to monetize your plugin. Grafana Marketplace is part of the Grafana Plugin Catalog and allows eligible developers to distribute and sell their plugins. For more details refer to [Monetize your plugin](#monetize-your-plugin).
+
+:::
+
 
 ## Before you begin
 
@@ -76,6 +83,20 @@ Following [best practices](./publishing-best-practices.md) or [providing a test 
 To update a plugin, follow the same guidance as for [publish your plugin](#publish-your-plugin), except in Step 3 where you can now click **Submit Update** for the plugin you want to update.
 
 All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already setup for an existing plugin, plugin update reviews may go faster.
+
+## Monetize your plugin
+
+Grafana Marketplace provides an optional path for plugin developers, independent software vendors, and partners to sell and distribute commercial plugins through the Grafana plugin catalog, subject to the approval and discretion of Grafana Labs. Paid Marketplace plugins can help fund ongoing development, maintenance, updates, and support.
+
+Marketplace plugins are published in Grafana Catalog with a `Marketplace` label, and can be proprietary. 
+
+:::caution
+
+Marketplace submissions follow a separate review process from free plugins. If you want have any questions or wish to submit a monetizable plugin, contact the Grafana Marketplace team at `plugins-marketplace@grafana.com`. 
+
+For more background, refer to the [Grafana Marketplace pilot announcement](https://grafana.com/blog/grafana-marketplace-pilot/). 
+
+:::
 
 ## Deprecate a plugin
 
