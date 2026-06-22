@@ -4,6 +4,7 @@ import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import createDebug from 'debug';
 import type { Manifest, Page, MarkdownFiles, Frontmatter } from '@grafana/plugin-docs-parser';
+import { isMetaFile } from './validation/rules/utils.js';
 
 const debug = createDebug('plugin-docs-cli:scanner');
 
@@ -114,6 +115,9 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
   const filePaths = entries
     .filter((entry) => {
       if (!entry.endsWith('.md')) {
+        return false;
+      }
+      if (isMetaFile(entry)) {
         return false;
       }
       return !entry.includes('node_modules') && !entry.includes('dist');

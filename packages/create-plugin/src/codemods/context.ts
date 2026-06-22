@@ -57,11 +57,19 @@ export class Context {
       throw new Error(`File ${path} does not exist`);
     }
 
-    if (originalContent !== content) {
-      this.files[path] = { content, changeType: 'update' };
-    } else {
+    if (originalContent === content) {
       codemodsDebug(`Context.updateFile() - no updates for ${filePath}`);
+      return;
     }
+
+    // when a file was added earlier in this same context (i.e. it doesn't yet
+    // exist on disk), an "update" is really still part of the pending add. Keep
+    // the changeType as 'add' so flushChanges creates the parent directory
+    // before writing. Flipping to 'update' here used to cause flushChanges to
+    // skip mkdirSync and ENOENT when the parent dir doesn't exist yet.
+    const existing = this.files[path];
+    const changeType = existing?.changeType === 'add' ? 'add' : 'update';
+    this.files[path] = { content, changeType };
   }
 
   doesFileExist(filePath: string) {
