@@ -26,11 +26,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "find-up": "8.0.0",
     "minimist": "1.2.8",
     "proxy-agent": "8.0.1"
   },
   "devDependencies": {
+    "@libs/find-up": "^1.0.0",
     "@libs/output": "^1.0.3",
     "@libs/version": "^1.0.2",
     "@types/minimist": "^1.2.5"
