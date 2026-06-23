@@ -103,15 +103,11 @@ jobs:
     needs: [playwright-tests]
     runs-on: ubuntu-x64
     permissions:
-      contents: write
+      id-token: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@5da62466881cdba091672353cf3c72ca348d01b1 # deploy-report-pages/v1.1.0
+        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@9a83ca76bfa15893ff19680a12929dd708dc9b4c # plugin-actions#253 (GCS reports) - TEMP, do not merge
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          retention-days: 7
+          bucket: grafana-e2e-test-artifacts
