@@ -14,7 +14,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-x64
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: false # Temporarily disabled due to broken npm package publishing
     name: Run unit tests
     permissions:
       contents: read
