@@ -155,7 +155,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@686ff644d420875e6eeb7b4c10d52d634feeacee # wait-for-grafana/v1.0.4
         with:
           url: http://localhost:3000/login
 
@@ -237,7 +237,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Wait for grafana server (10.4.0)
-        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@686ff644d420875e6eeb7b4c10d52d634feeacee # wait-for-grafana/v1.0.4
         with:
           url: http://localhost:3000/login
 
@@ -394,7 +394,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (latest)
-        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@686ff644d420875e6eeb7b4c10d52d634feeacee # wait-for-grafana/v1.0.4
         with:
           url: http://localhost:3000/login
 
@@ -439,7 +439,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Wait for grafana server (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/wait-for-grafana@752a92aaebfcd83121acc27293c93b7013d30deb # wait-for-grafana/v1.0.1
+        uses: grafana/plugin-actions/wait-for-grafana@686ff644d420875e6eeb7b4c10d52d634feeacee # wait-for-grafana/v1.0.4
         with:
           url: http://localhost:3000/login
 
