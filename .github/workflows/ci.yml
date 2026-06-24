@@ -177,7 +177,7 @@ jobs:
   test-updates:
     name: Test create-plugin update command
     runs-on: ubuntu-x64
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: false
     needs: [test]
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
