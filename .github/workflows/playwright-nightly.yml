@@ -102,26 +102,28 @@ jobs:
           test-outcome: ${{ steps.run-tests.outcome }}
           report-dir: packages/plugin-e2e/playwright-report
 
-  publish-report:
-    if: ${{ always() && !cancelled() }}
-    needs: [playwright-tests]
-    runs-on: ubuntu-x64
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@5da62466881cdba091672353cf3c72ca348d01b1 # deploy-report-pages/v1.1.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          retention-days: 7
+  # TEMP DISABLED 2026-06-18: deploy-report-pages pushes an unsigned commit to gh-pages,
+  # which will be rejected once unsigned commits are blocked. Re-enable once resolved.
+  # publish-report:
+  #   if: ${{ always() && !cancelled() }}
+  #   needs: [playwright-tests]
+  #   runs-on: ubuntu-x64
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+  #       with:
+  #         persist-credentials: false
+  #
+  #     - name: Publish report
+  #       uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@5da62466881cdba091672353cf3c72ca348d01b1 # deploy-report-pages/v1.1.0
+  #       with:
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         retention-days: 7
 
   notify:
     if: ${{ always() }}
-    needs: [playwright-tests, publish-report]
+    needs: [playwright-tests]
     runs-on: ubuntu-x64
     permissions:
       id-token: write
