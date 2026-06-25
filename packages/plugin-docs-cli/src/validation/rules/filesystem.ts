@@ -43,15 +43,18 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
 
   // max-nesting-depth: report .md pages nested deeper than MAX_NESTING_DEPTH from docsPath
   for (const file of mdFiles) {
-    const rel = relative(input.docsPath, join(file.parentPath, file.name));
-    const depth = rel.split(sep).length;
+    const relFile = relative(input.docsPath, join(file.parentPath, file.name));
+    // index.md represents its parent directory (the scanner promotes it), so its nav
+    // depth is the directory depth — don't count the "index.md" filename as a level.
+    const relPage = file.name === 'index.md' ? relative(input.docsPath, file.parentPath) : relFile;
+    const depth = relPage === '' ? 0 : relPage.split(sep).length;
     if (depth > MAX_NESTING_DEPTH) {
       diagnostics.push({
         rule: Rule.MaxNestingDepth,
         severity: input.strict ? 'error' : 'info',
-        file: rel,
+        file: relFile,
         title: `Doc page nested too deeply (${depth} levels, max ${MAX_NESTING_DEPTH})`,
-        detail: `"${rel}" is ${depth} levels from the docs root. Deeply nested pages are hard to discover in the sidebar nav. Flatten the structure so no page is more than ${MAX_NESTING_DEPTH} levels deep.`,
+        detail: `"${relFile}" is ${depth} levels from the docs root. Deeply nested pages are hard to discover in the sidebar nav. Flatten the structure so no page is more than ${MAX_NESTING_DEPTH} levels deep.`,
       });
     }
   }

@@ -306,4 +306,34 @@ describe('checkFilesystem', () => {
     const depthFindings = findings.filter((f) => f.rule === Rule.MaxNestingDepth);
     expect(depthFindings).toHaveLength(3);
   });
+
+  it('should not flag an index.md folder-index page that is equivalent depth to a sibling .md page', async () => {
+    // x/y/z.md and x/y/z/index.md both resolve to the nav page x/y/z (depth 3) — the
+    // scanner promotes index.md to represent its parent dir, so neither is too deep.
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'x', 'y'), { recursive: true });
+    await writeFile(join(tmp, 'x', 'y', 'z.md'), '---\ntitle: Z page\n---\n');
+    await mkdir(join(tmp, 'x', 'y', 'z'), { recursive: true });
+    await writeFile(join(tmp, 'x', 'y', 'z', 'index.md'), '---\ntitle: Z index\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === Rule.MaxNestingDepth)).toBeUndefined();
+  });
+
+  it('should flag a too-deep index.md using its folder depth', async () => {
+    // a/b/c/d/index.md represents the nav page a/b/c/d (depth 4) — still too deep.
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'a', 'b', 'c', 'd'), { recursive: true });
+    await writeFile(join(tmp, 'a', 'b', 'c', 'd', 'index.md'), '---\ntitle: Deep\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    const finding = findings.find((f) => f.rule === Rule.MaxNestingDepth);
+    expect(finding).toBeDefined();
+    expect(finding!.file).toContain(join('a', 'b', 'c', 'd', 'index.md'));
+    expect(finding!.title).toContain('4 levels');
+  });
 });
