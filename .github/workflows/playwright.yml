@@ -91,12 +91,14 @@ jobs:
         id: run-tests
         run: npm run playwright:test --w @grafana/plugin-e2e
 
-      - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
+      - name: Upload report artifacts
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/upload-report-artifacts@6dec0ef6a1e3f6eaf4411b2bcb6ed2793a11d883 # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
         if: ${{ always() && !cancelled() }}
         with:
           test-outcome: ${{ steps.run-tests.outcome }}
           report-dir: packages/plugin-e2e/playwright-report
+          grafana-image: ${{ matrix.GRAFANA_IMAGE.NAME }}
+          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
 
   publish-report:
     if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
@@ -105,9 +107,10 @@ jobs:
     permissions:
       id-token: write
       pull-requests: write
+      contents: read
     steps:
       - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@9a83ca76bfa15893ff19680a12929dd708dc9b4c # plugin-actions#253 (GCS reports) - TEMP, do not merge
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/publish-report@6dec0ef6a1e3f6eaf4411b2bcb6ed2793a11d883 # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          bucket: grafana-e2e-test-artifacts
+          bucket: dev-grafana-e2e-test-artifacts
+          service-account: github-e2e-test-artifacts@grafanalabs-workload-identity.iam.gserviceaccount.com
