@@ -169,14 +169,20 @@ describe('signManifest', () => {
 });
 
 describe('saveManifest', () => {
+  const tempDirs: string[] = [];
+
+  afterAll(() => {
+    tempDirs.forEach((dir) => rmSync(dir, { recursive: true, force: true }));
+  });
+
   it('should write the signed manifest to MANIFEST.txt', () => {
     const dir = createTempDir();
+    tempDirs.push(dir);
 
     const result = saveManifest(dir, 'SIGNED-MANIFEST');
 
     expect(result).toBe(true);
     expect(readFileSync(path.join(dir, 'MANIFEST.txt'), 'utf-8')).toBe('SIGNED-MANIFEST');
-    rmSync(dir, { recursive: true, force: true });
   });
 
   it('should throw when the directory is not writable', () => {

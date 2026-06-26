@@ -111,6 +111,6 @@ export function saveManifest(dir: string, signedManifest: string) {
     writeFileSync(path.join(dir, MANIFEST_FILE), signedManifest);
     return true;
   } catch (error) {
-    throw new Error(`Failed to write signed manifest to ${dir}.`);
+    throw new Error(`Failed to write signed manifest to ${dir}.`, { cause: error });
   }
 }
