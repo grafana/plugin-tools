@@ -62,13 +62,26 @@ describe('scanDocsFolder', () => {
     expect(pages[2].file).toBe('advanced.md');
   });
 
-  it('should not include headings in page objects', async () => {
+  it('should extract h2/h3 headings into page objects', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
-    const pages = result.manifest.pages;
-    for (const page of pages) {
-      expect(page).not.toHaveProperty('headings');
-    }
+    const configPage = result.manifest.pages.find((p: Page) => p.slug === 'config');
+    const settingsPage = configPage?.children?.find((p: Page) => p.slug === 'config/settings');
+
+    expect(settingsPage?.headings).toEqual([
+      { level: 2, text: 'General Settings', id: 'general-settings' },
+      { level: 3, text: 'Display Name', id: 'display-name' },
+      { level: 2, text: 'Advanced Settings', id: 'advanced-settings' },
+    ]);
+  });
+
+  it('should omit headings on pages without h2/h3 content', async () => {
+    const result = await scanDocsFolder(testDocsPath);
+
+    // home.md has only an h1, no h2/h3 — field should be omitted
+    const homePage = result.manifest.pages.find((p: Page) => p.slug === 'home');
+    expect(homePage).toBeDefined();
+    expect(homePage).not.toHaveProperty('headings');
   });
 
   it('should throw error when no valid markdown files found', async () => {

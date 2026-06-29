@@ -43,6 +43,7 @@
     },
     "packages/react-detect": { "package-name": "@grafana/react-detect", "component": "@grafana/react-detect" },
     "packages/sign-plugin": { "package-name": "@grafana/sign-plugin", "component": "@grafana/sign-plugin" },
-    "packages/tsconfig": { "package-name": "@grafana/tsconfig", "component": "@grafana/tsconfig" }
+    "packages/tsconfig": { "package-name": "@grafana/tsconfig", "component": "@grafana/tsconfig" },
+    "packages/eslint-config": { "package-name": "@grafana/eslint-config", "component": "@grafana/eslint-config" }
   }
 }
