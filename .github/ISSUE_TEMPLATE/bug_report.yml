@@ -15,10 +15,16 @@ body:
       description: You may select more than one.
       options:
         - label: 'Create Plugin'
-        - label: 'Sign Plugin'
+        - label: 'ESLint Config'
+        - label: 'Plugin Docs CLI'
+        - label: 'Plugin Docs Parser'
         - label: 'Plugin E2E'
-        - label: 'Plugin Meta Extractor'
         - label: 'Plugin ESLint Rules'
+        - label: 'Plugin Meta Extractor'
+        - label: 'Plugin Types Bundler'
+        - label: 'React detect'
+        - label: 'Sign Plugin'
+        - label: 'TS Config'
     validations:
       required: true
   - type: textarea
