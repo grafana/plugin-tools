@@ -36,6 +36,10 @@ jobs:
   playwright-tests:
     needs: resolve-versions
     timeout-minutes: 60
+    # trial: fetch e2e-selectors from the running Grafana at runtime instead of the bundled dep.
+    # grafana-dev serves the file (exercises the fetch); latest stable 404s (exercises the fallback)
+    env:
+      PLUGIN_E2E_RUNTIME_SELECTORS: 'true'
     strategy:
       fail-fast: false
       matrix:
