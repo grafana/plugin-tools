@@ -1,6 +1,6 @@
 # Changelog
 
-# v0.0.12 (Tue May 26 2026)
+## v0.0.12 (Tue May 26 2026)
 
 #### 🐛 Bug Fix
 
