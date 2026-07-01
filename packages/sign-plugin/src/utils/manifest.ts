@@ -54,7 +54,11 @@ async function* walk(dir: string, baseDir: string): RecursiveWalk {
 }
 
 export async function buildManifest(dir: string): Promise<ManifestInfo> {
-  const pluginJson = JSON.parse(readFileSync(path.join(dir, 'plugin.json'), { encoding: 'utf8' }));
+  // Canonicalize the base directory once so the symlink-escape check in `walk`
+  // compares like-for-like. Without this, a dist path containing symlinks (e.g.
+  // macOS `/var` -> `/private/var`) makes internal symlinks look "outside".
+  const baseDir = await fs.realpath(dir);
+  const pluginJson = JSON.parse(readFileSync(path.join(baseDir, 'plugin.json'), { encoding: 'utf8' }));
 
   const manifest = {
     plugin: pluginJson.id,
@@ -62,7 +66,7 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
     files: {},
   } as ManifestInfo;
 
-  for await (const filePath of await walk(dir, dir)) {
+  for await (const filePath of await walk(baseDir, baseDir)) {
     if (filePath === MANIFEST_FILE) {
       continue;
     }
@@ -74,7 +78,7 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
 
     manifest.files[sanitisedFilePath] = crypto
       .createHash('sha256')
-      .update(readFileSync(path.join(dir, filePath)))
+      .update(readFileSync(path.join(baseDir, filePath)))
       .digest('hex');
   }
 
@@ -98,8 +102,13 @@ export async function signManifest(manifest: ManifestInfo, token: string): Promi
 
 function formatServerError(data: string): string {
   try {
-    return Object.entries(JSON.parse(data))
-      .map(([key, value]) => `${key}: ${value}`)
+    const parsed = JSON.parse(data);
+    // A JSON primitive (string/number/boolean/null) has no entries to map over.
+    if (parsed === null || typeof parsed !== 'object') {
+      return String(parsed);
+    }
+    return Object.entries(parsed)
+      .map(([key, value]) => `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`)
       .join(', ');
   } catch (err) {
     return data;

@@ -161,6 +161,22 @@ describe('signManifest', () => {
     );
   });
 
+  it('should stringify nested JSON values instead of rendering [object Object]', async () => {
+    mocks.postData.mockResolvedValue({ status: 422, data: JSON.stringify({ errors: { rootUrls: 'invalid' } }) });
+
+    await expect(signManifest(manifest, 'test-token')).rejects.toThrow(
+      'Server responded with status code 422 along with: errors: {"rootUrls":"invalid"}'
+    );
+  });
+
+  it('should handle a JSON primitive error body without a dangling message', async () => {
+    mocks.postData.mockResolvedValue({ status: 400, data: JSON.stringify('invalid plugin') });
+
+    await expect(signManifest(manifest, 'test-token')).rejects.toThrow(
+      'Server responded with status code 400 along with: invalid plugin'
+    );
+  });
+
   it('should propagate network errors', async () => {
     mocks.postData.mockRejectedValue(new Error('socket hang up'));
 
