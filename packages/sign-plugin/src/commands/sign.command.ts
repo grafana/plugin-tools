@@ -51,7 +51,7 @@ export const sign = async (argv: minimist.ParsedArgs) => {
 
     saveManifest(pluginDistDir, signedManifest);
     output.success({
-      title: `Plugin signed successsfully.`,
+      title: `Plugin signed successfully.`,
       body: [`Signed manifest saved to ${pluginDistDir}.`],
     });
   } catch (err) {
