@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.2](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.1...@grafana/sign-plugin@3.3.2) (2026-07-01)
+
+
+### Bug Fixes
+
+* replace find-up dependency with native @libs/find-up helper ([#2722](https://github.com/grafana/plugin-tools/issues/2722)) ([d20ff77](https://github.com/grafana/plugin-tools/commit/d20ff7714de762a2d7ce96cf33a37d615e78e77c))
+
 ## [3.3.1](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.0...@grafana/sign-plugin@3.3.1) (2026-06-11)
 
 

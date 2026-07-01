@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.8.0...@grafana/create-plugin@7.8.1) (2026-07-01)
+
+
+### Bug Fixes
+
+* replace find-up dependency with native @libs/find-up helper ([#2722](https://github.com/grafana/plugin-tools/issues/2722)) ([d20ff77](https://github.com/grafana/plugin-tools/commit/d20ff7714de762a2d7ce96cf33a37d615e78e77c))
+
 ## [7.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.7.1...@grafana/create-plugin@7.8.0) (2026-06-11)
 
 
