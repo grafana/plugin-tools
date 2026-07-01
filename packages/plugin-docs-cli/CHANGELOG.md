@@ -1,4 +1,6 @@
-# v0.0.12 (Tue May 26 2026)
+# Changelog
+
+## v0.0.12 (Tue May 26 2026)
 
 #### 🐛 Bug Fix
 
@@ -10,7 +12,7 @@
 
 ---
 
-# v0.0.11 (Tue May 26 2026)
+## v0.0.11 (Tue May 26 2026)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +24,7 @@
 
 ---
 
-# v0.0.10 (Thu Mar 19 2026)
+## v0.0.10 (Thu Mar 19 2026)
 
 #### 🐛 Bug Fix
 
@@ -33,8 +35,6 @@
 - Erik Sundell ([@sunker](https://github.com/sunker))
 
 ---
-
-# @grafana/plugin-docs-cli
 
 ## 0.0.1 (Unreleased)
 
