@@ -1,4 +1,6 @@
-# v2.1.0 (Thu Apr 30 2026)
+# Changelog
+
+## v2.1.0 (Thu Apr 30 2026)
 
 #### 🚀 Enhancement
 

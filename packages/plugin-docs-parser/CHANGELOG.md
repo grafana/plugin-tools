@@ -1,4 +1,6 @@
-# v0.1.0 (Fri May 29 2026)
+# Changelog
+
+## v0.1.0 (Fri May 29 2026)
 
 #### 🐛 Bug Fix
 
@@ -10,7 +12,7 @@
 
 ---
 
-# v0.0.5 (Tue May 26 2026)
+## v0.0.5 (Tue May 26 2026)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +24,7 @@
 
 ---
 
-# v0.0.4 (Thu Mar 19 2026)
+## v0.0.4 (Thu Mar 19 2026)
 
 #### 🐛 Bug Fix
 
@@ -31,12 +33,3 @@
 #### Authors: 1
 
 - Erik Sundell ([@sunker](https://github.com/sunker))
-
----
-
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
