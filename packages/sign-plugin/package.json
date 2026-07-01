@@ -33,7 +33,9 @@
     "@libs/find-up": "^1.0.0",
     "@libs/output": "^1.0.3",
     "@libs/version": "^1.0.2",
-    "@types/minimist": "^1.2.5"
+    "@types/minimist": "^1.2.5",
+    "@types/tmp": "0.2.6",
+    "tmp": "0.2.7"
   },
   "engines": {
     "node": ">=20"
