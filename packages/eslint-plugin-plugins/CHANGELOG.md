@@ -1,4 +1,6 @@
-# v0.6.4 (Wed Mar 11 2026)
+# Changelog
+
+## v0.6.4 (Wed Mar 11 2026)
 
 #### 🐛 Bug Fix
 
@@ -10,7 +12,7 @@
 
 ---
 
-# v0.5.2 (Thu Oct 23 2025)
+## v0.5.2 (Thu Oct 23 2025)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +24,7 @@
 
 ---
 
-# v0.5.1 (Wed Oct 22 2025)
+## v0.5.1 (Wed Oct 22 2025)
 
 #### 🐛 Bug Fix
 
@@ -34,7 +36,7 @@
 
 ---
 
-# v0.5.0 (Tue Oct 07 2025)
+## v0.5.0 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -46,7 +48,7 @@
 
 ---
 
-# v0.4.3 (Fri Jul 25 2025)
+## v0.4.3 (Fri Jul 25 2025)
 
 #### 🐛 Bug Fix
 
@@ -59,7 +61,7 @@
 
 ---
 
-# v0.3.3 (Thu Apr 10 2025)
+## v0.3.3 (Thu Apr 10 2025)
 
 #### 🐛 Bug Fix
 
@@ -71,7 +73,7 @@
 
 ---
 
-# v0.2.1 (Thu Feb 20 2025)
+## v0.2.1 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
 
@@ -83,7 +85,7 @@
 
 ---
 
-# v0.1.0 (Mon Feb 10 2025)
+## v0.1.0 (Mon Feb 10 2025)
 
 :tada: This release contains work from a new contributor! :tada:
 
