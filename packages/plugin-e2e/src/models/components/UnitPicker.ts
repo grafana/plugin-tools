@@ -1,11 +1,25 @@
 import { Locator } from '@playwright/test';
+import { gte } from '../../utils/version';
 import { PluginTestCtx } from '../../types';
 import { SelectOptionsType } from './types';
 import { ComponentBase } from './ComponentBase';
+import { resolveGrafanaSelector } from '../utils';
 
 export class UnitPicker extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
     super(ctx, element);
+  }
+
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.UnitPicker.container)).first();
+    }
+    return base.locator('div:has(> div > [data-testid="input-wrapper"] input[placeholder="Choose"])').first();
+  }
+
+  within(root: Locator): UnitPicker {
+    return new UnitPicker(this.ctx, UnitPicker.getContainer(this.ctx, root));
   }
 
   async selectOption(value: string, options?: SelectOptionsType): Promise<void> {
