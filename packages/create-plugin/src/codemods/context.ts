@@ -33,7 +33,7 @@ export class Context {
     const path = this.normalisePath(filePath);
 
     // Delete a file that was added to the current context
-    if (this.files[path] && this.files[path].changeType === 'add') {
+    if (this.files[path]?.changeType === 'add') {
       delete this.files[path];
       return;
     }
@@ -42,7 +42,7 @@ export class Context {
       this.files[path] = { ...this.files[path], changeType: 'delete' };
     }
     // Delete a file that was updated in the current context
-    else if (this.files[path] && this.files[path].changeType === 'update') {
+    else if (this.files[path]?.changeType === 'update') {
       throw new Error(`File ${path} was marked as updated already`);
     } else {
       throw new Error(`File ${path} does not exist`);
@@ -58,7 +58,9 @@ export class Context {
     }
 
     if (originalContent !== content) {
-      this.files[path] = { content, changeType: 'update' };
+      // new files should be written as 'add' to ensure their directories are created.
+      const isNewFile = this.files[path]?.changeType === 'add';
+      this.files[path] = { content, changeType: isNewFile ? 'add' : 'update' };
     } else {
       codemodsDebug(`Context.updateFile() - no updates for ${filePath}`);
     }
@@ -90,7 +92,7 @@ export class Context {
     const path = this.normalisePath(filePath);
 
     // Deleted in this context
-    if (this.files[path] && this.files[path].changeType === 'delete') {
+    if (this.files[path]?.changeType === 'delete') {
       return undefined;
     }
 
