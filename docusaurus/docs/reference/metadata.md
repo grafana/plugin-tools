@@ -22,7 +22,7 @@ The `plugin.json` file is required for all plugins. When Grafana starts, it scan
 | --------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------: |
 | **id**                                        | `string`   | Unique name of the plugin. If the plugin is published on grafana.com, then the plugin `id` has to follow the naming conventions.<br/>Pattern: `^[0-9a-z]+\-([0-9a-z]+\-)?(app\|panel\|datasource)$`<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |    ✅    |
 | **type**                                      | `string`   | Plugin type.<br/>Possible values are: `"app"`, `"datasource"`, `"panel"`, `"renderer"`<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |    ✅    |
-| [**info**](#info)                             | `object`   | Metadata for the plugin. Some fields are used on the plugins page in Grafana and others on grafana.com if the plugin is published.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |    ✅    |
+| [**info**](#info)                             | `object`   | Metadata for the plugin. **Some fields are mandatory**, since they're used on the plugins page in Grafana and/or on grafana.com if the plugin is published. Read the [info section](#info) in detail.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |    ✅    |
 | **name**                                      | `string`   | Human-readable name of the plugin that is shown to the user in the UI.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |    ✅    |
 | [**dependencies**](#dependencies)             | `object`   | Dependency information related to Grafana and other plugins.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |    ✅    |
 | **$schema**                                   | `string`   | Schema definition for the plugin.json file. Used primarily for schema validation.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |          |
@@ -94,7 +94,7 @@ Information about the plugin author.
 
 ### info\.build
 
-Build information
+Build information.
 
 **Properties**
 
@@ -122,7 +122,9 @@ Array of plugin keywords. Used for search on grafana.com.
 
 ### info\.links\[\]
 
-An array of link objects to be displayed on this plugin's project page in the form `{name: 'foo', url: 'http://example.com'}`
+An array of link objects to be displayed on this plugin's project page in the form `{name: 'foo', url: 'http://example.com'}`. 
+
+**This field is mandatory**. If you leave this field blank, you'll be asked to submit your plugin again.
 
 **Items**
 
@@ -151,7 +153,7 @@ SVG images that are used as plugin icons.
 
 ### info\.screenshots\[\]
 
-An array of screenshot objects in the form `{name: 'bar', path: 'img/screenshot.png'}`
+An array of screenshot objects in the form `{name: 'bar', path: 'img/screenshot.png'}`.
 
 **Items**
 
@@ -220,7 +222,7 @@ An array of exposed component ids that this plugin depends on.
 
 ## enterpriseFeatures
 
-Grafana Enterprise specific features
+Features specific to Grafana Enterprise.
 
 **Properties**
 
@@ -600,7 +602,7 @@ This list must contain all extension points that your plugin defines using [`use
 
 ## languages\[\]
 
-The list of languages supported by the plugin. Each entry should be a locale identifier in the format `language-COUNTRY` (for example `en-US`, `es-ES`, `de-DE`).
+The list of languages supported by the plugin. Each entry should be a locale identifier in the format `language-COUNTRY`, for example `en-US`, `es-ES`, or `de-DE`.
 
 **Items**
 
