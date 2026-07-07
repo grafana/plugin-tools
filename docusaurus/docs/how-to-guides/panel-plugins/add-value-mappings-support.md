@@ -33,7 +33,7 @@ export const plugin = new PanelPlugin<Options>(MyPanel).useFieldConfig();
 
 Calling `useFieldConfig()` without arguments enables all standard field configuration options, including value mappings, thresholds, units, min/max, and color.
 
-:::note
+### Enable a specific standard option
 
 If your panel only needs specific standard options, you can selectively enable or disable them using the `standardOptions` or `disableStandardOptions` parameters:
 
@@ -50,8 +50,6 @@ export const plugin = new PanelPlugin<Options>(MyPanel).useFieldConfig({
   },
 });
 ```
-
-:::
 
 ## Use mapped values in your panel
 
@@ -90,7 +88,7 @@ export function MyPanel({ data, width, height }: Props) {
 }
 ```
 
-When a user configures a value mapping (for example, mapping `0` to "Offline"), the `display` function returns the mapped text instead of the raw number. If no mapping matches, the raw value is formatted using the field's unit and decimal settings as usual.
+When you configure a value mapping (for example, mapping `0` to "Offline"), the `display` function returns the mapped text instead of the raw number. If no mapping matches, the raw value is formatted using the field's unit and decimal settings as usual.
 
 ### Use `getFieldDisplayValues` for reduced values
 
@@ -115,7 +113,7 @@ fieldDisplayValues.map((fieldDisplay) => {
 
 ## Behind the scenes
 
-1. **Configuration**: The user adds value mappings in the panel editor under the "Value mappings" section.
+1. **Configuration**: You're adding value mappings in the panel editor under the "Value mappings" section.
 2. **Processing**: When data arrives, Grafana applies the mappings and sets up a `display` function on each field.
 3. **Evaluation**: When your panel calls `field.display(value)`, Grafana evaluates the value against each mapping in order and returns the first match.
 4. **Rendering**: Your panel uses the returned `DisplayValue` to render the mapped text, color, and icon.
