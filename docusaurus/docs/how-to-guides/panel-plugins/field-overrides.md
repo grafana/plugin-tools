@@ -15,7 +15,7 @@ keywords:
 
 # Add field override support to panel plugins
 
-Field overrides let dashboard users customize how individual fields are displayed in a panel. For example, a user might change the unit of a single series, apply a different color to one field, or set custom thresholds for a specific column in a table.
+Field overrides allow your users to customize how individual fields are displayed in a dashboard panel. For example, you can change the unit of a single series, apply a different color to one field, or set custom thresholds for a specific column in a table.
 
 This guide shows you how to enable field overrides in your panel plugin, customize which standard options are available, and define your own custom field configuration properties.
 
@@ -26,7 +26,7 @@ This guide shows you how to enable field overrides in your panel plugin, customi
 
 :::tip
 
-For a step-by-step guide to building a panel plugin from scratch, refer to the [panel plugin tutorial](../../tutorials/build-a-panel-plugin.md).
+For a step-by-step guide to building a panel plugin from scratch, refer to the [Build a panel plugin tutorial](../../tutorials/build-a-panel-plugin.md).
 
 :::
 
@@ -202,7 +202,7 @@ The builder provides the following methods. All return the builder instance, so 
 | `addFieldNamePicker` | `string`   | Field name picker                   |
 | `addCustomEditor`    | `T`        | Fully custom React editor component |
 
-:::note
+### Add a custom editor
 
 If none of the built-in editors fit your needs, you can build a fully custom editor component using `addCustomEditor`. For more information on building custom editors, refer to [Build a custom panel option editor](./custom-panel-option-editors.md).
 
@@ -223,8 +223,6 @@ builder.addCustomEditor({
   shouldApply: () => true,
 });
 ```
-
-:::
 
 ### Control property visibility
 
