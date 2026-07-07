@@ -45,10 +45,11 @@ export class AlertRuleEditPage extends GrafanaPage {
   }
 
   async isAdvancedModeSupported() {
-    const alertingQueryAndExpressionsStepMode = await isLegacyFeatureEnabled(
-      this.ctx.page,
-      'alertingQueryAndExpressionsStepMode'
-    );
+    // The alertingQueryAndExpressionsStepMode feature toggle was removed in Grafana 13.2.0, where the
+    // advanced query and expression mode switch became always available.
+    const alertingQueryAndExpressionsStepMode =
+      gte(this.ctx.grafanaVersion, '13.2.0') ||
+      (await isLegacyFeatureEnabled(this.ctx.page, 'alertingQueryAndExpressionsStepMode'));
 
     if (alertingQueryAndExpressionsStepMode) {
       await expect(this.advancedModeSwitch).toBeVisible({ timeout: ALERT_PAGE_READY_TIMEOUT });
