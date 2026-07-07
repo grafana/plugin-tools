@@ -64,7 +64,7 @@ export function MyPanel({ data }: Props) {
 
   if (!timeField || !valueField) {
     throw new Error(
-      'This panel requires at least one time field and one number field. ' + 'Check your query or transformations.'
+      'This panel requires at least one time field and one number field. Check your query or transformations.'
     );
   }
 
@@ -82,19 +82,7 @@ If a transformation itself fails — for example, a calculation referencing a fi
 
 ## Let users choose which fields to use
 
-When your visualization needs specific fields (for example, X-axis and Y-axis), let users select them from the available fields rather than assuming field names. If the user hasn't selected a field, fall back to the first field of a matching type:
-
-```ts title="src/components/MyPanel.tsx"
-export function MyPanel({ data, options }: Props) {
-  const frame = data.series[0];
-
-  const valueField = frame.fields.find((field) =>
-    options.valueFieldName ? field.name === options.valueFieldName : field.type === FieldType.number
-  );
-}
-```
-
-This approach works well with transformations because users can reshape the data first, then select the appropriate fields in your panel options.
+When your visualization needs specific fields (for example, X-axis and Y-axis), let users select them from the available fields rather than assuming field names, and fall back to the first field of a matching type when nothing is selected. This pattern is described in [Provide usable defaults](./error-handling-for-panel-plugins#provide-usable-defaults). It works especially well with transformations: users can reshape the data first, then select the appropriate fields in your panel options.
 
 ## Handle multiple data frames
 
@@ -124,9 +112,13 @@ export function MyPanel({ data, options }: Props) {
 If your panel performs expensive processing when the data shape changes — for example, rebuilding a chart configuration — use `data.structureRev` to tell structural changes apart from value-only updates. Grafana increments this revision counter whenever the structure of the data frames changes: fields added, removed, renamed, or retyped. Editing transformations typically changes the structure, so it also bumps the revision.
 
 ```tsx title="src/components/MyPanel.tsx"
+import { useMemo } from 'react';
+
 export function MyPanel({ data }: Props) {
-  // Rebuild the chart configuration only when the frame structure changes,
-  // not on every data refresh.
+  // Intentionally depend on structureRev instead of data.series: the series
+  // array is a new reference on every refresh, but the chart configuration
+  // only needs rebuilding when the structure changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const chartConfig = useMemo(() => buildChartConfig(data.series), [data.structureRev]);
 }
 ```
