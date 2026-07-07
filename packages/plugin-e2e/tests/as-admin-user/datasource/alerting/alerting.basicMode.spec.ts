@@ -6,7 +6,22 @@ test.use({ featureToggles: { alertingQueryAndExpressionsStepMode: false, alertin
 test.describe('Test alert rule APIs', () => {
   test('advanced mode should be disabled', async ({ grafanaVersion, alertRuleEditPage }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);
+    test.skip(
+      semver.gte(grafanaVersion, '13.2.0'),
+      'The alertingQueryAndExpressionsStepMode toggle was removed in Grafana 13.2.0; advanced mode is always available'
+    );
     await expect(alertRuleEditPage.advancedModeSwitch).toHaveCount(0);
+  });
+
+  test('advanced mode is always available from Grafana 13.2.0 even with the removed toggle disabled', async ({
+    grafanaVersion,
+    alertRuleEditPage,
+  }) => {
+    test.skip(
+      semver.lt(grafanaVersion, '13.2.0'),
+      'Before Grafana 13.2.0 the alertingQueryAndExpressionsStepMode toggle still controls advanced mode'
+    );
+    await expect(alertRuleEditPage.advancedModeSwitch).toHaveCount(1);
   });
 });
 
