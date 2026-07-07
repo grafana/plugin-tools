@@ -102,7 +102,7 @@ export function MyPanel({ data, options }: Props) {
   }
 
   // Option B: Let the user select which frame to display
-  const frameIndex = Math.min(options.frameIndex ?? 0, frames.length - 1);
+  const frameIndex = Math.max(0, Math.min(options.frameIndex ?? 0, frames.length - 1));
   const frame = frames[frameIndex];
 }
 ```
