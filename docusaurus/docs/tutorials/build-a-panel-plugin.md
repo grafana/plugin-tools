@@ -244,7 +244,7 @@ Let's see how you can retrieve data from a data frame and use it in your visuali
    ```ts title="src/components/SimplePanel.tsx"
    const radii = data.series
      .map((series) => series.fields.find((field) => field.type === 'number'))
-     .map((field) => field?.values.get(field.values.length - 1));
+     .map((field) => field?.values[field.values.length - 1]);
    ```
 
    `radii` will contain the last values in each of the series that are returned from a data source query. You'll use these to set the radius for each circle.
