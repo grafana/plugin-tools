@@ -105,6 +105,16 @@ Grafana queries your data source whenever you update a variable. Excessive updat
 
 A [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) is a type of variable that allows you to query a data source for the values. By adding support for query variables to your data source plugin, users can create dynamic dashboards based on data from your data source.
 
+There are two ways to do this:
+
+- Implement the `metricFindQuery` method on your `DataSourceApi` class. This is the simplest option, but it's limited:
+  - It only works with Grafana's built-in string query input, so you can't render a custom variable query editor with it alone.
+  - The query is passed as a plain `string`, so you don't get the type safety or editor reuse of a typed query model.
+  - It returns a `Promise`, so it can't stream results the way an `Observable`-based query can.
+- Assign a variable support class to the `variables` property of your data source. Extend one of the classes exported from `@grafana/data` when you want a custom or reusable query editor, typed query models, or streaming responses. Refer to [Choose a variable support class](#choose-a-variable-support-class).
+
+This guide uses both: it implements `metricFindQuery` for the lookup and wraps it in a `CustomVariableSupport` class to provide a custom editor.
+
 To add support for query variables, you need to:
 
 1. Define a variable query model
