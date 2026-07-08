@@ -109,7 +109,7 @@ export function MyPanel({ data, options }: Props) {
 
 ## Detect structure changes with `structureRev`
 
-If your panel performs expensive processing when the data shape changes — for example, rebuilding a chart configuration — use `data.structureRev` to tell structural changes apart from value-only updates. Grafana increments this revision counter whenever the structure of the data frames changes: fields added, removed, renamed, or retyped. Editing transformations typically changes the structure, so it also bumps the revision.
+If your panel performs expensive processing when the data shape changes such as rebuilding a chart configuration, use `data.structureRev` to tell structural changes apart from value-only updates. Grafana increments this revision counter whenever the structure of the data frames changes: fields added, removed, renamed, or retyped. Editing transformations typically changes the structure, so it also bumps the revision.
 
 ```tsx title="src/components/MyPanel.tsx"
 import { useMemo } from 'react';
