@@ -19,7 +19,7 @@ export const toDisplayPreviews = async (
   const previewTable = variableEditPage.getByGrafanaSelector(Edit.CustomVariable.previewTable);
 
   try {
-    await expect(previewLabels.first().or(previewTable).first()).toBeVisible({ timeout: options?.timeout });
+    await expect(previewLabels.or(previewTable).first()).toBeVisible({ timeout: options?.timeout });
 
     if (await previewTable.isVisible()) {
       const headerTexts = await previewTable.locator('thead th').allInnerTexts();
