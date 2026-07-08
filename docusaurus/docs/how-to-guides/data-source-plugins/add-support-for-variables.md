@@ -117,11 +117,11 @@ This guide uses both: it implements `metricFindQuery` for the lookup and wraps i
 
 To add support for query variables, you need to:
 
-1. Define a variable query model
-2. Implement `metricFindQuery` in your data source
-3. Create a `VariableQueryEditor` component
-4. Create a `VariableSupport` class
-5. Assign the `VariableSupport` to your data source
+1. Define a variable query model.
+2. Implement `metricFindQuery` in your data source.
+3. Create a `VariableQueryEditor` component.
+4. Create a variable support class. This guide extends `CustomVariableSupport`, but you can extend `DataSourceVariableSupport` or `StandardVariableSupport` instead. Refer to [Choose a variable support class](#choose-a-variable-support-class).
+5. Assign the variable support class to your data source.
 
 Let's start by defining a query model for the variable query:
 
