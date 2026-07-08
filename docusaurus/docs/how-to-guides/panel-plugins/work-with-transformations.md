@@ -35,7 +35,7 @@ Data source query → Transformations → Field overrides → Panel plugin
 3. **Field overrides**: Grafana applies field configuration (units, thresholds, colors, display names) to the transformed data.
 4. **Panel plugin**: Your plugin receives the final `PanelData` object via `props.data`.
 
-Your plugin always receives already-transformed data. You never need to apply transformations yourself, and there is no way for a panel to opt out of them or access the untransformed data.
+Your plugin always receives already-transformed data. **You never need to apply transformations yourself, and there is no way for a panel to opt out of them or access the untransformed data**.
 
 :::note
 
