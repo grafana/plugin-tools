@@ -26,11 +26,10 @@ test('create new variable and preview values that carry additional properties', 
   selectors,
   page,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
-  await variableEditPage.datasource.set(ds.name);
-  await page.getByRole('textbox', { name: 'Query Text' }).fill('humidityQuery');
   // a data frame field not named "value" or "text" becomes an option property.
-  // since Grafana 13.1.0, options with properties are previewed in a table instead of labels
+  // since Grafana 13.1.0, options with properties are previewed in a table instead of labels.
+  // the route is registered before the query editor is touched because versions before
+  // scenes run the variable query eagerly on datasource selection and query changes
   await page.route(selectors.apis.DataSource.queryPattern, async (route) => {
     const refId = route.request().postDataJSON()?.queries?.[0]?.refId ?? 'A';
     await route.fulfill({
@@ -53,7 +52,10 @@ test('create new variable and preview values that carry additional properties', 
       status: 200,
     });
   });
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
+  await variableEditPage.datasource.set(ds.name);
   const queryDataRequest = variableEditPage.waitForQueryDataRequest();
+  await page.getByRole('textbox', { name: 'Query Text' }).fill('humidityQuery');
   await variableEditPage.runQuery();
   await queryDataRequest;
   await expect(variableEditPage).toDisplayPreviews(['25.3', '22.1', '19.5']);
