@@ -130,6 +130,9 @@ const config = async (env: Env): Promise<Configuration> => {
       minimize: Boolean(env.production),
       minimizer: [
         new TerserPlugin({
+          extractComments: {
+            filename: 'LICENSE.txt',
+          },
           terserOptions: {
             format: {
               comments: (_, { type, value }) => type === 'comment2' && value.trim().startsWith('[create-plugin]'),
