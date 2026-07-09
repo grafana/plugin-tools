@@ -14,18 +14,14 @@ export const overrideGrafanaBootData = ({ featureToggles, userPreferences }) => 
     if (Object.keys(featureToggles).length > 0) {
       console.log('@grafana/plugin-e2e: setting the following feature toggles', featureToggles);
 
-      // override feature toggles with the ones provided by the test
-      window.grafanaBootData.settings.featureToggles = {
-        ...window.grafanaBootData.settings.featureToggles,
-        ...featureToggles,
-      };
+      // override feature toggles with the ones provided by the test. Mutate the existing object
+      // instead of replacing it: the runtime config keeps a reference to it, so a replacement
+      // would not be picked up when this callback runs after the config has been constructed
+      Object.assign(window.grafanaBootData.settings.featureToggles, featureToggles);
     }
     if (Object.keys(userPreferences).length > 0) {
       console.log('@grafana/plugin-e2e: setting the following user preferences', userPreferences);
-      window.grafanaBootData.user = {
-        ...window.grafanaBootData.user,
-        ...userPreferences,
-      };
+      Object.assign(window.grafanaBootData.user, userPreferences);
     }
   });
 };
