@@ -80,7 +80,7 @@ export default [
   },
   {
     name: '012-terser-license-file',
-    version: '7.8.1',
+    version: '7.8.2',
     description: 'Emit a single LICENSE.txt file for all licenses in bundled code.',
     scriptPath: import.meta.resolve('./scripts/012-terser-license-file.js'),
   },
