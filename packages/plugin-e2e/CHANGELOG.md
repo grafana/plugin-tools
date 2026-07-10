@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.9.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.9.1...@grafana/plugin-e2e@3.9.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** adapt alert rule advanced mode detection to Grafana 13.2 ([#2762](https://github.com/grafana/plugin-tools/issues/2762)) ([8c7df9a](https://github.com/grafana/plugin-tools/commit/8c7df9af17ac3e9dfba8404226879b59259928c1))
+* **plugin-e2e:** disable dashboardSettingsRedesign OpenFeature flag by default ([#2761](https://github.com/grafana/plugin-tools/issues/2761)) ([d4173f8](https://github.com/grafana/plugin-tools/commit/d4173f84e545cd6a378bfed7144135e97fed67f6))
+* **plugin-e2e:** handle table-based preview of values in toDisplayPreviews ([#2760](https://github.com/grafana/plugin-tools/issues/2760)) ([47a8c34](https://github.com/grafana/plugin-tools/commit/47a8c34d00a0407132b7f750ab3015118d45db34))
+
 ## [3.9.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.9.0...@grafana/plugin-e2e@3.9.1) (2026-06-11)
 
 
