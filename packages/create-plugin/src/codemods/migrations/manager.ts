@@ -1,4 +1,4 @@
-import defaultMigrations, { Migration } from './migrations.js';
+import defaultMigrations, { isScriptMigration, Migration } from './migrations.js';
 import { runCodemod } from '../runner.js';
 import { gte, satisfies } from 'semver';
 import { CURRENT_APP_VERSION } from '../../utils/utils.version.js';
@@ -34,6 +34,10 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
 
   // run migrations sequentially in version order where lowest version runs first
   for (const migration of migrations) {
+    if (!isScriptMigration(migration)) {
+      // prompt-only migrations require an AI agent to apply them (agentic runtime wiring lands separately)
+      continue;
+    }
     const context = await runCodemod(migration, options.codemodOptions);
     const shouldCommit = options.commitEachMigration && context.hasChanges();
 
