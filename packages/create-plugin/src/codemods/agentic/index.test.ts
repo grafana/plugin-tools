@@ -189,7 +189,7 @@ describe('createAgenticRuntime', () => {
   });
 
   describe('hybrid steps', () => {
-    let hybridMigration: ScriptMigration;
+    let hybridMigration: ScriptMigration & { prompt: string };
     let context: Context;
 
     beforeEach(() => {
