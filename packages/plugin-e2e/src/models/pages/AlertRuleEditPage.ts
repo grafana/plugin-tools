@@ -3,7 +3,6 @@ import { AlertRuleArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '.
 import { GrafanaPage } from './GrafanaPage';
 import { AlertRuleQuery } from '../components/AlertRuleQuery';
 import { expect, Locator } from '@playwright/test';
-import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 const QUERY_AND_EXPRESSION_STEP_ID = '2';
 // Alert pages render slowly on busy CI runners; give the rendering 15s headroom
 // before falling back to default 5s expect timeouts for downstream interactions.
@@ -45,20 +44,20 @@ export class AlertRuleEditPage extends GrafanaPage {
   }
 
   async isAdvancedModeSupported() {
-    const alertingQueryAndExpressionsStepMode = await isLegacyFeatureEnabled(
-      this.ctx.page,
-      'alertingQueryAndExpressionsStepMode'
-    );
-
-    if (alertingQueryAndExpressionsStepMode) {
-      await expect(this.advancedModeSwitch).toBeVisible({ timeout: ALERT_PAGE_READY_TIMEOUT });
-      await expect(this.advancedModeSwitch).toHaveCount(1, { timeout: ALERT_PAGE_READY_TIMEOUT });
-      return true;
+    // the advanced mode switch and the step container selector used below were introduced in Grafana 11.5.0
+    if (lt(this.ctx.grafanaVersion, '11.5.0')) {
+      return false;
     }
 
-    await expect(this.advancedModeSwitch).not.toBeVisible({ timeout: ALERT_PAGE_READY_TIMEOUT });
-    await expect(this.advancedModeSwitch).toHaveCount(0, { timeout: ALERT_PAGE_READY_TIMEOUT });
-    return false;
+    // Detect the mode from the DOM instead of reading the alertingQueryAndExpressionsStepMode feature
+    // toggle: since Grafana 13.2.0 the frontend no longer honors that toggle (grafana/grafana#125086),
+    // so the switch is rendered regardless of the toggle value. Wait for the query step to be mounted
+    // first, otherwise a page that is still rendering would be mistaken for a page without the switch.
+    await this.getByGrafanaSelector(
+      this.ctx.selectors.components.AlertRules.step(QUERY_AND_EXPRESSION_STEP_ID)
+    ).waitFor({ state: 'visible', timeout: ALERT_PAGE_READY_TIMEOUT });
+
+    return (await this.advancedModeSwitch.count()) > 0;
   }
 
   /*
