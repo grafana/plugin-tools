@@ -117,9 +117,10 @@ describe('buildHybridUserPrompt', () => {
     handoffPath: systemPromptOptions.handoffPath,
   };
 
-  it('should point at git when the codemod changes are committed', () => {
-    const userPrompt = buildHybridUserPrompt({ ...baseOptions, codemodChanges: { kind: 'git-commit' } });
-    expect(userPrompt).toContain('git show HEAD');
+  it('should point at the working tree diff when per-migration commits isolate it', () => {
+    const userPrompt = buildHybridUserPrompt({ ...baseOptions, codemodChanges: { kind: 'git-diff' } });
+    expect(userPrompt).toContain('git status');
+    expect(userPrompt).toContain('git diff');
     expect(userPrompt).not.toContain('<files_changed>');
   });
 
@@ -155,7 +156,7 @@ describe('buildHybridUserPrompt', () => {
   });
 
   it('should state that the instructions take precedence', () => {
-    const userPrompt = buildHybridUserPrompt({ ...baseOptions, codemodChanges: { kind: 'git-commit' } });
+    const userPrompt = buildHybridUserPrompt({ ...baseOptions, codemodChanges: { kind: 'git-diff' } });
     expect(userPrompt).toContain('<precedence>');
   });
 });
