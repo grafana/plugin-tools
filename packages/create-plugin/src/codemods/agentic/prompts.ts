@@ -23,7 +23,7 @@ export interface ChangedFile {
   changeType: 'add' | 'delete' | 'update';
 }
 
-export type CodemodChanges = { kind: 'git-commit' } | { kind: 'file-list'; files: ChangedFile[] };
+export type CodemodChanges = { kind: 'git-diff' } | { kind: 'file-list'; files: ChangedFile[] };
 
 export interface UserPromptOptions {
   migration: MigrationMeta;
@@ -141,8 +141,10 @@ ${escapeXmlBody(options.instructions)}
 }
 
 function buildCodemodChangesBody(codemodChanges: CodemodChanges): string {
-  if (codemodChanges.kind === 'git-commit') {
-    return 'The automated portion of this migration has already run and is committed as the current HEAD commit. Inspect it with `git show HEAD`.';
+  if (codemodChanges.kind === 'git-diff') {
+    // per-migration commits mean everything before this step is already committed,
+    // so the working tree diff is exactly this migration's automated changes
+    return 'The automated portion of this migration has already run; its changes are uncommitted in the working tree and everything from earlier steps is already committed. Inspect them with `git status` and `git diff`.';
   }
 
   const visibleFiles = codemodChanges.files.slice(0, MAX_EMBEDDED_FILES);
