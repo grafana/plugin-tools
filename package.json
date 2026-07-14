@@ -49,7 +49,7 @@
     "lint-staged": "^17.0.0",
     "nx": "^22.7.3",
     "pkg-pr-new": "^0.0.75",
-    "prettier": "3.8.4",
+    "prettier": "3.9.5",
     "publint": "^0.3.12",
     "rollup": "^4.57.1",
     "rollup-plugin-delete": "^3.0.2",
