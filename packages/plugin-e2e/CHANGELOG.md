@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.10.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.9.2...@grafana/plugin-e2e@3.10.0) (2026-07-14)
+
+
+### Features
+
+* add userPreferences k8s overrides ([#2773](https://github.com/grafana/plugin-tools/issues/2773)) ([f3e82e4](https://github.com/grafana/plugin-tools/commit/f3e82e4e66603dd8ddff84cb2f17dcca0c4b7c85))
+
 ## [3.9.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.9.1...@grafana/plugin-e2e@3.9.2) (2026-07-09)
 
 
