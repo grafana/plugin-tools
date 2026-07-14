@@ -78,6 +78,12 @@ export default [
       'Security: replace insecure inline `npx --yes @grafana/sign-plugin@latest` sign script with a locked @grafana/sign-plugin devDependency to prevent arbitrary code execution from a compromised @latest publish.',
     scriptPath: import.meta.resolve('./scripts/011-secure-sign-script.js'),
   },
+  {
+    name: '012-terser-license-file',
+    version: '7.8.2',
+    description: 'Emit a single LICENSE.txt file for all licenses in bundled code.',
+    scriptPath: import.meta.resolve('./scripts/012-terser-license-file.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
