@@ -1,12 +1,12 @@
 import { lazy } from 'react';
 import { AppPlugin } from '@grafana/data';
 
-const LazyApp = lazy(() => import('./components/App/App'));
-const LazyAppConfig = lazy(() => import('./components/AppConfig/AppConfig'));
+const App = lazy(() => import('./components/App/App'));
+const AppConfig = lazy(() => import('./components/AppConfig/AppConfig'));
 
-export const plugin = new AppPlugin<{}>().setRootPage(LazyApp).addConfigPage({
+export const plugin = new AppPlugin<{}>().setRootPage(App).addConfigPage({
   title: 'Configuration',
   icon: 'cog',
-  body: LazyAppConfig,
+  body: AppConfig,
   id: 'configuration',
 });
