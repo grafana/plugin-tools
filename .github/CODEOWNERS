@@ -14,7 +14,7 @@
 /packages/tsconfig/ @grafana/grafana-frontend-platform
 
 /docusaurus/website/ @grafana/grafana-frontend-platform @grafana/docs-plugins
-/docusaurus/docs/ @grafana/grafana-frontend-platform @grafana/docs-plugins
+/docusaurus/docs/ @grafana/docs-plugins
 
 /.github/workflows/ @grafana/grafana-frontend-platform
 /.github/workflows/playwright.yml @grafana/grafana-catalog
