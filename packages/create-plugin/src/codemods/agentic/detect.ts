@@ -1,6 +1,4 @@
 import which from 'which';
-import { constants } from 'node:fs';
-import { access } from 'node:fs/promises';
 import { AGENT_DEFINITIONS } from './definitions.js';
 import { AgentDefinition, InstalledAgent } from './types.js';
 
@@ -35,20 +33,5 @@ async function detectAgent(definition: AgentDefinition): Promise<InstalledAgent 
     }
   }
 
-  for (const wellKnownPath of definition.wellKnownPaths) {
-    if (await isExecutable(wellKnownPath)) {
-      return { definition, binaryPath: wellKnownPath };
-    }
-  }
-
   return null;
-}
-
-async function isExecutable(filePath: string): Promise<boolean> {
-  try {
-    await access(filePath, constants.X_OK);
-    return true;
-  } catch {
-    return false;
-  }
 }

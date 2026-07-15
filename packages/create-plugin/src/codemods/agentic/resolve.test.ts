@@ -21,7 +21,6 @@ function createInstalledAgent(id: AgentId, displayName: string): InstalledAgent 
       id,
       displayName,
       binaryNames: [id],
-      wellKnownPaths: [],
       buildInteractive: () => ({ args: [] }),
     },
     binaryPath: `/usr/local/bin/${id}`,
