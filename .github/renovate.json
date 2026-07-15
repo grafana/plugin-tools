@@ -2,7 +2,7 @@
   // Renovate config options: https://docs.renovatebot.com/configuration-options/
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   // Inherit Grafana's shared preset, but opt out of the parts we configure ourselves below.
-  "extends": ["github>grafana/grafana-community-team//renovate/renovate"],
+  "extends": ["github>grafana/grafana-catalog-team//renovate/renovate"],
   "ignorePresets": [
     "github>grafana/grafana-renovate-config//presets/base",
     "github>grafana/grafana-renovate-config//presets/automerge",
