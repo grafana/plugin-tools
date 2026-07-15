@@ -1,20 +1,16 @@
 import which from 'which';
-import { access } from 'node:fs/promises';
 import { detectInstalledAgents, isInsideAgent } from './detect.js';
 import { AgentDefinition } from './types.js';
 
 vi.mock('which');
-vi.mock('node:fs/promises');
 
 const whichMock = vi.mocked(which);
-const accessMock = vi.mocked(access);
 
 function createDefinition(overrides: Partial<AgentDefinition>): AgentDefinition {
   return {
     id: 'claude-code',
     displayName: 'Claude Code',
     binaryNames: ['claude'],
-    wellKnownPaths: [],
     buildInteractive: () => ({ args: [] }),
     ...overrides,
   };
@@ -35,25 +31,11 @@ describe('detectInstalledAgents', () => {
     expect(whichMock).toHaveBeenCalledWith('claude', { nothrow: true });
   });
 
-  it('should fall back to well-known paths when the binary is not on the PATH', async () => {
-    // @ts-expect-error - the nothrow overload returns string | null which the mocked union cannot infer
-    whichMock.mockResolvedValue(null);
-    accessMock.mockResolvedValue(undefined);
-
-    const definition = createDefinition({ wellKnownPaths: ['/home/user/.claude/local/claude'] });
-    const installed = await detectInstalledAgents([definition]);
-
-    expect(installed).toHaveLength(1);
-    expect(installed[0].binaryPath).toBe('/home/user/.claude/local/claude');
-  });
-
   it('should return an empty list when nothing is installed', async () => {
     // @ts-expect-error - the nothrow overload returns string | null which the mocked union cannot infer
     whichMock.mockResolvedValue(null);
-    accessMock.mockRejectedValue(new Error('ENOENT'));
 
-    const definition = createDefinition({ wellKnownPaths: ['/home/user/.claude/local/claude'] });
-    const installed = await detectInstalledAgents([definition]);
+    const installed = await detectInstalledAgents([createDefinition({})]);
 
     expect(installed).toEqual([]);
   });
