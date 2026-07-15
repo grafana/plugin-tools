@@ -1,5 +1,3 @@
-import { homedir } from 'node:os';
-import { join } from 'node:path';
 import { AgentDefinition } from './types.js';
 
 // Pure data. Invocation args mirror the Nx agentic migrate implementation (nrwl/nx#35718, #35889)
@@ -9,7 +7,6 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     id: 'claude-code',
     displayName: 'Claude Code',
     binaryNames: ['claude'],
-    wellKnownPaths: [join(homedir(), '.claude', 'local', 'claude')],
     buildInteractive: (invocationContext) => ({
       args: [
         '--system-prompt',
@@ -25,7 +22,6 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     id: 'codex',
     displayName: 'OpenAI Codex',
     binaryNames: ['codex'],
-    wellKnownPaths: [],
     buildInteractive: (invocationContext) => ({
       args: ['-c', `developer_instructions=${invocationContext.systemPrompt}`, invocationContext.userPrompt],
     }),

@@ -17,8 +17,6 @@ export interface AgentDefinition {
   displayName: string;
   // candidate binary names probed on PATH, in order
   binaryNames: string[];
-  // absolute fallback locations checked for the execute bit when the binary is not on PATH
-  wellKnownPaths: string[];
   buildInteractive: (invocationContext: AgentInvocationContext) => AgentInvocation;
 }
 
