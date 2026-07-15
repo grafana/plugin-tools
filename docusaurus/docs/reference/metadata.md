@@ -171,9 +171,9 @@ Dependency information related to Grafana and other plugins.
 **Properties**
 
 | Name                                      | Type       | Description                                                                                                                                                                                                                                                                  | Required |
-| ----------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| ----------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------: |
 | **grafanaVersion**                        | `string`   | (Deprecated) Required Grafana version for this plugin, e.g. `6.x.x 7.x.x` to denote plugin requires Grafana v6.x.x or v7.x.x.<br/>Pattern: `^([0-9]+)(\.[0-9x]+)?(\.[0-9x])?$`<br/>                                                                                          |          |
-| **grafanaDependency**                     | `string`   | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.<br/>Pattern: `^(<=\|>=\|<\|>\|=\|~\|\^)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?(\s(<=\|>=\|<\|=>)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?)?(\s\\ |    \\    | \s(<=\|>=\|<\|>\|=\|~\|\^)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?(\s(<=\|>=\|<\|=>)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?)?)\*$`<br/> | ✅  |
+| **grafanaDependency**                     | `string`   | Required Grafana version for this plugin. Validated using https://github.com/npm/node-semver.<br/>Pattern: `^(<=\|>=\|<\|>\|=\|~\|\^)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?(\s(<=\|>=\|<\|=>)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?)?(\s\\ |    \\    | \s(<=\|>=\|<\|>\|=\|~\|\^)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?(\s(<=\|>=\|<\|=>)?([0-9]+)(\.[0-9x\*]+)?(\.[0-9x\*]+)?(-[0-9A-Za-z-.]+)?)?)*$`<br/> | ✅  |
 | [**plugins**](#dependenciesplugins)       | `object[]` | An array of required plugins on which this plugin depends. Only non-core (that is, external plugins) have to be specified in this list.<br/>                                                                                                                                 |          |
 | [**extensions**](#dependenciesextensions) | `object`   | Plugin extensions that this plugin depends on.<br/>                                                                                                                                                                                                                          |          |
 
@@ -334,12 +334,12 @@ Parameters for the token authentication request.
 
 **Properties**
 
-| Name              | Type     | Description                                                                                    | Required |
-| ----------------- | -------- | ---------------------------------------------------------------------------------------------- | :------: |
-| **grant_type**    | `string` | OAuth grant type<br/>                                                                          |          |
-| **client_id**     | `string` | OAuth client ID<br/>                                                                           |          |
-| **client_secret** | `string` | OAuth client secret. Usually populated by decrypting the secret from the SecureJson blob.<br/> |          |
-| **resource**      | `string` | OAuth resource<br/>                                                                            |          |
+| Name               | Type     | Description                                                                                    | Required |
+| ------------------ | -------- | ---------------------------------------------------------------------------------------------- | :------: |
+| **grant\_type**    | `string` | OAuth grant type<br/>                                                                          |          |
+| **client\_id**     | `string` | OAuth client ID<br/>                                                                           |          |
+| **client\_secret** | `string` | OAuth client secret. Usually populated by decrypting the secret from the SecureJson blob.<br/> |          |
+| **resource**       | `string` | OAuth resource<br/>                                                                            |          |
 
 <a name="routesjwttokenauth"></a>
 
@@ -372,11 +372,11 @@ Parameters for the JWT token authentication request.
 
 **Properties**
 
-| Name             | Type     | Description | Required |
-| ---------------- | -------- | ----------- | :------: |
-| **token_uri**    | `string` |             |          |
-| **client_email** | `string` |             |          |
-| **private_key**  | `string` |             |          |
+| Name              | Type     | Description | Required |
+| ----------------- | -------- | ----------- | :------: |
+| **token\_uri**    | `string` |             |          |
+| **client\_email** | `string` |             |          |
+| **private\_key**  | `string` |             |          |
 
 <a name="routesurlparams"></a>
 
