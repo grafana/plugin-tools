@@ -91,29 +91,26 @@ jobs:
         id: run-tests
         run: npm run playwright:test --w @grafana/plugin-e2e
 
-      - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
+      - name: Upload report artifacts
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/upload-report-artifacts@fa3c4c2356b64475bdcdee63d7e2111abea0c39f # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
         if: ${{ always() && !cancelled() }}
         with:
           test-outcome: ${{ steps.run-tests.outcome }}
           report-dir: packages/plugin-e2e/playwright-report
+          grafana-image: ${{ matrix.GRAFANA_IMAGE.NAME }}
+          grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
 
-  # TEMP DISABLED 2026-06-18: deploy-report-pages pushes an unsigned commit to gh-pages,
-  # which will be rejected once unsigned commits are blocked. Re-enable once resolved.
-  # publish-report:
-  #   if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
-  #   needs: [playwright-tests]
-  #   runs-on: ubuntu-x64
-  #   permissions:
-  #     contents: write
-  #     pull-requests: write
-  #   steps:
-  #     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-  #       with:
-  #         persist-credentials: false
-  #
-  #     - name: Publish report
-  #       uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@5da62466881cdba091672353cf3c72ca348d01b1 # deploy-report-pages/v1.1.0
-  #       with:
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         retention-days: 7
+  publish-report:
+    if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-x64
+    permissions:
+      id-token: write
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Publish report
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/publish-report@fa3c4c2356b64475bdcdee63d7e2111abea0c39f # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
+        with:
+          bucket: dev-grafana-e2e-test-artifacts
+          service-account: github-e2e-test-artifacts@grafanalabs-workload-identity.iam.gserviceaccount.com
