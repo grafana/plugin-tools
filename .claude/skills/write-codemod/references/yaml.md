@@ -3,7 +3,7 @@
 Use the `yaml` npm package for structured manipulation of `.yml` / `.yaml` files. Never use string replacement on YAML — it breaks on formatting and comment differences.
 
 ```ts
-import { parseDocument, stringify, visit, YAMLMap, YAMLSeq, Scalar, Pair, type Document } from 'yaml';
+import { parseDocument, stringify, visit, YAMLMap, YAMLSeq, Scalar, Pair, type visitorFn } from 'yaml';
 ```
 
 Note: migrations that modify YAML may be `async` — the codemod signature allows returning `Promise<Context>`, and the existing YAML examples use `async function migrate`.
