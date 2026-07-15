@@ -305,7 +305,7 @@ export class DataSource extends DataSourceApi<MyQuery> {
 ```
 
 That's it! Now you can try out the plugin by adding a [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) to your dashboard.
-For a complete, runnable example, refer to the [`datasource-basic` example](https://github.com/grafana/grafana-plugin-examples/tree/main/examples/datasource-basic) in the [grafana-plugin-examples](https://github.com/grafana/grafana-plugin-examples) repository.
+For a working reference implementation, see how the Grafana built-in TestData data source implements variable support in [variables.ts](https://github.com/grafana/grafana/blob/main/public/app/plugins/datasource/grafana-testdata-datasource/variables.ts).
 
 #### Choose a variable support class
 
