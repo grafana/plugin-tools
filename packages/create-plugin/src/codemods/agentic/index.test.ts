@@ -39,7 +39,6 @@ const fakeAgent: InstalledAgent = {
     id: 'claude-code',
     displayName: 'Claude Code',
     binaryNames: ['claude'],
-    wellKnownPaths: [],
     buildInteractive: (invocationContext) => ({
       args: ['--sys', invocationContext.systemPrompt, invocationContext.userPrompt],
       env: { FAKE_AGENT: '1' },
