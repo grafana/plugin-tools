@@ -105,13 +105,23 @@ Grafana queries your data source whenever you update a variable. Excessive updat
 
 A [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) is a type of variable that allows you to query a data source for the values. By adding support for query variables to your data source plugin, users can create dynamic dashboards based on data from your data source.
 
+There are two ways to do this:
+
+- Implement the `metricFindQuery` method on your `DataSourceApi` class. This is the simplest option, but it's limited:
+  - It only works with Grafana's built-in string query input, so you can't render a custom variable query editor with it alone.
+  - The query is passed as a plain `string`, so you don't get the type safety or editor reuse of a typed query model.
+  - It returns a `Promise`, so it can't stream results the way an `Observable`-based query can.
+- Assign a variable support class to the `variables` property of your data source. Extend one of the classes exported from `@grafana/data` when you want a custom or reusable query editor, typed query models, or streaming responses. Refer to [Choose a variable support class](#choose-a-variable-support-class).
+
+This guide uses both: it implements `metricFindQuery` for the lookup and wraps it in a `CustomVariableSupport` class to provide a custom editor.
+
 To add support for query variables, you need to:
 
-1. Define a variable query model
-2. Implement `metricFindQuery` in your data source
-3. Create a `VariableQueryEditor` component
-4. Create a `VariableSupport` class
-5. Assign the `VariableSupport` to your data source
+1. Define a variable query model.
+2. Implement `metricFindQuery` in your data source.
+3. Create a `VariableQueryEditor` component.
+4. Create a variable support class. This guide extends `CustomVariableSupport`, but you can extend `DataSourceVariableSupport` or `StandardVariableSupport` instead. Refer to [Choose a variable support class](#choose-a-variable-support-class).
+5. Assign the variable support class to your data source.
 
 Let's start by defining a query model for the variable query:
 
@@ -294,7 +304,61 @@ export class DataSource extends DataSourceApi<MyQuery> {
 }
 ```
 
-That's it! You can now try out the plugin by adding a [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) to your dashboard.
+That's it! Now you can try out the plugin by adding a [query variable](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables#add-a-query-variable) to your dashboard.
+For a working reference implementation, see how the Grafana built-in TestData data source implements variable support in [variables.ts](https://github.com/grafana/grafana/blob/main/public/app/plugins/datasource/grafana-testdata-datasource/variables.ts).
+
+#### Choose a variable support class
+
+The previous steps use `CustomVariableSupport`, but `@grafana/data` exports three base classes you can assign to the `variables` property. Choose the one that matches the editor experience you want:
+
+| Class | Use it when |
+| --- | --- |
+| `CustomVariableSupport` | You want to provide your own query editor component for variables. |
+| `DataSourceVariableSupport` | Your data source's main query editor already works for variable queries. |
+| `StandardVariableSupport` | You want to reuse Grafana's standard variable query editor. |
+
+##### `CustomVariableSupport`
+
+Provide an `editor` component and a `query` method that returns an `Observable`, as shown in the [steps above](#create-a-variablesupport-class).
+
+##### `DataSourceVariableSupport`
+
+Grafana reuses your existing query editor and `query` method, so there's nothing extra to implement:
+
+```ts title="src/variableSupport.ts"
+import { DataSourceVariableSupport } from '@grafana/data';
+import { DataSource } from './datasource';
+import { MyQuery, MyDataSourceOptions } from './types';
+
+export class MyVariableSupport extends DataSourceVariableSupport<DataSource, MyQuery, MyDataSourceOptions> {}
+```
+
+##### `StandardVariableSupport`
+
+Implement `toDataQuery` to convert the `StandardVariableQuery` produced by the standard editor into your data source's own query type:
+
+```ts title="src/variableSupport.ts"
+import { StandardVariableSupport, StandardVariableQuery } from '@grafana/data';
+import { DataSource } from './datasource';
+import { MyQuery } from './types';
+
+export class MyVariableSupport extends StandardVariableSupport<DataSource, MyQuery> {
+  toDataQuery(query: StandardVariableQuery): MyQuery {
+    return {
+      refId: query.refId,
+      rawQuery: query.query,
+    };
+  }
+}
+```
+
+`StandardVariableQuery` is the query model used by the standard editor. It extends `DataQuery` and adds a single `query` string:
+
+```ts
+interface StandardVariableQuery extends DataQuery {
+  query: string;
+}
+```
 
 ## Using template variables
 
