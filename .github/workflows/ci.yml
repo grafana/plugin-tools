@@ -31,15 +31,15 @@ jobs:
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
 
       - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
+      - uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
       - name: Setup nodejs
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
@@ -65,7 +65,7 @@ jobs:
           npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --workspace="@grafana/tsconfig" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -99,12 +99,12 @@ jobs:
           export_env: false
 
       - name: Setup nodejs
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -183,7 +183,7 @@ jobs:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
       - name: Setup nodejs
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
 
@@ -195,7 +195,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -299,12 +299,12 @@ jobs:
             DOCKERHUB_PASSWORD=dockerhub:password
 
       - name: Setup nodejs
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
 
       - name: Download packed artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: packed-artifacts
           path: ./packed-artifacts
@@ -348,7 +348,7 @@ jobs:
         run: npm run test:ci
         working-directory: ./${{ matrix.workingDir }}
 
-      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
           go-version-file: ./${{ matrix.workingDir }}/go.mod
           cache-dependency-path: ./${{ matrix.workingDir }}/go.sum
@@ -356,14 +356,14 @@ jobs:
 
       - name: Lint backend
         if: ${{ matrix.hasBackend == true }}
-        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
           version: latest
           working-directory: ./${{ matrix.workingDir }}
           args: ./...
 
       - name: Build plugin backend
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: -v build:linux
@@ -372,7 +372,7 @@ jobs:
 
       - name: Test plugin backend
         if: ${{ matrix.hasBackend == true }}
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: test
@@ -384,7 +384,7 @@ jobs:
 
       - name: Log in to Docker Hub
         if: ${{ github.event.pull_request.head.repo.fork != true }}
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
