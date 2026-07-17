@@ -3,10 +3,28 @@ import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
 import { gte } from '../../utils/version';
+import { resolveGrafanaSelector } from '../utils';
 
 export class RadioGroup extends ComponentBase {
   constructor(ctx: PluginTestCtx, element: Locator) {
     super(ctx, element);
+  }
+
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.RadioGroup.container)).first();
+    }
+    if (gte(ctx.grafanaVersion, '10.0.0')) {
+      return base.locator('[role="radiogroup"]').first();
+    }
+    return base
+      .locator('div:has(> input[type="radio"]), div:has(> div > input[type="radio"])')
+      .first();
+  }
+
+  within(root: Locator): RadioGroup {
+    return new RadioGroup(this.ctx, RadioGroup.getContainer(this.ctx, root));
   }
 
   async check(labelOrValue: string, options?: CheckOptionsType): Promise<void> {
