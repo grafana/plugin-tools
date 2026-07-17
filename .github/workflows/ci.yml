@@ -24,7 +24,7 @@ jobs:
     steps:
       - id: get-secrets
         if: ${{ github.event.pull_request.head.repo.fork != true }}
-        uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@e46fe1e9a2bf9e618bcf8d8d32f3a7381b45c06d # get-vault-secrets/v2.0.0
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -91,7 +91,7 @@ jobs:
     steps:
       - id: get-secrets
         if: ${{ github.event.pull_request.head.repo.fork != true }}
-        uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@e46fe1e9a2bf9e618bcf8d8d32f3a7381b45c06d # get-vault-secrets/v2.0.0
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -283,7 +283,7 @@ jobs:
     steps:
       - id: get-secrets
         if: ${{ github.event.pull_request.head.repo.fork != true }}
-        uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@e46fe1e9a2bf9e618bcf8d8d32f3a7381b45c06d # get-vault-secrets/v2.0.0
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
@@ -292,7 +292,7 @@ jobs:
 
       - name: Get secrets for DockerHub login
         if: ${{ github.event.pull_request.head.repo.fork != true }}
-        uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
+        uses: grafana/shared-workflows/actions/get-vault-secrets@e46fe1e9a2bf9e618bcf8d8d32f3a7381b45c06d # get-vault-secrets/v2.0.0
         with:
           common_secrets: |
             DOCKERHUB_USERNAME=dockerhub:username
