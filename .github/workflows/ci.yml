@@ -171,7 +171,9 @@ jobs:
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ github.event.pull_request.head.repo.fork != true }}
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
+          # Step env is evaluated even when the step is skipped, so fall back to '{}'
+          # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ env.WORKING_DIR }}
   test-updates:
@@ -477,7 +479,9 @@ jobs:
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
         if: ${{ matrix.workingDir == 'myorg-nobackend-panel' && github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.fork != true }}
         env:
-          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).GRAFANA_ACCESS_POLICY_TOKEN }}
+          # Step env is evaluated even when the step is skipped, so fall back to '{}'
+          # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
