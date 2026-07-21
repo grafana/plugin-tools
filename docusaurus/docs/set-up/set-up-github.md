@@ -111,7 +111,7 @@ jobs:
   createplugin-update:
     runs-on: ubuntu-latest
     steps:
-      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.1
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.2
         with:
           token: ${{ secrets.GH_PAT_TOKEN }}
 ```
@@ -147,7 +147,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
 
-      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.1
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.2
         with:
           token: ${{ steps.generate_token.outputs.token }}
 ```
@@ -181,7 +181,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: grafana/plugin-actions/bundle-size@bundle-size/v1.0.2
+      - uses: grafana/plugin-actions/bundle-size@bundle-size/v1.1.0
 ```
 
 ### Troubleshooting
