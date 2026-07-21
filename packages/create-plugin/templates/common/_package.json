@@ -16,7 +16,7 @@
   "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@grafana/eslint-config": "^9.0.0",
+    "@grafana/eslint-config": "^10.0.0",
     "@grafana/plugin-e2e": "^3.10.0",
     "@grafana/sign-plugin": "^3.2.2",
     "@grafana/tsconfig": "^2.0.1",
