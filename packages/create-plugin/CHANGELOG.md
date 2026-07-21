@@ -1,5 +1,24 @@
 # Changelog
 
+## [7.9.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.8.1...@grafana/create-plugin@7.9.0) (2026-07-14)
+
+
+### Features
+
+* **deps:** bump grafana libs to 13.1.0 in templates ([#2750](https://github.com/grafana/plugin-tools/issues/2750)) ([dab0f70](https://github.com/grafana/plugin-tools/commit/dab0f70ec9816b56d6fe73230fd24d0e2b76b03e))
+
+
+### Bug Fixes
+
+* output single license file when building plugin ([#2770](https://github.com/grafana/plugin-tools/issues/2770)) ([fd20ced](https://github.com/grafana/plugin-tools/commit/fd20cedfffc053e69898081740038544db2c7470))
+
+## [7.8.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.8.0...@grafana/create-plugin@7.8.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* replace find-up dependency with native @libs/find-up helper ([#2722](https://github.com/grafana/plugin-tools/issues/2722)) ([d20ff77](https://github.com/grafana/plugin-tools/commit/d20ff7714de762a2d7ce96cf33a37d615e78e77c))
+
 ## [7.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.7.1...@grafana/create-plugin@7.8.0) (2026-06-11)
 
 

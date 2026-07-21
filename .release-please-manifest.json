@@ -1,13 +1,13 @@
 {
-  "packages/create-plugin": "7.8.0",
+  "packages/create-plugin": "7.9.0",
   "packages/eslint-plugin-plugins": "0.7.0",
-  "packages/plugin-docs-cli": "0.1.0",
-  "packages/plugin-docs-parser": "0.1.0",
-  "packages/plugin-e2e": "3.9.1",
+  "packages/plugin-docs-cli": "0.2.0",
+  "packages/plugin-docs-parser": "0.2.0",
+  "packages/plugin-e2e": "3.10.0",
   "packages/plugin-meta-extractor": "0.13.0",
   "packages/plugin-types-bundler": "0.6.0",
   "packages/react-detect": "0.7.1",
-  "packages/sign-plugin": "3.3.1",
+  "packages/sign-plugin": "3.3.3",
   "packages/tsconfig": "2.2.0",
   "packages/eslint-config": "10.0.0"
 }

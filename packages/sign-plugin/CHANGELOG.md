@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.3.3](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.2...@grafana/sign-plugin@3.3.3) (2026-07-14)
+
+
+### Bug Fixes
+
+* **sign-plugin:** prevent symlink escape check bypass and add test coverage ([#2721](https://github.com/grafana/plugin-tools/issues/2721)) ([4a28227](https://github.com/grafana/plugin-tools/commit/4a2822764abdca815ebe848a3f9678b2b86fa63c))
+
+## [3.3.2](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.1...@grafana/sign-plugin@3.3.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* replace find-up dependency with native @libs/find-up helper ([#2722](https://github.com/grafana/plugin-tools/issues/2722)) ([d20ff77](https://github.com/grafana/plugin-tools/commit/d20ff7714de762a2d7ce96cf33a37d615e78e77c))
+
 ## [3.3.1](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.0...@grafana/sign-plugin@3.3.1) (2026-06-11)
 
 
