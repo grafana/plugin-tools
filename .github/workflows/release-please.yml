@@ -118,7 +118,7 @@ jobs:
             core.setOutput('payload', JSON.stringify(payload));
 
       - name: Notify Slack
-        uses: grafana/shared-workflows/actions/send-slack-message@eb1fbd807f87aea8f40ff08dc9cd02872cad55b3 # send-slack-message/v2.0.5
+        uses: grafana/shared-workflows/actions/send-slack-message@551bc8d50017d3e95d5da3f8a4826e733a208dc0 # send-slack-message/v3.0.2
         with:
           method: chat.postMessage
           # Set explicitly: the shared action forwards this input unconditionally, so leaving
