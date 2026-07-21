@@ -86,7 +86,8 @@
     "webpack-dev-server": "^6.0.0",
     "serialize-javascript": "7.0.5",
     "dompurify": "^3.4.12",
-    "uuid": "^11.1.1"
+    "uuid": "^11.1.1",
+    "js-cookie": "^3.0.8"
   },
   "packageManager": "npm@11.16.0"
 }
