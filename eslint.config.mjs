@@ -1,14 +1,14 @@
 // @ts-check
-const grafanaConfig = require('@grafana/eslint-config/flat');
-const mdxParser = require('eslint-mdx');
-const mdxPlugin = require('eslint-plugin-mdx');
+import grafanaConfig from '@grafana/eslint-config';
+import * as mdxParser from 'eslint-mdx';
+import * as mdxPlugin from 'eslint-plugin-mdx';
 
 // If you edit this config consider running `npx -y @eslint/config-inspector@latest` first.
 
 /**
  * @type {Array<import('eslint').Linter.Config>}
  */
-module.exports = [
+export default [
   {
     name: 'plugin-tools/ignores',
     ignores: [
