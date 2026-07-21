@@ -83,7 +83,7 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "serialize-javascript": "7.0.5",
+    "serialize-javascript": "7.0.7",
     "dompurify": "^3.4.12",
     "uuid": "^11.1.1",
     "js-cookie": "^3.0.8"
