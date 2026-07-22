@@ -25,7 +25,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@grafana/eslint-config": "^9.0.0",
+    "@grafana/eslint-config": "^10.0.0",
     "@playwright/test": "^1.58.1",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
@@ -62,18 +62,19 @@
     "node": ">=24"
   },
   "workspaces": [
-    "packages/create-plugin",
-    "packages/sign-plugin",
     "docusaurus/website",
+    "libs/*",
+    "packages/create-plugin",
+    "packages/eslint-config",
+    "packages/eslint-plugin-plugins",
+    "packages/plugin-docs-cli",
+    "packages/plugin-docs-parser",
     "packages/plugin-e2e",
     "packages/plugin-meta-extractor",
     "packages/plugin-types-bundler",
-    "packages/eslint-plugin-plugins",
-    "packages/tsconfig",
     "packages/react-detect",
-    "packages/plugin-docs-parser",
-    "packages/plugin-docs-cli",
-    "libs/*"
+    "packages/sign-plugin",
+    "packages/tsconfig"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
