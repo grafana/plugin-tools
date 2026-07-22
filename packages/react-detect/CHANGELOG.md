@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.2](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.1...@grafana/react-detect@0.7.2) (2026-07-22)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency @typescript-eslint/parser to v8.64.0 ([#2780](https://github.com/grafana/plugin-tools/issues/2780)) ([88fa2db](https://github.com/grafana/plugin-tools/commit/88fa2db37ab0279daf26f78b32f6d8efd0d67894))
+* **deps:** Update dependency pm-detect to v0.6.0 ([#2720](https://github.com/grafana/plugin-tools/issues/2720)) ([46d50de](https://github.com/grafana/plugin-tools/commit/46d50de382a9b5072924087d206fed5248be2e1e))
+
 ## [0.7.1](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.0...@grafana/react-detect@0.7.1) (2026-06-11)
 
 
