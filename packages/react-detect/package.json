@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@typescript-eslint/parser": "8.64.0",
-    "@typescript-eslint/typescript-estree": "8.54.0",
+    "@typescript-eslint/typescript-estree": "8.64.0",
     "fast-glob": "3.3.3",
     "minimist": "1.2.8",
     "pm-detect": "0.6.0",
