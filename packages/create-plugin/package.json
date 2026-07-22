@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/parser": "7.29.0",
+    "@babel/parser": "8.0.4",
     "@ivanmaxlogiudice/gitignore": "0.0.2",
     "change-case": "5.4.4",
     "debug": "4.4.3",
