@@ -149,15 +149,7 @@ export { selectors } from '@playwright/test';
 declare global {
   interface Window {
     monaco: any;
-    grafanaBootData: {
-      settings: {
-        featureToggles: Record<string, boolean>;
-        buildInfo: {
-          version: string;
-        };
-        namespace: string;
-      };
-    };
+    grafanaBootData: import('@grafana/data').BootData;
   }
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace PlaywrightTest {
