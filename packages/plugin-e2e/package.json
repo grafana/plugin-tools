@@ -49,6 +49,7 @@
     "dotenv": "^17.2.4"
   },
   "dependencies": {
+    "@grafana/data": "^13.1.1",
     "@grafana/e2e-selectors": "13.1.0-25644485979",
     "yaml": "^2.3.4"
   }
