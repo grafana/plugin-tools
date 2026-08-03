@@ -25,19 +25,19 @@ export class ColorPicker extends ComponentBase {
     await this.element.getByRole('button').click(options);
     await this.getCustomTab().click(options);
 
-    const colorInput = this.getContainer().getByTestId('input-wrapper').getByRole('textbox');
+    const colorInput = this.getPortalContainer().getByTestId('input-wrapper').getByRole('textbox');
     await colorInput.hover(options);
     await colorInput.fill(rgbOrHex, options);
   }
 
   private getCustomTab(): Locator {
     if (gte(this.ctx.grafanaVersion, '11.6.0')) {
-      return this.getContainer().getByRole('tab', { name: 'Custom', exact: true });
+      return this.getPortalContainer().getByRole('tab', { name: 'Custom', exact: true });
     }
-    return this.getContainer().getByRole('button', { name: 'Custom', exact: true });
+    return this.getPortalContainer().getByRole('button', { name: 'Custom', exact: true });
   }
 
-  private getContainer(): Locator {
+  private getPortalContainer(): Locator {
     const { grafanaVersion, page, selectors } = this.ctx;
     if (gte(grafanaVersion, '11.5.0')) {
       return page.locator(resolveGrafanaSelector(selectors.components.Portal.container));
