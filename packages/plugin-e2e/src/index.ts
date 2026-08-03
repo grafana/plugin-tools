@@ -64,10 +64,16 @@ import { DashboardPage } from './models/pages/DashboardPage';
 
 // models
 export { Components } from './models/Components';
+export { ColorPicker } from './models/components/ColorPicker';
 export { DataSourcePicker } from './models/components/DataSourcePicker';
+export { MultiSelect } from './models/components/MultiSelect';
+export { RadioGroup } from './models/components/RadioGroup';
 export { ScopedComponent } from './models/components/ScopedComponent';
+export { Select } from './models/components/Select';
+export { Switch } from './models/components/Switch';
 export { Panel } from './models/components/Panel';
 export { TimeRange } from './models/components/TimeRange';
+export { UnitPicker } from './models/components/UnitPicker';
 export { AnnotationEditPage } from './models/pages/AnnotationEditPage';
 export { AnnotationPage } from './models/pages/AnnotationPage';
 export { DashboardPage } from './models/pages/DashboardPage';
