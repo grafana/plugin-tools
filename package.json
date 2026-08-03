@@ -25,7 +25,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@grafana/eslint-config": "^9.0.0",
+    "@grafana/eslint-config": "^10.0.0",
     "@playwright/test": "^1.58.1",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
@@ -47,9 +47,9 @@
     "glob": "^13.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.0",
-    "nx": "^22.7.3",
-    "pkg-pr-new": "^0.0.75",
-    "prettier": "3.8.4",
+    "nx": "^23.1.0",
+    "pkg-pr-new": "^0.0.78",
+    "prettier": "3.9.5",
     "publint": "^0.3.12",
     "rollup": "^4.57.1",
     "rollup-plugin-delete": "^3.0.2",
@@ -62,18 +62,19 @@
     "node": ">=24"
   },
   "workspaces": [
-    "packages/create-plugin",
-    "packages/sign-plugin",
     "docusaurus/website",
+    "libs/*",
+    "packages/create-plugin",
+    "packages/eslint-config",
+    "packages/eslint-plugin-plugins",
+    "packages/plugin-docs-cli",
+    "packages/plugin-docs-parser",
     "packages/plugin-e2e",
     "packages/plugin-meta-extractor",
     "packages/plugin-types-bundler",
-    "packages/eslint-plugin-plugins",
-    "packages/tsconfig",
     "packages/react-detect",
-    "packages/plugin-docs-parser",
-    "packages/plugin-docs-cli",
-    "libs/*"
+    "packages/sign-plugin",
+    "packages/tsconfig"
   ],
   "lint-staged": {
     "*.{ts,tsx,js}": [
@@ -83,9 +84,14 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "webpack-dev-server": "^5.2.1",
-    "serialize-javascript": "7.0.5",
-    "dompurify": "^3.4.0"
+    "serialize-javascript": "7.0.7",
+    "dompurify": "^3.4.12",
+    "uuid": "^11.1.1",
+    "js-cookie": "^3.0.8",
+    "nx": {
+      "axios": "^1.18.0",
+      "brace-expansion": "^5.0.7"
+    }
   },
-  "packageManager": "npm@11.16.0"
+  "packageManager": "npm@12.0.2"
 }

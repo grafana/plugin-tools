@@ -3,6 +3,7 @@ import { ComponentBase } from './ComponentBase';
 import { CheckOptionsType } from './types';
 import { PluginTestCtx } from '../../types';
 import { gte, lt } from '../../utils/version';
+import { resolveGrafanaSelector } from '../utils';
 
 export class Switch extends ComponentBase {
   private group: Locator;
@@ -10,6 +11,21 @@ export class Switch extends ComponentBase {
   constructor(ctx: PluginTestCtx, group: Locator) {
     super(ctx, Switch.getElement(ctx, group));
     this.group = group;
+  }
+
+  static getContainer(ctx: PluginTestCtx, root?: Locator): Locator {
+    const base = root ?? ctx.page;
+    if (gte(ctx.grafanaVersion, '13.1.0')) {
+      return base.locator(resolveGrafanaSelector(ctx.selectors.components.Switch.container)).first();
+    }
+    if (gte(ctx.grafanaVersion, '12.0.0')) {
+      return base.locator('div:has(> input[type="checkbox"][role="switch"])').first();
+    }
+    return base.locator('div:has(> input[type="checkbox"] + label)').first();
+  }
+
+  within(root: Locator): Switch {
+    return new Switch(this.ctx, Switch.getContainer(this.ctx, root));
   }
 
   private static getElement(ctx: PluginTestCtx, group: Locator): Locator {

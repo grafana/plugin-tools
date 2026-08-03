@@ -17,10 +17,10 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@grafana/eslint-config": "^9.0.0",
-    "@grafana/plugin-e2e": "^3.6.1",
-    "@grafana/sign-plugin": "^3.2.2",
-    "@grafana/tsconfig": "^2.0.1",
-    "@playwright/test": "^1.57.0",{{#if useExperimentalRspack}}
+    "@grafana/plugin-e2e": "^3.10.0",
+    "@grafana/sign-plugin": "^3.3.3",
+    "@grafana/tsconfig": "^2.2.0",
+    "@playwright/test": "~1.61.1",{{#if useExperimentalRspack}}
     "@rspack/core": "^1.6.0",
     "@rspack/cli": "^1.6.0",{{/if}}
     "@stylistic/eslint-plugin-ts": "^4.4.0",
@@ -74,11 +74,11 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "13.0.2",
-    "@grafana/i18n": "13.0.2",
-    "@grafana/runtime": "13.0.2",
-    "@grafana/ui": "13.0.2",
-    "@grafana/schema": "13.0.2",{{#if_eq pluginType "scenesapp" }}
+    "@grafana/data": "13.1.0",
+    "@grafana/i18n": "13.1.0",
+    "@grafana/runtime": "13.1.0",
+    "@grafana/ui": "13.1.0",
+    "@grafana/schema": "13.1.0",{{#if_eq pluginType "scenesapp" }}
     "@grafana/scenes": "{{ scenesVersion }}",{{/if_eq}}
     "react": "^18.3.0",
     "react-dom": "^18.3.0"{{#if isAppType}},

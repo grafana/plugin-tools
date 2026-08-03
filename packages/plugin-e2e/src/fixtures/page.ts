@@ -37,6 +37,13 @@ export const page: PageFixture = async (
   if (hasFeatureToggles || hasUserPreferences) {
     try {
       await page.addInitScript(overrideGrafanaBootData, { featureToggles, userPreferences });
+      // override new k8s merged preferences API to ensure userPreferences are applied in the frontend
+      await page.route('**/apis/preferences.grafana.app/*/namespaces/*/preferences/merged', async (route) => {
+        const response = await route.fetch();
+        const json = await response.json();
+        json.spec = { ...json.spec, ...userPreferences };
+        await route.fulfill({ response, json });
+      });
     } catch (error) {
       console.error('Failed to set feature toggles', error);
     }

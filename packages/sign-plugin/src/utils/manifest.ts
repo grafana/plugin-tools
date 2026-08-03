@@ -3,8 +3,6 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { postData } from './request.js';
-import { output } from './utils.output.js';
-import { styleText } from 'node:util';
 
 const MANIFEST_FILE = 'MANIFEST.txt';
 
@@ -37,7 +35,11 @@ async function* walk(dir: string, baseDir: string): RecursiveWalk {
       yield path.relative(baseDir, entry);
     } else if (d.isSymbolicLink()) {
       const realPath = await fs.realpath(entry);
-      if (!realPath.startsWith(baseDir)) {
+      // A prefix check would treat sibling paths like <baseDir>-evil as inside the base directory.
+      const relativeToBase = path.relative(baseDir, realPath);
+      const isOutsideBaseDir =
+        relativeToBase === '..' || relativeToBase.startsWith('..' + path.sep) || path.isAbsolute(relativeToBase);
+      if (isOutsideBaseDir) {
         throw new Error(
           `symbolic link ${path.relative(baseDir, entry)} targets a file outside of the base directory: ${baseDir}`
         );
@@ -52,7 +54,11 @@ async function* walk(dir: string, baseDir: string): RecursiveWalk {
 }
 
 export async function buildManifest(dir: string): Promise<ManifestInfo> {
-  const pluginJson = JSON.parse(readFileSync(path.join(dir, 'plugin.json'), { encoding: 'utf8' }));
+  // Canonicalize the base directory once so the symlink-escape check in `walk`
+  // compares like-for-like. Without this, a dist path containing symlinks (e.g.
+  // macOS `/var` -> `/private/var`) makes internal symlinks look "outside".
+  const baseDir = await fs.realpath(dir);
+  const pluginJson = JSON.parse(readFileSync(path.join(baseDir, 'plugin.json'), { encoding: 'utf8' }));
 
   const manifest = {
     plugin: pluginJson.id,
@@ -60,7 +66,7 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
     files: {},
   } as ManifestInfo;
 
-  for await (const filePath of await walk(dir, dir)) {
+  for await (const filePath of await walk(baseDir, baseDir)) {
     if (filePath === MANIFEST_FILE) {
       continue;
     }
@@ -72,61 +78,40 @@ export async function buildManifest(dir: string): Promise<ManifestInfo> {
 
     manifest.files[sanitisedFilePath] = crypto
       .createHash('sha256')
-      .update(readFileSync(path.join(dir, filePath)))
+      .update(readFileSync(path.join(baseDir, filePath)))
       .digest('hex');
   }
 
   return manifest;
 }
 
-export async function signManifest(manifest: ManifestInfo): Promise<string> {
-  const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
-  const GRAFANA_ACCESS_POLICY_TOKEN = process.env.GRAFANA_ACCESS_POLICY_TOKEN;
-
-  if (!GRAFANA_ACCESS_POLICY_TOKEN && !GRAFANA_API_KEY) {
-    output.error({
-      title: 'Missing GRAFANA_ACCESS_POLICY_TOKEN.',
-      body: ['You must create a GRAFANA_ACCESS_POLICY_TOKEN env variable to sign plugins.'],
-      link: 'https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token',
-    });
-    process.exit(1);
-  }
-  if (GRAFANA_API_KEY) {
-    output.warning({
-      title: 'Usage of GRAFANA_API_KEY is deprecated.',
-      body: ['Please migrate to using a GRAFANA_ACCESS_POLICY_TOKEN instead.'],
-      link: 'https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin',
-    });
-  }
-
+export async function signManifest(manifest: ManifestInfo, token: string): Promise<string> {
   const GRAFANA_COM_URL = process.env.GRAFANA_COM_URL || 'https://grafana.com/api';
   const url = GRAFANA_COM_URL + '/plugins/ci/sign';
 
-  const token = GRAFANA_ACCESS_POLICY_TOKEN ? GRAFANA_ACCESS_POLICY_TOKEN : GRAFANA_API_KEY;
-  try {
-    const info = await postData(url, manifest, {
-      Authorization: 'Bearer ' + token,
-    });
-    if (info.status !== 200) {
-      const dataAsArray = Object.entries(JSON.parse(info.data)).map(([key, value]) => `${key}: ${value}`);
-      output.error({
-        title: 'Error signing manifest.',
-        body: [
-          `Server responded with status code ${styleText(['yellow'], info.status.toString())} along with:`,
-          ...output.bulletList(dataAsArray),
-        ],
-      });
-      process.exit(1);
-    }
+  const info = await postData(url, manifest, {
+    Authorization: 'Bearer ' + token,
+  });
 
-    return info.data;
-  } catch (err: any) {
-    const body = err.response?.data?.message ? [err.response.data.message] : [err.message];
-    output.error({
-      title: 'Error signing manifest.',
-      body,
-    });
-    process.exit(1);
+  if (info.status !== 200) {
+    throw new Error(`Server responded with status code ${info.status} along with: ${formatServerError(info.data)}`);
+  }
+
+  return info.data;
+}
+
+function formatServerError(data: string): string {
+  try {
+    const parsed = JSON.parse(data);
+    // A JSON primitive (string/number/boolean/null) has no entries to map over.
+    if (parsed === null || typeof parsed !== 'object') {
+      return String(parsed);
+    }
+    return Object.entries(parsed)
+      .map(([key, value]) => `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`)
+      .join(', ');
+  } catch (err) {
+    return data;
   }
 }
 
@@ -135,10 +120,6 @@ export function saveManifest(dir: string, signedManifest: string) {
     writeFileSync(path.join(dir, MANIFEST_FILE), signedManifest);
     return true;
   } catch (error) {
-    output.error({
-      title: 'Error saving manifest',
-      body: [`Failed to write signed manifest to ${dir}.`],
-    });
-    process.exit(1);
+    throw new Error(`Failed to write signed manifest to ${dir}.`, { cause: error });
   }
 }

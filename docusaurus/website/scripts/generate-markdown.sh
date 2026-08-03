@@ -17,7 +17,14 @@ if [ ! -s "$INPUT_FILE" ]; then
 fi
 
 # Generate markdown file
-npx --yes jsonschema2mk --partials "$PARTIALS" --schema "$INPUT_FILE" > "$OUTPUT_FILE"
+# Pinned to 2.1.x: jsonschema2mk 2.2.0 rewrote its templates (e.g. removed the
+# "mdlevel" helper) and is incompatible with the custom partials in ./partials.
+npx --yes jsonschema2mk@2.1.4 --partials "$PARTIALS" --schema "$INPUT_FILE" > "$OUTPUT_FILE"
+
+# jsonschema2mk escapes "|" as "\|" but leaves regex patterns' own backslashes in place,
+# so "\|" in a schema pattern becomes "\\|" - an escaped backslash followed by a bare pipe
+# that splits GFM table cells and breaks the MDX build. Add a backslash to keep the pipe escaped.
+perl -i -pe 's/\\\\\|/\\\\\\|/g' "$OUTPUT_FILE"
 
 # Prettify the markdown file
 npx prettier --write "$OUTPUT_FILE"

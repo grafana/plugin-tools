@@ -28,5 +28,6 @@
   "nxCloudAccessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ=",
   "tui": {
     "enabled": false
-  }
+  },
+  "analytics": false
 }

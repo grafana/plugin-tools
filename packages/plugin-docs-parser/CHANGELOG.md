@@ -1,4 +1,13 @@
-# v0.1.0 (Fri May 29 2026)
+# Changelog
+
+## [0.2.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.1.0...@grafana/plugin-docs-parser@0.2.0) (2026-07-09)
+
+
+### Features
+
+* **plugin-docs-cli:** Extract TOC headings at build time ([#2744](https://github.com/grafana/plugin-tools/issues/2744)) ([0a05680](https://github.com/grafana/plugin-tools/commit/0a05680e7961c52fcf68e567a5e58ffb1c4ae8e7))
+
+## v0.1.0 (Fri May 29 2026)
 
 #### 🐛 Bug Fix
 
@@ -10,7 +19,7 @@
 
 ---
 
-# v0.0.5 (Tue May 26 2026)
+## v0.0.5 (Tue May 26 2026)
 
 #### 🐛 Bug Fix
 
@@ -22,7 +31,7 @@
 
 ---
 
-# v0.0.4 (Thu Mar 19 2026)
+## v0.0.4 (Thu Mar 19 2026)
 
 #### 🐛 Bug Fix
 
@@ -31,12 +40,3 @@
 #### Authors: 1
 
 - Erik Sundell ([@sunker](https://github.com/sunker))
-
----
-
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

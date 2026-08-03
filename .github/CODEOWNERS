@@ -7,6 +7,7 @@
 /packages/plugin-docs-parser/ @grafana/grafana-catalog
 /packages/plugin-docs-cli/ @grafana/grafana-catalog
 /packages/plugin-e2e/ @grafana/grafana-catalog
+/packages/plugin-meta-extractor/ @grafana/grafana-catalog
 /packages/plugin-types-bundler/ @grafana/grafana-frontend-platform
 /packages/react-detect/ @grafana/grafana-frontend-platform
 /packages/sign-plugin/ @grafana/grafana-catalog
@@ -15,5 +16,6 @@
 /docusaurus/website/ @grafana/grafana-frontend-platform @grafana/docs-plugins
 /docusaurus/docs/ @grafana/grafana-frontend-platform @grafana/docs-plugins
 
+/.github/workflows/ @grafana/grafana-frontend-platform
 /.github/workflows/playwright.yml @grafana/grafana-catalog
 /.github/workflows/playwright-nightly.yml @grafana/grafana-catalog

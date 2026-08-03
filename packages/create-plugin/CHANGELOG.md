@@ -1,5 +1,35 @@
 # Changelog
 
+## [7.9.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.9.0...@grafana/create-plugin@7.9.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* **create-plugin:** pin @playwright/test to 1.61.x ([#2806](https://github.com/grafana/plugin-tools/issues/2806)) ([772bf50](https://github.com/grafana/plugin-tools/commit/772bf5018b1076d8e4dfa29625571b63003f665f))
+* **deps:** Update dependency recast to v0.23.12 ([#2776](https://github.com/grafana/plugin-tools/issues/2776)) ([8310d86](https://github.com/grafana/plugin-tools/commit/8310d86fc1288b76dca4d1cdf34d5bd6f766e180))
+* **deps:** Update dependency which to v7 ([#2769](https://github.com/grafana/plugin-tools/issues/2769)) ([9404973](https://github.com/grafana/plugin-tools/commit/9404973dd48592cf348cf8b6df2571b6c3e99ae2))
+* **deps:** Update grafana dependencies ([#2789](https://github.com/grafana/plugin-tools/issues/2789)) ([53c8b6b](https://github.com/grafana/plugin-tools/commit/53c8b6b05a4af04e7556149b6f1ade40031c7cd2))
+* **templates:** Update dependency @grafana/plugin-e2e to v3.10.0 ([#2787](https://github.com/grafana/plugin-tools/issues/2787)) ([ca2e54f](https://github.com/grafana/plugin-tools/commit/ca2e54fa3b05b0f9fb5647fa8ae3aeada7519916))
+
+## [7.9.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.8.1...@grafana/create-plugin@7.9.0) (2026-07-14)
+
+
+### Features
+
+* **deps:** bump grafana libs to 13.1.0 in templates ([#2750](https://github.com/grafana/plugin-tools/issues/2750)) ([dab0f70](https://github.com/grafana/plugin-tools/commit/dab0f70ec9816b56d6fe73230fd24d0e2b76b03e))
+
+
+### Bug Fixes
+
+* output single license file when building plugin ([#2770](https://github.com/grafana/plugin-tools/issues/2770)) ([fd20ced](https://github.com/grafana/plugin-tools/commit/fd20cedfffc053e69898081740038544db2c7470))
+
+## [7.8.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.8.0...@grafana/create-plugin@7.8.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* replace find-up dependency with native @libs/find-up helper ([#2722](https://github.com/grafana/plugin-tools/issues/2722)) ([d20ff77](https://github.com/grafana/plugin-tools/commit/d20ff7714de762a2d7ce96cf33a37d615e78e77c))
+
 ## [7.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.7.1...@grafana/create-plugin@7.8.0) (2026-06-11)
 
 

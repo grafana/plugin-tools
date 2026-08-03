@@ -10,6 +10,10 @@ export const DEFAULT_ADMIN_USER: User = {
 export const DEFAULT_OPEN_FEATURE_FLAGS = {
   // disable the splash screen by default for all consumers of plugin-e2e
   splashScreen: false,
+  // keep the variables and annotations tabs on the dashboard settings page.
+  // when this flag is enabled (default since Grafana 13.2.0), the tabs only show
+  // an alert pointing to the dashboard sidebar, which breaks VariableEditPage and AnnotationEditPage
+  'grafana.dashboardSettingsRedesign': false,
 };
 
 export const options: Fixtures<{}, PluginOptions> = {

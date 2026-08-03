@@ -3,6 +3,16 @@ import { test, expect } from '../../../../src';
 
 const skipMsg = 'Alerting rule test API are only compatible with Grafana 9.5.0 and later';
 test.use({ featureToggles: { alertingQueryAndExpressionsStepMode: false, alertingNotificationsStepMode: false } });
+
+// This spec covers the query and expression step without the advanced mode switch, which requires
+// disabling the alertingQueryAndExpressionsStepMode feature toggle. Since Grafana 13.2.0 the frontend
+// no longer honors that toggle (grafana/grafana#125086), so this configuration cannot be tested there.
+// alerting.advancedMode.spec.ts covers the same scenarios on those versions.
+test.skip(
+  ({ grafanaVersion }) => semver.gte(grafanaVersion, '13.2.0-0'),
+  'the alertingQueryAndExpressionsStepMode feature toggle has no effect in Grafana >= 13.2.0'
+);
+
 test.describe('Test alert rule APIs', () => {
   test('advanced mode should be disabled', async ({ grafanaVersion, alertRuleEditPage }) => {
     test.skip(semver.lt(grafanaVersion, '9.5.0'), skipMsg);

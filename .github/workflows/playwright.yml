@@ -17,7 +17,7 @@ jobs:
       matrix: ${{ steps.resolve-versions.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -42,12 +42,12 @@ jobs:
     name: ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
     runs-on: ubuntu-x64
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: ".nvmrc"
           registry-url: 'https://registry.npmjs.org'
@@ -62,8 +62,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      # Fork PRs never get an OIDC id-token, so Vault secrets are unavailable there.
+      # Skipping the Docker Hub login falls back to anonymous image pulls (rate-limit risk only).
       - name: Get secrets for DockerHub login
         id: get-secrets
+        if: ${{ github.event.pull_request.head.repo.fork != true }}
         uses: grafana/shared-workflows/actions/get-vault-secrets@9f37f656e063f0ad0b0bfc38d49894b57d363936 # v1.2.1
         with:
           common_secrets: |
@@ -72,10 +75,11 @@ jobs:
           export_env: false
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
-          username: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_USERNAME }}
-          password: ${{ fromJSON(steps.get-secrets.outputs.secrets).DOCKERHUB_PASSWORD }}
+          username: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').DOCKERHUB_USERNAME }}
+          password: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').DOCKERHUB_PASSWORD }}
 
       - name: Start Grafana
         working-directory: ./packages/plugin-e2e

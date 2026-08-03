@@ -24,6 +24,12 @@ export interface Page {
   file: string;
 
   /**
+   * Optional headings (h2, h3) extracted from the page's markdown body.
+   * Present only on pages backed by a real file; omitted on category nodes.
+   */
+  headings?: Heading[];
+
+  /**
    * Optional nested child pages.
    */
   children?: Page[];
