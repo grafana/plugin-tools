@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "minimist": "1.2.8",
-    "proxy-agent": "8.0.1"
+    "proxy-agent": "8.0.2"
   },
   "devDependencies": {
     "@libs/find-up": "^1.0.0",
