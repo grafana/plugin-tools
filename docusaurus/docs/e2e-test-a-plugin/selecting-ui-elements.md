@@ -74,6 +74,8 @@ explorePage.getQueryEditorRow('A').getByLabel('Query').fill('sum(*)');
 
 Here are some examples demonstrating how to interact with a few UI components that are common in plugins. The `InlineField` and `Field` component can be used interchangeably.
 
+For many common Grafana UI components, such as `select`, `switch`, `radio group`, or `color picker`, `@grafana/plugin-e2e` provides ready-made component models through the [`components` fixture](./use-the-api.md#components). When it covers the component you're testing, use the `components` fixture, since it handles UI differences between Grafana versions and other elements and the component you're targeting.
+
 #### Input field
 
 You can use the `InlineField` component to interact with the UI.
@@ -93,17 +95,20 @@ await page.getByRole('textbox', { name: 'Auth key' }).fill('..');
 Unlike many other components that require you to pass an `id` prop to be able to associate the label with the form element, the `select` component requires you to pass an `inputId` prop. You can find more information about testing the `select` component [here](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md#testing-select-components).
 
 ```tsx title="UI component"
-<InlineField label="Auth type">
-  <Select inputId="config-auth-type" value={value} options={options} onChange={handleOnChange} />
-</InlineField>
+<div data-testid="config-auth-type-field">
+  <InlineField label="Auth type">
+    <Select inputId="config-auth-type" value={value} options={options} onChange={handleOnChange} />
+  </InlineField>
+</div>
 ```
 
+Use the `select` model from the [`components` fixture](./use-the-api.md#components) to interact with the component, and the `toHaveSelected` matcher to assert the selected option:
+
 ```ts title="Playwright test"
-test('testing select component', async ({ page, selectors }) => {
-  const configPage = await createDataSourceConfigPage({ type: 'test-datasource' });
-  await page.getByRole('combobox', { name: 'Auth type' }).click();
-  const option = selectors.components.Select.option;
-  await expect(configPage.getByGrafanaSelector(option)).toHaveText(['val1', 'val2']);
+test('testing select component', async ({ page, components }) => {
+  const authTypeField = page.getByTestId('config-auth-type-field');
+  await components.select.within(authTypeField).selectOption('OAuth');
+  await expect(components.select.within(authTypeField)).toHaveSelected('OAuth');
 });
 ```
 
@@ -111,7 +116,7 @@ test('testing select component', async ({ page, selectors }) => {
 
 You can use the `Checkbox` component to interact with the UI.
 
-```tsx title="UI componevnt"
+```tsx title="UI component"
 <InlineField label="TLS Enabled">
   <Checkbox id="config-tls-enabled" value={value} onChange={handleOnChange} />
 </InlineField>
@@ -129,27 +134,23 @@ await expect(page.getByRole('checkbox', { name: 'TLS Enabled' })).not.toBeChecke
 You can use the `InlineSwitch` component to interact with the UI.
 
 ```tsx title="UI component"
-<InlineField label="TLS Enabled">
-  <InlineSwitch label="TLS Enabled" value={value} onChange={handleOnChange} />
-</InlineField>
+<div data-testid="config-tls-field">
+  <InlineField label="TLS Enabled">
+    <InlineSwitch label="TLS Enabled" value={value} onChange={handleOnChange} />
+  </InlineField>
+</div>
 ```
 
-Use `getByRole('switch', { name: /TLS Enabled/i })` rather than `getByLabel` — newer versions of Grafana add `aria-label` to the `<label>` element itself, which causes `getByLabel` to match multiple elements and fail in strict mode.
-
-Use `isChecked()` combined with `click({ force: true })` rather than `check()`/`uncheck()`. The `check()` and `uncheck()` methods assert the final state after clicking, which can race with React's re-render cycle on newer versions of Grafana and cause intermittent failures.
+Use the `switch` model from the [`components` fixture](./use-the-api.md#components) to interact with the component. It resolves the switch element across Grafana versions, and its `check` and `uncheck` methods are idempotent, so they only click the switch when the state needs to change, which avoids races with React's re-render cycle.
 
 ```ts title="Playwright test"
-const switchLocator = page.getByRole('switch', { name: /TLS Enabled/i });
+const tlsField = page.getByTestId('config-tls-field');
 
 // checking
-if (!(await switchLocator.isChecked())) {
-  await switchLocator.click({ force: true });
-}
-await expect(switchLocator).toBeChecked();
+await components.switch.within(tlsField).check();
+await expect(components.switch.within(tlsField)).toBeChecked();
 
 // unchecking
-if (await switchLocator.isChecked()) {
-  await switchLocator.click({ force: true });
-}
-await expect(switchLocator).not.toBeChecked();
+await components.switch.within(tlsField).uncheck();
+await expect(components.switch.within(tlsField)).not.toBeChecked();
 ```

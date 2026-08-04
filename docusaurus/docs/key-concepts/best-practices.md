@@ -79,6 +79,7 @@ Is something missing from this list? [Let us know](https://github.com/grafana/pl
 - **Code split your app** - If you app contains multiple pages, make sure to use code splitting techniques to improve frontend load performance. By default Webpack will display warnings in terminal during build if any frontend assets are larger than 250kb. See the following links for more info:
   - [SurviveJs code splitting overview](https://survivejs.com/books/webpack/building/code-splitting)
   - [Official React lazy documentation](https://react.dev/reference/react/lazy)
+- **Don't wrap your root page in a `Suspense` boundary** - Grafana renders a loading state for you while a lazy root page loads, so pass the lazy component straight to `setRootPage`. Config pages registered with `addConfigPage` and other components aren't wrapped, so those still need their own `Suspense` boundary.
 - **To generate dynamic apps, consider using [Grafana Scenes](https://grafana.com/developers/scenes/).**
 - **Consider contributing a [UI extension](../how-to-guides/ui-extensions/ui-extensions-concepts)** - UI extensions can help a user to discover your app in context and continue a given workflow. Additionally, if your app provides context that can be used in other apps, then create an extension point to allow these apps to do so, with no further changes required in your app.
 
