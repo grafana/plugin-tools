@@ -210,13 +210,6 @@ jobs:
         run: npx create-plugin update --force
         working-directory: ./${{ env.WORKING_DIR }}
 
-      # Temporarily pin playwright to match the template: the scaffolded plugin has a caret range
-      # that resolves to 1.62, which crashes on tsconfigs extending @grafana/tsconfig.
-      # Remove once playwright ships a fix and the template pin is lifted.
-      - name: Pin playwright version
-        run: npm install --no-audit --save-dev @playwright/test@~1.61.1
-        working-directory: ./${{ env.WORKING_DIR }}
-
       - name: Lint plugin frontend
         run: npm run lint
         working-directory: ./${{ env.WORKING_DIR }}
