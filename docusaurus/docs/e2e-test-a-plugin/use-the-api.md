@@ -59,7 +59,7 @@ To learn how to provision the Grafana instance with the resources that you need,
 
 ### Components
 
-Component model objects represent Grafana UI components such as the select, switch, radio group, and color picker components. Like pages, they encapsulate common UI operations in one place and handle UI deviations between different versions of Grafana. Use the `components` fixture to interact with a Grafana UI component instead of writing your own locators.
+Component model objects represent Grafana UI components such as the `select`, `switch`, `radio group`, and `color picker` components. Like pages, they encapsulate common UI operations in one place and handle UI deviations between different versions of Grafana. Use the `components` fixture to interact with a Grafana UI component instead of writing your own locators.
 
 The following example uses the `dataSourcePicker` component to select a data source:
 
