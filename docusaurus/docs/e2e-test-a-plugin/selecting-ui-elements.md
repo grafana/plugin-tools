@@ -74,7 +74,7 @@ explorePage.getQueryEditorRow('A').getByLabel('Query').fill('sum(*)');
 
 Here are some examples demonstrating how to interact with a few UI components that are common in plugins. The `InlineField` and `Field` component can be used interchangeably.
 
-For many common Grafana UI components, such as select, switch, radio group, and color picker, `@grafana/plugin-e2e` provides ready-made component models through the [`components` fixture](./use-the-api.md#components). Prefer the `components` fixture whenever it covers the component you're testing - it handles UI differences between Grafana versions and actionability quirks for you.
+For many common Grafana UI components, such as `select`, `switch`, `radio group`, or `color picker`, `@grafana/plugin-e2e` provides ready-made component models through the [`components` fixture](./use-the-api.md#components). When it covers the component you're testing, use the `components` fixture, since it handles UI differences between Grafana versions and other elements and the component you're targeting.
 
 #### Input field
 
