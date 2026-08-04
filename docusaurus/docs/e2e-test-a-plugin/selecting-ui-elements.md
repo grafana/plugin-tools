@@ -141,7 +141,7 @@ You can use the `InlineSwitch` component to interact with the UI.
 </div>
 ```
 
-Use the `switch` model from the [`components` fixture](./use-the-api.md#components) to interact with the component. It resolves the switch element across Grafana versions, and its `check` and `uncheck` methods are idempotent - they only click the switch when the state needs to change, which avoids races with React's re-render cycle.
+Use the `switch` model from the [`components` fixture](./use-the-api.md#components) to interact with the component. It resolves the switch element across Grafana versions, and its `check` and `uncheck` methods are idempotent, so they only click the switch when the state needs to change, which avoids races with React's re-render cycle.
 
 ```ts title="Playwright test"
 const tlsField = page.getByTestId('config-tls-field');
