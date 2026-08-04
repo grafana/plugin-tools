@@ -84,7 +84,7 @@ The `components` fixture exposes the following components:
 
 To see the full list of components exposed by `@grafana/plugin-e2e`, refer to the Github [repository](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-e2e/src/models/components).
 
-#### Scoping a component to a part of the page
+#### Scope a component to a part of the page
 
 By default, a component model resolves to the first matching element on the page. If the page contains more than one instance of a component, use the `within` method to scope the component to a Playwright [locator](https://playwright.dev/docs/locators).
 
