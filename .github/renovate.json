@@ -50,7 +50,7 @@
       "customType": "regex",
       "managerFilePatterns": ["/_package.json/"],
       "matchStrings": [
-        "\"(?<depName>@grafana/.*)\"[^\"]*:\\s*\"\\^(?<currentValue>.*)\","
+        "\"(?<depName>@grafana/[^\"]+)\":\\s*\"\\^?(?<currentValue>[^\"]+)\","
       ],
       "datasourceTemplate": "npm"
     },
@@ -174,20 +174,24 @@
       "matchFileNames": [".github/workflows/**"],
       "commitMessagePrefix": "chore(ci):"
     },
-    // @grafana/e2e-selectors are tracked on the nightly tag. Bumps here should release so fix(deps).
+    // @grafana/e2e-selectors tracks nightly builds (13.x-<run-id> prereleases published above the
+    // `latest` dist-tag, hence ignoreUnstable/respectLatest false). followTag: "nightly" could never
+    // pass the org-forced 3-day minimumReleaseAge (the tag always points at a <1 day old build),
+    // which froze the branch entirely (#2672). Version-based tracking lets Renovate pick the newest
+    // nightly that clears the age gate instead. Bumps here should release so fix(deps).
     {
       "automerge": true,
       "groupName": "e2e-selectors nightly",
       "groupSlug": "plugin-e2e-selectors",
       "labels": ["dependencies", "javascript"],
       "matchPackageNames": ["@grafana/e2e-selectors"],
-      "followTag": "nightly",
+      "ignoreUnstable": false,
+      "respectLatest": false,
       "rangeStrategy": "bump",
       "matchFileNames": [
         "packages/plugin-e2e/package.json",
         "package-lock.json"
       ],
-      "minimumReleaseAge": null,
       "commitMessagePrefix": "fix(deps):"
     }
   ],
