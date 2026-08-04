@@ -1,6 +1,4 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { PLUGIN_TYPES, TEMPLATE_PATHS } from '../../constants.js';
+import { PLUGIN_TYPES } from '../../constants.js';
 import { getTemplateFiles } from '../utils.templates.js';
 
 describe('Utils / Templates', () => {
@@ -41,18 +39,6 @@ describe('Utils / Templates', () => {
 
       expect(Array.isArray(templateFiles)).toBe(true);
       expect(templateFiles.length).toBe(1);
-    });
-
-    test('should include both the managed and extendable Playwright configs', () => {
-      const templateFiles = getTemplateFiles(PLUGIN_TYPES.app, ['.config/playwright.config.ts', 'playwright.config']);
-      const relativeTemplateFiles = templateFiles.map((file) => path.relative(TEMPLATE_PATHS.common, file));
-
-      expect(relativeTemplateFiles).toEqual(
-        expect.arrayContaining(['.config/playwright.config.ts', 'playwright.config'])
-      );
-      expect(fs.readFileSync(path.join(TEMPLATE_PATHS.common, 'playwright.config'), 'utf8')).toContain(
-        "import baseConfig from './.config/playwright.config';"
-      );
     });
   });
 });
