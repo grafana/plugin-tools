@@ -1,16 +1,95 @@
-import { TestFixture } from '@playwright/test';
+import { APIRequestContext, TestFixture } from '@playwright/test';
+import {
+  resolveSelectors,
+  versionedComponents as bundledVersionedComponents,
+  versionedPages as bundledVersionedPages,
+} from '@grafana/e2e-selectors';
 import { E2ESelectorGroups, PlaywrightArgs } from '../types';
-import { resolveSelectors, versionedComponents, versionedPages } from '@grafana/e2e-selectors';
 import { versionedConstants } from '../selectors/versionedConstants';
 import { versionedAPIs } from '../selectors/versionedAPIs';
+import { reconstructSelectorTree } from '../selectors/reconstruct';
 
 type SelectorFixture = TestFixture<E2ESelectorGroups, PlaywrightArgs>;
 
-export const selectors: SelectorFixture = async ({ grafanaVersion }, use) => {
-  await use({
-    components: resolveSelectors(versionedComponents, grafanaVersion),
-    pages: resolveSelectors(versionedPages, grafanaVersion),
+type VersionedComponents = typeof bundledVersionedComponents;
+type VersionedPages = typeof bundledVersionedPages;
+
+// data-only selectors file served by the Grafana instance under test (see grafana/grafana
+// e2e-selectors build). Used when the instance serves it; otherwise the fixture falls back to the
+// selectors bundled with the installed release.
+const SELECTORS_URL = '/public/e2e-selectors.json';
+
+// per-worker cache keyed by grafanaVersion so concurrent fixtures share one in-flight fetch
+const selectorsCache = new Map<string, Promise<E2ESelectorGroups>>();
+
+function buildGroups(
+  components: VersionedComponents,
+  pages: VersionedPages,
+  grafanaVersion: string
+): E2ESelectorGroups {
+  return {
+    components: resolveSelectors(components, grafanaVersion),
+    pages: resolveSelectors(pages, grafanaVersion),
     constants: resolveSelectors(versionedConstants, grafanaVersion),
     apis: resolveSelectors(versionedAPIs, grafanaVersion),
-  });
+  };
+}
+
+// fall back to the selectors bundled with the installed @grafana/plugin-e2e release
+function bundledGroups(grafanaVersion: string): E2ESelectorGroups {
+  return buildGroups(bundledVersionedComponents, bundledVersionedPages, grafanaVersion);
+}
+
+async function fetchRuntimeGroups(request: APIRequestContext, grafanaVersion: string): Promise<E2ESelectorGroups> {
+  let response;
+  try {
+    response = await request.get(SELECTORS_URL, { maxRedirects: 0 });
+  } catch (error) {
+    console.warn(`@grafana/plugin-e2e: failed to fetch ${SELECTORS_URL}, falling back to bundled selectors.`, error);
+    return bundledGroups(grafanaVersion);
+  }
+
+  // 404 -> Grafana predates the feature; expected on older images, fall back quietly
+  if (response.status() === 404) {
+    return bundledGroups(grafanaVersion);
+  }
+
+  if (!response.ok()) {
+    console.warn(
+      `@grafana/plugin-e2e: ${SELECTORS_URL} returned ${response.status()}, falling back to bundled selectors.`
+    );
+    return bundledGroups(grafanaVersion);
+  }
+
+  try {
+    const data = JSON.parse(await response.text()) as {
+      schemaVersion?: unknown;
+      versionedComponents?: unknown;
+      versionedPages?: unknown;
+    };
+    if (
+      data?.schemaVersion !== 1 ||
+      typeof data.versionedComponents !== 'object' ||
+      typeof data.versionedPages !== 'object'
+    ) {
+      throw new Error('unexpected e2e-selectors schema');
+    }
+    const components = reconstructSelectorTree(data.versionedComponents) as VersionedComponents;
+    const pages = reconstructSelectorTree(data.versionedPages) as VersionedPages;
+    return buildGroups(components, pages, grafanaVersion);
+  } catch (error) {
+    console.warn(`@grafana/plugin-e2e: failed to read ${SELECTORS_URL}, falling back to bundled selectors.`, error);
+    return bundledGroups(grafanaVersion);
+  }
+}
+
+export const selectors: SelectorFixture = async ({ grafanaVersion, request }, use) => {
+  // use the runtime selectors served by the Grafana under test when available, otherwise fall back
+  // to the selectors bundled with the installed release
+  let groups = selectorsCache.get(grafanaVersion);
+  if (!groups) {
+    groups = fetchRuntimeGroups(request, grafanaVersion);
+    selectorsCache.set(grafanaVersion, groups);
+  }
+  await use(await groups);
 };
