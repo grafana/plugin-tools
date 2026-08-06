@@ -1,5 +1,15 @@
 # Changelog
 
+## [7.9.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.9.1...@grafana/create-plugin@7.9.2) (2026-08-05)
+
+
+### Bug Fixes
+
+* **create-plugin:** bump valibot to 1.4.2 ([#2813](https://github.com/grafana/plugin-tools/issues/2813)) ([4920dd8](https://github.com/grafana/plugin-tools/commit/4920dd88acd6e25817dec8b0342cf0d64de8902b))
+* **create-plugin:** unpin @playwright/test now that 1.62.1 fixes tsconfig resolution ([#2815](https://github.com/grafana/plugin-tools/issues/2815)) ([3f5dc96](https://github.com/grafana/plugin-tools/commit/3f5dc9656b48e602b099044cc1eb9b25c6e2c220))
+* **deps:** bump plugin-actions in create-plugin templates ([#2732](https://github.com/grafana/plugin-tools/issues/2732)) ([9f43b00](https://github.com/grafana/plugin-tools/commit/9f43b00a32bfabaf9ad27b7efd409e512777e342))
+* remove suspense boundaries from app plugin templates ([#2778](https://github.com/grafana/plugin-tools/issues/2778)) ([dd1293a](https://github.com/grafana/plugin-tools/commit/dd1293a5c9278147df465ff7521e18cb7aec754f))
+
 ## [7.9.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.9.0...@grafana/create-plugin@7.9.1) (2026-07-29)
 
 
