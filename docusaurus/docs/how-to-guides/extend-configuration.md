@@ -1,7 +1,7 @@
 ---
 id: extend-configurations
 title: Extend default configurations
-description: Extend your development environment tooling configuration (webpack, eslint, prettier, jest)
+description: Extend your development environment tooling configuration (webpack, eslint, prettier, jest, Playwright)
 keywords:
   - grafana
   - plugins
@@ -10,6 +10,7 @@ keywords:
   - tooling
   - configuration
   - webpack
+  - playwright
 ---
 
 The `.config/` directory holds the preferred configuration for the different tools used to develop, test, and build a Grafana plugin. Although you can make changes, we recommend against doing so. Instead, follow the guidance in this topic to customize your tooling configs.
@@ -89,6 +90,32 @@ To extend the TS configuration, edit the `tsconfig.json` file in the project roo
   }
 }
 ```
+
+### Extend the Playwright config
+
+Edit the `playwright.config.ts` file in the project root to extend the Playwright configuration. The following example adds a Firefox project while retaining the default authentication and Chromium projects:
+
+```ts title="playwright.config.ts"
+import type { PluginOptions } from '@grafana/plugin-e2e';
+import { defineConfig, devices } from '@playwright/test';
+import baseConfig from './.config/playwright.config';
+
+export default defineConfig<PluginOptions>(baseConfig, {
+  projects: [
+    ...baseConfig.projects!,
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox'],
+        storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['auth'],
+    },
+  ],
+});
+```
+
+Playwright replaces arrays such as `projects` when it merges configurations. Spread `baseConfig.projects` into the new array when you want to retain the default projects.
 
 ### Extend the Webpack config
 
