@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.10.0...@grafana/plugin-e2e@3.11.0) (2026-08-05)
+
+
+### Features
+
+* **plugin-e2e:** add missing components to the components fixture ([#2621](https://github.com/grafana/plugin-tools/issues/2621)) ([3b64543](https://github.com/grafana/plugin-tools/commit/3b64543493936c24fa75ad7eb0ba89d5ac5647f4))
+
+
+### Bug Fixes
+
+* **deps:** bump e2e-selectors in plugin-e2e ([#2818](https://github.com/grafana/plugin-tools/issues/2818)) ([99635a7](https://github.com/grafana/plugin-tools/commit/99635a716363cd321010d440f74abbe8dcbbe1e5))
+
 ## [3.10.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.9.2...@grafana/plugin-e2e@3.10.0) (2026-07-14)
 
 

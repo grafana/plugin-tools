@@ -93,7 +93,6 @@ jobs:
               ].join('\n');
             });
             const payload = {
-              channel: 'C09CY9URN31',
               text: `:package: Beep Boop! :robot: Plugin tools ${paths.length} package${paths.length === 1 ? '' : 's'} staged for release`,
               blocks: [
                 {
@@ -115,7 +114,11 @@ jobs:
                 },
               ],
             };
-            core.setOutput('payload', JSON.stringify(payload));
+            // chat.postMessage takes a single channel per call, so emit one payload per channel.
+            const channels = ['C09CY9URN31', 'C0BNRK96T24'];
+            channels.forEach((channel, i) => {
+              core.setOutput(`payload-${i}`, JSON.stringify({ channel, ...payload }));
+            });
 
       - name: Notify Slack
         uses: grafana/shared-workflows/actions/send-slack-message@551bc8d50017d3e95d5da3f8a4826e733a208dc0 # send-slack-message/v3.0.2
@@ -125,4 +128,11 @@ jobs:
           # it unset passes an empty string that overrides slackapi's own "false" default and
           # throws on getBooleanInput. Our payload is pre-rendered, so no templating is needed.
           payload-templated: false
-          payload: ${{ steps.slack-payload.outputs.payload }}
+          payload: ${{ steps.slack-payload.outputs.payload-0 }}
+
+      - name: Notify Slack (second channel)
+        uses: grafana/shared-workflows/actions/send-slack-message@551bc8d50017d3e95d5da3f8a4826e733a208dc0 # send-slack-message/v3.0.2
+        with:
+          method: chat.postMessage
+          payload-templated: false
+          payload: ${{ steps.slack-payload.outputs.payload-1 }}
