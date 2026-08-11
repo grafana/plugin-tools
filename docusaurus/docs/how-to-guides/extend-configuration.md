@@ -102,7 +102,6 @@ import baseConfig from './.config/playwright.config';
 
 export default defineConfig<PluginOptions>(baseConfig, {
   projects: [
-    ...baseConfig.projects!,
     {
       name: 'firefox',
       use: {
@@ -114,8 +113,6 @@ export default defineConfig<PluginOptions>(baseConfig, {
   ],
 });
 ```
-
-Playwright replaces arrays such as `projects` when it merges configurations. Spread `baseConfig.projects` into the new array when you want to retain the default projects.
 
 ### Extend the Webpack config
 
