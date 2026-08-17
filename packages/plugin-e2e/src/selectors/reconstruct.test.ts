@@ -10,7 +10,7 @@ describe('reconstructSelectorTree', () => {
 
   it('reconstructs a one-arg descriptor into an interpolating function', () => {
     const tree = reconstructSelectorTree({
-      Comp: { sel: { '8.0.0': { $template: 'data-testid option {0}', params: ['value'] } } },
+      Comp: { sel: { '8.0.0': { $template: 'data-testid option {value}', params: ['value'] } } },
     }) as any;
     const fn = tree.Comp.sel['8.0.0'];
     expect(typeof fn).toBe('function');
@@ -19,7 +19,7 @@ describe('reconstructSelectorTree', () => {
 
   it('reconstructs a two-arg descriptor', () => {
     const tree = reconstructSelectorTree({
-      s: { '8.0.0': { $template: 'range {0} to {1}', params: ['from', 'to'] } },
+      s: { '8.0.0': { $template: 'range {from} to {to}', params: ['from', 'to'] } },
     }) as any;
     expect(tree.s['8.0.0']('a', 'b')).toBe('range a to b');
   });
@@ -31,7 +31,12 @@ describe('reconstructSelectorTree', () => {
 
   it('reconstructs a conditional (present/absent) descriptor', () => {
     const tree = reconstructSelectorTree({
-      s: { '11.1.0': { $template: { whenPresent: 'Options group {0}', whenAbsent: 'Options group' }, params: ['title'] } },
+      s: {
+        '11.1.0': {
+          $template: { whenPresent: 'Options group {title}', whenAbsent: 'Options group' },
+          params: ['title'],
+        },
+      },
     }) as any;
     const fn = tree.s['11.1.0'];
     expect(fn('X')).toBe('Options group X');
