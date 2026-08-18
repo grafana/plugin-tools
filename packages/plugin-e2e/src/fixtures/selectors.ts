@@ -22,6 +22,13 @@ const SELECTORS_URL = '/public/e2e-selectors.json';
 // per-worker cache keyed by grafanaVersion so concurrent fixtures share one in-flight fetch
 const selectorsCache = new Map<string, Promise<E2ESelectorGroups>>();
 
+// opt-in toggle while the runtime path is validated in plugin-tools' own Playwright workflows. when
+// unset, the fixture uses the bundled selectors as before. remove once runtime selectors ship to all
+// consumers.
+function runtimeSelectorsEnabled(): boolean {
+  return process.env.PLUGIN_E2E_RUNTIME_SELECTORS === 'true';
+}
+
 function buildGroups(
   components: VersionedComponents,
   pages: VersionedPages,
@@ -84,6 +91,13 @@ async function fetchRuntimeGroups(request: APIRequestContext, grafanaVersion: st
 }
 
 export const selectors: SelectorFixture = async ({ grafanaVersion, request }, use) => {
+  // until the runtime path is rolled out, only fetch when explicitly enabled; otherwise use the
+  // selectors bundled with the installed release
+  if (!runtimeSelectorsEnabled()) {
+    await use(bundledGroups(grafanaVersion));
+    return;
+  }
+
   // use the runtime selectors served by the Grafana under test when available, otherwise fall back
   // to the selectors bundled with the installed release
   let groups = selectorsCache.get(grafanaVersion);
