@@ -3,6 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import matter from 'gray-matter';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { isMetaFile } from './utils.js';
 
 const REQUIRED_FIELDS: Array<{ key: string; type: string }> = [
   { key: 'title', type: 'string' },
@@ -94,7 +95,11 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
 
   const mdFiles = entries.filter(
     (e) =>
-      e.isFile() && e.name.endsWith('.md') && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
+      e.isFile() &&
+      e.name.endsWith('.md') &&
+      !isMetaFile(e.name) &&
+      !e.parentPath.includes('node_modules') &&
+      !e.parentPath.includes('dist')
   );
 
   const records: FileRecord[] = [];
