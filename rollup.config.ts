@@ -39,7 +39,7 @@ if (pkg.name === '@grafana/create-plugin') {
     ignore: ['**/*.test.ts'],
     absolute: true,
   };
-  const codeMods = glob.sync('{migrations,additions}/scripts/*.ts', codeModsGlobOptions).map((m) => m.toString());
+  const codeMods = glob.sync('{migrations,additions}/scripts/**/*.ts', codeModsGlobOptions).map((m) => m.toString());
   input.push(...codeMods);
 
   external.push('prettier');
@@ -141,6 +141,16 @@ function copyAssets(): Plugin {
         const srcStyles = join(projectRoot, 'src', 'server', 'styles');
         const distStyles = join(projectRoot, 'dist', 'server', 'styles');
         await cp(srcStyles, distStyles, { recursive: true });
+      }
+
+      if (pkg.name === '@grafana/create-plugin') {
+        const templateDirs = glob.sync('src/codemods/**/templates', { cwd: projectRoot, absolute: true });
+        await Promise.all(
+          templateDirs.map((src) => {
+            const dist = src.replace(`${projectRoot}/src/`, `${projectRoot}/dist/`);
+            return cp(src, dist, { recursive: true });
+          })
+        );
       }
     },
   };
