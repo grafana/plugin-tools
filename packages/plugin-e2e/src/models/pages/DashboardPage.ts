@@ -57,16 +57,26 @@ export class DashboardPage extends GrafanaPage {
   /**
    * Returns a locator for the dashboard toolbar area that contains the time range controls.
    *
-   * - Grafana ≥ 11.1.0: resolves to `Dashboard.Controls` (scenes-based dashboard controls bar)
-   * - Grafana 9.4.0–11.0.x: resolves to `NavToolbar.container`
-   * - Grafana < 9.4.0: falls back to `.page-toolbar`
+   * The thresholds are the versions at which each toolbar became the *default*, not the versions
+   * at which its selector first existed. Both toolbars shipped behind a feature toggle that was
+   * still off by default for two minor releases, so gating on first availability resolves to an
+   * element that Grafana never renders:
+   *
+   * - `dashboard controls` is declared from 11.1.0 but belongs to the scenes dashboard, and
+   *   `dashboardScene` is only default-on from 11.3.0.
+   * - `Nav toolbar` is declared from 9.4.0 but belongs to the top nav, and `topnav` is only
+   *   default-on from 9.5.0 — the same threshold `addPanel` already uses below.
+   *
+   * - Grafana ≥ 11.3.0: resolves to `Dashboard.Controls` (scenes-based dashboard controls bar)
+   * - Grafana 9.5.0–11.2.x: resolves to `NavToolbar.container`
+   * - Grafana < 9.5.0: falls back to `.page-toolbar`
    */
   get toolbar() {
     const { components, pages } = this.ctx.selectors;
-    if (gte(this.ctx.grafanaVersion, '11.1.0')) {
+    if (gte(this.ctx.grafanaVersion, '11.3.0')) {
       return this.getByGrafanaSelector(pages.Dashboard.Controls);
     }
-    return gte(this.ctx.grafanaVersion, '9.4.0')
+    return gte(this.ctx.grafanaVersion, '9.5.0')
       ? this.getByGrafanaSelector(components.NavToolbar.container)
       : this.ctx.page.locator('.page-toolbar');
   }
