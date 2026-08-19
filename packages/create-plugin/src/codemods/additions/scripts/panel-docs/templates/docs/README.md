@@ -6,13 +6,21 @@ This folder contains the multi-page documentation for **{{pluginName}}**, publis
 
 Document every feature of the panel. The codemod scaffolded these pages as stubs — fill in each one:
 
-| File                 | Purpose                                                                                               |
-| -------------------- | ----------------------------------------------------------------------------------------------------- |
-| `index.md`           | Overview, what the panel does, what problem it solves.                                                |
-| `data-formats.md`    | The data shape the panel consumes; field types and which field plays which role in the visualization. |
-| `options.md`         | Panel-specific options the editor exposes (panel, tooltip, legend) beyond Grafana's standard options. |
-| `examples.md`        | Worked configurations in `dashboard.json` panel format.                                               |
-| `troubleshooting.md` | Real failures users hit, with diagnostic steps.                                                       |
+| File                 | Purpose                                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `index.md`           | Overview, what the panel does, what problem it solves. See note below — this is not just another docs page. |
+| `data-formats.md`    | The data shape the panel consumes; field types and which field plays which role in the visualization.       |
+| `options.md`         | Panel-specific options the editor exposes (panel, tooltip, legend) beyond Grafana's standard options.       |
+| `examples.md`        | Worked configurations in `dashboard.json` panel format.                                                     |
+| `troubleshooting.md` | Real failures users hit, with diagnostic steps.                                                             |
+
+### `index.md` replaces your README on grafana.com
+
+When `docsPath` is set, `index.md` is what grafana.com's **Overview** tab shows instead of your
+repository README — not just the docs entry point. Write its Introduction and Features sections as your
+plugin's public pitch: the same audience that used to read your README, not fellow contributors. Keep it
+free of build badges, contribution notes and other repo-only content; that still belongs in your actual
+`README.md`, which no longer appears on the catalog page once `docsPath` is set.
 
 ## Preview and validate locally
 
