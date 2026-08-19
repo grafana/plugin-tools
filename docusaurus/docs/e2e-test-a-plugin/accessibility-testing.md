@@ -82,7 +82,7 @@ test('panel has no accessibility violations', async ({
 });
 ```
 
-Use `exclude` to scan a page but skip a subtree, for example a third-party component you don't control:
+Use `exclude` to scan a page but skip a subtree. For example, you may need to skip a third-party component you don't control:
 
 ```ts
 const results = await scanForA11yViolations({ exclude: '[data-testid="third-party-map"]' });
