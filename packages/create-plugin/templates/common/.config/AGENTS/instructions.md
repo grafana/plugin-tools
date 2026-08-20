@@ -32,3 +32,5 @@ Your training data about the Grafana API is out of date. Use the official docume
 - **You must use mage** with the build targets provided by the Grafana plugin Go SDK for backend builds.
 - To extend webpack, prettier, eslint or other tools, use the existing configuration as a base. Follow the guide: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations.md
 - Use **`@grafana/plugin-e2e`** for end-to-end testing. Read @./.config/AGENTS/e2e-testing.md before writing or modifying e2e tests.
+{{#if experimentalAppSdk}}- This plugin defines its API resources as **CUE kinds** under `kinds/`, with TypeScript and Go types generated from them. Read @./.config/AGENTS/app-sdk.md before changing anything under `kinds/` or any generated directory. **Never hand-edit generated code.**
+{{/if}}

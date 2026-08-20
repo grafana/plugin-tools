@@ -3,3 +3,10 @@ services:
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
+{{#if experimentalAppSdk}}
+    environment:
+      # Lets Grafana read the grafana-app-sdk manifest from the plugin bundle and serve your kinds
+      # through the aggregated API server. Add further toggles to this comma-separated list.
+      # Note: this replaces (does not merge with) any GF_FEATURE_TOGGLES_ENABLE set in the base file.
+      GF_FEATURE_TOGGLES_ENABLE: plugins.appSDKManifest
+{{/if}}
