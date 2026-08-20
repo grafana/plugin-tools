@@ -84,6 +84,12 @@ describe('panel-docs codemod', () => {
       expect(context.getFile('docs/options.md') ?? '').toContain('<!-- section-brief:start -->');
     });
 
+    it('marks section-brief guidance as a fill-in blockquote', () => {
+      const context = makeContext();
+      panelDocs(context, { docsPath: 'docs' });
+      expect(context.getFile('docs/index.md') ?? '').toContain('> 📝 **Fill this in:**');
+    });
+
     it('interpolates pluginName into the index page', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs' });
