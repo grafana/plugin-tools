@@ -10,10 +10,13 @@ const FEATURE_TOGGLES_TIMEOUT = 5000;
  *
  * Grafana can render the app shell before it has merged its boot data, in which case
  * `settings.featureToggles` is briefly absent even though the Window type declares it as always
- * present. Reading it once then throws `Cannot read properties of undefined`. Falling back to an
- * empty map without waiting is worse than throwing, because a missing map is indistinguishable
- * from every toggle being disabled, so a caller silently takes its legacy branch on an instance
- * where the toggle is enabled.
+ * present. Reading it once then throws `Cannot read properties of undefined`.
+ *
+ * Waiting removes that race. It deliberately does not fall back to an empty map when the wait
+ * times out, because a missing map is indistinguishable from every toggle being disabled: a
+ * caller would silently take its legacy branch on an instance where the toggle is enabled. A
+ * loud failure is the lesser evil, so the timeout is rethrown with the context needed to act
+ * on it.
  */
 const readFeatureToggles = async <T>(page: Page): Promise<T> => {
   try {
@@ -24,8 +27,10 @@ const readFeatureToggles = async <T>(page: Page): Promise<T> => {
     );
     return (await featureToggles.jsonValue()) as T;
   } catch (error) {
-    console.error('@grafana/plugin-e2e: Failed to read feature toggles from boot data', error);
-    return {} as T;
+    throw new Error(
+      `@grafana/plugin-e2e: window.grafanaBootData.settings.featureToggles was not available within ${FEATURE_TOGGLES_TIMEOUT}ms`,
+      { cause: error }
+    );
   }
 };
 

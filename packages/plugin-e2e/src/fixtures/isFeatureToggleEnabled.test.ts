@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 import { isLegacyFeatureEnabled } from './isFeatureToggleEnabled';
 
@@ -19,14 +19,6 @@ function createMockPage(behaviour: { toggles?: Record<string, boolean>; timesOut
 }
 
 describe('isLegacyFeatureEnabled', () => {
-  beforeEach(() => {
-    vi.spyOn(console, 'error').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('returns true for an enabled toggle', async () => {
     const page = createMockPage({ toggles: { dashboardNewLayouts: true } });
     await expect(isLegacyFeatureEnabled(page, 'dashboardNewLayouts')).resolves.toBe(true);
@@ -43,9 +35,19 @@ describe('isLegacyFeatureEnabled', () => {
     expect(page.waitForFunction).toHaveBeenCalledTimes(1);
   });
 
-  it('returns false instead of throwing when boot data never arrives', async () => {
+  // Falling back to an empty map here would be indistinguishable from every toggle being
+  // disabled, so callers would silently take a legacy branch on an instance where the toggle is
+  // on. The timeout must stay loud.
+  it('rethrows when boot data never arrives rather than reporting every toggle as disabled', async () => {
     const page = createMockPage({ timesOut: true });
-    await expect(isLegacyFeatureEnabled(page, 'dashboardNewLayouts')).resolves.toBe(false);
-    expect(console.error).toHaveBeenCalled();
+    await expect(isLegacyFeatureEnabled(page, 'dashboardNewLayouts')).rejects.toThrow(
+      /featureToggles was not available within 5000ms/
+    );
+  });
+
+  it('preserves the underlying timeout as the error cause', async () => {
+    const page = createMockPage({ timesOut: true });
+    const error = await isLegacyFeatureEnabled(page, 'dashboardNewLayouts').catch((e: unknown) => e);
+    expect((error as Error).cause).toEqual(new Error('Timeout 5000ms exceeded'));
   });
 });
