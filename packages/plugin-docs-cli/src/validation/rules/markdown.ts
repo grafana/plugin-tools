@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines } from './utils.js';
+import { getCodeBlockLines, isMetaFile } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -72,7 +72,11 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
 
   const mdFiles = entries.filter(
     (e) =>
-      e.isFile() && e.name.endsWith('.md') && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
+      e.isFile() &&
+      e.name.endsWith('.md') &&
+      !isMetaFile(e.name) &&
+      !e.parentPath.includes('node_modules') &&
+      !e.parentPath.includes('dist')
   );
 
   for (const md of mdFiles) {

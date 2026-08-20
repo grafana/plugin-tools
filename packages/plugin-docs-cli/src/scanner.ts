@@ -10,6 +10,7 @@ import {
   type MarkdownFiles,
   type Frontmatter,
 } from '@grafana/plugin-docs-parser';
+import { isMetaFile } from './validation/rules/utils.js';
 
 const debug = createDebug('plugin-docs-cli:scanner');
 
@@ -122,6 +123,9 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
       if (!entry.endsWith('.md')) {
         return false;
       }
+      if (isMetaFile(entry)) {
+        return false;
+      }
       return !entry.includes('node_modules') && !entry.includes('dist');
     })
     .map((entry) => join(docsPath, entry));
@@ -212,9 +216,15 @@ function treeToPages(node: TreeNode): Page[] {
 
   // convert children to array and sort by sidebar_position; root index.md always first
   const sortedEntries = childEntries.sort((a, b) => {
-    if (a[0] === 'index.md') { return -1; }
-    if (b[0] === 'index.md') { return 1; }
-    return (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity);
+    if (a[0] === 'index.md') {
+      return -1;
+    }
+    if (b[0] === 'index.md') {
+      return 1;
+    }
+    return (
+      (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity)
+    );
   });
 
   for (const [name, child] of sortedEntries) {

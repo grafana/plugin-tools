@@ -3,7 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, relative, dirname, normalize } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines } from './utils.js';
+import { getCodeBlockLines, isMetaFile } from './utils.js';
 
 // matches markdown links: [text](url)
 const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
@@ -83,7 +83,7 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
   const allFiles = entries.filter(
     (e) => e.isFile() && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
   );
-  const mdFiles = allFiles.filter((e) => e.name.endsWith('.md'));
+  const mdFiles = allFiles.filter((e) => e.name.endsWith('.md') && !isMetaFile(e.name));
   const allFilePaths = new Set(allFiles.map((e) => relative(input.docsPath, join(e.parentPath, e.name))));
 
   // build a map of relative path -> heading IDs for each markdown file
