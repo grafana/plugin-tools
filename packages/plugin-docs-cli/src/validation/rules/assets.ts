@@ -3,6 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
+import { isMetaFile } from './utils.js';
 
 const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
@@ -51,7 +52,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
   const allFiles = entries.filter((e) => e.isFile());
   const imageFiles = allFiles.filter((e) => ALLOWED_IMAGE_EXTENSIONS.has(extname(e.name).toLowerCase()));
   const svgFiles = allFiles.filter((e) => extname(e.name).toLowerCase() === '.svg');
-  const mdFiles = allFiles.filter((e) => e.name.endsWith('.md'));
+  const mdFiles = allFiles.filter((e) => e.name.endsWith('.md') && !isMetaFile(e.name));
 
   // helper to get path relative to docsPath
   function rel(entry: Dirent): string {
