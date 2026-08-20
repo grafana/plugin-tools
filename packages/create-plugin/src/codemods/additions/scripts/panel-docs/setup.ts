@@ -2,7 +2,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Context } from '../../../context.js';
-import { additionsDebug, addDependenciesToPackageJson } from '../../../utils.js';
+import { output } from '../../../../utils/utils.console.js';
+import { additionsDebug, addDependenciesToPackageJson, isVersionGreater } from '../../../utils.js';
 
 const REQUIRED_BUILD_PLUGIN_REF = 'build-plugin/v1.2.0';
 
@@ -31,24 +32,15 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   }
 
   // step 2: set docsPath in src/plugin.json
-  const pluginJsonContent = context.getFile('src/plugin.json');
-  if (pluginJsonContent === undefined) {
-    throw new Error('Cannot find src/plugin.json. Run this command from the plugin root directory.');
-  }
-
-  let pluginJson: PluginJson;
-  try {
-    pluginJson = JSON.parse(pluginJsonContent);
-  } catch (e) {
-    throw new Error(`Cannot parse src/plugin.json: ${e}`);
-  }
+  const pluginJson = readPluginJson(context);
 
   const existingDocsPath = pluginJson.docsPath;
   if (existingDocsPath !== undefined && existingDocsPath !== docsPath) {
-    additionsDebug(`src/plugin.json already has docsPath set to '${existingDocsPath}', skipping update`);
-  } else {
-    context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
+    throw new Error(
+      `src/plugin.json already has docsPath set to '${existingDocsPath}'.\n  Re-run with the existing path:\n  create-plugin add ${codemodName} --docsPath ${existingDocsPath}`
+    );
   }
+  context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
 
   const pluginName = pluginJson.name ?? 'my-plugin';
 
@@ -61,12 +53,17 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 5: copy template files to docs folder (includes README.md)
   copyDocsTemplates(context, templateBaseUrl, docsPath, pluginName);
 
-  // step 6: copy validate-docs workflow
-  upsertFile(
-    context,
-    '.github/workflows/validate-docs.yml',
-    readTemplate(templateBaseUrl, 'workflows/validate-docs.yml')
-  );
+  // step 6: copy validate-docs workflow, unless the user already customized one
+  const workflowPath = '.github/workflows/validate-docs.yml';
+  if (!context.doesFileExist(workflowPath)) {
+    const workflowContent = readTemplate(templateBaseUrl, 'workflows/validate-docs.yml').replaceAll(
+      '{{docsPath}}',
+      docsPath
+    );
+    context.addFile(workflowPath, workflowContent);
+  } else {
+    additionsDebug(`${workflowPath} already exists, skipping`);
+  }
 
   // step 7: bump build-plugin version in release.yml
   bumpBuildPluginVersion(context);
@@ -78,35 +75,43 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 }
 
 function printNextSteps(docsPath: string): void {
-  console.log(
-    [
-      '',
-      'Next steps:',
-      `  - Fill in the stub docs under ${docsPath}/ with your plugin's actual content`,
-      '  - Run `npm run docs:serve` to preview the docs locally',
-      '  - Run `npm run docs:validate` to check for issues before pushing',
-      '',
-    ].join('\n')
-  );
+  output.log({
+    title: 'Next steps',
+    body: [
+      `Fill in the stub docs under ${docsPath}/ with your plugin's actual content`,
+      'Run `npm run docs:serve` to preview the docs locally',
+      'Run `npm run docs:validate` to check for issues before pushing',
+    ],
+  });
 }
 
-// parses src/plugin.json from the context and verifies its `type` matches the
-// expected value. Throws a helpful error otherwise. Returns the parsed object
-// so callers don't have to reparse.
-export function assertPluginType(
-  context: Context,
-  opts: { expectedType: 'datasource' | 'panel'; codemodName: string }
-): PluginJson {
+// reads and parses src/plugin.json, throwing a helpful error if it's missing,
+// unparseable, or not a plain object (e.g. `null`, an array, a bare string -
+// all valid JSON, none of them a usable plugin.json).
+function readPluginJson(context: Context): PluginJson {
   const raw = context.getFile('src/plugin.json');
   if (raw === undefined) {
     throw new Error('Cannot find src/plugin.json. Run this command from the plugin root directory.');
   }
-  let parsed: PluginJson;
+  let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
   } catch (e) {
     throw new Error(`Cannot parse src/plugin.json: ${e}`);
   }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error('src/plugin.json does not contain a JSON object.');
+  }
+  return parsed as PluginJson;
+}
+
+// verifies plugin.json's `type` matches the expected value. Throws a helpful
+// error otherwise.
+export function assertPluginType(
+  context: Context,
+  opts: { expectedType: 'datasource' | 'panel'; codemodName: string }
+): PluginJson {
+  const parsed = readPluginJson(context);
   if (parsed.type !== opts.expectedType) {
     const otherCommand = opts.expectedType === 'datasource' ? 'panel-docs' : 'datasource-docs';
     throw new Error(
@@ -119,7 +124,9 @@ export function assertPluginType(
 function copyDocsTemplates(context: Context, templateBaseUrl: URL, docsPath: string, pluginName: string): void {
   const docsTemplateDir = fileURLToPath(new URL('./docs', templateBaseUrl));
   if (!existsSync(docsTemplateDir)) {
-    return;
+    throw new Error(
+      `Cannot find docs templates at ${docsTemplateDir}. This is a bug in @grafana/create-plugin - please report it.`
+    );
   }
   for (const filePath of listFilesRecursively(docsTemplateDir)) {
     const relativePath = filePath.slice(docsTemplateDir.length + 1);
@@ -140,18 +147,18 @@ function listFilesRecursively(dir: string): string[] {
   });
 }
 
-function upsertFile(context: Context, path: string, content: string): void {
-  if (context.doesFileExist(path)) {
-    context.updateFile(path, content);
-  } else {
-    context.addFile(path, content);
-  }
-}
-
 function readTemplate(templateBaseUrl: URL, relativePath: string): string {
   const templatePath = fileURLToPath(new URL(relativePath, templateBaseUrl));
   return readFileSync(templatePath, 'utf-8');
 }
+
+// matches an anchored `uses: grafana/plugin-actions/build-plugin@<ref>` line,
+// capturing the prefix (for reassembly) and the existing ref (to compare
+// versions before overwriting it).
+const BUILD_PLUGIN_USES_RE = /(uses:\s*grafana\/plugin-actions\/build-plugin@)([^\s'"]+)/g;
+// matches the version out of either a bare `vX.Y.Z` tag or a `build-plugin/vX.Y.Z`
+// tag - the two ref shapes this codemod and its templates actually use.
+const BUILD_PLUGIN_TAG_RE = /^(?:build-plugin\/)?v(\d+\.\d+\.\d+)$/;
 
 function bumpBuildPluginVersion(context: Context): void {
   const releaseYmlContent = context.getFile('.github/workflows/release.yml');
@@ -159,12 +166,30 @@ function bumpBuildPluginVersion(context: Context): void {
     additionsDebug('no .github/workflows/release.yml found, skipping build-plugin version bump');
     return;
   }
-  const updated = releaseYmlContent.replace(
-    /(grafana\/plugin-actions\/build-plugin@)[^\s'"]+/g,
-    `$1${REQUIRED_BUILD_PLUGIN_REF}`
-  );
-  if (updated === releaseYmlContent) {
+
+  let matched = false;
+  const requiredVersion = BUILD_PLUGIN_TAG_RE.exec(REQUIRED_BUILD_PLUGIN_REF)?.[1];
+  const updated = releaseYmlContent.replace(BUILD_PLUGIN_USES_RE, (fullMatch, prefix: string, existingRef: string) => {
+    matched = true;
+    const existingVersion = BUILD_PLUGIN_TAG_RE.exec(existingRef)?.[1];
+    // only skip the bump when both refs parse as versions and the existing one
+    // is already at least as new - an unparseable ref (a branch, a SHA) always
+    // gets normalized to the required tag.
+    if (existingVersion && requiredVersion && !isVersionGreater(requiredVersion, existingVersion, false)) {
+      additionsDebug(
+        `release.yml already pins build-plugin@${existingRef}, which is not older than ${REQUIRED_BUILD_PLUGIN_REF}, skipping`
+      );
+      return fullMatch;
+    }
+    return `${prefix}${REQUIRED_BUILD_PLUGIN_REF}`;
+  });
+
+  if (!matched) {
     additionsDebug('no grafana/plugin-actions/build-plugin reference found in release.yml, skipping');
+    return;
+  }
+  if (updated === releaseYmlContent) {
+    additionsDebug('release.yml build-plugin reference(s) already up to date, skipping');
     return;
   }
   context.updateFile('.github/workflows/release.yml', updated);
@@ -175,7 +200,12 @@ function addDocsScripts(context: Context): void {
   if (!packageJsonContent) {
     return;
   }
-  const packageJson = JSON.parse(packageJsonContent) as Record<string, unknown>;
+  let packageJson: Record<string, unknown>;
+  try {
+    packageJson = JSON.parse(packageJsonContent);
+  } catch (e) {
+    throw new Error(`Cannot parse package.json: ${e}`);
+  }
   const scripts = (packageJson['scripts'] ?? {}) as Record<string, string>;
   let changed = false;
 

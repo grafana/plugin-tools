@@ -4,7 +4,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { glob, GlobOptions } from 'glob';
 import { readFileSync } from 'node:fs';
 import { chmod, cp } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { inspect } from 'node:util';
 import { defineConfig, ExternalOption, Plugin, RollupOptions } from 'rollup';
 import del from 'rollup-plugin-delete';
@@ -144,10 +144,11 @@ function copyAssets(): Plugin {
       }
 
       if (pkg.name === '@grafana/create-plugin') {
+        const srcRoot = join(projectRoot, 'src');
         const templateDirs = glob.sync('src/codemods/**/templates', { cwd: projectRoot, absolute: true });
         await Promise.all(
           templateDirs.map((src) => {
-            const dist = src.replace(`${projectRoot}/src/`, `${projectRoot}/dist/`);
+            const dist = join(projectRoot, 'dist', relative(srcRoot, src));
             return cp(src, dist, { recursive: true });
           })
         );
