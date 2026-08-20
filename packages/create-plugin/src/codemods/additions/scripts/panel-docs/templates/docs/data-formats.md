@@ -6,7 +6,7 @@ sidebar_position: 2
 
 <!-- section-brief:start -->
 
-Describe the data shape {{pluginName}} needs from its data source queries. Be specific about field types and structure - this is the contract dashboard authors rely on when building queries for the panel.
+> 📝 **Fill this in:** Describe the data shape {{pluginName}} needs from its data source queries. Be specific about field types and structure - this is the contract dashboard authors rely on when building queries for the panel.
 
 <!-- section-brief:end -->
 
@@ -14,7 +14,7 @@ Describe the data shape {{pluginName}} needs from its data source queries. Be sp
 
 <!-- section-brief:start -->
 
-Describe the data frame shape {{pluginName}} expects: time series with N numeric fields, table with specific columns, single numeric value, geographic coordinates, log lines, etc. Name the required field types (time, number, string, boolean) and any minimum/maximum field counts.
+> 📝 **Fill this in:** Describe the data frame shape {{pluginName}} expects: time series with N numeric fields, table with specific columns, single numeric value, geographic coordinates, log lines, etc. Name the required field types (time, number, string, boolean) and any minimum/maximum field counts.
 
 <!-- section-brief:end -->
 
@@ -22,6 +22,6 @@ Describe the data frame shape {{pluginName}} expects: time series with N numeric
 
 <!-- section-brief:start -->
 
-Explain which incoming field plays which role in the visualization - for example "the first time-typed field is the x-axis, all numeric fields become series". If {{pluginName}} lets users explicitly pick field roles in the editor, document those controls here. Remove the section if mapping is fully automatic and not user-configurable.
+> 📝 **Fill this in:** Explain which incoming field plays which role in the visualization - for example "the first time-typed field is the x-axis, all numeric fields become series". If {{pluginName}} lets users explicitly pick field roles in the editor, document those controls here. Remove the section if mapping is fully automatic and not user-configurable.
 
 <!-- section-brief:end -->
