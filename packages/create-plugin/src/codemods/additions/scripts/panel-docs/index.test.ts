@@ -1,17 +1,7 @@
-import { existsSync } from 'node:fs';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as v from 'valibot';
+import { describe, expect, it } from 'vitest';
 import { Context } from '../../../context.js';
-import panelDocs from './index.js';
-
-const { existsSync: realExistsSync } = await vi.importActual<typeof import('node:fs')>('node:fs');
-
-vi.mock('node:fs', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('node:fs')>();
-  return {
-    ...mod,
-    existsSync: vi.fn().mockImplementation(mod.existsSync),
-  };
-});
+import panelDocs, { schema } from './index.js';
 
 function makeContext(): Context {
   const context = new Context('/virtual');
@@ -22,10 +12,6 @@ function makeContext(): Context {
 }
 
 describe('panel-docs codemod', () => {
-  beforeEach(() => {
-    vi.mocked(existsSync).mockImplementation(realExistsSync);
-  });
-
   describe('type guard', () => {
     it('errors when plugin.json type is datasource', () => {
       const context = new Context('/virtual');
@@ -48,8 +34,30 @@ describe('panel-docs codemod', () => {
     });
   });
 
+  describe('docsPath validation', () => {
+    it('defaults to "docs" when omitted', () => {
+      expect(v.parse(schema, {})).toEqual({ docsPath: 'docs' });
+    });
+
+    it('rejects an empty docsPath', () => {
+      expect(() => v.parse(schema, { docsPath: '' })).toThrow();
+    });
+
+    it('rejects an absolute docsPath', () => {
+      expect(() => v.parse(schema, { docsPath: '/etc/passwd' })).toThrow();
+    });
+
+    it('rejects a docsPath with ".." segments', () => {
+      expect(() => v.parse(schema, { docsPath: '../../etc' })).toThrow();
+    });
+
+    it('accepts a valid custom docsPath', () => {
+      expect(v.parse(schema, { docsPath: 'documentation' })).toEqual({ docsPath: 'documentation' });
+    });
+  });
+
   describe('generated files', () => {
-    it('creates all five panel docs files', () => {
+    it('creates all six panel docs files', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('docs/index.md')).toBe(true);
@@ -57,6 +65,7 @@ describe('panel-docs codemod', () => {
       expect(context.doesFileExist('docs/options.md')).toBe(true);
       expect(context.doesFileExist('docs/examples.md')).toBe(true);
       expect(context.doesFileExist('docs/troubleshooting.md')).toBe(true);
+      expect(context.doesFileExist('docs/README.md')).toBe(true);
     });
 
     it('uses the expected H2s in each panel file', () => {
@@ -85,6 +94,14 @@ describe('panel-docs codemod', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('.github/workflows/validate-docs.yml')).toBe(true);
+    });
+
+    it('interpolates a custom docsPath into the workflow path filters', () => {
+      const context = makeContext();
+      panelDocs(context, { docsPath: 'documentation' });
+      const content = context.getFile('.github/workflows/validate-docs.yml') ?? '';
+      expect(content).toContain("'documentation/**'");
+      expect(content).not.toContain('{{docsPath}}');
     });
 
     it('bumps the build-plugin ref in release.yml', () => {
