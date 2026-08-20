@@ -26,6 +26,28 @@ export function isMetaFile(filenameOrPath: string): boolean {
 }
 
 /**
+ * Neutralizes the contents of inline code spans (`` `code` ``, ` ``code`` `,
+ * etc.) on a single line by replacing the inner characters with a same-length
+ * run of `#` filler, leaving the backtick delimiters and everything else on
+ * the line untouched. Per CommonMark/GFM, inline code spans are never
+ * interpreted as markup - this lets regex-based checks (e.g. raw-HTML
+ * detection) skip over them without false-positiving on literal text like
+ * `` `<placeholder>` ``.
+ *
+ * Known limitations (this is a linter aid, not a full CommonMark tokenizer):
+ * - Only spans fully contained within a single line are recognized.
+ * - Backslash-escaped backticks are not specially handled.
+ * - An unterminated backtick run (no matching close on the line) is left
+ *   unmasked, since it isn't a real code span - CommonMark treats it as
+ *   literal text too.
+ */
+export function maskInlineCode(line: string): string {
+  return line.replace(/(`+)(.*?)\1(?!`)/g, (_match, delim: string, inner: string) => {
+    return `${delim}${'#'.repeat(inner.length)}${delim}`;
+  });
+}
+
+/**
  * Returns a set of 1-based line numbers inside fenced code blocks.
  */
 export function getCodeBlockLines(content: string): Set<number> {

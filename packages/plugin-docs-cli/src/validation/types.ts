@@ -20,6 +20,8 @@ export const Rule = {
   NoH1: 'no-h1-heading',
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
+  // content-completeness rules
+  UnfilledSectionBrief: 'unfilled-section-brief',
   // asset rules
   NoSvg: 'no-svg-files',
   ReferencedImagesExist: 'referenced-images-exist',

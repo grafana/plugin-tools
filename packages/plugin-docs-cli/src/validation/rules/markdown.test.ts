@@ -94,6 +94,42 @@ describe('checkMarkdown', () => {
       expect(finding!.line).toBeDefined();
       expect(finding!.line).toBeGreaterThan(1);
     });
+
+    it('should not report angle-bracket placeholders inside inline code as raw HTML', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Published at `grafana.com/grafana/plugins/<slug>/docs/<page>`.'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
+    });
+
+    it('should still report real raw HTML on a line that also contains inline code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Use `<placeholder>` here <div>real html</div>'));
+
+      const findings = await checkMarkdown(input(tmp));
+      const htmlFindings = findings.filter((f) => f.rule === Rule.NoRawHtml);
+      // one finding each for the opening <div> and closing </div> tag - the
+      // masked `<placeholder>` span must not add a third
+      expect(htmlFindings).toHaveLength(2);
+      expect(htmlFindings.every((f) => f.detail.includes('<div>'))).toBe(true);
+    });
+
+    it('should still flag HTML when a backtick on the line is unterminated', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('`unclosed code <div>real</div>'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeDefined();
+    });
+
+    it('should not report HTML-looking text inside a double-backtick code span', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Example: ``<a> with a ` backtick inside``'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
+    });
   });
 
   // --- no-script-tags ---
