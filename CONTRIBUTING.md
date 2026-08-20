@@ -10,6 +10,8 @@
 - Make Something? 🤓👩🏽‍💻📜🍳
   - [Project Setup](#project-setup)
   - [Contributor License Agreement (CLA)](#contributor-license-agreement-cla)
+  - [Signed Commits](#signed-commits)
+  - [Signed Commits](#signed-commits)
   - [Contribute Documentation](#contribute-documentation)
   - [Contribute Code](#contribute-code)
 - Manage Something ✅🙆🏼💃👔
@@ -104,6 +106,48 @@ Plugin-tools is a mono-repo consisting of multiple projects. Please refer to the
 ## Contributor License Agreement (CLA)
 
 Before we can accept your pull request, you need to [sign our CLA](https://grafana.com/docs/grafana/latest/developers/cla/). If you haven't, our CLA assistant prompts you to when you create your pull request.
+
+## Signed Commits
+
+Effective June 22, 2026, all Grafana Labs repositories [require signed commits](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-signed-commits). Commits that GitHub cannot verify will block your pull request from being merged.
+
+> **Note**
+> Unsigned commits and pull requests will be rejected and closed. This includes pull requests authored by agents.
+
+To set this up:
+
+- Enable commit signature verification by following [about commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification).
+- Confirm your setup with [checking your commit and tag signature verification status](https://docs.github.com/en/authentication/troubleshooting-commit-signature-verification/checking-your-commit-and-tag-signature-verification-status).
+
+When a pull request contains commits that GitHub could not verify, an automated comment lists them so you know which ones to fix.
+
+If you only notice after pushing, you can sign the commits already on your branch by rebasing, replacing `main` with the branch you opened the pull request against:
+
+```shell
+git rebase --exec 'git commit --amend --no-edit -S' main
+git push --force-with-lease
+```
+
+## Signed Commits
+
+Effective June 22, 2026, all Grafana Labs repositories [require signed commits](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-signed-commits). Commits that GitHub cannot verify will block your pull request from being merged.
+
+> **Note**
+> Unsigned commits and pull requests will be rejected and closed. This includes pull requests authored by agents.
+
+To set this up:
+
+- Enable commit signature verification by following [about commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification).
+- Confirm your setup with [checking your commit and tag signature verification status](https://docs.github.com/en/authentication/troubleshooting-commit-signature-verification/checking-your-commit-and-tag-signature-verification-status).
+
+When a pull request contains commits that GitHub could not verify, an automated comment lists them so you know which ones to fix.
+
+If you only notice after pushing, you can sign the commits already on your branch by rebasing, replacing `main` with the branch you opened the pull request against:
+
+```shell
+git rebase --exec 'git commit --amend --no-edit -S' main
+git push --force-with-lease
+```
 
 ## Contribute Documentation
 
