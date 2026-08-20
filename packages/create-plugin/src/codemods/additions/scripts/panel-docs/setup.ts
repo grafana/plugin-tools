@@ -4,8 +4,7 @@ import { fileURLToPath } from 'node:url';
 import type { Context } from '../../../context.js';
 import { additionsDebug, addDependenciesToPackageJson } from '../../../utils.js';
 
-// TODO: replace with stable tag once plugin-actions PR #219 merges
-const REQUIRED_BUILD_PLUGIN_REF = 'eriksundell/plugin-docs-build-step';
+const REQUIRED_BUILD_PLUGIN_REF = 'build-plugin/v1.2.0';
 
 export interface PluginJson {
   type?: string;

@@ -183,7 +183,7 @@ describe('panel-docs/setup', () => {
       const context = makeContext();
       call(context);
       const content = context.getFile('.github/workflows/release.yml') ?? '';
-      expect(content).toContain('grafana/plugin-actions/build-plugin@eriksundell/plugin-docs-build-step');
+      expect(content).toContain('grafana/plugin-actions/build-plugin@build-plugin/v1.2.0');
     });
 
     it('handles multiple build-plugin refs', () => {
@@ -194,7 +194,7 @@ describe('panel-docs/setup', () => {
       );
       call(context);
       expect(context.getFile('.github/workflows/release.yml')).toBe(
-        'uses: grafana/plugin-actions/build-plugin@eriksundell/plugin-docs-build-step\nuses: grafana/plugin-actions/build-plugin@eriksundell/plugin-docs-build-step\n'
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\nuses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
       );
     });
 
