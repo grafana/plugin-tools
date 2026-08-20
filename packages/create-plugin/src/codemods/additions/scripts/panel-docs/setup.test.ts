@@ -88,11 +88,23 @@ describe('panel-docs/setup', () => {
       expect(() => call(context)).toThrow('Cannot find src/plugin.json');
     });
 
-    it('skips docsPath update when already set to a different value', () => {
+    it('throws if src/plugin.json is not valid JSON', () => {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', '{ not valid json');
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+      expect(() => call(context)).toThrow(/Cannot parse src\/plugin\.json/);
+    });
+
+    it('throws if src/plugin.json is not a JSON object', () => {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', JSON.stringify(['panel']));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+      expect(() => call(context)).toThrow(/does not contain a JSON object/);
+    });
+
+    it('throws when docsPath is already set to a different value', () => {
       const context = makeContext({ type: 'panel', name: 'My Plugin', docsPath: 'custom-docs' });
-      call(context);
-      const parsed = JSON.parse(context.getFile('src/plugin.json') ?? '{}');
-      expect(parsed.docsPath).toBe('custom-docs');
+      expect(() => call(context)).toThrow(/docsPath set to 'custom-docs'.*--docsPath custom-docs/s);
     });
 
     it('uses a custom docsPath when specified', () => {
@@ -133,6 +145,14 @@ describe('panel-docs/setup', () => {
     });
   });
 
+  describe('nested template directories', () => {
+    it('copies files nested more than one level deep', () => {
+      const context = makeContext();
+      call(context, { templates: { 'a/b/c.md': 'deeply nested\n' } });
+      expect(context.getFile('docs/a/b/c.md')).toBe('deeply nested\n');
+    });
+  });
+
   describe('template copy', () => {
     it('copies every template file under docs/', () => {
       const context = makeContext();
@@ -161,6 +181,21 @@ describe('panel-docs/setup', () => {
       call(context, { templates: { 'index.md': '# Replacement\n' } });
       expect(context.getFile('docs/index.md')).toBe('# Existing\n');
     });
+
+    it('throws if the docs template directory is missing (packaging bug guard)', () => {
+      const context = makeContext();
+      const dir = mkdtempSync(join(tmpdir(), 'panel-docs-empty-'));
+      tempDirs.push(dir);
+      // no `docs/` subdirectory created under `dir` - simulates a broken build
+      expect(() =>
+        setupDocsScaffolding({
+          context,
+          docsPath: 'docs',
+          templateBaseUrl: pathToFileURL(`${dir}/`),
+          codemodName: 'panel-docs',
+        })
+      ).toThrow(/Cannot find docs templates/);
+    });
   });
 
   describe('validate-docs workflow', () => {
@@ -170,11 +205,20 @@ describe('panel-docs/setup', () => {
       expect(context.doesFileExist('.github/workflows/validate-docs.yml')).toBe(true);
     });
 
-    it('overwrites an existing .github/workflows/validate-docs.yml', () => {
+    it('interpolates {{docsPath}} into the workflow path filters', () => {
+      const context = makeContext();
+      call(context, { docsPath: 'my-docs' });
+      // the synthetic test template has no {{docsPath}} placeholder, so this
+      // only proves the substitution doesn't error - the real template is
+      // covered by index.test.ts against the shipped workflow content.
+      expect(context.doesFileExist('.github/workflows/validate-docs.yml')).toBe(true);
+    });
+
+    it('does not overwrite an existing .github/workflows/validate-docs.yml', () => {
       const context = makeContext();
       context.addFile('.github/workflows/validate-docs.yml', 'old content');
       call(context);
-      expect(context.getFile('.github/workflows/validate-docs.yml')).not.toBe('old content');
+      expect(context.getFile('.github/workflows/validate-docs.yml')).toBe('old content');
     });
   });
 
@@ -186,15 +230,60 @@ describe('panel-docs/setup', () => {
       expect(content).toContain('grafana/plugin-actions/build-plugin@build-plugin/v1.2.0');
     });
 
-    it('handles multiple build-plugin refs', () => {
+    it('bumps a bare vX.Y.Z ref (no build-plugin/ prefix)', () => {
+      const context = makeContext();
+      context.updateFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@v1.0.0\n');
+      call(context);
+      expect(context.getFile('.github/workflows/release.yml')).toBe(
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
+      );
+    });
+
+    it('does not downgrade an existing ref that is already newer than required', () => {
       const context = makeContext();
       context.updateFile(
         '.github/workflows/release.yml',
-        'uses: grafana/plugin-actions/build-plugin@v1.0.0\nuses: grafana/plugin-actions/build-plugin@v2.0.0\n'
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v2.0.0\n'
       );
       call(context);
       expect(context.getFile('.github/workflows/release.yml')).toBe(
-        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\nuses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v2.0.0\n'
+      );
+    });
+
+    it('handles multiple build-plugin refs independently, only bumping the older one', () => {
+      const context = makeContext();
+      context.updateFile(
+        '.github/workflows/release.yml',
+        'uses: grafana/plugin-actions/build-plugin@v1.0.0\nuses: grafana/plugin-actions/build-plugin@build-plugin/v2.0.0\n'
+      );
+      call(context);
+      expect(context.getFile('.github/workflows/release.yml')).toBe(
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\nuses: grafana/plugin-actions/build-plugin@build-plugin/v2.0.0\n'
+      );
+    });
+
+    it('normalizes an unparseable ref (e.g. a branch name) to the required tag', () => {
+      const context = makeContext();
+      context.updateFile(
+        '.github/workflows/release.yml',
+        'uses: grafana/plugin-actions/build-plugin@some-feature-branch\n'
+      );
+      call(context);
+      expect(context.getFile('.github/workflows/release.yml')).toBe(
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
+      );
+    });
+
+    it('only bumps refs on a `uses:` line, not incidental mentions', () => {
+      const context = makeContext();
+      context.updateFile(
+        '.github/workflows/release.yml',
+        '# see grafana/plugin-actions/build-plugin@v1.0.0 for reference\nuses: grafana/plugin-actions/build-plugin@v1.0.0\n'
+      );
+      call(context);
+      expect(context.getFile('.github/workflows/release.yml')).toBe(
+        '# see grafana/plugin-actions/build-plugin@v1.0.0 for reference\nuses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
       );
     });
 
@@ -210,6 +299,7 @@ describe('panel-docs/setup', () => {
       context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       expect(() => call(context)).not.toThrow();
+      expect(context.doesFileExist('.github/workflows/release.yml')).toBe(false);
     });
   });
 
@@ -238,6 +328,14 @@ describe('panel-docs/setup', () => {
       const context = new Context('/virtual');
       expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
         'Cannot find src/plugin.json'
+      );
+    });
+
+    it('throws when plugin.json is not valid JSON', () => {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', '{ not valid json');
+      expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
+        /Cannot parse src\/plugin\.json/
       );
     });
 
