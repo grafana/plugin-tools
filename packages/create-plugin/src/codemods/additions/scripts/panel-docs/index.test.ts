@@ -91,7 +91,7 @@ describe('panel-docs codemod', () => {
       const context = makeContext();
       panelDocs(context, { docsPath: 'docs' });
       expect(context.getFile('.github/workflows/release.yml') ?? '').toContain(
-        'grafana/plugin-actions/build-plugin@eriksundell/plugin-docs-build-step'
+        'grafana/plugin-actions/build-plugin@build-plugin/v1.2.0'
       );
     });
 
