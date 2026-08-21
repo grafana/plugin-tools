@@ -2,6 +2,19 @@
 
 This folder contains the multi-page documentation for **{{pluginName}}**, published at `grafana.com/grafana/plugins/<slug>/docs/<page>`.
 
+## Why multi-page docs
+
+This lets you write {{pluginName}}'s documentation as lightweight markdown pages, Docusaurus-style: one file per topic, each with its own frontmatter, grouped into folders if you need to. No build step and no HTML, just markdown that gets validated for you and rendered on grafana.com. Styling is controlled by Grafana, not by you, so every plugin's docs look and feel consistent across the catalog.
+
+Your plugin's page at `grafana.com/grafana/plugins/<slug>/` has four tabs, each sourced differently:
+
+| Tab           | Source                                                                                                                                                                           |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Overview      | `index.md`                                                                                                                                                                       |
+| Installation  | Generated automatically - nothing to write                                                                                                                                       |
+| Changelog     | Your plugin's `CHANGELOG.md`                                                                                                                                                     |
+| Documentation | This folder, shown once `docsPath` is set and the docs pass validation. Its own landing page is `index.md` again, rendered here as an auto-generated tree of every page below it |
+
 ## What to document
 
 Document every feature of the panel. The codemod scaffolded these pages as stubs — fill in each one:
