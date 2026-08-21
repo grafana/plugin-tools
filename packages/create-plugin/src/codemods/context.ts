@@ -57,11 +57,14 @@ export class Context {
       throw new Error(`File ${path} does not exist`);
     }
 
-    if (originalContent !== content) {
-      this.files[path] = { content, changeType: 'update' };
-    } else {
+    if (originalContent === content) {
       codemodsDebug(`Context.updateFile() - no updates for ${filePath}`);
+      return;
     }
+
+    const existing = this.files[path];
+    const changeType = existing?.changeType === 'add' ? 'add' : 'update';
+    this.files[path] = { content, changeType };
   }
 
   doesFileExist(filePath: string) {
