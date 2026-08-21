@@ -95,7 +95,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     const codeLines = getCodeBlockLines(content);
 
     // no-script-tags: no <script> tags
-    for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines)) {
+    for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines, { maskInlineCode: true })) {
       diagnostics.push({
         rule: Rule.NoScriptTags,
         severity: 'error',
@@ -107,7 +107,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     // no-script-tags: no event handler attributes (onclick, onerror, etc.)
-    for (const { match, line } of matchOutsideCode(content, EVENT_HANDLER_RE, codeLines)) {
+    for (const { match, line } of matchOutsideCode(content, EVENT_HANDLER_RE, codeLines, { maskInlineCode: true })) {
       diagnostics.push({
         rule: Rule.NoScriptTags,
         severity: 'error',

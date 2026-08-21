@@ -196,6 +196,31 @@ describe('checkMarkdown', () => {
       expect(scriptFindings.length).toBeGreaterThanOrEqual(1);
       expect(scriptFindings[0].severity).toBe('error');
     });
+
+    it('should not report a <script> tag mentioned inside inline code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Avoid adding a `<script>` tag directly to your page.'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoScriptTags)).toBeUndefined();
+    });
+
+    it('should not report an event handler attribute mentioned inside inline code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('The `onclick="doSomething()"` attribute is set automatically.'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoScriptTags)).toBeUndefined();
+    });
+
+    it('should still report a real <script> tag on a line that also contains inline code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Use `<placeholder>` here <script>alert(1)</script>'));
+
+      const findings = await checkMarkdown(input(tmp));
+      const scriptFindings = findings.filter((f) => f.rule === Rule.NoScriptTags);
+      expect(scriptFindings.length).toBeGreaterThanOrEqual(1);
+    });
   });
 
   // --- image-refs-relative ---

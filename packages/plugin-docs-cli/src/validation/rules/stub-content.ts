@@ -55,7 +55,7 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
         line: i + 1,
         title: 'Unfilled documentation stub',
         detail:
-          "This section still has scaffolded authoring guidance (<!-- section-brief -->) instead of real content. Replace it with your plugin's actual documentation and remove the marker.",
+          "This section still has scaffolded authoring guidance (<!-- section-brief:start -->) instead of real content. Replace it with your plugin's actual documentation and remove the marker.",
       });
     }
   }
