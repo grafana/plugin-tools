@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.2.0...@grafana/plugin-docs-cli@0.2.1) (2026-08-21)
+
+
+### Bug Fixes
+
+* **plugin-docs-cli:** mask inline code before HTML checks ([#2840](https://github.com/grafana/plugin-tools/issues/2840)) ([3cd0785](https://github.com/grafana/plugin-tools/commit/3cd078521d109f53bbb52e175f8ad8ca43637b5a))
+* **plugin-docs-cli:** skip repo-meta files during docs scanning and validation ([#2833](https://github.com/grafana/plugin-tools/issues/2833)) ([0e10c49](https://github.com/grafana/plugin-tools/commit/0e10c4907a18314ea0dd529091f16ca542e71d4d))
+
 ## [0.2.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.1.0...@grafana/plugin-docs-cli@0.2.0) (2026-07-09)
 
 
