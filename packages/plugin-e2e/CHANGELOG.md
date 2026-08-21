@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.11.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.0...@grafana/plugin-e2e@3.11.1) (2026-08-21)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** correct dashboard toolbar version thresholds ([#2836](https://github.com/grafana/plugin-tools/issues/2836)) ([96b3ace](https://github.com/grafana/plugin-tools/commit/96b3ace0fac673361c2a9de309653e28e1eea1f6))
+* **plugin-e2e:** wait for feature toggles instead of reading them once ([#2832](https://github.com/grafana/plugin-tools/issues/2832)) ([7b1f4fd](https://github.com/grafana/plugin-tools/commit/7b1f4fddd3d4d8ac4719e13ee30394a4cff54e45))
+
 ## [3.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.10.0...@grafana/plugin-e2e@3.11.0) (2026-08-05)
 
 
