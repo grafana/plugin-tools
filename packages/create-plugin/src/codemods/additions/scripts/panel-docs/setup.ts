@@ -45,7 +45,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const pluginName = pluginJson.name ?? 'my-plugin';
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
-  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '^0.2.0' });
+  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '^0.2.1' });
 
   // step 4: add docs:serve and docs:validate npm scripts
   addDocsScripts(context);
