@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.10.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.9.2...@grafana/create-plugin@7.10.0) (2026-08-21)
+
+
+### Features
+
+* **create-plugin:** make Playwright config extendable ([#2807](https://github.com/grafana/plugin-tools/issues/2807)) ([b7dd0fb](https://github.com/grafana/plugin-tools/commit/b7dd0fbf299e6a99bef04a1fc74e4f2c11a17a47))
+
+
+### Bug Fixes
+
+* **templates:** Update dependency @grafana/plugin-e2e to v3.11.0 ([#2825](https://github.com/grafana/plugin-tools/issues/2825)) ([d039033](https://github.com/grafana/plugin-tools/commit/d039033421febaa04a33d7dc2c039d5d761b9723))
+
 ## [7.9.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.9.1...@grafana/create-plugin@7.9.2) (2026-08-05)
 
 
