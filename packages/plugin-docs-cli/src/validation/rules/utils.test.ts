@@ -14,6 +14,7 @@ describe('isMetaFile', () => {
     expect(isMetaFile('CODE_OF_CONDUCT.md')).toBe(true);
     expect(isMetaFile('SECURITY.md')).toBe(true);
     expect(isMetaFile('CHANGELOG.md')).toBe(true);
+    expect(isMetaFile('AGENTS.md')).toBe(true);
   });
 
   it('matches when given a path, not just a basename', () => {
@@ -37,6 +38,7 @@ describe('isMetaFile', () => {
   it('does not match files that merely contain a meta basename in their path component', () => {
     expect(isMetaFile('readme-tips.md')).toBe(false);
     expect(isMetaFile('contributing-quickstart.md')).toBe(false);
+    expect(isMetaFile('agents-of-shield.md')).toBe(false);
   });
 });
 

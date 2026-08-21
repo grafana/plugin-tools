@@ -13,6 +13,7 @@ const META_FILE_BASENAMES_UPPER: ReadonlySet<string> = new Set([
   'CODE_OF_CONDUCT.MD',
   'SECURITY.MD',
   'CHANGELOG.MD',
+  'AGENTS.MD',
 ]);
 
 /**
