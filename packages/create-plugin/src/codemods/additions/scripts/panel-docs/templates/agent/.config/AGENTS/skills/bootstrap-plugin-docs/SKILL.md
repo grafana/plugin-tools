@@ -95,10 +95,14 @@ For ongoing per-page work after the bootstrap, use `write-plugin-docs`.
    | RBAC role declarations in `plugin.json`                                            | `<docsPath>/permissions.md`               | What each role grants, default assignments.                  |
    | Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `<docsPath>/accessibility.md`             | Keyboard interaction, ARIA, contrast, motion preferences.    |
 
-5. **Prompt the author for non-source-backed context.** These questions matter more in greenfield runs, but ask in every run - source can't answer them. Ask explicitly:
+5. **Prompt the author for context that source and README genuinely can't supply.**
 
-   > "In one sentence, what problem does this panel solve for the user?"
-   > "Who is the target user (SRE, application developer, business analyst, etc.)?"
+   These docs render on a single, general page on the plugin catalog (`grafana.com/grafana/plugins/<slug>/docs/`), read by anyone evaluating or using the plugin. There's no persona segmentation to ask about - do not ask who the target user is.
+
+   **Panel purpose.** Check whether step 2 (source) or step 3 (README) already yields a clear one-sentence statement of what problem the panel solves. If so, state that sentence back to the author for a quick confirm rather than an open question, for example: "I read the purpose as: '<sentence>' (from README.md). Confirm or correct?" Only ask the open question - "In one sentence, what problem does this panel solve for users?" - when neither source nor README gives a usable answer.
+
+   **Always ask, regardless of source/README:**
+
    > "What data shape does the panel expect, and what kinds of queries produce it (time series, table, traces, logs)?"
    > "Are there topics that don't map to source - prerequisites, conceptual overviews, troubleshooting scenarios, FAQs? List them and I'll scaffold them as new pages."
 
