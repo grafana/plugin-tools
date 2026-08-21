@@ -119,7 +119,7 @@ describe('panel-docs/setup', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.2.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.2.1');
     });
 
     it('adds docs:serve and docs:validate scripts', () => {
