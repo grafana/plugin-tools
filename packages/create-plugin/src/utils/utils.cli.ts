@@ -17,6 +17,9 @@ export const argv = minimist(args, {
   // tell minimist to parse boolean flags as true/false to prevent minimist from interpreting
   // them as the command name if passed first. e.g. `create-plugin --force update`
   boolean: ['force', 'experimental-updates'],
+  // string (not boolean) gives --agent the tri-state the update command needs:
+  // absent -> undefined, --agent -> '', --agent=<id> -> '<id>', --no-agent -> false
+  string: ['agent'],
 });
 
 export const commandName = argv._[0] || 'generate';
