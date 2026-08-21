@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.2.1...@grafana/plugin-docs-cli@0.2.2) (2026-08-21)
+
+
+### Bug Fixes
+
+* **plugin-docs-cli:** treat AGENTS.md as a repo-meta file ([#2845](https://github.com/grafana/plugin-tools/issues/2845)) ([1b52480](https://github.com/grafana/plugin-tools/commit/1b52480ad08487057fba45eb89b5e49eba205120))
+
 ## [0.2.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.2.0...@grafana/plugin-docs-cli@0.2.1) (2026-08-21)
 
 
