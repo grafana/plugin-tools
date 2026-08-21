@@ -317,7 +317,7 @@ describe('panel-docs/setup', () => {
   describe('assertAgentLoop', () => {
     it('throws a friendly message when loop is undefined', () => {
       expect(() => assertAgentLoop(undefined)).toThrow(
-        /Missing required flag: --agent-loop[\s\S]*--agent-loop=claude[\s\S]*--agent-loop=none/
+        /Missing required flag: --agentLoop[\s\S]*--agentLoop=claude[\s\S]*--agentLoop=none/
       );
     });
 

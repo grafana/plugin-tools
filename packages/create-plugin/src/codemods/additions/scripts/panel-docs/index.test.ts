@@ -61,7 +61,7 @@ describe('panel-docs codemod', () => {
     });
 
     it('rejects an invalid agentLoop value', () => {
-      expect(() => v.parse(schema, { agentLoop: 'bogus' })).toThrow(/--agent-loop must be one of/);
+      expect(() => v.parse(schema, { agentLoop: 'bogus' })).toThrow(/--agentLoop must be one of/);
     });
 
     it('accepts each valid agentLoop literal', () => {
@@ -73,7 +73,7 @@ describe('panel-docs codemod', () => {
     it('throws the friendly "Missing required flag" error when agentLoop is omitted', () => {
       const context = makeContext();
       expect(() => panelDocs(context, { docsPath: 'docs' } as never)).toThrow(
-        /Missing required flag: --agent-loop[\s\S]*--agent-loop=claude[\s\S]*--agent-loop=none/
+        /Missing required flag: --agentLoop[\s\S]*--agentLoop=claude[\s\S]*--agentLoop=none/
       );
     });
   });

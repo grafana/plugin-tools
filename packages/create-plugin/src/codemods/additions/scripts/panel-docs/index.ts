@@ -17,7 +17,7 @@ export const schema = v.object({
   agentLoop: v.optional(
     v.union(
       [v.literal('claude'), v.literal('codex'), v.literal('cursor'), v.literal('none')],
-      "--agent-loop must be one of: 'claude', 'codex', 'cursor' or 'none'."
+      "--agentLoop must be one of: 'claude', 'codex', 'cursor' or 'none'."
     )
   ),
 });

@@ -159,7 +159,7 @@ function printNextSteps(opts: {
   output.log({ title: 'Next steps', body });
 }
 
-// throws a helpful error message when the user omits `--agent-loop`. Use this
+// throws a helpful error message when the user omits `--agentLoop`. Use this
 // at the top of the codemod's entrypoint, before calling setupDocsScaffolding.
 //
 // Note: this is a manual check rather than a valibot schema constraint because
@@ -173,15 +173,15 @@ export function assertAgentLoop(loop: AgentLoop | undefined): asserts loop is Ag
   }
   throw new Error(
     [
-      'Missing required flag: --agent-loop',
+      'Missing required flag: --agentLoop',
       '',
       "This codemod can ship a set of AI skills that help author plugin docs and keep them aligned with Grafana's documentation standards.",
       '',
       'Pick how you want the skills wired up:',
-      '  --agent-loop=claude   install skills under .claude/skills/   (Claude Code)',
-      '  --agent-loop=codex    install skills under .agents/skills/    (OpenAI Codex)',
-      '  --agent-loop=cursor   install skills under .cursor/skills/    (Cursor)',
-      '  --agent-loop=none     skip the AI skills entirely (just scaffold the docs files)',
+      '  --agentLoop=claude   install skills under .claude/skills/   (Claude Code)',
+      '  --agentLoop=codex    install skills under .agents/skills/    (OpenAI Codex)',
+      '  --agentLoop=cursor   install skills under .cursor/skills/    (Cursor)',
+      '  --agentLoop=none     skip the AI skills entirely (just scaffold the docs files)',
     ].join('\n')
   );
 }
