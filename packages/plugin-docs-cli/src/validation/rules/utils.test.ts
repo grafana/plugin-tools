@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isMetaFile } from './utils.js';
+import { isMetaFile, maskInlineCode } from './utils.js';
 
 describe('isMetaFile', () => {
   it('matches README.md regardless of case', () => {
@@ -37,5 +37,41 @@ describe('isMetaFile', () => {
   it('does not match files that merely contain a meta basename in their path component', () => {
     expect(isMetaFile('readme-tips.md')).toBe(false);
     expect(isMetaFile('contributing-quickstart.md')).toBe(false);
+  });
+});
+
+describe('maskInlineCode', () => {
+  it('masks the contents of a single-backtick span, preserving the delimiters', () => {
+    expect(maskInlineCode('a `<div>` b')).toBe('a `#####` b');
+  });
+
+  it('preserves line length and removes tag-like text from masked spans', () => {
+    const line = 'text `<slug>` more `<page>` end';
+    const masked = maskInlineCode(line);
+    expect(masked).toHaveLength(line.length);
+    expect(masked).not.toContain('<slug>');
+    expect(masked).not.toContain('<page>');
+  });
+
+  it('returns a line with no backticks unchanged', () => {
+    expect(maskInlineCode('no backticks here')).toBe('no backticks here');
+  });
+
+  it('leaves an unterminated backtick run unmasked', () => {
+    expect(maskInlineCode('`unterminated <div>')).toBe('`unterminated <div>');
+  });
+
+  it('masks multiple independent spans on one line', () => {
+    expect(maskInlineCode('`<a>` and `<b>`')).toBe('`###` and `###`');
+  });
+
+  it('masks a double-backtick span containing a literal single backtick', () => {
+    const line = '``<a> ` <b>``';
+    const masked = maskInlineCode(line);
+    expect(masked.startsWith('``')).toBe(true);
+    expect(masked.endsWith('``')).toBe(true);
+    expect(masked).not.toContain('<a>');
+    expect(masked).not.toContain('<b>');
+    expect(masked).toHaveLength(line.length);
   });
 });

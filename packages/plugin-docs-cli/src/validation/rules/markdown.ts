@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines, isMetaFile } from './utils.js';
+import { getCodeBlockLines, isMetaFile, maskInlineCode } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -41,7 +41,8 @@ const PATH_TRAVERSAL_RE = /(?:^|\/)\.\.\//;
 function matchOutsideCode(
   content: string,
   re: RegExp,
-  codeLines: Set<number>
+  codeLines: Set<number>,
+  options?: { maskInlineCode?: boolean }
 ): Array<{ match: RegExpExecArray; line: number }> {
   const results: Array<{ match: RegExpExecArray; line: number }> = [];
   const lines = content.split('\n');
@@ -50,9 +51,10 @@ function matchOutsideCode(
     if (codeLines.has(i + 1)) {
       continue;
     }
+    const lineText = options?.maskInlineCode ? maskInlineCode(lines[i]) : lines[i];
     const lineRe = new RegExp(re.source, re.flags);
     let m: RegExpExecArray | null;
-    while ((m = lineRe.exec(lines[i])) !== null) {
+    while ((m = lineRe.exec(lineText)) !== null) {
       results.push({ match: m, line: i + 1 });
     }
   }
@@ -93,7 +95,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     const codeLines = getCodeBlockLines(content);
 
     // no-script-tags: no <script> tags
-    for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines)) {
+    for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines, { maskInlineCode: true })) {
       diagnostics.push({
         rule: Rule.NoScriptTags,
         severity: 'error',
@@ -105,7 +107,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     // no-script-tags: no event handler attributes (onclick, onerror, etc.)
-    for (const { match, line } of matchOutsideCode(content, EVENT_HANDLER_RE, codeLines)) {
+    for (const { match, line } of matchOutsideCode(content, EVENT_HANDLER_RE, codeLines, { maskInlineCode: true })) {
       diagnostics.push({
         rule: Rule.NoScriptTags,
         severity: 'error',
@@ -116,8 +118,10 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    // no-raw-html: no raw HTML tags (except allowed ones)
-    for (const { match, line } of matchOutsideCode(content, HTML_TAG_RE, codeLines)) {
+    // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
+    // are masked first so placeholder text like `<slug>` inside backticks
+    // isn't mistaken for a real tag.
+    for (const { match, line } of matchOutsideCode(content, HTML_TAG_RE, codeLines, { maskInlineCode: true })) {
       const tagName = match[1].toLowerCase();
       // skip if it's a script tag (already handled above) or allowed tag
       if (tagName === 'script' || ALLOWED_HTML_TAGS.has(tagName)) {
