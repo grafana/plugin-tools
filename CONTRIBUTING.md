@@ -255,4 +255,3 @@ After the Slack notification fires:
 3. Verify the staged versions then **Approve** each to send them to the NPM registry.
 
 If you spot a problem with a staged package before approving, **Reject** removes the staged version without publishing.
-
