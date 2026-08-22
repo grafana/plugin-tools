@@ -4,7 +4,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { glob, GlobOptions } from 'glob';
 import { readFileSync } from 'node:fs';
 import { chmod, cp } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { inspect } from 'node:util';
 import { defineConfig, ExternalOption, Plugin, RollupOptions } from 'rollup';
 import del from 'rollup-plugin-delete';
@@ -39,7 +39,7 @@ if (pkg.name === '@grafana/create-plugin') {
     ignore: ['**/*.test.ts'],
     absolute: true,
   };
-  const codeMods = glob.sync('{migrations,additions}/scripts/*.ts', codeModsGlobOptions).map((m) => m.toString());
+  const codeMods = glob.sync('{migrations,additions}/scripts/**/*.ts', codeModsGlobOptions).map((m) => m.toString());
   input.push(...codeMods);
 
   external.push('prettier');
@@ -141,6 +141,17 @@ function copyAssets(): Plugin {
         const srcStyles = join(projectRoot, 'src', 'server', 'styles');
         const distStyles = join(projectRoot, 'dist', 'server', 'styles');
         await cp(srcStyles, distStyles, { recursive: true });
+      }
+
+      if (pkg.name === '@grafana/create-plugin') {
+        const srcRoot = join(projectRoot, 'src');
+        const templateDirs = glob.sync('src/codemods/**/templates', { cwd: projectRoot, absolute: true });
+        await Promise.all(
+          templateDirs.map((src) => {
+            const dist = join(projectRoot, 'dist', relative(srcRoot, src));
+            return cp(src, dist, { recursive: true });
+          })
+        );
       }
     },
   };
