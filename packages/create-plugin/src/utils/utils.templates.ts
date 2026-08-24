@@ -124,10 +124,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       bundleGrafanaUI,
       scenesVersion: '^7.0.0',
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
-      // Kinds are served per app, so codegen only applies to app plugins. A Go backend is NOT
-      // required: Grafana can serve kinds from the bundled manifest alone, and code generation runs
-      // via a standalone binary (a warning is emitted in the generate command for other types).
-      experimentalAppSdk: Boolean(features.experimentalAppSdk) && isAppType(cliArgs.pluginType),
       appSdkVersion: APP_SDK_VERSION,
       frontendBundler,
     };
@@ -154,7 +150,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       scenesVersion: '^7.0.0',
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
-      experimentalAppSdk: Boolean(features.experimentalAppSdk) && isAppType(pluginJson.type),
       appSdkVersion: APP_SDK_VERSION,
       frontendBundler,
     };

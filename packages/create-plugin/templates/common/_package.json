@@ -9,8 +9,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache .",
     "lint:fix": "{{ packageManagerName }} run lint{{#if isNPM}} --{{/if}} --fix && prettier --write --list-different .",
-    "e2e": "playwright test",{{#if experimentalAppSdk}}
-    "generate:kinds": "node ./scripts/generate-kinds.mjs",{{/if}}
+    "e2e": "playwright test",
     "server": "docker compose up --build",
     "sign": "sign-plugin"
   },

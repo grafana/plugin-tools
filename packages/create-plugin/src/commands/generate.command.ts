@@ -5,7 +5,6 @@ import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { EXTRA_TEMPLATE_VARIABLES, IS_DEV, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { TemplateData } from '../types.js';
-import { getConfig } from '../utils/utils.config.js';
 import { output } from '../utils/utils.console.js';
 import { directoryExists, getExportFileName, isFile } from '../utils/utils.files.js';
 import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
@@ -34,14 +33,6 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   // This is only possible when a user passes both flags via the command line.
   if (answers.hasBackend && answers.pluginType === PLUGIN_TYPES.panel) {
     output.warning({ title: `Backend ignored as incompatible with plugin type: ${PLUGIN_TYPES.panel}.` });
-  }
-  // Kinds are served per app, so the experimentalAppSdk feature flag only applies to app plugins.
-  // getTemplateData() has already forced it to false, so just explain why nothing happened.
-  if (getConfig().features.experimentalAppSdk && !templateData.experimentalAppSdk) {
-    output.warning({
-      title: 'grafana-app-sdk codegen ignored.',
-      body: [`It requires an app plugin, not a ${templateData.pluginType} plugin.`],
-    });
   }
 
   const actions = getTemplateActions({ templateData, exportPath });
@@ -107,21 +98,10 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
     ? getActionsForTemplateFolder({ folderPath: backendFolderPath, exportPath, templateData })
     : [];
 
-  // Copy over grafana-app-sdk kinds and the codegen script (if selected).
-  // templateData.experimentalAppSdk is already gated on isAppType.
-  const appSdkActions = templateData.experimentalAppSdk
-    ? getActionsForTemplateFolder({ folderPath: TEMPLATE_PATHS.appSdk, exportPath, templateData })
-    : [];
-
-  // Common, pluginType, backend and app-sdk actions can contain different templates for the same
-  // destination. This filtering removes the duplicate file additions to make sure the correct
-  // template is scaffolded. Note that the order is reversed so appSdk > backend > pluginType > common
-  const pluginActions = [
-    ...appSdkActions,
-    ...backendActions,
-    ...pluginTypeSpecificActions,
-    ...commonActions,
-  ].reduce<TemplateAction[]>(
+  // Common, pluginType and backend actions can contain different templates for the same destination.
+  // This filtering removes the duplicate file additions to make sure the correct template is scaffolded.
+  // Note that the order is reversed so backend > pluginType > common
+  const pluginActions = [...backendActions, ...pluginTypeSpecificActions, ...commonActions].reduce<TemplateAction[]>(
     (acc, file) => {
       const actionExists = acc.find((f) => f.path === file.path);
       // return early to prevent duplicate file additions
