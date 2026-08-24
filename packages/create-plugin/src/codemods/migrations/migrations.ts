@@ -84,6 +84,13 @@ export default [
     description: 'Emit a single LICENSE.txt file for all licenses in bundled code.',
     scriptPath: import.meta.resolve('./scripts/012-terser-license-file.js'),
   },
+  {
+    name: '013-jest-esmodules',
+    version: '7.10.1',
+    description:
+      'Support @grafana/ui@13.2.0 in Jest by transforming @react-hookz/web and @ver0/deep-equal ESM dependencies.',
+    scriptPath: import.meta.resolve('./scripts/013-jest-esmodules.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
