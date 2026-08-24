@@ -14,7 +14,7 @@ config: {
 		// The manifest tells Grafana which kinds and capabilities your app serves. Write it
 		// straight into src/ so the frontend build picks it up as-is.
 		manifestSchemas:  true
-		path:             "../src"
+		path:             "src"
 		manifestFileName: "app-sdk-manifest.json"
 		encoding:         "json"
 		// Do not generate separate files per-CRD, they are not used.
