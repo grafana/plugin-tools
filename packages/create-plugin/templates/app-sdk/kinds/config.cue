@@ -8,9 +8,9 @@ package kinds
 // the frontend lives in src/.
 config: {
 	definitions: {
-       		manifestVersion:  "v1alpha2"
+		manifestVersion:  "v1alpha2"
 
-                // DO NOT EDIT
+		// Do not edit this section; the generated manifest must be named exactly as below.
 		// The manifest tells Grafana which kinds and capabilities your app serves. Write it
 		// straight into src/ so the frontend build picks it up as-is.
 		manifestSchemas:  true
