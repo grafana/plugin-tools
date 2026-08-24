@@ -1,5 +1,4 @@
 import {
-  APP_SDK_VERSION,
   DEFAULT_FEATURE_FLAGS,
   EXPORT_PATH_PREFIX,
   EXTRA_TEMPLATE_VARIABLES,
@@ -124,7 +123,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       bundleGrafanaUI,
       scenesVersion: '^7.0.0',
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
-      appSdkVersion: APP_SDK_VERSION,
       frontendBundler,
     };
     // Updating or migrating a plugin
@@ -150,7 +148,6 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       scenesVersion: '^7.0.0',
       pluginExecutable: pluginJson.executable,
       useExperimentalRspack: Boolean(features.useExperimentalRspack),
-      appSdkVersion: APP_SDK_VERSION,
       frontendBundler,
     };
   }

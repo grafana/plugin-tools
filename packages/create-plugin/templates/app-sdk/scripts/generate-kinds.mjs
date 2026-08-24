@@ -3,17 +3,15 @@
 //
 // Always runs the CLI at the version pinned in VERSION below, resolved as:
 //   1. a previously obtained copy in .cache/grafana-app-sdk/<version>/
-//   2. a fresh copy, obtained one of two ways depending on VERSION:
-//      - a release tag (vX.Y.Z) downloads the official binary and verifies its checksum
-//      - any other git ref (a branch such as `main`, or a commit SHA) is built with `go install`
+//   2. a fresh copy, downloaded from the official release and verified against its checksum
 //
 // A `grafana-app-sdk` on your PATH is deliberately ignored: generated code has to match the library
 // version it is compiled against, and silently generating with whatever happens to be installed makes
-// that mismatch invisible. To use your own build, either point VERSION at its ref, or set
-// GRAFANA_APP_SDK_BIN to the binary — an explicit, per-invocation override for local development.
+// that mismatch invisible. To use your own build, set GRAFANA_APP_SDK_BIN to the binary — an explicit,
+// per-invocation override for local development.
 //
-// The release path needs no Go toolchain to obtain the CLI, but note that generation itself always
-// requires Go: the generator formats its output with golang.org/x/tools, which shells out to `go`.
+// Downloading the CLI needs no Go toolchain, but note that generation itself always requires Go: the
+// generator formats its output with golang.org/x/tools, which shells out to `go`.
 //
 // Output paths are configured in kinds/config.cue. Generated code is intended to be committed.
 
@@ -23,20 +21,15 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, wr
 import { join, resolve } from 'node:path';
 import { arch, platform, tmpdir } from 'node:os';
 
-const VERSION = '{{ appSdkVersion }}';
+const VERSION = 'v0.58.0';
 const REPO = 'grafana/grafana-app-sdk';
 const BIN = 'grafana-app-sdk';
-
-const MODULE = `github.com/${REPO}`;
 
 // Escape hatch for developing against a local CLI build, e.g. one you are changing yourself. Unlike a
 // binary that merely happens to be on PATH, setting this is a deliberate act, so it is honoured.
 const BIN_OVERRIDE = 'GRAFANA_APP_SDK_BIN';
 
-// Release tags get the verified-download path; anything else is treated as a git ref to build from
-// source. Slashes are stripped so a ref like `feature/foo` still yields a usable directory name.
-const IS_RELEASE = /^v\d+\.\d+\.\d+$/.test(VERSION);
-const CACHE_DIR = resolve('.cache', 'grafana-app-sdk', VERSION.replace(/[/\\]/g, '-'));
+const CACHE_DIR = resolve('.cache', 'grafana-app-sdk', VERSION);
 
 function run(command, args, options = {}) {
   return spawnSync(command, args, { stdio: 'inherit', ...options });
@@ -44,11 +37,7 @@ function run(command, args, options = {}) {
 
 const EXE = platform() === 'win32' ? '.exe' : '';
 
-/**
- * Returns the release asset's platform pair, or exits if this platform has no published build.
- *
- * Only the download path needs this; `go install` builds for whatever platform Go itself supports.
- */
+/** Returns the release asset's platform pair, or exits if this platform has no published build. */
 function target() {
   const goos = { linux: 'linux', darwin: 'darwin', win32: 'windows' }[platform()];
   const goarch = { x64: 'amd64', arm64: 'arm64' }[arch()];
@@ -129,47 +118,6 @@ async function download({ goos, goarch }) {
   return binary;
 }
 
-/**
- * Builds the CLI from source at an arbitrary git ref via `go install`.
- *
- * Used for non-release refs (a branch such as `main`, or a commit SHA), where there is no published
- * release asset and so nothing to checksum. GOBIN puts the result in our cache dir rather than the
- * user's ~/go/bin, so it neither depends on nor pollutes their global install.
- */
-function goInstall() {
-  if (!hasGo()) {
-    console.error(
-      `${BIN} ${VERSION} is not a release version, so it has to be built from source, but Go was not found on your PATH.\n` +
-        `Install Go from https://go.dev/dl/, or set VERSION in this script to a release tag.`
-    );
-    process.exit(1);
-  }
-
-  console.log(`Building ${BIN} ${VERSION} from source with go install...`);
-  mkdirSync(CACHE_DIR, { recursive: true });
-
-  const install = run('go', ['install', `${MODULE}/cmd/${BIN}@${VERSION}`], {
-    env: { ...process.env, GOBIN: CACHE_DIR },
-  });
-
-  if (install.status !== 0) {
-    console.error(`\ngo install ${MODULE}/cmd/${BIN}@${VERSION} failed. Is ${VERSION} a valid ref?`);
-    process.exit(1);
-  }
-
-  const binary = join(CACHE_DIR, `${BIN}${EXE}`);
-  if (!existsSync(binary)) {
-    console.error(`go install reported success but ${binary} is missing.`);
-    process.exit(1);
-  }
-
-  return binary;
-}
-
-function hasGo() {
-  return spawnSync('go', ['version'], { stdio: 'ignore' }).status === 0;
-}
-
 function findBinary(dir, name) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
@@ -204,9 +152,7 @@ async function resolveBinary() {
     return cached;
   }
 
-  // A moving ref such as `main` would otherwise be pinned by the cache above; delete the cached copy
-  // to rebuild it.
-  return IS_RELEASE ? download(target()) : goInstall();
+  return download(target());
 }
 
 const binary = await resolveBinary();

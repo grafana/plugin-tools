@@ -25,9 +25,6 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
 - **This plugin generates no Go code.** `kinds/config.cue` sets `codegen: goEnabled: false`, so
   generation emits only TypeScript and the JSON definitions. Do not add Go output paths or a Go
   backend to work around a generation problem.
-- **The pinned CLI version is an unreleased commit**, so `generate:kinds` builds it from source
-  with `go install` on first run and needs Go for that step. This is temporary; do not change
-  `VERSION` in `scripts/generate-kinds.mjs` to work around it.
 - **Do not set `GRAFANA_APP_SDK_BIN`.** It overrides the pinned CLI with a local build, and is meant
   for people working on the app-sdk itself. Code generated with it can differ from what `VERSION` in
   `scripts/generate-kinds.mjs` produces, so committing it would put the repository out of step. Run

@@ -20,11 +20,9 @@ After every change under this directory:
 ```
 
 That script always runs the `grafana-app-sdk` version set as `VERSION` at the top of
-`scripts/generate-kinds.mjs`, reusing a copy in `.cache/` or fetching one. A release tag (`vX.Y.Z`)
-downloads the official binary for your platform and verifies its checksum; any other git ref — a
-branch such as `main`, or a commit SHA — is built from source with `go install`. A `grafana-app-sdk`
-on your `PATH` is ignored, so everyone on the project generates with the same version. To run a local
-build instead, set `GRAFANA_APP_SDK_BIN` to its path. It writes:
+`scripts/generate-kinds.mjs`, reusing a copy in `.cache/` or downloading and checksum-verifying one for
+your platform. A `grafana-app-sdk` on your `PATH` is ignored, so everyone on the project generates with
+the same version. To run a local build instead, set `GRAFANA_APP_SDK_BIN` to its path. It writes:
 
 | Output | Path |
 | ------ | ---- |
@@ -37,10 +35,6 @@ without running code generation.
 > **No Go toolchain is needed.** This plugin has no Go backend, so `kinds/config.cue` sets
 > `codegen: goEnabled: false` and the generator emits only TypeScript and the definitions. Nothing
 > shells out to `go`.
->
-> **The pinned version is currently an unreleased commit**, so the CLI is built from source with
-> `go install` and Go is needed for that step regardless. Once `goEnabled` reaches a release, set
-> `VERSION` to that tag and the checksum-verified download applies again.
 
 ## How the manifest reaches Grafana
 

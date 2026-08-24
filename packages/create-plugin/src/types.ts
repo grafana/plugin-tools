@@ -24,7 +24,6 @@ export type TemplateData = {
   bundleGrafanaUI: boolean;
   scenesVersion: string;
   useExperimentalRspack: boolean;
-  appSdkVersion: string;
   pluginExecutable?: string;
   frontendBundler: 'webpack' | 'rspack';
 };

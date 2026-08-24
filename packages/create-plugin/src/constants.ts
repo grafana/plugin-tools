@@ -54,18 +54,6 @@ export const DEFAULT_FEATURE_FLAGS = {
   useExperimentalUpdates: true,
 };
 
-// The grafana-app-sdk version used for kind code generation.
-//
-// A release tag (vX.Y.Z) is downloaded as a checksum-verified binary. Any other git ref — a branch
-// such as `main`, or a commit SHA — is built with `go install` instead; see
-// templates/app-sdk/scripts/generate-kinds.mjs.
-//
-// TEMPORARY: pinned to an unreleased commit for `codegen: goEnabled: false` (grafana-app-sdk#1492),
-// which lets frontend-only plugins generate TypeScript without emitting Go. A pseudo-version rather
-// than `main` keeps it reproducible, at the cost of building the CLI from source via `go install`.
-// Move this back to a release tag as soon as one contains #1492.
-export const APP_SDK_VERSION = 'v0.57.2-0.20260824082014-08ce79806923';
-
 export const GRAFANA_FE_PACKAGES = ['@grafana/data', '@grafana/runtime', '@grafana/schema', '@grafana/ui'];
 
 export const MIGRATION_CONFIG = {
