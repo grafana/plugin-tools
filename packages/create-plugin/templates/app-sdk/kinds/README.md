@@ -20,7 +20,7 @@ After every change under this directory:
 ```
 
 That script always runs the `grafana-app-sdk` version set as `VERSION` at the top of
-`scripts/generate-kinds.mjs`, reusing a copy in `.cache/` or downloading and checksum-verifying one for
+`scripts/generate-kinds.mjs`, reusing a copy in `node_modules/.cache/` or downloading and checksum-verifying one for
 your platform. A `grafana-app-sdk` on your `PATH` is ignored, so everyone on the project generates with
 the same version. To run a local build instead, set `GRAFANA_APP_SDK_BIN` to its path. It writes:
 

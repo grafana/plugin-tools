@@ -2,7 +2,7 @@
 // Runs grafana-app-sdk kind code generation from the CUE kinds in ./kinds.
 //
 // Always runs the CLI at the version pinned in VERSION below, resolved as:
-//   1. a previously obtained copy in .cache/grafana-app-sdk/<version>/
+//   1. a previously obtained copy in node_modules/.cache/grafana-app-sdk/<version>/
 //   2. a fresh copy, downloaded from the official release and verified against its checksum
 //
 // A `grafana-app-sdk` on your PATH is deliberately ignored: generated code has to match the library
@@ -29,7 +29,8 @@ const BIN = 'grafana-app-sdk';
 // binary that merely happens to be on PATH, setting this is a deliberate act, so it is honoured.
 const BIN_OVERRIDE = 'GRAFANA_APP_SDK_BIN';
 
-const CACHE_DIR = resolve('.cache', 'grafana-app-sdk', VERSION);
+// node_modules is already gitignored, so nothing extra needs ignoring for this cache.
+const CACHE_DIR = resolve('node_modules', '.cache', 'grafana-app-sdk', VERSION);
 
 function run(command, args, options = {}) {
   return spawnSync(command, args, { stdio: 'inherit', ...options });
