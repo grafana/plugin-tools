@@ -17,7 +17,7 @@
 
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { arch, platform, tmpdir } from 'node:os';
 
@@ -91,46 +91,23 @@ async function download({ goos, goarch }) {
     process.exit(1);
   }
 
-  // Unpack via tar(1): available on macOS/Linux and shipped with Windows 10+.
-  const staging = join(tmpdir(), `${BIN}-${VERSION}-${process.pid}`);
-  mkdirSync(staging, { recursive: true });
-  const tarPath = join(staging, archive);
+  // Unpack via tar(1): available on macOS/Linux and shipped with Windows 10+. The archive lays the
+  // binary flat at its root (alongside LICENSE and README.md), so extract straight into CACHE_DIR.
+  const tarPath = join(tmpdir(), `${archive}-${process.pid}`);
   writeFileSync(tarPath, tarball);
+  mkdirSync(CACHE_DIR, { recursive: true });
 
-  const untar = run('tar', ['-xzf', tarPath, '-C', staging]);
+  const untar = run('tar', ['-xzf', tarPath, '-C', CACHE_DIR, `${BIN}${EXE}`]);
+  rmSync(tarPath, { force: true });
   if (untar.status !== 0) {
     console.error(`Could not unpack ${archive}. Is tar available on your PATH?`);
     process.exit(1);
   }
 
-  mkdirSync(CACHE_DIR, { recursive: true });
   const binary = join(CACHE_DIR, `${BIN}${EXE}`);
-  // The archive layout has varied between releases, so find the binary rather than assuming a path.
-  const found = findBinary(staging, `${BIN}${EXE}`);
-  if (!found) {
-    console.error(`Could not find ${BIN}${EXE} inside ${archive}.`);
-    process.exit(1);
-  }
-  writeFileSync(binary, readFileSync(found));
   chmodSync(binary, 0o755);
-  rmSync(staging, { recursive: true, force: true });
 
   return binary;
-}
-
-function findBinary(dir, name) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const path = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      const nested = findBinary(path, name);
-      if (nested) {
-        return nested;
-      }
-    } else if (entry.name === name) {
-      return path;
-    }
-  }
-  return undefined;
 }
 
 async function resolveBinary() {
