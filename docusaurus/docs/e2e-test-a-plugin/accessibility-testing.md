@@ -64,41 +64,25 @@ Every scan is attached to the Playwright report as a JSON attachment named `axe-
 
 ## Scan part of a page
 
-A full page scan includes the Grafana chrome that surrounds your plugin, such as the navigation menu and the dashboard controls. To assert only on the markup your plugin owns, pass `include` with a CSS selector:
+A full page scan includes the Grafana chrome that surrounds your plugin, such as the navigation menu and the dashboard controls. To assert only on the markup your plugin owns, pass `include` with a CSS selector.
+
+Both `include` and `exclude` accept a single CSS selector or an array of them. They don't accept Playwright locators or Grafana end-to-end selectors. Grafana end-to-end selectors are values of the `data-testid` or `aria-label` attribute, so use the `resolveGrafanaSelector` helper exported by `@grafana/plugin-e2e` to turn one into a CSS selector:
 
 ```ts
+import { test, expect, resolveGrafanaSelector } from '@grafana/plugin-e2e';
+
 test('panel has no accessibility violations', async ({
   gotoDashboardPage,
   readProvisionedDashboard,
+  selectors,
   scanForA11yViolations,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   const dashboardPage = await gotoDashboardPage(dashboard);
   await expect(dashboardPage.getPanelByTitle('Sales by region').locator).toBeVisible();
 
-  const results = await scanForA11yViolations({ include: '[data-testid="sales-panel"]' });
-
-  expect(results).toHaveNoA11yViolations();
-});
-```
-
-Use `exclude` to scan a page but skip a subtree. For example, you may need to skip a third-party component you don't control:
-
-```ts
-const results = await scanForA11yViolations({ exclude: '[data-testid="third-party-map"]' });
-```
-
-Both `include` and `exclude` accept a single CSS selector or an array of them. They don't accept Playwright locators or Grafana end-to-end selectors. Grafana end-to-end selectors are values of the `data-testid` or `aria-label` attribute, so you can turn one into a CSS selector with a small helper:
-
-```ts
-const toCssSelector = (selector: string) =>
-  selector.startsWith('data-testid') ? `[data-testid="${selector}"]` : `[aria-label="${selector}"]`;
-
-test('panel has no accessibility violations', async ({ selectors, scanForA11yViolations }) => {
-  // Navigate to the page and wait for the panel to render.
-
   const results = await scanForA11yViolations({
-    include: toCssSelector(selectors.components.Panels.Panel.title('Sales by region')),
+    include: resolveGrafanaSelector(selectors.components.Panels.Panel.title('Sales by region')),
   });
 
   expect(results).toHaveNoA11yViolations();
@@ -106,6 +90,12 @@ test('panel has no accessibility violations', async ({ selectors, scanForA11yVio
 ```
 
 To learn more about Grafana end-to-end selectors, refer to the [Select UI elements](./selecting-ui-elements.md) guide.
+
+Use `exclude` to scan a page but skip a subtree. For example, you may need to skip a third-party component you don't control:
+
+```ts
+const results = await scanForA11yViolations({ exclude: '[data-testid="third-party-map"]' });
+```
 
 ## Use the default Grafana rules
 
