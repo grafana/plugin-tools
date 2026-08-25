@@ -41,8 +41,9 @@ without running code generation.
 The generator writes the manifest straight into `src/app-sdk-manifest.json`, so the frontend build's
 existing `**/*.json` copy pattern (`.config/bundler/copyFiles.ts`) carries it into the plugin bundle as
 `dist/app-sdk-manifest.json` with no dedicated copy step. Grafana reads it when the
-`plugins.appSDKManifest` feature toggle is enabled — the Docker dev server in this repo enables it for
-you. Note the toggle is experimental and off by default in Grafana.
+`appplugins.loadAppManifest` and `appplugins.registerAPIServer` feature toggles are enabled — the Docker
+dev server in this repo enables both for you. Note the toggles are experimental and off by default in
+Grafana.
 
 With the manifest in place, Grafana serves storage and CRUD for your kinds through its aggregated API
 server, and users can also manage the objects with `kubectl`.

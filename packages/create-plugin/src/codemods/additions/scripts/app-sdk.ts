@@ -4,8 +4,9 @@ import type { Context } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
 
-// Grafana reads an app-sdk manifest from the plugin bundle only when this toggle is enabled.
-const APP_SDK_FEATURE_TOGGLE = 'plugins.appSDKManifest';
+// Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
+// these toggles are enabled.
+const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.registerAPIServer'];
 
 // Files copied verbatim from templates/app-sdk. Paths are relative to both the template folder and
 // the plugin root.
@@ -172,8 +173,8 @@ function addFeatureToggle(context: Context) {
   // replaces (rather than merges) a scalar value across `extends`, so a root value would also mask
   // any other toggles the base file sets.
   const baseComposeContent = context.getFile('.config/docker-compose-base.yaml');
-  if (baseComposeContent?.includes(APP_SDK_FEATURE_TOGGLE)) {
-    additionsDebug(`${APP_SDK_FEATURE_TOGGLE} is already enabled in the base compose file. Skipping.`);
+  if (APP_SDK_FEATURE_TOGGLES.every((toggle) => baseComposeContent?.includes(toggle))) {
+    additionsDebug(`${APP_SDK_FEATURE_TOGGLES.join(', ')} are already enabled in the base compose file. Skipping.`);
     return;
   }
 
@@ -182,7 +183,7 @@ function addFeatureToggle(context: Context) {
 
   if (environment !== undefined && !(environment instanceof YAMLMap)) {
     additionsDebug(
-      `services.grafana.environment in ${composePath} is not a mapping. Add ${APP_SDK_FEATURE_TOGGLE} to GF_FEATURE_TOGGLES_ENABLE manually.`
+      `services.grafana.environment in ${composePath} is not a mapping. Add ${APP_SDK_FEATURE_TOGGLES.join(', ')} to GF_FEATURE_TOGGLES_ENABLE manually.`
     );
     return;
   }
@@ -202,12 +203,14 @@ function addFeatureToggle(context: Context) {
         .filter(Boolean)
     : [];
 
-  if (toggles.includes(APP_SDK_FEATURE_TOGGLE)) {
-    additionsDebug(`${APP_SDK_FEATURE_TOGGLE} is already enabled. Skipping.`);
+  const missingToggles = APP_SDK_FEATURE_TOGGLES.filter((toggle) => !toggles.includes(toggle));
+
+  if (missingToggles.length === 0) {
+    additionsDebug(`${APP_SDK_FEATURE_TOGGLES.join(', ')} are already enabled. Skipping.`);
     return;
   }
 
-  toggles.push(APP_SDK_FEATURE_TOGGLE);
+  toggles.push(...missingToggles);
   composeData.setIn(['services', 'grafana', 'environment', 'GF_FEATURE_TOGGLES_ENABLE'], toggles.join(','));
 
   context.updateFile(composePath, stringify(composeData, { lineWidth: 120, singleQuote: true }));

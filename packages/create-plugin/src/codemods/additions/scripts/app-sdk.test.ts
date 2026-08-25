@@ -187,7 +187,9 @@ describe('experimental-app-sdk addition', () => {
 
       const result = appSdk(context);
 
-      expect(result.getFile('docker-compose.yaml')).toContain('GF_FEATURE_TOGGLES_ENABLE: plugins.appSDKManifest');
+      expect(result.getFile('docker-compose.yaml')).toContain(
+        'GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer'
+      );
     });
 
     it('appends to existing toggles rather than replacing them', () => {
@@ -206,10 +208,11 @@ describe('experimental-app-sdk addition', () => {
 
       const compose = result.getFile('docker-compose.yaml') ?? '';
       expect(compose).toContain('someOtherToggle');
-      expect(compose).toContain('plugins.appSDKManifest');
+      expect(compose).toContain('appplugins.loadAppManifest');
+      expect(compose).toContain('appplugins.registerAPIServer');
     });
 
-    it('does not duplicate the toggle when it is already set', () => {
+    it('does not duplicate the toggles when they are already set', () => {
       const context = createAppContext({
         compose: `services:
   grafana:
@@ -217,24 +220,44 @@ describe('experimental-app-sdk addition', () => {
       file: .config/docker-compose-base.yaml
       service: grafana
     environment:
-      GF_FEATURE_TOGGLES_ENABLE: plugins.appSDKManifest
+      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer
 `,
       });
 
       const result = appSdk(context);
 
       const compose = result.getFile('docker-compose.yaml') ?? '';
-      expect(compose.match(/plugins\.appSDKManifest/g)).toHaveLength(1);
+      expect(compose.match(/appplugins\.loadAppManifest/g)).toHaveLength(1);
+      expect(compose.match(/appplugins\.registerAPIServer/g)).toHaveLength(1);
     });
 
-    it('skips the toggle when the base compose file already enables it', () => {
+    it('adds only the missing toggle when one is already set', () => {
+      const context = createAppContext({
+        compose: `services:
+  grafana:
+    extends:
+      file: .config/docker-compose-base.yaml
+      service: grafana
+    environment:
+      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest
+`,
+      });
+
+      const result = appSdk(context);
+
+      const compose = result.getFile('docker-compose.yaml') ?? '';
+      expect(compose.match(/appplugins\.loadAppManifest/g)).toHaveLength(1);
+      expect(compose).toContain('appplugins.registerAPIServer');
+    });
+
+    it('skips the toggles when the base compose file already enables them', () => {
       const context = createAppContext();
       context.addFile(
         '.config/docker-compose-base.yaml',
         `services:
   grafana:
     environment:
-      GF_FEATURE_TOGGLES_ENABLE: plugins.appSDKManifest
+      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer
 `
       );
 

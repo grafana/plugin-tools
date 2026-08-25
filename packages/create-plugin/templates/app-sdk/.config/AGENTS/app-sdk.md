@@ -71,8 +71,8 @@ guessing at CUE syntax.
 ## Serving the kinds
 
 Grafana serves storage and CRUD for the kinds from the manifest bundled in the plugin, behind the
-`plugins.appSDKManifest` feature toggle. The development server enables it. Grafana only reads plugin
-manifests at startup, so restart it after rebuilding.
+`appplugins.loadAppManifest` and `appplugins.registerAPIServer` feature toggles. The development server
+enables both. Grafana only reads plugin manifests at startup, so restart it after rebuilding.
 
 Resources are served under a Kubernetes-style path:
 
