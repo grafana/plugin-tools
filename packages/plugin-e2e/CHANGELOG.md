@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.11.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.0...@grafana/plugin-e2e@3.11.1) (2026-08-27)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** correct dashboard toolbar version thresholds ([#2836](https://github.com/grafana/plugin-tools/issues/2836)) ([96b3ace](https://github.com/grafana/plugin-tools/commit/96b3ace0fac673361c2a9de309653e28e1eea1f6))
+* **plugin-e2e:** don't assume panel options group is expanded by default ([#2855](https://github.com/grafana/plugin-tools/issues/2855)) ([490b663](https://github.com/grafana/plugin-tools/commit/490b663759226a1450adcccd38ab9e2f4cdcc2d8))
+* **plugin-e2e:** support new root OFREP route ([#2848](https://github.com/grafana/plugin-tools/issues/2848)) ([f347e5d](https://github.com/grafana/plugin-tools/commit/f347e5db3a0445cfb47b318d841a11770552bc33))
+* **plugin-e2e:** wait for feature toggles instead of reading them once ([#2832](https://github.com/grafana/plugin-tools/issues/2832)) ([7b1f4fd](https://github.com/grafana/plugin-tools/commit/7b1f4fddd3d4d8ac4719e13ee30394a4cff54e45))
+
 ## [3.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.10.0...@grafana/plugin-e2e@3.11.0) (2026-08-05)
 
 
