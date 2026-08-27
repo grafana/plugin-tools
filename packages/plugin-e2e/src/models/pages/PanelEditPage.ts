@@ -235,7 +235,7 @@ export class PanelEditPage extends GrafanaPage {
   }
 
   getDataLinksOptions(): PanelEditOptionsGroup {
-    return this.getCustomOptions('Data links');
+    return this.getCustomOptions(this.ctx.selectors.constants.OptionsGroup.dataLinksTitle);
   }
 
   getThresholdsOptions(): PanelEditOptionsGroup {

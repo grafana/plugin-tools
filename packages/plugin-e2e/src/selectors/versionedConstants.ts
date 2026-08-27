@@ -27,6 +27,13 @@ export const versionedConstants = {
       [MIN_GRAFANA_VERSION]: 'All visualizations',
     },
   },
+  OptionsGroup: {
+    // the data links panel options category started supporting actions in 11.6.0, and was renamed accordingly
+    dataLinksTitle: {
+      '11.6.0': 'Data links and actions',
+      [MIN_GRAFANA_VERSION]: 'Data links',
+    },
+  },
 } satisfies VersionedSelectorGroup;
 
 export type VersionedConstants = typeof versionedConstants;
