@@ -33,10 +33,11 @@ export default function appSdk(context: Context): Context {
 
   const changesBefore = Object.keys(context.listChanges()).length;
 
-  addTemplateFiles(context);
+  addTemplateFiles(context, hasGoBackend(context));
   referenceAgentInstructions(context);
   addGenerateScript(context);
   addFeatureToggle(context);
+  wireGoBackend(context);
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
@@ -85,7 +86,7 @@ function skip(title: string, body: string[] = []) {
   output.warning({ title: `Skipping app-sdk: ${title}`, body });
 }
 
-function addTemplateFiles(context: Context) {
+function addTemplateFiles(context: Context, hasGoBackend: boolean) {
   for (const file of TEMPLATE_FILES) {
     if (context.doesFileExist(file)) {
       additionsDebug(`${file} already exists. Skipping.`);
@@ -94,7 +95,17 @@ function addTemplateFiles(context: Context) {
 
     // includeWarning is false: unlike the tool-managed files in .config, these are meant to be
     // edited — declaring your own kinds is the point.
-    context.addFile(file, renderTemplate(templatePath(file), false));
+    let content = renderTemplate(templatePath(file), false);
+
+    // Applied here, rather than as a later context.updateFile() pass, because a file added and then
+    // updated within the same codemod run is staged as changeType 'update' — losing the fact its
+    // directory (kinds/) doesn't exist on disk yet, which would make the write fail. Baking the Go
+    // config straight into the freshly-rendered content sidesteps that entirely.
+    if (file === 'kinds/config.cue' && hasGoBackend) {
+      content = enableGoCodegenIn(content) ?? content;
+    }
+
+    context.addFile(file, content);
   }
 }
 
@@ -214,6 +225,180 @@ function addFeatureToggle(context: Context) {
   composeData.setIn(['services', 'grafana', 'environment', 'GF_FEATURE_TOGGLES_ENABLE'], toggles.join(','));
 
   context.updateFile(composePath, stringify(composeData, { lineWidth: 120, singleQuote: true }));
+}
+
+/**
+ * Enables Go code generation and wires the generated kinds into the Go backend, for app plugins that
+ * have one. Plugins without a backend keep the frontend-only `goEnabled: false` config untouched.
+ */
+function wireGoBackend(context: Context) {
+  if (!hasGoBackend(context)) {
+    additionsDebug('No Go backend found. Skipping Go code generation and main.go wiring.');
+    return;
+  }
+
+  enableGoCodegen(context);
+  addAppProvider(context);
+  wireMainGo(context);
+}
+
+/**
+ * Scaffolds pkg/provider/provider.go: the app.Provider/app.App wiring that plugin.Run needs, built
+ * from the generated manifest and the example kind. Named "provider", not "app", so it doesn't
+ * collide with the app-sdk's own `app` package and force an import alias everywhere it's used.
+ *
+ * Not overwritten on a re-run — like kinds/*.cue, it's meant to be edited as the plugin adds
+ * validators, mutators, or more kinds.
+ */
+function addAppProvider(context: Context) {
+  const path = 'pkg/provider/provider.go';
+
+  if (context.doesFileExist(path)) {
+    additionsDebug(`${path} already exists. Skipping.`);
+    return;
+  }
+
+  context.addFile(path, renderTemplate(templatePath(path), false));
+}
+
+/** A Go backend is declared by `backend: true` in src/plugin.json, same as the rest of create-plugin. */
+function hasGoBackend(context: Context): boolean {
+  const pluginJsonContent = context.getFile('src/plugin.json');
+
+  if (!pluginJsonContent) {
+    return false;
+  }
+
+  try {
+    return JSON.parse(pluginJsonContent).backend === true;
+  } catch (error) {
+    additionsDebug(`Failed to parse src/plugin.json: ${error}`);
+    return false;
+  }
+}
+
+/**
+ * Flips `codegen.goEnabled` on and adds a Go output path in kinds/config.cue, for when the file
+ * already existed on disk before this run (e.g. a Go backend added after app-sdk was already set
+ * up). If config.cue is being scaffolded fresh in this same run, addTemplateFiles bakes this
+ * transform into its content directly instead of calling this — see the comment there.
+ */
+function enableGoCodegen(context: Context) {
+  const path = 'kinds/config.cue';
+  const content = context.getFile(path);
+
+  if (!content) {
+    additionsDebug(`Could not find ${path}. Skipping Go code generation config.`);
+    return;
+  }
+
+  const updated = enableGoCodegenIn(content);
+
+  if (updated === undefined) {
+    return;
+  }
+
+  context.updateFile(path, updated);
+}
+
+/**
+ * Pure string transform: flips `codegen.goEnabled` on and adds a Go output path. Returns undefined
+ * if Go codegen is already enabled or the content doesn't match the expected app-sdk config shape.
+ */
+function enableGoCodegenIn(content: string): string | undefined {
+  const path = 'kinds/config.cue';
+
+  if (content.includes('goEnabled: true')) {
+    additionsDebug(`${path} already has Go code generation enabled. Skipping.`);
+    return undefined;
+  }
+
+  const goDisabledBlock =
+    '\t\t// This plugin has no Go backend, so skip Go code generation entirely: only TypeScript and\n' +
+    '\t\t// the definitions below are emitted, and no Go toolchain is needed to generate them.\n' +
+    '\t\tgoEnabled: false';
+
+  if (!content.includes(goDisabledBlock)) {
+    additionsDebug(`${path} does not match the expected app-sdk config shape. Skipping.`);
+    return undefined;
+  }
+
+  const goEnabledBlock =
+    '\t\t// Generated Go types land alongside the plugin backend.\n' +
+    '\t\tgoEnabled: true\n' +
+    '\t\tgoGenPath: "pkg/generated/"';
+
+  return content.replace(goDisabledBlock, goEnabledBlock);
+}
+
+// Matches the backend-app template's `if err := app.Manage(...); err != nil { ... }` statement,
+// capturing the plugin ID, app factory, and error-handling body so they can be preserved verbatim.
+const APP_MANAGE_STATEMENT_REGEX =
+  /if err := app\.Manage\((".*?"), (\S+), app\.ManageOpts\{\}\); err != nil \{\n(\t+[\s\S]*?\n)\t\}/;
+
+/**
+ * Wires the app-sdk's plugin.Run helper into main.go, replacing the plain app.Manage call, using the
+ * app.Provider scaffolded into pkg/provider by addAppProvider.
+ *
+ * Bails out rather than guessing if main.go has already diverged from the scaffolded shape this
+ * transform expects.
+ */
+function wireMainGo(context: Context) {
+  const path = 'pkg/main.go';
+  const content = context.getFile(path);
+
+  if (!content) {
+    additionsDebug(`Could not find ${path}. Skipping the app-sdk backend wiring.`);
+    return;
+  }
+
+  if (content.includes('grafana-app-sdk/plugin"')) {
+    additionsDebug(`${path} already wires plugin.Run. Skipping.`);
+    return;
+  }
+
+  const match = content.match(APP_MANAGE_STATEMENT_REGEX);
+
+  if (!match) {
+    skip(`${path} does not match the expected app.Manage(...) call.`, [
+      'Wire the grafana-app-sdk plugin.Run helper into main.go yourself:',
+      'https://github.com/grafana/grafana-app-sdk/blob/main/plugin/run.go',
+    ]);
+    return;
+  }
+
+  const [fullStatement, pluginId, appFactory, errorBody] = match;
+  const moduleMatch = content.match(/"(github\.com\/[^/]+\/[^/]+)\/pkg\/plugin"/);
+  const providerImportPath = moduleMatch ? `${moduleMatch[1]}/pkg/provider` : undefined;
+
+  if (!providerImportPath) {
+    skip(`${path} does not import its own pkg/plugin package under a recognisable module path.`, [
+      'Wire the grafana-app-sdk plugin.Run helper into main.go yourself:',
+      'https://github.com/grafana/grafana-app-sdk/blob/main/plugin/run.go',
+    ]);
+    return;
+  }
+
+  const updated = content
+    .replace(
+      '\t"github.com/grafana/grafana-plugin-sdk-go/backend/app"\n\t"github.com/grafana/grafana-plugin-sdk-go/backend/log"',
+      '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"\n' + '\t"github.com/grafana/grafana-plugin-sdk-go/backend/log"'
+    )
+    .replace(
+      `"${moduleMatch![1]}/pkg/plugin"`,
+      `"${providerImportPath}"\n\t"${moduleMatch![1]}/pkg/plugin"`
+    )
+    .replace(
+      fullStatement,
+      `if err := sdkplugin.Run(
+		provider.New(),
+		sdkplugin.WithPluginID(${pluginId}),
+		sdkplugin.WithAppFunc(${appFactory}),
+	); err != nil {
+${errorBody}\t}`
+    );
+
+  context.updateFile(path, updated);
 }
 
 /** Tells the user what to run next. */

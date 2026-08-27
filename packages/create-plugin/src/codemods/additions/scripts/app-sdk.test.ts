@@ -27,6 +27,7 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
     'kinds/example.cue': render('kinds/example.cue'),
     'kinds/cue.mod/module.cue': render('kinds/cue.mod/module.cue'),
     'kinds/README.md': render('kinds/README.md'),
+    'pkg/provider/provider.go': render('pkg/provider/provider.go'),
   };
   return {
     ...originalModule,
@@ -57,10 +58,11 @@ const STOCK_COMPOSE = `services:
 function createAppContext({
   pluginType = 'app',
   compose = STOCK_COMPOSE,
-}: { pluginType?: string; compose?: string | null } = {}) {
+  hasBackend = false,
+}: { pluginType?: string; compose?: string | null; hasBackend?: boolean } = {}) {
   const context = new Context('/virtual');
 
-  context.addFile('src/plugin.json', JSON.stringify({ type: pluginType, id: 'my-plugin-id', backend: false }));
+  context.addFile('src/plugin.json', JSON.stringify({ type: pluginType, id: 'my-plugin-id', backend: hasBackend }));
   context.addFile('package.json', JSON.stringify({ scripts: { build: 'webpack' } }, null, 2));
   context.addFile('.gitignore', 'node_modules/\ndist/\n');
   context.addFile('.config/bundler/copyFiles.ts', `export const copyFilePatterns = ['**/*.json'];`);
@@ -70,8 +72,37 @@ function createAppContext({
     context.addFile('docker-compose.yaml', compose);
   }
 
+  if (hasBackend) {
+    context.addFile('pkg/main.go', BACKEND_MAIN_GO);
+  }
+
   return context;
 }
+
+const BACKEND_MAIN_GO = `package main
+
+import (
+	"os"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend/app"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
+	"github.com/my-org/my-plugin/pkg/plugin"
+)
+
+func main() {
+	// Start listening to requests sent from Grafana. This call is blocking so
+	// it won't finish until Grafana shuts down the process or the plugin choose
+	// to exit by itself using os.Exit. Manage automatically manages life cycle
+	// of app instances. It accepts app instance factory as first
+	// argument. This factory will be automatically called on incoming request
+	// from Grafana to create different instances of \`App\` (per plugin
+	// ID).
+	if err := app.Manage("my-plugin-id", plugin.NewApp, app.ManageOpts{}); err != nil {
+		log.DefaultLogger.Error(err.Error())
+		os.Exit(1)
+	}
+}
+`;
 
 describe('experimental-app-sdk addition', () => {
   // Silence terminal output, and let us assert on what the user is told.
@@ -325,5 +356,115 @@ describe('experimental-app-sdk addition', () => {
     const context = createAppContext();
 
     await expect(appSdk).toBeIdempotent(context);
+  });
+
+  describe('Go backend wiring', () => {
+    it('leaves Go code generation disabled when there is no backend', () => {
+      const context = createAppContext({ hasBackend: false });
+
+      const result = appSdk(context);
+
+      expect(result.getFile('kinds/config.cue')).toContain('goEnabled: false');
+      expect(result.doesFileExist('pkg/main.go')).toBe(false);
+    });
+
+    it('enables Go code generation and sets a Go output path when a backend is present', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      const result = appSdk(context);
+
+      const config = result.getFile('kinds/config.cue') ?? '';
+      expect(config).toContain('goEnabled: true');
+      expect(config).toContain('goGenPath: "pkg/generated/"');
+      expect(config).not.toContain('goEnabled: false');
+    });
+
+    it('scaffolds pkg/provider/provider.go with the app.Provider wiring', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      const result = appSdk(context);
+
+      const providerGo = result.getFile('pkg/provider/provider.go') ?? '';
+      expect(providerGo).toContain('"github.com/grafana/grafana-app-sdk/app"');
+      expect(providerGo).toContain('func New() app.Provider');
+      expect(providerGo).toContain('simple.NewAppProvider(manifestdata.LocalManifest(), nil, newApp)');
+    });
+
+    it('does not scaffold pkg/provider/provider.go when there is no Go backend', () => {
+      const context = createAppContext({ hasBackend: false });
+
+      const result = appSdk(context);
+
+      expect(result.doesFileExist('pkg/provider/provider.go')).toBe(false);
+    });
+
+    it('does not overwrite an existing pkg/provider/provider.go', () => {
+      const context = createAppContext({ hasBackend: true });
+      const userProviderGo = 'package provider\n\n// my own provider\n';
+      context.addFile('pkg/provider/provider.go', userProviderGo);
+
+      const result = appSdk(context);
+
+      expect(result.getFile('pkg/provider/provider.go')).toBe(userProviderGo);
+    });
+
+    it('wires plugin.Run into main.go', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      const result = appSdk(context);
+
+      const mainGo = result.getFile('pkg/main.go') ?? '';
+      expect(mainGo).toContain('sdkplugin "github.com/grafana/grafana-app-sdk/plugin"');
+      expect(mainGo).toContain('"github.com/my-org/my-plugin/pkg/provider"');
+      expect(mainGo).toContain('sdkplugin.Run(');
+      expect(mainGo).toContain('provider.New()');
+      // The original app.Manage call's plugin ID and app factory are preserved as Run options.
+      expect(mainGo).toContain('sdkplugin.WithPluginID("my-plugin-id")');
+      expect(mainGo).toContain('sdkplugin.WithAppFunc(plugin.NewApp)');
+      expect(mainGo).not.toContain('app.Manage(');
+    });
+
+    it('does not modify main.go when there is no Go backend', () => {
+      const context = createAppContext({ hasBackend: false });
+
+      const result = appSdk(context);
+
+      expect(result.doesFileExist('pkg/main.go')).toBe(false);
+    });
+
+    it('does not duplicate the wiring on a re-run', () => {
+      const context = createAppContext({ hasBackend: true });
+      appSdk(context);
+      const afterFirst = context.getFile('pkg/main.go');
+
+      appSdk(context);
+
+      expect(context.getFile('pkg/main.go')).toBe(afterFirst);
+      expect((context.getFile('pkg/main.go') ?? '').match(/sdkplugin "github\.com\/grafana\/grafana-app-sdk\/plugin"/g)).toHaveLength(1);
+    });
+
+    it('skips main.go safely when it does not match the expected shape', () => {
+      const context = createAppContext({ hasBackend: true });
+      const customMainGo = `package main
+
+func main() {
+	// heavily customized, no app.Manage call left
+}
+`;
+      context.updateFile('pkg/main.go', customMainGo);
+
+      const result = appSdk(context);
+
+      expect(result.getFile('pkg/main.go')).toBe(customMainGo);
+      expect(output.warning).toHaveBeenCalledWith(
+        expect.objectContaining({ title: expect.stringContaining('does not match the expected app.Manage') })
+      );
+    });
+
+    it('is idempotent with a Go backend present', async () => {
+      const context = createAppContext({ hasBackend: true });
+
+      await expect(appSdk).toBeIdempotent(context);
+    });
   });
 });
