@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.10.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.10.0...@grafana/create-plugin@7.10.1) (2026-08-27)
+
+
+### Bug Fixes
+
+* **create-plugin:** add @react-hookz/web + @ver0/deep-equal to Jest ESM ignore ([#2847](https://github.com/grafana/plugin-tools/issues/2847)) ([66068ab](https://github.com/grafana/plugin-tools/commit/66068abc145224767470902386949fd8b65f6eaa))
+
 ## [7.10.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.9.2...@grafana/create-plugin@7.10.0) (2026-08-21)
 
 
