@@ -466,19 +466,20 @@ ${errorBody}\t}`
 function printNextSteps(hasGoBackend: boolean) {
   const { packageManagerName } = getTemplateData();
 
-
   output.log({
     title: 'Added grafana-app-sdk code generation. Next steps:',
     body: [
-      ...(hasGoBackend
-        ? [
-            'Run the following to resolve the grafana-app-sdk dependency added to go.mod:',
-            '  go mod tidy',
-            '',
-          ]
-        : []),
       'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
       `  ${packageManagerName} run generate:kinds`,
+      ...(hasGoBackend
+        ? [
+            // provider.go imports the packages generate:kinds writes to pkg/generated/, so `go mod
+            // tidy` (which resolves the grafana-app-sdk dependency added to go.mod) must run after —
+            // running it first fails, since it can't find those not-yet-generated packages locally.
+            'Then, to resolve the grafana-app-sdk dependency added to go.mod, run:',
+            '  go mod tidy',
+          ]
+        : []),
       'See ./kinds/README.md for the full workflow.',
     ],
   });
