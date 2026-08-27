@@ -510,6 +510,18 @@ func main() {
       expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ body: expect.arrayContaining(['  go mod tidy']) }));
     });
 
+    it('tells the user to generate:kinds before go mod tidy, since provider.go imports generated packages', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      appSdk(context);
+
+      const body = vi.mocked(output.log).mock.calls[0][0].body ?? [];
+      const generateIndex = body.indexOf('  npm run generate:kinds');
+      const tidyIndex = body.indexOf('  go mod tidy');
+      expect(generateIndex).toBeGreaterThanOrEqual(0);
+      expect(tidyIndex).toBeGreaterThan(generateIndex);
+    });
+
     it('does not mention go mod tidy without a Go backend', () => {
       const context = createAppContext({ hasBackend: false });
 
