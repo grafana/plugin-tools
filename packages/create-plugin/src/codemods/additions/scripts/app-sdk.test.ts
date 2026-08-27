@@ -74,10 +74,23 @@ function createAppContext({
 
   if (hasBackend) {
     context.addFile('pkg/main.go', BACKEND_MAIN_GO);
+    context.addFile('go.mod', BACKEND_GO_MOD);
   }
 
   return context;
 }
+
+const BACKEND_GO_MOD = `module github.com/my-org/my-plugin
+
+
+go 1.26.3
+
+require github.com/grafana/grafana-plugin-sdk-go v0.285.0
+
+require (
+	github.com/BurntSushi/toml v1.5.0 // indirect
+)
+`;
 
 const BACKEND_MAIN_GO = `package main
 
@@ -465,6 +478,46 @@ func main() {
       const context = createAppContext({ hasBackend: true });
 
       await expect(appSdk).toBeIdempotent(context);
+    });
+
+    it('adds the grafana-app-sdk dependency to go.mod', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      const result = appSdk(context);
+
+      const goMod = result.getFile('go.mod') ?? '';
+      expect(goMod).toContain('require github.com/grafana/grafana-app-sdk v');
+      // The existing require survives.
+      expect(goMod).toContain('require github.com/grafana/grafana-plugin-sdk-go v0.285.0');
+    });
+
+    it('does not duplicate the go.mod dependency on a re-run', () => {
+      const context = createAppContext({ hasBackend: true });
+      appSdk(context);
+      const afterFirst = context.getFile('go.mod');
+
+      appSdk(context);
+
+      expect(context.getFile('go.mod')).toBe(afterFirst);
+      expect((context.getFile('go.mod') ?? '').match(/github\.com\/grafana\/grafana-app-sdk /g)).toHaveLength(1);
+    });
+
+    it('tells the user to run go mod tidy when a Go backend is present', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      appSdk(context);
+
+      expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ body: expect.arrayContaining(['  go mod tidy']) }));
+    });
+
+    it('does not mention go mod tidy without a Go backend', () => {
+      const context = createAppContext({ hasBackend: false });
+
+      appSdk(context);
+
+      expect(output.log).toHaveBeenCalledWith(
+        expect.objectContaining({ body: expect.not.arrayContaining(['  go mod tidy']) })
+      );
     });
   });
 });

@@ -41,7 +41,7 @@ export default function appSdk(context: Context): Context {
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    printNextSteps();
+    printNextSteps(hasGoBackend(context));
   }
 
   return context;
@@ -240,6 +240,57 @@ function wireGoBackend(context: Context) {
   enableGoCodegen(context);
   addAppProvider(context);
   wireMainGo(context);
+  addGoModDependency(context);
+}
+
+// Pinned to pseudo-versions rather than tagged releases: plugin.Run and simple.NewAppProvider
+// (https://github.com/grafana/grafana-app-sdk/pull/1516, merged 2026-08-27 at commit 9c1ef77)
+// haven't shipped in a tagged release of either module yet. `plugin/` is a separate Go module nested
+// in the grafana-app-sdk repo, versioned independently of the root module — hence the two different
+// version prefixes below, both pinned to the same commit. Once go.mod has *a* requirement for each,
+// `go mod tidy` (which printNextSteps tells the user to run) resolves exact versions and go.sum
+// entries for everything actually needed.
+const GRAFANA_APP_SDK_VERSION = 'v0.59.1-0.20260827170158-9c1ef7716f5a';
+const GRAFANA_APP_SDK_PLUGIN_VERSION = 'v0.17.3-0.20260827170158-9c1ef7716f5a';
+
+/**
+ * Adds github.com/grafana/grafana-app-sdk and its plugin/ submodule to go.mod. The generated Go kind
+ * types, provider.go, and main.go all import them, but the scaffolded backend's go.mod has no reason
+ * to know about either until app-sdk is added.
+ *
+ * Only adds the require lines — go.sum entries and any transitive requirements (k8s.io/apimachinery,
+ * k8s.io/kube-openapi, ...) still need `go mod tidy`, which this doesn't run itself.
+ */
+function addGoModDependency(context: Context) {
+  const path = 'go.mod';
+  const content = context.getFile(path);
+
+  if (!content) {
+    additionsDebug(`Could not find ${path}. Skipping the grafana-app-sdk dependency.`);
+    return;
+  }
+
+  if (content.includes('github.com/grafana/grafana-app-sdk ')) {
+    additionsDebug(`${path} already requires grafana-app-sdk. Skipping.`);
+    return;
+  }
+
+  const marker = 'require github.com/grafana/grafana-plugin-sdk-go';
+  const markerIndex = content.indexOf(marker);
+
+  if (markerIndex === -1) {
+    additionsDebug(`${path} does not match the expected require block shape. Skipping.`);
+    return;
+  }
+
+  const lineEnd = content.indexOf('\n', markerIndex);
+  const insertAt = lineEnd === -1 ? content.length : lineEnd + 1;
+
+  const newRequires =
+    `require github.com/grafana/grafana-app-sdk ${GRAFANA_APP_SDK_VERSION}\n` +
+    `require github.com/grafana/grafana-app-sdk/plugin ${GRAFANA_APP_SDK_PLUGIN_VERSION}\n`;
+
+  context.updateFile(path, `${content.slice(0, insertAt)}${newRequires}${content.slice(insertAt)}`);
 }
 
 /**
@@ -402,10 +453,17 @@ ${errorBody}\t}`
 }
 
 /** Tells the user what to run next. */
-function printNextSteps() {
+function printNextSteps(hasGoBackend: boolean) {
   output.log({
     title: 'Added grafana-app-sdk code generation. Next steps:',
     body: [
+      ...(hasGoBackend
+        ? [
+            'Run the following to resolve the grafana-app-sdk dependency added to go.mod:',
+            '  go mod tidy',
+            '',
+          ]
+        : []),
       'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
       '  npm run generate:kinds',
       'See ./kinds/README.md for the full workflow.',
