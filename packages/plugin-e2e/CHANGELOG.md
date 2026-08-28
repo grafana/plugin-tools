@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.11.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.1...@grafana/plugin-e2e@3.11.2) (2026-08-28)
+
+
+### Bug Fixes
+
+* wait for options pane before the viz picker check ([#2857](https://github.com/grafana/plugin-tools/issues/2857)) ([23dd63c](https://github.com/grafana/plugin-tools/commit/23dd63cdb8a73e02c5d5cb433867baa8ee694a46))
+
 ## [3.11.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.0...@grafana/plugin-e2e@3.11.1) (2026-08-27)
 
 
