@@ -11,7 +11,7 @@ const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.regis
 // Files copied verbatim from templates/app-sdk. Paths are relative to both the template folder and
 // the plugin root.
 const TEMPLATE_FILES = [
-  'scripts/generate-kinds.mjs',
+  '.config/app-sdk/generate-kinds.mjs',
   'kinds/config.cue',
   'kinds/manifest.cue',
   'kinds/example.cue',
@@ -94,8 +94,8 @@ function addTemplateFiles(context: Context) {
       continue;
     }
 
-    // includeWarning is false: unlike the tool-managed files in .config, these are meant to be
-    // edited — declaring your own kinds is the point.
+    // includeWarning is false: the CUE kinds are meant to be edited (declaring your own kinds is the
+    // point), and generate-kinds.mjs starts with a shebang, which a prepended comment would break.
     context.addFile(file, renderTemplate(templatePath(file), false));
   }
 }
@@ -156,7 +156,7 @@ function addGenerateScript(context: Context) {
     return;
   }
 
-  packageJson.scripts = { ...packageJson.scripts, 'generate:kinds': 'node ./scripts/generate-kinds.mjs' };
+  packageJson.scripts = { ...packageJson.scripts, 'generate:kinds': 'node ./.config/app-sdk/generate-kinds.mjs' };
   context.updateFile('package.json', JSON.stringify(packageJson, null, 2));
 }
 

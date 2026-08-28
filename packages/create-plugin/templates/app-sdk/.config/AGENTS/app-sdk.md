@@ -27,7 +27,7 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
   backend to work around a generation problem.
 - **Do not set `GRAFANA_APP_SDK_BIN`.** It overrides the pinned CLI with a local build, and is meant
   for people working on the app-sdk itself. Code generated with it can differ from what `VERSION` in
-  `scripts/generate-kinds.mjs` produces, so committing it would put the repository out of step. Run
+  `.config/app-sdk/generate-kinds.mjs` produces, so committing it would put the repository out of step. Run
   `generate:kinds` without it.
 - **Do not add code generation to the build.** It is a schema-change-time step, not a build step. The
   frontend build must keep working without a Go toolchain.

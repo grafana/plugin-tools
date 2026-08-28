@@ -20,7 +20,7 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
       false
     );
   const rendered: Record<string, string> = {
-    'scripts/generate-kinds.mjs': render('scripts/generate-kinds.mjs'),
+    '.config/app-sdk/generate-kinds.mjs': render('.config/app-sdk/generate-kinds.mjs'),
     '.config/AGENTS/app-sdk.md': render('.config/AGENTS/app-sdk.md'),
     'kinds/config.cue': render('kinds/config.cue'),
     'kinds/manifest.cue': render('kinds/manifest.cue'),
@@ -38,7 +38,7 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
 });
 
 const APP_SDK_FILES = [
-  'scripts/generate-kinds.mjs',
+  '.config/app-sdk/generate-kinds.mjs',
   '.config/AGENTS/app-sdk.md',
   'kinds/config.cue',
   'kinds/manifest.cue',
@@ -126,7 +126,7 @@ describe('experimental-app-sdk addition', () => {
       for (const file of APP_SDK_FILES) {
         expect(result.doesFileExist(file), `${file} should exist`).toBe(true);
       }
-      expect(result.getFile('scripts/generate-kinds.mjs')).toContain('grafana-app-sdk');
+      expect(result.getFile('.config/app-sdk/generate-kinds.mjs')).toContain('grafana-app-sdk');
       expect(result.getFile('kinds/config.cue')).toContain('tsGenPath');
     });
 
@@ -136,7 +136,7 @@ describe('experimental-app-sdk addition', () => {
       const result = appSdk(context);
 
       const packageJson = JSON.parse(result.getFile('package.json') ?? '{}');
-      expect(packageJson.scripts['generate:kinds']).toBe('node ./scripts/generate-kinds.mjs');
+      expect(packageJson.scripts['generate:kinds']).toBe('node ./.config/app-sdk/generate-kinds.mjs');
       // Existing scripts survive.
       expect(packageJson.scripts.build).toBe('webpack');
     });
