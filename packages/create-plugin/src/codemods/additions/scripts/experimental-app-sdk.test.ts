@@ -57,14 +57,18 @@ const STOCK_COMPOSE = `services:
 function createAppContext({
   pluginType = 'app',
   compose = STOCK_COMPOSE,
-}: { pluginType?: string; compose?: string | null } = {}) {
+  instructions = '# Grafana Plugin\n\n## Critical rules\n\n- Existing rule.\n',
+}: { pluginType?: string; compose?: string | null; instructions?: string | null } = {}) {
   const context = new Context('/virtual');
 
   context.addFile('src/plugin.json', JSON.stringify({ type: pluginType, id: 'my-plugin-id', backend: false }));
   context.addFile('package.json', JSON.stringify({ scripts: { build: 'webpack' } }, null, 2));
   context.addFile('.gitignore', 'node_modules/\ndist/\n');
   context.addFile('.config/bundler/copyFiles.ts', `export const copyFilePatterns = ['**/*.json'];`);
-  context.addFile('.config/AGENTS/instructions.md', '# Grafana Plugin\n\n## Critical rules\n\n- Existing rule.\n');
+
+  if (instructions !== null) {
+    context.addFile('.config/AGENTS/instructions.md', instructions);
+  }
 
   if (compose !== null) {
     context.addFile('docker-compose.yaml', compose);
@@ -178,6 +182,16 @@ describe('experimental-app-sdk addition', () => {
       appSdk(context);
 
       expect(context.getFile('.config/AGENTS/instructions.md')).toBe(afterFirst);
+    });
+
+    it('does not add the app-sdk guidance file when there is no instructions.md', () => {
+      const context = createAppContext({ instructions: null });
+
+      const result = appSdk(context);
+
+      expect(result.doesFileExist('.config/AGENTS/app-sdk.md')).toBe(false);
+      // The rest of the addition still applies.
+      expect(result.doesFileExist('kinds/config.cue')).toBe(true);
     });
   });
 

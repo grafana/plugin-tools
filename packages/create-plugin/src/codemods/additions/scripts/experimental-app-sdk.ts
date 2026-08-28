@@ -12,13 +12,15 @@ const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.regis
 // the plugin root.
 const TEMPLATE_FILES = [
   'scripts/generate-kinds.mjs',
-  '.config/AGENTS/app-sdk.md',
   'kinds/config.cue',
   'kinds/manifest.cue',
   'kinds/example.cue',
   'kinds/cue.mod/module.cue',
   'kinds/README.md',
 ];
+
+// Points agents at the app-sdk guidance. Only added alongside an existing instructions.md.
+const APP_SDK_MD = '.config/AGENTS/app-sdk.md';
 
 /**
  * Adds grafana-app-sdk CUE kind code generation to an existing app plugin.
@@ -118,13 +120,17 @@ function referenceAgentInstructions(context: Context) {
     return;
   }
 
-  if (instructions.includes('AGENTS/app-sdk.md')) {
+  if (!context.doesFileExist(APP_SDK_MD)) {
+    context.addFile(APP_SDK_MD, renderTemplate(templatePath(APP_SDK_MD), false));
+  }
+
+  if (instructions.includes(APP_SDK_MD)) {
     return;
   }
 
   context.updateFile(
     path,
-    `${instructions.trimEnd()}\n- This plugin defines its API resources as **CUE kinds** under \`kinds/\`, with TypeScript and Go types generated from them. Read @./.config/AGENTS/app-sdk.md before changing anything under \`kinds/\` or any generated directory. **Never hand-edit generated code.**\n`
+    `${instructions.trimEnd()}\n- This plugin defines its API resources as **CUE kinds** under \`kinds/\`, with TypeScript and Go types generated from them. Read @./${APP_SDK_MD} before changing anything under \`kinds/\` or any generated directory. **Never hand-edit generated code.**\n`
   );
 }
 
