@@ -99,6 +99,58 @@ test('data query should return headers  and 3', async ({ panelEditPage, readProv
 });
 ```
 
+### Assert on the query response body
+
+A panel data assertion tells you what Grafana rendered. To assert on what your data source returned, use the [`<page>.waitForQueryDataResponseWithBody`](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-e2e/src/models/pages/GrafanaPage.ts) method. It waits for a query data response and resolves with both the response and its parsed JSON body. The method reads the body while the response is still available, which is more reliable than calling `.json()` on a response that has already resolved.
+
+:::note
+This method is in alpha. The shape it returns can change without a major version bump.
+:::
+
+Call the method before you trigger the query, then await the result. The `body` property is `null` when the response body is not valid JSON.
+
+```ts title="queryEditor.spec.ts"
+type QueryResponse = {
+  results: Record<string, { frames?: unknown[]; error?: string }>;
+};
+
+test('data query response should contain frames for refId A', async ({
+  panelEditPage,
+  readProvisionedDataSource,
+}) => {
+  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
+  await panelEditPage.datasource.set(ds.name);
+  await panelEditPage.getQueryEditorRow('A').getByRole('textbox', { name: 'Query Text' }).fill('SELECT * FROM dataset');
+
+  const queryResponse = panelEditPage.waitForQueryDataResponseWithBody<QueryResponse>();
+  await panelEditPage.refreshPanel();
+  const { response, body } = await queryResponse;
+
+  expect(response.ok()).toBe(true);
+  expect(body?.results.A.frames).toBeDefined();
+});
+```
+
+The method also accepts a callback that filters the responses it waits for. The callback receives the parsed body, so you can select a response by its contents instead of only by status or URL. This helps when a panel runs more than one query, because every query request goes to the same URL.
+
+```ts title="queryEditor.spec.ts"
+test('data query response for refId B should not contain an error', async ({
+  readProvisionedDashboard,
+  gotoPanelEditPage,
+}) => {
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '3' });
+
+  const queryResponse = panelEditPage.waitForQueryDataResponseWithBody<QueryResponse>(
+    (_response, body) => body?.results.B !== undefined
+  );
+  await panelEditPage.refreshPanel();
+  const { body } = await queryResponse;
+
+  expect(body?.results.B.error).toBeUndefined();
+});
+```
+
 ### Testing a query in a provisioned dashboard
 
 Sometimes you may want to open the panel edit page for an already existing panel and run the query to make sure everything work as expected.

@@ -22,6 +22,41 @@ test('should return an error and display panel error when query is invalid', asy
   await expect(explorePage.runQuery()).not.toBeOK();
 });
 
+test('waitForQueryDataResponseWithBody exposes the parsed response body', async ({
+  explorePage,
+  readProvisionedDataSource,
+}) => {
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
+  await explorePage.datasource.set(ds.name);
+  const editorRow = await explorePage.getQueryEditorRow('A');
+  await editorRow.getByRole('textbox', { name: 'Query Text' }).fill('query');
+
+  const responseWithBody = explorePage.waitForQueryDataResponseWithBody<{ results?: Record<string, unknown> }>();
+  await explorePage.runQuery();
+  const { response, body } = await responseWithBody;
+
+  expect(response.ok()).toBe(true);
+  expect(body?.results?.A).toBeDefined();
+});
+
+test('waitForQueryDataResponseWithBody filters by the parsed body', async ({
+  explorePage,
+  readProvisionedDataSource,
+}) => {
+  const ds = await readProvisionedDataSource({ fileName: 'testdatasource.yaml' });
+  await explorePage.datasource.set(ds.name);
+  const editorRow = await explorePage.getQueryEditorRow('A');
+  await editorRow.getByRole('textbox', { name: 'Query Text' }).fill('query');
+
+  const responseWithBody = explorePage.waitForQueryDataResponseWithBody<{ results?: Record<string, unknown> }>(
+    (_response, body) => body?.results?.A !== undefined
+  );
+  await explorePage.runQuery();
+  const { body } = await responseWithBody;
+
+  expect(body?.results?.A).toBeDefined();
+});
+
 test('explore page should display table and time series panel only for certain query', async ({
   explorePage,
   grafanaVersion,
