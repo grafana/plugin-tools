@@ -14,11 +14,6 @@ type SelectorFixture = TestFixture<E2ESelectorGroups, PlaywrightArgs>;
 type VersionedComponents = typeof bundledVersionedComponents;
 type VersionedPages = typeof bundledVersionedPages;
 
-// data-only selectors file served by the Grafana instance under test (see grafana/grafana
-// e2e-selectors build). Used when the instance serves it; otherwise the fixture falls back to the
-// selectors bundled with the installed release.
-const SELECTORS_URL = '/public/e2e-selectors.json';
-
 // per-worker cache keyed by grafanaVersion so concurrent fixtures share one in-flight fetch
 const selectorsCache = new Map<string, Promise<E2ESelectorGroups>>();
 
@@ -47,12 +42,21 @@ function bundledGroups(grafanaVersion: string): E2ESelectorGroups {
   return buildGroups(bundledVersionedComponents, bundledVersionedPages, grafanaVersion);
 }
 
-async function fetchRuntimeGroups(request: APIRequestContext, grafanaVersion: string): Promise<E2ESelectorGroups> {
+async function fetchRuntimeGroups(
+  request: APIRequestContext,
+  selectorsUrl: string | undefined,
+  grafanaVersion: string
+): Promise<E2ESelectorGroups> {
+  // couldn't derive where the instance serves the file (older Grafana, or assets missing) -> bundled
+  if (!selectorsUrl) {
+    return bundledGroups(grafanaVersion);
+  }
+
   let response;
   try {
-    response = await request.get(SELECTORS_URL, { maxRedirects: 0 });
+    response = await request.get(selectorsUrl, { maxRedirects: 0 });
   } catch (error) {
-    console.warn(`@grafana/plugin-e2e: failed to fetch ${SELECTORS_URL}, falling back to bundled selectors.`, error);
+    console.warn(`@grafana/plugin-e2e: failed to fetch ${selectorsUrl}, falling back to bundled selectors.`, error);
     return bundledGroups(grafanaVersion);
   }
 
@@ -63,7 +67,7 @@ async function fetchRuntimeGroups(request: APIRequestContext, grafanaVersion: st
 
   if (!response.ok()) {
     console.warn(
-      `@grafana/plugin-e2e: ${SELECTORS_URL} returned ${response.status()}, falling back to bundled selectors.`
+      `@grafana/plugin-e2e: ${selectorsUrl} returned ${response.status()}, falling back to bundled selectors.`
     );
     return bundledGroups(grafanaVersion);
   }
@@ -85,12 +89,12 @@ async function fetchRuntimeGroups(request: APIRequestContext, grafanaVersion: st
     const pages = reconstructSelectorTree(data.versionedPages) as VersionedPages;
     return buildGroups(components, pages, grafanaVersion);
   } catch (error) {
-    console.warn(`@grafana/plugin-e2e: failed to read ${SELECTORS_URL}, falling back to bundled selectors.`, error);
+    console.warn(`@grafana/plugin-e2e: failed to read ${selectorsUrl}, falling back to bundled selectors.`, error);
     return bundledGroups(grafanaVersion);
   }
 }
 
-export const selectors: SelectorFixture = async ({ grafanaVersion, request }, use) => {
+export const selectors: SelectorFixture = async ({ grafanaVersion, bootData, request }, use) => {
   // until the runtime path is rolled out, only fetch when explicitly enabled; otherwise use the
   // selectors bundled with the installed release
   if (!runtimeSelectorsEnabled()) {
@@ -102,7 +106,7 @@ export const selectors: SelectorFixture = async ({ grafanaVersion, request }, us
   // to the selectors bundled with the installed release
   let groups = selectorsCache.get(grafanaVersion);
   if (!groups) {
-    groups = fetchRuntimeGroups(request, grafanaVersion);
+    groups = fetchRuntimeGroups(request, bootData.selectorsUrl, grafanaVersion);
     selectorsCache.set(grafanaVersion, groups);
   }
   await use(await groups);

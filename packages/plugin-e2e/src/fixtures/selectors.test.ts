@@ -26,10 +26,16 @@ function mockRequest(get: ReturnType<typeof vi.fn>) {
   return { get } as never;
 }
 
-async function runFixture(args: { grafanaVersion: string; request: never }) {
+// URL the bootData fixture would derive from the instance's asset base (origin in single-binary)
+const SELECTORS_URL = 'http://grafana.test/public/build/e2e-selectors.json';
+
+async function runFixture(args: { grafanaVersion: string; request: never; selectorsUrl?: string | undefined }) {
+  const { grafanaVersion, request } = args;
+  // key-presence, not a default, so an explicit `selectorsUrl: undefined` is honored
+  const selectorsUrl = 'selectorsUrl' in args ? args.selectorsUrl : SELECTORS_URL;
   let captured: Record<string, unknown> | undefined;
   await (selectors as unknown as (a: unknown, use: (value: Record<string, unknown>) => Promise<void>) => Promise<void>)(
-    args,
+    { grafanaVersion, request, bootData: { version: grafanaVersion, namespace: 'default', selectorsUrl } },
     async (value) => {
       captured = value;
     }
@@ -66,10 +72,24 @@ describe('selectors fixture', () => {
 
     const result = await runFixture({ grafanaVersion: '11.0.0-200', request: mockRequest(get) });
 
-    expect(get).toHaveBeenCalledWith('/public/e2e-selectors.json', { maxRedirects: 0 });
+    expect(get).toHaveBeenCalledWith(SELECTORS_URL, { maxRedirects: 0 });
     expect(result.components).toEqual({ __source: 'fetched-components' });
     expect(result.pages).toEqual({ __source: 'fetched-pages' });
     expect(result.apis).toEqual({ __source: 'local-apis' });
+    expect(warnSpy).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the bundled dependency quietly when the URL cannot be derived from bootData', async () => {
+    const get = vi.fn();
+
+    const result = await runFixture({
+      grafanaVersion: '11.0.0-nourl',
+      request: mockRequest(get),
+      selectorsUrl: undefined,
+    });
+
+    expect(get).not.toHaveBeenCalled();
+    expect(result.components).toEqual({ __source: 'dep-components' });
     expect(warnSpy).not.toHaveBeenCalled();
   });
 
