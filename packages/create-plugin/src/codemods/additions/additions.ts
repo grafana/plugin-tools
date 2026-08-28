@@ -14,6 +14,6 @@ export default [
   {
     name: 'experimental-app-sdk',
     description: 'Adds grafana-app-sdk CUE kind code generation to an app plugin',
-    scriptPath: import.meta.resolve('./scripts/app-sdk.js'),
+    scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),
   },
 ] satisfies Codemod[];

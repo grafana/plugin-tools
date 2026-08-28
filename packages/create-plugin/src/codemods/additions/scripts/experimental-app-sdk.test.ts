@@ -1,6 +1,6 @@
 import { Context } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
-import appSdk from './app-sdk.js';
+import appSdk from './experimental-app-sdk.js';
 
 vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
