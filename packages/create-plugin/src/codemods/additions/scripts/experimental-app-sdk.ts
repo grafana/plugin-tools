@@ -3,6 +3,7 @@ import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
+import { getTemplateData } from '../../../utils/utils.templates.js';
 
 // Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
 // these toggles are enabled.
@@ -224,11 +225,13 @@ function addFeatureToggle(context: Context) {
 
 /** Tells the user what to run next. */
 function printNextSteps() {
+  const { packageManagerName } = getTemplateData();
+
   output.log({
     title: 'Added grafana-app-sdk code generation. Next steps:',
     body: [
       'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
-      '  npm run generate:kinds',
+      `  ${packageManagerName} run generate:kinds`,
       'See ./kinds/README.md for the full workflow.',
     ],
   });
