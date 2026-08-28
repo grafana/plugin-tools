@@ -99,11 +99,18 @@ export class PanelEditPage extends GrafanaPage {
     // and also we need to check whether we're already rendering the viz picker or not since creating a new panel shows
     // the viz picker by default when the panel editor is opened
     if (gte(this.ctx.grafanaVersion, '12.4.0')) {
-      const allVisualizationsTab = components.Tab.title(constants.Tab.title);
-      if (!(await this.getByGrafanaSelector(allVisualizationsTab).isVisible())) {
-        await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
+      const allVisualizationsTab = this.getByGrafanaSelector(components.Tab.title(constants.Tab.title));
+      const openVizPickerButton = this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker);
+
+      // The options pane renders either the viz picker or the pane header. Wait for one of
+      // them to mount otherwise isVisible() returns false and the picker looks closed.
+      await expect(allVisualizationsTab.or(openVizPickerButton).first()).toBeVisible();
+
+      if (await openVizPickerButton.isVisible()) {
+        await openVizPickerButton.click();
       }
-      await this.getByGrafanaSelector(allVisualizationsTab).click();
+
+      await allVisualizationsTab.click();
     } else {
       await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
     }
@@ -179,8 +186,8 @@ export class PanelEditPage extends GrafanaPage {
 
   /**
    * Clicks the "Refresh" button in the panel editor. Returns the response promise for the data query
-   * 
-   * By default, this method will wait for any response that has the url '/api/ds/query'. 
+   *
+   * By default, this method will wait for any response that has the url '/api/ds/query'.
    * If you need to wait for a specific response, you can pass a callback to the `waitForResponsePredicateCallback` option.
    * e.g
    * panelEditPage.refreshPanel({
