@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../../context.js';
-import { assertPluginType, setupDocsScaffolding } from './setup.js';
+import { assertAgentLoop, assertPluginType, setupDocsScaffolding, type AgentLoop } from './setup.js';
 
 // capture the real existsSync before mocking so we can delegate to it in beforeEach
 const { existsSync: realExistsSync } = await vi.importActual<typeof import('node:fs')>('node:fs');
@@ -56,13 +56,17 @@ describe('panel-docs/setup', () => {
     }
   });
 
-  function call(context: Context, overrides: { templates?: Record<string, string>; docsPath?: string } = {}): void {
+  function call(
+    context: Context,
+    overrides: { templates?: Record<string, string>; docsPath?: string; agentLoop?: AgentLoop } = {}
+  ): void {
     const templates = overrides.templates ?? { 'index.md': '# {{pluginName}}\n' };
     setupDocsScaffolding({
       context,
       docsPath: overrides.docsPath ?? 'docs',
       templateBaseUrl: makeTemplateBaseUrl(templates),
       codemodName: 'panel-docs',
+      agentLoop: overrides.agentLoop,
     });
   }
 
@@ -196,6 +200,13 @@ describe('panel-docs/setup', () => {
         })
       ).toThrow(/Cannot find docs templates/);
     });
+
+    it('throws if the agent template directory is missing (packaging bug guard)', () => {
+      const context = makeContext();
+      // makeTemplateBaseUrl only ever creates `docs/` and `workflows/` - no
+      // `agent/` subdirectory - simulating a broken build when agentLoop is requested.
+      expect(() => call(context, { agentLoop: 'claude' })).toThrow(/Cannot find agent templates/);
+    });
   });
 
   describe('validate-docs workflow', () => {
@@ -300,6 +311,20 @@ describe('panel-docs/setup', () => {
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       expect(() => call(context)).not.toThrow();
       expect(context.doesFileExist('.github/workflows/release.yml')).toBe(false);
+    });
+  });
+
+  describe('assertAgentLoop', () => {
+    it('throws a friendly message when loop is undefined', () => {
+      expect(() => assertAgentLoop(undefined)).toThrow(
+        /Missing required flag: --agentLoop[\s\S]*--agentLoop=claude[\s\S]*--agentLoop=none/
+      );
+    });
+
+    it('does not throw for any valid loop value', () => {
+      for (const loop of ['claude', 'codex', 'cursor', 'none'] as const) {
+        expect(() => assertAgentLoop(loop)).not.toThrow();
+      }
     });
   });
 
