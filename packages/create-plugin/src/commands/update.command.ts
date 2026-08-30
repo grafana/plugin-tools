@@ -41,10 +41,12 @@ export const update = async (argv: minimist.ParsedArgs) => {
       process.exit(0);
     }
 
-    // filter out minimist internal properties (_ and $0) before passing to codemod
-    const { _, $0, ...codemodOptions } = argv;
+    // filter out minimist internal properties (_ and $0) and update-only flags before passing to codemod
+    const { _, $0, agent, ...codemodOptions } = argv;
     await runMigrations(migrations, {
-      commitEachMigration: !!argv.commit,
+      // tri-state: undefined means the flag was not passed, which lets agentic soft-force commits
+      commitEachMigration: argv.commit === undefined ? undefined : Boolean(argv.commit),
+      agent,
       codemodOptions,
     });
     output.success({

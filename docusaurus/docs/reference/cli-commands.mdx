@@ -14,6 +14,7 @@ sidebar_position: 40
 
 import ScaffoldNPM from '@shared/createplugin-scaffold.md';
 import UpdateNPM from '@shared/createplugin-update.md';
+import UpdateAgentNPM from '@shared/createplugin-update-agent.md';
 import UpdateForceNPM from '@shared/createplugin-update-force.md';
 
 # CLI commands
@@ -106,4 +107,10 @@ This command updates the following:
 By default, the `update` command will stop if there are any uncommitted changes in the repository. If you want to force the update, you can use the `--force` flag:
 
 <UpdateForceNPM />
+
+### update --agent
+
+Some migrations ship AI-agent instructions for changes an automated code transform can't apply. Use `--agent=<id>` to run them with a specific installed agent CLI (`claude-code` or `codex`), bare `--agent` to use whichever supported agent is installed, or `--no-agent` to always skip them. Without the flag, `update` asks when such a migration is queued and a supported agent is installed. Skipped agent steps are printed as manual next steps. See [AI-assisted migrations](/how-to-guides/updating-a-plugin#ai-assisted-migrations) for details.
+
+<UpdateAgentNPM />
 
