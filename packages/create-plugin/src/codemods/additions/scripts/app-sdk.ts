@@ -377,7 +377,11 @@ function enableGoCodegenIn(content: string): string | undefined {
   const goEnabledBlock =
     '\t\t// Generated Go types land alongside the plugin backend.\n' +
     '\t\tgoEnabled: true\n' +
-    '\t\tgoGenPath: "pkg/generated/"';
+    '\t\tgoGenPath: "pkg/generated/"\n' +
+    '\t\tkinds: {\n' +
+    '\t\t\t// Group generated go packages by kind (pkg/generated/<kind>/<version>).\n' +
+    '\t\t\tgrouping: "kind"\n' +
+    '\t\t}';
 
   return content.replace(goDisabledBlock, goEnabledBlock);
 }

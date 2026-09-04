@@ -389,6 +389,7 @@ describe('experimental-app-sdk addition', () => {
       const config = result.getFile('kinds/config.cue') ?? '';
       expect(config).toContain('goEnabled: true');
       expect(config).toContain('goGenPath: "pkg/generated/"');
+      expect(config).toContain('grouping: "kind"');
       expect(config).not.toContain('goEnabled: false');
     });
 
