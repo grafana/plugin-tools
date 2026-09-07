@@ -8,32 +8,37 @@ This lets you write {{pluginName}}'s documentation as lightweight markdown pages
 
 Your plugin's page at `grafana.com/grafana/plugins/<slug>/` has four tabs, each sourced differently:
 
-| Tab           | Source                                                                                                                                                                           |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Overview      | `index.md`                                                                                                                                                                       |
-| Installation  | Generated automatically - nothing to write                                                                                                                                       |
-| Changelog     | Your plugin's `CHANGELOG.md`                                                                                                                                                     |
-| Documentation | This folder, shown once `docsPath` is set and the docs pass validation. Its own landing page is `index.md` again, rendered here as an auto-generated tree of every page below it |
+| Tab           | Source                                                                                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Overview      | Your plugin's top-level `README.md`, sanitized and rendered as-is. Nothing in this folder replaces or adds to it.                                                                          |
+| Installation  | Generated automatically by the catalog from `plugin.json` - do not create an installation page in `docs/`.                                                                                 |
+| Changelog     | Your plugin's top-level `CHANGELOG.md` - not sourced from `docs/`, do not create a changelog page here either.                                                                             |
+| Documentation | This folder, shown once `docsPath` is set and the docs pass validation. Its own landing page is `index.md` - a curated router you write, not an auto-generated tree of every page below it |
 
 ## What to document
 
 Document every feature of the panel. The codemod scaffolded these pages as stubs — fill in each one:
 
-| File                 | Purpose                                                                                                     |
-| -------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `index.md`           | Overview, what the panel does, what problem it solves. See note below — this is not just another docs page. |
-| `data-formats.md`    | The data shape the panel consumes; field types and which field plays which role in the visualization.       |
-| `options.md`         | Panel-specific options the editor exposes (panel, tooltip, legend) beyond Grafana's standard options.       |
-| `examples.md`        | Worked configurations in `dashboard.json` panel format.                                                     |
-| `troubleshooting.md` | Real failures users hit, with diagnostic steps.                                                             |
+| File                 | Purpose                                                                                                                           |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `index.md`           | Landing page for this folder: orient a reader who already has the panel, then route them to the task pages below. See note below. |
+| `data-formats.md`    | The data shape the panel consumes; field types and which field plays which role in the visualization.                             |
+| `options.md`         | Panel-specific options the editor exposes (panel, tooltip, legend) beyond Grafana's standard options.                             |
+| `examples.md`        | Worked configurations in `dashboard.json` panel format.                                                                           |
+| `troubleshooting.md` | Real failures users hit, with diagnostic steps.                                                                                   |
 
-### `index.md` replaces your README on grafana.com
+### `index.md` is not a second Overview
 
-When `docsPath` is set, `index.md` is what grafana.com's **Overview** tab shows instead of your
-repository README — not just the docs entry point. Write its Introduction and Features sections as your
-plugin's public pitch: the same audience that used to read your README, not fellow contributors. Keep it
-free of build badges, contribution notes and other repo-only content; that still belongs in your actual
-`README.md`, which no longer appears on the catalog page once `docsPath` is set.
+`index.md` never appears on the Overview tab and never replaces your `README.md` - that keeps shipping
+to grafana.com untouched, `docsPath` or not. `index.md` is the landing page for _this_ folder, for a
+reader who already has {{pluginName}} installed and clicked into Documentation from the Overview tab.
+Its job is orientation, not re-introduction: a couple of sentences on how the docs are organized, a
+recommended reading order, then links to common tasks phrased as jobs ("shape your query results", "fix
+a panel that won't render") rather than page titles.
+
+Do not restate your README's description, feature list or requirements here - the reader has already
+seen those on Overview. Do not turn this into a flat list of every page in this folder either - the
+sidebar already lists them all; repeating that list in prose adds nothing.
 
 ## Preview and validate locally
 
