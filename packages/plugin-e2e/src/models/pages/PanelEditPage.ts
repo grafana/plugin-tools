@@ -102,9 +102,13 @@ export class PanelEditPage extends GrafanaPage {
       const allVisualizationsTab = this.getByGrafanaSelector(components.Tab.title(constants.Tab.title));
       const openVizPickerButton = this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker);
 
-      // The options pane renders either the viz picker or the pane header. Wait for one of
-      // them to mount otherwise isVisible() returns false and the picker looks closed.
-      await expect(allVisualizationsTab.or(openVizPickerButton).first()).toBeVisible();
+      // don't use `allVisualizationsTab.or(openVizPickerButton).first()` here - if both elements
+      // exist in the DOM at once (one hidden via CSS rather than unmounted), `.first()` resolves to
+      // the first one in DOM order, which can be the hidden one, and then hangs forever waiting for
+      // it to become visible. Poll each locator's own visibility instead until one of them is true.
+      await expect(async () => {
+        expect((await allVisualizationsTab.isVisible()) || (await openVizPickerButton.isVisible())).toBe(true);
+      }).toPass();
 
       if (await openVizPickerButton.isVisible()) {
         await openVizPickerButton.click();
