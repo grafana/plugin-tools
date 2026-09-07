@@ -90,44 +90,51 @@ export class PanelEditPage extends GrafanaPage {
   async setVisualization(visualization: Visualization | string) {
     const { components, constants } = this.ctx.selectors;
     const showPanelEditElement = this.getByGrafanaSelector('Show options pane');
-    const showPanelEditElementCount = await showPanelEditElement.count();
-    if (showPanelEditElementCount > 0) {
-      await showPanelEditElement.click();
-    }
-
-    // when suggestions got updated in 12.4.0, it became necessary to ensure the "All Visualizations" tab is selected,
-    // and also we need to check whether we're already rendering the viz picker or not since creating a new panel shows
-    // the viz picker by default when the panel editor is opened
-    if (gte(this.ctx.grafanaVersion, '12.4.0')) {
-      const allVisualizationsTab = this.getByGrafanaSelector(components.Tab.title(constants.Tab.title));
-      const openVizPickerButton = this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker);
-
-      // don't use `allVisualizationsTab.or(openVizPickerButton).first()` here - if both elements
-      // exist in the DOM at once (one hidden via CSS rather than unmounted), `.first()` resolves to
-      // the first one in DOM order, which can be the hidden one, and then hangs forever waiting for
-      // it to become visible. Poll each locator's own visibility instead until one of them is true.
-      await expect(async () => {
-        expect((await allVisualizationsTab.isVisible()) || (await openVizPickerButton.isVisible())).toBe(true);
-      }).toPass();
-
-      if (await openVizPickerButton.isVisible()) {
-        await openVizPickerButton.click();
-      }
-
-      await allVisualizationsTab.click();
-    } else {
-      await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
-    }
-
-    await this.getByGrafanaSelector(components.PluginVisualization.item(visualization)).click();
-
     const vizSelector = lt(this.ctx.grafanaVersion, '12.4.0')
       ? components.PanelEditor.toggleVizPicker
       : components.PanelEditor.OptionsPane.header;
-    await expect(
-      this.getByGrafanaSelector(vizSelector),
-      `Could not set visualization to ${visualization}. Ensure the panel is installed.`
-    ).toHaveText(visualization);
+    const currentViz = this.getByGrafanaSelector(vizSelector);
+    const vizItem = this.getByGrafanaSelector(components.PluginVisualization.item(visualization));
+
+    // switching quickly between panel types can leave the item grid mid-render right after the
+    // previous selection closed the picker - retry the whole open+select step rather than trusting
+    // a single click to land on the right item, so a stale click self-heals instead of leaving the
+    // panel stuck on the previous visualization.
+    await expect(async () => {
+      if ((await showPanelEditElement.count()) > 0) {
+        await showPanelEditElement.click();
+      }
+
+      // when suggestions got updated in 12.4.0, it became necessary to ensure the "All Visualizations" tab is selected,
+      // and also we need to check whether we're already rendering the viz picker or not since creating a new panel shows
+      // the viz picker by default when the panel editor is opened
+      if (gte(this.ctx.grafanaVersion, '12.4.0')) {
+        const allVisualizationsTab = this.getByGrafanaSelector(components.Tab.title(constants.Tab.title));
+        const openVizPickerButton = this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker);
+
+        // don't use `allVisualizationsTab.or(openVizPickerButton).first()` here - if both elements
+        // exist in the DOM at once (one hidden via CSS rather than unmounted), `.first()` resolves to
+        // the first one in DOM order, which can be the hidden one, and then hangs forever waiting for
+        // it to become visible. Poll each locator's own visibility instead until one of them is true.
+        await expect(async () => {
+          expect((await allVisualizationsTab.isVisible()) || (await openVizPickerButton.isVisible())).toBe(true);
+        }).toPass();
+
+        if (await openVizPickerButton.isVisible()) {
+          await openVizPickerButton.click();
+        }
+
+        await allVisualizationsTab.click();
+      } else {
+        await this.getByGrafanaSelector(components.PanelEditor.toggleVizPicker).click();
+      }
+
+      await vizItem.click();
+      await expect(
+        currentViz,
+        `Could not set visualization to ${visualization}. Ensure the panel is installed.`
+      ).toHaveText(visualization, { timeout: 2000 });
+    }).toPass({ timeout: 15000 });
   }
 
   /**
