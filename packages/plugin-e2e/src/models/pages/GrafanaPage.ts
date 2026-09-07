@@ -89,4 +89,34 @@ export abstract class GrafanaPage {
       return false;
     });
   }
+
+  /**
+   * Waits for a data source query data response and returns both the response and its parsed JSON body.
+   *
+   * The body is read while the response is still live, inside the same predicate `waitForResponse` uses
+   * to find the matching response, rather than by calling `.json()` on the resolved response afterwards.
+   *
+   * @param cb optional callback to filter the response. Receives the response together with its parsed
+   * body (`null` if the body could not be parsed as JSON) so you can filter by response contents, e.g. a
+   * specific refId's frames, rather than only status or url.
+   *
+   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+   */
+  async waitForQueryDataResponseWithBody<T = any>(
+    cb?: (response: Response, body: T | null) => boolean | Promise<boolean>
+  ): Promise<{ response: Response; body: T | null }> {
+    let body: T | null = null;
+    const response = await this.ctx.page.waitForResponse(async (response) => {
+      if (!response.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+        return false;
+      }
+      const parsedBody = (await response.json().catch(() => null)) as T | null;
+      if (cb && !(await cb(response, parsedBody))) {
+        return false;
+      }
+      body = parsedBody;
+      return true;
+    });
+    return { response, body };
+  }
 }
