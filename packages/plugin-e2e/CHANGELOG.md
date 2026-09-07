@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.2...@grafana/plugin-e2e@3.12.0) (2026-09-07)
+
+
+### Features
+
+* **plugin-e2e:** expose response body from waitForQueryDataResponse ([#2854](https://github.com/grafana/plugin-tools/issues/2854)) ([e0e8411](https://github.com/grafana/plugin-tools/commit/e0e8411d235c0aa1e111a941434a5c7fbfd032b5))
+
+
+### Bug Fixes
+
+* **plugin-e2e:** fix setVisualization race with Grafana's viz picker ([#2860](https://github.com/grafana/plugin-tools/issues/2860)) ([b866625](https://github.com/grafana/plugin-tools/commit/b866625c12ff96dfaa4da7b2b767d189fa1e1a2a))
+
 ## [3.11.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.1...@grafana/plugin-e2e@3.11.2) (2026-08-28)
 
 
