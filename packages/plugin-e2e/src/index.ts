@@ -166,7 +166,6 @@ declare global {
       // asset base for the frontend build. jsFiles paths are CDN-absolute in multi-tenant and
       // origin-relative in single-binary, which is what lets us locate sibling build assets.
       assets?: {
-        cdn?: string;
         jsFiles?: Array<{ filePath?: string }>;
       };
     };
