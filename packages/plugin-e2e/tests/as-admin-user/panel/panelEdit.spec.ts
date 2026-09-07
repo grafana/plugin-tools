@@ -165,4 +165,13 @@ test('set visualization', async ({ gotoPanelEditPage }) => {
   await expect(panelEdit.getVisualizationName()).toHaveText('Clock');
   await panelEdit.setVisualization('Table');
   await expect(panelEdit.getVisualizationName()).toHaveText('Table');
+  await panelEdit.setVisualization('Time series');
+  await expect(panelEdit.getVisualizationName()).toHaveText('Time series');
+});
+
+test('set visualization immediately after creating a new panel', async ({ panelEditPage }) => {
+  // the viz picker is open by default when a brand-new panel is created, unlike the case above
+  // where it's closed - setVisualization has to detect that correctly too
+  await panelEditPage.setVisualization('Table');
+  await expect(panelEditPage.getVisualizationName()).toHaveText('Table');
 });
