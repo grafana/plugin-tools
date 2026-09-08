@@ -11,4 +11,9 @@ export default [
     description: 'Externalizes the react JSX runtime to help migrate plugins to React 19',
     scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
   },
+  {
+    name: 'experimental-app-sdk',
+    description: 'Adds grafana-app-sdk CUE kind code generation to an app plugin',
+    scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),
+  },
 ] satisfies Codemod[];
