@@ -12,10 +12,12 @@ const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.regis
 // Files copied verbatim from templates/app-sdk, and whether they get the "scaffolded by create-plugin,
 // don't edit" header. Paths are relative to both the template folder and the plugin root.
 //
-// The CUE kinds are meant to be edited (declaring your own kinds is the point), so they're excluded.
-// generate-kinds.mjs is a tool, not something devs hand-edit, so it gets the header.
+// The CUE kinds and the drift-check workflow are meant to be edited (declaring your own kinds is the
+// point, and users may want to tweak the workflow's triggers), so they're excluded. generate-kinds.mjs
+// is a tool, not something devs hand-edit, so it gets the header.
 const TEMPLATE_FILES: Array<[path: string, includeWarning: boolean]> = [
   ['.config/app-sdk/generate-kinds.mjs', true],
+  ['.github/workflows/generate-kinds-drift.yml', false],
   ['kinds/config.cue', false],
   ['kinds/manifest.cue', false],
   ['kinds/example.cue', false],
