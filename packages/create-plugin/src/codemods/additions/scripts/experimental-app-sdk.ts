@@ -101,17 +101,13 @@ function addTemplateFiles(context: Context, hasGoBackend: boolean) {
       continue;
     }
 
-    let content = renderTemplate(templatePath(file), includeWarning);
-
-    // Applied here, rather than as a later context.updateFile() pass, because a file added and then
-    // updated within the same codemod run is staged as changeType 'update' — losing the fact its
-    // directory (kinds/) doesn't exist on disk yet, which would make the write fail. Baking the Go
-    // config straight into the freshly-rendered content sidesteps that entirely.
-    if (file === 'kinds/config.cue' && hasGoBackend) {
-      content = enableGoCodegenIn(content) ?? content;
-    }
+    const content = renderTemplate(templatePath(file), includeWarning);
 
     context.addFile(file, content);
+
+    if (file === 'kinds/config.cue' && hasGoBackend) {
+      enableGoCodegen(context);
+    }
   }
 }
 
