@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { access } from 'node:fs/promises';
+import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
 import { resolveDocsPath } from '../utils/utils.plugin.js';
@@ -36,11 +36,16 @@ async function main() {
   }
 
   // `serve` and `build` need a real folder to do anything useful, so fail fast here with a
-  // friendly message. `validate` reports a missing docsPath as a normal diagnostic instead
-  // (the `docs-path-exists` rule), so its --json output stays well-formed either way.
+  // friendly message. `validate` reports a missing or invalid docsPath as a normal diagnostic
+  // instead (the `docs-path-exists` rule), so its --json output stays well-formed either way.
   if (command !== 'validate') {
     try {
-      await access(docsPath);
+      const st = await stat(docsPath);
+      if (!st.isDirectory()) {
+        console.error(`Error: Not a directory: ${docsPath}`);
+        console.error('Check that the "docsPath" in src/plugin.json points to a directory, not a file.');
+        process.exit(1);
+      }
     } catch {
       console.error(`Error: Path not found: ${docsPath}`);
       console.error('Check that the "docsPath" in src/plugin.json points to an existing directory.');
