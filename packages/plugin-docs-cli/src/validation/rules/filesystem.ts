@@ -138,7 +138,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     });
   }
 
-  // max-total-docs-size: only checked in strict mode (serve = '-')
+  // max-total-docs-size: only checked under `validate` (not `serve`)
   if (input.strict) {
     let totalSize = 0;
     for (const file of entries) {

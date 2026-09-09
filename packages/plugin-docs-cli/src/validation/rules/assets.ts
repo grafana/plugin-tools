@@ -111,7 +111,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     }
   }
 
-  // max-total-images-size: only in strict mode (serve = '-')
+  // max-total-images-size: only checked under `validate` (not `serve`)
   if (input.strict && totalSize > MAX_TOTAL_SIZE) {
     diagnostics.push({
       rule: Rule.MaxTotalImagesSize,
@@ -183,7 +183,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     }
   }
 
-  // no-orphaned-images: only in strict mode (serve = '-')
+  // no-orphaned-images: only checked under `validate` (not `serve`)
   if (input.strict) {
     for (const img of imageFiles) {
       const relPath = rel(img);

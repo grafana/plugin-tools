@@ -225,7 +225,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       }
     }
 
-    // min-content-length: only checked in strict mode (serve = '-'); catches pages stubbed
+    // min-content-length: only checked under `validate` (not `serve`); catches pages stubbed
     // out with just a title and a sentence
     if (input.strict && body.trim().length < MIN_CONTENT_LENGTH) {
       diagnostics.push({
