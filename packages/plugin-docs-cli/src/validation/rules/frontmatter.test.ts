@@ -7,7 +7,7 @@ import { Rule } from '../types.js';
 
 const input = (docsPath: string) => ({ docsPath, strict: true });
 
-// a description long enough to clear the 20-char min-content-length floor introduced by
+// a description long enough to clear the 20-char min-description-length floor introduced by
 // frontmatter-description-length, so tests unrelated to that rule don't trip it incidentally
 const GOOD_DESCRIPTION = 'A page with enough detail to describe what it covers';
 
