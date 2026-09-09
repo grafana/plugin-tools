@@ -61,11 +61,26 @@ describe('Context', () => {
   });
 
   describe('updateFile', () => {
-    it('should update a file in the context', () => {
+    it('should keep changeType=add when updating a file that was just added in this context', () => {
       const context = new Context();
       context.addFile('file.txt', 'content');
       context.updateFile('file.txt', 'new content');
-      expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'update' } });
+      expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'add' } });
+    });
+
+    it('should keep changeType=add when updating a file whose parent dir does not yet exist', () => {
+      const context = new Context();
+      context.addFile('docs2/README.md', 'initial');
+      context.updateFile('docs2/README.md', 'initial\n\nappended');
+      expect(context.listChanges()).toEqual({
+        'docs2/README.md': { content: 'initial\n\nappended', changeType: 'add' },
+      });
+    });
+
+    it('should flip changeType to update when modifying a file from disk', () => {
+      const context = new Context(`${__dirname}/migrations/fixtures`);
+      context.updateFile('foo/bar.ts', 'replaced');
+      expect(context.listChanges()).toEqual({ 'foo/bar.ts': { content: 'replaced', changeType: 'update' } });
     });
 
     it('should not update a file if it does not exist', () => {

@@ -28,7 +28,7 @@ function makeContext(pluginJson: Record<string, unknown> = { type: 'panel', name
 describe('docs-scaffolding', () => {
   const tempDirs: string[] = [];
 
-  // build a synthetic plugin-type template folder with the given docs template file contents
+  // build a synthetic templateBaseUrl folder with the given docs template file contents
   function makeTemplateBaseUrl(files: Record<string, string>): URL {
     const dir = mkdtempSync(join(tmpdir(), 'panel-docs-templates-'));
     tempDirs.push(dir);
@@ -63,7 +63,10 @@ describe('docs-scaffolding', () => {
     }
   });
 
-  function call(context: Context, overrides: { templates?: Record<string, string>; docsPath?: string } = {}): void {
+  function call(
+    context: Context,
+    overrides: { templates?: Record<string, string>; docsPath?: string; agents?: boolean } = {}
+  ): void {
     const templates = overrides.templates ?? { 'index.md': '# {{pluginName}}\n' };
     setupDocsScaffolding({
       context,
@@ -71,6 +74,7 @@ describe('docs-scaffolding', () => {
       templateBaseUrl: makeTemplateBaseUrl(templates),
       commonTemplateBaseUrl: makeCommonTemplateBaseUrl(),
       codemodName: 'panel-docs',
+      agents: overrides.agents ?? false,
     });
   }
 
@@ -204,6 +208,13 @@ describe('docs-scaffolding', () => {
           codemodName: 'panel-docs',
         })
       ).toThrow(/Cannot find docs templates/);
+    });
+
+    it('throws if the agent template directory is missing (packaging bug guard)', () => {
+      const context = makeContext();
+      // makeTemplateBaseUrl only ever creates `docs/` and `workflows/` - no
+      // `agent/` subdirectory - simulating a broken build with agents enabled.
+      expect(() => call(context, { agents: true })).toThrow(/Cannot find agent templates/);
     });
   });
 

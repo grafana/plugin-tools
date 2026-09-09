@@ -14,6 +14,9 @@ export const schema = v.object({
     ),
     'docs'
   ),
+  // scaffolds the docs authoring guide plus the bootstrap skill. Disable with
+  // `--no-agents`.
+  agents: v.optional(v.boolean(), true),
 });
 
 type Options = v.InferOutput<typeof schema>;
@@ -32,5 +35,6 @@ export default function panelDocs(context: Context, options: Options): Context {
     templateBaseUrl: new URL('../../../../templates/docs/panel/', import.meta.url),
     commonTemplateBaseUrl: new URL('../../../../templates/docs/common/', import.meta.url),
     codemodName: 'panel-docs',
+    agents: options.agents,
   });
 }
