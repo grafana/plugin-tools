@@ -194,6 +194,10 @@ export function matchOutsideCode(
     let m: RegExpExecArray | null;
     while ((m = lineRe.exec(lineText)) !== null) {
       results.push({ match: m, line: i + 1 });
+      // Non-global, non-sticky regexes don't advance, so only report the first match.
+      if (!lineRe.global && !lineRe.sticky) {
+        break;
+      }
       // guard against a zero-length match spinning forever
       if (m[0] === '') {
         lineRe.lastIndex++;
