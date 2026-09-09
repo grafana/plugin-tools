@@ -29,7 +29,7 @@ it before you submit your plugin, since it will block publishing.
 | `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it. | Warning † |
 | `no-symlinks` | Symbolic links aren't allowed in the docs folder - use real files. | Error |
 | `allowed-file-types` | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder. | Suggestion † |
-| `max-nesting-depth` | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages. | Suggestion †
+| `max-nesting-depth` | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages. | Suggestion † |
 
 ## Page frontmatter
 
