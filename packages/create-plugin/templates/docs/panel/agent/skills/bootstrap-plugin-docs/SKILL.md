@@ -13,7 +13,9 @@ description: Fills the scaffolded plugin docs stubs from the panel's source code
 
 Run once after `create-plugin add docs`. The skill works on greenfield panels (no existing docs - drives content from source) and on brownfield panels (a README full of documentation - moves it onto pages, then trims the README back to what the Overview tab needs). Both paths are first-class.
 
-This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit the pages directly against the authoring conventions already in your context, no skill needed.
+Read `.config/AGENTS/plugin-docs.md` before starting - it holds the frontmatter shape, the folder conventions, the source-to-page mapping and the style rules. Claude Code loads it automatically through the plugin's agent instructions; other agents need to open it.
+
+This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit the pages directly against those conventions, no skill needed.
 
 ## Steps
 
@@ -69,18 +71,18 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    - **Custom field options** (`useFieldConfig({ useCustomConfig: (builder) => ... })`). Same walker as `setPanelOptions`. These appear under the **Overrides** picker in the panel editor.
 
-   - **Data support** (`setDataSupport({ annotations: true, alertStates: true })`). Each truthy flag becomes a Features bullet on `{{docsPath}}/index.md`:
+   - **Data support** (`setDataSupport({ annotations: true, alertStates: true })`). Each truthy flag is a capability worth a feature bullet in the plugin's own `README.md`, which is the Overview tab:
      - `annotations: true` → "Reads from annotations queries"
      - `alertStates: true` → "Visualises alert state on the panel"
 
-   - **Suggestions / presets suppliers** (`setSuggestionsSupplier(...)` / `setPresetsSupplier(...)`). Presence → Features bullets: "Appears in the Suggestions list when data shape matches" and "Ships preset configurations".
+   - **Suggestions / presets suppliers** (`setSuggestionsSupplier(...)` / `setPresetsSupplier(...)`). Presence → README feature bullets: "Appears in the Suggestions list when data shape matches" and "Ships preset configurations".
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
 3. **Plan the README migration.** Skip this step entirely when `README.md` is at or near scaffold default (under ~30 lines, only plugin name + install snippet + license). Otherwise the README is this plugin's existing documentation and the job is to *move* it into the multi-page structure, not to copy it and leave a duplicate behind:
    - For each README section, decide which scaffolded stub page it belongs on (`{{docsPath}}/options.md`, `{{docsPath}}/data-formats.md`, `{{docsPath}}/examples.md`, `{{docsPath}}/troubleshooting.md`, etc.).
    - Note content that does not map to any existing stub - those become candidates for new pages.
-   - Quote verbatim when the README's existing style already matches the authoring conventions; rewrite when it does not.
+   - Quote verbatim when the README's existing style already matches those conventions; rewrite when it does not.
    - Mark what stays behind. Only the pitch survives in the README: what the plugin does, the problem it solves and the feature list. Everything instructional - option tables, data-shape rules, query examples, troubleshooting, configuration walkthroughs - moves to a page.
    - Write the plan down before editing anything, so nothing is dropped between moving it out and trimming the README in step 7.
 
@@ -90,7 +92,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    | Trigger                                                                            | Filename                                    | Scope                                                        |
    | ---------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------ |
-   | `setSuggestionsSupplier(...)` in source                                            | mention in `{{docsPath}}/index.md` Features | When this panel surfaces in the Suggestions list.            |
+   | `setSuggestionsSupplier(...)` in source                                            | feature bullet in `README.md`               | When this panel surfaces in the Suggestions list.            |
    | `setPresetsSupplier(...)` in source                                                | `{{docsPath}}/presets.md`                   | The presets the panel ships, when each applies, screenshots. |
    | RBAC role declarations in `plugin.json`                                            | `{{docsPath}}/permissions.md`               | What each role grants, default assignments.                  |
    | Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `{{docsPath}}/accessibility.md`             | Keyboard interaction, ARIA, contrast, motion preferences.    |
@@ -109,7 +111,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
    If the author skips or has no answer, scaffold what source supports and flag the gaps in the final summary. Each named topic becomes a new page.
 
 6. For every page in the resulting list (scaffolded stubs + new pages):
-   - Write the page following the authoring conventions.
+   - Write the page following the conventions in `.config/AGENTS/plugin-docs.md`.
    - Pass the source understanding (always present), README excerpts (only when harvested in step 3) and author answers (only when given in step 5) as the page brief.
 
    **Special case: `{{docsPath}}/options.md`.** Use the source understanding from step 2 to populate the page directly:
@@ -132,18 +134,16 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    **Special case: `{{docsPath}}/examples.md`.** If `provisioning/dashboards/*.json` exists, lift example configurations from there before falling back to invented ones. For each dashboard, extract panels of this plugin type (match by `type` field against `plugin.json.id`) and use the panel JSON as the example. Pair each example with a one-paragraph explanation of which features it exercises and what data shape it expects. If the provisioning directory is missing or has no relevant panels, only then construct examples from the source understanding plus author input.
 
-   **Special case: `{{docsPath}}/index.md` Features section.** Emit one bullet per detected capability from step 2 (annotations, alert states, suggestions, presets). Order: data support flags first, then UX surfaces (suggestions, presets).
-
    **Estimate per-page length.** Project the final size based on the content the page will absorb. If any threshold will be exceeded, plan to split the page into a folder:
    - More than 6 H2 sections, or
    - More than ~400 lines, or
    - More than ~3,000 words
 
-   Pages that commonly need this split: `examples.md` (when there are many distinct example scenarios). Pages that should almost never split: `index.md`, `options.md`, `troubleshooting.md`.
+   Pages that commonly need this split: `examples.md` (many distinct scenarios) and `options.md` (an overview plus a page per option category, as the authoring guide shows). `index.md` is a router and should never split.
 
    **Group closely-coupled pages into folders.** When two or more pages in the resulting set share a single topic, make them a folder with an `index.md` parent and per-aspect children rather than flat siblings. Set `sidebar_position` on each child to control nav order within the folder.
 
-7. **Rewrite `README.md` down to its job.** Only once every page from step 3 is written, so no content is lost in transit. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
+7. **Rewrite `README.md` down to its job.** Only once every page from step 6 is written, so no content is lost in transit. Skip this step entirely when you skipped step 3 - a plugin whose README was already at scaffold default has nothing to migrate and nothing to trim. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
    - One or two paragraphs saying what the plugin does and which problem it solves. Lead with the problem, not the implementation.
    - A short list of features as bullet points - concrete capabilities, one per bullet.
    - A screenshot near the top if the repo has a usable one.
@@ -153,7 +153,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    Never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim.
 
-8. After all pages are written, run `npm run docs:validate` and fix what it reports. Repeat until clean.
+8. After all pages are written, run `{{packageManagerName}} run docs:validate` and fix what it reports. Repeat until clean.
 
 9. Report a summary to the user:
    - Pages drafted from source-only understanding (note when source was thin).
@@ -179,4 +179,4 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
   - **Multi-file builder chains.** If `setPanelOptions(builder => buildOptions(builder))` delegates to a helper function in another file, follow the import and walk the helper too. If you can't reasonably resolve the chain, document the source location and flag the gap in the summary.
   - **Computed defaults.** When `defaultValue: getDefaultThreshold()` references a function, render the source text verbatim in backticks (`` `getDefaultThreshold()` ``) and flag the row so the author can replace it with the resolved value.
   - **`useFieldConfig()` with no arguments.** Treat as `kind: 'all'`; list the standard options in the Standard field options section.
-- The bootstrap workflow is one-shot. Subsequent doc updates are ordinary edits against the authoring conventions, which are already in your context - you do not need to re-read them.
+- The bootstrap workflow is one-shot. Subsequent doc updates are ordinary edits against the conventions in `.config/AGENTS/plugin-docs.md`.
