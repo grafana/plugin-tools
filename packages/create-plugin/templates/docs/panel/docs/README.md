@@ -47,6 +47,10 @@ npm run docs:serve     # local preview at http://localhost:3001 with live reload
 npm run docs:validate  # check for issues before pushing (strict mode)
 ```
 
+`docs:validate` checks structure, frontmatter, images and links, and it also flags writing-style issues from the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/) - things like `datasource` where the house term is `data source`. Style findings are always warnings, so they never fail the command and never block publishing, and each one links to the rule it came from. `docs:serve` collapses them to a single count so they stay out of your way while writing.
+
+You don't need to learn the rules up front - write the page and let the command tell you. Every rule it applies is listed in [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
+
 ## How docs are published
 
 Multi-page docs are only published when `docsPath` is set in `src/plugin.json`. If it is not set, this folder is ignored by the publishing pipeline.
