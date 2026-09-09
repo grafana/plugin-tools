@@ -3,28 +3,13 @@ import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
-import { isMetaFile } from './utils.js';
+import { formatBytes, isMetaFile } from './utils.js';
 
 const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
 const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_DATA_URI_SIZE = 300 * 1024; // 300KB
-
-/**
- * Formats a byte count as a human-readable string.
- */
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) {
-    return `${bytes}B`;
-  }
-  const kb = bytes / 1024;
-  if (kb < 1024) {
-    return `${Math.round(kb)}KB`;
-  }
-  const mb = kb / 1024;
-  return `${mb.toFixed(1)}MB`;
-}
 
 /**
  * Finds the 1-based line number of the first occurrence of a string in content.

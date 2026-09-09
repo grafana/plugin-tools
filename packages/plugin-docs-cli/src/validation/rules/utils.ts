@@ -49,6 +49,21 @@ export function maskInlineCode(line: string): string {
 }
 
 /**
+ * Formats a byte count as a human-readable string.
+ */
+export function formatBytes(bytes: number): string {
+  if (bytes < 1024) {
+    return `${bytes}B`;
+  }
+  const kb = bytes / 1024;
+  if (kb < 1024) {
+    return `${Math.round(kb)}KB`;
+  }
+  const mb = kb / 1024;
+  return `${mb.toFixed(1)}MB`;
+}
+
+/**
  * Returns a set of 1-based line numbers inside fenced code blocks.
  */
 export function getCodeBlockLines(content: string): Set<number> {

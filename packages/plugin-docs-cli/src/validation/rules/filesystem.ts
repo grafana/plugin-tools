@@ -2,7 +2,7 @@ import { readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, relative, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { isMetaFile } from './utils.js';
+import { formatBytes, isMetaFile } from './utils.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
@@ -21,21 +21,6 @@ export const ALLOWED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp
 
 // allowed file extensions in the docs folder (.md + permitted image formats)
 export const ALLOWED_EXTENSIONS = new Set(['.md', ...ALLOWED_IMAGE_EXTENSIONS]);
-
-/**
- * Formats a byte count as a human-readable string.
- */
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) {
-    return `${bytes}B`;
-  }
-  const kb = bytes / 1024;
-  if (kb < 1024) {
-    return `${Math.round(kb)}KB`;
-  }
-  const mb = kb / 1024;
-  return `${mb.toFixed(1)}MB`;
-}
 
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
