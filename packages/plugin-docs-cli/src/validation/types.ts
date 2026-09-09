@@ -11,6 +11,9 @@ export const Rule = {
   NoSymlinks: 'no-symlinks',
   AllowedFileTypes: 'allowed-file-types',
   MaxNestingDepth: 'max-nesting-depth',
+  DocsPathExists: 'docs-path-exists',
+  MaxTotalDocsSize: 'max-total-docs-size',
+  MaxTotalPages: 'max-total-pages',
   // frontmatter rules
   BlockExists: 'frontmatter-block-exists',
   ValidYaml: 'frontmatter-valid-yaml',
@@ -20,6 +23,9 @@ export const Rule = {
   NoH1: 'no-h1-heading',
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
+  TitleLength: 'frontmatter-title-length',
+  DescriptionLength: 'frontmatter-description-length',
+  MinContentLength: 'min-content-length',
   // content-completeness rules
   UnfilledSectionBrief: 'unfilled-section-brief',
   // asset rules

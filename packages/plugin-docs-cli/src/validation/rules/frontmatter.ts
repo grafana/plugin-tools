@@ -13,6 +13,14 @@ const REQUIRED_FIELDS: Array<{ key: string; type: string }> = [
 // optional fields: validated only when present
 const OPTIONAL_FIELDS: Array<{ key: string; type: string }> = [{ key: 'sidebar_position', type: 'number' }];
 
+// SEO conventions: search engines truncate title/description around these lengths
+const MAX_TITLE_LENGTH = 60;
+const MIN_DESCRIPTION_LENGTH = 20;
+const MAX_DESCRIPTION_LENGTH = 160;
+
+// below this, a page body is almost certainly a stub rather than real content
+const MIN_CONTENT_LENGTH = 150;
+
 /**
  * Checks whether a custom slug is safe for use in URLs.
  * Mirrors the logic in scanner.ts normalizeCustomSlug.
@@ -129,8 +137,9 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
 
     // frontmatter-valid-yaml: gray-matter throws on invalid YAML
     let data: Record<string, unknown>;
+    let body: string;
     try {
-      ({ data } = matter(raw));
+      ({ data, content: body } = matter(raw));
     } catch (err) {
       diagnostics.push({
         rule: Rule.ValidYaml,
@@ -178,6 +187,54 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
           detail: `"${key}" should be a ${type} but got ${typeof data[key]}.`,
         });
       }
+    }
+
+    // frontmatter-title-length: search engines truncate long titles in results
+    if (typeof data.title === 'string' && data.title.length > MAX_TITLE_LENGTH) {
+      diagnostics.push({
+        rule: Rule.TitleLength,
+        severity: input.strict ? 'error' : 'info',
+        file: relativePath,
+        line: findFieldLine(raw, 'title'),
+        title: `Title exceeds ${MAX_TITLE_LENGTH} characters`,
+        detail: `"title" is ${data.title.length} characters. Search engines truncate titles around ${MAX_TITLE_LENGTH} characters, so shorten it.`,
+      });
+    }
+
+    // frontmatter-description-length: search engines truncate long descriptions, and a very
+    // short one usually means it hasn't been written yet
+    if (typeof data.description === 'string') {
+      if (data.description.length < MIN_DESCRIPTION_LENGTH) {
+        diagnostics.push({
+          rule: Rule.DescriptionLength,
+          severity: input.strict ? 'error' : 'info',
+          file: relativePath,
+          line: findFieldLine(raw, 'description'),
+          title: `Description is shorter than ${MIN_DESCRIPTION_LENGTH} characters`,
+          detail: `"description" is ${data.description.length} characters. Write a fuller sentence describing what's on this page.`,
+        });
+      } else if (data.description.length > MAX_DESCRIPTION_LENGTH) {
+        diagnostics.push({
+          rule: Rule.DescriptionLength,
+          severity: input.strict ? 'error' : 'info',
+          file: relativePath,
+          line: findFieldLine(raw, 'description'),
+          title: `Description exceeds ${MAX_DESCRIPTION_LENGTH} characters`,
+          detail: `"description" is ${data.description.length} characters. Search engines truncate descriptions around ${MAX_DESCRIPTION_LENGTH} characters, so shorten it.`,
+        });
+      }
+    }
+
+    // min-content-length: only checked in strict mode (serve = '-'); catches pages stubbed
+    // out with just a title and a sentence
+    if (input.strict && body.trim().length < MIN_CONTENT_LENGTH) {
+      diagnostics.push({
+        rule: Rule.MinContentLength,
+        severity: 'info',
+        file: relativePath,
+        title: 'Page content is very short',
+        detail: `This page has ${body.trim().length} characters of content, under the ${MIN_CONTENT_LENGTH}-character guideline. Add more detail, or remove the page if it isn't needed.`,
+      });
     }
 
     // check custom slug if present

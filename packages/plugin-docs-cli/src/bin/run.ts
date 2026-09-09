@@ -35,12 +35,17 @@ async function main() {
     process.exit(1);
   }
 
-  try {
-    await access(docsPath);
-  } catch {
-    console.error(`Error: Path not found: ${docsPath}`);
-    console.error('Check that the "docsPath" in src/plugin.json points to an existing directory.');
-    process.exit(1);
+  // `serve` and `build` need a real folder to do anything useful, so fail fast here with a
+  // friendly message. `validate` reports a missing docsPath as a normal diagnostic instead
+  // (the `docs-path-exists` rule), so its --json output stays well-formed either way.
+  if (command !== 'validate') {
+    try {
+      await access(docsPath);
+    } catch {
+      console.error(`Error: Path not found: ${docsPath}`);
+      console.error('Check that the "docsPath" in src/plugin.json points to an existing directory.');
+      process.exit(1);
+    }
   }
 
   switch (command) {
