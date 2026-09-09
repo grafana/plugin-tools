@@ -65,7 +65,9 @@ describe('Context', () => {
       const context = new Context();
       context.addFile('file.txt', 'content');
       context.updateFile('file.txt', 'new content');
-      expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'update' } });
+      // Stays 'add': the file was staged fresh in this context, so flushChanges still needs to
+      // mkdir its (possibly nonexistent) parent directory rather than treat it as an in-place update.
+      expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'add' } });
     });
 
     it('should not update a file if it does not exist', () => {
