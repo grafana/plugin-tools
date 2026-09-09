@@ -91,6 +91,32 @@ html[data-theme='dark'] {
   --ifm-tabs-color-active-border: var(--warning-main);
 }
 
+html[data-theme='light'] {
+  --grafana-gradient-brand-vertical: var(--gradients-brandVertical);
+  --ifm-background-color: var(--background-canvas);
+  --ifm-card-background-color: var(--background-primary);
+  --ifm-card-border-radius: 0;
+  --ifm-code-background: var(--background-primary);
+  --ifm-color-danger: var(--error-main);
+  --ifm-color-info: var(--info-main);
+  --ifm-color-primary-dark: var(--warning-shade);
+  --ifm-color-primary-darker: var(--warning-main);
+  --ifm-color-primary: var(--text-primary);
+  --ifm-color-secondary: var(--text-secondary);
+  --ifm-color-success: var(--success-main);
+  --ifm-color-warning: var(--warning-main);
+  --ifm-link-color: var(--text-link);
+  --ifm-link-focus-color: var(--text-link);
+  --ifm-link-hover-color: var(--text-link);
+  --ifm-navbar-background-color: var(--background-primary);
+  --ifm-pagination-nav-color-hover: var(--text-link);
+  --ifm-background-surface-color: var(--background-primary);
+  --ifm-pre-background: var(--background-primary);
+  --ifm-table-border-color: var(--background-secondary);
+  --ifm-table-stripe-background: var(--background-secondary);
+  --ifm-tabs-color-active-border: var(--warning-main);
+}
+
 .gap {
   gap: var(--ifm-spacing-horizontal);
 }
@@ -147,8 +173,12 @@ html[data-theme='dark'] {
 
 /* footer */
 
-.footer.footer--dark {
+html[data-theme='dark'] .footer.footer--dark {
   --ifm-footer-background-color: rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme='light'] .footer.footer--dark {
+  --ifm-footer-background-color: #22252b;
 }
 
 /* docs footer */
@@ -165,9 +195,14 @@ html[data-theme='dark'] {
   opacity: 1;
 }
 
-.button--outline {
+html[data-theme='dark'] .button--outline {
   --ifm-button-color: white;
   --ifm-button-border-color: white;
+}
+
+html[data-theme='light'] .button--outline {
+  --ifm-button-color: var(--text-primary);
+  --ifm-button-border-color: var(--border-strong);
 }
 
 .button--primary {
@@ -231,9 +266,17 @@ html[data-theme='dark'] {
   text-transform: lowercase;
 }
 
-.code-block-addition-highlighted-line {
+html[data-theme='dark'] .code-block-addition-highlighted-line {
   background-color: rgb(56, 64, 51);
   box-shadow: inset 3px 0 0 0 rgb(128, 164, 102);
+}
+
+html[data-theme='light'] .code-block-addition-highlighted-line {
+  background-color: rgb(218, 237, 207);
+  box-shadow: inset 3px 0 0 0 rgb(87, 150, 56);
+}
+
+.code-block-addition-highlighted-line {
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
@@ -262,7 +305,8 @@ html[data-theme='dark'] {
 }
 
 /* Set background for suggestions */
-html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before {
+html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before,
+html[data-theme='light'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before {
   background: var(--ifm-background-color);
 }
 
