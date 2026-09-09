@@ -358,6 +358,48 @@ describe('docs scaffolding', () => {
 });
 
 describe('docs codemod', () => {
+  describe('validate-docs workflow package manager', () => {
+    // exercises the real shipped workflow template, so these assert on generated CI content
+    function workflowFor(packageManager?: string): string {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P' }));
+      context.addFile(
+        'package.json',
+        JSON.stringify({ scripts: {}, devDependencies: {}, ...(packageManager ? { packageManager } : {}) })
+      );
+      docs(context, { docsPath: 'docs' });
+      return context.getFile('.github/workflows/validate-docs.yml') ?? '';
+    }
+
+    it('runs the pinned CLI through the docs:validate script rather than fetching the latest', () => {
+      const workflow = workflowFor('npm@10.2.3');
+      expect(workflow).toContain('npm run docs:validate');
+      expect(workflow).not.toContain('npx');
+    });
+
+    it.each([
+      ['npm@10.2.3', 'npm ci', 'npm'],
+      ['pnpm@9.1.0', 'pnpm install --frozen-lockfile --prefer-offline', 'pnpm'],
+      ['yarn@4.1.0', 'yarn install --immutable', 'yarn'],
+    ])('uses the %s install command and cache', (packageManager, installCmd, name) => {
+      const workflow = workflowFor(packageManager);
+      expect(workflow).toContain(`run: ${installCmd}`);
+      expect(workflow).toContain(`cache: '${name}'`);
+      expect(workflow).toContain(`${name} run docs:validate`);
+    });
+
+    it('adds the pnpm setup action only for pnpm', () => {
+      expect(workflowFor('pnpm@9.1.0')).toContain('pnpm/action-setup@v6');
+      expect(workflowFor('npm@10.2.3')).not.toContain('pnpm/action-setup');
+    });
+
+    it('falls back to npm when package.json has no packageManager field', () => {
+      const workflow = workflowFor();
+      expect(workflow).toContain('run: npm ci');
+      expect(workflow).not.toContain('pnpm/action-setup');
+    });
+  });
+
   describe('plugin type support', () => {
     it.each(['app', 'datasource'])('refuses a %s plugin until its templates exist', (type) => {
       const context = new Context('/virtual');
