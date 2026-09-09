@@ -17,8 +17,8 @@ export default [
     scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),
   },
   {
-    name: 'panel-docs',
-    description: 'Scaffolds multi-page documentation for a Grafana panel plugin',
-    scriptPath: import.meta.resolve('./scripts/panel-docs.js'),
+    name: 'docs',
+    description: 'Scaffolds multi-page documentation for a Grafana plugin',
+    scriptPath: import.meta.resolve('./scripts/docs.js'),
   },
 ] satisfies Codemod[];
