@@ -19,20 +19,17 @@ it before you submit your plugin, since it will block publishing.
 
 ## Folder & file structure
 
-| Rule                   | What it checks                                                                                                                                      | Severity                         |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `has-markdown-files`   | Your docs folder must contain at least one markdown page.                                                                                           | Error                            |
-| `root-index-exists`    | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation.                                             | Error                            |
-| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead.         | Warning                          |
-| `no-spaces-in-names`   | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead.                                                 | Error                            |
-| `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                        | Warning †                        |
-| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                               | Warning †                        |
-| `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                                  | Error                            |
-| `allowed-file-types`   | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder.                                                | Suggestion †                     |
-| `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                        | Suggestion †                     |
-| `docs-path-exists`     | The folder your plugin's `docsPath` points to must actually exist.                                                                                  | Error                            |
-| `max-total-pages`      | Your docs folder can have at most 50 pages. If you need more, consider splitting the plugin's documentation or linking out to an external resource. | Suggestion †                     |
-| `max-total-docs-size`  | Your whole docs folder (pages and images together) must stay under 10MB. Only checked as part of the pre-publish check.                             | Warning (pre-publish check only) |
+| Rule | What it checks | Severity |
+| ---- | -------------- | -------- |
+| `has-markdown-files` | Your docs folder must contain at least one markdown page. | Error |
+| `root-index-exists` | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation. | Error |
+| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead. | Warning |
+| `no-spaces-in-names` | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead. | Error |
+| `valid-file-naming` | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs. | Warning † |
+| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it. | Warning † |
+| `no-symlinks` | Symbolic links aren't allowed in the docs folder - use real files. | Error |
+| `allowed-file-types` | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder. | Suggestion † |
+| `max-nesting-depth` | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages. | Suggestion †
 
 ## Page frontmatter
 
