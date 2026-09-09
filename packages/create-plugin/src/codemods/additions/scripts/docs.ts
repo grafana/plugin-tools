@@ -92,9 +92,6 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 5: copy template files to docs folder (includes README.md)
   copyDocsTemplates(context, templateDir, docsPath, pluginName);
 
-  // append the AI-workflow section to the docs README
-  appendAgentSuffixToReadme(context, templateDir, docsPath, pluginName);
-
   // step 6: copy validate-docs workflow, unless the user already customized one
   const workflowPath = '.github/workflows/validate-docs.yml';
   if (!context.doesFileExist(workflowPath)) {
@@ -264,24 +261,6 @@ function appendDocsPointerToInstructions(context: Context, docsPath: string): bo
   const line = `- This plugin ships multi-page docs under \`${docsPath}/\`. Keep them in sync when features change in \`src/\`. Read @./.config/AGENTS/plugin-docs.md ${DOCS_INSTRUCTIONS_MARKER}.\n`;
   context.updateFile(targetPath, `${existing}${trailingNewline}${line}`);
   return true;
-}
-
-// appends the AI-workflow suffix to the docs README. No-op if the README is missing from Context
-// or if the suffix is already present.
-function appendAgentSuffixToReadme(context: Context, templateDir: string, docsPath: string, pluginName: string): void {
-  const readmePath = `${docsPath}/README.md`;
-  const existing = context.getFile(readmePath);
-  if (existing === undefined) {
-    additionsDebug(`${readmePath} not found in context; skipping agent-workflow suffix`);
-    return;
-  }
-  if (existing.includes('AI authoring assistance')) {
-    additionsDebug(`${readmePath} already contains the AI authoring section, skipping`);
-    return;
-  }
-  const suffix = readTemplate(templateDir, 'README-suffix.md').replaceAll('{{pluginName}}', pluginName);
-  const trailingNewline = existing.endsWith('\n') ? '' : '\n';
-  context.updateFile(readmePath, `${existing}${trailingNewline}${suffix}`);
 }
 
 function readTemplate(templateDir: string, relativePath: string): string {

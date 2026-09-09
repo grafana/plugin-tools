@@ -38,7 +38,6 @@ describe('docs scaffolding', () => {
     writeFileSync(join(dir, 'agent', '.config', 'AGENTS', 'plugin-docs.md'), '# Authoring guide\n');
     mkdirSync(join(dir, 'agent', 'skills', 'bootstrap-plugin-docs'), { recursive: true });
     writeFileSync(join(dir, 'agent', 'skills', 'bootstrap-plugin-docs', 'SKILL.md'), '---\nname: b\n---\n');
-    writeFileSync(join(dir, 'README-suffix.md'), '## AI authoring assistance\n');
     for (const [relPath, content] of Object.entries(files)) {
       const target = join(dir, 'docs', relPath);
       mkdirSync(join(target, '..'), { recursive: true });
@@ -217,7 +216,6 @@ describe('docs scaffolding', () => {
       tempDirs.push(dir);
       mkdirSync(join(dir, 'docs'), { recursive: true });
       writeFileSync(join(dir, 'docs', 'index.md'), '# Page\n');
-      writeFileSync(join(dir, 'README-suffix.md'), '## AI authoring assistance\n');
       expect(() =>
         setupDocsScaffolding({
           context,
@@ -605,20 +603,12 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/instructions.md')).toBe(false);
     });
 
-    it('appends the AI authoring section to docs/README.md by default', () => {
+    it('ships the AI authoring section in docs/README.md', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
       expect(content).toContain('## AI authoring assistance');
       expect(content).toContain('bootstrap-plugin-docs');
-    });
-
-    it('does not duplicate the AI authoring section if docs/README.md already contains it', () => {
-      const context = makeContext();
-      context.addFile('docs/README.md', '# My Panel documentation\n\n## AI authoring assistance\n\nAlready here.\n');
-      docs(context, { docsPath: 'docs' });
-      const content = context.getFile('docs/README.md') ?? '';
-      expect(content.match(/## AI authoring assistance/g)?.length).toBe(1);
     });
   });
 });

@@ -10,10 +10,27 @@ Your plugin's page at `grafana.com/grafana/plugins/<slug>/` has four tabs, each 
 
 | Tab           | Source                                                                                                                                                                                     |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Overview      | Your plugin's top-level `README.md`, sanitized and rendered as-is. Nothing in this folder replaces or adds to it.                                                                          |
+| Overview      | Your plugin's top-level `README.md`, sanitized and rendered as-is. This is your pitch to people who have not installed yet - see below. Nothing in this folder replaces or adds to it.     |
 | Installation  | Generated automatically by the catalog from `plugin.json` - do not create an installation page in `docs/`.                                                                                 |
 | Changelog     | Your plugin's top-level `CHANGELOG.md` - not sourced from `docs/`, do not create a changelog page here either.                                                                             |
 | Documentation | This folder, shown once `docsPath` is set and the docs pass validation. Its own landing page is `index.md` - a curated router you write, not an auto-generated tree of every page below it |
+
+### Your README sells the plugin
+
+Overview is the first thing someone sees, and most of them have not installed {{pluginName}} yet. They
+are deciding whether it is worth their time. So your top-level `README.md` needs to answer that in the
+first screenful:
+
+1. **One or two sentences on what {{pluginName}} does and which problem it solves.** Lead with the
+   problem, not the implementation. "Plots geospatial data on an interactive map so you can spot
+   regional outliers at a glance" tells a reader more than "A panel plugin built with deck.gl".
+2. **Then a short list of features as bullet points.** Concrete capabilities, not adjectives - what
+   the panel can actually do, one bullet each.
+3. A screenshot early on, if you have one. For a panel, seeing it is worth a paragraph of prose.
+
+Everything in this folder is written for the opposite reader: someone who already installed the plugin
+and needs to get it working. Keep the two apart. Reference material, option tables and troubleshooting
+belong here, not on Overview - and the pitch belongs on Overview, not here.
 
 ## What to document
 
@@ -39,6 +56,27 @@ a panel that won't render") rather than page titles.
 Do not restate your README's description, feature list or requirements here - the reader has already
 seen those on Overview. Do not turn this into a flat list of every page in this folder either - the
 sidebar already lists them all; repeating that list in prose adds nothing.
+
+## AI authoring assistance
+
+The authoring conventions for these docs live in `.config/AGENTS/plugin-docs.md` - the page shape, the
+judgement calls validation cannot make, which source file backs which page and what belongs on the Overview
+tab versus here. Your coding agent picks that up automatically through the plugin's own agent instructions,
+so it applies to ordinary editing without you invoking anything.
+
+One skill is scaffolded alongside it: **`bootstrap-plugin-docs`**, a one-shot helper for the initial fill.
+Run it once, after scaffolding:
+
+```
+/bootstrap-plugin-docs
+```
+
+It reads your panel's source plus any existing README content, drafts the stub pages from what it finds and
+asks you about anything the source can't answer. Greenfield panels work too - with no README to mine it
+leans on source analysis and prompts you for the rest.
+
+After that, editing docs is ordinary work. Change a panel option, update `options.md` in the same change.
+Your agent already has the conventions, so no special command is needed.
 
 ## Preview and validate locally
 
