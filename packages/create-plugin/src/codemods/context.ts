@@ -58,7 +58,10 @@ export class Context {
     }
 
     if (originalContent !== content) {
-      this.files[path] = { content, changeType: 'update' };
+      // Preserve 'add' so a file added earlier in this same context (its directory may not exist on
+      // disk yet) doesn't get downgraded to 'update' and fail to write.
+      const changeType = this.files[path]?.changeType === 'add' ? 'add' : 'update';
+      this.files[path] = { content, changeType };
     } else {
       codemodsDebug(`Context.updateFile() - no updates for ${filePath}`);
     }
