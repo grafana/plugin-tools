@@ -23,8 +23,7 @@ async function main() {
     console.error('  serve      Start the local docs preview server');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
     console.error('  validate   Validate documentation (--json for machine-readable output,');
-    console.error('             --allow-unfilled-stubs while docs are still being written,');
-    console.error('             --no-style to skip writing-style rules)');
+    console.error('             --allow-unfilled-stubs while docs are still being written)');
     process.exit(1);
   }
 
@@ -78,23 +77,17 @@ async function main() {
     }
     case 'validate': {
       const validateArgv = minimist(process.argv.slice(3), {
-        boolean: ['strict', 'json', 'allow-unfilled-stubs', 'style'],
-        string: ['style-level'],
+        boolean: ['strict', 'json', 'allow-unfilled-stubs'],
         default: {
           strict: true,
           json: false,
           'allow-unfilled-stubs': false,
-          style: true,
         },
       });
-      // `--no-style` turns writing-style rules off; `--style-level=error` opts into failing on
-      // them, which is off by default so house style never blocks a plugin release.
-      const style = !validateArgv.style ? 'off' : validateArgv['style-level'] === 'error' ? 'error' : 'on';
       await validateCommand(docsPath, {
         strict: validateArgv.strict,
         json: validateArgv.json,
         allowUnfilledStubs: validateArgv['allow-unfilled-stubs'],
-        style,
       });
       break;
     }

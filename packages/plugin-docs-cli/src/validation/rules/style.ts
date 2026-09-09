@@ -15,7 +15,7 @@ import { getCodeBlockLines, getNonProseLines, isMetaFile, matchOutsideCode } fro
  *
  * These are advice, never a gate. `plugin-validator` maps a CLI `error` onto a publishing block,
  * and Grafana's in-house style is not grounds for refusing a third-party plugin release, so
- * nothing here reaches `error` unless the caller explicitly opts in with `style: 'error'`.
+ * nothing here ever reaches `error`.
  */
 
 /**
@@ -315,10 +315,7 @@ function compile(rule: ValeRule): Matcher[] {
 
 const MATCHERS: readonly Matcher[] = VALE_RULES.filter((r) => r.name in ALLOWED_RULES).flatMap(compile);
 
-function severityFor(tier: StyleTier, input: ValidationInput): Severity {
-  if (input.style === 'error') {
-    return 'error';
-  }
+function severityFor(tier: StyleTier): Severity {
   return tier === 'info' ? 'info' : 'warning';
 }
 
@@ -366,10 +363,6 @@ function getHeadingLines(content: string, codeLines: ReadonlySet<number>): Set<n
 }
 
 export async function checkWritingStyle(input: ValidationInput): Promise<Diagnostic[]> {
-  if (input.style === 'off') {
-    return [];
-  }
-
   const diagnostics: Diagnostic[] = [];
 
   let entries: Dirent[] = [];
@@ -435,7 +428,7 @@ export async function checkWritingStyle(input: ValidationInput): Promise<Diagnos
 
         diagnostics.push({
           rule: matcher.ruleId,
-          severity: severityFor(matcher.tier, input),
+          severity: severityFor(matcher.tier),
           file: relPath,
           line,
           title: title.trim(),

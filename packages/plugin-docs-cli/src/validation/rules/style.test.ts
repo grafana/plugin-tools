@@ -148,18 +148,6 @@ describe('checkWritingStyle', () => {
         expect(findings.find((f) => f.rule === 'style-timeless')!.severity).toBe('info');
       }
     });
-
-    it('should skip every rule when style is off', async () => {
-      const tmp = await withDoc('Please configure the datasource!');
-      expect(await checkWritingStyle(input(tmp, { style: 'off' }))).toHaveLength(0);
-    });
-
-    it('should escalate to error only when explicitly opted in', async () => {
-      const tmp = await withDoc('Please configure the datasource!');
-      const findings = await checkWritingStyle(input(tmp, { style: 'error' }));
-      expect(findings.length).toBeGreaterThan(0);
-      expect(findings.every((f) => f.severity === 'error')).toBe(true);
-    });
   });
 
   describe('noise control', () => {

@@ -11,16 +11,14 @@ export async function validateCommand(
     strict: boolean;
     json: boolean;
     allowUnfilledStubs?: boolean;
-    style?: 'on' | 'off' | 'error';
   } = { strict: true, json: false }
 ): Promise<void> {
   debug(
-    'Validating docs at: %s (strict: %s, json: %s, allowUnfilledStubs: %s, style: %s)',
+    'Validating docs at: %s (strict: %s, json: %s, allowUnfilledStubs: %s)',
     docsPath,
     options.strict,
     options.json,
-    options.allowUnfilledStubs ?? false,
-    options.style ?? 'on'
+    options.allowUnfilledStubs ?? false
   );
 
   const result = await validate(
@@ -28,7 +26,6 @@ export async function validateCommand(
       docsPath,
       strict: options.strict,
       allowUnfilledStubs: options.allowUnfilledStubs,
-      style: options.style,
     },
     allRules
   );

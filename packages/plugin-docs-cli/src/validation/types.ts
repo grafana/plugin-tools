@@ -95,12 +95,6 @@ export interface ValidationInput {
    * it, so half-written docs still cannot reach the catalog.
    */
   allowUnfilledStubs?: boolean;
-  /**
-   * How to treat Grafana Writers' Toolkit writing-style rules. `on` is the default and caps them
-   * at `warning`; `off` skips them; `error` is an explicit opt-in for teams that want style to
-   * fail their own CI. Left optional so existing callers are unaffected.
-   */
-  style?: 'on' | 'off' | 'error';
 }
 
 /**
