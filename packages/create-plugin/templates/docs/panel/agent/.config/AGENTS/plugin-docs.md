@@ -119,7 +119,7 @@ When updating a page after a code change, read the source that page documents:
 ## Skill
 
 One skill supports docs work: **`bootstrap-plugin-docs`**, a one-shot helper to run once after
-`create-plugin add panel-docs`. It mines `README.md` plus source files, routes existing content to the right
+`create-plugin add docs`. It mines `README.md` plus source files, routes existing content to the right
 stub pages and prompts for topics that source cannot supply.
 
 Everything after the bootstrap is ordinary editing. Follow the conventions in this file, then run

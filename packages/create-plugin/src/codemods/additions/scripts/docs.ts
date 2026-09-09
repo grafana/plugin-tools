@@ -24,17 +24,21 @@ export const schema = v.object({
 
 type Options = v.InferOutput<typeof schema>;
 
-export default function panelDocs(context: Context, options: Options): Context {
-  assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' });
+// Plugin types with a template set under `templates/docs/<type>/`. Adding a type here without
+// adding its templates fails loudly at scaffold time, which is the intent - the two go together.
+const SUPPORTED_PLUGIN_TYPES = ['panel'] as const;
+type SupportedPluginType = (typeof SUPPORTED_PLUGIN_TYPES)[number];
+
+export default function docs(context: Context, options: Options): Context {
+  const pluginType = assertSupportedPluginType(context);
   return setupDocsScaffolding({
     context,
     docsPath: options.docsPath,
-    // docs templates are split by plugin type so a future datasource-docs codemod reuses
-    // `docs/common/`. `templates/docs` is deliberately absent from TEMPLATE_PATHS, so `generate`
-    // ignores it until we scaffold docs for every new plugin.
-    templateDir: join(TEMPLATES_DIR, 'docs', 'panel'),
+    // docs templates are split by plugin type, sharing `docs/common/`. `templates/docs` is
+    // deliberately absent from TEMPLATE_PATHS, so `generate` ignores it until we scaffold docs for
+    // every new plugin.
+    templateDir: join(TEMPLATES_DIR, 'docs', pluginType),
     commonTemplateDir: join(TEMPLATES_DIR, 'docs', 'common'),
-    codemodName: 'panel-docs',
   });
 }
 
@@ -54,16 +58,15 @@ export interface DocsSetupOptions {
   templateDir: string;
   /** Templates shared by every plugin type, under `templates/docs/common/`. */
   commonTemplateDir: string;
-  codemodName: string;
 }
 
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
-  const { context, docsPath, templateDir, commonTemplateDir, codemodName } = opts;
+  const { context, docsPath, templateDir, commonTemplateDir } = opts;
 
   // step 1: early exit if the docs directory already exists on disk
   if (existsSync(join(context.basePath, docsPath))) {
     throw new Error(
-      `A directory already exists at '${docsPath}'. Re-run with a different path:\n  create-plugin add ${codemodName} --docsPath <alternative-path>`
+      `A directory already exists at '${docsPath}'. Re-run with a different path:\n  create-plugin add docs --docsPath <alternative-path>`
     );
   }
 
@@ -73,7 +76,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const existingDocsPath = pluginJson.docsPath;
   if (existingDocsPath !== undefined && existingDocsPath !== docsPath) {
     throw new Error(
-      `src/plugin.json already has docsPath set to '${existingDocsPath}'.\n  Re-run with the existing path:\n  create-plugin add ${codemodName} --docsPath ${existingDocsPath}`
+      `src/plugin.json already has docsPath set to '${existingDocsPath}'.\n  Re-run with the existing path:\n  create-plugin add docs --docsPath ${existingDocsPath}`
     );
   }
   context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
@@ -157,20 +160,27 @@ function readPluginJson(context: Context): PluginJson {
   return parsed;
 }
 
-// verifies plugin.json's `type` matches the expected value. Throws a helpful
-// error otherwise.
-export function assertPluginType(
-  context: Context,
-  opts: { expectedType: 'datasource' | 'panel'; codemodName: string }
-): PluginJson {
-  const parsed = readPluginJson(context);
-  if (parsed.type !== opts.expectedType) {
-    const otherCommand = opts.expectedType === 'datasource' ? 'panel-docs' : 'datasource-docs';
-    throw new Error(
-      `create-plugin add ${opts.codemodName} only works on '${opts.expectedType}' plugins, but this plugin's type is '${parsed.type ?? 'unset'}'. Try create-plugin add ${otherCommand} if this is the other plugin type.`
-    );
+// Reads the plugin type from plugin.json and refuses the ones we have no templates for yet. The
+// docs themselves differ per type - a panel documents its options and data formats, a data source
+// documents queries and configuration - so there is nothing sensible to scaffold without them.
+export function assertSupportedPluginType(context: Context): SupportedPluginType {
+  const { type } = readPluginJson(context);
+
+  if (isSupportedPluginType(type)) {
+    return type;
   }
-  return parsed;
+
+  const supported = SUPPORTED_PLUGIN_TYPES.join(', ');
+  if (type === 'app' || type === 'datasource') {
+    throw new Error(`create-plugin add docs does not support '${type}' plugins yet. Supported so far: ${supported}.`);
+  }
+  throw new Error(
+    `create-plugin add docs needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
+  );
+}
+
+function isSupportedPluginType(type: string | undefined): type is SupportedPluginType {
+  return SUPPORTED_PLUGIN_TYPES.includes(type as SupportedPluginType);
 }
 
 function copyDocsTemplates(context: Context, templateDir: string, docsPath: string, pluginName: string): void {

@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import * as v from 'valibot';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
-import panelDocs, { assertPluginType, schema, setupDocsScaffolding } from './panel-docs.js';
+import docs, { assertSupportedPluginType, schema, setupDocsScaffolding } from './docs.js';
 
 // capture the real existsSync before mocking so we can delegate to it in beforeEach
 const { existsSync: realExistsSync } = await vi.importActual<typeof import('node:fs')>('node:fs');
@@ -30,7 +30,7 @@ describe('docs scaffolding', () => {
 
   // build a synthetic plugin-type template folder with the given docs template file contents
   function makeTemplateDir(files: Record<string, string>): string {
-    const dir = mkdtempSync(join(tmpdir(), 'panel-docs-templates-'));
+    const dir = mkdtempSync(join(tmpdir(), 'docs-templates-'));
     tempDirs.push(dir);
     mkdirSync(join(dir, 'docs'), { recursive: true });
     // agent scaffolding always runs, so every synthetic template dir needs the subtree
@@ -49,7 +49,7 @@ describe('docs scaffolding', () => {
 
   // the templates every plugin type shares, mirroring templates/docs/common
   function makeCommonTemplateDir(): string {
-    const dir = mkdtempSync(join(tmpdir(), 'panel-docs-common-'));
+    const dir = mkdtempSync(join(tmpdir(), 'docs-common-'));
     tempDirs.push(dir);
     mkdirSync(join(dir, 'workflows'), { recursive: true });
     writeFileSync(join(dir, 'workflows', 'validate-docs.yml'), 'name: Validate documentation\n');
@@ -76,7 +76,6 @@ describe('docs scaffolding', () => {
       docsPath: overrides.docsPath ?? 'docs',
       templateDir: makeTemplateDir(templates),
       commonTemplateDir: makeCommonTemplateDir(),
-      codemodName: 'panel-docs',
     });
   }
 
@@ -198,7 +197,7 @@ describe('docs scaffolding', () => {
 
     it('throws if the docs template directory is missing (packaging bug guard)', () => {
       const context = makeContext();
-      const dir = mkdtempSync(join(tmpdir(), 'panel-docs-empty-'));
+      const dir = mkdtempSync(join(tmpdir(), 'docs-empty-'));
       tempDirs.push(dir);
       // no `docs/` subdirectory created under `dir` - simulates a broken build
       expect(() =>
@@ -207,7 +206,6 @@ describe('docs scaffolding', () => {
           docsPath: 'docs',
           templateDir: dir,
           commonTemplateDir: makeCommonTemplateDir(),
-          codemodName: 'panel-docs',
         })
       ).toThrow(/Cannot find docs templates/);
     });
@@ -215,7 +213,7 @@ describe('docs scaffolding', () => {
     it('throws if the agent template directory is missing (packaging bug guard)', () => {
       const context = makeContext();
       // a template dir with `docs/` but no `agent/` - simulating a build that copied only half
-      const dir = mkdtempSync(join(tmpdir(), 'panel-docs-noagent-'));
+      const dir = mkdtempSync(join(tmpdir(), 'docs-noagent-'));
       tempDirs.push(dir);
       mkdirSync(join(dir, 'docs'), { recursive: true });
       writeFileSync(join(dir, 'docs', 'index.md'), '# Page\n');
@@ -226,7 +224,6 @@ describe('docs scaffolding', () => {
           docsPath: 'docs',
           templateDir: dir,
           commonTemplateDir: makeCommonTemplateDir(),
-          codemodName: 'panel-docs',
         })
       ).toThrow(/Cannot find agent templates/);
     });
@@ -337,71 +334,43 @@ describe('docs scaffolding', () => {
     });
   });
 
-  describe('assertPluginType', () => {
-    it('returns the parsed plugin.json when the type matches', () => {
+  describe('assertSupportedPluginType', () => {
+    it('returns the plugin type when it is supported', () => {
       const context = makeContext({ type: 'panel', name: 'X' });
-      const parsed = assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' });
-      expect(parsed.name).toBe('X');
+      expect(assertSupportedPluginType(context)).toBe('panel');
     });
 
-    it('throws when the type does not match', () => {
-      const context = makeContext({ type: 'datasource', name: 'X' });
-      expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
-        /only works on 'panel' plugins.*type is 'datasource'/
+    it.each(['app', 'datasource'])('reports %s as not supported yet', (type) => {
+      const context = makeContext({ type, name: 'X' });
+      expect(() => assertSupportedPluginType(context)).toThrow(
+        new RegExp(`does not support '${type}' plugins yet.*Supported so far: panel`, 's')
       );
     });
 
-    it('points the user at the sibling codemod in the error message', () => {
-      const context = makeContext({ type: 'datasource', name: 'X' });
-      expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
-        /create-plugin add datasource-docs/
-      );
-    });
-
-    it('throws when plugin.json is missing', () => {
-      const context = new Context('/virtual');
-      expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
-        'Cannot find src/plugin.json'
-      );
-    });
-
-    it('throws when plugin.json is not valid JSON', () => {
-      const context = new Context('/virtual');
-      context.addFile('src/plugin.json', '{ not valid json');
-      expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
-        /Cannot parse src\/plugin\.json/
-      );
-    });
-
-    it('throws when type is unset', () => {
+    it('reports an unset type against the supported list', () => {
       const context = makeContext({ name: 'X' });
-      expect(() => assertPluginType(context, { expectedType: 'panel', codemodName: 'panel-docs' })).toThrow(
-        /type is 'unset'/
-      );
+      expect(() => assertSupportedPluginType(context)).toThrow(/needs a plugin type of panel.*found 'unset'/s);
+    });
+
+    it('reports an unrecognised type against the supported list', () => {
+      const context = makeContext({ type: 'renderer', name: 'X' });
+      expect(() => assertSupportedPluginType(context)).toThrow(/needs a plugin type of panel.*found 'renderer'/s);
     });
   });
 });
 
-describe('panel-docs codemod', () => {
-  describe('type guard', () => {
-    it('errors when plugin.json type is datasource', () => {
+describe('docs codemod', () => {
+  describe('plugin type support', () => {
+    it.each(['app', 'datasource'])('refuses a %s plugin until its templates exist', (type) => {
       const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'datasource', name: 'X' }));
-      expect(() => panelDocs(context, { docsPath: 'docs' })).toThrow(
-        /only works on 'panel'.*type is 'datasource'.*datasource-docs/s
-      );
+      context.addFile('src/plugin.json', JSON.stringify({ type, name: 'X' }));
+      expect(() => docs(context, { docsPath: 'docs' })).toThrow(new RegExp(`does not support '${type}' plugins yet`));
     });
 
-    it('errors when plugin.json type is app', () => {
-      const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'app', name: 'X' }));
-      expect(() => panelDocs(context, { docsPath: 'docs' })).toThrow(/only works on 'panel'/);
-    });
-
-    it('errors when plugin.json type is unset', () => {
+    it('refuses a plugin with no type set', () => {
       const context = new Context('/virtual');
       context.addFile('src/plugin.json', JSON.stringify({ name: 'X' }));
-      expect(() => panelDocs(context, { docsPath: 'docs' })).toThrow(/type is 'unset'/);
+      expect(() => docs(context, { docsPath: 'docs' })).toThrow(/needs a plugin type of panel/);
     });
   });
 
@@ -435,7 +404,7 @@ describe('panel-docs codemod', () => {
   describe('generated files', () => {
     it('creates all six panel docs files', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('docs/index.md')).toBe(true);
       expect(context.doesFileExist('docs/data-formats.md')).toBe(true);
       expect(context.doesFileExist('docs/options.md')).toBe(true);
@@ -446,7 +415,7 @@ describe('panel-docs codemod', () => {
 
     it('uses the expected H2s in each panel file', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/data-formats.md') ?? '').toContain('## Supported data shape');
       expect(context.getFile('docs/options.md') ?? '').toContain('## Panel options');
       expect(context.getFile('docs/examples.md') ?? '').toContain('## Basic example');
@@ -455,32 +424,32 @@ describe('panel-docs codemod', () => {
 
     it('wraps sections in section-brief blocks', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/index.md') ?? '').toContain('<!-- section-brief:start -->');
       expect(context.getFile('docs/options.md') ?? '').toContain('<!-- section-brief:start -->');
     });
 
     it('marks section-brief guidance as a fill-in blockquote', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/index.md') ?? '').toContain('> 📝 **Fill this in:**');
     });
 
     it('interpolates pluginName into the index page', () => {
       const context = makeContext({ type: 'panel', name: 'My Panel' });
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/index.md') ?? '').toContain('My Panel');
     });
 
     it('writes the validate-docs workflow', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('.github/workflows/validate-docs.yml')).toBe(true);
     });
 
     it('interpolates a custom docsPath into the workflow path filters', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'documentation' });
+      docs(context, { docsPath: 'documentation' });
       const content = context.getFile('.github/workflows/validate-docs.yml') ?? '';
       expect(content).toContain("'documentation/**'");
       expect(content).not.toContain('{{docsPath}}');
@@ -488,7 +457,7 @@ describe('panel-docs codemod', () => {
 
     it('bumps the build-plugin ref in release.yml', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.getFile('.github/workflows/release.yml') ?? '').toContain(
         'grafana/plugin-actions/build-plugin@build-plugin/v1.2.0'
       );
@@ -496,7 +465,7 @@ describe('panel-docs codemod', () => {
 
     it('options.md asks for the Panel options table format with the four expected columns', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/options.md') ?? '';
       expect(content).toContain('| Option | Type | Default | Description |');
       expect(content).toContain('## Standard field options');
@@ -505,7 +474,7 @@ describe('panel-docs codemod', () => {
 
     it('scaffolds docs/README.md with panel-specific content', () => {
       const context = makeContext({ type: 'panel', name: 'My Panel' });
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
       expect(content).toContain('# My Panel documentation');
       expect(content).toContain('data-formats.md');
@@ -515,7 +484,7 @@ describe('panel-docs codemod', () => {
 
     it('does not scaffold a docs/README.txt (legacy filename)', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('docs/README.txt')).toBe(false);
     });
   });
@@ -525,7 +494,7 @@ describe('panel-docs codemod', () => {
 
     it('writes the skill to every agent skills directory', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       for (const skill of SKILLS) {
         expect(context.doesFileExist(skill)).toBe(true);
       }
@@ -533,7 +502,7 @@ describe('panel-docs codemod', () => {
 
     it('writes each skill as a complete self-contained file, not an @import shim', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       for (const skill of SKILLS) {
         const content = context.getFile(skill) ?? '';
         // Claude Code ignores @imports in SKILL.md and treats a file whose first
@@ -546,7 +515,7 @@ describe('panel-docs codemod', () => {
 
     it('writes identical content to every skills directory', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const [first, ...rest] = SKILLS.map((s) => context.getFile(s));
       for (const other of rest) {
         expect(other).toEqual(first);
@@ -555,13 +524,13 @@ describe('panel-docs codemod', () => {
 
     it('does not write a redundant .codex copy, since codex reads .agents/skills', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('.codex/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
     });
 
     it('does not scaffold the skills that were folded into the authoring guide', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       for (const name of ['write-plugin-docs', 'review-plugin-docs', 'validate-plugin-docs']) {
         expect(context.doesFileExist(`.claude/skills/${name}/SKILL.md`)).toBe(false);
         expect(context.doesFileExist(`.agents/skills/${name}/SKILL.md`)).toBe(false);
@@ -570,7 +539,7 @@ describe('panel-docs codemod', () => {
 
     it('scaffolds the authoring guide', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('.config/AGENTS/plugin-docs.md') ?? '';
       expect(content).toContain('## Keeping docs in sync with source');
       expect(content).toContain('bootstrap-plugin-docs');
@@ -578,14 +547,14 @@ describe('panel-docs codemod', () => {
 
     it('keeps the authoring guide out of docsPath, where the validator would treat it as a page', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('docs/AGENTS.md')).toBe(false);
       expect(context.doesFileExist('.config/AGENTS/plugin-docs.md')).toBe(true);
     });
 
     it('interpolates the configured docsPath into the guide and the skill body', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'documentation' });
+      docs(context, { docsPath: 'documentation' });
       const guide = context.getFile('.config/AGENTS/plugin-docs.md') ?? '';
       const skill = context.getFile('.claude/skills/bootstrap-plugin-docs/SKILL.md') ?? '';
       expect(guide).toContain('documentation/');
@@ -597,14 +566,14 @@ describe('panel-docs codemod', () => {
     it('does not overwrite an existing customized guide', () => {
       const context = makeContext();
       context.addFile('.config/AGENTS/plugin-docs.md', 'CUSTOMIZED');
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.getFile('.config/AGENTS/plugin-docs.md')).toEqual('CUSTOMIZED');
     });
 
     it('points .config/AGENTS/instructions.md at the authoring guide when present', () => {
       const context = makeContext();
       context.addFile('.config/AGENTS/instructions.md', '# Existing instructions\n\nDo the thing.\n');
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content).toContain('# Existing instructions');
       expect(content).toContain('Do the thing.');
@@ -615,7 +584,7 @@ describe('panel-docs codemod', () => {
     it('names the configured docsPath in the instructions pointer', () => {
       const context = makeContext();
       context.addFile('.config/AGENTS/instructions.md', '# Existing instructions\n');
-      panelDocs(context, { docsPath: 'documentation' });
+      docs(context, { docsPath: 'documentation' });
       expect(context.getFile('.config/AGENTS/instructions.md') ?? '').toContain('`documentation/`');
     });
 
@@ -625,20 +594,20 @@ describe('panel-docs codemod', () => {
         '.config/AGENTS/instructions.md',
         '# Existing\n\n- Read @./.config/AGENTS/plugin-docs.md before writing or modifying plugin documentation.\n'
       );
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content.match(/before writing or modifying plugin documentation/g)?.length).toBe(1);
     });
 
     it('does not throw or create .config/AGENTS/instructions.md when it is absent', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('.config/AGENTS/instructions.md')).toBe(false);
     });
 
     it('appends the AI authoring section to docs/README.md by default', () => {
       const context = makeContext();
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
       expect(content).toContain('## AI authoring assistance');
       expect(content).toContain('bootstrap-plugin-docs');
@@ -647,7 +616,7 @@ describe('panel-docs codemod', () => {
     it('does not duplicate the AI authoring section if docs/README.md already contains it', () => {
       const context = makeContext();
       context.addFile('docs/README.md', '# My Panel documentation\n\n## AI authoring assistance\n\nAlready here.\n');
-      panelDocs(context, { docsPath: 'docs' });
+      docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
       expect(content.match(/## AI authoring assistance/g)?.length).toBe(1);
     });

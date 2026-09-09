@@ -1,6 +1,6 @@
 ---
 name: bootstrap-plugin-docs
-description: Fills the scaffolded plugin docs stubs by reading the panel's source code and any existing docs. Use right after `create-plugin add panel-docs`.
+description: Fills the scaffolded plugin docs stubs by reading the panel's source code and any existing docs. Use right after `create-plugin add docs`.
 ---
 
 # Bootstrap Plugin Docs
@@ -11,7 +11,7 @@ description: Fills the scaffolded plugin docs stubs by reading the panel's sourc
 /bootstrap-plugin-docs
 ```
 
-Run once after `create-plugin add panel-docs`. The skill works on greenfield panels (no existing docs - drives content from source) and on brownfield panels (existing README content - mines and routes it onto pages). Both paths are first-class.
+Run once after `create-plugin add docs`. The skill works on greenfield panels (no existing docs - drives content from source) and on brownfield panels (existing README content - mines and routes it onto pages). Both paths are first-class.
 
 This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit the pages directly against the authoring conventions already in your context, no skill needed.
 
