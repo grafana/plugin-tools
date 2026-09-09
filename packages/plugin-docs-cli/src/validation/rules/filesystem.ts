@@ -47,14 +47,23 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     // docs-path-exists: docsPath is set in plugin.json but the folder isn't there (or isn't
     // readable). Every other filesystem/frontmatter/asset check is meaningless without it, so
     // report just this and stop.
-    if ((err as NodeJS.ErrnoException)?.code === 'ENOENT') {
-      diagnostics.push({
-        rule: Rule.DocsPathExists,
-        severity: 'error',
-        title: 'docsPath does not exist',
-        detail: `"${input.docsPath}" does not exist. Check that "docsPath" in src/plugin.json points to an existing directory.`,
-      });
-    }
+    const code = (err as NodeJS.ErrnoException | undefined)?.code;
+
+    diagnostics.push({
+      rule: Rule.DocsPathExists,
+      severity: 'error',
+      title:
+        code === 'ENOENT'
+          ? 'docsPath does not exist'
+          : code === 'ENOTDIR'
+            ? 'docsPath is not a directory'
+            : 'docsPath is not readable',
+      detail:
+        code === 'ENOENT'
+          ? `"${input.docsPath}" does not exist. Check that "docsPath" in src/plugin.json points to an existing directory.`
+          : `"${input.docsPath}" could not be read (${code ?? 'unknown error'}). Check that it is a directory and that you have permission to read it.`,
+    });
+
     return diagnostics;
   }
 
