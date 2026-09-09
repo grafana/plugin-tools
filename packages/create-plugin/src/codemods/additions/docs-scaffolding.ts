@@ -1,9 +1,9 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Context } from '../../../context.js';
-import { output } from '../../../../utils/utils.console.js';
-import { additionsDebug, addDependenciesToPackageJson, isVersionGreater } from '../../../utils.js';
+import type { Context } from '../context.js';
+import { output } from '../../utils/utils.console.js';
+import { additionsDebug, addDependenciesToPackageJson, isVersionGreater } from '../utils.js';
 
 const REQUIRED_BUILD_PLUGIN_REF = 'build-plugin/v1.2.0';
 
@@ -17,12 +17,15 @@ export interface PluginJson {
 export interface DocsSetupOptions {
   context: Context;
   docsPath: string;
+  /** Templates specific to this plugin type, under `templates/docs/<type>/`. */
   templateBaseUrl: URL;
+  /** Templates shared by every plugin type, under `templates/docs/common/`. */
+  commonTemplateBaseUrl: URL;
   codemodName: string;
 }
 
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
-  const { context, docsPath, templateBaseUrl, codemodName } = opts;
+  const { context, docsPath, templateBaseUrl, commonTemplateBaseUrl, codemodName } = opts;
 
   // step 1: early exit if the docs directory already exists on disk
   if (existsSync(join(context.basePath, docsPath))) {
@@ -56,7 +59,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 6: copy validate-docs workflow, unless the user already customized one
   const workflowPath = '.github/workflows/validate-docs.yml';
   if (!context.doesFileExist(workflowPath)) {
-    const workflowContent = readTemplate(templateBaseUrl, 'workflows/validate-docs.yml').replaceAll(
+    const workflowContent = readTemplate(commonTemplateBaseUrl, 'workflows/validate-docs.yml').replaceAll(
       '{{docsPath}}',
       docsPath
     );

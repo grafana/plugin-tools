@@ -3,8 +3,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Context } from '../../../context.js';
-import { assertPluginType, setupDocsScaffolding } from './setup.js';
+import { Context } from '../context.js';
+import { assertPluginType, setupDocsScaffolding } from './docs-scaffolding.js';
 
 // capture the real existsSync before mocking so we can delegate to it in beforeEach
 const { existsSync: realExistsSync } = await vi.importActual<typeof import('node:fs')>('node:fs');
@@ -25,21 +25,28 @@ function makeContext(pluginJson: Record<string, unknown> = { type: 'panel', name
   return context;
 }
 
-describe('panel-docs/setup', () => {
+describe('docs-scaffolding', () => {
   const tempDirs: string[] = [];
 
-  // build a synthetic templateBaseUrl folder with the given docs template file contents
+  // build a synthetic plugin-type template folder with the given docs template file contents
   function makeTemplateBaseUrl(files: Record<string, string>): URL {
     const dir = mkdtempSync(join(tmpdir(), 'panel-docs-templates-'));
     tempDirs.push(dir);
     mkdirSync(join(dir, 'docs'), { recursive: true });
-    mkdirSync(join(dir, 'workflows'), { recursive: true });
-    writeFileSync(join(dir, 'workflows', 'validate-docs.yml'), 'name: Validate documentation\n');
     for (const [relPath, content] of Object.entries(files)) {
       const target = join(dir, 'docs', relPath);
       mkdirSync(join(target, '..'), { recursive: true });
       writeFileSync(target, content);
     }
+    return pathToFileURL(`${dir}/`);
+  }
+
+  // the templates every plugin type shares, mirroring templates/docs/common
+  function makeCommonTemplateBaseUrl(): URL {
+    const dir = mkdtempSync(join(tmpdir(), 'panel-docs-common-'));
+    tempDirs.push(dir);
+    mkdirSync(join(dir, 'workflows'), { recursive: true });
+    writeFileSync(join(dir, 'workflows', 'validate-docs.yml'), 'name: Validate documentation\n');
     return pathToFileURL(`${dir}/`);
   }
 
@@ -62,6 +69,7 @@ describe('panel-docs/setup', () => {
       context,
       docsPath: overrides.docsPath ?? 'docs',
       templateBaseUrl: makeTemplateBaseUrl(templates),
+      commonTemplateBaseUrl: makeCommonTemplateBaseUrl(),
       codemodName: 'panel-docs',
     });
   }
@@ -192,6 +200,7 @@ describe('panel-docs/setup', () => {
           context,
           docsPath: 'docs',
           templateBaseUrl: pathToFileURL(`${dir}/`),
+          commonTemplateBaseUrl: makeCommonTemplateBaseUrl(),
           codemodName: 'panel-docs',
         })
       ).toThrow(/Cannot find docs templates/);

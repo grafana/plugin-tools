@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
-import { Context } from '../../../context.js';
-import panelDocs, { schema } from './index.js';
+import { Context } from '../../context.js';
+import panelDocs, { schema } from './panel-docs.js';
 
 function makeContext(): Context {
   const context = new Context('/virtual');
