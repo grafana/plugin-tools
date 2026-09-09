@@ -17,12 +17,12 @@ If you are filling in stub pages, maintaining docs alongside code changes or add
 - Changed feature → update the page text and any tables so they match the current behaviour.
 - Removed feature → delete the section or page and fix any cross-references that pointed to it.
 
-This is routine work, not a special workflow: edit the page directly, follow the conventions in this file, then run `npm run docs:validate`.
+This is routine work, not a special workflow: edit the page directly, follow the conventions in this file, then run `{{packageManagerName}} run docs:validate`.
 
 ## Page shape
 
-Every page is plain Markdown with a YAML frontmatter block. `title`, `description` and
-`sidebar_position` are required; `deprecated: true` hides a page from the nav.
+Every page is plain Markdown with a YAML frontmatter block. `title`, `description` and `sidebar_position`
+are all required.
 
 ```yaml
 ---
@@ -35,14 +35,13 @@ sidebar_position: 2
 One Markdown file per page, and nested folders become nested URLs Docusaurus-style, so
 `{{docsPath}}/options/legend.md` is served at `.../{{docsPath}}/options/legend`.
 
-`npm run docs:validate` enforces the rest - filenames, frontmatter fields and lengths, image formats
-and sizes, link resolution and what Markdown is allowed. Do not try to remember those rules or
-reproduce them here. Write the page, run validate and fix what it reports. The full list, if you
-need it, is in [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
+`{{packageManagerName}} run docs:validate` enforces the rest - filenames, frontmatter fields and lengths, image formats and
+sizes, link resolution and what Markdown is allowed. Do not try to remember those rules. Write the page, run
+validate and fix what it reports.
 
 ### Group closely-coupled pages into folders
 
-When two or more pages share a single topic - for example an options overview plus one page per option category, or a data-formats overview plus one page per supported data shape - put them in a folder instead of as flat siblings:
+Start flat. When a page outgrows itself - more than about six H2 sections, or a topic that clearly has several independent aspects - split it into a folder rather than letting it sprawl. `options.md` is the usual candidate: an overview plus one page per option category.
 
 ```
 {{docsPath}}/options/index.md      # overview, shared context, links to children
@@ -62,11 +61,8 @@ The folder's `index.md` is the parent page (carries the topic overview and links
 
 ## Style
 
-`npm run docs:validate` checks these pages against the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/) style guide. Tense, banned words, terminology, punctuation, inclusive language and `see` versus `refer to` are all checked for you. Do not spend effort on them while drafting and do not read the style guide up front - write the page, run validate, then fix what it reports. Each finding links to the rule it comes from, so open a link only when you have tripped that rule and the message alone is not enough.
-
-**Writing-style findings are warnings, so `docs:validate` still exits 0 while they are outstanding. Fix everything it reports, not only what makes the command fail.**
-
-These are the parts validation cannot judge for you. Get them right as you write:
+These pages follow the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/). `docs:validate`
+checks structure, frontmatter, images and links - it does not check prose, so getting these right is on you:
 
 1. **Active voice.** Not "the request is processed by the server" - "the server processes the request".
 2. **Second person.** Address the reader as "you", not "we" or "our".
@@ -74,7 +70,9 @@ These are the parts validation cannot judge for you. Get them right as you write
 4. **Code formatting for commands, paths and values.** "Set `region` to `us-east-1`."
 5. **Descriptive link text.** Never "click here" or "this link", and never a bare filename. Use the target page's own title, so the text still makes sense out of context.
 6. **Sentence case for headings.** "Before you begin", not "Before You Begin". Product names keep their own capitalization.
-7. **No filler.** Cut "just", "obviously" and "of course". They tell the reader nothing and imply the task is easier than it is. Validation catches "easy" and "simple" for you.
+7. **Present tense, no filler.** "The panel renders", not "the panel will render". Cut "just", "simply",
+   "easy", "obviously" and "of course" - they tell the reader nothing and imply the task is easier than it is.
+8. **"refer to", not "see"** when pointing at another page.
 
 ## The Section-brief protocol
 
@@ -123,7 +121,7 @@ One skill supports docs work: **`bootstrap-plugin-docs`**, a one-shot helper to 
 stub pages and prompts for topics that source cannot supply.
 
 Everything after the bootstrap is ordinary editing. Follow the conventions in this file, then run
-`npm run docs:validate` and fix what it reports.
+`{{packageManagerName}} run docs:validate` and fix what it reports.
 
 ## Adding a new page
 
@@ -141,14 +139,11 @@ Validation cannot catch any of these, so they are on you.
 ## Validation
 
 ```bash
-npm run docs:validate            # runs in strict mode; fails on any error
-npm run docs:validate -- --json  # machine-readable output
-npm run docs:serve               # local preview on port 3001
+{{packageManagerName}} run docs:validate            # runs in strict mode; fails on any error
+{{packageManagerName}} run docs:validate -- --json  # machine-readable output
+{{packageManagerName}} run docs:serve               # local preview on port 3001
 ```
 
-Errors fail the command. Warnings and suggestions do not, but they are still work to do - writing-style
-findings all arrive as warnings. Treat the page as done when `docs:validate` reports nothing at all, not
-when it exits 0. `docs:serve` collapses writing-style findings to a single count while you write; run
-`docs:validate` to see them individually.
-
-Every rule the command applies is documented in [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
+A freshly scaffolded page fails validation on purpose: every unfilled `<!-- section-brief -->` block is
+reported as an error, so the error count doubles as a to-do list. It reaches zero once every brief is either
+filled in or deleted.

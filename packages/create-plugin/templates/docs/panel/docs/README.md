@@ -1,12 +1,12 @@
 # {{pluginName}} documentation
 
-This folder contains the multi-page documentation for **{{pluginName}}**, published at `grafana.com/grafana/plugins/<slug>/docs/<page>`.
+This folder contains the multi-page documentation for **{{pluginName}}**, published at `grafana.com/grafana/plugins/{{pluginId}}/docs/<page>`.
 
 ## Why multi-page docs
 
 This lets you write {{pluginName}}'s documentation as lightweight markdown pages, Docusaurus-style: one file per topic, each with its own frontmatter, grouped into folders if you need to. No build step and no HTML, just markdown that gets validated for you and rendered on grafana.com. Styling is controlled by Grafana, not by you, so every plugin's docs look and feel consistent across the catalog.
 
-Your plugin's page at `grafana.com/grafana/plugins/<slug>/` has four tabs, each sourced differently:
+Your plugin's page at `grafana.com/grafana/plugins/{{pluginId}}/` has four tabs, each sourced differently:
 
 | Tab           | Source                                                                                                                                                                                     |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -81,13 +81,17 @@ Your agent already has the conventions, so no special command is needed.
 ## Preview and validate locally
 
 ```bash
-npm run docs:serve     # local preview at http://localhost:3001 with live reload
-npm run docs:validate  # check for issues before pushing (strict mode)
+{{packageManagerName}} run docs:serve     # local preview at http://localhost:3001 with live reload
+{{packageManagerName}} run docs:validate  # check for issues before pushing (strict mode)
 ```
 
-`docs:validate` checks structure, frontmatter, images and links, and it also flags writing-style issues from the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/) - things like `datasource` where the house term is `data source`. Style findings are always warnings, so they never fail the command and never block publishing, and each one links to the rule it came from. `docs:serve` collapses them to a single count so they stay out of your way while writing.
+`docs:validate` checks structure, frontmatter, images and links. It does not check your prose - for that,
+follow the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/).
 
-You don't need to learn the rules up front - write the page and let the command tell you. Every rule it applies is listed in [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
+**Freshly scaffolded docs fail validation on purpose.** Every `<!-- section-brief -->` block still in place
+is reported as an error, so the count is your to-do list: it reaches zero once each brief is filled in or
+deleted. Until then `docs:validate` exits non-zero, and so does the `validate-docs.yml` workflow on a pull
+request - expect red CI until you have written the pages.
 
 ## How docs are published
 
@@ -99,13 +103,13 @@ When `docsPath` is set:
 2. On tag push (release), the docs validator runs again as part of the plugin-validator step. Errors at this stage fail the release.
 3. On successful validation, `plugin-docs-cli` builds the docs and writes `dist/docs/` — the manifest plus all markdown and image files.
 4. `dist/docs/` rides along inside the plugin archive (`.zip`) uploaded to GCS.
-5. Grafana's plugin publishing flow syncs the archive to the CDN, then surfaces the docs at `grafana.com/grafana/plugins/<slug>/docs/`.
+5. Grafana's plugin publishing flow syncs the archive to the CDN, then surfaces the docs at `grafana.com/grafana/plugins/{{pluginId}}/docs/`.
 
 ## How to disable multi-page docs
 
 If you no longer want multi-page docs for this plugin:
 
 1. Remove the `docsPath` field from `src/plugin.json`.
-2. Cut a new release. The next deploy publishes the plugin without the docs subtree; existing pages at `grafana.com/grafana/plugins/<slug>/docs/` stop being served once the new version replaces the old one.
+2. Cut a new release. The next deploy publishes the plugin without the docs subtree; existing pages at `grafana.com/grafana/plugins/{{pluginId}}/docs/` stop being served once the new version replaces the old one.
 
 You can leave this folder in place — the publishing pipeline ignores it without `docsPath`. Delete it if you want a clean tree.

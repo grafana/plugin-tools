@@ -48,6 +48,7 @@ const REQUIRED_BUILD_PLUGIN_REF = 'build-plugin/v1.2.0';
 interface PluginJson {
   type?: string;
   name?: string;
+  id?: string;
   docsPath?: string;
   [key: string]: unknown;
 }
@@ -64,25 +65,50 @@ export interface DocsSetupOptions {
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const { context, docsPath, templateDir, commonTemplateDir } = opts;
 
-  // step 1: early exit if the docs directory already exists on disk
-  if (existsSync(join(context.basePath, docsPath))) {
-    throw new Error(
-      `A directory already exists at '${docsPath}'. Re-run with a different path:\n  create-plugin add docs --docsPath <alternative-path>`
-    );
-  }
-
-  // step 2: set docsPath in src/plugin.json
+  // step 1: reconcile the requested docsPath with what the plugin already has
   const pluginJson = readPluginJson(context);
-
   const existingDocsPath = pluginJson.docsPath;
+
   if (existingDocsPath !== undefined && existingDocsPath !== docsPath) {
     throw new Error(
       `src/plugin.json already has docsPath set to '${existingDocsPath}'.\n  Re-run with the existing path:\n  create-plugin add docs --docsPath ${existingDocsPath}`
     );
   }
+
+  // A folder that plugin.json does not know about is someone else's - refuse rather than scatter
+  // pages into it. A folder this plugin already declares is our own from a previous run, so fall
+  // through: every copy step below skips files that exist, making a re-run additive.
+  if (existingDocsPath === undefined && existsSync(join(context.basePath, docsPath))) {
+    throw new Error(
+      `A directory already exists at '${docsPath}' but src/plugin.json has no docsPath.\n  Point the plugin at it by setting "docsPath": "${docsPath}" in src/plugin.json, or scaffold elsewhere:\n  create-plugin add docs --docsPath <alternative-path>`
+    );
+  }
+
+  // step 2: set docsPath in src/plugin.json
   context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
 
-  const pluginName = pluginJson.name ?? 'my-plugin';
+  if (!pluginJson.name) {
+    throw new Error('src/plugin.json has no "name". Add one - it is used as the title throughout the docs.');
+  }
+  const pluginName = pluginJson.name;
+  const pluginId = pluginJson.id ?? pluginName;
+  const { name: packageManagerName, version: packageManagerVersion } = readPackageManager(context);
+
+  // every template - docs stubs, agent guidance and the workflow - is filled from this one map, so
+  // a placeholder added to any template works everywhere without extra plumbing.
+  const substitutions: Record<string, string> = {
+    '{{pluginName}}': pluginName,
+    '{{pluginId}}': pluginId,
+    '{{docsPath}}': docsPath,
+    '{{packageManagerName}}': packageManagerName,
+    '{{packageManagerInstallCmd}}': getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
+    // pnpm needs its own setup action; corepack reads the version from package.json's
+    // `packageManager` field, which is why the action takes no `with:` block.
+    '{{pnpmSetup}}':
+      packageManagerName === 'pnpm'
+        ? '\n      # pnpm action uses the packageManager field in package.json to\n      # understand which version to install.\n      - uses: pnpm/action-setup@v6'
+        : '',
+  };
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '^0.2.1' });
@@ -91,26 +117,12 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   addDocsScripts(context);
 
   // step 5: copy template files to docs folder (includes README.md)
-  copyDocsTemplates(context, templateDir, docsPath, pluginName);
+  copyDocsTemplates(context, templateDir, docsPath, substitutions);
 
   // step 6: copy validate-docs workflow, unless the user already customized one
   const workflowPath = '.github/workflows/validate-docs.yml';
   if (!context.doesFileExist(workflowPath)) {
-    const { name: packageManagerName, version: packageManagerVersion } = readPackageManager(context);
-    // pnpm needs its own setup action; corepack reads the version from package.json's
-    // `packageManager` field, which is why the action takes no `with:` block.
-    const pnpmSetup =
-      packageManagerName === 'pnpm'
-        ? '\n      # pnpm action uses the packageManager field in package.json to\n      # understand which version to install.\n      - uses: pnpm/action-setup@v6'
-        : '';
-    const workflowContent = readTemplate(commonTemplateDir, 'workflows/validate-docs.yml')
-      .replaceAll('{{docsPath}}', docsPath)
-      .replaceAll('{{pnpmSetup}}', pnpmSetup)
-      .replaceAll('{{packageManagerName}}', packageManagerName)
-      .replaceAll(
-        '{{packageManagerInstallCmd}}',
-        getPackageManagerInstallCmd(packageManagerName, packageManagerVersion)
-      );
+    const workflowContent = interpolate(readTemplate(commonTemplateDir, 'workflows/validate-docs.yml'), substitutions);
     context.addFile(workflowPath, workflowContent);
   } else {
     additionsDebug(`${workflowPath} already exists, skipping`);
@@ -121,40 +133,51 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 
   // step 8: scaffold the docs authoring guide and bootstrap skill. `agentAssistanceAdded` is false
   // on a re-run where every agent file already exists, which changes the next-steps wording.
-  const agentAssistanceAdded = copyAgentTemplates(context, templateDir, pluginName, docsPath);
+  const agentAssistanceAdded = copyAgentTemplates(context, templateDir, substitutions);
   const instructionsPointerAdded = agentAssistanceAdded && appendDocsPointerToInstructions(context, docsPath);
 
   // step 9: print next-steps summary
-  const readmePresent = existsSync(join(context.basePath, 'README.md'));
-  printNextSteps({ docsPath, agentAssistanceAdded, instructionsPointerAdded, readmePresent });
+  printNextSteps({
+    docsPath,
+    packageManagerName,
+    agentAssistanceAdded,
+    instructionsPointerAdded,
+    readmePresent: existsSync(join(context.basePath, 'README.md')),
+  });
 
   return context;
 }
 
 function printNextSteps(opts: {
   docsPath: string;
+  packageManagerName: string;
   agentAssistanceAdded: boolean;
   instructionsPointerAdded: boolean;
   readmePresent: boolean;
 }): void {
-  const { docsPath, agentAssistanceAdded, instructionsPointerAdded, readmePresent } = opts;
-  const body: string[] = [];
+  const { docsPath, packageManagerName, agentAssistanceAdded, instructionsPointerAdded, readmePresent } = opts;
+
+  // Lead with what everyone has to do, by hand or otherwise. The skill is an accelerant, not the
+  // route - a reader with no coding agent must still find a first step they can act on.
+  const body: string[] = [
+    `Fill in the stub pages under ${docsPath}/ - each section carries a note saying what belongs there`,
+    `Read ${docsPath}/README.md for the four catalog tabs and what belongs on each`,
+    `Until every stub is filled, \`${packageManagerName} run docs:validate\` reports each one as an error - that count is your to-do list`,
+  ];
+
   if (agentAssistanceAdded) {
-    const readmeMention = readmePresent ? ' (and mine your README for content)' : '';
-    body.push(`Run the \`/bootstrap-plugin-docs\` skill to draft docs for your current features${readmeMention}`);
-    body.push(
-      'Authoring conventions live in .config/AGENTS/plugin-docs.md - your coding agent reads them automatically'
-    );
+    const readmeMention = readmePresent ? ', mining your README for content' : '';
+    body.push(`Using a coding agent? \`/bootstrap-plugin-docs\` drafts the pages from your source${readmeMention}`);
     if (!instructionsPointerAdded) {
       body.push(
         'No .config/AGENTS/instructions.md found, so nothing points at .config/AGENTS/plugin-docs.md - reference it from your own agent instructions'
       );
     }
-  } else {
-    body.push(`Fill in the stub docs under ${docsPath}/ with your plugin's actual content`);
   }
-  body.push('Run `npm run docs:serve` to preview the docs locally');
-  body.push('Run `npm run docs:validate` to check for issues before pushing');
+
+  body.push(
+    `Preview with \`${packageManagerName} run docs:serve\`, check with \`${packageManagerName} run docs:validate\``
+  );
   output.log({ title: 'Next steps', body });
 }
 
@@ -192,7 +215,16 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
   return SUPPORTED_PLUGIN_TYPES.includes(type as SupportedPluginType);
 }
 
-function copyDocsTemplates(context: Context, templateDir: string, docsPath: string, pluginName: string): void {
+function interpolate(content: string, substitutions: Record<string, string>): string {
+  return Object.entries(substitutions).reduce((acc, [token, value]) => acc.replaceAll(token, value), content);
+}
+
+function copyDocsTemplates(
+  context: Context,
+  templateDir: string,
+  docsPath: string,
+  substitutions: Record<string, string>
+): void {
   const docsTemplateDir = join(templateDir, 'docs');
   if (!existsSync(docsTemplateDir)) {
     throw new Error(
@@ -203,8 +235,7 @@ function copyDocsTemplates(context: Context, templateDir: string, docsPath: stri
     const relativePath = filePath.slice(docsTemplateDir.length + 1);
     const targetPath = `${docsPath}/${relativePath}`;
     if (!context.doesFileExist(targetPath)) {
-      const content = readFileSync(filePath, 'utf-8').replaceAll('{{pluginName}}', pluginName);
-      context.addFile(targetPath, content);
+      context.addFile(targetPath, interpolate(readFileSync(filePath, 'utf-8'), substitutions));
     } else {
       additionsDebug(`${targetPath} already exists, skipping`);
     }
@@ -216,18 +247,20 @@ function copyDocsTemplates(context: Context, templateDir: string, docsPath: stri
 // CLAUDE.md, and a SKILL.md whose first line isn't `---` is treated as literal content rather than
 // parsed for frontmatter. So each destination gets a complete, self-contained copy.
 //
-// `.agents/skills/` is the cross-agent path (Codex, Cursor, Copilot, Gemini CLI and Amp all read
-// it), which is why there is no separate `.codex/skills/` copy.
+// `.agents/skills/` is the emerging cross-agent path (Cursor, Copilot, Gemini CLI and Amp read it).
+// `.codex/skills/` is kept as well because that is where `templates/common` already puts the
+// build-plugin and validate-plugin skills - a Codex user who only reads `.codex/` would otherwise
+// see those two and not this one.
 const DOCS_INSTRUCTIONS_MARKER = 'before writing or modifying plugin documentation';
 const SKILLS_TEMPLATE_PREFIX = 'skills/';
-const SKILL_TARGET_DIRS = ['.claude/skills', '.agents/skills'];
+const SKILL_TARGET_DIRS = ['.claude/skills', '.agents/skills', '.codex/skills'];
 
 // The `agent/` template subtree mirrors its destination, except `skills/` which fans out to every
 // agent's skills directory:
 //   agent/.config/AGENTS/plugin-docs.md  -> .config/AGENTS/plugin-docs.md
 //   agent/skills/<name>/SKILL.md         -> .claude/skills/<name>/SKILL.md
 //                                        -> .agents/skills/<name>/SKILL.md
-function copyAgentTemplates(context: Context, templateDir: string, pluginName: string, docsPath: string): boolean {
+function copyAgentTemplates(context: Context, templateDir: string, substitutions: Record<string, string>): boolean {
   const agentTemplateDir = join(templateDir, 'agent');
   if (!existsSync(agentTemplateDir)) {
     throw new Error(
@@ -237,9 +270,7 @@ function copyAgentTemplates(context: Context, templateDir: string, pluginName: s
   let wroteSomething = false;
   for (const filePath of glob.sync(`${agentTemplateDir}/**`, { dot: true }).filter(isFile)) {
     const relPath = filePath.slice(agentTemplateDir.length + 1);
-    const content = readFileSync(filePath, 'utf-8')
-      .replaceAll('{{pluginName}}', pluginName)
-      .replaceAll('{{docsPath}}', docsPath);
+    const content = interpolate(readFileSync(filePath, 'utf-8'), substitutions);
     const targetPaths = relPath.startsWith(SKILLS_TEMPLATE_PREFIX)
       ? SKILL_TARGET_DIRS.map((dir) => `${dir}/${relPath.slice(SKILLS_TEMPLATE_PREFIX.length)}`)
       : [relPath];

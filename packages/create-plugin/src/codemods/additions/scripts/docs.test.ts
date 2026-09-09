@@ -400,6 +400,51 @@ describe('docs codemod', () => {
     });
   });
 
+  describe('re-running on an adopted plugin', () => {
+    it('is additive when plugin.json already declares the same docsPath', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-'));
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+      docs(context, { docsPath: 'docs' });
+
+      // the author's page is left untouched, and agent files can still be picked up after a bump
+      expect(context.listChanges()['docs/index.md']).toBeUndefined();
+      expect(context.doesFileExist('.config/AGENTS/plugin-docs.md')).toBe(true);
+    });
+
+    it('refuses a docs folder that plugin.json knows nothing about', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-unknown-'));
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+      expect(() => docs(context, { docsPath: 'docs' })).toThrow(/has no docsPath/);
+    });
+  });
+
+  describe('plugin.json requirements', () => {
+    it('refuses a plugin.json with no name rather than scaffolding docs about "my-plugin"', () => {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+      expect(() => docs(context, { docsPath: 'docs' })).toThrow(/has no "name"/);
+    });
+
+    it('substitutes the plugin id into catalog URLs', () => {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', id: 'acme-p-panel' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+      docs(context, { docsPath: 'docs' });
+      const readme = context.getFile('docs/README.md') ?? '';
+      expect(readme).toContain('grafana/plugins/acme-p-panel/');
+      expect(readme).not.toContain('<slug>');
+    });
+  });
+
   describe('plugin type support', () => {
     it.each(['app', 'datasource'])('refuses a %s plugin until its templates exist', (type) => {
       const context = new Context('/virtual');
@@ -530,7 +575,11 @@ describe('docs codemod', () => {
   });
 
   describe('AI authoring assistance', () => {
-    const SKILLS = ['.claude/skills/bootstrap-plugin-docs/SKILL.md', '.agents/skills/bootstrap-plugin-docs/SKILL.md'];
+    const SKILLS = [
+      '.claude/skills/bootstrap-plugin-docs/SKILL.md',
+      '.agents/skills/bootstrap-plugin-docs/SKILL.md',
+      '.codex/skills/bootstrap-plugin-docs/SKILL.md',
+    ];
 
     it('writes the skill to every agent skills directory', () => {
       const context = makeContext();
@@ -562,10 +611,10 @@ describe('docs codemod', () => {
       }
     });
 
-    it('does not write a redundant .codex copy, since codex reads .agents/skills', () => {
+    it('writes a .codex copy too, matching where templates/common puts its skills', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
-      expect(context.doesFileExist('.codex/skills/bootstrap-plugin-docs/SKILL.md')).toBe(false);
+      expect(context.doesFileExist('.codex/skills/bootstrap-plugin-docs/SKILL.md')).toBe(true);
     });
 
     it('does not scaffold the skills that were folded into the authoring guide', () => {
