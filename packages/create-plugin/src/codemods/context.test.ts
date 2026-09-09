@@ -62,11 +62,15 @@ describe('Context', () => {
 
   describe('updateFile', () => {
     it('should update a file in the context', () => {
+      const context = new Context(`${__dirname}/migrations/fixtures`);
+      context.updateFile('foo/bar.ts', 'new content');
+      expect(context.listChanges()).toEqual({ 'foo/bar.ts': { content: 'new content', changeType: 'update' } });
+    });
+
+    it("should preserve the 'add' changeType when updating a file that was added in the current context", () => {
       const context = new Context();
       context.addFile('file.txt', 'content');
       context.updateFile('file.txt', 'new content');
-      // Stays 'add': the file was staged fresh in this context, so flushChanges still needs to
-      // mkdir its (possibly nonexistent) parent directory rather than treat it as an in-place update.
       expect(context.listChanges()).toEqual({ 'file.txt': { content: 'new content', changeType: 'add' } });
     });
 
