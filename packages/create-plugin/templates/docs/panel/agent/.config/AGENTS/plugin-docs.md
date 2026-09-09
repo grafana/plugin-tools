@@ -146,4 +146,5 @@ Validation cannot catch any of these, so they are on you.
 
 A freshly scaffolded page fails validation on purpose: every unfilled `<!-- section-brief -->` block is
 reported as an error, so the error count doubles as a to-do list. It reaches zero once every brief is either
-filled in or deleted.
+filled in or deleted. CI skips validation until then, so a red `docs:validate` while you work is expected,
+not a build failure.
