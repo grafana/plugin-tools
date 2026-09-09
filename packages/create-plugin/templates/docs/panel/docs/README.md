@@ -90,8 +90,11 @@ follow the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/)
 
 **Freshly scaffolded docs fail validation on purpose.** Every `<!-- section-brief -->` block still in place
 is reported as an error, so the count is your to-do list: it reaches zero once each brief is filled in or
-deleted. Until then `docs:validate` exits non-zero, and so does the `validate-docs.yml` workflow on a pull
-request - expect red CI until you have written the pages.
+deleted.
+
+CI stays green while you work. The `validate-docs.yml` workflow skips validation as long as any brief
+remains, and starts enforcing once they are all gone. Publishing is gated separately, so unfinished docs can
+never ship.
 
 ## How docs are published
 
