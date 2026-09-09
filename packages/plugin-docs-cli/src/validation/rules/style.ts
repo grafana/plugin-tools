@@ -372,7 +372,14 @@ export async function checkWritingStyle(input: ValidationInput): Promise<Diagnos
     return diagnostics;
   }
 
-  const mdFiles = entries.filter((e) => e.isFile() && e.name.endsWith('.md') && !isMetaFile(e.name));
+  const mdFiles = entries.filter(
+    (e) =>
+      e.isFile() &&
+      e.name.endsWith('.md') &&
+      !isMetaFile(e.name) &&
+      !e.parentPath.includes('node_modules') &&
+      !e.parentPath.includes('dist')
+  );
 
   for (const entry of mdFiles) {
     const absPath = join(entry.parentPath, entry.name);
