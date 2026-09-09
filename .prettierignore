@@ -8,3 +8,5 @@
 
 # Renovate config should not be formatted by prettier
 /.github/renovate.json
+
+/packages/plugin-docs-cli/src/validation/rules/style.ts
