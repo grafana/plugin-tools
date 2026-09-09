@@ -6,6 +6,7 @@ import type { Context } from '../../context.js';
 import { TEMPLATES_DIR } from '../../../constants.js';
 import { output } from '../../../utils/utils.console.js';
 import { isFile } from '../../../utils/utils.files.js';
+import { getPackageManagerInstallCmd } from '../../../utils/utils.packageManager.js';
 import { additionsDebug, addDependenciesToPackageJson, isVersionGreater, readJsonFile } from '../../utils.js';
 
 export const schema = v.object({
@@ -95,10 +96,21 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 6: copy validate-docs workflow, unless the user already customized one
   const workflowPath = '.github/workflows/validate-docs.yml';
   if (!context.doesFileExist(workflowPath)) {
-    const workflowContent = readTemplate(commonTemplateDir, 'workflows/validate-docs.yml').replaceAll(
-      '{{docsPath}}',
-      docsPath
-    );
+    const { name: packageManagerName, version: packageManagerVersion } = readPackageManager(context);
+    // pnpm needs its own setup action; corepack reads the version from package.json's
+    // `packageManager` field, which is why the action takes no `with:` block.
+    const pnpmSetup =
+      packageManagerName === 'pnpm'
+        ? '\n      # pnpm action uses the packageManager field in package.json to\n      # understand which version to install.\n      - uses: pnpm/action-setup@v6'
+        : '';
+    const workflowContent = readTemplate(commonTemplateDir, 'workflows/validate-docs.yml')
+      .replaceAll('{{docsPath}}', docsPath)
+      .replaceAll('{{pnpmSetup}}', pnpmSetup)
+      .replaceAll('{{packageManagerName}}', packageManagerName)
+      .replaceAll(
+        '{{packageManagerInstallCmd}}',
+        getPackageManagerInstallCmd(packageManagerName, packageManagerVersion)
+      );
     context.addFile(workflowPath, workflowContent);
   } else {
     additionsDebug(`${workflowPath} already exists, skipping`);
@@ -261,6 +273,19 @@ function appendDocsPointerToInstructions(context: Context, docsPath: string): bo
   const line = `- This plugin ships multi-page docs under \`${docsPath}/\`. Keep them in sync when features change in \`src/\`. Read @./.config/AGENTS/plugin-docs.md ${DOCS_INSTRUCTIONS_MARKER}.\n`;
   context.updateFile(targetPath, `${existing}${trailingNewline}${line}`);
   return true;
+}
+
+// The corepack `packageManager` field is what every scaffolded plugin records and what CI actions
+// read, so it is the authoritative answer for an existing plugin. Plugins predating it fall back to
+// npm, which matches what `create-plugin` assumes elsewhere.
+function readPackageManager(context: Context): { name: string; version: string } {
+  const packageJson = readJsonFile<{ packageManager?: string }>(context, 'package.json');
+  const match = /^([a-z]+)@(\d+\.\d+\.\d+)/.exec(packageJson.packageManager ?? '');
+  if (!match) {
+    additionsDebug('no usable packageManager field in package.json, assuming npm');
+    return { name: 'npm', version: '0.0.0' };
+  }
+  return { name: match[1], version: match[2] };
 }
 
 function readTemplate(templateDir: string, relativePath: string): string {

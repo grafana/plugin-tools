@@ -26,11 +26,15 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-
+{{pnpmSetup}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: '{{packageManagerName}}'
+
+      - name: Install dependencies
+        run: {{packageManagerInstallCmd}}
 
       - name: Validate plugin documentation
         run: |
@@ -39,4 +43,4 @@ jobs:
             echo "docsPath not set in src/plugin.json, skipping"
             exit 0
           fi
-          npx --yes @grafana/plugin-docs-cli validate --strict
+          {{packageManagerName}} run docs:validate
