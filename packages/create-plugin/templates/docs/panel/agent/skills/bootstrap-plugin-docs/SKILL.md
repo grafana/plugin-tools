@@ -79,7 +79,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
-3. **Plan the README migration.** Skip this step entirely when `README.md` is at or near scaffold default (under ~30 lines, only plugin name + install snippet + license). Otherwise the README is this plugin's existing documentation and the job is to *move* it into the multi-page structure, not to copy it and leave a duplicate behind:
+3. **Plan the README migration.** First decide whether there is anything to migrate. Skip this step entirely when `README.md` says nothing specific to this plugin - the `create-plugin` scaffold ships a generic one titled "Grafana panel plugin template" that explains what panel plugins are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to *move* it into the multi-page structure, not to copy it and leave a duplicate behind:
    - For each README section, decide which scaffolded stub page it belongs on (`{{docsPath}}/options.md`, `{{docsPath}}/data-formats.md`, `{{docsPath}}/examples.md`, `{{docsPath}}/troubleshooting.md`, etc.).
    - Note content that does not map to any existing stub - those become candidates for new pages.
    - Quote verbatim when the README's existing style already matches those conventions; rewrite when it does not.
