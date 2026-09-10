@@ -26,8 +26,14 @@ export default function exampleAddition(context: Context, options: ExampleOption
   // These options have been validated by the framework
   const { featureName, enabled, port, frameworks } = options;
 
-  const rawPkgJson = context.getFile('./package.json') ?? '{}';
-  const packageJson = JSON.parse(rawPkgJson);
+  // Decline instead of failing when a precondition isn't met. Skip before making any changes, and
+  // word the reason to complete "Skipped example-addition: ".
+  if (!context.doesFileExist('./package.json')) {
+    context.skip('there is no package.json to add the example script to.', ['Run this from the root of your plugin.']);
+    return context;
+  }
+
+  const packageJson = JSON.parse(context.getFile('./package.json') ?? '{}');
 
   if (packageJson.scripts && !packageJson.scripts['example-script']) {
     packageJson.scripts['example-script'] = `echo "Running ${featureName}"`;
@@ -48,6 +54,10 @@ export default function exampleAddition(context: Context, options: ExampleOption
 };
 `;
     context.addFile(`./src/features/${featureName}.ts`, featureCode);
+
+    // Never print from a codemod. Record it and the command renders it after the change list and
+    // the install. Inside the guard, so a re-run that changed nothing stays quiet.
+    context.addNextStep(`Wire up ./src/features/${featureName}.ts from your plugin's entry point`);
   }
 
   if (context.doesFileExist('./src/deprecated.ts')) {

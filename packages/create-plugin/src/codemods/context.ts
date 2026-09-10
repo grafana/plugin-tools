@@ -12,8 +12,16 @@ export type ContextFile = Record<
   }
 >;
 
+/** Why a codemod declined to run, and what the author can do about it. */
+export type SkipNotice = {
+  reason: string;
+  hints: string[];
+};
+
 export class Context {
   private files: ContextFile = {};
+  private nextSteps: string[] = [];
+  private skipNotice: SkipNotice | undefined;
   basePath: string;
 
   constructor(basePath?: string) {
@@ -115,6 +123,45 @@ export class Context {
 
   hasChanges() {
     return Object.keys(this.files).length > 0;
+  }
+
+  /**
+   * Record something the author should do once the codemod has finished.
+   *
+   * Codemods never print. The command renders these after the change list and the install, so they
+   * are the last thing on screen rather than the first - which is where a codemod printing for
+   * itself would put them. Wrap a command in backticks and the renderer styles it as code.
+   */
+  addNextStep(step: string) {
+    this.nextSteps.push(step);
+  }
+
+  listNextSteps(): string[] {
+    return [...this.nextSteps];
+  }
+
+  /**
+   * Decline to run, with the reason and anything the author can do about it.
+   *
+   * Use this for "this codemod does not apply here" - the wrong plugin type, a conflicting setting,
+   * a precondition the author can fix. The command reports it as a warning and the process still
+   * exits 0. Keep `throw` for genuine faults, such as a missing template, which mean the package
+   * itself is broken.
+   *
+   * The reason completes the sentence "Skipped <codemod name>: ", so start it lowercase and leave
+   * the codemod's own name out of it.
+   *
+   * Skipping means nothing happened, so call it before staging any changes. The runner rejects a
+   * context that is both skipped and changed rather than silently discarding the edits. Calling
+   * this twice keeps the last reason, so guard clauses should return straight after skipping.
+   */
+  skip(reason: string, hints: string[] = []) {
+    codemodsDebug(`Context.skip() - ${reason}`);
+    this.skipNotice = { reason, hints };
+  }
+
+  getSkip(): SkipNotice | undefined {
+    return this.skipNotice;
   }
 
   renameFile(from: string, to: string) {

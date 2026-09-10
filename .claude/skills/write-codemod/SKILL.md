@@ -33,13 +33,17 @@ Both kinds run through the same pipeline in `runner.ts`:
 4. Flush the context's staged changes to disk
 5. Print a summary of changes to the author
 6. Run the package manager's install when `package.json` changed
+7. The calling command prints the success line, then anything the codemod recorded with `addNextStep`
+
+A codemod that called `context.skip(...)` short-circuits steps 3 to 6 — nothing is formatted, flushed, listed or installed — and the command prints the skip in place of the success line.
 
 The pipeline explains the core rules:
 
 - **Use the Context for all file operations, never Node.js `fs`.** The runner owns disk writes; the context is an in-memory staging area, which is also what makes tests hermetic. Always `return context`, even on early returns.
 - **Don't chase perfect output formatting.** Prettier reformats every changed file afterwards using the plugin's own config.
 - **The dependency helpers are enough.** Changing `package.json` through them triggers a real install after the run.
-- **Degrade gracefully — don't throw.** A thrown error aborts the author's entire `update` sequence. When a file is missing, unparseable, or already migrated, log with the debug helper and return the context unchanged.
+- **Degrade gracefully — don't throw.** A thrown error aborts the author's entire `update` sequence. When there is nothing for the author to act on — already migrated, or the feature this touches isn't present — log with the debug helper and return the context unchanged. When the author could do something about it and would otherwise be left guessing, `context.skip(...)` — see "Talking to the author". Reserve `throw` for faults that mean the package itself is broken, such as a template missing from the published build.
+- **Never print.** Codemods record what to say; the framework renders it. Importing `output` or calling `console.*` from a codemod puts the message in the wrong place — before the change list and the install — and no codemod can fix that from where it sits.
 - **Stay inside the plugin's working directory.** Codemods run inside a user's project; the context base path is the boundary.
 - **Idempotency is non-negotiable.** Codemods re-run against already-migrated projects; every script must be safe to run repeatedly.
 - **One concern per codemod.** Don't bundle unrelated changes.
@@ -105,9 +109,66 @@ context.renameFile(from: string, to: string)           // delete old + add new
 // Inspect
 context.listChanges(): ContextFile
 context.hasChanges(): boolean
+
+// Talk to the author (rendered by the command, never by you)
+context.addNextStep(step: string)                      // what to do once this has finished
+context.listNextSteps(): string[]                      // a copy; push through addNextStep
+context.skip(reason: string, hints?: string[])         // decline; nothing is flushed, exit stays 0
+                                                       // reason completes "Skipped <name>: "
+context.getSkip(): { reason, hints } | undefined
 ```
 
 Always check `doesFileExist` before `getFile` or `updateFile`.
+
+## Talking to the author
+
+Codemods never write to the terminal. They record on the context and the calling command renders it, which is what keeps the ordering right and the wording consistent between codemods.
+
+**Next steps** — what the author should do now that the codemod has finished:
+
+```ts
+context.addNextStep(`Run \`${packageManagerName} run generate:kinds\` to generate from them`);
+```
+
+Rendered after the change list, the dependency install and the success line, so it is the last thing on screen. Only record these when you actually did something — a re-run that changes nothing should stay quiet. Gate on whether this run changed anything, the way `experimental-app-sdk.ts` does:
+
+```ts
+const changesBefore = Object.keys(context.listChanges()).length;
+// ...do the work...
+if (Object.keys(context.listChanges()).length > changesBefore) {
+  context.addNextStep('…');
+}
+```
+
+**Skipping** — the codemod does not apply here, and the author should know why:
+
+```ts
+if (pluginJson.type !== 'app') {
+  context.skip(`needs an app plugin, but this is a ${pluginJson.type} plugin.`, [
+    'The app-sdk serves Kubernetes-style resources from an app plugin.',
+  ]);
+  return context;
+}
+```
+
+Rendered as a warning; the process still exits 0 either way. In `add` the warning replaces the success line. In `update` the other migrations still run, so the command reports how many were skipped instead of claiming plain success.
+
+The reason completes the sentence `Skipped <codemod name>: `, so start it lowercase, end it with a period and leave the codemod's own name out of it — "needs an app plugin, but this is a panel plugin.", not "app-sdk needs an app plugin".
+
+Skip before staging any changes: a skipped context is never flushed, and the runner throws if this run staged something and then skipped, rather than dropping the edits silently. Calling `skip` twice keeps only the last reason, so return straight after skipping.
+
+**Migrations should rarely skip.** An addition is invoked deliberately, so "I declined, here's why" is exactly what the author asked for. A migration runs unattended against every plugin on every `update`, so a skip that fires for a whole class of plugin becomes a warning those authors see forever. Prefer the debug helper there, and skip only when the author genuinely needs to act.
+
+Four situations, four mechanisms — keep them apart:
+
+| Situation                                                       | Use                                      |
+| --------------------------------------------------------------- | ---------------------------------------- |
+| Does not apply here, and the author could do something about it | `context.skip(reason, hints)`            |
+| Applied cleanly, and there is something to do next              | `context.addNextStep(...)`               |
+| Already applied, or the thing it touches isn't there            | the debug helper, and return the context |
+| The package itself is broken                                    | `throw`                                  |
+
+The line between rows one and three is whether the author can act. A wrong plugin type or a conflicting setting is a skip. An already-migrated file or an absent optional feature is a debug log — saying nothing is the right amount to say.
 
 ## Utility functions (from `../../utils.js`)
 
@@ -131,10 +192,13 @@ migrationsDebug, additionsDebug
 
 ```ts
 import type { Context } from '../../context.js';
+import { migrationsDebug } from '../../utils.js';
 
 export default function migrate(context: Context) {
-  // 1. Guard: check the file/condition that makes this migration applicable
+  // 1. Guard: check the file/condition that makes this migration applicable. Nothing for the author
+  //    to act on here, so log and return rather than context.skip()
   if (!context.doesFileExist('some-file')) {
+    migrationsDebug('some-file not found, nothing to migrate');
     return context;
   }
 
@@ -142,6 +206,7 @@ export default function migrate(context: Context) {
 
   // 2. Guard: skip if already applied (idempotency)
   if (content.includes('already-migrated-marker')) {
+    migrationsDebug('already migrated');
     return context;
   }
 
@@ -253,7 +318,7 @@ Structured files need parser-based edits — string replacement breaks on format
 
 ## Testing requirements
 
-Every codemod ships with a colocated `.test.ts`. Cover four behaviours:
+Every codemod ships with a colocated `.test.ts`. Cover five behaviours:
 
 1. **Happy path** — the codemod applies the expected change.
 2. **Idempotency** — running twice produces the same result, via the custom matcher (defined in `packages/create-plugin/vitest.setup.ts`; it runs the codemod twice and diffs the files staged after the first run):
@@ -262,8 +327,9 @@ Every codemod ships with a colocated `.test.ts`. Cover four behaviours:
    // codemods that take options need a wrapper:
    await expect((ctx) => addFeature(ctx, options)).toBeIdempotent(context);
    ```
-3. **Already-migrated guard** — no-op when the change is already present.
+3. **Already-migrated guard** — no-op when the change is already present, and no next step recorded on the second run.
 4. **Missing file guard** — no-op when the target file doesn't exist (if applicable).
+5. **What the author is told** — assert on `context.getSkip()` and `context.listNextSteps()`, never on `output`. A codemod that prints is a codemod with a bug; there is nothing to spy on.
 
 `test-utils.ts` exports `createDefaultContext()` for a context pre-seeded with a minimal plugin; otherwise seed your own:
 
