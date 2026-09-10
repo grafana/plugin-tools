@@ -42,7 +42,7 @@ export default function appSdk(context: Context): Context {
 
   const changesBefore = Object.keys(context.listChanges()).length;
 
-  addTemplateFiles(context, hasGoBackend(context));
+  addTemplateFiles(context);
   referenceAgentInstructions(context);
   addGenerateScript(context);
   addFeatureToggle(context);
@@ -95,20 +95,14 @@ function skip(title: string, body: string[] = []) {
   output.warning({ title: `Skipping app-sdk: ${title}`, body });
 }
 
-function addTemplateFiles(context: Context, hasGoBackend: boolean) {
+function addTemplateFiles(context: Context) {
   for (const [file, includeWarning] of TEMPLATE_FILES) {
     if (context.doesFileExist(file)) {
       additionsDebug(`${file} already exists. Skipping.`);
       continue;
     }
 
-    const content = renderTemplate(templatePath(file), includeWarning);
-
-    context.addFile(file, content);
-
-    if (file === 'kinds/config.cue' && hasGoBackend) {
-      enableGoCodegen(context);
-    }
+    context.addFile(file, renderTemplate(templatePath(file), includeWarning));
   }
 }
 
@@ -235,16 +229,15 @@ function addFeatureToggle(context: Context) {
 }
 
 /**
- * Enables Go code generation and wires the generated kinds into the Go backend, for app plugins that
- * have one. Plugins without a backend keep the frontend-only `goEnabled: false` config untouched.
+ * Wires the generated kinds into the Go backend, for app plugins that have one. Go code generation
+ * itself is enabled when kinds/config.cue is first scaffolded, in addTemplateFiles.
  */
 function wireGoBackend(context: Context) {
   if (!hasGoBackend(context)) {
-    additionsDebug('No Go backend found. Skipping Go code generation and main.go wiring.');
+    additionsDebug('No Go backend found. Skipping main.go wiring.');
     return;
   }
 
-  enableGoCodegen(context);
   addAppProvider(context);
   wireMainGo(context);
   addGoModDependency(context);
@@ -333,60 +326,6 @@ function hasGoBackend(context: Context): boolean {
     additionsDebug(`Failed to parse src/plugin.json: ${error}`);
     return false;
   }
-}
-
-/**
- * Flips `codegen.goEnabled` on and adds a Go output path in kinds/config.cue, for when the file
- * already existed on disk before this run (e.g. a Go backend added after app-sdk was already set
- * up). If config.cue is being scaffolded fresh in this same run, addTemplateFiles bakes this
- * transform into its content directly instead of calling this — see the comment there.
- */
-function enableGoCodegen(context: Context) {
-  const path = 'kinds/config.cue';
-  const content = context.getFile(path);
-
-  if (!content) {
-    additionsDebug(`Could not find ${path}. Skipping Go code generation config.`);
-    return;
-  }
-
-  const updated = enableGoCodegenIn(content);
-
-  if (updated === undefined) {
-    return;
-  }
-
-  context.updateFile(path, updated);
-}
-
-/**
- * Pure string transform: flips `codegen.goEnabled` on and adds a Go output path. Returns undefined
- * if Go codegen is already enabled or the content doesn't match the expected app-sdk config shape.
- */
-function enableGoCodegenIn(content: string): string | undefined {
-  const path = 'kinds/config.cue';
-
-  if (content.includes('goEnabled: true')) {
-    additionsDebug(`${path} already has Go code generation enabled. Skipping.`);
-    return undefined;
-  }
-
-  const goDisabledBlock =
-    '\t\t// This plugin has no Go backend, so skip Go code generation entirely: only TypeScript and\n' +
-    '\t\t// the definitions below are emitted, and no Go toolchain is needed to generate them.\n' +
-    '\t\tgoEnabled: false';
-
-  if (!content.includes(goDisabledBlock)) {
-    additionsDebug(`${path} does not match the expected app-sdk config shape. Skipping.`);
-    return undefined;
-  }
-
-  const goEnabledBlock =
-    '\t\t// Generated Go types land alongside the plugin backend.\n' +
-    '\t\tgoEnabled: true\n' +
-    '\t\tgoGenPath: "pkg/generated/"';
-
-  return content.replace(goDisabledBlock, goEnabledBlock);
 }
 
 // Matches the backend-app template's `if err := app.Manage(...); err != nil { ... }` statement,

@@ -2,24 +2,37 @@ import { Context } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
 import appSdk from './experimental-app-sdk.js';
 
+// renderTemplate resolves hasBackend (and other plugin state) via getPluginJson, which reads real
+// disk rather than the codemod's in-memory Context. Mirror that value here, kept in sync with each
+// test's createAppContext({ hasBackend }) below, so templates render as they would for the plugin
+// actually under test. Declared via vi.hoisted since the vi.mock factories below are hoisted above
+// ordinary top-level declarations.
+const mockedState = vi.hoisted(() => ({ hasBackend: false }));
+
 vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
   return {
     ...originalModule,
-    getPluginJson: () => ({ id: 'my-plugin-id', name: 'My Plugin', info: { author: { name: 'my-author' } } }),
+    getPluginJson: () => ({
+      id: 'my-plugin-id',
+      name: 'My Plugin',
+      info: { author: { name: 'my-author' } },
+      backend: mockedState.hasBackend,
+    }),
   };
 });
 
-
 vi.mock(import('../../utils.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
-  // Disk I/O is slow so render the templates once (for both warning variants) and key off the
-  // requested path and includeWarning flag.
-  const render = (file: string, includeWarning: boolean) =>
-    originalModule.renderTemplate(
+  // Disk I/O is slow so render each template once per includeWarning/hasBackend combination, keyed
+  // off the requested path.
+  const render = (file: string, includeWarning: boolean, hasBackend: boolean) => {
+    mockedState.hasBackend = hasBackend;
+    return originalModule.renderTemplate(
       new URL(`../../../../templates/app-sdk/${file}`, import.meta.url).pathname,
       includeWarning
     );
+  };
   const files = [
     '.config/app-sdk/generate-kinds.mjs',
     '.config/app-sdk/README.md',
@@ -32,14 +45,29 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
     'kinds/README.md',
     'pkg/provider/provider.go',
   ];
-  const rendered: Record<string, Record<'true' | 'false', string>> = Object.fromEntries(
-    files.map((file) => [file, { true: render(file, true), false: render(file, false) }])
-  );
+  const rendered: Record<string, Record<'true' | 'false', { withoutBackend: string; withBackend: string }>> =
+    Object.fromEntries(
+      files.map((file) => [
+        file,
+        {
+          true: { withoutBackend: render(file, true, false), withBackend: render(file, true, true) },
+          false: { withoutBackend: render(file, false, false), withBackend: render(file, false, true) },
+        },
+      ])
+    );
+  mockedState.hasBackend = false;
+
   return {
     ...originalModule,
     renderTemplate: (templatePath: string, includeWarning = false) => {
       const match = Object.keys(rendered).find((file) => templatePath.endsWith(file));
-      return match ? rendered[match][includeWarning ? 'true' : 'false'] : '';
+
+      if (!match) {
+        return '';
+      }
+
+      const variant = rendered[match][includeWarning ? 'true' : 'false'];
+      return mockedState.hasBackend ? variant.withBackend : variant.withoutBackend;
     },
   };
 });
@@ -74,6 +102,8 @@ function createAppContext({
   instructions?: string | null;
   hasBackend?: boolean;
 } = {}) {
+  mockedState.hasBackend = hasBackend;
+
   const context = new Context('/virtual');
 
   context.addFile('src/plugin.json', JSON.stringify({ type: pluginType, id: 'my-plugin-id', backend: hasBackend }));

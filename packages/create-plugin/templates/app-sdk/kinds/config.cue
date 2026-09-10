@@ -22,9 +22,15 @@ config: {
 	}
 
 	codegen: {
+{{#if hasBackend}}
+		// Generated Go types land alongside the plugin backend.
+		goEnabled: true
+		goGenPath: "pkg/generated/"
+{{else}}
 		// This plugin has no Go backend, so skip Go code generation entirely: only TypeScript and
 		// the definitions below are emitted, and no Go toolchain is needed to generate them.
 		goEnabled: false
+{{/if}}
 		// Generated TypeScript types land in the frontend source dir.
 		tsGenPath:                      "src/generated/"
 		enableK8sPostProcessing:        false
