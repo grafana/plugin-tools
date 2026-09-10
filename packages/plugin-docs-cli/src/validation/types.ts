@@ -11,6 +11,9 @@ export const Rule = {
   NoSymlinks: 'no-symlinks',
   AllowedFileTypes: 'allowed-file-types',
   MaxNestingDepth: 'max-nesting-depth',
+  DocsPathExists: 'docs-path-exists',
+  MaxTotalDocsSize: 'max-total-docs-size',
+  MaxTotalPages: 'max-total-pages',
   // frontmatter rules
   BlockExists: 'frontmatter-block-exists',
   ValidYaml: 'frontmatter-valid-yaml',
@@ -20,6 +23,9 @@ export const Rule = {
   NoH1: 'no-h1-heading',
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
+  TitleLength: 'frontmatter-title-length',
+  DescriptionLength: 'frontmatter-description-length',
+  MinContentLength: 'min-content-length',
   // content-completeness rules
   UnfilledSectionBrief: 'unfilled-section-brief',
   // asset rules
@@ -67,6 +73,15 @@ export interface Diagnostic {
 export interface ValidationInput {
   docsPath: string;
   strict: boolean;
+  /**
+   * Treat leftover `section-brief` scaffolding as progress rather than a defect.
+   *
+   * Docs scaffolded by `create-plugin add docs` are all stub, by design - reporting that back as
+   * errors turns "you ran the command successfully" into a red build. Authoring tools pass this so
+   * the count is informational while the pages are being written. The publishing check never passes
+   * it, so half-written docs still cannot reach the catalog.
+   */
+  allowUnfilledStubs?: boolean;
 }
 
 /**

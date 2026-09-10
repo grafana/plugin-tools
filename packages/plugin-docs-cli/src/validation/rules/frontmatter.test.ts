@@ -7,10 +7,20 @@ import { Rule } from '../types.js';
 
 const input = (docsPath: string) => ({ docsPath, strict: true });
 
+// a description long enough to clear the 20-char min-description-length floor introduced by
+// frontmatter-description-length, so tests unrelated to that rule don't trip it incidentally
+const GOOD_DESCRIPTION = 'A page with enough detail to describe what it covers';
+
+// body content long enough to clear the 150-char min-content-length floor (with margin, since
+// some tests prepend a short heading to this), for tests that aren't themselves about page length
+const LONG_BODY =
+  'This page has enough body content to clear the minimum content length check on its own, ' +
+  'so tests that are not themselves about page length are not affected by that rule.';
+
 describe('checkFrontmatter', () => {
   it('should report missing required fields', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
-    await writeFile(join(tmp, 'page.md'), '---\ntitle: Hello\n---\n# Hi\n');
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Hello\n---\n# Hi\n\n${LONG_BODY}\n`);
 
     const findings = await checkFrontmatter(input(tmp));
     expect(findings).toHaveLength(2); // 1 missing description + 1 h1 warning
@@ -44,7 +54,7 @@ describe('checkFrontmatter', () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await writeFile(
       join(tmp, 'index.md'),
-      '---\ntitle: Home\ndescription: Welcome\nsidebar_position: 1\n---\n## Introduction\n'
+      `---\ntitle: Home\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: 1\n---\n## Introduction\n\n${LONG_BODY}\n`
     );
 
     const findings = await checkFrontmatter(input(tmp));
@@ -55,7 +65,7 @@ describe('checkFrontmatter', () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await writeFile(
       join(tmp, 'page.md'),
-      '---\ntitle: Page\ndescription: A page\nsidebar_position: 1\nslug: custom-slug\n---\n## Content\n'
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: 1\nslug: custom-slug\n---\n## Content\n\n${LONG_BODY}\n`
     );
 
     const findings = await checkFrontmatter(input(tmp));
@@ -65,10 +75,13 @@ describe('checkFrontmatter', () => {
   it('should include line numbers for wrong field types', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     // title on line 2, description on line 3
-    await writeFile(join(tmp, 'page.md'), '---\ntitle: 123\ndescription: Valid\nsidebar_position: 1\n---\n');
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: 123\ndescription: Valid\nsidebar_position: 1\n---\n\n${LONG_BODY}\n`
+    );
 
     const findings = await checkFrontmatter(input(tmp));
-    expect(findings).toHaveLength(1);
+    expect(findings).toHaveLength(2); // wrong type for title + description shorter than the 20-char minimum
     const titleError = findings.find((f) => f.rule === Rule.FieldTypes && f.title.includes('title'));
     expect(titleError).toBeDefined();
     expect(titleError!.line).toBe(2);
@@ -78,7 +91,7 @@ describe('checkFrontmatter', () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await writeFile(
       join(tmp, 'page.md'),
-      '---\ntitle: Page\ndescription: A page\nsidebar_position: 1\n---\n\n# Big Heading\n'
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: 1\n---\n\n# Big Heading\n\n${LONG_BODY}\n`
     );
 
     const findings = await checkFrontmatter(input(tmp));
@@ -198,7 +211,7 @@ describe('checkFrontmatter', () => {
 
   it('should report no-duplicate-sidebar-position as warning in non-strict mode', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
-    const fm = (pos: number) => `---\ntitle: Page\ndescription: A page\nsidebar_position: ${pos}\n---\n`;
+    const fm = (pos: number) => `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: ${pos}\n---\n`;
     await writeFile(join(tmp, 'a.md'), fm(1));
     await writeFile(join(tmp, 'b.md'), fm(1));
 
@@ -248,5 +261,94 @@ describe('checkFrontmatter', () => {
 
     const findings = await checkFrontmatter(input(tmp));
     expect(findings.find((f) => f.rule === Rule.DuplicateSlug)).toBeUndefined();
+  });
+
+  it('should report frontmatter-title-length as error in strict mode for a title over 60 characters', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    const longTitle = 'A'.repeat(61);
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: ${longTitle}\ndescription: ${GOOD_DESCRIPTION}\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    const finding = findings.find((f) => f.rule === Rule.TitleLength);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+  });
+
+  it('should report frontmatter-title-length as info in non-strict mode', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    const longTitle = 'A'.repeat(61);
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: ${longTitle}\ndescription: ${GOOD_DESCRIPTION}\n---\n`);
+
+    const findings = await checkFrontmatter({ docsPath: tmp, strict: false });
+    const finding = findings.find((f) => f.rule === Rule.TitleLength);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('info');
+  });
+
+  it('should not report frontmatter-title-length for a title at or under 60 characters', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    const title = 'A'.repeat(60);
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: ${title}\ndescription: ${GOOD_DESCRIPTION}\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    expect(findings.find((f) => f.rule === Rule.TitleLength)).toBeUndefined();
+  });
+
+  it('should report frontmatter-description-length for a description under 20 characters', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: Too short\n---\n\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(tmp));
+    const finding = findings.find((f) => f.rule === Rule.DescriptionLength);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.title).toContain('shorter');
+  });
+
+  it('should report frontmatter-description-length for a description over 160 characters', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    const longDescription = 'A'.repeat(161);
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${longDescription}\n---\n\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(tmp));
+    const finding = findings.find((f) => f.rule === Rule.DescriptionLength);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.title).toContain('exceeds');
+  });
+
+  it('should not report frontmatter-description-length for a description within range', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n---\n\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(tmp));
+    expect(findings.find((f) => f.rule === Rule.DescriptionLength)).toBeUndefined();
+  });
+
+  it('should report min-content-length only in strict mode for a very short page', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n---\n\nToo short.\n`);
+
+    const strictFindings = await checkFrontmatter(input(tmp));
+    const finding = strictFindings.find((f) => f.rule === Rule.MinContentLength);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('info');
+
+    const nonStrictFindings = await checkFrontmatter({ docsPath: tmp, strict: false });
+    expect(nonStrictFindings.find((f) => f.rule === Rule.MinContentLength)).toBeUndefined();
+  });
+
+  it('should not report min-content-length for a page with enough body content', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n---\n\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(tmp));
+    expect(findings.find((f) => f.rule === Rule.MinContentLength)).toBeUndefined();
   });
 });

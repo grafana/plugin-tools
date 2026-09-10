@@ -78,4 +78,17 @@ describe('formatResult', () => {
     expect(output).toContain('1 warning');
     expect(output).toContain('1 info');
   });
+
+  it('reports a clean bill when the only findings are informational', () => {
+    const output = formatResult({
+      valid: true,
+      diagnostics: [
+        { rule: Rule.UnfilledSectionBrief, severity: 'info', file: 'index.md', line: 7, title: 'Stub', detail: '' },
+      ],
+    });
+
+    // a freshly scaffolded docs folder is valid; "has 1 info" reads like a failure
+    expect(output).toContain('✓ Documentation is valid (1 note)');
+    expect(output).not.toContain('⚠');
+  });
 });

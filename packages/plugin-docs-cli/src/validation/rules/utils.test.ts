@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isMetaFile, maskInlineCode } from './utils.js';
+import { formatBytes, isMetaFile, maskInlineCode } from './utils.js';
 
 describe('isMetaFile', () => {
   it('matches README.md regardless of case', () => {
@@ -39,6 +39,23 @@ describe('isMetaFile', () => {
     expect(isMetaFile('readme-tips.md')).toBe(false);
     expect(isMetaFile('contributing-quickstart.md')).toBe(false);
     expect(isMetaFile('agents-of-shield.md')).toBe(false);
+  });
+});
+
+describe('formatBytes', () => {
+  it('formats sub-kilobyte counts as bytes', () => {
+    expect(formatBytes(0)).toBe('0B');
+    expect(formatBytes(512)).toBe('512B');
+  });
+
+  it('formats kilobyte counts, rounded', () => {
+    expect(formatBytes(1024)).toBe('1KB');
+    expect(formatBytes(1536)).toBe('2KB');
+  });
+
+  it('formats megabyte counts to one decimal place', () => {
+    expect(formatBytes(1024 * 1024)).toBe('1.0MB');
+    expect(formatBytes(5.5 * 1024 * 1024)).toBe('5.5MB');
   });
 });
 

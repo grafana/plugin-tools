@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { access } from 'node:fs/promises';
+import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
 import { resolveDocsPath } from '../utils/utils.plugin.js';
@@ -22,7 +22,8 @@ async function main() {
     console.error('Commands:');
     console.error('  serve      Start the local docs preview server');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
-    console.error('  validate   Validate documentation (--json for machine-readable output)');
+    console.error('  validate   Validate documentation (--json for machine-readable output,');
+    console.error('             --allow-unfilled-stubs while docs are still being written)');
     process.exit(1);
   }
 
@@ -35,12 +36,22 @@ async function main() {
     process.exit(1);
   }
 
-  try {
-    await access(docsPath);
-  } catch {
-    console.error(`Error: Path not found: ${docsPath}`);
-    console.error('Check that the "docsPath" in src/plugin.json points to an existing directory.');
-    process.exit(1);
+  // `serve` and `build` need a real folder to do anything useful, so fail fast here with a
+  // friendly message. `validate` reports a missing or invalid docsPath as a normal diagnostic
+  // instead (the `docs-path-exists` rule), so its --json output stays well-formed either way.
+  if (command !== 'validate') {
+    try {
+      const st = await stat(docsPath);
+      if (!st.isDirectory()) {
+        console.error(`Error: Not a directory: ${docsPath}`);
+        console.error('Check that the "docsPath" in src/plugin.json points to a directory, not a file.');
+        process.exit(1);
+      }
+    } catch {
+      console.error(`Error: Path not found: ${docsPath}`);
+      console.error('Check that the "docsPath" in src/plugin.json points to an existing directory.');
+      process.exit(1);
+    }
   }
 
   switch (command) {
@@ -66,13 +77,18 @@ async function main() {
     }
     case 'validate': {
       const validateArgv = minimist(process.argv.slice(3), {
-        boolean: ['strict', 'json'],
+        boolean: ['strict', 'json', 'allow-unfilled-stubs'],
         default: {
           strict: true,
           json: false,
+          'allow-unfilled-stubs': false,
         },
       });
-      await validateCommand(docsPath, { strict: validateArgv.strict, json: validateArgv.json });
+      await validateCommand(docsPath, {
+        strict: validateArgv.strict,
+        json: validateArgv.json,
+        allowUnfilledStubs: validateArgv['allow-unfilled-stubs'],
+      });
       break;
     }
     default:

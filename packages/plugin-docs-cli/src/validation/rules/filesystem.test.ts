@@ -36,10 +36,13 @@ describe('checkFilesystem', () => {
     expect(findings.find((f) => f.rule === Rule.HasMarkdown)).toBeUndefined();
   });
 
-  it('should report has-markdown-files when docs path does not exist', async () => {
+  it('should report docs-path-exists (and nothing else) when docs path does not exist', async () => {
     const findings = await checkFilesystem({ docsPath: '/nonexistent/path', strict: true });
 
-    expect(findings.find((f) => f.rule === Rule.HasMarkdown)).toBeDefined();
+    const finding = findings.find((f) => f.rule === Rule.DocsPathExists);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(findings).toHaveLength(1);
   });
 
   it('should report has-markdown-files for empty directory', async () => {
@@ -335,5 +338,71 @@ describe('checkFilesystem', () => {
     expect(finding).toBeDefined();
     expect(finding!.file).toContain(join('a', 'b', 'c', 'd', 'index.md'));
     expect(finding!.title).toContain('4 levels');
+  });
+
+  it('should report max-total-pages as error in strict mode when over the limit', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    for (let i = 0; i < 50; i++) {
+      await writeFile(join(tmp, `page-${i}.md`), `---\ntitle: Page ${i}\n---\n`);
+    }
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    const finding = findings.find((f) => f.rule === Rule.MaxTotalPages);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.title).toContain('51');
+  });
+
+  it('should report max-total-pages as info in non-strict mode when over the limit', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    for (let i = 0; i < 50; i++) {
+      await writeFile(join(tmp, `page-${i}.md`), `---\ntitle: Page ${i}\n---\n`);
+    }
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: false });
+
+    const finding = findings.find((f) => f.rule === Rule.MaxTotalPages);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('info');
+  });
+
+  it('should not report max-total-pages at or under the limit', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    for (let i = 0; i < 49; i++) {
+      await writeFile(join(tmp, `page-${i}.md`), `---\ntitle: Page ${i}\n---\n`);
+    }
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === Rule.MaxTotalPages)).toBeUndefined();
+  });
+
+  it('should report max-total-docs-size only in strict mode when over the limit', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await mkdir(join(tmp, 'img'));
+    // one file just over the 10MB total-docs-size limit
+    await writeFile(join(tmp, 'img', 'big.png'), Buffer.alloc(11 * 1024 * 1024));
+
+    const strictFindings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const finding = strictFindings.find((f) => f.rule === Rule.MaxTotalDocsSize);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('warning');
+
+    const nonStrictFindings = await checkFilesystem({ docsPath: tmp, strict: false });
+    expect(nonStrictFindings.find((f) => f.rule === Rule.MaxTotalDocsSize)).toBeUndefined();
+  });
+
+  it('should not report max-total-docs-size under the limit', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === Rule.MaxTotalDocsSize)).toBeUndefined();
   });
 });

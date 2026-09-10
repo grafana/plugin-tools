@@ -1,13 +1,25 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
-import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { type Diagnostic, type Severity, type ValidationInput, Rule } from '../types.js';
 import { isMetaFile } from './utils.js';
 
 // matches the opening marker of a section-brief authoring-guidance block,
-// scaffolded by `create-plugin add panel-docs`/`datasource-docs` as a
-// placeholder for the author to replace with real content.
+// scaffolded by `create-plugin add docs` as a placeholder for the author to
+// replace with real content.
 const SECTION_BRIEF_START_RE = /<!--\s*section-brief:start\s*-->/;
+
+/**
+ * A stub is only a defect at the point of publishing. While the author is still writing, the count
+ * is a to-do list, so `allowUnfilledStubs` keeps it out of the error and warning tallies entirely -
+ * a freshly scaffolded docs folder should validate clean.
+ */
+function stubSeverity(input: ValidationInput): Severity {
+  if (input.allowUnfilledStubs) {
+    return 'info';
+  }
+  return input.strict ? 'error' : 'warning';
+}
 
 /**
  * Checks that no page still contains an unfilled `section-brief` block. A
@@ -50,7 +62,7 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       }
       diagnostics.push({
         rule: Rule.UnfilledSectionBrief,
-        severity: input.strict ? 'error' : 'warning',
+        severity: stubSeverity(input),
         file: relativePath,
         line: i + 1,
         title: 'Unfilled documentation stub',

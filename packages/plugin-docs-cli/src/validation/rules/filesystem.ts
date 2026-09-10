@@ -1,14 +1,20 @@
-import { readdir } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, relative, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { isMetaFile } from './utils.js';
+import { formatBytes, isMetaFile } from './utils.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
 const SLUG_SAFE_RE = /^[a-z0-9-]+$/;
 
 // max path segments from the docs root (e.g. `a/b/page.md` is 3)
 const MAX_NESTING_DEPTH = 3;
+
+// max total size of everything in the docs folder combined
+const MAX_TOTAL_DOCS_SIZE = 10 * 1024 * 1024; // 10MB
+
+// max number of documentation pages
+const MAX_TOTAL_PAGES = 50;
 
 // permitted image formats shared across filesystem and asset rules
 export const ALLOWED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
@@ -22,8 +28,28 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   let entries: Dirent[] = [];
   try {
     entries = await readdir(input.docsPath, { recursive: true, withFileTypes: true });
-  } catch {
-    // docsPath doesn't exist or isn't readable
+  } catch (err) {
+    // docs-path-exists: docsPath is set in plugin.json but the folder isn't there (or isn't
+    // readable). Every other filesystem/frontmatter/asset check is meaningless without it, so
+    // report just this and stop.
+    const code = (err as NodeJS.ErrnoException | undefined)?.code;
+
+    diagnostics.push({
+      rule: Rule.DocsPathExists,
+      severity: 'error',
+      title:
+        code === 'ENOENT'
+          ? 'docsPath does not exist'
+          : code === 'ENOTDIR'
+            ? 'docsPath is not a directory'
+            : 'docsPath is not readable',
+      detail:
+        code === 'ENOENT'
+          ? `"${input.docsPath}" does not exist. Check that "docsPath" in src/plugin.json points to an existing directory.`
+          : `"${input.docsPath}" could not be read (${code ?? 'unknown error'}). Check that it is a directory and that you have permission to read it.`,
+    });
+
+    return diagnostics;
   }
 
   // skip repo-meta files (README.md, CONTRIBUTING.md etc.) at the source so
@@ -85,6 +111,40 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
       detail:
         'The docs folder must contain at least one markdown file. Add markdown files with valid frontmatter to get started.',
     });
+  }
+
+  // max-total-pages
+  if (mdFiles.length > MAX_TOTAL_PAGES) {
+    diagnostics.push({
+      rule: Rule.MaxTotalPages,
+      severity: input.strict ? 'error' : 'info',
+      title: `Too many documentation pages (${mdFiles.length}, max ${MAX_TOTAL_PAGES})`,
+      detail: `The docs folder has ${mdFiles.length} pages, which exceeds the ${MAX_TOTAL_PAGES}-page limit. Consolidate related pages or split the plugin's documentation into a linked external resource.`,
+    });
+  }
+
+  // max-total-docs-size: only checked under `validate` (not `serve`)
+  if (input.strict) {
+    let totalSize = 0;
+    for (const file of entries) {
+      if (!file.isFile()) {
+        continue;
+      }
+      try {
+        const st = await stat(join(file.parentPath, file.name));
+        totalSize += st.size;
+      } catch {
+        continue;
+      }
+    }
+    if (totalSize > MAX_TOTAL_DOCS_SIZE) {
+      diagnostics.push({
+        rule: Rule.MaxTotalDocsSize,
+        severity: 'warning',
+        title: `Docs folder exceeds ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit`,
+        detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages and images.`,
+      });
+    }
   }
 
   // root-index-exists
