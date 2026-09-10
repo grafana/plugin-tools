@@ -389,7 +389,7 @@ function wireMainGo(context: Context) {
 
   const updated = content
     .replace(appImport, '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"')
-    .replace(pluginImport, `"${providerImportPath}"\n\t${pluginImport}`)
+    .replace(pluginImport, `${pluginImport}\n\t"${providerImportPath}"`)
     .replace(
       fullStatement,
       `if err := sdkplugin.Run(
