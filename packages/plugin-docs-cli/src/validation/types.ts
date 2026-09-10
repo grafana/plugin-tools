@@ -73,6 +73,15 @@ export interface Diagnostic {
 export interface ValidationInput {
   docsPath: string;
   strict: boolean;
+  /**
+   * Treat leftover `section-brief` scaffolding as progress rather than a defect.
+   *
+   * Docs scaffolded by `create-plugin add docs` are all stub, by design - reporting that back as
+   * errors turns "you ran the command successfully" into a red build. Authoring tools pass this so
+   * the count is informational while the pages are being written. The publishing check never passes
+   * it, so half-written docs still cannot reach the catalog.
+   */
+  allowUnfilledStubs?: boolean;
 }
 
 /**

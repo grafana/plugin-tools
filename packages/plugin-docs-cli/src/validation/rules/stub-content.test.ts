@@ -88,4 +88,29 @@ describe('checkStubContent', () => {
     expect(files).toContain('index.md');
     expect(files).toContain('options.md');
   });
+
+  it('treats stubs as informational when the author opts in, so a fresh scaffold validates clean', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
+    await writeFile(
+      join(tmp, 'index.md'),
+      md('<!-- section-brief:start -->\n\n> Fill me in\n\n<!-- section-brief:end -->')
+    );
+
+    const findings = await checkStubContent({ docsPath: tmp, strict: true, allowUnfilledStubs: true });
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0].severity).toBe('info');
+  });
+
+  it('still errors for the publishing check, which never opts in', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
+    await writeFile(
+      join(tmp, 'index.md'),
+      md('<!-- section-brief:start -->\n\n> Fill me in\n\n<!-- section-brief:end -->')
+    );
+
+    const findings = await checkStubContent({ docsPath: tmp, strict: true });
+
+    expect(findings[0].severity).toBe('error');
+  });
 });

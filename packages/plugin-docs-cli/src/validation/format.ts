@@ -35,9 +35,16 @@ export function formatResult(result: ValidationResult): string {
     parts.push(`${infos} info`);
   }
 
-  const icon = errors > 0 ? '✗' : '⚠';
-  lines.push(`${icon} Documentation has ${parts.join(' and ')}`);
-  lines.push('');
+  // info-only output is not a problem report - the docs are valid and these are notes. Saying
+  // "Documentation has 17 info" reads as a failure and buries the fact that nothing is wrong.
+  if (errors === 0 && warnings === 0) {
+    lines.push(`✓ Documentation is valid (${infos} note${infos !== 1 ? 's' : ''})`);
+    lines.push('');
+  } else {
+    const icon = errors > 0 ? '✗' : '⚠';
+    lines.push(`${icon} Documentation has ${parts.join(' and ')}`);
+    lines.push('');
+  }
 
   for (const d of result.diagnostics) {
     const label = SEVERITY_LABEL[d.severity] ?? d.severity;
