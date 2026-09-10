@@ -33,7 +33,7 @@
     "minimist": "1.2.8",
     "pm-detect": "0.6.0",
     "snyk-nodejs-lockfile-parser": "2.10.3",
-    "source-map": "0.7.6"
+    "source-map": "0.8.0"
   },
   "devDependencies": {
     "@libs/output": "1.0.3",
