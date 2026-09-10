@@ -28,13 +28,12 @@ the same version. To run a local build instead, set `GRAFANA_APP_SDK_BIN` to its
 | ------ | ---- |
 | TypeScript types | `src/generated/<kind>/<version>/` |
 | App manifest (JSON) | `src/app-sdk-manifest.json` |
+| Go types (backend only) | `pkg/generated/` |
 
 Generated code is meant to be committed, so schema changes show up in review and a fresh clone builds
 without running code generation.
 
-> **No Go toolchain is needed.** This plugin has no Go backend, so `kinds/config.cue` sets
-> `codegen: goEnabled: false` and the generator emits only TypeScript and the definitions. Nothing
-> shells out to `go`.
+> **Note:** No Go toolchain is not needed to run generate:kinds unless generating Go code.** 
 
 ## How the manifest reaches Grafana
 
@@ -48,8 +47,14 @@ Grafana.
 With the manifest in place, Grafana serves storage and CRUD for your kinds through its aggregated API
 server, and users can also manage the objects with `kubectl`.
 
-## Adding a backend later
+## Adding a backend
 
-Storage and CRUD come from the manifest alone, so this plugin needs no backend. Admission
-(validation/mutation), conversion, and custom routes would require adding a Go backend — the app-sdk is
-designed for that progression, so there's no lock-in from starting frontend-only.
+Storage and CRUD come from the manifest alone, so a plugin with no backend still gets them. A backend will
+be required for:
+
+- Admission logic (i.e. validation/mutation)
+- Conversion logic (i.e. between API versions)
+- Custom routes and subresource routes
+- Controller logic (informers, watchers, or any other background work)
+
+If this plugin has a backend, `pkg/provider/provider.go` is where you wire those up as your app grows.
