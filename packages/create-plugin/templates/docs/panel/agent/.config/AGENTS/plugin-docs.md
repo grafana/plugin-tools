@@ -144,7 +144,9 @@ Validation cannot catch any of these, so they are on you.
 {{packageManagerName}} run docs:serve               # local preview on port 3001
 ```
 
-A freshly scaffolded page fails validation on purpose: every unfilled `<!-- section-brief -->` block is
-reported as an error, so the error count doubles as a to-do list. It reaches zero once every brief is either
-filled in or deleted. CI skips validation until then, so a red `docs:validate` while you work is expected,
-not a build failure.
+A freshly scaffolded docs folder validates clean. Unfilled `<!-- section-brief -->` blocks are reported as
+notes rather than errors, so the count is a to-do list: `✓ Documentation is valid (17 notes)`. Everything
+else - frontmatter, links, images - is checked normally the whole time, so fix those as they appear.
+
+Leftover briefs do block publishing. Strip every one before release: the marker is removed when the page is
+rendered, but the `📝 Fill this in` text is not, so a leftover brief ships to the catalog verbatim.
