@@ -17,6 +17,7 @@ const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.regis
 // is a tool, not something devs hand-edit, so it gets the header.
 const TEMPLATE_FILES: Array<[path: string, includeWarning: boolean]> = [
   ['.config/app-sdk/generate-kinds.mjs', true],
+  ['.config/app-sdk/README.md', false],
   ['.github/workflows/generate-kinds-drift.yml', false],
   ['kinds/config.cue', false],
   ['kinds/manifest.cue', false],
@@ -476,7 +477,7 @@ function printNextSteps(hasGoBackend: boolean) {
             '  go mod tidy',
           ]
         : []),
-      'See ./kinds/README.md for the full workflow.',
+      'See ./.config/app-sdk/README.md for the full workflow.',
     ],
   });
 }

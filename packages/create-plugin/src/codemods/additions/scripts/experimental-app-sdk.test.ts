@@ -22,6 +22,7 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
     );
   const files = [
     '.config/app-sdk/generate-kinds.mjs',
+    '.config/app-sdk/README.md',
     '.config/AGENTS/app-sdk.md',
     '.github/workflows/generate-kinds-drift.yml',
     'kinds/config.cue',
@@ -45,6 +46,7 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
 
 const APP_SDK_FILES = [
   '.config/app-sdk/generate-kinds.mjs',
+  '.config/app-sdk/README.md',
   '.config/AGENTS/app-sdk.md',
   '.github/workflows/generate-kinds-drift.yml',
   'kinds/config.cue',
