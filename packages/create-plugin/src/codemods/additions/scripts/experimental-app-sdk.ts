@@ -376,15 +376,20 @@ function wireMainGo(context: Context) {
     return;
   }
 
+  const appImport = '\t"github.com/grafana/grafana-plugin-sdk-go/backend/app"';
+  const pluginImport = `"${moduleMatch![1]}/pkg/plugin"`;
+
+  if (!content.includes(appImport) || !content.includes(pluginImport)) {
+    skip(`${path} does not match the expected import shape.`, [
+      'Wire the grafana-app-sdk plugin.Run helper into main.go yourself:',
+      'https://github.com/grafana/grafana-app-sdk/blob/main/plugin/run.go',
+    ]);
+    return;
+  }
+
   const updated = content
-    .replace(
-      '\t"github.com/grafana/grafana-plugin-sdk-go/backend/app"',
-      '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"'
-    )
-    .replace(
-      `"${moduleMatch![1]}/pkg/plugin"`,
-      `"${providerImportPath}"\n\t"${moduleMatch![1]}/pkg/plugin"`
-    )
+    .replace(appImport, '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"')
+    .replace(pluginImport, `"${providerImportPath}"\n\t${pluginImport}`)
     .replace(
       fullStatement,
       `if err := sdkplugin.Run(
