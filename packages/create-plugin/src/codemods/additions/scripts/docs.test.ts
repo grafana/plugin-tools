@@ -139,7 +139,7 @@ describe('docs scaffolding', () => {
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
       expect(pkg.scripts?.['docs:serve']).toBe('plugin-docs-cli serve --port 3001 --reload');
-      expect(pkg.scripts?.['docs:validate']).toBe('plugin-docs-cli validate --strict');
+      expect(pkg.scripts?.['docs:validate']).toBe('plugin-docs-cli validate --strict --allow-unfilled-stubs');
     });
 
     it('skips docs:serve if already present', () => {
@@ -153,7 +153,7 @@ describe('docs scaffolding', () => {
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
       expect(pkg.scripts?.['docs:serve']).toBe('custom-command');
-      expect(pkg.scripts?.['docs:validate']).toBe('plugin-docs-cli validate --strict');
+      expect(pkg.scripts?.['docs:validate']).toBe('plugin-docs-cli validate --strict --allow-unfilled-stubs');
     });
   });
 
@@ -370,6 +370,14 @@ describe('docs codemod', () => {
       docs(context, { docsPath: 'docs' });
       return context.getFile('.github/workflows/validate-docs.yml') ?? '';
     }
+
+    it('runs validation on every push rather than skipping while docs are unfinished', () => {
+      // scaffolded stubs are reported as notes, not errors, so CI can check links and frontmatter
+      // from the first commit instead of waiting until the docs are done
+      const workflow = workflowFor('npm@10.2.3');
+      expect(workflow).not.toContain('section-brief');
+      expect(workflow).toContain('npm run docs:validate');
+    });
 
     it('runs the pinned CLI through the docs:validate script rather than fetching the latest', () => {
       const workflow = workflowFor('npm@10.2.3');

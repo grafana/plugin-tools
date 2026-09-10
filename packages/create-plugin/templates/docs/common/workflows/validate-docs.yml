@@ -44,15 +44,4 @@ jobs:
             exit 0
           fi
 
-          # Scaffolded pages carry <!-- section-brief --> notes explaining what to write, and
-          # validation reports each one as an error. That is the local to-do list, not a CI failure -
-          # docs still being written should not turn the build red. Once every brief is filled in or
-          # deleted, this step starts enforcing. Publishing is gated separately by plugin-validator.
-          REMAINING=$(grep -rl 'section-brief:start' "$DOCS_PATH" 2>/dev/null | wc -l | tr -d ' ')
-          if [ "$REMAINING" != "0" ]; then
-            echo "$REMAINING page(s) still contain scaffolded section-brief notes - docs are still being written, skipping."
-            echo "Run \`{{packageManagerName}} run docs:validate\` locally to see what is left."
-            exit 0
-          fi
-
           {{packageManagerName}} run docs:validate

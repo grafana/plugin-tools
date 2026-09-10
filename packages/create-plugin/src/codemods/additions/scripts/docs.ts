@@ -162,7 +162,7 @@ function printNextSteps(opts: {
   const body: string[] = [
     `Fill in the stub pages under ${docsPath}/ - each section carries a note saying what belongs there`,
     `Read ${docsPath}/README.md for the four catalog tabs and what belongs on each`,
-    `Until every stub is filled, \`${packageManagerName} run docs:validate\` reports each one as an error - that count is your to-do list`,
+    `\`${packageManagerName} run docs:validate\` counts the stubs left to fill, and must reach zero before you release`,
   ];
 
   if (agentAssistanceAdded) {
@@ -379,7 +379,10 @@ function addDocsScripts(context: Context): void {
   }
 
   if (!scripts['docs:validate']) {
-    scripts['docs:validate'] = 'plugin-docs-cli validate --strict';
+    // `--allow-unfilled-stubs` keeps scaffolded section-brief notes out of the error count while the
+    // author is still writing, so a fresh scaffold validates clean. plugin-validator never passes it,
+    // so half-written docs are still blocked at publish.
+    scripts['docs:validate'] = 'plugin-docs-cli validate --strict --allow-unfilled-stubs';
     changed = true;
   } else {
     additionsDebug('docs:validate already exists in package.json scripts, skipping');

@@ -88,13 +88,13 @@ Your agent already has the conventions, so no special command is needed.
 `docs:validate` checks structure, frontmatter, images and links. It does not check your prose - for that,
 follow the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/).
 
-**Freshly scaffolded docs fail validation on purpose.** Every `<!-- section-brief -->` block still in place
-is reported as an error, so the count is your to-do list: it reaches zero once each brief is filled in or
-deleted.
+**Freshly scaffolded docs validate clean.** The `<!-- section-brief -->` notes are reported as notes, not
+errors, so you get `✓ Documentation is valid (17 notes)` and the count is your to-do list. Everything else -
+frontmatter, links, images - is checked from the start, and CI stays green while you write.
 
-CI stays green while you work. The `validate-docs.yml` workflow skips validation as long as any brief
-remains, and starts enforcing once they are all gone. Publishing is gated separately, so unfinished docs can
-never ship.
+Leftover briefs do block publishing, and for good reason: the marker itself is stripped when the page is
+rendered, but the `📝 Fill this in` text is not. A brief you forget to remove ships to grafana.com as
+visible text. Strip every one before you release.
 
 ## How docs are published
 
