@@ -378,8 +378,8 @@ function wireMainGo(context: Context) {
 
   const updated = content
     .replace(
-      '\t"github.com/grafana/grafana-plugin-sdk-go/backend/app"\n\t"github.com/grafana/grafana-plugin-sdk-go/backend/log"',
-      '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"\n' + '\t"github.com/grafana/grafana-plugin-sdk-go/backend/log"'
+      '\t"github.com/grafana/grafana-plugin-sdk-go/backend/app"',
+      '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"'
     )
     .replace(
       `"${moduleMatch![1]}/pkg/plugin"`,
